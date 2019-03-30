@@ -1,0 +1,12 @@
+[version]
+0.94.0
+[ignore]
+.*/node_modules/.*/\(lib\|test\).*\.json$
+/lib/.*
+
+[include]
+
+[libs]
+flow-typed
+
+[options]
