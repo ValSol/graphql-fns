@@ -8,6 +8,7 @@ type Fields = { [key: string]: null | Fields };
  * @arg {number} [shift=2] - shift of current lines of fields hierarchy
  */
 const composeFields = (fields: Fields, resultArray = [], shift: number = 2) => {
+  if (fields === null) return [];
   Object.keys(fields).reduce((prev, fieldName) => {
     const field = fields[fieldName];
 
@@ -60,12 +61,15 @@ const composeGql = (
     .join(', ');
   const argsString2WhithParentheses = argsString2 ? `(${argsString2})` : '';
   const fieldsString = composeFields(fields).join('\n');
-  return `
-${isMutation ? 'mutation' : 'query'} ${operationName}${argsStringWhithParentheses} {
-  ${queryName}${argsString2WhithParentheses} {
+  const fieldsString2 = fieldsString
+    ? ` {
 ${fieldsString}
   }
-}
+`
+    : '\n';
+  return `
+${isMutation ? 'mutation' : 'query'} ${operationName}${argsStringWhithParentheses} {
+  ${queryName}${argsString2WhithParentheses}${fieldsString2}}
 `;
 };
 

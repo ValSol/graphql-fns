@@ -116,4 +116,18 @@ query userQuery {
     const result = composeGql(name, fields, options);
     expect(result).toBe(expectedResult);
   });
+
+  test('should return hello query with scalar result', () => {
+    const name = 'hello';
+    const args = [{ name: 'name', type: 'String!' }];
+    const fields = null;
+    const options = { args };
+    const expectedResult = `
+query helloQuery($name: String!) {
+  hello(name: $name)
+}
+`;
+    const result = composeGql(name, fields, options);
+    expect(result).toBe(expectedResult);
+  });
 });
