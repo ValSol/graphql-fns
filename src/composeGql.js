@@ -1,6 +1,6 @@
 // @flow
 
-type Fields = { [key: string]: null | Fields };
+type Fields = null | { [key: string]: Fields };
 
 /** Supporting recursive fuction to compose fields hierarchy
  * @arg {Object} fields - tree / subtree of fields hierarchy
@@ -10,6 +10,7 @@ type Fields = { [key: string]: null | Fields };
 const composeFields = (fields: Fields, resultArray = [], shift: number = 2) => {
   if (fields === null) return [];
   Object.keys(fields).reduce((prev, fieldName) => {
+    // $FlowFixMe
     const field = fields[fieldName];
 
     if (field === null) {

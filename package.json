@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -46,6 +46,7 @@
     "eslint-plugin-react": "^7.12.4",
     "flow-bin": "^0.95.1",
     "flow-copy-source": "^2.0.3",
+    "ghooks": "^2.0.4",
     "jest": "^24.5.0",
     "prettier": "^1.16.4",
     "rimraf": "^2.6.3",
