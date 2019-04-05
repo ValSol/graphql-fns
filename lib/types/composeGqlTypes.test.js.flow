@@ -43,7 +43,7 @@ describe('composeGqlTypes', () => {
   textField4: [String!]!
   textField5: [String!]!
 }
-type ExampleInput {
+input ExampleInput {
   textField1: String
   textField2: String
   textField3: String!
@@ -109,12 +109,12 @@ type Example2 {
   textField1: [String!]!
   textField2: [String!]!
 }
-type Example1Input {
+input Example1Input {
   textField1: String
   textField2: String
   textField3: String!
 }
-type Example2Input {
+input Example2Input {
   textField1: [String!]!
   textField2: [String!]!
 }

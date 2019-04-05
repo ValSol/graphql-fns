@@ -30,7 +30,7 @@ describe('createThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `type ExampleInput {
+    const expectedResult = `input ExampleInput {
   textField1: String
   textField2: String
   textField3: String!

@@ -11,7 +11,7 @@ type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 const createThingInputType = (thingConfig: ThingConfig): string => {
   const { textFields, thingName } = thingConfig;
 
-  const thingTypeArray = [`type ${thingName}Input {`];
+  const thingTypeArray = [`input ${thingName}Input {`];
 
   if (textFields) {
     textFields.reduce((prev, { array, name, required }) => {
