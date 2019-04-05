@@ -69,6 +69,7 @@ describe('composeGqlResolvers', () => {
     const thingConfigs = [thingConfig1, thingConfig2];
     const result = composeGqlResolvers(thingConfigs);
 
+    expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Mutation.addExample1).toBe('function');
     expect(typeof result.Mutation.addExample2).toBe('function');
   });

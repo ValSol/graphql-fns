@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.0",
+  "version": "0.1.2-beta.1",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -29,6 +29,8 @@
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
+    "@okgrow/graphql-scalars": "^0.4.5",
+    "graphql": "^14.2.1",
     "mongoose": "^5.4.21"
   },
   "devDependencies": {

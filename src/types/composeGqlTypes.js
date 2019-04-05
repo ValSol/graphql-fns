@@ -21,7 +21,8 @@ const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
     .map(thingConfig => createAddThingMutationType(thingConfig))
     .join('\n');
 
-  const result = `${thingTypes}
+  const result = `scalar DateTime
+${thingTypes}
 ${thingInputTypes}
 type Mutation {
 ${thingMutationTypes}

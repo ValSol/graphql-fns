@@ -31,7 +31,8 @@ describe('composeGqlTypes', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const expectedResult = `type Example {
+    const expectedResult = `scalar DateTime
+type Example {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime
@@ -90,7 +91,8 @@ type Mutation {
       ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
-    const expectedResult = `type Example1 {
+    const expectedResult = `scalar DateTime
+type Example1 {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime
