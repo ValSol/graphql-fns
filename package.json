@@ -28,6 +28,9 @@
     "url": "https://github.com/ValSol/graphql-fns/issues"
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
+  "dependencies": {
+    "mongoose": "^5.4.21"
+  },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
