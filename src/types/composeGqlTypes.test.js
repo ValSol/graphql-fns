@@ -44,7 +44,7 @@ type Example {
   textField4: [String!]!
   textField5: [String!]!
 }
-input ExampleInput {
+input ExampleCreateInput {
   textField1: String
   textField2: String
   textField3: String!
@@ -52,7 +52,7 @@ input ExampleInput {
   textField5: [String!]!
 }
 type Mutation {
-  addExample(input: ExampleInput): Example!
+  createExample(data: ExampleCreateInput!): Example!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -111,18 +111,18 @@ type Example2 {
   textField1: [String!]!
   textField2: [String!]!
 }
-input Example1Input {
+input Example1CreateInput {
   textField1: String
   textField2: String
   textField3: String!
 }
-input Example2Input {
+input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
 }
 type Mutation {
-  addExample1(input: Example1Input): Example1!
-  addExample2(input: Example2Input): Example2!
+  createExample1(data: Example1CreateInput!): Example1!
+  createExample2(data: Example2CreateInput!): Example2!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
