@@ -8,10 +8,10 @@ type TextField = {
 };
 type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
-const createThingInputType = (thingConfig: ThingConfig): string => {
+const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   const { textFields, thingName } = thingConfig;
 
-  const thingTypeArray = [`input ${thingName}Input {`];
+  const thingTypeArray = [`input ${thingName}CreateInput {`];
 
   if (textFields) {
     textFields.reduce((prev, { array, name, required }) => {
@@ -29,4 +29,4 @@ const createThingInputType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-module.exports = createThingInputType;
+module.exports = createThingCreateInputType;

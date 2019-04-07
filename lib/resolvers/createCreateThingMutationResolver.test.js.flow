@@ -1,8 +1,8 @@
 // @flow
 /* eslint-env jest */
-const createAddThingMutationResolver = require('./createAddThingMutationResolver');
+const createCreateThingMutationResolver = require('./createCreateThingMutationResolver');
 
-describe('createAddThingMutationResolver', () => {
+describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const thingConfig = {
       thingName: 'Example',
@@ -31,7 +31,7 @@ describe('createAddThingMutationResolver', () => {
       ],
     };
 
-    const result = createAddThingMutationResolver(thingConfig);
+    const result = createCreateThingMutationResolver(thingConfig);
 
     expect(typeof result).toBe('function');
   });

@@ -1,8 +1,8 @@
 // @flow
 /* eslint-env jest */
-const createThingInputType = require('./createThingInputType');
+const createThingCreateInputType = require('./createThingCreateInputType');
 
-describe('createThingInputType', () => {
+describe('createThingCreateInputType', () => {
   test('should create thing input type', () => {
     const thingConfig = {
       thingName: 'Example',
@@ -30,7 +30,7 @@ describe('createThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleInput {
+    const expectedResult = `input ExampleCreateInput {
   textField1: String
   textField2: String
   textField3: String!
@@ -38,7 +38,7 @@ describe('createThingInputType', () => {
   textField5: [String!]!
 }`;
 
-    const result = createThingInputType(thingConfig);
+    const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

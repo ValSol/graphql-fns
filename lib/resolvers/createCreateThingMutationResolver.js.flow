@@ -9,12 +9,12 @@ type TextField = {
 };
 type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
-type Args = { input: Object };
+type Args = { data: Object };
 type Context = { mongooseConn: Object };
 
-const createAddThingMutationResolver = (thingConfig: ThingConfig): Function => {
+const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { input } = args;
+    const { data } = args;
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig);
@@ -22,7 +22,7 @@ const createAddThingMutationResolver = (thingConfig: ThingConfig): Function => {
 
     const Thing = await mongooseConn.model(thingName, thingSchema);
 
-    const thing = await Thing.create(input);
+    const thing = await Thing.create(data);
 
     return thing;
   };
@@ -30,4 +30,4 @@ const createAddThingMutationResolver = (thingConfig: ThingConfig): Function => {
   return resolver;
 };
 
-module.exports = createAddThingMutationResolver;
+module.exports = createCreateThingMutationResolver;

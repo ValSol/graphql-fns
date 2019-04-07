@@ -1,7 +1,7 @@
 // @flow
 const createThingType = require('./createThingType');
-const createThingInputType = require('./createThingInputType');
-const createAddThingMutationType = require('./createAddThingMutationType');
+const createThingCreateInputType = require('./createThingCreateInputType');
+const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 
 type TextField = {
   name: string,
@@ -15,10 +15,10 @@ type ThingConfigs = Array<ThingConfig>;
 const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
   const thingInputTypes = thingConfigs
-    .map(thingConfig => createThingInputType(thingConfig))
+    .map(thingConfig => createThingCreateInputType(thingConfig))
     .join('\n');
   const thingMutationTypes = thingConfigs
-    .map(thingConfig => createAddThingMutationType(thingConfig))
+    .map(thingConfig => createCreateThingMutationType(thingConfig))
     .join('\n');
 
   const result = `scalar DateTime

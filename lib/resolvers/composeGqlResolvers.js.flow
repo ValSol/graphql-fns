@@ -1,7 +1,7 @@
 // @flow
 const { DateTime } = require('@okgrow/graphql-scalars');
 
-const createAddThingMutationResolver = require('./createAddThingMutationResolver');
+const createCreateThingMutationResolver = require('./createCreateThingMutationResolver');
 
 type TextField = {
   name: string,
@@ -16,9 +16,9 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
   const resolvers = { DateTime, Mutation: {} };
   thingConfigs.reduce((prev, thingConfig) => {
     const { thingName } = thingConfig;
-    const addThingMutationResolver = createAddThingMutationResolver(thingConfig);
+    const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
     // eslint-disable-next-line no-param-reassign
-    prev.Mutation[`add${thingName}`] = addThingMutationResolver;
+    prev.Mutation[`create${thingName}`] = createThingMutationResolver;
     return prev;
   }, resolvers);
 
