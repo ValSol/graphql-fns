@@ -1,5 +1,5 @@
 // @flow
-const createThingSchema = require('../mongooseModels/createThingSchema');
+const createThingSchema = require('../../mongooseModels/createThingSchema');
 
 type TextField = {
   name: string,
@@ -9,12 +9,14 @@ type TextField = {
 };
 type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
-type Args = { data: Object };
+type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
 const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { data } = args;
+    const {
+      where: { id },
+    } = args;
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig);
@@ -22,7 +24,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
 
     const Thing = await mongooseConn.model(thingName, thingSchema);
 
-    const thing = await Thing.create(data);
+    const thing = await Thing.findById(id);
 
     return thing;
   };

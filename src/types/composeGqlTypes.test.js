@@ -51,6 +51,12 @@ input ExampleCreateInput {
   textField4: [String!]!
   textField5: [String!]!
 }
+input ExampleWhereInput {
+  id: ID!
+}
+type Query {
+  Example(where: ExampleWhereInput!): Example
+}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -116,9 +122,19 @@ input Example1CreateInput {
   textField2: String
   textField3: String!
 }
+input Example1WhereInput {
+  id: ID!
+}
 input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
+}
+input Example2WhereInput {
+  id: ID!
+}
+type Query {
+  Example1(where: Example1WhereInput!): Example1
+  Example2(where: Example2WhereInput!): Example2
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!

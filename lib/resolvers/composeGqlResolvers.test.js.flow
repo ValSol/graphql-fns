@@ -32,6 +32,7 @@ describe('composeGqlResolvers', () => {
     };
     const thingConfigs = [thingConfig];
     const result = composeGqlResolvers(thingConfigs);
+    expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
   });
   test('should create things types for two things', () => {
@@ -70,6 +71,8 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(thingConfigs);
 
     expect(typeof result.DateTime).toBe('object');
+    expect(typeof result.Query.Example1).toBe('function');
+    expect(typeof result.Query.Example2).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
   });

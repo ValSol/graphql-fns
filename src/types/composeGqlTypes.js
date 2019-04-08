@@ -1,6 +1,8 @@
 // @flow
 const createThingType = require('./createThingType');
-const createThingCreateInputType = require('./createThingCreateInputType');
+const createThingCreateInputType = require('./inputs/createThingCreateInputType');
+const createThingWhereInputType = require('./inputs/createThingWhereInputType');
+const createThingQueryType = require('./queries/createThingQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 
 type TextField = {
@@ -15,7 +17,13 @@ type ThingConfigs = Array<ThingConfig>;
 const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
   const thingInputTypes = thingConfigs
-    .map(thingConfig => createThingCreateInputType(thingConfig))
+    .map(
+      thingConfig => `${createThingCreateInputType(thingConfig)}
+${createThingWhereInputType(thingConfig)}`,
+    )
+    .join('\n');
+  const thingQueryTypes = thingConfigs
+    .map(thingConfig => createThingQueryType(thingConfig))
     .join('\n');
   const thingMutationTypes = thingConfigs
     .map(thingConfig => createCreateThingMutationType(thingConfig))
@@ -24,6 +32,9 @@ const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
   const result = `scalar DateTime
 ${thingTypes}
 ${thingInputTypes}
+type Query {
+${thingQueryTypes}
+}
 type Mutation {
 ${thingMutationTypes}
 }`;
