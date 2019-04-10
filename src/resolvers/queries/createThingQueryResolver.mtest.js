@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
+const info = require('../info.auxiliary.js');
 const createThingQueryResolver = require('./createThingQueryResolver');
 
 let mongooseConn;
@@ -51,17 +52,19 @@ describe('createThingQueryResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(null, { data }, { mongooseConn }, data);
+    const createdExample = await createExample(null, { data }, { mongooseConn });
     const { id } = createdExample;
 
     const Example = createThingQueryResolver(thingConfig);
     const where = { id };
-    const example = await Example(null, { where }, { mongooseConn });
+    const example = await Example(null, { where }, { mongooseConn }, info);
 
     expect(example.textField1).toBe(data.textField1);
-    expect(example.textField2).toBe(data.textField2);
+    expect(example.textField2).toBeUndefined();
     expect(example.textField3).toBe(data.textField3);
-    expect(example.textField4).toEqual(data.textField4);
-    expect(example.textField5).toEqual(data.textField5);
+    expect(example.textField4).toBeUndefined();
+    expect(example.textField5).toBeUndefined();
+    expect(example.createdAt instanceof Date).toBeTruthy();
+    expect(example.updatedAt).toBeUndefined();
   });
 });

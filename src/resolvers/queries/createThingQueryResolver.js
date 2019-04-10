@@ -2,6 +2,7 @@
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
+const getProjectionFromInfo = require('../getProjectionFromInfo');
 
 type TextField = {
   name: string,
@@ -34,8 +35,9 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { thingName } = thingConfig;
 
     const Thing = await mongooseConn.model(thingName, thingSchema);
+    const projection = getProjectionFromInfo(info);
 
-    const thing = await Thing.findById(id);
+    const thing = await Thing.findById({ _id: id }, projection);
     const thing2 = thing.toObject();
     const { _id } = thing2;
     thing2.id = _id;

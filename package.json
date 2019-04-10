@@ -1,12 +1,12 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.6",
+  "version": "0.1.2-beta.7",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn build:clean && yarn build:lib && yarn build:flow",
     "build:clean": "rimraf lib",
-    "build:lib": "BABEL_ENV=production && babel src --out-dir lib --ignore \"src/**/*.mtest.js\",\"src/**/*.test.js\"",
+    "build:lib": "BABEL_ENV=production && babel src --out-dir lib --ignore \"src/**/*.mtest.js\",\"src/**/*.test.js\",\"src/**/*.auxiliary.js\"",
     "build:flow": "flow-copy-source src lib --ignore \"**/*.mtest.js\" --ignore \"**/*.test.js\"",
     "commit": "git-cz",
     "flow": "flow",
