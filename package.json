@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.4",
+  "version": "0.1.2-beta.5",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -64,7 +64,7 @@
       "path": "node_modules/cz-conventional-changelog"
     },
     "ghooks": {
-      "pre-commit": "yarn flow && yarn test:once"
+      "pre-commit": "yarn flow && yarn test:once && yarn test:mongodb"
     }
   }
 }
