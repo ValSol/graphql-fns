@@ -1,4 +1,6 @@
 // @flow
+const fs = require('fs');
+
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 
 type TextField = {
@@ -19,11 +21,14 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     } = args;
     const { mongooseConn } = context;
 
-    console.log('***************************************');
-    console.log('info =', info);
-    console.log('***************************************');
-    console.log('JSON.stgingify(info, null, " ") =', JSON.stringify(info, null, ' '));
-    console.log('***************************************');
+    const fileName = 'thing.txt';
+    const delimiter = '***************************************\n';
+    const result = `${delimiter}${info}\n${delimiter}${JSON.stringify(
+      info,
+      null,
+      ' ',
+    )}\n${delimiter}`;
+    fs.writeFileSync(fileName, result);
 
     const thingSchema = createThingSchema(thingConfig);
     const { thingName } = thingConfig;

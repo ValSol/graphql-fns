@@ -50,7 +50,7 @@ describe('createCreateThingMutationResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(null, { data }, { mongooseConn });
+    const createdExample = await createExample(null, { data }, { mongooseConn }, data);
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
     expect(createdExample.textField3).toBe(data.textField3);

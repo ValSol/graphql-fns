@@ -51,7 +51,7 @@ describe('createThingQueryResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(null, { data }, { mongooseConn });
+    const createdExample = await createExample(null, { data }, { mongooseConn }, data);
     const { id } = createdExample;
 
     const Example = createThingQueryResolver(thingConfig);
