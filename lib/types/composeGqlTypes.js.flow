@@ -1,17 +1,13 @@
 // @flow
+
+import type { ThingConfig } from '../flowTypes';
+
 const createThingType = require('./createThingType');
 const createThingCreateInputType = require('./inputs/createThingCreateInputType');
 const createThingWhereInputType = require('./inputs/createThingWhereInputType');
 const createThingQueryType = require('./queries/createThingQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 type ThingConfigs = Array<ThingConfig>;
 
 const composeGqlTypes = (thingConfigs: ThingConfigs): string => {

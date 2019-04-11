@@ -1,15 +1,9 @@
 // @flow
 
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
+import type { ThingConfig } from '../../flowTypes';
 
 const createThingCreateInputType = (thingConfig: ThingConfig): string => {
-  const { textFields, thingName } = thingConfig;
+  const { relationalFields, textFields, thingName } = thingConfig;
 
   const thingTypeArray = [`input ${thingName}CreateInput {`];
 
@@ -22,7 +16,22 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     }, thingTypeArray);
   }
 
-  thingTypeArray.push('}');
+  if (relationalFields) {
+    relationalFields.reduce((prev, { array, name, required, thingName: referencedThingName }) => {
+      prev.push(
+        `  ${name}: ${array ? '[' : ''}${referencedThingName}Create2Input${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
+  }
+
+  thingTypeArray.push(`}
+input ${thingName}Create2Input {
+  connect: ID
+  create: ${thingName}CreateInput
+}`);
 
   const result = thingTypeArray.join('\n');
 

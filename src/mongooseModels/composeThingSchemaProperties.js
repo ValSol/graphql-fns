@@ -1,18 +1,15 @@
 // @flow
+import type { ThingConfig } from '../flowTypes';
 
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
+const mongoose = require('mongoose');
 
 type ThingSchemaProperty = { type: String | [String], default: string, required: boolean };
 type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 
+const { Schema } = mongoose;
+
 const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
-  const { textFields } = thingConfig;
+  const { relationalFields, textFields } = thingConfig;
 
   const textFieldsObject = {};
   if (textFields) {
@@ -32,6 +29,19 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
         type: array ? [String] : String,
         required: !!required,
       };
+      return prev;
+    }, textFieldsObject);
+  }
+
+  if (relationalFields) {
+    relationalFields.reduce((prev, { array, name, required, thingName }) => {
+      const obj = {
+        ref: thingName,
+        type: Schema.Types.ObjectId,
+        required: !!required,
+      };
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = array ? [obj] : obj;
       return prev;
     }, textFieldsObject);
   }

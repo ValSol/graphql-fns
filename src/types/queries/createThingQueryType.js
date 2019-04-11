@@ -1,12 +1,5 @@
 // @flow
-
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
+import type { ThingConfig } from '../../flowTypes';
 
 const createThingQueryType = (thingConfig: ThingConfig): string => {
   const { thingName } = thingConfig;

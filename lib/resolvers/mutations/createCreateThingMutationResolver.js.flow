@@ -1,15 +1,9 @@
 // @flow
+import type { ThingConfig } from '../../flowTypes';
+
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
-
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
 type Args = { data: Object };
 type Context = { mongooseConn: Object };
@@ -29,11 +23,27 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     fs.writeFileSync(fileName, result);
 
     const thingSchema = createThingSchema(thingConfig);
-    const { thingName } = thingConfig;
+    const { relationalFields, thingName } = thingConfig;
+
+    let relationalFieldsNames = [];
+    if (relationalFields) {
+      relationalFieldsNames = relationalFields.map(({ name }) => name);
+    }
+
+    const data2 = Object.keys(data).reduce((prev, key) => {
+      if (relationalFieldsNames.includes(key)) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key].connect;
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key];
+      }
+      return prev;
+    }, {});
 
     const Thing = await mongooseConn.model(thingName, thingSchema);
 
-    const thing = await Thing.create(data);
+    const thing = await Thing.create(data2);
     const thing2 = thing.toObject();
     const { _id } = thing2;
     thing2.id = _id;

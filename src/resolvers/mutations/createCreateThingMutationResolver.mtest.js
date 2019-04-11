@@ -61,4 +61,59 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdExample.createdAt instanceof Date).toBeTruthy();
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
   });
+  test('should create mutation add thing resolver', async () => {
+    const thingConfig = {
+      thingName: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'friend',
+          thingName: 'Person',
+        },
+        {
+          name: 'friends',
+          thingName: 'Person',
+          array: true,
+        },
+      ],
+    };
+
+    const createPerson = createCreateThingMutationResolver(thingConfig);
+    expect(typeof createPerson).toBe('function');
+    const data = {
+      firstName: 'Ivan',
+      lastName: 'Fedorov',
+    };
+
+    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    expect(createdPerson.firstName).toBe(data.firstName);
+    expect(createdPerson.lastName).toBe(data.lastName);
+    expect(createdPerson.createdAt instanceof Date).toBeTruthy();
+    expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+
+    const { id: otherId } = createdPerson;
+
+    const data2 = {
+      firstName: 'Jim',
+      lastName: 'Jonson',
+      friend: { connect: otherId },
+      friends: { connect: [otherId] },
+    };
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    expect(createdPerson2.firstName).toBe(data2.firstName);
+    expect(createdPerson2.lastName).toBe(data2.lastName);
+    expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
+    expect(createdPerson2.updatedAt instanceof Date).toBeTruthy();
+    expect(createdPerson2.friend.toString()).toBe(data2.friend.connect.toString());
+    expect(createdPerson2.friends[0].toString()).toBe(data2.friends.connect[0].toString());
+  });
 });

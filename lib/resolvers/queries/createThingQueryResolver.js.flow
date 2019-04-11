@@ -1,16 +1,11 @@
 // @flow
+
+import type { ThingConfig } from '../../flowTypes';
+
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
-
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };

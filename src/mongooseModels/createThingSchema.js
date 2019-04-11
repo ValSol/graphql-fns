@@ -1,14 +1,8 @@
 // @flow
+import type { ThingConfig } from '../flowTypes';
+
 const mongoose = require('mongoose');
 const composeThingSchemaProperties = require('./composeThingSchemaProperties');
-
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 
 const { Schema } = mongoose;
 

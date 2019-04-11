@@ -35,9 +35,8 @@ describe('composeGqlTypes', () => {
 type Example {
   id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   deletedAt: DateTime
-  permanentlyDeleted: DateTime
   textField1: String
   textField2: String
   textField3: String!
@@ -50,6 +49,10 @@ input ExampleCreateInput {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
+}
+input ExampleCreate2Input {
+  connect: ID
+  create: ExampleCreateInput
 }
 input ExampleWhereInput {
   id: ID!
@@ -101,9 +104,8 @@ type Mutation {
 type Example1 {
   id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   deletedAt: DateTime
-  permanentlyDeleted: DateTime
   textField1: String
   textField2: String
   textField3: String!
@@ -111,9 +113,8 @@ type Example1 {
 type Example2 {
   id: ID!
   createdAt: DateTime!
-  updatedAt: DateTime
+  updatedAt: DateTime!
   deletedAt: DateTime
-  permanentlyDeleted: DateTime
   textField1: [String!]!
   textField2: [String!]!
 }
@@ -122,12 +123,20 @@ input Example1CreateInput {
   textField2: String
   textField3: String!
 }
+input Example1Create2Input {
+  connect: ID
+  create: Example1CreateInput
+}
 input Example1WhereInput {
   id: ID!
 }
 input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
+}
+input Example2Create2Input {
+  connect: ID
+  create: Example2CreateInput
 }
 input Example2WhereInput {
   id: ID!
@@ -139,6 +148,109 @@ type Query {
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
   createExample2(data: Example2CreateInput!): Example2!
+}`;
+
+    const result = composeGqlTypes(thingConfigs);
+    expect(result).toEqual(expectedResult);
+  });
+  test('should create things types for two related fields', () => {
+    const personConfig = {
+      thingName: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'friends',
+          thingName: 'Person',
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          thingName: 'Person',
+          array: true,
+        },
+        {
+          name: 'location',
+          thingName: 'Place',
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          thingName: 'Place',
+        },
+      ],
+    };
+    const placeConfig = {
+      thingName: 'Place',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+    };
+    const thingConfigs = [personConfig, placeConfig];
+    const expectedResult = `scalar DateTime
+type Person {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  firstName: String!
+  lastName: String!
+  friends: [Person!]!
+  enemies: [Person!]!
+  location: Place!
+  favoritePlace: Place
+}
+type Place {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  title: String!
+}
+input PersonCreateInput {
+  firstName: String!
+  lastName: String!
+  friends: [PersonCreate2Input!]!
+  enemies: [PersonCreate2Input!]!
+  location: PlaceCreate2Input!
+  favoritePlace: PlaceCreate2Input
+}
+input PersonCreate2Input {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonWhereInput {
+  id: ID!
+}
+input PlaceCreateInput {
+  title: String!
+}
+input PlaceCreate2Input {
+  connect: ID
+  create: PlaceCreateInput
+}
+input PlaceWhereInput {
+  id: ID!
+}
+type Query {
+  Person(where: PersonWhereInput!): Person
+  Place(where: PlaceWhereInput!): Place
+}
+type Mutation {
+  createPerson(data: PersonCreateInput!): Person!
+  createPlace(data: PlaceCreateInput!): Place!
 }`;
 
     const result = composeGqlTypes(thingConfigs);

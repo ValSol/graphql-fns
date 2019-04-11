@@ -1,16 +1,11 @@
 // @flow
+import type { ThingConfig } from '../flowTypes';
+
 const { DateTime } = require('@okgrow/graphql-scalars');
 
 const createThingQueryResolver = require('./queries/createThingQueryResolver');
 const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
 
-type TextField = {
-  name: string,
-  default?: string | Array<string>,
-  required?: boolean,
-  array?: boolean,
-};
-type ThingConfig = { textFields?: Array<TextField>, thingName: string };
 type ThingConfigs = Array<ThingConfig>;
 
 const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
