@@ -13,15 +13,6 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const fileName = 'create-thing.txt';
-    const delimiter = '***************************************\n';
-    const result = `${delimiter}${info}\n${delimiter}${JSON.stringify(
-      info,
-      null,
-      ' ',
-    )}\n${delimiter}`;
-    fs.writeFileSync(fileName, result);
-
     const thingSchema = createThingSchema(thingConfig);
     const { relationalFields, thingName } = thingConfig;
 
@@ -45,6 +36,16 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
 
     const thing = await Thing.create(data2);
     const thing2 = thing.toObject();
+
+    const fileName = 'create-thing.log';
+    const delimiter = '***************************************\n';
+    const result = `${delimiter}${JSON.stringify(args, null, ' ')}\n${delimiter}${JSON.stringify(
+      thing2,
+      null,
+      ' ',
+    )}\n${delimiter}${info}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
+    fs.writeFileSync(fileName, result);
+
     const { _id } = thing2;
     thing2.id = _id;
 
