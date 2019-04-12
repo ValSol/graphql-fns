@@ -25,6 +25,9 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       if (relationalFieldsNames.includes(key)) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].connect;
+        console.log('--------------------------------------');
+        console.log('prev[key] =', prev[key]);
+        console.log('--------------------------------------');
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key];
