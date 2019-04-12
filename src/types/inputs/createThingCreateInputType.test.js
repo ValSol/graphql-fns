@@ -42,8 +42,8 @@ input ExampleCreateChildInput {
   create: ExampleCreateInput
 }
 input ExampleCreateChildrenInput {
-  connect: [ID!]!
-  create: [ExampleCreateInput!]!
+  connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingCreateInputType(thingConfig);
@@ -86,8 +86,8 @@ input PersonCreateChildInput {
   create: PersonCreateInput
 }
 input PersonCreateChildrenInput {
-  connect: [ID!]!
-  create: [PersonCreateInput!]!
+  connect: [ID!]
+  create: [PersonCreateInput!]
 }`;
 
     const result = createThingCreateInputType(thingConfig);

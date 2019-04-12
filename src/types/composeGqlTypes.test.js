@@ -55,8 +55,8 @@ input ExampleCreateChildInput {
   create: ExampleCreateInput
 }
 input ExampleCreateChildrenInput {
-  connect: [ID!]!
-  create: [ExampleCreateInput!]!
+  connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 input ExampleWhereInput {
   id: ID!
@@ -132,8 +132,8 @@ input Example1CreateChildInput {
   create: Example1CreateInput
 }
 input Example1CreateChildrenInput {
-  connect: [ID!]!
-  create: [Example1CreateInput!]!
+  connect: [ID!]
+  create: [Example1CreateInput!]
 }
 input Example1WhereInput {
   id: ID!
@@ -147,8 +147,8 @@ input Example2CreateChildInput {
   create: Example2CreateInput
 }
 input Example2CreateChildrenInput {
-  connect: [ID!]!
-  create: [Example2CreateInput!]!
+  connect: [ID!]
+  create: [Example2CreateInput!]
 }
 input Example2WhereInput {
   id: ID!
@@ -244,8 +244,8 @@ input PersonCreateChildInput {
   create: PersonCreateInput
 }
 input PersonCreateChildrenInput {
-  connect: [ID!]!
-  create: [PersonCreateInput!]!
+  connect: [ID!]
+  create: [PersonCreateInput!]
 }
 input PersonWhereInput {
   id: ID!
@@ -258,8 +258,8 @@ input PlaceCreateChildInput {
   create: PlaceCreateInput
 }
 input PlaceCreateChildrenInput {
-  connect: [ID!]!
-  create: [PlaceCreateInput!]!
+  connect: [ID!]
+  create: [PlaceCreateInput!]
 }
 input PlaceWhereInput {
   id: ID!

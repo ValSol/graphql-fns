@@ -33,8 +33,8 @@ input ${thingName}CreateChildInput {
   create: ${thingName}CreateInput
 }
 input ${thingName}CreateChildrenInput {
-  connect: [ID!]!
-  create: [${thingName}CreateInput!]!
+  connect: [ID!]
+  create: [${thingName}CreateInput!]
 }`);
 
   const result = thingTypeArray.join('\n');
