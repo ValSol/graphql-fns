@@ -1284,7 +1284,7 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@^1.1.0, bson@~1.1.0:
+bson@^1.1.1, bson@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.1.1.tgz#4330f5e99104c4e751e7351859e2d408279f2f13"
   integrity sha512-jCGVYLoYMHDkOsbwJZBCqwMHyH4c+wzgI9hG7Z6SZJRXWr+x58pdIbm2i9a/jFGCkRJqRUr8eoI7lDWa0hTkxg==
@@ -5022,23 +5022,23 @@ modify-values@^1.0.0:
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
-mongodb-core@3.1.11:
-  version "3.1.11"
-  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.1.11.tgz#b253038dbb4d7329f3d1c2ee5400bb0c9221fde5"
-  integrity sha512-rD2US2s5qk/ckbiiGFHeu+yKYDXdJ1G87F6CG3YdaZpzdOm5zpoAZd/EKbPmFO6cQZ+XVXBXBJ660sSI0gc6qg==
+mongodb-core@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.2.2.tgz#d1c084b34c102a98b4734087800115e639d907c5"
+  integrity sha512-YRgC39MuzKL0uoGoRdTmV1e9m47NbMnYmuEx4IOkgWAGXPSEzRY7cwb3N0XMmrDMnD9vp7MysNyAriIIeGgIQg==
   dependencies:
-    bson "^1.1.0"
+    bson "^1.1.1"
     require_optional "^1.0.1"
     safe-buffer "^5.1.2"
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongodb@3.1.13:
-  version "3.1.13"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.13.tgz#f8cdcbb36ad7a08b570bd1271c8525753f75f9f4"
-  integrity sha512-sz2dhvBZQWf3LRNDhbd30KHVzdjZx9IKC0L+kSZ/gzYquCF5zPOgGqRz6sSCqYZtKP2ekB4nfLxhGtzGHnIKxA==
+mongodb@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.2.2.tgz#49b592be3cd50097f78e0964488d18c2e189de20"
+  integrity sha512-xQ6apOOV+w7VFApdaJpWhYhzartpjIDFQjG0AwgJkLh7dBs7PTsq4A3Bia2QWpDohmAzTBIdQVLMqqLy0mwt3Q==
   dependencies:
-    mongodb-core "3.1.11"
+    mongodb-core "3.2.2"
     safe-buffer "^5.1.2"
 
 mongoose-legacy-pluralize@1.0.2:
@@ -5046,22 +5046,23 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@^5.4.21:
-  version "5.4.21"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.21.tgz#59c201d48eea168dc2bd1748210998b2099e8e95"
-  integrity sha512-8teQZ/YUXv7+m5GaPDTmyoSJx7tPczZ99vM0/MS8GFCGVn8BKb5jQzuQCP62nBH4vN6Dmf0OiVKTFUkCpkVp+Q==
+mongoose@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.5.1.tgz#a256a08241a1412bb307b85e7ece25629d0b4bbe"
+  integrity sha512-sVDyzADl0RbNvoRWLL/zQDqoFGi1IaSo5+DpOwhvGgFs3pSsvmONPNW3JF1KvZerNkkkGFb8ZMuFBeKEiDqZLw==
   dependencies:
     async "2.6.1"
-    bson "~1.1.0"
+    bson "~1.1.1"
     kareem "2.3.0"
-    mongodb "3.1.13"
-    mongodb-core "3.1.11"
+    mongodb "3.2.2"
+    mongodb-core "3.2.2"
     mongoose-legacy-pluralize "1.0.2"
     mpath "0.5.1"
     mquery "3.2.0"
     ms "2.1.1"
     regexp-clone "0.0.1"
     safe-buffer "5.1.2"
+    sift "7.0.1"
     sliced "1.0.1"
 
 move-concurrently@^1.0.1:
@@ -6771,6 +6772,11 @@ shellwords@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
+
+sift@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/sift/-/sift-7.0.1.tgz#47d62c50b159d316f1372f8b53f9c10cd21a4b08"
+  integrity sha512-oqD7PMJ+uO6jV9EQCl0LrRw1OwsiPsiFQR5AR30heR+4Dl7jBBbDLnNvWiak20tzZlSE1H7RB30SX/1j/YYT7g==
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
