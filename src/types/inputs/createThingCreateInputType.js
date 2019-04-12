@@ -19,8 +19,8 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   if (relationalFields) {
     relationalFields.reduce((prev, { array, name, required, thingName: referencedThingName }) => {
       prev.push(
-        `  ${name}: ${array ? '[' : ''}${referencedThingName}Create2Input${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
+        `  ${name}: ${referencedThingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
+          required ? '!' : ''
         }`,
       );
       return prev;
@@ -28,9 +28,13 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   }
 
   thingTypeArray.push(`}
-input ${thingName}Create2Input {
+input ${thingName}CreateChildInput {
   connect: ID
   create: ${thingName}CreateInput
+}
+input ${thingName}CreateChildrenInput {
+  connect: [ID!]!
+  create: [${thingName}CreateInput!]!
 }`);
 
   const result = thingTypeArray.join('\n');

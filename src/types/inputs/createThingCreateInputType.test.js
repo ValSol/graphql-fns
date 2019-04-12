@@ -37,9 +37,13 @@ describe('createThingCreateInputType', () => {
   textField4: [String!]!
   textField5: [String!]!
 }
-input ExampleCreate2Input {
+input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]!
+  create: [ExampleCreateInput!]!
 }`;
 
     const result = createThingCreateInputType(thingConfig);
@@ -72,14 +76,18 @@ input ExampleCreate2Input {
       ],
     };
     const expectedResult = `input PersonCreateInput {
-  friends: [PersonCreate2Input!]!
-  enemies: [PersonCreate2Input!]!
-  location: PlaceCreate2Input!
-  favoritePlace: PlaceCreate2Input
+  friends: PersonCreateChildrenInput!
+  enemies: PersonCreateChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
 }
-input PersonCreate2Input {
+input PersonCreateChildInput {
   connect: ID
   create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]!
+  create: [PersonCreateInput!]!
 }`;
 
     const result = createThingCreateInputType(thingConfig);

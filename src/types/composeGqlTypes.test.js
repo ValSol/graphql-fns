@@ -50,9 +50,13 @@ input ExampleCreateInput {
   textField4: [String!]!
   textField5: [String!]!
 }
-input ExampleCreate2Input {
+input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]!
+  create: [ExampleCreateInput!]!
 }
 input ExampleWhereInput {
   id: ID!
@@ -123,9 +127,13 @@ input Example1CreateInput {
   textField2: String
   textField3: String!
 }
-input Example1Create2Input {
+input Example1CreateChildInput {
   connect: ID
   create: Example1CreateInput
+}
+input Example1CreateChildrenInput {
+  connect: [ID!]!
+  create: [Example1CreateInput!]!
 }
 input Example1WhereInput {
   id: ID!
@@ -134,9 +142,13 @@ input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
 }
-input Example2Create2Input {
+input Example2CreateChildInput {
   connect: ID
   create: Example2CreateInput
+}
+input Example2CreateChildrenInput {
+  connect: [ID!]!
+  create: [Example2CreateInput!]!
 }
 input Example2WhereInput {
   id: ID!
@@ -222,14 +234,18 @@ type Place {
 input PersonCreateInput {
   firstName: String!
   lastName: String!
-  friends: [PersonCreate2Input!]!
-  enemies: [PersonCreate2Input!]!
-  location: PlaceCreate2Input!
-  favoritePlace: PlaceCreate2Input
+  friends: PersonCreateChildrenInput!
+  enemies: PersonCreateChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
 }
-input PersonCreate2Input {
+input PersonCreateChildInput {
   connect: ID
   create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]!
+  create: [PersonCreateInput!]!
 }
 input PersonWhereInput {
   id: ID!
@@ -237,9 +253,13 @@ input PersonWhereInput {
 input PlaceCreateInput {
   title: String!
 }
-input PlaceCreate2Input {
+input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
+}
+input PlaceCreateChildrenInput {
+  connect: [ID!]!
+  create: [PlaceCreateInput!]!
 }
 input PlaceWhereInput {
   id: ID!
