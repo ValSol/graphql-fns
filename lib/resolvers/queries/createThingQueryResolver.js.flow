@@ -10,7 +10,7 @@ const getProjectionFromInfo = require('../getProjectionFromInfo');
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
-const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function => {
+const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
     const {
       where: { id },
@@ -44,4 +44,4 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
   return resolver;
 };
 
-module.exports = createCreateThingMutationResolver;
+module.exports = createThingQueryResolver;

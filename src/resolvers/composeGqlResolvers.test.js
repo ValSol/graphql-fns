@@ -76,4 +76,62 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
   });
+  test('should create things types for two things with re', () => {
+    const personConfig = {
+      thingName: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'friends',
+          thingName: 'Person',
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          thingName: 'Person',
+          array: true,
+        },
+        {
+          name: 'location',
+          thingName: 'Place',
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          thingName: 'Place',
+        },
+      ],
+    };
+    const placeConfig = {
+      thingName: 'Place',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+    };
+    const thingConfigs = [personConfig, placeConfig];
+    const result = composeGqlResolvers(thingConfigs);
+
+    expect(typeof result.DateTime).toBe('object');
+    expect(typeof result.Query.Person).toBe('function');
+    expect(typeof result.Query.Place).toBe('function');
+    expect(typeof result.Mutation.createPerson).toBe('function');
+    expect(typeof result.Mutation.createPlace).toBe('function');
+    expect(typeof result.Person.friends).toBe('function');
+    expect(typeof result.Person.enemies).toBe('function');
+    expect(typeof result.Person.location).toBe('function');
+    expect(typeof result.Person.favoritePlace).toBe('function');
+  });
 });
