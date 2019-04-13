@@ -13,8 +13,11 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const thingSchema = createThingSchema(thingConfig);
     const { relationalFields, thingName } = thingConfig;
+
+    const thingSchema = createThingSchema(thingConfig);
+    console.log('--------------------------------------');
+    console.log('thingSchema =', JSON.stringify(thingSchema, null, ' '));
 
     let relationalFieldsNames = [];
     if (relationalFields) {
