@@ -2,7 +2,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingArrayResolver = require('./createThingScalarResolver');
+const createThingArrayResolver = require('./createThingArrayResolver');
 const createThingScalarResolver = require('./createThingScalarResolver');
 
 type ThingConfigsObject = { [key: string]: ThingConfig };

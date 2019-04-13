@@ -15,7 +15,7 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     const { fieldName } = info;
     const ids = parent[fieldName];
 
-    if (!ids.length) return [];
+    if (!ids || !ids.length) return [];
 
     const { mongooseConn } = context;
 
@@ -25,16 +25,6 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     const Thing = await mongooseConn.model(thingName, thingSchema);
     // const projection = getProjectionFromInfo(info);
 
-    // const thing = await Thing.findById({ _id: id }, projection);
-    const things = await Thing.find({ _id: { $in: ids } });
-
-    const things2 = things.map(item => {
-      const result = item.toObject();
-      // eslint-disable-next-line no-underscore-dangle
-      result.id = result._id;
-      return result;
-    });
-
     const fileName = 'array-thing.log';
     const delimiter = '***************************************\n';
     const result = `${delimiter}${fieldName}\n${delimiter}${ids}\n${delimiter}${info}\n${delimiter}${JSON.stringify(
@@ -43,6 +33,16 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
       ' ',
     )}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
+
+    // const thing = await Thing.findById({ _id: id }, projection);
+    const things = await Thing.find({ _id: { $in: ids } });
+
+    const things2 = things.map(item => {
+      const item2 = item.toObject();
+      // eslint-disable-next-line no-underscore-dangle
+      item2.id = item2._id;
+      return item2;
+    });
 
     return things2;
   };
