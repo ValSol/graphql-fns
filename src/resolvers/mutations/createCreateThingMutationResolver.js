@@ -34,11 +34,18 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       }
       return prev;
     }, {});
-
+    console.log('data2 =', data2);
+    console.log('--------------------------------------');
     const Thing = await mongooseConn.model(thingName, thingSchema);
+    console.log('Thing =', Thing);
+    console.log('--------------------------------------');
 
     const thing = await Thing.create(data2);
+    console.log('thing =', thing);
+    console.log('--------------------------------------');
     const thing2 = thing.toObject();
+    console.log('thing2=', thing2);
+    console.log('--------------------------------------');
 
     const fileName = 'create-thing.log';
     const delimiter = '***************************************\n';
