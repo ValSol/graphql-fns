@@ -16,8 +16,6 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { relationalFields, thingName } = thingConfig;
 
     const thingSchema = createThingSchema(thingConfig);
-    console.log('--------------------------------------');
-    console.log('thingSchema =', JSON.stringify(thingSchema, null, ' '));
 
     let relationalFieldsNames = [];
     if (relationalFields) {
@@ -28,27 +26,16 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       if (relationalFieldsNames.includes(key)) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].connect;
-        console.log('--------------------------------------');
-        console.log('prev[key] =', prev[key]);
-        console.log('--------------------------------------');
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key];
       }
       return prev;
     }, {});
-    console.log('data2 =', data2);
-    console.log('--------------------------------------');
     const Thing = await mongooseConn.model(thingName, thingSchema);
-    console.log('Thing =', Thing);
-    console.log('--------------------------------------');
 
     const thing = await Thing.create(data2);
-    console.log('thing =', thing);
-    console.log('--------------------------------------');
     const thing2 = thing.toObject();
-    console.log('thing2=', thing2);
-    console.log('--------------------------------------');
 
     const fileName = 'create-thing.log';
     const delimiter = '***************************************\n';
