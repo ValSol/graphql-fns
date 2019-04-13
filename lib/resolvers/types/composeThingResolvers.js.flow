@@ -2,6 +2,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+const createThingArrayResolver = require('./createThingScalarResolver');
 const createThingScalarResolver = require('./createThingScalarResolver');
 
 type ThingConfigsObject = { [key: string]: ThingConfig };
@@ -18,11 +19,11 @@ const composeThingResolvers = (
 
   const resolvers = relationalFields.reduce((prev, { array, name, thingName }) => {
     if (array) {
-      const resolver = () => `${thingName}-array'`;
+      const resolver = createThingArrayResolver(thingConfigsObject[thingName]);
       // eslint-disable-next-line no-param-reassign
       prev[name] = resolver;
     } else {
-      const resolver = createThingScalarResolver(thingConfigsObject[thingName], name);
+      const resolver = createThingScalarResolver(thingConfigsObject[thingName]);
       // eslint-disable-next-line no-param-reassign
       prev[name] = resolver;
     }

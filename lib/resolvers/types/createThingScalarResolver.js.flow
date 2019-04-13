@@ -10,8 +10,9 @@ const createThingSchema = require('../../mongooseModels/createThingSchema');
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
-const createThingScalarResolver = (thingConfig: ThingConfig, fieldName: string): Function => {
+const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const { fieldName } = info;
     const id = parent[fieldName];
 
     if (!id) return null;
