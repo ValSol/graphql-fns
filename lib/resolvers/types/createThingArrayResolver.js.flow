@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../flowTypes';
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
-// const getProjectionFromInfo = require('../getProjectionFromInfo');
+const getProjectionFromInfo = require('../getProjectionFromInfo');
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
@@ -23,7 +23,7 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     const { thingName } = thingConfig;
 
     const Thing = await mongooseConn.model(thingName, thingSchema);
-    // const projection = getProjectionFromInfo(info);
+    const projection = getProjectionFromInfo(info);
 
     const fileName = 'array-thing.log';
     const delimiter = '***************************************\n';
@@ -34,8 +34,7 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     )}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
 
-    // const thing = await Thing.findById({ _id: id }, projection);
-    const things = await Thing.find({ _id: { $in: ids } });
+    const things = await Thing.find({ _id: { $in: ids } }, projection);
 
     const things2 = things.map(item => {
       const item2 = item.toObject();

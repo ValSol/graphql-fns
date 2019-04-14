@@ -13,7 +13,7 @@ beforeAll(async () => {
 });
 
 describe('createCreateThingMutationResolver', () => {
-  test.skip('should create mutation add thing resolver', async () => {
+  test('should create mutation add thing resolver', async () => {
     const thingConfig = {
       thingName: 'Example',
       textFields: [
