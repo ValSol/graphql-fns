@@ -9,18 +9,18 @@ const { Schema } = mongoose;
 const thingSchemas = {};
 
 const createThingSchema = (thingConfig: ThingConfig): Object => {
-  const { thingName } = thingConfig;
+  const { name } = thingConfig;
 
-  if (thingSchemas[thingName]) return thingSchemas[thingName];
+  if (thingSchemas[name]) return thingSchemas[name];
 
   const thingSchemaProperties = composeThingSchemaProperties(thingConfig);
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
 
   // to work dynamic adding fields
-  mongoose.model(thingName, ThingSchema);
+  mongoose.model(name, ThingSchema);
 
   // дополняем кеш уже заданных коллекций с индексами
-  thingSchemas[thingName] = ThingSchema;
+  thingSchemas[name] = ThingSchema;
 
   return ThingSchema;
 };

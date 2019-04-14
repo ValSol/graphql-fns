@@ -13,7 +13,13 @@ type TextField = {
   array?: boolean,
 };
 export type ThingConfig = {
+  embeddedFields?: Array<{
+    name: string,
+    required?: boolean,
+    array?: boolean,
+    config: ThingConfig,
+  }>,
   relationalFields?: Array<RelationalField>,
   textFields?: Array<TextField>,
-  thingName: string,
+  name: string,
 };

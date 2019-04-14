@@ -17,7 +17,7 @@ beforeAll(async () => {
 describe('createThingQueryResolver', () => {
   test('should create query thing resolver', async () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',

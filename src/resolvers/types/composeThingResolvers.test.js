@@ -5,7 +5,7 @@ const composeThingResolvers = require('./composeThingResolvers');
 describe('composeThingResolvers', () => {
   test('should create resolver for type', () => {
     const personConfig = {
-      thingName: 'Person',
+      name: 'Person',
       textFields: [
         {
           name: 'firstName',
@@ -41,7 +41,7 @@ describe('composeThingResolvers', () => {
     };
 
     const placeConfig = {
-      thingName: 'Place',
+      name: 'Place',
       textFields: [
         {
           name: 'title',

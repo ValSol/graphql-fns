@@ -9,9 +9,9 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 const { Schema } = mongoose;
 
 const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
-  const { relationalFields, textFields } = thingConfig;
+  const { embeddedFields, relationalFields, textFields } = thingConfig;
 
-  const textFieldsObject = {};
+  const result = {};
   if (textFields) {
     textFields.reduce((prev, { array, default: defaultValue, name, required }) => {
       if (defaultValue) {
@@ -30,7 +30,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
         required: !!required,
       };
       return prev;
-    }, textFieldsObject);
+    }, result);
   }
 
   if (relationalFields) {
@@ -43,12 +43,17 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
       // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
       return prev;
-    }, textFieldsObject);
+    }, result);
   }
 
-  const result = {
-    ...textFieldsObject,
-  };
+  if (embeddedFields) {
+    embeddedFields.reduce((prev, { array, name, config }) => {
+      const obj = composeThingSchemaProperties(config);
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = array ? [obj] : obj;
+      return prev;
+    }, result);
+  }
 
   return result;
 };

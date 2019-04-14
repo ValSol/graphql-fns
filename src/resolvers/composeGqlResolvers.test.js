@@ -5,7 +5,7 @@ const composeGqlResolvers = require('./composeGqlResolvers');
 describe('composeGqlResolvers', () => {
   test('should create things types for one thing', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',
@@ -37,7 +37,7 @@ describe('composeGqlResolvers', () => {
   });
   test('should create things types for two things', () => {
     const thingConfig1 = {
-      thingName: 'Example1',
+      name: 'Example1',
       textFields: [
         {
           name: 'textField1',
@@ -53,7 +53,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfig2 = {
-      thingName: 'Example2',
+      name: 'Example2',
       textFields: [
         {
           name: 'textField1',
@@ -78,7 +78,7 @@ describe('composeGqlResolvers', () => {
   });
   test('should create things types for two things with re', () => {
     const personConfig = {
-      thingName: 'Person',
+      name: 'Person',
       textFields: [
         {
           name: 'firstName',
@@ -113,7 +113,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const placeConfig = {
-      thingName: 'Place',
+      name: 'Place',
       textFields: [
         {
           name: 'title',

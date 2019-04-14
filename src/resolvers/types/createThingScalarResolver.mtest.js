@@ -17,7 +17,7 @@ beforeAll(async () => {
 describe('createThingScalarResolver', () => {
   test('should create type thing resolver', async () => {
     const thingConfig = {
-      thingName: 'Place',
+      name: 'Place',
       textFields: [
         {
           name: 'title',

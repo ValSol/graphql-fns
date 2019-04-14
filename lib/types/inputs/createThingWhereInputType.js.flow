@@ -3,9 +3,9 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = (thingConfig: ThingConfig): string => {
-  const { thingName } = thingConfig;
+  const { name } = thingConfig;
 
-  const result = `input ${thingName}WhereInput {
+  const result = `input ${name}WhereInput {
   id: ID!
 }`;
 

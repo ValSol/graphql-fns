@@ -3,23 +3,25 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingCreateInputType = (thingConfig: ThingConfig): string => {
-  const { relationalFields, textFields, thingName } = thingConfig;
+  const { relationalFields, textFields, name } = thingConfig;
 
-  const thingTypeArray = [`input ${thingName}CreateInput {`];
+  const thingTypeArray = [`input ${name}CreateInput {`];
 
   if (textFields) {
-    textFields.reduce((prev, { array, name, required }) => {
+    textFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name}: ${array ? '[' : ''}String${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
       );
       return prev;
     }, thingTypeArray);
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name, required, thingName: referencedThingName }) => {
+    relationalFields.reduce((prev, { array, name: name2, required, thingName }) => {
       prev.push(
-        `  ${name}: ${referencedThingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
+        `  ${name2}: ${thingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
           required ? '!' : ''
         }`,
       );
@@ -28,13 +30,13 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   }
 
   thingTypeArray.push(`}
-input ${thingName}CreateChildInput {
+input ${name}CreateChildInput {
   connect: ID
-  create: ${thingName}CreateInput
+  create: ${name}CreateInput
 }
-input ${thingName}CreateChildrenInput {
+input ${name}CreateChildrenInput {
   connect: [ID!]
-  create: [${thingName}CreateInput!]
+  create: [${name}CreateInput!]
 }`);
 
   const result = thingTypeArray.join('\n');

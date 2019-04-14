@@ -3,10 +3,10 @@
 import type { ThingConfig } from '../flowTypes';
 
 const createThingType = (thingConfig: ThingConfig): string => {
-  const { relationalFields, textFields, thingName } = thingConfig;
+  const { relationalFields, textFields, name } = thingConfig;
 
   const thingTypeArray = [
-    `type ${thingName} {`,
+    `type ${name} {`,
     '  id: ID!',
     '  createdAt: DateTime!',
     '  updatedAt: DateTime!',
@@ -14,17 +14,19 @@ const createThingType = (thingConfig: ThingConfig): string => {
   ];
 
   if (textFields) {
-    textFields.reduce((prev, { array, name, required }) => {
+    textFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name}: ${array ? '[' : ''}String${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
       );
       return prev;
     }, thingTypeArray);
   }
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name, required, thingName: referencedThingName }) => {
+    relationalFields.reduce((prev, { array, name: name2, required, thingName }) => {
       prev.push(
-        `  ${name}: ${array ? '[' : ''}${referencedThingName}${array ? '!]!' : ''}${
+        `  ${name2}: ${array ? '[' : ''}${thingName}${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );

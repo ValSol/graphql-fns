@@ -18,9 +18,9 @@ const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig);
-    const { thingName } = thingConfig;
+    const { name } = thingConfig;
 
-    const Thing = await mongooseConn.model(thingName, thingSchema);
+    const Thing = await mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
 
     const thing = await Thing.findById({ _id: id }, projection);

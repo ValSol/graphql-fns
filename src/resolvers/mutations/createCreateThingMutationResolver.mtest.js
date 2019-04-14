@@ -15,7 +15,7 @@ beforeAll(async () => {
 describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',
@@ -63,7 +63,7 @@ describe('createCreateThingMutationResolver', () => {
   });
   test('should create mutation add thing resolver', async () => {
     const thingConfig = {
-      thingName: 'Person',
+      name: 'Person',
       textFields: [
         {
           name: 'firstName',

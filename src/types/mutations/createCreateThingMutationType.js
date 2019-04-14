@@ -3,9 +3,9 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createCreateThingMutationType = (thingConfig: ThingConfig): string => {
-  const { thingName } = thingConfig;
+  const { name } = thingConfig;
 
-  const result = `  create${thingName}(data: ${thingName}CreateInput!): ${thingName}!`;
+  const result = `  create${name}(data: ${name}CreateInput!): ${name}!`;
 
   return result;
 };

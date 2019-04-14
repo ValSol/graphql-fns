@@ -8,7 +8,7 @@ const { Schema } = mongoose;
 describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text fields', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',
@@ -66,7 +66,7 @@ describe('composeThingSchemaProperties', () => {
   });
   test('should compose schema properties with text and relational fields', () => {
     const thingConfig = {
-      thingName: 'Person',
+      name: 'Person',
       textFields: [
         {
           name: 'firstName',
@@ -135,6 +135,124 @@ describe('composeThingSchemaProperties', () => {
         ref: 'Place',
         required: false,
       },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+  test('should compose schema properties with text and embeded fields', () => {
+    const Address = {
+      name: 'Address',
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const thingConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: Address,
+          required: true,
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: Address,
+          required: true,
+        },
+        {
+          name: 'place',
+          config: Address,
+        },
+        {
+          name: 'places',
+          array: true,
+          config: Address,
+        },
+      ],
+    };
+
+    const expectedResult = {
+      firstName: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      lastName: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      location: {
+        country: {
+          type: String,
+          required: true,
+          default: 'Ukraine',
+        },
+        province: {
+          type: String,
+          required: false,
+          default: '',
+        },
+      },
+      locations: [
+        {
+          country: {
+            type: String,
+            required: true,
+            default: 'Ukraine',
+          },
+          province: {
+            type: String,
+            required: false,
+            default: '',
+          },
+        },
+      ],
+      place: {
+        country: {
+          type: String,
+          required: true,
+          default: 'Ukraine',
+        },
+        province: {
+          type: String,
+          required: false,
+          default: '',
+        },
+      },
+      places: [
+        {
+          country: {
+            type: String,
+            required: true,
+            default: 'Ukraine',
+          },
+          province: {
+            type: String,
+            required: false,
+            default: '',
+          },
+        },
+      ],
     };
 
     const result = composeThingSchemaProperties(thingConfig);

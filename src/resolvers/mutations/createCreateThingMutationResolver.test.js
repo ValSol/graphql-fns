@@ -5,7 +5,7 @@ const createCreateThingMutationResolver = require('./createCreateThingMutationRe
 describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',

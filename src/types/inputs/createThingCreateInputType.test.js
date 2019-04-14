@@ -5,7 +5,7 @@ const createThingCreateInputType = require('./createThingCreateInputType');
 describe('createThingCreateInputType', () => {
   test('should create thing input type with text fields', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',
@@ -51,7 +51,7 @@ input ExampleCreateChildrenInput {
   });
   test('should create thing input type with relational fields', () => {
     const thingConfig = {
-      thingName: 'Person',
+      name: 'Person',
       relationalFields: [
         {
           name: 'friends',

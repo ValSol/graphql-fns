@@ -13,13 +13,13 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const { relationalFields, thingName } = thingConfig;
+    const { relationalFields, name } = thingConfig;
 
     const thingSchema = createThingSchema(thingConfig);
 
     let relationalFieldsNames = [];
     if (relationalFields) {
-      relationalFieldsNames = relationalFields.map(({ name }) => name);
+      relationalFieldsNames = relationalFields.map(({ name: name2 }) => name2);
     }
 
     const data2 = Object.keys(data).reduce((prev, key) => {
@@ -32,7 +32,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       }
       return prev;
     }, {});
-    const Thing = await mongooseConn.model(thingName, thingSchema);
+    const Thing = await mongooseConn.model(name, thingSchema);
 
     const thing = await Thing.create(data2);
     const thing2 = thing.toObject();

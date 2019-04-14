@@ -5,7 +5,7 @@ const createThingWhereInputType = require('./createThingWhereInputType');
 describe('createThingWhereInputType', () => {
   test('should create thing input type', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
     };
     const expectedResult = `input ExampleWhereInput {
   id: ID!

@@ -5,7 +5,7 @@ const createThingType = require('./createThingType');
 describe('createThingType', () => {
   test('should create thing type with Text fields', () => {
     const thingConfig = {
-      thingName: 'Example',
+      name: 'Example',
       textFields: [
         {
           name: 'textField1',
@@ -48,7 +48,7 @@ describe('createThingType', () => {
 
   test('should create thing type with relational fields', () => {
     const thingConfig = {
-      thingName: 'Person',
+      name: 'Person',
       relationalFields: [
         {
           name: 'friends',
