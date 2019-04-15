@@ -17,20 +17,27 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
     prev[name] = thingConfig;
     return prev;
   }, {});
-  thingConfigs.reduce((prev, thingConfig) => {
-    const { name, relationalFields } = thingConfig;
-    const thingQueryResolver = createThingQueryResolver(thingConfig);
-    // eslint-disable-next-line no-param-reassign
-    prev.Query[name] = thingQueryResolver;
-    const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
-    // eslint-disable-next-line no-param-reassign
-    prev.Mutation[`create${name}`] = createThingMutationResolver;
-    if (relationalFields) {
+  thingConfigs
+    .filter(({ isEmbedded }) => !isEmbedded)
+    .reduce((prev, thingConfig) => {
+      const { name, relationalFields } = thingConfig;
+
+      const thingQueryResolver = createThingQueryResolver(thingConfig);
+
       // eslint-disable-next-line no-param-reassign
-      prev[name] = createThingResolver(thingConfig, thingConfigsObject);
-    }
-    return prev;
-  }, resolvers);
+      prev.Query[name] = thingQueryResolver;
+
+      const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
+
+      // eslint-disable-next-line no-param-reassign
+      prev.Mutation[`create${name}`] = createThingMutationResolver;
+
+      if (relationalFields) {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = createThingResolver(thingConfig, thingConfigsObject);
+      }
+      return prev;
+    }, resolvers);
 
   return resolvers;
 };

@@ -9,7 +9,7 @@ const createThingScalarResolver = require('./createThingScalarResolver');
 let mongooseConn;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-query';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-scalar-type';
   mongooseConn = await mongoose.connect(dbURI, { useNewUrlParser: true });
   await mongooseConn.connection.db.dropDatabase();
 });

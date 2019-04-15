@@ -9,7 +9,7 @@ const createThingArrayResolver = require('./createThingArrayResolver');
 let mongooseConn;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-query';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-array-type';
   mongooseConn = await mongoose.connect(dbURI, { useNewUrlParser: true });
   await mongooseConn.connection.db.dropDatabase();
 });

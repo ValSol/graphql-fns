@@ -76,7 +76,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
   });
-  test('should create things types for two things with re', () => {
+  test('should create things types for two things with relational things', () => {
     const personConfig = {
       name: 'Person',
       textFields: [
@@ -133,5 +133,64 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.enemies).toBe('function');
     expect(typeof result.Person.location).toBe('function');
     expect(typeof result.Person.favoritePlace).toBe('function');
+  });
+  test('should create things types for two things with re', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const personConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'place',
+          config: addressConfig,
+        },
+        {
+          name: 'places',
+          array: true,
+          config: addressConfig,
+        },
+      ],
+    };
+    const thingConfigs = [personConfig, addressConfig];
+    const result = composeGqlResolvers(thingConfigs);
+
+    expect(typeof result.DateTime).toBe('object');
+    expect(typeof result.Query.Person).toBe('function');
+    expect(typeof result.Mutation.createPerson).toBe('function');
+    expect(result.Query.Address).toBeUndefined();
+    expect(result.Mutation.createAddress).toBeUndefined();
   });
 });
