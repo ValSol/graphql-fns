@@ -276,4 +276,110 @@ type Mutation {
     const result = composeGqlTypes(thingConfigs);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create things types for regular and embedded fields', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const personConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'place',
+          config: addressConfig,
+        },
+        {
+          name: 'places',
+          array: true,
+          config: addressConfig,
+        },
+      ],
+    };
+    const thingConfigs = [personConfig, addressConfig];
+    const expectedResult = `scalar DateTime
+type Person {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  firstName: String!
+  lastName: String!
+  location: Address!
+  locations: [Address!]!
+  place: Address
+  places: [Address!]!
+}
+type Address {
+  id: ID!
+  country: String!
+  province: String
+}
+input PersonCreateInput {
+  firstName: String!
+  lastName: String!
+  location: AddressCreateInput!
+  locations: [AddressCreateInput!]!
+  place: AddressCreateInput
+  places: [AddressCreateInput!]!
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}
+input PersonWhereInput {
+  id: ID!
+}
+input AddressCreateInput {
+  country: String!
+  province: String
+}
+input AddressWhereInput {
+  id: ID!
+}
+type Query {
+  Person(where: PersonWhereInput!): Person
+}
+type Mutation {
+  createPerson(data: PersonCreateInput!): Person!
+}`;
+
+    const result = composeGqlTypes(thingConfigs);
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -86,4 +86,96 @@ describe('createThingType', () => {
     const result = createThingType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing type with embedded fields', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const personConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'place',
+          config: addressConfig,
+        },
+        {
+          name: 'places',
+          array: true,
+          config: addressConfig,
+        },
+      ],
+    };
+    const expectedResult = `type Person {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  firstName: String!
+  lastName: String!
+  location: Address!
+  locations: [Address!]!
+  place: Address
+  places: [Address!]!
+}`;
+
+    const result = createThingType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create embeded thing type with text fields', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const expectedResult = `type Address {
+  id: ID!
+  country: String!
+  province: String
+}`;
+
+    const result = createThingType(addressConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

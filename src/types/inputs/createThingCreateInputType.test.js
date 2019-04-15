@@ -93,4 +93,99 @@ input PersonCreateChildrenInput {
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create embedded thing input type with text fields', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const expectedResult = `input AddressCreateInput {
+  country: String!
+  province: String
+}`;
+
+    const result = createThingCreateInputType(addressConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type with embedded fields', () => {
+    const addressConfig = {
+      name: 'Address',
+      isEmbedded: true,
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+        },
+        {
+          name: 'province',
+        },
+      ],
+    };
+    const personConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: addressConfig,
+          required: true,
+        },
+        {
+          name: 'place',
+          config: addressConfig,
+        },
+        {
+          name: 'places',
+          array: true,
+          config: addressConfig,
+        },
+      ],
+    };
+    const expectedResult = `input PersonCreateInput {
+  firstName: String!
+  lastName: String!
+  location: AddressCreateInput!
+  locations: [AddressCreateInput!]!
+  place: AddressCreateInput
+  places: [AddressCreateInput!]!
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

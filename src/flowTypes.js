@@ -13,6 +13,7 @@ type TextField = {
   array?: boolean,
 };
 export type ThingConfig = {
+  isEmbedded?: boolean,
   embeddedFields?: Array<{
     name: string,
     required?: boolean,

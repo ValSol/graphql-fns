@@ -3,7 +3,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingCreateInputType = (thingConfig: ThingConfig): string => {
-  const { relationalFields, textFields, name } = thingConfig;
+  const { isEmbedded, embeddedFields, relationalFields, textFields, name } = thingConfig;
 
   const thingTypeArray = [`input ${name}CreateInput {`];
 
@@ -29,8 +29,24 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     }, thingTypeArray);
   }
 
-  thingTypeArray.push(`}
-input ${name}CreateChildInput {
+  if (embeddedFields) {
+    embeddedFields.reduce(
+      (prev, { array, name: name2, required, config: { name: embeddedName } }) => {
+        prev.push(
+          `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]!' : ''}${
+            !array && required ? '!' : ''
+          }`,
+        );
+        return prev;
+      },
+      thingTypeArray,
+    );
+  }
+
+  thingTypeArray.push('}');
+
+  if (!isEmbedded) {
+    thingTypeArray.push(`input ${name}CreateChildInput {
   connect: ID
   create: ${name}CreateInput
 }
@@ -38,6 +54,7 @@ input ${name}CreateChildrenInput {
   connect: [ID!]
   create: [${name}CreateInput!]
 }`);
+  }
 
   const result = thingTypeArray.join('\n');
 

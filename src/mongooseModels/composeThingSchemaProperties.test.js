@@ -141,8 +141,9 @@ describe('composeThingSchemaProperties', () => {
     expect(result).toEqual(expectedResult);
   });
   test('should compose schema properties with text and embeded fields', () => {
-    const Address = {
+    const addressConfig = {
       name: 'Address',
+      isEmbedded: true,
       textFields: [
         {
           name: 'country',
@@ -154,7 +155,7 @@ describe('composeThingSchemaProperties', () => {
         },
       ],
     };
-    const thingConfig = {
+    const personConfig = {
       name: 'Person',
       textFields: [
         {
@@ -169,23 +170,23 @@ describe('composeThingSchemaProperties', () => {
       embeddedFields: [
         {
           name: 'location',
-          config: Address,
+          config: addressConfig,
           required: true,
         },
         {
           name: 'locations',
           array: true,
-          config: Address,
+          config: addressConfig,
           required: true,
         },
         {
           name: 'place',
-          config: Address,
+          config: addressConfig,
         },
         {
           name: 'places',
           array: true,
-          config: Address,
+          config: addressConfig,
         },
       ],
     };
@@ -255,7 +256,7 @@ describe('composeThingSchemaProperties', () => {
       ],
     };
 
-    const result = composeThingSchemaProperties(thingConfig);
+    const result = composeThingSchemaProperties(personConfig);
     expect(result).toEqual(expectedResult);
   });
 });
