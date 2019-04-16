@@ -4,7 +4,7 @@ import type { ThingConfig } from '../flowTypes';
 const { DateTime } = require('@okgrow/graphql-scalars');
 
 const createThingQueryResolver = require('./queries/createThingQueryResolver');
-const createThingResolver = require('./types/composeThingResolvers');
+const composeThingResolvers = require('./types/composeThingResolvers');
 const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
 
 type ThingConfigs = Array<ThingConfig>;
@@ -15,7 +15,7 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
   thingConfigs
     .filter(({ isEmbedded }) => !isEmbedded)
     .reduce((prev, thingConfig) => {
-      const { name, relationalFields } = thingConfig;
+      const { name } = thingConfig;
 
       const thingQueryResolver = createThingQueryResolver(thingConfig);
 
@@ -26,13 +26,17 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
 
       // eslint-disable-next-line no-param-reassign
       prev.Mutation[`create${name}`] = createThingMutationResolver;
-
-      if (relationalFields) {
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = createThingResolver(thingConfig);
-      }
       return prev;
     }, resolvers);
+
+  thingConfigs.reduce((prev, thingConfig) => {
+    const { name, relationalFields } = thingConfig;
+    if (relationalFields) {
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = composeThingResolvers(thingConfig);
+    }
+    return prev;
+  }, resolvers);
 
   return resolvers;
 };

@@ -95,7 +95,6 @@ describe('composeThingResolvers', () => {
 
     const generatedResolvers = composeGqlResolvers(thingConfigs);
 
-    console.log('************ createThingScalarResolver *************');
     const fileName = 'all-results.log';
     const delimiter = '***************************************\n';
     const result = `${delimiter}${generatedTypeDefs}\n${delimiter}${generatedResolvers}\n${delimiter}${JSON.stringify(
