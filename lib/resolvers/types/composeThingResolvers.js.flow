@@ -36,9 +36,12 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
             // eslint-disable-next-line no-param-reassign
             prev2[name2] = resolver;
           } else {
-            const resolver = createThingScalarResolver(config);
+            // const resolver = createThingScalarResolver(config);
+            // prev2[name2] = resolver;
             // eslint-disable-next-line no-param-reassign
-            prev2[name2] = resolver;
+            prev2[name2] = () => {
+              return { id: '5cb4d6130490ee40854416b4', name: 'VVaassyyaa' };
+            };
           }
           return prev2;
         }, childeren);
