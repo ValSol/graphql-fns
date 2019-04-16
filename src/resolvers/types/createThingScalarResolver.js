@@ -14,9 +14,10 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const { fieldName } = info;
 
+    console.log('************ createThingScalarResolver *************');
     const fileName = 'scalar-thing.log';
     const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${delimiter}${JSON.stringify(
+    const result = `${delimiter}${fieldName}\n${delimiter}${JSON.stringify(
       parent,
       null,
       ' ',

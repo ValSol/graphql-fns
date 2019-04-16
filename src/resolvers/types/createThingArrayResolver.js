@@ -16,7 +16,7 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
 
     const fileName = 'array-thing.log';
     const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${delimiter}${JSON.stringify(
+    const result = `${delimiter}${fieldName}\n${delimiter}${JSON.stringify(
       parent,
       null,
       ' ',
