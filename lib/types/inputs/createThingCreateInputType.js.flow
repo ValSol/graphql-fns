@@ -20,9 +20,9 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, name: name2, required, config: { name: thingName } }) => {
+      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${thingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
+          `  ${name2}: ${relationalThingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
             required ? '!' : ''
           }`,
         );

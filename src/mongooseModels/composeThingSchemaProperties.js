@@ -34,16 +34,19 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name, required, config: { name: thingName } }) => {
-      const obj = {
-        ref: thingName,
-        type: Schema.Types.ObjectId,
-        required: !!required,
-      };
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = array ? [obj] : obj;
-      return prev;
-    }, result);
+    relationalFields.reduce(
+      (prev, { array, name, required, config: { name: relationalThingName } }) => {
+        const obj = {
+          ref: relationalThingName,
+          type: Schema.Types.ObjectId,
+          required: !!required,
+        };
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = array ? [obj] : obj;
+        return prev;
+      },
+      result,
+    );
   }
 
   if (embeddedFields) {

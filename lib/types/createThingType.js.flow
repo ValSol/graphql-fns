@@ -29,9 +29,9 @@ const createThingType = (thingConfig: ThingConfig): string => {
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, name: name2, required, config: { name: thingName } }) => {
+      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}${thingName}${array ? '!]!' : ''}${
+          `  ${name2}: ${array ? '[' : ''}${relationalThingName}${array ? '!]!' : ''}${
             !array && required ? '!' : ''
           }`,
         );
