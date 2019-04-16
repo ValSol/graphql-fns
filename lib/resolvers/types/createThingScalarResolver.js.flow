@@ -30,11 +30,11 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
 
     const fileName = 'scalar-thing.log';
     const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${id}\n${delimiter}${info}\n${delimiter}${JSON.stringify(
-      info,
+    const result = `${delimiter}${fieldName}\n${delimiter}${id}\n${delimiter}${JSON.stringify(
+      parent,
       null,
       ' ',
-    )}\n${delimiter}`;
+    )}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
 
     const { _id } = thing2;

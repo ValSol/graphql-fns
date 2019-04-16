@@ -27,11 +27,11 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
 
     const fileName = 'array-thing.log';
     const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${ids}\n${delimiter}${info}\n${delimiter}${JSON.stringify(
-      info,
+    const result = `${delimiter}${fieldName}\n${delimiter}${ids}\n${delimiter}${JSON.stringify(
+      parent,
       null,
       ' ',
-    )}\n${delimiter}`;
+    )}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
 
     const things = await Thing.find({ _id: { $in: ids } }, projection);
