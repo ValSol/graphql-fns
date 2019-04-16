@@ -77,7 +77,21 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample2).toBe('function');
   });
   test('should create things types for two things with relational things', () => {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+    };
     const personConfig = {
+      name: 'Person',
+      textFields: [],
+      relationalFields: [],
+    };
+    Object.assign(personConfig, {
       name: 'Person',
       textFields: [
         {
@@ -92,35 +106,26 @@ describe('composeGqlResolvers', () => {
       relationalFields: [
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
           required: true,
         },
         {
           name: 'enemies',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
         {
           name: 'location',
-          thingName: 'Place',
+          config: placeConfig,
           required: true,
         },
         {
           name: 'favoritePlace',
-          thingName: 'Place',
+          config: placeConfig,
         },
       ],
-    };
-    const placeConfig = {
-      name: 'Place',
-      textFields: [
-        {
-          name: 'title',
-          required: true,
-        },
-      ],
-    };
+    });
     const thingConfigs = [personConfig, placeConfig];
     const result = composeGqlResolvers(thingConfigs);
 

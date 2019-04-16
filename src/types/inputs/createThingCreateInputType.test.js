@@ -50,31 +50,39 @@ input ExampleCreateChildrenInput {
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with relational fields', () => {
-    const thingConfig = {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+    };
+    const personConfig = {
+      name: 'Person',
+      relationalFields: [],
+    };
+    Object.assign(personConfig, {
       name: 'Person',
       relationalFields: [
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
           required: true,
         },
         {
           name: 'enemies',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
         {
           name: 'location',
-          thingName: 'Place',
+          config: placeConfig,
           required: true,
         },
         {
           name: 'favoritePlace',
-          thingName: 'Place',
+          config: placeConfig,
         },
       ],
-    };
+    });
     const expectedResult = `input PersonCreateInput {
   friends: PersonCreateChildrenInput!
   enemies: PersonCreateChildrenInput
@@ -90,7 +98,7 @@ input PersonCreateChildrenInput {
   create: [PersonCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 

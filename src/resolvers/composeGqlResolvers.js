@@ -11,12 +11,7 @@ type ThingConfigs = Array<ThingConfig>;
 
 const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
   const resolvers = { DateTime, Query: {}, Mutation: {}, Subscription: {} };
-  const thingConfigsObject = thingConfigs.reduce((prev, thingConfig) => {
-    const { name } = thingConfig;
-    // eslint-disable-next-line no-param-reassign
-    prev[name] = thingConfig;
-    return prev;
-  }, {});
+
   thingConfigs
     .filter(({ isEmbedded }) => !isEmbedded)
     .reduce((prev, thingConfig) => {
@@ -34,7 +29,7 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
 
       if (relationalFields) {
         // eslint-disable-next-line no-param-reassign
-        prev[name] = createThingResolver(thingConfig, thingConfigsObject);
+        prev[name] = createThingResolver(thingConfig);
       }
       return prev;
     }, resolvers);

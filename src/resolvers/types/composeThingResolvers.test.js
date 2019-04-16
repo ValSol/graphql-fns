@@ -4,7 +4,22 @@ const composeThingResolvers = require('./composeThingResolvers');
 
 describe('composeThingResolvers', () => {
   test('should create resolver for type', () => {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+    };
     const personConfig = {
+      name: 'Person',
+      textFields: [],
+      relationalFields: [],
+    };
+
+    Object.assign(personConfig, {
       name: 'Person',
       textFields: [
         {
@@ -19,40 +34,28 @@ describe('composeThingResolvers', () => {
       relationalFields: [
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
           required: true,
         },
         {
           name: 'enemies',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
         {
           name: 'location',
-          thingName: 'Place',
+          config: placeConfig,
           required: true,
         },
         {
           name: 'favoritePlace',
-          thingName: 'Place',
+          config: personConfig,
         },
       ],
-    };
+    });
 
-    const placeConfig = {
-      name: 'Place',
-      textFields: [
-        {
-          name: 'title',
-          required: true,
-        },
-      ],
-    };
-
-    const thingConfigsObject = { Person: personConfig, Place: placeConfig };
-
-    const result = composeThingResolvers(personConfig, thingConfigsObject);
+    const result = composeThingResolvers(personConfig);
 
     expect(typeof result.friends).toBe('function');
     expect(typeof result.enemies).toBe('function');

@@ -34,7 +34,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name, required, thingName }) => {
+    relationalFields.reduce((prev, { array, name, required, config: { name: thingName } }) => {
       const obj = {
         ref: thingName,
         type: Schema.Types.ObjectId,

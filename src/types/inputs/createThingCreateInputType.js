@@ -19,14 +19,17 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name: name2, required, thingName }) => {
-      prev.push(
-        `  ${name2}: ${thingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
-          required ? '!' : ''
-        }`,
-      );
-      return prev;
-    }, thingTypeArray);
+    relationalFields.reduce(
+      (prev, { array, name: name2, required, config: { name: thingName } }) => {
+        prev.push(
+          `  ${name2}: ${thingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
+            required ? '!' : ''
+          }`,
+        );
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
   if (embeddedFields) {

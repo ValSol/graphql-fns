@@ -166,7 +166,21 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
   test('should create things types for two related fields', () => {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+    };
     const personConfig = {
+      name: 'Person',
+      textFields: [],
+      relationalFields: [],
+    };
+    Object.assign(personConfig, {
       name: 'Person',
       textFields: [
         {
@@ -181,35 +195,26 @@ type Mutation {
       relationalFields: [
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
           required: true,
         },
         {
           name: 'enemies',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
         {
           name: 'location',
-          thingName: 'Place',
+          config: placeConfig,
           required: true,
         },
         {
           name: 'favoritePlace',
-          thingName: 'Place',
+          config: placeConfig,
         },
       ],
-    };
-    const placeConfig = {
-      name: 'Place',
-      textFields: [
-        {
-          name: 'title',
-          required: true,
-        },
-      ],
-    };
+    });
     const thingConfigs = [personConfig, placeConfig];
     const expectedResult = `scalar DateTime
 type Person {

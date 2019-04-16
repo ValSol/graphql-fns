@@ -65,7 +65,12 @@ describe('composeThingSchemaProperties', () => {
     expect(result).toEqual(expectedResult);
   });
   test('should compose schema properties with text and relational fields', () => {
-    const thingConfig = {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+    };
+    const personConfig = { name: 'Person', textFields: [], relationalFields: [] };
+    Object.assign(personConfig, {
       name: 'Person',
       textFields: [
         {
@@ -80,26 +85,26 @@ describe('composeThingSchemaProperties', () => {
       relationalFields: [
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
           required: true,
         },
         {
           name: 'enemies',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
         {
           name: 'location',
-          thingName: 'Place',
+          config: placeConfig,
           required: true,
         },
         {
           name: 'favoritePlace',
-          thingName: 'Place',
+          config: placeConfig,
         },
       ],
-    };
+    });
     const expectedResult = {
       firstName: {
         type: String,
@@ -137,7 +142,7 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig);
+    const result = composeThingSchemaProperties(personConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should compose schema properties with text and embeded fields', () => {

@@ -16,7 +16,12 @@ beforeAll(async () => {
 
 describe('createThingScalarResolver', () => {
   test('should create type thing resolver', async () => {
-    const thingConfig = {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [],
+      relationalFields: [],
+    };
+    Object.assign(placeConfig, {
       name: 'Place',
       textFields: [
         {
@@ -27,17 +32,17 @@ describe('createThingScalarResolver', () => {
       relationalFields: [
         {
           name: 'friend',
-          thingName: 'Place',
+          config: placeConfig,
         },
         {
           name: 'friends',
-          thingName: 'Place',
+          config: placeConfig,
           array: true,
         },
       ],
-    };
+    });
 
-    const createPlace = createCreateThingMutationResolver(thingConfig);
+    const createPlace = createCreateThingMutationResolver(placeConfig);
     expect(typeof createPlace).toBe('function');
     const data = {
       title: 'Paris',
@@ -45,7 +50,7 @@ describe('createThingScalarResolver', () => {
     const createdPlace = await createPlace(null, { data }, { mongooseConn });
     const { id } = createdPlace;
 
-    const Place = createThingScalarResolver(thingConfig);
+    const Place = createThingScalarResolver(placeConfig);
     const parent = { friend: id };
     const place = await Place(parent, null, { mongooseConn }, info);
 

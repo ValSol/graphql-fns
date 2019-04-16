@@ -1,11 +1,5 @@
 // @flow
 
-type RelationalField = {
-  name: string,
-  thingName: string,
-  required?: boolean,
-  array?: boolean,
-};
 type TextField = {
   name: string,
   default?: string | Array<string>,
@@ -20,7 +14,12 @@ export type ThingConfig = {
     array?: boolean,
     config: ThingConfig,
   }>,
-  relationalFields?: Array<RelationalField>,
+  relationalFields?: Array<{
+    name: string,
+    required?: boolean,
+    array?: boolean,
+    config: ThingConfig,
+  }>,
   textFields?: Array<TextField>,
   name: string,
 };

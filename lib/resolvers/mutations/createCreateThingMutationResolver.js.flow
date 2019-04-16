@@ -32,6 +32,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       }
       return prev;
     }, {});
+
     const Thing = await mongooseConn.model(name, thingSchema);
 
     const thing = await Thing.create(data2);

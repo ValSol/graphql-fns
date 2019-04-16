@@ -62,7 +62,8 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
   });
   test('should create mutation add thing resolver', async () => {
-    const thingConfig = {
+    const personConfig = { name: 'Person', textFields: [], relationalFields: [] };
+    Object.assign(personConfig, {
       name: 'Person',
       textFields: [
         {
@@ -77,17 +78,17 @@ describe('createCreateThingMutationResolver', () => {
       relationalFields: [
         {
           name: 'friend',
-          thingName: 'Person',
+          config: personConfig,
         },
         {
           name: 'friends',
-          thingName: 'Person',
+          config: personConfig,
           array: true,
         },
       ],
-    };
+    });
 
-    const createPerson = createCreateThingMutationResolver(thingConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig);
     expect(typeof createPerson).toBe('function');
     const data = {
       firstName: 'Ivan',
