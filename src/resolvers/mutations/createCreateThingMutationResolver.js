@@ -4,6 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
+const transformInputData = require('./transformInputData');
 
 type Args = { data: Object };
 type Context = { mongooseConn: Object };
@@ -13,25 +14,11 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const { relationalFields, name } = thingConfig;
+    const { name } = thingConfig;
 
     const thingSchema = createThingSchema(thingConfig);
 
-    let relationalFieldsNames = [];
-    if (relationalFields) {
-      relationalFieldsNames = relationalFields.map(({ name: name2 }) => name2);
-    }
-
-    const data2 = Object.keys(data).reduce((prev, key) => {
-      if (relationalFieldsNames.includes(key)) {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].connect;
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key];
-      }
-      return prev;
-    }, {});
+    const data2 = transformInputData(data, thingConfig);
 
     const Thing = await mongooseConn.model(name, thingSchema);
 
