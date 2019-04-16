@@ -13,6 +13,16 @@ type Context = { mongooseConn: Object };
 const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const { fieldName } = info;
+
+    const fileName = 'array-thing.log';
+    const delimiter = '***************************************\n';
+    const result = `${delimiter}${fieldName}\n${delimiter}${delimiter}${JSON.stringify(
+      parent,
+      null,
+      ' ',
+    )}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
+    fs.writeFileSync(fileName, result);
+
     const ids = parent[fieldName];
 
     if (!ids || !ids.length) return [];
@@ -24,15 +34,6 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
 
     const Thing = await mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
-
-    const fileName = 'array-thing.log';
-    const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${ids}\n${delimiter}${JSON.stringify(
-      parent,
-      null,
-      ' ',
-    )}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
-    fs.writeFileSync(fileName, result);
 
     const things = await Thing.find({ _id: { $in: ids } }, projection);
 
