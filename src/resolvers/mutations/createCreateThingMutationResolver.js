@@ -18,7 +18,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
 
     const thingSchema = createThingSchema(thingConfig);
 
-    const data2 = transformInputData(data, thingConfig);
+    const [{ data: data2 }] = transformInputData(data, thingConfig);
 
     const Thing = await mongooseConn.model(name, thingSchema);
 

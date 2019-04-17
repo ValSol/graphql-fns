@@ -2,6 +2,14 @@
 /* eslint-env jest */
 const transformInputData = require('./transformInputData');
 
+const mongooseTypes = {
+  count: 0,
+  ObjectId() {
+    this.count += 1;
+    return String(this.count);
+  },
+};
+
 describe('transformInputData', () => {
   test('should create object with simple fields', () => {
     const thingConfig = {
@@ -20,11 +28,17 @@ describe('transformInputData', () => {
       textField2: 'textField2-Value',
     };
 
-    const expectedResult = {
-      textField1: 'textField1-Value',
-      textField2: 'textField2-Value',
-    };
-    const result = transformInputData(data, thingConfig);
+    const expectedResult = [
+      {
+        config: thingConfig,
+        data: {
+          _id: '1',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+        },
+      },
+    ];
+    const result = transformInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -63,14 +77,20 @@ describe('transformInputData', () => {
       relationalField2: { connect: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'] },
     };
 
-    const expectedResult = {
-      textField1: 'textField1-Value',
-      textField2: 'textField2-Value',
-      relationalField1: '5caf757d62552d713461f420',
-      relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
-    };
+    const expectedResult = [
+      {
+        config: thingConfig,
+        data: {
+          _id: '2',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          relationalField1: '5caf757d62552d713461f420',
+          relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
+        },
+      },
+    ];
 
-    const result = transformInputData(data, thingConfig);
+    const result = transformInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -134,19 +154,81 @@ describe('transformInputData', () => {
       },
     };
 
-    const expectedResult = {
-      textField1: 'textField1-Value',
-      textField2: 'textField2-Value',
-      embeddedField1: {
-        textField_e1: 'textField_e1-value',
-        embeddedField2: {
-          textField_e2: 'textField_e2-value',
-          relationalField: '5caf757d62552d713461f420',
+    const expectedResult = [
+      {
+        config: thingConfig,
+        data: {
+          _id: '3',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          embeddedField1: {
+            textField_e1: 'textField_e1-value',
+            embeddedField2: {
+              textField_e2: 'textField_e2-value',
+              relationalField: '5caf757d62552d713461f420',
+            },
+          },
         },
       },
+    ];
+
+    const result = transformInputData(data, thingConfig, mongooseTypes);
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create object and children objectcs', () => {
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'city' }],
+    };
+    const personConfig = {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+        },
+        {
+          name: 'lastName',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'location',
+          config: placeConfig,
+        },
+        {
+          name: 'favorites',
+          config: placeConfig,
+          array: true,
+        },
+      ],
+    };
+    const data = {
+      firstName: 'Vasya',
+      lastName: 'Pupkin',
+      location: { create: { city: 'Kyiv' } },
+      favorites: { create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }] },
     };
 
-    const result = transformInputData(data, thingConfig);
+    const expectedResult = [
+      {
+        config: personConfig,
+        data: {
+          _id: '4',
+          firstName: 'Vasya',
+          lastName: 'Pupkin',
+          location: '5',
+          favorites: ['6', '7', '8'],
+        },
+      },
+      { config: placeConfig, data: { _id: '5', city: 'Kyiv' } },
+      { config: placeConfig, data: { _id: '6', city: 'Odesa' } },
+      { config: placeConfig, data: { _id: '7', city: 'Chernygiv' } },
+      { config: placeConfig, data: { _id: '8', city: 'Zhitomyr' } },
+    ];
+
+    const result = transformInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
