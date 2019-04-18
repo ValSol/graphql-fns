@@ -38,9 +38,10 @@ const transformInputData = (
         if (data2[key].connect) {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key].connect;
-        } else if (data2[key].create) {
+        }
+        if (data2[key].create) {
           if (relationalFieldsObject[key].array) {
-            const ids = [];
+            const ids = data2[key].connect || [];
             data2[key].create.forEach(item => {
               // eslint-disable-next-line no-underscore-dangle
               const _id = mongooseTypes.ObjectId();

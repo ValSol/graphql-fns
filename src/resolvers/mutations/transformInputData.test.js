@@ -208,7 +208,10 @@ describe('transformInputData', () => {
       firstName: 'Vasya',
       lastName: 'Pupkin',
       location: { create: { city: 'Kyiv' } },
-      favorites: { create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }] },
+      favorites: {
+        connect: ['777'],
+        create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }],
+      },
     };
 
     const expectedResult = [
@@ -219,7 +222,7 @@ describe('transformInputData', () => {
           firstName: 'Vasya',
           lastName: 'Pupkin',
           location: '5',
-          favorites: ['6', '7', '8'],
+          favorites: ['777', '6', '7', '8'],
         },
       },
       { config: placeConfig, data: { _id: '5', city: 'Kyiv' } },
