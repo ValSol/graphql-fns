@@ -32,7 +32,7 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     const thingSchema = createThingSchema(thingConfig);
     const { name } = thingConfig;
 
-    const Thing = await mongooseConn.model(name, thingSchema);
+    const Thing = mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
 
     const thing = await Thing.findById(id, projection);
