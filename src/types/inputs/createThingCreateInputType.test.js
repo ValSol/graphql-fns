@@ -196,4 +196,87 @@ input PersonCreateChildrenInput {
     const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
+  test('should create thing input type with duplex fields', () => {
+    const personConfig = {
+      name: 'Person',
+      textFields: [],
+      duplexFields: [],
+    };
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friends',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          oppositeName: 'enemies',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          oppositeName: 'visitors',
+          config: placeConfig,
+        },
+      ],
+    });
+    const expectedResult = `input PersonCreateInput {
+  firstName: String!
+  lastName: String!
+  friends: PersonCreateChildrenInput!
+  enemies: PersonCreateChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

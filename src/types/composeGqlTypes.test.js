@@ -387,4 +387,138 @@ type Mutation {
     const result = composeGqlTypes(thingConfigs);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create things types for two duplex fields', () => {
+    const personConfig = {
+      name: 'Person',
+      textFields: [],
+      duplexFields: [],
+    };
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friends',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          oppositeName: 'enemies',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          oppositeName: 'visitors',
+          config: placeConfig,
+        },
+      ],
+    });
+    const thingConfigs = [personConfig, placeConfig];
+    const expectedResult = `scalar DateTime
+type Person {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  firstName: String!
+  lastName: String!
+  friends: [Person!]!
+  enemies: [Person!]!
+  location: Place!
+  favoritePlace: Place
+}
+type Place {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  name: String
+  citizens: [Person!]!
+  visitors: [Person!]!
+}
+input PersonCreateInput {
+  firstName: String!
+  lastName: String!
+  friends: PersonCreateChildrenInput!
+  enemies: PersonCreateChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}
+input PersonWhereInput {
+  id: ID!
+}
+input PlaceCreateInput {
+  name: String
+  citizens: PersonCreateChildrenInput
+  visitors: PersonCreateChildrenInput
+}
+input PlaceCreateChildInput {
+  connect: ID
+  create: PlaceCreateInput
+}
+input PlaceCreateChildrenInput {
+  connect: [ID!]
+  create: [PlaceCreateInput!]
+}
+input PlaceWhereInput {
+  id: ID!
+}
+type Query {
+  Person(where: PersonWhereInput!): Person
+  Place(where: PlaceWhereInput!): Place
+}
+type Mutation {
+  createPerson(data: PersonCreateInput!): Person!
+  createPlace(data: PlaceCreateInput!): Place!
+}`;
+
+    const result = composeGqlTypes(thingConfigs);
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -235,4 +235,92 @@ describe('transformInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+  test('should create object and children objectcs along with ', () => {
+    const personConfig = {
+      name: 'Person',
+      textFields: [],
+      duplexFields: [],
+    };
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favorites',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        // {
+        //   name: 'friends',
+        //   oppositeName: 'friends',
+        //   config: personConfig,
+        //   array: true,
+        //   required: true,
+        // },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favorites',
+          oppositeName: 'visitors',
+          config: placeConfig,
+          array: true,
+        },
+      ],
+    });
+    const data = {
+      firstName: 'Vasya',
+      lastName: 'Pupkin',
+      location: { create: { city: 'Kyiv' } },
+      favorites: {
+        create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }],
+      },
+    };
+
+    const expectedResult = [
+      {
+        config: personConfig,
+        data: {
+          _id: '9',
+          firstName: 'Vasya',
+          lastName: 'Pupkin',
+          location: '10',
+          favorites: ['11', '12', '13'],
+        },
+      },
+      { config: placeConfig, data: { _id: '10', city: 'Kyiv', citizens: ['9'] } },
+      { config: placeConfig, data: { _id: '11', city: 'Odesa', visitors: ['9'] } },
+      { config: placeConfig, data: { _id: '12', city: 'Chernygiv', visitors: ['9'] } },
+      { config: placeConfig, data: { _id: '13', city: 'Zhitomyr', visitors: ['9'] } },
+    ];
+
+    const result = transformInputData(data, personConfig, mongooseTypes);
+
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -145,6 +145,105 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(personConfig);
     expect(result).toEqual(expectedResult);
   });
+  test('should compose schema properties with text and duplex fields', () => {
+    const personConfig = { name: 'Person', textFields: [], duplexFields: [] };
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friends',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          oppositeName: 'enemies',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          oppositeName: 'visitors',
+          config: placeConfig,
+        },
+      ],
+    });
+    const expectedResult = {
+      firstName: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      lastName: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      friends: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Person',
+          required: true,
+        },
+      ],
+      enemies: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Person',
+          required: false,
+        },
+      ],
+      location: {
+        type: Schema.Types.ObjectId,
+        ref: 'Place',
+        required: true,
+      },
+      favoritePlace: {
+        type: Schema.Types.ObjectId,
+        ref: 'Place',
+        required: false,
+      },
+    };
+
+    const result = composeThingSchemaProperties(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
   test('should compose schema properties with text and embeded fields', () => {
     const addressConfig = {
       name: 'Address',

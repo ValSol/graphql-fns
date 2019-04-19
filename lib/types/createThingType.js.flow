@@ -3,7 +3,14 @@
 import type { ThingConfig } from '../flowTypes';
 
 const createThingType = (thingConfig: ThingConfig): string => {
-  const { isEmbedded, embeddedFields, relationalFields, textFields, name } = thingConfig;
+  const {
+    duplexFields,
+    isEmbedded,
+    embeddedFields,
+    relationalFields,
+    textFields,
+    name,
+  } = thingConfig;
 
   const thingTypeArray = [
     `type ${name} {
@@ -29,6 +36,21 @@ const createThingType = (thingConfig: ThingConfig): string => {
 
   if (relationalFields) {
     relationalFields.reduce(
+      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
+        prev.push(
+          `  ${name2}: ${array ? '[' : ''}${relationalThingName}${array ? '!]!' : ''}${
+            !array && required ? '!' : ''
+          }`,
+        );
+        return prev;
+      },
+      thingTypeArray,
+    );
+  }
+
+  // the same code as for relationalFields
+  if (duplexFields) {
+    duplexFields.reduce(
       (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${array ? '[' : ''}${relationalThingName}${array ? '!]!' : ''}${

@@ -9,7 +9,7 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 const { Schema } = mongoose;
 
 const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
-  const { embeddedFields, relationalFields, textFields } = thingConfig;
+  const { duplexFields, embeddedFields, relationalFields, textFields } = thingConfig;
 
   const result = {};
   if (textFields) {
@@ -35,6 +35,23 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
 
   if (relationalFields) {
     relationalFields.reduce(
+      (prev, { array, name, required, config: { name: relationalThingName } }) => {
+        const obj = {
+          ref: relationalThingName,
+          type: Schema.Types.ObjectId,
+          required: !!required,
+        };
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = array ? [obj] : obj;
+        return prev;
+      },
+      result,
+    );
+  }
+
+  // the same code as for relationalFields
+  if (duplexFields) {
+    duplexFields.reduce(
       (prev, { array, name, required, config: { name: relationalThingName } }) => {
         const obj = {
           ref: relationalThingName,

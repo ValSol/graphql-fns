@@ -8,6 +8,13 @@ type TextField = {
 };
 export type ThingConfig = {
   isEmbedded?: boolean,
+  duplexFields?: Array<{
+    name: string,
+    oppositeName: string,
+    required?: boolean,
+    array?: boolean,
+    config: ThingConfig,
+  }>,
   embeddedFields?: Array<{
     name: string,
     required?: boolean,
