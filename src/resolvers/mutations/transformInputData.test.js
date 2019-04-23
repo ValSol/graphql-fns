@@ -28,16 +28,30 @@ describe('transformInputData', () => {
       textField2: 'textField2-Value',
     };
 
-    const expectedResult = [
-      {
-        config: thingConfig,
-        data: {
+    const core = new Map();
+    const item = {
+      insertOne: {
+        document: {
           _id: '1',
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
         },
       },
-    ];
+    };
+
+    core.set(thingConfig, [item]);
+    const single = true;
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single,
+      first: {
+        _id: '1',
+        textField1: 'textField1-Value',
+        textField2: 'textField2-Value',
+      },
+    };
     const result = transformInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
@@ -77,10 +91,10 @@ describe('transformInputData', () => {
       relationalField2: { connect: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'] },
     };
 
-    const expectedResult = [
-      {
-        config: thingConfig,
-        data: {
+    const core = new Map();
+    const item = {
+      insertOne: {
+        document: {
           _id: '2',
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
@@ -88,7 +102,22 @@ describe('transformInputData', () => {
           relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
         },
       },
-    ];
+    };
+    core.set(thingConfig, [item]);
+    const single = true;
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single,
+      first: {
+        _id: '2',
+        textField1: 'textField1-Value',
+        textField2: 'textField2-Value',
+        relationalField1: '5caf757d62552d713461f420',
+        relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
+      },
+    };
 
     const result = transformInputData(data, thingConfig, mongooseTypes);
 
@@ -154,10 +183,10 @@ describe('transformInputData', () => {
       },
     };
 
-    const expectedResult = [
-      {
-        config: thingConfig,
-        data: {
+    const core = new Map();
+    const item = {
+      insertOne: {
+        document: {
           _id: '3',
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
@@ -170,7 +199,27 @@ describe('transformInputData', () => {
           },
         },
       },
-    ];
+    };
+    core.set(thingConfig, [item]);
+    const single = true;
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single,
+      first: {
+        _id: '3',
+        textField1: 'textField1-Value',
+        textField2: 'textField2-Value',
+        embeddedField1: {
+          textField_e1: 'textField_e1-value',
+          embeddedField2: {
+            textField_e2: 'textField_e2-value',
+            relationalField: '5caf757d62552d713461f420',
+          },
+        },
+      },
+    };
 
     const result = transformInputData(data, thingConfig, mongooseTypes);
 
@@ -214,28 +263,45 @@ describe('transformInputData', () => {
       },
     };
 
-    const expectedResult = [
+    const core = new Map();
+    core.set(personConfig, [
       {
-        config: personConfig,
-        data: {
-          _id: '4',
-          firstName: 'Vasya',
-          lastName: 'Pupkin',
-          location: '5',
-          favorites: ['777', '6', '7', '8'],
+        insertOne: {
+          document: {
+            _id: '4',
+            firstName: 'Vasya',
+            lastName: 'Pupkin',
+            location: '5',
+            favorites: ['777', '6', '7', '8'],
+          },
         },
       },
-      { config: placeConfig, data: { _id: '5', city: 'Kyiv' } },
-      { config: placeConfig, data: { _id: '6', city: 'Odesa' } },
-      { config: placeConfig, data: { _id: '7', city: 'Chernygiv' } },
-      { config: placeConfig, data: { _id: '8', city: 'Zhitomyr' } },
-    ];
+    ]);
+    core.set(placeConfig, [
+      { insertOne: { document: { _id: '5', city: 'Kyiv' } } },
+      { insertOne: { document: { _id: '6', city: 'Odesa' } } },
+      { insertOne: { document: { _id: '7', city: 'Chernygiv' } } },
+      { insertOne: { document: { _id: '8', city: 'Zhitomyr' } } },
+    ]);
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single: false,
+      first: {
+        _id: '4',
+        firstName: 'Vasya',
+        lastName: 'Pupkin',
+        location: '5',
+        favorites: ['777', '6', '7', '8'],
+      },
+    };
 
     const result = transformInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
-  test('should create object and children objectcs along with ', () => {
+  test('should create object and children objectcs with duplex fields along with create', () => {
     const personConfig = {
       name: 'Person',
       textFields: [],
@@ -272,13 +338,12 @@ describe('transformInputData', () => {
         },
       ],
       duplexFields: [
-        // {
-        //   name: 'friends',
-        //   oppositeName: 'friends',
-        //   config: personConfig,
-        //   array: true,
-        //   required: true,
-        // },
+        {
+          name: 'friend',
+          oppositeName: 'friend',
+          config: personConfig,
+          required: true,
+        },
         {
           name: 'location',
           oppositeName: 'citizens',
@@ -296,31 +361,278 @@ describe('transformInputData', () => {
     const data = {
       firstName: 'Vasya',
       lastName: 'Pupkin',
-      location: { create: { city: 'Kyiv' } },
+      friend: {
+        create: {
+          firstName: 'Masha',
+          lastName: 'Rasteryasha',
+        },
+      },
+      location: { create: { name: 'Kyiv' } },
       favorites: {
-        create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }],
+        connect: ['777'],
+        create: [{ name: 'Odesa' }, { name: 'Chernygiv' }, { name: 'Zhitomyr' }],
       },
     };
 
-    const expectedResult = [
+    const core = new Map();
+    core.set(personConfig, [
       {
-        config: personConfig,
-        data: {
-          _id: '9',
-          firstName: 'Vasya',
-          lastName: 'Pupkin',
-          location: '10',
-          favorites: ['11', '12', '13'],
+        insertOne: {
+          document: {
+            _id: '9',
+            firstName: 'Vasya',
+            lastName: 'Pupkin',
+            friend: '10',
+            location: '11',
+            favorites: ['777', '12', '13', '14'],
+          },
         },
       },
-      { config: placeConfig, data: { _id: '10', city: 'Kyiv', citizens: ['9'] } },
-      { config: placeConfig, data: { _id: '11', city: 'Odesa', visitors: ['9'] } },
-      { config: placeConfig, data: { _id: '12', city: 'Chernygiv', visitors: ['9'] } },
-      { config: placeConfig, data: { _id: '13', city: 'Zhitomyr', visitors: ['9'] } },
-    ];
+      {
+        insertOne: {
+          document: {
+            _id: '10',
+            firstName: 'Masha',
+            lastName: 'Rasteryasha',
+            friend: '9',
+          },
+        },
+      },
+    ]);
+    core.set(placeConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '777',
+          },
+          update: {
+            $push: {
+              visitors: '9',
+            },
+          },
+        },
+      },
+      {
+        insertOne: { document: { _id: '11', name: 'Kyiv', citizens: ['9'] } },
+      },
+      {
+        insertOne: { document: { _id: '12', name: 'Odesa', visitors: ['9'] } },
+      },
+      {
+        insertOne: { document: { _id: '13', name: 'Chernygiv', visitors: ['9'] } },
+      },
+      {
+        insertOne: { document: { _id: '14', name: 'Zhitomyr', visitors: ['9'] } },
+      },
+    ]);
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single: false,
+      first: {
+        _id: '9',
+        firstName: 'Vasya',
+        lastName: 'Pupkin',
+        friend: '10',
+        location: '11',
+        favorites: ['777', '12', '13', '14'],
+      },
+    };
+
+    const result = transformInputData(data, personConfig, mongooseTypes);
+
+    expect(result).toEqual(expectedResult);
+  });
+  test('should create object and children objectcs with duplex fields along with connect', () => {
+    const personConfig = {
+      name: 'Person',
+      textFields: [],
+      duplexFields: [],
+    };
+    const placeConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favorites',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'curator',
+          oppositeName: 'locations',
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friend',
+          oppositeName: 'friend',
+          config: personConfig,
+          required: true,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'locations',
+          oppositeName: 'curator',
+          config: placeConfig,
+          array: true,
+        },
+        {
+          name: 'favorites',
+          oppositeName: 'visitors',
+          config: placeConfig,
+          array: true,
+        },
+      ],
+    });
+    const data = {
+      firstName: 'Vasya',
+      lastName: 'Pupkin',
+      friend: {
+        connect: '111',
+      },
+      location: {
+        connect: '222',
+      },
+      locations: {
+        connect: ['333', '444'],
+      },
+      favorites: {
+        connect: ['555', '666'],
+      },
+    };
+
+    const core = new Map();
+    core.set(personConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '111',
+          },
+          update: {
+            friend: '15',
+          },
+        },
+      },
+      {
+        insertOne: {
+          document: {
+            _id: '15',
+            firstName: 'Vasya',
+            lastName: 'Pupkin',
+            friend: '111',
+            location: '222',
+            locations: ['333', '444'],
+            favorites: ['555', '666'],
+          },
+        },
+      },
+    ]);
+    core.set(placeConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '222',
+          },
+          update: {
+            $push: {
+              citizens: '15',
+            },
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            _id: '333',
+          },
+          update: {
+            curator: '15',
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            _id: '444',
+          },
+          update: {
+            curator: '15',
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            _id: '555',
+          },
+          update: {
+            $push: {
+              visitors: '15',
+            },
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            _id: '666',
+          },
+          update: {
+            $push: {
+              visitors: '15',
+            },
+          },
+        },
+      },
+    ]);
+    const periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single: false,
+      first: {
+        _id: '15',
+        firstName: 'Vasya',
+        lastName: 'Pupkin',
+        friend: '111',
+        location: '222',
+        locations: ['333', '444'],
+        favorites: ['555', '666'],
+      },
+    };
 
     const result = transformInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
 });
+
+// core and periphery

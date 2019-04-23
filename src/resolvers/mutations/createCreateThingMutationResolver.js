@@ -14,35 +14,19 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const inputDataArray = transformInputData(data, thingConfig);
+    const { core, single, first } = transformInputData(data, thingConfig);
 
     const { name } = thingConfig;
     const thingSchema = createThingSchema(thingConfig);
     const Thing = mongooseConn.model(name, thingSchema);
 
     let thing;
-    if (inputDataArray.length === 1) {
-      const result = await Thing.create(inputDataArray[0].data);
+    if (single) {
+      const result = await Thing.create(first);
       thing = result.toObject();
     } else {
-      const assortment = new Map();
-      inputDataArray.reduce((prev, { config, data: document }) => {
-        const bulkItem = {
-          insertOne: {
-            document,
-          },
-        };
-        if (assortment.get(config)) {
-          // $FlowFixMe
-          assortment.get(config).push(bulkItem);
-        } else {
-          assortment.set(config, [bulkItem]);
-        }
-        return prev;
-      }, assortment);
-
       const promises = [];
-      assortment.forEach((bulkItems, config) => {
+      core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config);
         const Thing2 = mongooseConn.model(name2, thingSchema2);
@@ -50,7 +34,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       });
       await Promise.all(promises);
       // eslint-disable-next-line no-underscore-dangle
-      const result = await Thing.findById(inputDataArray[0].data._id);
+      const result = await Thing.findById(first._id);
       thing = result.toObject();
     }
 
