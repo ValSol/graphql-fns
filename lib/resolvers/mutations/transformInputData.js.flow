@@ -1,9 +1,9 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { Periphery, ThingConfig } from '../../flowTypes';
 
 type TransformInputDataResult = {
   core: { [ThingConfig]: Array<Object> },
-  periphery: { [ThingConfig]: Array<Object> },
+  periphery: Periphery,
   single: Boolean,
   first: Object,
 };
@@ -105,7 +105,9 @@ const transformInputData = (
           }
         }
       } else if (duplexFieldsObject[key]) {
-        const { array, config, oppositeArray, oppositeName } = duplexFieldsObject[key];
+        const { array, config, oppositeArray, oppositeConfig, oppositeName } = duplexFieldsObject[
+          key
+        ];
         if (!array && data2[key].create && data2[key].connect) {
           throw new TypeError(
             `Simultaneous use "create" and "connect" keys with a duplexField "${key}" that not an array!`,
@@ -124,8 +126,7 @@ const transformInputData = (
                   update: oppositeArray
                     ? // eslint-disable-next-line no-underscore-dangle
                       { $push: { [oppositeName]: data2._id } }
-                    : // TODO set remove id value for previous array
-                      // eslint-disable-next-line no-underscore-dangle
+                    : // eslint-disable-next-line no-underscore-dangle
                       { [oppositeName]: data2._id },
                 },
               };
@@ -134,6 +135,32 @@ const transformInputData = (
                 core.get(config).push(item);
               } else {
                 core.set(config, [item]);
+              }
+              if (!oppositeArray) {
+                if (periphery.get(config)) {
+                  // $FlowFixMe
+                  if (periphery.get(config)[oppositeName]) {
+                    // $FlowFixMe
+                    periphery.get(config)[oppositeName].oppositeIds.push(oppositeId);
+                  } else {
+                    // $FlowFixMe
+                    periphery.get(config)[oppositeName] = {
+                      array: true,
+                      name: key,
+                      oppositeConfig,
+                      oppositeIds: [oppositeId],
+                    };
+                  }
+                } else {
+                  periphery.set(config, {
+                    [oppositeName]: {
+                      array: true,
+                      name: key,
+                      oppositeConfig,
+                      oppositeIds: [oppositeId],
+                    },
+                  });
+                }
               }
             });
           } else {
@@ -147,16 +174,43 @@ const transformInputData = (
                 update: oppositeArray
                   ? // eslint-disable-next-line no-underscore-dangle
                     { $push: { [oppositeName]: data2._id } }
-                  : // TODO set null for previous value
-                    // eslint-disable-next-line no-underscore-dangle
+                  : // eslint-disable-next-line no-underscore-dangle
                     { [oppositeName]: data2._id },
               },
             };
+
             if (core.get(config)) {
               // $FlowFixMe
               core.get(config).push(item);
             } else {
               core.set(config, [item]);
+            }
+
+            if (!oppositeArray) {
+              if (periphery.get(config)) {
+                // $FlowFixMe
+                if (periphery.get(config)[oppositeName]) {
+                  // $FlowFixMe
+                  periphery.get(config)[oppositeName].oppositeIds.push(oppositeId);
+                } else {
+                  // $FlowFixMe
+                  periphery.get(config)[oppositeName] = {
+                    array: false,
+                    name: key,
+                    oppositeConfig,
+                    oppositeIds: [oppositeId],
+                  };
+                }
+              } else {
+                periphery.set(config, {
+                  [oppositeName]: {
+                    array: false,
+                    name: key,
+                    oppositeConfig,
+                    oppositeIds: [oppositeId],
+                  },
+                });
+              }
             }
           }
         }

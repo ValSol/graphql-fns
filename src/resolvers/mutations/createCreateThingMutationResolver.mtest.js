@@ -456,4 +456,158 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdFavorities2[0].visitors[1]).toEqual(_id2);
     expect(createdFavorities2[1].visitors[1]).toEqual(_id2);
   });
+  test('should update mongodb documents using periphery objects', async () => {
+    const personConfig = {
+      name: 'Person4',
+      textFields: [],
+      duplexFields: [],
+    };
+    const placeConfig = {
+      name: 'Place3',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'curator',
+          oppositeName: 'locations',
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person4',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friend',
+          oppositeName: 'friend',
+          config: personConfig,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+        },
+        {
+          name: 'locations',
+          oppositeName: 'curator',
+          config: placeConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const createPerson = createCreateThingMutationResolver(personConfig);
+    expect(typeof createPerson).toBe('function');
+
+    const data = {
+      firstName: 'Hugo',
+      lastName: 'Boss',
+      friend: {
+        create: {
+          firstName: 'Adam',
+          lastName: 'Mamedov',
+          location: {
+            create: {
+              name: 'Belarus',
+            },
+          },
+        },
+      },
+      location: {
+        create: {
+          name: 'USA',
+        },
+      },
+      locations: {
+        create: [
+          {
+            name: 'China',
+          },
+          {
+            name: 'Ukraine',
+          },
+        ],
+      },
+    };
+    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    expect(createdPerson.firstName).toBe(data.firstName);
+    expect(createdPerson.lastName).toBe(data.lastName);
+    expect(createdPerson.locations.length).toBe(2);
+    expect(createdPerson.createdAt instanceof Date).toBeTruthy();
+    expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+
+    const { friend: friendId, _id, location: locationId, locations: locationIds } = createdPerson;
+
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person4', personSchema);
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place3', placeSchema);
+
+    const createdFriend = await Person.findById(friendId);
+    expect(createdFriend.firstName).toBe(data.friend.create.firstName);
+    expect(createdFriend.lastName).toBe(data.friend.create.lastName);
+    expect(createdFriend.friend).toEqual(_id);
+    expect(createdFriend.createdAt instanceof Date).toBeTruthy();
+    expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
+
+    const createdFriendLocation = await Place.findById(createdFriend.location);
+    expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
+    // eslint-disable-next-line no-underscore-dangle
+    expect(createdFriendLocation.citizens[0]).toEqual(createdFriend._id);
+
+    const createdLocation = await Place.findById(locationId);
+    expect(createdLocation.name).toBe(data.location.create.name);
+    expect(createdLocation.citizens[0]).toEqual(_id);
+    expect(createdLocation.createdAt instanceof Date).toBeTruthy();
+    expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
+
+    const createdLocations = await Place.find({ _id: { $in: locationIds } });
+    expect(createdLocations[0].name).toBe(data.locations.create[0].name);
+    expect(createdLocations[0].curator).toEqual(_id);
+    expect(createdLocations[1].name).toBe(data.locations.create[1].name);
+    expect(createdLocations[1].curator).toEqual(_id);
+
+    const data2 = {
+      firstName: 'Nina',
+      lastName: 'Richi',
+      friend: {
+        connect: _id,
+      },
+      location: {
+        connect: locationId,
+      },
+      locations: {
+        connect: [locationIds[0], locationIds[1]],
+      },
+    };
+
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    expect(createdPerson2.firstName).toBe(data2.firstName);
+    expect(createdPerson2.lastName).toBe(data2.lastName);
+    expect(createdPerson.createdAt instanceof Date).toBeTruthy();
+    expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+
+    const connectedFriend = await Person.findById(createdPerson2.friend);
+    expect(connectedFriend.firstName).toBe(data.firstName);
+    expect(connectedFriend.lastName).toBe(data.lastName);
+    expect(connectedFriend.locations.length).toBe(0);
+
+    const oldCreatedFriend = await Person.findById(friendId);
+    expect(oldCreatedFriend.friend).toBeUndefined();
+  });
 });

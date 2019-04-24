@@ -56,6 +56,7 @@ describe('transformInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
   test('should create object with self relation fields', () => {
     const thingConfig = {
       name: 'Thing',
@@ -123,6 +124,7 @@ describe('transformInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
   test('should create object with embedded fields with relation fields', () => {
     const embedded1Config = {
       name: 'Embedded1',
@@ -301,6 +303,7 @@ describe('transformInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
   test('should create object and children objectcs with duplex fields along with create', () => {
     const personConfig = {
       name: 'Person',
@@ -444,6 +447,7 @@ describe('transformInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
   test('should create object and children objectcs with duplex fields along with connect', () => {
     const personConfig = {
       name: 'Person',
@@ -614,6 +618,23 @@ describe('transformInputData', () => {
       },
     ]);
     const periphery = new Map();
+    periphery.set(personConfig, {
+      friend: {
+        oppositeIds: ['111'],
+        array: false,
+        name: 'friend',
+        oppositeConfig: personConfig,
+      },
+    });
+    periphery.set(placeConfig, {
+      curator: {
+        oppositeIds: ['333', '444'],
+        array: true,
+        name: 'locations',
+        oppositeConfig: personConfig,
+      },
+    });
+
     const expectedResult = {
       core,
       periphery,

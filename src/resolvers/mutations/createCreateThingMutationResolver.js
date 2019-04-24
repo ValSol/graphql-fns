@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const transformInputData = require('./transformInputData');
+const updatePeriphery = require('./updatePeriphery');
 
 type Args = { data: Object };
 type Context = { mongooseConn: Object };
@@ -14,11 +15,13 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const { core, single, first } = transformInputData(data, thingConfig);
+    const { core, periphery, single, first } = transformInputData(data, thingConfig);
 
     const { name } = thingConfig;
     const thingSchema = createThingSchema(thingConfig);
     const Thing = mongooseConn.model(name, thingSchema);
+
+    await updatePeriphery(periphery, mongooseConn);
 
     let thing;
     if (single) {

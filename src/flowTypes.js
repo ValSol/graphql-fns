@@ -30,3 +30,15 @@ export type ThingConfig = {
   textFields?: Array<TextField>,
   name: string,
 };
+
+export type Periphery = {
+  [ThingConfig]: {
+    [key: string]: {
+      oppositeIds: Array<String>,
+      array: Boolean,
+      name: String,
+      oppositeConfig: ThingConfig,
+      oppositeName: String,
+    },
+  },
+};
