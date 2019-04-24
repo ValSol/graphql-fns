@@ -6,6 +6,7 @@ const { DateTime } = require('@okgrow/graphql-scalars');
 const createThingQueryResolver = require('./queries/createThingQueryResolver');
 const composeThingResolvers = require('./types/composeThingResolvers');
 const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
+const createDeleteThingMutationResolver = require('./mutations/createDeleteThingMutationResolver');
 
 type ThingConfigs = Array<ThingConfig>;
 
@@ -23,9 +24,13 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
       prev.Query[name] = thingQueryResolver;
 
       const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
-
       // eslint-disable-next-line no-param-reassign
       prev.Mutation[`create${name}`] = createThingMutationResolver;
+
+      const deleteThingMutationResolver = createDeleteThingMutationResolver(thingConfig);
+      // eslint-disable-next-line no-param-reassign
+      prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
+
       return prev;
     }, resolvers);
 

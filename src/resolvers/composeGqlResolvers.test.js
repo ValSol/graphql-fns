@@ -34,6 +34,7 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(thingConfigs);
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.deleteExample).toBe('function');
   });
   test('should create things types for two things', () => {
     const thingConfig1 = {
@@ -75,6 +76,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Example2).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
+    expect(typeof result.Mutation.deleteExample1).toBe('function');
+    expect(typeof result.Mutation.deleteExample2).toBe('function');
   });
   test('should create things types for two things with relational things', () => {
     const placeConfig = {
@@ -134,6 +137,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Place).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
+    expect(typeof result.Mutation.deletePerson).toBe('function');
+    expect(typeof result.Mutation.deletePlace).toBe('function');
     expect(typeof result.Person.friends).toBe('function');
     expect(typeof result.Person.enemies).toBe('function');
     expect(typeof result.Person.location).toBe('function');
@@ -195,6 +200,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
+    expect(typeof result.Mutation.deletePerson).toBe('function');
     expect(result.Query.Address).toBeUndefined();
     expect(result.Mutation.createAddress).toBeUndefined();
   });
@@ -270,6 +276,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Place).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
+    expect(typeof result.Mutation.deletePerson).toBe('function');
+    expect(typeof result.Mutation.deletePlace).toBe('function');
     expect(typeof result.Person.friends).toBe('function');
     expect(typeof result.Person.enemies).toBe('function');
     expect(typeof result.Person.location).toBe('function');
