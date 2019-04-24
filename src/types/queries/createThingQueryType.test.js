@@ -3,7 +3,7 @@
 const createThingQueryType = require('./createThingQueryType');
 
 describe('createThingQueryType', () => {
-  test('should create mutation add thing type', () => {
+  test('should create query only thing type', () => {
     const thingConfig = {
       name: 'Example',
     };

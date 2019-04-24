@@ -34,7 +34,6 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   textField1: String
   textField2: String
   textField3: String!
@@ -84,7 +83,6 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   friends: [Person!]!
   enemies: [Person!]!
   location: Place!
@@ -149,7 +147,6 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   firstName: String!
   lastName: String!
   location: Address!
@@ -254,7 +251,6 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   firstName: String!
   lastName: String!
   friends: [Person!]!

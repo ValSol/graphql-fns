@@ -36,7 +36,6 @@ type Example {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   textField1: String
   textField2: String
   textField3: String!
@@ -66,6 +65,7 @@ type Query {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
+  deleteExample(where: ExampleWhereInput!): Example!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -109,7 +109,6 @@ type Example1 {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   textField1: String
   textField2: String
   textField3: String!
@@ -118,7 +117,6 @@ type Example2 {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   textField1: [String!]!
   textField2: [String!]!
 }
@@ -159,7 +157,9 @@ type Query {
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
+  deleteExample1(where: Example1WhereInput!): Example1!
   createExample2(data: Example2CreateInput!): Example2!
+  deleteExample2(where: Example2WhereInput!): Example2!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -221,7 +221,6 @@ type Person {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   firstName: String!
   lastName: String!
   friends: [Person!]!
@@ -233,7 +232,6 @@ type Place {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   title: String!
 }
 input PersonCreateInput {
@@ -275,7 +273,9 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person!
   createPlace(data: PlaceCreateInput!): Place!
+  deletePlace(where: PlaceWhereInput!): Place!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -338,7 +338,6 @@ type Person {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   firstName: String!
   lastName: String!
   location: Address!
@@ -382,6 +381,7 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person!
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -457,7 +457,6 @@ type Person {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   firstName: String!
   lastName: String!
   friends: [Person!]!
@@ -469,7 +468,6 @@ type Place {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  deletedAt: DateTime
   name: String
   citizens: [Person!]!
   visitors: [Person!]!
@@ -515,7 +513,9 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person!
   createPlace(data: PlaceCreateInput!): Place!
+  deletePlace(where: PlaceWhereInput!): Place!
 }`;
 
     const result = composeGqlTypes(thingConfigs);

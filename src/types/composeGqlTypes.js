@@ -7,6 +7,7 @@ const createThingCreateInputType = require('./inputs/createThingCreateInputType'
 const createThingWhereInputType = require('./inputs/createThingWhereInputType');
 const createThingQueryType = require('./queries/createThingQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
+const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
 
 type ThingConfigs = Array<ThingConfig>;
 
@@ -27,7 +28,10 @@ ${createThingWhereInputType(thingConfig)}`,
 
   const thingMutationTypes = thingConfigs
     .filter(({ isEmbedded }) => !isEmbedded)
-    .map(thingConfig => createCreateThingMutationType(thingConfig))
+    .map(
+      thingConfig => `${createCreateThingMutationType(thingConfig)}
+${createDeleteThingMutationType(thingConfig)}`,
+    )
     .join('\n');
 
   const result = `scalar DateTime

@@ -19,8 +19,7 @@ const createThingType = (thingConfig: ThingConfig): string => {
 
   if (!isEmbedded) {
     thingTypeArray.push(`  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime`);
+  updatedAt: DateTime!`);
   }
 
   if (textFields) {
