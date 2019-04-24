@@ -7,7 +7,7 @@ describe('createDeleteThingMutationType', () => {
     const thingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  deleteExample(where: ExampleWhereInput!): Example!';
+    const expectedResult = '  deleteExample(where: ExampleWhereInput!): Example';
 
     const result = createDeleteThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);

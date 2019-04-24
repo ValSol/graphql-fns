@@ -65,7 +65,7 @@ type Query {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
-  deleteExample(where: ExampleWhereInput!): Example!
+  deleteExample(where: ExampleWhereInput!): Example
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -157,9 +157,9 @@ type Query {
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
-  deleteExample1(where: Example1WhereInput!): Example1!
+  deleteExample1(where: Example1WhereInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
-  deleteExample2(where: Example2WhereInput!): Example2!
+  deleteExample2(where: Example2WhereInput!): Example2
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -273,9 +273,9 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  deletePlace(where: PlaceWhereInput!): Place!
+  deletePlace(where: PlaceWhereInput!): Place
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -381,7 +381,7 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -513,9 +513,9 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person!
+  deletePerson(where: PersonWhereInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  deletePlace(where: PlaceWhereInput!): Place!
+  deletePlace(where: PlaceWhereInput!): Place
 }`;
 
     const result = composeGqlTypes(thingConfigs);

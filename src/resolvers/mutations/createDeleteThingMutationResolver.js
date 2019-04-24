@@ -20,9 +20,11 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
     const Thing = mongooseConn.model(name, thingSchema);
 
     const thing = await Thing.findById(id);
-    const thing2 = thing.toObject();
+    if (!thing) return null;
 
+    const thing2 = thing.toObject();
     const { _id } = thing2;
+
     await Thing.deleteOne({ _id });
 
     thing2.id = _id;

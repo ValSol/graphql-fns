@@ -24,7 +24,10 @@ const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
     const projection = getProjectionFromInfo(info);
 
     const thing = await Thing.findById({ _id: id }, projection);
+    if (!thing) return null;
+
     const thing2 = thing.toObject();
+    const { _id } = thing2;
 
     const fileName = 'thing.log';
     const delimiter = '***************************************\n';
@@ -35,9 +38,7 @@ const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
     )}\n${delimiter}${info}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
 
-    const { _id } = thing2;
     thing2.id = _id;
-
     return thing2;
   };
 
