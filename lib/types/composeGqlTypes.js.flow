@@ -4,9 +4,11 @@ import type { ThingConfig } from '../flowTypes';
 
 const createThingType = require('./createThingType');
 const createThingCreateInputType = require('./inputs/createThingCreateInputType');
+const createThingUpdateInputType = require('./inputs/createThingUpdateInputType');
 const createThingWhereInputType = require('./inputs/createThingWhereInputType');
 const createThingQueryType = require('./queries/createThingQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
+const createUpdateThingMutationType = require('./mutations/createUpdateThingMutationType');
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
 
 type ThingConfigs = Array<ThingConfig>;
@@ -17,6 +19,7 @@ const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
   const thingInputTypes = thingConfigs
     .map(
       thingConfig => `${createThingCreateInputType(thingConfig)}
+${createThingUpdateInputType(thingConfig)}
 ${createThingWhereInputType(thingConfig)}`,
     )
     .join('\n');
@@ -30,6 +33,7 @@ ${createThingWhereInputType(thingConfig)}`,
     .filter(({ isEmbedded }) => !isEmbedded)
     .map(
       thingConfig => `${createCreateThingMutationType(thingConfig)}
+${createUpdateThingMutationType(thingConfig)}
 ${createDeleteThingMutationType(thingConfig)}`,
     )
     .join('\n');

@@ -57,6 +57,13 @@ input ExampleCreateChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
+input ExampleUpdateInput {
+  textField1: String
+  textField2: String
+  textField3: String
+  textField4: [String!]
+  textField5: [String!]
+}
 input ExampleWhereInput {
   id: ID!
 }
@@ -65,6 +72,7 @@ type Query {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
+  updateExample(where: ExampleWhereInput! data: ExampleUpdateInput!): Example!
   deleteExample(where: ExampleWhereInput!): Example
 }`;
 
@@ -133,6 +141,11 @@ input Example1CreateChildrenInput {
   connect: [ID!]
   create: [Example1CreateInput!]
 }
+input Example1UpdateInput {
+  textField1: String
+  textField2: String
+  textField3: String
+}
 input Example1WhereInput {
   id: ID!
 }
@@ -148,6 +161,10 @@ input Example2CreateChildrenInput {
   connect: [ID!]
   create: [Example2CreateInput!]
 }
+input Example2UpdateInput {
+  textField1: [String!]
+  textField2: [String!]
+}
 input Example2WhereInput {
   id: ID!
 }
@@ -157,8 +174,10 @@ type Query {
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
+  updateExample1(where: Example1WhereInput! data: Example1UpdateInput!): Example1!
   deleteExample1(where: Example1WhereInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
+  updateExample2(where: Example2WhereInput! data: Example2UpdateInput!): Example2!
   deleteExample2(where: Example2WhereInput!): Example2
 }`;
 
@@ -250,6 +269,14 @@ input PersonCreateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
 }
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  friends: [ID!]
+  enemies: [ID!]
+  location: ID
+  favoritePlace: ID
+}
 input PersonWhereInput {
   id: ID!
 }
@@ -264,6 +291,9 @@ input PlaceCreateChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
 }
+input PlaceUpdateInput {
+  title: String
+}
 input PlaceWhereInput {
   id: ID!
 }
@@ -273,8 +303,10 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
   deletePerson(where: PersonWhereInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
+  updatePlace(where: PlaceWhereInput! data: PlaceUpdateInput!): Place!
   deletePlace(where: PlaceWhereInput!): Place
 }`;
 
@@ -366,11 +398,23 @@ input PersonCreateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
 }
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  location: AddressUpdateInput
+  locations: [AddressUpdateInput!]
+  place: AddressUpdateInput
+  places: [AddressUpdateInput!]
+}
 input PersonWhereInput {
   id: ID!
 }
 input AddressCreateInput {
   country: String!
+  province: String
+}
+input AddressUpdateInput {
+  country: String
   province: String
 }
 input AddressWhereInput {
@@ -381,6 +425,7 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
   deletePerson(where: PersonWhereInput!): Person
 }`;
 
@@ -488,6 +533,14 @@ input PersonCreateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
 }
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  friends: [ID!]
+  enemies: [ID!]
+  location: ID
+  favoritePlace: ID
+}
 input PersonWhereInput {
   id: ID!
 }
@@ -504,6 +557,11 @@ input PlaceCreateChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
 }
+input PlaceUpdateInput {
+  name: String
+  citizens: [ID!]
+  visitors: [ID!]
+}
 input PlaceWhereInput {
   id: ID!
 }
@@ -513,8 +571,10 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
   deletePerson(where: PersonWhereInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
+  updatePlace(where: PlaceWhereInput! data: PlaceUpdateInput!): Place!
   deletePlace(where: PlaceWhereInput!): Place
 }`;
 
