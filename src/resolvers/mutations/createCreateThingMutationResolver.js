@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 const fs = require('fs');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
-const transformInputData = require('./transformInputData');
+const processCreateInputData = require('./processCreateInputData');
 const updatePeriphery = require('./updatePeriphery');
 
 type Args = { data: Object };
@@ -15,7 +15,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { data } = args;
     const { mongooseConn } = context;
 
-    const { core, periphery, single, first } = transformInputData(data, thingConfig);
+    const { core, periphery, single, first } = processCreateInputData(data, thingConfig);
 
     const { name } = thingConfig;
     const thingSchema = createThingSchema(thingConfig);

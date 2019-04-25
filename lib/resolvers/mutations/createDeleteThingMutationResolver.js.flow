@@ -2,12 +2,12 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
-// const transformInputData = require('./transformInputData');
-// const updatePeriphery = require('./updatePeriphery');
+const processDeleteData = require('./processDeleteData');
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
+// TODO update to remove garbage from relation fields that relate to deleted object
 const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const {
@@ -26,6 +26,18 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { _id } = thing2;
 
     await Thing.deleteOne({ _id });
+
+    const promises = [];
+    const bulkItemsMap = processDeleteData(thing2, thingConfig);
+    // $FlowFixMe
+    bulkItemsMap.forEach((bulkItems, config) => {
+      const { name: name2 } = config;
+      const thingSchema2 = createThingSchema(config);
+      const Thing2 = mongooseConn.model(name2, thingSchema2);
+      promises.push(Thing2.bulkWrite(bulkItems));
+    });
+
+    await Promise.all(promises);
 
     thing2.id = _id;
     return thing2;

@@ -1,7 +1,7 @@
 // @flow
 import type { Periphery, ThingConfig } from '../../flowTypes';
 
-type TransformInputDataResult = {
+type ProcessCreateInputDataResult = {
   core: { [ThingConfig]: Array<Object> },
   periphery: Periphery,
   single: Boolean,
@@ -10,7 +10,7 @@ type TransformInputDataResult = {
 
 const { Types } = require('mongoose');
 
-const transformInputData = (
+const processCreateInputData = (
   data: Object,
   thingConfig: ThingConfig,
   // use mongoose Types in args to let mocking the ObjectId() in tests
@@ -20,7 +20,7 @@ const transformInputData = (
   const periphery = new Map();
   const prepared = [{ data: { ...data, _id: mongooseTypes.ObjectId() }, config: thingConfig }];
 
-  const transform = (data2: Object, thingConfig2: ThingConfig): TransformInputDataResult => {
+  const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
     const { duplexFields, embeddedFields, relationalFields, textFields } = thingConfig2;
 
     const relationalFieldsObject = {};
@@ -303,4 +303,4 @@ const transformInputData = (
   return { core, periphery, single, first };
 };
 
-module.exports = transformInputData;
+module.exports = processCreateInputData;

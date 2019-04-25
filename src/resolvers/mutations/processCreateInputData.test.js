@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-const transformInputData = require('./transformInputData');
+const processCreateInputData = require('./processCreateInputData');
 
 const mongooseTypes = {
   count: 0,
@@ -10,7 +10,7 @@ const mongooseTypes = {
   },
 };
 
-describe('transformInputData', () => {
+describe('processCreateInputData', () => {
   test('should create object with simple fields', () => {
     const thingConfig = {
       name: 'Thing',
@@ -52,7 +52,7 @@ describe('transformInputData', () => {
         textField2: 'textField2-Value',
       },
     };
-    const result = transformInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -120,7 +120,7 @@ describe('transformInputData', () => {
       },
     };
 
-    const result = transformInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -223,7 +223,7 @@ describe('transformInputData', () => {
       },
     };
 
-    const result = transformInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -299,7 +299,7 @@ describe('transformInputData', () => {
       },
     };
 
-    const result = transformInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -443,7 +443,7 @@ describe('transformInputData', () => {
       },
     };
 
-    const result = transformInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -650,10 +650,8 @@ describe('transformInputData', () => {
       },
     };
 
-    const result = transformInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
 });
-
-// core and periphery
