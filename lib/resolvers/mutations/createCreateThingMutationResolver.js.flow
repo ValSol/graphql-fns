@@ -38,7 +38,6 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       await Promise.all(promises);
       // eslint-disable-next-line no-underscore-dangle
       thing = await Thing.findById(first._id, null, { lean: true });
-      // thing = result.toObject();
     }
 
     const fileName = 'create-thing.log';
