@@ -35,14 +35,13 @@ const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
     const Thing = mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
 
-    const things = await Thing.find({ _id: { $in: ids } }, projection);
+    const things = await Thing.find({ _id: { $in: ids } }, projection, { lean: true });
 
-    const things2 = things.map(item => {
-      const item2 = item.toObject();
+    const things2 = things.map(item => ({
+      ...item,
       // eslint-disable-next-line no-underscore-dangle
-      item2.id = item2._id;
-      return item2;
-    });
+      id: item._id,
+    }));
 
     return things2;
   };

@@ -19,16 +19,15 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
     const thingSchema = createThingSchema(thingConfig);
     const Thing = mongooseConn.model(name, thingSchema);
 
-    const thing = await Thing.findById(id);
+    const thing = await Thing.findById(id, null, { lean: true });
     if (!thing) return null;
 
-    const thing2 = thing.toObject();
-    const { _id } = thing2;
+    const { _id } = thing;
 
-    await Thing.deleteOne({ _id });
+    await Thing.findOneAndDelete({ _id });
 
     const promises = [];
-    const bulkItemsMap = processDeleteData(thing2, thingConfig);
+    const bulkItemsMap = processDeleteData(thing, thingConfig);
     // $FlowFixMe
     bulkItemsMap.forEach((bulkItems, config) => {
       const { name: name2 } = config;
@@ -39,8 +38,8 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
 
     await Promise.all(promises);
 
-    thing2.id = _id;
-    return thing2;
+    thing.id = _id;
+    return thing;
   };
 
   return resolver;

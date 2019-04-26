@@ -23,23 +23,22 @@ const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
     const Thing = mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
 
-    const thing = await Thing.findById({ _id: id }, projection);
+    const thing = await Thing.findById({ _id: id }, projection, { lean: true });
     if (!thing) return null;
 
-    const thing2 = thing.toObject();
-    const { _id } = thing2;
+    const { _id } = thing;
 
     const fileName = 'thing.log';
     const delimiter = '***************************************\n';
     const result = `${delimiter}${JSON.stringify(args, null, ' ')}\n${delimiter}${JSON.stringify(
-      thing2,
+      thing,
       null,
       ' ',
     )}\n${delimiter}${info}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
     fs.writeFileSync(fileName, result);
 
-    thing2.id = _id;
-    return thing2;
+    thing.id = _id;
+    return thing;
   };
 
   return resolver;

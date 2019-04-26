@@ -22,8 +22,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const thingSchema = createThingSchema(thingConfig);
     const Thing = mongooseConn.model(name, thingSchema);
 
-    const result = await Thing.findOneAndUpdate({ _id: id }, data);
-    const thing = result.toObject();
+    const thing = await Thing.findOneAndUpdate({ _id: id }, data, { new: true, lean: true });
     /*
     await updatePeriphery(periphery, mongooseConn);
 
@@ -41,10 +40,10 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       });
       await Promise.all(promises);
       // eslint-disable-next-line no-underscore-dangle
-      const result = await Thing.findById(first._id);
-      thing = result.toObject();
+      thing = await Thing.findById(first._id, null, { lean: true });
     }
 */
+
     const { _id } = thing;
     thing.id = _id;
 
