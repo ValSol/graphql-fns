@@ -10,7 +10,10 @@ type Context = { mongooseConn: Object };
 
 const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { where, data } = args;
+    const {
+      where: { id },
+      data,
+    } = args;
     const { mongooseConn } = context;
 
     // const { core, periphery, single, first } = processCreateInputData(data, thingConfig);
@@ -19,7 +22,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const thingSchema = createThingSchema(thingConfig);
     const Thing = mongooseConn.model(name, thingSchema);
 
-    const result = await Thing.findOneAndUpdate(where, data);
+    const result = await Thing.findOneAndUpdate({ _id: id }, data);
     const thing = result.toObject();
     /*
     await updatePeriphery(periphery, mongooseConn);
