@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
-const transformCreateIntoUpdateInput = require('./transformCreateIntoUpdateInput');
+const processUpdateInputData = require('./processUpdateInputData');
 
-describe('transformCreateIntoUpdateInput', () => {
-  test('transofrm update data into create data', () => {
+describe('processUpdateInputData', () => {
+  test('should create object and children objectcs with duplex fields along with connect', () => {
     const personConfig = {
       name: 'Person',
       textFields: [],
@@ -46,8 +46,8 @@ describe('transformCreateIntoUpdateInput', () => {
       ],
       duplexFields: [
         {
-          name: 'spouse',
-          oppositeName: 'spouse',
+          name: 'friend',
+          oppositeName: 'friend',
           config: personConfig,
           required: true,
         },
@@ -72,41 +72,48 @@ describe('transformCreateIntoUpdateInput', () => {
       ],
     });
     const data = {
-      _id: '111',
+      _id: '999',
       firstName: 'Vasya',
       lastName: 'Pupkin',
-      spouse: '222',
-      location: '333',
-      locations: ['444', '555'],
-      favorites: ['666', '777'],
+      friend: '111',
+      location: '222',
+      locations: ['333', '444'],
+      favorites: ['555', '666'],
     };
 
-    const expectedResult = new Map();
-    expectedResult.set(personConfig, [
+    const core = new Map();
+    core.set(personConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '111',
+          },
+          update: {
+            friend: '999',
+          },
+        },
+      },
+    ]);
+    core.set(placeConfig, [
       {
         updateOne: {
           filter: {
             _id: '222',
           },
           update: {
-            $unset: {
-              spouse: 1,
+            $push: {
+              citizens: '999',
             },
           },
         },
       },
-    ]);
-
-    expectedResult.set(placeConfig, [
       {
         updateOne: {
           filter: {
             _id: '333',
           },
           update: {
-            $pull: {
-              citizens: '111',
-            },
+            curator: '999',
           },
         },
       },
@@ -116,9 +123,7 @@ describe('transformCreateIntoUpdateInput', () => {
             _id: '444',
           },
           update: {
-            $unset: {
-              curator: 1,
-            },
+            curator: '999',
           },
         },
       },
@@ -128,8 +133,8 @@ describe('transformCreateIntoUpdateInput', () => {
             _id: '555',
           },
           update: {
-            $unset: {
-              curator: 1,
+            $push: {
+              visitors: '999',
             },
           },
         },
@@ -140,27 +145,37 @@ describe('transformCreateIntoUpdateInput', () => {
             _id: '666',
           },
           update: {
-            $pull: {
-              visitors: '111',
-            },
-          },
-        },
-      },
-      {
-        updateOne: {
-          filter: {
-            _id: '777',
-          },
-          update: {
-            $pull: {
-              visitors: '111',
+            $push: {
+              visitors: '999',
             },
           },
         },
       },
     ]);
+    const periphery = new Map();
+    periphery.set(personConfig, {
+      friend: {
+        oppositeIds: ['111'],
+        array: false,
+        name: 'friend',
+        oppositeConfig: personConfig,
+      },
+    });
+    periphery.set(placeConfig, {
+      curator: {
+        oppositeIds: ['333', '444'],
+        array: true,
+        name: 'locations',
+        oppositeConfig: personConfig,
+      },
+    });
 
-    const result = transformCreateIntoUpdateInput(data, personConfig);
+    const expectedResult = {
+      core,
+      periphery,
+    };
+
+    const result = processUpdateInputData(data, personConfig);
 
     expect(result).toEqual(expectedResult);
   });

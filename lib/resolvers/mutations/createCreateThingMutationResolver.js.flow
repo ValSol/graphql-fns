@@ -1,8 +1,6 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const fs = require('fs');
-
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processCreateInputData = require('./processCreateInputData');
 const updatePeriphery = require('./updatePeriphery');
@@ -11,7 +9,7 @@ type Args = { data: Object };
 type Context = { mongooseConn: Object };
 
 const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function => {
-  const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
+  const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { data } = args;
     const { mongooseConn } = context;
 
@@ -39,15 +37,6 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       // eslint-disable-next-line no-underscore-dangle
       thing = await Thing.findById(first._id, null, { lean: true });
     }
-
-    const fileName = 'create-thing.log';
-    const delimiter = '***************************************\n';
-    const result = `${delimiter}${JSON.stringify(args, null, ' ')}\n${delimiter}${JSON.stringify(
-      thing,
-      null,
-      ' ',
-    )}\n${delimiter}${info}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
-    fs.writeFileSync(fileName, result);
 
     const { _id } = thing;
     thing.id = _id;

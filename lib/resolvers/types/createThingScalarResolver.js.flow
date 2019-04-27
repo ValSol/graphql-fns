@@ -2,8 +2,6 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const fs = require('fs');
-
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 
@@ -13,15 +11,6 @@ type Context = { mongooseConn: Object };
 const createThingScalarResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const { fieldName } = info;
-
-    const fileName = 'scalar-thing.log';
-    const delimiter = '***************************************\n';
-    const result = `${delimiter}${fieldName}\n${delimiter}${JSON.stringify(
-      parent,
-      null,
-      ' ',
-    )}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
-    fs.writeFileSync(fileName, result);
 
     const id = parent[fieldName];
 

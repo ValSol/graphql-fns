@@ -2,8 +2,6 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const fs = require('fs');
-
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 
@@ -27,15 +25,6 @@ const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
     if (!thing) return null;
 
     const { _id } = thing;
-
-    const fileName = 'thing.log';
-    const delimiter = '***************************************\n';
-    const result = `${delimiter}${JSON.stringify(args, null, ' ')}\n${delimiter}${JSON.stringify(
-      thing,
-      null,
-      ' ',
-    )}\n${delimiter}${info}\n${delimiter}${JSON.stringify(info, null, ' ')}\n${delimiter}`;
-    fs.writeFileSync(fileName, result);
 
     thing.id = _id;
     return thing;
