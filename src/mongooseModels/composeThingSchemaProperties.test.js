@@ -12,6 +12,7 @@ describe('composeThingSchemaProperties', () => {
       textFields: [
         {
           name: 'textField1',
+          index: true,
         },
         {
           name: 'textField2',
@@ -20,6 +21,7 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'textField3',
           required: true,
+          unique: true,
         },
         {
           name: 'textField4',
@@ -36,22 +38,21 @@ describe('composeThingSchemaProperties', () => {
     const expectedResult = {
       textField1: {
         type: String,
-        required: false,
         default: '',
+        index: true,
       },
       textField2: {
         type: String,
-        required: false,
         default: 'default text',
       },
       textField3: {
         type: String,
         required: true,
         default: '',
+        unique: true,
       },
       textField4: {
         type: [String],
-        required: false,
         default: [],
       },
       textField5: {
@@ -85,18 +86,20 @@ describe('composeThingSchemaProperties', () => {
       relationalFields: [
         {
           name: 'friends',
-          config: personConfig,
           array: true,
+          config: personConfig,
+          index: true,
           required: true,
         },
         {
           name: 'enemies',
-          config: personConfig,
           array: true,
+          config: personConfig,
         },
         {
           name: 'location',
           config: placeConfig,
+          index: true,
           required: true,
         },
         {
@@ -120,7 +123,7 @@ describe('composeThingSchemaProperties', () => {
         {
           type: Schema.Types.ObjectId,
           ref: 'Person',
-          required: true,
+          index: true,
         },
       ],
       enemies: [
@@ -133,7 +136,7 @@ describe('composeThingSchemaProperties', () => {
       location: {
         type: Schema.Types.ObjectId,
         ref: 'Place',
-        required: true,
+        index: true,
       },
       favoritePlace: {
         type: Schema.Types.ObjectId,
@@ -183,24 +186,26 @@ describe('composeThingSchemaProperties', () => {
           oppositeName: 'friends',
           config: personConfig,
           array: true,
-          required: true,
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          index: true,
+          required: false,
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
-          required: true,
+          index: true,
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          required: false,
         },
       ],
     });
@@ -219,20 +224,22 @@ describe('composeThingSchemaProperties', () => {
         {
           type: Schema.Types.ObjectId,
           ref: 'Person',
-          required: true,
+          required: false,
         },
       ],
       enemies: [
         {
           type: Schema.Types.ObjectId,
           ref: 'Person',
+          index: true,
           required: false,
         },
       ],
       location: {
         type: Schema.Types.ObjectId,
         ref: 'Place',
-        required: true,
+        index: true,
+        required: false,
       },
       favoritePlace: {
         type: Schema.Types.ObjectId,
@@ -314,7 +321,6 @@ describe('composeThingSchemaProperties', () => {
         },
         province: {
           type: String,
-          required: false,
           default: '',
         },
       },
@@ -327,7 +333,6 @@ describe('composeThingSchemaProperties', () => {
           },
           province: {
             type: String,
-            required: false,
             default: '',
           },
         },
@@ -340,7 +345,6 @@ describe('composeThingSchemaProperties', () => {
         },
         province: {
           type: String,
-          required: false,
           default: '',
         },
       },
@@ -353,7 +357,6 @@ describe('composeThingSchemaProperties', () => {
           },
           province: {
             type: String,
-            required: false,
             default: '',
           },
         },

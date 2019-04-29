@@ -21,6 +21,7 @@ describe('createThingQueryResolver', () => {
       textFields: [
         {
           name: 'textField1',
+          unique: true,
         },
         {
           name: 'textField2',
@@ -56,6 +57,7 @@ describe('createThingQueryResolver', () => {
     const { id } = createdExample;
 
     const Example = createThingQueryResolver(thingConfig);
+
     const where = { id };
     const example = await Example(null, { where }, { mongooseConn }, info);
 
@@ -66,5 +68,16 @@ describe('createThingQueryResolver', () => {
     expect(example.textField5).toBeUndefined();
     expect(example.createdAt instanceof Date).toBeTruthy();
     expect(example.updatedAt).toBeUndefined();
+
+    const where2 = { textField1: data.textField1 };
+    const example2 = await Example(null, { where: where2 }, { mongooseConn }, info);
+
+    expect(example2.textField1).toBe(data.textField1);
+    expect(example2.textField2).toBeUndefined();
+    expect(example2.textField3).toBe(data.textField3);
+    expect(example2.textField4).toBeUndefined();
+    expect(example2.textField5).toBeUndefined();
+    expect(example2.createdAt instanceof Date).toBeTruthy();
+    expect(example2.updatedAt).toBeUndefined();
   });
 });

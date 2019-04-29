@@ -9,11 +9,11 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 const { Schema } = mongoose;
 
 const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
-  const { duplexFields, embeddedFields, relationalFields, textFields } = thingConfig;
+  const { isEmbedded, duplexFields, embeddedFields, relationalFields, textFields } = thingConfig;
 
   const result = {};
   if (textFields) {
-    textFields.reduce((prev, { array, default: defaultValue, name, required }) => {
+    textFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
       if (defaultValue) {
         if (!array && !(typeof defaultValue === 'string')) {
           throw new TypeError('Expected a string as defalut value');
@@ -23,24 +23,35 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
         }
       }
 
+      if ((index || unique) && isEmbedded) {
+        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      }
+
       // eslint-disable-next-line no-param-reassign
       prev[name] = {
         default: defaultValue || (array ? [] : ''),
         type: array ? [String] : String,
-        required: !!required,
       };
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+      if (index && !unique) prev[name].index = !!index; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, name, required, config: { name: relationalThingName } }) => {
-        const obj = {
+      (prev, { array, config: { name: relationalThingName }, index, name, required }) => {
+        if (index && isEmbedded) {
+          throw new TypeError('Must not have an "index" field in an embedded document!');
+        }
+        const obj: { ref: string, type: string, required?: boolean, index?: boolean } = {
           ref: relationalThingName,
           type: Schema.Types.ObjectId,
-          required: !!required,
         };
+        if (!required) obj.required = !!required; // by default required = true
+        if (index) obj.index = !!index;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
         return prev;
@@ -49,15 +60,19 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
     );
   }
 
-  // the same code as for relationalFields
   if (duplexFields) {
+    if (isEmbedded) {
+      throw new TypeError('Must not have an "duplexField" in an embedded document!');
+    }
     duplexFields.reduce(
-      (prev, { array, name, required, config: { name: relationalThingName } }) => {
-        const obj = {
-          ref: relationalThingName,
+      (prev, { array, config: { name: duplexThingName }, index, name, required }) => {
+        // the same code as for relationalFields
+        const obj: { ref: string, type: string, required?: boolean, index?: boolean } = {
+          ref: duplexThingName,
           type: Schema.Types.ObjectId,
-          required: !!required,
         };
+        if (!required) obj.required = !!required; // by default required = true
+        if (index) obj.index = !!index;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
         return prev;

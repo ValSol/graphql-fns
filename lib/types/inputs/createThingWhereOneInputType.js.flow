@@ -3,13 +3,25 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
-  const { name } = thingConfig;
+  const { name, textFields } = thingConfig;
 
-  const result = `input ${name}WhereOneInput {
+  const uniqueFields = textFields
+    ? textFields
+        .filter(({ unique }) => unique)
+        .map(({ name: fieldName }) => `  ${fieldName}: ID`)
+        .join('\n')
+    : '';
+
+  if (uniqueFields) {
+    return `input ${name}WhereOneInput {
+  id: ID
+${uniqueFields}
+}`;
+  }
+
+  return `input ${name}WhereOneInput {
   id: ID!
 }`;
-
-  return result;
 };
 
 module.exports = createThingWhereOneInputType;

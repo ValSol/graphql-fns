@@ -23,7 +23,7 @@ describe('createDeleteThingMutationResolver', () => {
     };
     const placeConfig = {
       name: 'Place',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
           name: 'citizens',
@@ -199,5 +199,13 @@ describe('createDeleteThingMutationResolver', () => {
 
     const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn });
     expect(deletedPerson2).toBeNull();
+
+    const deletePlace = createDeleteThingMutationResolver(placeConfig);
+    const where2 = { name: data.location.create.name };
+    const deletedPlace = await deletePlace(null, { where: where2 }, { mongooseConn });
+    expect(deletedPlace.name).toBe(data.location.create.name);
+
+    const deletedPlace2 = await deletePlace(null, { where: where2 }, { mongooseConn });
+    expect(deletedPlace2).toBeNull();
   });
 });

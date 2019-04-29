@@ -61,6 +61,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       thing = await Thing.findOneAndUpdate({ _id }, data, { new: true, lean: true });
     } else {
       thing = await Thing.findOneAndUpdate(where, data, { new: true, lean: true });
+      if (!thing) return null;
       _id = thing._id; // eslint-disable-line no-underscore-dangle, prefer-destructuring
     }
 

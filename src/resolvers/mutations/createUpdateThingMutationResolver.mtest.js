@@ -24,7 +24,7 @@ describe('createUpdateThingMutationResolver', () => {
     };
     const placeConfig = {
       name: 'Place',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
           name: 'citizens',
@@ -337,5 +337,23 @@ describe('createUpdateThingMutationResolver', () => {
     expect(updatedFavorities2[1].visitors.length).toBe(2);
     expect(updatedFavorities2[1].visitors[0]).toEqual(id2);
     expect(updatedFavorities2[1].visitors[1]).toEqual(id);
+
+    const updatePlace = createUpdateThingMutationResolver(placeConfig);
+    const where2 = { name: data.location.create.name };
+    const dataForUpdate2 = { name: 'Mexico' };
+    const updatedPlace = await updatePlace(
+      null,
+      { where: where2, data: dataForUpdate2 },
+      { mongooseConn },
+    );
+
+    expect(updatedPlace.name).toBe(dataForUpdate2.name);
+
+    const updatedPlace2 = await updatePlace(
+      null,
+      { where: where2, data: dataForUpdate2 },
+      { mongooseConn },
+    );
+    expect(updatedPlace2).toBeNull();
   });
 });
