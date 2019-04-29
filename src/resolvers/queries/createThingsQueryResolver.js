@@ -10,6 +10,8 @@ type Context = { mongooseConn: Object };
 
 const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
+    const { where } = args;
+
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig);
@@ -18,7 +20,9 @@ const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
     const Thing = mongooseConn.model(name, thingSchema);
     const projection = getProjectionFromInfo(info);
 
-    const things = await Thing.find({}, projection, { lean: true });
+    const conditions = where || { where };
+
+    const things = await Thing.find(conditions, projection, { lean: true });
     if (!things) return [];
 
     const result = things.map(item => {
