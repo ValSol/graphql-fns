@@ -9,14 +9,17 @@ describe('composeGqlTypes', () => {
       textFields: [
         {
           name: 'textField1',
+          unique: true,
         },
         {
           name: 'textField2',
           default: 'default text',
+          index: true,
         },
         {
           name: 'textField3',
           required: true,
+          index: true,
         },
         {
           name: 'textField4',
@@ -65,10 +68,12 @@ input ExampleUpdateInput {
   textField5: [String!]
 }
 input ExampleWhereOneInput {
-  id: ID!
+  id: ID
+  textField1: ID
 }
 input ExampleWhereInput {
-  id: ID!
+  textField2: String
+  textField3: String
 }
 type Query {
   Example(where: ExampleWhereOneInput!): Example
@@ -169,20 +174,14 @@ input Example2UpdateInput {
 input Example1WhereOneInput {
   id: ID!
 }
-input Example1WhereInput {
-  id: ID!
-}
 input Example2WhereOneInput {
-  id: ID!
-}
-input Example2WhereInput {
   id: ID!
 }
 type Query {
   Example1(where: Example1WhereOneInput!): Example1
-  Example1S(where: Example1WhereInput): [Example1!]!
+  Example1S: [Example1!]!
   Example2(where: Example2WhereOneInput!): Example2
-  Example2S(where: Example2WhereInput): [Example2!]!
+  Example2S: [Example2!]!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
@@ -306,20 +305,14 @@ input PlaceUpdateInput {
 input PersonWhereOneInput {
   id: ID!
 }
-input PersonWhereInput {
-  id: ID!
-}
 input PlaceWhereOneInput {
-  id: ID!
-}
-input PlaceWhereInput {
   id: ID!
 }
 type Query {
   Person(where: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People: [Person!]!
   Place(where: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput): [Place!]!
+  Places: [Place!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -437,12 +430,9 @@ input AddressUpdateInput {
 input PersonWhereOneInput {
   id: ID!
 }
-input PersonWhereInput {
-  id: ID!
-}
 type Query {
   Person(where: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People: [Person!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -583,20 +573,14 @@ input PlaceUpdateInput {
 input PersonWhereOneInput {
   id: ID!
 }
-input PersonWhereInput {
-  id: ID!
-}
 input PlaceWhereOneInput {
-  id: ID!
-}
-input PlaceWhereInput {
   id: ID!
 }
 type Query {
   Person(where: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People: [Person!]!
   Place(where: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput): [Place!]!
+  Places: [Place!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!

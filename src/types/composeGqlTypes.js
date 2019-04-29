@@ -28,8 +28,8 @@ ${createThingUpdateInputType(thingConfig)}`,
   const thingInputTypes2 = thingConfigs
     .filter(({ isEmbedded }) => !isEmbedded)
     .map(
-      thingConfig => `${createThingWhereOneInputType(thingConfig)}
-${createThingWhereInputType(thingConfig)}`,
+      thingConfig =>
+        `${createThingWhereOneInputType(thingConfig)}${createThingWhereInputType(thingConfig)}`,
     )
     .join('\n');
 

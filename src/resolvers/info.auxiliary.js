@@ -239,11 +239,11 @@ module.exports = {
     _typeMap: {
       Query: 'Query',
       String: 'String',
-      Example1WhereInput: 'Example1WhereInput',
+      Example1WhereOneInput: 'Example1WhereOneInput',
       ID: 'ID',
       Example1: 'Example1',
       DateTime: 'DateTime',
-      Example2WhereInput: 'Example2WhereInput',
+      Example2WhereOneInput: 'Example2WhereOneInput',
       Example2: 'Example2',
       Mutation: 'Mutation',
       User: 'User',

@@ -3,10 +3,19 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = (thingConfig: ThingConfig): string => {
-  const { name } = thingConfig;
+  const { name, textFields } = thingConfig;
 
-  const result = `input ${name}WhereInput {
-  id: ID!
+  const indexedFields = textFields
+    ? textFields
+        .filter(({ index }) => index)
+        .map(({ name: fieldName }) => `  ${fieldName}: String`)
+        .join('\n')
+    : '';
+  const result =
+    indexedFields &&
+    `
+input ${name}WhereInput {
+${indexedFields}
 }`;
 
   return result;
