@@ -1,9 +1,11 @@
 // @flow
 import type { ThingConfig } from '../flowTypes';
 
+const pluralize = require('pluralize');
 const { DateTime } = require('@okgrow/graphql-scalars');
 
 const createThingQueryResolver = require('./queries/createThingQueryResolver');
+const createThingsQueryResolver = require('./queries/createThingsQueryResolver');
 const composeThingResolvers = require('./types/composeThingResolvers');
 const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
 const createUpdateThingMutationResolver = require('./mutations/createUpdateThingMutationResolver');
@@ -20,9 +22,12 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
       const { name } = thingConfig;
 
       const thingQueryResolver = createThingQueryResolver(thingConfig);
-
       // eslint-disable-next-line no-param-reassign
       prev.Query[name] = thingQueryResolver;
+
+      const thingsQueryResolver = createThingsQueryResolver(thingConfig);
+      // eslint-disable-next-line no-param-reassign
+      prev.Query[pluralize(name)] = thingsQueryResolver;
 
       const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
       // eslint-disable-next-line no-param-reassign

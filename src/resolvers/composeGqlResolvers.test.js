@@ -138,6 +138,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Query.Place).toBe('function');
+    expect(typeof result.Query.People).toBe('function');
+    expect(typeof result.Query.Places).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
     expect(typeof result.Mutation.updatePerson).toBe('function');
@@ -204,6 +206,7 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
+    expect(typeof result.Query.People).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.updatePerson).toBe('function');
     expect(typeof result.Mutation.deletePerson).toBe('function');
@@ -280,6 +283,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Query.Place).toBe('function');
+    expect(typeof result.Query.People).toBe('function');
+    expect(typeof result.Query.Places).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
     expect(typeof result.Mutation.updatePerson).toBe('function');

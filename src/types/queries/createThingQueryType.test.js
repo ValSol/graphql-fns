@@ -7,7 +7,7 @@ describe('createThingQueryType', () => {
     const thingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  Example(where: ExampleWhereInput!): Example';
+    const expectedResult = '  Example(where: ExampleWhereOneInput!): Example';
 
     const result = createThingQueryType(thingConfig);
     expect(result).toEqual(expectedResult);

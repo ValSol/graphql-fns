@@ -64,16 +64,20 @@ input ExampleUpdateInput {
   textField4: [String!]
   textField5: [String!]
 }
+input ExampleWhereOneInput {
+  id: ID!
+}
 input ExampleWhereInput {
   id: ID!
 }
 type Query {
-  Example(where: ExampleWhereInput!): Example
+  Example(where: ExampleWhereOneInput!): Example
+  Examples(where: ExampleWhereInput): [Example!]!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
-  updateExample(where: ExampleWhereInput! data: ExampleUpdateInput!): Example!
-  deleteExample(where: ExampleWhereInput!): Example
+  updateExample(where: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  deleteExample(where: ExampleWhereOneInput!): Example
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -146,9 +150,6 @@ input Example1UpdateInput {
   textField2: String
   textField3: String
 }
-input Example1WhereInput {
-  id: ID!
-}
 input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
@@ -165,20 +166,31 @@ input Example2UpdateInput {
   textField1: [String!]
   textField2: [String!]
 }
+input Example1WhereOneInput {
+  id: ID!
+}
+input Example1WhereInput {
+  id: ID!
+}
+input Example2WhereOneInput {
+  id: ID!
+}
 input Example2WhereInput {
   id: ID!
 }
 type Query {
-  Example1(where: Example1WhereInput!): Example1
-  Example2(where: Example2WhereInput!): Example2
+  Example1(where: Example1WhereOneInput!): Example1
+  Example1S(where: Example1WhereInput): [Example1!]!
+  Example2(where: Example2WhereOneInput!): Example2
+  Example2S(where: Example2WhereInput): [Example2!]!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
-  updateExample1(where: Example1WhereInput! data: Example1UpdateInput!): Example1!
-  deleteExample1(where: Example1WhereInput!): Example1
+  updateExample1(where: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
+  deleteExample1(where: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
-  updateExample2(where: Example2WhereInput! data: Example2UpdateInput!): Example2!
-  deleteExample2(where: Example2WhereInput!): Example2
+  updateExample2(where: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
+  deleteExample2(where: Example2WhereOneInput!): Example2
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -277,9 +289,6 @@ input PersonUpdateInput {
   location: ID
   favoritePlace: ID
 }
-input PersonWhereInput {
-  id: ID!
-}
 input PlaceCreateInput {
   title: String!
 }
@@ -294,20 +303,31 @@ input PlaceCreateChildrenInput {
 input PlaceUpdateInput {
   title: String
 }
+input PersonWhereOneInput {
+  id: ID!
+}
+input PersonWhereInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
 input PlaceWhereInput {
   id: ID!
 }
 type Query {
-  Person(where: PersonWhereInput!): Person
-  Place(where: PlaceWhereInput!): Place
+  Person(where: PersonWhereOneInput!): Person
+  People(where: PersonWhereInput): [Person!]!
+  Place(where: PlaceWhereOneInput!): Place
+  Places(where: PlaceWhereInput): [Place!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person
+  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  deletePerson(where: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  updatePlace(where: PlaceWhereInput! data: PlaceUpdateInput!): Place!
-  deletePlace(where: PlaceWhereInput!): Place
+  updatePlace(where: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  deletePlace(where: PlaceWhereOneInput!): Place
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -406,9 +426,6 @@ input PersonUpdateInput {
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
 }
-input PersonWhereInput {
-  id: ID!
-}
 input AddressCreateInput {
   country: String!
   province: String
@@ -417,16 +434,20 @@ input AddressUpdateInput {
   country: String
   province: String
 }
-input AddressWhereInput {
+input PersonWhereOneInput {
+  id: ID!
+}
+input PersonWhereInput {
   id: ID!
 }
 type Query {
-  Person(where: PersonWhereInput!): Person
+  Person(where: PersonWhereOneInput!): Person
+  People(where: PersonWhereInput): [Person!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person
+  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  deletePerson(where: PersonWhereOneInput!): Person
 }`;
 
     const result = composeGqlTypes(thingConfigs);
@@ -541,9 +562,6 @@ input PersonUpdateInput {
   location: ID
   favoritePlace: ID
 }
-input PersonWhereInput {
-  id: ID!
-}
 input PlaceCreateInput {
   name: String
   citizens: PersonCreateChildrenInput
@@ -562,20 +580,31 @@ input PlaceUpdateInput {
   citizens: [ID!]
   visitors: [ID!]
 }
+input PersonWhereOneInput {
+  id: ID!
+}
+input PersonWhereInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
 input PlaceWhereInput {
   id: ID!
 }
 type Query {
-  Person(where: PersonWhereInput!): Person
-  Place(where: PlaceWhereInput!): Place
+  Person(where: PersonWhereOneInput!): Person
+  People(where: PersonWhereInput): [Person!]!
+  Place(where: PlaceWhereOneInput!): Place
+  Places(where: PlaceWhereInput): [Place!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereInput! data: PersonUpdateInput!): Person!
-  deletePerson(where: PersonWhereInput!): Person
+  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  deletePerson(where: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  updatePlace(where: PlaceWhereInput! data: PlaceUpdateInput!): Place!
-  deletePlace(where: PlaceWhereInput!): Place
+  updatePlace(where: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  deletePlace(where: PlaceWhereOneInput!): Place
 }`;
 
     const result = composeGqlTypes(thingConfigs);
