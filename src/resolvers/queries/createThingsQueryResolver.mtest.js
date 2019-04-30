@@ -21,10 +21,7 @@ describe('createThingQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
-      pagination: {
-        skip: 1,
-        first: 3,
-      },
+      pagination: true,
       textFields: [
         {
           name: 'firstName',

@@ -6,10 +6,7 @@ describe('composeGqlTypes', () => {
   test('should create things types for one thing', () => {
     const thingConfig = {
       name: 'Example',
-      pagination: {
-        skip: 0,
-        first: 64,
-      },
+      pagination: true,
       textFields: [
         {
           name: 'textField1',
@@ -80,12 +77,12 @@ input ExampleWhereInput {
   textField3: String
 }
 input ExamplePaginationInput {
-  skip: Int = 0
-  first: Int = 64
+  skip: Int
+  first: Int
 }
 type Query {
   Example(where: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput!): [Example!]!
+  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput): [Example!]!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!

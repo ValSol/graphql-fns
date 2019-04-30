@@ -13,7 +13,7 @@ const createThingsQueryType = (thingConfig: ThingConfig): string => {
   const thingWhereInputType = createThingWhereInputType(thingConfig);
   if (thingWhereInputType) mutationArgs.push(`where: ${name}WhereInput`);
   const thingPaginationInputType = createThingPaginationInputType(thingConfig);
-  if (thingPaginationInputType) mutationArgs.push(`pagination: ${name}PaginationInput!`);
+  if (thingPaginationInputType) mutationArgs.push(`pagination: ${name}PaginationInput`);
 
   const result = mutationArgs.length
     ? `  ${pluralize(name)}(${mutationArgs.join(', ')}): [${name}!]!`

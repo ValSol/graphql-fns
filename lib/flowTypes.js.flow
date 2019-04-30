@@ -9,11 +9,6 @@ type TextField = {
   unique?: boolean,
 };
 
-type Pagination = {
-  first: number,
-  skip: number,
-};
-
 export type ThingConfig = {
   isEmbedded?: boolean,
   duplexFields?: Array<{
@@ -39,7 +34,7 @@ export type ThingConfig = {
   }>,
   textFields?: Array<TextField>,
   name: string,
-  pagination?: Pagination,
+  pagination?: boolean,
 };
 
 export type Periphery = {

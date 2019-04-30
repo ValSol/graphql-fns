@@ -18,15 +18,12 @@ describe('createThingPaginationInputType', () => {
   test('should create pageInputType string if there are pagination', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: {
-        skip: 0,
-        first: 100,
-      },
+      pagination: true,
     };
     const expectedResult = `
 input ExamplePaginationInput {
-  skip: Int = 0
-  first: Int = 100
+  skip: Int
+  first: Int
 }`;
 
     const result = createThingPaginationInputType(thingConfig);

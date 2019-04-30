@@ -36,12 +36,9 @@ describe('createThingsQueryType', () => {
   test('should create query things type with pagination arg', () => {
     const thingConfig = {
       name: 'Example',
-      pagination: {
-        skip: 100,
-        first: 200,
-      },
+      pagination: true,
     };
-    const expectedResult = '  Examples(pagination: ExamplePaginationInput!): [Example!]!';
+    const expectedResult = '  Examples(pagination: ExamplePaginationInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
