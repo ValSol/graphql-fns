@@ -5,12 +5,12 @@ import type { ThingConfig } from '../../flowTypes';
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 
-type Args = { where?: Object };
+type Args = { where?: Object, pagination?: { skip: number, first: number } };
 type Context = { mongooseConn: Object };
 
 const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
-    const { where } = args;
+    const { pagination, where } = args;
 
     const { mongooseConn } = context;
 
@@ -18,11 +18,15 @@ const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
     const { name } = thingConfig;
 
     const Thing = mongooseConn.model(name, thingSchema);
+    const conditions = where || { where };
     const projection = getProjectionFromInfo(info);
 
-    const conditions = where || { where };
-
-    const things = await Thing.find(conditions, projection, { lean: true });
+    let query = Thing.find(conditions, projection, { lean: true });
+    if (pagination) {
+      const { skip, first: limit } = pagination;
+      query = query.skip(skip).limit(limit);
+    }
+    const things = await query.exec();
     if (!things) return [];
 
     const result = things.map(item => {

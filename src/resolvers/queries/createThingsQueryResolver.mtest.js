@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const mongoose = require('mongoose');
 
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -16,13 +18,13 @@ beforeAll(async () => {
 
 describe('createThingQueryResolver', () => {
   test('should create query thing resolver', async () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      pagination: {
+        skip: 1,
+        first: 3,
+      },
       textFields: [
         {
           name: 'firstName',
@@ -92,5 +94,10 @@ describe('createThingQueryResolver', () => {
     const people3 = await People(null, { where: where2 }, { mongooseConn }, info);
 
     expect(people3.length).toBe(3);
+
+    const pagination = { skip: 1, first: 3 };
+    const people4 = await People(null, { pagination }, { mongooseConn }, info);
+
+    expect(people4.length).toBe(3);
   });
 });
