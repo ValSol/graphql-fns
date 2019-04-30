@@ -87,5 +87,10 @@ describe('createThingQueryResolver', () => {
     const people2 = await People(null, { where }, { mongooseConn }, info);
 
     expect(people2.length).toBe(4);
+
+    const where2 = { friends: createdPerson.id };
+    const people3 = await People(null, { where: where2 }, { mongooseConn }, info);
+
+    expect(people3.length).toBe(3);
   });
 });
