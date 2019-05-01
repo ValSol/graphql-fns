@@ -8,7 +8,7 @@ const createThingScalarResolver = require('./createThingScalarResolver');
 type ThingResolver = { [key: string]: Function };
 
 const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
-  const { duplexFields, relationalFields } = thingConfig;
+  const { duplexFields, geospatialFields, relationalFields } = thingConfig;
 
   if (!relationalFields && !duplexFields)
     throw new TypeError('Expected an array as a value of the relationalFields key of thingConfig');
@@ -41,6 +41,21 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       }
+      return prev;
+    }, resolvers);
+  }
+
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { name }) => {
+      const resolver = (parent, args, context, info) => {
+        const { fieldName } = info;
+        const rawValue = parent[fieldName];
+
+        if (!rawValue) return null;
+        return rawValue;
+      };
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = resolver;
       return prev;
     }, resolvers);
   }
