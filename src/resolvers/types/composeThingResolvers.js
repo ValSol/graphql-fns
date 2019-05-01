@@ -45,11 +45,11 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name }) => {
       const resolver = (parent, args, context, info) => {
-        const { fieldName } = info;
-        const rawValue = parent[fieldName];
+        // const { fieldName } = info;
+        // const rawValue = parent[fieldName];
 
-        if (!rawValue) return null;
-        return rawValue;
+        return null;
+        // return rawValue;
       };
       // eslint-disable-next-line no-param-reassign
       prev[name] = resolver;
