@@ -9,17 +9,23 @@ const { Schema } = mongoose;
 const thingSchemas = {};
 
 const createThingSchema = (thingConfig: ThingConfig): Object => {
-  const { name } = thingConfig;
+  const { name, geospatialFields } = thingConfig;
 
   if (thingSchemas[name]) return thingSchemas[name];
 
   const thingSchemaProperties = composeThingSchemaProperties(thingConfig);
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
 
+  if (geospatialFields) {
+    geospatialFields.forEach(({ name: fieldName }) => {
+      ThingSchema.index({ [fieldName]: '2dsphere' });
+    });
+  }
+
   // to work dynamic adding fields
   mongoose.model(name, ThingSchema);
 
-  // дополняем кеш уже заданных коллекций с индексами
+  // to supplement cache
   thingSchemas[name] = ThingSchema;
 
   return ThingSchema;

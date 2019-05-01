@@ -9,6 +9,13 @@ type TextField = {
   unique?: boolean,
 };
 
+type GeospatialField = {
+  name: string,
+  type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint',
+  array?: boolean,
+  required?: boolean,
+};
+
 export type ThingConfig = {
   isEmbedded?: boolean,
   duplexFields?: Array<{
@@ -33,6 +40,7 @@ export type ThingConfig = {
     required?: boolean,
   }>,
   textFields?: Array<TextField>,
+  geospatialFields?: Array<GeospatialField>,
   name: string,
   pagination?: boolean,
 };

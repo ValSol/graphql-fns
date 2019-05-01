@@ -1,0 +1,64 @@
+// @flow
+
+import type { ThingConfig } from '../../flowTypes';
+
+type ThingConfigs = Array<ThingConfig>;
+
+const composeGeospatialTypes = (thingConfigs: ThingConfigs): string => {
+  let thereIsGeospatialPoint = false;
+  let thereIsGeospatialPolygon = false;
+
+  for (let i = 0; i < thingConfigs.length; i += 1) {
+    const thingConfig = thingConfigs[i];
+    const { geospatialFields } = thingConfig;
+    if (geospatialFields && geospatialFields.some(({ type }) => type === 'Point')) {
+      thereIsGeospatialPoint = true;
+    }
+    if (geospatialFields && geospatialFields.some(({ type }) => type === 'Polygon')) {
+      thereIsGeospatialPolygon = true;
+      break;
+    }
+  }
+
+  if (thereIsGeospatialPolygon) {
+    return `
+type GeospatialPoint {
+  longitude: Float!
+  latitude: Float!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  extarnalRing: GeospatialPolygonRing!
+  intarnalRings: [GeospatialPolygonRing!]
+}
+input GeospatialPointInput {
+  longitude: Float!
+  latitude: Float!
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  extarnalRing: GeospatialPolygonRingInput!
+  intarnalRings: [GeospatialPolygonRingInput!]
+}`;
+  }
+
+  if (thereIsGeospatialPoint) {
+    return `
+type GeospatialPoint {
+  longitude: Float!
+  latitude: Float!
+}
+input GeospatialPointInput {
+  longitude: Float!
+  latitude: Float!
+}`;
+  }
+
+  return '';
+};
+
+module.exports = composeGeospatialTypes;

@@ -4,9 +4,10 @@ import type { ThingConfig } from '../flowTypes';
 
 const createThingType = (thingConfig: ThingConfig): string => {
   const {
-    duplexFields,
     isEmbedded,
+    duplexFields,
     embeddedFields,
+    geospatialFields,
     relationalFields,
     textFields,
     name,
@@ -74,6 +75,17 @@ const createThingType = (thingConfig: ThingConfig): string => {
       },
       thingTypeArray,
     );
+  }
+
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { array, name: name2, type, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}Geospatial${type}${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   thingTypeArray.push('}');

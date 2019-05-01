@@ -262,4 +262,68 @@ describe('createThingType', () => {
     const result = createThingType(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing type with geospatial fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'precedingPosition',
+          type: 'Point',
+        },
+        {
+          name: 'favoritePositions',
+          array: true,
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'worstPositions',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'area',
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'precedingArea',
+          type: 'Polygon',
+        },
+        {
+          name: 'favoriteAreas',
+          array: true,
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'worstAreas',
+          array: true,
+          type: 'Polygon',
+        },
+      ],
+    };
+    const expectedResult = `type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  position: GeospatialPoint!
+  precedingPosition: GeospatialPoint
+  favoritePositions: [GeospatialPoint!]!
+  worstPositions: [GeospatialPoint!]!
+  area: GeospatialPolygon!
+  precedingArea: GeospatialPolygon
+  favoriteAreas: [GeospatialPolygon!]!
+  worstAreas: [GeospatialPolygon!]!
+}`;
+
+    const result = createThingType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -9,7 +9,14 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 const { Schema } = mongoose;
 
 const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
-  const { isEmbedded, duplexFields, embeddedFields, relationalFields, textFields } = thingConfig;
+  const {
+    isEmbedded,
+    duplexFields,
+    embeddedFields,
+    geospatialFields,
+    relationalFields,
+    textFields,
+  } = thingConfig;
 
   const result = {};
   if (textFields) {
@@ -86,6 +93,45 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
       const obj = composeThingSchemaProperties(config);
       // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
+      return prev;
+    }, result);
+  }
+
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { array, name, required, type }) => {
+      if (type === 'Point') {
+        const obj: Object = {
+          type: {
+            type: String,
+            enum: ['Point'],
+            required: true,
+          },
+          coordinates: {
+            type: [Number],
+            required: true,
+          },
+        };
+        if (required) obj.required = !!required; // by default required = false
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = array ? [obj] : obj;
+      } else if (type === 'Polygon') {
+        const obj: Object = {
+          type: {
+            type: String,
+            enum: ['Polygon'],
+            required: true,
+          },
+          coordinates: {
+            type: [[[Number]]],
+            required: true,
+          },
+        };
+        if (required) obj.required = !!required; // by default required = false
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = array ? [obj] : obj;
+      } else {
+        throw new TypeError(`Invalid value "${type}" of geospatial field type!`);
+      }
       return prev;
     }, result);
   }

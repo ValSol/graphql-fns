@@ -49,6 +49,7 @@ input ExampleCreateChildrenInput {
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
   test('should create thing input type with relational fields', () => {
     const placeConfig = {
       name: 'Place',
@@ -277,6 +278,75 @@ input PersonCreateChildrenInput {
 }`;
 
     const result = createThingCreateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type with geospatial fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'precedingPosition',
+          type: 'Point',
+        },
+        {
+          name: 'favoritePositions',
+          array: true,
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'worstPositions',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'area',
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'precedingArea',
+          type: 'Polygon',
+        },
+        {
+          name: 'favoriteAreas',
+          array: true,
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'worstAreas',
+          array: true,
+          type: 'Polygon',
+        },
+      ],
+    };
+    const expectedResult = `input ExampleCreateInput {
+  position: GeospatialPointInput!
+  precedingPosition: GeospatialPointInput
+  favoritePositions: [GeospatialPointInput!]!
+  worstPositions: [GeospatialPointInput!]!
+  area: GeospatialPolygonInput!
+  precedingArea: GeospatialPolygonInput
+  favoriteAreas: [GeospatialPolygonInput!]!
+  worstAreas: [GeospatialPolygonInput!]!
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

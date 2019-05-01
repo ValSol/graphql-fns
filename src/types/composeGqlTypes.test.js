@@ -33,9 +33,23 @@ describe('composeGqlTypes', () => {
           array: true,
         },
       ],
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+        },
+      ],
     };
     const thingConfigs = [thingConfig];
     const expectedResult = `scalar DateTime
+type GeospatialPoint {
+  longitude: Float!
+  latitude: Float!
+}
+input GeospatialPointInput {
+  longitude: Float!
+  latitude: Float!
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -45,6 +59,7 @@ type Example {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
+  position: GeospatialPoint
 }
 input ExampleCreateInput {
   textField1: String
@@ -52,6 +67,7 @@ input ExampleCreateInput {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
+  position: GeospatialPointInput
 }
 input ExampleCreateChildInput {
   connect: ID
@@ -67,6 +83,7 @@ input ExampleUpdateInput {
   textField3: String
   textField4: [String!]
   textField5: [String!]
+  position: GeospatialPointInput
 }
 input ExampleWhereOneInput {
   id: ID
@@ -80,9 +97,13 @@ input ExamplePaginationInput {
   skip: Int
   first: Int
 }
+input ExampleNearInput {
+  position: GeospatialPointInput
+  maxDistance: Float
+}
 type Query {
   Example(where: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput): [Example!]!
+  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -109,6 +130,12 @@ type Mutation {
           required: true,
         },
       ],
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+        },
+      ],
     };
     const thingConfig2 = {
       name: 'Example2',
@@ -124,9 +151,37 @@ type Mutation {
           array: true,
         },
       ],
+      geospatialFields: [
+        {
+          name: 'area',
+          type: 'Polygon',
+        },
+      ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
     const expectedResult = `scalar DateTime
+type GeospatialPoint {
+  longitude: Float!
+  latitude: Float!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  extarnalRing: GeospatialPolygonRing!
+  intarnalRings: [GeospatialPolygonRing!]
+}
+input GeospatialPointInput {
+  longitude: Float!
+  latitude: Float!
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  extarnalRing: GeospatialPolygonRingInput!
+  intarnalRings: [GeospatialPolygonRingInput!]
+}
 type Example1 {
   id: ID!
   createdAt: DateTime!
@@ -134,6 +189,7 @@ type Example1 {
   textField1: String
   textField2: String
   textField3: String!
+  position: GeospatialPoint
 }
 type Example2 {
   id: ID!
@@ -141,11 +197,13 @@ type Example2 {
   updatedAt: DateTime!
   textField1: [String!]!
   textField2: [String!]!
+  area: GeospatialPolygon
 }
 input Example1CreateInput {
   textField1: String
   textField2: String
   textField3: String!
+  position: GeospatialPointInput
 }
 input Example1CreateChildInput {
   connect: ID
@@ -159,10 +217,12 @@ input Example1UpdateInput {
   textField1: String
   textField2: String
   textField3: String
+  position: GeospatialPointInput
 }
 input Example2CreateInput {
   textField1: [String!]!
   textField2: [String!]!
+  area: GeospatialPolygonInput
 }
 input Example2CreateChildInput {
   connect: ID
@@ -175,18 +235,27 @@ input Example2CreateChildrenInput {
 input Example2UpdateInput {
   textField1: [String!]
   textField2: [String!]
+  area: GeospatialPolygonInput
 }
 input Example1WhereOneInput {
   id: ID!
 }
+input Example1NearInput {
+  position: GeospatialPointInput
+  maxDistance: Float
+}
 input Example2WhereOneInput {
   id: ID!
 }
+input Example2NearInput {
+  area: GeospatialPointInput
+  maxDistance: Float
+}
 type Query {
   Example1(where: Example1WhereOneInput!): Example1
-  Example1S: [Example1!]!
+  Example1S(near: Example1NearInput): [Example1!]!
   Example2(where: Example2WhereOneInput!): Example2
-  Example2S: [Example2!]!
+  Example2S(near: Example2NearInput): [Example2!]!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!

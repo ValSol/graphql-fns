@@ -7,6 +7,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     duplexFields,
     isEmbedded,
     embeddedFields,
+    geospatialFields,
     relationalFields,
     textFields,
     name,
@@ -66,6 +67,17 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
       },
       thingTypeArray,
     );
+  }
+
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { array, name: name2, type, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}Geospatial${type}Input${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   thingTypeArray.push('}');

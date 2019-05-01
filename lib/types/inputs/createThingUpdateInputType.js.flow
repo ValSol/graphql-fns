@@ -3,7 +3,14 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
-  const { duplexFields, embeddedFields, relationalFields, textFields, name } = thingConfig;
+  const {
+    duplexFields,
+    embeddedFields,
+    geospatialFields,
+    relationalFields,
+    textFields,
+    name,
+  } = thingConfig;
 
   const thingTypeArray = [`input ${name}UpdateInput {`];
 
@@ -32,6 +39,13 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   if (embeddedFields) {
     embeddedFields.reduce((prev, { array, name: name2, config: { name: embeddedName } }) => {
       prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+      return prev;
+    }, thingTypeArray);
+  }
+
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { array, name: name2, type }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}Geospatial${type}Input${array ? '!]' : ''}`);
       return prev;
     }, thingTypeArray);
   }

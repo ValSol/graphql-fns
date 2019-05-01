@@ -212,4 +212,64 @@ describe('createThingUpdateInputType', () => {
     const result = createThingUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing update input type with text fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'precedingPosition',
+          type: 'Point',
+        },
+        {
+          name: 'favoritePositions',
+          array: true,
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'worstPositions',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'area',
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'precedingArea',
+          type: 'Polygon',
+        },
+        {
+          name: 'favoriteAreas',
+          array: true,
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'worstAreas',
+          array: true,
+          type: 'Polygon',
+        },
+      ],
+    };
+    const expectedResult = `input ExampleUpdateInput {
+  position: GeospatialPointInput
+  precedingPosition: GeospatialPointInput
+  favoritePositions: [GeospatialPointInput!]
+  worstPositions: [GeospatialPointInput!]
+  area: GeospatialPolygonInput
+  precedingArea: GeospatialPolygonInput
+  favoriteAreas: [GeospatialPolygonInput!]
+  worstAreas: [GeospatialPolygonInput!]
+}`;
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

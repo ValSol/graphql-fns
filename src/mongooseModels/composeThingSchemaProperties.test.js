@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../flowTypes';
+
 const mongoose = require('mongoose');
 const composeThingSchemaProperties = require('./composeThingSchemaProperties');
 
@@ -7,7 +9,7 @@ const { Schema } = mongoose;
 
 describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -65,12 +67,13 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
   test('should compose schema properties with text and relational fields', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
     };
-    const personConfig = { name: 'Person', textFields: [], relationalFields: [] };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       textFields: [
@@ -148,9 +151,10 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
   test('should compose schema properties with text and duplex fields', () => {
-    const personConfig = { name: 'Person', textFields: [], duplexFields: [] };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [
@@ -251,8 +255,9 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
   test('should compose schema properties with text and embeded fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -266,7 +271,7 @@ describe('composeThingSchemaProperties', () => {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -362,8 +367,160 @@ describe('composeThingSchemaProperties', () => {
         },
       ],
     };
-
     const result = composeThingSchemaProperties(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with geospatial fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'pointField1',
+          type: 'Point',
+        },
+        {
+          name: 'pointField2',
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'pointField3',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'pointField4',
+          array: true,
+          type: 'Point',
+          required: true,
+        },
+        {
+          name: 'polygonField1',
+          type: 'Polygon',
+        },
+        {
+          name: 'polygonField2',
+          type: 'Polygon',
+          required: true,
+        },
+        {
+          name: 'polygonField3',
+          array: true,
+          type: 'Polygon',
+        },
+        {
+          name: 'polygonField4',
+          array: true,
+          type: 'Polygon',
+          required: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      pointField1: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+        },
+        coordinates: {
+          type: [Number],
+          required: true,
+        },
+      },
+      pointField2: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+        },
+        coordinates: {
+          type: [Number],
+          required: true,
+        },
+        required: true,
+      },
+      pointField3: [
+        {
+          type: {
+            type: String,
+            enum: ['Point'],
+            required: true,
+          },
+          coordinates: {
+            type: [Number],
+            required: true,
+          },
+        },
+      ],
+      pointField4: [
+        {
+          type: {
+            type: String,
+            enum: ['Point'],
+            required: true,
+          },
+          coordinates: {
+            type: [Number],
+            required: true,
+          },
+          required: true,
+        },
+      ],
+      polygonField1: {
+        type: {
+          type: String,
+          enum: ['Polygon'],
+          required: true,
+        },
+        coordinates: {
+          type: [[[Number]]],
+          required: true,
+        },
+      },
+      polygonField2: {
+        type: {
+          type: String,
+          enum: ['Polygon'],
+          required: true,
+        },
+        coordinates: {
+          type: [[[Number]]],
+          required: true,
+        },
+        required: true,
+      },
+      polygonField3: [
+        {
+          type: {
+            type: String,
+            enum: ['Polygon'],
+            required: true,
+          },
+          coordinates: {
+            type: [[[Number]]],
+            required: true,
+          },
+        },
+      ],
+      polygonField4: [
+        {
+          type: {
+            type: String,
+            enum: ['Polygon'],
+            required: true,
+          },
+          coordinates: {
+            type: [[[Number]]],
+            required: true,
+          },
+          required: true,
+        },
+      ],
+    };
+
+    const result = composeThingSchemaProperties(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });
