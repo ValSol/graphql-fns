@@ -45,8 +45,8 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
     }, resolvers);
 
   thingConfigs.reduce((prev, thingConfig) => {
-    const { name, relationalFields, duplexFields } = thingConfig;
-    if (relationalFields || duplexFields) {
+    const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
+    if (duplexFields || geospatialFields || relationalFields) {
       // eslint-disable-next-line no-param-reassign
       prev[name] = composeThingResolvers(thingConfig);
     }

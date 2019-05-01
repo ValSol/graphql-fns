@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../../flowTypes';
+
 const composeThingResolvers = require('./composeThingResolvers');
 
 describe('composeThingResolvers', () => {
   test('should create resolver for type', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [
         {
@@ -13,11 +16,7 @@ describe('composeThingResolvers', () => {
         },
       ],
     };
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
 
     Object.assign(personConfig, {
       name: 'Person',
@@ -62,12 +61,9 @@ describe('composeThingResolvers', () => {
     expect(typeof result.location).toBe('function');
     expect(typeof result.favoritePlace).toBe('function');
   });
+
   test('should create resolver for type', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
+    const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -132,5 +128,37 @@ describe('composeThingResolvers', () => {
     expect(typeof result.enemies).toBe('function');
     expect(typeof result.location).toBe('function');
     expect(typeof result.favoritePlace).toBe('function');
+  });
+  test('should create resolver for type', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Place',
+      geospatialFields: [
+        {
+          name: 'position',
+          type: 'Point',
+        },
+        {
+          name: 'positions',
+          type: 'Point',
+          array: true,
+        },
+        {
+          name: 'area',
+          type: 'Polygon',
+        },
+        {
+          name: 'areas',
+          type: 'Polygon',
+          array: true,
+        },
+      ],
+    };
+
+    const result = composeThingResolvers(thingConfig);
+
+    expect(typeof result.position).toBe('function');
+    expect(typeof result.positions).toBe('function');
+    expect(typeof result.area).toBe('function');
+    expect(typeof result.areas).toBe('function');
   });
 });

@@ -10,9 +10,6 @@ type ThingResolver = { [key: string]: Function };
 const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
   const { duplexFields, geospatialFields, relationalFields } = thingConfig;
 
-  if (!relationalFields && !duplexFields)
-    throw new TypeError('Expected an array as a value of the relationalFields key of thingConfig');
-
   const resolvers = {};
 
   if (relationalFields) {
