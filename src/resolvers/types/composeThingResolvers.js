@@ -50,15 +50,15 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
         if (array) {
           const values = parent[name];
           if (!values || !values.length) return [];
-          console.log('*************************************');
-          console.log('values =', JSON.stringify(values, null, ' '));
-          console.log('*************************************');
+
           if (type === 'Point') {
             return values.map(value => pointFromMongoToGql(value));
           }
+
           if (type === 'Polygon') {
             return values.map(value => polygonFromMongoToGql(value));
           }
+
           throw new TypeError(`Invalid type value "${name}" of geospatial mongodb field!`);
         }
 

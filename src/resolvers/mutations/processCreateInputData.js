@@ -1,14 +1,17 @@
 // @flow
 import type { Periphery, ThingConfig } from '../../flowTypes';
 
+const { Types } = require('mongoose');
+
+const pointFromGqlToMongo = require('./pointFromGqlToMongo');
+const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
+
 type ProcessCreateInputDataResult = {
   core: { [ThingConfig]: Array<Object> },
   periphery: Periphery,
   single: Boolean,
   first: Object,
 };
-
-const { Types } = require('mongoose');
 
 const processCreateInputData = (
   data: Object,
@@ -21,7 +24,13 @@ const processCreateInputData = (
   const prepared = [{ data: { ...data, _id: mongooseTypes.ObjectId() }, config: thingConfig }];
 
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
-    const { duplexFields, embeddedFields, relationalFields, textFields } = thingConfig2;
+    const {
+      duplexFields,
+      embeddedFields,
+      geospatialFields,
+      relationalFields,
+      textFields,
+    } = thingConfig2;
 
     const relationalFieldsObject = {};
     if (relationalFields) {
@@ -56,6 +65,15 @@ const processCreateInputData = (
         prev[name] = config;
         return prev;
       }, embeddedFieldsConfigs);
+    }
+
+    const geospatialFieldsObject = {};
+    if (geospatialFields) {
+      geospatialFields.reduce((prev, { name, array, type }) => {
+        // eslint-disable-next-line
+        prev[name] = { array, type };
+        return prev;
+      }, geospatialFieldsObject);
     }
 
     const scalarFieldsArray = ['_id'];
@@ -254,6 +272,27 @@ const processCreateInputData = (
       } else if (embeddedFieldsConfigs[key]) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = transform(data2[key], embeddedFieldsConfigs[key]);
+      } else if (geospatialFieldsObject[key]) {
+        const { array, type } = geospatialFieldsObject[key];
+        if (array) {
+          if (type === 'Point') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = data2[key].map(value => pointFromGqlToMongo(value));
+          }
+          if (type === 'Polygon') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = data2[key].map(value => polygonFromGqlToMongo(value));
+          }
+        } else {
+          if (type === 'Point') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = pointFromGqlToMongo(data2[key]);
+          }
+          if (type === 'Polygon') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = polygonFromGqlToMongo(data2[key]);
+          }
+        }
       } else if (scalarFieldsArray.includes(key)) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data2[key];

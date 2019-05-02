@@ -2,10 +2,10 @@
 
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowTypes';
 
-const polygonFromMongoToGql = (point: MongodbGeospatialPolygon): GeospatialPolygon => {
+const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPolygon => {
   const {
     coordinates: [externalRingArray, ...internalRingsArray],
-  } = point;
+  } = polygon;
 
   const externalRing = externalRingArray.reduce(
     (prev, item) => {
