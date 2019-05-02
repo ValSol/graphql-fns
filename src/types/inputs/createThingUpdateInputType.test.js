@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../../flowTypes';
+
 const createThingUpdateInputType = require('./createThingUpdateInputType');
 
 describe('createThingUpdateInputType', () => {
   test('should create thing update input type with text fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -43,14 +46,11 @@ describe('createThingUpdateInputType', () => {
   });
 
   test('should create thing update input type with relational fields', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
     };
-    const personConfig = {
-      name: 'Person',
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       relationalFields: [
@@ -88,11 +88,8 @@ describe('createThingUpdateInputType', () => {
   });
 
   test('should create thing update input type with duplex fields', () => {
-    const personConfig = {
-      name: 'Person',
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [
@@ -151,7 +148,7 @@ describe('createThingUpdateInputType', () => {
   });
 
   test('should create thing update input type with embedded fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -165,7 +162,7 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -214,7 +211,7 @@ describe('createThingUpdateInputType', () => {
   });
 
   test('should create thing update input type with text fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       geospatialFields: [
         {

@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../../flowTypes';
+
 const createThingCreateInputType = require('./createThingCreateInputType');
 
 describe('createThingCreateInputType', () => {
   test('should create thing input type with text fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -51,14 +54,11 @@ input ExampleCreateChildrenInput {
   });
 
   test('should create thing input type with relational fields', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
     };
-    const personConfig = {
-      name: 'Person',
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       relationalFields: [
@@ -104,7 +104,7 @@ input PersonCreateChildrenInput {
   });
 
   test('should create embedded thing input type with text fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -128,7 +128,7 @@ input PersonCreateChildrenInput {
   });
 
   test('should create thing input type with embedded fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -142,7 +142,7 @@ input PersonCreateChildrenInput {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -198,12 +198,8 @@ input PersonCreateChildrenInput {
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with duplex fields', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [

@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../../flowTypes';
+
 const createThingWhereOneInputType = require('./createThingWhereOneInputType');
 
 describe('createThingWhereOneInputType', () => {
   test('should create thing input type', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
     };
     const expectedResult = `input ExampleWhereOneInput {
@@ -15,7 +18,7 @@ describe('createThingWhereOneInputType', () => {
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with several args', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {

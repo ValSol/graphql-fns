@@ -1,10 +1,12 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const createThingQueryResolver = require('./createThingQueryResolver');
 
 describe('createThingQueryResolver', () => {
   test('should create mutation add thing type', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {

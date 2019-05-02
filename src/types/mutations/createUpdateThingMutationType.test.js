@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../../flowTypes';
+
 const createUpdateThingMutationType = require('./createUpdateThingMutationType');
 
 describe('createUpdateThingMutationType', () => {
   test('should create mutation update thing type', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
     };
     const expectedResult =

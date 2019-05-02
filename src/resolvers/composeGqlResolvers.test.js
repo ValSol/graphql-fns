@@ -1,10 +1,12 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../flowTypes';
+
 const composeGqlResolvers = require('./composeGqlResolvers');
 
 describe('composeGqlResolvers', () => {
   test('should create things types for one thing', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -38,7 +40,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deleteExample).toBe('function');
   });
   test('should create things types for two things', () => {
-    const thingConfig1 = {
+    const thingConfig1: ThingConfig = {
       name: 'Example1',
       textFields: [
         {
@@ -54,7 +56,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfig2 = {
+    const thingConfig2: ThingConfig = {
       name: 'Example2',
       textFields: [
         {
@@ -83,7 +85,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deleteExample2).toBe('function');
   });
   test('should create things types for two things with relational things', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [
         {
@@ -92,11 +94,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       textFields: [
@@ -151,8 +149,9 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.location).toBe('function');
     expect(typeof result.Person.favoritePlace).toBe('function');
   });
+
   test('should create things types for two things with re', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -166,7 +165,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -213,13 +212,10 @@ describe('composeGqlResolvers', () => {
     expect(result.Query.Address).toBeUndefined();
     expect(result.Mutation.createAddress).toBeUndefined();
   });
+
   test('should create things types for two things with duplex things', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [

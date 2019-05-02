@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const mongoose = require('mongoose');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
@@ -15,7 +17,7 @@ beforeAll(async () => {
 
 describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -63,7 +65,7 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
   });
   test('should create mutation add thing resolver adding relations', async () => {
-    const personConfig = { name: 'Person', textFields: [], relationalFields: [] };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       textFields: [
@@ -244,12 +246,8 @@ describe('createCreateThingMutationResolver', () => {
   });
 
   test('should create mutation add thing resolver that create duplex related things', async () => {
-    const personConfig = {
-      name: 'Person3',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place2',
       textFields: [{ name: 'name' }],
       duplexFields: [
@@ -456,13 +454,10 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdFavorities2[0].visitors[1]).toEqual(_id2);
     expect(createdFavorities2[1].visitors[1]).toEqual(_id2);
   });
+
   test('should update mongodb documents using periphery objects', async () => {
-    const personConfig = {
-      name: 'Person4',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place3',
       textFields: [{ name: 'name' }],
       duplexFields: [

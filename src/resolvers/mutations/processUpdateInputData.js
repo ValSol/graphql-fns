@@ -1,7 +1,7 @@
 // @flow
 import type { Periphery, ThingConfig } from '../../flowTypes';
 
-type Core = { [ThingConfig]: Array<Object> };
+type Core = Map<ThingConfig, Array<Object>>;
 
 type ProcessUpdateInputDataResult = {
   core: Core,
@@ -53,23 +53,19 @@ const processCreateInputData = (
                   { [oppositeName]: data._id },
             },
           };
-          // $FlowFixMe
-          if (core.get(config)) {
-            // $FlowFixMe
-            core.get(config).push(item);
+          const itemCore = core.get(config);
+          if (itemCore) {
+            itemCore.push(item);
           } else {
-            // $FlowFixMe
             core.set(config, [item]);
           }
           if (!oppositeArray) {
-            if (periphery.get(config)) {
-              // $FlowFixMe
-              if (periphery.get(config)[oppositeName]) {
-                // $FlowFixMe
-                periphery.get(config)[oppositeName].oppositeIds.push(oppositeId);
+            const peripheryItem = periphery.get(config);
+            if (peripheryItem) {
+              if (peripheryItem[oppositeName]) {
+                peripheryItem[oppositeName].oppositeIds.push(oppositeId);
               } else {
-                // $FlowFixMe
-                periphery.get(config)[oppositeName] = {
+                peripheryItem[oppositeName] = {
                   array: true,
                   name: key,
                   oppositeConfig,
@@ -101,24 +97,20 @@ const processCreateInputData = (
                 { [oppositeName]: data._id },
           },
         };
-        // $FlowFixMe
-        if (core.get(config)) {
-          // $FlowFixMe
-          core.get(config).push(item);
+        const coreItem = core.get(config);
+        if (coreItem) {
+          coreItem.push(item);
         } else {
-          // $FlowFixMe
           core.set(config, [item]);
         }
 
         if (!oppositeArray) {
-          if (periphery.get(config)) {
-            // $FlowFixMe
-            if (periphery.get(config)[oppositeName]) {
-              // $FlowFixMe
-              periphery.get(config)[oppositeName].oppositeIds.push(oppositeId);
+          const peripheryItem = periphery.get(config);
+          if (peripheryItem) {
+            if (peripheryItem[oppositeName]) {
+              peripheryItem[oppositeName].oppositeIds.push(oppositeId);
             } else {
-              // $FlowFixMe
-              periphery.get(config)[oppositeName] = {
+              peripheryItem[oppositeName] = {
                 array: false,
                 name: key,
                 oppositeConfig,

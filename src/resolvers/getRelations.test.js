@@ -1,11 +1,13 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../flowTypes';
+
 const getRelations = require('./getRelations');
 
 describe('getRelations', () => {
   test('should return map with relations', () => {
-    const thingConfig = { name: 'Thing', relationalFields: [] };
-    const thingConfig2 = {
+    const thingConfig: ThingConfig = {};
+    const thingConfig2: ThingConfig = {
       name: 'Thing2',
       relationalFields: [
         { config: thingConfig, name: 'relationalField_2' },

@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../flowTypes';
+
 const composeGqlTypes = require('./composeGqlTypes');
 
 describe('composeGqlTypes', () => {
   test('should create things types for one thing', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       pagination: true,
       textFields: [
@@ -115,7 +118,7 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
   test('should create things types for two things', () => {
-    const thingConfig1 = {
+    const thingConfig1: ThingConfig = {
       name: 'Example1',
       textFields: [
         {
@@ -137,7 +140,7 @@ type Mutation {
         },
       ],
     };
-    const thingConfig2 = {
+    const thingConfig2: ThingConfig = {
       name: 'Example2',
       textFields: [
         {
@@ -270,7 +273,7 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
   test('should create things types for two related fields', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [
         {
@@ -279,11 +282,7 @@ type Mutation {
         },
       ],
     };
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       textFields: [
@@ -402,7 +401,7 @@ type Mutation {
   });
 
   test('should create things types for regular and embedded fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -416,7 +415,7 @@ type Mutation {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -519,12 +518,8 @@ type Mutation {
   });
 
   test('should create things types for two duplex fields', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [

@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const mongoose = require('mongoose');
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
@@ -16,12 +18,8 @@ beforeAll(async () => {
 
 describe('createDeleteThingMutationResolver', () => {
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name', unique: true }],
       duplexFields: [

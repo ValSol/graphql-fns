@@ -45,14 +45,15 @@ export type ThingConfig = {
   pagination?: boolean,
 };
 
-export type Periphery = {
-  [ThingConfig]: {
+export type Periphery = Map<
+  ThingConfig,
+  {
+    // as key using oppositeName
     [key: string]: {
-      oppositeIds: Array<String>,
-      array: Boolean,
-      name: String,
+      oppositeIds: Array<string>,
+      array: boolean,
+      name: string,
       oppositeConfig: ThingConfig,
-      oppositeName: String,
     },
   },
-};
+>;

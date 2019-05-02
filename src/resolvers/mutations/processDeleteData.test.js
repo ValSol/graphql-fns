@@ -1,15 +1,13 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const processDeleteData = require('./processDeleteData');
 
 describe('processDeleteData', () => {
   test('should create object with simple fields', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [

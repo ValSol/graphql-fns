@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-type ProcessDeleteDataResult = { [ThingConfig]: Array<Object> };
+type ProcessDeleteDataResult = Map<ThingConfig, Array<Object>>;
 
 const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDeleteDataResult => {
   // eslint-disable-next-line no-unused-vars
@@ -48,9 +48,9 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
                   },
             },
           };
-          if (result.get(config)) {
-            // $FlowFixMe
-            result.get(config).push(item);
+          const resultItem = result.get(config);
+          if (resultItem) {
+            resultItem.push(item);
           } else {
             result.set(config, [item]);
           }
@@ -75,9 +75,9 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
                 },
           },
         };
-        if (result.get(config)) {
-          // $FlowFixMe
-          result.get(config).push(item);
+        const resultItem = result.get(config);
+        if (resultItem) {
+          resultItem.push(item);
         } else {
           result.set(config, [item]);
         }

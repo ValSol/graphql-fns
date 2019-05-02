@@ -43,7 +43,6 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       await updatePeriphery(periphery, mongooseConn);
 
       const promises = [];
-      // $FlowFixMe
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config);

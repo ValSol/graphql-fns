@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { Periphery, ThingConfig } from '../../flowTypes';
+
 const processCreateInputData = require('./processCreateInputData');
 
 const mongooseTypes = {
@@ -12,7 +14,7 @@ const mongooseTypes = {
 
 describe('processCreateInputData', () => {
   test('should create object with simple fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Thing',
       textFields: [
         {
@@ -41,7 +43,7 @@ describe('processCreateInputData', () => {
 
     core.set(thingConfig, [item]);
     const single = true;
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
@@ -58,11 +60,7 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object with self relation fields', () => {
-    const thingConfig = {
-      name: 'Thing',
-      textFields: [],
-      relationalFields: [],
-    };
+    const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Thing',
       textFields: [
@@ -106,7 +104,7 @@ describe('processCreateInputData', () => {
     };
     core.set(thingConfig, [item]);
     const single = true;
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
@@ -126,23 +124,11 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object with embedded fields with relation fields', () => {
-    const embedded1Config = {
-      name: 'Embedded1',
-      textFields: [],
-      embeddedFields: [],
-    };
+    const embedded1Config: ThingConfig = {};
 
-    const embedded2Config = {
-      name: 'Embedded2',
-      textFields: [],
-      relationalFields: [],
-    };
+    const embedded2Config: ThingConfig = {};
 
-    const thingConfig = {
-      name: 'Thing',
-      textFields: [],
-      embeddedFields: [],
-    };
+    const thingConfig = {};
 
     Object.assign(embedded1Config, {
       name: 'Embedded1',
@@ -204,7 +190,7 @@ describe('processCreateInputData', () => {
     };
     core.set(thingConfig, [item]);
     const single = true;
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
@@ -229,11 +215,11 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'city' }],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -285,7 +271,7 @@ describe('processCreateInputData', () => {
       { insertOne: { document: { _id: '7', city: 'Chernygiv' } } },
       { insertOne: { document: { _id: '8', city: 'Zhitomyr' } } },
     ]);
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
@@ -305,11 +291,7 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs with duplex fields along with create', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
+    const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -428,7 +410,7 @@ describe('processCreateInputData', () => {
         insertOne: { document: { _id: '14', name: 'Zhitomyr', visitors: ['9'] } },
       },
     ]);
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
@@ -449,11 +431,7 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs with duplex fields along with connect', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
+    const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -617,7 +595,7 @@ describe('processCreateInputData', () => {
         },
       },
     ]);
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     periphery.set(personConfig, {
       friend: {
         oppositeIds: ['111'],

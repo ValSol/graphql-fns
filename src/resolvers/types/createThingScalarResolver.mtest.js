@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const mongoose = require('mongoose');
 
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -16,11 +18,7 @@ beforeAll(async () => {
 
 describe('createThingScalarResolver', () => {
   test('should create type thing resolver', async () => {
-    const placeConfig = {
-      name: 'Place',
-      textFields: [],
-      relationalFields: [],
-    };
+    const placeConfig: ThingConfig = {};
     Object.assign(placeConfig, {
       name: 'Place',
       textFields: [

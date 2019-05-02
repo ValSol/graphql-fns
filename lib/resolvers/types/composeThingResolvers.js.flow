@@ -44,7 +44,7 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
 
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name }) => {
-      const resolver = (parent, args, context, info) => {
+      const resolver = () => {
         // const { fieldName } = info;
         // const rawValue = parent[fieldName];
 

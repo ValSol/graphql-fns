@@ -1,10 +1,13 @@
 // @flow
 /* eslint-env jest */
+
+import type { ThingConfig } from '../flowTypes';
+
 const createThingType = require('./createThingType');
 
 describe('createThingType', () => {
   test('should create thing type with Text fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
@@ -46,14 +49,11 @@ describe('createThingType', () => {
   });
 
   test('should create thing type with relational fields', () => {
-    const placeConfig = {
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
     };
-    const personConfig = {
-      name: 'Person',
-      relationalFields: [],
-    };
+    const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       relationalFields: [
@@ -94,7 +94,7 @@ describe('createThingType', () => {
   });
 
   test('should create thing type with embedded fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -108,7 +108,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const personConfig = {
+    const personConfig: ThingConfig = {
       name: 'Person',
       textFields: [
         {
@@ -160,7 +160,7 @@ describe('createThingType', () => {
   });
 
   test('should create embeded thing type with text fields', () => {
-    const addressConfig = {
+    const addressConfig: ThingConfig = {
       name: 'Address',
       isEmbedded: true,
       textFields: [
@@ -185,12 +185,8 @@ describe('createThingType', () => {
   });
 
   test('should create thing type with duplex fields', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [
@@ -264,7 +260,7 @@ describe('createThingType', () => {
   });
 
   test('should create thing type with geospatial fields', () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       geospatialFields: [
         {

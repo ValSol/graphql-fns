@@ -1,5 +1,7 @@
 // @flow
 /* eslint-env jest */
+import type { ThingConfig } from '../../flowTypes';
+
 const mongoose = require('mongoose');
 
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -16,7 +18,7 @@ beforeAll(async () => {
 
 describe('createThingQueryResolver', () => {
   test('should create query thing resolver', async () => {
-    const thingConfig = {
+    const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {

@@ -1,15 +1,13 @@
 // @flow
 /* eslint-env jest */
+import type { Periphery, ThingConfig } from '../../flowTypes';
+
 const processUpdateInputData = require('./processUpdateInputData');
 
 describe('processUpdateInputData', () => {
   test('should create object and children objectcs with duplex fields along with connect', () => {
-    const personConfig = {
-      name: 'Person',
-      textFields: [],
-      duplexFields: [],
-    };
-    const placeConfig = {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
       duplexFields: [
@@ -152,7 +150,7 @@ describe('processUpdateInputData', () => {
         },
       },
     ]);
-    const periphery = new Map();
+    const periphery: Periphery = new Map();
     periphery.set(personConfig, {
       friend: {
         oppositeIds: ['111'],

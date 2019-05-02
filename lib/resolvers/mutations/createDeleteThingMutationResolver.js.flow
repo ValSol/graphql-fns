@@ -33,7 +33,6 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
 
     const promises = [];
     const bulkItemsMap = processDeleteData(thing, thingConfig);
-    // $FlowFixMe
     bulkItemsMap.forEach((bulkItems, config) => {
       const { name: name2 } = config;
       const thingSchema2 = createThingSchema(config);
