@@ -50,6 +50,9 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
         if (array) {
           const values = parent[name];
           if (!values || !values.length) return [];
+          console.log('*************************************');
+          console.log('values =', JSON.stringify(values, null, ' '));
+          console.log('*************************************');
           if (type === 'Point') {
             return values.map(value => pointFromMongoToGql(value));
           }
