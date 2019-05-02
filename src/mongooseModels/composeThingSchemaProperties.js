@@ -104,11 +104,11 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           type: {
             type: String,
             enum: ['Point'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [Number],
-            required: true,
+            // required: true,
           },
         };
         if (required) obj.required = !!required; // by default required = false
@@ -119,11 +119,11 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           type: {
             type: String,
             enum: ['Polygon'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [[[Number]]],
-            required: true,
+            // required: true,
           },
         };
         if (required) obj.required = !!required; // by default required = false

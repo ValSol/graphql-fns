@@ -422,22 +422,22 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Point'],
-          required: true,
+          // required: true,
         },
         coordinates: {
           type: [Number],
-          required: true,
+          // required: true,
         },
       },
       pointField2: {
         type: {
           type: String,
           enum: ['Point'],
-          required: true,
+          // required: true,
         },
         coordinates: {
           type: [Number],
-          required: true,
+          // required: true,
         },
         required: true,
       },
@@ -446,11 +446,11 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Point'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [Number],
-            required: true,
+            // required: true,
           },
         },
       ],
@@ -459,11 +459,11 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Point'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [Number],
-            required: true,
+            // required: true,
           },
           required: true,
         },
@@ -472,22 +472,22 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Polygon'],
-          required: true,
+          // required: true,
         },
         coordinates: {
           type: [[[Number]]],
-          required: true,
+          // required: true,
         },
       },
       polygonField2: {
         type: {
           type: String,
           enum: ['Polygon'],
-          required: true,
+          // required: true,
         },
         coordinates: {
           type: [[[Number]]],
-          required: true,
+          // required: true,
         },
         required: true,
       },
@@ -496,11 +496,11 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Polygon'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [[[Number]]],
-            required: true,
+            // required: true,
           },
         },
       ],
@@ -509,11 +509,11 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Polygon'],
-            required: true,
+            // required: true,
           },
           coordinates: {
             type: [[[Number]]],
-            required: true,
+            // required: true,
           },
           required: true,
         },

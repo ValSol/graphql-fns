@@ -30,8 +30,8 @@ type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
 }
 type GeospatialPolygon {
-  extarnalRing: GeospatialPolygonRing!
-  intarnalRings: [GeospatialPolygonRing!]
+  externalRing: GeospatialPolygonRing!
+  internalRings: [GeospatialPolygonRing!]
 }
 input GeospatialPointInput {
   longitude: Float!
@@ -41,8 +41,8 @@ input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
 input GeospatialPolygonInput {
-  extarnalRing: GeospatialPolygonRingInput!
-  intarnalRings: [GeospatialPolygonRingInput!]
+  externalRing: GeospatialPolygonRingInput!
+  internalRings: [GeospatialPolygonRingInput!]
 }`;
   }
 

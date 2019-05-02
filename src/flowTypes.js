@@ -57,3 +57,23 @@ export type Periphery = Map<
     },
   },
 >;
+
+export type GeospatialPoint = {
+  longitude: number,
+  latitude: number,
+};
+
+export type GeospatialPolygon = {
+  externalRing: { ring: Array<GeospatialPoint> },
+  internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
+};
+
+export type MongodbGeospatialPoint = {
+  type: 'Point',
+  coordinates: [number, number],
+};
+
+export type MongodbGeospatialPolygon = {
+  type: 'Polygon',
+  coordinates: Array<Array<[number, number]>>,
+};

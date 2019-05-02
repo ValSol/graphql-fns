@@ -4,6 +4,8 @@ import type { ThingConfig } from '../../flowTypes';
 
 const createThingArrayResolver = require('./createThingArrayResolver');
 const createThingScalarResolver = require('./createThingScalarResolver');
+const pointFromMongoToGql = require('./pointFromMongoToGql');
+const polygonFromMongoToGql = require('./polygonFromMongoToGql');
 
 type ThingResolver = { [key: string]: Function };
 
@@ -43,13 +45,28 @@ const composeThingResolvers = (thingConfig: ThingConfig): ThingResolver => {
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { name }) => {
-      const resolver = () => {
-        // const { fieldName } = info;
-        // const rawValue = parent[fieldName];
+    geospatialFields.reduce((prev, { name, array, type }) => {
+      const resolver = (parent: Object): Object => {
+        if (array) {
+          const values = parent[name];
+          if (!values || !values.length) return [];
+          if (type === 'Point') {
+            return values.map(value => pointFromMongoToGql(value));
+          }
+          if (type === 'Polygon') {
+            return values.map(value => polygonFromMongoToGql(value));
+          }
+          throw new TypeError(`Invalid type value "${name}" of geospatial mongodb field!`);
+        }
 
-        return null;
-        // return rawValue;
+        const value = parent[name];
+        if (!value || !value.type) return null;
+
+        if (type === 'Point') return pointFromMongoToGql(value);
+
+        if (type === 'Polygon') return polygonFromMongoToGql(value);
+
+        throw new TypeError(`Invalid type value "${name}" of geospatial mongodb field!`);
       };
       // eslint-disable-next-line no-param-reassign
       prev[name] = resolver;
