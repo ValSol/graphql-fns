@@ -42,12 +42,6 @@ describe('createCreateThingMutationResolver', () => {
           array: true,
         },
       ],
-      geospatialFields: [
-        {
-          name: 'position',
-          type: 'Point',
-        },
-      ],
     };
 
     const createExample = createCreateThingMutationResolver(thingConfig);
