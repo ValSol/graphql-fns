@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../flowTypes';
 
 const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
 

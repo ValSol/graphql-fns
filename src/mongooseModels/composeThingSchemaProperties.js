@@ -3,6 +3,9 @@ import type { ThingConfig } from '../flowTypes';
 
 const mongoose = require('mongoose');
 
+const pointFromGqlToMongo = require('../utils/pointFromGqlToMongo');
+const polygonFromGqlToMongo = require('../utils/polygonFromGqlToMongo');
+
 type ThingSchemaProperty = { type: String | [String], default: string, required: boolean };
 type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 
@@ -98,18 +101,22 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name, required, type }) => {
+    geospatialFields.reduce((prev, { array, default: defaultValue, name, required, type }) => {
       if (type === 'Point') {
         const obj: Object = {
           type: {
             type: String,
             enum: ['Point'],
-            // required: true,
           },
           coordinates: {
             type: [Number],
-            // required: true,
           },
+          default:
+            defaultValue &&
+            // use Array.isArray(defaultValue) instead of array to pass flowjs check
+            (Array.isArray(defaultValue)
+              ? defaultValue.map(item => pointFromGqlToMongo(item))
+              : pointFromGqlToMongo(defaultValue)),
         };
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
@@ -119,12 +126,16 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           type: {
             type: String,
             enum: ['Polygon'],
-            // required: true,
           },
           coordinates: {
             type: [[[Number]]],
-            // required: true,
           },
+          default:
+            defaultValue &&
+            // use Array.isArray(defaultValue) instead of array to pass flowjs check
+            (Array.isArray(defaultValue)
+              ? defaultValue.map(item => polygonFromGqlToMongo(item))
+              : polygonFromGqlToMongo(defaultValue)),
         };
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign

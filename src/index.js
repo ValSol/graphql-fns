@@ -1,4 +1,4 @@
-const composeGql = require('./composeGql');
+const composeGql = require('./other/composeGql');
 const composeGqlTypes = require('./types/composeGqlTypes');
 const composeGqlResolvers = require('./resolvers/composeGqlResolvers');
 

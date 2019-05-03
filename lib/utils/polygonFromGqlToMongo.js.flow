@@ -1,6 +1,6 @@
 // @flow
 
-import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../flowTypes';
 
 const polygonFromGqlToMongo = (polygon: GeospatialPolygon): MongodbGeospatialPolygon => {
   const {

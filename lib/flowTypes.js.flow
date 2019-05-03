@@ -1,5 +1,25 @@
 // @flow
 
+export type MongodbGeospatialPoint = {|
+  type: 'Point',
+  coordinates: [number, number],
+|};
+
+export type MongodbGeospatialPolygon = {|
+  type: 'Polygon',
+  coordinates: Array<Array<[number, number]>>,
+|};
+
+export type GeospatialPoint = {|
+  longitude: number,
+  latitude: number,
+|};
+
+export type GeospatialPolygon = {
+  externalRing: {| ring: Array<GeospatialPoint> |},
+  internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
+};
+
 type TextField = {
   name: string,
   array?: boolean,
@@ -9,12 +29,23 @@ type TextField = {
   unique?: boolean,
 };
 
-type GeospatialField = {
-  name: string,
-  type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint',
-  array?: boolean,
-  required?: boolean,
-};
+type GeospatialField =
+  | {
+      name: string,
+      // default?: GeospatialPoint | Array<GeospatialPoint>,
+      default?: Object | Array<Object>,
+      required?: boolean,
+      type: 'Point',
+      array?: boolean,
+    }
+  | {
+      name: string,
+      // default?: GeospatialPolygon | Array<GeospatialPolygon>,
+      default?: Object | Array<Object>,
+      required?: boolean,
+      type: 'Polygon',
+      array?: boolean,
+    };
 
 export type ThingConfig = {
   isEmbedded?: boolean,
@@ -57,23 +88,3 @@ export type Periphery = Map<
     },
   },
 >;
-
-export type GeospatialPoint = {
-  longitude: number,
-  latitude: number,
-};
-
-export type GeospatialPolygon = {
-  externalRing: { ring: Array<GeospatialPoint> },
-  internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
-};
-
-export type MongodbGeospatialPoint = {
-  type: 'Point',
-  coordinates: [number, number],
-};
-
-export type MongodbGeospatialPolygon = {
-  type: 'Polygon',
-  coordinates: Array<Array<[number, number]>>,
-};
