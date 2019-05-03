@@ -17,11 +17,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
 
   if (textFields) {
     textFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}${required ? '!' : ''}`);
       return prev;
     }, thingTypeArray);
   }
@@ -59,8 +55,8 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     embeddedFields.reduce(
       (prev, { array, name: name2, required, config: { name: embeddedName } }) => {
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]!' : ''}${
-            !array && required ? '!' : ''
+          `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}${
+            required ? '!' : ''
           }`,
         );
         return prev;
@@ -72,8 +68,8 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   if (geospatialFields) {
     geospatialFields.reduce((prev, { array, name: name2, type, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Geospatial${type}Input${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
+        `  ${name2}: ${array ? '[' : ''}Geospatial${type}Input${array ? '!]' : ''}${
+          required ? '!' : ''
         }`,
       );
       return prev;

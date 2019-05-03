@@ -37,7 +37,7 @@ describe('createThingCreateInputType', () => {
   textField1: String
   textField2: String
   textField3: String!
-  textField4: [String!]!
+  textField4: [String!]
   textField5: [String!]!
 }
 input ExampleCreateChildInput {
@@ -183,7 +183,7 @@ input PersonCreateChildrenInput {
   location: AddressCreateInput!
   locations: [AddressCreateInput!]!
   place: AddressCreateInput
-  places: [AddressCreateInput!]!
+  places: [AddressCreateInput!]
 }
 input PersonCreateChildInput {
   connect: ID
@@ -327,11 +327,11 @@ input PersonCreateChildrenInput {
   position: GeospatialPointInput!
   precedingPosition: GeospatialPointInput
   favoritePositions: [GeospatialPointInput!]!
-  worstPositions: [GeospatialPointInput!]!
+  worstPositions: [GeospatialPointInput!]
   area: GeospatialPolygonInput!
   precedingArea: GeospatialPolygonInput
   favoriteAreas: [GeospatialPolygonInput!]!
-  worstAreas: [GeospatialPolygonInput!]!
+  worstAreas: [GeospatialPolygonInput!]
 }
 input ExampleCreateChildInput {
   connect: ID

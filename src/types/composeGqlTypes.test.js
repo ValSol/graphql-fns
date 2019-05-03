@@ -68,7 +68,7 @@ input ExampleCreateInput {
   textField1: String
   textField2: String
   textField3: String!
-  textField4: [String!]!
+  textField4: [String!]
   textField5: [String!]!
   position: GeospatialPointInput
 }
@@ -223,7 +223,7 @@ input Example1UpdateInput {
   position: GeospatialPointInput
 }
 input Example2CreateInput {
-  textField1: [String!]!
+  textField1: [String!]
   textField2: [String!]!
   area: GeospatialPolygonInput
 }
@@ -474,7 +474,7 @@ input PersonCreateInput {
   location: AddressCreateInput!
   locations: [AddressCreateInput!]!
   place: AddressCreateInput
-  places: [AddressCreateInput!]!
+  places: [AddressCreateInput!]
 }
 input PersonCreateChildInput {
   connect: ID
