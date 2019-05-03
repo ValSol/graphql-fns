@@ -26,10 +26,10 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
     textFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
       if (defaultValue) {
         if (!array && !(typeof defaultValue === 'string')) {
-          throw new TypeError('Expected a string as defalut value');
+          throw new TypeError('Expected a string as default value');
         }
         if (array && !Array.isArray(defaultValue)) {
-          throw new TypeError('Expected an array as defalut value');
+          throw new TypeError('Expected an array as default value');
         }
       }
 
@@ -110,14 +110,11 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           },
           coordinates: {
             type: [Number],
+            index: '2dsphere',
           },
-          default:
-            defaultValue &&
-            // use Array.isArray(defaultValue) instead of array to pass flowjs check
-            (Array.isArray(defaultValue)
-              ? defaultValue.map(item => pointFromGqlToMongo(item))
-              : pointFromGqlToMongo(defaultValue)),
         };
+        // $FlowFixMe
+        if (defaultValue) obj.coordinates.default = pointFromGqlToMongo(defaultValue).coordinates;
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -130,13 +127,9 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           coordinates: {
             type: [[[Number]]],
           },
-          default:
-            defaultValue &&
-            // use Array.isArray(defaultValue) instead of array to pass flowjs check
-            (Array.isArray(defaultValue)
-              ? defaultValue.map(item => polygonFromGqlToMongo(item))
-              : polygonFromGqlToMongo(defaultValue)),
         };
+        // $FlowFixMe
+        if (defaultValue) obj.coordinates.default = polygonFromGqlToMongo(defaultValue).coordinates;
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;

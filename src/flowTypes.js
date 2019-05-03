@@ -32,16 +32,14 @@ type TextField = {
 type GeospatialField =
   | {
       name: string,
-      // default?: GeospatialPoint | Array<GeospatialPoint>,
-      default?: Object | Array<Object>,
+      default?: GeospatialPoint,
       required?: boolean,
       type: 'Point',
       array?: boolean,
     }
   | {
       name: string,
-      // default?: GeospatialPolygon | Array<GeospatialPolygon>,
-      default?: Object | Array<Object>,
+      default?: GeospatialPolygon,
       required?: boolean,
       type: 'Polygon',
       array?: boolean,

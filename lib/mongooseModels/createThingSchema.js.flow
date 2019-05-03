@@ -17,8 +17,18 @@ const createThingSchema = (thingConfig: ThingConfig): Object => {
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
 
   if (geospatialFields) {
-    geospatialFields.forEach(({ name: fieldName }) => {
-      ThingSchema.index({ [fieldName]: '2dsphere' });
+    geospatialFields.forEach(({ name: fieldName, type }) => {
+      if (type === 'Point') {
+        // eslint-disable-next-line func-names
+        ThingSchema.pre('save', function(next) {
+          if (this[fieldName].coordinates.length === 0) {
+            this[fieldName].coordinates = undefined;
+          }
+          next();
+        });
+      } else {
+        ThingSchema.index({ [fieldName]: '2dsphere' });
+      }
     });
   }
 
