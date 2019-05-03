@@ -454,6 +454,7 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Point'],
+          default: 'Point',
         },
         coordinates: {
           type: [Number],
@@ -479,6 +480,7 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Point'],
+            default: 'Point',
           },
           coordinates: {
             type: [Number],
@@ -501,6 +503,7 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Polygon'],
+          default: 'Polygon',
         },
         coordinates: {
           type: [[[Number]]],
@@ -524,6 +527,7 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Polygon'],
+            default: 'Polygon',
           },
           coordinates: {
             type: [[[Number]]],

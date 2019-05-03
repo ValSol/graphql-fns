@@ -113,8 +113,11 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
             index: '2dsphere',
           },
         };
-        // $FlowFixMe
-        if (defaultValue) obj.coordinates.default = pointFromGqlToMongo(defaultValue).coordinates;
+        if (defaultValue) {
+          obj.type.default = 'Point';
+          // $FlowFixMe
+          obj.coordinates.default = pointFromGqlToMongo(defaultValue).coordinates;
+        }
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -128,8 +131,11 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
             type: [[[Number]]],
           },
         };
-        // $FlowFixMe
-        if (defaultValue) obj.coordinates.default = polygonFromGqlToMongo(defaultValue).coordinates;
+        if (defaultValue) {
+          obj.type.default = 'Polygon';
+          // $FlowFixMe
+          obj.coordinates.default = polygonFromGqlToMongo(defaultValue).coordinates;
+        }
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
