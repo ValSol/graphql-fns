@@ -2,6 +2,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
+const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
 const processUpdateInputData = require('./processUpdateInputData');
 const processDeleteData = require('./processDeleteData');
 const updatePeriphery = require('./updatePeriphery');
@@ -29,6 +30,8 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
         }, {})
       : {};
 
+    const mainData = processUpdateInputData(data, thingConfig);
+
     let thing;
     let _id = id; // eslint-disable-line no-underscore-dangle
     if (Object.keys(duplexFieldsProjection).length) {
@@ -38,7 +41,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       const data2 = { ...data, _id };
       const bulkItemsMap = processDeleteData(currentData, thingConfig);
 
-      const { core, periphery } = processUpdateInputData(data2, thingConfig, bulkItemsMap);
+      const { core, periphery } = processUpdateDuplexInputData(data2, thingConfig, bulkItemsMap);
 
       await updatePeriphery(periphery, mongooseConn);
 
@@ -51,15 +54,15 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       });
       await Promise.all(promises);
 
-      thing = await Thing.findOneAndUpdate({ _id }, data, {
+      thing = await Thing.findOneAndUpdate({ _id }, mainData, {
         new: true,
         lean: true,
       });
     } else if (id) {
       _id = id;
-      thing = await Thing.findOneAndUpdate({ _id }, data, { new: true, lean: true });
+      thing = await Thing.findOneAndUpdate({ _id }, mainData, { new: true, lean: true });
     } else {
-      thing = await Thing.findOneAndUpdate(where, data, { new: true, lean: true });
+      thing = await Thing.findOneAndUpdate(where, mainData, { new: true, lean: true });
       if (!thing) return null;
       _id = thing._id; // eslint-disable-line no-underscore-dangle, prefer-destructuring
     }

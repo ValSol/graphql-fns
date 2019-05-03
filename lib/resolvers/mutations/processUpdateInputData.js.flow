@@ -1,138 +1,49 @@
 // @flow
-import type { Periphery, ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../flowTypes';
 
-type Core = Map<ThingConfig, Array<Object>>;
+const pointFromGqlToMongo = require('./pointFromGqlToMongo');
+const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
 
-type ProcessUpdateInputDataResult = {
-  core: Core,
-  periphery: Periphery,
-};
+const processCreateInputData = (data: Object, thingConfig: ThingConfig): Object => {
+  const { geospatialFields } = thingConfig;
 
-const processCreateInputData = (
-  data: Object,
-  thingConfig: ThingConfig,
-  core: Core = new Map(),
-): ProcessUpdateInputDataResult => {
-  const { duplexFields } = thingConfig;
-  const periphery = new Map();
-
-  const duplexFieldsObject = {};
-  if (duplexFields) {
-    duplexFields.reduce((prev, { name, oppositeName, array, config }) => {
-      if (!config.duplexFields) {
-        throw new TypeError('Expected a duplexFields in config!');
-      }
-      const duplexField = config.duplexFields.find(({ name: name2 }) => name2 === oppositeName);
-      if (!duplexField) {
-        throw new TypeError(`Expected a duplexField with name "${oppositeName}"!`);
-      }
-      const { array: oppositeArray, config: oppositeConfig } = duplexField;
+  const geospatialFieldsObject = {};
+  if (geospatialFields) {
+    geospatialFields.reduce((prev, { name, array, type }) => {
       // eslint-disable-next-line
-      prev[name] = { array, config, oppositeArray, oppositeConfig, oppositeName };
+      prev[name] = { array, type };
       return prev;
-    }, duplexFieldsObject);
+    }, geospatialFieldsObject);
   }
 
-  Object.keys(data).forEach(key => {
-    if (duplexFieldsObject[key]) {
-      const { array, config, oppositeArray, oppositeConfig, oppositeName } = duplexFieldsObject[
-        key
-      ];
-
+  return Object.keys(data).reduce((prev, key) => {
+    if (geospatialFieldsObject[key]) {
+      const { array, type } = geospatialFieldsObject[key];
       if (array) {
-        const oppositeIds = data[key];
-
-        oppositeIds.forEach(oppositeId => {
-          const item = {
-            updateOne: {
-              filter: { _id: oppositeId },
-              update: oppositeArray
-                ? // eslint-disable-next-line no-underscore-dangle
-                  { $push: { [oppositeName]: data._id } }
-                : // eslint-disable-next-line no-underscore-dangle
-                  { [oppositeName]: data._id },
-            },
-          };
-          const itemCore = core.get(config);
-          if (itemCore) {
-            itemCore.push(item);
-          } else {
-            core.set(config, [item]);
-          }
-          if (!oppositeArray) {
-            const peripheryItem = periphery.get(config);
-            if (peripheryItem) {
-              if (peripheryItem[oppositeName]) {
-                peripheryItem[oppositeName].oppositeIds.push(oppositeId);
-              } else {
-                peripheryItem[oppositeName] = {
-                  array: true,
-                  name: key,
-                  oppositeConfig,
-                  oppositeIds: [oppositeId],
-                };
-              }
-            } else {
-              periphery.set(config, {
-                [oppositeName]: {
-                  array: true,
-                  name: key,
-                  oppositeConfig,
-                  oppositeIds: [oppositeId],
-                },
-              });
-            }
-          }
-        });
-      } else {
-        const oppositeId = data[key];
-
-        const item = {
-          updateOne: {
-            filter: { _id: oppositeId },
-            update: oppositeArray
-              ? // eslint-disable-next-line no-underscore-dangle
-                { $push: { [oppositeName]: data._id } }
-              : // eslint-disable-next-line no-underscore-dangle
-                { [oppositeName]: data._id },
-          },
-        };
-        const coreItem = core.get(config);
-        if (coreItem) {
-          coreItem.push(item);
-        } else {
-          core.set(config, [item]);
+        if (type === 'Point') {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(value => pointFromGqlToMongo(value));
         }
-
-        if (!oppositeArray) {
-          const peripheryItem = periphery.get(config);
-          if (peripheryItem) {
-            if (peripheryItem[oppositeName]) {
-              peripheryItem[oppositeName].oppositeIds.push(oppositeId);
-            } else {
-              peripheryItem[oppositeName] = {
-                array: false,
-                name: key,
-                oppositeConfig,
-                oppositeIds: [oppositeId],
-              };
-            }
-          } else {
-            periphery.set(config, {
-              [oppositeName]: {
-                array: false,
-                name: key,
-                oppositeConfig,
-                oppositeIds: [oppositeId],
-              },
-            });
-          }
+        if (type === 'Polygon') {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(value => polygonFromGqlToMongo(value));
+        }
+      } else {
+        if (type === 'Point') {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = pointFromGqlToMongo(data[key]);
+        }
+        if (type === 'Polygon') {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = polygonFromGqlToMongo(data[key]);
         }
       }
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      prev[key] = data[key];
     }
-  });
-
-  return { core, periphery };
+    return prev;
+  }, {});
 };
 
 module.exports = processCreateInputData;

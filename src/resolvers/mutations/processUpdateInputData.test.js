@@ -1,179 +1,102 @@
 // @flow
 /* eslint-env jest */
-import type { Periphery, ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../flowTypes';
 
 const processUpdateInputData = require('./processUpdateInputData');
 
 describe('processUpdateInputData', () => {
-  test('should create object and children objectcs with duplex fields along with connect', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
-      name: 'Place',
-      textFields: [{ name: 'name' }],
-      duplexFields: [
-        {
-          name: 'citizens',
-          oppositeName: 'location',
-          array: true,
-          config: personConfig,
-        },
-        {
-          name: 'visitors',
-          oppositeName: 'favorites',
-          array: true,
-          config: personConfig,
-        },
-        {
-          name: 'curator',
-          oppositeName: 'locations',
-          config: personConfig,
-        },
-      ],
-    };
-    Object.assign(personConfig, {
-      name: 'Person',
+  test('should create object with simple fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Thing',
       textFields: [
         {
-          name: 'firstName',
-          required: true,
+          name: 'textField1',
         },
         {
-          name: 'lastName',
-          required: true,
+          name: 'textField2',
         },
       ],
-      duplexFields: [
-        {
-          name: 'friend',
-          oppositeName: 'friend',
-          config: personConfig,
-          required: true,
-        },
-        {
-          name: 'location',
-          oppositeName: 'citizens',
-          config: placeConfig,
-          required: true,
-        },
-        {
-          name: 'locations',
-          oppositeName: 'curator',
-          config: placeConfig,
-          array: true,
-        },
-        {
-          name: 'favorites',
-          oppositeName: 'visitors',
-          config: placeConfig,
-          array: true,
-        },
-      ],
-    });
-    const data = {
-      _id: '999',
-      firstName: 'Vasya',
-      lastName: 'Pupkin',
-      friend: '111',
-      location: '222',
-      locations: ['333', '444'],
-      favorites: ['555', '666'],
     };
-
-    const core = new Map();
-    core.set(personConfig, [
-      {
-        updateOne: {
-          filter: {
-            _id: '111',
-          },
-          update: {
-            friend: '999',
-          },
-        },
-      },
-    ]);
-    core.set(placeConfig, [
-      {
-        updateOne: {
-          filter: {
-            _id: '222',
-          },
-          update: {
-            $push: {
-              citizens: '999',
-            },
-          },
-        },
-      },
-      {
-        updateOne: {
-          filter: {
-            _id: '333',
-          },
-          update: {
-            curator: '999',
-          },
-        },
-      },
-      {
-        updateOne: {
-          filter: {
-            _id: '444',
-          },
-          update: {
-            curator: '999',
-          },
-        },
-      },
-      {
-        updateOne: {
-          filter: {
-            _id: '555',
-          },
-          update: {
-            $push: {
-              visitors: '999',
-            },
-          },
-        },
-      },
-      {
-        updateOne: {
-          filter: {
-            _id: '666',
-          },
-          update: {
-            $push: {
-              visitors: '999',
-            },
-          },
-        },
-      },
-    ]);
-    const periphery: Periphery = new Map();
-    periphery.set(personConfig, {
-      friend: {
-        oppositeIds: ['111'],
-        array: false,
-        name: 'friend',
-        oppositeConfig: personConfig,
-      },
-    });
-    periphery.set(placeConfig, {
-      curator: {
-        oppositeIds: ['333', '444'],
-        array: true,
-        name: 'locations',
-        oppositeConfig: personConfig,
-      },
-    });
+    const data = {
+      textField1: 'textField1-Value',
+      textField2: 'textField2-Value',
+    };
 
     const expectedResult = {
-      core,
-      periphery,
+      textField1: 'textField1-Value',
+      textField2: 'textField2-Value',
+    };
+    const result = processUpdateInputData(data, thingConfig);
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create object with geospatial fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Thing',
+      geospatialFields: [
+        {
+          name: 'point',
+          type: 'Point',
+        },
+        {
+          name: 'points',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'polygon',
+          type: 'Polygon',
+        },
+        {
+          name: 'polygons',
+          array: true,
+          type: 'Polygon',
+        },
+      ],
+    };
+    const data = {
+      point: { longitude: 40, latitude: 5 },
+      points: [{ longitude: 12, latitude: 23 }, { longitude: 34, latitude: 45 }],
+      polygon: {
+        externalRing: {
+          ring: [
+            { longitude: 0, latitude: 0 },
+            { longitude: 3, latitude: 6 },
+            { longitude: 6, latitude: 1 },
+            { longitude: 0, latitude: 0 },
+          ],
+        },
+      },
+      polygons: [
+        {
+          externalRing: {
+            ring: [
+              { longitude: 0, latitude: 0 },
+              { longitude: 3, latitude: 6 },
+              { longitude: 6, latitude: 1 },
+              { longitude: 0, latitude: 0 },
+            ],
+          },
+        },
+      ],
     };
 
-    const result = processUpdateInputData(data, personConfig);
+    const expectedResult = {
+      point: { type: 'Point', coordinates: [40, 5] },
+      points: [{ type: 'Point', coordinates: [12, 23] }, { type: 'Point', coordinates: [34, 45] }],
+      polygon: {
+        type: 'Polygon',
+        coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
+      },
+      polygons: [
+        {
+          type: 'Polygon',
+          coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
+        },
+      ],
+    };
+    const result = processUpdateInputData(data, thingConfig);
 
     expect(result).toEqual(expectedResult);
   });
