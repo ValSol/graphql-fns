@@ -29,21 +29,12 @@ type TextField = {
   unique?: boolean,
 };
 
-type GeospatialField =
-  | {
-      name: string,
-      default?: GeospatialPoint,
-      required?: boolean,
-      type: 'Point',
-      array?: boolean,
-    }
-  | {
-      name: string,
-      default?: GeospatialPolygon,
-      required?: boolean,
-      type: 'Polygon',
-      array?: boolean,
-    };
+type GeospatialField = {
+  name: string,
+  required?: boolean,
+  type: 'Point' | 'Polygon',
+  array?: boolean,
+};
 
 export type ThingConfig = {
   isEmbedded?: boolean,

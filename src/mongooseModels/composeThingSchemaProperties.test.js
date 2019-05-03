@@ -381,7 +381,6 @@ describe('composeThingSchemaProperties', () => {
         },
         {
           name: 'pointField2',
-          default: { longitude: 50, latitude: 30 },
           required: true,
           type: 'Point',
         },
@@ -393,7 +392,6 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'pointField4',
           array: true,
-          default: { longitude: 50, latitude: 30 },
           required: true,
           type: 'Point',
         },
@@ -403,16 +401,6 @@ describe('composeThingSchemaProperties', () => {
         },
         {
           name: 'polygonField2',
-          default: {
-            externalRing: {
-              ring: [
-                { longitude: 0, latitude: 0 },
-                { longitude: 3, latitude: 6 },
-                { longitude: 6, latitude: 1 },
-                { longitude: 0, latitude: 0 },
-              ],
-            },
-          },
           required: true,
           type: 'Polygon',
         },
@@ -424,16 +412,6 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'polygonField4',
           array: true,
-          default: {
-            externalRing: {
-              ring: [
-                { longitude: 0, latitude: 0 },
-                { longitude: 3, latitude: 6 },
-                { longitude: 6, latitude: 1 },
-                { longitude: 0, latitude: 0 },
-              ],
-            },
-          },
           required: true,
           type: 'Polygon',
         },
@@ -454,12 +432,10 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Point'],
-          default: 'Point',
         },
         coordinates: {
           type: [Number],
           index: '2dsphere',
-          default: [50, 30],
         },
         required: true,
       },
@@ -480,12 +456,10 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Point'],
-            default: 'Point',
           },
           coordinates: {
             type: [Number],
             index: '2dsphere',
-            default: [50, 30],
           },
           required: true,
         },
@@ -503,11 +477,9 @@ describe('composeThingSchemaProperties', () => {
         type: {
           type: String,
           enum: ['Polygon'],
-          default: 'Polygon',
         },
         coordinates: {
           type: [[[Number]]],
-          default: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
         },
         required: true,
       },
@@ -527,11 +499,9 @@ describe('composeThingSchemaProperties', () => {
           type: {
             type: String,
             enum: ['Polygon'],
-            default: 'Polygon',
           },
           coordinates: {
             type: [[[Number]]],
-            default: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
           },
           required: true,
         },

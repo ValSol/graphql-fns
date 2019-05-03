@@ -1,6 +1,6 @@
 // @flow
 
-import type { GeospatialPoint, MongodbGeospatialPoint } from '../flowTypes';
+import type { GeospatialPoint, MongodbGeospatialPoint } from '../../flowTypes';
 
 const pointFromGqlToMongo = (point: GeospatialPoint): MongodbGeospatialPoint => {
   const { longitude, latitude } = point;

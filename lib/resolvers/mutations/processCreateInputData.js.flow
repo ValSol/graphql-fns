@@ -3,8 +3,8 @@ import type { Periphery, ThingConfig } from '../../flowTypes';
 
 const { Types } = require('mongoose');
 
-const pointFromGqlToMongo = require('../../utils/pointFromGqlToMongo');
-const polygonFromGqlToMongo = require('../../utils/polygonFromGqlToMongo');
+const pointFromGqlToMongo = require('./pointFromGqlToMongo');
+const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
 
 type ProcessCreateInputDataResult = {
   core: { [ThingConfig]: Array<Object> },

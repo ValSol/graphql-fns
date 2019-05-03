@@ -3,9 +3,6 @@ import type { ThingConfig } from '../flowTypes';
 
 const mongoose = require('mongoose');
 
-const pointFromGqlToMongo = require('../utils/pointFromGqlToMongo');
-const polygonFromGqlToMongo = require('../utils/polygonFromGqlToMongo');
-
 type ThingSchemaProperty = { type: String | [String], default: string, required: boolean };
 type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 
@@ -101,7 +98,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, default: defaultValue, name, required, type }) => {
+    geospatialFields.reduce((prev, { array, name, required, type }) => {
       if (type === 'Point') {
         const obj: Object = {
           type: {
@@ -113,11 +110,6 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
             index: '2dsphere',
           },
         };
-        if (defaultValue) {
-          obj.type.default = 'Point';
-          // $FlowFixMe
-          obj.coordinates.default = pointFromGqlToMongo(defaultValue).coordinates;
-        }
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -131,11 +123,6 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
             type: [[[Number]]],
           },
         };
-        if (defaultValue) {
-          obj.type.default = 'Polygon';
-          // $FlowFixMe
-          obj.coordinates.default = polygonFromGqlToMongo(defaultValue).coordinates;
-        }
         if (required) obj.required = !!required; // by default required = false
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
