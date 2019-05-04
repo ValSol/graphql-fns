@@ -6,16 +6,22 @@ const createThingNearInputType = (thingConfig: ThingConfig): string => {
   const { name, geospatialFields } = thingConfig;
 
   const fieldLines = geospatialFields
-    ? geospatialFields.map(({ name: fieldName }) => `  ${fieldName}: GeospatialPointInput`)
+    ? geospatialFields
+        // for 'near' query will use only scalar points
+        .filter(({ array, type }) => !array && type === 'Point')
+        .map(({ name: fieldName }) => `  ${fieldName}`)
     : [];
 
   if (!fieldLines.length) return '';
 
-  fieldLines.push('  maxDistance: Float');
-
   return `
-input ${name}NearInput {
+enum ${name}GeospatialFieldNamesEnums {
 ${fieldLines.join('\n')}
+}
+input ${name}NearInput {
+  geospatialField: ${name}GeospatialFieldNamesEnums
+  coordinates: GeospatialPointInput
+  maxDistance: Float
 }`;
 };
 

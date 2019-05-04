@@ -1,16 +1,17 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { NearInput, ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
+const composeNearInput = require('./composeNearInput');
 
-type Args = { where?: Object, pagination?: { skip: number, first: number } };
+type Args = { where?: Object, near?: NearInput, pagination?: { skip: number, first: number } };
 type Context = { mongooseConn: Object };
 
 const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
-    const { pagination, where } = args;
+    const { pagination, where, near } = args;
 
     const { mongooseConn } = context;
 
@@ -18,7 +19,8 @@ const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
     const { name } = thingConfig;
 
     const Thing = mongooseConn.model(name, thingSchema);
-    const conditions = where || { where };
+    const composedNear = near && composeNearInput(near);
+    const conditions = composedNear || where || {};
     const projection = getProjectionFromInfo(info);
 
     let query = Thing.find(conditions, projection, { lean: true });

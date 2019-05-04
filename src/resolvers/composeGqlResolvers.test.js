@@ -294,4 +294,70 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Place.citizens).toBe('function');
     expect(typeof result.Place.visitors).toBe('function');
   });
+
+  test('should create things types for two things with geospatial fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'pointField1',
+          type: 'Point',
+        },
+        {
+          name: 'pointField2',
+          required: true,
+          type: 'Point',
+        },
+        {
+          name: 'pointField3',
+          array: true,
+          type: 'Point',
+        },
+        {
+          name: 'pointField4',
+          array: true,
+          required: true,
+          type: 'Point',
+        },
+        {
+          name: 'polygonField1',
+          type: 'Polygon',
+        },
+        {
+          name: 'polygonField2',
+          required: true,
+          type: 'Polygon',
+        },
+        {
+          name: 'polygonField3',
+          array: true,
+          type: 'Polygon',
+        },
+        {
+          name: 'polygonField4',
+          array: true,
+          required: true,
+          type: 'Polygon',
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const result = composeGqlResolvers(thingConfigs);
+
+    expect(typeof result.DateTime).toBe('object');
+    expect(typeof result.Query.Example).toBe('function');
+    expect(typeof result.Query.Examples).toBe('function');
+    expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.updateExample).toBe('function');
+    expect(typeof result.Mutation.deleteExample).toBe('function');
+    expect(typeof result.Example.pointField1).toBe('function');
+    expect(typeof result.Example.pointField2).toBe('function');
+    expect(typeof result.Example.pointField3).toBe('function');
+    expect(typeof result.Example.pointField4).toBe('function');
+    expect(typeof result.Example.polygonField1).toBe('function');
+    expect(typeof result.Example.polygonField2).toBe('function');
+    expect(typeof result.Example.polygonField3).toBe('function');
+    expect(typeof result.Example.polygonField4).toBe('function');
+  });
 });

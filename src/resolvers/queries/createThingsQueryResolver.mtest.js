@@ -1,23 +1,26 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { NearInput, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
+const mongoOptions = require('../../../test/mongo-options');
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
-const info = require('../info.auxiliary.js');
+const info = require('../info.auxiliary');
+const info2 = require('../info-geospatial.auxiliary');
+
 const createThingsQueryResolver = require('./createThingsQueryResolver');
 
 let mongooseConn;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-things-query';
-  mongooseConn = await mongoose.connect(dbURI, { useNewUrlParser: true });
+  mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 });
 
 describe('createThingQueryResolver', () => {
-  test('should create query thing resolver', async () => {
+  test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
@@ -96,5 +99,135 @@ describe('createThingQueryResolver', () => {
     const people4 = await People(null, { pagination }, { mongooseConn }, info);
 
     expect(people4.length).toBe(3);
+  });
+
+  test('should create query things resolver for thing with geospatial fields', async () => {
+    const restaurantConfig: ThingConfig = {};
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+      textFields: [{ name: 'name' }],
+      relationalFields: [
+        {
+          name: 'restaurants',
+          array: true,
+          config: restaurantConfig,
+        },
+      ],
+
+      geospatialFields: [
+        {
+          name: 'point',
+          type: 'Point',
+        },
+        {
+          name: 'point2',
+          type: 'Point',
+        },
+        {
+          name: 'area',
+          type: 'Polygon',
+        },
+        {
+          name: 'areas',
+          array: true,
+          type: 'Polygon',
+        },
+      ],
+    });
+
+    const createRestaurant = createCreateThingMutationResolver(restaurantConfig);
+    expect(typeof createRestaurant).toBe('function');
+
+    const data = {
+      name: 'Murakami',
+      restaurants: {
+        create: [
+          {
+            name: 'Fabbrica',
+            point: { longitude: 50.438198, latitude: 30.515858 },
+            point2: { longitude: 50.438198, latitude: 30.515858 },
+          },
+          {
+            name: 'Fine Family',
+            point: { longitude: 50.438061, latitude: 30.515879 },
+            point2: { longitude: 50.438061, latitude: 30.515879 },
+          },
+          {
+            name: 'Zhizn Zamechatelnykh Lyudey',
+            point: { longitude: 50.438007, latitude: 30.515858 },
+            point2: { longitude: 50.438007, latitude: 30.515858 },
+          },
+          {
+            name: 'Georgian House',
+            point: { longitude: 50.437692, latitude: 30.51583 },
+            point2: { longitude: 50.437692, latitude: 30.51583 },
+          },
+          {
+            name: 'Mama Manana',
+            point: { longitude: 50.437045, latitude: 30.515803 },
+            point2: { longitude: 50.437045, latitude: 30.515803 },
+          },
+          {
+            name: 'Satori Lounge',
+            point: { longitude: 50.43673, latitude: 30.515007 },
+            point2: { longitude: 50.43673, latitude: 30.515007 },
+          },
+          {
+            name: 'NAM',
+            point: { longitude: 50.436149, latitude: 30.515785 },
+            point2: { longitude: 50.436149, latitude: 30.515785 },
+          },
+        ],
+      },
+      // point: { longitude: 50.438198, latitude: 30.515858 },
+      // point2: { longitude: 50.438198, latitude: 30.515858 },
+    };
+    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn });
+
+    const Restaurants = createThingsQueryResolver(restaurantConfig);
+
+    const restaurants = await Restaurants(null, {}, { mongooseConn }, info);
+
+    expect(restaurants.length).toBe(8);
+    expect(restaurants[0].id).toEqual(createdRestaurant.id);
+
+    const near: NearInput = {
+      geospatialField: 'point',
+      coordinates: { longitude: 50.435766, latitude: 30.515742 },
+      maxDistance: 150,
+    };
+    const restaurants2 = await Restaurants(null, { near }, { mongooseConn }, info2);
+    expect(restaurants2.length).toBe(3);
+    expect(restaurants2[0].name).toEqual('NAM');
+    expect(restaurants2[1].name).toEqual('Mama Manana');
+    expect(restaurants2[2].name).toEqual('Satori Lounge');
+
+    const near2: NearInput = {
+      geospatialField: 'point2',
+      coordinates: { longitude: 50.435766, latitude: 30.515742 },
+      maxDistance: 150,
+    };
+    const restaurants3 = await Restaurants(null, { near: near2 }, { mongooseConn }, info2);
+    expect(restaurants3.length).toBe(3);
+    expect(restaurants3[0].name).toEqual('NAM');
+    expect(restaurants3[1].name).toEqual('Mama Manana');
+    expect(restaurants3[2].name).toEqual('Satori Lounge');
+
+    /*
+    const where = { position: data.theBestFriend.create.position };
+    const people2 = await People(null, { where }, { mongooseConn }, info);
+
+    expect(people2.length).toBe(4);
+
+    const where2 = { friends: createdPerson.id };
+    const people3 = await People(null, { where: where2 }, { mongooseConn }, info);
+
+    expect(people3.length).toBe(3);
+
+    const pagination = { skip: 1, first: 3 };
+    const people4 = await People(null, { pagination }, { mongooseConn }, info);
+
+    expect(people4.length).toBe(3);
+  */
   });
 });

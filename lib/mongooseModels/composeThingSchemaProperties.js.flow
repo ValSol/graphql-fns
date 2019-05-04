@@ -111,6 +111,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           },
         };
         if (required) obj.required = !!required; // by default required = false
+
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
       } else if (type === 'Polygon') {
@@ -124,6 +125,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
           },
         };
         if (required) obj.required = !!required; // by default required = false
+
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
       } else {

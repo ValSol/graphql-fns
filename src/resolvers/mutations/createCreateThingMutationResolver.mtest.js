@@ -4,6 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
+const mongoOptions = require('../../../test/mongo-options');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const createCreateThingMutationResolver = require('./createCreateThingMutationResolver');
 
@@ -11,7 +12,7 @@ let mongooseConn;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-mutation';
-  mongooseConn = await mongoose.connect(dbURI, { useNewUrlParser: true });
+  mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 });
 

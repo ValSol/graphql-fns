@@ -32,15 +32,23 @@ describe('createThingNearInputType', () => {
           type: 'Point',
         },
         {
+          name: 'positions',
+          array: true,
+          type: 'Point',
+        },
+        {
           name: 'area',
           type: 'Polygon',
         },
       ],
     };
     const expectedResult = `
+enum ExampleGeospatialFieldNamesEnums {
+  position
+}
 input ExampleNearInput {
-  position: GeospatialPointInput
-  area: GeospatialPointInput
+  geospatialField: ExampleGeospatialFieldNamesEnums
+  coordinates: GeospatialPointInput
   maxDistance: Float
 }`;
 
