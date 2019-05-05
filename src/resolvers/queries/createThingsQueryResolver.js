@@ -6,12 +6,17 @@ const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 const composeNearInput = require('./composeNearInput');
 
-type Args = { where?: Object, near?: NearInput, pagination?: { skip: number, first: number } };
+type Args = {
+  where?: Object,
+  near?: NearInput,
+  sort?: { sortBy: Array<string> },
+  pagination?: { skip: number, first: number },
+};
 type Context = { mongooseConn: Object };
 
 const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
-    const { pagination, where, near } = args;
+    const { near, pagination, sort, where } = args;
 
     const { mongooseConn } = context;
 
@@ -24,10 +29,17 @@ const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
     const projection = getProjectionFromInfo(info);
 
     let query = Thing.find(conditions, projection, { lean: true });
+
+    if (sort) {
+      const { sortBy } = sort;
+      sortBy.forEach(sortItem => query.sort(sortItem));
+    }
+
     if (pagination) {
       const { skip, first: limit } = pagination;
       query = query.skip(skip).limit(limit);
     }
+
     const things = await query.exec();
     if (!things) return [];
 

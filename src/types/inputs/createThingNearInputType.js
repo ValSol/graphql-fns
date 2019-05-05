@@ -15,11 +15,11 @@ const createThingNearInputType = (thingConfig: ThingConfig): string => {
   if (!fieldLines.length) return '';
 
   return `
-enum ${name}GeospatialFieldNamesEnums {
+enum ${name}GeospatialFieldNamesEnumeration {
 ${fieldLines.join('\n')}
 }
 input ${name}NearInput {
-  geospatialField: ${name}GeospatialFieldNamesEnums
+  geospatialField: ${name}GeospatialFieldNamesEnumeration
   coordinates: GeospatialPointInput
   maxDistance: Float
 }`;

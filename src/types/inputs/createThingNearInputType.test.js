@@ -43,11 +43,11 @@ describe('createThingNearInputType', () => {
       ],
     };
     const expectedResult = `
-enum ExampleGeospatialFieldNamesEnums {
+enum ExampleGeospatialFieldNamesEnumeration {
   position
 }
 input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnums
+  geospatialField: ExampleGeospatialFieldNamesEnumeration
   coordinates: GeospatialPointInput
   maxDistance: Float
 }`;

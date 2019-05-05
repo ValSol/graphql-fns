@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 const mongoOptions = require('../../../test/mongo-options');
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
 const info = require('../info.auxiliary');
-const info2 = require('../info-geospatial.auxiliary');
+const info2 = require('./info-geospatial.auxiliary');
+const infoForSort = require('./info-sort.auxiliary');
 
 const createThingsQueryResolver = require('./createThingsQueryResolver');
 
@@ -179,8 +180,8 @@ describe('createThingQueryResolver', () => {
           },
         ],
       },
-      // point: { longitude: 50.438198, latitude: 30.515858 },
-      // point2: { longitude: 50.438198, latitude: 30.515858 },
+      point: { longitude: 50.438198, latitude: 30.515858 },
+      point2: { longitude: 50.438198, latitude: 30.515858 },
     };
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn });
 
@@ -212,22 +213,109 @@ describe('createThingQueryResolver', () => {
     expect(restaurants3[0].name).toEqual('NAM');
     expect(restaurants3[1].name).toEqual('Mama Manana');
     expect(restaurants3[2].name).toEqual('Satori Lounge');
+  });
 
-    /*
-    const where = { position: data.theBestFriend.create.position };
-    const people2 = await People(null, { where }, { mongooseConn }, info);
+  test('should create query things resolver for thing sorted by several fields', async () => {
+    const tableItemConfig: ThingConfig = {
+      name: 'TableItem',
+      textFields: [
+        {
+          name: 'first',
+          index: true,
+        },
+        {
+          name: 'second',
+          index: true,
+        },
+      ],
+    };
+    const tableConfig: ThingConfig = {
+      name: 'Table',
+      relationalFields: [
+        {
+          name: 'items',
+          array: true,
+          config: tableItemConfig,
+        },
+      ],
+    };
 
-    expect(people2.length).toBe(4);
+    const createTable = createCreateThingMutationResolver(tableConfig);
+    expect(typeof createTable).toBe('function');
 
-    const where2 = { friends: createdPerson.id };
-    const people3 = await People(null, { where: where2 }, { mongooseConn }, info);
+    const data = {
+      items: {
+        create: [
+          {
+            first: 'b',
+            second: 'a',
+          },
+          {
+            first: 'a',
+            second: 'b',
+          },
+          {
+            first: 'b',
+            second: 'b',
+          },
+          {
+            first: 'c',
+            second: 'b',
+          },
+          {
+            first: 'c',
+            second: 'c',
+          },
+          {
+            first: 'b',
+            second: 'c',
+          },
+          {
+            first: 'c',
+            second: 'a',
+          },
+          {
+            first: 'a',
+            second: 'a',
+          },
+          {
+            first: 'a',
+            second: 'c',
+          },
+        ],
+      },
+    };
 
-    expect(people3.length).toBe(3);
+    await createTable(null, { data }, { mongooseConn });
 
-    const pagination = { skip: 1, first: 3 };
-    const people4 = await People(null, { pagination }, { mongooseConn }, info);
+    const Items = createThingsQueryResolver(tableItemConfig);
 
-    expect(people4.length).toBe(3);
-  */
+    const items = await Items(null, {}, { mongooseConn }, infoForSort);
+
+    expect(items.length).toBe(9);
+
+    const sort = { sortBy: ['first', '-second'] };
+
+    const items2 = await Items(null, { sort }, { mongooseConn }, infoForSort);
+
+    expect(items2.length).toBe(9);
+    expect(items2[0].first).toBe('a');
+    expect(items2[0].second).toBe('c');
+    expect(items2[1].first).toBe('a');
+    expect(items2[1].second).toBe('b');
+    expect(items2[2].first).toBe('a');
+    expect(items2[2].second).toBe('a');
+    expect(items2[3].first).toBe('b');
+    expect(items2[3].second).toBe('c');
+    expect(items2[4].first).toBe('b');
+    expect(items2[4].second).toBe('b');
+    expect(items2[5].first).toBe('b');
+    expect(items2[5].second).toBe('a');
+    expect(items2[6].first).toBe('c');
+    expect(items2[6].second).toBe('c');
+    expect(items2[7].first).toBe('c');
+    expect(items2[7].second).toBe('b');
+    expect(items2[8].first).toBe('c');
+    expect(items2[8].second).toBe('a');
   });
 });

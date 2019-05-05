@@ -100,17 +100,17 @@ input ExamplePaginationInput {
   skip: Int
   first: Int
 }
-enum ExampleGeospatialFieldNamesEnums {
+enum ExampleGeospatialFieldNamesEnumeration {
   position
 }
 input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnums
+  geospatialField: ExampleGeospatialFieldNamesEnumeration
   coordinates: GeospatialPointInput
   maxDistance: Float
 }
 type Query {
   Example(where: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -247,11 +247,11 @@ input Example2UpdateInput {
 input Example1WhereOneInput {
   id: ID!
 }
-enum Example1GeospatialFieldNamesEnums {
+enum Example1GeospatialFieldNamesEnumeration {
   position
 }
 input Example1NearInput {
-  geospatialField: Example1GeospatialFieldNamesEnums
+  geospatialField: Example1GeospatialFieldNamesEnumeration
   coordinates: GeospatialPointInput
   maxDistance: Float
 }
