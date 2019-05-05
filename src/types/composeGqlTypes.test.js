@@ -96,6 +96,15 @@ input ExampleWhereInput {
   textField2: String
   textField3: String
 }
+enum ExampleSortEnumeration {
+  textField2
+  -textField2
+  textField3
+  -textField3
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}
 input ExamplePaginationInput {
   skip: Int
   first: Int

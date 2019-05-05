@@ -7,6 +7,7 @@ const createThingCreateInputType = require('./inputs/createThingCreateInputType'
 const createThingPaginationInputType = require('./inputs/createThingPaginationInputType');
 const createThingUpdateInputType = require('./inputs/createThingUpdateInputType');
 const createThingNearInputType = require('./inputs/createThingNearInputType');
+const createThingSortInputType = require('./inputs/createThingSortInputType');
 const createThingWhereInputType = require('./inputs/createThingWhereInputType');
 const createThingWhereOneInputType = require('./inputs/createThingWhereOneInputType');
 const createThingQueryType = require('./queries/createThingQueryType');
@@ -34,7 +35,9 @@ ${createThingUpdateInputType(thingConfig)}`,
       thingConfig =>
         `${createThingWhereOneInputType(thingConfig)}${createThingWhereInputType(
           thingConfig,
-        )}${createThingPaginationInputType(thingConfig)}${createThingNearInputType(thingConfig)}`,
+        )}${createThingSortInputType(thingConfig)}${createThingPaginationInputType(
+          thingConfig,
+        )}${createThingNearInputType(thingConfig)}`,
     )
     .join('\n');
 
