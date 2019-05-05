@@ -294,7 +294,7 @@ describe('createThingQueryResolver', () => {
 
     expect(items.length).toBe(9);
 
-    const sort = { sortBy: ['first', '-second'] };
+    const sort = { sortBy: ['first_ASC', 'second_DESC'] };
 
     const items2 = await Items(null, { sort }, { mongooseConn }, infoForSort);
 

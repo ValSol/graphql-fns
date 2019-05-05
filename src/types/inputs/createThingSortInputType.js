@@ -12,8 +12,8 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
       ? thingConfig[fieldTypesName]
           .filter(({ array, index }) => !array && index)
           .map(
-            ({ name: fieldName }) => `  ${fieldName}
-  -${fieldName}`,
+            ({ name: fieldName }) => `  ${fieldName}_ASC
+  ${fieldName}_DESC`,
           )
       : [];
 

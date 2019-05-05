@@ -97,10 +97,10 @@ input ExampleWhereInput {
   textField3: String
 }
 enum ExampleSortEnumeration {
-  textField2
-  -textField2
-  textField3
-  -textField3
+  textField2_ASC
+  textField2_DESC
+  textField3_ASC
+  textField3_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]

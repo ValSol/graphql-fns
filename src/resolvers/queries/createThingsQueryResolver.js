@@ -5,6 +5,7 @@ import type { NearInput, ThingConfig } from '../../flowTypes';
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 const composeNearInput = require('./composeNearInput');
+const composeSortInput = require('./composeSortInput');
 
 type Args = {
   where?: Object,
@@ -32,7 +33,8 @@ const createThingsQueryResolver = (thingConfig: ThingConfig): Function => {
 
     if (sort) {
       const { sortBy } = sort;
-      sortBy.forEach(sortItem => query.sort(sortItem));
+      const composedSortBy = composeSortInput(sortBy);
+      composedSortBy.forEach(sortItem => query.sort(sortItem));
     }
 
     if (pagination) {

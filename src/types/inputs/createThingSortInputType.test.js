@@ -38,10 +38,10 @@ describe('createThingSortInputType', () => {
     };
     const expectedResult = `
 enum ExampleSortEnumeration {
-  firstName
-  -firstName
-  lastName
-  -lastName
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]
