@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 /* eslint no-underscore-dangle: 0 */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -19,6 +19,7 @@ beforeAll(async () => {
 });
 
 describe('createUpdateThingMutationResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -84,7 +85,7 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
 
     expect(typeof createPerson).toBe('function');
 
@@ -142,9 +143,9 @@ describe('createUpdateThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createThingSchema(personConfig, []);
     const Person = mongooseConn.model('Person', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createThingSchema(placeConfig, []);
     const Place = mongooseConn.model('Place', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
@@ -260,7 +261,7 @@ describe('createUpdateThingMutationResolver', () => {
     expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
-    const updatePerson = createUpdateThingMutationResolver(personConfig);
+    const updatePerson = createUpdateThingMutationResolver(personConfig, generalConfig);
     const where = { id };
     const dataForUpdate = {
       firstName: 'Vasya',
@@ -337,7 +338,7 @@ describe('createUpdateThingMutationResolver', () => {
     expect(updatedFavorities2[1].visitors[0]).toEqual(id2);
     expect(updatedFavorities2[1].visitors[1]).toEqual(id);
 
-    const updatePlace = createUpdateThingMutationResolver(placeConfig);
+    const updatePlace = createUpdateThingMutationResolver(placeConfig, generalConfig);
     const where2 = { name: data.location.create.name };
     const dataForUpdate2 = { name: 'Mexico' };
     const updatedPlace = await updatePlace(

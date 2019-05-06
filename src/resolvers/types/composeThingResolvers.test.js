@@ -1,11 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const composeThingResolvers = require('./composeThingResolvers');
 
 describe('composeThingResolvers', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create resolver for type', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -54,7 +55,7 @@ describe('composeThingResolvers', () => {
       ],
     });
 
-    const result = composeThingResolvers(personConfig);
+    const result = composeThingResolvers(personConfig, generalConfig);
 
     expect(typeof result.friends).toBe('function');
     expect(typeof result.enemies).toBe('function');
@@ -122,7 +123,7 @@ describe('composeThingResolvers', () => {
       ],
     });
 
-    const result = composeThingResolvers(personConfig);
+    const result = composeThingResolvers(personConfig, generalConfig);
 
     expect(typeof result.friends).toBe('function');
     expect(typeof result.enemies).toBe('function');
@@ -154,7 +155,7 @@ describe('composeThingResolvers', () => {
       ],
     };
 
-    const result = composeThingResolvers(thingConfig);
+    const result = composeThingResolvers(thingConfig, generalConfig);
 
     expect(typeof result.position).toBe('function');
     expect(typeof result.positions).toBe('function');

@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
@@ -8,13 +8,17 @@ const getProjectionFromInfo = require('../getProjectionFromInfo');
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
-const createThingQueryResolver = (thingConfig: ThingConfig): Function => {
+const createThingQueryResolver = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+): Function => {
+  const { enums } = generalConfig;
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
     const { where } = args;
 
     const { mongooseConn } = context;
 
-    const thingSchema = createThingSchema(thingConfig);
+    const thingSchema = createThingSchema(thingConfig, enums);
     const { name } = thingConfig;
 
     const Thing = mongooseConn.model(name, thingSchema);

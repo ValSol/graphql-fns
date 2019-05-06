@@ -1,10 +1,9 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig } from '../../flowTypes';
 
-type ThingConfigs = Array<ThingConfig>;
-
-const composeGeospatialTypes = (thingConfigs: ThingConfigs): string => {
+const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
+  const { thingConfigs } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialPolygon = false;
 

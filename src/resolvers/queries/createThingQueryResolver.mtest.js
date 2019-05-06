@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -18,6 +18,7 @@ beforeAll(async () => {
 });
 
 describe('createThingQueryResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create query thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -47,7 +48,7 @@ describe('createThingQueryResolver', () => {
       ],
     };
 
-    const createExample = createCreateThingMutationResolver(thingConfig);
+    const createExample = createCreateThingMutationResolver(thingConfig, generalConfig);
     expect(typeof createExample).toBe('function');
     const data = {
       textField1: 'textField1',
@@ -59,7 +60,7 @@ describe('createThingQueryResolver', () => {
     const createdExample = await createExample(null, { data }, { mongooseConn });
     const { id } = createdExample;
 
-    const Example = createThingQueryResolver(thingConfig);
+    const Example = createThingQueryResolver(thingConfig, generalConfig);
 
     const where = { id };
     const example = await Example(null, { where }, { mongooseConn }, info);

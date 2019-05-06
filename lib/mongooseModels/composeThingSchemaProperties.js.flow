@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { Enums, ThingConfig } from '../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -8,11 +8,15 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 
 const { Schema } = mongoose;
 
-const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProperties => {
+const composeThingSchemaProperties = (
+  thingConfig: ThingConfig,
+  enums: Enums,
+): ThingSchemaProperties => {
   const {
     isEmbedded,
     duplexFields,
     embeddedFields,
+    enumFields,
     geospatialFields,
     relationalFields,
     textFields,
@@ -90,7 +94,7 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
 
   if (embeddedFields) {
     embeddedFields.reduce((prev, { array, name, config }) => {
-      const obj = composeThingSchemaProperties(config);
+      const obj = composeThingSchemaProperties(config, enums);
       // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
       return prev;
@@ -131,6 +135,39 @@ const composeThingSchemaProperties = (thingConfig: ThingConfig): ThingSchemaProp
       } else {
         throw new TypeError(`Invalid value "${type}" of geospatial field type!`);
       }
+      return prev;
+    }, result);
+  }
+
+  if (enumFields) {
+    const enumObject = enums.reduce((prev, { name, enum: enumeration }) => {
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = enumeration;
+      return prev;
+    }, {});
+    enumFields.reduce((prev, { array, default: defaultValue, index, name, required, enumName }) => {
+      if (defaultValue) {
+        if (!array && !(typeof defaultValue === 'string')) {
+          throw new TypeError('Expected a string as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
+
+      if (index && isEmbedded) {
+        throw new TypeError('Must not have an "index" field in an embedded document!');
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = {
+        enum: enumObject[enumName],
+        type: array ? [String] : String,
+      };
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }

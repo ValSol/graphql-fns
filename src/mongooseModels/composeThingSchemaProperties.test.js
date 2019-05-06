@@ -64,7 +64,7 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig);
+    const result = composeThingSchemaProperties(thingConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
@@ -148,7 +148,7 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(personConfig);
+    const result = composeThingSchemaProperties(personConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
@@ -252,7 +252,7 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(personConfig);
+    const result = composeThingSchemaProperties(personConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
@@ -367,7 +367,7 @@ describe('composeThingSchemaProperties', () => {
         },
       ],
     };
-    const result = composeThingSchemaProperties(personConfig);
+    const result = composeThingSchemaProperties(personConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
@@ -508,7 +508,69 @@ describe('composeThingSchemaProperties', () => {
       ],
     };
 
-    const result = composeThingSchemaProperties(thingConfig);
+    const result = composeThingSchemaProperties(thingConfig, []);
+    expect(result).toEqual(expectedResult);
+  });
+  test('should compose schema properties with enum fields', () => {
+    const enumeration1 = ['key1-1', 'key1-2', 'key1-3'];
+    const enumeration2 = ['key2-1', 'key2-2', 'key2-3', 'key2-4'];
+    const enums = [
+      { name: 'enumeration1', enum: enumeration1 },
+      { name: 'enumeration2', enum: enumeration2 },
+    ];
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'enumField1',
+          index: true,
+          enumName: 'enumeration1',
+        },
+        {
+          name: 'enumField2',
+          default: 'key2-2',
+          enumName: 'enumeration2',
+        },
+        {
+          name: 'enumField3',
+          array: true,
+          enumName: 'enumeration2',
+        },
+        {
+          name: 'enumField4',
+          default: ['key1-1', 'key1-3'],
+          required: true,
+          array: true,
+          index: true,
+          enumName: 'enumeration1',
+        },
+      ],
+    };
+    const expectedResult = {
+      enumField1: {
+        type: String,
+        enum: enumeration1,
+        index: true,
+      },
+      enumField2: {
+        type: String,
+        enum: enumeration2,
+        default: 'key2-2',
+      },
+      enumField3: {
+        type: [String],
+        enum: enumeration2,
+      },
+      enumField4: {
+        type: [String],
+        enum: enumeration1,
+        required: true,
+        default: ['key1-1', 'key1-3'],
+        index: true,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 });

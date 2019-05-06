@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const composeGeospatialTypes = require('./composeGeospatialTypes');
 
@@ -10,9 +10,10 @@ describe('composeGeospatialTypes', () => {
       name: 'Example',
     };
     const thingConfigs = [thingConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = '';
 
-    const result = composeGeospatialTypes(thingConfigs);
+    const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should return GeospatialPoint type if there are geospatial fields with type "Point"', () => {
@@ -26,6 +27,7 @@ describe('composeGeospatialTypes', () => {
       ],
     };
     const thingConfigs = [thingConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `
 type GeospatialPoint {
   longitude: Float!
@@ -36,7 +38,7 @@ input GeospatialPointInput {
   latitude: Float!
 }`;
 
-    const result = composeGeospatialTypes(thingConfigs);
+    const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -51,6 +53,7 @@ input GeospatialPointInput {
       ],
     };
     const thingConfigs = [thingConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `
 type GeospatialPoint {
   longitude: Float!
@@ -74,7 +77,7 @@ input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
 }`;
-    const result = composeGeospatialTypes(thingConfigs);
+    const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

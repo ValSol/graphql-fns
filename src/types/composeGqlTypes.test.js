@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../flowTypes';
 
 const composeGqlTypes = require('./composeGqlTypes');
 
@@ -44,6 +44,7 @@ describe('composeGqlTypes', () => {
       ],
     };
     const thingConfigs = [thingConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `scalar DateTime
 type GeospatialPoint {
   longitude: Float!
@@ -127,7 +128,7 @@ type Mutation {
   deleteExample(where: ExampleWhereOneInput!): Example
 }`;
 
-    const result = composeGqlTypes(thingConfigs);
+    const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should create things types for two things', () => {
@@ -175,6 +176,7 @@ type Mutation {
       ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `scalar DateTime
 type GeospatialPoint {
   longitude: Float!
@@ -282,7 +284,7 @@ type Mutation {
   deleteExample2(where: Example2WhereOneInput!): Example2
 }`;
 
-    const result = composeGqlTypes(thingConfigs);
+    const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should create things types for two related fields', () => {
@@ -332,6 +334,7 @@ type Mutation {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!
@@ -409,7 +412,7 @@ type Mutation {
   deletePlace(where: PlaceWhereOneInput!): Place
 }`;
 
-    const result = composeGqlTypes(thingConfigs);
+    const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -464,6 +467,7 @@ type Mutation {
       ],
     };
     const thingConfigs = [personConfig, addressConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!
@@ -526,7 +530,7 @@ type Mutation {
   deletePerson(where: PersonWhereOneInput!): Person
 }`;
 
-    const result = composeGqlTypes(thingConfigs);
+    const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -590,6 +594,7 @@ type Mutation {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
+    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!
@@ -673,7 +678,7 @@ type Mutation {
   deletePlace(where: PlaceWhereOneInput!): Place
 }`;
 
-    const result = composeGqlTypes(thingConfigs);
+    const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

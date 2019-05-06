@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { NearInput, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, NearInput, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -21,6 +21,7 @@ beforeAll(async () => {
 });
 
 describe('createThingQueryResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
@@ -55,7 +56,7 @@ describe('createThingQueryResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
 
     const data = {
@@ -79,7 +80,7 @@ describe('createThingQueryResolver', () => {
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn });
 
-    const People = createThingsQueryResolver(personConfig);
+    const People = createThingsQueryResolver(personConfig, generalConfig);
 
     const people = await People(null, {}, { mongooseConn }, info);
 
@@ -136,7 +137,7 @@ describe('createThingQueryResolver', () => {
       ],
     });
 
-    const createRestaurant = createCreateThingMutationResolver(restaurantConfig);
+    const createRestaurant = createCreateThingMutationResolver(restaurantConfig, generalConfig);
     expect(typeof createRestaurant).toBe('function');
 
     const data = {
@@ -185,7 +186,7 @@ describe('createThingQueryResolver', () => {
     };
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn });
 
-    const Restaurants = createThingsQueryResolver(restaurantConfig);
+    const Restaurants = createThingsQueryResolver(restaurantConfig, generalConfig);
 
     const restaurants = await Restaurants(null, {}, { mongooseConn }, info);
 
@@ -240,7 +241,7 @@ describe('createThingQueryResolver', () => {
       ],
     };
 
-    const createTable = createCreateThingMutationResolver(tableConfig);
+    const createTable = createCreateThingMutationResolver(tableConfig, generalConfig);
     expect(typeof createTable).toBe('function');
 
     const data = {
@@ -288,7 +289,7 @@ describe('createThingQueryResolver', () => {
 
     await createTable(null, { data }, { mongooseConn });
 
-    const Items = createThingsQueryResolver(tableItemConfig);
+    const Items = createThingsQueryResolver(tableItemConfig, generalConfig);
 
     const items = await Items(null, {}, { mongooseConn }, infoForSort);
 

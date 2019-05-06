@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { GeneralConfig } from '../flowTypes';
 
 const pluralize = require('pluralize');
 const { DateTime } = require('@okgrow/graphql-scalars');
@@ -11,9 +11,8 @@ const createCreateThingMutationResolver = require('./mutations/createCreateThing
 const createUpdateThingMutationResolver = require('./mutations/createUpdateThingMutationResolver');
 const createDeleteThingMutationResolver = require('./mutations/createDeleteThingMutationResolver');
 
-type ThingConfigs = Array<ThingConfig>;
-
-const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
+const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
+  const { thingConfigs } = generalConfig;
   const resolvers = { DateTime, Query: {}, Mutation: {}, Subscription: {} };
 
   thingConfigs
@@ -21,23 +20,32 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
 
-      const thingQueryResolver = createThingQueryResolver(thingConfig);
+      const thingQueryResolver = createThingQueryResolver(thingConfig, generalConfig);
       // eslint-disable-next-line no-param-reassign
       prev.Query[name] = thingQueryResolver;
 
-      const thingsQueryResolver = createThingsQueryResolver(thingConfig);
+      const thingsQueryResolver = createThingsQueryResolver(thingConfig, generalConfig);
       // eslint-disable-next-line no-param-reassign
       prev.Query[pluralize(name)] = thingsQueryResolver;
 
-      const createThingMutationResolver = createCreateThingMutationResolver(thingConfig);
+      const createThingMutationResolver = createCreateThingMutationResolver(
+        thingConfig,
+        generalConfig,
+      );
       // eslint-disable-next-line no-param-reassign
       prev.Mutation[`create${name}`] = createThingMutationResolver;
 
-      const updateThingMutationResolver = createUpdateThingMutationResolver(thingConfig);
+      const updateThingMutationResolver = createUpdateThingMutationResolver(
+        thingConfig,
+        generalConfig,
+      );
       // eslint-disable-next-line no-param-reassign
       prev.Mutation[`update${name}`] = updateThingMutationResolver;
 
-      const deleteThingMutationResolver = createDeleteThingMutationResolver(thingConfig);
+      const deleteThingMutationResolver = createDeleteThingMutationResolver(
+        thingConfig,
+        generalConfig,
+      );
       // eslint-disable-next-line no-param-reassign
       prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
 
@@ -48,7 +56,7 @@ const composeGqlResolvers = (thingConfigs: ThingConfigs): Object => {
     const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
     if (duplexFields || geospatialFields || relationalFields) {
       // eslint-disable-next-line no-param-reassign
-      prev[name] = composeThingResolvers(thingConfig);
+      prev[name] = composeThingResolvers(thingConfig, generalConfig);
     }
     return prev;
   }, resolvers);

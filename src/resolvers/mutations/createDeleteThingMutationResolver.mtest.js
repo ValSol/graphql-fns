@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -18,6 +18,7 @@ beforeAll(async () => {
 });
 
 describe('createDeleteThingMutationResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -83,7 +84,7 @@ describe('createDeleteThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
 
     expect(typeof createPerson).toBe('function');
 
@@ -141,9 +142,9 @@ describe('createDeleteThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createThingSchema(personConfig, []);
     const Person = mongooseConn.model('Person', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createThingSchema(placeConfig, []);
     const Place = mongooseConn.model('Place', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
@@ -176,7 +177,7 @@ describe('createDeleteThingMutationResolver', () => {
     expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
     expect(createdFavorities[1].visitors[0]).toEqual(_id);
 
-    const deletePerson = createDeleteThingMutationResolver(personConfig);
+    const deletePerson = createDeleteThingMutationResolver(personConfig, generalConfig);
     const where = { id: _id };
     const deletedPerson = await deletePerson(null, { where }, { mongooseConn });
     expect(deletedPerson.firstName).toBe(data.firstName);
@@ -199,7 +200,7 @@ describe('createDeleteThingMutationResolver', () => {
     const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn });
     expect(deletedPerson2).toBeNull();
 
-    const deletePlace = createDeleteThingMutationResolver(placeConfig);
+    const deletePlace = createDeleteThingMutationResolver(placeConfig, generalConfig);
     const where2 = { name: data.location.create.name };
     const deletedPlace = await deletePlace(null, { where: where2 }, { mongooseConn });
     expect(deletedPlace.name).toBe(data.location.create.name);

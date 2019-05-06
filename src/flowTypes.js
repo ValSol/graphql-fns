@@ -29,6 +29,15 @@ type TextField = {
   unique?: boolean,
 };
 
+type EnumField = {
+  name: string,
+  array?: boolean,
+  default?: string | Array<string>,
+  index?: boolean,
+  required?: boolean,
+  enumName: string, // name to compose graphql types
+};
+
 type GeospatialField = {
   name: string,
   required?: boolean,
@@ -60,10 +69,15 @@ export type ThingConfig = {
     required?: boolean,
   }>,
   textFields?: Array<TextField>,
+  enumFields?: Array<EnumField>,
   geospatialFields?: Array<GeospatialField>,
   name: string,
   pagination?: boolean,
 };
+
+export type Enums = Array<{ name: string, enum: Array<string> }>;
+
+export type GeneralConfig = { thingConfigs: Array<ThingConfig>, enums: Enums };
 
 export type Periphery = Map<
   ThingConfig,

@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -17,6 +17,7 @@ beforeAll(async () => {
 });
 
 describe('createCreateThingMutationResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -45,7 +46,7 @@ describe('createCreateThingMutationResolver', () => {
       ],
     };
 
-    const createExample = createCreateThingMutationResolver(thingConfig);
+    const createExample = createCreateThingMutationResolver(thingConfig, generalConfig);
     expect(typeof createExample).toBe('function');
     const data = {
       textField1: 'textField1',
@@ -92,7 +93,7 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
     const data = {
       firstName: 'Ivan',
@@ -164,7 +165,7 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
     const data = {
       firstName: 'Ivan',
@@ -229,7 +230,7 @@ describe('createCreateThingMutationResolver', () => {
 
     const { friend: friendId, friends: friendIds } = createdPerson2;
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createThingSchema(personConfig, []);
     const Person = mongooseConn.model('Person2', personSchema);
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data2.friend.create.firstName);
@@ -311,7 +312,7 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
 
     const data = {
@@ -368,9 +369,9 @@ describe('createCreateThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createThingSchema(personConfig, []);
     const Person = mongooseConn.model('Person3', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createThingSchema(placeConfig, []);
     const Place = mongooseConn.model('Place2', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
@@ -507,7 +508,7 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig);
+    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
 
     const data = {
@@ -549,9 +550,9 @@ describe('createCreateThingMutationResolver', () => {
 
     const { friend: friendId, _id, location: locationId, locations: locationIds } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig);
+    const personSchema = createThingSchema(personConfig, []);
     const Person = mongooseConn.model('Person4', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
+    const placeSchema = createThingSchema(placeConfig, []);
     const Place = mongooseConn.model('Place3', placeSchema);
 
     const createdFriend = await Person.findById(friendId);

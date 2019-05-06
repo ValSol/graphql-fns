@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { Enums, GeneralConfig, ThingConfig } from '../flowTypes';
 
 const composeGqlResolvers = require('./composeGqlResolvers');
 
@@ -33,7 +33,9 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
@@ -72,7 +74,9 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Example1).toBe('function');
@@ -131,7 +135,9 @@ describe('composeGqlResolvers', () => {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
@@ -201,7 +207,9 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [personConfig, addressConfig];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
@@ -274,7 +282,9 @@ describe('composeGqlResolvers', () => {
     });
 
     const thingConfigs = [personConfig, placeConfig];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Person).toBe('function');
@@ -343,7 +353,9 @@ describe('composeGqlResolvers', () => {
     };
 
     const thingConfigs = [thingConfig];
-    const result = composeGqlResolvers(thingConfigs);
+    const enums: Enums = [];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Example).toBe('function');

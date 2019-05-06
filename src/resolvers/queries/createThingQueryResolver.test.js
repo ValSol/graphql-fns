@@ -1,10 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const createThingQueryResolver = require('./createThingQueryResolver');
 
 describe('createThingQueryResolver', () => {
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
   test('should create mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -33,7 +34,7 @@ describe('createThingQueryResolver', () => {
       ],
     };
 
-    const result = createThingQueryResolver(thingConfig);
+    const result = createThingQueryResolver(thingConfig, generalConfig);
 
     expect(typeof result).toBe('function');
   });

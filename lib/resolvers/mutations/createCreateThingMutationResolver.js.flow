@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processCreateInputData = require('./processCreateInputData');
@@ -8,7 +8,12 @@ const updatePeriphery = require('./updatePeriphery');
 type Args = { data: Object };
 type Context = { mongooseConn: Object };
 
-const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function => {
+const createCreateThingMutationResolver = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+): Function => {
+  const { enums } = generalConfig;
+
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { data } = args;
     const { mongooseConn } = context;
@@ -16,7 +21,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
     const { core, periphery, single, first } = processCreateInputData(data, thingConfig);
 
     const { name } = thingConfig;
-    const thingSchema = createThingSchema(thingConfig);
+    const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(name, thingSchema);
 
     await updatePeriphery(periphery, mongooseConn);
@@ -29,7 +34,7 @@ const createCreateThingMutationResolver = (thingConfig: ThingConfig): Function =
       const promises = [];
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config);
+        const thingSchema2 = createThingSchema(config, enums);
         const Thing2 = mongooseConn.model(name2, thingSchema2);
         promises.push(Thing2.bulkWrite(bulkItems));
       });

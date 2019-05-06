@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
@@ -10,7 +10,12 @@ const updatePeriphery = require('./updatePeriphery');
 type Args = { data: Object, where: Object };
 type Context = { mongooseConn: Object };
 
-const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function => {
+const createUpdateThingMutationResolver = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+): Function => {
+  const { enums } = generalConfig;
+
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { mongooseConn } = context;
     const {
@@ -20,7 +25,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
     } = args;
 
     const { name: thingName, duplexFields } = thingConfig;
-    const thingSchema = createThingSchema(thingConfig);
+    const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(thingName, thingSchema);
 
     const duplexFieldsProjection = duplexFields
@@ -48,7 +53,7 @@ const createUpdateThingMutationResolver = (thingConfig: ThingConfig): Function =
       const promises = [];
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config);
+        const thingSchema2 = createThingSchema(config, enums);
         const Thing2 = mongooseConn.model(name2, thingSchema2);
         promises.push(Thing2.bulkWrite(bulkItems));
       });

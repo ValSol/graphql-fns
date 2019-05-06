@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../flowTypes';
+import type { GeneralConfig } from '../flowTypes';
 
 const createThingType = require('./createThingType');
 const createThingCreateInputType = require('./inputs/createThingCreateInputType');
@@ -17,9 +17,8 @@ const createUpdateThingMutationType = require('./mutations/createUpdateThingMuta
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
 
-type ThingConfigs = Array<ThingConfig>;
-
-const composeGqlTypes = (thingConfigs: ThingConfigs): string => {
+const composeGqlTypes = (generalConfig: GeneralConfig): string => {
+  const { thingConfigs } = generalConfig;
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
 
   const thingInputTypes = thingConfigs
@@ -58,7 +57,7 @@ ${createDeleteThingMutationType(thingConfig)}`,
     )
     .join('\n');
 
-  const result = `scalar DateTime${composeGeospatialTypes(thingConfigs)}
+  const result = `scalar DateTime${composeGeospatialTypes(generalConfig)}
 ${thingTypes}
 ${thingInputTypes}
 ${thingInputTypes2}

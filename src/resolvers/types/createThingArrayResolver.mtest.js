@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { Enums, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -18,6 +18,8 @@ beforeAll(async () => {
 });
 
 describe('createThingArrayResolver', () => {
+  const enums: Enums = [];
+  const generalConfig: GeneralConfig = { thingConfigs: [], enums };
   test('should create type thing resolver', async () => {
     const placeConfig: ThingConfig = {};
     Object.assign(placeConfig, {
@@ -41,7 +43,7 @@ describe('createThingArrayResolver', () => {
       ],
     });
 
-    const createPlace = createCreateThingMutationResolver(placeConfig);
+    const createPlace = createCreateThingMutationResolver(placeConfig, generalConfig);
     expect(typeof createPlace).toBe('function');
     const data = {
       title: 'Paris',
@@ -49,7 +51,7 @@ describe('createThingArrayResolver', () => {
     const createdPlace = await createPlace(null, { data }, { mongooseConn });
     const { id } = createdPlace;
 
-    const Place = createThingArrayResolver(placeConfig);
+    const Place = createThingArrayResolver(placeConfig, enums);
     const parent = { friends: [id] };
     const places = await Place(parent, null, { mongooseConn }, info);
     const [place] = places;

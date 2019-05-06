@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processDeleteData = require('./processDeleteData');
@@ -8,14 +8,19 @@ type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
 // TODO update to remove garbage from relation fields that relate to deleted object
-const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function => {
+const createDeleteThingMutationResolver = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+): Function => {
+  const { enums } = generalConfig;
+
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { where } = args;
 
     const { mongooseConn } = context;
 
     const { name } = thingConfig;
-    const thingSchema = createThingSchema(thingConfig);
+    const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(name, thingSchema);
 
     const whereKeys = Object.keys(where);
@@ -35,7 +40,7 @@ const createDeleteThingMutationResolver = (thingConfig: ThingConfig): Function =
     const bulkItemsMap = processDeleteData(thing, thingConfig);
     bulkItemsMap.forEach((bulkItems, config) => {
       const { name: name2 } = config;
-      const thingSchema2 = createThingSchema(config);
+      const thingSchema2 = createThingSchema(config, enums);
       const Thing2 = mongooseConn.model(name2, thingSchema2);
       promises.push(Thing2.bulkWrite(bulkItems));
     });
