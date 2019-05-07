@@ -27,6 +27,7 @@ const processCreateInputData = (
     const {
       duplexFields,
       embeddedFields,
+      enumFields,
       geospatialFields,
       relationalFields,
       textFields,
@@ -79,6 +80,12 @@ const processCreateInputData = (
     const scalarFieldsArray = ['_id'];
     if (textFields) {
       textFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
+    if (enumFields) {
+      enumFields.reduce((prev, { name }) => {
         prev.push(name);
         return prev;
       }, scalarFieldsArray);

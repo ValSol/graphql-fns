@@ -104,4 +104,42 @@ input PersonWhereInput {
     const result = createThingWhereInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing input type if there are enum index fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'field1',
+          enumName: 'Weekdays',
+          index: true,
+        },
+        {
+          name: 'field2',
+          array: true,
+          enumName: 'Cuisines',
+        },
+        {
+          name: 'field3',
+          enumName: 'Weekdays',
+          required: true,
+        },
+        {
+          name: 'field4',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+input ExampleWhereInput {
+  field1: WeekdaysEnumeration
+  field4: CuisinesEnumeration
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

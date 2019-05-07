@@ -7,6 +7,7 @@ const createThingType = (thingConfig: ThingConfig): string => {
     isEmbedded,
     duplexFields,
     embeddedFields,
+    enumFields,
     geospatialFields,
     relationalFields,
     textFields,
@@ -27,6 +28,17 @@ const createThingType = (thingConfig: ThingConfig): string => {
     textFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
         `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
+  }
+
+  if (enumFields) {
+    enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );

@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../flowTypes';
 const createThingSortInputType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  const sortableFieldTypes = ['textFields'];
+  const sortableFieldTypes = ['textFields', 'enumFields'];
 
   const fieldLines = sortableFieldTypes.reduce((prev, fieldTypesName) => {
     const fieldLinesPortion = thingConfig[fieldTypesName]

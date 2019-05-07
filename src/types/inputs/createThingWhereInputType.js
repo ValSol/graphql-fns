@@ -3,11 +3,20 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = (thingConfig: ThingConfig): string => {
-  const { name, duplexFields, relationalFields, textFields } = thingConfig;
+  const { name, enumFields, duplexFields, relationalFields, textFields } = thingConfig;
 
   const indexedFields = textFields
     ? textFields.filter(({ index }) => index).map(({ name: fieldName }) => `  ${fieldName}: String`)
     : [];
+
+  if (enumFields) {
+    enumFields
+      .filter(({ index }) => index)
+      .reduce((prev, { enumName, name: fieldName }) => {
+        prev.push(`  ${fieldName}: ${enumName}Enumeration`);
+        return prev;
+      }, indexedFields);
+  }
 
   if (relationalFields) {
     relationalFields

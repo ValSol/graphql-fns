@@ -269,4 +269,42 @@ describe('createThingUpdateInputType', () => {
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing update input type with enum fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'field1',
+          enumName: 'Weekdays',
+        },
+        {
+          name: 'field2',
+          array: true,
+          enumName: 'Cuisines',
+        },
+        {
+          name: 'field3',
+          enumName: 'Weekdays',
+          required: true,
+        },
+        {
+          name: 'field4',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+        },
+      ],
+    };
+
+    const expectedResult = `input ExampleUpdateInput {
+  field1: WeekdaysEnumeration
+  field2: [CuisinesEnumeration!]
+  field3: WeekdaysEnumeration
+  field4: [CuisinesEnumeration!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

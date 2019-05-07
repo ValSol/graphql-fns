@@ -20,13 +20,11 @@ export type GeospatialPolygon = {
   internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
 };
 
-type TextField = {
+type GeospatialField = {
   name: string,
-  array?: boolean,
-  default?: string | Array<string>,
-  index?: boolean,
   required?: boolean,
-  unique?: boolean,
+  type: 'Point' | 'Polygon',
+  array?: boolean,
 };
 
 type EnumField = {
@@ -38,11 +36,13 @@ type EnumField = {
   enumName: string, // name to compose graphql types
 };
 
-type GeospatialField = {
+type TextField = {
   name: string,
-  required?: boolean,
-  type: 'Point' | 'Polygon',
   array?: boolean,
+  default?: string | Array<string>,
+  index?: boolean,
+  required?: boolean,
+  unique?: boolean,
 };
 
 export type ThingConfig = {
@@ -68,7 +68,9 @@ export type ThingConfig = {
     index?: boolean,
     required?: boolean,
   }>,
+
   textFields?: Array<TextField>,
+  // $FlowFixMe
   enumFields?: Array<EnumField>,
   geospatialFields?: Array<GeospatialField>,
   name: string,

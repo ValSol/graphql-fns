@@ -345,4 +345,49 @@ input ExampleCreateChildrenInput {
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing input type with enum fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'field1',
+          enumName: 'Weekdays',
+        },
+        {
+          name: 'field2',
+          array: true,
+          enumName: 'Cuisines',
+        },
+        {
+          name: 'field3',
+          enumName: 'Weekdays',
+          required: true,
+        },
+        {
+          name: 'field4',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleCreateInput {
+  field1: WeekdaysEnumeration
+  field2: [CuisinesEnumeration!]
+  field3: WeekdaysEnumeration!
+  field4: [CuisinesEnumeration!]!
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

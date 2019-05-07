@@ -15,6 +15,7 @@ const createThingsQueryType = require('./queries/createThingsQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 const createUpdateThingMutationType = require('./mutations/createUpdateThingMutationType');
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
+const composeEnumTypes = require('./specialized/composeEnumTypes');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
@@ -57,7 +58,9 @@ ${createDeleteThingMutationType(thingConfig)}`,
     )
     .join('\n');
 
-  const result = `scalar DateTime${composeGeospatialTypes(generalConfig)}
+  const result = `scalar DateTime${composeEnumTypes(generalConfig)}${composeGeospatialTypes(
+    generalConfig,
+  )}
 ${thingTypes}
 ${thingInputTypes}
 ${thingInputTypes2}

@@ -22,7 +22,8 @@ describe('createThingSortInputType', () => {
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
-  test('should create string if there are not indexed fields', () => {
+
+  test('should create string with indexed text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -42,6 +43,43 @@ enum ExampleSortEnumeration {
   firstName_DESC
   lastName_ASC
   lastName_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create string with indexed text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'firstCuisine',
+          index: true,
+          enumName: 'Cuisines',
+        },
+        {
+          name: 'secondCuisine',
+          index: true,
+          enumName: 'Cuisines',
+        },
+        {
+          name: 'otherCuisines',
+          array: true,
+          index: true,
+          enumName: 'Cuisines',
+        },
+      ],
+    };
+    const expectedResult = `
+enum ExampleSortEnumeration {
+  firstCuisine_ASC
+  firstCuisine_DESC
+  secondCuisine_ASC
+  secondCuisine_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]

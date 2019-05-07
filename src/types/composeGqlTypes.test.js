@@ -36,6 +36,21 @@ describe('composeGqlTypes', () => {
           array: true,
         },
       ],
+      enumFields: [
+        {
+          name: 'day',
+          enumName: 'Weekdays',
+          index: true,
+        },
+        {
+          name: 'cuisines',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+          index: true,
+        },
+      ],
+
       geospatialFields: [
         {
           name: 'position',
@@ -44,8 +59,28 @@ describe('composeGqlTypes', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const enums = [
+      { name: 'Weekdays', enum: ['0', '1', '2', '3', '4', '5', '6'] },
+      { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
+    ];
+    const generalConfig: GeneralConfig = { thingConfigs, enums };
     const expectedResult = `scalar DateTime
+enum WeekdaysEnumeration {
+  0
+  1
+  2
+  3
+  4
+  5
+  6
+}
+enum CuisinesEnumeration {
+  ukrainian
+  italian
+  georgian
+  japanese
+  chinese
+}
 type GeospatialPoint {
   longitude: Float!
   latitude: Float!
@@ -63,6 +98,8 @@ type Example {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
+  day: WeekdaysEnumeration
+  cuisines: [CuisinesEnumeration!]!
   position: GeospatialPoint
 }
 input ExampleCreateInput {
@@ -71,6 +108,8 @@ input ExampleCreateInput {
   textField3: String!
   textField4: [String!]
   textField5: [String!]!
+  day: WeekdaysEnumeration
+  cuisines: [CuisinesEnumeration!]!
   position: GeospatialPointInput
 }
 input ExampleCreateChildInput {
@@ -87,6 +126,8 @@ input ExampleUpdateInput {
   textField3: String
   textField4: [String!]
   textField5: [String!]
+  day: WeekdaysEnumeration
+  cuisines: [CuisinesEnumeration!]
   position: GeospatialPointInput
 }
 input ExampleWhereOneInput {
@@ -96,12 +137,16 @@ input ExampleWhereOneInput {
 input ExampleWhereInput {
   textField2: String
   textField3: String
+  day: WeekdaysEnumeration
+  cuisines: CuisinesEnumeration
 }
 enum ExampleSortEnumeration {
   textField2_ASC
   textField2_DESC
   textField3_ASC
   textField3_DESC
+  day_ASC
+  day_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]
