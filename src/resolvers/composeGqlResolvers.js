@@ -13,7 +13,7 @@ const createDeleteThingMutationResolver = require('./mutations/createDeleteThing
 
 const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
   const { thingConfigs } = generalConfig;
-  const resolvers = { DateTime, Query: {}, Mutation: {}, Subscription: {} };
+  const resolvers = { DateTime, Query: {}, Mutation: {} /* Subscription: {} */ };
 
   thingConfigs
     .filter(({ isEmbedded }) => !isEmbedded)
