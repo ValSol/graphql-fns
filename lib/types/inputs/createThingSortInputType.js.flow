@@ -3,7 +3,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSortInputType = (thingConfig: ThingConfig): string => {
-  const { enumFields, name } = thingConfig;
+  const { booleanFields, enumFields, name } = thingConfig;
 
   const fieldLines = enumFields
     ? enumFields
@@ -14,7 +14,7 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
         )
     : [];
 
-  const scalarFieldTypes = ['textFields'];
+  const scalarFieldTypes = ['textFields', 'intFields', 'floatFields'];
 
   scalarFieldTypes.reduce((prev, fieldTypesName) => {
     const fieldLinesPortion = thingConfig[fieldTypesName]
@@ -29,6 +29,16 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
     prev.push.apply(prev, fieldLinesPortion); // eslint-disable-line prefer-spread
     return prev;
   }, fieldLines);
+
+  if (booleanFields) {
+    booleanFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
   if (!fieldLines.length) return '';
 

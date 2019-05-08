@@ -52,7 +52,7 @@ input ExampleSortInput {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create string with indexed text fields', () => {
+  test('should create string with indexed enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       enumFields: [
@@ -80,6 +80,93 @@ enum ExampleSortEnumeration {
   firstCuisine_DESC
   secondCuisine_ASC
   secondCuisine_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create string with indexed int fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+enum ExampleSortEnumeration {
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create string with indexed text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+enum ExampleSortEnumeration {
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create string with indexed text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+enum ExampleSortEnumeration {
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]
