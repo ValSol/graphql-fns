@@ -19,37 +19,45 @@ const composeThingSchemaProperties = (
     enumFields,
     geospatialFields,
     relationalFields,
-    textFields,
   } = thingConfig;
 
-  const result = {};
-  if (textFields) {
-    textFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
-      if (defaultValue) {
-        if (!array && !(typeof defaultValue === 'string')) {
-          throw new TypeError('Expected a string as default value');
-        }
-        if (array && !Array.isArray(defaultValue)) {
-          throw new TypeError('Expected an array as default value');
-        }
-      }
+  const scalarFieldTypes = [
+    { fieldTypeName: 'textFields', mongoType: String },
+    { fieldTypeName: 'dateTimeFields', mongoType: Date },
+  ];
+  const result = scalarFieldTypes.reduce((prev, { fieldTypeName, mongoType }) => {
+    if (thingConfig[fieldTypeName]) {
+      thingConfig[fieldTypeName].forEach(
+        ({ array, default: defaultValue, index, name, required, unique }) => {
+          if (defaultValue) {
+            if (!array && Array.isArray(defaultValue)) {
+              throw new TypeError('Expected not an array as default value');
+            }
+            if (array && !Array.isArray(defaultValue)) {
+              throw new TypeError('Expected an array as default value');
+            }
+          }
 
-      if ((index || unique) && isEmbedded) {
-        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
-      }
+          if ((index || unique) && isEmbedded) {
+            throw new TypeError(
+              'Must not have an "index" or "unique" field in an embedded document!',
+            );
+          }
 
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = {
-        default: defaultValue || (array ? [] : ''),
-        type: array ? [String] : String,
-      };
-      // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-      if (index && !unique) prev[name].index = !!index; // eslint-disable-line no-param-reassign
-      return prev;
-    }, result);
-  }
+          // eslint-disable-next-line no-param-reassign
+          prev[name] = {
+            type: array ? [mongoType] : mongoType,
+          };
+          if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+          // eslint-disable-next-line no-param-reassign
+          if (required) prev[name].required = !!required; // by default required = false
+          if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+          if (index && !unique) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+        },
+      );
+    }
+    return prev;
+  }, {});
 
   if (relationalFields) {
     relationalFields.reduce(

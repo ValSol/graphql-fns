@@ -3,11 +3,21 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = (thingConfig: ThingConfig): string => {
-  const { name, enumFields, duplexFields, relationalFields, textFields } = thingConfig;
+  const { name, enumFields, duplexFields, relationalFields } = thingConfig;
 
-  const indexedFields = textFields
-    ? textFields.filter(({ index }) => index).map(({ name: fieldName }) => `  ${fieldName}: String`)
-    : [];
+  const scalarFieldTypes = [
+    { fieldTypeName: 'textFields', gqlType: 'String' },
+    { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
+  ];
+
+  const indexedFields = scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
+    if (thingConfig[fieldTypeName]) {
+      thingConfig[fieldTypeName]
+        .filter(({ index }) => index)
+        .forEach(({ name: name2 }) => prev.push(`  ${name2}: ${gqlType}`));
+    }
+    return prev;
+  }, []);
 
   if (enumFields) {
     enumFields

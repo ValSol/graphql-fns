@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { Enums, ThingConfig } from '../flowTypes';
 
 const mongoose = require('mongoose');
 const composeThingSchemaProperties = require('./composeThingSchemaProperties');
@@ -40,7 +40,6 @@ describe('composeThingSchemaProperties', () => {
     const expectedResult = {
       textField1: {
         type: String,
-        default: '',
         index: true,
       },
       textField2: {
@@ -50,12 +49,10 @@ describe('composeThingSchemaProperties', () => {
       textField3: {
         type: String,
         required: true,
-        default: '',
         unique: true,
       },
       textField4: {
         type: [String],
-        default: [],
       },
       textField5: {
         type: [String],
@@ -115,12 +112,10 @@ describe('composeThingSchemaProperties', () => {
       firstName: {
         type: String,
         required: true,
-        default: '',
       },
       lastName: {
         type: String,
         required: true,
-        default: '',
       },
       friends: [
         {
@@ -217,12 +212,10 @@ describe('composeThingSchemaProperties', () => {
       firstName: {
         type: String,
         required: true,
-        default: '',
       },
       lastName: {
         type: String,
         required: true,
-        default: '',
       },
       friends: [
         {
@@ -311,12 +304,10 @@ describe('composeThingSchemaProperties', () => {
       firstName: {
         type: String,
         required: true,
-        default: '',
       },
       lastName: {
         type: String,
         required: true,
-        default: '',
       },
       location: {
         country: {
@@ -326,7 +317,6 @@ describe('composeThingSchemaProperties', () => {
         },
         province: {
           type: String,
-          default: '',
         },
       },
       locations: [
@@ -338,7 +328,6 @@ describe('composeThingSchemaProperties', () => {
           },
           province: {
             type: String,
-            default: '',
           },
         },
       ],
@@ -350,7 +339,6 @@ describe('composeThingSchemaProperties', () => {
         },
         province: {
           type: String,
-          default: '',
         },
       },
       places: [
@@ -362,7 +350,6 @@ describe('composeThingSchemaProperties', () => {
           },
           province: {
             type: String,
-            default: '',
           },
         },
       ],
@@ -511,10 +498,11 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(thingConfig, []);
     expect(result).toEqual(expectedResult);
   });
+
   test('should compose schema properties with enum fields', () => {
     const enumeration1 = ['key1-1', 'key1-2', 'key1-3'];
     const enumeration2 = ['key2-1', 'key2-2', 'key2-3', 'key2-4'];
-    const enums = [
+    const enums: Enums = [
       { name: 'enumeration1', enum: enumeration1 },
       { name: 'enumeration2', enum: enumeration2 },
     ];
@@ -566,6 +554,56 @@ describe('composeThingSchemaProperties', () => {
         enum: enumeration1,
         required: true,
         default: ['key1-1', 'key1-3'],
+        index: true,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, enums);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with dateTime fields', () => {
+    const enums: Enums = [];
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'birthday',
+          index: true,
+        },
+        {
+          name: 'startDate',
+          default: new Date(1993, 6, 28, 14, 39, 7),
+        },
+        {
+          name: 'holidays',
+          array: true,
+        },
+        {
+          name: 'windays',
+          default: [new Date('1991-08-24'), new Date('1991-12-01')],
+          required: true,
+          array: true,
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      birthday: {
+        type: Date,
+        index: true,
+      },
+      startDate: {
+        type: Date,
+        default: new Date(1993, 6, 28, 14, 39, 7),
+      },
+      holidays: {
+        type: [Date],
+      },
+      windays: {
+        type: [Date],
+        required: true,
+        default: [new Date('1991-08-24'), new Date('1991-12-01')],
         index: true,
       },
     };

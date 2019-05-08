@@ -3,14 +3,23 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
-  const { name, textFields } = thingConfig;
+  const { name } = thingConfig;
 
-  const uniqueFields = textFields
-    ? textFields
+  const scalarFieldTypes = [
+    { fieldTypeName: 'textFields', gqlType: 'ID' },
+    { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
+  ];
+
+  const fieldLines = scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
+    if (thingConfig[fieldTypeName]) {
+      thingConfig[fieldTypeName]
         .filter(({ unique }) => unique)
-        .map(({ name: fieldName }) => `  ${fieldName}: ID`)
-        .join('\n')
-    : '';
+        .forEach(({ name: name2 }) => prev.push(`  ${name2}: ${gqlType}`));
+    }
+    return prev;
+  }, []);
+
+  const uniqueFields = fieldLines.join('\n');
 
   if (uniqueFields) {
     return `input ${name}WhereOneInput {

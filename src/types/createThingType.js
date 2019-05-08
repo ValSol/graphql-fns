@@ -10,7 +10,6 @@ const createThingType = (thingConfig: ThingConfig): string => {
     enumFields,
     geospatialFields,
     relationalFields,
-    textFields,
     name,
   } = thingConfig;
 
@@ -24,16 +23,23 @@ const createThingType = (thingConfig: ThingConfig): string => {
   updatedAt: DateTime!`);
   }
 
-  if (textFields) {
-    textFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
+  const scalarFieldTypes = [
+    { fieldTypeName: 'textFields', gqlType: 'String' },
+    { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
+  ];
+
+  scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
+    if (thingConfig[fieldTypeName]) {
+      thingConfig[fieldTypeName].forEach(({ array, name: name2, required }) =>
+        prev.push(
+          `  ${name2}: ${array ? '[' : ''}${gqlType}${array ? '!]!' : ''}${
+            !array && required ? '!' : ''
+          }`,
+        ),
       );
-      return prev;
-    }, thingTypeArray);
-  }
+    }
+    return prev;
+  }, thingTypeArray);
 
   if (enumFields) {
     enumFields.reduce((prev, { array, enumName, name: name2, required }) => {

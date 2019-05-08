@@ -36,13 +36,23 @@ type EnumField = {
   enumName: string, // name to compose graphql types
 };
 
-type TextField = {
-  name: string,
+type ScalarInterfaceField = {
   array?: boolean,
-  default?: string | Array<string>,
   index?: boolean,
   required?: boolean,
   unique?: boolean,
+};
+
+type TextField = {
+  ...ScalarInterfaceField,
+  name: string,
+  default?: string | Array<string>,
+};
+
+type DateTimeField = {
+  ...ScalarInterfaceField,
+  name: string,
+  default?: Date | Array<Date>,
 };
 
 export type ThingConfig = {
@@ -69,9 +79,9 @@ export type ThingConfig = {
     required?: boolean,
   }>,
 
-  textFields?: Array<TextField>,
-  // $FlowFixMe
+  dateTimeFields?: Array<DateTimeField>,
   enumFields?: Array<EnumField>,
+  textFields?: Array<TextField>,
   geospatialFields?: Array<GeospatialField>,
   name: string,
   pagination?: boolean,

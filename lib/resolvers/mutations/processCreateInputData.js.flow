@@ -30,7 +30,6 @@ const processCreateInputData = (
       enumFields,
       geospatialFields,
       relationalFields,
-      textFields,
     } = thingConfig2;
 
     const relationalFieldsObject = {};
@@ -78,12 +77,16 @@ const processCreateInputData = (
     }
 
     const scalarFieldsArray = ['_id'];
-    if (textFields) {
-      textFields.reduce((prev, { name }) => {
-        prev.push(name);
-        return prev;
-      }, scalarFieldsArray);
-    }
+
+    const scalarFieldTypes = ['textFields'];
+    scalarFieldTypes.reduce((prev, fieldTypeName) => {
+      if (thingConfig2[fieldTypeName]) {
+        thingConfig2[fieldTypeName].forEach(({ name: name2 }) => prev.push(name2));
+      }
+      return prev;
+    }, scalarFieldsArray);
+
+    // enumFields process separately to prevent flowjs error
     if (enumFields) {
       enumFields.reduce((prev, { name }) => {
         prev.push(name);

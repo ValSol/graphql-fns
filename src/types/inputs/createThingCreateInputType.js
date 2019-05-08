@@ -10,18 +10,26 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     enumFields,
     geospatialFields,
     relationalFields,
-    textFields,
     name,
   } = thingConfig;
 
   const thingTypeArray = [`input ${name}CreateInput {`];
 
-  if (textFields) {
-    textFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}${required ? '!' : ''}`);
-      return prev;
-    }, thingTypeArray);
-  }
+  const scalarFieldTypes = [
+    { fieldTypeName: 'textFields', gqlType: 'String' },
+    { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
+  ];
+
+  scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
+    if (thingConfig[fieldTypeName]) {
+      thingConfig[fieldTypeName].forEach(({ array, name: name2, required }) =>
+        prev.push(
+          `  ${name2}: ${array ? '[' : ''}${gqlType}${array ? '!]' : ''}${required ? '!' : ''}`,
+        ),
+      );
+    }
+    return prev;
+  }, thingTypeArray);
 
   if (enumFields) {
     enumFields.reduce((prev, { array, enumName, name: name2, required }) => {

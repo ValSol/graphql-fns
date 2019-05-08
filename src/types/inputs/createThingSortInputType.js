@@ -1,13 +1,22 @@
-// @flow
+//  @flow
 
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSortInputType = (thingConfig: ThingConfig): string => {
-  const { name } = thingConfig;
+  const { enumFields, name } = thingConfig;
 
-  const sortableFieldTypes = ['textFields', 'enumFields'];
+  const fieldLines = enumFields
+    ? enumFields
+        .filter(({ array, index }) => !array && index)
+        .map(
+          ({ name: fieldName }) => `  ${fieldName}_ASC
+  ${fieldName}_DESC`,
+        )
+    : [];
 
-  const fieldLines = sortableFieldTypes.reduce((prev, fieldTypesName) => {
+  const scalarFieldTypes = ['textFields'];
+
+  scalarFieldTypes.reduce((prev, fieldTypesName) => {
     const fieldLinesPortion = thingConfig[fieldTypesName]
       ? thingConfig[fieldTypesName]
           .filter(({ array, index }) => !array && index)
@@ -17,8 +26,9 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
           )
       : [];
 
-    return [...prev, ...fieldLinesPortion];
-  }, []);
+    prev.push.apply(prev, fieldLinesPortion); // eslint-disable-line prefer-spread
+    return prev;
+  }, fieldLines);
 
   if (!fieldLines.length) return '';
 

@@ -141,12 +141,12 @@ input ExampleWhereInput {
   cuisines: CuisinesEnumeration
 }
 enum ExampleSortEnumeration {
+  day_ASC
+  day_DESC
   textField2_ASC
   textField2_DESC
   textField3_ASC
   textField3_DESC
-  day_ASC
-  day_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]
