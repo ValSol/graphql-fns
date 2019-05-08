@@ -307,4 +307,121 @@ describe('createThingUpdateInputType', () => {
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing update input type with int fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField1',
+        },
+        {
+          name: 'intField2',
+          default: 0,
+        },
+        {
+          name: 'intField3',
+          required: true,
+        },
+        {
+          name: 'intField4',
+          array: true,
+        },
+        {
+          name: 'intField5',
+          default: [55],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleUpdateInput {
+  intField1: Int
+  intField2: Int
+  intField3: Int
+  intField4: [Int!]
+  intField5: [Int!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing update input type with float fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'floatField1',
+        },
+        {
+          name: 'floatField2',
+          default: 0,
+        },
+        {
+          name: 'floatField3',
+          required: true,
+        },
+        {
+          name: 'floatField4',
+          array: true,
+        },
+        {
+          name: 'floatField5',
+          default: [5.5],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleUpdateInput {
+  floatField1: Float
+  floatField2: Float
+  floatField3: Float
+  floatField4: [Float!]
+  floatField5: [Float!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing update input type with boolean fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField1',
+        },
+        {
+          name: 'booleanField2',
+          default: false,
+        },
+        {
+          name: 'booleanField3',
+          required: true,
+        },
+        {
+          name: 'booleanField4',
+          array: true,
+        },
+        {
+          name: 'booleanField5',
+          default: [true, true],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleUpdateInput {
+  booleanField1: Boolean
+  booleanField2: Boolean
+  booleanField3: Boolean
+  booleanField4: [Boolean!]
+  booleanField5: [Boolean!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

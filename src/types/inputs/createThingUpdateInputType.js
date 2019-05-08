@@ -4,6 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   const {
+    booleanFields,
     duplexFields,
     embeddedFields,
     enumFields,
@@ -16,9 +17,10 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   const scalarFieldTypes = [
     { fieldTypeName: 'textFields', gqlType: 'String' },
+    { fieldTypeName: 'intFields', gqlType: 'Int' },
+    { fieldTypeName: 'floatFields', gqlType: 'Float' },
     { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
   ];
-
   scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
     if (thingConfig[fieldTypeName]) {
       thingConfig[fieldTypeName].forEach(({ array, name: name2 }) =>
@@ -27,6 +29,13 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
     }
     return prev;
   }, thingTypeArray);
+
+  if (booleanFields) {
+    booleanFields.reduce((prev, { array, name: name2 }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}`);
+      return prev;
+    }, thingTypeArray);
+  }
 
   if (enumFields) {
     enumFields.reduce((prev, { array, enumName, name: name2 }) => {
