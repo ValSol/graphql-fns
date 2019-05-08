@@ -390,4 +390,145 @@ input ExampleCreateChildrenInput {
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing type with int fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField1',
+        },
+        {
+          name: 'intField2',
+          default: 0,
+        },
+        {
+          name: 'intField3',
+          required: true,
+        },
+        {
+          name: 'intField4',
+          array: true,
+        },
+        {
+          name: 'intField5',
+          default: [55],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleCreateInput {
+  intField1: Int
+  intField2: Int
+  intField3: Int!
+  intField4: [Int!]
+  intField5: [Int!]!
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing type with float fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'floatField1',
+        },
+        {
+          name: 'floatField2',
+          default: 0,
+        },
+        {
+          name: 'floatField3',
+          required: true,
+        },
+        {
+          name: 'floatField4',
+          array: true,
+        },
+        {
+          name: 'floatField5',
+          default: [5.5],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleCreateInput {
+  floatField1: Float
+  floatField2: Float
+  floatField3: Float!
+  floatField4: [Float!]
+  floatField5: [Float!]!
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing type with boolean fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField1',
+        },
+        {
+          name: 'booleanField2',
+          default: false,
+        },
+        {
+          name: 'booleanField3',
+          required: true,
+        },
+        {
+          name: 'booleanField4',
+          array: true,
+        },
+        {
+          name: 'booleanField5',
+          default: [true, true],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleCreateInput {
+  booleanField1: Boolean
+  booleanField2: Boolean
+  booleanField3: Boolean!
+  booleanField4: [Boolean!]
+  booleanField5: [Boolean!]!
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}`;
+
+    const result = createThingCreateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
