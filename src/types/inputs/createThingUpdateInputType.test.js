@@ -150,7 +150,7 @@ describe('createThingUpdateInputType', () => {
   test('should create thing update input type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',

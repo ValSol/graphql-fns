@@ -106,7 +106,7 @@ input PersonCreateChildrenInput {
   test('should create embedded thing input type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',
@@ -130,7 +130,7 @@ input PersonCreateChildrenInput {
   test('should create thing input type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',

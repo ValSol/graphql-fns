@@ -20,11 +20,12 @@ export type GeospatialPolygon = {
   internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
 };
 
-type GeospatialField = {
+type BooleanField = {
   name: string,
-  required?: boolean,
-  type: 'Point' | 'Polygon',
   array?: boolean,
+  default?: boolean | Array<boolean>,
+  index?: boolean,
+  required?: boolean,
 };
 
 type EnumField = {
@@ -34,6 +35,13 @@ type EnumField = {
   index?: boolean,
   required?: boolean,
   enumName: string, // name to compose graphql types
+};
+
+type GeospatialField = {
+  name: string,
+  required?: boolean,
+  type: 'Point' | 'Polygon',
+  array?: boolean,
 };
 
 type ScalarInterfaceField = {
@@ -55,8 +63,23 @@ type DateTimeField = {
   default?: Date | Array<Date>,
 };
 
+type IntField = {
+  ...ScalarInterfaceField,
+  name: string,
+  default?: number | Array<number>,
+};
+
+type FloatField = {
+  ...ScalarInterfaceField,
+  name: string,
+  default?: number | Array<number>,
+};
+
 export type ThingConfig = {
-  isEmbedded?: boolean,
+  name: string,
+  embedded?: boolean,
+  pagination?: boolean,
+
   duplexFields?: Array<{
     name: string,
     array?: boolean,
@@ -79,12 +102,13 @@ export type ThingConfig = {
     required?: boolean,
   }>,
 
+  booleanFields?: Array<BooleanField>,
   dateTimeFields?: Array<DateTimeField>,
   enumFields?: Array<EnumField>,
-  textFields?: Array<TextField>,
   geospatialFields?: Array<GeospatialField>,
-  name: string,
-  pagination?: boolean,
+  intFields?: Array<IntField>,
+  floatFields?: Array<FloatField>,
+  textFields?: Array<TextField>,
 };
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;

@@ -13,7 +13,8 @@ const composeThingSchemaProperties = (
   enums: Enums,
 ): ThingSchemaProperties => {
   const {
-    isEmbedded,
+    embedded,
+    booleanFields,
     duplexFields,
     embeddedFields,
     enumFields,
@@ -24,6 +25,8 @@ const composeThingSchemaProperties = (
   const scalarFieldTypes = [
     { fieldTypeName: 'textFields', mongoType: String },
     { fieldTypeName: 'dateTimeFields', mongoType: Date },
+    { fieldTypeName: 'intFields', mongoType: Number },
+    { fieldTypeName: 'floatFields', mongoType: Number },
   ];
   const result = scalarFieldTypes.reduce((prev, { fieldTypeName, mongoType }) => {
     if (thingConfig[fieldTypeName]) {
@@ -38,7 +41,7 @@ const composeThingSchemaProperties = (
             }
           }
 
-          if ((index || unique) && isEmbedded) {
+          if ((index || unique) && embedded) {
             throw new TypeError(
               'Must not have an "index" or "unique" field in an embedded document!',
             );
@@ -59,10 +62,30 @@ const composeThingSchemaProperties = (
     return prev;
   }, {});
 
+  if (booleanFields) {
+    booleanFields.reduce((prev, { array, default: defaultValue, index, name, required }) => {
+      if (defaultValue) {
+        if (!array && Array.isArray(defaultValue)) {
+          throw new TypeError('Expected not an array as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { type: array ? [Boolean] : Boolean };
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
   if (relationalFields) {
     relationalFields.reduce(
       (prev, { array, config: { name: relationalThingName }, index, name, required }) => {
-        if (index && isEmbedded) {
+        if (index && embedded) {
           throw new TypeError('Must not have an "index" field in an embedded document!');
         }
         const obj: { ref: string, type: string, required?: boolean, index?: boolean } = {
@@ -80,7 +103,7 @@ const composeThingSchemaProperties = (
   }
 
   if (duplexFields) {
-    if (isEmbedded) {
+    if (embedded) {
       throw new TypeError('Must not have an "duplexField" in an embedded document!');
     }
     duplexFields.reduce(
@@ -163,7 +186,7 @@ const composeThingSchemaProperties = (
         }
       }
 
-      if (index && isEmbedded) {
+      if (index && embedded) {
         throw new TypeError('Must not have an "index" field in an embedded document!');
       }
 

@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../flowTypes';
 const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   const {
     duplexFields,
-    isEmbedded,
+    embedded,
     embeddedFields,
     enumFields,
     geospatialFields,
@@ -98,7 +98,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
 
   thingTypeArray.push('}');
 
-  if (!isEmbedded) {
+  if (!embedded) {
     thingTypeArray.push(`input ${name}CreateChildInput {
   connect: ID
   create: ${name}CreateInput

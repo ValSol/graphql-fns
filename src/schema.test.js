@@ -118,7 +118,7 @@ describe('graphql schema', () => {
   test('test schema with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',

@@ -252,7 +252,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text and embeded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',
@@ -604,6 +604,166 @@ describe('composeThingSchemaProperties', () => {
         type: [Date],
         required: true,
         default: [new Date('1991-08-24'), new Date('1991-12-01')],
+        index: true,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, enums);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with int fields', () => {
+    const enums: Enums = [];
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField_1',
+          unique: true,
+          required: true,
+        },
+        {
+          name: 'intField_2',
+          default: 0,
+          index: true,
+        },
+        {
+          name: 'intField_3',
+          array: true,
+        },
+        {
+          name: 'intField_4',
+          default: [10, 20, 30],
+          required: true,
+          array: true,
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      intField_1: {
+        type: Number,
+        unique: true,
+        required: true,
+      },
+      intField_2: {
+        type: Number,
+        index: true,
+        default: 0,
+      },
+      intField_3: {
+        type: [Number],
+      },
+      intField_4: {
+        type: [Number],
+        required: true,
+        default: [10, 20, 30],
+        index: true,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, enums);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with float fields', () => {
+    const enums: Enums = [];
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'floatField_1',
+          unique: true,
+          required: true,
+        },
+        {
+          name: 'floatField_2',
+          default: 0.0,
+          index: true,
+        },
+        {
+          name: 'floatField_3',
+          array: true,
+        },
+        {
+          name: 'floatField_4',
+          default: [0.1, 0.2, 0.3],
+          required: true,
+          array: true,
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      floatField_1: {
+        type: Number,
+        unique: true,
+        required: true,
+      },
+      floatField_2: {
+        type: Number,
+        index: true,
+        default: 0,
+      },
+      floatField_3: {
+        type: [Number],
+      },
+      floatField_4: {
+        type: [Number],
+        required: true,
+        default: [0.1, 0.2, 0.3],
+        index: true,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, enums);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with boolean fields', () => {
+    const enums: Enums = [];
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField_1',
+          required: true,
+        },
+        {
+          name: 'booleanField_2',
+          index: true,
+          default: false,
+        },
+        {
+          name: 'booleanField_3',
+          array: true,
+        },
+        {
+          name: 'booleanField_4',
+          default: [true, false, true],
+          required: true,
+          array: true,
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      booleanField_1: {
+        type: Boolean,
+        required: true,
+      },
+      booleanField_2: {
+        type: Boolean,
+        index: true,
+        default: false,
+      },
+      booleanField_3: {
+        type: [Boolean],
+      },
+      booleanField_4: {
+        type: [Boolean],
+        required: true,
+        default: [true, false, true],
         index: true,
       },
     };

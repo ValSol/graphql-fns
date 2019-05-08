@@ -159,7 +159,7 @@ describe('composeGqlResolvers', () => {
   test('should create things types for two things with re', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',

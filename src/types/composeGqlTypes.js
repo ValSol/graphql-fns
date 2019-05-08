@@ -30,7 +30,7 @@ ${createThingUpdateInputType(thingConfig)}`,
     .join('\n');
 
   const thingInputTypes2 = thingConfigs
-    .filter(({ isEmbedded }) => !isEmbedded)
+    .filter(({ embedded }) => !embedded)
     .map(
       thingConfig =>
         `${createThingWhereOneInputType(thingConfig)}${createThingWhereInputType(
@@ -42,7 +42,7 @@ ${createThingUpdateInputType(thingConfig)}`,
     .join('\n');
 
   const thingQueryTypes = thingConfigs
-    .filter(({ isEmbedded }) => !isEmbedded)
+    .filter(({ embedded }) => !embedded)
     .map(
       thingConfig => `${createThingQueryType(thingConfig)}
 ${createThingsQueryType(thingConfig)}`,
@@ -50,7 +50,7 @@ ${createThingsQueryType(thingConfig)}`,
     .join('\n');
 
   const thingMutationTypes = thingConfigs
-    .filter(({ isEmbedded }) => !isEmbedded)
+    .filter(({ embedded }) => !embedded)
     .map(
       thingConfig => `${createCreateThingMutationType(thingConfig)}
 ${createUpdateThingMutationType(thingConfig)}

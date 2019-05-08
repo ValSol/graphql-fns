@@ -96,7 +96,7 @@ describe('createThingType', () => {
   test('should create thing type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',
@@ -162,7 +162,7 @@ describe('createThingType', () => {
   test('should create embeded thing type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',

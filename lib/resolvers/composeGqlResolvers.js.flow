@@ -16,7 +16,7 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
   const resolvers = { DateTime, Query: {}, Mutation: {} /* Subscription: {} */ };
 
   thingConfigs
-    .filter(({ isEmbedded }) => !isEmbedded)
+    .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
 

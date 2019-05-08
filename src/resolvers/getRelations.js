@@ -7,8 +7,8 @@ const getRelations = (thingConfig: ThingConfig, thingConfigs: Array<ThingConfig>
   const result = new Map();
 
   thingConfigs.forEach(currentThingConfig => {
-    const { relationalFields, isEmbedded } = currentThingConfig;
-    if (relationalFields && !isEmbedded) {
+    const { relationalFields, embedded } = currentThingConfig;
+    if (relationalFields && !embedded) {
       const fields = relationalFields
         .filter(({ config }) => config === thingConfig)
         .map(({ name, array }) => ({ name, array }));

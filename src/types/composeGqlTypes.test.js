@@ -464,7 +464,7 @@ type Mutation {
   test('should create things types for regular and embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      isEmbedded: true,
+      embedded: true,
       textFields: [
         {
           name: 'country',
