@@ -7,6 +7,8 @@ const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
 
   const scalarFieldTypes = [
     { fieldTypeName: 'textFields', gqlType: 'ID' },
+    { fieldTypeName: 'intFields', gqlType: 'Int' },
+    { fieldTypeName: 'floatFields', gqlType: 'Float' },
     { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
   ];
 

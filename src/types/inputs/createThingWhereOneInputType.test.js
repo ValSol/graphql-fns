@@ -33,11 +33,32 @@ describe('createThingWhereOneInputType', () => {
           name: 'firstName',
         },
       ],
+      intFields: [
+        {
+          name: 'perosonaNum',
+          unique: true,
+        },
+      ],
+      floatFields: [
+        {
+          name: 'perosonaNumber',
+          unique: true,
+        },
+      ],
+      dateTimeFields: [
+        {
+          name: 'birthday',
+          unique: true,
+        },
+      ],
     };
     const expectedResult = `input ExampleWhereOneInput {
   id: ID
   email: ID
   userId: ID
+  perosonaNum: Int
+  perosonaNumber: Float
+  birthday: DateTime
 }`;
 
     const result = createThingWhereOneInputType(thingConfig);
