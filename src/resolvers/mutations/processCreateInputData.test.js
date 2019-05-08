@@ -13,7 +13,7 @@ const mongooseTypes = {
 };
 
 describe('processCreateInputData', () => {
-  test('should create object with simple fields', () => {
+  test('should create object with scalar fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Thing',
       textFields: [
@@ -24,10 +24,36 @@ describe('processCreateInputData', () => {
           name: 'textField2',
         },
       ],
+      intFields: [
+        {
+          name: 'intField1',
+        },
+        {
+          name: 'intField2',
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField1',
+        },
+        {
+          name: 'floatField2',
+        },
+      ],
+      booleanFields: [
+        {
+          name: 'booleanField1',
+        },
+      ],
     };
     const data = {
       textField1: 'textField1-Value',
       textField2: 'textField2-Value',
+      intField1: 0,
+      intField2: 55,
+      floatField1: 0.0,
+      floatField2: 5.5,
+      booleanField1: false,
     };
 
     const core = new Map();
@@ -35,8 +61,13 @@ describe('processCreateInputData', () => {
       insertOne: {
         document: {
           _id: '1',
+          intField1: 0,
+          intField2: 55,
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
+          floatField1: 0.0,
+          floatField2: 5.5,
+          booleanField1: false,
         },
       },
     };
@@ -50,8 +81,13 @@ describe('processCreateInputData', () => {
       single,
       first: {
         _id: '1',
+        intField1: 0,
+        intField2: 55,
+        floatField1: 0.0,
+        floatField2: 5.5,
         textField1: 'textField1-Value',
         textField2: 'textField2-Value',
+        booleanField1: false,
       },
     };
     const result = processCreateInputData(data, thingConfig, mongooseTypes);

@@ -25,6 +25,7 @@ const processCreateInputData = (
 
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
     const {
+      booleanFields,
       duplexFields,
       embeddedFields,
       enumFields,
@@ -78,13 +79,21 @@ const processCreateInputData = (
 
     const scalarFieldsArray = ['_id'];
 
-    const scalarFieldTypes = ['textFields'];
+    const scalarFieldTypes = ['textFields', 'intFields', 'floatFields'];
     scalarFieldTypes.reduce((prev, fieldTypeName) => {
       if (thingConfig2[fieldTypeName]) {
         thingConfig2[fieldTypeName].forEach(({ name: name2 }) => prev.push(name2));
       }
       return prev;
     }, scalarFieldsArray);
+
+    // booleanFields process separately to prevent flowjs error
+    if (booleanFields) {
+      booleanFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
 
     // enumFields process separately to prevent flowjs error
     if (enumFields) {
