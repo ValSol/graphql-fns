@@ -5,6 +5,7 @@ import type { ThingConfig } from '../flowTypes';
 const createThingType = (thingConfig: ThingConfig): string => {
   const {
     embedded,
+    booleanFields,
     duplexFields,
     embeddedFields,
     enumFields,
@@ -25,6 +26,8 @@ const createThingType = (thingConfig: ThingConfig): string => {
 
   const scalarFieldTypes = [
     { fieldTypeName: 'textFields', gqlType: 'String' },
+    { fieldTypeName: 'intFields', gqlType: 'Int' },
+    { fieldTypeName: 'floatFields', gqlType: 'Float' },
     { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
   ];
 
@@ -40,6 +43,17 @@ const createThingType = (thingConfig: ThingConfig): string => {
     }
     return prev;
   }, thingTypeArray);
+
+  if (booleanFields) {
+    booleanFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
+  }
 
   if (enumFields) {
     enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
