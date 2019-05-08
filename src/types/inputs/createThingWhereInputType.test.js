@@ -142,4 +142,76 @@ input ExampleWhereInput {
     const result = createThingWhereInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing input type if there are int index fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+input ExampleWhereInput {
+  firstName: Int
+  lastName: Int
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type if there are int float fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+input ExampleWhereInput {
+  firstName: Float
+  lastName: Float
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type if there are boolean float fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `
+input ExampleWhereInput {
+  firstName: Boolean
+  lastName: Boolean
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
