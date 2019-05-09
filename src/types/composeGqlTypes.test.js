@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
 
 const composeGqlTypes = require('./composeGqlTypes');
 
@@ -726,4 +726,133 @@ type Mutation {
     const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create things types with inventory for only queries', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: null } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
+type Query {
+  Example(where: ExampleWhereOneInput!): Example
+  Examples: [Example!]!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only mutations', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: null } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleCreateInput {
+  textField: String
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}
+input ExampleUpdateInput {
+  textField: String
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
+type Mutation {
+  createExample(data: ExampleCreateInput!): Example!
+  updateExample(where: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  deleteExample(where: ExampleWhereOneInput!): Example
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  /*
+  test('should create things types with inventory for only queries', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: null } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleCreateInput {
+  textField: String
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}
+input ExampleUpdateInput {
+  textField: String
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
+type Query {
+  Example(where: ExampleWhereOneInput!): Example
+  Examples: [Example!]!
+}
+type Mutation {
+  createExample(data: ExampleCreateInput!): Example!
+  updateExample(where: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  deleteExample(where: ExampleWhereOneInput!): Example
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  }); */
 });

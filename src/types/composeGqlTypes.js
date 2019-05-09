@@ -2,6 +2,7 @@
 
 import type { GeneralConfig } from '../flowTypes';
 
+const checkInventory = require('../utils/checkInventory');
 const createThingType = require('./createThingType');
 const createThingCreateInputType = require('./inputs/createThingCreateInputType');
 const createThingPaginationInputType = require('./inputs/createThingPaginationInputType');
@@ -19,57 +20,73 @@ const composeEnumTypes = require('./specialized/composeEnumTypes');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs } = generalConfig;
+  const { thingConfigs, inventory } = generalConfig;
+
+  const allowQueries = checkInventory(['Query'], inventory);
+  const allowMutations = checkInventory(['Mutation'], inventory);
+
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
 
-  const thingInputTypes = thingConfigs
-    .map(
-      thingConfig => `${createThingCreateInputType(thingConfig)}
-${createThingUpdateInputType(thingConfig)}`,
-    )
-    .join('\n');
+  const thingInputTypes = allowMutations
+    ? thingConfigs
+        .map(
+          thingConfig => `${createThingCreateInputType(thingConfig)}
+${createThingUpdateInputType(thingConfig)}
+`,
+        )
+        .join('')
+    : '';
 
-  const thingInputTypes2 = thingConfigs
+  const thingInputTypes3 = thingConfigs
     .filter(({ embedded }) => !embedded)
     .map(
       thingConfig =>
-        `${createThingWhereOneInputType(thingConfig)}${createThingWhereInputType(
-          thingConfig,
-        )}${createThingSortInputType(thingConfig)}${createThingPaginationInputType(
-          thingConfig,
-        )}${createThingNearInputType(thingConfig)}`,
+        `${createThingWhereOneInputType(thingConfig)}${
+          allowQueries ? createThingWhereInputType(thingConfig) : ''
+        }${allowQueries ? createThingSortInputType(thingConfig) : ''}${
+          allowQueries ? createThingPaginationInputType(thingConfig) : ''
+        }${allowQueries ? createThingNearInputType(thingConfig) : ''}`,
     )
     .join('\n');
 
-  const thingQueryTypes = thingConfigs
-    .filter(({ embedded }) => !embedded)
-    .map(
-      thingConfig => `${createThingQueryType(thingConfig)}
+  const thingQueryTypes = allowQueries
+    ? thingConfigs
+        .filter(({ embedded }) => !embedded)
+        .map(
+          thingConfig => `${createThingQueryType(thingConfig)}
 ${createThingsQueryType(thingConfig)}`,
-    )
-    .join('\n');
+        )
+        .join('\n')
+    : '';
+  const thingQueryTypes2 = allowQueries
+    ? `
+type Query {
+${thingQueryTypes}
+}`
+    : '';
 
-  const thingMutationTypes = thingConfigs
-    .filter(({ embedded }) => !embedded)
-    .map(
-      thingConfig => `${createCreateThingMutationType(thingConfig)}
+  const thingMutationTypes = allowMutations
+    ? thingConfigs
+        .filter(({ embedded }) => !embedded)
+        .map(
+          thingConfig => `${createCreateThingMutationType(thingConfig)}
 ${createUpdateThingMutationType(thingConfig)}
 ${createDeleteThingMutationType(thingConfig)}`,
-    )
-    .join('\n');
+        )
+        .join('\n')
+    : '';
+  const thingMutationTypes2 = allowMutations
+    ? `
+type Mutation {
+${thingMutationTypes}
+}`
+    : '';
 
   const result = `scalar DateTime${composeEnumTypes(generalConfig)}${composeGeospatialTypes(
     generalConfig,
   )}
 ${thingTypes}
-${thingInputTypes}
-${thingInputTypes2}
-type Query {
-${thingQueryTypes}
-}
-type Mutation {
-${thingMutationTypes}
-}`;
+${thingInputTypes}${thingInputTypes3}${thingQueryTypes2}${thingMutationTypes2}`;
 
   return result;
 };

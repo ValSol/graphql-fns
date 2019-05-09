@@ -142,9 +142,9 @@ describe('createDeleteThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig, []);
+    const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person', personSchema);
-    const placeSchema = createThingSchema(placeConfig, []);
+    const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place', placeSchema);
 
     const createdFriend = await Person.findById(friendId);

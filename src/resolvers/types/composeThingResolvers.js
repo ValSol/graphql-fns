@@ -36,11 +36,11 @@ const composeThingResolvers = (
   if (duplexFields) {
     duplexFields.reduce((prev, { array, name, config }) => {
       if (array) {
-        const resolver = createThingArrayResolver(config, enums || []);
+        const resolver = createThingArrayResolver(config, enums);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       } else {
-        const resolver = createThingScalarResolver(config, enums || []);
+        const resolver = createThingScalarResolver(config, enums);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       }
