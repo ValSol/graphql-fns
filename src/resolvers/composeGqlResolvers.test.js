@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
 
 const composeGqlResolvers = require('./composeGqlResolvers');
 
@@ -40,6 +40,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
   });
+
   test('should create things types for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
@@ -86,6 +87,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deleteExample1).toBe('function');
     expect(typeof result.Mutation.deleteExample2).toBe('function');
   });
+
   test('should create things types for two things with relational things', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -153,7 +155,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.favoritePlace).toBe('function');
   });
 
-  test('should create things types for two things with re', () => {
+  test('should create things types for two things with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
       embedded: true,
@@ -365,5 +367,41 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Example.polygonField2).toBe('function');
     expect(typeof result.Example.polygonField3).toBe('function');
     expect(typeof result.Example.polygonField4).toBe('function');
+  });
+
+  test('should create things types for one thing with inventory for only queries', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: null } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const result = composeGqlResolvers(generalConfig);
+    expect(typeof result.Query.Example).toBe('function');
+    expect(result.Mutation).toBeUndefined();
+  });
+
+  test('should create things types for one thing with inventory for only mutations', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: null } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const result = composeGqlResolvers(generalConfig);
+    expect(result.Query).toBeUndefined();
+    expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.updateExample).toBe('function');
+    expect(typeof result.Mutation.deleteExample).toBe('function');
   });
 });
