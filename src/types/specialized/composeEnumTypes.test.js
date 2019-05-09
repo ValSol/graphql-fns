@@ -5,11 +5,19 @@ import type { Enums, GeneralConfig } from '../../flowTypes';
 const composeEnumTypes = require('./composeEnumTypes');
 
 describe('composeEnumTypes', () => {
-  test('should return empty string if there are not any enumerations', () => {
-    const enums: Enums = [];
+  test('should return empty string if enums undefined', () => {
     const generalConfig: GeneralConfig = {
       thingConfigs: [],
-      enums,
+    };
+    const expectedResult = '';
+
+    const result = composeEnumTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return empty string if there are not any enumerations', () => {
+    const generalConfig: GeneralConfig = {
+      thingConfigs: [],
     };
     const expectedResult = '';
 

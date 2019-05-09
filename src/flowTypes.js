@@ -136,7 +136,7 @@ export type Inventory = {
 
 export type GeneralConfig = {
   thingConfigs: Array<ThingConfig>,
-  enums: Enums,
+  enums?: Enums,
   inventory?: Inventory,
 };
 

@@ -37,8 +37,7 @@ describe('graphql schema', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -166,8 +165,7 @@ describe('graphql schema', () => {
       ],
     };
     const thingConfigs = [personConfig, addressConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -237,8 +235,7 @@ describe('graphql schema', () => {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({

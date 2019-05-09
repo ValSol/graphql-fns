@@ -17,7 +17,7 @@ beforeAll(async () => {
 });
 
 describe('createCreateThingMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -130,7 +130,7 @@ describe('createCreateThingMutationResolver', () => {
       textFields: [{ name: 'name' }],
       relationalFields: [{ name: 'capital', config: cityConfig }],
     };
-    const personConfig = { name: 'Person', textFields: [], relationalFields: [] };
+    const personConfig = {};
     Object.assign(personConfig, {
       name: 'Person2',
       textFields: [
@@ -230,7 +230,7 @@ describe('createCreateThingMutationResolver', () => {
 
     const { friend: friendId, friends: friendIds } = createdPerson2;
 
-    const personSchema = createThingSchema(personConfig, []);
+    const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person2', personSchema);
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data2.friend.create.firstName);
@@ -369,9 +369,9 @@ describe('createCreateThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig, []);
+    const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person3', personSchema);
-    const placeSchema = createThingSchema(placeConfig, []);
+    const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place2', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
@@ -550,9 +550,9 @@ describe('createCreateThingMutationResolver', () => {
 
     const { friend: friendId, _id, location: locationId, locations: locationIds } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig, []);
+    const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person4', personSchema);
-    const placeSchema = createThingSchema(placeConfig, []);
+    const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place3', placeSchema);
 
     const createdFriend = await Person.findById(friendId);

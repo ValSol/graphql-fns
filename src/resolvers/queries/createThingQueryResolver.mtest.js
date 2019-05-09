@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 
 describe('createThingQueryResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create query thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',

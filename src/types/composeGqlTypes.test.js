@@ -221,7 +221,7 @@ type Mutation {
       ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 type GeospatialPoint {
   longitude: Float!
@@ -379,7 +379,7 @@ type Mutation {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!
@@ -512,7 +512,7 @@ type Mutation {
       ],
     };
     const thingConfigs = [personConfig, addressConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!
@@ -639,7 +639,7 @@ type Mutation {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 type Person {
   id: ID!

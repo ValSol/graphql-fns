@@ -10,7 +10,7 @@ describe('composeGeospatialTypes', () => {
       name: 'Example',
     };
     const thingConfigs = [thingConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = '';
 
     const result = composeGeospatialTypes(generalConfig);
@@ -27,7 +27,7 @@ describe('composeGeospatialTypes', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `
 type GeospatialPoint {
   longitude: Float!
@@ -53,7 +53,7 @@ input GeospatialPointInput {
       ],
     };
     const thingConfigs = [thingConfig];
-    const generalConfig: GeneralConfig = { thingConfigs, enums: [] };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `
 type GeospatialPoint {
   longitude: Float!

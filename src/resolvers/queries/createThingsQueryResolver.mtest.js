@@ -21,7 +21,7 @@ beforeAll(async () => {
 });
 
 describe('createThingQueryResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {

@@ -19,7 +19,7 @@ beforeAll(async () => {
 });
 
 describe('createUpdateThingMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [], enums: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -143,9 +143,9 @@ describe('createUpdateThingMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig, []);
+    const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person', personSchema);
-    const placeSchema = createThingSchema(placeConfig, []);
+    const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place', placeSchema);
 
     const createdFriend = await Person.findById(friendId);

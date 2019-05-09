@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { Enums, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
 
@@ -18,8 +18,7 @@ beforeAll(async () => {
 });
 
 describe('createThingScalarResolver', () => {
-  const enums: Enums = [];
-  const generalConfig: GeneralConfig = { thingConfigs: [], enums };
+  const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create type thing resolver', async () => {
     const placeConfig: ThingConfig = {};
     Object.assign(placeConfig, {
@@ -51,7 +50,7 @@ describe('createThingScalarResolver', () => {
     const createdPlace = await createPlace(null, { data }, { mongooseConn });
     const { id } = createdPlace;
 
-    const Place = createThingScalarResolver(placeConfig, enums);
+    const Place = createThingScalarResolver(placeConfig);
     const parent = { friend: id };
     const place = await Place(parent, null, { mongooseConn }, info);
 

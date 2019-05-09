@@ -8,7 +8,7 @@ const getProjectionFromInfo = require('../getProjectionFromInfo');
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
 
-const createThingScalarResolver = (thingConfig: ThingConfig, enums: Enums): Function => {
+const createThingArrayResolver = (thingConfig: ThingConfig, enums?: Enums = []): Function => {
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const { fieldName } = info;
 
@@ -37,4 +37,4 @@ const createThingScalarResolver = (thingConfig: ThingConfig, enums: Enums): Func
   return resolver;
 };
 
-module.exports = createThingScalarResolver;
+module.exports = createThingArrayResolver;

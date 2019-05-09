@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { Enums, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../flowTypes';
 
 const composeGqlResolvers = require('./composeGqlResolvers');
 
@@ -33,8 +33,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [thingConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
@@ -74,8 +73,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [thingConfig1, thingConfig2];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -135,8 +133,7 @@ describe('composeGqlResolvers', () => {
       ],
     });
     const thingConfigs = [personConfig, placeConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -207,8 +204,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = [personConfig, addressConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -282,8 +278,7 @@ describe('composeGqlResolvers', () => {
     });
 
     const thingConfigs = [personConfig, placeConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -353,8 +348,7 @@ describe('composeGqlResolvers', () => {
     };
 
     const thingConfigs = [thingConfig];
-    const enums: Enums = [];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
