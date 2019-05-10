@@ -16,6 +16,10 @@ const createThingsQueryType = require('./queries/createThingsQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 const createUpdateThingMutationType = require('./mutations/createUpdateThingMutationType');
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
+const createThingSubscriptionType = require('./subscriptions/createThingSubscriptionType');
+const createThingSubscriptionPayloadType = require('./subscriptions/createThingSubscriptionPayloadType');
+const composeSubscriptionMutationEnumerations = require('./subscriptions/composeSubscriptionMutationEnumerations');
+
 const composeEnumTypes = require('./specialized/composeEnumTypes');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
 
@@ -24,6 +28,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
+  const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
 
@@ -117,10 +122,53 @@ ${thingMutationTypes}
 }`
     : '';
 
+  const thingSubscriptionPayloadTypes = allowSubscriptions
+    ? thingConfigs
+        .filter(({ embedded }) => !embedded)
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (
+            checkInventory(['Subscription', 'thingSubscription', name], inventory) &&
+            (checkInventory(['Mutation', 'createThing', name], inventory) ||
+              checkInventory(['Mutation', 'updateThing', name], inventory) ||
+              checkInventory(['Mutation', 'deleteThing', name], inventory))
+          ) {
+            prev.push(createThingSubscriptionPayloadType(thingConfig));
+          }
+          return prev;
+        }, [])
+        .join('\n')
+    : '';
+
+  const thingSubscriptionTypes = allowSubscriptions
+    ? thingConfigs
+        .filter(({ embedded }) => !embedded)
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (
+            checkInventory(['Subscription', 'thingSubscription', name], inventory) &&
+            (checkInventory(['Mutation', 'createThing', name], inventory) ||
+              checkInventory(['Mutation', 'updateThing', name], inventory) ||
+              checkInventory(['Mutation', 'deleteThing', name], inventory))
+          ) {
+            prev.push(createThingSubscriptionType(thingConfig));
+          }
+          return prev;
+        }, [])
+        .join('\n')
+    : '';
+  const thingSubscriptionTypes2 = allowSubscriptions
+    ? `type Subscription {
+${thingSubscriptionTypes}
+}`
+    : '';
   const resultArray = ['scalar DateTime'];
 
   const enumTypes = composeEnumTypes(generalConfig);
   if (enumTypes) resultArray.push(enumTypes);
+
+  const subscriptionMutationEnumerations = composeSubscriptionMutationEnumerations(generalConfig);
+  if (subscriptionMutationEnumerations) resultArray.push(subscriptionMutationEnumerations);
 
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);
@@ -129,8 +177,10 @@ ${thingMutationTypes}
 
   if (thingInputTypes) resultArray.push(thingInputTypes);
   if (thingInputTypes2) resultArray.push(thingInputTypes2);
+  if (thingSubscriptionPayloadTypes) resultArray.push(thingSubscriptionPayloadTypes);
   if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
   if (thingMutationTypes2) resultArray.push(thingMutationTypes2);
+  if (thingSubscriptionTypes2) resultArray.push(thingSubscriptionTypes2);
 
   return resultArray.join('\n');
 };
