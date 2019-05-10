@@ -6,8 +6,7 @@ const createThingPaginationInputType = (thingConfig: ThingConfig): string => {
   const { name, pagination } = thingConfig;
 
   if (pagination) {
-    return `
-input ${name}PaginationInput {
+    return `input ${name}PaginationInput {
   skip: Int
   first: Int
 }`;

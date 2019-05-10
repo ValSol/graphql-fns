@@ -37,8 +37,7 @@ describe('createThingWhereInputType', () => {
         },
       ],
     };
-    const expectedResult = `
-input ExampleWhereInput {
+    const expectedResult = `input ExampleWhereInput {
   firstName: String
   lastName: String
 }`;
@@ -65,8 +64,7 @@ input ExampleWhereInput {
         },
       ],
     });
-    const expectedResult = `
-input PersonWhereInput {
+    const expectedResult = `input PersonWhereInput {
   spouse: ID
   friends: ID
 }`;
@@ -95,8 +93,7 @@ input PersonWhereInput {
         },
       ],
     });
-    const expectedResult = `
-input PersonWhereInput {
+    const expectedResult = `input PersonWhereInput {
   spouse: ID
   friends: ID
 }`;
@@ -133,8 +130,7 @@ input PersonWhereInput {
         },
       ],
     };
-    const expectedResult = `
-input ExampleWhereInput {
+    const expectedResult = `input ExampleWhereInput {
   field1: WeekdaysEnumeration
   field4: CuisinesEnumeration
 }`;
@@ -157,8 +153,7 @@ input ExampleWhereInput {
         },
       ],
     };
-    const expectedResult = `
-input ExampleWhereInput {
+    const expectedResult = `input ExampleWhereInput {
   firstName: Int
   lastName: Int
 }`;
@@ -181,8 +176,7 @@ input ExampleWhereInput {
         },
       ],
     };
-    const expectedResult = `
-input ExampleWhereInput {
+    const expectedResult = `input ExampleWhereInput {
   firstName: Float
   lastName: Float
 }`;
@@ -205,8 +199,7 @@ input ExampleWhereInput {
         },
       ],
     };
-    const expectedResult = `
-input ExampleWhereInput {
+    const expectedResult = `input ExampleWhereInput {
   firstName: Boolean
   lastName: Boolean
 }`;

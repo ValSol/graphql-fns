@@ -36,8 +36,7 @@ describe('composeEnumTypes', () => {
       thingConfigs: [],
       enums,
     };
-    const expectedResult = `
-enum Enumeration1Enumeration {
+    const expectedResult = `enum Enumeration1Enumeration {
   key1_1
   key1_2
   key1_3

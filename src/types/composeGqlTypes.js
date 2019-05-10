@@ -29,38 +29,64 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const thingInputTypes = allowMutations
     ? thingConfigs
-        .map(
-          thingConfig => `${createThingCreateInputType(thingConfig)}
-${createThingUpdateInputType(thingConfig)}
-`,
-        )
-        .join('')
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
+            const thingCreateInputType = createThingCreateInputType(thingConfig);
+            prev.push(thingCreateInputType);
+          }
+          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
+            const thingUpdateInputType = createThingUpdateInputType(thingConfig);
+            prev.push(thingUpdateInputType);
+          }
+          return prev;
+        }, [])
+        .join('\n')
     : '';
 
-  const thingInputTypes3 = thingConfigs
+  const thingInputTypes2 = thingConfigs
     .filter(({ embedded }) => !embedded)
-    .map(
-      thingConfig =>
-        `${createThingWhereOneInputType(thingConfig)}${
-          allowQueries ? createThingWhereInputType(thingConfig) : ''
-        }${allowQueries ? createThingSortInputType(thingConfig) : ''}${
-          allowQueries ? createThingPaginationInputType(thingConfig) : ''
-        }${allowQueries ? createThingNearInputType(thingConfig) : ''}`,
-    )
+    .reduce((prev, thingConfig) => {
+      const { name } = thingConfig;
+      if (
+        checkInventory(['Query', 'thing', name], inventory) ||
+        checkInventory(['Mutation', 'updateThing', name], inventory) ||
+        checkInventory(['Mutation', 'deleteThing', name], inventory)
+      ) {
+        const thingWhereOneInputType = createThingWhereOneInputType(thingConfig);
+        prev.push(thingWhereOneInputType);
+      }
+      if (checkInventory(['Query', 'things', name], inventory)) {
+        const thingWhereInputType = createThingWhereInputType(thingConfig);
+        if (thingWhereInputType) prev.push(thingWhereInputType);
+        const thingSortInputType = createThingSortInputType(thingConfig);
+        if (thingSortInputType) prev.push(thingSortInputType);
+        const thingPaginationInputType = createThingPaginationInputType(thingConfig);
+        if (thingPaginationInputType) prev.push(thingPaginationInputType);
+        const thingNearInputType = createThingNearInputType(thingConfig);
+        if (thingNearInputType) prev.push(thingNearInputType);
+      }
+      return prev;
+    }, [])
     .join('\n');
 
   const thingQueryTypes = allowQueries
     ? thingConfigs
         .filter(({ embedded }) => !embedded)
-        .map(
-          thingConfig => `${createThingQueryType(thingConfig)}
-${createThingsQueryType(thingConfig)}`,
-        )
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (checkInventory(['Query', 'thing', name], inventory)) {
+            prev.push(createThingQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'things', name], inventory)) {
+            prev.push(createThingsQueryType(thingConfig));
+          }
+          return prev;
+        }, [])
         .join('\n')
     : '';
   const thingQueryTypes2 = allowQueries
-    ? `
-type Query {
+    ? `type Query {
 ${thingQueryTypes}
 }`
     : '';
@@ -68,27 +94,43 @@ ${thingQueryTypes}
   const thingMutationTypes = allowMutations
     ? thingConfigs
         .filter(({ embedded }) => !embedded)
-        .map(
-          thingConfig => `${createCreateThingMutationType(thingConfig)}
-${createUpdateThingMutationType(thingConfig)}
-${createDeleteThingMutationType(thingConfig)}`,
-        )
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
+            prev.push(createCreateThingMutationType(thingConfig));
+          }
+          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
+            prev.push(createUpdateThingMutationType(thingConfig));
+          }
+          if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
+            prev.push(createDeleteThingMutationType(thingConfig));
+          }
+          return prev;
+        }, [])
         .join('\n')
     : '';
   const thingMutationTypes2 = allowMutations
-    ? `
-type Mutation {
+    ? `type Mutation {
 ${thingMutationTypes}
 }`
     : '';
 
-  const result = `scalar DateTime${composeEnumTypes(generalConfig)}${composeGeospatialTypes(
-    generalConfig,
-  )}
-${thingTypes}
-${thingInputTypes}${thingInputTypes3}${thingQueryTypes2}${thingMutationTypes2}`;
+  const resultArray = ['scalar DateTime'];
 
-  return result;
+  const enumTypes = composeEnumTypes(generalConfig);
+  if (enumTypes) resultArray.push(enumTypes);
+
+  const geospatialTypes = composeGeospatialTypes(generalConfig);
+  if (geospatialTypes) resultArray.push(geospatialTypes);
+
+  resultArray.push(thingTypes);
+
+  if (thingInputTypes) resultArray.push(thingInputTypes);
+  if (thingInputTypes2) resultArray.push(thingInputTypes2);
+  if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
+  if (thingMutationTypes2) resultArray.push(thingMutationTypes2);
+
+  return resultArray.join('\n');
 };
 
 module.exports = composeGqlTypes;

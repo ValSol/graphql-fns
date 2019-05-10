@@ -37,8 +37,7 @@ describe('createThingSortInputType', () => {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnumeration {
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -74,8 +73,7 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnumeration {
   firstCuisine_ASC
   firstCuisine_DESC
   secondCuisine_ASC
@@ -103,8 +101,7 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnumeration {
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -132,8 +129,7 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnumeration {
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -161,8 +157,7 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnumeration {
   firstName_ASC
   firstName_DESC
   lastName_ASC

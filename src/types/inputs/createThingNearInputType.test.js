@@ -42,8 +42,7 @@ describe('createThingNearInputType', () => {
         },
       ],
     };
-    const expectedResult = `
-enum ExampleGeospatialFieldNamesEnumeration {
+    const expectedResult = `enum ExampleGeospatialFieldNamesEnumeration {
   position
 }
 input ExampleNearInput {

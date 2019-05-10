@@ -805,6 +805,137 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create things types with inventory for only things query', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { things: null } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type Query {
+  Examples: [Example!]!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only things query for Example config', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { things: ['Example'] } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type Query {
+  Examples: [Example!]!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only create mutations', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: { createThing: null } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleCreateInput {
+  textField: String
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}
+type Mutation {
+  createExample(data: ExampleCreateInput!): Example!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only mutations', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: { createThing: ['Example'] } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleCreateInput {
+  textField: String
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}
+type Mutation {
+  createExample(data: ExampleCreateInput!): Example!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
   /*
   test('should create things types with inventory for only queries', () => {
     const thingConfig: ThingConfig = {

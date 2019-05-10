@@ -20,8 +20,7 @@ describe('createThingPaginationInputType', () => {
       name: 'Example',
       pagination: true,
     };
-    const expectedResult = `
-input ExamplePaginationInput {
+    const expectedResult = `input ExamplePaginationInput {
   skip: Int
   first: Int
 }`;

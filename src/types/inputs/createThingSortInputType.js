@@ -42,8 +42,7 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
 
   if (!fieldLines.length) return '';
 
-  return `
-enum ${name}SortEnumeration {
+  return `enum ${name}SortEnumeration {
 ${fieldLines.join('\n')}
 }
 input ${name}SortInput {

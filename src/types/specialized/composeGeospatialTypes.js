@@ -20,8 +20,7 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   }
 
   if (thereIsGeospatialPolygon) {
-    return `
-type GeospatialPoint {
+    return `type GeospatialPoint {
   longitude: Float!
   latitude: Float!
 }
@@ -46,8 +45,7 @@ input GeospatialPolygonInput {
   }
 
   if (thereIsGeospatialPoint) {
-    return `
-type GeospatialPoint {
+    return `type GeospatialPoint {
   longitude: Float!
   latitude: Float!
 }
