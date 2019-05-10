@@ -175,7 +175,7 @@ describe('graphql schema', () => {
     expect(schema).not.toBeUndefined();
   });
 
-  test('test schema with duplicate fields', () => {
+  test('test schema with duplex fields', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -243,5 +243,139 @@ describe('graphql schema', () => {
       resolvers,
     });
     expect(schema).not.toBeUndefined();
+  });
+
+  describe('test schemas with differnet variants of inventory', () => {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'friends',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'enemies',
+          oppositeName: 'enemies',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          oppositeName: 'visitors',
+          config: placeConfig,
+        },
+      ],
+    });
+    const thingConfigs = [personConfig, placeConfig];
+    const generalConfig: GeneralConfig = { thingConfigs };
+    generalConfig.inventory = { include: { Mutation: null } };
+    let typeDefs = composeGqlTypes(generalConfig);
+    let resolvers = composeGqlResolvers(generalConfig);
+    let schema = makeExecutableSchema({
+      typeDefs,
+      resolvers,
+    });
+
+    test('test schema with only mutations in inventory', () => {
+      expect(schema).not.toBeUndefined();
+    });
+
+    test('test schema with only createThing mutations in inventory', () => {
+      generalConfig.inventory = { include: { Mutation: { createThing: null } } };
+
+      typeDefs = composeGqlTypes(generalConfig);
+      resolvers = composeGqlResolvers(generalConfig);
+      schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+      expect(schema).not.toBeUndefined();
+    });
+
+    test('test schema with only createPerson mutations in inventory', () => {
+      generalConfig.inventory = { include: { Mutation: { createThing: ['Person'] } } };
+
+      typeDefs = composeGqlTypes(generalConfig);
+      resolvers = composeGqlResolvers(generalConfig);
+      schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+      expect(schema).not.toBeUndefined();
+    });
+
+    test('test schema with only quries in inventory', () => {
+      generalConfig.inventory = { include: { Query: null } };
+
+      typeDefs = composeGqlTypes(generalConfig);
+      resolvers = composeGqlResolvers(generalConfig);
+      schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+      expect(schema).not.toBeUndefined();
+    });
+
+    test('test schema with only thing query in inventory', () => {
+      generalConfig.inventory = { include: { Query: { thing: null } } };
+
+      typeDefs = composeGqlTypes(generalConfig);
+      resolvers = composeGqlResolvers(generalConfig);
+      schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+      expect(schema).not.toBeUndefined();
+    });
+
+    test('test schema with only Person query in inventory', () => {
+      generalConfig.inventory = { include: { Query: { thing: ['Person'] } } };
+
+      typeDefs = composeGqlTypes(generalConfig);
+      resolvers = composeGqlResolvers(generalConfig);
+      schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+      expect(schema).not.toBeUndefined();
+    });
   });
 });

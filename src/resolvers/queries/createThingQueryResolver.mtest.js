@@ -50,6 +50,8 @@ describe('createThingQueryResolver', () => {
 
     const createExample = createCreateThingMutationResolver(thingConfig, generalConfig);
     expect(typeof createExample).toBe('function');
+    if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const data = {
       textField1: 'textField1',
       textField2: 'textField2',
@@ -61,6 +63,7 @@ describe('createThingQueryResolver', () => {
     const { id } = createdExample;
 
     const Example = createThingQueryResolver(thingConfig, generalConfig);
+    if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where = { id };
     const example = await Example(null, { where }, { mongooseConn }, info);

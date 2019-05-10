@@ -31,7 +31,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     ? thingConfigs
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
-          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
+          // use ['Mutation', 'createThing'] not ['Mutation', 'updateThing', name] ...
+          // ... to let creation of children things of other types
+          if (checkInventory(['Mutation', 'createThing'], inventory)) {
             const thingCreateInputType = createThingCreateInputType(thingConfig);
             prev.push(thingCreateInputType);
           }

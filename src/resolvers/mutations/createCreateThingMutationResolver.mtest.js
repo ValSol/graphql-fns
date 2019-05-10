@@ -48,6 +48,8 @@ describe('createCreateThingMutationResolver', () => {
 
     const createExample = createCreateThingMutationResolver(thingConfig, generalConfig);
     expect(typeof createExample).toBe('function');
+    if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const data = {
       textField1: 'textField1',
       textField2: 'textField2',
@@ -95,6 +97,8 @@ describe('createCreateThingMutationResolver', () => {
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const data = {
       firstName: 'Ivan',
       lastName: 'Fedorov',
@@ -167,6 +171,8 @@ describe('createCreateThingMutationResolver', () => {
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const data = {
       firstName: 'Ivan',
       lastName: 'Fedorov',
@@ -314,6 +320,7 @@ describe('createCreateThingMutationResolver', () => {
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       firstName: 'Hugo',
@@ -510,6 +517,7 @@ describe('createCreateThingMutationResolver', () => {
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       firstName: 'Hugo',

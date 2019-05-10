@@ -86,8 +86,8 @@ describe('createUpdateThingMutationResolver', () => {
     });
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
-
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       firstName: 'Hugo',
@@ -262,6 +262,8 @@ describe('createUpdateThingMutationResolver', () => {
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
     const updatePerson = createUpdateThingMutationResolver(personConfig, generalConfig);
+    if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const where = { id };
     const dataForUpdate = {
       firstName: 'Vasya',
@@ -339,6 +341,8 @@ describe('createUpdateThingMutationResolver', () => {
     expect(updatedFavorities2[1].visitors[1]).toEqual(id);
 
     const updatePlace = createUpdateThingMutationResolver(placeConfig, generalConfig);
+    if (!updatePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const where2 = { name: data.location.create.name };
     const dataForUpdate2 = { name: 'Mexico' };
     const updatedPlace = await updatePlace(

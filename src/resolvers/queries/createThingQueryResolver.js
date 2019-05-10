@@ -2,6 +2,7 @@
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
+const checkInventory = require('../../utils/checkInventory');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 
@@ -11,15 +12,17 @@ type Context = { mongooseConn: Object };
 const createThingQueryResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
-): Function => {
-  const { enums } = generalConfig;
+): Function | null => {
+  const { enums, inventory } = generalConfig;
+  const { name } = thingConfig;
+  if (!checkInventory(['Query', 'thing', name], inventory)) return null;
+
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
     const { where } = args;
 
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig, enums);
-    const { name } = thingConfig;
 
     const Thing = mongooseConn.model(name, thingSchema);
 

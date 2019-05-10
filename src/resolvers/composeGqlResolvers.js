@@ -34,11 +34,11 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
       if (allowQueries) {
         const thingQueryResolver = createThingQueryResolver(thingConfig, generalConfig);
         // eslint-disable-next-line no-param-reassign
-        prev.Query[name] = thingQueryResolver;
+        if (thingQueryResolver) prev.Query[name] = thingQueryResolver;
 
         const thingsQueryResolver = createThingsQueryResolver(thingConfig, generalConfig);
         // eslint-disable-next-line no-param-reassign
-        prev.Query[pluralize(name)] = thingsQueryResolver;
+        if (thingsQueryResolver) prev.Query[pluralize(name)] = thingsQueryResolver;
       }
 
       if (allowMutations) {
@@ -46,22 +46,28 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
           thingConfig,
           generalConfig,
         );
-        // eslint-disable-next-line no-param-reassign
-        prev.Mutation[`create${name}`] = createThingMutationResolver;
+        if (createThingMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`create${name}`] = createThingMutationResolver;
+        }
 
         const updateThingMutationResolver = createUpdateThingMutationResolver(
           thingConfig,
           generalConfig,
         );
-        // eslint-disable-next-line no-param-reassign
-        prev.Mutation[`update${name}`] = updateThingMutationResolver;
+        if (updateThingMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`update${name}`] = updateThingMutationResolver;
+        }
 
         const deleteThingMutationResolver = createDeleteThingMutationResolver(
           thingConfig,
           generalConfig,
         );
-        // eslint-disable-next-line no-param-reassign
-        prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
+        if (deleteThingMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
+        }
       }
 
       return prev;

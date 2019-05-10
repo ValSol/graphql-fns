@@ -44,6 +44,8 @@ describe('createThingScalarResolver', () => {
 
     const createPlace = createCreateThingMutationResolver(placeConfig, generalConfig);
     expect(typeof createPlace).toBe('function');
+    if (!createPlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const data = {
       title: 'Paris',
     };

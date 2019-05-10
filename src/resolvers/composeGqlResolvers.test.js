@@ -383,6 +383,7 @@ describe('composeGqlResolvers', () => {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.Example).toBe('function');
+    expect(typeof result.Query.Examples).toBe('function');
     expect(result.Mutation).toBeUndefined();
   });
 
@@ -403,5 +404,42 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
+  });
+
+  test('should create things types for one thing with inventory for only thing queries', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { thing: null } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const result = composeGqlResolvers(generalConfig);
+    expect(typeof result.Query.Example).toBe('function');
+    expect(result.Query.Examples).toBeUndefined();
+    expect(result.Mutation).toBeUndefined();
+  });
+
+  test('should create things types for one thing with inventory for only mutations', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: { createThing: null } } };
+    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const result = composeGqlResolvers(generalConfig);
+    expect(result.Query).toBeUndefined();
+    expect(typeof result.Mutation.createExample).toBe('function');
+    expect(result.Mutation.updateExample).toBeUndefined();
+    expect(result.Mutation.deleteExample).toBeUndefined();
   });
 });

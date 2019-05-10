@@ -58,6 +58,7 @@ describe('createThingQueryResolver', () => {
 
     const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
     expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       firstName: 'Hugo',
@@ -81,6 +82,7 @@ describe('createThingQueryResolver', () => {
     const createdPerson = await createPerson(null, { data }, { mongooseConn });
 
     const People = createThingsQueryResolver(personConfig, generalConfig);
+    if (!People) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const people = await People(null, {}, { mongooseConn }, info);
 
@@ -139,6 +141,7 @@ describe('createThingQueryResolver', () => {
 
     const createRestaurant = createCreateThingMutationResolver(restaurantConfig, generalConfig);
     expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       name: 'Murakami',
@@ -187,6 +190,7 @@ describe('createThingQueryResolver', () => {
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn });
 
     const Restaurants = createThingsQueryResolver(restaurantConfig, generalConfig);
+    if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const restaurants = await Restaurants(null, {}, { mongooseConn }, info);
 
@@ -243,6 +247,7 @@ describe('createThingQueryResolver', () => {
 
     const createTable = createCreateThingMutationResolver(tableConfig, generalConfig);
     expect(typeof createTable).toBe('function');
+    if (!createTable) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
       items: {
@@ -290,6 +295,7 @@ describe('createThingQueryResolver', () => {
     await createTable(null, { data }, { mongooseConn });
 
     const Items = createThingsQueryResolver(tableItemConfig, generalConfig);
+    if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const items = await Items(null, {}, { mongooseConn }, infoForSort);
 
