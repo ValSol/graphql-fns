@@ -11,7 +11,7 @@ const createThingSubscriptionType = (thingConfig: ThingConfig): string => {
   const thingWhereInputType = createThingWhereInputType(thingConfig);
   if (thingWhereInputType) subscriptionArgs.push(`where: ${name}WhereInput`);
 
-  subscriptionArgs.push(`mutation_in: [${name}SubscriptionMutationEnum!]`);
+  subscriptionArgs.push(`mutation_in: [${name}SubscriptionMutationEnumeration!]!`);
 
   const result = `  ${name}Subscription(${subscriptionArgs.join(
     ', ',
