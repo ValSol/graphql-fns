@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 const createThingQueryType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  const result = `  ${name}(where: ${name}WhereOneInput!): ${name}`;
+  const result = `  ${name}(whereOne: ${name}WhereOneInput!): ${name}`;
 
   return result;
 };
