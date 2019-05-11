@@ -81,11 +81,6 @@ enum CuisinesEnumeration {
   japanese
   chinese
 }
-enum ExampleSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
 type GeospatialPoint {
   longitude: Float!
   latitude: Float!
@@ -179,7 +174,6 @@ enum ExampleFieldNamesEnumeration {
   position
 }
 type ExampleSubscriptionPayload {
-  mutation: ExampleSubscriptionMutationEnumeration!
   node: Example
   previousNode: Example
   updatedFields: [ExampleFieldNamesEnumeration!]
@@ -194,7 +188,7 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
 type Subscription {
-  ExampleSubscription(whereOne: ExampleWhereOneInput, where: ExampleWhereInput, mutation_in: [ExampleSubscriptionMutationEnumeration!]!): ExampleSubscriptionPayload
+  ExampleSubscription(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): ExampleSubscriptionPayload
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -247,16 +241,6 @@ type Subscription {
     const thingConfigs = [thingConfig1, thingConfig2];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
-enum Example1SubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
-enum Example2SubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
 type GeospatialPoint {
   longitude: Float!
   latitude: Float!
@@ -355,7 +339,6 @@ enum Example1FieldNamesEnumeration {
   position
 }
 type Example1SubscriptionPayload {
-  mutation: Example1SubscriptionMutationEnumeration!
   node: Example1
   previousNode: Example1
   updatedFields: [Example1FieldNamesEnumeration!]
@@ -366,7 +349,6 @@ enum Example2FieldNamesEnumeration {
   area
 }
 type Example2SubscriptionPayload {
-  mutation: Example2SubscriptionMutationEnumeration!
   node: Example2
   previousNode: Example2
   updatedFields: [Example2FieldNamesEnumeration!]
@@ -386,8 +368,8 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
-  Example1Subscription(whereOne: Example1WhereOneInput, mutation_in: [Example1SubscriptionMutationEnumeration!]!): Example1SubscriptionPayload
-  Example2Subscription(whereOne: Example2WhereOneInput, mutation_in: [Example2SubscriptionMutationEnumeration!]!): Example2SubscriptionPayload
+  Example1Subscription(whereOne: Example1WhereOneInput): Example1SubscriptionPayload
+  Example2Subscription(whereOne: Example2WhereOneInput): Example2SubscriptionPayload
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -442,16 +424,6 @@ type Subscription {
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
-enum PersonSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
-enum PlaceSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -522,7 +494,6 @@ enum PersonFieldNamesEnumeration {
   favoritePlace
 }
 type PersonSubscriptionPayload {
-  mutation: PersonSubscriptionMutationEnumeration!
   node: Person
   previousNode: Person
   updatedFields: [PersonFieldNamesEnumeration!]
@@ -531,7 +502,6 @@ enum PlaceFieldNamesEnumeration {
   title
 }
 type PlaceSubscriptionPayload {
-  mutation: PlaceSubscriptionMutationEnumeration!
   node: Place
   previousNode: Place
   updatedFields: [PlaceFieldNamesEnumeration!]
@@ -551,8 +521,8 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  PersonSubscription(whereOne: PersonWhereOneInput, mutation_in: [PersonSubscriptionMutationEnumeration!]!): PersonSubscriptionPayload
-  PlaceSubscription(whereOne: PlaceWhereOneInput, mutation_in: [PlaceSubscriptionMutationEnumeration!]!): PlaceSubscriptionPayload
+  PersonSubscription(whereOne: PersonWhereOneInput): PersonSubscriptionPayload
+  PlaceSubscription(whereOne: PlaceWhereOneInput): PlaceSubscriptionPayload
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -612,16 +582,6 @@ type Subscription {
     const thingConfigs = [personConfig, addressConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
-enum PersonSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
-enum AddressSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -682,7 +642,6 @@ enum PersonFieldNamesEnumeration {
   places
 }
 type PersonSubscriptionPayload {
-  mutation: PersonSubscriptionMutationEnumeration!
   node: Person
   previousNode: Person
   updatedFields: [PersonFieldNamesEnumeration!]
@@ -697,7 +656,7 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
-  PersonSubscription(whereOne: PersonWhereOneInput, mutation_in: [PersonSubscriptionMutationEnumeration!]!): PersonSubscriptionPayload
+  PersonSubscription(whereOne: PersonWhereOneInput): PersonSubscriptionPayload
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -766,16 +725,6 @@ type Subscription {
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
-enum PersonSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
-enum PlaceSubscriptionMutationEnumeration {
-  CREATED
-  UPDATED
-  DELETED
-}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -852,7 +801,6 @@ enum PersonFieldNamesEnumeration {
   favoritePlace
 }
 type PersonSubscriptionPayload {
-  mutation: PersonSubscriptionMutationEnumeration!
   node: Person
   previousNode: Person
   updatedFields: [PersonFieldNamesEnumeration!]
@@ -863,7 +811,6 @@ enum PlaceFieldNamesEnumeration {
   visitors
 }
 type PlaceSubscriptionPayload {
-  mutation: PlaceSubscriptionMutationEnumeration!
   node: Place
   previousNode: Place
   updatedFields: [PlaceFieldNamesEnumeration!]
@@ -883,8 +830,8 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  PersonSubscription(whereOne: PersonWhereOneInput, mutation_in: [PersonSubscriptionMutationEnumeration!]!): PersonSubscriptionPayload
-  PlaceSubscription(whereOne: PlaceWhereOneInput, mutation_in: [PlaceSubscriptionMutationEnumeration!]!): PlaceSubscriptionPayload
+  PersonSubscription(whereOne: PersonWhereOneInput): PersonSubscriptionPayload
+  PlaceSubscription(whereOne: PlaceWhereOneInput): PlaceSubscriptionPayload
 }`;
 
     const result = composeGqlTypes(generalConfig);

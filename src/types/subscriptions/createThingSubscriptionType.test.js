@@ -18,7 +18,7 @@ describe('createThingSubscriptionType', () => {
       ],
     };
     const expectedResult =
-      '  ExampleSubscription(whereOne: ExampleWhereOneInput, mutation_in: [ExampleSubscriptionMutationEnumeration!]!): ExampleSubscriptionPayload';
+      '  ExampleSubscription(whereOne: ExampleWhereOneInput): ExampleSubscriptionPayload';
 
     const result = createThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -39,7 +39,7 @@ describe('createThingSubscriptionType', () => {
       ],
     };
     const expectedResult =
-      '  ExampleSubscription(whereOne: ExampleWhereOneInput, where: ExampleWhereInput, mutation_in: [ExampleSubscriptionMutationEnumeration!]!): ExampleSubscriptionPayload';
+      '  ExampleSubscription(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): ExampleSubscriptionPayload';
 
     const result = createThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);

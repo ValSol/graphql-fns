@@ -18,7 +18,6 @@ const createUpdateThingMutationType = require('./mutations/createUpdateThingMuta
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
 const createThingSubscriptionType = require('./subscriptions/createThingSubscriptionType');
 const createThingSubscriptionPayloadType = require('./subscriptions/createThingSubscriptionPayloadType');
-const composeSubscriptionMutationEnumerations = require('./subscriptions/composeSubscriptionMutationEnumerations');
 
 const composeEnumTypes = require('./specialized/composeEnumTypes');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
@@ -166,9 +165,6 @@ ${thingSubscriptionTypes}
 
   const enumTypes = composeEnumTypes(generalConfig);
   if (enumTypes) resultArray.push(enumTypes);
-
-  const subscriptionMutationEnumerations = composeSubscriptionMutationEnumerations(generalConfig);
-  if (subscriptionMutationEnumerations) resultArray.push(subscriptionMutationEnumerations);
 
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);

@@ -23,7 +23,6 @@ describe('createThingSubscriptionPayloadType', () => {
   lastName
 }
 type ExampleSubscriptionPayload {
-  mutation: ExampleSubscriptionMutationEnumeration!
   node: Example
   previousNode: Example
   updatedFields: [ExampleFieldNamesEnumeration!]
@@ -117,7 +116,6 @@ type ExampleSubscriptionPayload {
   relationalField
 }
 type ExampleSubscriptionPayload {
-  mutation: ExampleSubscriptionMutationEnumeration!
   node: Example
   previousNode: Example
   updatedFields: [ExampleFieldNamesEnumeration!]

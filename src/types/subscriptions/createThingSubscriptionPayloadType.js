@@ -66,7 +66,6 @@ const createThingSubscriptionPayloadType = (thingConfig: ThingConfig): string =>
 ${thingFieldsArray.join('\n')}
 }
 type ${name}SubscriptionPayload {
-  mutation: ${name}SubscriptionMutationEnumeration!
   node: ${name}
   previousNode: ${name}
   updatedFields: [${name}FieldNamesEnumeration!]
