@@ -3,7 +3,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = require('../inputs/createThingWhereInputType');
 
-const createThingSubscriptionType = (thingConfig: ThingConfig): string => {
+const createDeletedThingSubscriptionType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
   const subscriptionArgs = [`whereOne: ${name}WhereOneInput`];
@@ -11,11 +11,9 @@ const createThingSubscriptionType = (thingConfig: ThingConfig): string => {
   const thingWhereInputType = createThingWhereInputType(thingConfig);
   if (thingWhereInputType) subscriptionArgs.push(`where: ${name}WhereInput`);
 
-  const result = `  ${name}Subscription(${subscriptionArgs.join(
-    ', ',
-  )}): ${name}SubscriptionPayload`;
+  const result = `  deleted${name}(${subscriptionArgs.join(', ')}): ${name}!`;
 
   return result;
 };
 
-module.exports = createThingSubscriptionType;
+module.exports = createDeletedThingSubscriptionType;

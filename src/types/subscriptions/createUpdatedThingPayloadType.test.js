@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingSubscriptionPayloadType = require('./createThingSubscriptionPayloadType');
+const createUpdatedThingPayloadType = require('./createUpdatedThingPayloadType');
 
-describe('createThingSubscriptionPayloadType', () => {
+describe('createUpdatedThingPayloadType', () => {
   test('should create subscription payload type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -22,13 +22,13 @@ describe('createThingSubscriptionPayloadType', () => {
   firstName
   lastName
 }
-type ExampleSubscriptionPayload {
+type UpdatedExamplePayload {
   node: Example
   previousNode: Example
   updatedFields: [ExampleFieldNamesEnumeration!]
 }`;
 
-    const result = createThingSubscriptionPayloadType(thingConfig);
+    const result = createUpdatedThingPayloadType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -115,13 +115,13 @@ type ExampleSubscriptionPayload {
   geospatialField
   relationalField
 }
-type ExampleSubscriptionPayload {
+type UpdatedExamplePayload {
   node: Example
   previousNode: Example
   updatedFields: [ExampleFieldNamesEnumeration!]
 }`;
 
-    const result = createThingSubscriptionPayloadType(exampleConfig);
+    const result = createUpdatedThingPayloadType(exampleConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -28,7 +28,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
@@ -40,7 +40,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
@@ -68,7 +68,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
@@ -80,7 +80,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -112,7 +112,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
@@ -128,7 +128,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -160,7 +160,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
@@ -180,7 +180,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -208,7 +208,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
@@ -220,7 +220,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
@@ -252,7 +252,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
@@ -268,7 +268,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
@@ -300,7 +300,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription'];
+    inventoryСhain = ['Subscription', 'newThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
@@ -320,7 +320,7 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'thingSubscription', 'User'];
+    inventoryСhain = ['Subscription', 'newThing', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });

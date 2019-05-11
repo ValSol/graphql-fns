@@ -16,8 +16,10 @@ const createThingsQueryType = require('./queries/createThingsQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
 const createUpdateThingMutationType = require('./mutations/createUpdateThingMutationType');
 const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
-const createThingSubscriptionType = require('./subscriptions/createThingSubscriptionType');
-const createThingSubscriptionPayloadType = require('./subscriptions/createThingSubscriptionPayloadType');
+const createNewThingSubscriptionType = require('./subscriptions/createNewThingSubscriptionType');
+const createDeletedThingSubscriptionType = require('./subscriptions/createDeletedThingSubscriptionType');
+const createUpdatedThingSubscriptionType = require('./subscriptions/createUpdatedThingSubscriptionType');
+const createUpdatedThingPayloadType = require('./subscriptions/createUpdatedThingPayloadType');
 
 const composeEnumTypes = require('./specialized/composeEnumTypes');
 const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
@@ -27,7 +29,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
-  const allowSubscriptions = checkInventory(['Subscription'], inventory);
+  const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
   const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
 
@@ -121,18 +123,16 @@ ${thingMutationTypes}
 }`
     : '';
 
-  const thingSubscriptionPayloadTypes = allowSubscriptions
+  const updatedThingPayloadTypes = allowSubscriptions
     ? thingConfigs
         .filter(({ embedded }) => !embedded)
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (
-            checkInventory(['Subscription', 'thingSubscription', name], inventory) &&
-            (checkInventory(['Mutation', 'createThing', name], inventory) ||
-              checkInventory(['Mutation', 'updateThing', name], inventory) ||
-              checkInventory(['Mutation', 'deleteThing', name], inventory))
+            checkInventory(['Subscription', 'updatedThing', name], inventory) &&
+            checkInventory(['Mutation', 'updateThing', name], inventory)
           ) {
-            prev.push(createThingSubscriptionPayloadType(thingConfig));
+            prev.push(createUpdatedThingPayloadType(thingConfig));
           }
           return prev;
         }, [])
@@ -145,12 +145,22 @@ ${thingMutationTypes}
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (
-            checkInventory(['Subscription', 'thingSubscription', name], inventory) &&
-            (checkInventory(['Mutation', 'createThing', name], inventory) ||
-              checkInventory(['Mutation', 'updateThing', name], inventory) ||
-              checkInventory(['Mutation', 'deleteThing', name], inventory))
+            checkInventory(['Subscription', 'newThing', name], inventory) &&
+            checkInventory(['Mutation', 'createThing', name], inventory)
           ) {
-            prev.push(createThingSubscriptionType(thingConfig));
+            prev.push(createNewThingSubscriptionType(thingConfig));
+          }
+          if (
+            checkInventory(['Subscription', 'updatedThing', name], inventory) &&
+            checkInventory(['Mutation', 'updateThing', name], inventory)
+          ) {
+            prev.push(createUpdatedThingSubscriptionType(thingConfig));
+          }
+          if (
+            checkInventory(['Subscription', 'deletedThing', name], inventory) &&
+            checkInventory(['Mutation', 'deleteThing', name], inventory)
+          ) {
+            prev.push(createDeletedThingSubscriptionType(thingConfig));
           }
           return prev;
         }, [])
@@ -173,7 +183,7 @@ ${thingSubscriptionTypes}
 
   if (thingInputTypes) resultArray.push(thingInputTypes);
   if (thingInputTypes2) resultArray.push(thingInputTypes2);
-  if (thingSubscriptionPayloadTypes) resultArray.push(thingSubscriptionPayloadTypes);
+  if (updatedThingPayloadTypes) resultArray.push(updatedThingPayloadTypes);
   if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
   if (thingMutationTypes2) resultArray.push(thingMutationTypes2);
   if (thingSubscriptionTypes2) resultArray.push(thingSubscriptionTypes2);

@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingSubscriptionPayloadType = (thingConfig: ThingConfig): string => {
+const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
   const {
     booleanFields,
     duplexFields,
@@ -65,7 +65,7 @@ const createThingSubscriptionPayloadType = (thingConfig: ThingConfig): string =>
   const result = `enum ${name}FieldNamesEnumeration {
 ${thingFieldsArray.join('\n')}
 }
-type ${name}SubscriptionPayload {
+type Updated${name}Payload {
   node: ${name}
   previousNode: ${name}
   updatedFields: [${name}FieldNamesEnumeration!]
@@ -74,4 +74,4 @@ type ${name}SubscriptionPayload {
   return result;
 };
 
-module.exports = createThingSubscriptionPayloadType;
+module.exports = createUpdatedThingPayloadType;
