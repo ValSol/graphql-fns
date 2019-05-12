@@ -8,7 +8,7 @@ const { Schema } = mongoose;
 
 const thingSchemas = {};
 
-const createThingSchema = (thingConfig: ThingConfig, enums: Enums): Object => {
+const createThingSchema = (thingConfig: ThingConfig, enums?: Enums = []): Object => {
   const { name } = thingConfig;
 
   if (thingSchemas[name]) return thingSchemas[name];

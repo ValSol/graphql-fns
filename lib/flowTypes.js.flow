@@ -113,7 +113,46 @@ export type ThingConfig = {
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;
 
-export type GeneralConfig = { thingConfigs: Array<ThingConfig>, enums: Enums };
+type thingNamesList = null | Array<string>;
+
+type InverntoryOptions = {
+  Query?: null | {
+    thing?: thingNamesList,
+    things?: thingNamesList,
+  },
+  Mutation?: null | {
+    createThing?: thingNamesList,
+    updateThing?: thingNamesList,
+    deleteThing?: thingNamesList,
+  },
+  Subscription?: null | {
+    newThing?: thingNamesList,
+  },
+};
+export type Inventory = {
+  include?: null | InverntoryOptions,
+  exclude?: null | InverntoryOptions,
+};
+
+export type GeneralConfig = {
+  thingConfigs: Array<ThingConfig>,
+  enums?: Enums,
+  inventory?: Inventory,
+};
+
+type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
+type TwoSegmentInventoryChain =
+  | ['Query', 'thing' | 'things']
+  | ['Mutation', 'createThing' | 'updateThing' | 'deleteThing']
+  | ['Subscription', 'newThing'];
+type ThreeSegmentInventoryChain =
+  | ['Query', 'thing' | 'things', string]
+  | ['Mutation', 'createThing' | 'updateThing' | 'deleteThing', string]
+  | ['Subscription', 'newThing' | 'updatedThing' | 'deletedThing', string];
+export type InventoryСhain =
+  | OneSegmentInventoryChain
+  | TwoSegmentInventoryChain
+  | ThreeSegmentInventoryChain;
 
 export type Periphery = Map<
   ThingConfig,
@@ -142,3 +181,5 @@ export type NearMongodb = {
     },
   },
 };
+
+export type Subscribe = { subscribe: (_: Object, { name: string }, { pubsub: Object }) => Object };

@@ -1,6 +1,7 @@
 // @flow
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
+const checkInventory = require('../../utils/checkInventory');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
 const processUpdateInputData = require('./processUpdateInputData');
@@ -13,8 +14,10 @@ type Context = { mongooseConn: Object };
 const createUpdateThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
-): Function => {
-  const { enums } = generalConfig;
+): Function | null => {
+  const { enums, inventory } = generalConfig;
+  const { name } = thingConfig;
+  if (!checkInventory(['Mutation', 'updateThing', name], inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { mongooseConn } = context;
@@ -29,8 +32,8 @@ const createUpdateThingMutationResolver = (
     const Thing = mongooseConn.model(thingName, thingSchema);
 
     const duplexFieldsProjection = duplexFields
-      ? duplexFields.reduce((prev, { name }) => {
-          if (data[name]) prev[name] = 1; // eslint-disable-line no-param-reassign
+      ? duplexFields.reduce((prev, { name: name2 }) => {
+          if (data[name2]) prev[name2] = 1; // eslint-disable-line no-param-reassign
           return prev;
         }, {})
       : {};

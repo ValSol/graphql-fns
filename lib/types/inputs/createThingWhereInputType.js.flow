@@ -59,8 +59,7 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   }
 
   const result = indexedFields.length
-    ? `
-input ${name}WhereInput {
+    ? `input ${name}WhereInput {
 ${indexedFields.join('\n')}
 }`
     : '';

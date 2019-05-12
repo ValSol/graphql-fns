@@ -11,20 +11,21 @@ const composeThingResolvers = require('./types/composeThingResolvers');
 const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
 const createUpdateThingMutationResolver = require('./mutations/createUpdateThingMutationResolver');
 const createDeleteThingMutationResolver = require('./mutations/createDeleteThingMutationResolver');
+const createNewThingSubscriptionResolver = require('./subscriptions/createNewThingSubscriptionResolver');
 
 const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
   const { thingConfigs, inventory } = generalConfig;
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
-  // const allowSubscriptions = checkInventory(['Subscription'], inventory);
+  const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
   const resolvers = {};
 
   resolvers.DateTime = DateTime;
   if (allowQueries) resolvers.Query = {};
   if (allowMutations) resolvers.Mutation = {};
-  // if (allowMutations) resolvers.Subscription = {};
+  if (allowSubscriptions) resolvers.Subscription = {};
 
   thingConfigs
     .filter(({ embedded }) => !embedded)
@@ -67,6 +68,17 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
         if (deleteThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
+        }
+      }
+
+      if (allowSubscriptions) {
+        const newThingSubscriptionResolver = createNewThingSubscriptionResolver(
+          thingConfig,
+          generalConfig,
+        );
+        if (newThingSubscriptionResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Subscription[`new${name}`] = newThingSubscriptionResolver;
         }
       }
 

@@ -7,7 +7,7 @@ const processCreateInputData = require('./processCreateInputData');
 const updatePeriphery = require('./updatePeriphery');
 
 type Args = { data: Object };
-type Context = { mongooseConn: Object };
+type Context = { mongooseConn: Object, pubsub?: Object };
 
 const createCreateThingMutationResolver = (
   thingConfig: ThingConfig,
@@ -47,6 +47,12 @@ const createCreateThingMutationResolver = (
 
     const { _id } = thing;
     thing.id = _id;
+
+    if (checkInventory(['Subscription', 'newThing', name], inventory)) {
+      const { pubsub } = context;
+      if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
+      pubsub.publish(`new-${name}`, { [`new${name}`]: thing });
+    }
 
     return thing;
   };

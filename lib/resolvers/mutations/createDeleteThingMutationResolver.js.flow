@@ -1,6 +1,7 @@
 // @flow
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
+const checkInventory = require('../../utils/checkInventory');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processDeleteData = require('./processDeleteData');
 
@@ -11,15 +12,16 @@ type Context = { mongooseConn: Object };
 const createDeleteThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
-): Function => {
-  const { enums } = generalConfig;
+): Function | null => {
+  const { enums, inventory } = generalConfig;
+  const { name } = thingConfig;
+  if (!checkInventory(['Mutation', 'deleteThing', name], inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { where } = args;
 
     const { mongooseConn } = context;
 
-    const { name } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(name, thingSchema);
 

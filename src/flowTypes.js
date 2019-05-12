@@ -181,3 +181,5 @@ export type NearMongodb = {
     },
   },
 };
+
+export type Subscribe = { subscribe: (_: Object, { name: string }, { pubsub: Object }) => Object };

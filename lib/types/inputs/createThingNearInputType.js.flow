@@ -14,8 +14,7 @@ const createThingNearInputType = (thingConfig: ThingConfig): string => {
 
   if (!fieldLines.length) return '';
 
-  return `
-enum ${name}GeospatialFieldNamesEnumeration {
+  return `enum ${name}GeospatialFieldNamesEnumeration {
 ${fieldLines.join('\n')}
 }
 input ${name}NearInput {

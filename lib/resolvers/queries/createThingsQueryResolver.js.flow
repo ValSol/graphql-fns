@@ -2,6 +2,7 @@
 
 import type { GeneralConfig, NearInput, ThingConfig } from '../../flowTypes';
 
+const checkInventory = require('../../utils/checkInventory');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const getProjectionFromInfo = require('../getProjectionFromInfo');
 const composeNearInput = require('./composeNearInput');
@@ -19,7 +20,9 @@ const createThingsQueryResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): Function => {
-  const { enums } = generalConfig;
+  const { enums, inventory } = generalConfig;
+  const { name } = thingConfig;
+  if (!checkInventory(['Query', 'things', name], inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
     const { near, pagination, sort, where } = args;
@@ -27,7 +30,6 @@ const createThingsQueryResolver = (
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig, enums);
-    const { name } = thingConfig;
 
     const Thing = mongooseConn.model(name, thingSchema);
     const composedNear = near && composeNearInput(near);
