@@ -79,7 +79,7 @@ const processCreateInputData = (
 
     const scalarFieldsArray = ['_id'];
 
-    const scalarFieldTypes = ['textFields', 'intFields', 'floatFields'];
+    const scalarFieldTypes = ['textFields', 'intFields', 'floatFields', 'dateTimeFields'];
     scalarFieldTypes.reduce((prev, fieldTypeName) => {
       if (thingConfig2[fieldTypeName]) {
         thingConfig2[fieldTypeName].forEach(({ name: name2 }) => prev.push(name2));
