@@ -17,7 +17,12 @@ const createNewThingSubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: (_, args, { pubsub }) => pubsub.asyncIterator(`new-${name}`),
+    subscribe: (_, args, { pubsub }) => {
+      console.log('******************************');
+      console.log('args =', args);
+      console.log('******************************');
+      return pubsub.asyncIterator(`new-${name}`);
+    },
   };
 
   return resolver;
