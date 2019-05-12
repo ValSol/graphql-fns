@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 const pointFromGqlToMongo = require('./pointFromGqlToMongo');
 const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
 
-const processCreateInputData = (data: Object, thingConfig: ThingConfig): Object => {
+const processUpdateInputData = (data: Object, thingConfig: ThingConfig): Object => {
   const { geospatialFields } = thingConfig;
 
   const geospatialFieldsObject = {};
@@ -46,4 +46,4 @@ const processCreateInputData = (data: Object, thingConfig: ThingConfig): Object 
   }, {});
 };
 
-module.exports = processCreateInputData;
+module.exports = processUpdateInputData;

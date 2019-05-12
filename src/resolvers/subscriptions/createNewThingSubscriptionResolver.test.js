@@ -36,6 +36,6 @@ describe('createNewThingSubscriptionResolver', () => {
 
     const result = createNewThingSubscriptionResolver(thingConfig, generalConfig);
     expect(result).not.toBeNull();
-    if (result) expect(typeof result.subscribe).toBe('function');
+    if (result) expect(typeof result.subscribe).toBe('function'); // "if (result)" to prevent flowjs error
   });
 });

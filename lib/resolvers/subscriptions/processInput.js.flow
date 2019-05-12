@@ -1,0 +1,8 @@
+// @flow
+import type { ThingConfig } from '../../flowTypes';
+
+const processInput = (data: Object, thingConfig: ThingConfig): Object => {
+  return thingConfig;
+};
+
+module.exports = processInput;
