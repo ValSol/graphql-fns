@@ -1,6 +1,8 @@
 // @flow
 import type { GeneralConfig, Subscribe, ThingConfig } from '../../flowTypes';
 
+const { withFilter } = require('graphql-subscriptions');
+
 const checkInventory = require('../../utils/checkInventory');
 
 const createNewThingSubscriptionResolver = (
@@ -17,13 +19,21 @@ const createNewThingSubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: (parent, args, { pubsub }) => {
-      console.log('******************************');
-      console.log('parent =', parent);
-      console.log('args =', args);
-      console.log('******************************');
-      return pubsub.asyncIterator(`new-${name}`);
-    },
+    subscribe: withFilter(
+      (_, args, { pubsub }) => {
+        console.log('********************');
+        console.log('args =', args);
+        console.log('********************');
+        return pubsub.asyncIterator(`new-${name}`);
+      },
+      (payload, variables) => {
+        console.log('=======================');
+        console.log('payload =', payload);
+        console.log('variables =', variables);
+        console.log('=======================');
+        return true;
+      },
+    ),
   };
 
   return resolver;

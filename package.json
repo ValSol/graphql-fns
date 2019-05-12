@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.73",
+  "version": "0.1.2-beta.74",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -32,6 +32,7 @@
   "dependencies": {
     "@okgrow/graphql-scalars": "^0.4.5",
     "graphql": "^14.2.1",
+    "graphql-subscriptions": "^1.1.0",
     "pluralize": "^7.0.0"
   },
   "devDependencies": {
