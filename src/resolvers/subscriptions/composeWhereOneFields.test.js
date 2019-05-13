@@ -119,6 +119,7 @@ describe('composeWhereOneFields', () => {
       dateTimeFieldUnique: 'dateTimeFields',
       intFieldUnique: 'intFields',
       floatFieldUnique: 'floatFields',
+      id: null,
     };
 
     const result = composeWhereOneFields(exampleConfig);

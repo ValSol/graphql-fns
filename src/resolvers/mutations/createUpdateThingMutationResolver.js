@@ -8,8 +8,8 @@ const processUpdateInputData = require('./processUpdateInputData');
 const processDeleteData = require('./processDeleteData');
 const updatePeriphery = require('./updatePeriphery');
 
-type Args = { data: Object, where: Object };
-type Context = { mongooseConn: Object };
+type Args = { data: Object, whereOne: Object };
+type Context = { mongooseConn: Object, pubsub?: Object };
 
 const createUpdateThingMutationResolver = (
   thingConfig: ThingConfig,
@@ -22,8 +22,8 @@ const createUpdateThingMutationResolver = (
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { mongooseConn } = context;
     const {
-      where,
-      where: { id },
+      whereOne,
+      whereOne: { id },
       data,
     } = args;
 
@@ -40,14 +40,20 @@ const createUpdateThingMutationResolver = (
 
     const mainData = processUpdateInputData(data, thingConfig);
 
-    let thing;
     let _id = id; // eslint-disable-line no-underscore-dangle
-    if (Object.keys(duplexFieldsProjection).length) {
-      const where2 = id ? { _id } : where;
-      const currentData = await Thing.findOne(where2, duplexFieldsProjection, { lean: true });
+    const whereOne2 = id ? { _id } : whereOne;
 
+    const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
+      ? {}
+      : duplexFieldsProjection;
+
+    const previousThing = await Thing.findOne(whereOne2, projection, { lean: true });
+
+    let thing;
+
+    if (Object.keys(duplexFieldsProjection).length) {
       const data2 = { ...data, _id };
-      const bulkItemsMap = processDeleteData(currentData, thingConfig);
+      const bulkItemsMap = processDeleteData(previousThing, thingConfig);
 
       const { core, periphery } = processUpdateDuplexInputData(data2, thingConfig, bulkItemsMap);
 
@@ -70,12 +76,23 @@ const createUpdateThingMutationResolver = (
       _id = id;
       thing = await Thing.findOneAndUpdate({ _id }, mainData, { new: true, lean: true });
     } else {
-      thing = await Thing.findOneAndUpdate(where, mainData, { new: true, lean: true });
+      thing = await Thing.findOneAndUpdate(whereOne, mainData, { new: true, lean: true });
       if (!thing) return null;
       _id = thing._id; // eslint-disable-line no-underscore-dangle, prefer-destructuring
     }
 
     thing.id = _id;
+
+    if (checkInventory(['Subscription', 'updatedThing', name], inventory)) {
+      const { pubsub } = context;
+      if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
+      const updatedFields = Object.keys(data);
+
+      previousThing.id = _id;
+
+      const payload = { node: thing, previousNode: previousThing, updatedFields };
+      pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
+    }
 
     return thing;
   };

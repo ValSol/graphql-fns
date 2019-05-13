@@ -42,6 +42,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(typeof result.Subscription.newExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
   test('should create things types for two things', () => {
@@ -95,6 +96,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.newExample2.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample1.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample2.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedExample1.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedExample2.subscribe).toBe('function');
   });
 
   test('should create things types for two things with relational things', () => {
@@ -166,6 +169,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
   test('should create things types for two things with embedded fields', () => {
@@ -232,6 +237,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Mutation.createAddress).toBeUndefined();
     expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
   });
 
   test('should create things types for two things with duplex things', () => {
@@ -319,6 +325,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
   test('should create things types for two things with geospatial fields', () => {
@@ -388,6 +396,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Example.polygonField4).toBe('function');
     expect(typeof result.Subscription.newExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
   test('should create things types for one thing with inventory for only queries', () => {

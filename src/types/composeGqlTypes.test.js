@@ -184,7 +184,7 @@ type Query {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
-  updateExample(where: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
 type Subscription {
@@ -363,10 +363,10 @@ type Query {
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
-  updateExample1(where: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
+  updateExample1(whereOne: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
-  updateExample2(where: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
+  updateExample2(whereOne: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
@@ -520,10 +520,10 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  updatePlace(where: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
@@ -662,7 +662,7 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
@@ -835,10 +835,10 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
-  updatePerson(where: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
-  updatePlace(where: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
@@ -924,7 +924,7 @@ input ExampleWhereOneInput {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
-  updateExample(where: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }`;
 

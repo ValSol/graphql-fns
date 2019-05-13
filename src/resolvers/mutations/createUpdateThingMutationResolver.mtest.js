@@ -268,7 +268,7 @@ describe('createUpdateThingMutationResolver', () => {
     const updatePerson = createUpdateThingMutationResolver(personConfig, generalConfig);
     if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where = { id };
+    const whereOne = { id };
     const dataForUpdate = {
       firstName: 'Vasya',
       lastName: 'Pupkin',
@@ -279,7 +279,7 @@ describe('createUpdateThingMutationResolver', () => {
     };
     const updatedPerson = await updatePerson(
       null,
-      { where, data: dataForUpdate },
+      { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
     );
     expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
@@ -347,11 +347,11 @@ describe('createUpdateThingMutationResolver', () => {
     const updatePlace = createUpdateThingMutationResolver(placeConfig, generalConfig);
     if (!updatePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where2 = { name: data.location.create.name };
+    const whereOne2 = { name: data.location.create.name };
     const dataForUpdate2 = { name: 'Mexico' };
     const updatedPlace = await updatePlace(
       null,
-      { where: where2, data: dataForUpdate2 },
+      { whereOne: whereOne2, data: dataForUpdate2 },
       { mongooseConn, pubsub },
     );
 
@@ -359,7 +359,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     const updatedPlace2 = await updatePlace(
       null,
-      { where: where2, data: dataForUpdate2 },
+      { whereOne: whereOne2, data: dataForUpdate2 },
       { mongooseConn, pubsub },
     );
     expect(updatedPlace2).toBeNull();

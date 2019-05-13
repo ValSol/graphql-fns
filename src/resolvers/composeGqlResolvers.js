@@ -12,6 +12,7 @@ const createCreateThingMutationResolver = require('./mutations/createCreateThing
 const createUpdateThingMutationResolver = require('./mutations/createUpdateThingMutationResolver');
 const createDeleteThingMutationResolver = require('./mutations/createDeleteThingMutationResolver');
 const createNewThingSubscriptionResolver = require('./subscriptions/createNewThingSubscriptionResolver');
+const createUpdatedThingSubscriptionResolver = require('./subscriptions/createUpdatedThingSubscriptionResolver');
 const createDeletedThingSubscriptionResolver = require('./subscriptions/createDeletedThingSubscriptionResolver');
 
 const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
@@ -89,6 +90,15 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
         if (deletedThingSubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Subscription[`deleted${name}`] = deletedThingSubscriptionResolver;
+        }
+
+        const updatedThingSubscriptionResolver = createUpdatedThingSubscriptionResolver(
+          thingConfig,
+          generalConfig,
+        );
+        if (updatedThingSubscriptionResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Subscription[`updated${name}`] = updatedThingSubscriptionResolver;
         }
       }
 
