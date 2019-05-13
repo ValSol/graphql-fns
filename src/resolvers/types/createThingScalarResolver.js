@@ -26,6 +26,8 @@ const createThingScalarResolver = (thingConfig: ThingConfig, enums?: Enums = [])
 
     const thing = await Thing.findById(id, projection, { lean: true });
 
+    if (!thing) return null; // if there's broken link
+
     const { _id } = thing;
     thing.id = _id;
 

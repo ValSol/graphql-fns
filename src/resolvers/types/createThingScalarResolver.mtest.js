@@ -61,5 +61,10 @@ describe('createThingScalarResolver', () => {
     const place = await Place(parent, null, { mongooseConn, pubsub }, info);
 
     expect(place.title).toBe(data.title);
+
+    const parent2 = { friend: '5cd82d6075fb194334d8c1d7' };
+    const place2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
+
+    expect(place2).toBeNull();
   });
 });

@@ -69,8 +69,8 @@ describe('createThingQueryResolver', () => {
     const Example = createThingQueryResolver(thingConfig, generalConfig);
     if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where = { id };
-    const example = await Example(null, { where }, { mongooseConn, pubsub }, info);
+    const whereOne = { id };
+    const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info);
 
     expect(example.textField1).toBe(data.textField1);
     expect(example.textField2).toBeUndefined();
@@ -80,8 +80,8 @@ describe('createThingQueryResolver', () => {
     expect(example.createdAt instanceof Date).toBeTruthy();
     expect(example.updatedAt).toBeUndefined();
 
-    const where2 = { textField1: data.textField1 };
-    const example2 = await Example(null, { where: where2 }, { mongooseConn, pubsub }, info);
+    const whereOne2 = { textField1: data.textField1 };
+    const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info);
 
     expect(example2.textField1).toBe(data.textField1);
     expect(example2.textField2).toBeUndefined();

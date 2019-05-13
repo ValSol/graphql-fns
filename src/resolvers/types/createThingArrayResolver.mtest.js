@@ -62,5 +62,12 @@ describe('createThingArrayResolver', () => {
     const [place] = places;
 
     expect(place.title).toBe(data.title);
+
+    const parent2 = { friends: ['5cd82d6075fb194334d8c1d7', id, '5cd82d6075fb194334d8c1d8'] };
+    const places2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
+    const [place2] = places2;
+
+    expect(places2.length).toBe(1);
+    expect(place2.title).toBe(data.title);
   });
 });

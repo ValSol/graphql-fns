@@ -26,7 +26,7 @@ const createThingArrayResolver = (thingConfig: ThingConfig, enums?: Enums = []):
 
     const things = await Thing.find({ _id: { $in: ids } }, projection, { lean: true });
 
-    const things2 = things.map(item => ({
+    const things2 = things.filter(Boolean).map(item => ({
       ...item,
       id: item._id, // eslint-disable-line no-underscore-dangle
     }));
