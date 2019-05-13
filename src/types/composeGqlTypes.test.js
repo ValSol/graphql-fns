@@ -188,7 +188,7 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
 type Subscription {
-  newExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): Example!
+  newExample(where: ExampleWhereInput): Example!
   updatedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): UpdatedExamplePayload!
   deletedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): Example!
 }`;
@@ -370,10 +370,10 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
-  newExample1(whereOne: Example1WhereOneInput): Example1!
+  newExample1: Example1!
   updatedExample1(whereOne: Example1WhereOneInput): UpdatedExample1Payload!
   deletedExample1(whereOne: Example1WhereOneInput): Example1!
-  newExample2(whereOne: Example2WhereOneInput): Example2!
+  newExample2: Example2!
   updatedExample2(whereOne: Example2WhereOneInput): UpdatedExample2Payload!
   deletedExample2(whereOne: Example2WhereOneInput): Example2!
 }`;
@@ -527,10 +527,10 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  newPerson(whereOne: PersonWhereOneInput): Person!
+  newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson(whereOne: PersonWhereOneInput): Person!
-  newPlace(whereOne: PlaceWhereOneInput): Place!
+  newPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
   deletedPlace(whereOne: PlaceWhereOneInput): Place!
 }`;
@@ -666,7 +666,7 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
-  newPerson(whereOne: PersonWhereOneInput): Person!
+  newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson(whereOne: PersonWhereOneInput): Person!
 }`;
@@ -842,10 +842,10 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  newPerson(whereOne: PersonWhereOneInput): Person!
+  newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson(whereOne: PersonWhereOneInput): Person!
-  newPlace(whereOne: PlaceWhereOneInput): Place!
+  newPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
   deletedPlace(whereOne: PlaceWhereOneInput): Place!
 }`;

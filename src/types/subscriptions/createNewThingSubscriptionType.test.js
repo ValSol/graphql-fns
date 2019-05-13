@@ -17,7 +17,7 @@ describe('createNewThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult = '  newExample(whereOne: ExampleWhereOneInput): Example!';
+    const expectedResult = '  newExample: Example!';
 
     const result = createNewThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -37,8 +37,7 @@ describe('createNewThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult =
-      '  newExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): Example!';
+    const expectedResult = '  newExample(where: ExampleWhereInput): Example!';
 
     const result = createNewThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
