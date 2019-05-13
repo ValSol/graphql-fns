@@ -4,7 +4,7 @@ import type { GeneralConfig, Subscribe, ThingConfig } from '../../flowTypes';
 const { withFilter } = require('graphql-subscriptions');
 
 const checkInventory = require('../../utils/checkInventory');
-const createNewThingFilter = require('./createNewThingFilter');
+const createDeletedThingFilter = require('./createDeletedThingFilter');
 
 const createDeletedThingSubscriptionResolver = (
   thingConfig: ThingConfig,
@@ -22,7 +22,7 @@ const createDeletedThingSubscriptionResolver = (
   const resolver: Subscribe = {
     subscribe: withFilter((_, args, { pubsub }) => {
       return pubsub.asyncIterator(`deleted-${name}`);
-    }, createNewThingFilter(thingConfig)),
+    }, createDeletedThingFilter(thingConfig)),
   };
 
   return resolver;

@@ -36,9 +36,12 @@ describe('composeGqlResolvers', () => {
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.Example).toBe('function');
+    expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
+    expect(typeof result.Subscription.newExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
   });
 
   test('should create things types for two things', () => {
@@ -79,13 +82,19 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Example1).toBe('function');
+    expect(typeof result.Query.Example1S).toBe('function');
     expect(typeof result.Query.Example2).toBe('function');
+    expect(typeof result.Query.Example2S).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
     expect(typeof result.Mutation.updateExample1).toBe('function');
     expect(typeof result.Mutation.updateExample2).toBe('function');
     expect(typeof result.Mutation.deleteExample1).toBe('function');
     expect(typeof result.Mutation.deleteExample2).toBe('function');
+    expect(typeof result.Subscription.newExample1.subscribe).toBe('function');
+    expect(typeof result.Subscription.newExample2.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedExample1.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedExample2.subscribe).toBe('function');
   });
 
   test('should create things types for two things with relational things', () => {
@@ -153,6 +162,10 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.enemies).toBe('function');
     expect(typeof result.Person.location).toBe('function');
     expect(typeof result.Person.favoritePlace).toBe('function');
+    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
   });
 
   test('should create things types for two things with embedded fields', () => {
@@ -217,6 +230,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deletePerson).toBe('function');
     expect(result.Query.Address).toBeUndefined();
     expect(result.Mutation.createAddress).toBeUndefined();
+    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
   });
 
   test('should create things types for two things with duplex things', () => {
@@ -300,6 +315,10 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.favoritePlace).toBe('function');
     expect(typeof result.Place.citizens).toBe('function');
     expect(typeof result.Place.visitors).toBe('function');
+    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
   });
 
   test('should create things types for two things with geospatial fields', () => {
@@ -367,6 +386,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Example.polygonField2).toBe('function');
     expect(typeof result.Example.polygonField3).toBe('function');
     expect(typeof result.Example.polygonField4).toBe('function');
+    expect(typeof result.Subscription.newExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
   });
 
   test('should create things types for one thing with inventory for only queries', () => {
@@ -385,6 +406,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(result.Mutation).toBeUndefined();
+    expect(result.Subscription).toBeUndefined();
   });
 
   test('should create things types for one thing with inventory for only mutations', () => {
@@ -404,6 +426,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
+    expect(result.Subscription).toBeUndefined();
   });
 
   test('should create things types for one thing with inventory for only thing queries', () => {
@@ -422,6 +445,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Example).toBe('function');
     expect(result.Query.Examples).toBeUndefined();
     expect(result.Mutation).toBeUndefined();
+    expect(result.Subscription).toBeUndefined();
   });
 
   test('should create things types for one thing with inventory for only mutations', () => {
@@ -441,5 +465,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();
+    expect(result.Subscription).toBeUndefined();
   });
 });
