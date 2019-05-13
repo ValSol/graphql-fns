@@ -3,6 +3,7 @@
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
@@ -10,11 +11,14 @@ const createCreateThingMutationResolver = require('./createCreateThingMutationRe
 const createDeleteThingMutationResolver = require('./createDeleteThingMutationResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-delete-thing-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createDeleteThingMutationResolver', () => {
@@ -128,7 +132,7 @@ describe('createDeleteThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -181,7 +185,7 @@ describe('createDeleteThingMutationResolver', () => {
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where = { id: _id };
-    const deletedPerson = await deletePerson(null, { where }, { mongooseConn });
+    const deletedPerson = await deletePerson(null, { where }, { mongooseConn, pubsub });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
 
@@ -199,17 +203,17 @@ describe('createDeleteThingMutationResolver', () => {
     expect(createdFavorities2[0].visitors.length).toEqual(0);
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
-    const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn });
+    const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn, pubsub });
     expect(deletedPerson2).toBeNull();
 
     const deletePlace = createDeleteThingMutationResolver(placeConfig, generalConfig);
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where2 = { name: data.location.create.name };
-    const deletedPlace = await deletePlace(null, { where: where2 }, { mongooseConn });
+    const deletedPlace = await deletePlace(null, { where: where2 }, { mongooseConn, pubsub });
     expect(deletedPlace.name).toBe(data.location.create.name);
 
-    const deletedPlace2 = await deletePlace(null, { where: where2 }, { mongooseConn });
+    const deletedPlace2 = await deletePlace(null, { where: where2 }, { mongooseConn, pubsub });
     expect(deletedPlace2).toBeNull();
   });
 });

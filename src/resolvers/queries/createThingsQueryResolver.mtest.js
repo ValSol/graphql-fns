@@ -3,6 +3,7 @@
 import type { GeneralConfig, NearInput, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -13,11 +14,14 @@ const infoForSort = require('./info-sort.auxiliary');
 const createThingsQueryResolver = require('./createThingsQueryResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-things-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createThingQueryResolver', () => {
@@ -79,28 +83,28 @@ describe('createThingQueryResolver', () => {
         },
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
 
     const People = createThingsQueryResolver(personConfig, generalConfig);
     if (!People) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const people = await People(null, {}, { mongooseConn }, info);
+    const people = await People(null, {}, { mongooseConn, pubsub }, info);
 
     expect(people.length).toBe(5);
     expect(people[0].id).toEqual(createdPerson.id);
 
     const where = { position: data.theBestFriend.create.position };
-    const people2 = await People(null, { where }, { mongooseConn }, info);
+    const people2 = await People(null, { where }, { mongooseConn, pubsub }, info);
 
     expect(people2.length).toBe(4);
 
     const where2 = { friends: createdPerson.id };
-    const people3 = await People(null, { where: where2 }, { mongooseConn }, info);
+    const people3 = await People(null, { where: where2 }, { mongooseConn, pubsub }, info);
 
     expect(people3.length).toBe(3);
 
     const pagination = { skip: 1, first: 3 };
-    const people4 = await People(null, { pagination }, { mongooseConn }, info);
+    const people4 = await People(null, { pagination }, { mongooseConn, pubsub }, info);
 
     expect(people4.length).toBe(3);
   });
@@ -187,12 +191,12 @@ describe('createThingQueryResolver', () => {
       point: { longitude: 50.438198, latitude: 30.515858 },
       point2: { longitude: 50.438198, latitude: 30.515858 },
     };
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn });
+    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
 
     const Restaurants = createThingsQueryResolver(restaurantConfig, generalConfig);
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const restaurants = await Restaurants(null, {}, { mongooseConn }, info);
+    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info);
 
     expect(restaurants.length).toBe(8);
     expect(restaurants[0].id).toEqual(createdRestaurant.id);
@@ -202,7 +206,7 @@ describe('createThingQueryResolver', () => {
       coordinates: { longitude: 50.435766, latitude: 30.515742 },
       maxDistance: 150,
     };
-    const restaurants2 = await Restaurants(null, { near }, { mongooseConn }, info2);
+    const restaurants2 = await Restaurants(null, { near }, { mongooseConn, pubsub }, info2);
     expect(restaurants2.length).toBe(3);
     expect(restaurants2[0].name).toEqual('NAM');
     expect(restaurants2[1].name).toEqual('Mama Manana');
@@ -213,7 +217,7 @@ describe('createThingQueryResolver', () => {
       coordinates: { longitude: 50.435766, latitude: 30.515742 },
       maxDistance: 150,
     };
-    const restaurants3 = await Restaurants(null, { near: near2 }, { mongooseConn }, info2);
+    const restaurants3 = await Restaurants(null, { near: near2 }, { mongooseConn, pubsub }, info2);
     expect(restaurants3.length).toBe(3);
     expect(restaurants3[0].name).toEqual('NAM');
     expect(restaurants3[1].name).toEqual('Mama Manana');
@@ -292,18 +296,18 @@ describe('createThingQueryResolver', () => {
       },
     };
 
-    await createTable(null, { data }, { mongooseConn });
+    await createTable(null, { data }, { mongooseConn, pubsub });
 
     const Items = createThingsQueryResolver(tableItemConfig, generalConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const items = await Items(null, {}, { mongooseConn }, infoForSort);
+    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort);
 
     expect(items.length).toBe(9);
 
     const sort = { sortBy: ['first_ASC', 'second_DESC'] };
 
-    const items2 = await Items(null, { sort }, { mongooseConn }, infoForSort);
+    const items2 = await Items(null, { sort }, { mongooseConn, pubsub }, infoForSort);
 
     expect(items2.length).toBe(9);
     expect(items2[0].first).toBe('a');

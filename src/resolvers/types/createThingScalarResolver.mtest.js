@@ -3,6 +3,7 @@
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -10,11 +11,14 @@ const info = require('./scalar-info.auxiliary.js');
 const createThingScalarResolver = require('./createThingScalarResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-scalar-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createThingScalarResolver', () => {
@@ -49,12 +53,12 @@ describe('createThingScalarResolver', () => {
     const data = {
       title: 'Paris',
     };
-    const createdPlace = await createPlace(null, { data }, { mongooseConn });
+    const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub });
     const { id } = createdPlace;
 
     const Place = createThingScalarResolver(placeConfig);
     const parent = { friend: id };
-    const place = await Place(parent, null, { mongooseConn }, info);
+    const place = await Place(parent, null, { mongooseConn, pubsub }, info);
 
     expect(place.title).toBe(data.title);
   });

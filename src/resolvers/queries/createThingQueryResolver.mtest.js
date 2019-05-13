@@ -3,6 +3,7 @@
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
@@ -10,11 +11,14 @@ const info = require('../info.auxiliary.js');
 const createThingQueryResolver = require('./createThingQueryResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createThingQueryResolver', () => {
@@ -59,14 +63,14 @@ describe('createThingQueryResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(null, { data }, { mongooseConn });
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
     const { id } = createdExample;
 
     const Example = createThingQueryResolver(thingConfig, generalConfig);
     if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where = { id };
-    const example = await Example(null, { where }, { mongooseConn }, info);
+    const example = await Example(null, { where }, { mongooseConn, pubsub }, info);
 
     expect(example.textField1).toBe(data.textField1);
     expect(example.textField2).toBeUndefined();
@@ -77,7 +81,7 @@ describe('createThingQueryResolver', () => {
     expect(example.updatedAt).toBeUndefined();
 
     const where2 = { textField1: data.textField1 };
-    const example2 = await Example(null, { where: where2 }, { mongooseConn }, info);
+    const example2 = await Example(null, { where: where2 }, { mongooseConn, pubsub }, info);
 
     expect(example2.textField1).toBe(data.textField1);
     expect(example2.textField2).toBeUndefined();

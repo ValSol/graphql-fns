@@ -4,6 +4,7 @@
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
@@ -11,11 +12,14 @@ const createCreateThingMutationResolver = require('./createCreateThingMutationRe
 const createUpdateThingMutationResolver = require('./createUpdateThingMutationResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-update-thing-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createUpdateThingMutationResolver', () => {
@@ -129,7 +133,7 @@ describe('createUpdateThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -217,7 +221,7 @@ describe('createUpdateThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -276,7 +280,7 @@ describe('createUpdateThingMutationResolver', () => {
     const updatedPerson = await updatePerson(
       null,
       { where, data: dataForUpdate },
-      { mongooseConn },
+      { mongooseConn, pubsub },
     );
     expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
     expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
@@ -348,7 +352,7 @@ describe('createUpdateThingMutationResolver', () => {
     const updatedPlace = await updatePlace(
       null,
       { where: where2, data: dataForUpdate2 },
-      { mongooseConn },
+      { mongooseConn, pubsub },
     );
 
     expect(updatedPlace.name).toBe(dataForUpdate2.name);
@@ -356,7 +360,7 @@ describe('createUpdateThingMutationResolver', () => {
     const updatedPlace2 = await updatePlace(
       null,
       { where: where2, data: dataForUpdate2 },
-      { mongooseConn },
+      { mongooseConn, pubsub },
     );
     expect(updatedPlace2).toBeNull();
   });

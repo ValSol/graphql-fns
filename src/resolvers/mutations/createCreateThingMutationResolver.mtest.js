@@ -3,17 +3,21 @@
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 const mongoose = require('mongoose');
+const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const createCreateThingMutationResolver = require('./createCreateThingMutationResolver');
 
 let mongooseConn;
+let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  pubsub = new PubSub();
 });
 
 describe('createCreateThingMutationResolver', () => {
@@ -58,7 +62,7 @@ describe('createCreateThingMutationResolver', () => {
       textField5: ['textField5'],
     };
 
-    const createdExample = await createExample(null, { data }, { mongooseConn });
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
 
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -104,7 +108,7 @@ describe('createCreateThingMutationResolver', () => {
       lastName: 'Fedorov',
     };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -119,7 +123,7 @@ describe('createCreateThingMutationResolver', () => {
       friend: { connect: otherId },
       friends: { connect: [otherId] },
     };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -178,7 +182,7 @@ describe('createCreateThingMutationResolver', () => {
       lastName: 'Fedorov',
     };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -228,7 +232,7 @@ describe('createCreateThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -362,7 +366,7 @@ describe('createCreateThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -428,7 +432,7 @@ describe('createCreateThingMutationResolver', () => {
       },
     };
 
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -549,7 +553,7 @@ describe('createCreateThingMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.locations.length).toBe(2);
@@ -601,7 +605,7 @@ describe('createCreateThingMutationResolver', () => {
       },
     };
 
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn });
+    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
