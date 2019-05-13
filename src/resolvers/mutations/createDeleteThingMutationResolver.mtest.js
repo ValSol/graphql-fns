@@ -184,8 +184,8 @@ describe('createDeleteThingMutationResolver', () => {
     const deletePerson = createDeleteThingMutationResolver(personConfig, generalConfig);
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where = { id: _id };
-    const deletedPerson = await deletePerson(null, { where }, { mongooseConn, pubsub });
+    const whereOne = { id: _id };
+    const deletedPerson = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
 
@@ -203,17 +203,17 @@ describe('createDeleteThingMutationResolver', () => {
     expect(createdFavorities2[0].visitors.length).toEqual(0);
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
-    const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn, pubsub });
+    const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
     expect(deletedPerson2).toBeNull();
 
     const deletePlace = createDeleteThingMutationResolver(placeConfig, generalConfig);
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where2 = { name: data.location.create.name };
-    const deletedPlace = await deletePlace(null, { where: where2 }, { mongooseConn, pubsub });
+    const deletedPlace = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
     expect(deletedPlace.name).toBe(data.location.create.name);
 
-    const deletedPlace2 = await deletePlace(null, { where: where2 }, { mongooseConn, pubsub });
+    const deletedPlace2 = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
     expect(deletedPlace2).toBeNull();
   });
 });

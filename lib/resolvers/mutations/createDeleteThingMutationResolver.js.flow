@@ -5,7 +5,7 @@ const checkInventory = require('../../utils/checkInventory');
 const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processDeleteData = require('./processDeleteData');
 
-type Args = { where: { id: string } };
+type Args = { whereOne: { id: string } };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 // TODO update to remove garbage from relation fields that relate to deleted object
@@ -18,18 +18,18 @@ const createDeleteThingMutationResolver = (
   if (!checkInventory(['Mutation', 'deleteThing', name], inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { where } = args;
+    const { whereOne } = args;
 
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(name, thingSchema);
 
-    const whereKeys = Object.keys(where);
-    if (whereKeys.length !== 1) {
+    const whereOneKeys = Object.keys(whereOne);
+    if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in where arg!');
     }
-    const conditions = where.id ? { _id: where.id } : where;
+    const conditions = whereOne.id ? { _id: whereOne.id } : whereOne;
 
     const thing = await Thing.findOne(conditions, null, { lean: true });
     if (!thing) return null;
