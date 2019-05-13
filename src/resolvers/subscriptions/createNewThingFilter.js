@@ -16,6 +16,7 @@ const createNewThingFilter = (thingConfig: ThingConfig): NewThingFilter => {
 
     const thing = payload[`new${name}`];
 
+    // the same code as in createDeletedThingFilter.js
     return !Object.keys(where).some(key => {
       if (!where[key] === undefined) return false;
       if (thing[key] === undefined) return true;

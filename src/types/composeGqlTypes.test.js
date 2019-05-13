@@ -190,7 +190,7 @@ type Mutation {
 type Subscription {
   newExample(where: ExampleWhereInput): Example!
   updatedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): UpdatedExamplePayload!
-  deletedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): Example!
+  deletedExample(where: ExampleWhereInput): Example!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -372,10 +372,10 @@ type Mutation {
 type Subscription {
   newExample1: Example1!
   updatedExample1(whereOne: Example1WhereOneInput): UpdatedExample1Payload!
-  deletedExample1(whereOne: Example1WhereOneInput): Example1!
+  deletedExample1: Example1!
   newExample2: Example2!
   updatedExample2(whereOne: Example2WhereOneInput): UpdatedExample2Payload!
-  deletedExample2(whereOne: Example2WhereOneInput): Example2!
+  deletedExample2: Example2!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -529,10 +529,10 @@ type Mutation {
 type Subscription {
   newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson(whereOne: PersonWhereOneInput): Person!
+  deletedPerson: Person!
   newPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
-  deletedPlace(whereOne: PlaceWhereOneInput): Place!
+  deletedPlace: Place!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -668,7 +668,7 @@ type Mutation {
 type Subscription {
   newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson(whereOne: PersonWhereOneInput): Person!
+  deletedPerson: Person!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -844,10 +844,10 @@ type Mutation {
 type Subscription {
   newPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson(whereOne: PersonWhereOneInput): Person!
+  deletedPerson: Person!
   newPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
-  deletedPlace(whereOne: PlaceWhereOneInput): Place!
+  deletedPlace: Place!
 }`;
 
     const result = composeGqlTypes(generalConfig);

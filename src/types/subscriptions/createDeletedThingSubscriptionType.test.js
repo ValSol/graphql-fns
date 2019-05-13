@@ -17,7 +17,7 @@ describe('createDeletedThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult = '  deletedExample(whereOne: ExampleWhereOneInput): Example!';
+    const expectedResult = '  deletedExample: Example!';
 
     const result = createDeletedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -37,8 +37,7 @@ describe('createDeletedThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult =
-      '  deletedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): Example!';
+    const expectedResult = '  deletedExample(where: ExampleWhereInput): Example!';
 
     const result = createDeletedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);

@@ -6,7 +6,7 @@ const createThingSchema = require('../../mongooseModels/createThingSchema');
 const processDeleteData = require('./processDeleteData');
 
 type Args = { where: { id: string } };
-type Context = { mongooseConn: Object };
+type Context = { mongooseConn: Object, pubsub?: Object };
 
 // TODO update to remove garbage from relation fields that relate to deleted object
 const createDeleteThingMutationResolver = (
@@ -50,6 +50,13 @@ const createDeleteThingMutationResolver = (
     await Promise.all(promises);
 
     thing.id = _id;
+
+    if (checkInventory(['Subscription', 'deletedThing', name], inventory)) {
+      const { pubsub } = context;
+      if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
+      pubsub.publish(`deleted-${name}`, { [`deleted${name}`]: thing });
+    }
+
     return thing;
   };
 
