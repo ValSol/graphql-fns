@@ -182,4 +182,13 @@ export type NearMongodb = {
   },
 };
 
-export type Subscribe = { subscribe: (_: Object, { name: string }, { pubsub: Object }) => Object };
+export type Subscribe = {
+  subscribe: (_: Object, { name: string }, { pubsub: Object }) => Object,
+};
+
+export type ClientOptions = {
+  depth?: number,
+  include?: Object,
+  exclude?: Object,
+  shift: number,
+};
