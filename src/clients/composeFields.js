@@ -1,12 +1,12 @@
 // @flow
-import type { ThingConfig, ClientOptions } from '../flowTypes';
+import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
 
 // accessorial function
 const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
   (!include || Object.keys(include).includes(name)) &&
   (!exclude || !(Object.keys(exclude).includes(name) && exclude[name] === null));
 
-const composeFields = (thingConfig: ThingConfig, options: ClientOptions): Array<string> => {
+const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): Array<string> => {
   const {
     booleanFields,
     duplexFields,

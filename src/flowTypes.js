@@ -190,5 +190,9 @@ export type ClientOptions = {
   depth?: number,
   include?: Object,
   exclude?: Object,
+};
+
+export type ClientFieldsOptions = {
+  ...ClientOptions,
   shift: number,
 };

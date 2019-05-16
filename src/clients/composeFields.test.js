@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, ClientOptions } from '../flowTypes';
+import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
 
 const composeFields = require('./composeFields');
 
@@ -52,7 +52,7 @@ describe('composeFields', () => {
     };
 
     test('should compose not nested fields with shift = 0', () => {
-      const options: ClientOptions = { shift: 0 };
+      const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
         'id',
         'textField',
@@ -86,7 +86,7 @@ describe('composeFields', () => {
     });
 
     test('should compose not nested fields with shift = 1', () => {
-      const options: ClientOptions = { shift: 1 };
+      const options: ClientFieldsOptions = { shift: 1 };
       const expectedResult = [
         '  id',
         '  textField',
@@ -126,7 +126,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: { ring: { longitude: null } } },
       };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'textField',
         'intField',
@@ -153,7 +153,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: { ring: { longitude: null } } },
       };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
         'dateTimeField',
@@ -189,7 +189,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: { ring: null } },
       };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
         'dateTimeField',
@@ -220,7 +220,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: null },
       };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
         'dateTimeField',
@@ -251,7 +251,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { internalRings: { ring: { longitude: null } } },
       };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'textField',
         'intField',
@@ -278,7 +278,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: { ring: null } },
       };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'textField',
         'intField',
@@ -306,7 +306,7 @@ describe('composeFields', () => {
         geospatialPoint: { longitude: null },
         geospatialPolygon: { externalRing: null },
       };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'textField',
         'intField',
@@ -387,7 +387,7 @@ describe('composeFields', () => {
     };
 
     test('should compose embedded fields', () => {
-      const options: ClientOptions = { shift: 0 };
+      const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
         'id',
         'textField',
@@ -408,7 +408,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with include option 1', () => {
       const include = { textField: null };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['textField'];
 
       const result = composeFields(exampleConfig, options);
@@ -417,7 +417,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with include option 2', () => {
       const include = { embeddedField1: null };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'embeddedField1 {',
         '  textField1',
@@ -436,7 +436,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with include option 3', () => {
       const include = { embeddedField1: { textField1: null } };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['embeddedField1 {', '  textField1', '}'];
 
       const result = composeFields(exampleConfig, options);
@@ -445,7 +445,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with include option 4', () => {
       const include = { embeddedField1: { embeddedField2: { textField2: null } } };
-      const options: ClientOptions = { shift: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'embeddedField1 {',
         '  embeddedField2 {',
@@ -460,7 +460,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with exclude option 1', () => {
       const exclude = { embeddedField1: null };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = ['id', 'textField'];
 
       const result = composeFields(exampleConfig, options);
@@ -469,7 +469,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with exclude option 2', () => {
       const exclude = { embeddedField1: { embeddedField2: null } };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = ['id', 'textField', 'embeddedField1 {', '  textField1', '}'];
 
       const result = composeFields(exampleConfig, options);
@@ -478,7 +478,7 @@ describe('composeFields', () => {
 
     test('should compose embedded fields with exclude option 3', () => {
       const exclude = { embeddedField1: { embeddedField2: { embeddedField3: null } } };
-      const options: ClientOptions = { shift: 0, exclude };
+      const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
         'textField',
@@ -530,7 +530,7 @@ describe('composeFields', () => {
     });
 
     test('should compose relatioanl and duplex fields with depth: 0', () => {
-      const options: ClientOptions = { shift: 0, depth: 0 };
+      const options: ClientFieldsOptions = { shift: 0, depth: 0 };
       const expectedResult = ['id', 'firstName', 'secondName'];
 
       const result = composeFields(personConfig, options);
@@ -538,7 +538,7 @@ describe('composeFields', () => {
     });
 
     test('should compose relatioanl and duplex fields with depth: 1', () => {
-      const options: ClientOptions = { shift: 0, depth: 1 };
+      const options: ClientFieldsOptions = { shift: 0, depth: 1 };
       const expectedResult = [
         'id',
         'firstName',
@@ -565,7 +565,7 @@ describe('composeFields', () => {
     });
 
     test('should compose relatioanl and duplex fields with depth: 2', () => {
-      const options: ClientOptions = { shift: 0, depth: 2 };
+      const options: ClientFieldsOptions = { shift: 0, depth: 2 };
       const expectedResult = [
         'id',
         'firstName',
@@ -643,7 +643,7 @@ describe('composeFields', () => {
         parent: { firstName: null },
         children: { secondName: null },
       };
-      const options: ClientOptions = { shift: 0, depth: 0, include };
+      const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
       const expectedResult = ['id'];
 
       const result = composeFields(personConfig, options);
@@ -657,7 +657,7 @@ describe('composeFields', () => {
         parent: { firstName: null },
         children: { secondName: null },
       };
-      const options: ClientOptions = { shift: 0, depth: 2, include };
+      const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
         'id',
         'friends {',
@@ -682,7 +682,7 @@ describe('composeFields', () => {
         parent: { firstName: null, parent: null },
         children: { secondName: null, children: null },
       };
-      const options: ClientOptions = { shift: 0, depth: 2, include };
+      const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
         'id',
         'friends {',
@@ -721,7 +721,7 @@ describe('composeFields', () => {
         parent: { friends: null, children: null },
         children: { friends: null, parent: null },
       };
-      const options: ClientOptions = { shift: 0, depth: 2, exclude };
+      const options: ClientFieldsOptions = { shift: 0, depth: 2, exclude };
       const expectedResult = [
         'id',
         'firstName',
