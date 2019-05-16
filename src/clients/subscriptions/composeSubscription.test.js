@@ -20,6 +20,8 @@ describe('composeSubscription', () => {
     const expectedResult = `subscription newExample($where: ExampleWhereInput) {
   newExample(where: $where) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;
@@ -33,6 +35,8 @@ describe('composeSubscription', () => {
     const expectedResult = `subscription deletedExample($where: ExampleWhereInput) {
   deletedExample(where: $where) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;
@@ -46,6 +50,8 @@ describe('composeSubscription', () => {
     const expectedResult = `subscription updatedExample($whereOne: ExampleWhereOneInput, $where: ExampleWhereInput) {
   updatedExample(whereOne: $whereOne, where: $where) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;

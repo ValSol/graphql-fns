@@ -19,6 +19,8 @@ describe('composeMutation', () => {
     const expectedResult = `mutation createExample($data: ExampleCreateInput!) {
   createExample(data: $data) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;
@@ -32,6 +34,8 @@ describe('composeMutation', () => {
     const expectedResult = `mutation deleteExample($whereOne: ExampleWhereOneInput!) {
   deleteExample(whereOne: $whereOne) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;
@@ -45,6 +49,8 @@ describe('composeMutation', () => {
     const expectedResult = `mutation updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {
   updateExample(whereOne: $whereOne, data: $data) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;

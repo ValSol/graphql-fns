@@ -18,8 +18,13 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   } = thingConfig;
   const { shift, depth, include, exclude } = options;
 
-  const result =
-    embedded || !includeField('id', include, exclude) ? [] : [`${'  '.repeat(shift)}id`];
+  const result = [];
+
+  if (!embedded) {
+    if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
+    if (includeField('createdAt', include, exclude)) result.push(`${'  '.repeat(shift)}createdAt`);
+    if (includeField('updatedAt', include, exclude)) result.push(`${'  '.repeat(shift)}updatedAt`);
+  }
 
   const scalarFields = ['textFields', 'dateTimeFields', 'intFields', 'floatFields'];
 

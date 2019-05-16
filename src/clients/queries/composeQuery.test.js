@@ -19,6 +19,8 @@ describe('composeQuery', () => {
     const expectedResult = `query Example($whereOne: ExampleWhereOneInput!) {
   Example(whereOne: $whereOne) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;
@@ -41,6 +43,8 @@ describe('composeQuery', () => {
     const expectedResult = `query Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {
   Examples(where: $where, sort: $sort) {
     id
+    createdAt
+    updatedAt
     textField
   }
 }`;

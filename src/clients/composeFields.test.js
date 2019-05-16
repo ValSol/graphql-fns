@@ -55,6 +55,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'textField',
         'dateTimeField',
         'intField',
@@ -89,6 +91,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 1 };
       const expectedResult = [
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  textField',
         '  dateTimeField',
         '  intField',
@@ -156,6 +160,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'dateTimeField',
         'floatField',
         'booleanField',
@@ -192,6 +198,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'dateTimeField',
         'floatField',
         'booleanField',
@@ -223,6 +231,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'dateTimeField',
         'floatField',
         'booleanField',
@@ -390,6 +400,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'textField',
         'embeddedField1 {',
         '  textField1',
@@ -461,7 +473,7 @@ describe('composeFields', () => {
     test('should compose embedded fields with exclude option 1', () => {
       const exclude = { embeddedField1: null };
       const options: ClientFieldsOptions = { shift: 0, exclude };
-      const expectedResult = ['id', 'textField'];
+      const expectedResult = ['id', 'createdAt', 'updatedAt', 'textField'];
 
       const result = composeFields(exampleConfig, options);
       expect(result).toEqual(expectedResult);
@@ -470,7 +482,15 @@ describe('composeFields', () => {
     test('should compose embedded fields with exclude option 2', () => {
       const exclude = { embeddedField1: { embeddedField2: null } };
       const options: ClientFieldsOptions = { shift: 0, exclude };
-      const expectedResult = ['id', 'textField', 'embeddedField1 {', '  textField1', '}'];
+      const expectedResult = [
+        'id',
+        'createdAt',
+        'updatedAt',
+        'textField',
+        'embeddedField1 {',
+        '  textField1',
+        '}',
+      ];
 
       const result = composeFields(exampleConfig, options);
       expect(result).toEqual(expectedResult);
@@ -481,6 +501,8 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'textField',
         'embeddedField1 {',
         '  textField1',
@@ -531,7 +553,7 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 0', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 0 };
-      const expectedResult = ['id', 'firstName', 'secondName'];
+      const expectedResult = ['id', 'createdAt', 'updatedAt', 'firstName', 'secondName'];
 
       const result = composeFields(personConfig, options);
       expect(result).toEqual(expectedResult);
@@ -541,20 +563,28 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 1 };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'firstName',
         'secondName',
         'friends {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '}',
         'parent {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '}',
         'children {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '}',
@@ -568,64 +598,90 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 2 };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'firstName',
         'secondName',
         'friends {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  friends {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  parent {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  children {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '}',
         'parent {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  friends {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  parent {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  children {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '}',
         'children {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  friends {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  parent {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '  children {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
@@ -689,6 +745,8 @@ describe('composeFields', () => {
         '  id',
         '  friends {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
@@ -697,6 +755,8 @@ describe('composeFields', () => {
         '  firstName',
         '  parent {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
@@ -705,6 +765,8 @@ describe('composeFields', () => {
         '  secondName',
         '  children {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
@@ -724,34 +786,48 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 2, exclude };
       const expectedResult = [
         'id',
+        'createdAt',
+        'updatedAt',
         'firstName',
         'secondName',
         'friends {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  friends {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '}',
         'parent {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  parent {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
         '}',
         'children {',
         '  id',
+        '  createdAt',
+        '  updatedAt',
         '  firstName',
         '  secondName',
         '  children {',
         '    id',
+        '    createdAt',
+        '    updatedAt',
         '    firstName',
         '    secondName',
         '  }',
