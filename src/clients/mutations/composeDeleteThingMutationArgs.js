@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const composDeleteThingMutationArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeDeleteThingMutationArgs = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
 
   const result = [
@@ -12,4 +12,4 @@ const composDeleteThingMutationArgs = (thingConfig: ThingConfig): Array<string> 
   return result;
 };
 
-module.exports = composDeleteThingMutationArgs;
+module.exports = composeDeleteThingMutationArgs;

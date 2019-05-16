@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composUpdateThingMutationArgs = require('./composUpdateThingMutationArgs');
+const composeDeleteThingMutationArgs = require('./composeDeleteThingMutationArgs');
 
-describe('composUpdateThingMutationArgs', () => {
+describe('composeDeleteThingMutationArgs', () => {
   test('should compose deleteThing mutation args ', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,11 +17,11 @@ describe('composUpdateThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {',
-      '  updateExample(whereOne: $whereOne, data: $data) {',
+      'mutation deleteExample($whereOne: ExampleWhereOneInput!) {',
+      '  deleteExample(whereOne: $whereOne) {',
     ];
 
-    const result = composUpdateThingMutationArgs(thingConfig);
+    const result = composeDeleteThingMutationArgs(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });
