@@ -3,7 +3,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereInputType = require('../../types/inputs/createThingWhereInputType');
 
-const composeNewThingSubscriptionArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeDeletedThingSubscriptionArgs = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
 
   const argsArray = [];
@@ -14,13 +14,13 @@ const composeNewThingSubscriptionArgs = (thingConfig: ThingConfig): Array<string
   }
 
   if (!argsArray.length) {
-    return [`subscription new${name} {`, `  new${name} {`];
+    return [`subscription deleted${name} {`, `  deleted${name} {`];
   }
 
   const args1 = argsArray.map(({ argName, argType }) => `$${argName}: ${argType}`).join(', ');
   const args2 = argsArray.map(({ argName }) => `${argName}: $${argName}`).join(', ');
 
-  return [`subscription new${name}(${args1}) {`, `  new${name}(${args2}) {`];
+  return [`subscription deleted${name}(${args1}) {`, `  deleted${name}(${args2}) {`];
 };
 
-module.exports = composeNewThingSubscriptionArgs;
+module.exports = composeDeletedThingSubscriptionArgs;
