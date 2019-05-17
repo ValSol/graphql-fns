@@ -110,9 +110,9 @@ const createThingType = (thingConfig: ThingConfig): string => {
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name: name2, type, required }) => {
+    geospatialFields.reduce((prev, { array, name: name2, geospatialType, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Geospatial${type}${array ? '!]!' : ''}${
+        `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );

@@ -10,10 +10,16 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   for (let i = 0; i < thingConfigs.length; i += 1) {
     const thingConfig = thingConfigs[i];
     const { geospatialFields } = thingConfig;
-    if (geospatialFields && geospatialFields.some(({ type }) => type === 'Point')) {
+    if (
+      geospatialFields &&
+      geospatialFields.some(({ geospatialType }) => geospatialType === 'Point')
+    ) {
       thereIsGeospatialPoint = true;
     }
-    if (geospatialFields && geospatialFields.some(({ type }) => type === 'Polygon')) {
+    if (
+      geospatialFields &&
+      geospatialFields.some(({ geospatialType }) => geospatialType === 'Polygon')
+    ) {
       thereIsGeospatialPolygon = true;
       break;
     }

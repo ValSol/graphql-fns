@@ -95,7 +95,7 @@ describe('graphql schema', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
     };

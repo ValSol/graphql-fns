@@ -67,8 +67,10 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name: name2, type }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}Geospatial${type}Input${array ? '!]' : ''}`);
+    geospatialFields.reduce((prev, { array, name: name2, geospatialType }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}`,
+      );
       return prev;
     }, thingTypeArray);
   }

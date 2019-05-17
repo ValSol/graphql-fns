@@ -37,21 +37,21 @@ describe('processUpdateInputData', () => {
       geospatialFields: [
         {
           name: 'point',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'points',
           array: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'polygon',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'polygons',
           array: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

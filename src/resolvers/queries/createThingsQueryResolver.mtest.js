@@ -125,20 +125,20 @@ describe('createThingQueryResolver', () => {
       geospatialFields: [
         {
           name: 'point',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'point2',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'areas',
           array: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     });

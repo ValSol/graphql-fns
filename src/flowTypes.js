@@ -40,7 +40,7 @@ type EnumField = {
 type GeospatialField = {
   name: string,
   required?: boolean,
-  type: 'Point' | 'Polygon',
+  geospatialType: 'Point' | 'Polygon',
   array?: boolean,
 };
 
@@ -157,8 +157,7 @@ export type InventoryСhain =
 export type Periphery = Map<
   ThingConfig,
   {
-    // as key using oppositeName
-    [key: string]: {
+    [oppositeName: string]: {
       oppositeIds: Array<string>,
       array: boolean,
       name: string,
@@ -174,6 +173,7 @@ export type NearInput = {|
 |};
 
 export type NearMongodb = {
+  // as key using [fieldName].coordinates
   [key: string]: {
     $nearSphere: {
       $geometry: MongodbGeospatialPoint,

@@ -364,43 +364,43 @@ describe('composeThingSchemaProperties', () => {
       geospatialFields: [
         {
           name: 'pointField1',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'pointField2',
           required: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'pointField3',
           array: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'pointField4',
           array: true,
           required: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'polygonField1',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'polygonField2',
           required: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'polygonField3',
           array: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'polygonField4',
           array: true,
           required: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

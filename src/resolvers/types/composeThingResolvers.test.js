@@ -136,20 +136,20 @@ describe('composeThingResolvers', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'positions',
-          type: 'Point',
+          geospatialType: 'Point',
           array: true,
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'areas',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
           array: true,
         },
       ],

@@ -42,11 +42,11 @@ describe('composeFields', () => {
       geospatialFields: [
         {
           name: 'geospatialPoint',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'geospatialPolygon',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

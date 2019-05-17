@@ -114,9 +114,9 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { name, type }) => {
+    geospatialFields.reduce((prev, { name, geospatialType }) => {
       if (includeField(name, include, exclude)) {
-        if (type === 'Point') {
+        if (geospatialType === 'Point') {
           prev.push(`${'  '.repeat(shift)}${name} {`);
           const nestedInculde = include && include[name];
           const nestedExclude = exclude && exclude[name];
@@ -128,7 +128,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
           }
           prev.push(`${'  '.repeat(shift)}}`);
         }
-        if (type === 'Polygon') {
+        if (geospatialType === 'Polygon') {
           prev.push(`${'  '.repeat(shift)}${name} {`);
           const includeExteralRing =
             includeField('externalRing', include && include[name], exclude && exclude[name]) &&

@@ -8,7 +8,7 @@ const createThingNearInputType = (thingConfig: ThingConfig): string => {
   const fieldLines = geospatialFields
     ? geospatialFields
         // for 'near' query will use only scalar points
-        .filter(({ array, type }) => !array && type === 'Point')
+        .filter(({ array, geospatialType }) => !array && geospatialType === 'Point')
         .map(({ name: fieldName }) => `  ${fieldName}`)
     : [];
 

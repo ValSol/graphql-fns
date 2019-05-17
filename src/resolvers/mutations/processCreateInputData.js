@@ -70,9 +70,9 @@ const processCreateInputData = (
 
     const geospatialFieldsObject = {};
     if (geospatialFields) {
-      geospatialFields.reduce((prev, { name, array, type }) => {
+      geospatialFields.reduce((prev, { name, array, geospatialType }) => {
         // eslint-disable-next-line
-        prev[name] = { array, type };
+        prev[name] = { array, geospatialType };
         return prev;
       }, geospatialFieldsObject);
     }
@@ -292,22 +292,22 @@ const processCreateInputData = (
         // eslint-disable-next-line no-param-reassign
         prev[key] = transform(data2[key], embeddedFieldsConfigs[key]);
       } else if (geospatialFieldsObject[key]) {
-        const { array, type } = geospatialFieldsObject[key];
+        const { array, geospatialType } = geospatialFieldsObject[key];
         if (array) {
-          if (type === 'Point') {
+          if (geospatialType === 'Point') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map(value => pointFromGqlToMongo(value));
           }
-          if (type === 'Polygon') {
+          if (geospatialType === 'Polygon') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map(value => polygonFromGqlToMongo(value));
           }
         } else {
-          if (type === 'Point') {
+          if (geospatialType === 'Point') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = pointFromGqlToMongo(data2[key]);
           }
-          if (type === 'Polygon') {
+          if (geospatialType === 'Polygon') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = polygonFromGqlToMongo(data2[key]);
           }

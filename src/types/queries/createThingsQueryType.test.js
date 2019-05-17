@@ -53,11 +53,11 @@ describe('createThingsQueryType', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };
@@ -84,11 +84,11 @@ describe('createThingsQueryType', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

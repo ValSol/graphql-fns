@@ -68,7 +68,7 @@ describe('composeThingsQueryArgs', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
     };

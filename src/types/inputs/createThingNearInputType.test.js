@@ -29,16 +29,16 @@ describe('createThingNearInputType', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'positions',
           array: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

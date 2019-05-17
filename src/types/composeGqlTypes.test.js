@@ -54,7 +54,7 @@ describe('composeGqlTypes', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
     };
@@ -215,7 +215,7 @@ type Subscription {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
     };
@@ -236,7 +236,7 @@ type Subscription {
       geospatialFields: [
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

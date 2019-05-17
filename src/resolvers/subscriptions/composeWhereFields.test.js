@@ -33,7 +33,7 @@ describe('composeWhereFields', () => {
       geospatialFields: [
         {
           name: 'geospatialField',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
       textFields: [

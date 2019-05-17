@@ -216,43 +216,43 @@ describe('createThingUpdateInputType', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
           required: true,
         },
         {
           name: 'precedingPosition',
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'favoritePositions',
           array: true,
-          type: 'Point',
+          geospatialType: 'Point',
           required: true,
         },
         {
           name: 'worstPositions',
           array: true,
-          type: 'Point',
+          geospatialType: 'Point',
         },
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
           required: true,
         },
         {
           name: 'precedingArea',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
         {
           name: 'favoriteAreas',
           array: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
           required: true,
         },
         {
           name: 'worstAreas',
           array: true,
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

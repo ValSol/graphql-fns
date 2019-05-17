@@ -22,7 +22,7 @@ describe('composeGeospatialTypes', () => {
       geospatialFields: [
         {
           name: 'position',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
     };
@@ -47,7 +47,7 @@ input GeospatialPointInput {
       geospatialFields: [
         {
           name: 'area',
-          type: 'Polygon',
+          geospatialType: 'Polygon',
         },
       ],
     };

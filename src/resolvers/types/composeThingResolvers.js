@@ -49,31 +49,33 @@ const composeThingResolvers = (
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { name, array, type }) => {
+    geospatialFields.reduce((prev, { name, array, geospatialType }) => {
       const resolver = (parent: Object): Object => {
         if (array) {
           const values = parent[name];
           if (!values || !values.length) return [];
 
-          if (type === 'Point') {
+          if (geospatialType === 'Point') {
             return values.map(value => pointFromMongoToGql(value));
           }
 
-          if (type === 'Polygon') {
+          if (geospatialType === 'Polygon') {
             return values.map(value => polygonFromMongoToGql(value));
           }
 
-          throw new TypeError(`Invalid type value "${name}" of geospatial mongodb field!`);
+          throw new TypeError(
+            `Invalid geospatialType value "${name}" of geospatial mongodb field!`,
+          );
         }
 
         const value = parent[name];
         if (!value || !value.type) return null;
 
-        if (type === 'Point') return pointFromMongoToGql(value);
+        if (geospatialType === 'Point') return pointFromMongoToGql(value);
 
-        if (type === 'Polygon') return polygonFromMongoToGql(value);
+        if (geospatialType === 'Polygon') return polygonFromMongoToGql(value);
 
-        throw new TypeError(`Invalid type value "${name}" of geospatial mongodb field!`);
+        throw new TypeError(`Invalid geospatialType value "${name}" of geospatial mongodb field!`);
       };
       // eslint-disable-next-line no-param-reassign
       prev[name] = resolver;

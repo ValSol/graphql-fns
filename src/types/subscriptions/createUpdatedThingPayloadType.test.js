@@ -92,7 +92,7 @@ type UpdatedExamplePayload {
       geospatialFields: [
         {
           name: 'geospatialField',
-          type: 'Point',
+          geospatialType: 'Point',
         },
       ],
       relationalFields: [

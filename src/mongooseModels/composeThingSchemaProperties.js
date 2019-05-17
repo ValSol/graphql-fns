@@ -133,8 +133,8 @@ const composeThingSchemaProperties = (
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name, required, type }) => {
-      if (type === 'Point') {
+    geospatialFields.reduce((prev, { array, name, required, geospatialType }) => {
+      if (geospatialType === 'Point') {
         const obj: Object = {
           type: {
             type: String,
@@ -149,7 +149,7 @@ const composeThingSchemaProperties = (
 
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
-      } else if (type === 'Polygon') {
+      } else if (geospatialType === 'Polygon') {
         const obj: Object = {
           type: {
             type: String,
@@ -164,7 +164,9 @@ const composeThingSchemaProperties = (
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
       } else {
-        throw new TypeError(`Invalid value "${type}" of geospatial field type!`);
+        throw new TypeError(
+          `Invalid value "${geospatialType}" of geospatial field geospatialType!`,
+        );
       }
       return prev;
     }, result);
