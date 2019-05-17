@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig, FormField } from '../flowTypes';
 
-const arrangeFields = (thingConfig: ThingConfig): Array<FormField> => {
+const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
   const {
     booleanFields,
     dateTimeFields,
@@ -21,35 +21,50 @@ const arrangeFields = (thingConfig: ThingConfig): Array<FormField> => {
   ];
 
   if (booleanFields) {
-    booleanFields.reduce((prev, { name }) => {
-      prev.push({ name });
+    booleanFields.reduce((prev, { name, default: value }) => {
+      const obj = {};
+      obj.name = name;
+      if (value !== undefined) obj.value = value;
+      prev.push(obj);
       return prev;
     }, result);
   }
 
   if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { name }) => {
-      prev.push({ name });
+    dateTimeFields.reduce((prev, { name, default: value }) => {
+      const obj = {};
+      obj.name = name;
+      if (value !== undefined) obj.value = value;
+      prev.push(obj);
       return prev;
     }, result);
   }
 
   if (textFields) {
-    textFields.reduce((prev, { name }) => {
-      prev.push({ name });
+    textFields.reduce((prev, { name, default: value }) => {
+      const obj = {};
+      obj.name = name;
+      if (value !== undefined) obj.value = value;
+      prev.push(obj);
       return prev;
     }, result);
   }
 
   if (intFields) {
-    intFields.reduce((prev, { name }) => {
-      prev.push({ name });
+    intFields.reduce((prev, { name, default: value }) => {
+      const obj = {};
+      obj.name = name;
+      if (value !== undefined) obj.value = value;
+      prev.push(obj);
       return prev;
     }, result);
   }
   if (floatFields) {
-    floatFields.reduce((prev, { name }) => {
-      prev.push({ name });
+    floatFields.reduce((prev, { name, default: value }) => {
+      const obj = {};
+      obj.name = name;
+      if (value !== undefined) obj.value = value;
+      prev.push(obj);
       return prev;
     }, result);
   }
@@ -81,4 +96,4 @@ const arrangeFields = (thingConfig: ThingConfig): Array<FormField> => {
   return result;
 };
 
-module.exports = arrangeFields;
+module.exports = arrangeFormFields;

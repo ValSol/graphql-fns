@@ -78,6 +78,7 @@ type FloatField = {
 export type FormField = {
   name: string,
   formFieldType?: 'hidden' | 'disabled' | 'email' | 'multiline',
+  value?: any,
 };
 
 export type ThingConfig = {
