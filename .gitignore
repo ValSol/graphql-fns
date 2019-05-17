@@ -1,4 +1,5 @@
-node_modules
-flow-typed
+flow-typed/
+lib/
+node_modules/
 
 *.log
