@@ -75,6 +75,11 @@ type FloatField = {
   default?: number | Array<number>,
 };
 
+export type FormField = {
+  name: string,
+  formFieldType?: 'hidden' | 'disabled' | 'email' | 'multiline',
+};
+
 export type ThingConfig = {
   name: string,
   embedded?: boolean,
@@ -109,6 +114,8 @@ export type ThingConfig = {
   intFields?: Array<IntField>,
   floatFields?: Array<FloatField>,
   textFields?: Array<TextField>,
+
+  form?: Array<FormField>,
 };
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;
