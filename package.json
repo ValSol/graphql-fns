@@ -62,7 +62,8 @@
     "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
-    "mongoose": "5.x"
+    "mongoose": "5.x",
+    "yup": "0.x"
   },
   "config": {
     "commitizen": {

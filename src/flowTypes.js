@@ -121,7 +121,7 @@ export type ThingConfig = {
 
 export type ThingConfigObject = {
   [fieldName: string]: {
-    [propery: string]: any,
+    [property: string]: any,
     name: string,
     kind:
       | 'booleanFields'
