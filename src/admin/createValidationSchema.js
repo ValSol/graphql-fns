@@ -35,9 +35,6 @@ const createValidationSchema = (thingConfig: ThingConfig): Object => {
     return prev;
   }, {});
 
-  const object2 = {};
-  object2.textField = Yup.string();
-
   return Yup.object().shape(object);
 };
 
