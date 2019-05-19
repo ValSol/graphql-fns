@@ -3,6 +3,7 @@ import type { ThingConfig, FormField } from '../flowTypes';
 
 const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
   const {
+    embedded,
     booleanFields,
     dateTimeFields,
     textFields,
@@ -14,11 +15,13 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
     relationalFields,
   } = thingConfig;
 
-  const result = [
-    { name: 'id', formFieldType: 'hidden' },
-    { name: 'createdAt', formFieldType: 'disabled' },
-    { name: 'updatedAt', formFieldType: 'disabled' },
-  ];
+  const result = embedded
+    ? []
+    : [
+        { name: 'id', formFieldType: 'hidden' },
+        { name: 'createdAt', formFieldType: 'disabled' },
+        { name: 'updatedAt', formFieldType: 'disabled' },
+      ];
 
   if (booleanFields) {
     booleanFields.reduce((prev, { name, default: value }) => {

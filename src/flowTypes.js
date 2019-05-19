@@ -119,6 +119,24 @@ export type ThingConfig = {
   form?: Array<FormField>,
 };
 
+export type ThingConfigObject = {
+  [fieldName: string]: {
+    [propery: string]: any,
+    name: string,
+    kind:
+      | 'booleanFields'
+      | 'dateTimeFields'
+      | 'duplexFields'
+      | 'embeddedFields'
+      | 'enumFields'
+      | 'floatFields'
+      | 'geospatialFields'
+      | 'intFields'
+      | 'relationalFields'
+      | 'textFields',
+  },
+};
+
 export type Enums = Array<{ name: string, enum: Array<string> }>;
 
 type thingNamesList = null | Array<string>;

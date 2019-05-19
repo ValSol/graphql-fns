@@ -1,4 +1,4 @@
-// flow
+// @flow
 import type { Periphery } from '../../flowTypes';
 
 const createThingSchema = require('../../mongooseModels/createThingSchema');
