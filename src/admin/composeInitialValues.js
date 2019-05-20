@@ -10,8 +10,6 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    if (!fieldsObject[name]) return prev; // ignore: id, crteatedAt, updatedAt
-
     const { array, config, default: defaultValue, kind } = fieldsObject[name];
 
     switch (kind) {

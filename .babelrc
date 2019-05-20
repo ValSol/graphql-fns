@@ -1,4 +1,8 @@
 {
-  "presets": ["minify"],
+  "presets": [
+    ["@babel/preset-env", { "targets": { "node": "current" } }],
+    "@babel/preset-react",
+    "minify"
+  ],
   "plugins": ["transform-flow-strip-types"]
 }

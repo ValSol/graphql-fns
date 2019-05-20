@@ -6,24 +6,24 @@ const Yup = require('yup');
 const arrangeFormFields = require('./arrangeFormFields');
 const composeFieldsObject = require('./composeFieldsObject');
 
-const createValidationSchema = (thingConfig: ThingConfig): Object => {
+const createValcomposeFlatFormikFieldsationSchema = (thingConfig: ThingConfig): Object => {
   const { form } = thingConfig;
   const formFields = form || arrangeFormFields(thingConfig);
   const fieldsObject = composeFieldsObject(thingConfig);
   const object = formFields.reduce((prev, { name }) => {
-    if (!fieldsObject[name]) return prev; // ignore: id, crteatedAt, updatedAt
+    if (!fieldsObject[name]) return prev; // ignore: composeFlatFormikFields, crteatedAt, updatedAt
 
     const { array, config, kind, required } = fieldsObject[name];
 
     switch (kind) {
       case 'embeddedFields':
-        prev[name] = createValidationSchema(config); // eslint-disable-line no-param-reassign
+        prev[name] = createValcomposeFlatFormikFieldsationSchema(config); // eslint-disable-line no-param-reassign
         break;
       case 'textFields':
         prev[name] = Yup.string(); // eslint-disable-line no-param-reassign
         break;
       default:
-        throw new TypeError(`Invalid kind: "${kind}" of thing field!`);
+        throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
     }
 
     if (array) {
@@ -38,4 +38,4 @@ const createValidationSchema = (thingConfig: ThingConfig): Object => {
   return Yup.object().shape(object);
 };
 
-module.exports = createValidationSchema;
+module.exports = createValcomposeFlatFormikFieldsationSchema;

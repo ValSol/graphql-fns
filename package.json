@@ -30,17 +30,19 @@
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "@okgrow/graphql-scalars": "^0.4.5",
-    "graphql": "^14.2.1",
     "graphql-subscriptions": "^1.1.0",
     "pluralize": "^7.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
     "apollo-server": "^2.4.8",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.5.0",
+    "babel-jest": "^24.8.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-minify": "^0.5.0",
     "commitizen": "^3.0.7",
@@ -55,14 +57,19 @@
     "flow-bin": "^0.98.1",
     "flow-copy-source": "^2.0.3",
     "ghooks": "^2.0.4",
-    "jest": "^24.5.0",
+    "jest": "^24.8.0",
     "jest-environment-node": "^24.7.1",
     "prettier": "^1.16.4",
     "rimraf": "^2.6.3",
     "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
+    "@material-ui/core": "^3.x",
+    "formik": "1.x",
+    "graphql": "14.x",
     "mongoose": "5.x",
+    "react": "16.x",
+    "react-dom": "^16.x",
     "yup": "0.x"
   },
   "config": {

@@ -59,7 +59,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with array field', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -77,7 +77,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with default array field', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with default array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -96,7 +96,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with default array field and data', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with default array field and data', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -116,7 +116,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with embedded field', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with embedded field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -143,7 +143,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with embedded field and data', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with embedded field and data', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -171,7 +171,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with embedded array field', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -199,7 +199,7 @@ describe('composeInitialValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the validation schema with embedded array field with data', () => {
+  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field with data', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,

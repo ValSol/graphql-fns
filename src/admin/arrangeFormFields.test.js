@@ -163,10 +163,6 @@ describe('arrangeFormFields', () => {
 
   test('should arrange fields', () => {
     const expectedResult: Array<FormField> = [
-      // default fields
-      { name: 'id', formFieldType: 'hidden' },
-      { name: 'createdAt', formFieldType: 'disabled' },
-      { name: 'updatedAt', formFieldType: 'disabled' },
       // booleanFields
       { name: 'booleanField' },
       { name: 'booleanField2', value: false },
