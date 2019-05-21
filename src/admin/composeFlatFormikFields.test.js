@@ -19,8 +19,8 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { fieldName: 'textField1' },
-      { fieldName: 'textField2' },
+      { name: 'textField1', path: 'textField1' },
+      { name: 'textField2', path: 'textField2' },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -43,8 +43,16 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { arrayName: 'textFieldArray1' },
-      { arrayName: 'textFieldArray2' },
+      {
+        name: 'textFieldArray1',
+        path: 'textFieldArray1',
+        array: true,
+      },
+      {
+        name: 'textFieldArray2',
+        path: 'textFieldArray2',
+        array: true,
+      },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -110,18 +118,21 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { fieldName: 'textField' },
+      { name: 'textField', path: 'textField' },
       {
-        sectionName: 'embedded1',
+        name: 'embedded1',
+        path: 'embedded1',
         child: [
-          { fieldName: 'embedded1.textField1' },
+          { name: 'textField1', path: 'embedded1.textField1' },
           {
-            sectionName: 'embedded2',
+            name: 'embedded2',
+            path: 'embedded1.embedded2',
             child: [
-              { fieldName: 'embedded1.embedded2.textField2' },
+              { name: 'textField2', path: 'embedded1.embedded2.textField2' },
               {
-                sectionName: 'embedded3',
-                child: [{ fieldName: 'embedded1.embedded2.embedded3.textField3' }],
+                name: 'embedded3',
+                path: 'embedded1.embedded2.embedded3',
+                child: [{ name: 'textField3', path: 'embedded1.embedded2.embedded3.textField3' }],
               },
             ],
           },
@@ -195,18 +206,24 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { fieldName: 'textField' },
+      { name: 'textField', path: 'textField' },
       {
-        sectionName: 'embedded1',
-        children: [
-          { fieldName: 'embedded1.textField1' },
+        name: 'embedded1',
+        path: 'embedded1',
+        array: true,
+        child: [
+          { name: 'textField1', path: 'embedded1.textField1' },
           {
-            sectionName: 'embedded2',
-            children: [
-              { fieldName: 'embedded1.embedded2.textField2' },
+            name: 'embedded2',
+            path: 'embedded1.embedded2',
+            array: true,
+            child: [
+              { name: 'textField2', path: 'embedded1.embedded2.textField2' },
               {
-                sectionName: 'embedded3',
-                children: [{ fieldName: 'embedded1.embedded2.embedded3.textField3' }],
+                name: 'embedded3',
+                path: 'embedded1.embedded2.embedded3',
+                array: true,
+                child: [{ name: 'textField3', path: 'embedded1.embedded2.embedded3.textField3' }],
               },
             ],
           },

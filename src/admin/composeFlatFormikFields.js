@@ -13,18 +13,19 @@ const composeFlatFormikFields = (thingConfig: ThingConfig, prefix?: string): Fla
   const result = formFields.reduce((prev, { name }) => {
     const { array, config, kind } = fieldsObject[name];
 
-    const flatName = prefix ? `${prefix}.${name}` : name;
+    const path = prefix ? `${prefix}.${name}` : name;
+
     switch (kind) {
       case 'embeddedFields':
         if (array) {
-          prev.push({ sectionName: name, children: composeFlatFormikFields(config, flatName) });
+          prev.push({ array, name, path, child: composeFlatFormikFields(config, path) });
         } else {
-          prev.push({ sectionName: name, child: composeFlatFormikFields(config, flatName) });
+          prev.push({ name, path, child: composeFlatFormikFields(config, path) });
         }
         break;
 
       case 'textFields':
-        prev.push(array ? { arrayName: flatName } : { fieldName: flatName });
+        prev.push(array ? { array, name, path } : { name, path });
         break;
 
       default:
