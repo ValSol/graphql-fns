@@ -111,9 +111,22 @@ describe('composeFlatFormikFields', () => {
 
     const expectedResult: FlatFormikFields = [
       { fieldName: 'textField' },
-      { fieldName: 'embedded1.textField1' },
-      { fieldName: 'embedded1.embedded2.textField2' },
-      { fieldName: 'embedded1.embedded2.embedded3.textField3' },
+      {
+        sectionName: 'embedded1',
+        child: [
+          { fieldName: 'embedded1.textField1' },
+          {
+            sectionName: 'embedded2',
+            child: [
+              { fieldName: 'embedded1.embedded2.textField2' },
+              {
+                sectionName: 'embedded3',
+                child: [{ fieldName: 'embedded1.embedded2.embedded3.textField3' }],
+              },
+            ],
+          },
+        ],
+      },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -184,14 +197,17 @@ describe('composeFlatFormikFields', () => {
     const expectedResult: FlatFormikFields = [
       { fieldName: 'textField' },
       {
-        arrayName: 'embedded1',
+        sectionName: 'embedded1',
         children: [
-          { fieldName: 'textField1' },
+          { fieldName: 'embedded1.textField1' },
           {
-            arrayName: 'embedded2',
+            sectionName: 'embedded2',
             children: [
-              { fieldName: 'textField2' },
-              { arrayName: 'embedded3', children: [{ fieldName: 'textField3' }] },
+              { fieldName: 'embedded1.embedded2.textField2' },
+              {
+                sectionName: 'embedded3',
+                children: [{ fieldName: 'embedded1.embedded2.embedded3.textField3' }],
+              },
             ],
           },
         ],

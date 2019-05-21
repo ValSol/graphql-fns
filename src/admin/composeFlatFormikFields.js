@@ -17,9 +17,9 @@ const composeFlatFormikFields = (thingConfig: ThingConfig, prefix?: string): Fla
     switch (kind) {
       case 'embeddedFields':
         if (array) {
-          prev.push({ arrayName: flatName, children: composeFlatFormikFields(config) });
+          prev.push({ sectionName: name, children: composeFlatFormikFields(config, flatName) });
         } else {
-          prev.push.apply(prev, composeFlatFormikFields(config, flatName)); // eslint-disable-line prefer-spread
+          prev.push({ sectionName: name, child: composeFlatFormikFields(config, flatName) });
         }
         break;
 
