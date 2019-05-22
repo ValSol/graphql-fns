@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.94",
+  "version": "0.1.2-beta.111",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -31,9 +31,18 @@
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
     "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "@okgrow/graphql-scalars": "^0.4.5",
+    "formik": "^1.5.7",
+    "formik-material-ui": "^0.0.16",
+    "graphql": "^14.3.0",
     "graphql-subscriptions": "^1.1.0",
-    "pluralize": "^7.0.0"
+    "lodash": "^4.17.11",
+    "mongoose": "^5.5.10",
+    "pluralize": "^7.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -64,13 +73,14 @@
     "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
-    "@material-ui/core": "^3.x",
-    "formik": "1.x",
-    "graphql": "14.x",
-    "mongoose": "5.x",
-    "react": "16.x",
-    "react-dom": "^16.x",
-    "yup": "0.x"
+    "@material-ui/core": "^3.9.3",
+    "formik": "^1.5.7",
+    "formik-material-ui": "^0.0.16",
+    "graphql": "^14.3.0",
+    "mongoose": "^5.5.10",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "yup": "^0.27.0"
   },
   "config": {
     "commitizen": {
