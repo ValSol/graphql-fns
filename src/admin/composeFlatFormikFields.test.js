@@ -18,10 +18,7 @@ describe('composeFlatFormikFields', () => {
       ],
     };
 
-    const expectedResult: FlatFormikFields = [
-      { name: 'textField1', path: 'textField1' },
-      { name: 'textField2', path: 'textField2' },
-    ];
+    const expectedResult: FlatFormikFields = [{ name: 'textField1' }, { name: 'textField2' }];
 
     const result = composeFlatFormikFields(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -45,12 +42,10 @@ describe('composeFlatFormikFields', () => {
     const expectedResult: FlatFormikFields = [
       {
         name: 'textFieldArray1',
-        path: 'textFieldArray1',
         array: true,
       },
       {
         name: 'textFieldArray2',
-        path: 'textFieldArray2',
         array: true,
       },
     ];
@@ -118,21 +113,18 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'textField', path: 'textField' },
+      { name: 'textField' },
       {
         name: 'embedded1',
-        path: 'embedded1',
         child: [
-          { name: 'textField1', path: 'embedded1.textField1' },
+          { name: 'textField1' },
           {
             name: 'embedded2',
-            path: 'embedded1.embedded2',
             child: [
-              { name: 'textField2', path: 'embedded1.embedded2.textField2' },
+              { name: 'textField2' },
               {
                 name: 'embedded3',
-                path: 'embedded1.embedded2.embedded3',
-                child: [{ name: 'textField3', path: 'embedded1.embedded2.embedded3.textField3' }],
+                child: [{ name: 'textField3' }],
               },
             ],
           },
@@ -206,24 +198,24 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'textField', path: 'textField' },
+      { name: 'textField' },
       {
         name: 'embedded1',
-        path: 'embedded1',
         array: true,
+        config: embedded1Config,
         child: [
-          { name: 'textField1', path: 'embedded1.textField1' },
+          { name: 'textField1' },
           {
             name: 'embedded2',
-            path: 'embedded1.embedded2',
             array: true,
+            config: embedded2Config,
             child: [
-              { name: 'textField2', path: 'embedded1.embedded2.textField2' },
+              { name: 'textField2' },
               {
                 name: 'embedded3',
-                path: 'embedded1.embedded2.embedded3',
                 array: true,
-                child: [{ name: 'textField3', path: 'embedded1.embedded2.embedded3.textField3' }],
+                config: embedded3Config,
+                child: [{ name: 'textField3' }],
               },
             ],
           },

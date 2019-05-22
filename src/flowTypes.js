@@ -139,9 +139,9 @@ export type ThingConfigObject = {
 
 export type FlatFormikFields = Array<{
   name: string,
-  path: string,
   array?: boolean,
   child?: FlatFormikFields,
+  config?: ThingConfig,
 }>;
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;
