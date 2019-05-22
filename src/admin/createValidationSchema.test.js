@@ -74,6 +74,7 @@ describe('createValidationSchema', () => {
       textFields: [
         {
           name: 'textField',
+          required: true,
         },
       ],
     };
@@ -89,7 +90,7 @@ describe('createValidationSchema', () => {
     });
 
     const expectedResult = yup.object().shape({
-      embeddedField: yup.object().shape({ textField: yup.string() }),
+      embeddedField: yup.object().shape({ textField: yup.string().required('Required') }),
     });
 
     const result = createValidationSchema(thingConfig);

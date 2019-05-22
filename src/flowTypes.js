@@ -137,12 +137,12 @@ export type ThingConfigObject = {
   },
 };
 
-export type FlatFormikFields = Array<
-  | { fieldName: string }
-  | { arrayName: string }
-  | { sectionName: string, child: FlatFormikFields }
-  | { sectionName: string, children: FlatFormikFields },
->;
+export type FlatFormikFields = Array<{
+  name: string,
+  path: string,
+  array?: boolean,
+  child?: FlatFormikFields,
+}>;
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;
 
