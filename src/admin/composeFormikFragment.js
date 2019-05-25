@@ -13,15 +13,14 @@ const composeFlatFormikFields = require('./composeFlatFormikFields');
 const formikFieldArrayChild = require('./formikFieldArrayChild');
 const composeInitialValues = require('./composeInitialValues');
 
-const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, prefix?: string) =>
+const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, prefix2?: string) =>
   flatFormikFields.map(({ array, config, child, name }, i) => {
-    const name2 = `${'• '.repeat(shift)}${name}`;
+    const name2 = prefix2 ? `${prefix2} ‣ ${name}` : name;
     const path = prefix ? `${prefix}.${name}` : name;
     if (child) {
       return array ? (
         // eslint-disable-next-line react/no-array-index-key
         <div key={i}>
-          <div>{name2}</div>
           <FieldArray name={path}>
             {args => {
               const {
@@ -31,6 +30,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
               } = args;
 
               const itemName = pluralize.singular(name);
+              const name3 = prefix2 ? `${prefix2} ‣ ${itemName}` : itemName;
 
               return (
                 <div>
@@ -39,13 +39,14 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
                       objectGet(values, path).map((item, j) => (
                         // eslint-disable-next-line react/no-array-index-key
                         <div key={j}>
-                          {composeFields(child, shift + 1, `${path}[${j}]`)}
+                          {composeFields(child, `${path}[${j}]`, `${name3} #${j + 1}`)}
                           <button type="button" onClick={() => remove(j)} disabled={isSubmitting}>
-                            {`Delete the ${itemName}`}
+                            X
                           </button>
                         </div>
                       ))}
                   </div>
+                  <br />
                   <button
                     type="button"
                     onClick={() => {
@@ -53,7 +54,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
                     }}
                     disabled={isSubmitting}
                   >
-                    {`Add a ${itemName}`}
+                    {`Add ${name3}`}
                   </button>
                 </div>
               );
@@ -62,10 +63,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
         </div>
       ) : (
         // eslint-disable-next-line react/no-array-index-key
-        <div key={i}>
-          <div>{name2}</div>
-          {composeFields(child, shift + 1, path)}
-        </div>
+        <div key={i}>{composeFields(child, path, name2)}</div>
       );
     }
 
@@ -73,7 +71,6 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
       return (
         // eslint-disable-next-line react/no-array-index-key
         <div key={i}>
-          <div>{name2}</div>
           <FieldArray name={path}>{formikFieldArrayChild}</FieldArray>
         </div>
       );
@@ -82,7 +79,14 @@ const composeFields = (flatFormikFields: FlatFormikFields, shift?: number = 0, p
     return (
       // eslint-disable-next-line react/no-array-index-key
       <div key={i}>
-        <Field name={path} label={name2} component={FormikTextField} />
+        <Field
+          component={FormikTextField}
+          fullWidth
+          label={name2}
+          margin="normal"
+          name={path}
+          variant="outlined"
+        />
       </div>
     );
   });

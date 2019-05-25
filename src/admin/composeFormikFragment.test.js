@@ -31,13 +31,34 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         <div key={0}>
-          <Field name="textField1" label="textField1" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField1"
+            margin="normal"
+            name="textField1"
+            variant="outlined"
+          />
         </div>
         <div key={1}>
-          <Field name="textField2" label="textField2" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField2"
+            margin="normal"
+            name="textField2"
+            variant="outlined"
+          />
         </div>
         <div key={2}>
-          <Field name="textField3" label="textField3" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField3"
+            margin="normal"
+            name="textField3"
+            variant="outlined"
+          />
         </div>
       </React.Fragment>
     );
@@ -107,33 +128,49 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         <div key={0}>
-          <Field name="textField" label="textField" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField"
+            margin="normal"
+            name="textField"
+            variant="outlined"
+          />
         </div>
-
         <div key={1}>
-          <div>embedded1</div>
           {[
             <div key={0}>
-              <Field name="embedded1.textField1" label="• textField1" component={FormikTextField} />
+              <Field
+                component={FormikTextField}
+                fullWidth
+                label="embedded1 ‣ textField1"
+                margin="normal"
+                name="embedded1.textField1"
+                variant="outlined"
+              />
             </div>,
             <div key={1}>
-              <div>• embedded2</div>
               {[
                 <div key={0}>
                   <Field
-                    name="embedded1.embedded2.textField2"
-                    label="• • textField2"
                     component={FormikTextField}
+                    fullWidth
+                    label="embedded1 ‣ embedded2 ‣ textField2"
+                    margin="normal"
+                    name="embedded1.embedded2.textField2"
+                    variant="outlined"
                   />
                 </div>,
                 <div key={1}>
-                  <div>• • embedded3</div>
                   {[
                     <div key={0}>
                       <Field
-                        name="embedded1.embedded2.embedded3.textField3"
-                        label="• • • textField3"
                         component={FormikTextField}
+                        fullWidth
+                        label="embedded1 ‣ embedded2 ‣ embedded3 ‣ textField3"
+                        margin="normal"
+                        name="embedded1.embedded2.embedded3.textField3"
+                        variant="outlined"
                       />
                     </div>,
                   ]}
@@ -211,27 +248,40 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         <div key={0}>
-          <Field name="textField" label="textField" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField"
+            margin="normal"
+            name="textField"
+            variant="outlined"
+          />
         </div>
-
         <div key={1}>
-          <div>embedded1</div>
           {[
             <div key={0}>
-              <Field name="embedded1.textField1" label="• textField1" component={FormikTextField} />
+              <Field
+                component={FormikTextField}
+                fullWidth
+                label="embedded1 ‣ textField1"
+                margin="normal"
+                name="embedded1.textField1"
+                variant="outlined"
+              />
             </div>,
             <div key={1}>
-              <div>• embedded2</div>
               {[
                 <div key={0}>
                   <Field
-                    name="embedded1.embedded2.textField2"
-                    label="• • textField2"
                     component={FormikTextField}
+                    fullWidth
+                    label="embedded1 ‣ embedded2 ‣ textField2"
+                    margin="normal"
+                    name="embedded1.embedded2.textField2"
+                    variant="outlined"
                   />
                 </div>,
                 <div key={1}>
-                  <div>• • embedded3</div>
                   <FieldArray name="embedded1.embedded2.embedded3">{() => {}}</FieldArray>
                 </div>,
               ]}
@@ -267,10 +317,16 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         <div key={0}>
-          <Field name="textField" label="textField" component={FormikTextField} />
+          <Field
+            component={FormikTextField}
+            fullWidth
+            label="textField"
+            margin="normal"
+            name="textField"
+            variant="outlined"
+          />
         </div>
         <div key={1}>
-          <div>arrayTextFields</div>
           <FieldArray name="arrayTextFields">{formikFieldArrayChild}</FieldArray>
         </div>
       </React.Fragment>
