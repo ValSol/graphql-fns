@@ -5,11 +5,13 @@ import React from 'react';
 
 import { Field, FieldArray } from 'formik';
 import { TextField as FormikTextField } from 'formik-material-ui';
-
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import type { ThingConfig } from '../flowTypes';
 
 import composeFormikFragment from './composeFormikFragment';
-import formikFieldArrayChild from './formikFieldArrayChild';
+import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 
 describe('composeFormikFragment', () => {
   test('should return fragment for a simple fields set', () => {
@@ -138,48 +140,57 @@ describe('composeFormikFragment', () => {
             variant="outlined"
           />
         </div>
-        <div key={1}>
-          {[
-            <div key={0}>
-              <Field
-                component={FormikTextField}
-                fullWidth
-                label="embedded1 ‣ textField1"
-                margin="normal"
-                name="embedded1.textField1"
-                variant="outlined"
-              />
-            </div>,
-            <div key={1}>
-              {[
-                <div key={0}>
-                  <Field
-                    component={FormikTextField}
-                    fullWidth
-                    label="embedded1 ‣ embedded2 ‣ textField2"
-                    margin="normal"
-                    name="embedded1.embedded2.textField2"
-                    variant="outlined"
-                  />
-                </div>,
-                <div key={1}>
+        <Card key={1}>
+          <CardHeader title="embedded1" />
+          <CardContent>
+            {[
+              <div key={0}>
+                <Field
+                  component={FormikTextField}
+                  fullWidth
+                  label="embedded1 ‣ textField1"
+                  margin="normal"
+                  name="embedded1.textField1"
+                  variant="outlined"
+                />
+              </div>,
+              <Card key={1}>
+                <CardHeader title="embedded1 ‣ embedded2" />
+                <CardContent>
                   {[
                     <div key={0}>
                       <Field
                         component={FormikTextField}
                         fullWidth
-                        label="embedded1 ‣ embedded2 ‣ embedded3 ‣ textField3"
+                        label="embedded1 ‣ embedded2 ‣ textField2"
                         margin="normal"
-                        name="embedded1.embedded2.embedded3.textField3"
+                        name="embedded1.embedded2.textField2"
                         variant="outlined"
                       />
                     </div>,
+                    <Card key={1}>
+                      <CardHeader title="embedded1 ‣ embedded2 ‣ embedded3" />
+                      <CardContent>
+                        {[
+                          <div key={0}>
+                            <Field
+                              component={FormikTextField}
+                              fullWidth
+                              label="embedded1 ‣ embedded2 ‣ embedded3 ‣ textField3"
+                              margin="normal"
+                              name="embedded1.embedded2.embedded3.textField3"
+                              variant="outlined"
+                            />
+                          </div>,
+                        ]}
+                      </CardContent>
+                    </Card>,
                   ]}
-                </div>,
-              ]}
-            </div>,
-          ]}
-        </div>
+                </CardContent>
+              </Card>,
+            ]}
+          </CardContent>
+        </Card>
       </div>
     );
 
@@ -258,37 +269,43 @@ describe('composeFormikFragment', () => {
             variant="outlined"
           />
         </div>
-        <div key={1}>
-          {[
-            <div key={0}>
-              <Field
-                component={FormikTextField}
-                fullWidth
-                label="embedded1 ‣ textField1"
-                margin="normal"
-                name="embedded1.textField1"
-                variant="outlined"
-              />
-            </div>,
-            <div key={1}>
-              {[
-                <div key={0}>
-                  <Field
-                    component={FormikTextField}
-                    fullWidth
-                    label="embedded1 ‣ embedded2 ‣ textField2"
-                    margin="normal"
-                    name="embedded1.embedded2.textField2"
-                    variant="outlined"
-                  />
-                </div>,
-                <div key={1}>
-                  <FieldArray name="embedded1.embedded2.embedded3">{() => {}}</FieldArray>
-                </div>,
-              ]}
-            </div>,
-          ]}
-        </div>
+        <Card key={1}>
+          <CardHeader title="embedded1" />
+          <CardContent>
+            {[
+              <div key={0}>
+                <Field
+                  component={FormikTextField}
+                  fullWidth
+                  label="embedded1 ‣ textField1"
+                  margin="normal"
+                  name="embedded1.textField1"
+                  variant="outlined"
+                />
+              </div>,
+              <Card key={1}>
+                <CardHeader title="embedded1 ‣ embedded2" />
+                <CardContent>
+                  {[
+                    <div key={0}>
+                      <Field
+                        component={FormikTextField}
+                        fullWidth
+                        label="embedded1 ‣ embedded2 ‣ textField2"
+                        margin="normal"
+                        name="embedded1.embedded2.textField2"
+                        variant="outlined"
+                      />
+                    </div>,
+                    <div key={1}>
+                      <FieldArray name="embedded1.embedded2.embedded3">{() => {}}</FieldArray>
+                    </div>,
+                  ]}
+                </CardContent>
+              </Card>,
+            ]}
+          </CardContent>
+        </Card>
       </div>
     );
 
@@ -328,13 +345,16 @@ describe('composeFormikFragment', () => {
           />
         </div>
         <div key={1}>
-          <FieldArray name="arrayTextFields">{formikFieldArrayChild}</FieldArray>
+          <FieldArray name="arrayTextFields">{composeFormikFieldArrayChild()}</FieldArray>
         </div>
       </div>
     );
 
     const result = composeFormikFragment(thingConfig);
 
-    expect(result).toEqual(expectedResult);
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
   });
 });

@@ -3,9 +3,12 @@
 import React from 'react';
 import { Field, FieldArray } from 'formik';
 import Button from '@material-ui/core/Button';
-// const IconButton = require('@material-ui/core/IconButton');
-// const IconButton = require('@material-ui/core/IconButton');
-// const DeleteIcon = require('@material-ui/icons/Delete');
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import { TextField as FormikTextField } from 'formik-material-ui';
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
@@ -13,7 +16,7 @@ import pluralize from 'pluralize';
 import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
 import composeFlatFormikFields from './composeFlatFormikFields';
-import formikFieldArrayChild from './formikFieldArrayChild';
+import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 import composeInitialValues from './composeInitialValues';
 
 const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, prefix2?: string) =>
@@ -41,24 +44,33 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
                     {objectGet(values, path) &&
                       objectGet(values, path).map((item, j) => (
                         // eslint-disable-next-line react/no-array-index-key
-                        <div key={j}>
-                          {composeFields(child, `${path}[${j}]`, `${name3} #${j + 1}`)}
-                          <button type="button" onClick={() => remove(j)} disabled={isSubmitting}>
-                            X
-                          </button>
-                        </div>
+                        <Card key={j} style={{ marginBottom: 8 }}>
+                          <CardHeader title={`${name3} #${j + 1}`} />
+                          <CardContent>
+                            {composeFields(child, `${path}[${j}]`, `${name3} #${j + 1}`)}
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              edge="end"
+                              aria-label={`Delete ${itemName}`}
+                              onClick={() => remove(j)}
+                            >
+                              <DeleteIcon />
+                              {`${itemName} #${j + 1}`}
+                            </Button>
+                          </CardActions>
+                        </Card>
                       ))}
                   </div>
-                  <br />
                   <Button
-                    color="primary"
                     disabled={isSubmitting}
                     onClick={() => {
                       if (config) push(composeInitialValues(config));
                     }}
                     variant="contained"
                   >
-                    {`Add ${name3}`}
+                    <AddIcon />
+                    {name3}
                   </Button>
                 </div>
               );
@@ -67,7 +79,10 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
         </div>
       ) : (
         // eslint-disable-next-line react/no-array-index-key
-        <div key={i}>{composeFields(child, path, name2)}</div>
+        <Card key={i}>
+          <CardHeader title={name2} />
+          <CardContent>{composeFields(child, path, name2)}</CardContent>
+        </Card>
       );
     }
 
@@ -75,7 +90,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
       return (
         // eslint-disable-next-line react/no-array-index-key
         <div key={i}>
-          <FieldArray name={path}>{formikFieldArrayChild}</FieldArray>
+          <FieldArray name={path}>{composeFormikFieldArrayChild(prefix2)}</FieldArray>
         </div>
       );
     }
