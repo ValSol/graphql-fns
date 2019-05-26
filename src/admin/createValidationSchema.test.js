@@ -1,10 +1,11 @@
 // @flow
 /* eslint-env jest */
+
+import * as yup from 'yup';
+
 import type { ThingConfig } from '../flowTypes';
 
-const yup = require('yup');
-
-const createValidationSchema = require('./createValidationSchema');
+import createValidationSchema from './createValidationSchema';
 
 describe('createValidationSchema', () => {
   test('should create the simplest validation schema', () => {

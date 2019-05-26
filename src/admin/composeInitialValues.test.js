@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../flowTypes';
 
-const composeInitialValues = require('./composeInitialValues');
+import composeInitialValues from './composeInitialValues';
 
 describe('composeInitialValues', () => {
   test('should create the simplest initial values object', () => {

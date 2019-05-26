@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig, FormField } from '../flowTypes';
 
-const arrangeFormFields = require('./arrangeFormFields');
+import arrangeFormFields from './arrangeFormFields';
 
 describe('arrangeFormFields', () => {
   const embedded3Config: ThingConfig = {

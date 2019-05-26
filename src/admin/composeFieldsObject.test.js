@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig, ThingConfigObject } from '../flowTypes';
 
-const composeFieldsObject = require('./composeFieldsObject');
+import composeFieldsObject from './composeFieldsObject';
 
 describe('composeFieldsObject', () => {
   test('should compose Oject of fields', () => {

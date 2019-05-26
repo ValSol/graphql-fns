@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.135",
+  "version": "0.1.2-beta.160",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -73,6 +73,8 @@
     "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
+    "@material-ui/core": "^4.0.0",
+    "@material-ui/icons": "^4.0.0",
     "formik": "^1.5.7",
     "formik-material-ui": "^0.0.16",
     "graphql": "^14.3.0",

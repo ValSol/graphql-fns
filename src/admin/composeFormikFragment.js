@@ -1,17 +1,20 @@
 // @flow
-import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
-const React = require('react');
-const { Field, FieldArray } = require('formik');
+import React from 'react';
+import { Field, FieldArray } from 'formik';
+import Button from '@material-ui/core/Button';
+// const IconButton = require('@material-ui/core/IconButton');
 // const IconButton = require('@material-ui/core/IconButton');
 // const DeleteIcon = require('@material-ui/icons/Delete');
-const { TextField: FormikTextField } = require('formik-material-ui');
-const { get: objectGet } = require('lodash/object');
-const pluralize = require('pluralize');
+import { TextField as FormikTextField } from 'formik-material-ui';
+import { get as objectGet } from 'lodash/object';
+import pluralize from 'pluralize';
 
-const composeFlatFormikFields = require('./composeFlatFormikFields');
-const formikFieldArrayChild = require('./formikFieldArrayChild');
-const composeInitialValues = require('./composeInitialValues');
+import type { ThingConfig, FlatFormikFields } from '../flowTypes';
+
+import composeFlatFormikFields from './composeFlatFormikFields';
+import formikFieldArrayChild from './formikFieldArrayChild';
+import composeInitialValues from './composeInitialValues';
 
 const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, prefix2?: string) =>
   flatFormikFields.map(({ array, config, child, name }, i) => {
@@ -47,15 +50,16 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
                       ))}
                   </div>
                   <br />
-                  <button
-                    type="button"
+                  <Button
+                    color="primary"
+                    disabled={isSubmitting}
                     onClick={() => {
                       if (config) push(composeInitialValues(config));
                     }}
-                    disabled={isSubmitting}
+                    variant="contained"
                   >
                     {`Add ${name3}`}
-                  </button>
+                  </Button>
                 </div>
               );
             }}
@@ -94,7 +98,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
 const composeFormikFragment = (thingConfig: ThingConfig): Object => {
   const flatFormikFields = composeFlatFormikFields(thingConfig);
 
-  return <React.Fragment>{composeFields(flatFormikFields)}</React.Fragment>;
+  return <div>{composeFields(flatFormikFields)}</div>;
 };
 
-module.exports = composeFormikFragment;
+export default composeFormikFragment;

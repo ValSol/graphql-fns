@@ -1,8 +1,8 @@
 // @flow
 import type { ThingConfig } from '../flowTypes';
 
-const arrangeFormFields = require('./arrangeFormFields');
-const composeFieldsObject = require('./composeFieldsObject');
+import arrangeFormFields from './arrangeFormFields';
+import composeFieldsObject from './composeFieldsObject';
 
 const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Object => {
   const { form } = thingConfig;

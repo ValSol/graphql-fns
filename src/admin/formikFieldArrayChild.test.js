@@ -1,11 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-const React = require('react');
-const { Field } = require('formik');
-const { TextField: FormikTextField } = require('formik-material-ui');
+import React from 'react';
+import { Field } from 'formik';
 
-const formikFieldArrayChild = require('./formikFieldArrayChild');
+import { TextField as FormikTextField } from 'formik-material-ui';
+
+import formikFieldArrayChild from './formikFieldArrayChild';
 
 describe('formikFieldArrayChild', () => {
   test('should return fragment for a simple fields set', () => {
@@ -20,22 +21,39 @@ describe('formikFieldArrayChild', () => {
         <div>
           {[
             <div key={0}>
-              <Field name="people.friends[0].emails[0]" label="email" component={FormikTextField} />
-              <button type="button" onClick={() => {}} disabled={false}>
-                {`Delete the email`}
+              <Field
+                component={FormikTextField}
+                fullWidth
+                label="email #1"
+                margin="normal"
+                name="people.friends[0].emails[0]"
+                variant="outlined"
+              />
+              <button type="button" onClick={() => {}} disabled={false} title="Delete the email">
+                X
               </button>
             </div>,
             <div key={1}>
-              <Field name="people.friends[0].emails[1]" label="email" component={FormikTextField} />
-              <button type="button" onClick={() => {}} disabled={false}>
-                {`Delete the email`}
+              <Field
+                component={FormikTextField}
+                fullWidth
+                label="email #2"
+                margin="normal"
+                name="people.friends[0].emails[1]"
+                variant="outlined"
+              />
+              <button type="button" onClick={() => {}} disabled={false} title="Delete the email">
+                X
               </button>
             </div>,
           ]}
         </div>
-        <button type="button" onClick={() => {}} disabled={false}>
-          Add a email
-        </button>
+        <div>
+          <br />
+          <button type="button" onClick={() => {}} disabled={false}>
+            Add email
+          </button>
+        </div>
       </div>
     );
 

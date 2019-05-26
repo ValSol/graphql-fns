@@ -1,8 +1,8 @@
 // @flow
 import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
-const arrangeFormFields = require('./arrangeFormFields');
-const composeFieldsObject = require('./composeFieldsObject');
+import arrangeFormFields from './arrangeFormFields';
+import composeFieldsObject from './composeFieldsObject';
 
 const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => {
   const { form } = thingConfig;
@@ -36,4 +36,4 @@ const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => 
   return result;
 };
 
-module.exports = composeFlatFormikFields;
+export default composeFlatFormikFields;

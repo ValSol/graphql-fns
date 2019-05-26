@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
-const composeFlatFormikFields = require('./composeFlatFormikFields');
+import composeFlatFormikFields from './composeFlatFormikFields';
 
 describe('composeFlatFormikFields', () => {
   test('should compose the flat fields', () => {

@@ -1,14 +1,15 @@
 // @flow
 /* eslint-env jest */
+
+import React from 'react';
+
+import { Field, FieldArray } from 'formik';
+import { TextField as FormikTextField } from 'formik-material-ui';
+
 import type { ThingConfig } from '../flowTypes';
 
-const React = require('react');
-
-const { Field, FieldArray } = require('formik');
-const { TextField: FormikTextField } = require('formik-material-ui');
-
-const composeFormikFragment = require('./composeFormikFragment');
-const formikFieldArrayChild = require('./formikFieldArrayChild');
+import composeFormikFragment from './composeFormikFragment';
+import formikFieldArrayChild from './formikFieldArrayChild';
 
 describe('composeFormikFragment', () => {
   test('should return fragment for a simple fields set', () => {
@@ -29,7 +30,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <div>
         <div key={0}>
           <Field
             component={FormikTextField}
@@ -60,7 +61,7 @@ describe('composeFormikFragment', () => {
             variant="outlined"
           />
         </div>
-      </React.Fragment>
+      </div>
     );
 
     const result = composeFormikFragment(thingConfig);
@@ -126,7 +127,7 @@ describe('composeFormikFragment', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <div>
         <div key={0}>
           <Field
             component={FormikTextField}
@@ -179,7 +180,7 @@ describe('composeFormikFragment', () => {
             </div>,
           ]}
         </div>
-      </React.Fragment>
+      </div>
     );
 
     const result = composeFormikFragment(thingConfig);
@@ -246,7 +247,7 @@ describe('composeFormikFragment', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <div>
         <div key={0}>
           <Field
             component={FormikTextField}
@@ -288,7 +289,7 @@ describe('composeFormikFragment', () => {
             </div>,
           ]}
         </div>
-      </React.Fragment>
+      </div>
     );
 
     const result = composeFormikFragment(thingConfig);
@@ -315,7 +316,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <div>
         <div key={0}>
           <Field
             component={FormikTextField}
@@ -329,7 +330,7 @@ describe('composeFormikFragment', () => {
         <div key={1}>
           <FieldArray name="arrayTextFields">{formikFieldArrayChild}</FieldArray>
         </div>
-      </React.Fragment>
+      </div>
     );
 
     const result = composeFormikFragment(thingConfig);

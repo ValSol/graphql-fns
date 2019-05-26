@@ -80,4 +80,4 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
   return result;
 };
 
-module.exports = composeFieldsObject;
+export default composeFieldsObject;

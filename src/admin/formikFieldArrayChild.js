@@ -1,10 +1,10 @@
 // @flow
 
-const React = require('react');
-const { Field } = require('formik');
-const { TextField: FormikTextField } = require('formik-material-ui');
-const { get: objectGet } = require('lodash/object');
-const pluralize = require('pluralize');
+import React from 'react';
+import { Field } from 'formik';
+import { TextField as FormikTextField } from 'formik-material-ui';
+import { get as objectGet } from 'lodash/object';
+import pluralize from 'pluralize';
 
 type Props = {
   form: { isSubmitting: boolean, values: Object },
@@ -30,18 +30,33 @@ const formikFieldArrayChild = (props: Props) => {
           objectGet(values, name).map((item, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={i}>
-              <Field name={`${name}[${i}]`} label={itemName} component={FormikTextField} />
-              <button type="button" onClick={() => remove(i)} disabled={isSubmitting}>
-                {`Delete the ${itemName}`}
+              <Field
+                component={FormikTextField}
+                fullWidth
+                label={`${itemName} #${i + 1}`}
+                margin="normal"
+                name={`${name}[${i}]`}
+                variant="outlined"
+              />
+              <button
+                disabled={isSubmitting}
+                onClick={() => remove(i)}
+                title={`Delete the ${itemName}`}
+                type="button"
+              >
+                X
               </button>
             </div>
           ))}
       </div>
-      <button type="button" onClick={() => push('')} disabled={isSubmitting}>
-        {`Add a ${itemName}`}
-      </button>
+      <div>
+        <br />
+        <button type="button" onClick={() => push('')} disabled={isSubmitting}>
+          {`Add ${itemName}`}
+        </button>
+      </div>
     </div>
   );
 };
 
-module.exports = formikFieldArrayChild;
+export default formikFieldArrayChild;

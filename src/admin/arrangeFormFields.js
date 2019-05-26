@@ -92,4 +92,4 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
   return result;
 };
 
-module.exports = arrangeFormFields;
+export default arrangeFormFields;
