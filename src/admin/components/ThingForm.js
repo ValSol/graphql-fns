@@ -44,7 +44,6 @@ const FormikForm = (props: Props & ProvidedProps) => {
   );
 
   const initialValues = composeInitialValues(thingConfig);
-  const validationSchema = createValidationSchema(thingConfig);
   const formikFragment = composeFormikFragment(thingConfig);
 
   const whereOne = { id };
@@ -54,7 +53,7 @@ const FormikForm = (props: Props & ProvidedProps) => {
       <h1>{`Update ${name}`}</h1>
       <NoSsr>
         <Query query={thingQuery} skip={!id} variables={{ whereOne }}>
-          {({ loading, error: thingQueryError, data }) => {
+          {({ client: apolloClient, data, error: thingQueryError, loading }) => {
             if (loading) return 'Loading...';
             if (thingQueryError)
               return (
@@ -94,7 +93,7 @@ const FormikForm = (props: Props & ProvidedProps) => {
                             })
                             .catch(() => actions.setSubmitting(false));
                         }}
-                        validationSchema={validationSchema}
+                        validationSchema={createValidationSchema(thingConfig, apolloClient, id)}
                       >
                         {formikProps => {
                           const { dirty, errors, isSubmitting, resetForm } = formikProps;
@@ -149,7 +148,7 @@ const FormikForm = (props: Props & ProvidedProps) => {
         </Query>
         {!id && (
           <Mutation mutation={createThingMutation}>
-            {(createThing, { error: submitCreateError }) => {
+            {(createThing, { client: apolloClient, error: submitCreateError }) => {
               return (
                 <Formik
                   initialValues={initialValues}
@@ -172,7 +171,7 @@ const FormikForm = (props: Props & ProvidedProps) => {
                       })
                       .catch(() => actions.setSubmitting(false));
                   }}
-                  validationSchema={validationSchema}
+                  validationSchema={createValidationSchema(thingConfig, apolloClient)}
                 >
                   {formikProps => {
                     const { dirty, errors, isSubmitting, resetForm } = formikProps;
