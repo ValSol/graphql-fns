@@ -51,6 +51,7 @@ const composeFormikFieldArrayChild = (prefix2?: string) => {
                           edge="end"
                           aria-label={`Delete ${itemName}`}
                           onClick={() => remove(i)}
+                          disabled={isSubmitting}
                         >
                           <DeleteIcon />
                         </IconButton>

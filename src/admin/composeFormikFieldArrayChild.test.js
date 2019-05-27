@@ -36,7 +36,12 @@ describe('composeFormikFieldArrayChild', () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton edge="end" aria-label="Delete email" onClick={() => {}}>
+                      <IconButton
+                        aria-label="Delete email"
+                        disabled={false}
+                        edge="end"
+                        onClick={() => {}}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </InputAdornment>
@@ -55,7 +60,12 @@ describe('composeFormikFieldArrayChild', () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton edge="end" aria-label="Delete email" onClick={() => {}}>
+                      <IconButton
+                        aria-label="Delete email"
+                        disabled={false}
+                        edge="end"
+                        onClick={() => {}}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </InputAdornment>
