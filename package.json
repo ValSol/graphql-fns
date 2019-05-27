@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.161",
+  "version": "0.1.2-beta.162",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -78,8 +78,11 @@
     "formik": "^1.5.7",
     "formik-material-ui": "^0.0.16",
     "graphql": "^14.3.0",
+    "graphql-tag": "^2.10.1",
     "mongoose": "^5.5.10",
+    "next": "^8.1.0",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.6",
     "react-dom": "^16.8.6",
     "yup": "^0.27.0"
   },
