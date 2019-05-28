@@ -6,11 +6,11 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
-import Router, { withRouter } from 'next/router';
+import Router from 'next/router';
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { RouterQuery, ThingConfig } from '../../flowTypes';
 
 import composeFormikFragment from '../composeFormikFragment';
 import composeInitialValues from '../composeInitialValues';
@@ -19,10 +19,9 @@ import createValidationSchema from '../createValidationSchema';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
 
-type Props = { thingConfig: ThingConfig };
-type ProvidedProps = { router: { pathname: string, query: { id: string } } };
+type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
 
-const FormikForm = (props: Props & ProvidedProps) => {
+const ThingForm = (props: Props) => {
   const {
     thingConfig,
     thingConfig: { name },
@@ -50,7 +49,7 @@ const FormikForm = (props: Props & ProvidedProps) => {
 
   return (
     <Container>
-      <h1>{`Update ${name}`}</h1>
+      <h1>{`${id ? 'Update' : 'Create'} ${name}`}</h1>
       <NoSsr>
         <Query query={thingQuery} skip={!id} variables={{ whereOne }}>
           {({ client: apolloClient, data, error: thingQueryError, loading }) => {
@@ -219,4 +218,4 @@ const FormikForm = (props: Props & ProvidedProps) => {
   );
 };
 
-export default withRouter(FormikForm);
+export default ThingForm;

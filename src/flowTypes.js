@@ -229,3 +229,5 @@ export type ClientFieldsOptions = {
   ...ClientOptions,
   shift: number,
 };
+
+export type RouterQuery = { id?: string, create?: '', thing: string };
