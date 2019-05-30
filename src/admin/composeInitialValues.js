@@ -15,7 +15,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
     switch (kind) {
       case 'embeddedFields':
         prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
-          ? data && data[name]
+          ? data[name]
             ? data[name].map(dataItem => composeInitialValues(config, dataItem))
             : []
           : composeInitialValues(config, data[name]); // eslint-disable-line no-param-reassign
