@@ -12,7 +12,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 import formikFieldArrayChild from './formikFieldArrayChild';
 
-describe('composeFormikFieldArrayChild', () => {
+describe('formikFieldArrayChild', () => {
   test('should return fragment for a simple fields set', () => {
     const values = {
       people: {

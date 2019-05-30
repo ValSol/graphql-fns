@@ -2,32 +2,29 @@
 
 import React from 'react';
 import { Field, FieldArray } from 'formik';
-import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { TextField as FormikTextField } from 'formik-material-ui';
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
 import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
+import Outline from './components/Outline';
 import composeFlatFormikFields from './composeFlatFormikFields';
-import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
+import formikFieldArrayChild from './formikFieldArrayChild';
 import composeInitialValues from './composeInitialValues';
 
-const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, prefix2?: string) =>
-  flatFormikFields.map(({ array, config, child, name }, i) => {
-    const name2 = prefix2 ? `${prefix2} ‣ ${name}` : name;
-    const path = prefix ? `${prefix}.${name}` : name;
-    if (child) {
-      return array ? (
-        // eslint-disable-next-line react/no-array-index-key
-        <div key={i}>
-          <FieldArray name={path}>
+const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
+  <React.Fragment>
+    {flatFormikFields.map(({ array, config, child, name }, i) => {
+      const path = prefix ? `${prefix}.${name}` : name;
+      if (child) {
+        return array ? (
+          // eslint-disable-next-line react/no-array-index-key
+          <FieldArray key={i} name={path}>
             {args => {
               const {
                 form: { isSubmitting, values },
@@ -36,84 +33,81 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string, pref
               } = args;
 
               const itemName = pluralize.singular(name);
-              const name3 = prefix2 ? `${prefix2} ‣ ${itemName}` : itemName;
 
               return (
-                <div>
-                  <div>
-                    {objectGet(values, path) &&
-                      objectGet(values, path).map((item, j) => (
+                <React.Fragment>
+                  {objectGet(values, path) &&
+                    objectGet(values, path).map((item, j) => (
+                      <Outline
                         // eslint-disable-next-line react/no-array-index-key
-                        <Card key={j} style={{ marginBottom: 8 }}>
-                          <CardHeader title={`${name3} #${j + 1}`} />
-                          <CardContent>
-                            {composeFields(child, `${path}[${j}]`, `${name3} #${j + 1}`)}
-                          </CardContent>
-                          <CardActions>
-                            <Button
-                              edge="end"
-                              aria-label={`Delete ${itemName}`}
-                              onClick={() => remove(j)}
-                            >
-                              <DeleteIcon />
-                              {`${itemName} #${j + 1}`}
-                            </Button>
-                          </CardActions>
-                        </Card>
-                      ))}
-                  </div>
-                  <Button
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      if (config) push(composeInitialValues(config));
-                    }}
-                    variant="contained"
-                  >
-                    <AddIcon />
-                    {name3}
-                  </Button>
-                </div>
+                        key={j}
+                        label={`${itemName} #${j + 1}`}
+                      >
+                        {composeFields(child, `${path}[${j}]`)}
+                        <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
+                          <IconButton
+                            edge="end"
+                            aria-label={`Delete ${itemName}`}
+                            onClick={() => remove(j)}
+                            disabled={isSubmitting}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </Outline>
+                    ))}
+                  <Tooltip title={`Add ${itemName}`} placement="right">
+                    <IconButton
+                      edge="end"
+                      aria-label={`Add ${itemName}`}
+                      onClick={() => {
+                        if (config) push(composeInitialValues(config));
+                      }}
+                      disabled={isSubmitting}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                </React.Fragment>
               );
             }}
           </FieldArray>
-        </div>
-      ) : (
-        // eslint-disable-next-line react/no-array-index-key
-        <Card key={i}>
-          <CardHeader title={name2} />
-          <CardContent>{composeFields(child, path, name2)}</CardContent>
-        </Card>
-      );
-    }
+        ) : (
+          // eslint-disable-next-line react/no-array-index-key
+          <Outline key={i} label={name}>
+            {composeFields(child, path)}
+          </Outline>
+        );
+      }
 
-    if (array) {
+      if (array) {
+        return (
+          // eslint-disable-next-line react/no-array-index-key
+          <Outline key={i} label={name}>
+            <FieldArray name={path}>{formikFieldArrayChild}</FieldArray>
+          </Outline>
+        );
+      }
+
       return (
-        // eslint-disable-next-line react/no-array-index-key
-        <div key={i}>
-          <FieldArray name={path}>{composeFormikFieldArrayChild(prefix2)}</FieldArray>
-        </div>
-      );
-    }
-
-    return (
-      // eslint-disable-next-line react/no-array-index-key
-      <div key={i}>
         <Field
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
           component={FormikTextField}
           fullWidth
-          label={name2}
+          label={name}
           margin="normal"
           name={path}
           variant="outlined"
         />
-      </div>
-    );
-  });
-
+      );
+    })}
+  </React.Fragment>
+);
 const composeFormikFragment = (thingConfig: ThingConfig): Object => {
   const flatFormikFields = composeFlatFormikFields(thingConfig);
 
-  return <div>{composeFields(flatFormikFields)}</div>;
+  return composeFields(flatFormikFields);
 };
 
 export default composeFormikFragment;
