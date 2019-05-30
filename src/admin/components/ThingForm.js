@@ -42,7 +42,6 @@ const ThingForm = (props: Props) => {
     composeMutation('createThing', thingConfig, { include: { id: null } }),
   );
 
-  const initialValues = composeInitialValues(thingConfig);
   const formikFragment = composeFormikFragment(thingConfig);
 
   const whereOne = { id };
@@ -65,84 +64,85 @@ const ThingForm = (props: Props) => {
                   message={<span id="message-id">{thingQueryError.message}</span>}
                 />
               );
-            if (data) {
-              let currentInitialValues;
-              return (
-                <Mutation mutation={updateThingMutation} key={id}>
-                  {(updateThing, { error: submitUpdateError }) => {
-                    return (
-                      <Formik
-                        initialValues={(initialValues, data[name])}
-                        onSubmit={(values, actions) => {
-                          updateThing({
-                            variables: {
-                              whereOne,
-                              data: { ...values, __typename: undefined },
-                            },
-                          })
-                            .then(result => {
-                              if (result) {
-                                const { data: updatedData } = result;
-                                if (updatedData) {
-                                  currentInitialValues = updatedData[`update${name}`];
-                                  actions.resetForm(currentInitialValues);
-                                  actions.setSubmitting(false);
-                                }
-                              }
-                            })
-                            .catch(() => actions.setSubmitting(false));
-                        }}
-                        validationSchema={createValidationSchema(thingConfig, apolloClient, id)}
-                      >
-                        {formikProps => {
-                          const { dirty, errors, isSubmitting, resetForm } = formikProps;
-                          const isError = !!Object.keys(errors).length;
-                          return (
-                            <Form>
-                              {formikFragment}
-                              <Button
-                                color="primary"
-                                disabled={!dirty || isError || isSubmitting}
-                                type="submit"
-                                variant="outlined"
-                              >
-                                Update Person
-                              </Button>{' '}
-                              <Button
-                                color="secondary"
-                                disabled={!dirty || isSubmitting}
-                                onClick={() => {
-                                  if (currentInitialValues) {
-                                    resetForm(currentInitialValues);
-                                  } else {
-                                    resetForm();
-                                  }
-                                }}
-                                variant="outlined"
-                              >
-                                Reset
-                              </Button>{' '}
-                              <Button variant="outlined">Cancel</Button>
-                              {submitUpdateError && (
-                                <Snackbar
-                                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                                  open={!!submitUpdateError}
-                                  ContentProps={{
-                                    'aria-describedby': 'message-id',
-                                  }}
-                                  message={<span id="message-id">{submitUpdateError.message}</span>}
-                                />
-                              )}
-                            </Form>
-                          );
-                        }}
-                      </Formik>
-                    );
-                  }}
-                </Mutation>
-              );
+            if (!data || !data[name]) {
+              Router.push({ pathname, query: {} });
+              return null;
             }
-            return null;
+            let currentInitialValues;
+            return (
+              <Mutation mutation={updateThingMutation} key={id}>
+                {(updateThing, { error: submitUpdateError }) => {
+                  return (
+                    <Formik
+                      initialValues={composeInitialValues(thingConfig, data[name])}
+                      onSubmit={(values, actions) => {
+                        updateThing({
+                          variables: {
+                            whereOne,
+                            data: { ...values, __typename: undefined },
+                          },
+                        })
+                          .then(result => {
+                            if (result) {
+                              const { data: updatedData } = result;
+                              if (updatedData) {
+                                currentInitialValues = updatedData[`update${name}`];
+                                actions.resetForm(currentInitialValues);
+                                actions.setSubmitting(false);
+                              }
+                            }
+                          })
+                          .catch(() => actions.setSubmitting(false));
+                      }}
+                      validationSchema={createValidationSchema(thingConfig, apolloClient, id)}
+                    >
+                      {formikProps => {
+                        const { dirty, errors, isSubmitting, resetForm } = formikProps;
+                        const isError = !!Object.keys(errors).length;
+                        return (
+                          <Form>
+                            {formikFragment}
+                            <Button
+                              color="primary"
+                              disabled={!dirty || isError || isSubmitting}
+                              type="submit"
+                              variant="outlined"
+                            >
+                              Update Person
+                            </Button>{' '}
+                            <Button
+                              color="secondary"
+                              disabled={!dirty || isSubmitting}
+                              onClick={() => {
+                                if (currentInitialValues) {
+                                  resetForm(currentInitialValues);
+                                } else {
+                                  resetForm();
+                                }
+                              }}
+                              variant="outlined"
+                            >
+                              Reset
+                            </Button>{' '}
+                            <Button variant="outlined">Cancel</Button>
+                            {submitUpdateError && (
+                              <Snackbar
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                                open={!!submitUpdateError}
+                                ContentProps={{
+                                  'aria-describedby': 'message-id',
+                                }}
+                                message={<span id="message-id">{submitUpdateError.message}</span>}
+                              />
+                            )}
+                          </Form>
+                        );
+                      }}
+                    </Formik>
+                  );
+                }}
+              </Mutation>
+            );
           }}
         </Query>
         {!id && (
@@ -150,7 +150,7 @@ const ThingForm = (props: Props) => {
             {(createThing, { client: apolloClient, error: submitCreateError }) => {
               return (
                 <Formik
-                  initialValues={initialValues}
+                  initialValues={composeInitialValues(thingConfig)}
                   enableReinitialize
                   onSubmit={(values, actions) => {
                     createThing({
