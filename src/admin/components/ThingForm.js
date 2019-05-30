@@ -110,7 +110,7 @@ const ThingForm = (props: Props) => {
                               </Button>{' '}
                               <Button
                                 color="secondary"
-                                disabled={!dirty || isError || isSubmitting}
+                                disabled={!dirty || isSubmitting}
                                 onClick={() => {
                                   if (currentInitialValues) {
                                     resetForm(currentInitialValues);
@@ -164,7 +164,7 @@ const ThingForm = (props: Props) => {
                           const { data: createdData } = result;
                           if (createdData) {
                             const { id: newId } = createdData[`create${name}`];
-                            Router.push({ pathname, query: { id: newId } });
+                            Router.push({ pathname, query: { id: newId, thing: name } });
                           }
                         }
                       })
@@ -188,7 +188,7 @@ const ThingForm = (props: Props) => {
                         </Button>{' '}
                         <Button
                           color="secondary"
-                          disabled={!dirty || isError || isSubmitting}
+                          disabled={!dirty || isSubmitting}
                           onClick={() => resetForm()}
                           variant="outlined"
                         >
