@@ -33,11 +33,7 @@ const createValcomposeFlatFormikFieldsationSchema = (
         throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
     }
 
-    if (required) {
-      prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
-    } else {
-      prev[name] = prev[name].nullable(); // eslint-disable-line no-param-reassign
-    }
+    if (required) prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
 
     if (unique) {
       if (embedded) {
