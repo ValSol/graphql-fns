@@ -59,13 +59,13 @@ const processCreateInputData = (
       }, duplexFieldsObject);
     }
 
-    const embeddedFieldsConfigs = {};
+    const embeddedFieldsObject = {};
     if (embeddedFields) {
-      embeddedFields.reduce((prev, { name, config }) => {
+      embeddedFields.reduce((prev, { array, config, name }) => {
         // eslint-disable-next-line
-        prev[name] = config;
+        prev[name] = { array, config };
         return prev;
-      }, embeddedFieldsConfigs);
+      }, embeddedFieldsObject);
     }
 
     const geospatialFieldsObject = {};
@@ -288,9 +288,15 @@ const processCreateInputData = (
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key];
         }
-      } else if (embeddedFieldsConfigs[key]) {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = transform(data2[key], embeddedFieldsConfigs[key]);
+      } else if (embeddedFieldsObject[key]) {
+        const { array, config } = embeddedFieldsObject[key];
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data2[key].map(value => transform(value, config));
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = transform(data2[key], config);
+        }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];
         if (array) {

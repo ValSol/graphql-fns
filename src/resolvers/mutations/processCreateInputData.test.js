@@ -668,4 +668,112 @@ describe('processCreateInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create object with array of embedded fields', () => {
+    const embedded1Config: ThingConfig = {};
+
+    const embedded2Config: ThingConfig = {};
+
+    const thingConfig = {};
+
+    Object.assign(embedded1Config, {
+      name: 'Embedded1',
+      textFields: [{ name: 'textField_e1' }],
+      embeddedFields: [
+        {
+          array: true,
+          name: 'embeddedField2S',
+          config: embedded2Config,
+        },
+      ],
+    });
+
+    Object.assign(embedded2Config, {
+      name: 'Embedded2',
+      textFields: [{ name: 'textField_e2' }],
+    });
+
+    Object.assign(thingConfig, {
+      name: 'Thing',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+        {
+          name: 'textField2',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embeddedField1',
+          config: embedded1Config,
+        },
+      ],
+    });
+    const data = {
+      textField1: 'textField1-Value',
+      textField2: 'textField2-Value',
+      embeddedField1: {
+        textField_e1: 'textField_e1-value',
+        embeddedField2S: [
+          {
+            textField_e2: 'textField_e2-value-1',
+          },
+          {
+            textField_e2: 'textField_e2-value-2',
+          },
+        ],
+      },
+    };
+
+    const core = new Map();
+    const item = {
+      insertOne: {
+        document: {
+          _id: '16',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          embeddedField1: {
+            textField_e1: 'textField_e1-value',
+            embeddedField2S: [
+              {
+                textField_e2: 'textField_e2-value-1',
+              },
+              {
+                textField_e2: 'textField_e2-value-2',
+              },
+            ],
+          },
+        },
+      },
+    };
+    core.set(thingConfig, [item]);
+    const single = true;
+    const periphery: Periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+      single,
+      first: {
+        _id: '16',
+        textField1: 'textField1-Value',
+        textField2: 'textField2-Value',
+        embeddedField1: {
+          textField_e1: 'textField_e1-value',
+          embeddedField2S: [
+            {
+              textField_e2: 'textField_e2-value-1',
+            },
+            {
+              textField_e2: 'textField_e2-value-2',
+            },
+          ],
+        },
+      },
+    };
+
+    const result = processCreateInputData(data, thingConfig, mongooseTypes);
+
+    expect(result).toEqual(expectedResult);
+  });
 });
