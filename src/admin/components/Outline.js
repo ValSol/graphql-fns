@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => {
   const align = theme.direction === 'rtl' ? 'right' : 'left';
-
+  const borderColor =
+    theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
   return {
     /* Styles applied to the root element. */
     root: {
@@ -18,12 +19,21 @@ const useStyles = makeStyles(theme => {
         duration: theme.transitions.duration.shorter,
         easing: theme.transitions.easing.easeOut,
       }),
+      '&:hover': {
+        borderColor: theme.palette.text.primary,
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          borderColor,
+        },
+      },
     },
     /* Styles applied to the legend element. */
     legend: {
+      opacity: 0.6,
       textAlign: 'left',
       padding: 8,
       lineHeight: '11px',
+      transform: 'scale(0.86)',
       transition: theme.transitions.create('width', {
         duration: theme.transitions.duration.shorter,
         easing: theme.transitions.easing.easeOut,
