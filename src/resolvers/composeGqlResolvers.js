@@ -5,6 +5,7 @@ const pluralize = require('pluralize');
 const { DateTime } = require('@okgrow/graphql-scalars');
 
 const checkInventory = require('../utils/checkInventory');
+const createThingCountQueryResolver = require('./queries/createThingCountQueryResolver');
 const createThingQueryResolver = require('./queries/createThingQueryResolver');
 const createThingsQueryResolver = require('./queries/createThingsQueryResolver');
 const composeThingResolvers = require('./types/composeThingResolvers');
@@ -35,6 +36,10 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
       const { name } = thingConfig;
 
       if (allowQueries) {
+        const thingCountQueryResolver = createThingCountQueryResolver(thingConfig, generalConfig);
+        // eslint-disable-next-line no-param-reassign
+        if (thingCountQueryResolver) prev.Query[`${name}Count`] = thingCountQueryResolver;
+
         const thingQueryResolver = createThingQueryResolver(thingConfig, generalConfig);
         // eslint-disable-next-line no-param-reassign
         if (thingQueryResolver) prev.Query[name] = thingQueryResolver;
