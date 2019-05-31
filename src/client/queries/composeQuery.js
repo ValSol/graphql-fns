@@ -4,9 +4,10 @@ import type { ClientOptions, ThingConfig } from '../../flowTypes';
 const composeFields = require('../composeFields');
 const composeThingQueryArgs = require('./composeThingQueryArgs');
 const composeThingsQueryArgs = require('./composeThingsQueryArgs');
+const composeThingCountQuery = require('./composeThingCountQuery');
 
 const composeQuery = (
-  queryName: 'thing' | 'things',
+  queryName: 'thing' | 'things' | 'thingCount',
   thingConfig: ThingConfig,
   clientOptions: ClientOptions = {},
 ): string => {
@@ -20,6 +21,9 @@ const composeQuery = (
     case 'things':
       head = composeThingsQueryArgs(thingConfig);
       break;
+
+    case 'thingCount':
+      return composeThingCountQuery(thingConfig);
 
     default:
       throw new TypeError(`Invalid queryName value "${queryName}"!`);

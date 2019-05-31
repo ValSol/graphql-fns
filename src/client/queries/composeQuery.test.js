@@ -52,4 +52,23 @@ describe('composeQuery', () => {
     const result = composeQuery('things', thingConfig);
     expect(result).toBe(expectedResult);
   });
+
+  test('should compose thingCount query', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    const expectedResult = `query ExampleCount($where: ExampleWhereInput) {
+  ExampleCount(where: $where)
+}`;
+
+    const result = composeQuery('thingCount', thingConfig);
+    expect(result).toBe(expectedResult);
+  });
 });

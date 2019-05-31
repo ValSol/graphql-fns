@@ -8,7 +8,7 @@ const createThingPaginationInputType = require('../../types/inputs/createThingPa
 const createThingSortInputType = require('../../types/inputs/createThingSortInputType');
 const createThingWhereInputType = require('../../types/inputs/createThingWhereInputType');
 
-const composeThingQueryArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
   const argsArray = [];
 
@@ -42,4 +42,4 @@ const composeThingQueryArgs = (thingConfig: ThingConfig): Array<string> => {
   return [`query ${pluralize(name)}(${args1}) {`, `  ${pluralize(name)}(${args2}) {`];
 };
 
-module.exports = composeThingQueryArgs;
+module.exports = composeThingCountQuery;
