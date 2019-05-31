@@ -181,7 +181,7 @@ type UpdatedExamplePayload {
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
-  ExampleCount(where: ExampleWhereInput): String!
+  ExampleCount(where: ExampleWhereInput): Int!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -359,10 +359,10 @@ type UpdatedExample2Payload {
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
   Example1S(near: Example1NearInput): [Example1!]!
-  Example1Count: String!
+  Example1Count: Int!
   Example2(whereOne: Example2WhereOneInput!): Example2
   Example2S: [Example2!]!
-  Example2Count: String!
+  Example2Count: Int!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
@@ -518,10 +518,10 @@ type UpdatedPlacePayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
-  PersonCount: String!
+  PersonCount: Int!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places: [Place!]!
-  PlaceCount: String!
+  PlaceCount: Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -664,7 +664,7 @@ type UpdatedPersonPayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
-  PersonCount: String!
+  PersonCount: Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -836,10 +836,10 @@ type UpdatedPlacePayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
-  PersonCount: String!
+  PersonCount: Int!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places: [Place!]!
-  PlaceCount: String!
+  PlaceCount: Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -887,7 +887,7 @@ input ExampleWhereOneInput {
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples: [Example!]!
-  ExampleCount: String!
+  ExampleCount: Int!
 }`;
 
     const result = composeGqlTypes(generalConfig);

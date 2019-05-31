@@ -17,7 +17,7 @@ describe('createThingCountQueryType', () => {
         },
       ],
     };
-    const expectedResult = '  ExampleCount: String!';
+    const expectedResult = '  ExampleCount: Int!';
 
     const result = createThingCountQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -37,7 +37,7 @@ describe('createThingCountQueryType', () => {
         },
       ],
     };
-    const expectedResult = '  ExampleCount(where: ExampleWhereInput): String!';
+    const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
 
     const result = createThingCountQueryType(thingConfig);
     expect(result).toEqual(expectedResult);

@@ -8,9 +8,9 @@ const createThingCountQueryType = (thingConfig: ThingConfig): string => {
 
   const thingWhereInputType = createThingWhereInputType(thingConfig);
 
-  if (thingWhereInputType) return `  ${name}Count(where: ${name}WhereInput): String!`;
+  if (thingWhereInputType) return `  ${name}Count(where: ${name}WhereInput): Int!`;
 
-  return `  ${name}Count: String!`;
+  return `  ${name}Count: Int!`;
 };
 
 module.exports = createThingCountQueryType;
