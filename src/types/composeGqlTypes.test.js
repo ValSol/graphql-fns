@@ -181,6 +181,7 @@ type UpdatedExamplePayload {
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
+  ExampleCount(where: ExampleWhereInput): String!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -358,8 +359,10 @@ type UpdatedExample2Payload {
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
   Example1S(near: Example1NearInput): [Example1!]!
+  Example1Count: String!
   Example2(whereOne: Example2WhereOneInput!): Example2
   Example2S: [Example2!]!
+  Example2Count: String!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
@@ -515,8 +518,10 @@ type UpdatedPlacePayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
+  PersonCount: String!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places: [Place!]!
+  PlaceCount: String!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -659,6 +664,7 @@ type UpdatedPersonPayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
+  PersonCount: String!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -830,8 +836,10 @@ type UpdatedPlacePayload {
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People: [Person!]!
+  PersonCount: String!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places: [Place!]!
+  PlaceCount: String!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -879,6 +887,7 @@ input ExampleWhereOneInput {
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples: [Example!]!
+  ExampleCount: String!
 }`;
 
     const result = composeGqlTypes(generalConfig);

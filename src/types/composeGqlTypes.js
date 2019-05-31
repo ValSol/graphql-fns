@@ -11,6 +11,7 @@ const createThingNearInputType = require('./inputs/createThingNearInputType');
 const createThingSortInputType = require('./inputs/createThingSortInputType');
 const createThingWhereInputType = require('./inputs/createThingWhereInputType');
 const createThingWhereOneInputType = require('./inputs/createThingWhereOneInputType');
+const createThingCountQueryType = require('./queries/createThingCountQueryType');
 const createThingQueryType = require('./queries/createThingQueryType');
 const createThingsQueryType = require('./queries/createThingsQueryType');
 const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
@@ -64,7 +65,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         const thingWhereOneInputType = createThingWhereOneInputType(thingConfig);
         prev.push(thingWhereOneInputType);
       }
-      if (checkInventory(['Query', 'things', name], inventory)) {
+      if (
+        checkInventory(['Query', 'things', name], inventory) ||
+        checkInventory(['Query', 'thingCount', name], inventory)
+      ) {
         const thingWhereInputType = createThingWhereInputType(thingConfig);
         if (thingWhereInputType) prev.push(thingWhereInputType);
         const thingSortInputType = createThingSortInputType(thingConfig);
@@ -88,6 +92,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           }
           if (checkInventory(['Query', 'things', name], inventory)) {
             prev.push(createThingsQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'thingCount', name], inventory)) {
+            prev.push(createThingCountQueryType(thingConfig));
           }
           return prev;
         }, [])
