@@ -166,6 +166,9 @@ describe('arrangeFormFields', () => {
       // booleanFields
       { name: 'booleanField' },
       { name: 'booleanField2' },
+      // enumFields
+      { name: 'enumField' },
+      { name: 'enumField2' },
       // dateTimeFields
       { name: 'dateTimeField' },
       { name: 'dateTimeField2' },

@@ -5,19 +5,27 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
   const {
     booleanFields,
     dateTimeFields,
-    textFields,
-    intFields,
+    duplexFields,
+    embeddedFields,
+    enumFields,
     floatFields,
     geospatialFields,
-    embeddedFields,
-    duplexFields,
+    intFields,
     relationalFields,
+    textFields,
   } = thingConfig;
 
   const result = [];
 
   if (booleanFields) {
     booleanFields.reduce((prev, { name }) => {
+      prev.push({ name });
+      return prev;
+    }, result);
+  }
+
+  if (enumFields) {
+    enumFields.reduce((prev, { name }) => {
       prev.push({ name });
       return prev;
     }, result);
