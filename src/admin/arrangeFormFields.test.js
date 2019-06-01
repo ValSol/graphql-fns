@@ -165,19 +165,19 @@ describe('arrangeFormFields', () => {
     const expectedResult: Array<FormField> = [
       // booleanFields
       { name: 'booleanField' },
-      { name: 'booleanField2', value: false },
+      { name: 'booleanField2' },
       // dateTimeFields
       { name: 'dateTimeField' },
-      { name: 'dateTimeField2', value: new Date('1991-08-24') },
+      { name: 'dateTimeField2' },
       // textFields
       { name: 'textField' },
-      { name: 'textField2', value: 'textField default value' },
+      { name: 'textField2' },
       // intFields
       { name: 'intField' },
-      { name: 'intField2', value: 10 },
+      { name: 'intField2' },
       // floatFields
       { name: 'floatField' },
-      { name: 'floatField2', value: 0.5 },
+      { name: 'floatField2' },
       // geospatialFields
       { name: 'geospatialPoint' },
       { name: 'geospatialPolygon' },
