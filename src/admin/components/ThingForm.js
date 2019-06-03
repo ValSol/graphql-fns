@@ -37,10 +37,9 @@ const ThingForm = (props: Props) => {
     updatedAt: null,
   };
   const thingQuery = gql(composeQuery('thing', thingConfig, { exclude }));
-  const updateThingMutation = gql(composeMutation('updateThing', thingConfig, { exclude }));
-  const createThingMutation = gql(
-    composeMutation('createThing', thingConfig, { include: { id: null } }),
-  );
+  const thingMutation = id
+    ? gql(composeMutation('updateThing', thingConfig, { exclude }))
+    : gql(composeMutation('createThing', thingConfig, { include: { id: null } }));
 
   const formikFragment = composeFormikFragment(thingConfig);
 
@@ -64,31 +63,42 @@ const ThingForm = (props: Props) => {
                   message={<span id="message-id">{thingQueryError.message}</span>}
                 />
               );
-            if (!data || !data[name]) {
+
+            if (id && (!data || !data[name])) {
               Router.push({ pathname, query: {} });
               return null;
             }
+
             let currentInitialValues;
             return (
-              <Mutation mutation={updateThingMutation} key={id}>
-                {(updateThing, { error: submitUpdateError }) => {
+              <Mutation mutation={thingMutation} key={id}>
+                {(mutateThing, { error: submitError }) => {
                   return (
                     <Formik
-                      initialValues={composeInitialValues(thingConfig, data[name])}
+                      initialValues={
+                        data
+                          ? composeInitialValues(thingConfig, data[name])
+                          : composeInitialValues(thingConfig)
+                      }
                       onSubmit={(values, actions) => {
-                        updateThing({
-                          variables: {
-                            whereOne,
-                            data: { ...values, __typename: undefined },
-                          },
-                        })
+                        const variables = data
+                          ? { whereOne, data: { ...values, __typename: undefined } }
+                          : { data: { ...values, __typename: undefined } };
+                        mutateThing({ variables })
                           .then(result => {
                             if (result) {
-                              const { data: updatedData } = result;
-                              if (updatedData) {
-                                currentInitialValues = updatedData[`update${name}`];
-                                actions.resetForm(currentInitialValues);
-                                actions.setSubmitting(false);
+                              const { data: resultData } = result;
+                              if (resultData) {
+                                if (data) {
+                                  // if update
+                                  currentInitialValues = resultData[`update${name}`];
+                                  actions.resetForm(currentInitialValues);
+                                  actions.setSubmitting(false);
+                                } else {
+                                  // if create
+                                  const { id: newId } = resultData[`create${name}`];
+                                  Router.push({ pathname, query: { id: newId, thing: name } });
+                                }
                               }
                             }
                           })
@@ -108,7 +118,7 @@ const ThingForm = (props: Props) => {
                               type="submit"
                               variant="outlined"
                             >
-                              Update Person
+                              {`${data ? 'Update' : 'Create'} Person`}
                             </Button>{' '}
                             <Button
                               color="secondary"
@@ -125,14 +135,14 @@ const ThingForm = (props: Props) => {
                               Reset
                             </Button>{' '}
                             <Button variant="outlined">Cancel</Button>
-                            {submitUpdateError && (
+                            {submitError && (
                               <Snackbar
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                                open={!!submitUpdateError}
+                                open={!!submitError}
                                 ContentProps={{
                                   'aria-describedby': 'message-id',
                                 }}
-                                message={<span id="message-id">{submitUpdateError.message}</span>}
+                                message={<span id="message-id">{submitError.message}</span>}
                               />
                             )}
                           </Form>
@@ -145,74 +155,6 @@ const ThingForm = (props: Props) => {
             );
           }}
         </Query>
-        {!id && (
-          <Mutation mutation={createThingMutation}>
-            {(createThing, { client: apolloClient, error: submitCreateError }) => {
-              return (
-                <Formik
-                  initialValues={composeInitialValues(thingConfig)}
-                  enableReinitialize
-                  onSubmit={(values, actions) => {
-                    createThing({
-                      variables: {
-                        whereOne,
-                        data: { ...values, __typename: undefined },
-                      },
-                    })
-                      .then(result => {
-                        if (result) {
-                          const { data: createdData } = result;
-                          if (createdData) {
-                            const { id: newId } = createdData[`create${name}`];
-                            Router.push({ pathname, query: { id: newId, thing: name } });
-                          }
-                        }
-                      })
-                      .catch(() => actions.setSubmitting(false));
-                  }}
-                  validationSchema={createValidationSchema(thingConfig, apolloClient)}
-                >
-                  {formikProps => {
-                    const { dirty, errors, isSubmitting, resetForm } = formikProps;
-                    const isError = !!Object.keys(errors).length;
-                    return (
-                      <Form>
-                        {formikFragment}
-                        <Button
-                          color="primary"
-                          disabled={!dirty || isError || isSubmitting}
-                          type="submit"
-                          variant="outlined"
-                        >
-                          {`Create ${name}`}
-                        </Button>{' '}
-                        <Button
-                          color="secondary"
-                          disabled={!dirty || isSubmitting}
-                          onClick={() => resetForm()}
-                          variant="outlined"
-                        >
-                          Reset
-                        </Button>{' '}
-                        <Button variant="outlined">Cancel</Button>
-                        {submitCreateError && (
-                          <Snackbar
-                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                            open={!!submitCreateError}
-                            ContentProps={{
-                              'aria-describedby': 'message-id',
-                            }}
-                            message={<span id="message-id">{submitCreateError.message}</span>}
-                          />
-                        )}
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              );
-            }}
-          </Mutation>
-        )}
       </NoSsr>
     </Container>
   );
