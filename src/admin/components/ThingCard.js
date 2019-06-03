@@ -2,6 +2,7 @@
 
 import React from 'react';
 import clsx from 'clsx';
+import Router from 'next/router';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -24,7 +25,7 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import composeQuery from '../../client/queries/composeQuery';
 import composeThingCardContent from './composeThingCardContent';
 
-type Props = { config: ThingConfig, generalConfig: GeneralConfig };
+type Props = { config: ThingConfig, generalConfig: GeneralConfig, router: { pathname: string } };
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -58,6 +59,7 @@ const ThingCard = (props: Props) => {
     config,
     config: { name },
     generalConfig,
+    router: { pathname },
   } = props;
 
   const thingCountQuery = gql(composeQuery('thingCount', config));
@@ -83,12 +85,18 @@ const ThingCard = (props: Props) => {
       }
       <CardActions>
         <Tooltip title="Example List">
-          <IconButton aria-label="Example List">
+          <IconButton
+            aria-label="Example List"
+            onClick={() => Router.push(`${pathname}?thing=${name}`)}
+          >
             <ViewListIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Create Example Item">
-          <IconButton aria-label="Create Example Item">
+          <IconButton
+            aria-label="Create Example Item"
+            onClick={() => Router.push(`${pathname}?thing=${name}&create`)}
+          >
             <InsertDriveFileIcon />
           </IconButton>
         </Tooltip>

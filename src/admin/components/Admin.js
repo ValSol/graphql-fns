@@ -27,7 +27,7 @@ const Admin = (props: Props & ProvidedProps) => {
   const thingConfig = thingConfigs.find(({ name }) => name === thing);
 
   if (!thingConfig) {
-    return <AllThings generalConfig={generalConfig} />;
+    return <AllThings router={router} generalConfig={generalConfig} />;
   }
 
   if (id || create || create === '') {

@@ -7,12 +7,13 @@ import type { GeneralConfig } from '../../flowTypes';
 
 import ThingCard from './ThingCard';
 
-type Props = { generalConfig: GeneralConfig };
+type Props = { generalConfig: GeneralConfig, router: Object };
 
 const AllThings = (props: Props) => {
   const {
     generalConfig,
     generalConfig: { thingConfigs },
+    router,
   } = props;
 
   return (
@@ -21,7 +22,12 @@ const AllThings = (props: Props) => {
       {thingConfigs
         .filter(({ embedded }) => !embedded)
         .map(config => (
-          <ThingCard key={config.name} config={config} generalConfig={generalConfig} />
+          <ThingCard
+            key={config.name}
+            config={config}
+            generalConfig={generalConfig}
+            router={router}
+          />
         ))}
     </Container>
   );
