@@ -80,6 +80,11 @@ export type FormField = {
   formFieldType?: 'hidden' | 'disabled' | 'email' | 'multiline',
 };
 
+export type ListColumn = {
+  name: string,
+  width: number, // pixels
+};
+
 export type ThingConfig = {
   name: string,
   embedded?: boolean,
@@ -116,6 +121,7 @@ export type ThingConfig = {
   textFields?: Array<TextField>,
 
   form?: Array<FormField>,
+  list?: Array<ListColumn>,
 };
 
 export type ThingConfigObject = {
