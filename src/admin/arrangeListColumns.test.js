@@ -132,6 +132,9 @@ describe('arrangeListColumns', () => {
       { name: 'children', width: 200 },
       // relationalFields
       { name: 'siblings', width: 200 },
+      // default fields
+      { name: 'createdAt', width: 220 },
+      { name: 'updatedAt', width: 220 },
     ];
 
     const result = arrangeListColumns(thingConfig);

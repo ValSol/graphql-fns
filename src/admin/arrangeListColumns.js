@@ -76,6 +76,9 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
     }, result);
   }
 
+  result.push({ name: 'createdAt', width: 220 });
+  result.push({ name: 'updatedAt', width: 220 });
+
   return result;
 };
 
