@@ -118,7 +118,7 @@ const ThingForm = (props: Props) => {
                               type="submit"
                               variant="outlined"
                             >
-                              {`${data ? 'Update' : 'Create'} Person`}
+                              {`${data ? 'Update' : 'Create'} ${name}`}
                             </Button>{' '}
                             <Button
                               color="secondary"
@@ -134,7 +134,12 @@ const ThingForm = (props: Props) => {
                             >
                               Reset
                             </Button>{' '}
-                            <Button variant="outlined">Cancel</Button>
+                            <Button
+                              onClick={() => Router.push({ pathname, query: { thing: name } })}
+                              variant="outlined"
+                            >
+                              {`${name} List`}
+                            </Button>
                             {submitError && (
                               <Snackbar
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
