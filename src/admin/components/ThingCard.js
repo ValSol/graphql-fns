@@ -2,6 +2,7 @@
 
 import React from 'react';
 import clsx from 'clsx';
+import pluralize from 'pluralize';
 import Router from 'next/router';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -84,17 +85,17 @@ const ThingCard = (props: Props) => {
         </NoSsr>
       }
       <CardActions>
-        <Tooltip title="Example List">
+        <Tooltip title={`All ${pluralize(name)}`}>
           <IconButton
-            aria-label="Example List"
+            aria-label={`All ${pluralize(name)}`}
             onClick={() => Router.push(`${pathname}?thing=${name}`)}
           >
             <ViewListIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Create Example Item">
+        <Tooltip title={`Create ${name}`}>
           <IconButton
-            aria-label="Create Example Item"
+            aria-label={`Create ${name}`}
             onClick={() => Router.push(`${pathname}?thing=${name}&create`)}
           >
             <InsertDriveFileIcon />
