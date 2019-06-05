@@ -5,10 +5,7 @@ import pluralize from 'pluralize';
 
 import Container from '@material-ui/core/Container';
 import NoSsr from '@material-ui/core/NoSsr';
-import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
-
-import Router from 'next/router';
 
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -26,7 +23,7 @@ function ThingList(props: Props) {
   const {
     thingConfig,
     thingConfig: { list, name },
-    router: { pathname },
+    router,
   } = props;
 
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
@@ -45,43 +42,65 @@ function ThingList(props: Props) {
 
   const thingQuery = gql(composeQuery('things', thingConfig, { include }));
 
+  const columns2 = [
+    {
+      dataKey: '',
+      label: '',
+      width: 48,
+    },
+    {
+      dataKey: '',
+      label: '#',
+      width: 48,
+    },
+    ...columns,
+    {
+      dataKey: '',
+      label: '',
+      width: 48,
+    },
+  ];
+
+  const width = columns2.reduce((prev, { width: columnWidht }) => {
+    prev += columnWidht; // eslint-disable-line no-param-reassign
+    return prev;
+  }, 0);
+
   return (
     <Container>
-      <h1>{`${name} List`}</h1>
-      <Paper style={{ height: 400, width: '100%' }}>
-        <NoSsr>
-          <Query query={thingQuery}>
-            {({ data, error: thingQueryError, loading }) => {
-              if (loading) return 'Loading...';
+      <h1>{`All ${pluralize(name)}`}</h1>
+      <NoSsr>
+        <Query query={thingQuery}>
+          {({ data, error: thingQueryError, loading }) => {
+            if (loading) return 'Loading...';
 
-              if (thingQueryError)
-                return (
-                  <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    open={!!thingQueryError}
-                    ContentProps={{
-                      'aria-describedby': 'message-id',
-                    }}
-                    message={<span id="message-id">{thingQueryError.message}</span>}
-                  />
-                );
-
-              const items = coerceListItems(data[pluralize(name)], thingConfig);
-
+            if (thingQueryError)
               return (
-                <VirtualizedTable
-                  rowCount={items.length}
-                  rowGetter={({ index }) => items[index]}
-                  onRowClick={({ rowData: { id } }) =>
-                    Router.push({ pathname, query: { id, thing: name } })
-                  }
-                  columns={columns}
+                <Snackbar
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  open={!!thingQueryError}
+                  ContentProps={{
+                    'aria-describedby': 'message-id',
+                  }}
+                  message={<span id="message-id">{thingQueryError.message}</span>}
                 />
               );
-            }}
-          </Query>
-        </NoSsr>
-      </Paper>
+
+            const items = coerceListItems(data[pluralize(name)], thingConfig);
+
+            return (
+              <VirtualizedTable
+                columns={columns2}
+                router={router}
+                rowCount={items.length}
+                rowGetter={({ index }) => items[index]}
+                thingConfig={thingConfig}
+                width={width}
+              />
+            );
+          }}
+        </Query>
+      </NoSsr>
     </Container>
   );
 }

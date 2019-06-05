@@ -4,14 +4,26 @@ import React from 'react';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+import WindowScroller from 'react-virtualized/dist/commonjs/WindowScroller';
 import Table, { Column } from 'react-virtualized/dist/commonjs/Table';
+
+import Router from 'next/router';
+
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+
+import type { RouterQuery, ThingConfig } from '../../flowTypes';
 
 type Props = {
   columns: Array<Object>,
   headerHeight: number, // eslint-disable-line react/require-default-props
   onRowClick: Function,
+  router: { pathname: string, query: RouterQuery },
   rowHeight: number, // eslint-disable-line react/require-default-props
+  thingConfig: ThingConfig,
+  width: number,
 };
 
 type ProvidedProps = {
@@ -54,8 +66,41 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
     });
   };
 
-  cellRenderer = ({ cellData, columnIndex }) => {
-    const { columns, classes, rowHeight, onRowClick } = this.props;
+  cellRenderer = ({ cellData, columnIndex, rowData, rowIndex }) => {
+    const {
+      columns,
+      classes,
+      rowHeight,
+      onRowClick,
+      router: { pathname },
+      thingConfig: { name },
+    } = this.props;
+    if (!columnIndex) {
+      return (
+        <Tooltip title={`Update ${name}`}>
+          <IconButton
+            aria-label={`Update ${name}`}
+            onClick={() => Router.push({ pathname, query: { thing: name, id: rowData.id } })}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+
+    if (columnIndex === columns.length - 1) {
+      return (
+        <Tooltip title={`Delete ${name}`}>
+          <IconButton
+            aria-label={`Delete ${name}`}
+            onClick={() => Router.push(`${pathname}?thing=${name}&id=${rowData.id}&delete`)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+
     return (
       <TableCell
         component="div"
@@ -66,7 +111,7 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
         style={{ height: rowHeight }}
         align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
       >
-        {cellData}
+        {columnIndex > 1 ? cellData : rowIndex}
       </TableCell>
     );
   };
@@ -88,31 +133,42 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
   };
 
   render() {
-    const { classes, columns, ...tableProps } = this.props;
+    const { classes, columns, width, ...tableProps } = this.props;
     return (
-      <AutoSizer>
-        {({ height, width }) => (
-          <Table height={height} width={width} {...tableProps} rowClassName={this.getRowClassName}>
-            {columns.map(({ dataKey, ...other }, index) => {
-              return (
-                <Column
-                  key={dataKey}
-                  headerRenderer={headerProps =>
-                    this.headerRenderer({
-                      ...headerProps,
-                      columnIndex: index,
-                    })
-                  }
-                  className={classes.flexContainer}
-                  cellRenderer={this.cellRenderer}
-                  dataKey={dataKey}
-                  {...other}
-                />
-              );
-            })}
-          </Table>
-        )}
-      </AutoSizer>
+      <WindowScroller>
+        {({ height, isScrolling, onChildScroll, scrollTop }) => {
+          return (
+            <Table
+              autoHeight
+              height={height}
+              isScrolling={isScrolling}
+              onScroll={onChildScroll}
+              scrollTop={scrollTop}
+              width={width}
+              {...tableProps}
+              rowClassName={this.getRowClassName}
+            >
+              {columns.map(({ dataKey, ...other }, index) => {
+                return (
+                  <Column
+                    key={dataKey}
+                    headerRenderer={headerProps =>
+                      this.headerRenderer({
+                        ...headerProps,
+                        columnIndex: index,
+                      })
+                    }
+                    className={classes.flexContainer}
+                    cellRenderer={this.cellRenderer}
+                    dataKey={dataKey}
+                    {...other}
+                  />
+                );
+              })}
+            </Table>
+          );
+        }}
+      </WindowScroller>
     );
   }
 }
