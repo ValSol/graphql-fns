@@ -8,6 +8,8 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 
+import Router from 'next/router';
+
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -23,17 +25,25 @@ type Props = { thingConfig: ThingConfig, router: { pathname: string, query: Rout
 function ThingList(props: Props) {
   const {
     thingConfig,
-    thingConfig: { name },
-    // router: { pathname },
+    thingConfig: { list, name },
+    router: { pathname },
   } = props;
 
-  const thingQuery = gql(composeQuery('things', thingConfig));
-
-  const columns = arrangeListColumns(thingConfig).map(({ name: fieldName, width }) => ({
+  const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
     dataKey: fieldName,
     label: fieldName,
     width,
   }));
+
+  const include = columns.reduce(
+    (prev, { dataKey }) => {
+      prev[dataKey] = null; // eslint-disable-line no-param-reassign
+      return prev;
+    },
+    { id: null },
+  );
+
+  const thingQuery = gql(composeQuery('things', thingConfig, { include }));
 
   return (
     <Container>
@@ -56,14 +66,14 @@ function ThingList(props: Props) {
                   />
                 );
 
-              const list = coerceListItems(data[pluralize(name)], thingConfig);
+              const items = coerceListItems(data[pluralize(name)], thingConfig);
 
               return (
                 <VirtualizedTable
-                  rowCount={list.length}
-                  rowGetter={({ index }) => list[index]}
-                  onRowClick={({ index, rowData }) =>
-                    alert(`index = ${index}\nrowData = ${JSON.stringify(rowData, null, ' ')}`)
+                  rowCount={items.length}
+                  rowGetter={({ index }) => items[index]}
+                  onRowClick={({ rowData: { id } }) =>
+                    Router.push({ pathname, query: { id, thing: name } })
                   }
                   columns={columns}
                 />
