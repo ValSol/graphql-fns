@@ -114,7 +114,7 @@ const ThingForm = (props: Props) => {
                             {formikFragment}
                             <Button
                               color="primary"
-                              disabled={!dirty || isError || isSubmitting}
+                              disabled={(!dirty && !!data) || isError || isSubmitting}
                               type="submit"
                               variant="outlined"
                             >
