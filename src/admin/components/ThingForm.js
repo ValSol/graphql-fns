@@ -8,6 +8,11 @@ import Router from 'next/router';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
@@ -28,14 +33,18 @@ import Link from './Link';
 type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
 
 const ThingForm = (props: Props) => {
+  const [open, setOpen] = React.useState(false);
+
   const {
     thingConfig,
     thingConfig: { name },
     router: {
-      query: { id },
+      query: { id, delete: deleteAttr },
       pathname,
     },
   } = props;
+
+  const toDelete = deleteAttr === '' || !!deleteAttr;
 
   const exclude = {
     id: null,
@@ -43,14 +52,17 @@ const ThingForm = (props: Props) => {
     updatedAt: null,
   };
   const thingQuery = gql(composeQuery('thing', thingConfig, { exclude }));
-  const thingMutation = id
-    ? gql(composeMutation('updateThing', thingConfig, { exclude }))
+  const thingMutation = id // eslint-disable-line no-nested-ternary
+    ? toDelete
+      ? gql(composeMutation('deleteThing', thingConfig, { exclude }))
+      : gql(composeMutation('updateThing', thingConfig, { exclude }))
     : gql(composeMutation('createThing', thingConfig, { include: { id: null } }));
 
-  const formikFragment = composeFormikFragment(thingConfig);
+  const formikFragment = composeFormikFragment(thingConfig, toDelete);
 
   const whereOne = { id };
-  const header = `${id ? 'Update' : 'Create'} ${name}`;
+  // eslint-disable-next-line no-nested-ternary
+  const header = `${id ? (toDelete ? 'Delete' : 'Update') : 'Create'} ${name}`;
   return (
     <Container>
       <h1>{header}</h1>
@@ -94,9 +106,15 @@ const ThingForm = (props: Props) => {
                           : composeInitialValues(thingConfig)
                       }
                       onSubmit={(values, actions) => {
+                        if (toDelete) {
+                          setOpen(true);
+                          return;
+                        }
+
                         const variables = data
                           ? { whereOne, data: { ...values, __typename: undefined } }
                           : { data: { ...values, __typename: undefined } };
+
                         mutateThing({ variables })
                           .then(result => {
                             if (result) {
@@ -106,11 +124,19 @@ const ThingForm = (props: Props) => {
                                   // if update
                                   currentInitialValues = resultData[`update${name}`];
                                   actions.resetForm(currentInitialValues);
-                                  actions.setSubmitting(false);
+
+                                  apolloClient
+                                    .clearStore()
+                                    .then(() => actions.setSubmitting(false));
                                 } else {
                                   // if create
                                   const { id: newId } = resultData[`create${name}`];
-                                  Router.push({ pathname, query: { id: newId, thing: name } });
+                                  // TODO update store instead of clear store
+                                  apolloClient
+                                    .clearStore()
+                                    .then(() =>
+                                      Router.push({ pathname, query: { id: newId, thing: name } }),
+                                    );
                                 }
                               }
                             }
@@ -122,36 +148,44 @@ const ThingForm = (props: Props) => {
                       {formikProps => {
                         const { dirty, errors, isSubmitting, resetForm } = formikProps;
                         const isError = !!Object.keys(errors).length;
+                        const submitButtonName = `${
+                          // eslint-disable-next-line no-nested-ternary
+                          data ? (toDelete ? 'Delete' : 'Update') : 'Create'
+                        } ${name}`;
                         return (
                           <Form>
                             {formikFragment}
                             <Button
-                              color="primary"
-                              disabled={(!dirty && !!data) || isError || isSubmitting}
-                              type="submit"
-                              variant="outlined"
-                            >
-                              {`${data ? 'Update' : 'Create'} ${name}`}
-                            </Button>{' '}
-                            <Button
-                              color="secondary"
-                              disabled={!dirty || isSubmitting}
-                              onClick={() => {
-                                if (currentInitialValues) {
-                                  resetForm(currentInitialValues);
-                                } else {
-                                  resetForm();
-                                }
-                              }}
-                              variant="outlined"
-                            >
-                              Reset
-                            </Button>{' '}
-                            <Button
                               onClick={() => Router.push({ pathname, query: { thing: name } })}
                               variant="outlined"
                             >
-                              {`${name} List`}
+                              Cancel
+                            </Button>{' '}
+                            {!toDelete && (
+                              <Button
+                                color="secondary"
+                                disabled={!dirty || isSubmitting}
+                                onClick={() => {
+                                  if (currentInitialValues) {
+                                    resetForm(currentInitialValues);
+                                  } else {
+                                    resetForm();
+                                  }
+                                }}
+                                variant="outlined"
+                              >
+                                Reset
+                              </Button>
+                            )}{' '}
+                            <Button
+                              color="primary"
+                              disabled={
+                                !toDelete && ((!dirty && !!data) || isError || isSubmitting)
+                              }
+                              type="submit"
+                              variant="outlined"
+                            >
+                              {submitButtonName}
                             </Button>
                             {submitError && (
                               <Snackbar
@@ -163,6 +197,50 @@ const ThingForm = (props: Props) => {
                                 message={<span id="message-id">{submitError.message}</span>}
                               />
                             )}
+                            <Dialog
+                              open={open}
+                              onClose={() => setOpen(false)}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                Are you sure to delete?
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  {`The ${name} will be deleted permanently...`}
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={() => setOpen(false)}>Cancel</Button>
+                                <Button
+                                  onClick={() => {
+                                    setOpen(false);
+                                    const variables = { whereOne };
+
+                                    mutateThing({ variables }).then(result => {
+                                      if (result) {
+                                        const { data: resultData } = result;
+                                        if (resultData) {
+                                          // TODO update store instead of clear store
+                                          apolloClient.clearStore().then(() =>
+                                            Router.push({
+                                              pathname,
+                                              query: { thing: name },
+                                            }),
+                                          );
+                                        }
+                                      }
+                                    });
+                                    // .catch(() => actions.setSubmitting(false));
+                                  }}
+                                  color="primary"
+                                  autoFocus
+                                >
+                                  Delete
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
                           </Form>
                         );
                       }}

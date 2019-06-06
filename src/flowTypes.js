@@ -236,4 +236,4 @@ export type ClientFieldsOptions = {
   shift: number,
 };
 
-export type RouterQuery = { id?: string, create?: '', thing: string };
+export type RouterQuery = { create?: '', delete?: '', id?: string, thing: string };
