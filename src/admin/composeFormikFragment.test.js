@@ -9,7 +9,7 @@ import type { ThingConfig } from '../flowTypes';
 
 import Outline from './components/Outline';
 import composeFormikFragment from './composeFormikFragment';
-import formikFieldArrayChild from './formikFieldArrayChild';
+import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 
 describe('composeFormikFragment', () => {
   test('should return fragment for a simple fields set', () => {
@@ -34,6 +34,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={0}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField1"
           margin="normal"
@@ -43,6 +44,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={1}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField2"
           margin="normal"
@@ -52,6 +54,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={2}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField3"
           margin="normal"
@@ -128,6 +131,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={0}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField"
           margin="normal"
@@ -140,6 +144,7 @@ describe('composeFormikFragment', () => {
               <Field
                 key={0}
                 component={FormikTextField}
+                disabled={false}
                 fullWidth
                 label="textField1"
                 margin="normal"
@@ -152,6 +157,7 @@ describe('composeFormikFragment', () => {
                     <Field
                       key={0}
                       component={FormikTextField}
+                      disabled={false}
                       fullWidth
                       label="textField2"
                       margin="normal"
@@ -164,6 +170,7 @@ describe('composeFormikFragment', () => {
                           <Field
                             key={0}
                             component={FormikTextField}
+                            disabled={false}
                             fullWidth
                             label="textField3"
                             margin="normal"
@@ -250,6 +257,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={0}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField"
           margin="normal"
@@ -262,6 +270,7 @@ describe('composeFormikFragment', () => {
               <Field
                 key={0}
                 component={FormikTextField}
+                disabled={false}
                 fullWidth
                 label="textField1"
                 margin="normal"
@@ -274,6 +283,7 @@ describe('composeFormikFragment', () => {
                     <Field
                       key={0}
                       component={FormikTextField}
+                      disabled={false}
                       fullWidth
                       label="textField2"
                       margin="normal"
@@ -320,6 +330,7 @@ describe('composeFormikFragment', () => {
         <Field
           key={0}
           component={FormikTextField}
+          disabled={false}
           fullWidth
           label="textField"
           margin="normal"
@@ -327,7 +338,7 @@ describe('composeFormikFragment', () => {
           variant="outlined"
         />
         <Outline key={1} label="arrayTextFields">
-          <FieldArray name="arrayTextFields">{formikFieldArrayChild}</FieldArray>
+          <FieldArray name="arrayTextFields">{composeFormikFieldArrayChild}</FieldArray>
         </Outline>
       </React.Fragment>
     );

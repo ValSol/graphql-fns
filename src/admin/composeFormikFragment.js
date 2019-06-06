@@ -14,10 +14,10 @@ import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
 import Outline from './components/Outline';
 import composeFlatFormikFields from './composeFlatFormikFields';
-import formikFieldArrayChild from './formikFieldArrayChild';
+import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 import composeInitialValues from './composeInitialValues';
 
-const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
+const composeFields = (flatFormikFields: FlatFormikFields, disabled: boolean, prefix?: string) => (
   <React.Fragment>
     {flatFormikFields.map(({ array, config, child, name }, i) => {
       const path = prefix ? `${prefix}.${name}` : name;
@@ -43,31 +43,33 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
                         key={j}
                         label={`${itemName} #${j + 1}`}
                       >
-                        {composeFields(child, `${path}[${j}]`)}
+                        {composeFields(child, disabled, `${path}[${j}]`)}
                         <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
                           <IconButton
                             edge="end"
                             aria-label={`Delete ${itemName}`}
                             onClick={() => remove(j)}
-                            disabled={isSubmitting}
+                            disabled={disabled || isSubmitting}
                           >
                             <DeleteIcon />
                           </IconButton>
                         </Tooltip>
                       </Outline>
                     ))}
-                  <Tooltip title={`Add ${itemName}`} placement="right">
-                    <IconButton
-                      edge="end"
-                      aria-label={`Add ${itemName}`}
-                      onClick={() => {
-                        if (config) push(composeInitialValues(config));
-                      }}
-                      disabled={isSubmitting}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <div>
+                    <Tooltip title={`Add ${itemName}`} placement="right">
+                      <IconButton
+                        edge="end"
+                        aria-label={`Add ${itemName}`}
+                        onClick={() => {
+                          if (config) push(composeInitialValues(config));
+                        }}
+                        disabled={disabled || isSubmitting}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
                 </React.Fragment>
               );
             }}
@@ -75,7 +77,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
         ) : (
           // eslint-disable-next-line react/no-array-index-key
           <Outline key={i} label={name}>
-            {composeFields(child, path)}
+            {composeFields(child, disabled, path)}
           </Outline>
         );
       }
@@ -84,7 +86,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
         return (
           // eslint-disable-next-line react/no-array-index-key
           <Outline key={i} label={name}>
-            <FieldArray name={path}>{formikFieldArrayChild}</FieldArray>
+            <FieldArray name={path}>{composeFormikFieldArrayChild(disabled)}</FieldArray>
           </Outline>
         );
       }
@@ -94,6 +96,7 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
           // eslint-disable-next-line react/no-array-index-key
           key={i}
           component={FormikTextField}
+          disabled={disabled}
           fullWidth
           label={name}
           margin="normal"
@@ -104,10 +107,11 @@ const composeFields = (flatFormikFields: FlatFormikFields, prefix?: string) => (
     })}
   </React.Fragment>
 );
-const composeFormikFragment = (thingConfig: ThingConfig): Object => {
+const composeFormikFragment = (thingConfig: ThingConfig, disabled?: boolean): Object => {
+  const disabled2 = !!disabled;
   const flatFormikFields = composeFlatFormikFields(thingConfig);
 
-  return composeFields(flatFormikFields);
+  return composeFields(flatFormikFields, disabled2);
 };
 
 export default composeFormikFragment;
