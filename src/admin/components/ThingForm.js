@@ -2,11 +2,16 @@
 
 import React from 'react';
 import { Form, Formik } from 'formik';
+import pluralize from 'pluralize';
+import Router from 'next/router';
+
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
-import Router from 'next/router';
+import Typography from '@material-ui/core/Typography';
+
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 
@@ -18,6 +23,7 @@ import createValidationSchema from '../createValidationSchema';
 
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
+import Link from './Link';
 
 type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
 
@@ -44,10 +50,17 @@ const ThingForm = (props: Props) => {
   const formikFragment = composeFormikFragment(thingConfig);
 
   const whereOne = { id };
-
+  const header = `${id ? 'Update' : 'Create'} ${name}`;
   return (
     <Container>
-      <h1>{`${id ? 'Update' : 'Create'} ${name}`}</h1>
+      <h1>{header}</h1>
+      <Breadcrumbs aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+        <Link href={pathname}>All Things</Link>
+        <Link href={`${pathname}?thing=${name}`}>{`All ${pluralize(name)}`}</Link>
+        <Typography color="textPrimary">{header}</Typography>
+      </Breadcrumbs>
+
       <NoSsr>
         <Query query={thingQuery} skip={!id} variables={{ whereOne }}>
           {({ client: apolloClient, data, error: thingQueryError, loading }) => {
