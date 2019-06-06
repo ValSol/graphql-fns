@@ -3,9 +3,11 @@
 import React from 'react';
 import pluralize from 'pluralize';
 
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -15,6 +17,7 @@ import type { RouterQuery, ThingConfig } from '../../flowTypes';
 import composeQuery from '../../client/queries/composeQuery';
 import arrangeListColumns from '../arrangeListColumns';
 import coerceListItems from '../coerceListItems';
+import Link from './Link';
 import VirtualizedTable from './VirtualizedTable';
 
 type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
@@ -24,6 +27,7 @@ function ThingList(props: Props) {
     thingConfig,
     thingConfig: { list, name },
     router,
+    router: { pathname },
   } = props;
 
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
@@ -69,6 +73,12 @@ function ThingList(props: Props) {
   return (
     <Container>
       <h1>{`All ${pluralize(name)}`}</h1>
+      <Breadcrumbs aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+        <Link href={pathname}>All Things</Link>
+        <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
+      </Breadcrumbs>
+
       <NoSsr>
         <Query query={thingQuery}>
           {({ data, error: thingQueryError, loading }) => {
