@@ -41,7 +41,7 @@ const styles = theme => ({
   },
   tableRowHover: {
     '&:hover': {
-      backgroundColor: theme.palette.grey[200],
+      border: `1px solid ${theme.palette.primary.main}`,
     },
   },
   tableCell: {
@@ -59,10 +59,10 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
   };
 
   getRowClassName = ({ index }) => {
-    const { classes, onRowClick } = this.props;
+    const { classes } = this.props;
 
     return clsx(classes.tableRow, classes.flexContainer, {
-      [classes.tableRowHover]: index !== -1 && onRowClick != null,
+      [classes.tableRowHover]: index !== -1, // && onRowClick != null,
     });
   };
 
@@ -111,7 +111,7 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
         style={{ height: rowHeight }}
         align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
       >
-        {columnIndex > 1 ? cellData : rowIndex}
+        {columnIndex > 1 ? cellData : rowIndex + 1}
       </TableCell>
     );
   };
