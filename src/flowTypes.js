@@ -147,6 +147,17 @@ export type FlatFormikFields = Array<{
   array?: boolean,
   child?: FlatFormikFields,
   config?: ThingConfig,
+  kind:
+    | 'booleanFields'
+    | 'dateTimeFields'
+    | 'duplexFields'
+    | 'embeddedFields'
+    | 'enumFields'
+    | 'floatFields'
+    | 'geospatialFields'
+    | 'intFields'
+    | 'relationalFields'
+    | 'textFields',
 }>;
 
 export type Enums = Array<{ name: string, enum: Array<string> }>;

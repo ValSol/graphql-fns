@@ -350,4 +350,51 @@ describe('composeFormikFragment', () => {
 
     expect(result2).toEqual(expectedResult2);
   });
+
+  test('should return fragment for a int and float fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField',
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        <Field
+          key={0}
+          component={FormikTextField}
+          disabled={false}
+          fullWidth
+          label="intField"
+          margin="normal"
+          name="intField"
+          type="number"
+          variant="outlined"
+        />
+        <Field
+          key={1}
+          component={FormikTextField}
+          disabled={false}
+          fullWidth
+          label="floatField"
+          margin="normal"
+          name="floatField"
+          type="number"
+          variant="outlined"
+        />
+      </React.Fragment>
+    );
+
+    const result = composeFormikFragment(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

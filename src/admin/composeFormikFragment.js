@@ -19,7 +19,7 @@ import composeInitialValues from './composeInitialValues';
 
 const composeFields = (flatFormikFields: FlatFormikFields, disabled: boolean, prefix?: string) => (
   <React.Fragment>
-    {flatFormikFields.map(({ array, config, child, name }, i) => {
+    {flatFormikFields.map(({ array, config, child, kind, name }, i) => {
       const path = prefix ? `${prefix}.${name}` : name;
       if (child) {
         return array ? (
@@ -86,24 +86,35 @@ const composeFields = (flatFormikFields: FlatFormikFields, disabled: boolean, pr
         return (
           // eslint-disable-next-line react/no-array-index-key
           <Outline key={i} label={name}>
-            <FieldArray name={path}>{composeFormikFieldArrayChild(disabled)}</FieldArray>
+            <FieldArray name={path}>{composeFormikFieldArrayChild(kind, disabled)}</FieldArray>
           </Outline>
         );
       }
 
-      return (
-        <Field
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
-          component={FormikTextField}
-          disabled={disabled}
-          fullWidth
-          label={name}
-          margin="normal"
-          name={path}
-          variant="outlined"
-        />
-      );
+      const fieldProps = {
+        // eslint-disable-next-line react/no-array-index-key
+        key: i,
+        component: FormikTextField,
+        disabled,
+        fullWidth: true,
+        label: name,
+        margin: 'normal',
+        name: path,
+        variant: 'outlined',
+      };
+      switch (kind) {
+        case 'textFields':
+          return <Field {...fieldProps} />;
+
+        case 'intFields':
+          return <Field {...fieldProps} type="number" />;
+
+        case 'floatFields':
+          return <Field {...fieldProps} type="number" />;
+
+        default:
+          throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
+      }
     })}
   </React.Fragment>
 );
