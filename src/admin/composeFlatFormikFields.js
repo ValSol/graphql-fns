@@ -16,14 +16,52 @@ const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => 
     switch (kind) {
       case 'embeddedFields':
         if (array) {
-          prev.push({ array, config, name, child: composeFlatFormikFields(config) });
+          prev.push({
+            array,
+            child: composeFlatFormikFields(config),
+            config,
+            kind,
+            name,
+          });
         } else {
-          prev.push({ name, child: composeFlatFormikFields(config) });
+          prev.push({
+            child: composeFlatFormikFields(config),
+            kind,
+            name,
+          });
         }
         break;
 
       case 'textFields':
-        prev.push(array ? { array, name } : { name });
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'intFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'floatFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'booleanFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'dateTimeFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'enumFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'relationalFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
+        break;
+
+      case 'duplexFields':
+        prev.push(array ? { array, kind, name } : { kind, name });
         break;
 
       default:
