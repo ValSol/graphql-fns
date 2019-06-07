@@ -308,4 +308,26 @@ describe('composeInitialValues', () => {
     const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create the simplest initial int & float values object', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField',
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField',
+        },
+      ],
+    });
+
+    const expectedResult = { intField: null, floatField: null };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
