@@ -9,7 +9,7 @@ import composeQuery from '../client/queries/composeQuery';
 import arrangeFormFields from './arrangeFormFields';
 import composeFieldsObject from './composeFieldsObject';
 
-const createValcomposeFlatFormikFieldsationSchema = (
+const createValidationSchema = (
   thingConfig: ThingConfig,
   apolloClient: Object,
   id?: string,
@@ -24,11 +24,21 @@ const createValcomposeFlatFormikFieldsationSchema = (
 
     switch (kind) {
       case 'embeddedFields':
-        prev[name] = createValcomposeFlatFormikFieldsationSchema(config); // eslint-disable-line no-param-reassign
+        prev[name] = createValidationSchema(config); // eslint-disable-line no-param-reassign
         break;
       case 'textFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
         break;
+      case 'intFields':
+        prev[name] = yup // eslint-disable-line no-param-reassign
+          .number()
+          .integer()
+          .nullable();
+        break;
+      case 'floatFields':
+        prev[name] = yup.number().nullable(); // eslint-disable-line no-param-reassign
+        break;
+
       default:
         throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
     }
@@ -54,7 +64,9 @@ const createValcomposeFlatFormikFieldsationSchema = (
       });
     }
 
-    if (array) {
+    if (array && kind !== 'embeddedFields') {
+      prev[name] = yup.array().of(prev[name].required('Required')); // eslint-disable-line no-param-reassign
+    } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
     }
 
@@ -64,4 +76,4 @@ const createValcomposeFlatFormikFieldsationSchema = (
   return yup.object().shape(object);
 };
 
-export default createValcomposeFlatFormikFieldsationSchema;
+export default createValidationSchema;

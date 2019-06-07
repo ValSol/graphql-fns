@@ -61,7 +61,7 @@ describe('createValidationSchema', () => {
     });
 
     const expectedResult = yup.object().shape({
-      textFields: yup.array().of(yup.string()),
+      textFields: yup.array().of(yup.string().required('Required')),
     });
 
     const result = createValidationSchema(thingConfig);
@@ -122,6 +122,47 @@ describe('createValidationSchema', () => {
 
     const expectedResult = yup.object().shape({
       embeddedFields: yup.array().of(yup.object().shape({ textField: yup.string() })),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
+
+  test('should create the validation schema with float field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      floatFields: [
+        {
+          name: 'floatField',
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      floatField: yup.number().nullable(),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
+
+  test('should create the validation schema with int field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField',
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      intField: yup
+        .number()
+        .integer()
+        .nullable(),
     });
 
     const result = createValidationSchema(thingConfig);
