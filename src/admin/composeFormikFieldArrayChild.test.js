@@ -13,7 +13,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 
 describe('composeFormikFieldArrayChild', () => {
-  test('should return fragment for a simple fields set', () => {
+  test('should array of text fields', () => {
     const values = {
       people: {
         friends: [{ name: 'Vasya', emails: ['vasya@gmail.com', 'vasya@ukr.net'] }],
@@ -91,7 +91,183 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild(false)(props);
+    const result = composeFormikFieldArrayChild('textFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should array of int fields', () => {
+    const values = {
+      people: {
+        friends: [{ name: 'Vasya', counts: [15, 23] }],
+      },
+    };
+    const name = 'people.friends[0].counts';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="count #1"
+            margin="normal"
+            name="people.friends[0].counts[0]"
+            type="number"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete count #1" placement="left">
+                    <IconButton
+                      aria-label="Delete count #1"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="count #2"
+            margin="normal"
+            name="people.friends[0].counts[1]"
+            type="number"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete count #2" placement="left">
+                    <IconButton
+                      aria-label="Delete count #2"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+        ]}
+        <Tooltip title="Add count" placement="right">
+          <IconButton aria-label="Add count" onClick={() => {}} disabled={false}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('intFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should array of float fields', () => {
+    const values = {
+      people: {
+        friends: [{ name: 'Vasya', weights: [78.1, 73.5] }],
+      },
+    };
+    const name = 'people.friends[0].weights';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="weight #1"
+            margin="normal"
+            name="people.friends[0].weights[0]"
+            type="number"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete weight #1" placement="left">
+                    <IconButton
+                      aria-label="Delete weight #1"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="weight #2"
+            margin="normal"
+            name="people.friends[0].weights[1]"
+            type="number"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete weight #2" placement="left">
+                    <IconButton
+                      aria-label="Delete weight #2"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+        ]}
+        <Tooltip title="Add weight" placement="right">
+          <IconButton aria-label="Add weight" onClick={() => {}} disabled={false}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('floatFields', false)(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));

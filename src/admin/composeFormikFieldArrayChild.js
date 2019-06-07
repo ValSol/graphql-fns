@@ -14,6 +14,18 @@ import { TextField as FormikTextField } from 'formik-material-ui';
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
+type Kind =
+  | 'booleanFields'
+  | 'dateTimeFields'
+  | 'duplexFields'
+  | 'embeddedFields'
+  | 'enumFields'
+  | 'floatFields'
+  | 'geospatialFields'
+  | 'intFields'
+  | 'relationalFields'
+  | 'textFields';
+
 type Props = {
   form: { isSubmitting: boolean, values: Object },
   name: string,
@@ -21,7 +33,7 @@ type Props = {
   remove: Function,
 };
 
-const composeFormikFieldArrayChild = (disabled: boolean) => {
+const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
   const formikFieldArrayChild = (props: Props) => {
     const {
       form: { isSubmitting, values },
@@ -36,18 +48,18 @@ const composeFormikFieldArrayChild = (disabled: boolean) => {
     return (
       <React.Fragment>
         {objectGet(values, name) &&
-          objectGet(values, name).map((item, i) => (
-            <Field
+          objectGet(values, name).map((item, i) => {
+            const fieldProps = {
               // eslint-disable-next-line react/no-array-index-key
-              key={i}
-              component={FormikTextField}
-              disabled={disabled}
-              fullWidth
-              label={`${itemLabel} #${i + 1}`}
-              margin="normal"
-              name={`${name}[${i}]`}
-              variant="outlined"
-              InputProps={{
+              key: i,
+              component: FormikTextField,
+              disabled,
+              fullWidth: true,
+              label: `${itemLabel} #${i + 1}`,
+              margin: 'normal',
+              name: `${name}[${i}]`,
+              variant: 'outlined',
+              InputProps: {
                 endAdornment: (
                   <InputAdornment position="end">
                     <Tooltip title={`Delete ${itemLabel} #${i + 1}`} placement="left">
@@ -62,13 +74,23 @@ const composeFormikFieldArrayChild = (disabled: boolean) => {
                     </Tooltip>
                   </InputAdornment>
                 ),
-              }}
-            />
-          ))}
+              },
+            };
+            switch (kind) {
+              case 'textFields':
+                return <Field {...fieldProps} />;
+              case 'intFields':
+                return <Field {...fieldProps} type="number" />;
+              case 'floatFields':
+                return <Field {...fieldProps} type="number" />;
+              default:
+                throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
+            }
+          })}
         <Tooltip title={`Add ${itemLabel}`} placement="right">
           <IconButton
             aria-label={`Add ${itemLabel}`}
-            onClick={() => push('')}
+            onClick={() => push(kind === 'textFields' ? '' : null)}
             disabled={disabled || isSubmitting}
           >
             <AddIcon />
