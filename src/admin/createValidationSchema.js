@@ -32,11 +32,10 @@ const createValidationSchema = (
       case 'intFields':
         prev[name] = yup // eslint-disable-line no-param-reassign
           .number()
-          .integer()
-          .nullable();
+          .integer();
         break;
       case 'floatFields':
-        prev[name] = yup.number().nullable(); // eslint-disable-line no-param-reassign
+        prev[name] = yup.number(); // eslint-disable-line no-param-reassign
         break;
 
       default:

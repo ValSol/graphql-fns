@@ -140,7 +140,7 @@ describe('createValidationSchema', () => {
     });
 
     const expectedResult = yup.object().shape({
-      floatField: yup.number().nullable(),
+      floatField: yup.number(),
     });
 
     const result = createValidationSchema(thingConfig);
@@ -159,10 +159,7 @@ describe('createValidationSchema', () => {
     });
 
     const expectedResult = yup.object().shape({
-      intField: yup
-        .number()
-        .integer()
-        .nullable(),
+      intField: yup.number().integer(),
     });
 
     const result = createValidationSchema(thingConfig);
