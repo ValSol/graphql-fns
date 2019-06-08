@@ -325,7 +325,7 @@ describe('composeInitialValues', () => {
       ],
     });
 
-    const expectedResult = { intField: null, floatField: null };
+    const expectedResult = { intField: '', floatField: '' };
 
     const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
