@@ -80,9 +80,23 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
               case 'textFields':
                 return <Field {...fieldProps} />;
               case 'intFields':
-                return <Field {...fieldProps} type="number" />;
+                return (
+                  <Field
+                    {...fieldProps}
+                    fullWidth={false}
+                    style={{ marginRight: 8 }}
+                    type="number"
+                  />
+                );
               case 'floatFields':
-                return <Field {...fieldProps} type="number" />;
+                return (
+                  <Field
+                    {...fieldProps}
+                    fullWidth={false}
+                    style={{ marginRight: 8 }}
+                    type="number"
+                  />
+                );
               default:
                 throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
             }
@@ -90,8 +104,9 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
         <Tooltip title={`Add ${itemLabel}`} placement="right">
           <IconButton
             aria-label={`Add ${itemLabel}`}
-            onClick={() => push(kind === 'textFields' ? '' : null)}
+            onClick={() => push('')}
             disabled={disabled || isSubmitting}
+            style={{ display: 'block' }}
           >
             <AddIcon />
           </IconButton>

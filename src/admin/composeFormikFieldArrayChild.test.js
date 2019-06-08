@@ -77,7 +77,12 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add email" placement="right">
-          <IconButton aria-label="Add email" onClick={() => {}} disabled={false}>
+          <IconButton
+            aria-label="Add email"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -113,10 +118,11 @@ describe('composeFormikFieldArrayChild', () => {
             key={0}
             component={FormikTextField}
             disabled={false}
-            fullWidth
+            fullWidth={false}
             label="count #1"
             margin="normal"
             name="people.friends[0].counts[0]"
+            style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
             InputProps={{
@@ -140,10 +146,11 @@ describe('composeFormikFieldArrayChild', () => {
             key={1}
             component={FormikTextField}
             disabled={false}
-            fullWidth
+            fullWidth={false}
             label="count #2"
             margin="normal"
             name="people.friends[0].counts[1]"
+            style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
             InputProps={{
@@ -165,7 +172,12 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add count" placement="right">
-          <IconButton aria-label="Add count" onClick={() => {}} disabled={false}>
+          <IconButton
+            aria-label="Add count"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -201,10 +213,11 @@ describe('composeFormikFieldArrayChild', () => {
             key={0}
             component={FormikTextField}
             disabled={false}
-            fullWidth
+            fullWidth={false}
             label="weight #1"
             margin="normal"
             name="people.friends[0].weights[0]"
+            style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
             InputProps={{
@@ -228,10 +241,11 @@ describe('composeFormikFieldArrayChild', () => {
             key={1}
             component={FormikTextField}
             disabled={false}
-            fullWidth
+            fullWidth={false}
             label="weight #2"
             margin="normal"
             name="people.friends[0].weights[1]"
+            style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
             InputProps={{
@@ -253,7 +267,12 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add weight" placement="right">
-          <IconButton aria-label="Add weight" onClick={() => {}} disabled={false}>
+          <IconButton
+            aria-label="Add weight"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
             <AddIcon />
           </IconButton>
         </Tooltip>
