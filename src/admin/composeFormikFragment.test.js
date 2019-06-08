@@ -351,7 +351,7 @@ describe('composeFormikFragment', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should return fragment for a int and float fields', () => {
+  test('should return fragment for int and float fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -373,7 +373,7 @@ describe('composeFormikFragment', () => {
           key={0}
           component={FormikTextField}
           disabled={false}
-          fullWidth
+          fullWidth={false}
           label="intField"
           margin="normal"
           name="intField"
@@ -384,7 +384,7 @@ describe('composeFormikFragment', () => {
           key={1}
           component={FormikTextField}
           disabled={false}
-          fullWidth
+          fullWidth={false}
           label="floatField"
           margin="normal"
           name="floatField"

@@ -107,10 +107,10 @@ const composeFields = (flatFormikFields: FlatFormikFields, disabled: boolean, pr
           return <Field {...fieldProps} />;
 
         case 'intFields':
-          return <Field {...fieldProps} type="number" />;
+          return <Field {...fieldProps} fullWidth={false} type="number" />;
 
         case 'floatFields':
-          return <Field {...fieldProps} type="number" />;
+          return <Field {...fieldProps} fullWidth={false} type="number" />;
 
         default:
           throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
