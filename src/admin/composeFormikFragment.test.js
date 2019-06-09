@@ -4,7 +4,10 @@
 import React from 'react';
 
 import { Field, FieldArray } from 'formik';
-import { TextField as FormikTextField } from 'formik-material-ui';
+import {
+  TextField as FormikTextField,
+  CheckboxWithLabel as FormikCheckbox,
+} from 'formik-material-ui';
 import type { ThingConfig } from '../flowTypes';
 
 import Outline from './components/Outline';
@@ -373,7 +376,6 @@ describe('composeFormikFragment', () => {
           key={0}
           component={FormikTextField}
           disabled={false}
-          fullWidth={false}
           label="intField"
           margin="normal"
           name="intField"
@@ -384,7 +386,6 @@ describe('composeFormikFragment', () => {
           key={1}
           component={FormikTextField}
           disabled={false}
-          fullWidth={false}
           label="floatField"
           margin="normal"
           name="floatField"
@@ -395,6 +396,81 @@ describe('composeFormikFragment', () => {
     );
 
     const result = composeFormikFragment(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for int and float fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField',
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        <Field
+          key={0}
+          component={FormikTextField}
+          disabled={false}
+          label="intField"
+          margin="normal"
+          name="intField"
+          type="number"
+          variant="outlined"
+        />
+        <Field
+          key={1}
+          component={FormikTextField}
+          disabled={false}
+          label="floatField"
+          margin="normal"
+          name="floatField"
+          type="number"
+          variant="outlined"
+        />
+      </React.Fragment>
+    );
+
+    const result = composeFormikFragment(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for boolean fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikCheckbox}
+            disabled={false}
+            Label={{ label: 'booleanField' }}
+            name="booleanField"
+          />,
+        ]}
+      </React.Fragment>
+    );
+
+    const result = composeFormikFragment(thingConfig);
+
     expect(result).toEqual(expectedResult);
   });
 });

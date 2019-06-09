@@ -6,7 +6,10 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import { TextField as FormikTextField } from 'formik-material-ui';
+import {
+  TextField as FormikTextField,
+  CheckboxWithLabel as FormikCheckbox,
+} from 'formik-material-ui';
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
@@ -91,26 +94,39 @@ const composeFields = (flatFormikFields: FlatFormikFields, disabled: boolean, pr
         );
       }
 
-      const fieldProps = {
+      let fieldProps = {
         // eslint-disable-next-line react/no-array-index-key
         key: i,
         component: FormikTextField,
         disabled,
-        fullWidth: true,
         label: name,
         margin: 'normal',
         name: path,
         variant: 'outlined',
       };
+
+      if (kind === 'booleanFields') {
+        fieldProps = {
+          key: i,
+          disabled,
+          Label: { label: name },
+          name: path,
+          component: FormikCheckbox,
+        };
+      }
+
       switch (kind) {
         case 'textFields':
-          return <Field {...fieldProps} />;
+          return <Field {...fieldProps} fullWidth />;
 
         case 'intFields':
-          return <Field {...fieldProps} fullWidth={false} type="number" />;
+          return <Field {...fieldProps} type="number" />;
 
         case 'floatFields':
-          return <Field {...fieldProps} fullWidth={false} type="number" />;
+          return <Field {...fieldProps} type="number" />;
+
+        case 'booleanFields':
+          return <Field {...fieldProps} />;
 
         default:
           throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
