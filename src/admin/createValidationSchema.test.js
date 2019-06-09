@@ -134,13 +134,23 @@ describe('createValidationSchema', () => {
       name: 'Example',
       floatFields: [
         {
-          name: 'floatField',
+          name: 'floatField1',
+        },
+        {
+          name: 'floatField2',
+          required: true,
+        },
+        {
+          name: 'floatField3',
+          array: true,
         },
       ],
     });
 
     const expectedResult = yup.object().shape({
-      floatField: yup.number(),
+      floatField1: yup.number(),
+      floatField2: yup.number().required(),
+      floatField3: yup.array().of(yup.number().required()),
     });
 
     const result = createValidationSchema(thingConfig);
@@ -153,13 +163,55 @@ describe('createValidationSchema', () => {
       name: 'Example',
       intFields: [
         {
-          name: 'intField',
+          name: 'intField1',
+        },
+        {
+          name: 'intField2',
+          required: true,
+        },
+        {
+          name: 'intField3',
+          array: true,
         },
       ],
     });
 
     const expectedResult = yup.object().shape({
-      intField: yup.number().integer(),
+      intField1: yup.number().integer(),
+      intField2: yup
+        .number()
+        .integer()
+        .required(),
+      intField3: yup.array().of(
+        yup
+          .number()
+          .integer()
+          .required(),
+      ),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
+
+  test('should create the validation schema with boolean field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField1',
+        },
+        {
+          name: 'booleanField2',
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      booleanField1: yup.boolean(),
+      booleanField2: yup.array().of(yup.boolean()),
     });
 
     const result = createValidationSchema(thingConfig);

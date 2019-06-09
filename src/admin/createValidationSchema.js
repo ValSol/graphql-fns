@@ -37,6 +37,9 @@ const createValidationSchema = (
       case 'floatFields':
         prev[name] = yup.number(); // eslint-disable-line no-param-reassign
         break;
+      case 'booleanFields':
+        prev[name] = yup.boolean(); // eslint-disable-line no-param-reassign
+        break;
 
       default:
         throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
@@ -63,7 +66,7 @@ const createValidationSchema = (
       });
     }
 
-    if (array && kind !== 'embeddedFields') {
+    if (array && !['embeddedFields', 'booleanFields'].includes(kind)) {
       prev[name] = yup.array().of(prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
