@@ -3,7 +3,10 @@
 
 import React from 'react';
 import { Field } from 'formik';
-import { TextField as FormikTextField } from 'formik-material-ui';
+import {
+  TextField as FormikTextField,
+  CheckboxWithLabel as FormikCheckbox,
+} from 'formik-material-ui';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
@@ -35,7 +38,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete email #1" placement="left">
+                  <Tooltip title="Delete email #1">
                     <IconButton
                       aria-label="Delete email #1"
                       disabled={false}
@@ -61,7 +64,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete email #2" placement="left">
+                  <Tooltip title="Delete email #2">
                     <IconButton
                       aria-label="Delete email #2"
                       disabled={false}
@@ -118,7 +121,6 @@ describe('composeFormikFieldArrayChild', () => {
             key={0}
             component={FormikTextField}
             disabled={false}
-            fullWidth={false}
             label="count #1"
             margin="normal"
             name="people.friends[0].counts[0]"
@@ -128,7 +130,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete count #1" placement="left">
+                  <Tooltip title="Delete count #1">
                     <IconButton
                       aria-label="Delete count #1"
                       disabled={false}
@@ -146,7 +148,6 @@ describe('composeFormikFieldArrayChild', () => {
             key={1}
             component={FormikTextField}
             disabled={false}
-            fullWidth={false}
             label="count #2"
             margin="normal"
             name="people.friends[0].counts[1]"
@@ -156,7 +157,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete count #2" placement="left">
+                  <Tooltip title="Delete count #2">
                     <IconButton
                       aria-label="Delete count #2"
                       disabled={false}
@@ -213,7 +214,6 @@ describe('composeFormikFieldArrayChild', () => {
             key={0}
             component={FormikTextField}
             disabled={false}
-            fullWidth={false}
             label="weight #1"
             margin="normal"
             name="people.friends[0].weights[0]"
@@ -223,7 +223,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete weight #1" placement="left">
+                  <Tooltip title="Delete weight #1">
                     <IconButton
                       aria-label="Delete weight #1"
                       disabled={false}
@@ -241,7 +241,6 @@ describe('composeFormikFieldArrayChild', () => {
             key={1}
             component={FormikTextField}
             disabled={false}
-            fullWidth={false}
             label="weight #2"
             margin="normal"
             name="people.friends[0].weights[1]"
@@ -251,7 +250,7 @@ describe('composeFormikFieldArrayChild', () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Tooltip title="Delete weight #2" placement="left">
+                  <Tooltip title="Delete weight #2">
                     <IconButton
                       aria-label="Delete weight #2"
                       disabled={false}
@@ -287,6 +286,82 @@ describe('composeFormikFieldArrayChild', () => {
     };
 
     const result = composeFormikFieldArrayChild('floatFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should array of boolean fields', () => {
+    const values = {
+      people: {
+        friends: [{ name: 'Vasya', bools: [78.1, 73.5] }],
+      },
+    };
+    const name = 'people.friends[0].bools';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <span key={0} style={{ display: 'inline-block', marginRight: 24 }}>
+            <Field
+              component={FormikCheckbox}
+              disabled={false}
+              Label={{ label: 'bool #1' }}
+              name="people.friends[0].bools[0]"
+            />
+            <Tooltip title="Delete bool #1">
+              <IconButton
+                aria-label="Delete bool #1"
+                disabled={false}
+                edge="end"
+                onClick={() => {}}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </span>,
+
+          <span key={1} style={{ display: 'inline-block', marginRight: 24 }}>
+            <Field
+              component={FormikCheckbox}
+              disabled={false}
+              Label={{ label: 'bool #2' }}
+              name="people.friends[0].bools[1]"
+            />
+            <Tooltip title="Delete bool #2">
+              <IconButton
+                aria-label="Delete bool #2"
+                disabled={false}
+                edge="end"
+                onClick={() => {}}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </span>,
+        ]}
+        <Tooltip title="Add bool" placement="right">
+          <IconButton
+            aria-label="Add bool"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('booleanFields', false)(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
