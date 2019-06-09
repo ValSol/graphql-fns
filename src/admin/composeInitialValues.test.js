@@ -330,4 +330,21 @@ describe('composeInitialValues', () => {
     const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create the simplest initial boolean values object', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      booleanFields: [
+        {
+          name: 'booleanField',
+        },
+      ],
+    });
+
+    const expectedResult = { booleanField: false };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
