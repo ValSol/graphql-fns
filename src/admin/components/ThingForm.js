@@ -22,6 +22,7 @@ import { Mutation, Query } from 'react-apollo';
 
 import type { RouterQuery, ThingConfig } from '../../flowTypes';
 
+import clearData from '../clearData';
 import composeFormikFragment from '../composeFormikFragment';
 import composeInitialValues from '../composeInitialValues';
 import createValidationSchema from '../createValidationSchema';
@@ -102,7 +103,7 @@ const ThingForm = (props: Props) => {
                     <Formik
                       initialValues={
                         data
-                          ? composeInitialValues(thingConfig, data[name])
+                          ? composeInitialValues(thingConfig, clearData(data[name]))
                           : composeInitialValues(thingConfig)
                       }
                       onSubmit={(values, actions) => {
@@ -111,9 +112,7 @@ const ThingForm = (props: Props) => {
                           return;
                         }
 
-                        const variables = data
-                          ? { whereOne, data: { ...values, __typename: undefined } }
-                          : { data: { ...values, __typename: undefined } };
+                        const variables = data ? { whereOne, data: values } : { data: values };
 
                         mutateThing({ variables })
                           .then(result => {
@@ -122,7 +121,7 @@ const ThingForm = (props: Props) => {
                               if (resultData) {
                                 if (data) {
                                   // if update
-                                  currentInitialValues = resultData[`update${name}`];
+                                  currentInitialValues = clearData(resultData[`update${name}`]);
                                   actions.resetForm(currentInitialValues);
 
                                   apolloClient
