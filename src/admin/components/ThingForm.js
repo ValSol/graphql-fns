@@ -20,7 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 
-import type { RouterQuery, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, RouterQuery, ThingConfig } from '../../flowTypes';
 
 import clearData from '../clearData';
 import composeFormikFragment from '../composeFormikFragment';
@@ -31,12 +31,17 @@ import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
 import Link from './Link';
 
-type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
+type Props = {
+  generalConfig: GeneralConfig,
+  thingConfig: ThingConfig,
+  router: { pathname: string, query: RouterQuery },
+};
 
 const ThingForm = (props: Props) => {
   const [open, setOpen] = React.useState(false);
 
   const {
+    generalConfig,
     thingConfig,
     thingConfig: { name },
     router: {
@@ -59,7 +64,7 @@ const ThingForm = (props: Props) => {
       : gql(composeMutation('updateThing', thingConfig, { exclude }))
     : gql(composeMutation('createThing', thingConfig, { include: { id: null } }));
 
-  const formikFragment = composeFormikFragment(thingConfig, toDelete);
+  const formikFragment = composeFormikFragment(thingConfig, generalConfig, toDelete);
 
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary

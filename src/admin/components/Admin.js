@@ -31,7 +31,7 @@ const Admin = (props: Props & ProvidedProps) => {
   }
 
   if (id || create || create === '') {
-    return <ThingForm router={router} thingConfig={thingConfig} />;
+    return <ThingForm router={router} thingConfig={thingConfig} generalConfig={generalConfig} />;
   }
 
   return <ThingList router={router} thingConfig={thingConfig} />;
