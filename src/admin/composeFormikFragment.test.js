@@ -67,7 +67,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -192,7 +194,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -305,7 +309,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
 
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
     const result2 = JSON.parse(JSON.stringify(result));
@@ -346,7 +352,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -395,7 +403,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -440,7 +450,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -469,7 +481,9 @@ describe('composeFormikFragment', () => {
       </React.Fragment>
     );
 
-    const result = composeFormikFragment(thingConfig);
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment(thingConfig, generalConfig);
 
     expect(result).toEqual(expectedResult);
   });
