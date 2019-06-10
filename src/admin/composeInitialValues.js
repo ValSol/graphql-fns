@@ -36,6 +36,11 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
         // eslint-disable-next-line no-param-reassign
         prev[name] = data[name] !== undefined ? data[name] : defaultValue || (array ? [] : false);
         break;
+      case 'enumFields':
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = data[name] !== undefined ? data[name] : defaultValue || (array ? [] : '');
+        break;
+
       default:
         throw new TypeError(`Invalid kind: "${kind}" of thing field!`);
     }

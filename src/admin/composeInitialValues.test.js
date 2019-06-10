@@ -347,4 +347,22 @@ describe('composeInitialValues', () => {
     const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create the simplest initial enum values object', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'enumField',
+          enumName: 'SomeEnum',
+        },
+      ],
+    });
+
+    const expectedResult = { enumField: '' };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
