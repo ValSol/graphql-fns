@@ -217,4 +217,36 @@ describe('createValidationSchema', () => {
     const result = createValidationSchema(thingConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
+
+  test('should create the validation schema with enum field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'enumField1',
+          enumName: 'SomeEnum',
+        },
+        {
+          name: 'enumField2',
+          enumName: 'SomeEnum',
+          required: true,
+        },
+        {
+          name: 'enumField3',
+          enumName: 'SomeEnum',
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      enumField1: yup.string(),
+      enumField2: yup.string().required(),
+      enumField3: yup.array().of(yup.string().required()),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
 });

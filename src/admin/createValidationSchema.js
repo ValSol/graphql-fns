@@ -40,6 +40,9 @@ const createValidationSchema = (
       case 'booleanFields':
         prev[name] = yup.boolean(); // eslint-disable-line no-param-reassign
         break;
+      case 'enumFields':
+        prev[name] = yup.string(); // eslint-disable-line no-param-reassign
+        break;
 
       default:
         throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
@@ -70,6 +73,10 @@ const createValidationSchema = (
       prev[name] = yup.array().of(prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
+    }
+
+    if (array && required) {
+      prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
     }
 
     return prev;
