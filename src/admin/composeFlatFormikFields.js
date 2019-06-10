@@ -11,66 +11,30 @@ const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => 
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    const { array, config, kind } = fieldsObject[name];
+    const { kind, ...attributes } = fieldsObject[name];
 
-    switch (kind) {
-      case 'embeddedFields':
-        if (array) {
-          prev.push({
-            array,
-            child: composeFlatFormikFields(config),
-            config,
-            kind,
-            name,
-          });
-        } else {
-          prev.push({
-            child: composeFlatFormikFields(config),
-            kind,
-            name,
-          });
-        }
-        break;
-
-      case 'textFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'intFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'floatFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'booleanFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'dateTimeFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'enumFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'relationalFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      case 'duplexFields':
-        prev.push(array ? { array, kind, name } : { kind, name });
-        break;
-
-      default:
-        throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
+    if (kind === 'embeddedFields') {
+      // $FlowFixMe
+      const { config } = attributes; // eslint-disable-line no-case-declarations
+      if (!config) {
+        throw new TypeError(`Attribute: "config" have to be declared in embeddedFields!`);
+      }
+      prev.push({
+        attributes,
+        child: composeFlatFormikFields(config),
+        kind,
+      });
+    } else {
+      prev.push({
+        attributes,
+        kind,
+      });
     }
 
     return prev;
   }, []);
 
+  // $FlowFixMe
   return result;
 };
 

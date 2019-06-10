@@ -19,8 +19,8 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'textField1', kind: 'textFields' },
-      { name: 'textField2', kind: 'textFields' },
+      { attributes: { name: 'textField1' }, kind: 'textFields' },
+      { attributes: { name: 'textField2' }, kind: 'textFields' },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -44,13 +44,17 @@ describe('composeFlatFormikFields', () => {
 
     const expectedResult: FlatFormikFields = [
       {
-        name: 'textFieldArray1',
-        array: true,
+        attributes: {
+          name: 'textFieldArray1',
+          array: true,
+        },
         kind: 'textFields',
       },
       {
-        name: 'textFieldArray2',
-        array: true,
+        attributes: {
+          name: 'textFieldArray2',
+          array: true,
+        },
         kind: 'textFields',
       },
     ];
@@ -118,21 +122,21 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'textField', kind: 'textFields' },
+      { attributes: { name: 'textField' }, kind: 'textFields' },
       {
-        name: 'embedded1',
+        attributes: { name: 'embedded1', config: embedded1Config },
         kind: 'embeddedFields',
         child: [
-          { name: 'textField1', kind: 'textFields' },
+          { attributes: { name: 'textField1' }, kind: 'textFields' },
           {
-            name: 'embedded2',
+            attributes: { name: 'embedded2', config: embedded2Config },
             kind: 'embeddedFields',
             child: [
-              { name: 'textField2', kind: 'textFields' },
+              { attributes: { name: 'textField2' }, kind: 'textFields' },
               {
-                name: 'embedded3',
+                attributes: { name: 'embedded3', config: embedded3Config },
                 kind: 'embeddedFields',
-                child: [{ name: 'textField3', kind: 'textFields' }],
+                child: [{ attributes: { name: 'textField3' }, kind: 'textFields' }],
               },
             ],
           },
@@ -206,27 +210,21 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'textField', kind: 'textFields' },
+      { attributes: { name: 'textField' }, kind: 'textFields' },
       {
-        name: 'embedded1',
+        attributes: { name: 'embedded1', array: true, config: embedded1Config },
         kind: 'embeddedFields',
-        array: true,
-        config: embedded1Config,
         child: [
-          { name: 'textField1', kind: 'textFields' },
+          { attributes: { name: 'textField1' }, kind: 'textFields' },
           {
-            name: 'embedded2',
+            attributes: { name: 'embedded2', array: true, config: embedded2Config },
             kind: 'embeddedFields',
-            array: true,
-            config: embedded2Config,
             child: [
-              { name: 'textField2', kind: 'textFields' },
+              { attributes: { name: 'textField2' }, kind: 'textFields' },
               {
-                name: 'embedded3',
+                attributes: { name: 'embedded3', array: true, config: embedded3Config },
                 kind: 'embeddedFields',
-                array: true,
-                config: embedded3Config,
-                child: [{ name: 'textField3', kind: 'textFields' }],
+                child: [{ attributes: { name: 'textField3' }, kind: 'textFields' }],
               },
             ],
           },
@@ -254,8 +252,8 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'intField', kind: 'intFields' },
-      { name: 'floatField', kind: 'floatFields' },
+      { attributes: { name: 'intField' }, kind: 'intFields' },
+      { attributes: { name: 'floatField' }, kind: 'floatFields' },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -284,9 +282,9 @@ describe('composeFlatFormikFields', () => {
     };
 
     const expectedResult: FlatFormikFields = [
-      { name: 'booleanField', kind: 'booleanFields' },
-      { name: 'enumField', kind: 'enumFields' },
-      { name: 'dateTimeField', kind: 'dateTimeFields' },
+      { attributes: { name: 'booleanField' }, kind: 'booleanFields' },
+      { attributes: { name: 'enumField', enumName: 'enumName' }, kind: 'enumFields' },
+      { attributes: { name: 'dateTimeField' }, kind: 'dateTimeFields' },
     ];
 
     const result = composeFlatFormikFields(thingConfig);
@@ -313,8 +311,14 @@ describe('composeFlatFormikFields', () => {
     });
 
     const expectedResult: FlatFormikFields = [
-      { name: 'duplexField', kind: 'duplexFields' },
-      { name: 'relationalField', kind: 'relationalFields' },
+      {
+        attributes: { name: 'duplexField', config: thingConfig, oppositeName: 'duplexField' },
+        kind: 'duplexFields',
+      },
+      {
+        attributes: { name: 'relationalField', config: thingConfig },
+        kind: 'relationalFields',
+      },
     ];
 
     const result = composeFlatFormikFields(thingConfig);

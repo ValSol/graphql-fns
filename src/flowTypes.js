@@ -124,6 +124,30 @@ export type ThingConfig = {
   list?: Array<ListColumn>,
 };
 
+type DuplexField = {
+  name: string,
+  array?: boolean,
+  config: ThingConfig,
+  index?: boolean,
+  oppositeName: string,
+  required?: boolean,
+};
+
+type EmbeddedField = {
+  name: string,
+  required?: boolean,
+  array?: boolean,
+  config: ThingConfig,
+};
+
+type RelationalField = {
+  name: string,
+  array?: boolean,
+  config: ThingConfig,
+  index?: boolean,
+  required?: boolean,
+};
+
 export type ThingConfigObject = {
   [fieldName: string]: {
     [property: string]: any,
@@ -143,10 +167,18 @@ export type ThingConfigObject = {
 };
 
 export type FlatFormikFields = Array<{
-  name: string,
-  array?: boolean,
+  attributes:
+    | BooleanField
+    | DateTimeField
+    | DuplexField
+    | EmbeddedField
+    | EnumField
+    | FloatField
+    | GeospatialField
+    | IntField
+    | RelationalField
+    | TextField,
   child?: FlatFormikFields,
-  config?: ThingConfig,
   kind:
     | 'booleanFields'
     | 'dateTimeFields'
