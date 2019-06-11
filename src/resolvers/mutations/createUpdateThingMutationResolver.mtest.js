@@ -272,10 +272,10 @@ describe('createUpdateThingMutationResolver', () => {
     const dataForUpdate = {
       firstName: 'Vasya',
       lastName: 'Pupkin',
-      friend: createdFriend2._id,
-      location: createdLocation2._id,
-      locations: [createdLocations2[0]._id, createdLocations2[1]._id],
-      favorities: [createdFavorities2[0]._id, createdFavorities2[1]._id],
+      friend: { connect: createdFriend2._id },
+      location: { connect: createdLocation2._id },
+      locations: { connect: [createdLocations2[0]._id, createdLocations2[1]._id] },
+      favorities: { connect: [createdFavorities2[0]._id, createdFavorities2[1]._id] },
     };
     const updatedPerson = await updatePerson(
       null,

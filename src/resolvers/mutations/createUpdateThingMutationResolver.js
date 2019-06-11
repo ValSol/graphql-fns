@@ -7,6 +7,7 @@ const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
 const processUpdateInputData = require('./processUpdateInputData');
 const processDeleteData = require('./processDeleteData');
 const updatePeriphery = require('./updatePeriphery');
+const clearUpdateInputDate = require('./clearUpdateInputDate');
 
 type Args = { data: Object, whereOne: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -24,8 +25,12 @@ const createUpdateThingMutationResolver = (
     const {
       whereOne,
       whereOne: { id },
-      data,
+      data: rawData,
     } = args;
+
+    // now only remove 'connect'
+    // TODO refactor to process 'connect' & 'create'
+    const data = clearUpdateInputDate(rawData, thingConfig);
 
     const { name: thingName, duplexFields } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);
