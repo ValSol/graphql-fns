@@ -14,6 +14,11 @@ describe('coerceDataFromGql', () => {
           name: 'relationalField',
           config: thingConfig,
         },
+        {
+          name: 'relationalField2',
+          config: thingConfig,
+          array: true,
+        },
       ],
       duplexFields: [
         {
@@ -27,12 +32,14 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       relationalField: { id: '5cefb33f05d6be4b7b59842b' },
+      relationalField2: [{ id: '5cefb33f05d6be4b7b598421' }, { id: '5cefb33f05d6be4b7b598422' }],
       duplexField: { id: '5cefb33f05d6be4b7b59842c' },
       __typename: 'Example',
     };
 
     const expectedResult = {
       relationalField: '5cefb33f05d6be4b7b59842b',
+      relationalField2: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'],
       duplexField: '5cefb33f05d6be4b7b59842c',
     };
 
@@ -40,7 +47,7 @@ describe('coerceDataFromGql', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should coerce realational & duplex & enum fields in embedded fields', () => {
+  test('should coerce realational & duplex fields in embedded fields', () => {
     const thingConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
