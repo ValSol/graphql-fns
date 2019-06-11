@@ -93,6 +93,17 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
     }, result);
   }
 
+  if (relationalFields && !depth) {
+    relationalFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name} {`);
+        prev.push(`${'  '.repeat(shift)}  id`);
+        prev.push(`${'  '.repeat(shift)}}`);
+      }
+      return prev;
+    }, result);
+  }
+
   if (duplexFields && depth) {
     duplexFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
@@ -107,6 +118,17 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
         };
         // eslint-disable-next-line prefer-spread
         prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push(`${'  '.repeat(shift)}}`);
+      }
+      return prev;
+    }, result);
+  }
+
+  if (duplexFields && !depth) {
+    duplexFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name} {`);
+        prev.push(`${'  '.repeat(shift)}  id`);
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
