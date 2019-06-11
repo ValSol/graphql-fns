@@ -39,6 +39,12 @@ describe('createThingUpdateInputType', () => {
   textField3: String
   textField4: [String!]
   textField5: [String!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -77,10 +83,16 @@ describe('createThingUpdateInputType', () => {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: [ID!]
-  enemies: [ID!]
-  location: ID
-  favoritePlace: ID
+  friends: PersonUpdateChildrenInput!
+  enemies: PersonUpdateChildrenInput
+  location: PlaceUpdateChildInput!
+  favoritePlace: PlaceUpdateChildInput
+}
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -137,10 +149,16 @@ describe('createThingUpdateInputType', () => {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: [ID!]
-  enemies: [ID!]
-  location: ID
-  favoritePlace: ID
+  friends: PersonUpdateChildrenInput!
+  enemies: PersonUpdateChildrenInput
+  location: PlaceUpdateChildInput!
+  favoritePlace: PlaceUpdateChildInput
+}
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -204,6 +222,12 @@ describe('createThingUpdateInputType', () => {
   locations: [AddressUpdateInput!]
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
+}
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -265,6 +289,12 @@ describe('createThingUpdateInputType', () => {
   precedingArea: GeospatialPolygonInput
   favoriteAreas: [GeospatialPolygonInput!]
   worstAreas: [GeospatialPolygonInput!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -302,6 +332,12 @@ describe('createThingUpdateInputType', () => {
   field2: [CuisinesEnumeration!]
   field3: WeekdaysEnumeration
   field4: [CuisinesEnumeration!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -341,6 +377,12 @@ describe('createThingUpdateInputType', () => {
   intField3: Int
   intField4: [Int!]
   intField5: [Int!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -380,6 +422,12 @@ describe('createThingUpdateInputType', () => {
   floatField3: Float
   floatField4: [Float!]
   floatField5: [Float!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -419,6 +467,12 @@ describe('createThingUpdateInputType', () => {
   booleanField3: Boolean
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);

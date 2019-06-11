@@ -130,6 +130,12 @@ input ExampleUpdateInput {
   cuisines: [CuisinesEnumeration!]
   position: GeospatialPointInput
 }
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
+}
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
@@ -303,6 +309,12 @@ input Example1UpdateInput {
   textField3: String
   position: GeospatialPointInput
 }
+input Example1UpdateChildInput {
+  connect: ID
+}
+input Example1UpdateChildrenInput {
+  connect: [ID!]
+}
 input Example2CreateInput {
   textField1: [String!]
   textField2: [String!]!
@@ -320,6 +332,12 @@ input Example2UpdateInput {
   textField1: [String!]
   textField2: [String!]
   area: GeospatialPolygonInput
+}
+input Example2UpdateChildInput {
+  connect: ID
+}
+input Example2UpdateChildrenInput {
+  connect: [ID!]
 }
 input Example1WhereOneInput {
   id: ID!
@@ -469,10 +487,16 @@ input PersonCreateChildrenInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: [ID!]
-  enemies: [ID!]
-  location: ID
-  favoritePlace: ID
+  friends: PersonUpdateChildrenInput!
+  enemies: PersonUpdateChildrenInput
+  location: PlaceUpdateChildInput!
+  favoritePlace: PlaceUpdateChildInput
+}
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
 }
 input PlaceCreateInput {
   title: String!
@@ -487,6 +511,12 @@ input PlaceCreateChildrenInput {
 }
 input PlaceUpdateInput {
   title: String
+}
+input PlaceUpdateChildInput {
+  connect: ID
+}
+input PlaceUpdateChildrenInput {
+  connect: [ID!]
 }
 input PersonWhereOneInput {
   id: ID!
@@ -637,6 +667,12 @@ input PersonUpdateInput {
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
 }
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
+}
 input AddressCreateInput {
   country: String!
   province: String
@@ -781,10 +817,16 @@ input PersonCreateChildrenInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: [ID!]
-  enemies: [ID!]
-  location: ID
-  favoritePlace: ID
+  friends: PersonUpdateChildrenInput!
+  enemies: PersonUpdateChildrenInput
+  location: PlaceUpdateChildInput!
+  favoritePlace: PlaceUpdateChildInput
+}
+input PersonUpdateChildInput {
+  connect: ID
+}
+input PersonUpdateChildrenInput {
+  connect: [ID!]
 }
 input PlaceCreateInput {
   name: String
@@ -801,8 +843,14 @@ input PlaceCreateChildrenInput {
 }
 input PlaceUpdateInput {
   name: String
-  citizens: [ID!]
-  visitors: [ID!]
+  citizens: PersonUpdateChildrenInput
+  visitors: PersonUpdateChildrenInput
+}
+input PlaceUpdateChildInput {
+  connect: ID
+}
+input PlaceUpdateChildrenInput {
+  connect: [ID!]
 }
 input PersonWhereOneInput {
   id: ID!
@@ -927,6 +975,12 @@ input ExampleCreateChildrenInput {
 }
 input ExampleUpdateInput {
   textField: String
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }
 input ExampleWhereOneInput {
   id: ID!

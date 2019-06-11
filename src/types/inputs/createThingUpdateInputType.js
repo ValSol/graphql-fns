@@ -4,6 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   const {
+    embedded,
     booleanFields,
     duplexFields,
     embeddedFields,
@@ -45,18 +46,32 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}ID${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    relationalFields.reduce(
+      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
+        prev.push(
+          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}${
+            required ? '!' : ''
+          }`,
+        );
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}ID${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    duplexFields.reduce(
+      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
+        prev.push(
+          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}${
+            required ? '!' : ''
+          }`,
+        );
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
   if (embeddedFields) {
@@ -76,6 +91,15 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   }
 
   thingTypeArray.push('}');
+
+  if (!embedded) {
+    thingTypeArray.push(`input ${name}UpdateChildInput {
+  connect: ID
+}
+input ${name}UpdateChildrenInput {
+  connect: [ID!]
+}`);
+  }
 
   const result = thingTypeArray.join('\n');
 
