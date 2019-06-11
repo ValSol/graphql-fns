@@ -2,7 +2,7 @@
 import type { ThingConfig, FlatFormikFields } from '../flowTypes';
 
 import arrangeFormFields from './arrangeFormFields';
-import composeFieldsObject from './composeFieldsObject';
+import composeFieldsObject from '../utils/composeFieldsObject';
 
 const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => {
   const { form } = thingConfig;

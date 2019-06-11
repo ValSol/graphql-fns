@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig, ListColumn } from '../flowTypes';
 
-import composeFieldsObject from './composeFieldsObject';
+import composeFieldsObject from '../utils/composeFieldsObject';
 
 const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListColumn> => {
   const fieldsObject = composeFieldsObject(thingConfig);

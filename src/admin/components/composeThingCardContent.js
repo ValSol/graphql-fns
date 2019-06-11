@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import arrangeFormFields from '../arrangeFormFields';
-import composeFieldsObject from '../composeFieldsObject';
+import composeFieldsObject from '../../utils/composeFieldsObject';
 
 type EmbeddedProps = { children: Object };
 
