@@ -2,6 +2,7 @@
 import type { ThingConfig } from '../flowTypes';
 
 import composeFieldsObject from '../utils/composeFieldsObject';
+import composeEmptyValues from './composeEmptyValues';
 
 const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
@@ -10,19 +11,32 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
     if (fieldsObject[key] === undefined) return prev;
     const { array, config, kind } = fieldsObject[key];
     if (kind === 'relationalFields' || kind === 'duplexFields') {
-      if (array) {
-        prev[key] = data[key].map(({ id }) => id); // eslint-disable-line no-param-reassign
-      } else if (data[key]) {
-        prev[key] = data[key].id; // eslint-disable-line no-param-reassign
-      }
-    } else if (kind === 'embeddedFields' && data[key]) {
-      if (array) {
-        prev[key] = data[key].map(item => coerceDataFromGql(item, config)); // eslint-disable-line no-param-reassign
+      if (data[key] === null) {
+        prev[key] = ''; // eslint-disable-line no-param-reassign
+      } else if (array) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key].map(item => {
+          if (item === null) return '';
+          const { id } = item;
+          return id === null ? '' : id;
+        });
       } else {
-        prev[key] = coerceDataFromGql(data[key], config); // eslint-disable-line no-param-reassign
+        const { id } = data[key];
+        prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
       }
-    } else if (data[key] !== undefined) {
-      prev[key] = data[key]; // eslint-disable-line no-param-reassign
+    } else if (kind === 'embeddedFields') {
+      if (array) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key].map(item =>
+          item === null ? composeEmptyValues(config) : coerceDataFromGql(item, config),
+        );
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] =
+          data[key] === null ? composeEmptyValues(config) : coerceDataFromGql(data[key], config);
+      }
+    } else {
+      prev[key] = data[key] === null ? '' : data[key]; // eslint-disable-line no-param-reassign
     }
     return prev;
   }, {});
