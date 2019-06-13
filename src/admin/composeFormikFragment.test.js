@@ -3,10 +3,16 @@
 
 import React from 'react';
 
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+
 import { Field, FieldArray } from 'formik';
 import {
   TextField as FormikTextField,
   CheckboxWithLabel as FormikCheckbox,
+  Select as FormikSelect,
 } from 'formik-material-ui';
 import type { ThingConfig } from '../flowTypes';
 
@@ -69,7 +75,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -196,7 +202,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -311,7 +317,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
 
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
     const result2 = JSON.parse(JSON.stringify(result));
@@ -354,7 +360,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -405,7 +411,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -452,7 +458,7 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -483,8 +489,136 @@ describe('composeFormikFragment', () => {
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment(thingConfig, generalConfig);
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
 
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for a relational and duplex fields set', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      relationalFields: [
+        {
+          name: 'relationalField',
+          config: thingConfig,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexField',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="duplexField"
+            margin="normal"
+            name="duplexField"
+            variant="outlined"
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="relationalField"
+            margin="normal"
+            name="relationalField"
+            variant="outlined"
+          />,
+        ]}
+      </React.Fragment>
+    );
+
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for a enum fields set', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      enumFields: [
+        {
+          name: 'enumField',
+          enumName: 'weekdays',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <FormControl key={0} error style={{ margin: 8 }}>
+            <InputLabel shrink htmlFor="enumField">
+              enumField
+            </InputLabel>
+            <Field
+              name="enumField"
+              disabled={false}
+              component={FormikSelect}
+              inputProps={{
+                name: 'enumField',
+              }}
+            >
+              {[
+                <MenuItem key="" value="">
+                  {''}
+                </MenuItem>,
+                <MenuItem key="Sunday" value="Sunday">
+                  Sunday
+                </MenuItem>,
+                <MenuItem key="Monday" value="Monday">
+                  Monday
+                </MenuItem>,
+                <MenuItem key="Tuesday" value="Tuesday">
+                  Tuesday
+                </MenuItem>,
+                <MenuItem key="Wednesday" value="Wednesday">
+                  Wednesday
+                </MenuItem>,
+                <MenuItem key="Thursday" value="Thursday">
+                  Thursday
+                </MenuItem>,
+                <MenuItem key="Friday" value="Friday">
+                  Friday
+                </MenuItem>,
+                <MenuItem key="Saturday" value="Saturday">
+                  Saturday
+                </MenuItem>,
+              ]}
+            </Field>
+            <FormHelperText>Required</FormHelperText>
+          </FormControl>,
+        ]}
+      </React.Fragment>
+    );
+
+    const enums = [
+      {
+        name: 'weekdays',
+        enum: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      },
+    ];
+    const generalConfig = { thingConfigs: [thingConfig], enums };
+
+    const result = composeFormikFragment(
+      { errors: { enumField: 'Required' }, values: {} },
+      thingConfig,
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 });
