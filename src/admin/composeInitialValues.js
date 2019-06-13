@@ -2,7 +2,7 @@
 import type { ThingConfig } from '../flowTypes';
 
 import arrangeFormFields from './arrangeFormFields';
-import composeFieldsObject from './composeFieldsObject';
+import composeFieldsObject from '../utils/composeFieldsObject';
 
 const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Object => {
   const { form } = thingConfig;
@@ -20,10 +20,16 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
         : composeInitialValues(config, data[name]); // eslint-disable-line no-param-reassign
     } else if (kind === 'booleanFields') {
       // eslint-disable-next-line no-param-reassign
-      prev[name] = data[name] !== undefined ? data[name] : defaultValue || (array ? [] : false);
+      prev[name] =
+        data[name] === undefined || data[name] === null
+          ? defaultValue || (array ? [] : false)
+          : data[name];
     } else {
       // eslint-disable-next-line no-param-reassign
-      prev[name] = data[name] !== undefined ? data[name] : defaultValue || (array ? [] : '');
+      prev[name] =
+        data[name] === undefined || data[name] === null
+          ? defaultValue || (array ? [] : '')
+          : data[name];
     }
 
     return prev;
