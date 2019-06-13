@@ -5,7 +5,7 @@ import type { ThingConfig } from '../flowTypes';
 import coerceDataToGql from './coerceDataToGql';
 
 describe('coerceDataToGql', () => {
-  test('should coerce realational & duplex & enum fields', () => {
+  describe('should coerce realational & duplex & enum fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -29,7 +29,6 @@ describe('coerceDataToGql', () => {
         },
       ],
     });
-
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       relationalField: '5cefb33f05d6be4b7b59842b',
@@ -37,13 +36,53 @@ describe('coerceDataToGql', () => {
       enumField: '',
     };
 
-    const expectedResult = {
-      relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
-      duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
-    };
+    test('empty prev data', () => {
+      const prevData = { enumField: '' };
 
-    const result = coerceDataToGql(data, thingConfig);
-    expect(result).toEqual(expectedResult);
+      const expectedResult = {
+        relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
+        duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('some not changed prev data', () => {
+      const prevData = {
+        relationalField: '5cefb33f05d6be4b7b59842b',
+        duplexField: '5cefb33f05d6be4b7b59842c',
+        enumField: '',
+      };
+
+      const expectedResult = {};
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('removed prev data', () => {
+      const data2 = {
+        relationalField: '',
+        duplexField: '',
+        enumField: '',
+      };
+
+      const prevData = {
+        relationalField: '5cefb33f05d6be4b7b59842b',
+        duplexField: '5cefb33f05d6be4b7b59842c',
+        enumField: 'Enum1',
+      };
+
+      const expectedResult = {
+        relationalField: { connect: null },
+        duplexField: { connect: null },
+        enumField: null,
+      };
+
+      const result = coerceDataToGql(data2, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
   });
 
   test('should coerce realational & duplex fields in embedded fields', () => {
@@ -99,6 +138,8 @@ describe('coerceDataToGql', () => {
       ],
     };
 
+    const prevData = null;
+
     const expectedResult = {
       textField: 'text field',
       embedded1: {
@@ -117,7 +158,7 @@ describe('coerceDataToGql', () => {
       ],
     };
 
-    const result = coerceDataToGql(data, thingConfig);
+    const result = coerceDataToGql(data, prevData, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });
