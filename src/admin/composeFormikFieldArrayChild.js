@@ -90,6 +90,10 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
             switch (kind) {
               case 'textFields':
                 return <Field {...fieldProps} fullWidth />;
+              case 'duplexFields':
+                return <Field {...fieldProps} fullWidth />;
+              case 'relationalFields':
+                return <Field {...fieldProps} fullWidth />;
               case 'intFields':
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
               case 'floatFields':

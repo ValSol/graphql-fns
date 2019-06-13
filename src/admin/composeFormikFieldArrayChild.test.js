@@ -368,4 +368,190 @@ describe('composeFormikFieldArrayChild', () => {
 
     expect(result2).toEqual(expectedResult2);
   });
+
+  test('should array of relational fields', () => {
+    const values = {
+      people: {
+        friends: [
+          { name: 'Vasya', coworkers: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'] },
+        ],
+      },
+    };
+    const name = 'people.friends[0].coworkers';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="coworker #1"
+            margin="normal"
+            name="people.friends[0].coworkers[0]"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete coworker #1">
+                    <IconButton
+                      aria-label="Delete coworker #1"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="coworker #2"
+            margin="normal"
+            name="people.friends[0].coworkers[1]"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete coworker #2">
+                    <IconButton
+                      aria-label="Delete coworker #2"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+        ]}
+        <Tooltip title="Add coworker" placement="right">
+          <IconButton
+            aria-label="Add coworker"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('relationalFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should array of duplex fields', () => {
+    const values = {
+      people: {
+        friends: [
+          { name: 'Vasya', coworkers: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'] },
+        ],
+      },
+    };
+    const name = 'people.friends[0].coworkers';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="coworker #1"
+            margin="normal"
+            name="people.friends[0].coworkers[0]"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete coworker #1">
+                    <IconButton
+                      aria-label="Delete coworker #1"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            fullWidth
+            label="coworker #2"
+            margin="normal"
+            name="people.friends[0].coworkers[1]"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete coworker #2">
+                    <IconButton
+                      aria-label="Delete coworker #2"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+        ]}
+        <Tooltip title="Add coworker" placement="right">
+          <IconButton
+            aria-label="Add coworker"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('duplexFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
 });
