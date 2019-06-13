@@ -364,4 +364,113 @@ describe('createUpdateThingMutationResolver', () => {
     );
     expect(updatedPlace2).toBeNull();
   });
+
+  test('should create mutation update thing resolver to remove embedded fields on null', async () => {
+    const embeddedConfig: ThingConfig = {
+      name: 'Embedded',
+      embedded: true,
+      textFields: [
+        {
+          name: 'embeddedTextField',
+        },
+      ],
+    };
+
+    const exampleConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+        {
+          name: 'textField2',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embeddedField',
+          config: embeddedConfig,
+        },
+      ],
+    };
+
+    const createExample = createCreateThingMutationResolver(exampleConfig, generalConfig);
+    expect(typeof createExample).toBe('function');
+    if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      textField1: 'text Field 1',
+      textField2: 'text Field 2',
+      embeddedField: {
+        embeddedTextField: 'embedded Text Field',
+      },
+    };
+
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
+    expect(createdExample.textField1).toBe(data.textField1);
+    expect(createdExample.textField2).toBe(data.textField2);
+    expect(createdExample.embeddedField).toEqual(data.embeddedField);
+    expect(createdExample.createdAt instanceof Date).toBeTruthy();
+    expect(createdExample.updatedAt instanceof Date).toBeTruthy();
+    const { id } = createdExample;
+
+    const exampleSchema = createThingSchema(exampleConfig);
+    const Example = mongooseConn.model('Example', exampleSchema);
+
+    const updateExample = createUpdateThingMutationResolver(exampleConfig, generalConfig);
+    if (!updateExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const whereOne = { id };
+    const dataForUpdate = {
+      textField1: 'text Field 1 Plus',
+      textField2: 'text Field 2 Plus',
+      embeddedField: {
+        embeddedTextField: 'embedded Text Field Plus',
+      },
+    };
+    const updatedExample = await updateExample(
+      null,
+      { whereOne, data: dataForUpdate },
+      { mongooseConn, pubsub },
+    );
+    expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
+    expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
+    expect(updatedExample.embeddedField).toEqual(dataForUpdate.embeddedField);
+
+    const dataForUpdate2 = {
+      textField1: 'text Field 1 Plus Plus',
+      textField2: undefined,
+      embeddedField: undefined,
+    };
+
+    const updatedExample2 = await updateExample(
+      null,
+      { whereOne, data: dataForUpdate2 },
+      { mongooseConn, pubsub },
+    );
+    expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
+    expect(updatedExample2.textField2).toBe(dataForUpdate.textField2);
+    expect(updatedExample2.embeddedField).toEqual(dataForUpdate.embeddedField);
+
+    const dataForUpdate3 = {
+      textField1: 'text Field 1 Plus Plus Plus',
+      textField2: null,
+      embeddedField: null,
+    };
+
+    const updatedExample3 = await updateExample(
+      null,
+      { whereOne, data: dataForUpdate3 },
+      { mongooseConn, pubsub },
+    );
+    expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
+    expect(updatedExample3.textField2).toBe(dataForUpdate3.textField2);
+    expect(updatedExample3.embeddedField).toBe(dataForUpdate3.embeddedField);
+
+    const updatedExample31 = await Example.findById(id);
+    const updatedExample32 = updatedExample31.toObject();
+    expect(updatedExample32.textField1).toBe(dataForUpdate3.textField1);
+    expect(updatedExample32.textField2).toBe(dataForUpdate3.textField2);
+    expect(updatedExample32.embeddedField).toBe(dataForUpdate3.embeddedField);
+  });
 });
