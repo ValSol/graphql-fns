@@ -22,7 +22,8 @@ import { Mutation, Query } from 'react-apollo';
 
 import type { GeneralConfig, RouterQuery, ThingConfig } from '../../flowTypes';
 
-import clearData from '../clearData';
+import coerceDataToGql from '../coerceDataToGql';
+import coerceDataFromGql from '../coerceDataFromGql';
 import composeFormikFragment from '../composeFormikFragment';
 import composeInitialValues from '../composeInitialValues';
 import createValidationSchema from '../createValidationSchema';
@@ -64,7 +65,7 @@ const ThingForm = (props: Props) => {
       : gql(composeMutation('updateThing', thingConfig, { exclude }))
     : gql(composeMutation('createThing', thingConfig, { include: { id: null } }));
 
-  const formikFragment = composeFormikFragment(thingConfig, generalConfig, toDelete);
+  // const formikFragment = composeFormikFragment(thingConfig, generalConfig, toDelete);
 
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary
@@ -108,7 +109,10 @@ const ThingForm = (props: Props) => {
                     <Formik
                       initialValues={
                         data
-                          ? composeInitialValues(thingConfig, clearData(data[name]))
+                          ? composeInitialValues(
+                              thingConfig,
+                              coerceDataFromGql(data[name], thingConfig),
+                            )
                           : composeInitialValues(thingConfig)
                       }
                       onSubmit={(values, actions) => {
@@ -117,7 +121,18 @@ const ThingForm = (props: Props) => {
                           return;
                         }
 
-                        const variables = data ? { whereOne, data: values } : { data: values };
+                        if (data) {
+                          currentInitialValues = coerceDataFromGql(data[name], thingConfig);
+                        }
+
+                        const variables = data
+                          ? {
+                              whereOne,
+                              data: coerceDataToGql(values, currentInitialValues, thingConfig),
+                            }
+                          : {
+                              data: coerceDataToGql(values, null, thingConfig),
+                            };
 
                         mutateThing({ variables })
                           .then(result => {
@@ -126,7 +141,10 @@ const ThingForm = (props: Props) => {
                               if (resultData) {
                                 if (data) {
                                   // if update
-                                  currentInitialValues = clearData(resultData[`update${name}`]);
+                                  currentInitialValues = coerceDataFromGql(
+                                    resultData[`update${name}`],
+                                    thingConfig,
+                                  );
                                   actions.resetForm(currentInitialValues);
 
                                   apolloClient
@@ -151,6 +169,7 @@ const ThingForm = (props: Props) => {
                     >
                       {formikProps => {
                         const { dirty, errors, isSubmitting, resetForm } = formikProps;
+
                         const isError = !!Object.keys(errors).length;
                         const submitButtonName = `${
                           // eslint-disable-next-line no-nested-ternary
@@ -158,7 +177,12 @@ const ThingForm = (props: Props) => {
                         } ${name}`;
                         return (
                           <Form>
-                            {formikFragment}
+                            {composeFormikFragment(
+                              formikProps,
+                              thingConfig,
+                              generalConfig,
+                              toDelete,
+                            )}
                             <Button
                               onClick={() => Router.push({ pathname, query: { thing: name } })}
                               variant="outlined"
