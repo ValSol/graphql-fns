@@ -249,4 +249,59 @@ describe('createValidationSchema', () => {
     const result = createValidationSchema(thingConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
+
+  test('should create the validation schema with relational and duplex field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      relationalFields: [
+        {
+          name: 'relationalField',
+          config: thingConfig,
+        },
+        {
+          name: 'relationalField2',
+          config: thingConfig,
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexField',
+        },
+        {
+          name: 'duplexField2',
+          config: thingConfig,
+          oppositeName: 'duplexField',
+          required: true,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      relationalField: yup
+        .string()
+        .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true })
+        .test('existence-Example', 'Existence', async function test2() {}), // eslint-disable-line no-empty-function
+      relationalField2: yup
+        .string()
+        .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true })
+        .required()
+        .test('existence-Example', 'Existence', async function test2() {}), // eslint-disable-line no-empty-function
+      duplexField: yup
+        .string()
+        .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true })
+        .test('existence-Example', 'Existence', async function test2() {}), // eslint-disable-line no-empty-function
+      duplexField2: yup
+        .string()
+        .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true })
+        .required()
+        .test('existence-Example', 'Existence', async function test2() {}), // eslint-disable-line no-empty-function
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
 });

@@ -7,7 +7,7 @@ import type { ThingConfig } from '../flowTypes';
 
 import composeQuery from '../client/queries/composeQuery';
 import arrangeFormFields from './arrangeFormFields';
-import composeFieldsObject from './composeFieldsObject';
+import composeFieldsObject from '../utils/composeFieldsObject';
 
 const createValidationSchema = (
   thingConfig: ThingConfig,
@@ -24,7 +24,7 @@ const createValidationSchema = (
 
     switch (kind) {
       case 'embeddedFields':
-        prev[name] = createValidationSchema(config); // eslint-disable-line no-param-reassign
+        prev[name] = createValidationSchema(config, apolloClient, id); // eslint-disable-line no-param-reassign
         break;
       case 'textFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
@@ -42,6 +42,18 @@ const createValidationSchema = (
         break;
       case 'enumFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
+        break;
+      case 'duplexFields':
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = yup
+          .string()
+          .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true });
+        break;
+      case 'relationalFields':
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = yup
+          .string()
+          .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true });
         break;
 
       default:
@@ -69,8 +81,23 @@ const createValidationSchema = (
       });
     }
 
+    if (['duplexFields', 'relationalFields'].includes(kind)) {
+      const query = gql(composeQuery('thing', config, { include: { id: null } }));
+      const { name: configName2 } = config;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = prev[name].test(`existence-${configName2}`, 'Existence', async function test2(
+        value,
+      ) {
+        if (!value) return true;
+        const whereOne = { id: value };
+        const { data } = await apolloClient.query({ query, variables: { whereOne } });
+        if (data && data[thingName]) return true;
+        return false;
+      });
+    }
+
     if (array && !['embeddedFields', 'booleanFields'].includes(kind)) {
-      prev[name] = yup.array().of(prev[name].required('Required')); // eslint-disable-line no-param-reassign
+      prev[name] = yup.array().of(required ? prev[name] : prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
     }
