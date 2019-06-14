@@ -21,7 +21,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
     } else if (kind === 'booleanFields') {
       // eslint-disable-next-line no-param-reassign
       prev[name] =
-        data[name] === undefined || data[name] === null
+        data[name] === undefined || data[name] === null || data[name] === ''
           ? defaultValue || (array ? [] : false)
           : data[name];
     } else {

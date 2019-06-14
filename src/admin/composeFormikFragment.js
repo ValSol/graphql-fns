@@ -112,7 +112,6 @@ const composeFields = (
             if (kind === 'enumFields') {
               const error = objectGet(errors, path);
               const value = objectGet(allValues, path);
-              console.log('value =', value);
               return (
                 // eslint-disable-next-line react/no-array-index-key
                 <FormControl key={i} error={!!error} style={{ margin: 8 }}>

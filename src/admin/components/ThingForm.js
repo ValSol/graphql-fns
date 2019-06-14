@@ -183,38 +183,40 @@ const ThingForm = (props: Props) => {
                               generalConfig,
                               toDelete,
                             )}
-                            <Button
-                              onClick={() => Router.push({ pathname, query: { thing: name } })}
-                              variant="outlined"
-                            >
-                              Cancel
-                            </Button>{' '}
-                            {!toDelete && (
+                            <div>
                               <Button
-                                color="secondary"
-                                disabled={!dirty || isSubmitting}
-                                onClick={() => {
-                                  if (currentInitialValues) {
-                                    resetForm(currentInitialValues);
-                                  } else {
-                                    resetForm();
-                                  }
-                                }}
+                                onClick={() => Router.push({ pathname, query: { thing: name } })}
                                 variant="outlined"
                               >
-                                Reset
+                                Cancel
+                              </Button>{' '}
+                              {!toDelete && (
+                                <Button
+                                  color="secondary"
+                                  disabled={!dirty || isSubmitting}
+                                  onClick={() => {
+                                    if (currentInitialValues) {
+                                      resetForm(currentInitialValues);
+                                    } else {
+                                      resetForm();
+                                    }
+                                  }}
+                                  variant="outlined"
+                                >
+                                  Reset
+                                </Button>
+                              )}{' '}
+                              <Button
+                                color="primary"
+                                disabled={
+                                  !toDelete && ((!dirty && !!data) || isError || isSubmitting)
+                                }
+                                type="submit"
+                                variant="outlined"
+                              >
+                                {submitButtonName}
                               </Button>
-                            )}{' '}
-                            <Button
-                              color="primary"
-                              disabled={
-                                !toDelete && ((!dirty && !!data) || isError || isSubmitting)
-                              }
-                              type="submit"
-                              variant="outlined"
-                            >
-                              {submitButtonName}
-                            </Button>
+                            </div>
                             {submitError && (
                               <Snackbar
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
