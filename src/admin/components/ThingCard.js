@@ -30,11 +30,7 @@ type Props = { config: ThingConfig, generalConfig: GeneralConfig, router: { path
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 400,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+    marginTop: theme.spacing(1),
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -68,7 +64,7 @@ const ThingCard = (props: Props) => {
   const cardContent = composeThingCardContent(config, generalConfig);
 
   return (
-    <Card>
+    <Card className={classes.card}>
       {
         <NoSsr>
           <Query query={thingCountQuery}>
