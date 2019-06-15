@@ -30,7 +30,6 @@ describe('coerceDataToGql', () => {
       ],
     });
     const data = {
-      id: '5cefb33f05d6be4b7b59842a',
       relationalField: '5cefb33f05d6be4b7b59842b',
       duplexField: '5cefb33f05d6be4b7b59842c',
       enumField: '',
@@ -96,6 +95,10 @@ describe('coerceDataToGql', () => {
           config: thingConfig,
         },
       ],
+    };
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [{ name: 'textField' }],
       duplexFields: [
         {
           name: 'duplexField',
@@ -103,10 +106,6 @@ describe('coerceDataToGql', () => {
           oppositeName: 'duplexField',
         },
       ],
-    };
-    Object.assign(thingConfig, {
-      name: 'Example',
-      textFields: [{ name: 'textField' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -122,18 +121,16 @@ describe('coerceDataToGql', () => {
 
     const data = {
       textField: 'text field',
+      duplexField: '5cefb33f05d6be4b7b59842c',
       embedded1: {
         relationalField: '5cefb33f05d6be4b7b59842b',
-        duplexField: '5cefb33f05d6be4b7b59842c',
       },
       embedded2: [
         {
           relationalField: '5cefb33f05d6be4b7b59842e',
-          duplexField: '5cefb33f05d6be4b7b59842f',
         },
         {
           relationalField: '5cefb33f05d6be4b7b598421',
-          duplexField: '5cefb33f05d6be4b7b598422',
         },
       ],
     };
@@ -142,23 +139,588 @@ describe('coerceDataToGql', () => {
 
     const expectedResult = {
       textField: 'text field',
+      duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
       embedded1: {
         relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
-        duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
       },
       embedded2: [
         {
           relationalField: { connect: '5cefb33f05d6be4b7b59842e' },
-          duplexField: { connect: '5cefb33f05d6be4b7b59842f' },
         },
         {
           relationalField: { connect: '5cefb33f05d6be4b7b598421' },
-          duplexField: { connect: '5cefb33f05d6be4b7b598422' },
         },
       ],
     };
 
     const result = coerceDataToGql(data, prevData, thingConfig);
     expect(result).toEqual(expectedResult);
+  });
+
+  describe('should coerce embedded fields', () => {
+    const thingConfig: ThingConfig = {};
+    const embedded3Config: ThingConfig = {
+      name: 'Embedded3',
+      embedded: true,
+      enumFields: [
+        {
+          name: 'enumField',
+          enumName: 'EnumName',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'relationalField',
+          config: thingConfig,
+        },
+      ],
+    };
+
+    const embedded2Config: ThingConfig = {
+      name: 'Embedded2',
+      embedded: true,
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embeddedField3',
+          config: embedded3Config,
+        },
+        {
+          name: 'embeddedField3a',
+          array: true,
+          config: embedded3Config,
+        },
+      ],
+    };
+
+    const embeddedConfig: ThingConfig = {
+      name: 'Embedded',
+      embedded: true,
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embeddedField2',
+          config: embedded2Config,
+        },
+        {
+          name: 'embeddedField2a',
+          array: true,
+          config: embedded2Config,
+        },
+      ],
+    };
+
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embedded',
+          config: embeddedConfig,
+        },
+        {
+          name: 'embeddeda',
+          config: embeddedConfig,
+          array: true,
+        },
+      ],
+    });
+
+    test('filled in data & prevData = null', () => {
+      const data = {
+        textField: 'text field',
+        embedded: {
+          textField: 'embedded text field',
+          embeddedField2: {
+            textField: 'embedded2 text field',
+            embeddedField3: {
+              enumField: 'en0',
+              relationalField: '5cefb33f05d6be4b7b59842b',
+            },
+            embeddedField3a: [
+              {
+                enumField: 'en1',
+                relationalField: '5cefb33f05d6be4b7b598421',
+              },
+              {
+                enumField: 'en2',
+                relationalField: '5cefb33f05d6be4b7b598422',
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: 'embedded2 1 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842c',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en3',
+                  relationalField: '5cefb33f05d6be4b7b59842d',
+                },
+                {
+                  enumField: 'en4',
+                  relationalField: '5cefb33f05d6be4b7b59842e',
+                },
+              ],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: 'embedded text field',
+            embeddedField2: {
+              textField: 'embedded2 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842b',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en1',
+                  relationalField: '5cefb33f05d6be4b7b598421',
+                },
+                {
+                  enumField: 'en2',
+                  relationalField: '5cefb33f05d6be4b7b598422',
+                },
+              ],
+            },
+            embeddedField2a: [
+              {
+                textField: 'embedded2 1 text field',
+                embeddedField3: {
+                  enumField: 'en0',
+                  relationalField: '5cefb33f05d6be4b7b59842c',
+                },
+                embeddedField3a: [
+                  {
+                    enumField: 'en3',
+                    relationalField: '5cefb33f05d6be4b7b59842d',
+                  },
+                  {
+                    enumField: 'en4',
+                    relationalField: '5cefb33f05d6be4b7b59842e',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const prevData = null;
+
+      const expectedResult = {
+        textField: 'text field',
+        embedded: {
+          textField: 'embedded text field',
+          embeddedField2: {
+            textField: 'embedded2 text field',
+            embeddedField3: {
+              enumField: 'en0',
+              relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
+            },
+            embeddedField3a: [
+              {
+                enumField: 'en1',
+                relationalField: { connect: '5cefb33f05d6be4b7b598421' },
+              },
+              {
+                enumField: 'en2',
+                relationalField: { connect: '5cefb33f05d6be4b7b598422' },
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: 'embedded2 1 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en3',
+                  relationalField: { connect: '5cefb33f05d6be4b7b59842d' },
+                },
+                {
+                  enumField: 'en4',
+                  relationalField: { connect: '5cefb33f05d6be4b7b59842e' },
+                },
+              ],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: 'embedded text field',
+            embeddedField2: {
+              textField: 'embedded2 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en1',
+                  relationalField: { connect: '5cefb33f05d6be4b7b598421' },
+                },
+                {
+                  enumField: 'en2',
+                  relationalField: { connect: '5cefb33f05d6be4b7b598422' },
+                },
+              ],
+            },
+            embeddedField2a: [
+              {
+                textField: 'embedded2 1 text field',
+                embeddedField3: {
+                  enumField: 'en0',
+                  relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
+                },
+                embeddedField3a: [
+                  {
+                    enumField: 'en3',
+                    relationalField: { connect: '5cefb33f05d6be4b7b59842d' },
+                  },
+                  {
+                    enumField: 'en4',
+                    relationalField: { connect: '5cefb33f05d6be4b7b59842e' },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('empty data & prevData = null', () => {
+      const data = {
+        textField: '',
+        embedded: {
+          textField: '',
+          embeddedField2: {
+            textField: '',
+            embeddedField3: {
+              enumField: '',
+              relationalField: '',
+            },
+            embeddedField3a: [
+              {
+                enumField: '',
+                relationalField: '',
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: '',
+              embeddedField3: {
+                enumField: '',
+                relationalField: '',
+              },
+              embeddedField3a: [],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: '',
+            embeddedField2: {
+              textField: '',
+              embeddedField3: {
+                enumField: '',
+                relationalField: '',
+              },
+              embeddedField3a: [],
+            },
+            embeddedField2a: [],
+          },
+        ],
+      };
+
+      const prevData = null;
+
+      const expectedResult = {
+        textField: '',
+        embedded: {
+          textField: '',
+          embeddedField2: {
+            textField: '',
+            embeddedField3: {
+              enumField: null,
+              relationalField: { connect: null },
+            },
+            embeddedField3a: [
+              {
+                enumField: null,
+                relationalField: { connect: null },
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: '',
+              embeddedField3: {
+                enumField: null,
+                relationalField: { connect: null },
+              },
+              embeddedField3a: [],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: '',
+            embeddedField2: {
+              textField: '',
+              embeddedField3: {
+                enumField: null,
+                relationalField: { connect: null },
+              },
+              embeddedField3a: [],
+            },
+            embeddedField2a: [],
+          },
+        ],
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('filled in data & prevData with same array and text field', () => {
+      const data = {
+        textField: 'text field',
+        embedded: {
+          textField: 'embedded text field',
+          embeddedField2: {
+            textField: 'embedded2 text field',
+            embeddedField3: {
+              enumField: 'en0',
+              relationalField: '5cefb33f05d6be4b7b59842b',
+            },
+            embeddedField3a: [
+              {
+                enumField: 'en1',
+                relationalField: '5cefb33f05d6be4b7b598421',
+              },
+              {
+                enumField: 'en2',
+                relationalField: '5cefb33f05d6be4b7b598422',
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: 'embedded2 1 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842c',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en3',
+                  relationalField: '5cefb33f05d6be4b7b59842d',
+                },
+                {
+                  enumField: 'en4',
+                  relationalField: '5cefb33f05d6be4b7b59842e',
+                },
+              ],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: 'embedded text field',
+            embeddedField2: {
+              textField: 'embedded2 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842b',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en1',
+                  relationalField: '5cefb33f05d6be4b7b598421',
+                },
+                {
+                  enumField: 'en2',
+                  relationalField: '5cefb33f05d6be4b7b598422',
+                },
+              ],
+            },
+            embeddedField2a: [
+              {
+                textField: 'embedded2 1 text field',
+                embeddedField3: {
+                  enumField: 'en0',
+                  relationalField: '5cefb33f05d6be4b7b59842c',
+                },
+                embeddedField3a: [
+                  {
+                    enumField: 'en3',
+                    relationalField: '5cefb33f05d6be4b7b59842d',
+                  },
+                  {
+                    enumField: 'en4',
+                    relationalField: '5cefb33f05d6be4b7b59842e',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const prevData = {
+        textField: 'text field',
+        embedded: {
+          textField: 'embedded text field',
+          embeddedField2: {
+            textField: 'embedded2 text field',
+            embeddedField3: {
+              enumField: 'en0',
+              relationalField: '5cefb33f05d6be4b7b59842b',
+            },
+            embeddedField3a: [
+              {
+                enumField: 'en1',
+                relationalField: '5cefb33f05d6be4b7b598421',
+              },
+              {
+                enumField: 'en2',
+                relationalField: '5cefb33f05d6be4b7b598423',
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: 'embedded2 1 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842c',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en3',
+                  relationalField: '5cefb33f05d6be4b7b59842d',
+                },
+                {
+                  enumField: 'en4',
+                  relationalField: '5cefb33f05d6be4b7b59842e',
+                },
+              ],
+            },
+          ],
+        },
+        embeddeda: [
+          {
+            textField: 'embedded text field',
+            embeddedField2: {
+              textField: 'embedded2 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: '5cefb33f05d6be4b7b59842b',
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en1',
+                  relationalField: '5cefb33f05d6be4b7b598421',
+                },
+                {
+                  enumField: 'en2',
+                  relationalField: '5cefb33f05d6be4b7b598422',
+                },
+              ],
+            },
+            embeddedField2a: [
+              {
+                textField: 'embedded2 1 text field',
+                embeddedField3: {
+                  enumField: 'en0',
+                  relationalField: '5cefb33f05d6be4b7b59842c',
+                },
+                embeddedField3a: [
+                  {
+                    enumField: 'en3',
+                    relationalField: '5cefb33f05d6be4b7b59842d',
+                  },
+                  {
+                    enumField: 'en4',
+                    relationalField: '5cefb33f05d6be4b7b59842e',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const expectedResult = {
+        embedded: {
+          textField: 'embedded text field',
+          embeddedField2: {
+            textField: 'embedded2 text field',
+            embeddedField3: {
+              enumField: 'en0',
+              relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
+            },
+            embeddedField3a: [
+              {
+                enumField: 'en1',
+                relationalField: { connect: '5cefb33f05d6be4b7b598421' },
+              },
+              {
+                enumField: 'en2',
+                relationalField: { connect: '5cefb33f05d6be4b7b598422' },
+              },
+            ],
+          },
+          embeddedField2a: [
+            {
+              textField: 'embedded2 1 text field',
+              embeddedField3: {
+                enumField: 'en0',
+                relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
+              },
+              embeddedField3a: [
+                {
+                  enumField: 'en3',
+                  relationalField: { connect: '5cefb33f05d6be4b7b59842d' },
+                },
+                {
+                  enumField: 'en4',
+                  relationalField: { connect: '5cefb33f05d6be4b7b59842e' },
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
   });
 });
