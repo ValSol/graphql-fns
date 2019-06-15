@@ -284,7 +284,8 @@ const processCreateInputData = (
             prev[key] = _id;
           }
         }
-        if (!data2[key].connect && !data2[key].create && data2[key]) {
+        if (data2[key].connect === undefined && data2[key].create === undefined && data2[key]) {
+          // set id of created thing
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key];
         }
@@ -320,7 +321,7 @@ const processCreateInputData = (
         }
       } else if (scalarFieldsArray.includes(key)) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data2[key];
+        if (data2[key] !== null) prev[key] = data2[key];
       }
       return prev;
     }, {});
