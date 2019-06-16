@@ -9,6 +9,8 @@ import composeQuery from '../client/queries/composeQuery';
 import arrangeFormFields from './arrangeFormFields';
 import composeFieldsObject from '../utils/composeFieldsObject';
 
+const idReqExp = /^[0-9a-fA-F]{24}$/;
+
 const createValidationSchema = (
   thingConfig: ThingConfig,
   apolloClient: Object,
@@ -47,13 +49,13 @@ const createValidationSchema = (
         // eslint-disable-next-line no-param-reassign
         prev[name] = yup
           .string()
-          .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true });
+          .matches(idReqExp, { message: 'mongoose id', excludeEmptyString: true });
         break;
       case 'relationalFields':
         // eslint-disable-next-line no-param-reassign
         prev[name] = yup
           .string()
-          .matches(/^[0-9a-fA-F]{24}$/, { message: 'mongoose id', excludeEmptyString: true });
+          .matches(idReqExp, { message: 'mongoose id', excludeEmptyString: true });
         break;
 
       default:
@@ -88,7 +90,7 @@ const createValidationSchema = (
       prev[name] = prev[name].test(`existence-${configName2}`, 'Existence', async function test2(
         value,
       ) {
-        if (!value) return true;
+        if (!value || !idReqExp.test(value)) return true;
         const whereOne = { id: value };
         const { data } = await apolloClient.query({ query, variables: { whereOne } });
         if (data && data[thingName]) return true;
