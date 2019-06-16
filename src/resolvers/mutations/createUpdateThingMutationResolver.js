@@ -7,7 +7,7 @@ const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
 const processUpdateInputData = require('./processUpdateInputData');
 const processDeleteData = require('./processDeleteData');
 const updatePeriphery = require('./updatePeriphery');
-const clearUpdateInputDate = require('./clearUpdateInputDate');
+const clearUpdateInputDate = require('./clearUpdateInputData');
 
 type Args = { data: Object, whereOne: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };

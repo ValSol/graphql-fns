@@ -455,7 +455,6 @@ describe('createUpdateThingMutationResolver', () => {
     const dataForUpdate3 = {
       textField1: 'text Field 1 Plus Plus Plus',
       textField2: null,
-      embeddedField: null,
     };
 
     const updatedExample3 = await updateExample(
@@ -465,12 +464,81 @@ describe('createUpdateThingMutationResolver', () => {
     );
     expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample3.textField2).toBe(dataForUpdate3.textField2);
-    expect(updatedExample3.embeddedField).toBe(dataForUpdate3.embeddedField);
 
     const updatedExample31 = await Example.findById(id);
     const updatedExample32 = updatedExample31.toObject();
     expect(updatedExample32.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample32.textField2).toBe(dataForUpdate3.textField2);
-    expect(updatedExample32.embeddedField).toBe(dataForUpdate3.embeddedField);
+  });
+
+  test('should create mutation update thing resolver to update embedded array fiedl', async () => {
+    const embeddedConfig: ThingConfig = {
+      name: 'Embedded',
+      embedded: true,
+      textFields: [
+        {
+          name: 'embeddedTextField',
+        },
+      ],
+    };
+
+    const mainConfig: ThingConfig = {
+      name: 'Main',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'embeddedFields',
+          config: embeddedConfig,
+          array: true,
+        },
+      ],
+    };
+
+    const createMain = createCreateThingMutationResolver(mainConfig, generalConfig);
+    expect(typeof createMain).toBe('function');
+    if (!createMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      textField: 'text Field',
+    };
+
+    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub });
+    expect(createdMain.textField).toBe(data.textField);
+    const { id } = createdMain;
+
+    const updateMain = createUpdateThingMutationResolver(mainConfig, generalConfig);
+    if (!updateMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const whereOne = { id };
+    const dataForUpdate = {
+      textField: 'text Field 2',
+      embeddedFields: [
+        {
+          embeddedTextField: 'embedded Text Field 1',
+        },
+        {
+          embeddedTextField: 'embedded Text Field 2',
+        },
+      ],
+    };
+
+    const updatedMain = await updateMain(
+      null,
+      { whereOne, data: dataForUpdate },
+      { mongooseConn, pubsub },
+    );
+
+    expect(updatedMain.textField).toBe(dataForUpdate.textField);
+    expect(updatedMain.embeddedFields.length).toBe(2);
+    expect(updatedMain.embeddedFields[0].embeddedTextField).toBe(
+      dataForUpdate.embeddedFields[0].embeddedTextField,
+    );
+    expect(updatedMain.embeddedFields[1].embeddedTextField).toBe(
+      dataForUpdate.embeddedFields[1].embeddedTextField,
+    );
   });
 });
