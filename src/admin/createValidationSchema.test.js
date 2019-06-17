@@ -304,4 +304,33 @@ describe('createValidationSchema', () => {
     const result = createValidationSchema(thingConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
+
+  test('should create the validation schema with dateTime', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField1',
+        },
+        {
+          name: 'dateTimeField2',
+          required: true,
+        },
+        {
+          name: 'dateTimeField3',
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      dateTimeField1: yup.date(),
+      dateTimeField2: yup.date().required(),
+      dateTimeField3: yup.array().of(yup.date().required()),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
 });

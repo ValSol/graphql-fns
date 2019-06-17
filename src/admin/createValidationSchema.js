@@ -31,6 +31,9 @@ const createValidationSchema = (
       case 'textFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
         break;
+      case 'dateTimeFields':
+        prev[name] = yup.date(); // eslint-disable-line no-param-reassign
+        break;
       case 'intFields':
         prev[name] = yup // eslint-disable-line no-param-reassign
           .number()
