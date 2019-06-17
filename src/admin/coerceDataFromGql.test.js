@@ -278,4 +278,29 @@ describe('coerceDataFromGql', () => {
     const result = coerceDataFromGql(data, thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should coerce dateTime fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField',
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      dateTimeField: '2019-06-09T22:00:00.000Z',
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      dateTimeField: '2019-06-09T22:00:00',
+    };
+
+    const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

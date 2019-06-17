@@ -24,6 +24,16 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
         const { id } = data[key];
         prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
       }
+    } else if (kind === 'dateTimeFields') {
+      if (data[key] === null) {
+        prev[key] = ''; // eslint-disable-line no-param-reassign
+      } else if (array) {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key].map(item => (item === null ? '' : item.slice(0, 19)));
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key] === null ? '' : data[key].slice(0, 19);
+      }
     } else if (kind === 'embeddedFields') {
       if (array) {
         // eslint-disable-next-line no-param-reassign
