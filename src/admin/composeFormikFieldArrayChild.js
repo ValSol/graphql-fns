@@ -98,6 +98,15 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
               case 'floatFields':
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
+              case 'dateTimeFields':
+                return (
+                  <Field
+                    {...fieldProps}
+                    InputLabelProps={{ shrink: true }}
+                    style={{ marginRight: 8 }}
+                    type="datetime-local"
+                  />
+                );
               case 'booleanFields':
                 return (
                   // eslint-disable-next-line react/no-array-index-key

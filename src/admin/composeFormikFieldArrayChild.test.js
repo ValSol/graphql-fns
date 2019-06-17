@@ -554,4 +554,105 @@ describe('composeFormikFieldArrayChild', () => {
 
     expect(result2).toEqual(expectedResult2);
   });
+
+  test('should array of dateTime fields', () => {
+    const values = {
+      people: {
+        friends: [
+          { name: 'Vasya', dates: ['2018-12-15T22:00:00.000Z', '2018-12-23T22:00:00.000Z'] },
+        ],
+      },
+    };
+    const name = 'people.friends[0].dates';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label="date #1"
+            margin="normal"
+            name="people.friends[0].dates[0]"
+            style={{ marginRight: 8 }}
+            type="datetime-local"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete date #1">
+                    <IconButton
+                      aria-label="Delete date #1"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+          <Field
+            key={1}
+            component={FormikTextField}
+            disabled={false}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label="date #2"
+            margin="normal"
+            name="people.friends[0].dates[1]"
+            style={{ marginRight: 8 }}
+            type="datetime-local"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Delete date #2">
+                    <IconButton
+                      aria-label="Delete date #2"
+                      disabled={false}
+                      edge="end"
+                      onClick={() => {}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />,
+        ]}
+        <Tooltip title="Add date" placement="right">
+          <IconButton
+            aria-label="Add date"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild('dateTimeFields', false)(props);
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
 });
