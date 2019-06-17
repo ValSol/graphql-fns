@@ -561,7 +561,7 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         {[
-          <FormControl key={0} error style={{ margin: 8 }}>
+          <FormControl key={0} error style={{ marginRight: 16 }}>
             <InputLabel shrink htmlFor="enumField">
               enumField
             </InputLabel>
@@ -619,6 +619,44 @@ describe('composeFormikFragment', () => {
       thingConfig,
       generalConfig,
     );
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for dateTime field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Field
+            key={0}
+            component={FormikTextField}
+            disabled={false}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label="dateTimeField"
+            margin="normal"
+            name="dateTimeField"
+            style={{ marginRight: 16 }}
+            type="datetime-local"
+            variant="outlined"
+          />,
+        ]}
+      </React.Fragment>
+    );
+
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

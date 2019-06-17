@@ -114,7 +114,7 @@ const composeFields = (
               const value = objectGet(allValues, path);
               return (
                 // eslint-disable-next-line react/no-array-index-key
-                <FormControl key={i} error={!!error} style={{ margin: 8 }}>
+                <FormControl key={i} error={!!error} style={{ marginRight: 16 }}>
                   <InputLabel shrink htmlFor={path}>
                     {name}
                   </InputLabel>
@@ -190,6 +190,16 @@ const composeFields = (
             case 'floatFields':
               return <Field {...fieldProps} type="number" />;
 
+            case 'dateTimeFields':
+              return (
+                <Field
+                  {...fieldProps}
+                  InputLabelProps={{ shrink: true }}
+                  style={{ marginRight: 16 }}
+                  type="datetime-local"
+                />
+              );
+
             case 'booleanFields':
               return <Field {...fieldProps} />;
 
@@ -205,7 +215,7 @@ const composeFields = (
               const error = objectGet(errors, path); // eslint-disable-line no-case-declarations
               return (
                 // eslint-disable-next-line react/no-array-index-key
-                <FormControl key={i} error={!!error} style={{ margin: 8 }}>
+                <FormControl key={i} error={!!error} style={{ marginRight: 16 }}>
                   <InputLabel shrink htmlFor={path}>
                     {name}
                   </InputLabel>
