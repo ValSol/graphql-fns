@@ -333,4 +333,44 @@ describe('createValidationSchema', () => {
     const result = createValidationSchema(thingConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
+
+  test('should create the validation schema with geospatial Point', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'geospatialField1',
+          geospatialType: 'Point',
+        },
+        {
+          name: 'geospatialField2',
+          geospatialType: 'Point',
+          required: true,
+        },
+        {
+          name: 'geospatialField3',
+          geospatialType: 'Point',
+          array: true,
+        },
+      ],
+    });
+
+    const geospatialPointSchema = yup.object().shape({
+      ring: yup.array().of(
+        yup.object().shape({
+          longitude: yup.number(),
+          latitude: yup.number(),
+        }),
+      ),
+    });
+    const expectedResult = yup.object().shape({
+      geospatialField1: geospatialPointSchema.clone(),
+      geospatialField2: geospatialPointSchema.clone().required(),
+      geospatialField3: yup.array().of(geospatialPointSchema.clone().required()),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
 });

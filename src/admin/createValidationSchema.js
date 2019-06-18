@@ -11,6 +11,23 @@ import composeFieldsObject from '../utils/composeFieldsObject';
 
 const idReqExp = /^[0-9a-fA-F]{24}$/;
 
+const floatSchema = () =>
+  yup
+    .number()
+    .transform((currentValue, originalValue) => (originalValue === '' ? undefined : currentValue));
+
+const intSchema = () => floatSchema().integer();
+
+const geospatialPointSchema = () =>
+  yup.object().shape({
+    ring: yup.array().of(
+      yup.object().shape({
+        longitude: floatSchema(),
+        latitude: floatSchema(),
+      }),
+    ),
+  });
+
 const createValidationSchema = (
   thingConfig: ThingConfig,
   apolloClient: Object,
@@ -22,7 +39,7 @@ const createValidationSchema = (
   const object = formFields.reduce((prev, { name }) => {
     if (!fieldsObject[name]) return prev; // ignore: composeFlatFormikFields, crteatedAt, updatedAt
 
-    const { array, config, embedded, kind, required, unique } = fieldsObject[name];
+    const { array, config, embedded, geospatialType, kind, required, unique } = fieldsObject[name];
 
     switch (kind) {
       case 'embeddedFields':
@@ -35,12 +52,30 @@ const createValidationSchema = (
         prev[name] = yup.date(); // eslint-disable-line no-param-reassign
         break;
       case 'intFields':
-        prev[name] = yup // eslint-disable-line no-param-reassign
-          .number()
-          .integer();
+        prev[name] = intSchema(); // eslint-disable-line no-param-reassign
         break;
       case 'floatFields':
-        prev[name] = yup.number(); // eslint-disable-line no-param-reassign
+        prev[name] = floatSchema(); // eslint-disable-line no-param-reassign
+        break;
+      case 'geospatialFields':
+        if (geospatialType === 'Point') {
+          // eslint-disable-next-line no-param-reassign
+          prev[name] = geospatialPointSchema();
+        } else if (geospatialType === 'Polygon') {
+          // eslint-disable-next-line no-param-reassign
+          prev[name] = yup.object().shape({
+            externalRing: yup.object().shape({
+              ring: yup.array().of(geospatialPointSchema()),
+            }),
+            internalRings: yup.array().of(
+              yup.object().shape({
+                ring: yup.array().of(yup.object().shape(geospatialPointSchema())),
+              }),
+            ),
+          });
+        } else {
+          throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
+        }
         break;
       case 'booleanFields':
         prev[name] = yup.boolean(); // eslint-disable-line no-param-reassign
@@ -101,7 +136,7 @@ const createValidationSchema = (
       });
     }
 
-    if (array && !['embeddedFields', 'booleanFields'].includes(kind)) {
+    if (array && !['booleanFields', 'embeddedFields'].includes(kind)) {
       prev[name] = yup.array().of(required ? prev[name] : prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
