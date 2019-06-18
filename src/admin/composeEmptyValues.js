@@ -10,18 +10,30 @@ const composeEmptyValues = (thingConfig: ThingConfig): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    const { array, config, kind } = fieldsObject[name];
+    const { array, config, geospatialType, kind } = fieldsObject[name];
 
-    if (kind === 'embeddedFields') {
-      prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
-        ? []
-        : composeEmptyValues(config); // eslint-disable-line no-param-reassign
+    if (array) {
+      prev[name] = []; // eslint-disable-line no-param-reassign
+    } else if (kind === 'embeddedFields') {
+      prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
     } else if (kind === 'booleanFields') {
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = array ? [] : false; // eslint-disable-line no-param-reassign
+      prev[name] = false; // eslint-disable-line no-param-reassign
+    } else if (kind === 'geospatialFields') {
+      if (geospatialType === 'Point') {
+        prev[name] = { longitude: '', latitude: '' }; // eslint-disable-line no-param-reassign
+      } else if (geospatialType === 'Polygon') {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = {
+          externalRing: {
+            ring: [],
+          },
+          internalRings: [],
+        };
+      } else {
+        throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
+      }
     } else {
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = array ? [] : ''; // eslint-disable-line no-param-reassign
+      prev[name] = ''; // eslint-disable-line no-param-reassign
     }
 
     return prev;
