@@ -1,7 +1,10 @@
 // @flow
 
 import React from 'react';
+import clsx from 'clsx';
+
 import { makeStyles } from '@material-ui/core/styles';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles(theme => {
   const align = theme.direction === 'rtl' ? 'right' : 'left';
@@ -27,17 +30,28 @@ const useStyles = makeStyles(theme => {
         },
       },
     },
+    error: {
+      color: theme.palette.error.main,
+      borderColor: theme.palette.error.light,
+      '&:hover': {
+        borderColor: theme.palette.error.main,
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          borderColor,
+        },
+      },
+    },
     /* Styles applied to the legend element. */
     legend: {
-      opacity: 0.6,
       textAlign: 'left',
-      padding: 8,
-      lineHeight: '11px',
       transform: 'scale(0.86)',
       transition: theme.transitions.create('width', {
         duration: theme.transitions.duration.shorter,
         easing: theme.transitions.easing.easeOut,
       }),
+    },
+    legend2: {
+      opacity: 0.6,
     },
   };
 });
@@ -45,22 +59,41 @@ const useStyles = makeStyles(theme => {
 type Props = {
   children: Object,
   label: string,
+  error?: boolean,
+  message?: string,
 };
 
-const Outline = ({ children, label }: Props) => {
+const Outline = ({ children, error, message, label }: Props) => {
   const classes = useStyles();
 
   return (
-    <fieldset aria-hidden className={classes.root}>
-      <legend className={classes.legend}>
-        {/* Use the nominal use case of the legend, avoid rendering artefacts. */}
-        {/* eslint-disable-next-line react/no-danger */}
-        <span dangerouslySetInnerHTML={{ __html: '&#8203;' }} />
-        {label}
-      </legend>
-      {children}
-    </fieldset>
+    <React.Fragment>
+      <fieldset aria-hidden className={clsx(classes.root, { [classes.error]: error })}>
+        <legend
+          className={clsx(classes.legend, {
+            [classes.legend2]: !error,
+            [classes.error]: error,
+          })}
+        >
+          {/* Use the nominal use case of the legend, avoid rendering artefacts. */}
+          {/* eslint-disable-next-line react/no-danger */}
+          <span dangerouslySetInnerHTML={{ __html: '&#8203;' }} />
+          {label}
+        </legend>
+        {children}
+      </fieldset>
+      {message ? (
+        <FormHelperText error={error} variant="outlined">
+          {message}
+        </FormHelperText>
+      ) : null}
+    </React.Fragment>
   );
+};
+
+Outline.defaultProps = {
+  error: false,
+  message: '',
 };
 
 export default Outline;
