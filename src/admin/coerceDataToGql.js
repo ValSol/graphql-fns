@@ -13,7 +13,7 @@ const coerceDataToGql = (
   const fieldsObject = composeFieldsObject(thingConfig);
 
   return Object.keys(data).reduce((prev, key) => {
-    const { array, config, kind } = fieldsObject[key];
+    const { array, config, geospatialType, kind } = fieldsObject[key];
 
     if (prevData && deepEqual(data[key], prevData[key])) {
       return prev;
@@ -37,6 +37,38 @@ const coerceDataToGql = (
         prev[key] = data[key]; // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
+      }
+    } else if (kind === 'geospatialFields') {
+      if (geospatialType === 'Point') {
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(item => {
+            const { longitude, latitude } = item;
+            return longitude === '' || latitude === '' ? null : item; // eslint-disable-line no-param-reassign
+          });
+        } else {
+          const { longitude, latitude } = data[key];
+          prev[key] = longitude === '' || latitude === '' ? null : data[key]; // eslint-disable-line no-param-reassign
+        }
+      } else if (geospatialType === 'Polygon') {
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(item => {
+            // TODO expand test for all empty situations
+            const {
+              externalRing: { ring: externalRing },
+            } = item;
+            return externalRing.length < 4 ? null : item; // eslint-disable-line no-param-reassign
+          });
+        } else {
+          // TODO expand test for all empty situations
+          const {
+            externalRing: { ring: externalRing },
+          } = data[key];
+          prev[key] = externalRing.length < 4 ? null : data[key]; // eslint-disable-line no-param-reassign
+        }
+      } else {
+        throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
     } else {
       prev[key] = data[key]; // eslint-disable-line no-param-reassign
