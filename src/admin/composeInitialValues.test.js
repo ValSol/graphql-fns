@@ -454,4 +454,37 @@ describe('composeInitialValues', () => {
     const result = composeInitialValues(thingConfig, data);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create the simplest initial geospatial values object', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'geospatialFieldPoint',
+          geospatialType: 'Point',
+        },
+        {
+          name: 'geospatialFieldPolygon',
+          geospatialType: 'Polygon',
+        },
+      ],
+    });
+
+    const expectedResult = {
+      geospatialFieldPoint: {
+        longitude: '',
+        latitude: '',
+      },
+      geospatialFieldPolygon: {
+        externalRing: {
+          ring: [],
+        },
+        internalRings: [],
+      },
+    };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

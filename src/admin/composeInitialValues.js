@@ -10,7 +10,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    const { array, config, default: defaultValue, kind } = fieldsObject[name];
+    const { array, config, default: defaultValue, geospatialType, kind } = fieldsObject[name];
 
     if (kind === 'embeddedFields') {
       prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
@@ -24,6 +24,30 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
         data[name] === undefined || data[name] === null || data[name] === ''
           ? defaultValue || (array ? [] : false)
           : data[name];
+    } else if (kind === 'geospatialFields') {
+      if (geospatialType === 'Point') {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] =
+          data[name] === undefined || data[name] === null
+            ? defaultValue || (array ? [] : { longitude: '', latitude: '' })
+            : data[name];
+      } else if (geospatialType === 'Polygon') {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] =
+          data[name] === undefined || data[name] === null
+            ? defaultValue ||
+              (array
+                ? []
+                : {
+                    externalRing: {
+                      ring: [],
+                    },
+                    internalRings: [],
+                  })
+            : data[name];
+      } else {
+        throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
+      }
     } else {
       // eslint-disable-next-line no-param-reassign
       prev[name] =
