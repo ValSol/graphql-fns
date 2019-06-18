@@ -9,7 +9,7 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
 
   return Object.keys(data).reduce((prev, key) => {
     if (fieldsObject[key] === undefined) return prev;
-    const { array, config, kind } = fieldsObject[key];
+    const { array, config, geospatialType, kind } = fieldsObject[key];
     if (kind === 'relationalFields' || kind === 'duplexFields') {
       if (data[key] === null) {
         prev[key] = ''; // eslint-disable-line no-param-reassign
@@ -25,14 +25,58 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
         prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'dateTimeFields') {
-      if (data[key] === null) {
-        prev[key] = ''; // eslint-disable-line no-param-reassign
-      } else if (array) {
+      if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map(item => (item === null ? '' : item.slice(0, 19)));
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key] === null ? '' : data[key].slice(0, 19);
+      }
+    } else if (kind === 'geospatialFields') {
+      if (geospatialType === 'Point') {
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(item => {
+            if (!item) {
+              return { longitude: '', latitude: '' };
+            }
+            const { longitude, latitude } = item;
+            return { longitude, latitude };
+          });
+        } else if (!data[key]) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = { longitude: '', latitude: '' };
+        } else {
+          const { longitude, latitude } = data[key];
+          prev[key] = { longitude, latitude }; // eslint-disable-line no-param-reassign
+        }
+      } else if (geospatialType === 'Polygon') {
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map(item =>
+            item === null
+              ? {
+                  externalRing: {
+                    ring: [],
+                  },
+                  internalRings: [],
+                }
+              : item,
+          );
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] =
+            data[key] === null
+              ? {
+                  externalRing: {
+                    ring: [],
+                  },
+                  internalRings: [],
+                }
+              : data[key];
+        }
+      } else {
+        throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
     } else if (kind === 'embeddedFields') {
       if (array) {

@@ -303,4 +303,130 @@ describe('coerceDataFromGql', () => {
     const result = coerceDataFromGql(data, thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should coerce geospatial fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'geospatialField1',
+          geospatialType: 'Point',
+        },
+        {
+          name: 'geospatialField2',
+          geospatialType: 'Point',
+        },
+        {
+          name: 'geospatialField3',
+          array: true,
+          geospatialType: 'Point',
+        },
+        {
+          name: 'geospatialField4',
+          geospatialType: 'Polygon',
+        },
+        {
+          name: 'geospatialField5',
+          geospatialType: 'Polygon',
+        },
+        {
+          name: 'geospatialField6',
+          array: true,
+          geospatialType: 'Polygon',
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      geospatialField1: {
+        longitude: 50.426982,
+        latitude: 30.615328,
+        __typename: 'GeospatialPoint',
+      },
+      geospatialField2: null,
+      geospatialField3: [
+        {
+          longitude: 50.426983,
+          latitude: 30.615329,
+          __typename: 'GeospatialPoint',
+        },
+        null,
+      ],
+      geospatialField4: {
+        externalRing: {
+          ring: [
+            { longitude: 0, latitude: 0 },
+            { longitude: 3, latitude: 6 },
+            { longitude: 6, latitude: 1 },
+            { longitude: 0, latitude: 0 },
+          ],
+        },
+        internalRings: [
+          {
+            ring: [
+              { longitude: 2, latitude: 2 },
+              { longitude: 3, latitude: 3 },
+              { longitude: 4, latitude: 2 },
+              { longitude: 2, latitude: 2 },
+            ],
+          },
+        ],
+      },
+      geospatialField5: null,
+
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      geospatialField1: {
+        longitude: 50.426982,
+        latitude: 30.615328,
+      },
+      geospatialField2: {
+        longitude: '',
+        latitude: '',
+      },
+      geospatialField3: [
+        {
+          longitude: 50.426983,
+          latitude: 30.615329,
+        },
+        {
+          longitude: '',
+          latitude: '',
+        },
+      ],
+      geospatialField4: {
+        externalRing: {
+          ring: [
+            { longitude: 0, latitude: 0 },
+            { longitude: 3, latitude: 6 },
+            { longitude: 6, latitude: 1 },
+            { longitude: 0, latitude: 0 },
+          ],
+        },
+        internalRings: [
+          {
+            ring: [
+              { longitude: 2, latitude: 2 },
+              { longitude: 3, latitude: 3 },
+              { longitude: 4, latitude: 2 },
+              { longitude: 2, latitude: 2 },
+            ],
+          },
+        ],
+      },
+      geospatialField5: {
+        externalRing: {
+          ring: [],
+        },
+        internalRings: [],
+      },
+    };
+
+    const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
