@@ -121,7 +121,7 @@ const ThingForm = (props: Props) => {
                           return;
                         }
 
-                        if (data) {
+                        if (data && !currentInitialValues) {
                           currentInitialValues = coerceDataFromGql(data[name], thingConfig);
                         }
 
