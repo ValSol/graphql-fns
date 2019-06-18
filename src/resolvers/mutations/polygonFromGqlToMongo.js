@@ -2,7 +2,11 @@
 
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowTypes';
 
-const polygonFromGqlToMongo = (polygon: GeospatialPolygon): MongodbGeospatialPolygon => {
+const polygonFromGqlToMongo = (
+  polygon: GeospatialPolygon | null,
+): MongodbGeospatialPolygon | null => {
+  if (polygon === null) return null;
+
   const {
     externalRing: { ring: externalRing },
     internalRings,

@@ -5,6 +5,16 @@ import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowType
 const polygonFromGqlToMongo = require('./polygonFromGqlToMongo');
 
 describe('polygonFromGqlToMongo', () => {
+  test('should return null for null point', () => {
+    const polygon = null;
+
+    const result = polygonFromGqlToMongo(polygon);
+
+    const expectedResult = null;
+
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should transform Mongodb geospatial polygon format to gql format', () => {
     const polygon: GeospatialPolygon = {
       externalRing: {
@@ -17,9 +27,9 @@ describe('polygonFromGqlToMongo', () => {
       },
     };
 
-    const result: MongodbGeospatialPolygon = polygonFromGqlToMongo(polygon);
+    const result = polygonFromGqlToMongo(polygon);
 
-    const expectedResult = {
+    const expectedResult: MongodbGeospatialPolygon = {
       type: 'Polygon',
       coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
     };
@@ -49,9 +59,9 @@ describe('polygonFromGqlToMongo', () => {
       ],
     };
 
-    const result: MongodbGeospatialPolygon = polygonFromGqlToMongo(polygon);
+    const result = polygonFromGqlToMongo(polygon);
 
-    const expectedResult = {
+    const expectedResult: MongodbGeospatialPolygon = {
       type: 'Polygon',
       coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]], [[2, 2], [3, 3], [4, 2], [2, 2]]],
     };
