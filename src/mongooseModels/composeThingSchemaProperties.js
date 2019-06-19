@@ -145,7 +145,7 @@ const composeThingSchemaProperties = (
             index: '2dsphere',
           },
         };
-        if (required) obj.required = !!required; // by default required = false
+        if (required) obj.type.required = !!required; // by default required = false
 
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -159,7 +159,7 @@ const composeThingSchemaProperties = (
             type: [[[Number]]],
           },
         };
-        if (required) obj.required = !!required; // by default required = false
+        if (required) obj.type.required = !!required; // by default required = false
 
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
