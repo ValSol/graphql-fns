@@ -121,8 +121,13 @@ const composeFields = (
           if (kind === 'enumFields') {
             const value = objectGet(allValues, path);
             return (
-              // eslint-disable-next-line react/no-array-index-key
-              <FormControl key={i} error={!!error && !!touch} style={{ marginRight: 16 }}>
+              <FormControl
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
+                error={!!error && !!touch}
+                required={!!required}
+                style={{ marginRight: 16 }}
+              >
                 <InputLabel shrink htmlFor={path}>
                   {name}
                 </InputLabel>
@@ -166,6 +171,7 @@ const composeFields = (
               error={!!error2 && !!touch}
               label={name}
               message={touch ? error2 : ''}
+              required={required}
             >
               <FieldArray name={path}>
                 {composeFormikFieldArrayChild({ attributes: { geospatialType }, kind }, disabled)}
@@ -182,6 +188,7 @@ const composeFields = (
           label: name,
           margin: 'normal',
           name: path,
+          required: !!required,
           variant: 'outlined',
         };
 
@@ -234,6 +241,7 @@ const composeFields = (
                 label={name}
                 message={touch ? error2 : ''}
                 name={path}
+                required={required}
                 type={geospatialType}
               />
             );
@@ -242,18 +250,23 @@ const composeFields = (
             // eslint-disable-next-line no-case-declarations
             const menuItems = required ? enumsObject[enumName] : ['', ...enumsObject[enumName]];
             return (
-              // eslint-disable-next-line react/no-array-index-key
-              <FormControl key={i} error={!!error && !!touch} style={{ marginRight: 16 }}>
+              <FormControl
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
+                error={!!error && !!touch}
+                required={!!required}
+                style={{ marginRight: 16 }}
+              >
                 <InputLabel shrink htmlFor={path}>
                   {name}
                 </InputLabel>
                 <Field
-                  name={path}
-                  disabled={disabled}
                   component={FormikSelect}
+                  disabled={disabled}
                   inputProps={{
                     name: path,
                   }}
+                  name={path}
                 >
                   {menuItems.map(item => (
                     <MenuItem key={item} value={item}>

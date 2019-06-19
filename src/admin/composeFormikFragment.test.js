@@ -49,6 +49,7 @@ describe('composeFormikFragment', () => {
           label="textField1"
           margin="normal"
           name="textField1"
+          required={false}
           variant="outlined"
         />
         <Field
@@ -59,6 +60,7 @@ describe('composeFormikFragment', () => {
           label="textField2"
           margin="normal"
           name="textField2"
+          required={false}
           variant="outlined"
         />
         <Field
@@ -69,6 +71,7 @@ describe('composeFormikFragment', () => {
           label="textField3"
           margin="normal"
           name="textField3"
+          required={false}
           variant="outlined"
         />
       </React.Fragment>
@@ -148,6 +151,7 @@ describe('composeFormikFragment', () => {
           label="textField"
           margin="normal"
           name="textField"
+          required={false}
           variant="outlined"
         />
         <Outline key={1} label="embedded1">
@@ -161,6 +165,7 @@ describe('composeFormikFragment', () => {
                 label="textField1"
                 margin="normal"
                 name="embedded1.textField1"
+                required={false}
                 variant="outlined"
               />,
               <Outline key={1} label="embedded2">
@@ -174,6 +179,7 @@ describe('composeFormikFragment', () => {
                       label="textField2"
                       margin="normal"
                       name="embedded1.embedded2.textField2"
+                      required={false}
                       variant="outlined"
                     />,
                     <Outline key={1} label="embedded3">
@@ -187,6 +193,7 @@ describe('composeFormikFragment', () => {
                             label="textField3"
                             margin="normal"
                             name="embedded1.embedded2.embedded3.textField3"
+                            required={false}
                             variant="outlined"
                           />,
                         ]}
@@ -276,6 +283,7 @@ describe('composeFormikFragment', () => {
           label="textField"
           margin="normal"
           name="textField"
+          required={false}
           variant="outlined"
         />
         <Outline key={1} label="embedded1">
@@ -289,6 +297,7 @@ describe('composeFormikFragment', () => {
                 label="textField1"
                 margin="normal"
                 name="embedded1.textField1"
+                required={false}
                 variant="outlined"
               />,
               <Outline key={1} label="embedded2">
@@ -302,6 +311,7 @@ describe('composeFormikFragment', () => {
                       label="textField2"
                       margin="normal"
                       name="embedded1.embedded2.textField2"
+                      required={false}
                       variant="outlined"
                     />,
                     <FieldArray key={1} name="embedded1.embedded2.embedded3">
@@ -351,6 +361,7 @@ describe('composeFormikFragment', () => {
           label="textField"
           margin="normal"
           name="textField"
+          required={false}
           variant="outlined"
         />
         <Outline key={1} label="arrayTextFields">
@@ -395,6 +406,7 @@ describe('composeFormikFragment', () => {
           margin="normal"
           name="intField"
           type="number"
+          required={false}
           variant="outlined"
         />
         <Field
@@ -405,6 +417,7 @@ describe('composeFormikFragment', () => {
           margin="normal"
           name="floatField"
           type="number"
+          required={false}
           variant="outlined"
         />
       </React.Fragment>
@@ -442,6 +455,7 @@ describe('composeFormikFragment', () => {
           margin="normal"
           name="intField"
           type="number"
+          required={false}
           variant="outlined"
         />
         <Field
@@ -452,6 +466,7 @@ describe('composeFormikFragment', () => {
           margin="normal"
           name="floatField"
           type="number"
+          required={false}
           variant="outlined"
         />
       </React.Fragment>
@@ -525,6 +540,7 @@ describe('composeFormikFragment', () => {
             label="duplexField"
             margin="normal"
             name="duplexField"
+            required={false}
             variant="outlined"
           />,
           <Field
@@ -535,6 +551,7 @@ describe('composeFormikFragment', () => {
             label="relationalField"
             margin="normal"
             name="relationalField"
+            required={false}
             variant="outlined"
           />,
         ]}
@@ -562,7 +579,7 @@ describe('composeFormikFragment', () => {
     const expectedResult = (
       <React.Fragment>
         {[
-          <FormControl key={0} error style={{ marginRight: 16 }}>
+          <FormControl key={0} error required={false} style={{ marginRight: 16 }}>
             <InputLabel shrink htmlFor="enumField">
               enumField
             </InputLabel>
@@ -647,6 +664,7 @@ describe('composeFormikFragment', () => {
             label="dateTimeField"
             margin="normal"
             name="dateTimeField"
+            required={false}
             style={{ marginRight: 16 }}
             type="datetime-local"
             variant="outlined"
@@ -681,6 +699,7 @@ describe('composeFormikFragment', () => {
             disabled={false}
             label="geospatialField"
             name="geospatialField"
+            required={false}
             type="Point"
           />,
         ]}
