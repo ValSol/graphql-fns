@@ -94,6 +94,7 @@ const composeFormikFieldArrayChild = (
               label: `${itemLabel} #${i + 1}`,
               margin: 'normal',
               name: `${name}[${i}]`,
+              required: true,
               variant: 'outlined',
               InputProps,
             };
@@ -147,8 +148,9 @@ const composeFormikFieldArrayChild = (
                     disabled={disabled || isSubmitting}
                     label={`${itemLabel} #${i + 1}`}
                     name={`${name}[${i}]`}
-                    type={geospatialType}
                     onDelete={index => remove(index)}
+                    required
+                    type={geospatialType}
                   />
                 );
 

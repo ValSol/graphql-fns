@@ -35,6 +35,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="email #1"
             margin="normal"
             name="people.friends[0].emails[0]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -61,6 +62,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="email #2"
             margin="normal"
             name="people.friends[0].emails[1]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -129,6 +131,7 @@ describe('composeFormikFieldArrayChild', () => {
             name="people.friends[0].counts[0]"
             style={{ marginRight: 8 }}
             type="number"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -156,6 +159,7 @@ describe('composeFormikFieldArrayChild', () => {
             name="people.friends[0].counts[1]"
             style={{ marginRight: 8 }}
             type="number"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -225,6 +229,7 @@ describe('composeFormikFieldArrayChild', () => {
             style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
+            required
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -252,6 +257,7 @@ describe('composeFormikFieldArrayChild', () => {
             style={{ marginRight: 8 }}
             type="number"
             variant="outlined"
+            required
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -398,6 +404,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="coworker #1"
             margin="normal"
             name="people.friends[0].coworkers[0]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -424,6 +431,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="coworker #2"
             margin="normal"
             name="people.friends[0].coworkers[1]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -494,6 +502,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="coworker #1"
             margin="normal"
             name="people.friends[0].coworkers[0]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -520,6 +529,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="coworker #2"
             margin="normal"
             name="people.friends[0].coworkers[1]"
+            required
             variant="outlined"
             InputProps={{
               endAdornment: (
@@ -592,6 +602,7 @@ describe('composeFormikFieldArrayChild', () => {
             margin="normal"
             name="people.friends[0].dates[0]"
             style={{ marginRight: 8 }}
+            required
             type="datetime-local"
             variant="outlined"
             InputProps={{
@@ -621,6 +632,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="date #2"
             margin="normal"
             name="people.friends[0].dates[1]"
+            required
             style={{ marginRight: 8 }}
             type="datetime-local"
             variant="outlined"
@@ -702,6 +714,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="position #1"
             name="people.friends[0].positions[0]"
             onDelete={() => {}}
+            required
             type="Point"
           />,
           <Geospatial
@@ -710,6 +723,7 @@ describe('composeFormikFieldArrayChild', () => {
             label="position #2"
             name="people.friends[0].positions[1]"
             onDelete={() => {}}
+            required
             type="Point"
           />,
         ]}
