@@ -356,10 +356,10 @@ describe('coerceListItems', () => {
 
     const items = [
       {
-        children: ['000001', '000002'],
-        parent: '12345',
-        sibling: '54321',
-        siblings: ['000011', '000012'],
+        children: [{ id: '000001' }, { id: '000002' }],
+        parent: { id: '12345' },
+        sibling: { id: '54321' },
+        siblings: [{ id: '000011' }, { id: '000012' }],
       },
       {
         children: [],

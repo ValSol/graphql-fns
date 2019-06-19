@@ -98,17 +98,17 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
 
         case 'duplexFields':
           if (array) {
-            prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
+            prev[key] = item[key].map(item2 => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
           } else {
-            prev[key] = item[key]; // eslint-disable-line no-param-reassign
+            prev[key] = item[key] && item[key].id; // eslint-disable-line no-param-reassign
           }
           break;
 
         case 'relationalFields':
           if (array) {
-            prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
+            prev[key] = item[key].map(item2 => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
           } else {
-            prev[key] = item[key]; // eslint-disable-line no-param-reassign
+            prev[key] = item[key] && item[key].id; // eslint-disable-line no-param-reassign
           }
           break;
 
