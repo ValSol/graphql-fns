@@ -16,6 +16,7 @@ import {
 } from 'formik-material-ui';
 import type { ThingConfig } from '../flowTypes';
 
+import Geospatial from './components/Geospatial';
 import Outline from './components/Outline';
 import composeFormikFragment from './composeFormikFragment';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
@@ -615,7 +616,7 @@ describe('composeFormikFragment', () => {
     const generalConfig = { thingConfigs: [thingConfig], enums };
 
     const result = composeFormikFragment(
-      { errors: { enumField: 'Required' }, values: {} },
+      { errors: { enumField: 'Required' }, touched: { enumField: true }, values: {} },
       thingConfig,
       generalConfig,
     );
@@ -649,6 +650,38 @@ describe('composeFormikFragment', () => {
             style={{ marginRight: 16 }}
             type="datetime-local"
             variant="outlined"
+          />,
+        ]}
+      </React.Fragment>
+    );
+
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fragment for dateTime field', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      geospatialFields: [
+        {
+          name: 'geospatialField',
+          geospatialType: 'Point',
+        },
+      ],
+    });
+
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Geospatial
+            key={0}
+            disabled={false}
+            label="geospatialField"
+            name="geospatialField"
+            type="Point"
           />,
         ]}
       </React.Fragment>

@@ -20,6 +20,7 @@ import pluralize from 'pluralize';
 
 import type { GeneralConfig, FlatFormikFields, ThingConfig } from '../flowTypes';
 
+import Geospatial from './components/Geospatial';
 import Outline from './components/Outline';
 import composeFlatFormikFields from './composeFlatFormikFields';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
@@ -34,34 +35,41 @@ const composeFields = (
   disabled: boolean,
   prefix?: string,
 ) => {
-  const { errors, values: allValues } = formikProps;
+  const { errors, touched, values: allValues } = formikProps;
   return (
     <React.Fragment>
-      {flatFormikFields.map(
-        // $FlowFixMe
-        ({ attributes: { array, config, enumName, name, required }, child, kind }, i) => {
-          const path = prefix ? `${prefix}.${name}` : name;
-          if (child) {
-            return array ? (
-              // eslint-disable-next-line react/no-array-index-key
-              <FieldArray key={i} name={path}>
-                {args => {
-                  const {
-                    form: { isSubmitting, values },
-                    push,
-                    remove,
-                  } = args;
+      {flatFormikFields.map(({ // $FlowFixMe
+        attributes: { array, config, enumName, geospatialType, name, required }, child, kind }, i) => {
+        const path = prefix ? `${prefix}.${name}` : name;
+        const touch = objectGet(touched, path);
+        const error = objectGet(errors, path);
+        const error2 = typeof error === 'string' ? error : undefined; // for embedded fields
+        if (child) {
+          return array ? (
+            // eslint-disable-next-line react/no-array-index-key
+            <FieldArray key={i} name={path}>
+              {args => {
+                const {
+                  form: { isSubmitting, values },
+                  push,
+                  remove,
+                } = args;
 
-                  const itemName = pluralize.singular(name);
+                const itemName = pluralize.singular(name);
 
-                  return (
-                    <React.Fragment>
-                      {objectGet(values, path) &&
-                        objectGet(values, path).map((item, j) => (
+                return (
+                  <React.Fragment>
+                    {objectGet(values, path) &&
+                      objectGet(values, path).map((item, j) => {
+                        const error3 = error && typeof error[j] === 'string' ? error[j] : undefined;
+                        const touch2 = touch && touch[j];
+                        return (
                           <Outline
                             // eslint-disable-next-line react/no-array-index-key
                             key={j}
+                            error={!!error3 && !!touch2}
                             label={`${itemName} #${j + 1}`}
+                            message={touch2 ? error3 : ''}
                           >
                             {composeFields(
                               formikProps,
@@ -81,167 +89,186 @@ const composeFields = (
                               </IconButton>
                             </Tooltip>
                           </Outline>
-                        ))}
-                      <div>
-                        <Tooltip title={`Add ${itemName}`} placement="right">
-                          <IconButton
-                            edge="end"
-                            aria-label={`Add ${itemName}`}
-                            onClick={() => {
-                              if (config) push(composeInitialValues(config, enumsObject));
-                            }}
-                            disabled={disabled || isSubmitting}
-                          >
-                            <AddIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </div>
-                    </React.Fragment>
-                  );
-                }}
-              </FieldArray>
-            ) : (
-              // eslint-disable-next-line react/no-array-index-key
-              <Outline key={i} label={name}>
-                {composeFields(formikProps, child, enumsObject, disabled, path)}
-              </Outline>
-            );
-          }
+                        );
+                      })}
+                    <div>
+                      <Tooltip title={`Add ${itemName}`} placement="right">
+                        <IconButton
+                          edge="end"
+                          aria-label={`Add ${itemName}`}
+                          onClick={() => {
+                            if (config) push(composeInitialValues(config, enumsObject));
+                          }}
+                          disabled={disabled || isSubmitting}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  </React.Fragment>
+                );
+              }}
+            </FieldArray>
+          ) : (
+            // eslint-disable-next-line react/no-array-index-key
+            <Outline key={i} error={!!error2 && touch} label={name} message={touch ? error2 : ''}>
+              {composeFields(formikProps, child, enumsObject, disabled, path)}
+            </Outline>
+          );
+        }
 
-          if (array) {
-            if (kind === 'enumFields') {
-              const error = objectGet(errors, path);
-              const value = objectGet(allValues, path);
-              return (
-                // eslint-disable-next-line react/no-array-index-key
-                <FormControl key={i} error={!!error} style={{ marginRight: 16 }}>
-                  <InputLabel shrink htmlFor={path}>
-                    {name}
-                  </InputLabel>
-                  <Field
-                    name={path}
-                    disabled={disabled}
-                    component={FormikSelect}
-                    inputProps={{
-                      name: path,
-                    }}
-                    multiple
-                    renderValue={selected => (
-                      <div>
-                        {selected.map((menuItem, index) => {
-                          return (
-                            <span key={menuItem}>
-                              {menuItem}
-                              {index < selected.length - 1 ? ', ' : ''}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    )}
-                  >
-                    {enumsObject[enumName].map(item => {
-                      return (
-                        <MenuItem key={item} value={item}>
-                          {`${item} ${composeIndex(value.indexOf(item))}`}
-                        </MenuItem>
-                      );
-                    })}
-                  </Field>
-                  {!!error && <FormHelperText>{error}</FormHelperText>}
-                </FormControl>
-              );
-            }
+        if (array) {
+          if (kind === 'enumFields') {
+            const value = objectGet(allValues, path);
             return (
               // eslint-disable-next-line react/no-array-index-key
-              <Outline key={i} label={name}>
-                <FieldArray name={path}>{composeFormikFieldArrayChild(kind, disabled)}</FieldArray>
-              </Outline>
+              <FormControl key={i} error={!!error && !!touch} style={{ marginRight: 16 }}>
+                <InputLabel shrink htmlFor={path}>
+                  {name}
+                </InputLabel>
+                <Field
+                  name={path}
+                  disabled={disabled}
+                  component={FormikSelect}
+                  inputProps={{
+                    name: path,
+                  }}
+                  multiple
+                  renderValue={selected => (
+                    <div>
+                      {selected.map((menuItem, index) => {
+                        return (
+                          <span key={menuItem}>
+                            {menuItem}
+                            {index < selected.length - 1 ? ', ' : ''}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                >
+                  {enumsObject[enumName].map(item => {
+                    return (
+                      <MenuItem key={item} value={item}>
+                        {`${item} ${composeIndex(value.indexOf(item))}`}
+                      </MenuItem>
+                    );
+                  })}
+                </Field>
+                {!!error && !!touch && <FormHelperText>{error}</FormHelperText>}
+              </FormControl>
             );
           }
+          return (
+            <Outline
+              // eslint-disable-next-line react/no-array-index-key
+              key={i}
+              error={!!error2 && !!touch}
+              label={name}
+              message={touch ? error2 : ''}
+            >
+              <FieldArray name={path}>
+                {composeFormikFieldArrayChild({ attributes: { geospatialType }, kind }, disabled)}
+              </FieldArray>
+            </Outline>
+          );
+        }
 
-          let fieldProps = {
-            // eslint-disable-next-line react/no-array-index-key
+        let fieldProps = {
+          // eslint-disable-next-line react/no-array-index-key
+          key: i,
+          component: FormikTextField,
+          disabled,
+          label: name,
+          margin: 'normal',
+          name: path,
+          variant: 'outlined',
+        };
+
+        if (kind === 'booleanFields') {
+          fieldProps = {
             key: i,
-            component: FormikTextField,
             disabled,
-            label: name,
-            margin: 'normal',
+            Label: { label: name },
             name: path,
-            variant: 'outlined',
+            component: FormikCheckbox,
           };
+        }
 
-          if (kind === 'booleanFields') {
-            fieldProps = {
-              key: i,
-              disabled,
-              Label: { label: name },
-              name: path,
-              component: FormikCheckbox,
-            };
-          }
+        switch (kind) {
+          case 'textFields':
+            return <Field {...fieldProps} fullWidth />;
 
-          switch (kind) {
-            case 'textFields':
-              return <Field {...fieldProps} fullWidth />;
+          case 'intFields':
+            return <Field {...fieldProps} type="number" />;
 
-            case 'intFields':
-              return <Field {...fieldProps} type="number" />;
+          case 'floatFields':
+            return <Field {...fieldProps} type="number" />;
 
-            case 'floatFields':
-              return <Field {...fieldProps} type="number" />;
+          case 'dateTimeFields':
+            return (
+              <Field
+                {...fieldProps}
+                InputLabelProps={{ shrink: true }}
+                style={{ marginRight: 16 }}
+                type="datetime-local"
+              />
+            );
 
-            case 'dateTimeFields':
-              return (
-                <Field
-                  {...fieldProps}
-                  InputLabelProps={{ shrink: true }}
-                  style={{ marginRight: 16 }}
-                  type="datetime-local"
-                />
-              );
+          case 'booleanFields':
+            return <Field {...fieldProps} />;
 
-            case 'booleanFields':
-              return <Field {...fieldProps} />;
+          case 'relationalFields':
+            return <Field {...fieldProps} fullWidth />;
 
-            case 'relationalFields':
-              return <Field {...fieldProps} fullWidth />;
+          case 'duplexFields':
+            return <Field {...fieldProps} fullWidth />;
 
-            case 'duplexFields':
-              return <Field {...fieldProps} fullWidth />;
-
-            case 'enumFields':
-              // eslint-disable-next-line no-case-declarations
-              const menuItems = required ? enumsObject[enumName] : ['', ...enumsObject[enumName]];
-              const error = objectGet(errors, path); // eslint-disable-line no-case-declarations
-              return (
+          case 'geospatialFields':
+            return (
+              <Geospatial
                 // eslint-disable-next-line react/no-array-index-key
-                <FormControl key={i} error={!!error} style={{ marginRight: 16 }}>
-                  <InputLabel shrink htmlFor={path}>
-                    {name}
-                  </InputLabel>
-                  <Field
-                    name={path}
-                    disabled={disabled}
-                    component={FormikSelect}
-                    inputProps={{
-                      name: path,
-                    }}
-                  >
-                    {menuItems.map(item => (
-                      <MenuItem key={item} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                  {!!error && <FormHelperText>{error}</FormHelperText>}
-                </FormControl>
-              );
+                key={i}
+                error={!!error2 && !!touch}
+                disabled={disabled}
+                label={name}
+                message={touch ? error2 : ''}
+                name={path}
+                type={geospatialType}
+              />
+            );
 
-            default:
-              throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
-          }
-        },
-      )}
+          case 'enumFields':
+            // eslint-disable-next-line no-case-declarations
+            const menuItems = required ? enumsObject[enumName] : ['', ...enumsObject[enumName]];
+            return (
+              // eslint-disable-next-line react/no-array-index-key
+              <FormControl key={i} error={!!error && !!touch} style={{ marginRight: 16 }}>
+                <InputLabel shrink htmlFor={path}>
+                  {name}
+                </InputLabel>
+                <Field
+                  name={path}
+                  disabled={disabled}
+                  component={FormikSelect}
+                  inputProps={{
+                    name: path,
+                  }}
+                >
+                  {menuItems.map(item => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Field>
+                {!!error && !!touch && <FormHelperText>{error}</FormHelperText>}
+              </FormControl>
+            );
+
+          default:
+            throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
+        }
+      })}
     </React.Fragment>
   );
 };
