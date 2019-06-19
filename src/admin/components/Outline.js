@@ -65,7 +65,6 @@ type Props = {
 
 const Outline = ({ children, error, message, label }: Props) => {
   const classes = useStyles();
-
   return (
     <React.Fragment>
       <fieldset aria-hidden className={clsx(classes.root, { [classes.error]: error })}>
