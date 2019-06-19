@@ -9,6 +9,8 @@ import composeQuery from '../client/queries/composeQuery';
 import arrangeFormFields from './arrangeFormFields';
 import composeFieldsObject from '../utils/composeFieldsObject';
 
+type GeospatialPointSchemaArgs = { array?: boolean, required?: boolean };
+
 const idReqExp = /^[0-9a-fA-F]{24}$/;
 
 const floatSchema = () =>
@@ -18,12 +20,12 @@ const floatSchema = () =>
 
 const intSchema = () => floatSchema().integer();
 
-const geospatialPointSchema = () =>
+const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): Object =>
   yup.object().shape({
     ring: yup.array().of(
       yup.object().shape({
-        longitude: floatSchema(),
-        latitude: floatSchema(),
+        longitude: required || array ? floatSchema().required('Required') : floatSchema(),
+        latitude: required || array ? floatSchema().required('Required') : floatSchema(),
       }),
     ),
   });
@@ -60,16 +62,16 @@ const createValidationSchema = (
       case 'geospatialFields':
         if (geospatialType === 'Point') {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = geospatialPointSchema();
+          prev[name] = geospatialPointSchema({ array, required });
         } else if (geospatialType === 'Polygon') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = yup.object().shape({
             externalRing: yup.object().shape({
-              ring: yup.array().of(geospatialPointSchema()),
+              ring: yup.array().of(geospatialPointSchema({})),
             }),
             internalRings: yup.array().of(
               yup.object().shape({
-                ring: yup.array().of(yup.object().shape(geospatialPointSchema())),
+                ring: yup.array().of(yup.object().shape(geospatialPointSchema({}))),
               }),
             ),
           });
@@ -100,7 +102,9 @@ const createValidationSchema = (
         throw new TypeError(`InvalcomposeFlatFormikFields kind: "${kind}" of thing field!`);
     }
 
-    if (required) prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
+    if (required && !['geospatialFields'].includes(kind)) {
+      prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
+    }
 
     if (unique) {
       if (embedded) {
@@ -136,7 +140,7 @@ const createValidationSchema = (
       });
     }
 
-    if (array && !['booleanFields', 'embeddedFields'].includes(kind)) {
+    if (array && !['booleanFields', 'embeddedFields', 'geospatialFields'].includes(kind)) {
       prev[name] = yup.array().of(required ? prev[name] : prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign

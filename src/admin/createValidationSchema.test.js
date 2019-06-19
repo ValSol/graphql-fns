@@ -364,10 +364,18 @@ describe('createValidationSchema', () => {
         }),
       ),
     });
+    const geospatialPointRequiredSchema = yup.object().shape({
+      ring: yup.array().of(
+        yup.object().shape({
+          longitude: yup.number().required(),
+          latitude: yup.number().required(),
+        }),
+      ),
+    });
     const expectedResult = yup.object().shape({
       geospatialField1: geospatialPointSchema.clone(),
-      geospatialField2: geospatialPointSchema.clone().required(),
-      geospatialField3: yup.array().of(geospatialPointSchema.clone().required()),
+      geospatialField2: geospatialPointRequiredSchema.clone(),
+      geospatialField3: yup.array().of(geospatialPointRequiredSchema.clone()),
     });
 
     const result = createValidationSchema(thingConfig);
