@@ -18,6 +18,11 @@ const floatSchema = () =>
     .number()
     .transform((currentValue, originalValue) => (originalValue === '' ? undefined : currentValue));
 
+const dateTimeSchema = () =>
+  yup
+    .date()
+    .transform((currentValue, originalValue) => (originalValue === '' ? undefined : currentValue));
+
 const intSchema = () => floatSchema().integer();
 
 const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): Object =>
@@ -51,7 +56,7 @@ const createValidationSchema = (
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
         break;
       case 'dateTimeFields':
-        prev[name] = yup.date(); // eslint-disable-line no-param-reassign
+        prev[name] = dateTimeSchema(); // eslint-disable-line no-param-reassign
         break;
       case 'intFields':
         prev[name] = intSchema(); // eslint-disable-line no-param-reassign
