@@ -17,6 +17,8 @@ import {
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
+import Geospatial from './components/Geospatial';
+
 type Kind =
   | 'booleanFields'
   | 'dateTimeFields'
@@ -29,6 +31,7 @@ type Kind =
   | 'relationalFields'
   | 'textFields';
 
+type GeospatialType = 'Point' | 'Polygon';
 type Props = {
   form: { isSubmitting: boolean, values: Object },
   name: string,
@@ -36,7 +39,14 @@ type Props = {
   remove: Function,
 };
 
-const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
+type FieldAttrs = {
+  attributes: { geospatialType?: GeospatialType },
+  kind: Kind,
+};
+const composeFormikFieldArrayChild = (
+  { attributes: { geospatialType }, kind }: FieldAttrs,
+  disabled: boolean,
+) => {
   const formikFieldArrayChild = (props: Props) => {
     const {
       form: { isSubmitting, values },
@@ -47,6 +57,15 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
 
     const label = name.split('.').slice(-1)[0];
     const itemLabel = pluralize.singular(label);
+
+    let itemForPush = '';
+    if (kind === 'booleanFields') itemForPush = false;
+    if (kind === 'geospatialFields' && geospatialType === 'Point') {
+      itemForPush = {
+        longitude: '',
+        latitude: '',
+      };
+    }
 
     return (
       <React.Fragment>
@@ -115,6 +134,24 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
                     {tooltip}
                   </span>
                 );
+              case 'geospatialFields':
+                if (geospatialType !== 'Point' && geospatialType !== 'Polygon') {
+                  throw new TypeError(
+                    `Invalid geospatialType: "${String(geospatialType)}" of field "${label}"!`,
+                  );
+                }
+                return (
+                  <Geospatial
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={i}
+                    disabled={disabled || isSubmitting}
+                    label={`${itemLabel} #${i + 1}`}
+                    name={`${name}[${i}]`}
+                    type={geospatialType}
+                    onDelete={index => remove(index)}
+                  />
+                );
+
               default:
                 throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
             }
@@ -122,7 +159,7 @@ const composeFormikFieldArrayChild = (kind: Kind, disabled: boolean) => {
         <Tooltip title={`Add ${itemLabel}`} placement="right">
           <IconButton
             aria-label={`Add ${itemLabel}`}
-            onClick={() => push(kind === 'booleanFields' ? false : '')}
+            onClick={() => push(itemForPush)}
             disabled={disabled || isSubmitting}
             style={{ display: 'block' }}
           >

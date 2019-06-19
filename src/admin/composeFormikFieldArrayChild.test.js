@@ -13,10 +13,11 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+import Geospatial from './components/Geospatial';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 
 describe('composeFormikFieldArrayChild', () => {
-  test('should array of text fields', () => {
+  test('should return array of text fields', () => {
     const values = {
       people: {
         friends: [{ name: 'Vasya', emails: ['vasya@gmail.com', 'vasya@ukr.net'] }],
@@ -99,7 +100,9 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('textFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'textFields' }, false)(
+      props,
+    );
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -107,7 +110,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of int fields', () => {
+  test('should return array of int fields', () => {
     const values = {
       people: {
         friends: [{ name: 'Vasya', counts: [15, 23] }],
@@ -192,7 +195,9 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('intFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'intFields' }, false)(
+      props,
+    );
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -200,7 +205,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of float fields', () => {
+  test('should return array of float fields', () => {
     const values = {
       people: {
         friends: [{ name: 'Vasya', weights: [78.1, 73.5] }],
@@ -285,7 +290,9 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('floatFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'floatFields' }, false)(
+      props,
+    );
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -293,7 +300,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of boolean fields', () => {
+  test('should return array of boolean fields', () => {
     const values = {
       people: {
         friends: [{ name: 'Vasya', bools: [78.1, 73.5] }],
@@ -361,7 +368,9 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('booleanFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'booleanFields' }, false)(
+      props,
+    );
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -369,7 +378,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of relational fields', () => {
+  test('should return array of relational fields', () => {
     const values = {
       people: {
         friends: [
@@ -454,7 +463,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('relationalFields', false)(props);
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'relationalFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -462,7 +474,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of duplex fields', () => {
+  test('should return array of duplex fields', () => {
     const values = {
       people: {
         friends: [
@@ -547,7 +559,9 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('duplexFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'duplexFields' }, false)(
+      props,
+    );
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -555,7 +569,7 @@ describe('composeFormikFieldArrayChild', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should array of dateTime fields', () => {
+  test('should return array of dateTime fields', () => {
     const values = {
       people: {
         friends: [
@@ -648,7 +662,81 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild('dateTimeFields', false)(props);
+    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'dateTimeFields' }, false)(
+      props,
+    );
+
+    const result2 = JSON.parse(JSON.stringify(result));
+    const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
+
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should return array of geospatial fields', () => {
+    const values = {
+      people: {
+        friends: [
+          {
+            name: 'Vasya',
+            positions: [
+              {
+                longitude: 50.426982,
+                latitude: 30.615328,
+              },
+              {
+                longitude: 50.426983,
+                latitude: 30.615329,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    const name = 'people.friends[0].positions';
+    const expectedResult = (
+      <React.Fragment>
+        {[
+          <Geospatial
+            key={0}
+            disabled={false}
+            label="position #1"
+            name="people.friends[0].positions[0]"
+            onDelete={() => {}}
+            type="Point"
+          />,
+          <Geospatial
+            key={1}
+            disabled={false}
+            label="position #2"
+            name="people.friends[0].positions[1]"
+            onDelete={() => {}}
+            type="Point"
+          />,
+        ]}
+        <Tooltip title="Add position" placement="right">
+          <IconButton
+            aria-label="Add position"
+            onClick={() => {}}
+            disabled={false}
+            style={{ display: 'block' }}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    const props = {
+      form: { values, isSubmitting: false },
+      name,
+      push() {},
+      remove() {},
+    };
+
+    const result = composeFormikFieldArrayChild(
+      { attributes: { geospatialType: 'Point' }, kind: 'geospatialFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
