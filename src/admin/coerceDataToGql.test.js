@@ -945,4 +945,58 @@ describe('coerceDataToGql', () => {
       expect(result).toEqual(expectedResult);
     });
   });
+
+  describe('should coerce dateTime fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField',
+        },
+      ],
+    });
+    const data = {
+      dateTimeField: '2019-06-01T01:00',
+    };
+
+    test('prev data null', () => {
+      const prevData = null;
+
+      const expectedResult = {
+        dateTimeField: '2019-06-01T01:00',
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('some not changed prev data', () => {
+      const prevData = {
+        dateTimeField: '2019-06-01T01:00',
+      };
+
+      const expectedResult = {};
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('removed prev data', () => {
+      const data2 = {
+        dateTimeField: '',
+      };
+
+      const prevData = {
+        dateTimeField: '2019-06-01T01:00',
+      };
+
+      const expectedResult = {
+        dateTimeField: null,
+      };
+
+      const result = coerceDataToGql(data2, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
 });

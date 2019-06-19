@@ -5,6 +5,9 @@ import type { ThingConfig } from '../flowTypes';
 
 import composeFieldsObject from '../utils/composeFieldsObject';
 
+const isNotDate = date =>
+  new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));
+
 const coerceDataToGql = (
   data: Object,
   prevData: null | Object,
@@ -37,6 +40,12 @@ const coerceDataToGql = (
         prev[key] = data[key]; // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
+      }
+    } else if (kind === 'dateTimeFields') {
+      if (array) {
+        prev[key] = data[key].map(item => (isNotDate(item) ? null : item)); // eslint-disable-line no-param-reassign
+      } else {
+        prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'geospatialFields') {
       if (geospatialType === 'Point') {
