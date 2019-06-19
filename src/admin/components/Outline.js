@@ -61,9 +61,10 @@ type Props = {
   label: string,
   error?: boolean,
   message?: string,
+  required?: boolean,
 };
 
-const Outline = ({ children, error, message, label }: Props) => {
+const Outline = ({ children, error, message, label, required }: Props) => {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -77,7 +78,7 @@ const Outline = ({ children, error, message, label }: Props) => {
           {/* Use the nominal use case of the legend, avoid rendering artefacts. */}
           {/* eslint-disable-next-line react/no-danger */}
           <span dangerouslySetInnerHTML={{ __html: '&#8203;' }} />
-          {label}
+          {`${label}${required ? ' *' : ''}`}
         </legend>
         {children}
       </fieldset>
@@ -93,6 +94,7 @@ const Outline = ({ children, error, message, label }: Props) => {
 Outline.defaultProps = {
   error: false,
   message: '',
+  required: false,
 };
 
 export default Outline;
