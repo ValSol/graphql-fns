@@ -18,10 +18,11 @@ type Props = {
   message?: string,
   name: string,
   onDelete?: Function,
+  required?: boolean,
   type: 'Point' | 'Polygon',
 };
 
-const Geospatial = ({ disabled, error, label, message, name, onDelete, type }: Props) => {
+const Geospatial = ({ disabled, error, label, message, name, onDelete, required, type }: Props) => {
   const fieldProps = {
     // eslint-disable-next-line react/no-array-index-key
     component: FormikTextField,
@@ -29,6 +30,8 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, type }: P
     margin: 'normal',
     type: 'number',
     variant: 'outlined',
+    required,
+    style: { marginRight: 8 },
   };
 
   let control = null;
@@ -51,18 +54,8 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, type }: P
             </IconButton>
           </Tooltip>
         )}
-        <Field
-          {...fieldProps}
-          label="longitude"
-          name={`${name}.longitude`}
-          style={{ marginRight: 8 }}
-        />
-        <Field
-          {...fieldProps}
-          label="latitude"
-          name={`${name}.latitude`}
-          style={{ marginRight: 8 }}
-        />
+        <Field {...fieldProps} label="longitude" name={`${name}.longitude`} />
+        <Field {...fieldProps} label="latitude" name={`${name}.latitude`} />
       </React.Fragment>
     );
   } else if (type === 'Polygon') {
@@ -72,7 +65,7 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, type }: P
   }
 
   return (
-    <Outline error={error} label={label} message={message}>
+    <Outline error={error} label={label} message={message} required={required}>
       {control}
     </Outline>
   );
@@ -82,6 +75,7 @@ Geospatial.defaultProps = {
   error: false,
   onDelete: null,
   message: '',
+  required: false,
 };
 
 export default Geospatial;
