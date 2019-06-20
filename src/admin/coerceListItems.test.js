@@ -41,15 +41,15 @@ describe('coerceListItems', () => {
     const expectedResult = [
       {
         id: '123',
-        createdAt: '2018-12-10T22:00:00.000Z',
-        updatedAt: '2018-12-10T22:00:00.000Z',
+        createdAt: '2018-12-10 22:00',
+        updatedAt: '2018-12-10 22:00',
         textField: 'text Field',
         textFieldArray: 'text Field-1, text Field-2',
       },
       {
         id: '456',
-        createdAt: '2019-02-10T22:00:00.000Z',
-        updatedAt: '2019-02-10T22:00:00.000Z',
+        createdAt: '2019-02-10 22:00',
+        updatedAt: '2019-02-10 22:00',
         textField: '',
         textFieldArray: '',
       },
@@ -224,8 +224,8 @@ describe('coerceListItems', () => {
 
     const expectedResult = [
       {
-        dateTimeField: '1980-12-10T22:00:00.000Z',
-        dateTimeFieldArray: '1980-12-10T22:00:00.000Z, 1982-12-10T22:00:00.000Z',
+        dateTimeField: '1980-12-10 22:00',
+        dateTimeFieldArray: '1980-12-10 22:00, 1982-12-10 22:00',
       },
       { dateTimeField: '', dateTimeFieldArray: '' },
     ];

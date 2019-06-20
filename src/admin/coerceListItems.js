@@ -3,6 +3,19 @@ import type { ThingConfig, ListColumn } from '../flowTypes';
 
 import composeFieldsObject from '../utils/composeFieldsObject';
 
+const coerceDateTime = (value: string | Array<string>, array?: boolean): string => {
+  if (array) {
+    if (!Array.isArray(value)) {
+      throw new TypeError(`Value have to be array!`);
+    }
+    return value.map(item => `${item.slice(0, 10)} ${item.slice(11, 16)}`).join(', ');
+  }
+  if (!(typeof value === 'string')) {
+    throw new TypeError(`Value have to be string!`);
+  }
+  return `${value.slice(0, 10)} ${value.slice(11, 16)}`;
+};
+
 const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListColumn> => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
@@ -10,7 +23,12 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
     Object.keys(item).reduce((prev, key) => {
       if (key === '__typename') return prev;
 
-      if (['id', 'createdAt', 'updatedAt'].includes(key)) {
+      if (['createdAt', 'updatedAt'].includes(key)) {
+        prev[key] = item[key] && coerceDateTime(item[key]); // eslint-disable-line no-param-reassign
+        return prev;
+      }
+
+      if (key === 'id') {
         prev[key] = item[key]; // eslint-disable-line no-param-reassign
         return prev;
       }
@@ -70,11 +88,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
           break;
 
         case 'dateTimeFields':
-          if (array) {
-            prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
-          } else {
-            prev[key] = item[key]; // eslint-disable-line no-param-reassign
-          }
+          prev[key] = coerceDateTime(item[key], array); // eslint-disable-line no-param-reassign
           break;
 
         case 'geospatialFields':
