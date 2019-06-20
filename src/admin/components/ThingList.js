@@ -5,9 +5,15 @@ import pluralize from 'pluralize';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Container from '@material-ui/core/Container';
+import Fab from '@material-ui/core/Fab';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+
+import AddIcon from '@material-ui/icons/Add';
+
+import Router from 'next/router';
 
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -99,14 +105,31 @@ function ThingList(props: Props) {
             const items = coerceListItems(data[pluralize(name)], thingConfig);
 
             return (
-              <VirtualizedTable
-                columns={columns2}
-                router={router}
-                rowCount={items.length}
-                rowGetter={({ index }) => items[index]}
-                thingConfig={thingConfig}
-                width={width}
-              />
+              <div>
+                <VirtualizedTable
+                  columns={columns2}
+                  router={router}
+                  rowCount={items.length}
+                  rowGetter={({ index }) => items[index]}
+                  thingConfig={thingConfig}
+                  width={width}
+                />
+                <Tooltip title={`Create new ${name}`}>
+                  <Fab
+                    color="primary"
+                    aria-label={`Create new ${name}`}
+                    onClick={() => Router.push(`${pathname}?thing=${name}&create`)}
+                    style={{
+                      position: 'sticky',
+                      bottom: 32,
+                      marginTop: 16,
+                      marginLeft: width / 2 - 28,
+                    }}
+                  >
+                    <AddIcon />
+                  </Fab>
+                </Tooltip>
+              </div>
             );
           }}
         </Query>
