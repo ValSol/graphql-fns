@@ -116,8 +116,8 @@ describe('arrangeListColumns', () => {
       { name: 'enumField', width: 200 },
       { name: 'enumField2', width: 200 },
       // dateTimeFields
-      { name: 'dateTimeField', width: 200 },
-      { name: 'dateTimeField2', width: 200 },
+      { name: 'dateTimeField', width: 144 },
+      { name: 'dateTimeField2', width: 144 },
       // intFields
       { name: 'intField', width: 200 },
       { name: 'intField2', width: 200 },
@@ -133,8 +133,8 @@ describe('arrangeListColumns', () => {
       // relationalFields
       { name: 'siblings', width: 200 },
       // default fields
-      { name: 'createdAt', width: 220 },
-      { name: 'updatedAt', width: 220 },
+      { name: 'createdAt', width: 144 },
+      { name: 'updatedAt', width: 144 },
     ];
 
     const result = arrangeListColumns(thingConfig);

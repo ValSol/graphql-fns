@@ -16,6 +16,7 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
 
   const result = [];
   const width = 200;
+  const dataFieldWidth = 144;
 
   if (textFields) {
     textFields.reduce((prev, { name }) => {
@@ -40,7 +41,7 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
 
   if (dateTimeFields) {
     dateTimeFields.reduce((prev, { name }) => {
-      prev.push({ name, width });
+      prev.push({ name, width: dataFieldWidth });
       return prev;
     }, result);
   }
@@ -76,8 +77,8 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
     }, result);
   }
 
-  result.push({ name: 'createdAt', width: 220 });
-  result.push({ name: 'updatedAt', width: 220 });
+  result.push({ name: 'createdAt', width: dataFieldWidth });
+  result.push({ name: 'updatedAt', width: dataFieldWidth });
 
   return result;
 };
