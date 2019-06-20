@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.214",
+  "version": "0.1.2-beta.250",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -30,26 +30,12 @@
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
-    "@material-ui/core": "^4.1.1",
-    "@material-ui/icons": "^4.2.0",
-    "@material-ui/styles": "^4.1.1",
     "@okgrow/graphql-scalars": "^0.4.5",
     "clsx": "^1.0.4",
     "fast-deep-equal": "^2.0.1",
-    "formik": "^1.5.7",
-    "formik-material-ui": "^0.0.18",
-    "graphql": "^14.3.1",
     "graphql-subscriptions": "^1.1.0",
     "lodash": "^4.17.11",
-    "mongoose": "^5.5.10",
-    "next": "^8.1.0",
-    "peer": "^0.2.10",
-    "pluralize": "^7.0.0",
-    "react": "^16.8.6",
-    "react-apollo": "^2.5.6",
-    "react-dom": "^16.8.6",
-    "react-virtualized": "^9.21.1",
-    "yup": "^0.27.0"
+    "pluralize": "^7.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

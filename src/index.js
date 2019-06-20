@@ -1,11 +1,9 @@
-const composeGql = require('./other/composeGql');
-const composeGqlTypes = require('./types/composeGqlTypes');
-const composeGqlResolvers = require('./resolvers/composeGqlResolvers');
-const { default: Admin } = require('./admin/components/Admin');
+import composeGqlTypes from './types/composeGqlTypes';
+import composeGqlResolvers from './resolvers/composeGqlResolvers';
+import Admin from './admin/components/Admin';
 
 module.exports = {
-  composeGql,
+  Admin,
   composeGqlResolvers,
   composeGqlTypes,
-  Admin,
 };
