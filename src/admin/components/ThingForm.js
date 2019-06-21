@@ -183,7 +183,7 @@ const ThingForm = (props: Props) => {
                               generalConfig,
                               toDelete,
                             )}
-                            <div>
+                            <div style={{ marginTop: 16 }}>
                               <Button
                                 onClick={() => Router.push({ pathname, query: { thing: name } })}
                                 variant="outlined"
