@@ -405,8 +405,9 @@ describe('composeFormikFragment', () => {
           label="intField"
           margin="normal"
           name="intField"
-          type="number"
           required={false}
+          style={{ marginRight: 16 }}
+          type="number"
           variant="outlined"
         />
         <Field
@@ -416,8 +417,9 @@ describe('composeFormikFragment', () => {
           label="floatField"
           margin="normal"
           name="floatField"
-          type="number"
           required={false}
+          style={{ marginRight: 16 }}
+          type="number"
           variant="outlined"
         />
       </React.Fragment>
@@ -454,8 +456,9 @@ describe('composeFormikFragment', () => {
           label="intField"
           margin="normal"
           name="intField"
-          type="number"
           required={false}
+          style={{ marginRight: 16 }}
+          type="number"
           variant="outlined"
         />
         <Field
@@ -465,8 +468,9 @@ describe('composeFormikFragment', () => {
           label="floatField"
           margin="normal"
           name="floatField"
-          type="number"
           required={false}
+          style={{ marginRight: 16 }}
+          type="number"
           variant="outlined"
         />
       </React.Fragment>

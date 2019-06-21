@@ -78,16 +78,18 @@ const composeFields = (
                               disabled,
                               `${path}[${j}]`,
                             )}
-                            <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
-                              <IconButton
-                                edge="end"
-                                aria-label={`Delete ${itemName}`}
-                                onClick={() => remove(j)}
-                                disabled={disabled || isSubmitting}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </Tooltip>
+                            <div>
+                              <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
+                                <IconButton
+                                  edge="end"
+                                  aria-label={`Delete ${itemName}`}
+                                  onClick={() => remove(j)}
+                                  disabled={disabled || isSubmitting}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </div>
                           </Outline>
                         );
                       })}
@@ -207,10 +209,10 @@ const composeFields = (
             return <Field {...fieldProps} fullWidth />;
 
           case 'intFields':
-            return <Field {...fieldProps} type="number" />;
+            return <Field {...fieldProps} style={{ marginRight: 16 }} type="number" />;
 
           case 'floatFields':
-            return <Field {...fieldProps} type="number" />;
+            return <Field {...fieldProps} style={{ marginRight: 16 }} type="number" />;
 
           case 'dateTimeFields':
             return (
