@@ -102,6 +102,8 @@ function ThingList(props: Props) {
                 />
               );
 
+            if (!data) throw new TypeError('Undefined data!'); // to elimiate flowjs error
+
             const items = coerceListItems(data[pluralize(name)], thingConfig);
 
             return (

@@ -54,8 +54,8 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, required,
             </IconButton>
           </Tooltip>
         )}
-        <Field {...fieldProps} label="longitude" name={`${name}.longitude`} />
         <Field {...fieldProps} label="latitude" name={`${name}.latitude`} />
+        <Field {...fieldProps} label="longitude" name={`${name}.longitude`} />
       </React.Fragment>
     );
   } else if (type === 'Polygon') {
