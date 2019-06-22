@@ -14,10 +14,21 @@ describe('coerceDataToGql', () => {
           name: 'relationalField',
           config: thingConfig,
         },
+        {
+          name: 'relationalFields',
+          array: true,
+          config: thingConfig,
+        },
       ],
       duplexFields: [
         {
           name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexFields',
+        },
+        {
+          name: 'duplexFields',
+          array: true,
           config: thingConfig,
           oppositeName: 'duplexField',
         },
@@ -31,7 +42,9 @@ describe('coerceDataToGql', () => {
     });
     const data = {
       relationalField: '5cefb33f05d6be4b7b59842b',
+      relationalFields: ['5cefb33f05d6be4b7b59842a'],
       duplexField: '5cefb33f05d6be4b7b59842c',
+      duplexFields: ['5cefb33f05d6be4b7b59842d'],
       enumField: '',
     };
 
@@ -40,7 +53,9 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {
         relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
+        relationalFields: { connect: ['5cefb33f05d6be4b7b59842a'] },
         duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
+        duplexFields: { connect: ['5cefb33f05d6be4b7b59842d'] },
       };
 
       const result = coerceDataToGql(data, prevData, thingConfig);
@@ -50,7 +65,9 @@ describe('coerceDataToGql', () => {
     test('some not changed prev data', () => {
       const prevData = {
         relationalField: '5cefb33f05d6be4b7b59842b',
+        relationalFields: ['5cefb33f05d6be4b7b59842a'],
         duplexField: '5cefb33f05d6be4b7b59842c',
+        duplexFields: ['5cefb33f05d6be4b7b59842d'],
         enumField: '',
       };
 
@@ -63,19 +80,25 @@ describe('coerceDataToGql', () => {
     test('removed prev data', () => {
       const data2 = {
         relationalField: '',
+        relationalFields: [],
         duplexField: '',
+        duplexFields: [],
         enumField: '',
       };
 
       const prevData = {
         relationalField: '5cefb33f05d6be4b7b59842b',
+        relationalFields: ['5cefb33f05d6be4b7b59842a'],
         duplexField: '5cefb33f05d6be4b7b59842c',
+        duplexFields: ['5cefb33f05d6be4b7b59842d'],
         enumField: 'Enum1',
       };
 
       const expectedResult = {
         relationalField: { connect: null },
+        relationalFields: { connect: [] },
         duplexField: { connect: null },
+        duplexFields: { connect: [] },
         enumField: null,
       };
 

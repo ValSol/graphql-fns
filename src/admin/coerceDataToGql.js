@@ -31,7 +31,7 @@ const coerceDataToGql = (
       }
     } else if (kind === 'relationalFields' || kind === 'duplexFields') {
       if (array) {
-        prev[key] = data[key].map(item => ({ connect: item || null })); // eslint-disable-line no-param-reassign
+        prev[key] = { connect: data[key] || [] }; // eslint-disable-line no-param-reassign
       } else {
         prev[key] = { connect: data[key] || null }; // eslint-disable-line no-param-reassign
       }
