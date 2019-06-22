@@ -357,20 +357,26 @@ describe('createValidationSchema', () => {
     });
 
     const geospatialPointSchema = yup.object().shape({
-      ring: yup.array().of(
-        yup.object().shape({
-          longitude: yup.number(),
-          latitude: yup.number(),
-        }),
-      ),
+      latitude: yup
+        .number()
+        .min(-90)
+        .max(90),
+      longitude: yup
+        .number()
+        .min(-180)
+        .max(180),
     });
     const geospatialPointRequiredSchema = yup.object().shape({
-      ring: yup.array().of(
-        yup.object().shape({
-          longitude: yup.number().required(),
-          latitude: yup.number().required(),
-        }),
-      ),
+      latitude: yup
+        .number()
+        .min(-90)
+        .max(90)
+        .required(),
+      longitude: yup
+        .number()
+        .min(-180)
+        .max(180)
+        .required(),
     });
     const expectedResult = yup.object().shape({
       geospatialField1: geospatialPointSchema.clone(),

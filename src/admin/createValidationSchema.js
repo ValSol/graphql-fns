@@ -27,12 +27,24 @@ const intSchema = () => floatSchema().integer();
 
 const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): Object =>
   yup.object().shape({
-    ring: yup.array().of(
-      yup.object().shape({
-        longitude: required || array ? floatSchema().required('Required') : floatSchema(),
-        latitude: required || array ? floatSchema().required('Required') : floatSchema(),
-      }),
-    ),
+    latitude:
+      required || array
+        ? floatSchema()
+            .min(-90, 'latitude must be greater than or equal to -90')
+            .max(90, 'latitude must be less than or equal to 90')
+            .required('Required')
+        : floatSchema()
+            .min(-90, 'latitude must be greater than or equal to -90')
+            .max(90, 'latitude must be less than or equal to 90'),
+    longitude:
+      required || array
+        ? floatSchema()
+            .min(-180, 'longitude must be greater than or equal to -180')
+            .max(180, 'latitude must be less than or equal to 180')
+            .required('Required')
+        : floatSchema()
+            .min(-180, 'longitude must be greater than or equal to -180')
+            .max(180, 'latitude must be less than or equal to 180'),
   });
 
 const createValidationSchema = (
@@ -132,15 +144,13 @@ const createValidationSchema = (
 
     if (['duplexFields', 'relationalFields'].includes(kind)) {
       const query = gql(composeQuery('thing', config, { include: { id: null } }));
-      const { name: configName2 } = config;
+      const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = prev[name].test(`existence-${configName2}`, 'Existence', async function test2(
-        value,
-      ) {
+      prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async function test2(value) {
         if (!value || !idReqExp.test(value)) return true;
         const whereOne = { id: value };
         const { data } = await apolloClient.query({ query, variables: { whereOne } });
-        if (data && data[thingName]) return true;
+        if (data && data[name2]) return true;
         return false;
       });
     }
