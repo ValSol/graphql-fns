@@ -96,11 +96,11 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
             if (array) {
               // eslint-disable-next-line no-param-reassign
               prev[key] = item[key]
-                .map(({ longitude, latitude }) => `(${longitude}, ${latitude})`)
+                .map(({ latitude, longitude }) => `(${latitude}, ${longitude})`)
                 .join(', ');
             } else {
-              const { longitude, latitude } = item[key];
-              prev[key] = `(${longitude}, ${latitude})`; // eslint-disable-line no-param-reassign
+              const { latitude, longitude } = item[key];
+              prev[key] = `(${latitude}, ${longitude})`; // eslint-disable-line no-param-reassign
             }
           } else if (array) {
             // eslint-disable-next-line no-param-reassign

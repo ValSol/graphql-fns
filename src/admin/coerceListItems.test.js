@@ -306,8 +306,8 @@ describe('coerceListItems', () => {
 
     const expectedResult = [
       {
-        geospatialPoint: '(40, 5)',
-        geospatialPointArray: '(40, 5), (41, 6)',
+        geospatialPoint: '(5, 40)',
+        geospatialPointArray: '(5, 40), (6, 41)',
         geospatialPolygon: 'polygon',
         geospatialPolygonArray: 'polygon, polygon',
       },
