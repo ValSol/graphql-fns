@@ -10,6 +10,8 @@ import createThingCountQueryResolver from './queries/createThingCountQueryResolv
 import createThingQueryResolver from './queries/createThingQueryResolver';
 import createThingsQueryResolver from './queries/createThingsQueryResolver';
 import composeThingResolvers from './types/composeThingResolvers';
+
+import createCreateManyThingsMutationResolver from './mutations/createCreateManyThingsMutationResolver';
 import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
@@ -58,6 +60,15 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
         if (createThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Mutation[`create${name}`] = createThingMutationResolver;
+        }
+
+        const createManyThingsMutationResolver = createCreateManyThingsMutationResolver(
+          thingConfig,
+          generalConfig,
+        );
+        if (createManyThingsMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`createMany${pluralize(name)}`] = createManyThingsMutationResolver;
         }
 
         const updateThingMutationResolver = createUpdateThingMutationResolver(
