@@ -3,16 +3,16 @@ import type { Periphery, ThingConfig } from '../../flowTypes';
 
 type Core = Map<ThingConfig, Array<Object>>;
 
-type processUpdateDuplexInputData = {
+type ProcessUpdateDuplexInputData = {
   core: Core,
   periphery: Periphery,
 };
 
-const processCreateInputData = (
+const processUpdateDuplexInputData = (
   data: Object,
   thingConfig: ThingConfig,
   core: Core = new Map(),
-): processUpdateDuplexInputData => {
+): ProcessUpdateDuplexInputData => {
   const { duplexFields } = thingConfig;
   const periphery = new Map();
 
@@ -135,4 +135,4 @@ const processCreateInputData = (
   return { core, periphery };
 };
 
-export default processCreateInputData;
+export default processUpdateDuplexInputData;
