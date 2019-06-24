@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const createThingQueryResolver = require('./createThingQueryResolver');
+import createThingQueryResolver from './createThingQueryResolver';
 
 describe('createThingQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };

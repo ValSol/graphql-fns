@@ -1,10 +1,10 @@
 // @flow
 import type { ClientOptions, ThingConfig } from '../../flowTypes';
 
-const composeFields = require('../composeFields');
-const composeThingQueryArgs = require('./composeThingQueryArgs');
-const composeThingsQueryArgs = require('./composeThingsQueryArgs');
-const composeThingCountQuery = require('./composeThingCountQuery');
+import composeFields from '../composeFields';
+import composeThingQueryArgs from './composeThingQueryArgs';
+import composeThingsQueryArgs from './composeThingsQueryArgs';
+import composeThingCountQuery from './composeThingCountQuery';
 
 const composeQuery = (
   queryName: 'thing' | 'things' | 'thingCount',
@@ -36,4 +36,4 @@ const composeQuery = (
   return resultArray.join('\n');
 };
 
-module.exports = composeQuery;
+export default composeQuery;

@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
 
+import mongoose from 'mongoose';
+
 import type { ThingConfig } from '../../flowTypes';
 
-const mongoose = require('mongoose');
-
-const createDeletedThingFilter = require('./createDeletedThingFilter');
+import createDeletedThingFilter from './createDeletedThingFilter';
 
 describe('createDeletedThingFilter', () => {
   const thingConfig: ThingConfig = {};

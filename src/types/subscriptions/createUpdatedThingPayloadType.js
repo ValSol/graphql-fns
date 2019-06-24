@@ -74,4 +74,4 @@ type Updated${name}Payload {
   return result;
 };
 
-module.exports = createUpdatedThingPayloadType;
+export default createUpdatedThingPayloadType;

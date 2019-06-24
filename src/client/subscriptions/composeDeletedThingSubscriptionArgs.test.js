@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeDeletedThingSubscriptionArgs = require('./composeDeletedThingSubscriptionArgs');
+import composeDeletedThingSubscriptionArgs from './composeDeletedThingSubscriptionArgs';
 
 describe('composeDeletedThingSubscriptionArgs', () => {
   test('should compose things query without args', () => {

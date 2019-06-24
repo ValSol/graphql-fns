@@ -33,4 +33,4 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
   return result;
 };
 
-module.exports = polygonFromMongoToGql;
+export default polygonFromMongoToGql;

@@ -2,11 +2,11 @@
 
 import type { GeneralConfig, NearInput, ThingConfig } from '../../flowTypes';
 
-const checkInventory = require('../../utils/checkInventory');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const getProjectionFromInfo = require('../getProjectionFromInfo');
-const composeNearInput = require('./composeNearInput');
-const composeSortInput = require('./composeSortInput');
+import checkInventory from '../../utils/checkInventory';
+import createThingSchema from '../../mongooseModels/createThingSchema';
+import getProjectionFromInfo from '../getProjectionFromInfo';
+import composeNearInput from './composeNearInput';
+import composeSortInput from './composeSortInput';
 
 type Args = {
   where?: Object,
@@ -63,4 +63,4 @@ const createThingsQueryResolver = (
   return resolver;
 };
 
-module.exports = createThingsQueryResolver;
+export default createThingsQueryResolver;

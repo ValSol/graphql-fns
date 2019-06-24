@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const composeGeospatialTypes = require('./composeGeospatialTypes');
+import composeGeospatialTypes from './composeGeospatialTypes';
 
 describe('composeGeospatialTypes', () => {
   test('should return empty string if there are not any geospatial fields', () => {

@@ -67,4 +67,4 @@ ${indexedFields.join('\n')}
   return result;
 };
 
-module.exports = createThingWhereInputType;
+export default createThingWhereInputType;

@@ -33,4 +33,4 @@ const checkInventory = (inventoryСhain: InventoryСhain, inventory: Inventory =
   return true;
 };
 
-module.exports = checkInventory;
+export default checkInventory;

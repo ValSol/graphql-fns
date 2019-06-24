@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { NearInput, NearMongodb } from '../../flowTypes';
 
-const composeNearInput = require('./composeNearInput');
+import composeNearInput from './composeNearInput';
 
 describe('composeNearInput', () => {
   test('should create object with simple fields', () => {

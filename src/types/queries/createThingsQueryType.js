@@ -1,12 +1,13 @@
 // @flow
+
+import pluralize from 'pluralize';
+
 import type { ThingConfig } from '../../flowTypes';
 
-const pluralize = require('pluralize');
-
-const createThingNearInputType = require('../inputs/createThingNearInputType');
-const createThingPaginationInputType = require('../inputs/createThingPaginationInputType');
-const createThingSortInputType = require('../inputs/createThingSortInputType');
-const createThingWhereInputType = require('../inputs/createThingWhereInputType');
+import createThingNearInputType from '../inputs/createThingNearInputType';
+import createThingPaginationInputType from '../inputs/createThingPaginationInputType';
+import createThingSortInputType from '../inputs/createThingSortInputType';
+import createThingWhereInputType from '../inputs/createThingWhereInputType';
 
 const createThingsQueryType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
@@ -32,4 +33,4 @@ const createThingsQueryType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-module.exports = createThingsQueryType;
+export default createThingsQueryType;

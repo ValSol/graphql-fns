@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../flowTypes';
 
-const createThingType = require('./createThingType');
+import createThingType from './createThingType';
 
 describe('createThingType', () => {
   test('should create thing type with Text fields', () => {

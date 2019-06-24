@@ -20,4 +20,4 @@ const getRelations = (thingConfig: ThingConfig, thingConfigs: Array<ThingConfig>
   return result;
 };
 
-module.exports = getRelations;
+export default getRelations;

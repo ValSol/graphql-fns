@@ -1,7 +1,7 @@
 // @flow
 import type { Periphery } from '../../flowTypes';
 
-const createThingSchema = require('../../mongooseModels/createThingSchema');
+import createThingSchema from '../../mongooseModels/createThingSchema';
 
 const updatePeriphery = async (periphery: Periphery, mongooseConn: Object): Promise<void> => {
   const promises = [];
@@ -51,4 +51,4 @@ const updatePeriphery = async (periphery: Periphery, mongooseConn: Object): Prom
   await Promise.all(promises);
 };
 
-module.exports = updatePeriphery;
+export default updatePeriphery;

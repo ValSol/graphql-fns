@@ -2,8 +2,8 @@
 
 import type { Enums, ThingConfig } from '../../flowTypes';
 
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const getProjectionFromInfo = require('../getProjectionFromInfo');
+import createThingSchema from '../../mongooseModels/createThingSchema';
+import getProjectionFromInfo from '../getProjectionFromInfo';
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
@@ -37,4 +37,4 @@ const createThingArrayResolver = (thingConfig: ThingConfig, enums?: Enums = []):
   return resolver;
 };
 
-module.exports = createThingArrayResolver;
+export default createThingArrayResolver;

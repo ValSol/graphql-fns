@@ -248,4 +248,4 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   return result;
 };
 
-module.exports = composeFields;
+export default composeFields;

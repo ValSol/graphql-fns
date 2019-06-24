@@ -1,9 +1,9 @@
 // @flow
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const checkInventory = require('../../utils/checkInventory');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const processDeleteData = require('./processDeleteData');
+import checkInventory from '../../utils/checkInventory';
+import createThingSchema from '../../mongooseModels/createThingSchema';
+import processDeleteData from './processDeleteData';
 
 type Args = { whereOne: { id: string } };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -63,4 +63,4 @@ const createDeleteThingMutationResolver = (
   return resolver;
 };
 
-module.exports = createDeleteThingMutationResolver;
+export default createDeleteThingMutationResolver;

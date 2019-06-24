@@ -10,4 +10,4 @@ const createCreateThingMutationType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-module.exports = createCreateThingMutationType;
+export default createCreateThingMutationType;

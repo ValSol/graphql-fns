@@ -6,12 +6,14 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
-const createCreateThingMutationResolver = require('../mutations/createCreateThingMutationResolver');
-const info = require('../info.auxiliary');
-const info2 = require('./info-geospatial.auxiliary');
-const infoForSort = require('./info-sort.auxiliary');
+const {
+  default: createCreateThingMutationResolver,
+} = require('../mutations/createCreateThingMutationResolver');
+const { default: info } = require('../info.auxiliary');
+const { default: info2 } = require('./info-geospatial.auxiliary');
+const { default: infoForSort } = require('./info-sort.auxiliary');
 
-const createThingsQueryResolver = require('./createThingsQueryResolver');
+const { default: createThingsQueryResolver } = require('./createThingsQueryResolver');
 
 let mongooseConn;
 let pubsub;

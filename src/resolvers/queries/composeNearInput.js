@@ -19,4 +19,5 @@ const composeNearInput = (near: NearInput): NearMongodb => {
     },
   };
 };
-module.exports = composeNearInput;
+
+export default composeNearInput;

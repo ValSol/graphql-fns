@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../flowTypes';
 
-const polygonFromMongoToGql = require('./polygonFromMongoToGql');
+import polygonFromMongoToGql from './polygonFromMongoToGql';
 
 describe('polygonFromMongoToGql', () => {
   test('should transform Mongodb geospatial polygon format to gql format', () => {

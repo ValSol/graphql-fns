@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeSubscription = require('./composeSubscription');
+import composeSubscription from './composeSubscription';
 
 describe('composeSubscription', () => {
   const thingConfig: ThingConfig = {

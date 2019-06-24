@@ -1,12 +1,13 @@
 // @flow
+
+import pluralize from 'pluralize';
+
 import type { ThingConfig } from '../../flowTypes';
 
-const pluralize = require('pluralize');
-
-const createThingNearInputType = require('../../types/inputs/createThingNearInputType');
-const createThingPaginationInputType = require('../../types/inputs/createThingPaginationInputType');
-const createThingSortInputType = require('../../types/inputs/createThingSortInputType');
-const createThingWhereInputType = require('../../types/inputs/createThingWhereInputType');
+import createThingNearInputType from '../../types/inputs/createThingNearInputType';
+import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
+import createThingSortInputType from '../../types/inputs/createThingSortInputType';
+import createThingWhereInputType from '../../types/inputs/createThingWhereInputType';
 
 const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
@@ -42,4 +43,4 @@ const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   return [`query ${pluralize(name)}(${args1}) {`, `  ${pluralize(name)}(${args2}) {`];
 };
 
-module.exports = composeThingCountQuery;
+export default composeThingCountQuery;

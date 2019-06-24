@@ -1,10 +1,11 @@
 // @flow
+
+import { withFilter } from 'graphql-subscriptions';
+
 import type { GeneralConfig, Subscribe, ThingConfig } from '../../flowTypes';
 
-const { withFilter } = require('graphql-subscriptions');
-
-const checkInventory = require('../../utils/checkInventory');
-const createNewThingFilter = require('./createNewThingFilter');
+import checkInventory from '../../utils/checkInventory';
+import createNewThingFilter from './createNewThingFilter';
 
 const createNewThingSubscriptionResolver = (
   thingConfig: ThingConfig,
@@ -28,4 +29,4 @@ const createNewThingSubscriptionResolver = (
   return resolver;
 };
 
-module.exports = createNewThingSubscriptionResolver;
+export default createNewThingSubscriptionResolver;

@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const composeWhereFields = require('./composeWhereFields');
+import composeWhereFields from './composeWhereFields';
 
 type NewThingFilter = (payload: { [key: string]: Object }, args: Object) => boolean;
 
@@ -33,4 +33,4 @@ const createNewThingFilter = (thingConfig: ThingConfig): NewThingFilter => {
   return filter;
 };
 
-module.exports = createNewThingFilter;
+export default createNewThingFilter;

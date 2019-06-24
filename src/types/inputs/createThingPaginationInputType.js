@@ -15,4 +15,4 @@ const createThingPaginationInputType = (thingConfig: ThingConfig): string => {
   return '';
 };
 
-module.exports = createThingPaginationInputType;
+export default createThingPaginationInputType;

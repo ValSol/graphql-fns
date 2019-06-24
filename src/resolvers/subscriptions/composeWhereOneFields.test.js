@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeWhereOneFields = require('./composeWhereOneFields');
+import composeWhereOneFields from './composeWhereOneFields';
 
 describe('composeWhereOneFields', () => {
   test('should return true if args correspond to payload', () => {

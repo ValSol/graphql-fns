@@ -64,4 +64,4 @@ input GeospatialPointInput {
   return '';
 };
 
-module.exports = composeGeospatialTypes;
+export default composeGeospatialTypes;

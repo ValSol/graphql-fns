@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingWhereInputType = require('../inputs/createThingWhereInputType');
+import createThingWhereInputType from '../inputs/createThingWhereInputType';
 
 const createDeletedThingSubscriptionType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
@@ -13,4 +13,4 @@ const createDeletedThingSubscriptionType = (thingConfig: ThingConfig): string =>
   return `  deleted${name}: ${name}!`;
 };
 
-module.exports = createDeletedThingSubscriptionType;
+export default createDeletedThingSubscriptionType;

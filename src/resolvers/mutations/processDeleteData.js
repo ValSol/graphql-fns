@@ -88,4 +88,4 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
   return result;
 };
 
-module.exports = processDeleteData;
+export default processDeleteData;

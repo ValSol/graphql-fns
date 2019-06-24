@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
 
+import { makeExecutableSchema } from 'apollo-server';
+
 import type { Enums, GeneralConfig, ThingConfig } from './flowTypes';
 
-const { makeExecutableSchema } = require('apollo-server');
-
-const composeGqlTypes = require('./types/composeGqlTypes');
-const composeGqlResolvers = require('./resolvers/composeGqlResolvers');
+import composeGqlTypes from './types/composeGqlTypes';
+import composeGqlResolvers from './resolvers/composeGqlResolvers';
 
 describe('graphql schema', () => {
   test('test simle schema', () => {

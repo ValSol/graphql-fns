@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
-const getProjectionFromInfo = require('./getProjectionFromInfo');
-const info = require('./info.auxiliary.js');
+import getProjectionFromInfo from './getProjectionFromInfo';
+import info from './info.auxiliary';
 
 describe('getProjectionFromInfo', () => {
   test('should return object with fields from query info', () => {

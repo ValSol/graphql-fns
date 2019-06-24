@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingCountQueryType = require('./createThingCountQueryType');
+import createThingCountQueryType from './createThingCountQueryType';
 
 describe('createThingCountQueryType', () => {
   test('should create query things type without index fields', () => {

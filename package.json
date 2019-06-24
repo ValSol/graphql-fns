@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.250",
+  "version": "0.1.2-beta.264",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -79,6 +79,7 @@
     "react": "^16.8.6",
     "react-apollo": "^2.5.6",
     "react-dom": "^16.8.6",
+    "react-virtualized": "^9.21.1",
     "yup": "^0.27.0"
   },
   "config": {

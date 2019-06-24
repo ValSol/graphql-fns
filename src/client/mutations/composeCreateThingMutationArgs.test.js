@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeCreateThingMutationArgs = require('./composeCreateThingMutationArgs');
+import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
 
 describe('composeCreateThingMutationArgs', () => {
   test('should compose createThing mutation args ', () => {

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeospatialPoint, MongodbGeospatialPoint } from '../../flowTypes';
 
-const pointFromGqlToMongo = require('./pointFromGqlToMongo');
+import pointFromGqlToMongo from './pointFromGqlToMongo';
 
 describe('pointFromGqlToMongo', () => {
   test('should return null for null point', () => {

@@ -27,4 +27,4 @@ const polygonFromGqlToMongo = (
   return result;
 };
 
-module.exports = polygonFromGqlToMongo;
+export default polygonFromGqlToMongo;

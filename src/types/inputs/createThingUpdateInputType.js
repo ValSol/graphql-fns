@@ -106,4 +106,4 @@ input ${name}UpdateChildrenInput {
   return result;
 };
 
-module.exports = createThingUpdateInputType;
+export default createThingUpdateInputType;

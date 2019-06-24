@@ -1,10 +1,10 @@
 // @flow
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const checkInventory = require('../../utils/checkInventory');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const processCreateInputData = require('./processCreateInputData');
-const updatePeriphery = require('./updatePeriphery');
+import checkInventory from '../../utils/checkInventory';
+import createThingSchema from '../../mongooseModels/createThingSchema';
+import processCreateInputData from './processCreateInputData';
+import updatePeriphery from './updatePeriphery';
 
 type Args = { data: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -60,4 +60,4 @@ const createCreateThingMutationResolver = (
   return resolver;
 };
 
-module.exports = createCreateThingMutationResolver;
+export default createCreateThingMutationResolver;

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingPaginationInputType = require('./createThingPaginationInputType');
+import createThingPaginationInputType from './createThingPaginationInputType';
 
 describe('createThingPaginationInputType', () => {
   test('should create empty string if there are not pagination', () => {

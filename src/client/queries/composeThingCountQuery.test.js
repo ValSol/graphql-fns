@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeThingCountQuery = require('./composeThingCountQuery');
+import composeThingCountQuery from './composeThingCountQuery';
 
 describe('composeThingCountQuery', () => {
   test('should compose things query without args', () => {

@@ -2,10 +2,10 @@
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const createThingArrayResolver = require('./createThingArrayResolver');
-const createThingScalarResolver = require('./createThingScalarResolver');
-const pointFromMongoToGql = require('./pointFromMongoToGql');
-const polygonFromMongoToGql = require('./polygonFromMongoToGql');
+import createThingArrayResolver from './createThingArrayResolver';
+import createThingScalarResolver from './createThingScalarResolver';
+import pointFromMongoToGql from './pointFromMongoToGql';
+import polygonFromMongoToGql from './polygonFromMongoToGql';
 
 type ThingResolver = { [key: string]: Function };
 
@@ -86,4 +86,4 @@ const composeThingResolvers = (
   return resolvers;
 };
 
-module.exports = composeThingResolvers;
+export default composeThingResolvers;

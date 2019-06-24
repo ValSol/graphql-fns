@@ -127,4 +127,4 @@ const createThingType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-module.exports = createThingType;
+export default createThingType;

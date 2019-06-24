@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingWhereOneInputType = require('./createThingWhereOneInputType');
+import createThingWhereOneInputType from './createThingWhereOneInputType';
 
 describe('createThingWhereOneInputType', () => {
   test('should create thing input type', () => {

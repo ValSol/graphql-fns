@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const processUpdateInputData = require('./processUpdateInputData');
+import processUpdateInputData from './processUpdateInputData';
 
 describe('processUpdateInputData', () => {
   test('should create object with simple fields', () => {

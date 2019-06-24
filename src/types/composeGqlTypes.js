@@ -2,28 +2,28 @@
 
 import type { GeneralConfig } from '../flowTypes';
 
-const checkInventory = require('../utils/checkInventory');
-const createThingType = require('./createThingType');
-const createThingCreateInputType = require('./inputs/createThingCreateInputType');
-const createThingPaginationInputType = require('./inputs/createThingPaginationInputType');
-const createThingUpdateInputType = require('./inputs/createThingUpdateInputType');
-const createThingNearInputType = require('./inputs/createThingNearInputType');
-const createThingSortInputType = require('./inputs/createThingSortInputType');
-const createThingWhereInputType = require('./inputs/createThingWhereInputType');
-const createThingWhereOneInputType = require('./inputs/createThingWhereOneInputType');
-const createThingCountQueryType = require('./queries/createThingCountQueryType');
-const createThingQueryType = require('./queries/createThingQueryType');
-const createThingsQueryType = require('./queries/createThingsQueryType');
-const createCreateThingMutationType = require('./mutations/createCreateThingMutationType');
-const createUpdateThingMutationType = require('./mutations/createUpdateThingMutationType');
-const createDeleteThingMutationType = require('./mutations/createDeleteThingMutationType');
-const createNewThingSubscriptionType = require('./subscriptions/createNewThingSubscriptionType');
-const createDeletedThingSubscriptionType = require('./subscriptions/createDeletedThingSubscriptionType');
-const createUpdatedThingSubscriptionType = require('./subscriptions/createUpdatedThingSubscriptionType');
-const createUpdatedThingPayloadType = require('./subscriptions/createUpdatedThingPayloadType');
+import checkInventory from '../utils/checkInventory';
+import createThingType from './createThingType';
+import createThingCreateInputType from './inputs/createThingCreateInputType';
+import createThingPaginationInputType from './inputs/createThingPaginationInputType';
+import createThingUpdateInputType from './inputs/createThingUpdateInputType';
+import createThingNearInputType from './inputs/createThingNearInputType';
+import createThingSortInputType from './inputs/createThingSortInputType';
+import createThingWhereInputType from './inputs/createThingWhereInputType';
+import createThingWhereOneInputType from './inputs/createThingWhereOneInputType';
+import createThingCountQueryType from './queries/createThingCountQueryType';
+import createThingQueryType from './queries/createThingQueryType';
+import createThingsQueryType from './queries/createThingsQueryType';
+import createCreateThingMutationType from './mutations/createCreateThingMutationType';
+import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
+import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
+import createNewThingSubscriptionType from './subscriptions/createNewThingSubscriptionType';
+import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
+import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
+import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPayloadType';
 
-const composeEnumTypes = require('./specialized/composeEnumTypes');
-const composeGeospatialTypes = require('./specialized/composeGeospatialTypes');
+import composeEnumTypes from './specialized/composeEnumTypes';
+import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const { thingConfigs, inventory } = generalConfig;
@@ -198,4 +198,4 @@ ${thingSubscriptionTypes}
   return resultArray.join('\n');
 };
 
-module.exports = composeGqlTypes;
+export default composeGqlTypes;

@@ -2,8 +2,8 @@
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const checkInventory = require('../../utils/checkInventory');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
+import checkInventory from '../../utils/checkInventory';
+import createThingSchema from '../../mongooseModels/createThingSchema';
 
 type Args = {
   where?: Object,
@@ -49,4 +49,4 @@ const createThingCountQueryResolver = (
   return resolver;
 };
 
-module.exports = createThingCountQueryResolver;
+export default createThingCountQueryResolver;

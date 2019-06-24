@@ -50,4 +50,4 @@ input ${name}SortInput {
 }`;
 };
 
-module.exports = createThingSortInputType;
+export default createThingSortInputType;

@@ -12,4 +12,4 @@ const composeCreateThingMutationArgs = (thingConfig: ThingConfig): Array<string>
   return result;
 };
 
-module.exports = composeCreateThingMutationArgs;
+export default composeCreateThingMutationArgs;

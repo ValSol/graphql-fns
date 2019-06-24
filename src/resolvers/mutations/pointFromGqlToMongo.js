@@ -10,4 +10,4 @@ const pointFromGqlToMongo = (point: GeospatialPoint | null): MongodbGeospatialPo
   return { type: 'Point', coordinates: [longitude, latitude] };
 };
 
-module.exports = pointFromGqlToMongo;
+export default pointFromGqlToMongo;

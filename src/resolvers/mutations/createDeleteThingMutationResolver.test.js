@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const createDeleteThingMutationResolver = require('./createDeleteThingMutationResolver');
+import createDeleteThingMutationResolver from './createDeleteThingMutationResolver';
 
 describe('createDeleteThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };

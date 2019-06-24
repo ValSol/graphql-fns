@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const processDeleteData = require('./processDeleteData');
+import processDeleteData from './processDeleteData';
 
 describe('processDeleteData', () => {
   test('should create object with simple fields', () => {

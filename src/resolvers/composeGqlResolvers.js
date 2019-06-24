@@ -1,20 +1,21 @@
 // @flow
+
+import pluralize from 'pluralize';
+import { DateTime } from '@okgrow/graphql-scalars';
+
 import type { GeneralConfig } from '../flowTypes';
 
-const pluralize = require('pluralize');
-const { DateTime } = require('@okgrow/graphql-scalars');
-
-const checkInventory = require('../utils/checkInventory');
-const createThingCountQueryResolver = require('./queries/createThingCountQueryResolver');
-const createThingQueryResolver = require('./queries/createThingQueryResolver');
-const createThingsQueryResolver = require('./queries/createThingsQueryResolver');
-const composeThingResolvers = require('./types/composeThingResolvers');
-const createCreateThingMutationResolver = require('./mutations/createCreateThingMutationResolver');
-const createUpdateThingMutationResolver = require('./mutations/createUpdateThingMutationResolver');
-const createDeleteThingMutationResolver = require('./mutations/createDeleteThingMutationResolver');
-const createNewThingSubscriptionResolver = require('./subscriptions/createNewThingSubscriptionResolver');
-const createUpdatedThingSubscriptionResolver = require('./subscriptions/createUpdatedThingSubscriptionResolver');
-const createDeletedThingSubscriptionResolver = require('./subscriptions/createDeletedThingSubscriptionResolver');
+import checkInventory from '../utils/checkInventory';
+import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
+import createThingQueryResolver from './queries/createThingQueryResolver';
+import createThingsQueryResolver from './queries/createThingsQueryResolver';
+import composeThingResolvers from './types/composeThingResolvers';
+import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
+import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
+import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
+import createNewThingSubscriptionResolver from './subscriptions/createNewThingSubscriptionResolver';
+import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
+import createDeletedThingSubscriptionResolver from './subscriptions/createDeletedThingSubscriptionResolver';
 
 const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
   const { thingConfigs, inventory } = generalConfig;
@@ -122,4 +123,4 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
   return resolvers;
 };
 
-module.exports = composeGqlResolvers;
+export default composeGqlResolvers;

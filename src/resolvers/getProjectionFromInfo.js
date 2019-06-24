@@ -19,4 +19,4 @@ const getProjectionFromInfo = (info: Object): Object => {
   return result;
 };
 
-module.exports = getProjectionFromInfo;
+export default getProjectionFromInfo;

@@ -9,4 +9,4 @@ const createThingQueryType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-module.exports = createThingQueryType;
+export default createThingQueryType;

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const clearUpdateInputData = require('./clearUpdateInputData');
+import clearUpdateInputData from './clearUpdateInputData';
 
 describe('clearUpdateInputData', () => {
   test('should remove connect', () => {

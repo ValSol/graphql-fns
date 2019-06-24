@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createDeletedThingSubscriptionType = require('./createDeletedThingSubscriptionType');
+import createDeletedThingSubscriptionType from './createDeletedThingSubscriptionType';
 
 describe('createDeletedThingSubscriptionType', () => {
   test('should create subscription type without index fields', () => {

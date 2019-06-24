@@ -21,4 +21,4 @@ const composeWhereOneFields = (thingConfig: ThingConfig): Object => {
   return result;
 };
 
-module.exports = composeWhereOneFields;
+export default composeWhereOneFields;

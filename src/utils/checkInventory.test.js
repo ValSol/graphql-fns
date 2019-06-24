@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { Inventory } from '../flowTypes';
 
-const checkInventory = require('./checkInventory');
+import checkInventory from './checkInventory';
 
 describe('checkInventory', () => {
   test('should return correct results for empty inventory object', () => {

@@ -1,18 +1,13 @@
-import composeGqlTypes from './types/composeGqlTypes';
-import composeGqlResolvers from './resolvers/composeGqlResolvers';
-import Admin from './admin/components/Admin';
-import composeMutation from './client/mutations/composeMutation';
-import composeQuery from './client/queries/composeQuery';
-import composeSubscription from './client/subscriptions/composeSubscription';
+// @flow
 
-export default {
-  // server side
-  composeGqlResolvers,
-  composeGqlTypes,
-  // client side
-  composeMutation,
-  composeQuery,
-  composeSubscription,
-  // client side admin
-  Admin,
-};
+// server side
+export { default as composeGqlResolvers } from './resolvers/composeGqlResolvers';
+export { default as composeGqlTypes } from './types/composeGqlTypes';
+
+// client side
+export { default as composeMutation } from './client/mutations/composeMutation';
+export { default as composeQuery } from './client/queries/composeQuery';
+export { default as composeSubscription } from './client/subscriptions/composeSubscription';
+
+// client side admin
+export { default as Admin } from './admin/components/Admin';

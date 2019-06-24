@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
 
-const composeFields = require('./composeFields');
+import composeFields from './composeFields';
 
 describe('composeFields', () => {
   describe('not nested fields', () => {

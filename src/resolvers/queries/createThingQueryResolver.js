@@ -2,9 +2,9 @@
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const checkInventory = require('../../utils/checkInventory');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const getProjectionFromInfo = require('../getProjectionFromInfo');
+import checkInventory from '../../utils/checkInventory';
+import createThingSchema from '../../mongooseModels/createThingSchema';
+import getProjectionFromInfo from '../getProjectionFromInfo';
 
 type Args = { whereOne: { id: string } };
 type Context = { mongooseConn: Object };
@@ -46,4 +46,4 @@ const createThingQueryResolver = (
   return resolver;
 };
 
-module.exports = createThingQueryResolver;
+export default createThingQueryResolver;

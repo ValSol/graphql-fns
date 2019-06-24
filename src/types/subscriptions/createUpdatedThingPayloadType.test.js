@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createUpdatedThingPayloadType = require('./createUpdatedThingPayloadType');
+import createUpdatedThingPayloadType from './createUpdatedThingPayloadType';
 
 describe('createUpdatedThingPayloadType', () => {
   test('should create subscription payload type with text fields', () => {

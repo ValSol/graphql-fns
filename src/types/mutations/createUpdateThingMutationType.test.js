@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createUpdateThingMutationType = require('./createUpdateThingMutationType');
+import createUpdateThingMutationType from './createUpdateThingMutationType';
 
 describe('createUpdateThingMutationType', () => {
   test('should create mutation update thing type', () => {

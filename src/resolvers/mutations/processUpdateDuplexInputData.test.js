@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { Periphery, ThingConfig } from '../../flowTypes';
 
-const processUpdateDuplexInputData = require('./processUpdateDuplexInputData');
+import processUpdateDuplexInputData from './processUpdateDuplexInputData';
 
 describe('processUpdateDuplexInputData', () => {
   test('should create object and children objectcs with duplex fields along with connect', () => {

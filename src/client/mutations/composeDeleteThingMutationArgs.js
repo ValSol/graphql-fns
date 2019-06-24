@@ -12,4 +12,4 @@ const composeDeleteThingMutationArgs = (thingConfig: ThingConfig): Array<string>
   return result;
 };
 
-module.exports = composeDeleteThingMutationArgs;
+export default composeDeleteThingMutationArgs;

@@ -62,4 +62,4 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
   return result;
 };
 
-module.exports = composeInitialValues;
+export default composeInitialValues;

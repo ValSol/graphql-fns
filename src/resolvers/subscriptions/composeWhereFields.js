@@ -18,4 +18,4 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   return result;
 };
 
-module.exports = composeWhereFields;
+export default composeWhereFields;

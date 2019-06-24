@@ -124,4 +124,4 @@ input ${name}CreateChildrenInput {
   return result;
 };
 
-module.exports = createThingCreateInputType;
+export default createThingCreateInputType;

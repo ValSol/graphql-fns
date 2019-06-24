@@ -1,7 +1,8 @@
 // @flow
-import type { Enums, ThingConfig } from '../flowTypes';
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
+import type { Enums, ThingConfig } from '../flowTypes';
 
 type ThingSchemaProperty = { type: String | [String], default: string, required: boolean };
 type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
@@ -208,4 +209,4 @@ const composeThingSchemaProperties = (
   return result;
 };
 
-module.exports = composeThingSchemaProperties;
+export default composeThingSchemaProperties;

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingSortInputType = require('./createThingSortInputType');
+import createThingSortInputType from './createThingSortInputType';
 
 describe('createThingSortInputType', () => {
   test('should create empty string if there are not any indexed fields', () => {

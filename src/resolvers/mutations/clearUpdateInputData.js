@@ -29,4 +29,4 @@ const clearUpdateInputData = (data: Object, thingConfig: ThingConfig): Object =>
   return result;
 };
 
-module.exports = clearUpdateInputData;
+export default clearUpdateInputData;

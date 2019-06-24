@@ -16,4 +16,4 @@ const composeEnumTypes = (generalConfig: GeneralConfig): string => {
   return linesArray.join('\n');
 };
 
-module.exports = composeEnumTypes;
+export default composeEnumTypes;

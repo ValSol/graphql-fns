@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingWhereInputType = require('../../types/inputs/createThingWhereInputType');
+import createThingWhereInputType from '../../types/inputs/createThingWhereInputType';
 
 const composeThingCountQuery = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
@@ -17,4 +17,4 @@ const composeThingCountQuery = (thingConfig: ThingConfig): string => {
 }`;
 };
 
-module.exports = composeThingCountQuery;
+export default composeThingCountQuery;

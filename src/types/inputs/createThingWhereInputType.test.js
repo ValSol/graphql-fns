@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingWhereInputType = require('./createThingWhereInputType');
+import createThingWhereInputType from './createThingWhereInputType';
 
 describe('createThingWhereInputType', () => {
   test('should create empty string if there are not any index fields', () => {

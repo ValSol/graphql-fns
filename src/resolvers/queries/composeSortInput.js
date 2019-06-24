@@ -7,4 +7,5 @@ const composeSortInput = (sortBy: Array<string>): Array<string> =>
     }
     return `-${sortKey.slice(0, -5)}`;
   });
-module.exports = composeSortInput;
+
+export default composeSortInput;

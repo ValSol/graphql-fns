@@ -24,4 +24,4 @@ input ${name}NearInput {
 }`;
 };
 
-module.exports = createThingNearInputType;
+export default createThingNearInputType;

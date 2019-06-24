@@ -1,10 +1,10 @@
 // @flow
 import type { ClientOptions, ThingConfig } from '../../flowTypes';
 
-const composeFields = require('../composeFields');
-const composeCreateThingMutationArgs = require('./composeCreateThingMutationArgs');
-const composeDeleteThingMutationArgs = require('./composeDeleteThingMutationArgs');
-const composeUpdateThingMutationArgs = require('./composeUpdateThingMutationArgs');
+import composeFields from '../composeFields';
+import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
+import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
+import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
 
 const composeMutation = (
   mutationName: 'createThing' | 'deleteThing' | 'updateThing',
@@ -37,4 +37,4 @@ const composeMutation = (
   return resultArray.join('\n');
 };
 
-module.exports = composeMutation;
+export default composeMutation;

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { Periphery, ThingConfig } from '../../flowTypes';
 
-const processCreateInputData = require('./processCreateInputData');
+import processCreateInputData from './processCreateInputData';
 
 const mongooseTypes = {
   count: 0,

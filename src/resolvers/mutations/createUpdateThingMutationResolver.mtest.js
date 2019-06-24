@@ -7,9 +7,13 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../test/mongo-options');
-const createThingSchema = require('../../mongooseModels/createThingSchema');
-const createCreateThingMutationResolver = require('./createCreateThingMutationResolver');
-const createUpdateThingMutationResolver = require('./createUpdateThingMutationResolver');
+const { default: createThingSchema } = require('../../mongooseModels/createThingSchema');
+const {
+  default: createCreateThingMutationResolver,
+} = require('./createCreateThingMutationResolver');
+const {
+  default: createUpdateThingMutationResolver,
+} = require('./createUpdateThingMutationResolver');
 
 let mongooseConn;
 let pubsub;

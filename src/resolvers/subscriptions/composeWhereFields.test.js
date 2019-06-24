@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import composeWhereFields from './composeWhereFields';
 
-const composeWhereFields = require('./composeWhereFields');
+import type { ThingConfig } from '../../flowTypes';
 
 describe('composeWhereFields', () => {
   test('should return true if args correspond to payload', () => {

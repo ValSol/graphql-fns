@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingNearInputType = require('./createThingNearInputType');
+import createThingNearInputType from './createThingNearInputType';
 
 describe('createThingNearInputType', () => {
   test('should create empty string if there are not any geospatial fields', () => {

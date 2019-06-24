@@ -3,7 +3,7 @@
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-const composeThingResolvers = require('./composeThingResolvers');
+import composeThingResolvers from './composeThingResolvers';
 
 describe('composeThingResolvers', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };

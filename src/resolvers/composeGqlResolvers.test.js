@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
 
-const composeGqlResolvers = require('./composeGqlResolvers');
+import composeGqlResolvers from './composeGqlResolvers';
 
 describe('composeGqlResolvers', () => {
   test('should create things types for one thing', () => {

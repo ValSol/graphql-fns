@@ -1,10 +1,10 @@
 // @flow
 import type { ClientOptions, ThingConfig } from '../../flowTypes';
 
-const composeFields = require('../composeFields');
-const composeDeletedThingSubscriptionArgs = require('./composeDeletedThingSubscriptionArgs');
-const composeNewThingSubscriptionArgs = require('./composeNewThingSubscriptionArgs');
-const composeUpdatedThingSubscriptionArgs = require('./composeUpdatedThingSubscriptionArgs');
+import composeFields from '../composeFields';
+import composeDeletedThingSubscriptionArgs from './composeDeletedThingSubscriptionArgs';
+import composeNewThingSubscriptionArgs from './composeNewThingSubscriptionArgs';
+import composeUpdatedThingSubscriptionArgs from './composeUpdatedThingSubscriptionArgs';
 
 const composeSubscription = (
   subscriptionName: 'newThing' | 'deletedThing' | 'updatedThing',
@@ -37,4 +37,4 @@ const composeSubscription = (
   return resultArray.join('\n');
 };
 
-module.exports = composeSubscription;
+export default composeSubscription;

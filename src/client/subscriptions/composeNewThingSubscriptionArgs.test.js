@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeNewThingSubscriptionArgs = require('./composeNewThingSubscriptionArgs');
+import composeNewThingSubscriptionArgs from './composeNewThingSubscriptionArgs';
 
 describe('composeNewThingSubscriptionArgs', () => {
   test('should compose things query without args', () => {

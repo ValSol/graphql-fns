@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
 
+import mongoose from 'mongoose';
+
 import type { ThingConfig } from '../../flowTypes';
 
-const mongoose = require('mongoose');
-
-const createUpdatedThingFilter = require('./createUpdatedThingFilter');
+import createUpdatedThingFilter from './createUpdatedThingFilter';
 
 describe('createUpdatedThingFilter', () => {
   const thingConfig: ThingConfig = {};

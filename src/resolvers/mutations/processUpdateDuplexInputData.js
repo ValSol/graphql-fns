@@ -135,4 +135,4 @@ const processCreateInputData = (
   return { core, periphery };
 };
 
-module.exports = processCreateInputData;
+export default processCreateInputData;

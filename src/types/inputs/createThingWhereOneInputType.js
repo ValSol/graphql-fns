@@ -35,4 +35,4 @@ ${uniqueFields}
 }`;
 };
 
-module.exports = createThingWhereOneInputType;
+export default createThingWhereOneInputType;

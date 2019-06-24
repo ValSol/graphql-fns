@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-const composeSortInput = require('./composeSortInput');
+import composeSortInput from './composeSortInput';
 
 describe('composeSortInput', () => {
   test('should create list sorting fields for mongoose', () => {

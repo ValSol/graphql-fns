@@ -12,4 +12,4 @@ const composeThingQueryArgs = (thingConfig: ThingConfig): Array<string> => {
   return result;
 };
 
-module.exports = composeThingQueryArgs;
+export default composeThingQueryArgs;

@@ -3,7 +3,7 @@
 
 import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
 
-const composeGqlTypes = require('./composeGqlTypes');
+import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
   test('should create things types for one thing', () => {

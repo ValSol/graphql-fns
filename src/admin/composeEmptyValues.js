@@ -42,4 +42,4 @@ const composeEmptyValues = (thingConfig: ThingConfig): Object => {
   return result;
 };
 
-module.exports = composeEmptyValues;
+export default composeEmptyValues;

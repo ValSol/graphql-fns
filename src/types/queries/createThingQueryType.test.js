@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingQueryType = require('./createThingQueryType');
+import createThingQueryType from './createThingQueryType';
 
 describe('createThingQueryType', () => {
   test('should create query only thing type', () => {

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../flowTypes';
 
-const getRelations = require('./getRelations');
+import getRelations from './getRelations';
 
 describe('getRelations', () => {
   test('should return map with relations', () => {

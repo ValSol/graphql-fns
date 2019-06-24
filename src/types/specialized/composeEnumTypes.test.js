@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { Enums, GeneralConfig } from '../../flowTypes';
 
-const composeEnumTypes = require('./composeEnumTypes');
+import composeEnumTypes from './composeEnumTypes';
 
 describe('composeEnumTypes', () => {
   test('should return empty string if enums undefined', () => {
