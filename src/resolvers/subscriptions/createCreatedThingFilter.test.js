@@ -5,9 +5,9 @@ import mongoose from 'mongoose';
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createNewThingFilter from './createNewThingFilter';
+import createCreatedThingFilter from './createCreatedThingFilter';
 
-describe('createNewThingFilter', () => {
+describe('createCreatedThingFilter', () => {
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Person',
@@ -53,7 +53,7 @@ describe('createNewThingFilter', () => {
   });
 
   const payload = {
-    newPerson: {
+    createdPerson: {
       textField: 'abc',
       intField: 123,
       floatField: 0.55,
@@ -64,7 +64,7 @@ describe('createNewThingFilter', () => {
   };
 
   test('should return true if there is no where', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {};
 
@@ -74,7 +74,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where is {}', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = { where: {} };
 
@@ -84,7 +84,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only textField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -98,7 +98,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only intField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -112,7 +112,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only floatField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -126,7 +126,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only dateTimeField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -140,7 +140,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only relationalField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -154,7 +154,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only relationalField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {
@@ -169,7 +169,7 @@ describe('createNewThingFilter', () => {
   });
 
   test('should return true if where have only textField', () => {
-    const filter = createNewThingFilter(thingConfig);
+    const filter = createCreatedThingFilter(thingConfig);
 
     const args = {
       where: {

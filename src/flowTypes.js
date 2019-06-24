@@ -203,12 +203,15 @@ type InverntoryOptions = {
     thingCount?: thingNamesList,
   },
   Mutation?: null | {
+    createManyThings?: thingNamesList,
     createThing?: thingNamesList,
     updateThing?: thingNamesList,
     deleteThing?: thingNamesList,
   },
   Subscription?: null | {
-    newThing?: thingNamesList,
+    createdThing?: thingNamesList,
+    updatedThing?: thingNamesList,
+    deletedThing?: thingNamesList,
   },
 };
 export type Inventory = {
@@ -226,11 +229,11 @@ type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 type TwoSegmentInventoryChain =
   | ['Query', 'thing' | 'things' | 'thingCount']
   | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing']
-  | ['Subscription', 'newThing' | 'updatedThing' | 'deletedThing'];
+  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 type ThreeSegmentInventoryChain =
   | ['Query', 'thing' | 'things' | 'thingCount', string]
   | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing', string]
-  | ['Subscription', 'newThing' | 'updatedThing' | 'deletedThing', string];
+  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string];
 export type InventoryСhain =
   | OneSegmentInventoryChain
   | TwoSegmentInventoryChain

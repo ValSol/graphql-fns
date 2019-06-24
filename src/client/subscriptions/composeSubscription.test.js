@@ -15,10 +15,10 @@ describe('composeSubscription', () => {
       },
     ],
   };
-  test('should compose newThing subscription', () => {
-    const subscriptionName = 'newThing';
-    const expectedResult = `subscription newExample($where: ExampleWhereInput) {
-  newExample(where: $where) {
+  test('should compose createdThing subscription', () => {
+    const subscriptionName = 'createdThing';
+    const expectedResult = `subscription createdExample($where: ExampleWhereInput) {
+  createdExample(where: $where) {
     id
     createdAt
     updatedAt

@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createNewThingSubscriptionType from './createNewThingSubscriptionType';
+import createCreatedThingSubscriptionType from './createCreatedThingSubscriptionType';
 
-describe('createNewThingSubscriptionType', () => {
+describe('createCreatedThingSubscriptionType', () => {
   test('should create subscription type without index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,9 +17,9 @@ describe('createNewThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult = '  newExample: Example!';
+    const expectedResult = '  createdExample: Example!';
 
-    const result = createNewThingSubscriptionType(thingConfig);
+    const result = createCreatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -37,9 +37,9 @@ describe('createNewThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult = '  newExample(where: ExampleWhereInput): Example!';
+    const expectedResult = '  createdExample(where: ExampleWhereInput): Example!';
 
-    const result = createNewThingSubscriptionType(thingConfig);
+    const result = createCreatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

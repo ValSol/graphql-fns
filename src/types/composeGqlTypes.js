@@ -18,7 +18,7 @@ import createCreateManyThingsMutationType from './mutations/createCreateManyThin
 import createCreateThingMutationType from './mutations/createCreateThingMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
-import createNewThingSubscriptionType from './subscriptions/createNewThingSubscriptionType';
+import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
 import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPayloadType';
@@ -157,10 +157,10 @@ ${thingMutationTypes}
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (
-            checkInventory(['Subscription', 'newThing', name], inventory) &&
+            checkInventory(['Subscription', 'createdThing', name], inventory) &&
             checkInventory(['Mutation', 'createThing', name], inventory)
           ) {
-            prev.push(createNewThingSubscriptionType(thingConfig));
+            prev.push(createCreatedThingSubscriptionType(thingConfig));
           }
           if (
             checkInventory(['Subscription', 'updatedThing', name], inventory) &&

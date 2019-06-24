@@ -3,19 +3,19 @@ import type { ClientOptions, ThingConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
 import composeDeletedThingSubscriptionArgs from './composeDeletedThingSubscriptionArgs';
-import composeNewThingSubscriptionArgs from './composeNewThingSubscriptionArgs';
+import composeCreatedThingSubscriptionArgs from './composeCreatedThingSubscriptionArgs';
 import composeUpdatedThingSubscriptionArgs from './composeUpdatedThingSubscriptionArgs';
 
 const composeSubscription = (
-  subscriptionName: 'newThing' | 'deletedThing' | 'updatedThing',
+  subscriptionName: 'createdThing' | 'deletedThing' | 'updatedThing',
   thingConfig: ThingConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   let head;
 
   switch (subscriptionName) {
-    case 'newThing':
-      head = composeNewThingSubscriptionArgs(thingConfig);
+    case 'createdThing':
+      head = composeCreatedThingSubscriptionArgs(thingConfig);
       break;
 
     case 'deletedThing':

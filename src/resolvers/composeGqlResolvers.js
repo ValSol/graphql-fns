@@ -15,7 +15,7 @@ import createCreateManyThingsMutationResolver from './mutations/createCreateMany
 import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
-import createNewThingSubscriptionResolver from './subscriptions/createNewThingSubscriptionResolver';
+import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
 import createDeletedThingSubscriptionResolver from './subscriptions/createDeletedThingSubscriptionResolver';
 
@@ -91,13 +91,13 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
       }
 
       if (allowSubscriptions) {
-        const newThingSubscriptionResolver = createNewThingSubscriptionResolver(
+        const createdThingSubscriptionResolver = createCreatedThingSubscriptionResolver(
           thingConfig,
           generalConfig,
         );
-        if (newThingSubscriptionResolver) {
+        if (createdThingSubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Subscription[`new${name}`] = newThingSubscriptionResolver;
+          prev.Subscription[`created${name}`] = createdThingSubscriptionResolver;
         }
 
         const deletedThingSubscriptionResolver = createDeletedThingSubscriptionResolver(

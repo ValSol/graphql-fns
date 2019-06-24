@@ -196,7 +196,7 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
 type Subscription {
-  newExample(where: ExampleWhereInput): Example!
+  createdExample(where: ExampleWhereInput): Example!
   updatedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): UpdatedExamplePayload!
   deletedExample(where: ExampleWhereInput): Example!
 }`;
@@ -394,10 +394,10 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
-  newExample1: Example1!
+  createdExample1: Example1!
   updatedExample1(whereOne: Example1WhereOneInput): UpdatedExample1Payload!
   deletedExample1: Example1!
-  newExample2: Example2!
+  createdExample2: Example2!
   updatedExample2(whereOne: Example2WhereOneInput): UpdatedExample2Payload!
   deletedExample2: Example2!
 }`;
@@ -567,10 +567,10 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  newPerson: Person!
+  createdPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson: Person!
-  newPlace: Place!
+  createdPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
   deletedPlace: Place!
 }`;
@@ -714,7 +714,7 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
-  newPerson: Person!
+  createdPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson: Person!
 }`;
@@ -906,10 +906,10 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  newPerson: Person!
+  createdPerson: Person!
   updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
   deletedPerson: Person!
-  newPlace: Place!
+  createdPlace: Place!
   updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
   deletedPlace: Place!
 }`;

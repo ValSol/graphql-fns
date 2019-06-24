@@ -53,10 +53,10 @@ const createCreateThingMutationResolver = (
     const { _id } = thing;
     thing.id = _id;
 
-    if (checkInventory(['Subscription', 'newThing', name], inventory)) {
+    if (checkInventory(['Subscription', 'createdThing', name], inventory)) {
       const { pubsub } = context;
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-      pubsub.publish(`new-${name}`, { [`new${name}`]: thing });
+      pubsub.publish(`created-${name}`, { [`created${name}`]: thing });
     }
 
     return thing;

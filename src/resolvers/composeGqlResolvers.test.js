@@ -42,7 +42,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
-    expect(typeof result.Subscription.newExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
@@ -98,8 +98,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.updateExample2).toBe('function');
     expect(typeof result.Mutation.deleteExample1).toBe('function');
     expect(typeof result.Mutation.deleteExample2).toBe('function');
-    expect(typeof result.Subscription.newExample1.subscribe).toBe('function');
-    expect(typeof result.Subscription.newExample2.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdExample1.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdExample2.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample1.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample2.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedExample1.subscribe).toBe('function');
@@ -175,8 +175,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.enemies).toBe('function');
     expect(typeof result.Person.location).toBe('function');
     expect(typeof result.Person.favoritePlace).toBe('function');
-    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
-    expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
@@ -247,7 +247,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.deletePerson).toBe('function');
     expect(result.Query.Address).toBeUndefined();
     expect(result.Mutation.createAddress).toBeUndefined();
-    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
   });
@@ -336,8 +336,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Person.favoritePlace).toBe('function');
     expect(typeof result.Place.citizens).toBe('function');
     expect(typeof result.Place.visitors).toBe('function');
-    expect(typeof result.Subscription.newPerson.subscribe).toBe('function');
-    expect(typeof result.Subscription.newPlace.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdPerson.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPerson.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedPlace.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
@@ -411,7 +411,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Example.polygonField2).toBe('function');
     expect(typeof result.Example.polygonField3).toBe('function');
     expect(typeof result.Example.polygonField4).toBe('function');
-    expect(typeof result.Subscription.newExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });

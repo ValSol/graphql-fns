@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeNewThingSubscriptionArgs from './composeNewThingSubscriptionArgs';
+import composeCreatedThingSubscriptionArgs from './composeCreatedThingSubscriptionArgs';
 
-describe('composeNewThingSubscriptionArgs', () => {
+describe('composeCreatedThingSubscriptionArgs', () => {
   test('should compose things query without args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -16,9 +16,9 @@ describe('composeNewThingSubscriptionArgs', () => {
       ],
     };
 
-    const expectedResult = ['subscription newExample {', '  newExample {'];
+    const expectedResult = ['subscription createdExample {', '  createdExample {'];
 
-    const result = composeNewThingSubscriptionArgs(thingConfig);
+    const result = composeCreatedThingSubscriptionArgs(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -34,11 +34,11 @@ describe('composeNewThingSubscriptionArgs', () => {
     };
 
     const expectedResult = [
-      'subscription newExample($where: ExampleWhereInput) {',
-      '  newExample(where: $where) {',
+      'subscription createdExample($where: ExampleWhereInput) {',
+      '  createdExample(where: $where) {',
     ];
 
-    const result = composeNewThingSubscriptionArgs(thingConfig);
+    const result = composeCreatedThingSubscriptionArgs(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

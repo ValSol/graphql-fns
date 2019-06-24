@@ -5,9 +5,9 @@ import { withFilter } from 'graphql-subscriptions';
 import type { GeneralConfig, Subscribe, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
-import createNewThingFilter from './createNewThingFilter';
+import createCreatedThingFilter from './createCreatedThingFilter';
 
-const createNewThingSubscriptionResolver = (
+const createCreatedThingSubscriptionResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): Function | null => {
@@ -15,18 +15,18 @@ const createNewThingSubscriptionResolver = (
   const { name } = thingConfig;
   if (
     !checkInventory(['Mutation', 'createThing', name], inventory) ||
-    !checkInventory(['Subscription', 'newThing', name], inventory)
+    !checkInventory(['Subscription', 'createdThing', name], inventory)
   ) {
     return null;
   }
 
   const resolver: Subscribe = {
     subscribe: withFilter((_, args, { pubsub }) => {
-      return pubsub.asyncIterator(`new-${name}`);
-    }, createNewThingFilter(thingConfig)),
+      return pubsub.asyncIterator(`created-${name}`);
+    }, createCreatedThingFilter(thingConfig)),
   };
 
   return resolver;
 };
 
-export default createNewThingSubscriptionResolver;
+export default createCreatedThingSubscriptionResolver;

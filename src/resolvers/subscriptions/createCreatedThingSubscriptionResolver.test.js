@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import createNewThingSubscriptionResolver from './createNewThingSubscriptionResolver';
+import createCreatedThingSubscriptionResolver from './createCreatedThingSubscriptionResolver';
 
-describe('createNewThingSubscriptionResolver', () => {
+describe('createCreatedThingSubscriptionResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create mutation add thing type', () => {
     const thingConfig: ThingConfig = {
@@ -34,7 +34,7 @@ describe('createNewThingSubscriptionResolver', () => {
       ],
     };
 
-    const result = createNewThingSubscriptionResolver(thingConfig, generalConfig);
+    const result = createCreatedThingSubscriptionResolver(thingConfig, generalConfig);
     expect(result).not.toBeNull();
     if (result) expect(typeof result.subscribe).toBe('function'); // "if (result)" to prevent flowjs error
   });

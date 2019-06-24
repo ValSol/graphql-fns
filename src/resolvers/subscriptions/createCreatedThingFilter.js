@@ -3,9 +3,9 @@ import type { ThingConfig } from '../../flowTypes';
 
 import composeWhereFields from './composeWhereFields';
 
-type NewThingFilter = (payload: { [key: string]: Object }, args: Object) => boolean;
+type СreatedThingFilter = (payload: { [key: string]: Object }, args: Object) => boolean;
 
-const createNewThingFilter = (thingConfig: ThingConfig): NewThingFilter => {
+const createСreatedThingFilter = (thingConfig: ThingConfig): СreatedThingFilter => {
   const { name } = thingConfig;
   const whereFields = composeWhereFields(thingConfig);
 
@@ -14,7 +14,7 @@ const createNewThingFilter = (thingConfig: ThingConfig): NewThingFilter => {
 
     if (!where) return true;
 
-    const thing = payload[`new${name}`];
+    const thing = payload[`created${name}`];
 
     // the same code as in createDeletedThingFilter.js
     return !Object.keys(where).some(key => {
@@ -33,4 +33,4 @@ const createNewThingFilter = (thingConfig: ThingConfig): NewThingFilter => {
   return filter;
 };
 
-export default createNewThingFilter;
+export default createСreatedThingFilter;
