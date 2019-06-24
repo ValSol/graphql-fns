@@ -9,7 +9,7 @@ import updatePeriphery from './updatePeriphery';
 type Args = { data: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createCreateManyThingsMutationType = (
+const createCreateManyThingsMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): Function | null => {
@@ -73,4 +73,4 @@ const createCreateManyThingsMutationType = (
   return resolver;
 };
 
-export default createCreateManyThingsMutationType;
+export default createCreateManyThingsMutationResolver;
