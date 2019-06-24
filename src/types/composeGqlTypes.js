@@ -14,6 +14,7 @@ import createThingWhereOneInputType from './inputs/createThingWhereOneInputType'
 import createThingCountQueryType from './queries/createThingCountQueryType';
 import createThingQueryType from './queries/createThingQueryType';
 import createThingsQueryType from './queries/createThingsQueryType';
+import createCreateManyThingsMutationType from './mutations/createCreateManyThingsMutationType';
 import createCreateThingMutationType from './mutations/createCreateThingMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
@@ -113,6 +114,10 @@ ${thingQueryTypes}
           const { name } = thingConfig;
           if (checkInventory(['Mutation', 'createThing', name], inventory)) {
             prev.push(createCreateThingMutationType(thingConfig));
+
+            if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
+              prev.push(createCreateManyThingsMutationType(thingConfig));
+            }
           }
           if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
             prev.push(createUpdateThingMutationType(thingConfig));

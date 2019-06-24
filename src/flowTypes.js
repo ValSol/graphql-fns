@@ -225,11 +225,11 @@ export type GeneralConfig = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 type TwoSegmentInventoryChain =
   | ['Query', 'thing' | 'things' | 'thingCount']
-  | ['Mutation', 'createThing' | 'updateThing' | 'deleteThing']
-  | ['Subscription', 'newThing'];
+  | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing']
+  | ['Subscription', 'newThing' | 'updatedThing' | 'deletedThing'];
 type ThreeSegmentInventoryChain =
   | ['Query', 'thing' | 'things' | 'thingCount', string]
-  | ['Mutation', 'createThing' | 'updateThing' | 'deleteThing', string]
+  | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing', string]
   | ['Subscription', 'newThing' | 'updatedThing' | 'deletedThing', string];
 export type InventoryСhain =
   | OneSegmentInventoryChain

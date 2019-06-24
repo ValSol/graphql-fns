@@ -191,6 +191,7 @@ type Query {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
+  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
@@ -384,9 +385,11 @@ type Query {
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
+  createManyExample1S(data: [Example1CreateInput!]!): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
+  createManyExample2S(data: [Example2CreateInput!]!): [Example2!]!
   updateExample2(whereOne: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
@@ -555,9 +558,11 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
+  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
@@ -704,6 +709,7 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
@@ -891,9 +897,11 @@ type Query {
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
+  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
+  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
@@ -987,6 +995,7 @@ input ExampleWhereOneInput {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
+  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }`;
