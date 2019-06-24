@@ -21,7 +21,12 @@ const createCreateThingMutationResolver = (
     const { data } = args;
     const { mongooseConn } = context;
 
-    const { core, periphery, single, first } = processCreateInputData(data, thingConfig);
+    const { core, periphery, single, first } = processCreateInputData(
+      data,
+      null,
+      null,
+      thingConfig,
+    );
 
     const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(name, thingSchema);

@@ -90,7 +90,7 @@ describe('processCreateInputData', () => {
         booleanField1: false,
       },
     };
-    const result = processCreateInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -154,7 +154,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -245,7 +245,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -321,7 +321,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -461,7 +461,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -664,7 +664,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, personConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, personConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -772,7 +772,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    const result = processCreateInputData(data, thingConfig, mongooseTypes);
+    const result = processCreateInputData(data, null, null, thingConfig, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });

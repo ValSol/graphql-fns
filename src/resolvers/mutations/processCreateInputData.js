@@ -16,12 +16,14 @@ type ProcessCreateInputDataResult = {
 
 const processCreateInputData = (
   data: Object,
+  initialCore: null | Map<ThingConfig, Array<Object>>,
+  initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes: Object = Types,
 ): Object => {
-  const core = new Map();
-  const periphery = new Map();
+  const core = initialCore || new Map();
+  const periphery = initialPeriphery || new Map();
   const prepared = [{ data: { ...data, _id: mongooseTypes.ObjectId() }, config: thingConfig }];
 
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
