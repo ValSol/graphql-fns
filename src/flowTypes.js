@@ -198,15 +198,12 @@ type thingNamesList = null | Array<string>;
 
 type InverntoryOptions = {
   Query?: null | {
-    thing?: thingNamesList,
-    things?: thingNamesList,
-    thingCount?: thingNamesList,
+    // 'queryName' may be: thing, things, thingCount, or any custom query names
+    [queryName: string]: thingNamesList,
   },
   Mutation?: null | {
-    createManyThings?: thingNamesList,
-    createThing?: thingNamesList,
-    updateThing?: thingNamesList,
-    deleteThing?: thingNamesList,
+    // 'mutationName' may be: createManyThings, createThing, updateThing, deleteThing or any custom mutation names
+    [mutationName: string]: thingNamesList,
   },
   Subscription?: null | {
     createdThing?: thingNamesList,
@@ -221,19 +218,62 @@ export type Inventory = {
 
 export type GeneralConfig = {
   thingConfigs: Array<ThingConfig>,
+  custom?: {
+    Query?: {
+      [customQueryName: string]: {
+        name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+        argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+        type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      },
+    },
+    Mutation?: {
+      [customMutationName: string]: {
+        name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+        argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+        type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      },
+    },
+  },
   enums?: Enums,
   inventory?: Inventory,
 };
 
+export type SignatureMethods = {
+  // the same code as used above in GeneralConfig
+  name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+  argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
+  type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+};
+
+export type ServersideConfig = {
+  Query?: {
+    [customQueryName: string]: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Function,
+  },
+  Mutation?: {
+    [customMutationName: string]: (
+      thingConfig: ThingConfig,
+      generalConfig: GeneralConfig,
+    ) => Function,
+  },
+};
+
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
-type TwoSegmentInventoryChain =
-  | ['Query', 'thing' | 'things' | 'thingCount']
-  | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing']
+export type TwoSegmentInventoryChain =
+  | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
+  | ['Mutation', string] // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing' or custom mutation
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 type ThreeSegmentInventoryChain =
-  | ['Query', 'thing' | 'things' | 'thingCount', string]
-  | ['Mutation', 'createThing' | 'createManyThings' | 'updateThing' | 'deleteThing', string]
-  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string];
+  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
+  | [
+      'Mutation',
+      string, // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing' or custom mutation
+      string, //  second "string" for thing name
+    ]
+  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string]; //  "string" for thing name
+
 export type InventoryСhain =
   | OneSegmentInventoryChain
   | TwoSegmentInventoryChain
@@ -275,6 +315,10 @@ export type ClientOptions = {
   depth?: number,
   include?: Object,
   exclude?: Object,
+  // custom mutation, query or subscription attributes
+  // 1st string - argName, 2nd - prefix of argType, 3d - suffix of argType
+  name?: string,
+  args?: Array<[string, string, string]>,
 };
 
 export type ClientFieldsOptions = {
