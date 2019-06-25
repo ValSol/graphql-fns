@@ -1,11 +1,17 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
+import type {
+  GeneralConfig,
+  Inventory,
+  ServersideConfig,
+  SignatureMethods,
+  ThingConfig,
+} from '../flowTypes';
 
 import composeGqlResolvers from './composeGqlResolvers';
 
 describe('composeGqlResolvers', () => {
-  test('should create things types for one thing', () => {
+  test('should create resolvers for one thing', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -47,7 +53,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
-  test('should create things types for two things', () => {
+  test('should create resolvers for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
       textFields: [
@@ -106,7 +112,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample2.subscribe).toBe('function');
   });
 
-  test('should create things types for two things with relational things', () => {
+  test('should create resolvers for two things with relational things', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [
@@ -183,7 +189,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
-  test('should create things types for two things with embedded fields', () => {
+  test('should create resolvers for two things with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
       embedded: true,
@@ -252,7 +258,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
   });
 
-  test('should create things types for two things with duplex things', () => {
+  test('should create resolvers for two things with duplex things', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -344,7 +350,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
-  test('should create things types for two things with geospatial fields', () => {
+  test('should create resolvers for two things with geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       geospatialFields: [
@@ -416,7 +422,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
-  test('should create things types for one thing with inventory for only queries', () => {
+  test('should create resolvers for one thing with inventory for only queries', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -436,7 +442,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create things types for one thing with inventory for only mutations', () => {
+  test('should create resolvers for one thing with inventory for only mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -457,7 +463,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create things types for one thing with inventory for only thing queries', () => {
+  test('should create resolvers for one thing with inventory for only thing queries', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -477,7 +483,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create things types for one thing with inventory for only mutations', () => {
+  test('should create resolvers for one thing with inventory for only mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -496,5 +502,76 @@ describe('composeGqlResolvers', () => {
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();
     expect(result.Subscription).toBeUndefined();
+  });
+
+  test('should create resolvers for one thing with inventory for only one custom mutation', () => {
+    const createCustomLoadThingMutationResolver = () => () => 'test passed!';
+    const signatureMethods: SignatureMethods = {
+      name: ({ name }) => `load${name}`,
+      argNames: () => ['path'],
+      argTypes: () => ['String!'],
+      type: ({ name }) => name,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: { loadThing: null } } };
+    const custom = { Mutation: { loadThing: signatureMethods } };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const serversideConfig: ServersideConfig = {
+      Mutation: { loadThing: createCustomLoadThingMutationResolver },
+    };
+    const result = composeGqlResolvers(generalConfig, serversideConfig);
+    expect(result.Query).toBeUndefined();
+    expect(result.Mutation.createManyExamples).toBeUndefined();
+    expect(result.Mutation.createExample).toBeUndefined();
+    expect(result.Mutation.updateExample).toBeUndefined();
+    expect(result.Mutation.deleteExample).toBeUndefined();
+    expect(result.Subscription).toBeUndefined();
+    expect(typeof result.Mutation.loadExample).toBe('function');
+    expect(result.Mutation.loadExample()).toBe('test passed!');
+  });
+
+  test('should create resolvers for one thing with inventory for only one custom Query', () => {
+    const createCustomLoadThingMutationResolver = () => () => 'test passed!';
+    const signatureMethods: SignatureMethods = {
+      name: ({ name }) => `get${name}`,
+      argNames: () => ['path'],
+      argTypes: () => ['String!'],
+      type: ({ name }) => name,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { getThing: null } } };
+    const custom = { Query: { getThing: signatureMethods } };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const serversideConfig: ServersideConfig = {
+      Query: { getThing: createCustomLoadThingMutationResolver },
+    };
+    const result = composeGqlResolvers(generalConfig, serversideConfig);
+    expect(result.Mutation).toBeUndefined();
+    expect(result.Query.ExampleCount).toBeUndefined();
+    expect(result.Query.Example).toBeUndefined();
+    expect(result.Query.Examples).toBeUndefined();
+    expect(result.Subscription).toBeUndefined();
+    expect(typeof result.Query.getExample).toBe('function');
+    expect(result.Query.getExample()).toBe('test passed!');
   });
 });

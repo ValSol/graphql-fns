@@ -3,9 +3,10 @@
 import pluralize from 'pluralize';
 import { DateTime } from '@okgrow/graphql-scalars';
 
-import type { GeneralConfig } from '../flowTypes';
+import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
 import createThingsQueryResolver from './queries/createThingsQueryResolver';
@@ -19,8 +20,16 @@ import createCreatedThingSubscriptionResolver from './subscriptions/createCreate
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
 import createDeletedThingSubscriptionResolver from './subscriptions/createDeletedThingSubscriptionResolver';
 
-const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
-  const { thingConfigs, inventory } = generalConfig;
+const composeGqlResolvers = (
+  generalConfig: GeneralConfig,
+  serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
+): Object => {
+  const { thingConfigs, custom, inventory } = generalConfig;
+
+  // eslint-disable-next-line no-nested-ternary
+  const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
+  // eslint-disable-next-line no-nested-ternary
+  const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -50,6 +59,24 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
         const thingsQueryResolver = createThingsQueryResolver(thingConfig, generalConfig);
         // eslint-disable-next-line no-param-reassign
         if (thingsQueryResolver) prev.Query[pluralize(name)] = thingsQueryResolver;
+
+        const customQueryNames = Object.keys(customQuery);
+
+        customQueryNames.forEach(customName => {
+          const customQueryResolver = createCustomResolver(
+            'Query',
+            customName,
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (customQueryResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Query[
+              customQuery[customName].name(thingConfig, generalConfig)
+            ] = customQueryResolver;
+          }
+        });
       }
 
       if (allowMutations) {
@@ -88,6 +115,24 @@ const composeGqlResolvers = (generalConfig: GeneralConfig): Object => {
           // eslint-disable-next-line no-param-reassign
           prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
         }
+
+        const customMutationNames = Object.keys(customMutation);
+
+        customMutationNames.forEach(customName => {
+          const customMutationResolver = createCustomResolver(
+            'Mutation',
+            customName,
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (customMutationResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Mutation[
+              customMutation[customName].name(thingConfig, generalConfig)
+            ] = customMutationResolver;
+          }
+        });
       }
 
       if (allowSubscriptions) {
