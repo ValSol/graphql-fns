@@ -1,11 +1,28 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, SignatureMethods, ThingConfig } from '../../flowTypes';
 
 import composeMutation from './composeMutation';
 
 describe('composeMutation', () => {
+  const signatureMethods: SignatureMethods = {
+    name(thingConfig) {
+      const { name } = thingConfig;
+      return `load${name}`;
+    },
+    argNames() {
+      return ['path'];
+    },
+    argTypes() {
+      return ['String!'];
+    },
+    type(thingConfig) {
+      const { name } = thingConfig;
+      return `[${name}!]!`;
+    },
+  };
+
   const thingConfig: ThingConfig = {
     name: 'Example',
     textFields: [
@@ -14,6 +31,10 @@ describe('composeMutation', () => {
       },
     ],
   };
+  const thingConfigs = [thingConfig];
+  const custom = { Mutation: { loadThing: signatureMethods } };
+  const generalConfig: GeneralConfig = { thingConfigs, custom };
+
   test('should compose createThing mutation', () => {
     const mutationName = 'createThing';
     const expectedResult = `mutation createExample($data: ExampleCreateInput!) {
@@ -25,7 +46,7 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig);
+    const result = composeMutation(mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
@@ -40,7 +61,7 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig);
+    const result = composeMutation(mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
@@ -55,7 +76,22 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig);
+    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
+  test('should compose custom loadThing mutation', () => {
+    const mutationName = 'loadThing';
+    const expectedResult = `mutation loadExample($path: String!) {
+  loadExample(path: $path) {
+    id
+    createdAt
+    updatedAt
+    textField
+  }
+}`;
+
+    const result = composeMutation(mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

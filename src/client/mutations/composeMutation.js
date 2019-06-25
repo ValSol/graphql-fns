@@ -1,14 +1,17 @@
 // @flow
-import type { ClientOptions, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
 import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
+import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
+
 import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
 import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
 
 const composeMutation = (
-  mutationName: 'createThing' | 'deleteThing' | 'updateThing',
+  mutationName: string,
   thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   let head;
@@ -27,7 +30,7 @@ const composeMutation = (
       break;
 
     default:
-      throw new TypeError(`Invalid mutationName value "${mutationName}"!`);
+      head = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
   }
 
   const fields = composeFields(thingConfig, { ...clientOptions, shift: 2 });
