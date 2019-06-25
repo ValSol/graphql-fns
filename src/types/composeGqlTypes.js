@@ -3,6 +3,7 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import composeSignature from './composeSignature';
 import createThingType from './createThingType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
@@ -27,7 +28,12 @@ import composeEnumTypes from './specialized/composeEnumTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs, inventory } = generalConfig;
+  const { thingConfigs, custom, inventory } = generalConfig;
+
+  // eslint-disable-next-line no-nested-ternary
+  const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
+  // eslint-disable-next-line no-nested-ternary
+  const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -83,55 +89,77 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     }, [])
     .join('\n');
 
-  const thingQueryTypes = allowQueries
-    ? thingConfigs
-        .filter(({ embedded }) => !embedded)
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
-          if (checkInventory(['Query', 'thing', name], inventory)) {
-            prev.push(createThingQueryType(thingConfig));
+  const thingQueryTypes = [];
+  if (allowQueries) {
+    const customQueryNames = Object.keys(customQuery);
+
+    thingConfigs
+      .filter(({ embedded }) => !embedded)
+      .reduce((prev, thingConfig) => {
+        const { name } = thingConfig;
+        if (checkInventory(['Query', 'thing', name], inventory)) {
+          prev.push(createThingQueryType(thingConfig));
+        }
+        if (checkInventory(['Query', 'things', name], inventory)) {
+          prev.push(createThingsQueryType(thingConfig));
+        }
+        if (checkInventory(['Query', 'thingCount', name], inventory)) {
+          prev.push(createThingCountQueryType(thingConfig));
+        }
+
+        customQueryNames.forEach(customName => {
+          if (checkInventory(['Query', customName, name], inventory)) {
+            prev.push(`  ${composeSignature(customQuery[customName], thingConfig, generalConfig)}`);
           }
-          if (checkInventory(['Query', 'things', name], inventory)) {
-            prev.push(createThingsQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'thingCount', name], inventory)) {
-            prev.push(createThingCountQueryType(thingConfig));
-          }
-          return prev;
-        }, [])
-        .join('\n')
-    : '';
-  const thingQueryTypes2 = allowQueries
+        });
+
+        return prev;
+      }, thingQueryTypes);
+  }
+
+  const thingQueryTypes2 = thingQueryTypes.length
     ? `type Query {
-${thingQueryTypes}
+${thingQueryTypes.join('\n')}
 }`
     : '';
 
-  const thingMutationTypes = allowMutations
-    ? thingConfigs
-        .filter(({ embedded }) => !embedded)
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
-          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
-            prev.push(createCreateThingMutationType(thingConfig));
+  const thingMutationTypes = [];
+  if (allowMutations) {
+    const customMutationNames = Object.keys(customMutation);
 
-            if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
-              prev.push(createCreateManyThingsMutationType(thingConfig));
-            }
+    thingConfigs
+      .filter(({ embedded }) => !embedded)
+      .reduce((prev, thingConfig) => {
+        const { name } = thingConfig;
+        if (checkInventory(['Mutation', 'createThing', name], inventory)) {
+          prev.push(createCreateThingMutationType(thingConfig));
+
+          if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
+            prev.push(createCreateManyThingsMutationType(thingConfig));
           }
-          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
-            prev.push(createUpdateThingMutationType(thingConfig));
+        }
+        if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
+          prev.push(createUpdateThingMutationType(thingConfig));
+        }
+        if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
+          prev.push(createDeleteThingMutationType(thingConfig));
+        }
+
+        customMutationNames.forEach(customName => {
+          if (checkInventory(['Mutation', customName, name], inventory)) {
+            prev.push(
+              `  ${composeSignature(customMutation[customName], thingConfig, generalConfig)}`,
+            );
           }
-          if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
-            prev.push(createDeleteThingMutationType(thingConfig));
-          }
-          return prev;
-        }, [])
-        .join('\n')
-    : '';
-  const thingMutationTypes2 = allowMutations
+        });
+
+        return prev;
+      }, thingMutationTypes);
+  }
+
+  const thingMutationTypes2 = thingMutationTypes.length
     ? `type Mutation {
-${thingMutationTypes}
+${thingMutationTypes.join('\n')}
 }`
     : '';
 

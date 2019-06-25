@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, Inventory, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, Inventory, SignatureMethods, ThingConfig } from '../flowTypes';
 
 import composeGqlTypes from './composeGqlTypes';
 
@@ -1097,7 +1097,7 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only mutations', () => {
+  test('should create things types with inventory for only mutation cretateThing', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -1130,6 +1130,80 @@ input ExampleCreateChildrenInput {
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only one custom mutation loadThing', () => {
+    const signatureMethods: SignatureMethods = {
+      name: ({ name }) => `load${name}`,
+      argNames: () => ['path'],
+      argTypes: () => ['String!'],
+      type: ({ name }) => name,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Mutation: { loadThing: null } } };
+    const custom = { Mutation: { loadThing: signatureMethods } };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type Mutation {
+  loadExample(path: String!): Example
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with inventory for only one custom query getThing', () => {
+    const signatureMethods: SignatureMethods = {
+      name: ({ name }) => `get${name}`,
+      argNames: () => ['path'],
+      argTypes: () => ['String!'],
+      type: ({ name }) => name,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { getThing: null } } };
+    const custom = { Query: { getThing: signatureMethods } };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type Query {
+  getExample(path: String!): Example
 }`;
 
     const result = composeGqlTypes(generalConfig);
