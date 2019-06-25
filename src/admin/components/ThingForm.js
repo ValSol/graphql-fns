@@ -58,12 +58,12 @@ const ThingForm = (props: Props) => {
     createdAt: null,
     updatedAt: null,
   };
-  const thingQuery = gql(composeQuery('thing', thingConfig, { exclude }));
+  const thingQuery = gql(composeQuery('thing', thingConfig, generalConfig, { exclude }));
   const thingMutation = id // eslint-disable-line no-nested-ternary
     ? toDelete
-      ? gql(composeMutation('deleteThing', thingConfig, { exclude }))
-      : gql(composeMutation('updateThing', thingConfig, { exclude }))
-    : gql(composeMutation('createThing', thingConfig, { include: { id: null } }));
+      ? gql(composeMutation('deleteThing', thingConfig, generalConfig, { exclude }))
+      : gql(composeMutation('updateThing', thingConfig, generalConfig, { exclude }))
+    : gql(composeMutation('createThing', thingConfig, generalConfig, { include: { id: null } }));
 
   // const formikFragment = composeFormikFragment(thingConfig, generalConfig, toDelete);
 

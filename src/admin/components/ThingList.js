@@ -50,7 +50,7 @@ function ThingList(props: Props) {
     { id: null },
   );
 
-  const thingQuery = gql(composeQuery('things', thingConfig, { include }));
+  const thingQuery = gql(composeQuery('things', thingConfig, null, { include }));
 
   const columns2 = [
     {

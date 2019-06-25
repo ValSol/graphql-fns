@@ -129,7 +129,7 @@ const createValidationSchema = (
           `Unacceptable unique "${name}" field in embedded thing "${thingName}"!`,
         );
       }
-      const query = gql(composeQuery('thing', thingConfig, { include: { id: null } }));
+      const query = gql(composeQuery('thing', thingConfig, null, { include: { id: null } }));
       // eslint-disable-next-line no-param-reassign
       prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
         value,
@@ -143,7 +143,7 @@ const createValidationSchema = (
     }
 
     if (['duplexFields', 'relationalFields'].includes(kind)) {
-      const query = gql(composeQuery('thing', config, { include: { id: null } }));
+      const query = gql(composeQuery('thing', config, null, { include: { id: null } }));
       const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign
       prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async function test2(value) {

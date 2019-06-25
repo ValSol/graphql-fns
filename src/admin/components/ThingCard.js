@@ -59,7 +59,7 @@ const ThingCard = (props: Props) => {
     router: { pathname },
   } = props;
 
-  const thingCountQuery = gql(composeQuery('thingCount', config));
+  const thingCountQuery = gql(composeQuery('thingCount', config, generalConfig));
 
   const cardContent = composeThingCardContent(config, generalConfig);
 
