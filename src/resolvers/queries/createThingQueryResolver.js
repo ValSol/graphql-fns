@@ -32,7 +32,7 @@ const createThingQueryResolver = (
     }
     const conditions = whereOne.id ? { _id: whereOne.id } : whereOne;
 
-    const projection = getProjectionFromInfo(info);
+    const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
     const thing = await Thing.findOne(conditions, projection, { lean: true });
     if (!thing) return null;

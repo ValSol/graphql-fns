@@ -34,7 +34,7 @@ const createThingsQueryResolver = (
     const Thing = mongooseConn.model(name, thingSchema);
     const composedNear = near && composeNearInput(near);
     const conditions = composedNear || where || {};
-    const projection = getProjectionFromInfo(info);
+    const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
     let query = Thing.find(conditions, projection, { lean: true });
 
