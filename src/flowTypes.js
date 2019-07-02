@@ -120,6 +120,7 @@ export type ThingConfig = {
   floatFields?: Array<FloatField>,
   textFields?: Array<TextField>,
 
+  search?: Array<string>, // array of search field names
   form?: Array<FormField>,
   list?: Array<ListColumn>,
 };
