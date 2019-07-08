@@ -153,7 +153,7 @@ export type ThingConfigObject = {
   [fieldName: string]: {
     [property: string]: any,
     name: string,
-    kind:
+    kind:  // eslint-disable-line flowtype/space-after-type-colon
       | 'booleanFields'
       | 'dateTimeFields'
       | 'duplexFields'
@@ -168,7 +168,7 @@ export type ThingConfigObject = {
 };
 
 export type FlatFormikFields = Array<{
-  attributes:
+  attributes:  // eslint-disable-line flowtype/space-after-type-colon
     | BooleanField
     | DateTimeField
     | DuplexField
@@ -180,7 +180,7 @@ export type FlatFormikFields = Array<{
     | RelationalField
     | TextField,
   child?: FlatFormikFields,
-  kind:
+  kind:  // eslint-disable-line flowtype/space-after-type-colon
     | 'booleanFields'
     | 'dateTimeFields'
     | 'duplexFields'
@@ -280,6 +280,7 @@ export type InventoryСhain =
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;
 
+// eslint-disable-next-line flowtype/generic-spacing
 export type Periphery = Map<
   ThingConfig,
   {
