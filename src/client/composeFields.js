@@ -9,12 +9,16 @@ const includeField = (name: string, include: void | Object, exclude: void | Obje
 const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): Array<string> => {
   const {
     booleanFields,
+    dateTimeFields,
     duplexFields,
     embedded,
     embeddedFields,
     enumFields,
+    floatFields,
+    intFields,
     geospatialFields,
     relationalFields,
+    textFields,
   } = thingConfig;
   const { shift, depth, include, exclude } = options;
 
@@ -26,19 +30,41 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
     if (includeField('updatedAt', include, exclude)) result.push(`${'  '.repeat(shift)}updatedAt`);
   }
 
-  const scalarFields = ['textFields', 'dateTimeFields', 'intFields', 'floatFields'];
+  if (textFields) {
+    textFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name}`);
+      }
+      return prev;
+    }, result);
+  }
 
-  scalarFields.reduce((prev, fieldTypeName) => {
-    if (thingConfig[fieldTypeName]) {
-      thingConfig[fieldTypeName].forEach(({ name }) => {
-        if (includeField(name, include, exclude)) {
-          // eslint-disable-next-line no-param-reassign
-          prev.push(`${'  '.repeat(shift)}${name}`);
-        }
-      });
-    }
-    return prev;
-  }, result);
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name}`);
+      }
+      return prev;
+    }, result);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name}`);
+      }
+      return prev;
+    }, result);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name}`);
+      }
+      return prev;
+    }, result);
+  }
 
   if (booleanFields) {
     booleanFields.reduce((prev, { name }) => {

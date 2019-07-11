@@ -4,75 +4,105 @@ import type { ThingConfig, ThingConfigObject } from '../flowTypes';
 const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
   const {
     booleanFields,
+    dateTimeFields,
     duplexFields,
     embeddedFields,
     enumFields,
+    floatFields,
     geospatialFields,
+    intFields,
     relationalFields,
+    textFields,
   } = thingConfig;
 
-  const scalarFieldTypes = ['textFields', 'intFields', 'floatFields', 'dateTimeFields'];
-  const result = scalarFieldTypes.reduce((prev, kind) => {
-    if (thingConfig[kind]) {
-      thingConfig[kind].forEach(item => {
-        const { name } = item;
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = { ...item, kind };
-      });
-    }
-    return prev;
-  }, {});
+  const result = {};
+
+  if (textFields) {
+    textFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'textFields' };
+      return prev;
+    }, result);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'intFields' };
+      return prev;
+    }, result);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'floatFields' };
+      return prev;
+    }, result);
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'dateTimeFields' };
+      return prev;
+    }, result);
+  }
 
   if (booleanFields) {
-    booleanFields.reduce((prev, item) => {
-      const { name } = item;
+    booleanFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'booleanFields' };
+      prev[name] = { attributes, kind: 'booleanFields' };
       return prev;
     }, result);
   }
 
   if (embeddedFields) {
-    embeddedFields.reduce((prev, item) => {
-      const { name } = item;
+    embeddedFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'embeddedFields' };
+      prev[name] = { attributes, kind: 'embeddedFields' };
       return prev;
     }, result);
   }
 
   if (enumFields) {
-    enumFields.reduce((prev, item) => {
-      const { name } = item;
+    enumFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'enumFields' };
+      prev[name] = { attributes, kind: 'enumFields' };
       return prev;
     }, result);
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, item) => {
-      const { name } = item;
+    geospatialFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'geospatialFields' };
+      prev[name] = { attributes, kind: 'geospatialFields' };
       return prev;
     }, result);
   }
 
   if (duplexFields) {
-    duplexFields.reduce((prev, item) => {
-      const { name } = item;
+    duplexFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'duplexFields' };
+      prev[name] = { attributes, kind: 'duplexFields' };
       return prev;
     }, result);
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, item) => {
-      const { name } = item;
+    relationalFields.reduce((prev, attributes) => {
+      const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = { ...item, kind: 'relationalFields' };
+      prev[name] = { attributes, kind: 'relationalFields' };
       return prev;
     }, result);
   }

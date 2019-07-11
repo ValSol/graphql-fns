@@ -3,23 +3,37 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
-  const { name } = thingConfig;
+  const { dateTimeFields, floatFields, intFields, name, textFields } = thingConfig;
 
-  const scalarFieldTypes = [
-    { fieldTypeName: 'textFields', gqlType: 'ID' },
-    { fieldTypeName: 'intFields', gqlType: 'Int' },
-    { fieldTypeName: 'floatFields', gqlType: 'Float' },
-    { fieldTypeName: 'dateTimeFields', gqlType: 'DateTime' },
-  ];
+  const fieldLines = [];
 
-  const fieldLines = scalarFieldTypes.reduce((prev, { fieldTypeName, gqlType }) => {
-    if (thingConfig[fieldTypeName]) {
-      thingConfig[fieldTypeName]
-        .filter(({ unique }) => unique)
-        .forEach(({ name: name2 }) => prev.push(`  ${name2}: ${gqlType}`));
-    }
-    return prev;
-  }, []);
+  if (textFields) {
+    textFields.reduce((prev, { name: name2, unique }) => {
+      if (unique) prev.push(`  ${name2}: ID`);
+      return prev;
+    }, fieldLines);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { name: name2, unique }) => {
+      if (unique) prev.push(`  ${name2}: Int`);
+      return prev;
+    }, fieldLines);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { name: name2, unique }) => {
+      if (unique) prev.push(`  ${name2}: Float`);
+      return prev;
+    }, fieldLines);
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, { name: name2, unique }) => {
+      if (unique) prev.push(`  ${name2}: DateTime`);
+      return prev;
+    }, fieldLines);
+  }
 
   const uniqueFields = fieldLines.join('\n');
 

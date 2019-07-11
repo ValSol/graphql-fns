@@ -16,13 +16,17 @@ const coerceDataToGql = (
   const fieldsObject = composeFieldsObject(thingConfig);
 
   return Object.keys(data).reduce((prev, key) => {
-    const { array, config, geospatialType, kind } = fieldsObject[key];
+    const {
+      attributes: { array },
+      kind,
+    } = fieldsObject[key];
 
     if (prevData && deepEqual(data[key], prevData[key])) {
       return prev;
     }
 
-    if (kind === 'embeddedFields') {
+    if (fieldsObject[key].kind === 'embeddedFields') {
+      const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map(item => coerceDataToGql(item, null, config));
@@ -47,7 +51,8 @@ const coerceDataToGql = (
       } else {
         prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'geospatialFields') {
+    } else if (fieldsObject[key].kind === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[key].attributes;
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign

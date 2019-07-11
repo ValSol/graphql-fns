@@ -78,50 +78,70 @@ describe('composeFieldsObject', () => {
 
     const expectedResult: ThingConfigObject = {
       booleanField: {
-        name: 'booleanField',
         kind: 'booleanFields',
+        attributes: {
+          name: 'booleanField',
+        },
       },
       dateTimeField: {
-        name: 'dateTimeField',
         kind: 'dateTimeFields',
+        attributes: {
+          name: 'dateTimeField',
+        },
       },
       duplexField: {
-        name: 'duplexField',
-        config: thingConfig,
-        oppositeName: 'duplexField',
         kind: 'duplexFields',
+        attributes: {
+          name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexField',
+        },
       },
       embeddedField: {
-        name: 'embeddedField',
-        config: embeddedConfig,
         kind: 'embeddedFields',
+        attributes: {
+          name: 'embeddedField',
+          config: embeddedConfig,
+        },
       },
       enumField: {
-        name: 'enumField',
-        enumName: 'enumeration',
         kind: 'enumFields',
+        attributes: {
+          name: 'enumField',
+          enumName: 'enumeration',
+        },
       },
       floatField: {
-        name: 'floatField',
         kind: 'floatFields',
+        attributes: {
+          name: 'floatField',
+        },
       },
       geospatialField: {
-        name: 'geospatialField',
-        geospatialType: 'Point',
         kind: 'geospatialFields',
+        attributes: {
+          name: 'geospatialField',
+          geospatialType: 'Point',
+        },
       },
       intField: {
-        name: 'intField',
         kind: 'intFields',
+        attributes: {
+          name: 'intField',
+        },
       },
       relationalField: {
-        name: 'relationalField',
-        config: thingConfig,
         kind: 'relationalFields',
+        attributes: {
+          name: 'relationalField',
+          config: thingConfig,
+        },
       },
       textField: {
-        name: 'textField',
         kind: 'textFields',
+        attributes: {
+          name: 'textField',
+        },
       },
     };
 

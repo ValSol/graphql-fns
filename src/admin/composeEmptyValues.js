@@ -10,15 +10,20 @@ const composeEmptyValues = (thingConfig: ThingConfig): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    const { array, config, geospatialType, kind } = fieldsObject[name];
+    const {
+      attributes: { array },
+      kind,
+    } = fieldsObject[name];
 
     if (array) {
       prev[name] = []; // eslint-disable-line no-param-reassign
-    } else if (kind === 'embeddedFields') {
+    } else if (fieldsObject[name].kind === 'embeddedFields') {
+      const { config } = fieldsObject[name].attributes;
       prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
     } else if (kind === 'booleanFields') {
       prev[name] = false; // eslint-disable-line no-param-reassign
-    } else if (kind === 'geospatialFields') {
+    } else if (fieldsObject[name].kind === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[name].attributes;
       if (geospatialType === 'Point') {
         prev[name] = { longitude: '', latitude: '' }; // eslint-disable-line no-param-reassign
       } else if (geospatialType === 'Polygon') {

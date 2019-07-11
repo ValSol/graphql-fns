@@ -52,16 +52,20 @@ const createValidationSchema = (
   apolloClient: Object,
   id?: string,
 ): Object => {
-  const { form, name: thingName } = thingConfig;
+  const { form, name: thingName, embedded } = thingConfig;
   const formFields = form || arrangeFormFields(thingConfig);
   const fieldsObject = composeFieldsObject(thingConfig);
   const object = formFields.reduce((prev, { name }) => {
     if (!fieldsObject[name]) return prev; // ignore: composeFlatFormikFields, crteatedAt, updatedAt
 
-    const { array, config, embedded, geospatialType, kind, required, unique } = fieldsObject[name];
+    const {
+      attributes: { array, required },
+      kind,
+    } = fieldsObject[name];
 
-    switch (kind) {
+    switch (fieldsObject[name].kind) {
       case 'embeddedFields':
+        const { config } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         prev[name] = createValidationSchema(config, apolloClient, id); // eslint-disable-line no-param-reassign
         break;
       case 'textFields':
@@ -77,6 +81,7 @@ const createValidationSchema = (
         prev[name] = floatSchema(); // eslint-disable-line no-param-reassign
         break;
       case 'geospatialFields':
+        const { geospatialType } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         if (geospatialType === 'Point') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = geospatialPointSchema({ array, required });
@@ -123,26 +128,38 @@ const createValidationSchema = (
       prev[name] = prev[name].required('Required'); // eslint-disable-line no-param-reassign
     }
 
-    if (unique) {
-      if (embedded) {
-        throw new TypeError(
-          `Unacceptable unique "${name}" field in embedded thing "${thingName}"!`,
-        );
+    if (
+      fieldsObject[name].kind === 'dateTimeFields' ||
+      fieldsObject[name].kind === 'intFields' ||
+      fieldsObject[name].kind === 'floatFields' ||
+      fieldsObject[name].kind === 'textFields'
+    ) {
+      const { unique } = fieldsObject[name].attributes;
+      if (unique) {
+        if (embedded) {
+          throw new TypeError(
+            `Unacceptable unique "${name}" field in embedded thing "${thingName}"!`,
+          );
+        }
+        const query = gql(composeQuery('thing', thingConfig, null, { include: { id: null } }));
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
+          value,
+        ) {
+          if (!value) return true;
+          const whereOne = { [name]: value };
+          const { data } = await apolloClient.query({ query, variables: { whereOne } });
+          if (data && data[thingName] && data[thingName].id !== id) return false;
+          return true;
+        });
       }
-      const query = gql(composeQuery('thing', thingConfig, null, { include: { id: null } }));
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
-        value,
-      ) {
-        if (!value) return true;
-        const whereOne = { [name]: value };
-        const { data } = await apolloClient.query({ query, variables: { whereOne } });
-        if (data && data[thingName] && data[thingName].id !== id) return false;
-        return true;
-      });
     }
 
-    if (['duplexFields', 'relationalFields'].includes(kind)) {
+    if (
+      fieldsObject[name].kind === 'duplexFields' ||
+      fieldsObject[name].kind === 'relationalFields'
+    ) {
+      const { config } = fieldsObject[name].attributes;
       const query = gql(composeQuery('thing', config, null, { include: { id: null } }));
       const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign

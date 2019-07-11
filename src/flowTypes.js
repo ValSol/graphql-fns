@@ -1,260 +1,349 @@
 // @flow
 
 export type MongodbGeospatialPoint = {|
-  type: 'Point',
-  coordinates: [number, number],
+  +type: 'Point',
+  +coordinates: [number, number],
 |};
 
 export type MongodbGeospatialPolygon = {|
-  type: 'Polygon',
-  coordinates: Array<Array<[number, number]>>,
+  +type: 'Polygon',
+  +coordinates: $ReadOnlyArray<$ReadOnlyArray<[number, number]>>,
 |};
 
 export type GeospatialPoint = {|
-  longitude: number,
-  latitude: number,
+  +longitude: number,
+  +latitude: number,
 |};
 
 export type GeospatialPolygon = {
-  externalRing: {| ring: Array<GeospatialPoint> |},
-  internalRings?: Array<{ ring: Array<GeospatialPoint> }>,
+  +externalRing: {| ring: $ReadOnlyArray<GeospatialPoint> |},
+  +internalRings?: $ReadOnlyArray<{ +ring: $ReadOnlyArray<GeospatialPoint> }>,
 };
 
-type BooleanField = {
-  name: string,
-  array?: boolean,
-  default?: boolean | Array<boolean>,
-  index?: boolean,
-  required?: boolean,
-};
+type BooleanField =
+  | {|
+      +name: string,
+      +array?: false,
+      +default?: boolean,
+      +index?: boolean,
+      +required?: boolean,
+    |}
+  | {|
+      +name: string,
+      +array: true,
+      +default?: $ReadOnlyArray<boolean>,
+      +index?: boolean,
+      +required?: boolean,
+    |};
 
-type EnumField = {
-  name: string,
-  array?: boolean,
-  default?: string | Array<string>,
-  index?: boolean,
-  required?: boolean,
-  enumName: string, // name to compose graphql types
-};
+type EnumField =
+  | {|
+      +name: string,
+      +array?: false,
+      +default?: string,
+      +index?: boolean,
+      +required?: boolean,
+      +enumName: string, // name to compose graphql types
+    |}
+  | {|
+      +name: string,
+      +array: true,
+      +default?: $ReadOnlyArray<string>,
+      +index?: boolean,
+      +required?: boolean,
+      +enumName: string, // name to compose graphql types
+    |};
 
-type GeospatialField = {
-  name: string,
-  required?: boolean,
-  geospatialType: 'Point' | 'Polygon',
-  array?: boolean,
-};
+type GeospatialField = {|
+  +name: string,
+  +required?: boolean,
+  +geospatialType: 'Point' | 'Polygon',
+  +array?: boolean,
+|};
 
-type ScalarInterfaceField = {
-  array?: boolean,
-  index?: boolean,
-  required?: boolean,
-  unique?: boolean,
-};
+type TextField =
+  | {|
+      +array?: false,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: string,
+    |}
+  | {|
+      +array: true,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: $ReadOnlyArray<string>,
+    |};
 
-type TextField = {
-  ...ScalarInterfaceField,
-  name: string,
-  default?: string | Array<string>,
-};
+type DateTimeField =
+  | {|
+      +array?: false,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: Date,
+    |}
+  | {|
+      +array: true,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: $ReadOnlyArray<Date>,
+    |};
 
-type DateTimeField = {
-  ...ScalarInterfaceField,
-  name: string,
-  default?: Date | Array<Date>,
-};
+type IntField =
+  | {|
+      +array?: false,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: number,
+    |}
+  | {|
+      +array: true,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: $ReadOnlyArray<number>,
+    |};
 
-type IntField = {
-  ...ScalarInterfaceField,
-  name: string,
-  default?: number | Array<number>,
-};
+type FloatField =
+  | {|
+      +array?: false,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: number,
+    |}
+  | {|
+      +array: true,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: $ReadOnlyArray<number>,
+    |};
 
-type FloatField = {
-  ...ScalarInterfaceField,
-  name: string,
-  default?: number | Array<number>,
-};
+export type FormField = {|
+  +name: string,
+  +formFieldType?: 'hidden' | 'disabled' | 'email' | 'multiline',
+|};
 
-export type FormField = {
-  name: string,
-  formFieldType?: 'hidden' | 'disabled' | 'email' | 'multiline',
-};
-
-export type ListColumn = {
-  name: string,
-  width: number, // pixels
-};
+export type ListColumn = {|
+  +name: string,
+  +width: number, // pixels
+|};
 
 export type ThingConfig = {
   name: string,
   embedded?: boolean,
   pagination?: boolean,
 
-  duplexFields?: Array<{
-    name: string,
-    array?: boolean,
-    config: ThingConfig,
-    index?: boolean,
-    oppositeName: string,
-    required?: boolean,
+  duplexFields?: $ReadOnlyArray<{
+    +name: string,
+    +array?: boolean,
+    +config: ThingConfig,
+    +index?: boolean,
+    +oppositeName: string,
+    +required?: boolean,
   }>,
-  embeddedFields?: Array<{
-    name: string,
-    required?: boolean,
-    array?: boolean,
-    config: ThingConfig,
+  embeddedFields?: $ReadOnlyArray<{
+    +name: string,
+    +required?: boolean,
+    +array?: boolean,
+    +config: ThingConfig,
   }>,
-  relationalFields?: Array<{
-    name: string,
-    array?: boolean,
-    config: ThingConfig,
-    index?: boolean,
-    required?: boolean,
+  relationalFields?: $ReadOnlyArray<{
+    +name: string,
+    +array?: boolean,
+    +config: ThingConfig,
+    +index?: boolean,
+    +required?: boolean,
   }>,
 
-  booleanFields?: Array<BooleanField>,
-  dateTimeFields?: Array<DateTimeField>,
-  enumFields?: Array<EnumField>,
-  geospatialFields?: Array<GeospatialField>,
-  intFields?: Array<IntField>,
-  floatFields?: Array<FloatField>,
-  textFields?: Array<TextField>,
+  booleanFields?: $ReadOnlyArray<BooleanField>,
+  dateTimeFields?: $ReadOnlyArray<DateTimeField>,
+  enumFields?: $ReadOnlyArray<EnumField>,
+  geospatialFields?: $ReadOnlyArray<GeospatialField>,
+  intFields?: $ReadOnlyArray<IntField>,
+  floatFields?: $ReadOnlyArray<FloatField>,
+  textFields?: $ReadOnlyArray<TextField>,
 
-  search?: Array<string>, // array of search field names
-  form?: Array<FormField>,
-  list?: Array<ListColumn>,
+  search?: $ReadOnlyArray<string>, // array of search field names
+  form?: $ReadOnlyArray<FormField>,
+  list?: $ReadOnlyArray<ListColumn>,
 };
 
-type DuplexField = {
-  name: string,
-  array?: boolean,
-  config: ThingConfig,
-  index?: boolean,
-  oppositeName: string,
-  required?: boolean,
-};
+type DuplexField = {|
+  +name: string,
+  +array?: boolean,
+  +config: ThingConfig,
+  +index?: boolean,
+  +oppositeName: string,
+  +required?: boolean,
+|};
 
-type EmbeddedField = {
-  name: string,
-  required?: boolean,
-  array?: boolean,
-  config: ThingConfig,
-};
+type EmbeddedField = {|
+  +name: string,
+  +required?: boolean,
+  +array?: boolean,
+  +config: ThingConfig,
+|};
 
-type RelationalField = {
-  name: string,
-  array?: boolean,
-  config: ThingConfig,
-  index?: boolean,
-  required?: boolean,
-};
+type RelationalField = {|
+  +name: string,
+  +array?: boolean,
+  +config: ThingConfig,
+  +index?: boolean,
+  +required?: boolean,
+|};
+
+export type OrdinaryFieldObject =
+  | {|
+      +kind: 'booleanFields',
+      +attributes: BooleanField,
+    |}
+  | {|
+      +kind: 'dateTimeFields',
+      +attributes: DateTimeField,
+    |}
+  | {
+      +kind: 'duplexFields',
+      +attributes: DuplexField,
+    }
+  | {|
+      +kind: 'enumFields',
+      +attributes: EnumField,
+    |}
+  | {|
+      +kind: 'floatFields',
+      +attributes: FloatField,
+    |}
+  | {|
+      +kind: 'geospatialFields',
+      +attributes: GeospatialField,
+    |}
+  | {|
+      +kind: 'intFields',
+      +attributes: IntField,
+    |}
+  | {|
+      +kind: 'relationalFields',
+      +attributes: RelationalField,
+    |}
+  | {|
+      +kind: 'textFields',
+      +attributes: TextField,
+    |};
 
 export type ThingConfigObject = {
-  [fieldName: string]: {
-    [property: string]: any,
-    name: string,
-    kind:  // eslint-disable-line flowtype/space-after-type-colon
-      | 'booleanFields'
-      | 'dateTimeFields'
-      | 'duplexFields'
-      | 'embeddedFields'
-      | 'enumFields'
-      | 'floatFields'
-      | 'geospatialFields'
-      | 'intFields'
-      | 'relationalFields'
-      | 'textFields',
-  },
+  +[fieldName: string]:  // eslint-disable-line flowtype/space-after-type-colon
+    | OrdinaryFieldObject
+    | {|
+        +kind: 'embeddedFields',
+        +attributes: EmbeddedField,
+      |},
 };
 
-export type FlatFormikFields = Array<{
-  attributes:  // eslint-disable-line flowtype/space-after-type-colon
-    | BooleanField
-    | DateTimeField
-    | DuplexField
-    | EmbeddedField
-    | EnumField
-    | FloatField
-    | GeospatialField
-    | IntField
-    | RelationalField
-    | TextField,
-  child?: FlatFormikFields,
-  kind:  // eslint-disable-line flowtype/space-after-type-colon
-    | 'booleanFields'
-    | 'dateTimeFields'
-    | 'duplexFields'
-    | 'embeddedFields'
-    | 'enumFields'
-    | 'floatFields'
-    | 'geospatialFields'
-    | 'intFields'
-    | 'relationalFields'
-    | 'textFields',
-}>;
+// eslint-disable-next-line flowtype/generic-spacing
+export type FlatFormikFields = $ReadOnlyArray<
+  | OrdinaryFieldObject
+  | {|
+      +kind: 'embeddedFields',
+      +attributes: EmbeddedField,
+      +child: FlatFormikFields,
+    |},
+>;
 
-export type Enums = Array<{ name: string, enum: Array<string> }>;
+export type Enums = $ReadOnlyArray<{|
+  +name: string,
+  +enum: $ReadOnlyArray<string>,
+|}>;
 
-type thingNamesList = null | Array<string>;
+type thingNamesList = null | $ReadOnlyArray<string>;
 
 type InverntoryOptions = {
-  Query?: null | {
+  +Query?: null | {
     // 'queryName' may be: thing, things, thingCount, or any custom query names
-    [queryName: string]: thingNamesList,
+    +[queryName: string]: thingNamesList,
   },
-  Mutation?: null | {
+  +Mutation?: null | {
     // 'mutationName' may be: createManyThings, createThing, updateThing, deleteThing or any custom mutation names
-    [mutationName: string]: thingNamesList,
+    +[mutationName: string]: thingNamesList,
   },
-  Subscription?: null | {
-    createdThing?: thingNamesList,
-    updatedThing?: thingNamesList,
-    deletedThing?: thingNamesList,
+  +Subscription?: null | {
+    +createdThing?: thingNamesList,
+    +updatedThing?: thingNamesList,
+    +deletedThing?: thingNamesList,
   },
 };
 export type Inventory = {
-  include?: null | InverntoryOptions,
-  exclude?: null | InverntoryOptions,
+  +include?: null | InverntoryOptions,
+  +exclude?: null | InverntoryOptions,
 };
 
 export type GeneralConfig = {
-  thingConfigs: Array<ThingConfig>,
-  custom?: {
-    Query?: {
-      [customQueryName: string]: {
-        name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-        argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-        type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +thingConfigs: $ReadOnlyArray<ThingConfig>,
+  +custom?: {
+    +Query?: {
+      +[customQueryName: string]: {
+        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +argNames: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +argTypes: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
       },
     },
-    Mutation?: {
-      [customMutationName: string]: {
-        name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-        argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-        type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+    +Mutation?: {
+      +[customMutationName: string]: {
+        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +argNames: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +argTypes: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
       },
     },
   },
-  enums?: Enums,
+  +enums?: Enums,
   inventory?: Inventory,
 };
 
 export type SignatureMethods = {
   // the same code as used above in GeneralConfig
-  name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-  argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Array<string>,
-  type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
 };
 
 export type ServersideConfig = {
-  Query?: {
-    [customQueryName: string]: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => Function,
+  +Query?: {
+    +[customQueryName: string]: (
+      thingConfig: ThingConfig,
+      generalConfig: GeneralConfig,
+    ) => Function,
   },
-  Mutation?: {
-    [customMutationName: string]: (
+  +Mutation?: {
+    +[customMutationName: string]: (
       thingConfig: ThingConfig,
       generalConfig: GeneralConfig,
     ) => Function,
@@ -266,7 +355,7 @@ export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
   | ['Mutation', string] // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing' or custom mutation
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
-type ThreeSegmentInventoryChain =
+export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
   | [
       'Mutation',
@@ -284,19 +373,19 @@ export type InventoryСhain =
 export type Periphery = Map<
   ThingConfig,
   {
-    [oppositeName: string]: {
-      oppositeIds: Array<string>,
-      array: boolean,
-      name: string,
-      oppositeConfig: ThingConfig,
-    },
+    [oppositeName: string]: {|
+      +oppositeIds: Array<string>,
+      +array: boolean,
+      +name: string,
+      +oppositeConfig: ThingConfig,
+    |},
   },
 >;
 
 export type NearInput = {|
-  geospatialField: string,
-  coordinates: GeospatialPoint,
-  maxDistance: number,
+  +geospatialField: string,
+  +coordinates: GeospatialPoint,
+  +maxDistance: number,
 |};
 
 export type NearMongodb = {
@@ -314,13 +403,13 @@ export type Subscribe = {
 };
 
 export type ClientOptions = {
-  depth?: number,
-  include?: Object,
-  exclude?: Object,
+  +depth?: number,
+  +include?: Object,
+  +exclude?: Object,
   // custom mutation, query or subscription attributes
   // 1st string - argName, 2nd - prefix of argType, 3d - suffix of argType
-  name?: string,
-  args?: Array<[string, string, string]>,
+  +name?: string,
+  +args?: $ReadOnlyArray<[string, string, string]>,
 };
 
 export type ClientFieldsOptions = {

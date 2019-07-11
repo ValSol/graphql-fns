@@ -9,7 +9,10 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
 
   return Object.keys(data).reduce((prev, key) => {
     if (fieldsObject[key] === undefined) return prev;
-    const { array, config, geospatialType, kind } = fieldsObject[key];
+    const {
+      attributes: { array },
+      kind,
+    } = fieldsObject[key];
     if (kind === 'relationalFields' || kind === 'duplexFields') {
       if (data[key] === null) {
         prev[key] = ''; // eslint-disable-line no-param-reassign
@@ -32,7 +35,8 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key] === null ? '' : data[key].slice(0, 19);
       }
-    } else if (kind === 'geospatialFields') {
+    } else if (fieldsObject[key].kind === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[key].attributes;
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
@@ -78,7 +82,8 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
-    } else if (kind === 'embeddedFields') {
+    } else if (fieldsObject[key].kind === 'embeddedFields') {
+      const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map(item =>

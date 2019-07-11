@@ -3,7 +3,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSortInputType = (thingConfig: ThingConfig): string => {
-  const { booleanFields, enumFields, name } = thingConfig;
+  const { booleanFields, enumFields, intFields, floatFields, textFields, name } = thingConfig;
 
   const fieldLines = enumFields
     ? enumFields
@@ -14,21 +14,35 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
         )
     : [];
 
-  const scalarFieldTypes = ['textFields', 'intFields', 'floatFields'];
+  if (textFields) {
+    textFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
-  scalarFieldTypes.reduce((prev, fieldTypesName) => {
-    const fieldLinesPortion = thingConfig[fieldTypesName]
-      ? thingConfig[fieldTypesName]
-          .filter(({ array, index }) => !array && index)
-          .map(
-            ({ name: fieldName }) => `  ${fieldName}_ASC
-  ${fieldName}_DESC`,
-          )
-      : [];
+  if (intFields) {
+    intFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
-    prev.push.apply(prev, fieldLinesPortion); // eslint-disable-line prefer-spread
-    return prev;
-  }, fieldLines);
+  if (floatFields) {
+    floatFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
   if (booleanFields) {
     booleanFields

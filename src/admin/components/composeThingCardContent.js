@@ -29,17 +29,18 @@ const composeThingCardContent = (
   return (
     <React.Fragment>
       {formFields.map(({ name }) => {
-        const { config, enumName, kind, oppositeName } = fieldsObject[name];
+        const { attributes, kind } = fieldsObject[name];
 
-        const attributes = Object.keys(fieldsObject[name])
+        const attributes2 = Object.keys(attributes)
           .filter(attr => {
             if (['config', 'enumName', 'kind', 'name', 'oppositeName'].includes(attr)) return false;
-            return !!fieldsObject[name][attr];
+            // $FlowFixMe - no sense to check every field if it can have the attr
+            return !!attributes[attr];
           })
           .join(', ');
 
-        const secondary = attributes
-          ? `${kind.slice(0, -6)} | ${attributes}`
+        const secondary = attributes2
+          ? `${kind.slice(0, -6)} | ${attributes2}`
           : `${kind.slice(0, -6)}`;
 
         const listItemTextProps = {
@@ -47,7 +48,8 @@ const composeThingCardContent = (
           secondary,
         };
 
-        if (kind === 'enumFields') {
+        if (fieldsObject[name].kind === 'enumFields') {
+          const { enumName } = fieldsObject[name].attributes;
           const enums2 = enums || []; // to prevent flowjs error
           const purelyEnum = enums2.find(({ name: enumName2 }) => enumName === enumName2);
           const enums3 = purelyEnum ? purelyEnum.enum : []; // to prevent flowjs error
@@ -67,7 +69,8 @@ const composeThingCardContent = (
           );
         }
 
-        if (kind === 'embeddedFields') {
+        if (fieldsObject[name].kind === 'embeddedFields') {
+          const { config } = fieldsObject[name].attributes;
           return (
             <div key={name}>
               <ListItem>
@@ -78,7 +81,8 @@ const composeThingCardContent = (
           );
         }
 
-        if (kind === 'relationalFields') {
+        if (fieldsObject[name].kind === 'relationalFields') {
+          const { config } = fieldsObject[name].attributes;
           return (
             <div key={name}>
               <ListItem>
@@ -95,7 +99,8 @@ const composeThingCardContent = (
           );
         }
 
-        if (kind === 'duplexFields') {
+        if (fieldsObject[name].kind === 'duplexFields') {
+          const { config, oppositeName } = fieldsObject[name].attributes;
           return (
             <div key={name}>
               <ListItem>

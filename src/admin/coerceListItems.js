@@ -33,7 +33,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
         return prev;
       }
 
-      const { kind, array, geospatialType } = fieldsObject[key];
+      const { array } = fieldsObject[key].attributes;
       if (array && !item[key].length) {
         prev[key] = ''; // eslint-disable-line no-param-reassign
         return prev;
@@ -43,7 +43,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
         prev[key] = ''; // eslint-disable-line no-param-reassign
         return prev;
       }
-      switch (kind) {
+      switch (fieldsObject[key].kind) {
         case 'textFields':
           if (array) {
             prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
@@ -92,6 +92,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
           break;
 
         case 'geospatialFields':
+          const { geospatialType } = fieldsObject[key].attributes; // eslint-disable-line no-case-declarations
           if (geospatialType === 'Point') {
             if (array) {
               // eslint-disable-next-line no-param-reassign

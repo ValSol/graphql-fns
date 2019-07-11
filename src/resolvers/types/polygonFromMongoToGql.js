@@ -15,7 +15,6 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
     },
     { ring: [] },
   );
-  const result: GeospatialPolygon = { externalRing };
 
   if (internalRingsArray && internalRingsArray.length) {
     const internalRings = internalRingsArray.map(array =>
@@ -28,9 +27,9 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
         { ring: [] },
       ),
     );
-    result.internalRings = internalRings;
+    return { externalRing, internalRings };
   }
-  return result;
+  return { externalRing };
 };
 
 export default polygonFromMongoToGql;

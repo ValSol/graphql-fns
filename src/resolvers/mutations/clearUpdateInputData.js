@@ -10,9 +10,13 @@ const clearUpdateInputData = (data: Object, thingConfig: ThingConfig): Object =>
   const result = Object.keys(data).reduce((prev, key) => {
     if (fieldsObject[key] === undefined || data[key] === undefined) return prev;
 
-    const { array, config, kind } = fieldsObject[key];
+    const {
+      attributes: { array },
+      kind,
+    } = fieldsObject[key];
 
-    if (kind === 'embeddedFields') {
+    if (fieldsObject[key].kind === 'embeddedFields') {
+      const { config } = fieldsObject[key].attributes;
       if (array) {
         prev[key] = data[key].map(item => clearUpdateInputData(item, config)); // eslint-disable-line no-param-reassign
       } else {

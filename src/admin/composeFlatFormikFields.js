@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig, FlatFormikFields } from '../flowTypes';
+import type { FlatFormikFields, ThingConfig } from '../flowTypes';
 
 import arrangeFormFields from './arrangeFormFields';
 import composeFieldsObject from '../utils/composeFieldsObject';
@@ -11,30 +11,24 @@ const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => 
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const result = formFields.reduce((prev, { name }) => {
-    const { kind, ...attributes } = fieldsObject[name];
-
-    if (kind === 'embeddedFields') {
-      // $FlowFixMe
-      const { config } = attributes; // eslint-disable-line no-case-declarations
-      if (!config) {
-        throw new TypeError(`Attribute: "config" have to be declared in embeddedFields!`);
-      }
-      prev.push({
+    if (fieldsObject[name].kind === 'embeddedFields') {
+      const {
+        attributes,
+        attributes: { config },
+      } = fieldsObject[name];
+      const flatFormikField = {
         attributes,
         child: composeFlatFormikFields(config),
-        kind,
-      });
+        kind: 'embeddedFields',
+      };
+      prev.push(flatFormikField);
     } else {
-      prev.push({
-        attributes,
-        kind,
-      });
+      prev.push(fieldsObject[name]);
     }
 
     return prev;
   }, []);
 
-  // $FlowFixMe
   return result;
 };
 

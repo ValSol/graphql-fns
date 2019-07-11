@@ -4,21 +4,47 @@ import type { ThingConfig } from '../../flowTypes';
 const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
   const {
     booleanFields,
+    dateTimeFields,
     duplexFields,
     embeddedFields,
     enumFields,
+    intFields,
+    floatFields,
     geospatialFields,
     relationalFields,
+    textFields,
     name,
   } = thingConfig;
 
-  const scalarFieldTypeNames = ['textFields', 'intFields', 'floatFields', 'dateTimeFields'];
-  const thingFieldsArray = scalarFieldTypeNames.reduce((prev, fieldTypeName) => {
-    if (thingConfig[fieldTypeName]) {
-      thingConfig[fieldTypeName].forEach(({ name: name2 }) => prev.push(`  ${name2}`));
-    }
-    return prev;
-  }, []);
+  const thingFieldsArray = [];
+
+  if (textFields) {
+    textFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
 
   if (booleanFields) {
     booleanFields.reduce((prev, { name: name2 }) => {

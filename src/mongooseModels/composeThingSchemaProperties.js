@@ -14,54 +14,125 @@ const composeThingSchemaProperties = (
   enums: Enums,
 ): ThingSchemaProperties => {
   const {
-    embedded,
     booleanFields,
     duplexFields,
+    dateTimeFields,
+    embedded,
     embeddedFields,
     enumFields,
+    intFields,
+    floatFields,
     geospatialFields,
     relationalFields,
+    textFields,
   } = thingConfig;
 
-  const scalarFieldTypes = [
-    { fieldTypeName: 'textFields', mongoType: String },
-    { fieldTypeName: 'dateTimeFields', mongoType: Date },
-    { fieldTypeName: 'intFields', mongoType: Number },
-    { fieldTypeName: 'floatFields', mongoType: Number },
-  ];
-  const result = scalarFieldTypes.reduce((prev, { fieldTypeName, mongoType }) => {
-    if (thingConfig[fieldTypeName]) {
-      thingConfig[fieldTypeName].forEach(
-        ({ array, default: defaultValue, index, name, required, unique }) => {
-          if (defaultValue) {
-            if (!array && Array.isArray(defaultValue)) {
-              throw new TypeError('Expected not an array as default value');
-            }
-            if (array && !Array.isArray(defaultValue)) {
-              throw new TypeError('Expected an array as default value');
-            }
-          }
+  const result = {};
 
-          if ((index || unique) && embedded) {
-            throw new TypeError(
-              'Must not have an "index" or "unique" field in an embedded document!',
-            );
-          }
+  if (textFields) {
+    textFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
+      if (defaultValue) {
+        if (!array && Array.isArray(defaultValue)) {
+          throw new TypeError('Expected not an array as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
 
-          // eslint-disable-next-line no-param-reassign
-          prev[name] = {
-            type: array ? [mongoType] : mongoType,
-          };
-          if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-          // eslint-disable-next-line no-param-reassign
-          if (required) prev[name].required = !!required; // by default required = false
-          if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-          if (index && !unique) prev[name].index = !!index; // eslint-disable-line no-param-reassign
-        },
-      );
-    }
-    return prev;
-  }, {});
+      if ((index || unique) && embedded) {
+        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      } // eslint-disable-next-line no-param-reassign
+
+      prev[name] = { type: array ? [String] : String }; // eslint-disable-line no-param-reassign
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce(
+      (prev, { array, default: defaultValue, index, name, required, unique }) => {
+        if (defaultValue) {
+          if (!array && Array.isArray(defaultValue)) {
+            throw new TypeError('Expected not an array as default value');
+          }
+          if (array && !Array.isArray(defaultValue)) {
+            throw new TypeError('Expected an array as default value');
+          }
+        }
+
+        if ((index || unique) && embedded) {
+          throw new TypeError(
+            'Must not have an "index" or "unique" field in an embedded document!',
+          );
+        } // eslint-disable-next-line no-param-reassign
+
+        prev[name] = { type: array ? [Date] : Date }; // eslint-disable-line no-param-reassign
+        if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        if (required) prev[name].required = !!required; // by default required = false
+        if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+        if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+        return prev;
+      },
+      result,
+    );
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
+      if (defaultValue) {
+        if (!array && Array.isArray(defaultValue)) {
+          throw new TypeError('Expected not an array as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
+
+      if ((index || unique) && embedded) {
+        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      } // eslint-disable-next-line no-param-reassign
+
+      prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
+      if (defaultValue) {
+        if (!array && Array.isArray(defaultValue)) {
+          throw new TypeError('Expected not an array as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
+
+      if ((index || unique) && embedded) {
+        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      } // eslint-disable-next-line no-param-reassign
+
+      prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
 
   if (booleanFields) {
     booleanFields.reduce((prev, { array, default: defaultValue, index, name, required }) => {
@@ -73,8 +144,8 @@ const composeThingSchemaProperties = (
           throw new TypeError('Expected an array as default value');
         }
       }
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = { type: array ? [Boolean] : Boolean };
+
+      prev[name] = { type: array ? [Boolean] : Boolean }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
       if (required) prev[name].required = !!required; // by default required = false

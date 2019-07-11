@@ -29,11 +29,15 @@ const processCreateInputData = (
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
     const {
       booleanFields,
+      dateTimeFields,
       duplexFields,
+      floatFields,
+      intFields,
       embeddedFields,
       enumFields,
       geospatialFields,
       relationalFields,
+      textFields,
     } = thingConfig2;
 
     const relationalFieldsObject = {};
@@ -82,15 +86,27 @@ const processCreateInputData = (
 
     const scalarFieldsArray = ['_id'];
 
-    const scalarFieldTypes = ['textFields', 'intFields', 'floatFields', 'dateTimeFields'];
-    scalarFieldTypes.reduce((prev, fieldTypeName) => {
-      if (thingConfig2[fieldTypeName]) {
-        thingConfig2[fieldTypeName].forEach(({ name: name2 }) => prev.push(name2));
-      }
-      return prev;
-    }, scalarFieldsArray);
+    if (textFields) {
+      textFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
 
-    // booleanFields process separately to prevent flowjs error
+    if (intFields) {
+      intFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
+
+    if (floatFields) {
+      floatFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
+
     if (booleanFields) {
       booleanFields.reduce((prev, { name }) => {
         prev.push(name);
@@ -98,7 +114,13 @@ const processCreateInputData = (
       }, scalarFieldsArray);
     }
 
-    // enumFields process separately to prevent flowjs error
+    if (dateTimeFields) {
+      dateTimeFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
+
     if (enumFields) {
       enumFields.reduce((prev, { name }) => {
         prev.push(name);
