@@ -31,7 +31,6 @@ type Kind =
   | 'relationalFields'
   | 'textFields';
 
-type GeospatialType = 'Point' | 'Polygon';
 type Props = {
   form: { isSubmitting: boolean, values: Object },
   name: string,
@@ -40,7 +39,7 @@ type Props = {
 };
 
 type FieldAttrs = {
-  attributes: { geospatialType?: GeospatialType },
+  attributes: Object,
   kind: Kind,
 };
 const composeFormikFieldArrayChild = (

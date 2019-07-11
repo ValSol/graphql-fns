@@ -38,13 +38,21 @@ const composeFields = (
   const { errors, touched, values: allValues } = formikProps;
   return (
     <React.Fragment>
-      {flatFormikFields.map(({ // $FlowFixMe
-        attributes: { array, config, enumName, geospatialType, name, required }, child, kind }, i) => {
+      {flatFormikFields.map((flatFormikField, i) => {
+        const {
+          attributes,
+          attributes: { array, name, required },
+          kind,
+        } = flatFormikField;
         const path = prefix ? `${prefix}.${name}` : name;
         const touch = objectGet(touched, path);
         const error = objectGet(errors, path);
         const error2 = typeof error === 'string' ? error : undefined; // for embedded fields
-        if (child) {
+        if (flatFormikField.kind === 'embeddedFields') {
+          const {
+            attributes: { config },
+            child,
+          } = flatFormikField;
           return array ? (
             // eslint-disable-next-line react/no-array-index-key
             <FieldArray key={i} name={path}>
@@ -120,7 +128,10 @@ const composeFields = (
         }
 
         if (array) {
-          if (kind === 'enumFields') {
+          if (flatFormikField.kind === 'enumFields') {
+            const {
+              attributes: { enumName },
+            } = flatFormikField;
             const value = objectGet(allValues, path);
             return (
               <FormControl
@@ -176,7 +187,7 @@ const composeFields = (
               required={required}
             >
               <FieldArray name={path}>
-                {composeFormikFieldArrayChild({ attributes: { geospatialType }, kind }, disabled)}
+                {composeFormikFieldArrayChild({ attributes, kind }, disabled)}
               </FieldArray>
             </Outline>
           );
@@ -204,7 +215,7 @@ const composeFields = (
           };
         }
 
-        switch (kind) {
+        switch (flatFormikField.kind) {
           case 'textFields':
             return <Field {...fieldProps} fullWidth />;
 
@@ -234,6 +245,10 @@ const composeFields = (
             return <Field {...fieldProps} fullWidth />;
 
           case 'geospatialFields':
+            // eslint-disable-next-line no-case-declarations
+            const {
+              attributes: { geospatialType },
+            } = flatFormikField;
             return (
               <Geospatial
                 // eslint-disable-next-line react/no-array-index-key
@@ -249,6 +264,10 @@ const composeFields = (
             );
 
           case 'enumFields':
+            // eslint-disable-next-line no-case-declarations
+            const {
+              attributes: { enumName },
+            } = flatFormikField;
             // eslint-disable-next-line no-case-declarations
             const menuItems = required ? enumsObject[enumName] : ['', ...enumsObject[enumName]];
             return (

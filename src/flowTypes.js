@@ -207,6 +207,17 @@ type RelationalField = {|
   +required?: boolean,
 |};
 
+export type FlatField =
+  | RelationalField
+  | DuplexField
+  | TextField
+  | FloatField
+  | IntField
+  | GeospatialField
+  | EnumField
+  | DateTimeField
+  | BooleanField;
+
 export type OrdinaryFieldObject =
   | {|
       +kind: 'booleanFields',
