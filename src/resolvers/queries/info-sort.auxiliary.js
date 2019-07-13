@@ -1,3 +1,5 @@
+// @flow
+
 export default {
   fieldName: 'Example1',
   fieldNodes: [
