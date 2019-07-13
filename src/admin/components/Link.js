@@ -1,4 +1,4 @@
-// flow turned off
+// @flow
 /* eslint-disable jsx-a11y/anchor-has-content */
 
 import React from 'react';
@@ -7,7 +7,7 @@ import { withRouter } from 'next/router';
 import NextLink from 'next/link';
 import MuiLink from '@material-ui/core/Link';
 
-type Props = { as: string, href: string, prefetch: boolean };
+type Props = { as?: string, href: string, prefetch?: boolean }; // eslint-disable-line react/require-default-props
 
 const NextComposed = React.forwardRef(function NextComposed(props: Props, ref) {
   const { as, href, prefetch, ...other } = props;
@@ -56,8 +56,6 @@ Link.defaultProps = {
 const RouterLink = withRouter(Link);
 
 // eslint-disable-next-line react/no-multi-comp
-export default React.forwardRef((props, ref) => <RouterLink {...props} innerRef={ref} />);
-// TODO turn on flowjs
-// export default React.forwardRef<Props2, RouterLink>((props, ref) => (
-//   <RouterLink {...props} innerRef={ref} />
-// ));
+export default React.forwardRef<Props, 'a'>((props, ref) => (
+  <RouterLink {...props} innerRef={ref} />
+));
