@@ -1,5 +1,8 @@
 // @flow
 /* eslint-env jest */
+
+import pluralize from 'pluralize';
+
 import type {
   GeneralConfig,
   Inventory,
@@ -92,12 +95,12 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Example1Count).toBe('function');
     expect(typeof result.Query.Example1).toBe('function');
-    expect(typeof result.Query.Example1S).toBe('function');
+    expect(typeof result.Query.Example1s).toBe('function');
     expect(typeof result.Query.Example2Count).toBe('function');
     expect(typeof result.Query.Example2).toBe('function');
-    expect(typeof result.Query.Example2S).toBe('function');
-    expect(typeof result.Mutation.createManyExample1S).toBe('function');
-    expect(typeof result.Mutation.createManyExample2S).toBe('function');
+    expect(typeof result.Query.Example2s).toBe('function');
+    expect(typeof result.Mutation.createManyExample1s).toBe('function');
+    expect(typeof result.Mutation.createManyExample2s).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
     expect(typeof result.Mutation.updateExample1).toBe('function');

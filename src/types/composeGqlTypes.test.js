@@ -377,19 +377,19 @@ type UpdatedExample2Payload {
 }
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
-  Example1S(near: Example1NearInput): [Example1!]!
+  Example1s(near: Example1NearInput): [Example1!]!
   Example1Count: Int!
   Example2(whereOne: Example2WhereOneInput!): Example2
-  Example2S: [Example2!]!
+  Example2s: [Example2!]!
   Example2Count: Int!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
-  createManyExample1S(data: [Example1CreateInput!]!): [Example1!]!
+  createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
-  createManyExample2S(data: [Example2CreateInput!]!): [Example2!]!
+  createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   updateExample2(whereOne: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
