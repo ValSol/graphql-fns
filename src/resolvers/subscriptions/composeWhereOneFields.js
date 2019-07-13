@@ -1,22 +1,39 @@
-//  turn off flow to eliminate errors in flowTypes.js
+//   @flow
 
 import type { ThingConfig } from '../../flowTypes';
 
 const composeWhereOneFields = (thingConfig: ThingConfig): Object => {
-  const result = Object.keys(thingConfig).reduce(
-    (prev, key) => {
-      if (key.slice(-6) === 'Fields' && Array.isArray(thingConfig[key])) {
-        thingConfig[key].forEach(({ name, unique }) => {
-          if (unique) {
-            // eslint-disable-next-line no-param-reassign
-            prev[name] = key;
-          }
-        });
-      }
+  const { dateTimeFields, intFields, floatFields, textFields } = thingConfig;
+
+  const result = { id: null };
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, { name, unique }) => {
+      if (unique) prev[name] = 'dateTimeFields'; // eslint-disable-line no-param-reassign
       return prev;
-    },
-    { id: null },
-  );
+    }, result);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { name, unique }) => {
+      if (unique) prev[name] = 'intFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { name, unique }) => {
+      if (unique) prev[name] = 'floatFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (textFields) {
+    textFields.reduce((prev, { name, unique }) => {
+      if (unique) prev[name] = 'textFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
 
   return result;
 };
