@@ -1,19 +1,76 @@
-//  turn off flow to eliminate errors in flowTypes.js
+//  @flow
 
 import type { ThingConfig } from '../../flowTypes';
 
 const composeWhereFields = (thingConfig: ThingConfig): Object => {
-  const result = Object.keys(thingConfig).reduce((prev, key) => {
-    if (key.slice(-6) === 'Fields' && Array.isArray(thingConfig[key])) {
-      thingConfig[key].forEach(({ name, index }) => {
-        if (index) {
-          // eslint-disable-next-line no-param-reassign
-          prev[name] = key;
-        }
-      });
-    }
-    return prev;
-  }, {});
+  const {
+    booleanFields,
+    dateTimeFields,
+    duplexFields,
+    enumFields,
+    floatFields,
+    intFields,
+    relationalFields,
+    textFields,
+  } = thingConfig;
+
+  const result = {};
+
+  if (booleanFields) {
+    booleanFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'booleanFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'dateTimeFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (duplexFields) {
+    duplexFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'duplexFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (enumFields) {
+    enumFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'enumFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (floatFields) {
+    floatFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'floatFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (intFields) {
+    intFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'intFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (relationalFields) {
+    relationalFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'relationalFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (textFields) {
+    textFields.reduce((prev, { name, index }) => {
+      if (index) prev[name] = 'textFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
 
   return result;
 };
