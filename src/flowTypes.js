@@ -297,6 +297,7 @@ type InverntoryOptions = {
     +deletedThing?: thingNamesList,
   },
 };
+
 export type Inventory = {
   +include?: null | InverntoryOptions,
   +exclude?: null | InverntoryOptions,
@@ -336,6 +337,26 @@ export type GeneralConfig = {
   },
   +enums?: Enums,
   inventory?: Inventory,
+};
+
+// equal to previous code of 'custom' property
+export type Custom = {
+  +Query?: {
+    +[customQueryName: string]: {
+      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+      +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+      +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+    },
+  },
+  +Mutation?: {
+    +[customMutationName: string]: {
+      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+      +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+      +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+    },
+  },
 };
 
 export type SignatureMethods = {
