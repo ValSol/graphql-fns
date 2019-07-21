@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.268",
+  "version": "0.1.2-beta.270",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -81,7 +81,23 @@
     "semantic-release": "^15.13.18",
     "yup": "^0.27.0"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@material-ui/core": "4.x",
+    "@material-ui/icons": "4.x",
+    "@material-ui/styles": "4.x",
+    "formik": "1.5.x",
+    "formik-material-ui": "0.0.x",
+    "graphql": "14.x",
+    "graphql-subscriptions": "1.x",
+    "graphql-tag": "2.x",
+    "mongoose": "5.x",
+    "next": "9.x",
+    "react": "16.8.x",
+    "react-apollo": "2.x",
+    "react-dom": "16.8.x",
+    "react-virtualized": "9.x",
+    "yup": "0.27.x"
+  },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
