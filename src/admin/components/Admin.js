@@ -1,40 +1,39 @@
 // @flow
 
 import React from 'react';
-import { withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
-import type { GeneralConfig, RouterQuery } from '../../flowTypes';
+import type { GeneralConfig } from '../../flowTypes';
 
 import AllThings from './AllThings';
 import ThingForm from './ThingForm';
 import ThingList from './ThingList';
+import GeneralAdminContext from './GeneralAdminContext';
 
 type Props = { generalConfig: GeneralConfig };
-type ProvidedProps = {
-  router: { pathname: string, query: RouterQuery },
-};
 
-const Admin = (props: Props & ProvidedProps) => {
+const Admin = (props: Props) => {
+  const {
+    query: { create, id, thing },
+  } = useRouter();
   const {
     generalConfig,
     generalConfig: { thingConfigs },
-    router,
-    router: {
-      query: { create, id, thing },
-    },
   } = props;
 
   const thingConfig = thingConfigs.find(({ name }) => name === thing);
 
+  let resultChild;
   if (!thingConfig) {
-    return <AllThings router={router} generalConfig={generalConfig} />;
+    resultChild = <AllThings generalConfig={generalConfig} />;
+  } else if (id || create || create === '') {
+    resultChild = <ThingForm thingConfig={thingConfig} generalConfig={generalConfig} />;
+  } else {
+    resultChild = <ThingList thingConfig={thingConfig} />;
   }
-
-  if (id || create || create === '') {
-    return <ThingForm router={router} thingConfig={thingConfig} generalConfig={generalConfig} />;
-  }
-
-  return <ThingList router={router} thingConfig={thingConfig} />;
+  return (
+    <GeneralAdminContext.Provider value={generalConfig}>{resultChild}</GeneralAdminContext.Provider>
+  );
 };
 
-export default withRouter(Admin);
+export default Admin;

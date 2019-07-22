@@ -3,7 +3,7 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
 import pluralize from 'pluralize';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
@@ -20,7 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 
-import type { GeneralConfig, RouterQuery, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import coerceDataToGql from '../coerceDataToGql';
 import coerceDataFromGql from '../coerceDataFromGql';
@@ -35,20 +35,19 @@ import Link from './Link';
 type Props = {
   generalConfig: GeneralConfig,
   thingConfig: ThingConfig,
-  router: { pathname: string, query: RouterQuery },
 };
 
 const ThingForm = (props: Props) => {
   const [open, setOpen] = React.useState(false);
+  const {
+    query: { id, delete: deleteAttr },
+    pathname,
+  } = useRouter();
 
   const {
     generalConfig,
     thingConfig,
     thingConfig: { name },
-    router: {
-      query: { id, delete: deleteAttr },
-      pathname,
-    },
   } = props;
 
   const toDelete = deleteAttr === '' || !!deleteAttr;

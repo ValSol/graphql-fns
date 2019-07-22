@@ -13,12 +13,12 @@ import Typography from '@material-ui/core/Typography';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import type { RouterQuery, ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../flowTypes';
 
 import composeQuery from '../../client/queries/composeQuery';
 import arrangeListColumns from '../arrangeListColumns';
@@ -26,14 +26,14 @@ import coerceListItems from '../coerceListItems';
 import Link from './Link';
 import VirtualizedTable from './VirtualizedTable';
 
-type Props = { thingConfig: ThingConfig, router: { pathname: string, query: RouterQuery } };
+type Props = { thingConfig: ThingConfig };
 
 function ThingList(props: Props) {
+  const router = useRouter();
+  const { pathname } = router;
   const {
     thingConfig,
     thingConfig: { list, name },
-    router,
-    router: { pathname },
   } = props;
 
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({

@@ -3,11 +3,15 @@
 
 import React from 'react';
 import clsx from 'clsx';
-import { withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import MuiLink from '@material-ui/core/Link';
 
-type Props = { as?: string, href: string, prefetch?: boolean }; // eslint-disable-line react/require-default-props
+type Props = {
+  as?: string, // eslint-disable-line react/require-default-props
+  href: string,
+  prefetch?: boolean, // eslint-disable-line react/require-default-props
+};
 
 const NextComposed = React.forwardRef(function NextComposed(props: Props, ref) {
   const { as, href, prefetch, ...other } = props;
@@ -22,21 +26,19 @@ const NextComposed = React.forwardRef(function NextComposed(props: Props, ref) {
 type Props2 = {
   activeClassName: string, // eslint-disable-line react/require-default-props
   as: string,
-  className: string,
+  className?: string,
   href: string,
   innerRef: Function | Object,
-  naked: boolean,
-  onClick: Function,
+  naked?: boolean,
+  onClick?: Function,
   prefetch: boolean,
-  router: {
-    pathname: string,
-  },
 };
 
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/#with-link
 function Link(props: Props2) {
-  const { activeClassName, router, className: classNameProps, innerRef, naked, ...other } = props;
+  const router = useRouter();
+  const { activeClassName, className: classNameProps, innerRef, naked, ...other } = props;
   const { href } = props;
   const className = clsx(classNameProps, {
     [activeClassName]: router.pathname === href && activeClassName,
@@ -51,11 +53,10 @@ function Link(props: Props2) {
 
 Link.defaultProps = {
   activeClassName: 'active', // eslint-disable-line react/default-props-match-prop-types
+  className: '',
+  naked: false,
+  onClick: null,
 };
 
-const RouterLink = withRouter(Link);
-
 // eslint-disable-next-line react/no-multi-comp
-export default React.forwardRef<Props, 'a'>((props, ref) => (
-  <RouterLink {...props} innerRef={ref} />
-));
+export default React.forwardRef<Props, 'a'>((props, ref) => <Link {...props} innerRef={ref} />);

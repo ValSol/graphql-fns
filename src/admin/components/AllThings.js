@@ -1,23 +1,22 @@
 // @flow
 
 import React from 'react';
+import { useRouter } from 'next/router';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 
 import type { GeneralConfig } from '../../flowTypes';
 
+import GeneralAdminContext from './GeneralAdminContext';
 import Link from './Link';
 import ThingCard from './ThingCard';
 
-type Props = { generalConfig: GeneralConfig, router: Object };
+const AllThings = () => {
+  const generalConfig: GeneralConfig = React.useContext(GeneralAdminContext);
+  const router = useRouter();
 
-const AllThings = (props: Props) => {
-  const {
-    generalConfig,
-    generalConfig: { thingConfigs },
-    router,
-  } = props;
+  const { thingConfigs } = generalConfig;
 
   return (
     <Container>

@@ -3,7 +3,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import pluralize from 'pluralize';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -26,7 +26,7 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import composeQuery from '../../client/queries/composeQuery';
 import composeThingCardContent from './composeThingCardContent';
 
-type Props = { config: ThingConfig, generalConfig: GeneralConfig, router: { pathname: string } };
+type Props = { config: ThingConfig, generalConfig: GeneralConfig };
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 const ThingCard = (props: Props) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const { pathname } = useRouter();
   function handleExpandClick() {
     setExpanded(!expanded);
   }
@@ -56,7 +56,6 @@ const ThingCard = (props: Props) => {
     config,
     config: { name },
     generalConfig,
-    router: { pathname },
   } = props;
 
   const thingCountQuery = gql(composeQuery('thingCount', config, generalConfig));
