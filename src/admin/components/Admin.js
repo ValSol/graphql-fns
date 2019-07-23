@@ -8,7 +8,7 @@ import type { GeneralConfig } from '../../flowTypes';
 import AllThings from './AllThings';
 import ThingForm from './ThingForm';
 import ThingList from './ThingList';
-import GeneralAdminContext from './GeneralAdminContext';
+import GeneralConfigContext from './GeneralConfigContext';
 
 type Props = { generalConfig: GeneralConfig };
 
@@ -25,14 +25,16 @@ const Admin = (props: Props) => {
 
   let resultChild;
   if (!thingConfig) {
-    resultChild = <AllThings generalConfig={generalConfig} />;
+    resultChild = <AllThings />;
   } else if (id || create || create === '') {
-    resultChild = <ThingForm thingConfig={thingConfig} generalConfig={generalConfig} />;
+    resultChild = <ThingForm thingConfig={thingConfig} />;
   } else {
     resultChild = <ThingList thingConfig={thingConfig} />;
   }
   return (
-    <GeneralAdminContext.Provider value={generalConfig}>{resultChild}</GeneralAdminContext.Provider>
+    <GeneralConfigContext.Provider value={generalConfig}>
+      {resultChild}
+    </GeneralConfigContext.Provider>
   );
 };
 

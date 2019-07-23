@@ -1,20 +1,18 @@
 // @flow
 
 import React from 'react';
-import { useRouter } from 'next/router';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 
 import type { GeneralConfig } from '../../flowTypes';
 
-import GeneralAdminContext from './GeneralAdminContext';
+import GeneralConfigContext from './GeneralConfigContext';
 import Link from './Link';
 import ThingCard from './ThingCard';
 
 const AllThings = () => {
-  const generalConfig: GeneralConfig = React.useContext(GeneralAdminContext);
-  const router = useRouter();
+  const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
 
   const { thingConfigs } = generalConfig;
 
@@ -28,12 +26,7 @@ const AllThings = () => {
       {thingConfigs
         .filter(({ embedded }) => !embedded)
         .map(config => (
-          <ThingCard
-            key={config.name}
-            config={config}
-            generalConfig={generalConfig}
-            router={router}
-          />
+          <ThingCard key={config.name} config={config} />
         ))}
     </Container>
   );

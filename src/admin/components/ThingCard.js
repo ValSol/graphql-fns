@@ -23,10 +23,11 @@ import { Query } from 'react-apollo';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
+import GeneralConfigContext from './GeneralConfigContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeThingCardContent from './composeThingCardContent';
 
-type Props = { config: ThingConfig, generalConfig: GeneralConfig };
+type Props = { config: ThingConfig };
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -45,6 +46,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ThingCard = (props: Props) => {
+  const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const { pathname } = useRouter();
@@ -55,7 +57,6 @@ const ThingCard = (props: Props) => {
   const {
     config,
     config: { name },
-    generalConfig,
   } = props;
 
   const thingCountQuery = gql(composeQuery('thingCount', config, generalConfig));

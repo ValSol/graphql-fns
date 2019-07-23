@@ -28,16 +28,17 @@ import composeFormikFragment from '../composeFormikFragment';
 import composeInitialValues from '../composeInitialValues';
 import createValidationSchema from '../createValidationSchema';
 
+import GeneralConfigContext from './GeneralConfigContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
 import Link from './Link';
 
 type Props = {
-  generalConfig: GeneralConfig,
   thingConfig: ThingConfig,
 };
 
 const ThingForm = (props: Props) => {
+  const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const [open, setOpen] = React.useState(false);
   const {
     query: { id, delete: deleteAttr },
@@ -45,7 +46,6 @@ const ThingForm = (props: Props) => {
   } = useRouter();
 
   const {
-    generalConfig,
     thingConfig,
     thingConfig: { name },
   } = props;
