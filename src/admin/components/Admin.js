@@ -9,6 +9,7 @@ import AllThings from './AllThings';
 import ThingForm from './ThingForm';
 import ThingList from './ThingList';
 import GeneralConfigContext from './GeneralConfigContext';
+import { ThingListProvider } from './ThingListContext';
 
 type Props = { generalConfig: GeneralConfig };
 
@@ -27,9 +28,17 @@ const Admin = (props: Props) => {
   if (!thingConfig) {
     resultChild = <AllThings />;
   } else if (id || create || create === '') {
-    resultChild = <ThingForm thingConfig={thingConfig} />;
+    resultChild = (
+      <ThingListProvider>
+        <ThingForm thingConfig={thingConfig} />
+      </ThingListProvider>
+    );
   } else {
-    resultChild = <ThingList thingConfig={thingConfig} />;
+    resultChild = (
+      <ThingListProvider>
+        <ThingList thingConfig={thingConfig} />
+      </ThingListProvider>
+    );
   }
   return (
     <GeneralConfigContext.Provider value={generalConfig}>

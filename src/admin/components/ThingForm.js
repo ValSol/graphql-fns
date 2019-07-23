@@ -13,9 +13,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
+
+// import FastForward from '@material-ui/icons/FastForward';
+// import FastRewind from '@material-ui/icons/FastRewind';
+import SkipNext from '@material-ui/icons/SkipNext';
+import SkipPrevious from '@material-ui/icons/SkipPrevious';
 
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
@@ -27,10 +33,12 @@ import coerceDataFromGql from '../coerceDataFromGql';
 import composeFormikFragment from '../composeFormikFragment';
 import composeInitialValues from '../composeInitialValues';
 import createValidationSchema from '../createValidationSchema';
+import getNeighbors from '../getNeighbors';
 
 import GeneralConfigContext from './GeneralConfigContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
+import useThingList from './useThingList';
 import Link from './Link';
 
 type Props = {
@@ -49,6 +57,31 @@ const ThingForm = (props: Props) => {
     thingConfig,
     thingConfig: { name },
   } = props;
+
+  const { items } = useThingList(thingConfig, [{ dataKey: 'id' }]);
+  const { previous, next } = getNeighbors(id, items);
+
+  const scrollButtons =
+    !previous && !next ? null : (
+      <div>
+        <IconButton
+          aria-label="Delete"
+          disabled={!previous}
+          onClick={
+            previous ? () => Router.push({ pathname, query: { thing: name, id: previous } }) : null
+          }
+        >
+          <SkipPrevious />
+        </IconButton>{' '}
+        <IconButton
+          aria-label="Delete"
+          disabled={!next}
+          onClick={next ? () => Router.push({ pathname, query: { thing: name, id: next } }) : null}
+        >
+          <SkipNext />
+        </IconButton>
+      </div>
+    );
 
   const toDelete = deleteAttr === '' || !!deleteAttr;
 
@@ -80,6 +113,7 @@ const ThingForm = (props: Props) => {
       </Breadcrumbs>
 
       <NoSsr>
+        {scrollButtons}
         <Query query={thingQuery} skip={!id} variables={{ whereOne }}>
           {({ client: apolloClient, data, error: thingQueryError, loading }) => {
             if (loading) return 'Loading...';

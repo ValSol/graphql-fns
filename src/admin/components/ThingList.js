@@ -15,14 +15,10 @@ import AddIcon from '@material-ui/icons/Add';
 
 import Router, { useRouter } from 'next/router';
 
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-
 import type { ThingConfig } from '../../flowTypes';
 
-import composeQuery from '../../client/queries/composeQuery';
 import arrangeListColumns from '../arrangeListColumns';
-import coerceListItems from '../coerceListItems';
+import useThingList from './useThingList';
 import Link from './Link';
 import VirtualizedTable from './VirtualizedTable';
 
@@ -41,16 +37,6 @@ function ThingList(props: Props) {
     label: fieldName,
     width,
   }));
-
-  const include = columns.reduce(
-    (prev, { dataKey }) => {
-      prev[dataKey] = null; // eslint-disable-line no-param-reassign
-      return prev;
-    },
-    { id: null },
-  );
-
-  const thingQuery = gql(composeQuery('things', thingConfig, null, { include }));
 
   const columns2 = [
     {
@@ -76,6 +62,52 @@ function ThingList(props: Props) {
     return prev;
   }, 0);
 
+  const { loading, items, error } = useThingList(thingConfig, columns);
+
+  let resultChild = null;
+  if (loading) {
+    resultChild = 'Loading...';
+  } else if (error) {
+    resultChild = (
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={!!error}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        message={<span id="message-id">{error}</span>}
+      />
+    );
+  } else {
+    resultChild = (
+      <div>
+        <VirtualizedTable
+          columns={columns2}
+          router={router}
+          rowCount={items.length}
+          rowGetter={({ index }) => items[index]}
+          thingConfig={thingConfig}
+          width={width}
+        />
+        <Tooltip title={`Create new ${name}`}>
+          <Fab
+            color="primary"
+            aria-label={`Create new ${name}`}
+            onClick={() => Router.push(`${pathname}?thing=${name}&create`)}
+            style={{
+              position: 'sticky',
+              bottom: 32,
+              marginTop: 16,
+              marginLeft: width / 2 - 28,
+            }}
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </div>
+    );
+  }
+
   return (
     <Container>
       <h1>{`All ${pluralize(name)}`}</h1>
@@ -85,57 +117,7 @@ function ThingList(props: Props) {
         <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
       </Breadcrumbs>
 
-      <NoSsr>
-        <Query query={thingQuery}>
-          {({ data, error: thingQueryError, loading }) => {
-            if (loading) return 'Loading...';
-
-            if (thingQueryError)
-              return (
-                <Snackbar
-                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                  open={!!thingQueryError}
-                  ContentProps={{
-                    'aria-describedby': 'message-id',
-                  }}
-                  message={<span id="message-id">{thingQueryError.message}</span>}
-                />
-              );
-
-            if (!data) throw new TypeError('Undefined data!'); // to elimiate flowjs error
-
-            const items = coerceListItems(data[pluralize(name)], thingConfig);
-
-            return (
-              <div>
-                <VirtualizedTable
-                  columns={columns2}
-                  router={router}
-                  rowCount={items.length}
-                  rowGetter={({ index }) => items[index]}
-                  thingConfig={thingConfig}
-                  width={width}
-                />
-                <Tooltip title={`Create new ${name}`}>
-                  <Fab
-                    color="primary"
-                    aria-label={`Create new ${name}`}
-                    onClick={() => Router.push(`${pathname}?thing=${name}&create`)}
-                    style={{
-                      position: 'sticky',
-                      bottom: 32,
-                      marginTop: 16,
-                      marginLeft: width / 2 - 28,
-                    }}
-                  >
-                    <AddIcon />
-                  </Fab>
-                </Tooltip>
-              </div>
-            );
-          }}
-        </Query>
-      </NoSsr>
+      <NoSsr>{resultChild}</NoSsr>
     </Container>
   );
 }
