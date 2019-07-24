@@ -18,8 +18,6 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 
-// import FastForward from '@material-ui/icons/FastForward';
-// import FastRewind from '@material-ui/icons/FastRewind';
 import SkipNext from '@material-ui/icons/SkipNext';
 import SkipPrevious from '@material-ui/icons/SkipPrevious';
 
@@ -48,7 +46,7 @@ type Props = {
 
 const ThingForm = (props: Props) => {
   // eslint-disable-next-line no-unused-vars
-  const [foo, setState] = React.useContext(ThingListContext); // will use only when create new item
+  const [foo, setThingList] = React.useContext(ThingListContext); // will use only when create new item
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const [open, setOpen] = React.useState(false);
   const {
@@ -187,7 +185,7 @@ const ThingForm = (props: Props) => {
                                 } else {
                                   // if create
                                   const { id: newId } = resultData[`create${name}`];
-                                  setState(prevState => ({
+                                  setThingList(prevState => ({
                                     ...prevState,
                                     items: [...prevState.items, { id: newId }],
                                   }));
