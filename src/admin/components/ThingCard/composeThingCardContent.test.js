@@ -8,7 +8,7 @@ import Chip from '@material-ui/core/Chip';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
 import composeThingCardContent from './composeThingCardContent';
 

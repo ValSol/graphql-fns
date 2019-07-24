@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import composeEmptyValues from './composeEmptyValues';
+import composeInitialValues from './composeInitialValues';
 
-describe('composeEmptyValues', () => {
+describe('composeInitialValues', () => {
   test('should create the simplest initial values object', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
@@ -18,7 +18,7 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -34,13 +34,32 @@ describe('composeEmptyValues', () => {
       ],
     });
 
-    const expectedResult = { textField: '' };
+    const expectedResult = { textField: 'textFieldDefaultValue' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with array field', () => {
+  test('should create the simplest initial values object with data', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          default: 'textFieldDefaultValue',
+        },
+      ],
+    });
+    const data = { textField: 'textFieldValue' };
+
+    const expectedResult = { textField: 'textFieldValue' };
+
+    const result = composeInitialValues(thingConfig, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -54,11 +73,11 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with default array field', () => {
+  test('should create the initial values with default array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -71,13 +90,33 @@ describe('composeEmptyValues', () => {
       ],
     });
 
-    const expectedResult = { textFields: [] };
+    const expectedResult = { textFields: ['test'] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded field', () => {
+  test('should create the initial values with default array field and data', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textFields',
+          default: ['test'],
+          array: true,
+        },
+      ],
+    });
+    const data = { textFields: ['test2'] };
+
+    const expectedResult = { textFields: ['test2'] };
+
+    const result = composeInitialValues(thingConfig, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with embedded field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -100,11 +139,39 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { embeddedField: { textField: '' } };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field', () => {
+  test('should create the initial values with embedded field and data', () => {
+    const embeddedConfig: ThingConfig = {
+      name: 'Embedded',
+      embedded: true,
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      embeddedFields: [
+        {
+          name: 'embeddedField',
+          config: embeddedConfig,
+        },
+      ],
+    });
+    const data = { embeddedField: { textField: 'testFieldValue' } };
+
+    const expectedResult = { embeddedField: { textField: 'testFieldValue' } };
+
+    const result = composeInitialValues(thingConfig, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with embedded array field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -128,11 +195,11 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { embeddedFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field with composeEmptyValues', () => {
+  test('should create the initial values with embedded array field with data', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
@@ -153,14 +220,15 @@ describe('composeEmptyValues', () => {
         },
       ],
     });
+    const data = { embeddedFields: [{ textField: 'textFieldValue' }] };
 
-    const expectedResult = { embeddedFields: [] };
+    const expectedResult = { embeddedFields: [{ textField: 'textFieldValue' }] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig, data);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the emebeded initial values with default composeEmptyValues', () => {
+  test('should create the emebeded initial values with default data', () => {
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
       embedded: true,
@@ -227,17 +295,17 @@ describe('composeEmptyValues', () => {
     };
 
     const expectedResult = {
-      textField: '',
+      textField: 'default',
       embedded1: {
-        textField1: '',
+        textField1: 'default1',
         embedded2: {
-          textField2: '',
-          embedded3: { textField3: '' },
+          textField2: 'default2',
+          embedded3: { textField3: 'default3' },
         },
       },
     };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -259,7 +327,7 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { intField: '', floatField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -276,7 +344,7 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { booleanField: false };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -294,7 +362,96 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { enumField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with relational & duplex fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      relationalFields: [
+        {
+          name: 'relationalField',
+          config: thingConfig,
+        },
+        {
+          name: 'relationalField2',
+          config: thingConfig,
+          array: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexField2',
+        },
+        {
+          name: 'duplexField2',
+          array: true,
+          config: thingConfig,
+          oppositeName: 'duplexField',
+        },
+      ],
+    });
+
+    const expectedResult = {
+      relationalField: '',
+      relationalField2: [],
+      duplexField: '',
+      duplexField2: [],
+    };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with relational & duplex fields with data', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      relationalFields: [
+        {
+          name: 'relationalField',
+          config: thingConfig,
+        },
+        {
+          name: 'relationalField2',
+          config: thingConfig,
+          array: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'duplexField',
+          config: thingConfig,
+          oppositeName: 'duplexField2',
+        },
+        {
+          name: 'duplexField2',
+          array: true,
+          config: thingConfig,
+          oppositeName: 'duplexField',
+        },
+      ],
+    });
+
+    const data = {
+      relationalField: '5cefb33f05d6be4b7b598421',
+      relationalField2: ['5cefb33f05d6be4b7b59842a', '5cefb33f05d6be4b7b59842b'],
+      duplexField: '5cefb33f05d6be4b7b598422',
+      duplexField2: ['5cefb33f05d6be4b7b59842c', '5cefb33f05d6be4b7b59842d'],
+    };
+
+    const expectedResult = {
+      relationalField: '5cefb33f05d6be4b7b598421',
+      relationalField2: ['5cefb33f05d6be4b7b59842a', '5cefb33f05d6be4b7b59842b'],
+      duplexField: '5cefb33f05d6be4b7b598422',
+      duplexField2: ['5cefb33f05d6be4b7b59842c', '5cefb33f05d6be4b7b59842d'],
+    };
+
+    const result = composeInitialValues(thingConfig, data);
     expect(result).toEqual(expectedResult);
   });
 
@@ -327,7 +484,7 @@ describe('composeEmptyValues', () => {
       },
     };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, ListColumn } from '../flowTypes';
+import type { ThingConfig, ListColumn } from '../../../flowTypes';
 
 import arrangeListColumns from './arrangeListColumns';
 

@@ -1,9 +1,9 @@
 // @flow
 import deepEqual from 'fast-deep-equal';
 
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import composeFieldsObject from '../utils/composeFieldsObject';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const isNotDate = date =>
   new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));

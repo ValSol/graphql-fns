@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
 import coerceDataToGql from './coerceDataToGql';
 

@@ -3,7 +3,7 @@
 
 import * as yup from 'yup';
 
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
 import createValidationSchema from './createValidationSchema';
 

@@ -14,10 +14,10 @@ import {
   CheckboxWithLabel as FormikCheckbox,
   Select as FormikSelect,
 } from 'formik-material-ui';
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import Geospatial from './components/Geospatial';
-import Outline from './components/Outline';
+import Geospatial from '../Geospatial';
+import Outline from '../Outline';
 import composeFormikFragment from './composeFormikFragment';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 

@@ -7,10 +7,10 @@ import Chip from '@material-ui/core/Chip';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
-import arrangeFormFields from '../arrangeFormFields';
-import composeFieldsObject from '../../utils/composeFieldsObject';
+import arrangeFormFields from '../../arrangeFormFields';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 type EmbeddedProps = { children: Object };
 

@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import Geospatial from './components/Geospatial';
+import Geospatial from '../Geospatial';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 
 describe('composeFormikFieldArrayChild', () => {

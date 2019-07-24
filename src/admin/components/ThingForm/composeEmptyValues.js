@@ -1,8 +1,8 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import arrangeFormFields from './arrangeFormFields';
-import composeFieldsObject from '../utils/composeFieldsObject';
+import arrangeFormFields from '../../arrangeFormFields';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const composeEmptyValues = (thingConfig: ThingConfig): Object => {
   const { form } = thingConfig;

@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
 const arrangeSearchFields = (thingConfig: ThingConfig): Array<string> => {
   const { enumFields, textFields } = thingConfig;

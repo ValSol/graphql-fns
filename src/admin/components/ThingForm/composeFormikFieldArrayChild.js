@@ -17,7 +17,7 @@ import {
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
-import Geospatial from './components/Geospatial';
+import Geospatial from '../Geospatial';
 
 type Kind =
   | 'booleanFields'

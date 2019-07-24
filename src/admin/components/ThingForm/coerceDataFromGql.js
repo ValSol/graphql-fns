@@ -1,7 +1,7 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import composeFieldsObject from '../utils/composeFieldsObject';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 import composeEmptyValues from './composeEmptyValues';
 
 const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {

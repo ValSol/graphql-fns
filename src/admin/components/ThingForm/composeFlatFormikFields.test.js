@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, FlatFormikFields } from '../flowTypes';
+import type { ThingConfig, FlatFormikFields } from '../../../flowTypes';
 
 import composeFlatFormikFields from './composeFlatFormikFields';
 

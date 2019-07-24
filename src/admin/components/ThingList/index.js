@@ -15,12 +15,12 @@ import AddIcon from '@material-ui/icons/Add';
 
 import Router, { useRouter } from 'next/router';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import arrangeListColumns from '../arrangeListColumns';
-import useThingList from './useThingList';
-import Link from './Link';
-import VirtualizedTable from './VirtualizedTable';
+import arrangeListColumns from './arrangeListColumns';
+import useThingList from '../useThingList';
+import Link from '../Link';
+import VirtualizedTable from '../VirtualizedTable';
 
 type Props = { thingConfig: ThingConfig };
 

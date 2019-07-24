@@ -24,21 +24,21 @@ import SkipPrevious from '@material-ui/icons/SkipPrevious';
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
-import coerceDataToGql from '../coerceDataToGql';
-import coerceDataFromGql from '../coerceDataFromGql';
-import composeFormikFragment from '../composeFormikFragment';
-import composeInitialValues from '../composeInitialValues';
-import createValidationSchema from '../createValidationSchema';
-import getNeighbors from '../getNeighbors';
+import coerceDataToGql from './coerceDataToGql';
+import coerceDataFromGql from './coerceDataFromGql';
+import composeFormikFragment from './composeFormikFragment';
+import composeInitialValues from './composeInitialValues';
+import createValidationSchema from './createValidationSchema';
+import getNeighbors from './getNeighbors';
 
-import GeneralConfigContext from './GeneralConfigContext';
-import { ThingListContext } from './ThingListContext';
-import composeQuery from '../../client/queries/composeQuery';
-import composeMutation from '../../client/mutations/composeMutation';
-import useThingList from './useThingList';
-import Link from './Link';
+import GeneralConfigContext from '../GeneralConfigContext';
+import { ThingListContext } from '../ThingListContext';
+import composeQuery from '../../../client/queries/composeQuery';
+import composeMutation from '../../../client/mutations/composeMutation';
+import useThingList from '../useThingList';
+import Link from '../Link';
 
 type Props = {
   thingConfig: ThingConfig,

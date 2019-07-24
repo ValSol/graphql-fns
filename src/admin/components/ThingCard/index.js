@@ -21,10 +21,10 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
-import GeneralConfigContext from './GeneralConfigContext';
-import composeQuery from '../../client/queries/composeQuery';
+import GeneralConfigContext from '../GeneralConfigContext';
+import composeQuery from '../../../client/queries/composeQuery';
 import composeThingCardContent from './composeThingCardContent';
 
 type Props = { config: ThingConfig };

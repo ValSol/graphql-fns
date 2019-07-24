@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig, ListColumn } from '../flowTypes';
+import type { ThingConfig, ListColumn } from '../../../flowTypes';
 
 const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
   const {

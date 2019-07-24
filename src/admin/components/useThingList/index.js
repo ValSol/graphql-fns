@@ -7,11 +7,11 @@ import pluralize from 'pluralize';
 import { ApolloContext } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import composeQuery from '../../client/queries/composeQuery';
-import coerceListItems from '../coerceListItems';
-import { ThingListContext } from './ThingListContext';
+import composeQuery from '../../../client/queries/composeQuery';
+import coerceListItems from './coerceListItems';
+import { ThingListContext } from '../ThingListContext';
 
 function useThingList(thingConfig: ThingConfig, columns: Array<Object>) {
   const [state, setState] = React.useContext(ThingListContext);

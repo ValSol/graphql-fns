@@ -1,7 +1,7 @@
 // @flow
-import type { ThingConfig, ListColumn } from '../flowTypes';
+import type { ThingConfig, ListColumn } from '../../../flowTypes';
 
-import composeFieldsObject from '../utils/composeFieldsObject';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const coerceDateTime = (value: string | Array<string>, array?: boolean): string => {
   if (array) {

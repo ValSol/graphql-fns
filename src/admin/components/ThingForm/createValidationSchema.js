@@ -3,11 +3,11 @@
 import * as yup from 'yup';
 import gql from 'graphql-tag';
 
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
-import composeQuery from '../client/queries/composeQuery';
-import arrangeFormFields from './arrangeFormFields';
-import composeFieldsObject from '../utils/composeFieldsObject';
+import composeQuery from '../../../client/queries/composeQuery';
+import arrangeFormFields from '../../arrangeFormFields';
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 type GeospatialPointSchemaArgs = { array?: boolean, required?: boolean };
 

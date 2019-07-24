@@ -18,10 +18,10 @@ import {
 import { get as objectGet } from 'lodash/object';
 import pluralize from 'pluralize';
 
-import type { GeneralConfig, FlatFormikFields, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, FlatFormikFields, ThingConfig } from '../../../flowTypes';
 
-import Geospatial from './components/Geospatial';
-import Outline from './components/Outline';
+import Geospatial from '../Geospatial';
+import Outline from '../Outline';
 import composeFlatFormikFields from './composeFlatFormikFields';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 import composeInitialValues from './composeInitialValues';
