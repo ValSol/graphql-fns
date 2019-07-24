@@ -36,6 +36,7 @@ import createValidationSchema from '../createValidationSchema';
 import getNeighbors from '../getNeighbors';
 
 import GeneralConfigContext from './GeneralConfigContext';
+import { ThingListContext } from './ThingListContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
 import useThingList from './useThingList';
@@ -46,6 +47,8 @@ type Props = {
 };
 
 const ThingForm = (props: Props) => {
+  // eslint-disable-next-line no-unused-vars
+  const [foo, setState] = React.useContext(ThingListContext); // will use only when create new item
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const [open, setOpen] = React.useState(false);
   const {
@@ -96,8 +99,6 @@ const ThingForm = (props: Props) => {
       ? gql(composeMutation('deleteThing', thingConfig, generalConfig, { exclude }))
       : gql(composeMutation('updateThing', thingConfig, generalConfig, { exclude }))
     : gql(composeMutation('createThing', thingConfig, generalConfig, { include: { id: null } }));
-
-  // const formikFragment = composeFormikFragment(thingConfig, generalConfig, toDelete);
 
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary
@@ -186,6 +187,10 @@ const ThingForm = (props: Props) => {
                                 } else {
                                   // if create
                                   const { id: newId } = resultData[`create${name}`];
+                                  setState(prevState => ({
+                                    ...prevState,
+                                    items: [...prevState.items, { id: newId }],
+                                  }));
                                   // TODO update store instead of clear store
                                   apolloClient
                                     .clearStore()
