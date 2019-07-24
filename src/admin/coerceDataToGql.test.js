@@ -1022,4 +1022,115 @@ describe('coerceDataToGql', () => {
       expect(result).toEqual(expectedResult);
     });
   });
+
+  describe('should coerce int & float fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'intField',
+        },
+        {
+          name: 'intFields',
+          array: true,
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField',
+        },
+        {
+          name: 'floatFields',
+          array: true,
+        },
+      ],
+    });
+    const data = {
+      intField: 1,
+      intFields: [2],
+      floatField: 0.3,
+      floatFields: [0.4],
+    };
+
+    test('empty prev data', () => {
+      const prevData = {};
+
+      const expectedResult = {
+        intField: 1,
+        intFields: [2],
+        floatField: 0.3,
+        floatFields: [0.4],
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('some not changed prev data', () => {
+      const prevData = {
+        intField: 1,
+        intFields: [2],
+        floatField: 0.3,
+        floatFields: [0.4],
+      };
+
+      const expectedResult = {};
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('removed prev data', () => {
+      const data2 = {
+        intField: '',
+        intFields: [''],
+        floatField: '',
+        floatFields: [''],
+      };
+
+      const prevData = {
+        intField: 1,
+        intFields: [2],
+        floatField: 0.3,
+        floatFields: [0.4],
+      };
+
+      const expectedResult = {
+        intField: null,
+        intFields: [],
+        floatField: null,
+        floatFields: [],
+      };
+
+      const result = coerceDataToGql(data2, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('data have 0s', () => {
+      const data2 = {
+        intField: 0,
+        intFields: [0],
+        floatField: 0,
+        floatFields: [0],
+      };
+
+      const prevData = {
+        intField: 1,
+        intFields: [2],
+        floatField: 0.3,
+        floatFields: [0.4],
+      };
+
+      const expectedResult = {
+        intField: 0,
+        intFields: [0],
+        floatField: 0,
+        floatFields: [0],
+      };
+
+      const result = coerceDataToGql(data2, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
 });

@@ -45,9 +45,15 @@ const coerceDataToGql = (
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
       }
+    } else if (kind === 'intFields' || kind === 'floatFields') {
+      if (array) {
+        prev[key] = data[key].filter(item => item !== ''); // eslint-disable-line no-param-reassign
+      } else {
+        prev[key] = data[key] === '' ? null : data[key]; // eslint-disable-line no-param-reassign
+      }
     } else if (kind === 'dateTimeFields') {
       if (array) {
-        prev[key] = data[key].map(item => (isNotDate(item) ? null : item)); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].map(item => (isNotDate(item) ? null : item)).filter(Boolean); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
       }
@@ -56,10 +62,12 @@ const coerceDataToGql = (
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(item => {
-            const { longitude, latitude } = item;
-            return longitude === '' || latitude === '' ? null : item; // eslint-disable-line no-param-reassign
-          });
+          prev[key] = data[key]
+            .map(item => {
+              const { longitude, latitude } = item;
+              return longitude === '' || latitude === '' ? null : item; // eslint-disable-line no-param-reassign
+            })
+            .filter(Boolean);
         } else {
           const { longitude, latitude } = data[key];
           prev[key] = longitude === '' || latitude === '' ? null : data[key]; // eslint-disable-line no-param-reassign
@@ -67,13 +75,15 @@ const coerceDataToGql = (
       } else if (geospatialType === 'Polygon') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(item => {
-            // TODO expand test for all empty situations
-            const {
-              externalRing: { ring: externalRing },
-            } = item;
-            return externalRing.length < 4 ? null : item; // eslint-disable-line no-param-reassign
-          });
+          prev[key] = data[key]
+            .map(item => {
+              // TODO expand test for all empty situations
+              const {
+                externalRing: { ring: externalRing },
+              } = item;
+              return externalRing.length < 4 ? null : item; // eslint-disable-line no-param-reassign
+            })
+            .filter(Boolean);
         } else {
           // TODO expand test for all empty situations
           const {
