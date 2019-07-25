@@ -39,21 +39,22 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, required,
   if (type === 'Point') {
     control = (
       <React.Fragment>
-        {onDelete && (
-          <Tooltip
-            style={{ float: 'right', marginTop: 16, marginRight: 8 }}
-            title={`Delete ${label}`}
-          >
-            <IconButton
-              edge="end"
-              aria-label={`Delete ${label}`}
-              onClick={onDelete}
-              disabled={disabled}
+        {onDelete &&
+          (disabled ? null : (
+            <Tooltip
+              style={{ float: 'right', marginTop: 16, marginRight: 8 }}
+              title={disabled ? '' : `Delete ${label}`}
             >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+              <IconButton
+                edge="end"
+                aria-label={`Delete ${label}`}
+                onClick={onDelete}
+                disabled={disabled}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ))}
         <Field {...fieldProps} label="latitude" name={`${name}.latitude`} />
         <Field {...fieldProps} label="longitude" name={`${name}.longitude`} />
       </React.Fragment>
