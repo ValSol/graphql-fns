@@ -83,12 +83,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add email" placement="right">
-          <IconButton
-            aria-label="Add email"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add email" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -180,12 +175,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add count" placement="right">
-          <IconButton
-            aria-label="Add count"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add count" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -277,12 +267,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add weight" placement="right">
-          <IconButton
-            aria-label="Add weight"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add weight" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -355,12 +340,7 @@ describe('composeFormikFieldArrayChild', () => {
           </span>,
         ]}
         <Tooltip title="Add bool" placement="right">
-          <IconButton
-            aria-label="Add bool"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add bool" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -452,12 +432,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add coworker" placement="right">
-          <IconButton
-            aria-label="Add coworker"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add coworker" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -550,12 +525,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add coworker" placement="right">
-          <IconButton
-            aria-label="Add coworker"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add coworker" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -655,12 +625,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add date" placement="right">
-          <IconButton
-            aria-label="Add date"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add date" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -728,12 +693,7 @@ describe('composeFormikFieldArrayChild', () => {
           />,
         ]}
         <Tooltip title="Add position" placement="right">
-          <IconButton
-            aria-label="Add position"
-            onClick={() => {}}
-            disabled={false}
-            style={{ display: 'block' }}
-          >
+          <IconButton aria-label="Add position" onClick={() => {}} style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
         </Tooltip>

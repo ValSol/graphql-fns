@@ -70,18 +70,23 @@ const composeFormikFieldArrayChild = (
       <React.Fragment>
         {objectGet(values, name) &&
           objectGet(values, name).map((item, i) => {
-            const tooltip = (
-              <Tooltip title={`Delete ${itemLabel} #${i + 1}`}>
-                <IconButton
-                  edge="end"
-                  aria-label={`Delete ${itemLabel} #${i + 1}`}
-                  onClick={() => remove(i)}
-                  disabled={disabled || isSubmitting}
-                >
+            const tooltip =
+              disabled || isSubmitting ? (
+                <IconButton edge="end" aria-label={`Delete ${itemLabel} #${i + 1}`} disabled>
                   <DeleteIcon />
                 </IconButton>
-              </Tooltip>
-            );
+              ) : (
+                <Tooltip title={`Delete ${itemLabel} #${i + 1}`}>
+                  <IconButton
+                    edge="end"
+                    aria-label={`Delete ${itemLabel} #${i + 1}`}
+                    onClick={() => remove(i)}
+                    disabled={disabled || isSubmitting}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              );
             const InputProps = {
               endAdornment: <InputAdornment position="end">{tooltip}</InputAdornment>,
             };
@@ -157,16 +162,21 @@ const composeFormikFieldArrayChild = (
                 throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
             }
           })}
-        <Tooltip title={`Add ${itemLabel}`} placement="right">
-          <IconButton
-            aria-label={`Add ${itemLabel}`}
-            onClick={() => push(itemForPush)}
-            disabled={disabled || isSubmitting}
-            style={{ display: 'block' }}
-          >
+        {disabled || isSubmitting ? (
+          <IconButton aria-label={`Add ${itemLabel}`} disabled style={{ display: 'block' }}>
             <AddIcon />
           </IconButton>
-        </Tooltip>
+        ) : (
+          <Tooltip title={`Add ${itemLabel}`} placement="right">
+            <IconButton
+              aria-label={`Add ${itemLabel}`}
+              onClick={() => push(itemForPush)}
+              style={{ display: 'block' }}
+            >
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </React.Fragment>
     );
   };

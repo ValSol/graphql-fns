@@ -87,33 +87,43 @@ const composeFields = (
                               `${path}[${j}]`,
                             )}
                             <div>
-                              <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
-                                <IconButton
-                                  edge="end"
-                                  aria-label={`Delete ${itemName}`}
-                                  onClick={() => remove(j)}
-                                  disabled={disabled || isSubmitting}
-                                >
+                              {disabled || isSubmitting ? (
+                                <IconButton edge="end" aria-label={`Delete ${itemName}`} disabled>
                                   <DeleteIcon />
                                 </IconButton>
-                              </Tooltip>
+                              ) : (
+                                <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
+                                  <IconButton
+                                    edge="end"
+                                    aria-label={`Delete ${itemName}`}
+                                    onClick={() => remove(j)}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
                             </div>
                           </Outline>
                         );
                       })}
                     <div>
-                      <Tooltip title={`Add ${itemName}`} placement="right">
-                        <IconButton
-                          edge="end"
-                          aria-label={`Add ${itemName}`}
-                          onClick={() => {
-                            if (config) push(composeInitialValues(config, enumsObject));
-                          }}
-                          disabled={disabled || isSubmitting}
-                        >
+                      {disabled || isSubmitting ? (
+                        <IconButton edge="end" aria-label={`Add ${itemName}`} disabled>
                           <AddIcon />
                         </IconButton>
-                      </Tooltip>
+                      ) : (
+                        <Tooltip title={`Add ${itemName}`} placement="right">
+                          <IconButton
+                            edge="end"
+                            aria-label={`Add ${itemName}`}
+                            onClick={() => {
+                              if (config) push(composeInitialValues(config, enumsObject));
+                            }}
+                          >
+                            <AddIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </div>
                   </React.Fragment>
                 );
