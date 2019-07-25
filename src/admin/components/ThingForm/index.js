@@ -62,8 +62,10 @@ const ThingForm = (props: Props) => {
   const { items } = useThingList(thingConfig, [{ dataKey: 'id' }]);
   const { previous, next } = getNeighbors(id, items);
 
+  const toDelete = deleteAttr === '' || !!deleteAttr;
+
   const scrollButtons =
-    !previous && !next ? null : (
+    (!previous && !next) || toDelete ? null : (
       <div>
         <IconButton
           aria-label="Delete"
@@ -83,8 +85,6 @@ const ThingForm = (props: Props) => {
         </IconButton>
       </div>
     );
-
-  const toDelete = deleteAttr === '' || !!deleteAttr;
 
   const exclude = {
     id: null,
