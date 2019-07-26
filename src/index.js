@@ -50,4 +50,4 @@ export { default as composeQuery } from './client/queries/composeQuery';
 export { default as composeSubscription } from './client/subscriptions/composeSubscription';
 
 // admin
-export { default as Admin } from './admin/components/Admin';
+export { default as Admin } from './components/Admin';
