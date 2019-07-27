@@ -72,9 +72,7 @@ const composeFormikFieldArrayChild = (
           objectGet(values, name).map((item, i) => {
             const tooltip =
               disabled || isSubmitting ? (
-                <IconButton edge="end" aria-label={`Delete ${itemLabel} #${i + 1}`} disabled>
-                  <DeleteIcon />
-                </IconButton>
+                <DeleteIcon />
               ) : (
                 <Tooltip title={`Delete ${itemLabel} #${i + 1}`}>
                   <IconButton
@@ -163,9 +161,7 @@ const composeFormikFieldArrayChild = (
             }
           })}
         {disabled || isSubmitting ? (
-          <IconButton aria-label={`Add ${itemLabel}`} disabled style={{ display: 'block' }}>
-            <AddIcon />
-          </IconButton>
+          <AddIcon />
         ) : (
           <Tooltip title={`Add ${itemLabel}`} placement="right">
             <IconButton

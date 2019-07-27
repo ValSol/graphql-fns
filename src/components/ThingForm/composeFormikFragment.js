@@ -88,9 +88,7 @@ const composeFields = (
                             )}
                             <div>
                               {disabled || isSubmitting ? (
-                                <IconButton edge="end" aria-label={`Delete ${itemName}`} disabled>
-                                  <DeleteIcon />
-                                </IconButton>
+                                <DeleteIcon />
                               ) : (
                                 <Tooltip title={`Delete ${itemName} #${j + 1}`} placement="right">
                                   <IconButton
@@ -108,9 +106,7 @@ const composeFields = (
                       })}
                     <div>
                       {disabled || isSubmitting ? (
-                        <IconButton edge="end" aria-label={`Add ${itemName}`} disabled>
-                          <AddIcon />
-                        </IconButton>
+                        <AddIcon />
                       ) : (
                         <Tooltip title={`Add ${itemName}`} placement="right">
                           <IconButton
