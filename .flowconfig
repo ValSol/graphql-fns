@@ -2,6 +2,7 @@
 0.102.0
 [ignore]
 .*/node_modules/.*/\(lib\|test\).*\.json$
+.*/node_modules/.*/\(src\).*\.js$
 lib/.*
 
 [include]
