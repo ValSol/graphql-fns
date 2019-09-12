@@ -42,17 +42,17 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data[key].map(item => {
             if (!item) {
-              return { longitude: '', latitude: '' };
+              return { lng: '', lat: '' };
             }
-            const { longitude, latitude } = item;
-            return { longitude, latitude };
+            const { lng, lat } = item;
+            return { lng, lat };
           });
         } else if (!data[key]) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = { longitude: '', latitude: '' };
+          prev[key] = { lng: '', lat: '' };
         } else {
-          const { longitude, latitude } = data[key];
-          prev[key] = { longitude, latitude }; // eslint-disable-line no-param-reassign
+          const { lng, lat } = data[key];
+          prev[key] = { lng, lat }; // eslint-disable-line no-param-reassign
         }
       } else if (geospatialType === 'Polygon') {
         if (array) {

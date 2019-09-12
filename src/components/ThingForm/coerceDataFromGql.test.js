@@ -341,36 +341,26 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       geospatialField1: {
-        longitude: 50.426982,
-        latitude: 30.615328,
+        lng: 50.426982,
+        lat: 30.615328,
         __typename: 'GeospatialPoint',
       },
       geospatialField2: null,
       geospatialField3: [
         {
-          longitude: 50.426983,
-          latitude: 30.615329,
+          lng: 50.426983,
+          lat: 30.615329,
           __typename: 'GeospatialPoint',
         },
         null,
       ],
       geospatialField4: {
         externalRing: {
-          ring: [
-            { longitude: 0, latitude: 0 },
-            { longitude: 3, latitude: 6 },
-            { longitude: 6, latitude: 1 },
-            { longitude: 0, latitude: 0 },
-          ],
+          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
         },
         internalRings: [
           {
-            ring: [
-              { longitude: 2, latitude: 2 },
-              { longitude: 3, latitude: 3 },
-              { longitude: 4, latitude: 2 },
-              { longitude: 2, latitude: 2 },
-            ],
+            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
           },
         ],
       },
@@ -381,40 +371,30 @@ describe('coerceDataFromGql', () => {
 
     const expectedResult = {
       geospatialField1: {
-        longitude: 50.426982,
-        latitude: 30.615328,
+        lng: 50.426982,
+        lat: 30.615328,
       },
       geospatialField2: {
-        longitude: '',
-        latitude: '',
+        lng: '',
+        lat: '',
       },
       geospatialField3: [
         {
-          longitude: 50.426983,
-          latitude: 30.615329,
+          lng: 50.426983,
+          lat: 30.615329,
         },
         {
-          longitude: '',
-          latitude: '',
+          lng: '',
+          lat: '',
         },
       ],
       geospatialField4: {
         externalRing: {
-          ring: [
-            { longitude: 0, latitude: 0 },
-            { longitude: 3, latitude: 6 },
-            { longitude: 6, latitude: 1 },
-            { longitude: 0, latitude: 0 },
-          ],
+          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
         },
         internalRings: [
           {
-            ring: [
-              { longitude: 2, latitude: 2 },
-              { longitude: 3, latitude: 3 },
-              { longitude: 4, latitude: 2 },
-              { longitude: 2, latitude: 2 },
-            ],
+            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
           },
         ],
       },

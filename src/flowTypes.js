@@ -11,8 +11,8 @@ export type MongodbGeospatialPolygon = {|
 |};
 
 export type GeospatialPoint = {|
-  +longitude: number,
-  +latitude: number,
+  +lng: number,
+  +lat: number,
 |};
 
 export type GeospatialPolygon = {

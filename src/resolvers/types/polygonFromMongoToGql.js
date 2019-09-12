@@ -9,8 +9,8 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
 
   const externalRing = externalRingArray.reduce(
     (prev, item) => {
-      const [longitude, latitude] = item;
-      prev.ring.push({ longitude, latitude });
+      const [lng, lat] = item;
+      prev.ring.push({ lng, lat });
       return prev;
     },
     { ring: [] },
@@ -20,8 +20,8 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
     const internalRings = internalRingsArray.map(array =>
       array.reduce(
         (prev, item) => {
-          const [longitude, latitude] = item;
-          prev.ring.push({ longitude, latitude });
+          const [lng, lat] = item;
+          prev.ring.push({ lng, lat });
           return prev;
         },
         { ring: [] },

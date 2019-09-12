@@ -15,12 +15,7 @@ describe('polygonFromMongoToGql', () => {
 
     const expectedResult = {
       externalRing: {
-        ring: [
-          { longitude: 0, latitude: 0 },
-          { longitude: 3, latitude: 6 },
-          { longitude: 6, latitude: 1 },
-          { longitude: 0, latitude: 0 },
-        ],
+        ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
       },
     };
 
@@ -37,21 +32,11 @@ describe('polygonFromMongoToGql', () => {
 
     const expectedResult = {
       externalRing: {
-        ring: [
-          { longitude: 0, latitude: 0 },
-          { longitude: 3, latitude: 6 },
-          { longitude: 6, latitude: 1 },
-          { longitude: 0, latitude: 0 },
-        ],
+        ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
       },
       internalRings: [
         {
-          ring: [
-            { longitude: 2, latitude: 2 },
-            { longitude: 3, latitude: 3 },
-            { longitude: 4, latitude: 2 },
-            { longitude: 2, latitude: 2 },
-          ],
+          ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
         },
       ],
     };

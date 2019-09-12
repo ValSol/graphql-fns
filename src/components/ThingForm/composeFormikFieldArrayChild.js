@@ -61,13 +61,13 @@ const composeFormikFieldArrayChild = (
     if (kind === 'booleanFields') itemForPush = false;
     if (kind === 'geospatialFields' && geospatialType === 'Point') {
       itemForPush = {
-        longitude: '',
-        latitude: '',
+        lng: '',
+        lat: '',
       };
     }
 
     return (
-      <React.Fragment>
+      <>
         {objectGet(values, name) &&
           objectGet(values, name).map((item, i) => {
             const tooltip =
@@ -111,18 +111,24 @@ const composeFormikFieldArrayChild = (
             }
             switch (kind) {
               case 'textFields':
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} fullWidth />;
               case 'duplexFields':
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} fullWidth />;
               case 'relationalFields':
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} fullWidth />;
               case 'intFields':
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
               case 'floatFields':
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
               case 'dateTimeFields':
                 return (
                   <Field
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...fieldProps}
                     InputLabelProps={{ shrink: true }}
                     style={{ marginRight: 8 }}
@@ -133,6 +139,7 @@ const composeFormikFieldArrayChild = (
                 return (
                   // eslint-disable-next-line react/no-array-index-key
                   <span key={i} style={{ display: 'inline-block', marginRight: 24 }}>
+                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <Field {...fieldProps} />
                     {tooltip}
                   </span>
@@ -173,7 +180,7 @@ const composeFormikFieldArrayChild = (
             </IconButton>
           </Tooltip>
         )}
-      </React.Fragment>
+      </>
     );
   };
   return formikFieldArrayChild;

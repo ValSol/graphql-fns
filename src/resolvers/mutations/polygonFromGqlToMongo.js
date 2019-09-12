@@ -12,13 +12,13 @@ const polygonFromGqlToMongo = (
     internalRings,
   } = polygon;
 
-  const exteranlRing2 = externalRing.map(({ longitude, latitude }) => [longitude, latitude]);
+  const exteranlRing2 = externalRing.map(({ lng, lat }) => [lng, lat]);
 
   const result = { coordinates: [exteranlRing2], type: 'Polygon' };
 
   if (internalRings && internalRings.length) {
     const internalRings2 = internalRings.map(({ ring: array }) =>
-      array.map(({ longitude, latitude }) => [longitude, latitude]),
+      array.map(({ lng, lat }) => [lng, lat]),
     );
 
     result.coordinates = [...result.coordinates, ...internalRings2];

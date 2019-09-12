@@ -764,26 +764,16 @@ describe('coerceDataToGql', () => {
     });
     const data = {
       geospatialFieldPoint: {
-        longitude: 50.426982,
-        latitude: 30.615328,
+        lng: 50.426982,
+        lat: 30.615328,
       },
       geospatialFieldPolygon: {
         externalRing: {
-          ring: [
-            { longitude: 0, latitude: 0 },
-            { longitude: 3, latitude: 6 },
-            { longitude: 6, latitude: 1 },
-            { longitude: 0, latitude: 0 },
-          ],
+          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
         },
         internalRings: [
           {
-            ring: [
-              { longitude: 2, latitude: 2 },
-              { longitude: 3, latitude: 3 },
-              { longitude: 4, latitude: 2 },
-              { longitude: 2, latitude: 2 },
-            ],
+            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
           },
         ],
       },
@@ -794,25 +784,20 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {
         geospatialFieldPoint: {
-          longitude: 50.426982,
-          latitude: 30.615328,
+          lng: 50.426982,
+          lat: 30.615328,
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-              { longitude: 0, latitude: 0 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
           },
           internalRings: [
             {
               ring: [
-                { longitude: 2, latitude: 2 },
-                { longitude: 3, latitude: 3 },
-                { longitude: 4, latitude: 2 },
-                { longitude: 2, latitude: 2 },
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+                { lng: 2, lat: 2 },
               ],
             },
           ],
@@ -826,25 +811,20 @@ describe('coerceDataToGql', () => {
     test('some not changed prev data', () => {
       const prevData = {
         geospatialFieldPoint: {
-          longitude: 50.426982,
-          latitude: 30.615328,
+          lng: 50.426982,
+          lat: 30.615328,
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-              { longitude: 0, latitude: 0 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
           },
           internalRings: [
             {
               ring: [
-                { longitude: 2, latitude: 2 },
-                { longitude: 3, latitude: 3 },
-                { longitude: 4, latitude: 2 },
-                { longitude: 2, latitude: 2 },
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+                { lng: 2, lat: 2 },
               ],
             },
           ],
@@ -860,25 +840,17 @@ describe('coerceDataToGql', () => {
     test('removed prev data', () => {
       const data2 = {
         geospatialFieldPoint: {
-          longitude: '',
-          latitude: '',
+          lng: '',
+          lat: '',
         },
         // not correct filled polygon
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }],
           },
           internalRings: [
             {
-              ring: [
-                { longitude: 2, latitude: 2 },
-                { longitude: 3, latitude: 3 },
-                { longitude: 4, latitude: 2 },
-              ],
+              ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }],
             },
           ],
         },
@@ -886,25 +858,20 @@ describe('coerceDataToGql', () => {
 
       const prevData = {
         geospatialFieldPoint: {
-          longitude: 50.426982,
-          latitude: 30.615328,
+          lng: 50.426982,
+          lat: 30.615328,
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-              { longitude: 0, latitude: 0 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
           },
           internalRings: [
             {
               ring: [
-                { longitude: 2, latitude: 2 },
-                { longitude: 3, latitude: 3 },
-                { longitude: 4, latitude: 2 },
-                { longitude: 2, latitude: 2 },
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+                { lng: 2, lat: 2 },
               ],
             },
           ],
@@ -933,16 +900,16 @@ describe('coerceDataToGql', () => {
     });
     const prevData = {
       geospatialField: {
-        longitude: 50.426982,
-        latitude: 30.615328,
+        lng: 50.426982,
+        lat: 30.615328,
       },
     };
 
-    test('prev data with empty longitude', () => {
+    test('prev data with empty lng', () => {
       const data = {
         geospatialField: {
-          longitude: '',
-          latitude: 30.615328,
+          lng: '',
+          lat: 30.615328,
         },
       };
       const expectedResult = {
@@ -953,11 +920,11 @@ describe('coerceDataToGql', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    test('prev data with empty longitude', () => {
+    test('prev data with empty lng', () => {
       const data = {
         geospatialField: {
-          longitude: 50.426982,
-          latitude: '',
+          lng: 50.426982,
+          lat: '',
         },
       };
       const expectedResult = {

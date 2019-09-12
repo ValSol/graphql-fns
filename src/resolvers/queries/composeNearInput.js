@@ -4,7 +4,7 @@ import type { NearInput, NearMongodb } from '../../flowTypes';
 const composeNearInput = (near: NearInput): NearMongodb => {
   const {
     geospatialField,
-    coordinates: { longitude, latitude },
+    coordinates: { lng, lat },
     maxDistance: $maxDistance,
   } = near;
   return {
@@ -12,7 +12,7 @@ const composeNearInput = (near: NearInput): NearMongodb => {
       $nearSphere: {
         $geometry: {
           type: 'Point',
-          coordinates: [longitude, latitude],
+          coordinates: [lng, lat],
         },
         $maxDistance,
       },

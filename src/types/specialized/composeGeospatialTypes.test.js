@@ -29,12 +29,12 @@ describe('composeGeospatialTypes', () => {
     const thingConfigs = [thingConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `type GeospatialPoint {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 input GeospatialPointInput {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }`;
 
     const result = composeGeospatialTypes(generalConfig);
@@ -54,8 +54,8 @@ input GeospatialPointInput {
     const thingConfigs = [thingConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `type GeospatialPoint {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
@@ -65,8 +65,8 @@ type GeospatialPolygon {
   internalRings: [GeospatialPolygonRing!]
 }
 input GeospatialPointInput {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!

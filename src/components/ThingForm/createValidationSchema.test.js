@@ -357,22 +357,22 @@ describe('createValidationSchema', () => {
     });
 
     const geospatialPointSchema = yup.object().shape({
-      latitude: yup
+      lat: yup
         .number()
         .min(-90)
         .max(90),
-      longitude: yup
+      lng: yup
         .number()
         .min(-180)
         .max(180),
     });
     const geospatialPointRequiredSchema = yup.object().shape({
-      latitude: yup
+      lat: yup
         .number()
         .min(-90)
         .max(90)
         .required(),
-      longitude: yup
+      lng: yup
         .number()
         .min(-180)
         .max(180)

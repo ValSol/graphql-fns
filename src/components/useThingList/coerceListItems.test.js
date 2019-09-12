@@ -261,36 +261,31 @@ describe('coerceListItems', () => {
 
     const items = [
       {
-        geospatialPoint: { longitude: 40, latitude: 5 },
-        geospatialPointArray: [{ longitude: 40, latitude: 5 }, { longitude: 41, latitude: 6 }],
+        geospatialPoint: { lng: 40, lat: 5 },
+        geospatialPointArray: [{ lng: 40, lat: 5 }, { lng: 41, lat: 6 }],
         geospatialPolygon: {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-              { longitude: 0, latitude: 0 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
           },
         },
         geospatialPolygonArray: [
           {
             externalRing: {
               ring: [
-                { longitude: 0, latitude: 0 },
-                { longitude: 3, latitude: 6 },
-                { longitude: 6, latitude: 1 },
-                { longitude: 0, latitude: 0 },
+                { lng: 0, lat: 0 },
+                { lng: 3, lat: 6 },
+                { lng: 6, lat: 1 },
+                { lng: 0, lat: 0 },
               ],
             },
           },
           {
             externalRing: {
               ring: [
-                { longitude: 0, latitude: 0 },
-                { longitude: 3, latitude: 6 },
-                { longitude: 6, latitude: 1 },
-                { longitude: 0, latitude: 0 },
+                { lng: 0, lat: 0 },
+                { lng: 3, lat: 6 },
+                { lng: 6, lat: 1 },
+                { lng: 0, lat: 0 },
               ],
             },
           },

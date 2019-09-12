@@ -10,7 +10,7 @@ describe('pointFromMongoToGql', () => {
 
     const result: GeospatialPoint = pointFromMongoToGql(point);
 
-    const expectedResult = { longitude: 40, latitude: 5 };
+    const expectedResult = { lng: 40, lat: 5 };
 
     expect(result).toEqual(expectedResult);
   });

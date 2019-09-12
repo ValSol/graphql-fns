@@ -4,10 +4,10 @@ import type { GeospatialPoint, MongodbGeospatialPoint } from '../../flowTypes';
 
 const pointFromMongoToGql = (point: MongodbGeospatialPoint): GeospatialPoint => {
   const {
-    coordinates: [longitude, latitude],
+    coordinates: [lng, lat],
   } = point;
 
-  return { longitude, latitude };
+  return { lng, lat };
 };
 
 export default pointFromMongoToGql;

@@ -473,8 +473,8 @@ describe('composeInitialValues', () => {
 
     const expectedResult = {
       geospatialFieldPoint: {
-        longitude: '',
-        latitude: '',
+        lng: '',
+        lat: '',
       },
       geospatialFieldPolygon: {
         externalRing: {

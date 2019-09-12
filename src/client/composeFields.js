@@ -168,11 +168,11 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
           prev.push(`${'  '.repeat(shift)}${name} {`);
           const nestedInculde = include && include[name];
           const nestedExclude = exclude && exclude[name];
-          if (includeField('longitude', nestedInculde, nestedExclude)) {
-            prev.push(`${'  '.repeat(shift + 1)}longitude`);
+          if (includeField('lng', nestedInculde, nestedExclude)) {
+            prev.push(`${'  '.repeat(shift + 1)}lng`);
           }
-          if (includeField('latitude', nestedInculde, nestedExclude)) {
-            prev.push(`${'  '.repeat(shift + 1)}latitude`);
+          if (includeField('lat', nestedInculde, nestedExclude)) {
+            prev.push(`${'  '.repeat(shift + 1)}lat`);
           }
           prev.push(`${'  '.repeat(shift)}}`);
         }
@@ -190,7 +190,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
             prev.push(`${'  '.repeat(shift + 2)}ring {`);
             if (
               includeField(
-                'longitude',
+                'lng',
                 include &&
                   include[name] &&
                   include[name].externalRing &&
@@ -201,11 +201,11 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
                   exclude[name].externalRing.ring,
               )
             ) {
-              prev.push(`${'  '.repeat(shift + 3)}longitude`);
+              prev.push(`${'  '.repeat(shift + 3)}lng`);
             }
             if (
               includeField(
-                'latitude',
+                'lat',
                 include &&
                   include[name] &&
                   include[name].externalRing &&
@@ -216,7 +216,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
                   exclude[name].externalRing.ring,
               )
             ) {
-              prev.push(`${'  '.repeat(shift + 3)}latitude`);
+              prev.push(`${'  '.repeat(shift + 3)}lat`);
             }
             prev.push(`${'  '.repeat(shift + 2)}}`);
             prev.push(`${'  '.repeat(shift + 1)}}`);
@@ -233,7 +233,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
             prev.push(`${'  '.repeat(shift + 2)}ring {`);
             if (
               includeField(
-                'longitude',
+                'lng',
                 include &&
                   include[name] &&
                   include[name].internalRings &&
@@ -244,11 +244,11 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
                   exclude[name].internalRings.ring,
               )
             ) {
-              prev.push(`${'  '.repeat(shift + 3)}longitude`);
+              prev.push(`${'  '.repeat(shift + 3)}lng`);
             }
             if (
               includeField(
-                'latitude',
+                'lat',
                 include &&
                   include[name] &&
                   include[name].internalRings &&
@@ -259,7 +259,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
                   exclude[name].internalRings.ring,
               )
             ) {
-              prev.push(`${'  '.repeat(shift + 3)}latitude`);
+              prev.push(`${'  '.repeat(shift + 3)}lat`);
             }
             prev.push(`${'  '.repeat(shift + 2)}}`);
             prev.push(`${'  '.repeat(shift + 1)}}`);

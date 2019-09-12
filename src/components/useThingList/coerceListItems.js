@@ -96,12 +96,10 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
           if (geospatialType === 'Point') {
             if (array) {
               // eslint-disable-next-line no-param-reassign
-              prev[key] = item[key]
-                .map(({ latitude, longitude }) => `(${latitude}, ${longitude})`)
-                .join(', ');
+              prev[key] = item[key].map(({ lat, lng }) => `(${lat}, ${lng})`).join(', ');
             } else {
-              const { latitude, longitude } = item[key];
-              prev[key] = `(${latitude}, ${longitude})`; // eslint-disable-line no-param-reassign
+              const { lat, lng } = item[key];
+              prev[key] = `(${lat}, ${lng})`; // eslint-disable-line no-param-reassign
             }
           } else if (array) {
             // eslint-disable-next-line no-param-reassign

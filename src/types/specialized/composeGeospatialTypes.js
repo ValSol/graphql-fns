@@ -27,8 +27,8 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
 
   if (thereIsGeospatialPolygon) {
     return `type GeospatialPoint {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
@@ -38,8 +38,8 @@ type GeospatialPolygon {
   internalRings: [GeospatialPolygonRing!]
 }
 input GeospatialPointInput {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
@@ -52,12 +52,12 @@ input GeospatialPolygonInput {
 
   if (thereIsGeospatialPoint) {
     return `type GeospatialPoint {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }
 input GeospatialPointInput {
-  longitude: Float!
-  latitude: Float!
+  lng: Float!
+  lat: Float!
 }`;
   }
 

@@ -25,7 +25,7 @@ const composeEmptyValues = (thingConfig: ThingConfig): Object => {
     } else if (fieldsObject[name].kind === 'geospatialFields') {
       const { geospatialType } = fieldsObject[name].attributes;
       if (geospatialType === 'Point') {
-        prev[name] = { longitude: '', latitude: '' }; // eslint-disable-line no-param-reassign
+        prev[name] = { lng: '', lat: '' }; // eslint-disable-line no-param-reassign
       } else if (geospatialType === 'Polygon') {
         // eslint-disable-next-line no-param-reassign
         prev[name] = {

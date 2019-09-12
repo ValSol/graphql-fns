@@ -38,7 +38,7 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, required,
 
   if (type === 'Point') {
     control = (
-      <React.Fragment>
+      <>
         {onDelete &&
           (disabled ? null : (
             <Tooltip
@@ -55,9 +55,11 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, required,
               </IconButton>
             </Tooltip>
           ))}
-        <Field {...fieldProps} label="latitude" name={`${name}.latitude`} />
-        <Field {...fieldProps} label="longitude" name={`${name}.longitude`} />
-      </React.Fragment>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Field {...fieldProps} label="latitude" name={`${name}.lat`} />
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Field {...fieldProps} label="longitude" name={`${name}.lng`} />
+      </>
     );
   } else if (type === 'Polygon') {
     control = <h1>TODO Polygon control</h1>;

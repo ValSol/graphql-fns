@@ -27,7 +27,7 @@ const intSchema = () => floatSchema().integer();
 
 const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): Object =>
   yup.object().shape({
-    latitude:
+    lat:
       required || array
         ? floatSchema()
             .min(-90, 'latitude must be greater than or equal to -90')
@@ -36,15 +36,15 @@ const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): 
         : floatSchema()
             .min(-90, 'latitude must be greater than or equal to -90')
             .max(90, 'latitude must be less than or equal to 90'),
-    longitude:
+    lng:
       required || array
         ? floatSchema()
             .min(-180, 'longitude must be greater than or equal to -180')
-            .max(180, 'latitude must be less than or equal to 180')
+            .max(180, 'longitude must be less than or equal to 180')
             .required('Required')
         : floatSchema()
             .min(-180, 'longitude must be greater than or equal to -180')
-            .max(180, 'latitude must be less than or equal to 180'),
+            .max(180, 'longitude must be less than or equal to 180'),
   });
 
 const createValidationSchema = (

@@ -41,7 +41,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
             data[name] === undefined || data[name] === null
               ? array
                 ? []
-                : { longitude: '', latitude: '' }
+                : { lng: '', lat: '' }
               : data[name];
         } else if (geospatialType === 'Polygon') {
           // eslint-disable-next-line no-param-reassign

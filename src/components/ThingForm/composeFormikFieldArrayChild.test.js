@@ -657,12 +657,12 @@ describe('composeFormikFieldArrayChild', () => {
             name: 'Vasya',
             positions: [
               {
-                longitude: 50.426982,
-                latitude: 30.615328,
+                lng: 50.426982,
+                lat: 30.615328,
               },
               {
-                longitude: 50.426983,
-                latitude: 30.615329,
+                lng: 50.426983,
+                lat: 30.615329,
               },
             ],
           },

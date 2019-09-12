@@ -64,13 +64,13 @@ const coerceDataToGql = (
           // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
             .map(item => {
-              const { longitude, latitude } = item;
-              return longitude === '' || latitude === '' ? null : item; // eslint-disable-line no-param-reassign
+              const { lng, lat } = item;
+              return lng === '' || lat === '' ? null : item; // eslint-disable-line no-param-reassign
             })
             .filter(Boolean);
         } else {
-          const { longitude, latitude } = data[key];
-          prev[key] = longitude === '' || latitude === '' ? null : data[key]; // eslint-disable-line no-param-reassign
+          const { lng, lat } = data[key];
+          prev[key] = lng === '' || lat === '' ? null : data[key]; // eslint-disable-line no-param-reassign
         }
       } else if (geospatialType === 'Polygon') {
         if (array) {

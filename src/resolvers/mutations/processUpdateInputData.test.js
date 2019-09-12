@@ -56,27 +56,17 @@ describe('processUpdateInputData', () => {
       ],
     };
     const data = {
-      point: { longitude: 40, latitude: 5 },
-      points: [{ longitude: 12, latitude: 23 }, { longitude: 34, latitude: 45 }],
+      point: { lng: 40, lat: 5 },
+      points: [{ lng: 12, lat: 23 }, { lng: 34, lat: 45 }],
       polygon: {
         externalRing: {
-          ring: [
-            { longitude: 0, latitude: 0 },
-            { longitude: 3, latitude: 6 },
-            { longitude: 6, latitude: 1 },
-            { longitude: 0, latitude: 0 },
-          ],
+          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
         },
       },
       polygons: [
         {
           externalRing: {
-            ring: [
-              { longitude: 0, latitude: 0 },
-              { longitude: 3, latitude: 6 },
-              { longitude: 6, latitude: 1 },
-              { longitude: 0, latitude: 0 },
-            ],
+            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
           },
         },
       ],

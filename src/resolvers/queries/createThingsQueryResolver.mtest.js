@@ -155,43 +155,43 @@ describe('createThingQueryResolver', () => {
         create: [
           {
             name: 'Fabbrica',
-            point: { longitude: 50.438198, latitude: 30.515858 },
-            point2: { longitude: 50.438198, latitude: 30.515858 },
+            point: { lng: 50.438198, lat: 30.515858 },
+            point2: { lng: 50.438198, lat: 30.515858 },
           },
           {
             name: 'Fine Family',
-            point: { longitude: 50.438061, latitude: 30.515879 },
-            point2: { longitude: 50.438061, latitude: 30.515879 },
+            point: { lng: 50.438061, lat: 30.515879 },
+            point2: { lng: 50.438061, lat: 30.515879 },
           },
           {
             name: 'Zhizn Zamechatelnykh Lyudey',
-            point: { longitude: 50.438007, latitude: 30.515858 },
-            point2: { longitude: 50.438007, latitude: 30.515858 },
+            point: { lng: 50.438007, lat: 30.515858 },
+            point2: { lng: 50.438007, lat: 30.515858 },
           },
           {
             name: 'Georgian House',
-            point: { longitude: 50.437692, latitude: 30.51583 },
-            point2: { longitude: 50.437692, latitude: 30.51583 },
+            point: { lng: 50.437692, lat: 30.51583 },
+            point2: { lng: 50.437692, lat: 30.51583 },
           },
           {
             name: 'Mama Manana',
-            point: { longitude: 50.437045, latitude: 30.515803 },
-            point2: { longitude: 50.437045, latitude: 30.515803 },
+            point: { lng: 50.437045, lat: 30.515803 },
+            point2: { lng: 50.437045, lat: 30.515803 },
           },
           {
             name: 'Satori Lounge',
-            point: { longitude: 50.43673, latitude: 30.515007 },
-            point2: { longitude: 50.43673, latitude: 30.515007 },
+            point: { lng: 50.43673, lat: 30.515007 },
+            point2: { lng: 50.43673, lat: 30.515007 },
           },
           {
             name: 'NAM',
-            point: { longitude: 50.436149, latitude: 30.515785 },
-            point2: { longitude: 50.436149, latitude: 30.515785 },
+            point: { lng: 50.436149, lat: 30.515785 },
+            point2: { lng: 50.436149, lat: 30.515785 },
           },
         ],
       },
-      point: { longitude: 50.438198, latitude: 30.515858 },
-      point2: { longitude: 50.438198, latitude: 30.515858 },
+      point: { lng: 50.438198, lat: 30.515858 },
+      point2: { lng: 50.438198, lat: 30.515858 },
     };
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
 
@@ -205,7 +205,7 @@ describe('createThingQueryResolver', () => {
 
     const near: NearInput = {
       geospatialField: 'point',
-      coordinates: { longitude: 50.435766, latitude: 30.515742 },
+      coordinates: { lng: 50.435766, lat: 30.515742 },
       maxDistance: 150,
     };
     const restaurants2 = await Restaurants(null, { near }, { mongooseConn, pubsub }, info2);
@@ -216,7 +216,7 @@ describe('createThingQueryResolver', () => {
 
     const near2: NearInput = {
       geospatialField: 'point2',
-      coordinates: { longitude: 50.435766, latitude: 30.515742 },
+      coordinates: { lng: 50.435766, lat: 30.515742 },
       maxDistance: 150,
     };
     const restaurants3 = await Restaurants(null, { near: near2 }, { mongooseConn, pubsub }, info2);

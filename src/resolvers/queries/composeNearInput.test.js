@@ -8,7 +8,7 @@ describe('composeNearInput', () => {
   test('should create object with simple fields', () => {
     const near: NearInput = {
       geospatialField: 'position',
-      coordinates: { longitude: 50.435766, latitude: 30.515742 },
+      coordinates: { lng: 50.435766, lat: 30.515742 },
       maxDistance: 1000,
     };
 

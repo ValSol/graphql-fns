@@ -16,7 +16,7 @@ describe('pointFromGqlToMongo', () => {
   });
 
   test('should transform Mongodb geospatial point format to gql format', () => {
-    const point: GeospatialPoint = { longitude: 40, latitude: 5 };
+    const point: GeospatialPoint = { lng: 40, lat: 5 };
 
     const result = pointFromGqlToMongo(point);
 
