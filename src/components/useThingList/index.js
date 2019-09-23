@@ -4,7 +4,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 
 // $FlowFixMe - no 'ApolloContext' in flow types of 'react-apollo'
-import { ApolloContext } from 'react-apollo';
+import { useApolloClient } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import type { ThingConfig } from '../../flowTypes';
@@ -15,7 +15,7 @@ import { ThingListContext } from '../ThingListContext';
 
 function useThingList(thingConfig: ThingConfig, columns: Array<Object>) {
   const [state, setState] = React.useContext(ThingListContext);
-  const { client: apolloClient } = React.useContext(ApolloContext);
+  const apolloClient = useApolloClient();
   React.useEffect(() => {
     const fetchData = async () => {
       setState(currentState => ({ ...currentState, loading: true, error: '' }));
