@@ -50,6 +50,21 @@ describe('composeMutation', () => {
     expect(result).toBe(expectedResult);
   });
 
+  test('should compose createManyThings mutation', () => {
+    const mutationName = 'createManyThings';
+    const expectedResult = `mutation createManyExamples($data: [ExampleCreateInput!]!) {
+  createManyExamples(data: $data) {
+    id
+    createdAt
+    updatedAt
+    textField
+  }
+}`;
+
+    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
   test('should compose deleteThing mutation', () => {
     const mutationName = 'deleteThing';
     const expectedResult = `mutation deleteExample($whereOne: ExampleWhereOneInput!) {
