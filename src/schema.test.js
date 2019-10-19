@@ -38,7 +38,7 @@ describe('graphql schema', () => {
     };
     const thingConfigs = [thingConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = composeGqlTypes(generalConfig);
+    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -105,7 +105,7 @@ describe('graphql schema', () => {
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
     const generalConfig: GeneralConfig = { thingConfigs, enums };
-    const typeDefs = composeGqlTypes(generalConfig);
+    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -166,7 +166,7 @@ describe('graphql schema', () => {
     };
     const thingConfigs = [personConfig, addressConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = composeGqlTypes(generalConfig);
+    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -236,7 +236,7 @@ describe('graphql schema', () => {
     });
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = composeGqlTypes(generalConfig);
+    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -307,7 +307,7 @@ describe('graphql schema', () => {
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     generalConfig.inventory = { include: { Mutation: null } };
-    let typeDefs = composeGqlTypes(generalConfig);
+    let typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     let resolvers = composeGqlResolvers(generalConfig);
     let schema = makeExecutableSchema({
       typeDefs,
@@ -321,7 +321,7 @@ describe('graphql schema', () => {
     test('test schema with only createThing mutations in inventory', () => {
       generalConfig.inventory = { include: { Mutation: { createThing: null } } };
 
-      typeDefs = composeGqlTypes(generalConfig);
+      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -333,7 +333,7 @@ describe('graphql schema', () => {
     test('test schema with only createPerson mutations in inventory', () => {
       generalConfig.inventory = { include: { Mutation: { createThing: ['Person'] } } };
 
-      typeDefs = composeGqlTypes(generalConfig);
+      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -345,7 +345,7 @@ describe('graphql schema', () => {
     test('test schema with only quries in inventory', () => {
       generalConfig.inventory = { include: { Query: null } };
 
-      typeDefs = composeGqlTypes(generalConfig);
+      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -357,7 +357,7 @@ describe('graphql schema', () => {
     test('test schema with only thing query in inventory', () => {
       generalConfig.inventory = { include: { Query: { thing: null } } };
 
-      typeDefs = composeGqlTypes(generalConfig);
+      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -369,7 +369,7 @@ describe('graphql schema', () => {
     test('test schema with only Person query in inventory', () => {
       generalConfig.inventory = { include: { Query: { thing: ['Person'] } } };
 
-      typeDefs = composeGqlTypes(generalConfig);
+      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,

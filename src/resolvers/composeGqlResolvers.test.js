@@ -1,8 +1,6 @@
 // @flow
 /* eslint-env jest */
 
-import pluralize from 'pluralize';
-
 import type {
   GeneralConfig,
   Inventory,
@@ -49,6 +47,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
+    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
@@ -409,6 +408,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
+    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
@@ -460,6 +460,7 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(typeof result.Mutation.createManyExamples).toBe('function');
+    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
@@ -501,6 +502,7 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(result.Mutation.createManyExamples).toBeUndefined();
+    expect(result.Mutation.importExamples).toBeUndefined();
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();
@@ -535,6 +537,7 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(generalConfig, serversideConfig);
     expect(result.Query).toBeUndefined();
     expect(result.Mutation.createManyExamples).toBeUndefined();
+    expect(result.Mutation.importExamples).toBeUndefined();
     expect(result.Mutation.createExample).toBeUndefined();
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();

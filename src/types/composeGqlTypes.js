@@ -17,6 +17,7 @@ import createThingQueryType from './queries/createThingQueryType';
 import createThingsQueryType from './queries/createThingsQueryType';
 import createCreateManyThingsMutationType from './mutations/createCreateManyThingsMutationType';
 import createCreateThingMutationType from './mutations/createCreateThingMutationType';
+import createImportThingsMutationType from './mutations/createImportThingsMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
@@ -136,6 +137,10 @@ ${thingQueryTypes.join('\n')}
 
           if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
             prev.push(createCreateManyThingsMutationType(thingConfig));
+          }
+
+          if (checkInventory(['Mutation', 'importThings', name], inventory)) {
+            prev.push(createImportThingsMutationType(thingConfig));
           }
         }
         if (checkInventory(['Mutation', 'updateThing', name], inventory)) {

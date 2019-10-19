@@ -1,4 +1,6 @@
 // @flow
+import getStream from 'get-stream';
+
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
@@ -6,10 +8,10 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 
-type Args = { data: Object };
+type Args = { file: Object }; // todo set DOM file type
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createCreateManyThingsMutationResolver = (
+const createImportThingsMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): Function | null => {
@@ -17,15 +19,16 @@ const createCreateManyThingsMutationResolver = (
   const { name } = thingConfig;
   if (
     !checkInventory(['Mutation', 'createThing', name], inventory) ||
-    !checkInventory(['Mutation', 'createManyThings', name], inventory)
+    !checkInventory(['Mutation', 'importThings', name], inventory)
   )
     return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { data } = args;
-
-    // code beneath is identical to code from createImportThingsMutationResolver
-
+    const { file } = args;
+    // const { filename, mimetype, encoding, createReadStream } = await file;
+    const { createReadStream } = await file;
+    const content = await getStream(createReadStream());
+    const data = JSON.parse(content);
     const { mongooseConn } = context;
 
     let overallCore = null;
@@ -76,4 +79,4 @@ const createCreateManyThingsMutationResolver = (
   return resolver;
 };
 
-export default createCreateManyThingsMutationResolver;
+export default createImportThingsMutationResolver;

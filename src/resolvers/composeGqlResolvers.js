@@ -14,6 +14,7 @@ import composeThingResolvers from './types/composeThingResolvers';
 
 import createCreateManyThingsMutationResolver from './mutations/createCreateManyThingsMutationResolver';
 import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
+import createImportThingsMutationResolver from './mutations/createImportThingsMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
 import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
@@ -96,6 +97,15 @@ const composeGqlResolvers = (
         if (createManyThingsMutationResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Mutation[`createMany${pluralize(name)}`] = createManyThingsMutationResolver;
+        }
+
+        const importThingsMutationResolver = createImportThingsMutationResolver(
+          thingConfig,
+          generalConfig,
+        );
+        if (importThingsMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`import${pluralize(name)}`] = importThingsMutationResolver;
         }
 
         const updateThingMutationResolver = createUpdateThingMutationResolver(
