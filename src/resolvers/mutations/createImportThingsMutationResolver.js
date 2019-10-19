@@ -29,6 +29,9 @@ const createImportThingsMutationResolver = (
     const { createReadStream } = await file;
     const content = await getStream(createReadStream());
     const data = JSON.parse(content);
+
+    // code beneath is identical to code from createCreateManyThingsMutationResolver
+
     const { mongooseConn } = context;
 
     let overallCore = null;

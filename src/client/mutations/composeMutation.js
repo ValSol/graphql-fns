@@ -3,6 +3,7 @@ import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes'
 
 import composeFields from '../composeFields';
 import composeCreateManyThingsMutationArgs from './composeCreateManyThingsMutationArgs';
+import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
 import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
 
@@ -20,6 +21,10 @@ const composeMutation = (
   switch (mutationName) {
     case 'createManyThings':
       head = composeCreateManyThingsMutationArgs(thingConfig);
+      break;
+
+    case 'importThings':
+      head = composeImportThingsMutationArgs(thingConfig);
       break;
 
     case 'createThing':
