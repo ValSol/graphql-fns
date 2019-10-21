@@ -17,8 +17,8 @@ describe('composeImportThingsMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation importExamples($file: Upload!) {',
-      '  importExamples(file: $file) {',
+      'mutation importExamples($file: Upload!, $options: ImportOptionsInput) {',
+      '  importExamples(file: $file, options: $options) {',
     ];
 
     const result = composeImportThingsMutationArgs(thingConfig);

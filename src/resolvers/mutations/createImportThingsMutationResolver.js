@@ -1,5 +1,6 @@
 // @flow
 import getStream from 'get-stream';
+import csvParse from 'csv-parse';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
@@ -7,8 +8,42 @@ import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
+import allocateFieldsForCSV from './allocateFieldsForCSV';
 
-type Args = { file: Object }; // todo set DOM file type
+const csvParse2 = (data, fieldsForCSV) => {
+  return new Promise((resolve, reject) => {
+    csvParse(
+      data,
+      {
+        columns: true,
+        cast(value, context) {
+          if (!value) {
+            return value;
+          }
+          if (fieldsForCSV.object.includes(context.column)) {
+            return JSON.parse(value);
+          }
+          if (fieldsForCSV.int.includes(context.column)) {
+            return Number.parseInt(value, 10);
+          }
+          if (fieldsForCSV.float.includes(context.column)) {
+            return Number.parseFloat(value);
+          }
+          if (fieldsForCSV.boolean.includes(context.column)) {
+            return value === 'true';
+          }
+          return value;
+        },
+      },
+      (err, output) => {
+        if (err) reject(err);
+        resolve(output);
+      },
+    );
+  });
+};
+
+type Args = { file: Object, options?: { format: 'csv' | 'json' } }; // todo set DOM file type
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 const createImportThingsMutationResolver = (
@@ -24,11 +59,18 @@ const createImportThingsMutationResolver = (
     return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
-    const { file } = args;
+    const { file, options } = args;
     // const { filename, mimetype, encoding, createReadStream } = await file;
     const { createReadStream } = await file;
     const content = await getStream(createReadStream());
-    const data = JSON.parse(content);
+
+    let data;
+    if (options && options.format === 'csv') {
+      const fieldsForCSV = allocateFieldsForCSV(thingConfig);
+      data = await csvParse2(content, fieldsForCSV);
+    } else {
+      data = JSON.parse(content);
+    }
 
     // code beneath is identical to code from createCreateManyThingsMutationResolver
 

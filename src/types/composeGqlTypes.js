@@ -27,6 +27,7 @@ import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPay
 
 import composeEnumTypes from './specialized/composeEnumTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
+import composeImportOptionsInputTypes from './specialized/composeImportOptionsInputTypes';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const { thingConfigs, custom, inventory } = generalConfig;
@@ -223,6 +224,9 @@ ${thingSubscriptionTypes}
 
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);
+
+  const importOptionsInputTypes = composeImportOptionsInputTypes(generalConfig);
+  if (importOptionsInputTypes) resultArray.push(importOptionsInputTypes);
 
   resultArray.push(thingTypes);
 

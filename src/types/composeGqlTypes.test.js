@@ -89,6 +89,13 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -192,7 +199,7 @@ type Query {
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
-  importExamples(file: Upload!): [Example!]!
+  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }
@@ -273,6 +280,13 @@ input GeospatialPolygonRingInput {
 input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
 }
 type Example1 {
   id: ID!
@@ -387,12 +401,12 @@ type Query {
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
   createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
-  importExample1s(file: Upload!): [Example1!]!
+  importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
-  importExample2s(file: Upload!): [Example2!]!
+  importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
   updateExample2(whereOne: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
@@ -457,6 +471,13 @@ type Subscription {
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -562,12 +583,12 @@ type Query {
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  importPeople(file: Upload!): [Person!]!
+  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  importPlaces(file: Upload!): [Place!]!
+  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
@@ -637,6 +658,13 @@ type Subscription {
     const thingConfigs = [personConfig, addressConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -715,7 +743,7 @@ type Query {
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  importPeople(file: Upload!): [Person!]!
+  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
@@ -791,6 +819,13 @@ type Subscription {
     const thingConfigs = [personConfig, placeConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -904,12 +939,12 @@ type Query {
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  importPeople(file: Upload!): [Person!]!
+  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  importPlaces(file: Upload!): [Place!]!
+  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
@@ -972,6 +1007,13 @@ type Query {
     const inventory: Inventory = { include: { Mutation: null } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1004,7 +1046,7 @@ input ExampleWhereOneInput {
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
-  importExamples(file: Upload!): [Example!]!
+  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }`;

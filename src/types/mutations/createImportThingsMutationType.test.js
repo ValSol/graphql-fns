@@ -10,7 +10,8 @@ describe('createImportThingsMutationType', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  importExamples(file: Upload!): [Example!]!';
+    const expectedResult =
+      '  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!';
 
     const result = createImportThingsMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
