@@ -5,6 +5,7 @@ import csvParse from 'csv-parse';
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import coerceDataToGql from '../../utils/coerceDataToGql';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
@@ -17,20 +18,17 @@ const csvParse2 = (data, fieldsForCSV) => {
       {
         columns: true,
         cast(value, context) {
-          if (!value) {
-            return value;
-          }
           if (fieldsForCSV.object.includes(context.column)) {
             return JSON.parse(value);
           }
           if (fieldsForCSV.int.includes(context.column)) {
-            return Number.parseInt(value, 10);
+            return value && Number.parseInt(value, 10);
           }
           if (fieldsForCSV.float.includes(context.column)) {
-            return Number.parseFloat(value);
+            return value && Number.parseFloat(value);
           }
           if (fieldsForCSV.boolean.includes(context.column)) {
-            return value === 'true';
+            return !!value;
           }
           return value;
         },
@@ -64,13 +62,15 @@ const createImportThingsMutationResolver = (
     const { createReadStream } = await file;
     const content = await getStream(createReadStream());
 
-    let data;
+    let originalData;
     if (options && options.format === 'csv') {
       const fieldsForCSV = allocateFieldsForCSV(thingConfig);
-      data = await csvParse2(content, fieldsForCSV);
+      originalData = await csvParse2(content, fieldsForCSV);
     } else {
-      data = JSON.parse(content);
+      originalData = JSON.parse(content);
     }
+
+    const data = originalData.map(item => coerceDataToGql(item, null, thingConfig));
 
     // code beneath is identical to code from createCreateManyThingsMutationResolver
 

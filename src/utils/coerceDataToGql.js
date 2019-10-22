@@ -1,9 +1,9 @@
 // @flow
 import deepEqual from 'fast-deep-equal';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
-import composeFieldsObject from '../../utils/composeFieldsObject';
+import composeFieldsObject from './composeFieldsObject';
 
 const isNotDate = date =>
   new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));
@@ -15,7 +15,9 @@ const coerceDataToGql = (
 ): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
-  return Object.keys(data).reduce((prev, key) => {
+  const { id, createdAt, updatedAt, ...rest } = data;
+
+  const result = Object.keys(rest).reduce((prev, key) => {
     const {
       attributes: { array },
       kind,
@@ -99,6 +101,12 @@ const coerceDataToGql = (
     }
     return prev;
   }, {});
+
+  if (id) result.id = id;
+  if (createdAt) result.createdAt = createdAt;
+  if (updatedAt) result.updatedAt = updatedAt;
+
+  return result;
 };
 
 export default coerceDataToGql;

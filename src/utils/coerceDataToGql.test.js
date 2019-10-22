@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
 import coerceDataToGql from './coerceDataToGql';
 
@@ -143,6 +143,9 @@ describe('coerceDataToGql', () => {
     });
 
     const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      createdAt: '2019-06-07T22:00:00.000Z',
+      updatedAt: '2019-06-08T22:00:00.000Z',
       textField: 'text field',
       duplexField: '5cefb33f05d6be4b7b59842c',
       embedded1: {
@@ -161,6 +164,9 @@ describe('coerceDataToGql', () => {
     const prevData = null;
 
     const expectedResult = {
+      id: '5cefb33f05d6be4b7b59842a',
+      createdAt: '2019-06-07T22:00:00.000Z',
+      updatedAt: '2019-06-08T22:00:00.000Z',
       textField: 'text field',
       duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
       embedded1: {

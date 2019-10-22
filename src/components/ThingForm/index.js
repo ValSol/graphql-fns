@@ -26,8 +26,8 @@ import { Mutation, Query } from 'react-apollo';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import coerceDataToGql from './coerceDataToGql';
-import coerceDataFromGql from './coerceDataFromGql';
+import coerceDataToGql from '../../utils/coerceDataToGql';
+import coerceDataFromGql from '../../utils/coerceDataFromGql';
 import composeFormikFragment from './composeFormikFragment';
 import composeInitialValues from './composeInitialValues';
 import createValidationSchema from './createValidationSchema';

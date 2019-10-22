@@ -1,13 +1,13 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
-import composeFieldsObject from '../../utils/composeFieldsObject';
+import composeFieldsObject from './composeFieldsObject';
 import composeEmptyValues from './composeEmptyValues';
 
-const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
+const coerceDataFromGql = (data: Object, thingConfig: ThingConfig, allFields?: boolean): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
-  return Object.keys(data).reduce((prev, key) => {
+  const result = Object.keys(data).reduce((prev, key) => {
     if (fieldsObject[key] === undefined) return prev;
     const {
       attributes: { array },
@@ -30,10 +30,10 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
     } else if (kind === 'dateTimeFields') {
       if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map(item => (item === null ? '' : item.slice(0, 19)));
+        prev[key] = data[key].map(item => (item === null ? '' : item));
       } else {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key] === null ? '' : data[key].slice(0, 19);
+        prev[key] = data[key] === null ? '' : data[key];
       }
     } else if (fieldsObject[key].kind === 'geospatialFields') {
       const { geospatialType } = fieldsObject[key].attributes;
@@ -99,6 +99,13 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig): Object => {
     }
     return prev;
   }, {});
+  if (allFields) {
+    if (data.id) result.id = data.id;
+    if (data.createdAt) result.createdAt = data.createdAt;
+    if (data.updatedAt) result.updatedAt = data.updatedAt;
+  }
+
+  return result;
 };
 
 export default coerceDataFromGql;

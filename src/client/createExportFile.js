@@ -5,6 +5,8 @@ import csvStringify from 'csv-stringify';
 
 import type { ThingConfig } from '../flowTypes';
 
+import coerceDataFromGql from '../utils/coerceDataFromGql';
+
 const csvStringify2 = data => {
   return new Promise((resolve, reject) => {
     csvStringify(data, { header: true }, (err, output) => {
@@ -14,32 +16,6 @@ const csvStringify2 = data => {
   });
 };
 
-function clearObj(obj) {
-  return Object.keys(obj).reduce((prev, key) => {
-    const value = obj[key];
-    if (Array.isArray(value)) {
-      prev[key] = clearArr(value); // eslint-disable-line no-param-reassign, no-use-before-define
-    } else if (typeof value === 'object' && value !== null) {
-      prev[key] = clearObj(value); // eslint-disable-line no-param-reassign
-    } else if (key !== '__typename') {
-      prev[key] = value; // eslint-disable-line no-param-reassign
-    }
-    return prev;
-  }, {});
-}
-
-function clearArr(arr) {
-  return arr.map(item => {
-    if (Array.isArray(item)) {
-      return clearArr(item);
-    }
-    if (typeof item === 'object' && item !== null) {
-      return clearObj(item);
-    }
-    return item;
-  });
-}
-
 const createExportFile = async (
   items: Array<Object>,
   thingConfig: ThingConfig,
@@ -48,15 +24,15 @@ const createExportFile = async (
   const { name } = thingConfig;
 
   let type;
-  let content = clearArr(items);
-  let fileExtension = 'json';
+  let content = items.map(item => coerceDataFromGql(item, thingConfig, true));
+  let fileExtension;
   if (options && options.format === 'csv') {
     type = 'text/csv';
-    content = await csvStringify2(clearArr(items));
+    content = await csvStringify2(content);
     fileExtension = 'csv';
   } else {
     type = 'application/json';
-    content = JSON.stringify(clearArr(items), null, ' ');
+    content = JSON.stringify(content, null, ' ');
     fileExtension = 'json';
   }
 

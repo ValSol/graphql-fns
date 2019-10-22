@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
 import coerceDataFromGql from './coerceDataFromGql';
 
@@ -297,7 +297,7 @@ describe('coerceDataFromGql', () => {
     };
 
     const expectedResult = {
-      dateTimeField: '2019-06-09T22:00:00',
+      dateTimeField: '2019-06-09T22:00:00.000Z',
     };
 
     const result = coerceDataFromGql(data, thingConfig);
@@ -407,6 +407,36 @@ describe('coerceDataFromGql', () => {
     };
 
     const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should coerce dateTime fields and save id, createdAt, updatedAt fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField',
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      createdAt: '2019-06-07T22:00:00.000Z',
+      updatedAt: '2019-06-08T22:00:00.000Z',
+      dateTimeField: '2019-06-09T22:00:00.000Z',
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      id: '5cefb33f05d6be4b7b59842a',
+      createdAt: '2019-06-07T22:00:00.000Z',
+      updatedAt: '2019-06-08T22:00:00.000Z',
+      dateTimeField: '2019-06-09T22:00:00.000Z',
+    };
+
+    const result = coerceDataFromGql(data, thingConfig, true);
     expect(result).toEqual(expectedResult);
   });
 });

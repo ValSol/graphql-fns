@@ -12,6 +12,7 @@ type Result = {
 const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
   const {
     booleanFields,
+    dateTimeFields,
     duplexFields,
     embeddedFields,
     enumFields,
@@ -36,6 +37,14 @@ const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
 
   if (duplexFields) {
     duplexFields.forEach(({ name, array }) => {
+      if (array) {
+        result.object.push(name);
+      }
+    });
+  }
+
+  if (dateTimeFields) {
+    dateTimeFields.forEach(({ name, array }) => {
       if (array) {
         result.object.push(name);
       }

@@ -24,7 +24,10 @@ const processCreateInputData = (
 ): Object => {
   const core = initialCore || new Map();
   const periphery = initialPeriphery || new Map();
-  const prepared = [{ data: { ...data, _id: mongooseTypes.ObjectId() }, config: thingConfig }];
+  const { id } = data;
+  const prepared = [
+    { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: thingConfig },
+  ];
 
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
     const {
@@ -84,7 +87,7 @@ const processCreateInputData = (
       }, geospatialFieldsObject);
     }
 
-    const scalarFieldsArray = ['_id'];
+    const scalarFieldsArray = ['_id', 'createdAt', 'updatedAt'];
 
     if (textFields) {
       textFields.reduce((prev, { name }) => {

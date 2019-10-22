@@ -1,15 +1,12 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
-import arrangeFormFields from '../utils/arrangeFormFields';
-import composeFieldsObject from '../../utils/composeFieldsObject';
+import composeFieldsObject from './composeFieldsObject';
 
 const composeEmptyValues = (thingConfig: ThingConfig): Object => {
-  const { form } = thingConfig;
-  const formFields = form || arrangeFormFields(thingConfig);
   const fieldsObject = composeFieldsObject(thingConfig);
 
-  const result = formFields.reduce((prev, { name }) => {
+  const result = Object.keys(fieldsObject).reduce((prev, name) => {
     const {
       attributes: { array },
       kind,
