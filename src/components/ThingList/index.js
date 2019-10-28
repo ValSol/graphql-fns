@@ -17,8 +17,8 @@ import Router, { useRouter } from 'next/router';
 
 import type { ThingConfig } from '../../flowTypes';
 
+import { ThingListContext } from '../ThingListContext';
 import arrangeListColumns from './arrangeListColumns';
-import useThingList from '../useThingList';
 import Link from '../Link';
 import VirtualizedTable from '../VirtualizedTable';
 
@@ -32,6 +32,12 @@ function ThingList(props: Props) {
     thingConfig: { list, name },
   } = props;
 
+  const {
+    dispatch,
+    state: { loading, items, error },
+  } = React.useContext(ThingListContext);
+
+  React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), [dispatch, thingConfig]);
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
     dataKey: fieldName,
     label: fieldName,
@@ -61,8 +67,6 @@ function ThingList(props: Props) {
     prev += columnWidht; // eslint-disable-line no-param-reassign
     return prev;
   }, 0);
-
-  const { loading, items, error } = useThingList(thingConfig, columns);
 
   let resultChild = null;
   if (loading) {

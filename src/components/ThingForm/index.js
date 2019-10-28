@@ -37,7 +37,6 @@ import GeneralConfigContext from '../GeneralConfigContext';
 import { ThingListContext } from '../ThingListContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
-import useThingList from '../useThingList';
 import Link from '../Link';
 
 type Props = {
@@ -46,9 +45,13 @@ type Props = {
 
 const ThingForm = (props: Props) => {
   // eslint-disable-next-line no-unused-vars
-  const [foo, setThingList] = React.useContext(ThingListContext); // will use only when create new item
+  const {
+    dispatch,
+    state: { items },
+  } = React.useContext(ThingListContext); // will use only when create new item
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const [open, setOpen] = React.useState(false);
+  const [scrollButtons, setScrollButtons] = React.useState(null);
   const {
     query: { id, delete: deleteAttr },
     pathname,
@@ -59,32 +62,37 @@ const ThingForm = (props: Props) => {
     thingConfig: { name },
   } = props;
 
-  const { items } = useThingList(thingConfig, [{ dataKey: 'id' }]);
-  const { previous, next } = getNeighbors(id, items);
-
   const toDelete = deleteAttr === '' || !!deleteAttr;
-
-  const scrollButtons =
-    (!previous && !next) || toDelete ? null : (
-      <div>
-        <IconButton
-          aria-label="Delete"
-          disabled={!previous}
-          onClick={
-            previous ? () => Router.push({ pathname, query: { thing: name, id: previous } }) : null
-          }
-        >
-          <SkipPrevious />
-        </IconButton>{' '}
-        <IconButton
-          aria-label="Delete"
-          disabled={!next}
-          onClick={next ? () => Router.push({ pathname, query: { thing: name, id: next } }) : null}
-        >
-          <SkipNext />
-        </IconButton>
-      </div>
-    );
+  React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), []);
+  React.useEffect(() => {
+    const { previous, next } = getNeighbors(id, items);
+    const newScrollButtons =
+      (!previous && !next) || toDelete ? null : (
+        <div>
+          <IconButton
+            aria-label="Delete"
+            disabled={!previous}
+            onClick={
+              previous
+                ? () => Router.push({ pathname, query: { thing: name, id: previous } })
+                : null
+            }
+          >
+            <SkipPrevious />
+          </IconButton>{' '}
+          <IconButton
+            aria-label="Delete"
+            disabled={!next}
+            onClick={
+              next ? () => Router.push({ pathname, query: { thing: name, id: next } }) : null
+            }
+          >
+            <SkipNext />
+          </IconButton>
+        </div>
+      );
+    setScrollButtons(newScrollButtons);
+  }, [id, items, name, pathname, toDelete]);
 
   const exclude = {
     id: null,
@@ -185,10 +193,7 @@ const ThingForm = (props: Props) => {
                                 } else {
                                   // if create
                                   const { id: newId } = resultData[`create${name}`];
-                                  setThingList(prevState => ({
-                                    ...prevState,
-                                    items: [...prevState.items, { id: newId }],
-                                  }));
+                                  dispatch({ type: 'ADD', value: { id: newId } });
                                   // TODO update store instead of clear store
                                   apolloClient
                                     .clearStore()

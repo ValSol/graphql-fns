@@ -27,7 +27,7 @@ const composeThingCardContent = (
   const fieldsObject = composeFieldsObject(thingConfig);
 
   return (
-    <React.Fragment>
+    <>
       {formFields.map(({ name }) => {
         const { attributes, kind } = fieldsObject[name];
 
@@ -56,6 +56,7 @@ const composeThingCardContent = (
           return (
             <div key={name}>
               <ListItem>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <ListItemText {...listItemTextProps} />
               </ListItem>
               <Embedded>
@@ -74,6 +75,7 @@ const composeThingCardContent = (
           return (
             <div key={name}>
               <ListItem>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <ListItemText {...listItemTextProps} />
               </ListItem>
               <Embedded>{composeThingCardContent(config, generalConfig)}</Embedded>
@@ -86,6 +88,7 @@ const composeThingCardContent = (
           return (
             <div key={name}>
               <ListItem>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <ListItemText {...listItemTextProps} />
               </ListItem>
               <Embedded>
@@ -104,6 +107,7 @@ const composeThingCardContent = (
           return (
             <div key={name}>
               <ListItem>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <ListItemText {...listItemTextProps} />
               </ListItem>
               <Embedded>
@@ -118,11 +122,12 @@ const composeThingCardContent = (
         }
         return (
           <ListItem key={name}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <ListItemText {...listItemTextProps} />
           </ListItem>
         );
       })}
-    </React.Fragment>
+    </>
   );
 };
 
