@@ -37,7 +37,7 @@ const composeFields = (
 ) => {
   const { errors, touched, values: allValues } = formikProps;
   return (
-    <React.Fragment>
+    <>
       {flatFormikFields.map((flatFormikField, i) => {
         const {
           attributes,
@@ -66,7 +66,7 @@ const composeFields = (
                 const itemName = pluralize.singular(name);
 
                 return (
-                  <React.Fragment>
+                  <>
                     {objectGet(values, path) &&
                       objectGet(values, path).map((item, j) => {
                         const error3 = error && typeof error[j] === 'string' ? error[j] : undefined;
@@ -121,7 +121,7 @@ const composeFields = (
                         </Tooltip>
                       )}
                     </div>
-                  </React.Fragment>
+                  </>
                 );
               }}
             </FieldArray>
@@ -309,7 +309,7 @@ const composeFields = (
             throw new TypeError(`Invalid formFields kind: "${kind}" of thing field!`);
         }
       })}
-    </React.Fragment>
+    </>
   );
 };
 

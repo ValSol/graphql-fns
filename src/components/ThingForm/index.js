@@ -47,7 +47,7 @@ const ThingForm = (props: Props) => {
   // eslint-disable-next-line no-unused-vars
   const {
     dispatch,
-    state: { items },
+    state: { filtered },
   } = React.useContext(ThingListContext); // will use only when create new item
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const [open, setOpen] = React.useState(false);
@@ -63,9 +63,9 @@ const ThingForm = (props: Props) => {
   } = props;
 
   const toDelete = deleteAttr === '' || !!deleteAttr;
-  React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), []);
+  React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), [dispatch, thingConfig]);
   React.useEffect(() => {
-    const { previous, next } = getNeighbors(id, items);
+    const { previous, next } = getNeighbors(id, filtered);
     const newScrollButtons =
       (!previous && !next) || toDelete ? null : (
         <div>
@@ -92,7 +92,7 @@ const ThingForm = (props: Props) => {
         </div>
       );
     setScrollButtons(newScrollButtons);
-  }, [id, items, name, pathname, toDelete]);
+  }, [id, filtered, name, pathname, toDelete]);
 
   const exclude = {
     id: null,
@@ -157,6 +157,7 @@ const ThingForm = (props: Props) => {
                       }
                       onSubmit={(values, actions) => {
                         if (toDelete) {
+                          dispatch({ type: 'OUTDATE' });
                           setOpen(true);
                           return;
                         }
@@ -179,6 +180,7 @@ const ThingForm = (props: Props) => {
                             if (result) {
                               const { data: resultData } = result;
                               if (resultData) {
+                                dispatch({ type: 'OUTDATE' });
                                 if (data) {
                                   // if update
                                   currentInitialValues = coerceDataFromGql(

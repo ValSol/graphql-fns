@@ -29,13 +29,13 @@ const Admin = (props: Props) => {
     resultChild = <AllThings />;
   } else if (id || create || create === '') {
     resultChild = (
-      <ThingListProvider>
+      <ThingListProvider generalConfig={generalConfig}>
         <ThingForm thingConfig={thingConfig} />
       </ThingListProvider>
     );
   } else {
     resultChild = (
-      <ThingListProvider>
+      <ThingListProvider generalConfig={generalConfig}>
         <ThingList thingConfig={thingConfig} />
       </ThingListProvider>
     );

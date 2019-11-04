@@ -3205,10 +3205,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.0.0.tgz#23c0df14f6a88077f5f986c0d167ec03c3d5537c"
   integrity sha512-Phlt0plgpIIBOGTT/ehfFnbNlfsDEiqmzE2KRXoX1bLIlir4X/MR+zSyBEkL05ffWgnRSf/DXv+WrUAVr93/ow==
 
-bitwise-array@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/bitwise-array/-/bitwise-array-0.0.3.tgz#44adbd191a91deda4992509139bc1a406215df29"
-  integrity sha512-DHJWSgRvD7U0lwtwelwZzz+QhTcWnO2OeW+ZuWPHSxqs7oNuIxFmXejH+Js4SHnfH0xpJjUrPS0KDFvjVXPeFA==
+bitwise-array@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/bitwise-array/-/bitwise-array-0.0.5.tgz#465f03200acb9acc8f98e63d505317ee8f37c901"
+  integrity sha512-VJ8FtS39hPgfrG4/bqpyc0hu4NMfSuNYJUDvcUl1NgmnhHPfVp8U1KCEC/5XmbeAnBk0xgY1UJu1iAWDzn1rUw==
 
 bluebird@3.5.1:
   version "3.5.1"

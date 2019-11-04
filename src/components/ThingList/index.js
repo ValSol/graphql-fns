@@ -34,10 +34,15 @@ function ThingList(props: Props) {
 
   const {
     dispatch,
-    state: { loading, items, error },
+    state: { config, loading, outdated, filtered, error },
   } = React.useContext(ThingListContext);
 
-  React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), [dispatch, thingConfig]);
+  React.useEffect(() => {
+    if (config !== thingConfig || outdated) {
+      dispatch({ type: 'LOAD', config: thingConfig });
+    }
+  }, [dispatch, config, outdated, thingConfig]);
+
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
     dataKey: fieldName,
     label: fieldName,
@@ -88,8 +93,8 @@ function ThingList(props: Props) {
         <VirtualizedTable
           columns={columns2}
           router={router}
-          rowCount={items.length}
-          rowGetter={({ index }) => items[index]}
+          rowCount={filtered.length}
+          rowGetter={({ index }) => filtered[index]}
           thingConfig={thingConfig}
           width={width}
         />

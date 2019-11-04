@@ -1,5 +1,7 @@
 // @flow
 
+import BitwiseArray from 'bitwise-array';
+
 export type MongodbGeospatialPoint = {|
   +type: 'Point',
   +coordinates: [number, number],
@@ -450,3 +452,17 @@ export type ClientFieldsOptions = {
 };
 
 export type RouterQuery = { create?: '', delete?: '', id?: string, thing: string };
+
+type BoleanVariant = { fieldVariant: 'booleanField', value: 'all' | boolean };
+type EnumVariant = {
+  fieldVariant: 'enumField',
+  value: 'all' | BitwiseArray,
+  enumeration: Array<string>,
+};
+type EnumArrayVariant = {
+  fieldVariant: 'enumArrayField',
+  value: 'all' | BitwiseArray,
+  enumeration: Array<string>,
+};
+type FieldVariant = BoleanVariant | EnumVariant | EnumArrayVariant;
+export type AdminFilters = { [fieldName: string]: FieldVariant };
