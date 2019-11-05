@@ -25,8 +25,7 @@ import VirtualizedTable from '../VirtualizedTable';
 import composeFilters from './composeFilters';
 
 const useStyles = makeStyles(() => ({
-  filtersContainer: { display: 'flex', flexWrap: 'wrap' },
-  formControl: { marginRight: '1em', display: 'block' },
+  formControl: { marginRight: '1em' },
   inputLabel: { position: 'static', marginBottom: '-0.5em' },
 }));
 
@@ -136,7 +135,7 @@ function ThingList(props: Props) {
         <Link href={pathname}>All Things</Link>
         <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
       </Breadcrumbs>
-      <div className={classes.filtersContainer}>{composeFilters(state, dispatch, classes)}</div>
+      <div>{composeFilters(state, dispatch, classes)}</div>
       <NoSsr>{resultChild}</NoSsr>
     </Container>
   );

@@ -40,7 +40,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -74,12 +74,12 @@ describe('composeFormikFragment', () => {
           required={false}
           variant="outlined"
         />
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -142,7 +142,7 @@ describe('composeFormikFragment', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -155,7 +155,7 @@ describe('composeFormikFragment', () => {
           variant="outlined"
         />
         <Outline key={1} label="embedded1">
-          <React.Fragment>
+          <>
             {[
               <Field
                 key={0}
@@ -169,7 +169,7 @@ describe('composeFormikFragment', () => {
                 variant="outlined"
               />,
               <Outline key={1} label="embedded2">
-                <React.Fragment>
+                <>
                   {[
                     <Field
                       key={0}
@@ -183,7 +183,7 @@ describe('composeFormikFragment', () => {
                       variant="outlined"
                     />,
                     <Outline key={1} label="embedded3">
-                      <React.Fragment>
+                      <>
                         {[
                           <Field
                             key={0}
@@ -197,20 +197,20 @@ describe('composeFormikFragment', () => {
                             variant="outlined"
                           />,
                         ]}
-                      </React.Fragment>
+                      </>
                     </Outline>,
                   ]}
-                </React.Fragment>
+                </>
               </Outline>,
             ]}
-          </React.Fragment>
+          </>
         </Outline>
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -274,7 +274,7 @@ describe('composeFormikFragment', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -287,7 +287,7 @@ describe('composeFormikFragment', () => {
           variant="outlined"
         />
         <Outline key={1} label="embedded1">
-          <React.Fragment>
+          <>
             {[
               <Field
                 key={0}
@@ -301,7 +301,7 @@ describe('composeFormikFragment', () => {
                 variant="outlined"
               />,
               <Outline key={1} label="embedded2">
-                <React.Fragment>
+                <>
                   {[
                     <Field
                       key={0}
@@ -318,17 +318,17 @@ describe('composeFormikFragment', () => {
                       {() => {}}
                     </FieldArray>,
                   ]}
-                </React.Fragment>
+                </>
               </Outline>,
             ]}
-          </React.Fragment>
+          </>
         </Outline>
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
     const result2 = JSON.parse(JSON.stringify(result));
@@ -352,7 +352,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -367,12 +367,12 @@ describe('composeFormikFragment', () => {
         <Outline key={1} label="arrayTextFields">
           <FieldArray name="arrayTextFields">{composeFormikFieldArrayChild}</FieldArray>
         </Outline>
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -397,7 +397,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -422,12 +422,12 @@ describe('composeFormikFragment', () => {
           type="number"
           variant="outlined"
         />
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -448,7 +448,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         <Field
           key={0}
           component={FormikTextField}
@@ -473,12 +473,12 @@ describe('composeFormikFragment', () => {
           type="number"
           variant="outlined"
         />
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -494,7 +494,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -504,12 +504,12 @@ describe('composeFormikFragment', () => {
             name="booleanField"
           />,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
     expect(result).toEqual(expectedResult);
   });
@@ -534,7 +534,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -559,12 +559,12 @@ describe('composeFormikFragment', () => {
             variant="outlined"
           />,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -581,10 +581,10 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
-          <FormControl key={0} error required={false} style={{ marginRight: 16 }}>
-            <InputLabel shrink htmlFor="enumField">
+          <FormControl key={0} className="formControl" error required={false}>
+            <InputLabel className="inputLabel" shrink htmlFor="enumField">
               enumField
             </InputLabel>
             <Field
@@ -596,8 +596,8 @@ describe('composeFormikFragment', () => {
               }}
             >
               {[
-                <MenuItem key="" value="">
-                  {''}
+                <MenuItem key={'\u00A0'} value="">
+                  {'\u00A0'}
                 </MenuItem>,
                 <MenuItem key="Sunday" value="Sunday">
                   Sunday
@@ -625,7 +625,7 @@ describe('composeFormikFragment', () => {
             <FormHelperText>Required</FormHelperText>
           </FormControl>,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const enums = [
@@ -638,9 +638,11 @@ describe('composeFormikFragment', () => {
 
     const result = composeFormikFragment(
       { errors: { enumField: 'Required' }, touched: { enumField: true }, values: {} },
+      { formControl: 'formControl', inputLabel: 'inputLabel' },
       thingConfig,
       generalConfig,
     );
+
     expect(result).toEqual(expectedResult);
   });
 
@@ -656,7 +658,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -674,12 +676,12 @@ describe('composeFormikFragment', () => {
             variant="outlined"
           />,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -696,7 +698,7 @@ describe('composeFormikFragment', () => {
     });
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Geospatial
             key={0}
@@ -707,12 +709,12 @@ describe('composeFormikFragment', () => {
             type="Point"
           />,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig = { thingConfigs: [thingConfig] };
 
-    const result = composeFormikFragment({}, thingConfig, generalConfig);
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

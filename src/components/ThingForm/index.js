@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 import SkipNext from '@material-ui/icons/SkipNext';
 import SkipPrevious from '@material-ui/icons/SkipPrevious';
@@ -38,6 +39,11 @@ import { ThingListContext } from '../ThingListContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeMutation from '../../client/mutations/composeMutation';
 import Link from '../Link';
+
+const useStyles = makeStyles(() => ({
+  formControl: { marginRight: '1em' },
+  inputLabel: { position: 'static', marginBottom: '-1em' },
+}));
 
 type Props = {
   thingConfig: ThingConfig,
@@ -109,6 +115,9 @@ const ThingForm = (props: Props) => {
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary
   const header = `${id ? (toDelete ? 'Delete' : 'Update') : 'Create'} ${name}`;
+
+  const classes = useStyles();
+
   return (
     <Container>
       <h1>{header}</h1>
@@ -222,6 +231,7 @@ const ThingForm = (props: Props) => {
                           <Form>
                             {composeFormikFragment(
                               formikProps,
+                              classes,
                               thingConfig,
                               generalConfig,
                               toDelete,

@@ -30,6 +30,7 @@ const composeIndex = value => (value === -1 ? '' : `(${value + 1})`);
 
 const composeFields = (
   formikProps: Object,
+  classes: { [className: string]: string },
   flatFormikFields: FlatFormikFields,
   enumsObject: { [enumName: string]: Array<string> },
   disabled: boolean,
@@ -81,6 +82,7 @@ const composeFields = (
                           >
                             {composeFields(
                               formikProps,
+                              classes,
                               child,
                               enumsObject,
                               disabled,
@@ -128,7 +130,7 @@ const composeFields = (
           ) : (
             // eslint-disable-next-line react/no-array-index-key
             <Outline key={i} error={!!error2 && touch} label={name} message={touch ? error2 : ''}>
-              {composeFields(formikProps, child, enumsObject, disabled, path)}
+              {composeFields(formikProps, classes, child, enumsObject, disabled, path)}
             </Outline>
           );
         }
@@ -143,11 +145,11 @@ const composeFields = (
               <FormControl
                 // eslint-disable-next-line react/no-array-index-key
                 key={i}
+                className={classes.formControl}
                 error={!!error && !!touch}
                 required={!!required}
-                style={{ marginRight: 16 }}
               >
-                <InputLabel shrink htmlFor={path}>
+                <InputLabel className={classes.inputLabel} shrink htmlFor={path}>
                   {name}
                 </InputLabel>
                 <Field
@@ -223,17 +225,21 @@ const composeFields = (
 
         switch (flatFormikField.kind) {
           case 'textFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} fullWidth />;
 
           case 'intFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} style={{ marginRight: 16 }} type="number" />;
 
           case 'floatFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} style={{ marginRight: 16 }} type="number" />;
 
           case 'dateTimeFields':
             return (
               <Field
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...fieldProps}
                 InputLabelProps={{ shrink: true }}
                 style={{ marginRight: 16 }}
@@ -242,12 +248,15 @@ const composeFields = (
             );
 
           case 'booleanFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} />;
 
           case 'relationalFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} fullWidth />;
 
           case 'duplexFields':
+            // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} fullWidth />;
 
           case 'geospatialFields':
@@ -275,16 +284,18 @@ const composeFields = (
               attributes: { enumName },
             } = flatFormikField;
             // eslint-disable-next-line no-case-declarations
-            const menuItems = required ? enumsObject[enumName] : ['', ...enumsObject[enumName]];
+            const menuItems = required
+              ? enumsObject[enumName]
+              : ['\u00A0', ...enumsObject[enumName]];
             return (
               <FormControl
                 // eslint-disable-next-line react/no-array-index-key
                 key={i}
+                className={classes.formControl}
                 error={!!error && !!touch}
                 required={!!required}
-                style={{ marginRight: 16 }}
               >
-                <InputLabel shrink htmlFor={path}>
+                <InputLabel className={classes.inputLabel} shrink htmlFor={path}>
                   {name}
                 </InputLabel>
                 <Field
@@ -296,7 +307,7 @@ const composeFields = (
                   name={path}
                 >
                   {menuItems.map(item => (
-                    <MenuItem key={item} value={item}>
+                    <MenuItem key={item} value={item.trim()}>
                       {item}
                     </MenuItem>
                   ))}
@@ -315,6 +326,7 @@ const composeFields = (
 
 const composeFormikFragment = (
   formikProps: Object,
+  classes: { [className: string]: string },
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   disabled?: boolean,
@@ -330,7 +342,7 @@ const composeFormikFragment = (
       }, {})
     : {};
 
-  return composeFields(formikProps, flatFormikFields, enumsObject, disabled2);
+  return composeFields(formikProps, classes, flatFormikFields, enumsObject, disabled2);
 };
 
 export default composeFormikFragment;
