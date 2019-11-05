@@ -466,3 +466,16 @@ type EnumArrayVariant = {
 };
 type FieldVariant = BoleanVariant | EnumVariant | EnumArrayVariant;
 export type AdminFilters = { [fieldName: string]: FieldVariant };
+
+export type AdminListContextState = {
+  error: string,
+  decorated: Array<Object>,
+  items: Array<Object>,
+  listItems: Array<Object>,
+  filtered: Array<Object>,
+  masks: { [fieldName: string]: BitwiseArray },
+  loading: boolean,
+  filters: AdminFilters,
+  config: ThingConfig | null,
+  outdated: boolean,
+};

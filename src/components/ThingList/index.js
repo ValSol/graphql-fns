@@ -10,6 +10,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Snackbar from '@material-ui/core/Snackbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -21,6 +22,13 @@ import { ThingListContext } from '../ThingListContext';
 import arrangeListColumns from './arrangeListColumns';
 import Link from '../Link';
 import VirtualizedTable from '../VirtualizedTable';
+import composeFilters from './composeFilters';
+
+const useStyles = makeStyles(() => ({
+  filtersContainer: { display: 'flex', flexWrap: 'wrap' },
+  formControl: { marginRight: '1em', display: 'block' },
+  inputLabel: { position: 'static', marginBottom: '-0.5em' },
+}));
 
 type Props = { thingConfig: ThingConfig };
 
@@ -34,6 +42,7 @@ function ThingList(props: Props) {
 
   const {
     dispatch,
+    state,
     state: { config, loading, outdated, filtered, error },
   } = React.useContext(ThingListContext);
 
@@ -117,6 +126,8 @@ function ThingList(props: Props) {
     );
   }
 
+  const classes = useStyles();
+
   return (
     <Container>
       <h1>{`All ${pluralize(name)}`}</h1>
@@ -125,7 +136,7 @@ function ThingList(props: Props) {
         <Link href={pathname}>All Things</Link>
         <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
       </Breadcrumbs>
-
+      <div className={classes.filtersContainer}>{composeFilters(state, dispatch, classes)}</div>
       <NoSsr>{resultChild}</NoSsr>
     </Container>
   );

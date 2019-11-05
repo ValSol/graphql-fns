@@ -5,9 +5,8 @@ import pluralize from 'pluralize';
 
 import { useApolloClient } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import BitwiseArray from 'bitwise-array';
 
-import type { AdminFilters, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { AdminListContextState, GeneralConfig } from '../../flowTypes';
 
 import coerceDataFromGql from '../../utils/coerceDataFromGql';
 import composeQuery from '../../client/queries/composeQuery';
@@ -19,18 +18,7 @@ type Props = {
 };
 
 const ThingListContext = React.createContext<{
-  state: {
-    error: string,
-    decorated: Array<Object>,
-    items: Array<Object>,
-    listItems: Array<Object>,
-    filtered: Array<Object>,
-    masks: { [fieldName: string]: BitwiseArray },
-    loading: boolean,
-    filters: AdminFilters,
-    config: ThingConfig | null,
-    outdated: boolean,
-  },
+  state: AdminListContextState,
   dispatch: Function,
 }>({
   state: {

@@ -1,8 +1,6 @@
 // @flow
 
-import BitwiseArray from 'bitwise-array';
-
-import type { AdminFilters, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { AdminListContextState, GeneralConfig } from '../../flowTypes';
 
 import coerceListItems from './coerceListItems';
 import composeFilters from './composeFilters';
@@ -10,22 +8,10 @@ import decorateItems from './decorateItems';
 import filterItems from './filterItems';
 
 type Reducer = Function;
-type InititalState = {
-  error: string,
-  decorated: Array<Object>,
-  items: Array<Object>,
-  listItems: Array<Object>,
-  filtered: Array<Object>,
-  masks: { [fieldName: string]: BitwiseArray },
-  loading: boolean,
-  filters: AdminFilters,
-  config: ThingConfig | null,
-  outdated: boolean,
-};
 
 type Result = {|
   reducer: Reducer,
-  initialState: InititalState,
+  initialState: AdminListContextState,
 |};
 
 const createUseReducerArgs = (generalConfig: GeneralConfig): Result => {
@@ -48,7 +34,10 @@ const createUseReducerArgs = (generalConfig: GeneralConfig): Result => {
     if (type === 'LOAD') {
       const { config } = action;
       if (config === state.config && !state.error && !state.outdated) return state;
-      const filters = composeFilters(config, generalConfig);
+      const filters =
+        state.outdated && config === state.config
+          ? state.filters
+          : composeFilters(config, generalConfig);
       return { ...state, error: '', loading: true, outdated: false, config, filters };
     }
 
