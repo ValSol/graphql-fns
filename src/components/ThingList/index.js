@@ -4,6 +4,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Fab from '@material-ui/core/Fab';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -14,10 +15,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
+import gql from 'graphql-tag';
+import { useApolloClient } from '@apollo/react-hooks';
 import Router, { useRouter } from 'next/router';
 
 import type { ThingConfig } from '../../flowTypes';
 
+import GeneralConfigContext from '../GeneralConfigContext';
+import createExportFile from '../../client/createExportFile';
+import composeQuery from '../../client/queries/composeQuery';
 import { ThingListContext } from '../ThingListContext';
 import arrangeListColumns from './arrangeListColumns';
 import Link from '../Link';
@@ -25,6 +31,8 @@ import VirtualizedTable from '../VirtualizedTable';
 import composeFilters from './composeFilters';
 
 const useStyles = makeStyles(() => ({
+  button: { marginRight: '0.5em' },
+  exportImportContainer: { marginTop: '1em' },
   formControl: { marginRight: '1em' },
   inputLabel: { position: 'static', marginBottom: '-0.5em' },
 }));
@@ -32,6 +40,7 @@ const useStyles = makeStyles(() => ({
 type Props = { thingConfig: ThingConfig };
 
 function ThingList(props: Props) {
+  const apolloClient = useApolloClient();
   const router = useRouter();
   const { pathname } = router;
   const {
@@ -42,7 +51,7 @@ function ThingList(props: Props) {
   const {
     dispatch,
     state,
-    state: { config, loading, outdated, filtered, error },
+    state: { config, loading, outdated, filtered, filters, error },
   } = React.useContext(ThingListContext);
 
   React.useEffect(() => {
@@ -50,6 +59,35 @@ function ThingList(props: Props) {
       dispatch({ type: 'LOAD', config: thingConfig });
     }
   }, [dispatch, config, outdated, thingConfig]);
+
+  const generalConfig = React.useContext(GeneralConfigContext);
+  const handleExport = React.useCallback(
+    async (format: 'csv' | 'json') => {
+      if (!config) return; // to prevent flowjs warnings
+      const query = gql(composeQuery('things', config, generalConfig));
+      const where = Object.keys(filters).reduce((prev, key) => {
+        // $FlowFixMe
+        const { enumeration, fieldVariant, value } = filters[key];
+        if (value === 'all') return prev;
+        if (fieldVariant === 'booleanField') {
+          prev[key] = value; // eslint-disable-line no-param-reassign
+        } else {
+          // $FlowFixMe
+          prev[key] = value.count() ? value.select(enumeration)[0] : null; // eslint-disable-line no-param-reassign
+        }
+        return prev;
+      }, {});
+      const variables = { where };
+      const { name: thingName } = config;
+      const queryName = pluralize(thingName);
+      const {
+        data: { [queryName]: items },
+      } = await apolloClient.query({ query, variables });
+
+      createExportFile(items, config, { format });
+    },
+    [apolloClient, config, generalConfig, filters],
+  );
 
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
     dataKey: fieldName,
@@ -136,6 +174,24 @@ function ThingList(props: Props) {
         <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
       </Breadcrumbs>
       <div>{composeFilters(state, dispatch, classes)}</div>
+      <div className={classes.exportImportContainer}>
+        <Button
+          component="span"
+          onClick={() => handleExport('csv')}
+          variant="outlined"
+          className={classes.button}
+        >
+          Export to CSV
+        </Button>
+        <Button
+          component="span"
+          onClick={() => handleExport('json')}
+          variant="outlined"
+          className={classes.button}
+        >
+          Export to JSON
+        </Button>
+      </div>
       <NoSsr>{resultChild}</NoSsr>
     </Container>
   );
