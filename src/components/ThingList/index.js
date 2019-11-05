@@ -23,6 +23,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import GeneralConfigContext from '../GeneralConfigContext';
 import createExportFile from '../../client/createExportFile';
+import composeMutation from '../../client/mutations/composeMutation';
 import composeQuery from '../../client/queries/composeQuery';
 import { ThingListContext } from '../ThingListContext';
 import arrangeListColumns from './arrangeListColumns';
@@ -61,6 +62,7 @@ function ThingList(props: Props) {
   }, [dispatch, config, outdated, thingConfig]);
 
   const generalConfig = React.useContext(GeneralConfigContext);
+
   const handleExport = React.useCallback(
     async (format: 'csv' | 'json') => {
       if (!config) return; // to prevent flowjs warnings
@@ -87,6 +89,25 @@ function ThingList(props: Props) {
       createExportFile(items, config, { format });
     },
     [apolloClient, config, generalConfig, filters],
+  );
+
+  const handleImport = React.useCallback(
+    async (files, format) => {
+      if (files && files.length) {
+        if (!config) return; // to prevent flowjs warnings
+        const mutation = gql(composeMutation('importThings', config, generalConfig));
+        try {
+          const variables = { file: files[0], options: { format } };
+          await apolloClient.mutate({ mutation, variables });
+          await apolloClient.clearStore();
+          dispatch({ type: 'OUTDATE' });
+        } catch (err) {
+          const { message } = err;
+          dispatch({ type: 'ERROR', value: message });
+        }
+      }
+    },
+    [apolloClient, config, dispatch, generalConfig],
   );
 
   const columns = (list || arrangeListColumns(thingConfig)).map(({ name: fieldName, width }) => ({
@@ -176,21 +197,47 @@ function ThingList(props: Props) {
       <div>{composeFilters(state, dispatch, classes)}</div>
       <div className={classes.exportImportContainer}>
         <Button
+          className={classes.button}
           component="span"
           onClick={() => handleExport('csv')}
           variant="outlined"
-          className={classes.button}
         >
           Export to CSV
         </Button>
         <Button
+          className={classes.button}
           component="span"
           onClick={() => handleExport('json')}
           variant="outlined"
-          className={classes.button}
         >
           Export to JSON
         </Button>
+        <label htmlFor="contained-button-CSV-file">
+          <Button className={classes.button} component="span" variant="outlined">
+            Import from CSV
+          </Button>
+          <input
+            accept=".csv"
+            id="contained-button-CSV-file"
+            onChange={({ target: { files } }) => handleImport(files, 'csv')}
+            multiple
+            type="file"
+            hidden
+          />
+        </label>
+        <label htmlFor="contained-button-JSON-file">
+          <Button className={classes.button} component="span" variant="outlined">
+            Import from JSON
+          </Button>
+          <input
+            accept="*.json,application/json"
+            id="contained-button-JSON-file"
+            onChange={({ target: { files } }) => handleImport(files, 'json')}
+            multiple
+            type="file"
+            hidden
+          />
+        </label>
       </div>
       <NoSsr>{resultChild}</NoSsr>
     </Container>
