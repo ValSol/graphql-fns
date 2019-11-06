@@ -71,7 +71,7 @@ const ThingForm = (props: Props) => {
   const toDelete = deleteAttr === '' || !!deleteAttr;
   React.useEffect(() => dispatch({ type: 'LOAD', config: thingConfig }), [dispatch, thingConfig]);
   React.useEffect(() => {
-    const { previous, next } = getNeighbors(id, filtered);
+    const { previous, next, index } = getNeighbors(id, filtered);
     const newScrollButtons =
       (!previous && !next) || toDelete ? null : (
         <div>
@@ -85,7 +85,8 @@ const ThingForm = (props: Props) => {
             }
           >
             <SkipPrevious />
-          </IconButton>{' '}
+          </IconButton>
+          {` ${index + 1} `}
           <IconButton
             aria-label="Delete"
             disabled={!next}
@@ -124,7 +125,7 @@ const ThingForm = (props: Props) => {
       <Breadcrumbs aria-label="Breadcrumb">
         <Link href="/">Home</Link>
         <Link href={pathname}>All Things</Link>
-        <Link href={`${pathname}?thing=${name}`}>{`All ${pluralize(name)}`}</Link>
+        <Link href={`${pathname}?thing=${name}`}>{`${pluralize(name)} (${filtered.length})`}</Link>
         <Typography color="textPrimary">{header}</Typography>
       </Breadcrumbs>
 
