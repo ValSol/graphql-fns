@@ -192,7 +192,7 @@ function ThingList(props: Props) {
       <Breadcrumbs aria-label="Breadcrumb">
         <Link href="/">Home</Link>
         <Link href={pathname}>All Things</Link>
-        <Typography color="textPrimary">{`All ${pluralize(name)}`}</Typography>
+        <Typography color="textPrimary">{`${pluralize(name)} (${filtered.length})`}</Typography>
       </Breadcrumbs>
       <div>{composeFilters(state, dispatch, classes)}</div>
       <div className={classes.exportImportContainer}>
