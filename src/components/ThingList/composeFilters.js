@@ -40,8 +40,14 @@ const composeFilters = (
             : // use non-breaking space instead empty string to correct show empty row in Select
               ['all', ...masks[key].select(['\u00A0', ...enumeration])];
         const currentValue =
-          // $FlowFixMe
-          fieldVariant === 'booleanField' || value === 'all' ? value : value.select(enumeration)[0];
+          // eslint-disable-next-line no-nested-ternary
+          fieldVariant === 'booleanField' || value === 'all'
+            ? value
+            : // $FlowFixMe
+            value.count()
+            ? // $FlowFixMe
+              value.select(enumeration)[0]
+            : '';
         return (
           <FormControl key={key} className={classes.formControl}>
             <InputLabel className={classes.inputLabel} htmlFor={`${key}-filter`} shrink>
