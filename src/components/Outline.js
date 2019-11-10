@@ -67,7 +67,7 @@ type Props = {
 const Outline = ({ children, error, message, label, required }: Props) => {
   const classes = useStyles();
   return (
-    <React.Fragment>
+    <>
       <fieldset aria-hidden className={clsx(classes.root, { [classes.error]: error })}>
         <legend
           className={clsx(classes.legend, {
@@ -87,7 +87,7 @@ const Outline = ({ children, error, message, label, required }: Props) => {
           {message}
         </FormHelperText>
       ) : null}
-    </React.Fragment>
+    </>
   );
 };
 

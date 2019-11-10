@@ -43,7 +43,7 @@ describe('composeThingCardContent', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <ListItem key="firstName">
             <ListItemText primary="firstName" secondary="text | required" />
@@ -58,7 +58,7 @@ describe('composeThingCardContent', () => {
             <ListItemText primary="comment" secondary="text" />
           </ListItem>,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
@@ -135,7 +135,7 @@ describe('composeThingCardContent', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <ListItem key="textField">
             <ListItemText primary="textField" secondary="text" />
@@ -148,7 +148,7 @@ describe('composeThingCardContent', () => {
               <ListItemText primary="embedded1" secondary="embedded" />
             </ListItem>
             <Embedded>
-              <React.Fragment>
+              <>
                 {[
                   <ListItem key="textField1">
                     <ListItemText primary="textField1" secondary="text" />
@@ -158,7 +158,7 @@ describe('composeThingCardContent', () => {
                       <ListItemText primary="embedded2" secondary="embedded" />
                     </ListItem>
                     <Embedded>
-                      <React.Fragment>
+                      <>
                         {[
                           <ListItem key="textField2">
                             <ListItemText primary="textField2" secondary="text" />
@@ -168,25 +168,25 @@ describe('composeThingCardContent', () => {
                               <ListItemText primary="embedded3" secondary="embedded | array" />
                             </ListItem>
                             <Embedded>
-                              <React.Fragment>
+                              <>
                                 {[
                                   <ListItem key="textField3">
                                     <ListItemText primary="textField3" secondary="text" />
                                   </ListItem>,
                                 ]}
-                              </React.Fragment>
+                              </>
                             </Embedded>
                           </div>,
                         ]}
-                      </React.Fragment>
+                      </>
                     </Embedded>
                   </div>,
                 ]}
-              </React.Fragment>
+              </>
             </Embedded>
           </div>,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
@@ -224,7 +224,7 @@ describe('composeThingCardContent', () => {
       ],
     });
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <ListItem key="textField">
             <ListItemText primary="textField" secondary="text" />
@@ -254,7 +254,7 @@ describe('composeThingCardContent', () => {
             </Embedded>
           </div>,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
@@ -284,7 +284,7 @@ describe('composeThingCardContent', () => {
     };
 
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <div key="enumField">
             <ListItem>
@@ -320,7 +320,7 @@ describe('composeThingCardContent', () => {
             <ListItemText primary="textField" secondary="text" />
           </ListItem>,
         ]}
-      </React.Fragment>
+      </>
     );
 
     const enums = [

@@ -19,8 +19,9 @@ const csvStringify2 = data => {
 const createExportFile = async (
   items: Array<Object>,
   thingConfig: ThingConfig,
-  options?: { format: 'csv' | 'json' },
-): Promise<void> => {
+  //  if returnBlob="true" return blob with items data, if returnBlob="false" create "downloaded" file and return null
+  options?: { format: 'csv' | 'json', returnBlob?: boolean },
+): Promise<Blob | null> => {
   const { name } = thingConfig;
 
   let type;
@@ -40,6 +41,8 @@ const createExportFile = async (
     type,
   });
 
+  if (options && options.returnBlob) return blob;
+
   const objectURL = URL.createObjectURL(blob);
 
   const now = new Date();
@@ -58,6 +61,7 @@ const createExportFile = async (
   link.click();
   link.remove();
   URL.revokeObjectURL(objectURL);
+  return null;
 };
 
 export default createExportFile;
