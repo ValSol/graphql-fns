@@ -25,7 +25,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].emails';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -87,7 +87,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -115,7 +115,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].counts';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -179,7 +179,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -207,7 +207,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].weights';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -271,7 +271,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -299,7 +299,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].bools';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <span key={0} style={{ display: 'inline-block', marginRight: 24 }}>
             <Field
@@ -344,7 +344,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -374,7 +374,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].coworkers';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -436,7 +436,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -467,7 +467,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].coworkers';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -529,7 +529,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -559,7 +559,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].dates';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Field
             key={0}
@@ -629,7 +629,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {
@@ -671,7 +671,7 @@ describe('composeFormikFieldArrayChild', () => {
     };
     const name = 'people.friends[0].positions';
     const expectedResult = (
-      <React.Fragment>
+      <>
         {[
           <Geospatial
             key={0}
@@ -697,7 +697,7 @@ describe('composeFormikFieldArrayChild', () => {
             <AddIcon />
           </IconButton>
         </Tooltip>
-      </React.Fragment>
+      </>
     );
 
     const props = {

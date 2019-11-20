@@ -369,6 +369,15 @@ export type SignatureMethods = {
   +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
 };
 
+export type AuthData = {
+  [role: string]: {
+    +request?: Inventory,
+    +response?: {
+      [thingName: string]: { +include?: Array<string>, +exclude?: Array<string> },
+    },
+  },
+};
+
 export type ServersideConfig = {
   +Query?: {
     +[customQueryName: string]: (
@@ -382,6 +391,7 @@ export type ServersideConfig = {
       generalConfig: GeneralConfig,
     ) => Function,
   },
+  +authData?: AuthData,
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
