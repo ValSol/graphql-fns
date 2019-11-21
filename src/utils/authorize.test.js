@@ -16,6 +16,10 @@ describe('authorize', () => {
       request: {
         exclude: { Mutation: { deleteThing: ['User'], updateThing: ['User'] } },
       },
+      applyCallback: {
+        include: { Mutation: { deleteThing: ['User'], updateThing: ['User'] } },
+      },
+      callback: (inventoryChain, fields) => fields,
     },
     Customer: {
       request: {
@@ -53,6 +57,16 @@ describe('authorize', () => {
     const roles = ['Author'];
 
     const expectedResult = ['title', 'content'];
+    const result = authorize(inventoryСhain, fields, roles, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fields for Author mutation updateThing for User', () => {
+    const inventoryСhain = ['Mutation', 'updateThing', 'User'];
+    const fields = ['email', 'position'];
+    const roles = ['Author'];
+
+    const expectedResult = ['email', 'position'];
     const result = authorize(inventoryСhain, fields, roles, data);
     expect(result).toEqual(expectedResult);
   });

@@ -369,31 +369,6 @@ export type SignatureMethods = {
   +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
 };
 
-export type AuthData = {
-  [role: string]: {
-    +request?: Inventory,
-    +response?: {
-      [thingName: string]: { +include?: Array<string>, +exclude?: Array<string> },
-    },
-  },
-};
-
-export type ServersideConfig = {
-  +Query?: {
-    +[customQueryName: string]: (
-      thingConfig: ThingConfig,
-      generalConfig: GeneralConfig,
-    ) => Function,
-  },
-  +Mutation?: {
-    +[customMutationName: string]: (
-      thingConfig: ThingConfig,
-      generalConfig: GeneralConfig,
-    ) => Function,
-  },
-  +authData?: AuthData,
-};
-
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
@@ -412,6 +387,37 @@ export type InventoryСhain =
   | OneSegmentInventoryChain
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;
+
+export type AuthData = {
+  [role: string]: {
+    +request?: Inventory,
+    +response?: {
+      [thingName: string]: { +include?: Array<string>, +exclude?: Array<string> },
+    },
+    +applyCallback?: Inventory,
+    +collaback?: (
+      inventoryChain: ThreeSegmentInventoryChain,
+      fields: Array<string>,
+      { parent: Object, args: Object, context: Object },
+    ) => Boolean,
+  },
+};
+
+export type ServersideConfig = {
+  +Query?: {
+    +[customQueryName: string]: (
+      thingConfig: ThingConfig,
+      generalConfig: GeneralConfig,
+    ) => Function,
+  },
+  +Mutation?: {
+    +[customMutationName: string]: (
+      thingConfig: ThingConfig,
+      generalConfig: GeneralConfig,
+    ) => Function,
+  },
+  +authData?: AuthData,
+};
 
 // eslint-disable-next-line flowtype/generic-spacing
 export type Periphery = Map<
