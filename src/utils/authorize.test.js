@@ -19,7 +19,7 @@ describe('authorize', () => {
       applyCallback: {
         include: { Mutation: { deleteThing: ['User'], updateThing: ['User'] } },
       },
-      callback: (inventoryChain, fields) => fields,
+      callback: async (inventoryChain, fields) => fields,
     },
     Customer: {
       request: {
@@ -30,44 +30,45 @@ describe('authorize', () => {
       },
     },
   };
+  const requestArgs = {};
 
-  test('should return fields for Customer query', () => {
+  test('should return fields for Customer query', async () => {
     const inventoryСhain = ['Query', 'thing', 'User'];
     const fields = ['email', 'position'];
     const roles = ['Customer'];
 
-    const expectedResult = ['email'];
-    const result = authorize(inventoryСhain, fields, roles, data);
+    const expectedResult = false;
+    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return fields for Customer mutation', () => {
+  test('should return fields for Customer mutation', async () => {
     const inventoryСhain = ['Mutation', 'createThing', 'Blog'];
     const fields = ['title', 'content'];
     const roles = ['Customer'];
 
-    const expectedResult = [];
-    const result = authorize(inventoryСhain, fields, roles, data);
+    const expectedResult = false;
+    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return fields for Author mutation', () => {
+  test('should return fields for Author mutation', async () => {
     const inventoryСhain = ['Mutation', 'createThing', 'Blog'];
     const fields = ['title', 'content'];
     const roles = ['Author'];
 
-    const expectedResult = ['title', 'content'];
-    const result = authorize(inventoryСhain, fields, roles, data);
+    const expectedResult = true;
+    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return fields for Author mutation updateThing for User', () => {
+  test('should return fields for Author mutation updateThing for User', async () => {
     const inventoryСhain = ['Mutation', 'updateThing', 'User'];
     const fields = ['email', 'position'];
     const roles = ['Author'];
 
-    const expectedResult = ['email', 'position'];
-    const result = authorize(inventoryСhain, fields, roles, data);
+    const expectedResult = true;
+    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 });
