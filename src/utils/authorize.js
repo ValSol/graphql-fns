@@ -5,11 +5,12 @@ import checkInventory from './checkInventory';
 const authorize = async (
   inventoryChain: ThreeSegmentInventoryChain,
   fields: Array<string>,
-  roles: Array<string>,
+  credentials: { userId: string, roles: Array<string> },
   requestArgs: { parent: Object, args: Object, context: Object },
   authData: AuthData,
 ): Promise<Boolean> => {
-  if (!roles.length) {
+  const { roles, userId } = credentials;
+  if (!roles || !roles.length) {
     throw new TypeError('For auth must be at least one role!');
   }
   const [boo, foo, thingName] = inventoryChain; // eslint-disable-line no-unused-vars
@@ -21,7 +22,7 @@ const authorize = async (
     const allowRequest = request ? checkInventory(inventoryChain, request) : true;
     if (!allowRequest) {
       if (applyCallback && checkInventory(inventoryChain, applyCallback)) {
-        promises.push(callback(inventoryChain, fields, requestArgs));
+        promises.push(callback(inventoryChain, fields, userId, requestArgs));
       }
 
       continue; // eslint-disable-line no-continue
@@ -57,7 +58,9 @@ const authorize = async (
     }, result);
   });
 
-  return result.length === fields.length;
+  return (
+    result.every(field => fields.includes(field)) && fields.every(field => result.includes(field))
+  );
 };
 
 export default authorize;

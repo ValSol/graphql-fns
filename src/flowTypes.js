@@ -416,7 +416,12 @@ export type ServersideConfig = {
       generalConfig: GeneralConfig,
     ) => Function,
   },
-  +authData?: AuthData,
+  // "unrestricted" prevent using "authData" & "getCredentials" in defined cases
+  +unrestricted?: Inventory,
+  +authData?: AuthData, // "authData" & "getCredentials" are mutualy used
+  +getCredentials?: (
+    context: Object,
+  ) => Promise<{ roles: Array<string>, userId: string }> | Promise<null>,
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

@@ -15,7 +15,8 @@ const createCreateThingMutationResolver = (
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  if (!checkInventory(['Mutation', 'createThing', name], inventory)) return null;
+  const inventoryChain = ['Mutation', 'createThing', name];
+  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     const { data } = args;

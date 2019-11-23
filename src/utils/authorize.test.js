@@ -19,7 +19,7 @@ describe('authorize', () => {
       applyCallback: {
         include: { Mutation: { deleteThing: ['User'], updateThing: ['User'] } },
       },
-      callback: async (inventoryChain, fields) => fields,
+      callback: async (inventoryChain, fields, userId) => (userId === '1' ? fields : []),
     },
     Customer: {
       request: {
@@ -36,9 +36,10 @@ describe('authorize', () => {
     const inventoryСhain = ['Query', 'thing', 'User'];
     const fields = ['email', 'position'];
     const roles = ['Customer'];
+    const credentials = { roles, userId: '1' };
 
     const expectedResult = false;
-    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
@@ -46,9 +47,10 @@ describe('authorize', () => {
     const inventoryСhain = ['Mutation', 'createThing', 'Blog'];
     const fields = ['title', 'content'];
     const roles = ['Customer'];
+    const credentials = { roles, userId: '1' };
 
     const expectedResult = false;
-    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
@@ -56,9 +58,10 @@ describe('authorize', () => {
     const inventoryСhain = ['Mutation', 'createThing', 'Blog'];
     const fields = ['title', 'content'];
     const roles = ['Author'];
+    const credentials = { roles, userId: '1' };
 
     const expectedResult = true;
-    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 
@@ -66,9 +69,21 @@ describe('authorize', () => {
     const inventoryСhain = ['Mutation', 'updateThing', 'User'];
     const fields = ['email', 'position'];
     const roles = ['Author'];
+    const credentials = { roles, userId: '1' };
 
     const expectedResult = true;
-    const result = await authorize(inventoryСhain, fields, roles, requestArgs, data);
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return fields for Author mutation updateThing for User', async () => {
+    const inventoryСhain = ['Mutation', 'updateThing', 'User'];
+    const fields = ['email', 'position'];
+    const roles = ['Author'];
+    const credentials = { roles, userId: '2' };
+
+    const expectedResult = false;
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
 });
