@@ -24,6 +24,7 @@ beforeAll(async () => {
 
 describe('createCreateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const serversideConfig = {};
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -52,7 +53,11 @@ describe('createCreateThingMutationResolver', () => {
       ],
     };
 
-    const createExample = createCreateThingMutationResolver(thingConfig, generalConfig);
+    const createExample = createCreateThingMutationResolver(
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createExample).toBe('function');
     if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -101,7 +106,11 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -175,7 +184,11 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -324,7 +337,11 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -521,7 +538,11 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

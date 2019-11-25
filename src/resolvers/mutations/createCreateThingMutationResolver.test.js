@@ -34,7 +34,8 @@ describe('createCreateThingMutationResolver', () => {
       ],
     };
 
-    const result = createCreateThingMutationResolver(thingConfig, generalConfig);
+    const serversideConfig = {};
+    const result = createCreateThingMutationResolver(thingConfig, generalConfig, serversideConfig);
 
     expect(typeof result).toBe('function');
   });

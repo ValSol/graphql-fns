@@ -25,6 +25,7 @@ beforeAll(async () => {
 
 describe('createThingScalarResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const serversideConfig = {};
   test('should create type thing resolver', async () => {
     const placeConfig: ThingConfig = {};
     Object.assign(placeConfig, {
@@ -48,7 +49,11 @@ describe('createThingScalarResolver', () => {
       ],
     });
 
-    const createPlace = createCreateThingMutationResolver(placeConfig, generalConfig);
+    const createPlace = createCreateThingMutationResolver(
+      placeConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPlace).toBe('function');
     if (!createPlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

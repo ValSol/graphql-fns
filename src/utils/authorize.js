@@ -5,11 +5,11 @@ import checkInventory from './checkInventory';
 const authorize = async (
   inventoryChain: ThreeSegmentInventoryChain,
   fields: Array<string>,
-  credentials: { userId: string, roles: Array<string> },
+  credentials: { id: string, roles: Array<string> },
   requestArgs: { parent: Object, args: Object, context: Object },
   authData: AuthData,
 ): Promise<Boolean> => {
-  const { roles, userId } = credentials;
+  const { roles, id } = credentials;
   if (!roles || !roles.length) {
     throw new TypeError('For auth must be at least one role!');
   }
@@ -22,7 +22,7 @@ const authorize = async (
     const allowRequest = request ? checkInventory(inventoryChain, request) : true;
     if (!allowRequest) {
       if (applyCallback && checkInventory(inventoryChain, applyCallback)) {
-        promises.push(callback(inventoryChain, fields, userId, requestArgs));
+        promises.push(callback(inventoryChain, fields, id, requestArgs));
       }
 
       continue; // eslint-disable-line no-continue
@@ -33,17 +33,24 @@ const authorize = async (
     }
 
     if (!applyCallback) {
-      const { exclude, include } = response[thingName];
-      fields.reduce((prev, field) => {
-        // include & exclude are mutual exclusive!
-        if (include && include.includes(field) && !result.includes(field)) {
-          prev.push(field);
-        }
-        if (exclude && !exclude.includes(field) && !result.includes(field)) {
-          prev.push(field);
-        }
-        return prev;
-      }, result);
+      if (response) {
+        const { exclude, include } = response[thingName];
+        fields.reduce((prev, field) => {
+          // include & exclude are mutual exclusive!
+          if (include && include.includes(field) && !result.includes(field)) {
+            prev.push(field);
+          }
+          if (exclude && !exclude.includes(field) && !result.includes(field)) {
+            prev.push(field);
+          }
+          return prev;
+        }, result);
+      } else {
+        fields.reduce((prev, field) => {
+          if (!result.includes(field)) result.push(field);
+          return prev;
+        }, result);
+      }
     }
   }
 

@@ -84,6 +84,7 @@ const composeGqlResolvers = (
         const createThingMutationResolver = createCreateThingMutationResolver(
           thingConfig,
           generalConfig,
+          serversideConfig,
         );
         if (createThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign

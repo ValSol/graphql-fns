@@ -28,6 +28,7 @@ beforeAll(async () => {
 
 describe('createUpdateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const serversideConfig = {};
   test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -93,7 +94,11 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -398,7 +403,11 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     };
 
-    const createExample = createCreateThingMutationResolver(exampleConfig, generalConfig);
+    const createExample = createCreateThingMutationResolver(
+      exampleConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createExample).toBe('function');
     if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -502,7 +511,11 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     };
 
-    const createMain = createCreateThingMutationResolver(mainConfig, generalConfig);
+    const createMain = createCreateThingMutationResolver(
+      mainConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createMain).toBe('function');
     if (!createMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

@@ -1,8 +1,10 @@
 // @flow
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
+import authorize from '../../utils/authorize';
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import getProjectionFromInfo from '../getProjectionFromInfo';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 
@@ -12,13 +14,28 @@ type Context = { mongooseConn: Object, pubsub?: Object };
 const createCreateThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
+  const { authData, getCredentials, unrestricted } = serversideConfig;
   const { name } = thingConfig;
   const inventoryChain = ['Mutation', 'createThing', name];
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (_: Object, args: Args, context: Context): Object => {
+  const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
+    if (authData && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
+      if (!getCredentials) {
+        throw new TypeError('Must set "getCredentials" config method!');
+      }
+      const credentials = await getCredentials(context);
+      const fields = Object.keys(getProjectionFromInfo(info));
+
+      const authorized = await authorize(inventoryChain, fields, credentials, args, authData);
+      if (!authorized) {
+        throw new TypeError('Athorize Error!');
+      }
+    }
+
     const { data } = args;
     const { mongooseConn } = context;
 

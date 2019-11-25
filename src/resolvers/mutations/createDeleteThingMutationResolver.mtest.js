@@ -91,8 +91,12 @@ describe('createDeleteThingMutationResolver', () => {
         },
       ],
     });
-
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const serversideConfig = {};
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

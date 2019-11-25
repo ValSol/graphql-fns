@@ -27,7 +27,7 @@ const createCustomResolver = (
     throw new TypeError(`Have to set "${methodKind}" of "${methodName}" `);
   }
 
-  return serversideConfig[methodKind][methodName](thingConfig, generalConfig);
+  return serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig);
 };
 
 export default createCustomResolver;

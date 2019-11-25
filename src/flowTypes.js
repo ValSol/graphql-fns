@@ -408,12 +408,14 @@ export type ServersideConfig = {
     +[customQueryName: string]: (
       thingConfig: ThingConfig,
       generalConfig: GeneralConfig,
+      serversideConfig: ServersideConfig,
     ) => Function,
   },
   +Mutation?: {
     +[customMutationName: string]: (
       thingConfig: ThingConfig,
       generalConfig: GeneralConfig,
+      serversideConfig: ServersideConfig,
     ) => Function,
   },
   // "unrestricted" prevent using "authData" & "getCredentials" in defined cases
@@ -421,7 +423,7 @@ export type ServersideConfig = {
   +authData?: AuthData, // "authData" & "getCredentials" are mutualy used
   +getCredentials?: (
     context: Object,
-  ) => Promise<{ roles: Array<string>, userId: string }> | Promise<null>,
+  ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

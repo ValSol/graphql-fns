@@ -28,6 +28,7 @@ beforeAll(async () => {
 
 describe('createThingQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const serversideConfig = {};
   test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
@@ -62,7 +63,11 @@ describe('createThingQueryResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -145,7 +150,11 @@ describe('createThingQueryResolver', () => {
       ],
     });
 
-    const createRestaurant = createCreateThingMutationResolver(restaurantConfig, generalConfig);
+    const createRestaurant = createCreateThingMutationResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createRestaurant).toBe('function');
     if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -251,7 +260,11 @@ describe('createThingQueryResolver', () => {
       ],
     };
 
-    const createTable = createCreateThingMutationResolver(tableConfig, generalConfig);
+    const createTable = createCreateThingMutationResolver(
+      tableConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createTable).toBe('function');
     if (!createTable) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

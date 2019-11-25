@@ -25,6 +25,7 @@ beforeAll(async () => {
 
 describe('createThingCountQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const serversideConfig = {};
   test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
@@ -59,7 +60,11 @@ describe('createThingCountQueryResolver', () => {
       ],
     });
 
-    const createPerson = createCreateThingMutationResolver(personConfig, generalConfig);
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
