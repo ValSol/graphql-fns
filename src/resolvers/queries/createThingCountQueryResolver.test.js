@@ -33,8 +33,8 @@ describe('createThingCountQueryResolver', () => {
         },
       ],
     };
-
-    const result = createThingCountQueryResolver(thingConfig, generalConfig);
+    const serversideConfig = {};
+    const result = createThingCountQueryResolver(thingConfig, generalConfig, serversideConfig);
 
     expect(typeof result).toBe('function');
   });

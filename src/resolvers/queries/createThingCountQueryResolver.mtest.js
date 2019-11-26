@@ -89,7 +89,11 @@ describe('createThingCountQueryResolver', () => {
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
 
-    const PersonCount = createThingCountQueryResolver(personConfig, generalConfig);
+    const PersonCount = createThingCountQueryResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!PersonCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const count = await PersonCount(null, {}, { mongooseConn, pubsub });
