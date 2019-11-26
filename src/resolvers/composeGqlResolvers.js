@@ -49,7 +49,11 @@ const composeGqlResolvers = (
       const { name } = thingConfig;
 
       if (allowQueries) {
-        const thingCountQueryResolver = createThingCountQueryResolver(thingConfig, generalConfig);
+        const thingCountQueryResolver = createThingCountQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
         // eslint-disable-next-line no-param-reassign
         if (thingCountQueryResolver) prev.Query[`${name}Count`] = thingCountQueryResolver;
 

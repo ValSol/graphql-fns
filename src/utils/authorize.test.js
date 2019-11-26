@@ -97,4 +97,15 @@ describe('authorize', () => {
     const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return fields for Master mutation updateThing', async () => {
+    const inventoryСhain = ['Mutation', 'createThing', 'TextExample'];
+    const fields = ['text', 'textRequired', '​textItems', '​textRequiredItems'];
+    const roles = ['Author'];
+    const credentials = { roles, id: '2' };
+
+    const expectedResult = true;
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
+    expect(result).toEqual(expectedResult);
+  });
 });

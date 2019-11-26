@@ -23,10 +23,7 @@ const createCreateThingMutationResolver = (
   if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
-    if (authData && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
-      if (!getCredentials) {
-        throw new TypeError('Must set "getCredentials" config method!');
-      }
+    if (getCredentials && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
       const credentials = await getCredentials(context);
       const fields = Object.keys(getProjectionFromInfo(info));
 

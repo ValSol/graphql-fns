@@ -10,6 +10,7 @@ const getProjectionFromInfo = (info: Object): Object => {
   const result = selections
     .filter(({ kind }) => kind === 'Field')
     .map(({ name: { value } }) => value)
+    .filter(field => field !== '__typename')
     .reduce((prev, value, i, array) => {
       if (value !== 'id') {
         prev[value] = 1; // eslint-disable-line no-param-reassign

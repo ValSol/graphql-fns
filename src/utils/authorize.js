@@ -13,6 +13,7 @@ const authorize = async (
   if (!roles || !roles.length) {
     throw new TypeError('For auth must be at least one role!');
   }
+
   const [boo, foo, thingName] = inventoryChain; // eslint-disable-line no-unused-vars
   const result = [];
   const promises = [];
@@ -45,6 +46,10 @@ const authorize = async (
           }
           return prev;
         }, result);
+        // if only field and it's _id implied _id key is allowed
+        if (fields.includes('_id' && !result.includes('_id'))) {
+          result.push('_id');
+        }
       } else {
         fields.reduce((prev, field) => {
           if (!result.includes(field)) result.push(field);

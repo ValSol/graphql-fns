@@ -324,4 +324,12 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
+
+  test('should return correct results for inventory exclude object with 3 levels', () => {
+    const inventory: Inventory = { exclude: { Query: { thingCount: null } } };
+
+    const inventoryСhain = ['Query', 'thingCount', 'Invoice'];
+    const result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(false);
+  });
 });
