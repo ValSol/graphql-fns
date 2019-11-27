@@ -24,6 +24,9 @@ const createThingCountQueryResolver = (
 
   const resolver = async (_: Object, args: Args, context: Context): Object => {
     if (getCredentials && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
+      if (!getCredentials) {
+        throw new TypeError('Must set "getCredentials" config method!');
+      }
       const credentials = await getCredentials(context);
       // because qeury return scalar not use: Object.keys(getProjectionFromInfo(info)) ...
       const fields = ['foo']; // and use fake 'boo' field to check fields

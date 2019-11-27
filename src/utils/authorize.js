@@ -9,10 +9,11 @@ const authorize = async (
   requestArgs: { parent: Object, args: Object, context: Object },
   authData: AuthData,
 ): Promise<Boolean> => {
-  const { roles, id } = credentials;
-  if (!roles || !roles.length) {
-    throw new TypeError('For auth must be at least one role!');
+  if (!credentials || !credentials.roles || !credentials.roles.length || !credentials.id) {
+    return false;
   }
+
+  const { roles, id } = credentials;
 
   const [boo, foo, thingName] = inventoryChain; // eslint-disable-line no-unused-vars
   const result = [];
@@ -34,7 +35,7 @@ const authorize = async (
     }
 
     if (!applyCallback) {
-      if (response) {
+      if (response && response[thingName]) {
         const { exclude, include } = response[thingName];
         fields.reduce((prev, field) => {
           // include & exclude are mutual exclusive!

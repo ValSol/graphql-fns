@@ -108,4 +108,15 @@ describe('authorize', () => {
     const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return fields for null credetials mutation updateThing', async () => {
+    const inventoryСhain = ['Mutation', 'createThing', 'TextExample'];
+    const fields = ['text', 'textRequired', '​textItems', '​textRequiredItems'];
+    const roles = null;
+    const credentials = { roles, id: null };
+
+    const expectedResult = false;
+    const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);
+    expect(result).toEqual(expectedResult);
+  });
 });
