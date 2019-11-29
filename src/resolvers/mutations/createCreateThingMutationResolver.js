@@ -1,10 +1,9 @@
 // @flow
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
-import authorize from '../../utils/authorize';
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
-import getProjectionFromInfo from '../getProjectionFromInfo';
+import executeAuthorisation from '../executeAuthorisation';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 
@@ -17,24 +16,17 @@ const createCreateThingMutationResolver = (
   serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
-  const { authData, getCredentials, unrestricted } = serversideConfig;
   const { name } = thingConfig;
   const inventoryChain = ['Mutation', 'createThing', name];
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
-    if (getCredentials && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
-      if (!getCredentials) {
-        throw new TypeError('Must set "getCredentials" config method!');
-      }
-      const credentials = await getCredentials(context);
-      const fields = Object.keys(getProjectionFromInfo(info));
-
-      const authorized = await authorize(inventoryChain, fields, credentials, args, authData);
-      if (!authorized) {
-        throw new TypeError('Athorize Error!');
-      }
-    }
+  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const resolverArgs = { parent, args, context, info };
+    const credentials = await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
 
     const { data } = args;
     const { mongooseConn } = context;
@@ -71,7 +63,14 @@ const createCreateThingMutationResolver = (
     const { _id } = thing;
     thing.id = _id;
 
-    if (checkInventory(['Subscription', 'createdThing', name], inventory)) {
+    const subscriptionInventoryChain = ['Subscription', 'createdThing', name];
+    if (checkInventory(subscriptionInventoryChain, inventory)) {
+      await executeAuthorisation({
+        inventoryChain: subscriptionInventoryChain,
+        resolverArgs,
+        serversideConfig,
+        credentials,
+      });
       const { pubsub } = context;
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
       pubsub.publish(`created-${name}`, { [`created${name}`]: thing });
