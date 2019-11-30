@@ -63,7 +63,7 @@ describe('createThingScalarResolver', () => {
     const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub });
     const { id } = createdPlace;
 
-    const Place = createThingScalarResolver(placeConfig);
+    const Place = createThingScalarResolver(placeConfig, generalConfig, serversideConfig);
     const parent = { friend: id };
     const place = await Place(parent, null, { mongooseConn, pubsub }, info);
 

@@ -1,9 +1,10 @@
 // @flow
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 
 type Args = { whereOne: { id: string } };
@@ -12,12 +13,22 @@ type Context = { mongooseConn: Object };
 const createThingQueryResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  if (!checkInventory(['Query', 'thing', name], inventory)) return null;
 
-  const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
+  const inventoryChain = ['Query', 'thing', name];
+  if (!checkInventory(inventoryChain, inventory)) return null;
+
+  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const resolverArgs = { parent, args, context, info };
+    await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
+
     const { whereOne } = args;
 
     const { mongooseConn } = context;

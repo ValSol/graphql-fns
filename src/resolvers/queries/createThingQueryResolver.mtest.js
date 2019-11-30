@@ -73,7 +73,7 @@ describe('createThingQueryResolver', () => {
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
     const { id } = createdExample;
 
-    const Example = createThingQueryResolver(thingConfig, generalConfig);
+    const Example = createThingQueryResolver(thingConfig, generalConfig, serversideConfig);
     if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };

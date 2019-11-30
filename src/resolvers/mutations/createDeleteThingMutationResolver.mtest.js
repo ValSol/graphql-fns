@@ -189,7 +189,11 @@ describe('createDeleteThingMutationResolver', () => {
     expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
     expect(createdFavorities[1].visitors[0]).toEqual(_id);
 
-    const deletePerson = createDeleteThingMutationResolver(personConfig, generalConfig);
+    const deletePerson = createDeleteThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id: _id };
@@ -214,7 +218,11 @@ describe('createDeleteThingMutationResolver', () => {
     const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
     expect(deletedPerson2).toBeNull();
 
-    const deletePlace = createDeleteThingMutationResolver(placeConfig, generalConfig);
+    const deletePlace = createDeleteThingMutationResolver(
+      placeConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where2 = { name: data.location.create.name };

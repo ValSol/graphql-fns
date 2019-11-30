@@ -2,11 +2,12 @@
 import getStream from 'get-stream';
 import csvParse from 'csv-parse';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
 import coerceDataToGql from '../../utils/coerceDataToGql';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import executeAuthorisation from '../executeAuthorisation';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 import allocateFieldsForCSV from './allocateFieldsForCSV';
@@ -47,16 +48,29 @@ type Context = { mongooseConn: Object, pubsub?: Object };
 const createImportThingsMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  if (
-    !checkInventory(['Mutation', 'createThing', name], inventory) ||
-    !checkInventory(['Mutation', 'importThings', name], inventory)
-  )
+  const inventoryChain = ['Mutation', 'createThing', name];
+  const inventoryChain2 = ['Mutation', 'importThings', name];
+  if (!checkInventory(inventoryChain, inventory) || !checkInventory(inventoryChain2, inventory))
     return null;
 
-  const resolver = async (_: Object, args: Args, context: Context): Object => {
+  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const resolverArgs = { parent, args, context, info };
+    const credentials = await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
+    await executeAuthorisation({
+      inventoryChain: inventoryChain2,
+      resolverArgs,
+      serversideConfig,
+      credentials,
+    });
+
     const { file, options } = args;
     // const { filename, mimetype, encoding, createReadStream } = await file;
     const { createReadStream } = await file;

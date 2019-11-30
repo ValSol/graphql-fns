@@ -1,9 +1,10 @@
 // @flow
 
-import type { GeneralConfig, NearInput, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 import composeNearInput from './composeNearInput';
 import composeSortInput from './composeSortInput';
@@ -19,12 +20,22 @@ type Context = { mongooseConn: Object };
 const createThingsQueryResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  if (!checkInventory(['Query', 'things', name], inventory)) return null;
 
-  const resolver = async (_: Object, args: Args, context: Context, info: Object): Object => {
+  const inventoryChain = ['Query', 'things', name];
+  if (!checkInventory(inventoryChain, inventory)) return null;
+
+  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const resolverArgs = { parent, args, context, info };
+    await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
+
     const { near, pagination, sort, where } = args;
 
     const { mongooseConn } = context;

@@ -1,8 +1,9 @@
 // @flow
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import executeAuthorisation from '../executeAuthorisation';
 import processUpdateDuplexInputData from './processUpdateDuplexInputData';
 import processUpdateInputData from './processUpdateInputData';
 import processDeleteData from './processDeleteData';
@@ -15,12 +16,21 @@ type Context = { mongooseConn: Object, pubsub?: Object };
 const createUpdateThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  if (!checkInventory(['Mutation', 'updateThing', name], inventory)) return null;
+  const inventoryChain = ['Mutation', 'updateThing', name];
+  if (!checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (_: Object, args: Args, context: Context): Object => {
+  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
+    const resolverArgs = { parent, args, context, info };
+    const credentials = await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
+
     const { mongooseConn } = context;
     const {
       whereOne,
@@ -88,7 +98,14 @@ const createUpdateThingMutationResolver = (
 
     thing.id = _id;
 
-    if (checkInventory(['Subscription', 'updatedThing', name], inventory)) {
+    const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];
+    if (checkInventory(subscriptionInventoryChain, inventory)) {
+      await executeAuthorisation({
+        inventoryChain: subscriptionInventoryChain,
+        resolverArgs,
+        serversideConfig,
+        credentials,
+      });
       const { pubsub } = context;
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
       const updatedFields = Object.keys(data);

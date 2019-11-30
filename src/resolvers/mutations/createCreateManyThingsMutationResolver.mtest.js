@@ -47,8 +47,12 @@ describe('createCreateManyThingsMutationResolver', () => {
         },
       ],
     };
-
-    const createManyExamples = createCreateManyThingsMutationResolver(thingConfig, generalConfig);
+    const serversideConfig = {};
+    const createManyExamples = createCreateManyThingsMutationResolver(
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createManyExamples).toBe('function');
     if (!createManyExamples) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -115,8 +119,13 @@ describe('createCreateManyThingsMutationResolver', () => {
         },
       ],
     };
+    const serversideConfig = {};
 
-    const createManyExamples = createCreateManyThingsMutationResolver(thingConfig, generalConfig);
+    const createManyExamples = createCreateManyThingsMutationResolver(
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+    );
     expect(typeof createManyExamples).toBe('function');
     if (!createManyExamples) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 

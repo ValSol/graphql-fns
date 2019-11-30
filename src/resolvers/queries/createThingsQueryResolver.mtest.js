@@ -92,7 +92,7 @@ describe('createThingQueryResolver', () => {
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
 
-    const People = createThingsQueryResolver(personConfig, generalConfig);
+    const People = createThingsQueryResolver(personConfig, generalConfig, serversideConfig);
     if (!People) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const people = await People(null, {}, { mongooseConn, pubsub }, info);
@@ -204,7 +204,11 @@ describe('createThingQueryResolver', () => {
     };
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
 
-    const Restaurants = createThingsQueryResolver(restaurantConfig, generalConfig);
+    const Restaurants = createThingsQueryResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info);
@@ -313,7 +317,7 @@ describe('createThingQueryResolver', () => {
 
     await createTable(null, { data }, { mongooseConn, pubsub });
 
-    const Items = createThingsQueryResolver(tableItemConfig, generalConfig);
+    const Items = createThingsQueryResolver(tableItemConfig, generalConfig, serversideConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort);

@@ -274,7 +274,11 @@ describe('createUpdateThingMutationResolver', () => {
     expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
-    const updatePerson = createUpdateThingMutationResolver(personConfig, generalConfig);
+    const updatePerson = createUpdateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
@@ -353,7 +357,11 @@ describe('createUpdateThingMutationResolver', () => {
     expect(updatedFavorities2[1].visitors[0]).toEqual(id2);
     expect(updatedFavorities2[1].visitors[1]).toEqual(id);
 
-    const updatePlace = createUpdateThingMutationResolver(placeConfig, generalConfig);
+    const updatePlace = createUpdateThingMutationResolver(
+      placeConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!updatePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne2 = { name: data.location.create.name };
@@ -430,7 +438,11 @@ describe('createUpdateThingMutationResolver', () => {
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example', exampleSchema);
 
-    const updateExample = createUpdateThingMutationResolver(exampleConfig, generalConfig);
+    const updateExample = createUpdateThingMutationResolver(
+      exampleConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!updateExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
@@ -527,7 +539,11 @@ describe('createUpdateThingMutationResolver', () => {
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
 
-    const updateMain = createUpdateThingMutationResolver(mainConfig, generalConfig);
+    const updateMain = createUpdateThingMutationResolver(
+      mainConfig,
+      generalConfig,
+      serversideConfig,
+    );
     if (!updateMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };

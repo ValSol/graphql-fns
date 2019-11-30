@@ -33,8 +33,8 @@ describe('createDeleteThingMutationResolver', () => {
         },
       ],
     };
-
-    const result = createDeleteThingMutationResolver(thingConfig, generalConfig);
+    const serversideConfig = {};
+    const result = createDeleteThingMutationResolver(thingConfig, generalConfig, serversideConfig);
 
     expect(typeof result).toBe('function');
   });

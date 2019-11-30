@@ -63,7 +63,7 @@ describe('createThingArrayResolver', () => {
     const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub });
     const { id } = createdPlace;
 
-    const Place = createThingArrayResolver(placeConfig);
+    const Place = createThingArrayResolver(placeConfig, generalConfig, serversideConfig);
     const parent = { friends: [id] };
     const places = await Place(parent, null, { mongooseConn, pubsub }, info);
     const [place] = places;

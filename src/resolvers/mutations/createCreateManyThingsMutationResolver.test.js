@@ -33,8 +33,12 @@ describe('createCreateManyThingsMutationResolver', () => {
         },
       ],
     };
-
-    const result = createCreateManyThingsMutationResolver(thingConfig, generalConfig);
+    const serversideConfig = {};
+    const result = createCreateManyThingsMutationResolver(
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+    );
 
     expect(typeof result).toBe('function');
   });

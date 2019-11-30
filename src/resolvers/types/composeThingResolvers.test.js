@@ -55,7 +55,9 @@ describe('composeThingResolvers', () => {
       ],
     });
 
-    const result = composeThingResolvers(personConfig, generalConfig);
+    const serversideConfig = {};
+
+    const result = composeThingResolvers(personConfig, generalConfig, serversideConfig);
 
     expect(typeof result.friends).toBe('function');
     expect(typeof result.enemies).toBe('function');
@@ -123,7 +125,9 @@ describe('composeThingResolvers', () => {
       ],
     });
 
-    const result = composeThingResolvers(personConfig, generalConfig);
+    const serversideConfig = {};
+
+    const result = composeThingResolvers(personConfig, generalConfig, serversideConfig);
 
     expect(typeof result.friends).toBe('function');
     expect(typeof result.enemies).toBe('function');
@@ -155,7 +159,9 @@ describe('composeThingResolvers', () => {
       ],
     };
 
-    const result = composeThingResolvers(thingConfig, generalConfig);
+    const serversideConfig = {};
+
+    const result = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
 
     expect(typeof result.position).toBe('function');
     expect(typeof result.positions).toBe('function');

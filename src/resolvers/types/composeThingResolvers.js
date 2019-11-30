@@ -1,6 +1,6 @@
 // @flow
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import createThingArrayResolver from './createThingArrayResolver';
 import createThingScalarResolver from './createThingScalarResolver';
@@ -12,20 +12,20 @@ type ThingResolver = { [key: string]: Function };
 const composeThingResolvers = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): ThingResolver => {
   const { duplexFields, geospatialFields, relationalFields } = thingConfig;
-  const { enums } = generalConfig;
 
   const resolvers = {};
 
   if (relationalFields) {
     relationalFields.reduce((prev, { array, name, config }) => {
       if (array) {
-        const resolver = createThingArrayResolver(config, enums);
+        const resolver = createThingArrayResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       } else {
-        const resolver = createThingScalarResolver(config, enums);
+        const resolver = createThingScalarResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       }
@@ -36,11 +36,11 @@ const composeThingResolvers = (
   if (duplexFields) {
     duplexFields.reduce((prev, { array, name, config }) => {
       if (array) {
-        const resolver = createThingArrayResolver(config, enums);
+        const resolver = createThingArrayResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       } else {
-        const resolver = createThingScalarResolver(config, enums);
+        const resolver = createThingScalarResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign
         prev[name] = resolver;
       }

@@ -57,11 +57,19 @@ const composeGqlResolvers = (
         // eslint-disable-next-line no-param-reassign
         if (thingCountQueryResolver) prev.Query[`${name}Count`] = thingCountQueryResolver;
 
-        const thingQueryResolver = createThingQueryResolver(thingConfig, generalConfig);
+        const thingQueryResolver = createThingQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
         // eslint-disable-next-line no-param-reassign
         if (thingQueryResolver) prev.Query[name] = thingQueryResolver;
 
-        const thingsQueryResolver = createThingsQueryResolver(thingConfig, generalConfig);
+        const thingsQueryResolver = createThingsQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
         // eslint-disable-next-line no-param-reassign
         if (thingsQueryResolver) prev.Query[pluralize(name)] = thingsQueryResolver;
 
@@ -98,6 +106,7 @@ const composeGqlResolvers = (
         const createManyThingsMutationResolver = createCreateManyThingsMutationResolver(
           thingConfig,
           generalConfig,
+          serversideConfig,
         );
         if (createManyThingsMutationResolver) {
           // eslint-disable-next-line no-param-reassign
@@ -107,6 +116,7 @@ const composeGqlResolvers = (
         const importThingsMutationResolver = createImportThingsMutationResolver(
           thingConfig,
           generalConfig,
+          serversideConfig,
         );
         if (importThingsMutationResolver) {
           // eslint-disable-next-line no-param-reassign
@@ -116,6 +126,7 @@ const composeGqlResolvers = (
         const updateThingMutationResolver = createUpdateThingMutationResolver(
           thingConfig,
           generalConfig,
+          serversideConfig,
         );
         if (updateThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign
@@ -125,6 +136,7 @@ const composeGqlResolvers = (
         const deleteThingMutationResolver = createDeleteThingMutationResolver(
           thingConfig,
           generalConfig,
+          serversideConfig,
         );
         if (deleteThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign
@@ -186,7 +198,7 @@ const composeGqlResolvers = (
     const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
     if (duplexFields || geospatialFields || relationalFields) {
       // eslint-disable-next-line no-param-reassign
-      prev[name] = composeThingResolvers(thingConfig, generalConfig);
+      prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
     }
     return prev;
   }, resolvers);
