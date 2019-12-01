@@ -27,6 +27,7 @@ const createThingCountQueryResolver = (
       inventoryChain,
       resolverArgs,
       serversideConfig,
+      returnScalar: true,
     });
 
     const { where } = args;

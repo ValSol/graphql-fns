@@ -9,7 +9,6 @@ const mongoOptions = require('../../../test/mongo-options');
 const {
   default: createCreateThingMutationResolver,
 } = require('../mutations/createCreateThingMutationResolver');
-
 const { default: createThingCountQueryResolver } = require('./createThingCountQueryResolver');
 
 let mongooseConn;
@@ -25,8 +24,8 @@ beforeAll(async () => {
 
 describe('createThingCountQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
-  const serversideConfig = {};
   test('should create query things resolver', async () => {
+    const serversideConfig = {};
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',

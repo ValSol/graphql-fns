@@ -6,6 +6,7 @@ import type {
   ThreeSegmentInventoryChain,
 } from '../flowTypes';
 
+import executeAuthorisation from './executeAuthorisation';
 import checkInventory from '../utils/checkInventory';
 
 const createCustomResolver = (
@@ -27,7 +28,25 @@ const createCustomResolver = (
     throw new TypeError(`Have to set "${methodKind}" of "${methodName}" `);
   }
 
-  return serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig);
+  const authDecorator = func => async (...argarray) => {
+    const [parent, args, context, info] = argarray;
+    const resolverArgs = { parent, args, context, info };
+    await executeAuthorisation({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+      returnScalar:
+        serversideConfig.returnScalar &&
+        serversideConfig.returnScalar[methodKind] &&
+        serversideConfig.returnScalar[methodKind][methodName],
+    });
+    const result = await func(parent, args, context, info);
+    return result;
+  };
+
+  return authDecorator(
+    serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+  );
 };
 
 export default createCustomResolver;

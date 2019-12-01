@@ -46,7 +46,7 @@ describe('createCustomResolver', () => {
     Mutation: { loadThing: createCustomLoadThingMutationResolver },
   };
 
-  test('should return correct results for allowed custom mutation', () => {
+  test('should return correct results for allowed custom mutation', async () => {
     const inventory: Inventory = { include: { Mutation: { loadThing: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
 
@@ -57,10 +57,13 @@ describe('createCustomResolver', () => {
       generalConfig,
       serversideConfig,
     );
-    expect(result).toBe(resultResolver);
+    // $FlowFixMe
+    const result2 = await result();
+    const resultResolver2 = await resultResolver();
+    expect(result2).toBe(resultResolver2);
   });
 
-  test('should return correct results for allowed custom mutation', () => {
+  test('should return correct results for allowed custom mutation 2', () => {
     const inventory: Inventory = { include: { Mutation: { createThing: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
 

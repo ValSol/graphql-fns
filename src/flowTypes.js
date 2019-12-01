@@ -418,6 +418,14 @@ export type ServersideConfig = {
       serversideConfig: ServersideConfig,
     ) => Function,
   },
+  +returnScalar?: {
+    +Query?: {
+      +[customQueryName: string]: boolean,
+    },
+    +Mutation?: {
+      +[customMutationName: string]: boolean,
+    },
+  },
   // "unrestricted" prevent using "authData" & "getCredentials" in defined cases
   +unrestricted?: Inventory,
   +authData?: AuthData, // "authData" & "getCredentials" are mutualy used

@@ -509,7 +509,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create resolvers for one thing with inventory for only one custom mutation', () => {
+  test('should create resolvers for one thing with inventory for only one custom mutation', async () => {
     const createCustomLoadThingMutationResolver = () => () => 'test passed!';
     const signatureMethods: SignatureMethods = {
       name: ({ name }) => `load${name}`,
@@ -543,10 +543,11 @@ describe('composeGqlResolvers', () => {
     expect(result.Mutation.deleteExample).toBeUndefined();
     expect(result.Subscription).toBeUndefined();
     expect(typeof result.Mutation.loadExample).toBe('function');
-    expect(result.Mutation.loadExample()).toBe('test passed!');
+    const customMutationResult = await result.Mutation.loadExample();
+    expect(customMutationResult).toBe('test passed!');
   });
 
-  test('should create resolvers for one thing with inventory for only one custom Query', () => {
+  test('should create resolvers for one thing with inventory for only one custom Query', async () => {
     const createCustomLoadThingMutationResolver = () => () => 'test passed!';
     const signatureMethods: SignatureMethods = {
       name: ({ name }) => `get${name}`,
@@ -578,6 +579,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Query.Examples).toBeUndefined();
     expect(result.Subscription).toBeUndefined();
     expect(typeof result.Query.getExample).toBe('function');
-    expect(result.Query.getExample()).toBe('test passed!');
+    const customQueryResult = await result.Query.getExample();
+    expect(customQueryResult).toBe('test passed!');
   });
 });
