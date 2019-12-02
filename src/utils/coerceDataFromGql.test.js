@@ -69,6 +69,7 @@ describe('coerceDataFromGql', () => {
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
+      fileFields: [{ name: 'fileField' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -85,6 +86,7 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       textField: 'text field',
+      fileField: 'file/field',
       embedded1: {
         relationalField: { id: '5cefb33f05d6be4b7b59842b' },
         duplexField: { id: '5cefb33f05d6be4b7b59842c' },
@@ -107,6 +109,7 @@ describe('coerceDataFromGql', () => {
 
     const expectedResult = {
       textField: 'text field',
+      fileField: 'file/field',
       embedded1: {
         relationalField: '5cefb33f05d6be4b7b59842b',
         duplexField: '5cefb33f05d6be4b7b59842c',
@@ -137,10 +140,16 @@ describe('coerceDataFromGql', () => {
           name: 'embeddedTextField',
         },
       ],
+      fileFields: [
+        {
+          name: 'embeddedFileField',
+        },
+      ],
     };
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
+      fileFields: [{ name: 'fileField' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -161,14 +170,17 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       textField: null,
+      fileField: null,
       embedded1: null,
       embedded2: {
         embeddedTextField: null,
+        embeddedFileField: null,
         __typename: 'Embedded',
       },
       embedded3: [
         {
           embeddedTextField: null,
+          embeddedFileField: null,
           __typename: 'Embedded',
         },
       ],
@@ -177,16 +189,20 @@ describe('coerceDataFromGql', () => {
 
     const expectedResult = {
       textField: '',
+      fileField: '',
       embedded1: {
         embeddedTextField: '',
+        embeddedFileField: '',
       },
       embedded2: {
         embeddedTextField: '',
+        embeddedFileField: '',
       },
 
       embedded3: [
         {
           embeddedTextField: '',
+          embeddedFileField: '',
         },
       ],
     };

@@ -48,6 +48,48 @@ describe('createThingType', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create thing type with File fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+          default: 'default/text',
+        },
+        {
+          name: 'fileField3',
+          required: true,
+        },
+        {
+          name: 'fileField4',
+          array: true,
+        },
+        {
+          name: 'fileField5',
+          default: ['default/text'],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  fileField1: String
+  fileField2: String
+  fileField3: String!
+  fileField4: [String!]!
+  fileField5: [String!]!
+}`;
+
+    const result = createThingType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create thing type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',

@@ -33,6 +33,19 @@ describe('createThingWhereOneInputType', () => {
           name: 'firstName',
         },
       ],
+      fileFields: [
+        {
+          name: 'logo1',
+          unique: true,
+        },
+        {
+          name: 'logo2',
+          unique: true,
+        },
+        {
+          name: 'logo3',
+        },
+      ],
       intFields: [
         {
           name: 'perosonaNum',
@@ -56,6 +69,8 @@ describe('createThingWhereOneInputType', () => {
   id: ID
   email: ID
   userId: ID
+  logo1: ID
+  logo2: ID
   perosonaNum: Int
   perosonaNumber: Float
   birthday: DateTime

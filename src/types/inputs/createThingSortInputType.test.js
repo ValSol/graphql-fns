@@ -51,6 +51,34 @@ input ExampleSortInput {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create string with indexed file fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `enum ExampleSortEnumeration {
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnumeration]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create string with indexed enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',

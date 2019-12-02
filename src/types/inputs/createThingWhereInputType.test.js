@@ -46,6 +46,29 @@ describe('createThingWhereInputType', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create thing input type if there are file index fields', () => {
+    const thingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleWhereInput {
+  firstName: String
+  lastName: String
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create thing input type if there are relational index fields', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {

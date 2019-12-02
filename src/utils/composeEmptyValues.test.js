@@ -14,9 +14,14 @@ describe('composeEmptyValues', () => {
           name: 'textField',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField',
+        },
+      ],
     });
 
-    const expectedResult = { textField: '' };
+    const expectedResult = { textField: '', fileField: '' };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -32,9 +37,15 @@ describe('composeEmptyValues', () => {
           default: 'textFieldDefaultValue',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField',
+          default: 'fileFieldDefaultValue',
+        },
+      ],
     });
 
-    const expectedResult = { textField: '' };
+    const expectedResult = { textField: '', fileField: '' };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -50,9 +61,15 @@ describe('composeEmptyValues', () => {
           array: true,
         },
       ],
+      fileFields: [
+        {
+          name: 'fileFields',
+          array: true,
+        },
+      ],
     });
 
-    const expectedResult = { textFields: [] };
+    const expectedResult = { textFields: [], fileFields: [] };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -69,9 +86,16 @@ describe('composeEmptyValues', () => {
           array: true,
         },
       ],
+      fileFields: [
+        {
+          name: 'fileFields',
+          default: ['test'],
+          array: true,
+        },
+      ],
     });
 
-    const expectedResult = { textFields: [] };
+    const expectedResult = { textFields: [], fileFields: [] };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -86,6 +110,11 @@ describe('composeEmptyValues', () => {
           name: 'textField',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField',
+        },
+      ],
     };
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
@@ -98,7 +127,7 @@ describe('composeEmptyValues', () => {
       ],
     });
 
-    const expectedResult = { embeddedField: { textField: '' } };
+    const expectedResult = { embeddedField: { textField: '', fileField: '' } };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -111,6 +140,11 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'fileField',
         },
       ],
     };
@@ -139,6 +173,11 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'fileField',
         },
       ],
     };
@@ -171,6 +210,13 @@ describe('composeEmptyValues', () => {
           default: 'default3',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField3',
+          required: true,
+          default: 'default3',
+        },
+      ],
     };
 
     const embedded2Config: ThingConfig = {
@@ -179,6 +225,13 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField2',
+          required: true,
+          default: 'default2',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'fileField2',
           required: true,
           default: 'default2',
         },
@@ -201,6 +254,13 @@ describe('composeEmptyValues', () => {
           default: 'default1',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField1',
+          required: true,
+          default: 'default1',
+        },
+      ],
       embeddedFields: [
         {
           name: 'embedded2',
@@ -218,6 +278,13 @@ describe('composeEmptyValues', () => {
           default: 'default',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField',
+          required: true,
+          default: 'default',
+        },
+      ],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -228,11 +295,14 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = {
       textField: '',
+      fileField: '',
       embedded1: {
         textField1: '',
+        fileField1: '',
         embedded2: {
           textField2: '',
-          embedded3: { textField3: '' },
+          fileField2: '',
+          embedded3: { textField3: '', fileField3: '' },
         },
       },
     };

@@ -3,12 +3,19 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
-  const { dateTimeFields, floatFields, intFields, name, textFields } = thingConfig;
+  const { dateTimeFields, fileFields, floatFields, intFields, name, textFields } = thingConfig;
 
   const fieldLines = [];
 
   if (textFields) {
     textFields.reduce((prev, { name: name2, unique }) => {
+      if (unique) prev.push(`  ${name2}: ID`);
+      return prev;
+    }, fieldLines);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name: name2, unique }) => {
       if (unique) prev.push(`  ${name2}: ID`);
       return prev;
     }, fieldLines);

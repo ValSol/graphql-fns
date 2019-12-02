@@ -13,6 +13,7 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
     intFields,
     relationalFields,
     textFields,
+    fileFields,
   } = thingConfig;
 
   const result = {};
@@ -22,6 +23,15 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
       const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
       prev[name] = { attributes, kind: 'textFields' };
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'fileFields' };
       return prev;
     }, result);
   }

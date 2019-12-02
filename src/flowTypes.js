@@ -81,6 +81,24 @@ type TextField =
       +default?: $ReadOnlyArray<string>,
     |};
 
+type FileField =
+  | {|
+      +array?: false,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: string,
+    |}
+  | {|
+      +array: true,
+      +index?: boolean,
+      +required?: boolean,
+      +unique?: boolean,
+      +name: string,
+      +default?: $ReadOnlyArray<string>,
+    |};
+
 type DateTimeField =
   | {|
       +array?: false,
@@ -179,6 +197,7 @@ export type ThingConfig = {
   intFields?: $ReadOnlyArray<IntField>,
   floatFields?: $ReadOnlyArray<FloatField>,
   textFields?: $ReadOnlyArray<TextField>,
+  fileFields?: $ReadOnlyArray<FileField>,
 
   search?: $ReadOnlyArray<string>, // array of search field names
   form?: $ReadOnlyArray<FormField>,
@@ -213,6 +232,7 @@ export type FlatField =
   | RelationalField
   | DuplexField
   | TextField
+  | FileField
   | FloatField
   | IntField
   | GeospatialField
@@ -256,6 +276,10 @@ export type OrdinaryFieldObject =
   | {|
       +kind: 'textFields',
       +attributes: TextField,
+    |}
+  | {|
+      +kind: 'fileFields',
+      +attributes: FileField,
     |};
 
 export type ThingConfigObject = {

@@ -14,6 +14,11 @@ describe('composeFieldsObject', () => {
           name: 'textField',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField',
+        },
+      ],
     };
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
@@ -72,6 +77,11 @@ describe('composeFieldsObject', () => {
       textFields: [
         {
           name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'fileField',
         },
       ],
     });
@@ -141,6 +151,12 @@ describe('composeFieldsObject', () => {
         kind: 'textFields',
         attributes: {
           name: 'textField',
+        },
+      },
+      fileField: {
+        kind: 'fileFields',
+        attributes: {
+          name: 'fileField',
         },
       },
     };

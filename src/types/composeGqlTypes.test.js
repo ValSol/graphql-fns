@@ -36,6 +36,32 @@ describe('composeGqlTypes', () => {
           array: true,
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField1',
+          unique: true,
+        },
+        {
+          name: 'fileField2',
+          default: 'default/file',
+          index: true,
+        },
+        {
+          name: 'fileField3',
+          required: true,
+          index: true,
+        },
+        {
+          name: 'fileField4',
+          array: true,
+        },
+        {
+          name: 'fileField5',
+          default: ['default/field'],
+          required: true,
+          array: true,
+        },
+      ],
       enumFields: [
         {
           name: 'day',
@@ -105,6 +131,11 @@ type Example {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
+  fileField1: String
+  fileField2: String
+  fileField3: String!
+  fileField4: [String!]!
+  fileField5: [String!]!
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]!
   position: GeospatialPoint
@@ -115,6 +146,11 @@ input ExampleCreateInput {
   textField3: String!
   textField4: [String!]
   textField5: [String!]!
+  fileField1: String
+  fileField2: String
+  fileField3: String!
+  fileField4: [String!]
+  fileField5: [String!]!
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]!
   position: GeospatialPointInput
@@ -133,6 +169,11 @@ input ExampleUpdateInput {
   textField3: String
   textField4: [String!]
   textField5: [String!]
+  fileField1: String
+  fileField2: String
+  fileField3: String
+  fileField4: [String!]
+  fileField5: [String!]
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]
   position: GeospatialPointInput
@@ -146,10 +187,13 @@ input ExampleUpdateChildrenInput {
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
+  fileField1: ID
 }
 input ExampleWhereInput {
   textField2: String
   textField3: String
+  fileField2: String
+  fileField3: String
   day: WeekdaysEnumeration
   cuisines: CuisinesEnumeration
 }
@@ -160,6 +204,10 @@ enum ExampleSortEnumeration {
   textField2_DESC
   textField3_ASC
   textField3_DESC
+  fileField2_ASC
+  fileField2_DESC
+  fileField3_ASC
+  fileField3_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnumeration]
@@ -182,6 +230,11 @@ enum ExampleFieldNamesEnumeration {
   textField3
   textField4
   textField5
+  fileField1
+  fileField2
+  fileField3
+  fileField4
+  fileField5
   day
   cuisines
   position

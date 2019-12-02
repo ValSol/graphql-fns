@@ -36,6 +36,27 @@ describe('createThingsQueryType', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create query things type with where arg 2', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult =
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
+
+    const result = createThingsQueryType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create query things type with pagination arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',

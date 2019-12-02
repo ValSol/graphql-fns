@@ -51,6 +51,51 @@ input ExampleUpdateChildrenInput {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create thing update input type with file fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+          default: 'default/file',
+        },
+        {
+          name: 'fileField3',
+          required: true,
+        },
+        {
+          name: 'fileField4',
+          array: true,
+        },
+        {
+          name: 'fileField5',
+          default: ['default/file'],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = `input ExampleUpdateInput {
+  fileField1: String
+  fileField2: String
+  fileField3: String
+  fileField4: [String!]
+  fileField5: [String!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create thing update input type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',

@@ -9,6 +9,7 @@ const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
     embeddedFields,
     enumFields,
     intFields,
+    fileFields,
     floatFields,
     geospatialFields,
     relationalFields,
@@ -20,6 +21,13 @@ const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
 
   if (textFields) {
     textFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name: name2 }) => {
       prev.push(`  ${name2}`);
       return prev;
     }, thingFieldsArray);

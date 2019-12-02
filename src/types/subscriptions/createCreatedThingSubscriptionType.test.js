@@ -42,4 +42,42 @@ describe('createCreatedThingSubscriptionType', () => {
     const result = createCreatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create subscription type without index fields 2', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'firstName',
+        },
+        {
+          name: 'lastName',
+        },
+      ],
+    };
+    const expectedResult = '  createdExample: Example!';
+
+    const result = createCreatedThingSubscriptionType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create subscription type with where arg 2', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = '  createdExample(where: ExampleWhereInput): Example!';
+
+    const result = createCreatedThingSubscriptionType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

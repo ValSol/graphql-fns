@@ -32,6 +32,33 @@ type UpdatedExamplePayload {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create subscription payload type with file fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+        },
+        {
+          name: 'hero',
+        },
+      ],
+    };
+
+    const expectedResult = `enum ExampleFieldNamesEnumeration {
+  logo
+  hero
+}
+type UpdatedExamplePayload {
+  node: Example
+  previousNode: Example
+  updatedFields: [ExampleFieldNamesEnumeration!]
+}`;
+
+    const result = createUpdatedThingPayloadType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create subscription payload type with text fields', () => {
     const exampleConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {

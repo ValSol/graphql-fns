@@ -10,6 +10,7 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
     duplexFields,
     embeddedFields,
     enumFields,
+    fileFields,
     floatFields,
     intFields,
     geospatialFields,
@@ -22,6 +23,13 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   if (textFields) {
     textFields.reduce((prev, { array, name: name2 }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
+      return prev;
+    }, thingTypeArray);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { array, name: name2 }) => {
       prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
       return prev;
     }, thingTypeArray);
