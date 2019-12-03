@@ -3,7 +3,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const composeWhereOneFields = (thingConfig: ThingConfig): Object => {
-  const { dateTimeFields, intFields, floatFields, textFields } = thingConfig;
+  const { dateTimeFields, intFields, fileFields, floatFields, textFields } = thingConfig;
 
   const result = { id: null };
 
@@ -17,6 +17,13 @@ const composeWhereOneFields = (thingConfig: ThingConfig): Object => {
   if (intFields) {
     intFields.reduce((prev, { name, unique }) => {
       if (unique) prev[name] = 'intFields'; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name, unique }) => {
+      if (unique) prev[name] = 'fileFields'; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }

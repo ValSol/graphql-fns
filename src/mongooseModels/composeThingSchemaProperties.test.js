@@ -66,6 +66,63 @@ describe('composeThingSchemaProperties', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should compose schema properties with file fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'fileField1',
+          index: true,
+        },
+        {
+          name: 'fileField2',
+          default: 'default/file',
+        },
+        {
+          name: 'fileField3',
+          required: true,
+          unique: true,
+        },
+        {
+          name: 'fileField4',
+          array: true,
+        },
+        {
+          name: 'fileField5',
+          default: ['default/file'],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const expectedResult = {
+      fileField1: {
+        type: String,
+        index: true,
+      },
+      fileField2: {
+        type: String,
+        default: 'default/file',
+      },
+      fileField3: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      fileField4: {
+        type: [String],
+      },
+      fileField5: {
+        type: [String],
+        required: true,
+        default: ['default/file'],
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, []);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should compose schema properties with text and relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',

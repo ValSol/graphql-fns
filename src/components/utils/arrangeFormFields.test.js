@@ -80,6 +80,16 @@ describe('arrangeFormFields', () => {
       },
     ],
 
+    fileFields: [
+      {
+        name: 'fileField',
+      },
+      {
+        name: 'fileField2',
+        default: 'fileField/default/value',
+      },
+    ],
+
     floatFields: [
       {
         name: 'floatField',
@@ -178,6 +188,9 @@ describe('arrangeFormFields', () => {
       // intFields
       { name: 'intField' },
       { name: 'intField2' },
+      // fileFields
+      { name: 'fileField' },
+      { name: 'fileField2' },
       // floatFields
       { name: 'floatField' },
       { name: 'floatField2' },

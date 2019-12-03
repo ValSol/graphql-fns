@@ -31,6 +31,32 @@ describe('allocateFieldsForCSV', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should return right allacation fields for file fields', () => {
+    const exampleConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'fileField',
+        },
+        {
+          name: 'fileArrayField',
+          array: true,
+        },
+      ],
+    };
+
+    const result = allocateFieldsForCSV(exampleConfig);
+
+    const expectedResult = {
+      boolean: [],
+      float: [],
+      int: [],
+      object: ['fileArrayField'],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should return right allacation fields for datetime fields', () => {
     const exampleConfig: ThingConfig = {
       name: 'Example',

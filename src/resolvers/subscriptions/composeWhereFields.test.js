@@ -75,6 +75,19 @@ describe('composeWhereFields', () => {
           unique: true,
         },
       ],
+      fileFields: [
+        {
+          name: 'fileFieldIndexed',
+          index: true,
+        },
+        {
+          name: 'fileField',
+        },
+        {
+          name: 'fileFieldUnique',
+          unique: true,
+        },
+      ],
       floatFields: [
         {
           name: 'floatIndexed',
@@ -120,6 +133,7 @@ describe('composeWhereFields', () => {
       textFieldIndexed: 'textFields',
       dateTimeFieldIndexed: 'dateTimeFields',
       intFieldIndexed: 'intFields',
+      fileFieldIndexed: 'fileFields',
       floatIndexed: 'floatFields',
       relationalFieldIndexed: 'relationalFields',
       duplexFieldIndexed: 'duplexFields',

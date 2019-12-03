@@ -2,7 +2,7 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const arrangeSearchFields = (thingConfig: ThingConfig): Array<string> => {
-  const { enumFields, textFields } = thingConfig;
+  const { enumFields, textFields, fileFields } = thingConfig;
 
   const result = [];
 
@@ -20,6 +20,12 @@ const arrangeSearchFields = (thingConfig: ThingConfig): Array<string> => {
     }, result);
   }
 
+  if (fileFields) {
+    fileFields.reduce((prev, { name }) => {
+      prev.push(name);
+      return prev;
+    }, result);
+  }
   return result;
 };
 

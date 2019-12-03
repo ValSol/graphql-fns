@@ -32,6 +32,14 @@ describe('processCreateInputData', () => {
           name: 'intField2',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+        },
+      ],
       floatFields: [
         {
           name: 'floatField1',
@@ -51,6 +59,8 @@ describe('processCreateInputData', () => {
       textField2: 'textField2-Value',
       intField1: 0,
       intField2: 55,
+      fileField1: 'fileField1-Value',
+      fileField2: 'fileField2-Value',
       floatField1: 0.0,
       floatField2: 5.5,
       booleanField1: false,
@@ -65,6 +75,8 @@ describe('processCreateInputData', () => {
           intField2: 55,
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
+          fileField1: 'fileField1-Value',
+          fileField2: 'fileField2-Value',
           floatField1: 0.0,
           floatField2: 5.5,
           booleanField1: false,
@@ -85,6 +97,8 @@ describe('processCreateInputData', () => {
         intField2: 55,
         floatField1: 0.0,
         floatField2: 5.5,
+        fileField1: 'fileField1-Value',
+        fileField2: 'fileField2-Value',
         textField1: 'textField1-Value',
         textField2: 'textField2-Value',
         booleanField1: false,
@@ -107,6 +121,14 @@ describe('processCreateInputData', () => {
           name: 'textField2',
         },
       ],
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+        },
+      ],
       relationalFields: [
         {
           name: 'relationalField1',
@@ -122,6 +144,8 @@ describe('processCreateInputData', () => {
     const data = {
       textField1: 'textField1-Value',
       textField2: 'textField2-Value',
+      fileField1: 'fileField1-Value',
+      fileField2: 'fileField2-Value',
       relationalField1: { connect: '5caf757d62552d713461f420' },
       relationalField2: { connect: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'] },
     };
@@ -131,6 +155,8 @@ describe('processCreateInputData', () => {
       insertOne: {
         document: {
           _id: '2',
+          fileField1: 'fileField1-Value',
+          fileField2: 'fileField2-Value',
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           relationalField1: '5caf757d62552d713461f420',
@@ -147,6 +173,8 @@ describe('processCreateInputData', () => {
       single,
       first: {
         _id: '2',
+        fileField1: 'fileField1-Value',
+        fileField2: 'fileField2-Value',
         textField1: 'textField1-Value',
         textField2: 'textField2-Value',
         relationalField1: '5caf757d62552d713461f420',

@@ -7,6 +7,7 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
     dateTimeFields,
     duplexFields,
     enumFields,
+    fileFields,
     floatFields,
     geospatialFields,
     intFields,
@@ -52,24 +53,35 @@ const arrangeListColumns = (thingConfig: ThingConfig): Array<ListColumn> => {
       return prev;
     }, result);
   }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name }) => {
+      prev.push({ name, width });
+      return prev;
+    }, result);
+  }
+
   if (floatFields) {
     floatFields.reduce((prev, { name }) => {
       prev.push({ name, width });
       return prev;
     }, result);
   }
+
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name }) => {
       prev.push({ name, width });
       return prev;
     }, result);
   }
+
   if (duplexFields) {
     duplexFields.reduce((prev, { name }) => {
       prev.push({ name, width });
       return prev;
     }, result);
   }
+
   if (relationalFields) {
     relationalFields.reduce((prev, { name }) => {
       prev.push({ name, width });

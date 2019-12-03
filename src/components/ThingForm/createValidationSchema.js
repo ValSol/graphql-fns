@@ -77,6 +77,9 @@ const createValidationSchema = (
       case 'intFields':
         prev[name] = intSchema(); // eslint-disable-line no-param-reassign
         break;
+      case 'fileFields':
+        prev[name] = yup.string(); // eslint-disable-line no-param-reassign
+        break;
       case 'floatFields':
         prev[name] = floatSchema(); // eslint-disable-line no-param-reassign
         break;
@@ -131,6 +134,7 @@ const createValidationSchema = (
     if (
       fieldsObject[name].kind === 'dateTimeFields' ||
       fieldsObject[name].kind === 'intFields' ||
+      fieldsObject[name].kind === 'fileFields' ||
       fieldsObject[name].kind === 'floatFields' ||
       fieldsObject[name].kind === 'textFields'
     ) {

@@ -70,6 +70,14 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
           }
           break;
 
+        case 'fileFields':
+          if (array) {
+            prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
+          } else {
+            prev[key] = item[key]; // eslint-disable-line no-param-reassign
+          }
+          break;
+
         case 'floatFields':
           if (array) {
             // eslint-disable-next-line no-param-reassign

@@ -80,6 +80,16 @@ describe('arrangeSearchFields', () => {
       },
     ],
 
+    fileFields: [
+      {
+        name: 'fileField',
+      },
+      {
+        name: 'fileField2',
+        default: 'fileField/default/value',
+      },
+    ],
+
     floatFields: [
       {
         name: 'floatField',
@@ -169,6 +179,8 @@ describe('arrangeSearchFields', () => {
       // textFields
       'textField',
       'textField2',
+      'fileField',
+      'fileField2',
     ];
 
     const result = arrangeSearchFields(thingConfig);

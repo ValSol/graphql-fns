@@ -34,6 +34,7 @@ const processCreateInputData = (
       booleanFields,
       dateTimeFields,
       duplexFields,
+      fileFields,
       floatFields,
       intFields,
       embeddedFields,
@@ -98,6 +99,13 @@ const processCreateInputData = (
 
     if (intFields) {
       intFields.reduce((prev, { name }) => {
+        prev.push(name);
+        return prev;
+      }, scalarFieldsArray);
+    }
+
+    if (fileFields) {
+      fileFields.reduce((prev, { name }) => {
         prev.push(name);
         return prev;
       }, scalarFieldsArray);

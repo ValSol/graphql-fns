@@ -21,6 +21,7 @@ const composeThingSchemaProperties = (
     embeddedFields,
     enumFields,
     intFields,
+    fileFields,
     floatFields,
     geospatialFields,
     relationalFields,
@@ -100,6 +101,31 @@ const composeThingSchemaProperties = (
       } // eslint-disable-next-line no-param-reassign
 
       prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
+      if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      if (required) prev[name].required = !!required; // by default required = false
+      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
+      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {
+      if (defaultValue) {
+        if (!array && Array.isArray(defaultValue)) {
+          throw new TypeError('Expected not an array as default value');
+        }
+        if (array && !Array.isArray(defaultValue)) {
+          throw new TypeError('Expected an array as default value');
+        }
+      }
+
+      if ((index || unique) && embedded) {
+        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      } // eslint-disable-next-line no-param-reassign
+
+      prev[name] = { type: array ? [String] : String }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
       if (required) prev[name].required = !!required; // by default required = false

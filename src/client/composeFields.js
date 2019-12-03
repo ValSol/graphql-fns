@@ -14,6 +14,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
     embedded,
     embeddedFields,
     enumFields,
+    fileFields,
     floatFields,
     intFields,
     geospatialFields,
@@ -41,6 +42,15 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
 
   if (dateTimeFields) {
     dateTimeFields.reduce((prev, { name }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name}`);
+      }
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
         prev.push(`${'  '.repeat(shift)}${name}`);
       }

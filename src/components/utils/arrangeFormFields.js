@@ -8,6 +8,7 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
     duplexFields,
     embeddedFields,
     enumFields,
+    fileFields,
     floatFields,
     geospatialFields,
     intFields,
@@ -51,6 +52,14 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
       return prev;
     }, result);
   }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name }) => {
+      prev.push({ name });
+      return prev;
+    }, result);
+  }
+
   if (floatFields) {
     floatFields.reduce((prev, { name }) => {
       prev.push({ name });

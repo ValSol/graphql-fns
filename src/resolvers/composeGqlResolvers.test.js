@@ -55,6 +55,49 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
+  test('should create resolvers for one thing with fileFields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+          default: 'default/file',
+        },
+        {
+          name: 'fileField3',
+          required: true,
+        },
+        {
+          name: 'fileField4',
+          array: true,
+        },
+        {
+          name: 'fileField5',
+          default: ['default/file'],
+          required: true,
+          array: true,
+        },
+      ],
+    };
+    const thingConfigs = [thingConfig];
+    const generalConfig: GeneralConfig = { thingConfigs };
+    const result = composeGqlResolvers(generalConfig);
+    expect(typeof result.Query.ExampleCount).toBe('function');
+    expect(typeof result.Query.Example).toBe('function');
+    expect(typeof result.Query.Examples).toBe('function');
+    expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.createManyExamples).toBe('function');
+    expect(typeof result.Mutation.importExamples).toBe('function');
+    expect(typeof result.Mutation.updateExample).toBe('function');
+    expect(typeof result.Mutation.deleteExample).toBe('function');
+    expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
+    expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
+  });
+
   test('should create resolvers for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
