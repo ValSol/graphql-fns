@@ -96,13 +96,13 @@ const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
     }, thingFieldsArray);
   }
 
-  const result = `enum ${name}FieldNamesEnumeration {
+  const result = `enum ${name}FieldNamesEnum {
 ${thingFieldsArray.join('\n')}
 }
 type Updated${name}Payload {
   node: ${name}
   previousNode: ${name}
-  updatedFields: [${name}FieldNamesEnumeration!]
+  updatedFields: [${name}FieldNamesEnum!]
 }`;
 
   return result;

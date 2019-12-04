@@ -184,6 +184,17 @@ input ExampleUpdateChildInput {
 input ExampleUpdateChildrenInput {
   connect: [ID!]
 }
+enum ExampleFileFieldNamesEnum {
+  fileField1
+  fileField2
+  fileField3
+  fileField4
+  fileField5
+}
+input ExampleFileInput {
+  file: Upload!
+  target: ExampleFileFieldNamesEnum!
+}
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
@@ -197,7 +208,7 @@ input ExampleWhereInput {
   day: WeekdaysEnumeration
   cuisines: CuisinesEnumeration
 }
-enum ExampleSortEnumeration {
+enum ExampleSortEnum {
   day_ASC
   day_DESC
   textField2_ASC
@@ -210,21 +221,21 @@ enum ExampleSortEnumeration {
   fileField3_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }
 input ExamplePaginationInput {
   skip: Int
   first: Int
 }
-enum ExampleGeospatialFieldNamesEnumeration {
+enum ExampleGeospatialFieldNamesEnum {
   position
 }
 input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnumeration
+  geospatialField: ExampleGeospatialFieldNamesEnum
   coordinates: GeospatialPointInput
   maxDistance: Float
 }
-enum ExampleFieldNamesEnumeration {
+enum ExampleFieldNamesEnum {
   textField1
   textField2
   textField3
@@ -242,7 +253,7 @@ enum ExampleFieldNamesEnumeration {
 type UpdatedExamplePayload {
   node: Example
   previousNode: Example
-  updatedFields: [ExampleFieldNamesEnumeration!]
+  updatedFields: [ExampleFieldNamesEnum!]
 }
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
@@ -255,6 +266,7 @@ type Mutation {
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
+  uploadToExample(data: ExampleFileInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -411,18 +423,18 @@ input Example2UpdateChildrenInput {
 input Example1WhereOneInput {
   id: ID!
 }
-enum Example1GeospatialFieldNamesEnumeration {
+enum Example1GeospatialFieldNamesEnum {
   position
 }
 input Example1NearInput {
-  geospatialField: Example1GeospatialFieldNamesEnumeration
+  geospatialField: Example1GeospatialFieldNamesEnum
   coordinates: GeospatialPointInput
   maxDistance: Float
 }
 input Example2WhereOneInput {
   id: ID!
 }
-enum Example1FieldNamesEnumeration {
+enum Example1FieldNamesEnum {
   textField1
   textField2
   textField3
@@ -431,9 +443,9 @@ enum Example1FieldNamesEnumeration {
 type UpdatedExample1Payload {
   node: Example1
   previousNode: Example1
-  updatedFields: [Example1FieldNamesEnumeration!]
+  updatedFields: [Example1FieldNamesEnum!]
 }
-enum Example2FieldNamesEnumeration {
+enum Example2FieldNamesEnum {
   textField1
   textField2
   area
@@ -441,7 +453,7 @@ enum Example2FieldNamesEnumeration {
 type UpdatedExample2Payload {
   node: Example2
   previousNode: Example2
-  updatedFields: [Example2FieldNamesEnumeration!]
+  updatedFields: [Example2FieldNamesEnum!]
 }
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
@@ -604,7 +616,7 @@ input PersonWhereOneInput {
 input PlaceWhereOneInput {
   id: ID!
 }
-enum PersonFieldNamesEnumeration {
+enum PersonFieldNamesEnum {
   firstName
   lastName
   friends
@@ -615,15 +627,15 @@ enum PersonFieldNamesEnumeration {
 type UpdatedPersonPayload {
   node: Person
   previousNode: Person
-  updatedFields: [PersonFieldNamesEnumeration!]
+  updatedFields: [PersonFieldNamesEnum!]
 }
-enum PlaceFieldNamesEnumeration {
+enum PlaceFieldNamesEnum {
   title
 }
 type UpdatedPlacePayload {
   node: Place
   previousNode: Place
-  updatedFields: [PlaceFieldNamesEnumeration!]
+  updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
@@ -775,7 +787,7 @@ input AddressUpdateInput {
 input PersonWhereOneInput {
   id: ID!
 }
-enum PersonFieldNamesEnumeration {
+enum PersonFieldNamesEnum {
   firstName
   lastName
   location
@@ -786,7 +798,7 @@ enum PersonFieldNamesEnumeration {
 type UpdatedPersonPayload {
   node: Person
   previousNode: Person
-  updatedFields: [PersonFieldNamesEnumeration!]
+  updatedFields: [PersonFieldNamesEnum!]
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
@@ -958,7 +970,7 @@ input PersonWhereOneInput {
 input PlaceWhereOneInput {
   id: ID!
 }
-enum PersonFieldNamesEnumeration {
+enum PersonFieldNamesEnum {
   firstName
   lastName
   friends
@@ -969,9 +981,9 @@ enum PersonFieldNamesEnumeration {
 type UpdatedPersonPayload {
   node: Person
   previousNode: Person
-  updatedFields: [PersonFieldNamesEnumeration!]
+  updatedFields: [PersonFieldNamesEnum!]
 }
-enum PlaceFieldNamesEnumeration {
+enum PlaceFieldNamesEnum {
   name
   citizens
   visitors
@@ -979,7 +991,7 @@ enum PlaceFieldNamesEnumeration {
 type UpdatedPlacePayload {
   node: Place
   previousNode: Place
-  updatedFields: [PlaceFieldNamesEnumeration!]
+  updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person

@@ -5,6 +5,7 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
+import createThingFileInputType from './inputs/createThingFileInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -20,6 +21,7 @@ import createCreateThingMutationType from './mutations/createCreateThingMutation
 import createImportThingsMutationType from './mutations/createImportThingsMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
+import createUploadToThingMutationType from './mutations/createUploadToThingMutationType';
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
@@ -56,6 +58,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
             const thingUpdateInputType = createThingUpdateInputType(thingConfig);
             prev.push(thingUpdateInputType);
+          }
+          if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
+            const thingFileInputType = createThingFileInputType(thingConfig);
+            if (thingFileInputType) prev.push(thingFileInputType);
           }
           return prev;
         }, [])
@@ -149,6 +155,10 @@ ${thingQueryTypes.join('\n')}
         }
         if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
           prev.push(createDeleteThingMutationType(thingConfig));
+        }
+        if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
+          const uploadToThingMutationType = createUploadToThingMutationType(thingConfig);
+          if (uploadToThingMutationType) prev.push(uploadToThingMutationType);
         }
 
         customMutationNames.forEach(customName => {

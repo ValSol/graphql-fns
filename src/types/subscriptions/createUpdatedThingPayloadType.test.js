@@ -18,14 +18,14 @@ describe('createUpdatedThingPayloadType', () => {
       ],
     };
 
-    const expectedResult = `enum ExampleFieldNamesEnumeration {
+    const expectedResult = `enum ExampleFieldNamesEnum {
   firstName
   lastName
 }
 type UpdatedExamplePayload {
   node: Example
   previousNode: Example
-  updatedFields: [ExampleFieldNamesEnumeration!]
+  updatedFields: [ExampleFieldNamesEnum!]
 }`;
 
     const result = createUpdatedThingPayloadType(thingConfig);
@@ -45,14 +45,14 @@ type UpdatedExamplePayload {
       ],
     };
 
-    const expectedResult = `enum ExampleFieldNamesEnumeration {
+    const expectedResult = `enum ExampleFieldNamesEnum {
   logo
   hero
 }
 type UpdatedExamplePayload {
   node: Example
   previousNode: Example
-  updatedFields: [ExampleFieldNamesEnumeration!]
+  updatedFields: [ExampleFieldNamesEnum!]
 }`;
 
     const result = createUpdatedThingPayloadType(thingConfig);
@@ -130,7 +130,7 @@ type UpdatedExamplePayload {
       ],
     });
 
-    const expectedResult = `enum ExampleFieldNamesEnumeration {
+    const expectedResult = `enum ExampleFieldNamesEnum {
   textField
   intField
   floatField
@@ -145,7 +145,7 @@ type UpdatedExamplePayload {
 type UpdatedExamplePayload {
   node: Example
   previousNode: Example
-  updatedFields: [ExampleFieldNamesEnumeration!]
+  updatedFields: [ExampleFieldNamesEnum!]
 }`;
 
     const result = createUpdatedThingPayloadType(exampleConfig);

@@ -37,14 +37,14 @@ describe('createThingSortInputType', () => {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstName_ASC
   firstName_DESC
   lastName_ASC
   lastName_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
@@ -65,14 +65,14 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstName_ASC
   firstName_DESC
   lastName_ASC
   lastName_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
@@ -101,14 +101,14 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstCuisine_ASC
   firstCuisine_DESC
   secondCuisine_ASC
   secondCuisine_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
@@ -129,14 +129,14 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstName_ASC
   firstName_DESC
   lastName_ASC
   lastName_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
@@ -157,14 +157,14 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstName_ASC
   firstName_DESC
   lastName_ASC
   lastName_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
@@ -185,14 +185,14 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnumeration {
+    const expectedResult = `enum ExampleSortEnum {
   firstName_ASC
   firstName_DESC
   lastName_ASC
   lastName_DESC
 }
 input ExampleSortInput {
-  sortBy: [ExampleSortEnumeration]
+  sortBy: [ExampleSortEnum]
 }`;
 
     const result = createThingSortInputType(thingConfig);
