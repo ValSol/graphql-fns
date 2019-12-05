@@ -5,7 +5,7 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
-import createThingFileInputType from './inputs/createThingFileInputType';
+import createThingUploadOptionsInputType from './inputs/createThingUploadOptionsInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -60,7 +60,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             prev.push(thingUpdateInputType);
           }
           if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
-            const thingFileInputType = createThingFileInputType(thingConfig);
+            const thingFileInputType = createThingUploadOptionsInputType(thingConfig);
             if (thingFileInputType) prev.push(thingFileInputType);
           }
           return prev;

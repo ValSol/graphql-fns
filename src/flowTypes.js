@@ -396,13 +396,13 @@ export type SignatureMethods = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
-  | ['Mutation', string] // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing' or custom mutation
+  | ['Mutation', string] // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadToThing' or custom mutation
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
   | [
       'Mutation',
-      string, // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', uploadToThing or custom mutation
+      string, // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadToThing' or custom mutation
       string, //  second "string" for thing name
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string]; //  "string" for thing name
