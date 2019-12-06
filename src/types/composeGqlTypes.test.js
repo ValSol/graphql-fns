@@ -263,9 +263,9 @@ type Mutation {
   createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
-  updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
-  uploadToExample(file: Upload!, options: ExampleUploadOptionsInput!): Example!
+  uploadToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: ExampleUploadOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -466,12 +466,12 @@ type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
   createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
-  updateExample1(whereOne: Example1WhereOneInput! data: Example1UpdateInput!): Example1!
+  updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
-  updateExample2(whereOne: Example2WhereOneInput! data: Example2UpdateInput!): Example2!
+  updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
@@ -648,12 +648,12 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
@@ -808,7 +808,7 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
@@ -1004,12 +1004,12 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  updatePerson(whereOne: PersonWhereOneInput! data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  updatePlace(whereOne: PlaceWhereOneInput! data: PlaceUpdateInput!): Place!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
@@ -1111,7 +1111,7 @@ type Mutation {
   createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
-  updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!
+  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
 }`;
 

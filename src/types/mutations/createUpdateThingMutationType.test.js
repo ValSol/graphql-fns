@@ -11,7 +11,7 @@ describe('createUpdateThingMutationType', () => {
       name: 'Example',
     };
     const expectedResult =
-      '  updateExample(whereOne: ExampleWhereOneInput! data: ExampleUpdateInput!): Example!';
+      '  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!';
 
     const result = createUpdateThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);

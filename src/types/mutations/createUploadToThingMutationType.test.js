@@ -35,7 +35,7 @@ describe('createUploadToThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  uploadToExample(file: Upload!, options: ExampleUploadOptionsInput!): Example!';
+      '  uploadToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: ExampleUploadOptionsInput!): Example!';
 
     const result = createUploadToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);

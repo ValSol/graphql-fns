@@ -6,7 +6,7 @@ const createUploadToThingMutationType = (thingConfig: ThingConfig): string => {
   const { name, fileFields } = thingConfig;
 
   if (fileFields && fileFields.length) {
-    return `  uploadTo${name}(file: Upload!, options: ${name}UploadOptionsInput!): ${name}!`;
+    return `  uploadTo${name}(whereOne: ${name}WhereOneInput!, file: Upload!, options: ${name}UploadOptionsInput!): ${name}!`;
   }
 
   return '';
