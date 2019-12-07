@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadToThingMutationType from './createUploadToThingMutationType';
+import createUploadFileToThingMutationType from './createUploadFileToThingMutationType';
 
-describe('createUploadToThingMutationType', () => {
+describe('createUploadFileToThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,7 +17,7 @@ describe('createUploadToThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadToThingMutationType(thingConfig);
+    const result = createUploadFileToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -35,9 +35,9 @@ describe('createUploadToThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  uploadToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: ExampleUploadOptionsInput!): Example!';
+      '  uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: UploadFileToExampleOptionsInput!): Example!';
 
-    const result = createUploadToThingMutationType(thingConfig);
+    const result = createUploadFileToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

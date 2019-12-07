@@ -5,7 +5,7 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
-import createThingUploadOptionsInputType from './inputs/createThingUploadOptionsInputType';
+import createUploadFileToThingOptionsInputType from './inputs/createUploadFileToThingOptionsInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -21,7 +21,7 @@ import createCreateThingMutationType from './mutations/createCreateThingMutation
 import createImportThingsMutationType from './mutations/createImportThingsMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
-import createUploadToThingMutationType from './mutations/createUploadToThingMutationType';
+import createUploadFileToThingMutationType from './mutations/createUploadFileToThingMutationType';
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
@@ -60,7 +60,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             prev.push(thingUpdateInputType);
           }
           if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
-            const thingFileInputType = createThingUploadOptionsInputType(thingConfig);
+            const thingFileInputType = createUploadFileToThingOptionsInputType(thingConfig);
             if (thingFileInputType) prev.push(thingFileInputType);
           }
           return prev;
@@ -157,7 +157,7 @@ ${thingQueryTypes.join('\n')}
           prev.push(createDeleteThingMutationType(thingConfig));
         }
         if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
-          const uploadToThingMutationType = createUploadToThingMutationType(thingConfig);
+          const uploadToThingMutationType = createUploadFileToThingMutationType(thingConfig);
           if (uploadToThingMutationType) prev.push(uploadToThingMutationType);
         }
 

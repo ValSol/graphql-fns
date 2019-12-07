@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingUploadOptionsInputType from './createThingUploadOptionsInputType';
+import createUploadFileToThingOptionsInputType from './createUploadFileToThingOptionsInputType';
 
-describe('createThingUploadOptionsInputType', () => {
+describe('createUploadFileToThingOptionsInputType', () => {
   test('should create empty string if there are not any file fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -19,7 +19,7 @@ describe('createThingUploadOptionsInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createThingUploadOptionsInputType(thingConfig);
+    const result = createUploadFileToThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -40,11 +40,11 @@ describe('createThingUploadOptionsInputType', () => {
   logo
   photos
 }
-input ExampleUploadOptionsInput {
-  target: ExampleFileFieldNamesEnum!
+input UploadFileToExampleOptionsInput {
+  targets: [ExampleFileFieldNamesEnum!]!
 }`;
 
-    const result = createThingUploadOptionsInputType(thingConfig);
+    const result = createUploadFileToThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });
