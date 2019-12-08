@@ -194,6 +194,13 @@ enum ExampleFileFieldNamesEnum {
 input UploadFileToExampleOptionsInput {
   targets: [ExampleFileFieldNamesEnum!]!
 }
+enum ExampleFilesFieldNamesEnum {
+  fileField4
+  fileField5
+}
+input UploadFilesToExampleOptionsInput {
+  targets: [ExampleFilesFieldNamesEnum!]!
+}
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
@@ -266,6 +273,7 @@ type Mutation {
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: UploadFileToExampleOptionsInput!): Example!
+  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadFilesToExampleOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -276,6 +284,7 @@ type Subscription {
     const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
   test('should create things types for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
@@ -290,6 +299,15 @@ type Subscription {
         {
           name: 'textField3',
           required: true,
+        },
+      ],
+      fileFields: [
+        {
+          name: 'fileField1',
+        },
+        {
+          name: 'fileField2',
+          default: 'default/file',
         },
       ],
       geospatialFields: [
@@ -359,6 +377,8 @@ type Example1 {
   textField1: String
   textField2: String
   textField3: String!
+  fileField1: String
+  fileField2: String
   position: GeospatialPoint
 }
 type Example2 {
@@ -373,6 +393,8 @@ input Example1CreateInput {
   textField1: String
   textField2: String
   textField3: String!
+  fileField1: String
+  fileField2: String
   position: GeospatialPointInput
 }
 input Example1CreateChildInput {
@@ -387,6 +409,8 @@ input Example1UpdateInput {
   textField1: String
   textField2: String
   textField3: String
+  fileField1: String
+  fileField2: String
   position: GeospatialPointInput
 }
 input Example1UpdateChildInput {
@@ -394,6 +418,13 @@ input Example1UpdateChildInput {
 }
 input Example1UpdateChildrenInput {
   connect: [ID!]
+}
+enum Example1FileFieldNamesEnum {
+  fileField1
+  fileField2
+}
+input UploadFileToExample1OptionsInput {
+  targets: [Example1FileFieldNamesEnum!]!
 }
 input Example2CreateInput {
   textField1: [String!]
@@ -437,6 +468,8 @@ enum Example1FieldNamesEnum {
   textField1
   textField2
   textField3
+  fileField1
+  fileField2
   position
 }
 type UpdatedExample1Payload {
@@ -468,6 +501,7 @@ type Mutation {
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
+  uploadFileToExample1(whereOne: Example1WhereOneInput!, file: Upload!, options: UploadFileToExample1OptionsInput!): Example1!
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!

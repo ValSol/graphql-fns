@@ -6,6 +6,7 @@ import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
 import createUploadFileToThingOptionsInputType from './inputs/createUploadFileToThingOptionsInputType';
+import createUploadFilesToThingOptionsInputType from './inputs/createUploadFilesToThingOptionsInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -22,6 +23,7 @@ import createImportThingsMutationType from './mutations/createImportThingsMutati
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
 import createUploadFileToThingMutationType from './mutations/createUploadFileToThingMutationType';
+import createUploadFilesToThingMutationType from './mutations/createUploadFilesToThingMutationType';
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
@@ -59,9 +61,15 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const thingUpdateInputType = createThingUpdateInputType(thingConfig);
             prev.push(thingUpdateInputType);
           }
-          if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
-            const thingFileInputType = createUploadFileToThingOptionsInputType(thingConfig);
-            if (thingFileInputType) prev.push(thingFileInputType);
+          if (checkInventory(['Mutation', 'uploadFileToThing', name], inventory)) {
+            const uploadFileToThingInputType = createUploadFileToThingOptionsInputType(thingConfig);
+            if (uploadFileToThingInputType) prev.push(uploadFileToThingInputType);
+          }
+          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
+            const uploadFilesToThingInputType = createUploadFilesToThingOptionsInputType(
+              thingConfig,
+            );
+            if (uploadFilesToThingInputType) prev.push(uploadFilesToThingInputType);
           }
           return prev;
         }, [])
@@ -156,9 +164,13 @@ ${thingQueryTypes.join('\n')}
         if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
           prev.push(createDeleteThingMutationType(thingConfig));
         }
-        if (checkInventory(['Mutation', 'uploadToThing', name], inventory)) {
-          const uploadToThingMutationType = createUploadFileToThingMutationType(thingConfig);
-          if (uploadToThingMutationType) prev.push(uploadToThingMutationType);
+        if (checkInventory(['Mutation', 'uploadFileToThing', name], inventory)) {
+          const uploadFileToThingMutationType = createUploadFileToThingMutationType(thingConfig);
+          if (uploadFileToThingMutationType) prev.push(uploadFileToThingMutationType);
+        }
+        if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
+          const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(thingConfig);
+          if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
         }
 
         customMutationNames.forEach(customName => {

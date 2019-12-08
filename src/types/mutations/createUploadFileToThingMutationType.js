@@ -2,10 +2,14 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createUploadFileToThingMutationType = (thingConfig: ThingConfig): string => {
-  const { name, fileFields } = thingConfig;
+import createUploadFileToThingOptionsInputType from '../inputs/createUploadFileToThingOptionsInputType';
 
-  if (fileFields && fileFields.length) {
+const createUploadFileToThingMutationType = (thingConfig: ThingConfig): string => {
+  const { name } = thingConfig;
+
+  const uploadFileToThingOptionsInput = createUploadFileToThingOptionsInputType(thingConfig);
+
+  if (uploadFileToThingOptionsInput) {
     return `  uploadFileTo${name}(whereOne: ${name}WhereOneInput!, file: Upload!, options: UploadFileTo${name}OptionsInput!): ${name}!`;
   }
 
