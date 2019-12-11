@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadFilesToThingMutationType from './createUploadFilesToThingMutationType';
+import createUploadManyFilesToThingMutationType from './createUploadManyFilesToThingMutationType';
 
-describe('createUploadFilesToThingMutationType', () => {
+describe('createUploadManyFilesToThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,7 +17,7 @@ describe('createUploadFilesToThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = createUploadManyFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -32,7 +32,7 @@ describe('createUploadFilesToThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = createUploadManyFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -50,9 +50,9 @@ describe('createUploadFilesToThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadFilesToExampleOptionsInput!): Example!';
+      '  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadManyFilesToExampleOptionsInput!): Example!';
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = createUploadManyFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

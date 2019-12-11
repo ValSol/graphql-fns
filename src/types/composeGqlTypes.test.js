@@ -198,7 +198,7 @@ enum ExampleFilesFieldNamesEnum {
   fileField4
   fileField5
 }
-input UploadFilesToExampleOptionsInput {
+input UploadManyFilesToExampleOptionsInput {
   targets: [ExampleFilesFieldNamesEnum!]!
 }
 input ExampleWhereOneInput {
@@ -273,7 +273,7 @@ type Mutation {
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: UploadFileToExampleOptionsInput!): Example!
-  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadFilesToExampleOptionsInput!): Example!
+  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadManyFilesToExampleOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!

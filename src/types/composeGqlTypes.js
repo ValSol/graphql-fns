@@ -6,7 +6,7 @@ import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
 import createUploadFileToThingOptionsInputType from './inputs/createUploadFileToThingOptionsInputType';
-import createUploadFilesToThingOptionsInputType from './inputs/createUploadFilesToThingOptionsInputType';
+import createUploadManyFilesToThingOptionsInputType from './inputs/createUploadManyFilesToThingOptionsInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -23,7 +23,7 @@ import createImportThingsMutationType from './mutations/createImportThingsMutati
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
 import createUploadFileToThingMutationType from './mutations/createUploadFileToThingMutationType';
-import createUploadFilesToThingMutationType from './mutations/createUploadFilesToThingMutationType';
+import createUploadManyFilesToThingMutationType from './mutations/createUploadManyFilesToThingMutationType';
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
@@ -65,11 +65,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const uploadFileToThingInputType = createUploadFileToThingOptionsInputType(thingConfig);
             if (uploadFileToThingInputType) prev.push(uploadFileToThingInputType);
           }
-          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
-            const uploadFilesToThingInputType = createUploadFilesToThingOptionsInputType(
+          if (checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory)) {
+            const uploadManyFilesToThingInputType = createUploadManyFilesToThingOptionsInputType(
               thingConfig,
             );
-            if (uploadFilesToThingInputType) prev.push(uploadFilesToThingInputType);
+            if (uploadManyFilesToThingInputType) prev.push(uploadManyFilesToThingInputType);
           }
           return prev;
         }, [])
@@ -168,9 +168,11 @@ ${thingQueryTypes.join('\n')}
           const uploadFileToThingMutationType = createUploadFileToThingMutationType(thingConfig);
           if (uploadFileToThingMutationType) prev.push(uploadFileToThingMutationType);
         }
-        if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
-          const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(thingConfig);
-          if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
+        if (checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory)) {
+          const uploadManyFilesToThingMutationType = createUploadManyFilesToThingMutationType(
+            thingConfig,
+          );
+          if (uploadManyFilesToThingMutationType) prev.push(uploadManyFilesToThingMutationType);
         }
 
         customMutationNames.forEach(customName => {
