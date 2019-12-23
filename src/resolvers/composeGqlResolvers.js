@@ -1,7 +1,7 @@
 // @flow
 
 import pluralize from 'pluralize';
-import { DateTime } from '@okgrow/graphql-scalars';
+import { DateTimeResolver } from 'graphql-scalars';
 
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
@@ -38,7 +38,7 @@ const composeGqlResolvers = (
 
   const resolvers = {};
 
-  resolvers.DateTime = DateTime;
+  resolvers.DateTime = DateTimeResolver;
   if (allowQueries) resolvers.Query = {};
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
