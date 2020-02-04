@@ -315,7 +315,7 @@ describe('createUseReducerArgs util', () => {
     const secondState = reducer(initialState, firstAction);
     const action = {
       type: 'FILTER',
-      value: { enumIndexedField: createBitwiseArray(['Tuesday'], weekDays) },
+      value: { enumIndexedField: createBitwiseArray(weekDays, ['Tuesday']) },
     };
     const state = reducer(secondState, action);
 
@@ -333,7 +333,7 @@ describe('createUseReducerArgs util', () => {
         ...filters,
         enumIndexedField: {
           ...filters.enumIndexedField,
-          value: createBitwiseArray(['Tuesday'], weekDays),
+          value: createBitwiseArray(weekDays, ['Tuesday']),
         },
       },
     };
@@ -384,7 +384,7 @@ describe('createUseReducerArgs util', () => {
     const thirdState = reducer(secondState, secondAction);
     const action = {
       type: 'FILTER',
-      value: { enumIndexedField: createBitwiseArray(['Tuesday'], weekDays) },
+      value: { enumIndexedField: createBitwiseArray(weekDays, ['Tuesday']) },
     };
     const state = reducer(thirdState, action);
 
@@ -392,7 +392,7 @@ describe('createUseReducerArgs util', () => {
       ...filters,
       enumIndexedField: {
         ...filters.enumIndexedField,
-        value: createBitwiseArray(['Tuesday'], weekDays),
+        value: createBitwiseArray(weekDays, ['Tuesday']),
       },
     };
     const { decorated, masks } = decorateItems(items, filters);
@@ -454,7 +454,7 @@ describe('createUseReducerArgs util', () => {
     const secondState = reducer(initialState, firstAction);
     const secondAction = {
       type: 'FILTER',
-      value: { enumIndexedField: createBitwiseArray(['Tuesday'], weekDays) },
+      value: { enumIndexedField: createBitwiseArray(weekDays, ['Tuesday']) },
     };
     const thirdState = reducer(secondState, secondAction);
     const action = { type: 'SUCCESS', value: items };
@@ -464,7 +464,7 @@ describe('createUseReducerArgs util', () => {
       ...filters,
       enumIndexedField: {
         ...filters.enumIndexedField,
-        value: createBitwiseArray(['Tuesday'], weekDays),
+        value: createBitwiseArray(weekDays, ['Tuesday']),
       },
     };
     const { decorated, masks } = decorateItems(items, filters);

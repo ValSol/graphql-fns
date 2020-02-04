@@ -1,7 +1,5 @@
 // @flow
 
-import { createBitwiseArray } from 'bitwise-array';
-
 import type { AdminFilters } from '../../flowTypes';
 
 const filterItems = (
@@ -20,9 +18,7 @@ const filterItems = (
       if (!value.count()) return !item[key].count();
 
       // $FlowFixMe
-      return createBitwiseArray(value)
-        .and(item[key])
-        .count();
+      return value.and(item[key]).count();
     });
     if (satisfy) prev.push(items[i]);
     return prev;

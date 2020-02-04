@@ -65,7 +65,7 @@ const composeFilters = (
                     dispatch({ type: 'FILTER', value: { [key]: newValue } });
                   } else {
                     const newValue2 = newValue
-                      ? createBitwiseArray([newValue], enumeration)
+                      ? createBitwiseArray(enumeration, [newValue])
                       : createBitwiseArray(enumeration.length);
                     dispatch({ type: 'FILTER', value: { [key]: newValue2 } });
                   }

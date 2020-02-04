@@ -242,7 +242,7 @@ describe('filterItems', () => {
       ...filters,
       enumIndexedField: {
         ...filters.enumIndexedField,
-        value: createBitwiseArray(['Wednesday', 'Tuesday'], weekDays),
+        value: createBitwiseArray(weekDays, ['Wednesday', 'Tuesday']),
       },
     };
 
@@ -256,7 +256,7 @@ describe('filterItems', () => {
       ...filters,
       enumIndexedFieldArray: {
         ...filters.enumIndexedFieldArray,
-        value: createBitwiseArray(['Wednesday', 'Tuesday'], weekDays),
+        value: createBitwiseArray(weekDays, ['Wednesday', 'Tuesday']),
       },
     };
 

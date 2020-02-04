@@ -14,9 +14,9 @@ const decorateItems = (
     // $FlowFixMe
     const { fieldVariant, enumeration: currentEnum } = filters[key];
     if (fieldVariant === 'booleanField') {
-      prev[key] = createBitwiseArray([], booleanArr); // eslint-disable-line no-param-reassign
+      prev[key] = createBitwiseArray(booleanArr, []); // eslint-disable-line no-param-reassign
     } else {
-      prev[key] = createBitwiseArray([], ['', ...currentEnum]); // eslint-disable-line no-param-reassign
+      prev[key] = createBitwiseArray([...currentEnum, ''], []); // eslint-disable-line no-param-reassign
     }
     return prev;
   }, {});
@@ -32,33 +32,33 @@ const decorateItems = (
           decoratedItem[key] = !!item[key];
 
           // eslint-disable-next-line no-unused-expressions
-          decoratedItem[key]
-            ? masks[key].or(createBitwiseArray([true], booleanArr))
-            : masks[key].or(createBitwiseArray([false], booleanArr));
+          masks[key] = decoratedItem[key]
+            ? masks[key].or(createBitwiseArray(booleanArr, [true]))
+            : masks[key].or(createBitwiseArray(booleanArr, [false]));
 
           break;
 
         case 'enumField':
           decoratedItem[key] = item[key]
-            ? createBitwiseArray([item[key]], currentEnum)
+            ? createBitwiseArray(currentEnum, [item[key]])
             : createBitwiseArray(currentEnum.length);
 
           // eslint-disable-next-line no-unused-expressions
-          decoratedItem[key].count()
-            ? masks[key].or(createBitwiseArray([item[key]], ['', ...currentEnum]))
-            : masks[key].or(createBitwiseArray([''], ['', ...currentEnum]));
+          masks[key] = decoratedItem[key].count()
+            ? masks[key].or(createBitwiseArray(['', ...currentEnum], [item[key]]))
+            : masks[key].or(createBitwiseArray(['', ...currentEnum], ['']));
 
           break;
 
         case 'enumArrayField':
           decoratedItem[key] = item[key]
-            ? createBitwiseArray(item[key], currentEnum) // item[key] is array
+            ? createBitwiseArray(currentEnum, item[key]) // item[key] is array
             : createBitwiseArray(currentEnum.length); // item[key] is NOT array, but empty string
 
           // eslint-disable-next-line no-unused-expressions
-          decoratedItem[key].count()
-            ? masks[key].or(createBitwiseArray(item[key], ['', ...currentEnum]))
-            : masks[key].or(createBitwiseArray([''], ['', ...currentEnum]));
+          masks[key] = decoratedItem[key].count()
+            ? masks[key].or(createBitwiseArray(['', ...currentEnum], item[key]))
+            : masks[key].or(createBitwiseArray(['', ...currentEnum], ['']));
 
           break;
 
