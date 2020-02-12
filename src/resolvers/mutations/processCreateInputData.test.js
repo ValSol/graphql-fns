@@ -35,9 +35,13 @@ describe('processCreateInputData', () => {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
       floatFields: [
@@ -124,9 +128,13 @@ describe('processCreateInputData', () => {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
       relationalFields: [

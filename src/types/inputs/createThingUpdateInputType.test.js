@@ -57,21 +57,31 @@ input ExampleUpdateChildrenInput {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           default: 'default/file',
         },
         {
           name: 'fileField3',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
         },
         {
           name: 'fileField4',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           array: true,
         },
         {
           name: 'fileField5',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           default: ['default/file'],
           required: true,
           array: true,

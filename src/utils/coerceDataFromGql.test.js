@@ -69,7 +69,7 @@ describe('coerceDataFromGql', () => {
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField' }],
+      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -143,13 +143,15 @@ describe('coerceDataFromGql', () => {
       fileFields: [
         {
           name: 'embeddedFileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField' }],
+      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -372,11 +374,21 @@ describe('coerceDataFromGql', () => {
       ],
       geospatialField4: {
         externalRing: {
-          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+          ring: [
+            { lng: 0, lat: 0 },
+            { lng: 3, lat: 6 },
+            { lng: 6, lat: 1 },
+            { lng: 0, lat: 0 },
+          ],
         },
         internalRings: [
           {
-            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
+            ring: [
+              { lng: 2, lat: 2 },
+              { lng: 3, lat: 3 },
+              { lng: 4, lat: 2 },
+              { lng: 2, lat: 2 },
+            ],
           },
         ],
       },
@@ -406,11 +418,21 @@ describe('coerceDataFromGql', () => {
       ],
       geospatialField4: {
         externalRing: {
-          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+          ring: [
+            { lng: 0, lat: 0 },
+            { lng: 3, lat: 6 },
+            { lng: 6, lat: 1 },
+            { lng: 0, lat: 0 },
+          ],
         },
         internalRings: [
           {
-            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
+            ring: [
+              { lng: 2, lat: 2 },
+              { lng: 3, lat: 3 },
+              { lng: 4, lat: 2 },
+              { lng: 2, lat: 2 },
+            ],
           },
         ],
       },

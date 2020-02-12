@@ -78,13 +78,19 @@ describe('composeWhereFields', () => {
       fileFields: [
         {
           name: 'fileFieldIndexed',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           index: true,
         },
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileFieldUnique',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           unique: true,
         },
       ],

@@ -39,24 +39,34 @@ describe('composeGqlTypes', () => {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           unique: true,
         },
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           default: 'default/file',
           index: true,
         },
         {
           name: 'fileField3',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
           index: true,
         },
         {
           name: 'fileField4',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           array: true,
         },
         {
           name: 'fileField5',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           default: ['default/field'],
           required: true,
           array: true,
@@ -304,9 +314,13 @@ type Subscription {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           default: 'default/file',
         },
       ],

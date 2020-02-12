@@ -89,6 +89,8 @@ type FileField =
       +unique?: boolean,
       +name: string,
       +default?: string,
+      generalName: string,
+      fileType: string,
     |}
   | {|
       +array: true,
@@ -97,6 +99,8 @@ type FileField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<string>,
+      generalName: string,
+      fileType: string,
     |};
 
 type DateTimeField =

@@ -38,9 +38,13 @@ type UpdatedExamplePayload {
       fileFields: [
         {
           name: 'logo',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'hero',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };

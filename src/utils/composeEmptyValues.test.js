@@ -17,6 +17,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     });
@@ -40,6 +42,9 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
+
           default: 'fileFieldDefaultValue',
         },
       ],
@@ -64,6 +69,9 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileFields',
+          generalName: 'generalFile',
+          fileType: 'fileType',
+
           array: true,
         },
       ],
@@ -89,6 +97,9 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileFields',
+          generalName: 'generalFile',
+          fileType: 'fileType',
+
           default: ['test'],
           array: true,
         },
@@ -113,6 +124,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };
@@ -145,6 +158,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };
@@ -178,6 +193,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };
@@ -213,6 +230,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField3',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
           default: 'default3',
         },
@@ -232,6 +251,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField2',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
           default: 'default2',
         },
@@ -257,6 +278,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField1',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
           default: 'default1',
         },
@@ -281,6 +304,8 @@ describe('composeEmptyValues', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           required: true,
           default: 'default',
         },

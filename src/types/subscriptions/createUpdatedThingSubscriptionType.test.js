@@ -51,9 +51,13 @@ describe('createUpdatedThingSubscriptionType', () => {
       fileFields: [
         {
           name: 'firstName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'lastName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
     };
@@ -70,10 +74,14 @@ describe('createUpdatedThingSubscriptionType', () => {
       fileFields: [
         {
           name: 'firstName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           index: true,
         },
         {
           name: 'lastName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           index: true,
         },
       ],

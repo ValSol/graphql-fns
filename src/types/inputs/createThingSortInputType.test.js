@@ -57,10 +57,14 @@ input ExampleSortInput {
       fileFields: [
         {
           name: 'firstName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           index: true,
         },
         {
           name: 'lastName',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           index: true,
         },
       ],

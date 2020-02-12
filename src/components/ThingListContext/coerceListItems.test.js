@@ -65,9 +65,13 @@ describe('coerceListItems', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileFieldArray',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           array: true,
         },
       ],
@@ -316,10 +320,18 @@ describe('coerceListItems', () => {
     const items = [
       {
         geospatialPoint: { lng: 40, lat: 5 },
-        geospatialPointArray: [{ lng: 40, lat: 5 }, { lng: 41, lat: 6 }],
+        geospatialPointArray: [
+          { lng: 40, lat: 5 },
+          { lng: 41, lat: 6 },
+        ],
         geospatialPolygon: {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
           },
         },
         geospatialPolygonArray: [

@@ -42,10 +42,14 @@ describe('arrangeListColumns', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileField2',
           default: 'fileField/default/value',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
 

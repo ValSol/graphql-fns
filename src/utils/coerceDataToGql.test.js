@@ -122,7 +122,7 @@ describe('coerceDataToGql', () => {
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField' }],
+      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       duplexFields: [
         {
           name: 'duplexField',
@@ -219,6 +219,8 @@ describe('coerceDataToGql', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
       embeddedFields: [
@@ -245,6 +247,8 @@ describe('coerceDataToGql', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
       embeddedFields: [
@@ -270,6 +274,8 @@ describe('coerceDataToGql', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
       ],
       embeddedFields: [
@@ -836,11 +842,21 @@ describe('coerceDataToGql', () => {
       },
       geospatialFieldPolygon: {
         externalRing: {
-          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+          ring: [
+            { lng: 0, lat: 0 },
+            { lng: 3, lat: 6 },
+            { lng: 6, lat: 1 },
+            { lng: 0, lat: 0 },
+          ],
         },
         internalRings: [
           {
-            ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }, { lng: 2, lat: 2 }],
+            ring: [
+              { lng: 2, lat: 2 },
+              { lng: 3, lat: 3 },
+              { lng: 4, lat: 2 },
+              { lng: 2, lat: 2 },
+            ],
           },
         ],
       },
@@ -856,7 +872,12 @@ describe('coerceDataToGql', () => {
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
           },
           internalRings: [
             {
@@ -883,7 +904,12 @@ describe('coerceDataToGql', () => {
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
           },
           internalRings: [
             {
@@ -913,11 +939,19 @@ describe('coerceDataToGql', () => {
         // not correct filled polygon
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+            ],
           },
           internalRings: [
             {
-              ring: [{ lng: 2, lat: 2 }, { lng: 3, lat: 3 }, { lng: 4, lat: 2 }],
+              ring: [
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+              ],
             },
           ],
         },
@@ -930,7 +964,12 @@ describe('coerceDataToGql', () => {
         },
         geospatialFieldPolygon: {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
           },
           internalRings: [
             {

@@ -37,9 +37,13 @@ describe('allocateFieldsForCSV', () => {
       fileFields: [
         {
           name: 'fileField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'fileArrayField',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           array: true,
         },
       ],

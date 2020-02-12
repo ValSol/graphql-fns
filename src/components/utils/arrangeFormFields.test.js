@@ -83,9 +83,13 @@ describe('arrangeFormFields', () => {
     fileFields: [
       {
         name: 'fileField',
+        generalName: 'generalFile',
+        fileType: 'fileType',
       },
       {
         name: 'fileField2',
+        generalName: 'generalFile',
+        fileType: 'fileType',
         default: 'fileField/default/value',
       },
     ],

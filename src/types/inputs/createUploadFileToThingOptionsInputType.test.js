@@ -29,9 +29,13 @@ describe('createUploadFileToThingOptionsInputType', () => {
       fileFields: [
         {
           name: 'logo',
+          generalName: 'generalFile',
+          fileType: 'fileType',
         },
         {
           name: 'photos',
+          generalName: 'generalFile',
+          fileType: 'fileType',
           array: true,
         },
       ],
