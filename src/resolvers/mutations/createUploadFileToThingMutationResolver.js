@@ -4,23 +4,20 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import executeAuthorisation from '../executeAuthorisation';
-import processUpdateDuplexInputData from './processUpdateDuplexInputData';
-import processUpdateInputData from './processUpdateInputData';
-import processDeleteData from './processDeleteData';
-import updatePeriphery from './updatePeriphery';
-import clearUpdateInputDate from './clearUpdateInputData';
 
-type Args = { data: Object, whereOne: Object };
+type Args = { file: Object, options: { target: string }, whereOne: Object }; // todo set DOM file type
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createUpdateThingMutationResolver = (
+const createUploadFileToThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  const inventoryChain = ['Mutation', 'updateThing', name];
+  const { saveFiles } = serversideConfig;
+  if (!saveFiles) throw new TypeError('"saveFiles" callback have to be defined!');
+  const inventoryChain = ['Mutation', 'uploadFileToThing', name];
   if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
@@ -31,67 +28,42 @@ const createUpdateThingMutationResolver = (
       serversideConfig,
     });
 
+    // to get data such as: { photo: '/uploaded/cat.png', photoMobile: '/uploaded/mobile/cat.png' }
+    const data: { [fileFieldsName: string]: string } = await saveFiles({
+      inventoryChain,
+      resolverArgs,
+      serversideConfig,
+    });
+
     const { mongooseConn } = context;
     const {
       whereOne,
       whereOne: { id },
-      data: rawData,
     } = args;
 
-    // now only remove 'connect'
-    // TODO refactor to process 'connect' & 'create'
-    const data = clearUpdateInputDate(rawData, thingConfig);
-
-    const { name: thingName, duplexFields } = thingConfig;
+    const { name: thingName } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);
     const Thing = mongooseConn.model(thingName, thingSchema);
-
-    const duplexFieldsProjection = duplexFields
-      ? duplexFields.reduce((prev, { name: name2 }) => {
-          if (data[name2]) prev[name2] = 1; // eslint-disable-line no-param-reassign
-          return prev;
-        }, {})
-      : {};
-
-    const mainData = processUpdateInputData(data, thingConfig);
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;
 
     const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
       ? {} // if subsciption ON - return empty projection - to get all fields of thing
-      : duplexFieldsProjection;
+      : Object.keys(data).reduce((prev, key) => {
+          prev[key] = 1; // eslint-disable-line no-param-reassign
+          return prev;
+        }, {});
 
     const previousThing = await Thing.findOne(whereOne2, projection, { lean: true });
 
     let thing;
 
-    if (Object.keys(duplexFieldsProjection).length) {
-      const data2 = { ...data, _id };
-      const bulkItemsMap = processDeleteData(previousThing, thingConfig);
-
-      const { core, periphery } = processUpdateDuplexInputData(data2, thingConfig, bulkItemsMap);
-
-      await updatePeriphery(periphery, mongooseConn);
-
-      const promises = [];
-      core.forEach((bulkItems, config) => {
-        const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(name2, thingSchema2);
-        promises.push(Thing2.bulkWrite(bulkItems));
-      });
-      await Promise.all(promises);
-
-      thing = await Thing.findOneAndUpdate({ _id }, mainData, {
-        new: true,
-        lean: true,
-      });
-    } else if (id) {
+    if (id) {
       _id = id;
-      thing = await Thing.findOneAndUpdate({ _id }, mainData, { new: true, lean: true });
+      thing = await Thing.findOneAndUpdate({ _id }, data, { new: true, lean: true });
     } else {
-      thing = await Thing.findOneAndUpdate(whereOne, mainData, { new: true, lean: true });
+      thing = await Thing.findOneAndUpdate(whereOne, data, { new: true, lean: true });
       if (!thing) return null;
       _id = thing._id; // eslint-disable-line no-underscore-dangle, prefer-destructuring
     }
@@ -122,4 +94,4 @@ const createUpdateThingMutationResolver = (
   return resolver;
 };
 
-export default createUpdateThingMutationResolver;
+export default createUploadFileToThingMutationResolver;

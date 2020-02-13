@@ -6,6 +6,7 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import createFileOfThingOptionsInputType from '../types/inputs/createFileOfThingOptionsInputType';
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
@@ -17,6 +18,8 @@ import createCreateThingMutationResolver from './mutations/createCreateThingMuta
 import createImportThingsMutationResolver from './mutations/createImportThingsMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
+import createUploadFileToThingMutationResolver from './mutations/createUploadFileToThingMutationResolver';
+
 import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
 import createDeletedThingSubscriptionResolver from './subscriptions/createDeletedThingSubscriptionResolver';
@@ -141,6 +144,19 @@ const composeGqlResolvers = (
         if (deleteThingMutationResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
+        }
+
+        const fileOfThingOptionsInputType = createFileOfThingOptionsInputType(thingConfig);
+        if (fileOfThingOptionsInputType) {
+          const uploadFileToThingMutationResolver = createUploadFileToThingMutationResolver(
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (uploadFileToThingMutationResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Mutation[`uploadFileTo${name}`] = uploadFileToThingMutationResolver;
+          }
         }
 
         const customMutationNames = Object.keys(customMutation);

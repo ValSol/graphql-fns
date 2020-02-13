@@ -94,7 +94,14 @@ describe('composeGqlResolvers', () => {
     };
     const thingConfigs = [thingConfig];
     const generalConfig: GeneralConfig = { thingConfigs };
-    const result = composeGqlResolvers(generalConfig);
+    const serversideConfig = {
+      saveFiles: async () => ({
+        fileField: '/test',
+        fileField2: '/test_mobile',
+        fileField3: '/test_tablet',
+      }),
+    };
+    const result = composeGqlResolvers(generalConfig, serversideConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
@@ -103,6 +110,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
+    expect(typeof result.Mutation.uploadFileToExample).toBe('function');
     expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');

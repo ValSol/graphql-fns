@@ -469,11 +469,11 @@ export type ServersideConfig = {
   +getCredentials?: (
     context: Object,
   ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
-  +saveFile?: ({
+  +saveFiles?: ({
     inventoryChain: ThreeSegmentInventoryChain,
     resolverArgs: Object,
     serversideConfig: ServersideConfig,
-  }) => Promise<string>,
+  }) => Promise<{ [fileFieldsName: string]: string }>,
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

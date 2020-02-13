@@ -3061,10 +3061,10 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bitwise-array@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/bitwise-array/-/bitwise-array-0.1.0.tgz#24ebdbb10d0e538f48c18c0c3749b97bf68b2b0b"
-  integrity sha512-CO9E1zDB4MbUmj2P/Kjn46AZrNqsphba0eu18S1u0rOHVEKZ83EcBZD0cvPh3Lj1T4EaAib92ZFIKTDBqpdXqQ==
+bitwise-array@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/bitwise-array/-/bitwise-array-0.1.1.tgz#925148e8d7e871b826b6564baae29d0335b54eff"
+  integrity sha512-Qj6bDfMN3gu5oWJBl4oKBdOpw5XO5tSMInlenuPT10XtIkxjlSUxBce1KhbH/RKGa/I+BEWCQ25kdKE8dugajQ==
 
 bluebird@3.5.1:
   version "3.5.1"

@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
-    "bitwise-array": "^0.1.0",
+    "bitwise-array": "^0.1.1",
     "clsx": "^1.0.4",
     "csv-parse": "^4.8.3",
     "csv-stringify": "^5.3.6",
