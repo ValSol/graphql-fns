@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadFileToThingMutationType from './createUploadFileToThingMutationType';
+import createRemoveFileFromThingMutationType from './createRemoveFileFromThingMutationType';
 
-describe('createUploadFileToThingMutationType', () => {
+describe('createRemoveFileFromThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,7 +17,7 @@ describe('createUploadFileToThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadFileToThingMutationType(thingConfig);
+    const result = createRemoveFileFromThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -38,10 +38,11 @@ describe('createUploadFileToThingMutationType', () => {
         },
       ],
     };
+    // data - the array of strings every of which points to file(s) that we have to remove
     const expectedResult =
-      '  uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: UploadFileToExampleOptionsInput!): Example!';
+      '  removeFileFromExample(whereOne: ExampleWhereOneInput!, data: [String!]!, options: FileOfExampleOptionsInput!): Example!';
 
-    const result = createUploadFileToThingMutationType(thingConfig);
+    const result = createRemoveFileFromThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

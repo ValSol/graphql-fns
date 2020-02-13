@@ -5,8 +5,8 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
-import createUploadFileToThingOptionsInputType from './inputs/createUploadFileToThingOptionsInputType';
-import createUploadManyFilesToThingOptionsInputType from './inputs/createUploadManyFilesToThingOptionsInputType';
+import createFileOfThingOptionsInputType from './inputs/createFileOfThingOptionsInputType';
+import createManyFilesOfThingOptionsInputType from './inputs/createManyFilesOfThingOptionsInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -24,6 +24,9 @@ import createUpdateThingMutationType from './mutations/createUpdateThingMutation
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
 import createUploadFileToThingMutationType from './mutations/createUploadFileToThingMutationType';
 import createUploadManyFilesToThingMutationType from './mutations/createUploadManyFilesToThingMutationType';
+import createRemoveFileFromThingMutationType from './mutations/createRemoveFileFromThingMutationType';
+import createRemoveManyFilesFromThingMutationType from './mutations/createRemoveManyFilesFromThingMutationType';
+
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
 import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
@@ -61,15 +64,19 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const thingUpdateInputType = createThingUpdateInputType(thingConfig);
             prev.push(thingUpdateInputType);
           }
-          if (checkInventory(['Mutation', 'uploadFileToThing', name], inventory)) {
-            const uploadFileToThingInputType = createUploadFileToThingOptionsInputType(thingConfig);
-            if (uploadFileToThingInputType) prev.push(uploadFileToThingInputType);
+          if (
+            checkInventory(['Mutation', 'uploadFileToThing', name], inventory) ||
+            checkInventory(['Mutation', 'removeFileOfThing', name], inventory)
+          ) {
+            const fileOfThingInputType = createFileOfThingOptionsInputType(thingConfig);
+            if (fileOfThingInputType) prev.push(fileOfThingInputType);
           }
-          if (checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory)) {
-            const uploadManyFilesToThingInputType = createUploadManyFilesToThingOptionsInputType(
-              thingConfig,
-            );
-            if (uploadManyFilesToThingInputType) prev.push(uploadManyFilesToThingInputType);
+          if (
+            checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory) ||
+            checkInventory(['Mutation', 'removeManyFilesOfThing', name], inventory)
+          ) {
+            const manyFilesOfThingInputType = createManyFilesOfThingOptionsInputType(thingConfig);
+            if (manyFilesOfThingInputType) prev.push(manyFilesOfThingInputType);
           }
           return prev;
         }, [])
@@ -173,6 +180,18 @@ ${thingQueryTypes.join('\n')}
             thingConfig,
           );
           if (uploadManyFilesToThingMutationType) prev.push(uploadManyFilesToThingMutationType);
+        }
+        if (checkInventory(['Mutation', 'removeFileOfThing', name], inventory)) {
+          const removeFileFromThingMutationType = createRemoveFileFromThingMutationType(
+            thingConfig,
+          );
+          if (removeFileFromThingMutationType) prev.push(removeFileFromThingMutationType);
+        }
+        if (checkInventory(['Mutation', 'removeManyFilesOfThing', name], inventory)) {
+          const removeManyFilesFromThingMutationType = createRemoveManyFilesFromThingMutationType(
+            thingConfig,
+          );
+          if (removeManyFilesFromThingMutationType) prev.push(removeManyFilesFromThingMutationType);
         }
 
         customMutationNames.forEach(customName => {

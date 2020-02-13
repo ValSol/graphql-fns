@@ -89,8 +89,8 @@ type FileField =
       +unique?: boolean,
       +name: string,
       +default?: string,
-      generalName: string,
-      fileType: string,
+      +generalName: string,
+      +fileType: string,
     |}
   | {|
       +array: true,
@@ -99,8 +99,8 @@ type FileField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<string>,
-      generalName: string,
-      fileType: string,
+      +generalName: string,
+      +fileType: string,
     |};
 
 type DateTimeField =
@@ -318,7 +318,9 @@ type InverntoryOptions = {
     +[queryName: string]: thingNamesList,
   },
   +Mutation?: null | {
-    // 'mutationName' may be: createManyThings, createThing, updateThing, deleteThing, uploadFileToThing or any custom mutation names
+    // 'mutationName' may be: 'createThing', 'createManyThings', 'updateThing', 'deleteThing', ...
+    // ... 'uploadFileToThing', 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+
     +[mutationName: string]: thingNamesList,
   },
   +Subscription?: null | {
@@ -400,13 +402,20 @@ export type SignatureMethods = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
-  | ['Mutation', string] // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', 'uploadManyFilesToThing' or custom mutation
+  | [
+      'Mutation',
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', ...
+      // ... 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+      string,
+    ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
   | [
       'Mutation',
-      string, // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', 'uploadManyFilesToThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', ...
+      // ... 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+      string,
       string, //  second "string" for thing name
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string]; //  "string" for thing name

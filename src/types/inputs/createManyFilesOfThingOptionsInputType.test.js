@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadManyFilesToThingOptionsInputType from './createUploadManyFilesToThingOptionsInputType';
+import createManyFilesOfThingOptionsInputType from './createManyFilesOfThingOptionsInputType';
 
-describe('createUploadManyFilesToThingOptionsInputType', () => {
+describe('createManyFilesOfThingOptionsInputType', () => {
   test('should create empty string if there are not any file fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -19,7 +19,7 @@ describe('createUploadManyFilesToThingOptionsInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadManyFilesToThingOptionsInputType(thingConfig);
+    const result = createManyFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -36,7 +36,7 @@ describe('createUploadManyFilesToThingOptionsInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadManyFilesToThingOptionsInputType(thingConfig);
+    const result = createManyFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -57,14 +57,14 @@ describe('createUploadManyFilesToThingOptionsInputType', () => {
         },
       ],
     };
-    const expectedResult = `enum ExampleFilesFieldNamesEnum {
+    const expectedResult = `enum ExampleManyFilesGeneralNamesEnum {
   photos
 }
-input UploadManyFilesToExampleOptionsInput {
-  targets: [ExampleFilesFieldNamesEnum!]!
+input ManyFilesOfExampleOptionsInput {
+  target: ExampleManyFilesGeneralNamesEnum!
 }`;
 
-    const result = createUploadManyFilesToThingOptionsInputType(thingConfig);
+    const result = createManyFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

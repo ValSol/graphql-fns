@@ -194,22 +194,22 @@ input ExampleUpdateChildInput {
 input ExampleUpdateChildrenInput {
   connect: [ID!]
 }
-enum ExampleFileFieldNamesEnum {
+enum ExampleFileGeneralNamesEnum {
   fileField1
   fileField2
   fileField3
   fileField4
   fileField5
 }
-input UploadFileToExampleOptionsInput {
-  targets: [ExampleFileFieldNamesEnum!]!
+input FileOfExampleOptionsInput {
+  target: ExampleFileGeneralNamesEnum!
 }
-enum ExampleFilesFieldNamesEnum {
+enum ExampleManyFilesGeneralNamesEnum {
   fileField4
   fileField5
 }
-input UploadManyFilesToExampleOptionsInput {
-  targets: [ExampleFilesFieldNamesEnum!]!
+input ManyFilesOfExampleOptionsInput {
+  target: ExampleManyFilesGeneralNamesEnum!
 }
 input ExampleWhereOneInput {
   id: ID
@@ -282,8 +282,10 @@ type Mutation {
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
-  uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: UploadFileToExampleOptionsInput!): Example!
-  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: UploadManyFilesToExampleOptionsInput!): Example!
+  uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: FileOfExampleOptionsInput!): Example!
+  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: ManyFilesOfExampleOptionsInput!): Example!
+  removeFileFromExample(whereOne: ExampleWhereOneInput!, data: [String!]!, options: FileOfExampleOptionsInput!): Example!
+  removeManyFilesFromExample(whereOne: ExampleWhereOneInput!, data: [String!]!, options: ManyFilesOfExampleOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -433,12 +435,12 @@ input Example1UpdateChildInput {
 input Example1UpdateChildrenInput {
   connect: [ID!]
 }
-enum Example1FileFieldNamesEnum {
+enum Example1FileGeneralNamesEnum {
   fileField1
   fileField2
 }
-input UploadFileToExample1OptionsInput {
-  targets: [Example1FileFieldNamesEnum!]!
+input FileOfExample1OptionsInput {
+  target: Example1FileGeneralNamesEnum!
 }
 input Example2CreateInput {
   textField1: [String!]
@@ -515,7 +517,8 @@ type Mutation {
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
-  uploadFileToExample1(whereOne: Example1WhereOneInput!, file: Upload!, options: UploadFileToExample1OptionsInput!): Example1!
+  uploadFileToExample1(whereOne: Example1WhereOneInput!, file: Upload!, options: FileOfExample1OptionsInput!): Example1!
+  removeFileFromExample1(whereOne: Example1WhereOneInput!, data: [String!]!, options: FileOfExample1OptionsInput!): Example1!
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!

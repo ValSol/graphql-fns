@@ -2,17 +2,15 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadManyFilesToThingOptionsInputType from '../inputs/createUploadManyFilesToThingOptionsInputType';
+import createManyFilesOfThingOptionsInputType from '../inputs/createManyFilesOfThingOptionsInputType';
 
 const createUploadManyFilesToThingMutationType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  const uploadManyFilesToThingOptionsInput = createUploadManyFilesToThingOptionsInputType(
-    thingConfig,
-  );
+  const manyFilesOfThingOptionsInput = createManyFilesOfThingOptionsInputType(thingConfig);
 
-  if (uploadManyFilesToThingOptionsInput) {
-    return `  uploadManyFilesTo${name}(whereOne: ${name}WhereOneInput!, files: [Upload!]!, options: UploadManyFilesTo${name}OptionsInput!): ${name}!`;
+  if (manyFilesOfThingOptionsInput) {
+    return `  uploadManyFilesTo${name}(whereOne: ${name}WhereOneInput!, files: [Upload!]!, options: ManyFilesOf${name}OptionsInput!): ${name}!`;
   }
 
   return '';
