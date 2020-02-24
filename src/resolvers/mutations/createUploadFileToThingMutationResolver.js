@@ -43,7 +43,7 @@ const createUploadFileToThingMutationResolver = (
 
     const { name: thingName } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(thingName, thingSchema);
+    const Thing = mongooseConn.model(`${thingName}Thing`, thingSchema);
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;

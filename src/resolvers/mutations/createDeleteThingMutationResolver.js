@@ -33,7 +33,7 @@ const createDeleteThingMutationResolver = (
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(name, thingSchema);
+    const Thing = mongooseConn.model(`${name}Thing`, thingSchema);
 
     const whereOneKeys = Object.keys(whereOne);
     if (whereOneKeys.length !== 1) {
@@ -53,7 +53,7 @@ const createDeleteThingMutationResolver = (
     bulkItemsMap.forEach((bulkItems, config) => {
       const { name: name2 } = config;
       const thingSchema2 = createThingSchema(config, enums);
-      const Thing2 = mongooseConn.model(name2, thingSchema2);
+      const Thing2 = mongooseConn.model(`${name2}Thing`, thingSchema2);
       promises.push(Thing2.bulkWrite(bulkItems));
     });
 

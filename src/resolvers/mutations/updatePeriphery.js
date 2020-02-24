@@ -8,13 +8,13 @@ const updatePeriphery = async (periphery: Periphery, mongooseConn: Object): Prom
   periphery.forEach((obj, config) => {
     const { name: configName } = config;
     const thingSchema = createThingSchema(config);
-    const Thing = mongooseConn.model(configName, thingSchema);
+    const Thing = mongooseConn.model(`${configName}Thing`, thingSchema);
 
     Object.keys(obj).forEach(oppositeName => {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];
       const { name: configName2 } = oppositeConfig;
       const thingSchema2 = createThingSchema(oppositeConfig);
-      const Thing2 = mongooseConn.model(configName2, thingSchema2);
+      const Thing2 = mongooseConn.model(`${configName2}Thing`, thingSchema2);
 
       promises.push(
         Thing.find({ _id: { $in: oppositeIds } }, { [oppositeName]: 1 }).then(items => {

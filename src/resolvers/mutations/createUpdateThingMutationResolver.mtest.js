@@ -157,9 +157,9 @@ describe('createUpdateThingMutationResolver', () => {
     } = createdPerson;
 
     const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person', personSchema);
+    const Person = mongooseConn.model('PersonThing', personSchema);
     const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place', placeSchema);
+    const Place = mongooseConn.model('PlaceThing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -436,7 +436,7 @@ describe('createUpdateThingMutationResolver', () => {
     const { id } = createdExample;
 
     const exampleSchema = createThingSchema(exampleConfig);
-    const Example = mongooseConn.model('Example', exampleSchema);
+    const Example = mongooseConn.model('ExampleThing', exampleSchema);
 
     const updateExample = createUpdateThingMutationResolver(
       exampleConfig,

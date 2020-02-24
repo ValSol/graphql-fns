@@ -18,7 +18,7 @@ const createThingSchema = (thingConfig: ThingConfig, enums?: Enums = []): Object
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
 
   // to work dynamic adding fields
-  mongoose.model(name, ThingSchema);
+  mongoose.model(`${name}Thing`, ThingSchema);
 
   // to supplement cache
   thingSchemas[name] = ThingSchema;

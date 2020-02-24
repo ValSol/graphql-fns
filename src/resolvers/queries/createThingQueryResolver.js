@@ -35,7 +35,7 @@ const createThingQueryResolver = (
 
     const thingSchema = createThingSchema(thingConfig, enums);
 
-    const Thing = mongooseConn.model(name, thingSchema);
+    const Thing = mongooseConn.model(`${name}Thing`, thingSchema);
 
     const whereOneKeys = Object.keys(whereOne);
     if (whereOneKeys.length !== 1) {
