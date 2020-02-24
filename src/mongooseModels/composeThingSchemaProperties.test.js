@@ -66,73 +66,6 @@ describe('composeThingSchemaProperties', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should compose schema properties with file fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          index: true,
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/file',
-        },
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-          unique: true,
-        },
-        {
-          name: 'fileField4',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-        {
-          name: 'fileField5',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: ['default/file'],
-          required: true,
-          array: true,
-        },
-      ],
-    };
-    const expectedResult = {
-      fileField1: {
-        type: String,
-        index: true,
-      },
-      fileField2: {
-        type: String,
-        default: 'default/file',
-      },
-      fileField3: {
-        type: String,
-        required: true,
-        unique: true,
-      },
-      fileField4: {
-        type: [String],
-      },
-      fileField5: {
-        type: [String],
-        required: true,
-        default: ['default/file'],
-      },
-    };
-
-    const result = composeThingSchemaProperties(thingConfig, []);
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should compose schema properties with text and relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -423,6 +356,105 @@ describe('composeThingSchemaProperties', () => {
       ],
     };
     const result = composeThingSchemaProperties(personConfig, []);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should compose schema properties with text and file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'desktop',
+          required: true,
+        },
+        {
+          name: 'mobile',
+          required: true,
+        },
+        {
+          name: 'tablet',
+          required: true,
+        },
+        {
+          name: 'title',
+        },
+      ],
+    };
+
+    const exampleConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'photos',
+          array: true,
+          config: imageConfig,
+        },
+      ],
+    };
+
+    const expectedResult = {
+      firstName: {
+        type: String,
+        required: true,
+      },
+      lastName: {
+        type: String,
+        required: true,
+      },
+      logo: {
+        desktop: {
+          required: true,
+          type: String,
+        },
+        mobile: {
+          required: true,
+          type: String,
+        },
+        tablet: {
+          required: true,
+          type: String,
+        },
+        title: {
+          type: String,
+        },
+      },
+      photos: [
+        {
+          desktop: {
+            required: true,
+            type: String,
+          },
+          mobile: {
+            required: true,
+            type: String,
+          },
+          tablet: {
+            required: true,
+            type: String,
+          },
+          title: {
+            type: String,
+          },
+        },
+      ],
+    };
+
+    const result = composeThingSchemaProperties(exampleConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
