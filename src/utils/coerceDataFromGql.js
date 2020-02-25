@@ -82,7 +82,10 @@ const coerceDataFromGql = (data: Object, thingConfig: ThingConfig, allFields?: b
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
-    } else if (fieldsObject[key].kind === 'embeddedFields') {
+    } else if (
+      fieldsObject[key].kind === 'embeddedFields' ||
+      fieldsObject[key].kind === 'fileFields'
+    ) {
       const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign

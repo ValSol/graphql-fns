@@ -122,7 +122,6 @@ describe('coerceDataToGql', () => {
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       duplexFields: [
         {
           name: 'duplexField',
@@ -148,7 +147,6 @@ describe('coerceDataToGql', () => {
       createdAt: '2019-06-07T22:00:00.000Z',
       updatedAt: '2019-06-08T22:00:00.000Z',
       textField: 'text field',
-      fileField: 'file/field',
       duplexField: '5cefb33f05d6be4b7b59842c',
       embedded1: {
         relationalField: '5cefb33f05d6be4b7b59842b',
@@ -170,7 +168,6 @@ describe('coerceDataToGql', () => {
       createdAt: '2019-06-07T22:00:00.000Z',
       updatedAt: '2019-06-08T22:00:00.000Z',
       textField: 'text field',
-      fileField: 'file/field',
       duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
       embedded1: {
         relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
@@ -216,13 +213,6 @@ describe('coerceDataToGql', () => {
           name: 'textField',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
       embeddedFields: [
         {
           name: 'embeddedField3',
@@ -242,13 +232,6 @@ describe('coerceDataToGql', () => {
       textFields: [
         {
           name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
         },
       ],
       embeddedFields: [
@@ -271,13 +254,6 @@ describe('coerceDataToGql', () => {
           name: 'textField',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
       embeddedFields: [
         {
           name: 'embedded',
@@ -294,13 +270,10 @@ describe('coerceDataToGql', () => {
     test('filled in data & prevData = null', () => {
       const data = {
         textField: 'text field',
-        fileField: 'file/field',
         embedded: {
           textField: 'embedded text field',
-          fileField: 'embedded/file/field',
           embeddedField2: {
             textField: 'embedded2 text field',
-            fileField: 'embedded2/file/field',
             embeddedField3: {
               enumField: 'en0',
               relationalField: '5cefb33f05d6be4b7b59842b',
@@ -319,7 +292,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: 'embedded2 1 text field',
-              fileField: 'embedded2/1/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842c',
@@ -340,10 +312,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: 'embedded text field',
-            fileField: 'embedded/file/field',
             embeddedField2: {
               textField: 'embedded2 text field',
-              fileField: 'embedded2/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842b',
@@ -362,7 +332,6 @@ describe('coerceDataToGql', () => {
             embeddedField2a: [
               {
                 textField: 'embedded2 1 text field',
-                fileField: 'embedded2/1/file/field',
                 embeddedField3: {
                   enumField: 'en0',
                   relationalField: '5cefb33f05d6be4b7b59842c',
@@ -387,13 +356,10 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {
         textField: 'text field',
-        fileField: 'file/field',
         embedded: {
           textField: 'embedded text field',
-          fileField: 'embedded/file/field',
           embeddedField2: {
             textField: 'embedded2 text field',
-            fileField: 'embedded2/file/field',
             embeddedField3: {
               enumField: 'en0',
               relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
@@ -412,7 +378,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: 'embedded2 1 text field',
-              fileField: 'embedded2/1/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
@@ -433,10 +398,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: 'embedded text field',
-            fileField: 'embedded/file/field',
             embeddedField2: {
               textField: 'embedded2 text field',
-              fileField: 'embedded2/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
@@ -455,7 +418,6 @@ describe('coerceDataToGql', () => {
             embeddedField2a: [
               {
                 textField: 'embedded2 1 text field',
-                fileField: 'embedded2/1/file/field',
                 embeddedField3: {
                   enumField: 'en0',
                   relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
@@ -483,13 +445,10 @@ describe('coerceDataToGql', () => {
     test('empty data & prevData = null', () => {
       const data = {
         textField: '',
-        fileField: '',
         embedded: {
           textField: '',
-          fileField: '',
           embeddedField2: {
             textField: '',
-            fileField: '',
             embeddedField3: {
               enumField: '',
               relationalField: '',
@@ -504,7 +463,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: '',
-              fileField: '',
               embeddedField3: {
                 enumField: '',
                 relationalField: '',
@@ -516,10 +474,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: '',
-            fileField: '',
             embeddedField2: {
               textField: '',
-              fileField: '',
               embeddedField3: {
                 enumField: '',
                 relationalField: '',
@@ -535,13 +491,10 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {
         textField: '',
-        fileField: '',
         embedded: {
           textField: '',
-          fileField: '',
           embeddedField2: {
             textField: '',
-            fileField: '',
             embeddedField3: {
               enumField: null,
               relationalField: { connect: null },
@@ -556,7 +509,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: '',
-              fileField: '',
               embeddedField3: {
                 enumField: null,
                 relationalField: { connect: null },
@@ -568,10 +520,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: '',
-            fileField: '',
             embeddedField2: {
               textField: '',
-              fileField: '',
               embeddedField3: {
                 enumField: null,
                 relationalField: { connect: null },
@@ -590,13 +540,10 @@ describe('coerceDataToGql', () => {
     test('filled in data & prevData with same array and text field', () => {
       const data = {
         textField: 'text field',
-        fileField: 'file/field',
         embedded: {
           textField: 'embedded text field',
-          fileField: 'embedded/file/field',
           embeddedField2: {
             textField: 'embedded2 text field',
-            fileField: 'embedded2/file/field',
             embeddedField3: {
               enumField: 'en0',
               relationalField: '5cefb33f05d6be4b7b59842b',
@@ -615,7 +562,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: 'embedded2 1 text field',
-              fileField: 'embedded2/1/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842c',
@@ -636,10 +582,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: 'embedded text field',
-            fileField: 'embedded/file/field',
             embeddedField2: {
               textField: 'embedded2 text field',
-              fileField: 'embedded2/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842b',
@@ -658,7 +602,6 @@ describe('coerceDataToGql', () => {
             embeddedField2a: [
               {
                 textField: 'embedded2 1 text field',
-                fileField: 'embedded2/1/file/field',
                 embeddedField3: {
                   enumField: 'en0',
                   relationalField: '5cefb33f05d6be4b7b59842c',
@@ -681,13 +624,10 @@ describe('coerceDataToGql', () => {
 
       const prevData = {
         textField: 'text field',
-        fileField: 'file/field',
         embedded: {
           textField: 'embedded text field',
-          fileField: 'embedded/file/field',
           embeddedField2: {
             textField: 'embedded2 text field',
-            fileField: 'embedded2/file/field',
             embeddedField3: {
               enumField: 'en0',
               relationalField: '5cefb33f05d6be4b7b59842b',
@@ -706,7 +646,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: 'embedded2 1 text field',
-              fileField: 'embedded2/1/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842c',
@@ -727,10 +666,8 @@ describe('coerceDataToGql', () => {
         embeddeda: [
           {
             textField: 'embedded text field',
-            fileField: 'embedded/file/field',
             embeddedField2: {
               textField: 'embedded2 text field',
-              fileField: 'embedded2/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: '5cefb33f05d6be4b7b59842b',
@@ -749,7 +686,6 @@ describe('coerceDataToGql', () => {
             embeddedField2a: [
               {
                 textField: 'embedded2 1 text field',
-                fileField: 'embedded2/1/file/field',
                 embeddedField3: {
                   enumField: 'en0',
                   relationalField: '5cefb33f05d6be4b7b59842c',
@@ -773,10 +709,8 @@ describe('coerceDataToGql', () => {
       const expectedResult = {
         embedded: {
           textField: 'embedded text field',
-          fileField: 'embedded/file/field',
           embeddedField2: {
             textField: 'embedded2 text field',
-            fileField: 'embedded2/file/field',
             embeddedField3: {
               enumField: 'en0',
               relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
@@ -795,7 +729,6 @@ describe('coerceDataToGql', () => {
           embeddedField2a: [
             {
               textField: 'embedded2 1 text field',
-              fileField: 'embedded2/1/file/field',
               embeddedField3: {
                 enumField: 'en0',
                 relationalField: { connect: '5cefb33f05d6be4b7b59842c' },
@@ -813,6 +746,155 @@ describe('coerceDataToGql', () => {
             },
           ],
         },
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('should coerce file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    test('filled in data & prevData = null', () => {
+      const data = {
+        textField: 'text field',
+        logo: {
+          fileId: '1234567890',
+          address: '/images/logo',
+        },
+        pictures: [
+          {
+            fileId: '1234567891',
+            address: '/images/pic1',
+          },
+          {
+            fileId: '1234567892',
+            address: '/images/pic1',
+          },
+        ],
+      };
+
+      const prevData = null;
+
+      const expectedResult = {
+        textField: 'text field',
+        logo: {
+          fileId: '1234567890',
+          address: '/images/logo',
+        },
+        pictures: [
+          {
+            fileId: '1234567891',
+            address: '/images/pic1',
+          },
+          {
+            fileId: '1234567892',
+            address: '/images/pic1',
+          },
+        ],
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('empty data & prevData = null', () => {
+      const data = {
+        textField: '',
+        logo: {
+          fileId: '',
+          address: '',
+        },
+        pictures: [],
+      };
+
+      const prevData = null;
+
+      const expectedResult = {
+        textField: '',
+        logo: {
+          fileId: '',
+          address: '',
+        },
+        pictures: [],
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('filled in data & prevData with same array and scalar file field', () => {
+      const data = {
+        textField: 'text field',
+        logo: {
+          fileId: '1234567890',
+          address: '/images/logo',
+        },
+        pictures: [
+          {
+            fileId: '1234567891',
+            address: '/images/pic1',
+          },
+          {
+            fileId: '1234567892',
+            address: '/images/pic1',
+          },
+        ],
+      };
+
+      const prevData = {
+        textField: 'text field prev',
+        logo: {
+          fileId: '1234567890',
+          address: '/images/logo',
+        },
+        pictures: [
+          {
+            fileId: '1234567891',
+            address: '/images/pic1',
+          },
+          {
+            fileId: '1234567892',
+            address: '/images/pic1',
+          },
+        ],
+      };
+
+      const expectedResult = {
+        textField: 'text field',
       };
 
       const result = coerceDataToGql(data, prevData, thingConfig);
@@ -993,6 +1075,7 @@ describe('coerceDataToGql', () => {
       expect(result).toEqual(expectedResult);
     });
   });
+
   describe('should coerce geospatial fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {

@@ -14,7 +14,10 @@ const composeEmptyValues = (thingConfig: ThingConfig): Object => {
 
     if (array) {
       prev[name] = []; // eslint-disable-line no-param-reassign
-    } else if (fieldsObject[name].kind === 'embeddedFields') {
+    } else if (
+      fieldsObject[name].kind === 'embeddedFields' ||
+      fieldsObject[name].kind === 'fileFields'
+    ) {
       const { config } = fieldsObject[name].attributes;
       prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
     } else if (kind === 'booleanFields') {

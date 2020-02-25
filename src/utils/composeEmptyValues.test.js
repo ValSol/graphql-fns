@@ -14,16 +14,9 @@ describe('composeEmptyValues', () => {
           name: 'textField',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
     });
 
-    const expectedResult = { textField: '', fileField: '' };
+    const expectedResult = { textField: '' };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -39,24 +32,15 @@ describe('composeEmptyValues', () => {
           default: 'textFieldDefaultValue',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-
-          default: 'fileFieldDefaultValue',
-        },
-      ],
     });
 
-    const expectedResult = { textField: '', fileField: '' };
+    const expectedResult = { textField: '' };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with array field', () => {
+  test('should create the empty fields with array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -66,24 +50,15 @@ describe('composeEmptyValues', () => {
           array: true,
         },
       ],
-      fileFields: [
-        {
-          name: 'fileFields',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-
-          array: true,
-        },
-      ],
     });
 
-    const expectedResult = { textFields: [], fileFields: [] };
+    const expectedResult = { textFields: [] };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with default array field', () => {
+  test('should create the empty fields with default array field', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -94,38 +69,82 @@ describe('composeEmptyValues', () => {
           array: true,
         },
       ],
-      fileFields: [
-        {
-          name: 'fileFields',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-
-          default: ['test'],
-          array: true,
-        },
-      ],
     });
 
-    const expectedResult = { textFields: [], fileFields: [] };
+    const expectedResult = { textFields: [] };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded field', () => {
+  test('should create the empty fields with file field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'desktop',
+        },
+        {
+          name: 'mobile',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    });
+
+    const expectedResult = { logo: { desktop: '', mobile: '' } };
+
+    const result = composeEmptyValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the empty fields with file array field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'desktop',
+        },
+        {
+          name: 'mobile',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'photos',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = { photos: [] };
+
+    const result = composeEmptyValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the empty fields with embedded field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
       textFields: [
         {
           name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
         },
       ],
     };
@@ -140,26 +159,19 @@ describe('composeEmptyValues', () => {
       ],
     });
 
-    const expectedResult = { embeddedField: { textField: '', fileField: '' } };
+    const expectedResult = { embeddedField: { textField: '' } };
 
     const result = composeEmptyValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field', () => {
+  test('should create the empty fields with embedded array field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
       textFields: [
         {
           name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
         },
       ],
     };
@@ -181,20 +193,13 @@ describe('composeEmptyValues', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create the valcomposeFlatFormikFieldsation schema with embedded array field with composeEmptyValues', () => {
+  test('should create the empty fields with embedded array field with composeEmptyValues', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
       embedded: true,
       textFields: [
         {
           name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
         },
       ],
     };
@@ -227,15 +232,6 @@ describe('composeEmptyValues', () => {
           default: 'default3',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-          default: 'default3',
-        },
-      ],
     };
 
     const embedded2Config: ThingConfig = {
@@ -244,15 +240,6 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField2',
-          required: true,
-          default: 'default2',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
           required: true,
           default: 'default2',
         },
@@ -275,15 +262,6 @@ describe('composeEmptyValues', () => {
           default: 'default1',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-          default: 'default1',
-        },
-      ],
       embeddedFields: [
         {
           name: 'embedded2',
@@ -301,15 +279,6 @@ describe('composeEmptyValues', () => {
           default: 'default',
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-          default: 'default',
-        },
-      ],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -320,14 +289,11 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = {
       textField: '',
-      fileField: '',
       embedded1: {
         textField1: '',
-        fileField1: '',
         embedded2: {
           textField2: '',
-          fileField2: '',
-          embedded3: { textField3: '', fileField3: '' },
+          embedded3: { textField3: '' },
         },
       },
     };

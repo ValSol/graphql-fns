@@ -69,7 +69,6 @@ describe('coerceDataFromGql', () => {
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -86,7 +85,6 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       textField: 'text field',
-      fileField: 'file/field',
       embedded1: {
         relationalField: { id: '5cefb33f05d6be4b7b59842b' },
         duplexField: { id: '5cefb33f05d6be4b7b59842c' },
@@ -109,7 +107,6 @@ describe('coerceDataFromGql', () => {
 
     const expectedResult = {
       textField: 'text field',
-      fileField: 'file/field',
       embedded1: {
         relationalField: '5cefb33f05d6be4b7b59842b',
         duplexField: '5cefb33f05d6be4b7b59842c',
@@ -140,18 +137,10 @@ describe('coerceDataFromGql', () => {
           name: 'embeddedTextField',
         },
       ],
-      fileFields: [
-        {
-          name: 'embeddedFileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
     };
     Object.assign(thingConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
-      fileFields: [{ name: 'fileField', generalName: 'generalFile', fileType: 'fileType' }],
       embeddedFields: [
         {
           name: 'embedded1',
@@ -172,17 +161,14 @@ describe('coerceDataFromGql', () => {
     const data = {
       id: '5cefb33f05d6be4b7b59842a',
       textField: null,
-      fileField: null,
       embedded1: null,
       embedded2: {
         embeddedTextField: null,
-        embeddedFileField: null,
         __typename: 'Embedded',
       },
       embedded3: [
         {
           embeddedTextField: null,
-          embeddedFileField: null,
           __typename: 'Embedded',
         },
       ],
@@ -191,20 +177,16 @@ describe('coerceDataFromGql', () => {
 
     const expectedResult = {
       textField: '',
-      fileField: '',
       embedded1: {
         embeddedTextField: '',
-        embeddedFileField: '',
       },
       embedded2: {
         embeddedTextField: '',
-        embeddedFileField: '',
       },
 
       embedded3: [
         {
           embeddedTextField: '',
-          embeddedFileField: '',
         },
       ],
     };
@@ -213,7 +195,143 @@ describe('coerceDataFromGql', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should coerce realational & duplex null fields', () => {
+  test('should coerce file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      textField: 'text field',
+      logo: {
+        fileId: '5cefb33f05d6be4b7b59842b',
+        address: '/images/logo',
+        __typename: 'Image',
+      },
+      pictures: [
+        {
+          fileId: '5cefb33f05d6be4b7b59842b',
+          address: '/images/pic1',
+          __typename: 'Image',
+        },
+        {
+          fileId: '5cefb33f05d6be4b7b59842b',
+          address: '/images/pic2',
+          __typename: 'Image',
+        },
+      ],
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      textField: 'text field',
+      logo: {
+        fileId: '5cefb33f05d6be4b7b59842b',
+        address: '/images/logo',
+      },
+      pictures: [
+        {
+          fileId: '5cefb33f05d6be4b7b59842b',
+          address: '/images/pic1',
+        },
+        {
+          fileId: '5cefb33f05d6be4b7b59842b',
+          address: '/images/pic2',
+        },
+      ],
+    };
+
+    const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should coerce embedded null fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      textField: null,
+      logo: null,
+      pictures: [],
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      textField: '',
+      logo: {
+        fileId: '',
+        address: '',
+      },
+      pictures: [],
+    };
+
+    const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should coerce file null fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',

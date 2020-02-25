@@ -27,15 +27,6 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
     }, result);
   }
 
-  if (fileFields) {
-    fileFields.reduce((prev, attributes) => {
-      const { name } = attributes;
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = { attributes, kind: 'fileFields' };
-      return prev;
-    }, result);
-  }
-
   if (intFields) {
     intFields.reduce((prev, attributes) => {
       const { name } = attributes;
@@ -77,6 +68,15 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
       const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
       prev[name] = { attributes, kind: 'embeddedFields' };
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'fileFields' };
       return prev;
     }, result);
   }

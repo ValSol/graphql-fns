@@ -27,7 +27,7 @@ const coerceDataToGql = (
       return prev;
     }
 
-    if (fieldsObject[key].kind === 'embeddedFields') {
+    if (fieldsObject[key].kind === 'embeddedFields' || fieldsObject[key].kind === 'fileFields') {
       const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
