@@ -11,11 +11,11 @@ const createManyFilesOfThingOptionsInputType = (thingConfig: ThingConfig): strin
 
   if (!fieldLines.length) return '';
 
-  return `enum ${name}ManyFilesGeneralNamesEnum {
+  return `enum ${name}ManyFilesNamesEnum {
 ${fieldLines.join('\n')}
 }
 input ManyFilesOf${name}OptionsInput {
-  target: ${name}ManyFilesGeneralNamesEnum!
+  target: ${name}ManyFilesNamesEnum!
 }`;
 };
 

@@ -28,13 +28,6 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
     }, thingTypeArray);
   }
 
-  if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
-  }
-
   if (intFields) {
     intFields.reduce((prev, { array, name: name2 }) => {
       prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}`);
@@ -101,6 +94,14 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   if (embeddedFields) {
     embeddedFields.reduce((prev, { array, name: name2, config: { name: embeddedName } }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+      return prev;
+    }, thingTypeArray);
+  }
+
+  // the same code as for embeddedFields
+  if (fileFields) {
+    fileFields.reduce((prev, { array, name: name2, config: { name: embeddedName } }) => {
       prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
       return prev;
     }, thingTypeArray);

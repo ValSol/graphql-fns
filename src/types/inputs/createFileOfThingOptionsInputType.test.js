@@ -24,28 +24,45 @@ describe('createUploadFileToThingOptionsInputType', () => {
   });
 
   test('should create string with indexed text fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
         {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
+          name: 'fileId',
         },
         {
-          name: 'photos',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
+          name: 'address',
         },
       ],
     };
-    const expectedResult = `enum ExampleFileGeneralNamesEnum {
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+    const expectedResult = `enum ExampleFileNamesEnum {
   logo
-  photos
+  pictures
 }
 input FileOfExampleOptionsInput {
-  target: ExampleFileGeneralNamesEnum!
+  target: ExampleFileNamesEnum!
 }`;
 
     const result = createFileOfThingOptionsInputType(thingConfig);

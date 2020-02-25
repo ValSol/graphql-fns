@@ -33,25 +33,6 @@ describe('createThingWhereOneInputType', () => {
           name: 'firstName',
         },
       ],
-      fileFields: [
-        {
-          name: 'logo1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          unique: true,
-        },
-        {
-          name: 'logo2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          unique: true,
-        },
-        {
-          name: 'logo3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
       intFields: [
         {
           name: 'perosonaNum',
@@ -75,8 +56,6 @@ describe('createThingWhereOneInputType', () => {
   id: ID
   email: ID
   userId: ID
-  logo1: ID
-  logo2: ID
   perosonaNum: Int
   perosonaNumber: Float
   birthday: DateTime

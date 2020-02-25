@@ -1,4 +1,5 @@
 //  @flow
+// COMEBACK
 
 import type { ThingConfig } from '../../flowTypes';
 
@@ -9,11 +10,11 @@ const createFileOfThingOptionsInputType = (thingConfig: ThingConfig): string => 
 
   if (!fieldLines.length) return '';
 
-  return `enum ${name}FileGeneralNamesEnum {
+  return `enum ${name}FileNamesEnum {
 ${fieldLines.join('\n')}
 }
 input FileOf${name}OptionsInput {
-  target: ${name}FileGeneralNamesEnum!
+  target: ${name}FileNamesEnum!
 }`;
 };
 

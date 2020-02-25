@@ -24,16 +24,34 @@ describe('createManyFilesOfThingOptionsInputType', () => {
   });
 
   test('should create empty string if there are file scalar fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
         {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
+          name: 'fileId',
+        },
+        {
+          name: 'address',
         },
       ],
     };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    });
     const expectedResult = '';
 
     const result = createManyFilesOfThingOptionsInputType(thingConfig);
@@ -41,27 +59,44 @@ describe('createManyFilesOfThingOptionsInputType', () => {
   });
 
   test('should create string if there are array file fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
         {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
+          name: 'fileId',
         },
         {
-          name: 'photos',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
+          name: 'address',
         },
       ],
     };
-    const expectedResult = `enum ExampleManyFilesGeneralNamesEnum {
-  photos
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+    const expectedResult = `enum ExampleManyFilesNamesEnum {
+  pictures
 }
 input ManyFilesOfExampleOptionsInput {
-  target: ExampleManyFilesGeneralNamesEnum!
+  target: ExampleManyFilesNamesEnum!
 }`;
 
     const result = createManyFilesOfThingOptionsInputType(thingConfig);

@@ -7,9 +7,24 @@ import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
   test('should create things types for one thing', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
     const thingConfig: ThingConfig = {
       name: 'Example',
       pagination: true,
+
       textFields: [
         {
           name: 'textField1',
@@ -36,42 +51,7 @@ describe('composeGqlTypes', () => {
           array: true,
         },
       ],
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          unique: true,
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/file',
-          index: true,
-        },
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-          index: true,
-        },
-        {
-          name: 'fileField4',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-        {
-          name: 'fileField5',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: ['default/field'],
-          required: true,
-          array: true,
-        },
-      ],
+
       enumFields: [
         {
           name: 'day',
@@ -87,6 +67,29 @@ describe('composeGqlTypes', () => {
         },
       ],
 
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'photos',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+
       geospatialFields: [
         {
           name: 'position',
@@ -94,7 +97,7 @@ describe('composeGqlTypes', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = [thingConfig, imageConfig];
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -141,14 +144,18 @@ type Example {
   textField3: String!
   textField4: [String!]!
   textField5: [String!]!
-  fileField1: String
-  fileField2: String
-  fileField3: String!
-  fileField4: [String!]!
-  fileField5: [String!]!
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]!
+  logo: Image!
+  hero: Image
+  pictures: [Image!]!
+  photos: [Image!]!
   position: GeospatialPoint
+}
+type Image {
+  id: ID!
+  fileId: String!
+  address: String
 }
 input ExampleCreateInput {
   textField1: String
@@ -156,13 +163,12 @@ input ExampleCreateInput {
   textField3: String!
   textField4: [String!]
   textField5: [String!]!
-  fileField1: String
-  fileField2: String
-  fileField3: String!
-  fileField4: [String!]
-  fileField5: [String!]!
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]!
+  logo: ImageCreateInput!
+  hero: ImageCreateInput
+  pictures: [ImageCreateInput!]!
+  photos: [ImageCreateInput!]
   position: GeospatialPointInput
 }
 input ExampleCreateChildInput {
@@ -179,13 +185,12 @@ input ExampleUpdateInput {
   textField3: String
   textField4: [String!]
   textField5: [String!]
-  fileField1: String
-  fileField2: String
-  fileField3: String
-  fileField4: [String!]
-  fileField5: [String!]
   day: WeekdaysEnumeration
   cuisines: [CuisinesEnumeration!]
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
   position: GeospatialPointInput
 }
 input ExampleUpdateChildInput {
@@ -194,33 +199,37 @@ input ExampleUpdateChildInput {
 input ExampleUpdateChildrenInput {
   connect: [ID!]
 }
-enum ExampleFileGeneralNamesEnum {
-  fileField1
-  fileField2
-  fileField3
-  fileField4
-  fileField5
+enum ExampleFileNamesEnum {
+  logo
+  hero
+  pictures
+  photos
 }
 input FileOfExampleOptionsInput {
-  target: ExampleFileGeneralNamesEnum!
+  target: ExampleFileNamesEnum!
 }
-enum ExampleManyFilesGeneralNamesEnum {
-  fileField4
-  fileField5
+enum ExampleManyFilesNamesEnum {
+  pictures
+  photos
 }
 input ManyFilesOfExampleOptionsInput {
-  target: ExampleManyFilesGeneralNamesEnum!
+  target: ExampleManyFilesNamesEnum!
+}
+input ImageCreateInput {
+  fileId: String!
+  address: String
+}
+input ImageUpdateInput {
+  fileId: String
+  address: String
 }
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
-  fileField1: ID
 }
 input ExampleWhereInput {
   textField2: String
   textField3: String
-  fileField2: String
-  fileField3: String
   day: WeekdaysEnumeration
   cuisines: CuisinesEnumeration
 }
@@ -231,10 +240,6 @@ enum ExampleSortEnum {
   textField2_DESC
   textField3_ASC
   textField3_DESC
-  fileField2_ASC
-  fileField2_DESC
-  fileField3_ASC
-  fileField3_DESC
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
@@ -257,11 +262,10 @@ enum ExampleFieldNamesEnum {
   textField3
   textField4
   textField5
-  fileField1
-  fileField2
-  fileField3
-  fileField4
-  fileField5
+  logo
+  hero
+  pictures
+  photos
   day
   cuisines
   position
@@ -284,8 +288,6 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: FileOfExampleOptionsInput!): Example!
   uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: ManyFilesOfExampleOptionsInput!): Example!
-  removeFileFromExample(whereOne: ExampleWhereOneInput!, data: [String!]!, options: FileOfExampleOptionsInput!): Example!
-  removeManyFilesFromExample(whereOne: ExampleWhereOneInput!, data: [String!]!, options: ManyFilesOfExampleOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -311,19 +313,6 @@ type Subscription {
         {
           name: 'textField3',
           required: true,
-        },
-      ],
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/file',
         },
       ],
       geospatialFields: [
@@ -393,8 +382,6 @@ type Example1 {
   textField1: String
   textField2: String
   textField3: String!
-  fileField1: String
-  fileField2: String
   position: GeospatialPoint
 }
 type Example2 {
@@ -409,8 +396,6 @@ input Example1CreateInput {
   textField1: String
   textField2: String
   textField3: String!
-  fileField1: String
-  fileField2: String
   position: GeospatialPointInput
 }
 input Example1CreateChildInput {
@@ -425,8 +410,6 @@ input Example1UpdateInput {
   textField1: String
   textField2: String
   textField3: String
-  fileField1: String
-  fileField2: String
   position: GeospatialPointInput
 }
 input Example1UpdateChildInput {
@@ -434,13 +417,6 @@ input Example1UpdateChildInput {
 }
 input Example1UpdateChildrenInput {
   connect: [ID!]
-}
-enum Example1FileGeneralNamesEnum {
-  fileField1
-  fileField2
-}
-input FileOfExample1OptionsInput {
-  target: Example1FileGeneralNamesEnum!
 }
 input Example2CreateInput {
   textField1: [String!]
@@ -484,8 +460,6 @@ enum Example1FieldNamesEnum {
   textField1
   textField2
   textField3
-  fileField1
-  fileField2
   position
 }
 type UpdatedExample1Payload {
@@ -517,8 +491,6 @@ type Mutation {
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1
-  uploadFileToExample1(whereOne: Example1WhereOneInput!, file: Upload!, options: FileOfExample1OptionsInput!): Example1!
-  removeFileFromExample1(whereOne: Example1WhereOneInput!, data: [String!]!, options: FileOfExample1OptionsInput!): Example1!
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!

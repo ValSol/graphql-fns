@@ -48,58 +48,6 @@ describe('createThingType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing type with File fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/text',
-        },
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-        },
-        {
-          name: 'fileField4',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-        {
-          name: 'fileField5',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: ['default/text'],
-          required: true,
-          array: true,
-        },
-      ],
-    };
-    const expectedResult = `type Example {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  fileField1: String
-  fileField2: String
-  fileField3: String!
-  fileField4: [String!]!
-  fileField5: [String!]!
-}`;
-
-    const result = createThingType(thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should create thing type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -538,6 +486,92 @@ describe('createThingType', () => {
 }`;
 
     const result = createThingType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing type with embedded fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'photos',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = `type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+  logo: Image!
+  hero: Image
+  pictures: [Image!]!
+  photos: [Image!]!
+}`;
+
+    const result = createThingType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create file thing type with text fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const expectedResult = `type Image {
+  id: ID!
+  fileId: String!
+  address: String
+}`;
+
+    const result = createThingType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
 });

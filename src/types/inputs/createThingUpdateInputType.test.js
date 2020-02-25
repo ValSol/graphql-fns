@@ -51,61 +51,6 @@ input ExampleUpdateChildrenInput {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing update input type with file fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/file',
-        },
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-        },
-        {
-          name: 'fileField4',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-        {
-          name: 'fileField5',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: ['default/file'],
-          required: true,
-          array: true,
-        },
-      ],
-    };
-    const expectedResult = `input ExampleUpdateInput {
-  fileField1: String
-  fileField2: String
-  fileField3: String
-  fileField4: [String!]
-  fileField5: [String!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-}`;
-
-    const result = createThingUpdateInputType(thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should create thing update input type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -522,6 +467,93 @@ input ExampleUpdateChildrenInput {
   booleanField3: Boolean
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
+}`;
+
+    const result = createThingUpdateInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create file thing input type with text fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+        },
+        {
+          name: 'comment',
+        },
+      ],
+    };
+    const expectedResult = `input ImageUpdateInput {
+  fileId: String
+  comment: String
+}`;
+
+    const result = createThingUpdateInputType(imageConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type with embedded fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'photos',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = `input ExampleUpdateInput {
+  textField: String
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
 }
 input ExampleUpdateChildInput {
   connect: ID

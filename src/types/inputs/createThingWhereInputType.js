@@ -10,7 +10,6 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
     dateTimeFields,
     duplexFields,
     intFields,
-    fileFields,
     floatFields,
     textFields,
     relationalFields,
@@ -20,15 +19,6 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
 
   if (textFields) {
     textFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: String`);
-        return prev;
-      }, indexedFields);
-  }
-
-  if (fileFields) {
-    fileFields
       .filter(({ index }) => index)
       .reduce((prev, { name: fieldName }) => {
         prev.push(`  ${fieldName}: String`);

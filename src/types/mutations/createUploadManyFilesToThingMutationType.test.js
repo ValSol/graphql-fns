@@ -22,16 +22,39 @@ describe('createUploadManyFilesToThingMutationType', () => {
   });
 
   test('should create empty string if there are no array fileFields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
         {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
+          name: 'fileId',
+        },
+        {
+          name: 'address',
         },
       ],
     };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
+      ],
+    });
     const expectedResult = '';
 
     const result = createUploadManyFilesToThingMutationType(thingConfig);
@@ -39,22 +62,50 @@ describe('createUploadManyFilesToThingMutationType', () => {
   });
 
   test('should create mutation upload file thing type', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
         {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
+          name: 'fileId',
         },
         {
-          name: 'photos',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
+          name: 'address',
         },
       ],
     };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'photos',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
     const expectedResult =
       '  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: ManyFilesOfExampleOptionsInput!): Example!';
 

@@ -26,13 +26,6 @@ const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
     }, thingFieldsArray);
   }
 
-  if (fileFields) {
-    fileFields.reduce((prev, { name: name2 }) => {
-      prev.push(`  ${name2}`);
-      return prev;
-    }, thingFieldsArray);
-  }
-
   if (intFields) {
     intFields.reduce((prev, { name: name2 }) => {
       prev.push(`  ${name2}`);
@@ -70,6 +63,14 @@ const createUpdatedThingPayloadType = (thingConfig: ThingConfig): string => {
 
   if (embeddedFields) {
     embeddedFields.reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}`);
+      return prev;
+    }, thingFieldsArray);
+  }
+
+  // the same code as for embeddedFields
+  if (fileFields) {
+    fileFields.reduce((prev, { name: name2 }) => {
       prev.push(`  ${name2}`);
       return prev;
     }, thingFieldsArray);

@@ -32,37 +32,6 @@ type UpdatedExamplePayload {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create subscription payload type with file fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'logo',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'hero',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
-    };
-
-    const expectedResult = `enum ExampleFieldNamesEnum {
-  logo
-  hero
-}
-type UpdatedExamplePayload {
-  node: Example
-  previousNode: Example
-  updatedFields: [ExampleFieldNamesEnum!]
-}`;
-
-    const result = createUpdatedThingPayloadType(thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should create subscription payload type with text fields', () => {
     const exampleConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
@@ -74,6 +43,20 @@ type UpdatedExamplePayload {
         },
       ],
     };
+
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
     Object.assign(exampleConfig, {
       name: 'Example',
       textFields: [
@@ -132,6 +115,12 @@ type UpdatedExamplePayload {
           config: exampleConfig,
         },
       ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
     });
 
     const expectedResult = `enum ExampleFieldNamesEnum {
@@ -142,6 +131,7 @@ type UpdatedExamplePayload {
   booleanField
   duplexField
   embeddedField
+  logo
   enumField
   geospatialField
   relationalField

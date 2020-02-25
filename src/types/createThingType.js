@@ -40,17 +40,6 @@ const createThingType = (thingConfig: ThingConfig): string => {
     }, thingTypeArray);
   }
 
-  if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
-      return prev;
-    }, thingTypeArray);
-  }
-
   if (intFields) {
     intFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
@@ -143,6 +132,18 @@ const createThingType = (thingConfig: ThingConfig): string => {
       },
       thingTypeArray,
     );
+  }
+
+  // the same code as for embeddedFields
+  if (fileFields) {
+    fileFields.reduce((prev, { array, name: name2, required, config: { name: embeddedName } }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}${embeddedName}${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   if (geospatialFields) {
