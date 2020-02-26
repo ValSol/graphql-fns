@@ -15,7 +15,7 @@ const clearUpdateInputData = (data: Object, thingConfig: ThingConfig): Object =>
       kind,
     } = fieldsObject[key];
 
-    if (fieldsObject[key].kind === 'embeddedFields') {
+    if (fieldsObject[key].kind === 'embeddedFields' || fieldsObject[key].kind === 'fileFields') {
       const { config } = fieldsObject[key].attributes;
       if (array) {
         prev[key] = data[key].map(item => clearUpdateInputData(item, config)); // eslint-disable-line no-param-reassign

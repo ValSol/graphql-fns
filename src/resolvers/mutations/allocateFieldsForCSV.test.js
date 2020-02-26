@@ -31,36 +31,6 @@ describe('allocateFieldsForCSV', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return right allacation fields for file fields', () => {
-    const exampleConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileArrayField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-      ],
-    };
-
-    const result = allocateFieldsForCSV(exampleConfig);
-
-    const expectedResult = {
-      boolean: [],
-      float: [],
-      int: [],
-      object: ['fileArrayField'],
-    };
-
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should return right allacation fields for datetime fields', () => {
     const exampleConfig: ThingConfig = {
       name: 'Example',
@@ -286,7 +256,7 @@ describe('allocateFieldsForCSV', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return right allacation fields for geospatial fields', () => {
+  test('should return right allacation fields for embedded fields', () => {
     const embeddedConfig: ThingConfig = {
       name: 'EmbeddedExample',
       embedded: true,
@@ -319,6 +289,47 @@ describe('allocateFieldsForCSV', () => {
       float: [],
       int: [],
       object: ['embeddedField', 'embeddedArrayField'],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return right allacation fields for file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+    const exampleConfig: ThingConfig = {};
+    Object.assign(exampleConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const result = allocateFieldsForCSV(exampleConfig);
+
+    const expectedResult = {
+      boolean: [],
+      float: [],
+      int: [],
+      object: ['logo', 'pictures'],
     };
 
     expect(result).toEqual(expectedResult);

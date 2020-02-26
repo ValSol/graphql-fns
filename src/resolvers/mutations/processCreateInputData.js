@@ -19,8 +19,9 @@ const processCreateInputData = (
   initialCore: null | Map<ThingConfig, Array<Object>>,
   initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
+  forConcatenation?: boolean,
   // use mongoose Types in args to let mocking the ObjectId() in tests
-  mongooseTypes: Object = Types,
+  mongooseTypes?: Object = Types,
 ): Object => {
   const core = initialCore || new Map();
   const periphery = initialPeriphery || new Map();
@@ -79,6 +80,16 @@ const processCreateInputData = (
       }, embeddedFieldsObject);
     }
 
+    const fileFieldsObject = {};
+    if (fileFields) {
+      fileFields.reduce((prev, { array, config, name }) => {
+        // eslint-disable-next-line
+        prev[name] = { array, config };
+        return prev;
+      }, fileFieldsObject);
+    }
+
+    // the same code as for embeddedFields
     const geospatialFieldsObject = {};
     if (geospatialFields) {
       geospatialFields.reduce((prev, { name, array, geospatialType }) => {
@@ -99,13 +110,6 @@ const processCreateInputData = (
 
     if (intFields) {
       intFields.reduce((prev, { name }) => {
-        prev.push(name);
-        return prev;
-      }, scalarFieldsArray);
-    }
-
-    if (fileFields) {
-      fileFields.reduce((prev, { name }) => {
         prev.push(name);
         return prev;
       }, scalarFieldsArray);
@@ -334,6 +338,15 @@ const processCreateInputData = (
           // eslint-disable-next-line no-param-reassign
           prev[key] = transform(data2[key], config);
         }
+      } else if (fileFieldsObject[key]) {
+        const { array, config } = fileFieldsObject[key];
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data2[key].map(value => transform(value, config));
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = transform(data2[key], config);
+        }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];
         if (array) {
@@ -368,7 +381,10 @@ const processCreateInputData = (
     const { data: data3, config } = prepared.shift();
 
     const document = transform(data3, config);
-    if (!first) first = document;
+    if (!first) {
+      first = document;
+      if (forConcatenation) continue; // eslint-disable-line no-continue
+    }
     const item = { insertOne: { document } };
 
     const coreItem = core.get(config);

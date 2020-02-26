@@ -6,7 +6,9 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import createThingConcatenateInputType from '../types/inputs/createThingConcatenateInputType';
 import createFileOfThingOptionsInputType from '../types/inputs/createFileOfThingOptionsInputType';
+// import createManyFilesOfThingOptionsInputType from '../types/inputs/createManyFilesOfThingOptionsInputType';
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
@@ -16,9 +18,11 @@ import composeThingResolvers from './types/composeThingResolvers';
 import createCreateManyThingsMutationResolver from './mutations/createCreateManyThingsMutationResolver';
 import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
 import createImportThingsMutationResolver from './mutations/createImportThingsMutationResolver';
+import createConcatenateThingMutationResolver from './mutations/createConcatenateThingMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
 import createUploadFileToThingMutationResolver from './mutations/createUploadFileToThingMutationResolver';
+// import createUploadManyFilesToThingMutationResolver from './mutations/createUploadManyFilesToThingMutationResolver';
 
 import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
@@ -126,6 +130,19 @@ const composeGqlResolvers = (
           prev.Mutation[`import${pluralize(name)}`] = importThingsMutationResolver;
         }
 
+        const thingConcatenateInputType = createThingConcatenateInputType(thingConfig);
+        if (thingConcatenateInputType) {
+          const concatenateThingMutationResolver = createConcatenateThingMutationResolver(
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (concatenateThingMutationResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Mutation[`concatenate${name}`] = concatenateThingMutationResolver;
+          }
+        }
+
         const updateThingMutationResolver = createUpdateThingMutationResolver(
           thingConfig,
           generalConfig,
@@ -159,6 +176,22 @@ const composeGqlResolvers = (
           }
         }
 
+        /*
+        const manyFilesOfThingOptionsInputType = createManyFilesOfThingOptionsInputType(
+          thingConfig,
+        );
+        if (manyFilesOfThingOptionsInputType) {
+          const uploadManyFilesToThingMutationResolver = createUploadManyFilesToThingMutationResolver(
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (uploadManyFilesToThingMutationResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Mutation[`uploadFileTo${name}`] = uploadManyFilesToThingMutationResolver;
+          }
+        }
+*/
         const customMutationNames = Object.keys(customMutation);
 
         customMutationNames.forEach(customName => {

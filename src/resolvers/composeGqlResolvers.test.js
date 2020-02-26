@@ -48,69 +48,9 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.importExamples).toBe('function');
+    expect(typeof result.Mutation.concatenateExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
-    expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
-    expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
-    expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
-  });
-
-  test('should create resolvers for one thing with fileFields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField1',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileField2',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: 'default/file',
-        },
-        {
-          name: 'fileField3',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          required: true,
-        },
-        {
-          name: 'fileField4',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-        {
-          name: 'fileField5',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          default: ['default/file'],
-          required: true,
-          array: true,
-        },
-      ],
-    };
-    const thingConfigs = [thingConfig];
-    const generalConfig: GeneralConfig = { thingConfigs };
-    const serversideConfig = {
-      saveFiles: async () => ({
-        fileField: '/test',
-        fileField2: '/test_mobile',
-        fileField3: '/test_tablet',
-      }),
-    };
-    const result = composeGqlResolvers(generalConfig, serversideConfig);
-    expect(typeof result.Query.ExampleCount).toBe('function');
-    expect(typeof result.Query.Example).toBe('function');
-    expect(typeof result.Query.Examples).toBe('function');
-    expect(typeof result.Mutation.createExample).toBe('function');
-    expect(typeof result.Mutation.createManyExamples).toBe('function');
-    expect(typeof result.Mutation.importExamples).toBe('function');
-    expect(typeof result.Mutation.updateExample).toBe('function');
-    expect(typeof result.Mutation.deleteExample).toBe('function');
-    expect(typeof result.Mutation.uploadFileToExample).toBe('function');
     expect(typeof result.Subscription.createdExample.subscribe).toBe('function');
     expect(typeof result.Subscription.deletedExample.subscribe).toBe('function');
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
@@ -163,6 +103,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyExample2s).toBe('function');
     expect(typeof result.Mutation.createExample1).toBe('function');
     expect(typeof result.Mutation.createExample2).toBe('function');
+    expect(typeof result.Mutation.concatenateExample1).toBe('undefined');
+    expect(typeof result.Mutation.concatenateExample2).toBe('function');
     expect(typeof result.Mutation.updateExample1).toBe('function');
     expect(typeof result.Mutation.updateExample2).toBe('function');
     expect(typeof result.Mutation.deleteExample1).toBe('function');
@@ -236,6 +178,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyPlaces).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
+    expect(typeof result.Mutation.concatenatePerson).toBe('function');
+    expect(typeof result.Mutation.concatenatePlace).toBe('undefined');
     expect(typeof result.Mutation.updatePerson).toBe('function');
     expect(typeof result.Mutation.updatePlace).toBe('function');
     expect(typeof result.Mutation.deletePerson).toBe('function');
@@ -395,6 +339,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyPeople).toBe('function');
     expect(typeof result.Mutation.createPerson).toBe('function');
     expect(typeof result.Mutation.createPlace).toBe('function');
+    expect(typeof result.Mutation.concatenatePerson).toBe('function');
+    expect(typeof result.Mutation.concatenatePlace).toBe('function');
     expect(typeof result.Mutation.updatePerson).toBe('function');
     expect(typeof result.Mutation.updatePlace).toBe('function');
     expect(typeof result.Mutation.deletePerson).toBe('function');
@@ -471,6 +417,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.concatenateExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(typeof result.Example.pointField1).toBe('function');
@@ -523,6 +470,7 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
+    expect(typeof result.Mutation.concatenateExample).toBe('undefined');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
     expect(result.Subscription).toBeUndefined();

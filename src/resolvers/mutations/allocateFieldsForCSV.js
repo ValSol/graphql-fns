@@ -58,6 +58,13 @@ const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
     });
   }
 
+  // the same code as for embeddedFields
+  if (fileFields) {
+    fileFields.forEach(({ name }) => {
+      result.object.push(name);
+    });
+  }
+
   if (enumFields) {
     enumFields.forEach(({ name, array }) => {
       if (array) {
@@ -69,14 +76,6 @@ const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
   if (geospatialFields) {
     geospatialFields.forEach(({ name }) => {
       result.object.push(name);
-    });
-  }
-
-  if (fileFields) {
-    fileFields.forEach(({ name, array }) => {
-      if (array) {
-        result.object.push(name);
-      }
     });
   }
 
