@@ -175,9 +175,16 @@ input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
 }
-input ExampleCreateChildrenInput {
+input ExampleCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+}
+input ExampleConcatenateInput {
+  textField4: [String!]
+  textField5: [String!]
+  cuisines: [CuisinesEnumeration!]
+  pictures: [ImageCreateInput!]
+  photos: [ImageCreateInput!]
 }
 input ExampleUpdateInput {
   textField1: String
@@ -284,6 +291,7 @@ type Mutation {
   createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
+  concatenateExample(whereOne: ExampleWhereOneInput!, data: ExampleConcatenateInput!): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFileToExample(whereOne: ExampleWhereOneInput!, file: Upload!, options: FileOfExampleOptionsInput!): Example!
@@ -402,7 +410,7 @@ input Example1CreateChildInput {
   connect: ID
   create: Example1CreateInput
 }
-input Example1CreateChildrenInput {
+input Example1CreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [Example1CreateInput!]
 }
@@ -427,9 +435,13 @@ input Example2CreateChildInput {
   connect: ID
   create: Example2CreateInput
 }
-input Example2CreateChildrenInput {
+input Example2CreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [Example2CreateInput!]
+}
+input Example2ConcatenateInput {
+  textField1: [String!]
+  textField2: [String!]
 }
 input Example2UpdateInput {
   textField1: [String!]
@@ -494,6 +506,7 @@ type Mutation {
   createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
+  concatenateExample2(whereOne: Example2WhereOneInput!, data: Example2ConcatenateInput!): Example2!
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
@@ -585,8 +598,8 @@ type Place {
 input PersonCreateInput {
   firstName: String!
   lastName: String!
-  friends: PersonCreateChildrenInput!
-  enemies: PersonCreateChildrenInput
+  friends: PersonCreateOrConcatenateChildrenInput!
+  enemies: PersonCreateOrConcatenateChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
 }
@@ -594,9 +607,13 @@ input PersonCreateChildInput {
   connect: ID
   create: PersonCreateInput
 }
-input PersonCreateChildrenInput {
+input PersonCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+}
+input PersonConcatenateInput {
+  friends: PersonCreateOrConcatenateChildrenInput
+  enemies: PersonCreateOrConcatenateChildrenInput
 }
 input PersonUpdateInput {
   firstName: String
@@ -619,7 +636,7 @@ input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
 }
-input PlaceCreateChildrenInput {
+input PlaceCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
 }
@@ -671,6 +688,7 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
+  concatenatePerson(whereOne: PersonWhereOneInput!, data: PersonConcatenateInput!): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
@@ -780,9 +798,13 @@ input PersonCreateChildInput {
   connect: ID
   create: PersonCreateInput
 }
-input PersonCreateChildrenInput {
+input PersonCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+}
+input PersonConcatenateInput {
+  locations: [AddressCreateInput!]
+  places: [AddressCreateInput!]
 }
 input PersonUpdateInput {
   firstName: String
@@ -831,6 +853,7 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
+  concatenatePerson(whereOne: PersonWhereOneInput!, data: PersonConcatenateInput!): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
@@ -935,8 +958,8 @@ type Place {
 input PersonCreateInput {
   firstName: String!
   lastName: String!
-  friends: PersonCreateChildrenInput!
-  enemies: PersonCreateChildrenInput
+  friends: PersonCreateOrConcatenateChildrenInput!
+  enemies: PersonCreateOrConcatenateChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
 }
@@ -944,9 +967,13 @@ input PersonCreateChildInput {
   connect: ID
   create: PersonCreateInput
 }
-input PersonCreateChildrenInput {
+input PersonCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+}
+input PersonConcatenateInput {
+  friends: PersonCreateOrConcatenateChildrenInput
+  enemies: PersonCreateOrConcatenateChildrenInput
 }
 input PersonUpdateInput {
   firstName: String
@@ -964,16 +991,20 @@ input PersonUpdateChildrenInput {
 }
 input PlaceCreateInput {
   name: String
-  citizens: PersonCreateChildrenInput
-  visitors: PersonCreateChildrenInput
+  citizens: PersonCreateOrConcatenateChildrenInput
+  visitors: PersonCreateOrConcatenateChildrenInput
 }
 input PlaceCreateChildInput {
   connect: ID
   create: PlaceCreateInput
 }
-input PlaceCreateChildrenInput {
+input PlaceCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
+}
+input PlaceConcatenateInput {
+  citizens: PersonCreateOrConcatenateChildrenInput
+  visitors: PersonCreateOrConcatenateChildrenInput
 }
 input PlaceUpdateInput {
   name: String
@@ -1027,11 +1058,13 @@ type Mutation {
   createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
+  concatenatePerson(whereOne: PersonWhereOneInput!, data: PersonConcatenateInput!): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
+  concatenatePlace(whereOne: PlaceWhereOneInput!, data: PlaceConcatenateInput!): Place!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
@@ -1114,7 +1147,7 @@ input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
 }
-input ExampleCreateChildrenInput {
+input ExampleCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
@@ -1223,7 +1256,7 @@ input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
 }
-input ExampleCreateChildrenInput {
+input ExampleCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
@@ -1262,7 +1295,7 @@ input ExampleCreateChildInput {
   connect: ID
   create: ExampleCreateInput
 }
-input ExampleCreateChildrenInput {
+input ExampleCreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }

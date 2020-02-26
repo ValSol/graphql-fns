@@ -7,6 +7,7 @@ import composeSignature from './composeSignature';
 import createThingType from './createThingType';
 import createFileOfThingOptionsInputType from './inputs/createFileOfThingOptionsInputType';
 import createManyFilesOfThingOptionsInputType from './inputs/createManyFilesOfThingOptionsInputType';
+import createThingConcatenateInputType from './inputs/createThingConcatenateInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -17,6 +18,7 @@ import createThingWhereOneInputType from './inputs/createThingWhereOneInputType'
 import createThingCountQueryType from './queries/createThingCountQueryType';
 import createThingQueryType from './queries/createThingQueryType';
 import createThingsQueryType from './queries/createThingsQueryType';
+import createConcatenateThingMutationType from './mutations/createConcatenateThingMutationType';
 import createCreateManyThingsMutationType from './mutations/createCreateManyThingsMutationType';
 import createCreateThingMutationType from './mutations/createCreateThingMutationType';
 import createImportThingsMutationType from './mutations/createImportThingsMutationType';
@@ -57,6 +59,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           if (checkInventory(['Mutation', 'createThing'], inventory)) {
             const thingCreateInputType = createThingCreateInputType(thingConfig);
             prev.push(thingCreateInputType);
+          }
+          if (checkInventory(['Mutation', 'concatenateThing', name], inventory)) {
+            const thingConcatenateInputType = createThingConcatenateInputType(thingConfig);
+            if (thingConcatenateInputType) prev.push(thingConcatenateInputType);
           }
           if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
             const thingUpdateInputType = createThingUpdateInputType(thingConfig);
@@ -156,6 +162,10 @@ ${thingQueryTypes.join('\n')}
           if (checkInventory(['Mutation', 'importThings', name], inventory)) {
             prev.push(createImportThingsMutationType(thingConfig));
           }
+        }
+        if (checkInventory(['Mutation', 'concatenateThing', name], inventory)) {
+          const concatenateThingMutationType = createConcatenateThingMutationType(thingConfig);
+          if (concatenateThingMutationType) prev.push(concatenateThingMutationType);
         }
         if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
           prev.push(createUpdateThingMutationType(thingConfig));

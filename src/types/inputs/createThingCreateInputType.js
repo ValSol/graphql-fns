@@ -73,9 +73,9 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     relationalFields.reduce(
       (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${relationalThingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
-            required ? '!' : ''
-          }`,
+          `  ${name2}: ${relationalThingName}${
+            array ? 'CreateOrConcatenateChildrenInput' : 'CreateChildInput'
+          }${required ? '!' : ''}`,
         );
         return prev;
       },
@@ -88,9 +88,9 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     duplexFields.reduce(
       (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${relationalThingName}${array ? 'CreateChildrenInput' : 'CreateChildInput'}${
-            required ? '!' : ''
-          }`,
+          `  ${name2}: ${relationalThingName}${
+            array ? 'CreateOrConcatenateChildrenInput' : 'CreateChildInput'
+          }${required ? '!' : ''}`,
         );
         return prev;
       },
@@ -142,7 +142,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   connect: ID
   create: ${name}CreateInput
 }
-input ${name}CreateChildrenInput {
+input ${name}CreateOrConcatenateChildrenInput {
   connect: [ID!]
   create: [${name}CreateInput!]
 }`);
