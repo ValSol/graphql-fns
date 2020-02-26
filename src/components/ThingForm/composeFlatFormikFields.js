@@ -22,6 +22,17 @@ const composeFlatFormikFields = (thingConfig: ThingConfig): FlatFormikFields => 
         kind: 'embeddedFields',
       };
       prev.push(flatFormikField);
+    } else if (fieldsObject[name].kind === 'fileFields') {
+      const {
+        attributes,
+        attributes: { config },
+      } = fieldsObject[name];
+      const flatFormikField = {
+        attributes,
+        child: composeFlatFormikFields(config),
+        kind: 'fileFields',
+      };
+      prev.push(flatFormikField);
     } else {
       prev.push(fieldsObject[name]);
     }

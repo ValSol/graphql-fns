@@ -324,4 +324,43 @@ describe('composeFlatFormikFields', () => {
     const result = composeFlatFormikFields(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should compose the flat file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    };
+
+    const expectedResult: FlatFormikFields = [
+      { attributes: { name: 'textField' }, kind: 'textFields' },
+      {
+        attributes: { name: 'logo', config: imageConfig },
+        kind: 'fileFields',
+        child: [{ attributes: { name: 'fileId' }, kind: 'textFields' }],
+      },
+    ];
+
+    const result = composeFlatFormikFields(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

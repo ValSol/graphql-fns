@@ -47,6 +47,19 @@ describe('arrangeSearchFields', () => {
     ],
   };
 
+  const imageConfig: ThingConfig = {
+    name: 'Image',
+    embedded: true,
+    textFields: [
+      {
+        name: 'fileId',
+      },
+      {
+        name: 'address',
+      },
+    ],
+  };
+
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Example',
@@ -77,20 +90,6 @@ describe('arrangeSearchFields', () => {
       {
         name: 'intField2',
         default: 10,
-      },
-    ],
-
-    fileFields: [
-      {
-        name: 'fileField',
-        generalName: 'generalFile',
-        fileType: 'fileType',
-      },
-      {
-        name: 'fileField2',
-        default: 'fileField/default/value',
-        generalName: 'generalFile',
-        fileType: 'fileType',
       },
     ],
 
@@ -152,6 +151,18 @@ describe('arrangeSearchFields', () => {
       },
     ],
 
+    fileFields: [
+      {
+        name: 'logo',
+        config: imageConfig,
+      },
+      {
+        name: 'pictures',
+        array: true,
+        config: imageConfig,
+      },
+    ],
+
     duplexFields: [
       {
         name: 'parent',
@@ -183,8 +194,6 @@ describe('arrangeSearchFields', () => {
       // textFields
       'textField',
       'textField2',
-      'fileField',
-      'fileField2',
     ];
 
     const result = arrangeSearchFields(thingConfig);

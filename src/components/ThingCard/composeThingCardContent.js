@@ -70,7 +70,10 @@ const composeThingCardContent = (
           );
         }
 
-        if (fieldsObject[name].kind === 'embeddedFields') {
+        if (
+          fieldsObject[name].kind === 'embeddedFields' ||
+          fieldsObject[name].kind === 'fileFields'
+        ) {
           const { config } = fieldsObject[name].attributes;
           return (
             <div key={name}>

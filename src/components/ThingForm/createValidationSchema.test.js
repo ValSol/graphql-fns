@@ -387,4 +387,66 @@ describe('createValidationSchema', () => {
     const result = createValidationSchema(thingConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
+
+  test('should create the validation schema with file field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      logo: yup.object().shape({ fileId: yup.string().required('Required') }),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
+
+  test('should create the validation schema with file array field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = yup.object().shape({
+      pictures: yup.array().of(yup.object().shape({ fileId: yup.string() })),
+    });
+
+    const result = createValidationSchema(thingConfig);
+    expect(result.describe()).toEqual(expectedResult.describe());
+  });
 });

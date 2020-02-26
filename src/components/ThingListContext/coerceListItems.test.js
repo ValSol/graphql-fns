@@ -59,64 +59,6 @@ describe('coerceListItems', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should coerce file fields', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileFieldArray',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          array: true,
-        },
-      ],
-    };
-
-    const items = [
-      {
-        id: '123',
-        createdAt: '2018-12-10T22:00:00.000Z',
-        updatedAt: '2018-12-10T22:00:00.000Z',
-        fileField: 'file/Field',
-        fileFieldArray: ['file/Field-1, file/Field-2'],
-        __typename: 'Example',
-      },
-      {
-        id: '456',
-        createdAt: '2019-02-10T22:00:00.000Z',
-        updatedAt: '2019-02-10T22:00:00.000Z',
-        fileField: undefined,
-        fileFieldArray: [],
-        __typename: 'Example',
-      },
-    ];
-
-    const expectedResult = [
-      {
-        id: '123',
-        createdAt: '2018-12-10 22:00',
-        updatedAt: '2018-12-10 22:00',
-        fileField: 'file/Field',
-        fileFieldArray: 'file/Field-1, file/Field-2',
-      },
-      {
-        id: '456',
-        createdAt: '2019-02-10 22:00',
-        updatedAt: '2019-02-10 22:00',
-        fileField: '',
-        fileFieldArray: '',
-      },
-    ];
-
-    const result = coerceListItems(items, thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should coerce boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -483,6 +425,63 @@ describe('coerceListItems', () => {
       {
         embeddedField: '',
         embeddedFieldArray: '',
+      },
+    ];
+
+    const result = coerceListItems(items, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should coerce file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'pictures',
+          array: true,
+          config: imageConfig,
+        },
+      ],
+    };
+
+    const items = [
+      {
+        logo: { fileId: '000', address: '/images/logo' },
+        pictures: [
+          { fileId: '111', address: '/images/pic1' },
+          { fileId: '222', address: '/images/pic2' },
+        ],
+      },
+      {
+        logo: undefined,
+        pictures: [],
+      },
+    ];
+
+    const expectedResult = [
+      {
+        logo: 'file',
+        pictures: 'file, file',
+      },
+      {
+        logo: '',
+        pictures: '',
       },
     ];
 

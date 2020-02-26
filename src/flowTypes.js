@@ -81,28 +81,6 @@ type TextField =
       +default?: $ReadOnlyArray<string>,
     |};
 
-type FileField =
-  | {|
-      +array?: false,
-      +index?: boolean,
-      +required?: boolean,
-      +unique?: boolean,
-      +name: string,
-      +default?: string,
-      +generalName: string,
-      +fileType: string,
-    |}
-  | {|
-      +array: true,
-      +index?: boolean,
-      +required?: boolean,
-      +unique?: boolean,
-      +name: string,
-      +default?: $ReadOnlyArray<string>,
-      +generalName: string,
-      +fileType: string,
-    |};
-
 type DateTimeField =
   | {|
       +array?: false,
@@ -169,7 +147,7 @@ export type ListColumn = {|
 
 export type ThingConfig = {
   name: string,
-  embedded?: boolean,
+  embedded?: boolean, // true if related to embeddedFields OR fileFields
   pagination?: boolean,
 
   duplexFields?: $ReadOnlyArray<{
@@ -181,6 +159,12 @@ export type ThingConfig = {
     +required?: boolean,
   }>,
   embeddedFields?: $ReadOnlyArray<{
+    +name: string,
+    +required?: boolean,
+    +array?: boolean,
+    +config: ThingConfig,
+  }>,
+  fileFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
     +array?: boolean,
@@ -201,7 +185,6 @@ export type ThingConfig = {
   intFields?: $ReadOnlyArray<IntField>,
   floatFields?: $ReadOnlyArray<FloatField>,
   textFields?: $ReadOnlyArray<TextField>,
-  fileFields?: $ReadOnlyArray<FileField>,
 
   search?: $ReadOnlyArray<string>, // array of search field names
   form?: $ReadOnlyArray<FormField>,
@@ -224,6 +207,13 @@ type EmbeddedField = {|
   +config: ThingConfig,
 |};
 
+type FileField = {|
+  +name: string,
+  +required?: boolean,
+  +array?: boolean,
+  +config: ThingConfig,
+|};
+
 type RelationalField = {|
   +name: string,
   +array?: boolean,
@@ -236,7 +226,6 @@ export type FlatField =
   | RelationalField
   | DuplexField
   | TextField
-  | FileField
   | FloatField
   | IntField
   | GeospatialField
@@ -280,10 +269,6 @@ export type OrdinaryFieldObject =
   | {|
       +kind: 'textFields',
       +attributes: TextField,
-    |}
-  | {|
-      +kind: 'fileFields',
-      +attributes: FileField,
     |};
 
 export type ThingConfigObject = {
@@ -292,6 +277,10 @@ export type ThingConfigObject = {
     | {|
         +kind: 'embeddedFields',
         +attributes: EmbeddedField,
+      |}
+    | {|
+        +kind: 'fileFields',
+        +attributes: FileField,
       |},
 };
 
@@ -301,6 +290,11 @@ export type FlatFormikFields = $ReadOnlyArray<
   | {|
       +kind: 'embeddedFields',
       +attributes: EmbeddedField,
+      +child: FlatFormikFields,
+    |}
+  | {|
+      +kind: 'fileFields',
+      +attributes: FileField,
       +child: FlatFormikFields,
     |},
 >;
@@ -319,7 +313,7 @@ type InverntoryOptions = {
   },
   +Mutation?: null | {
     // 'mutationName' may be: 'createThing', 'createManyThings', 'updateThing', 'deleteThing', ...
-    // ... 'uploadFileToThing', 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+    // ... 'concatenateThing', 'uploadFileToThing', 'uploadManyFilesToThing', or custom mutation
 
     +[mutationName: string]: thingNamesList,
   },
@@ -404,8 +398,7 @@ export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', ...
-      // ... 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'concatenateThing', ...
       string,
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
@@ -413,8 +406,8 @@ export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'uploadFileToThing', ...
-      // ... 'uploadManyFilesToThing', 'removeFileOfThing', 'removeManyFilesOfThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'concatenateThing', ...
+      // ... 'uploadFileToThing', 'uploadManyFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
     ]
@@ -473,7 +466,16 @@ export type ServersideConfig = {
     inventoryChain: ThreeSegmentInventoryChain,
     resolverArgs: Object,
     serversideConfig: ServersideConfig,
-  }) => Promise<{ [fileFieldsName: string]: string }>,
+  }) => Promise<{
+    // eslint-disable-next-line flowtype/space-after-type-colon
+    [fileFieldName: string]:
+      | {
+          [fileFieldAttrName: string]: any,
+        }
+      | Array<{
+          [fileFieldAttrName: string]: any,
+        }>,
+  }>,
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

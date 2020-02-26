@@ -39,20 +39,6 @@ describe('arrangeListColumns', () => {
         },
       ],
 
-      fileFields: [
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileField2',
-          default: 'fileField/default/value',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-      ],
-
       floatFields: [
         {
           name: 'floatField',
@@ -135,9 +121,6 @@ describe('arrangeListColumns', () => {
       // intFields
       { name: 'intField', width: 200 },
       { name: 'intField2', width: 200 },
-      // fileFields
-      { name: 'fileField', width: 200 },
-      { name: 'fileField2', width: 200 },
       // floatFields
       { name: 'floatField', width: 200 },
       { name: 'floatField2', width: 200 },

@@ -717,4 +717,69 @@ describe('composeFormikFragment', () => {
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should compose the flat file fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    };
+
+    const expectedResult = (
+      <>
+        <Field
+          key={0}
+          component={FormikTextField}
+          disabled={false}
+          fullWidth
+          label="textField"
+          margin="normal"
+          name="textField"
+          required={false}
+          variant="outlined"
+        />
+        <Outline key={1} label="logo">
+          <>
+            {[
+              <Field
+                key={0}
+                component={FormikTextField}
+                disabled={false}
+                fullWidth
+                label="fileId"
+                margin="normal"
+                name="logo.fileId"
+                required={false}
+                variant="outlined"
+              />,
+            ]}
+          </>
+        </Outline>
+      </>
+    );
+
+    const generalConfig = { thingConfigs: [thingConfig] };
+
+    const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

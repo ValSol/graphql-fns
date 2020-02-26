@@ -24,8 +24,8 @@ type Kind =
   | 'dateTimeFields'
   | 'duplexFields'
   | 'embeddedFields'
-  | 'enumFields'
   | 'fileFields'
+  | 'enumFields'
   | 'floatFields'
   | 'geospatialFields'
   | 'intFields'
@@ -123,9 +123,6 @@ const composeFormikFieldArrayChild = (
               case 'intFields':
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;
-              case 'fileFields':
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                return <Field {...fieldProps} fullWidth />;
               case 'floatFields':
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 return <Field {...fieldProps} style={{ marginRight: 8 }} type="number" />;

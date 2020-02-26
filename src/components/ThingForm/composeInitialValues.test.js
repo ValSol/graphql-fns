@@ -487,4 +487,116 @@ describe('composeInitialValues', () => {
     const result = composeInitialValues(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create the initial values with file field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    });
+
+    const expectedResult = { logo: { fileId: '' } };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with file field and data', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+      ],
+    });
+    const data = { logo: { fileId: '123' } };
+
+    const expectedResult = { logo: { fileId: '123' } };
+
+    const result = composeInitialValues(thingConfig, data);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with file array field', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+
+    const expectedResult = { pictures: [] };
+
+    const result = composeInitialValues(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create the initial values with file array field with data', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+      ],
+    };
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      embeddedFields: [
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+      ],
+    });
+    const data = { pictures: [{ fileId: '111' }, { fileId: '222' }] };
+
+    const expectedResult = { pictures: [{ fileId: '111' }, { fileId: '222' }] };
+
+    const result = composeInitialValues(thingConfig, data);
+    expect(result).toEqual(expectedResult);
+  });
 });

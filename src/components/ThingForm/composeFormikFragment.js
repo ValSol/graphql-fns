@@ -49,7 +49,7 @@ const composeFields = (
         const touch = objectGet(touched, path);
         const error = objectGet(errors, path);
         const error2 = typeof error === 'string' ? error : undefined; // for embedded fields
-        if (flatFormikField.kind === 'embeddedFields') {
+        if (flatFormikField.kind === 'embeddedFields' || flatFormikField.kind === 'fileFields') {
           const {
             attributes: { config },
             child,
@@ -231,10 +231,6 @@ const composeFields = (
           case 'intFields':
             // eslint-disable-next-line react/jsx-props-no-spreading
             return <Field {...fieldProps} style={{ marginRight: 16 }} type="number" />;
-
-          case 'fileFields':
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            return <Field {...fieldProps} fullWidth />;
 
           case 'floatFields':
             // eslint-disable-next-line react/jsx-props-no-spreading

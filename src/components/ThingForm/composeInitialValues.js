@@ -24,6 +24,15 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
           : composeInitialValues(config, data[name]); // eslint-disable-line no-param-reassign
         break;
 
+      case 'fileFields':
+        const { config: config2 } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
+        prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
+          ? data[name]
+            ? data[name].map(dataItem => composeInitialValues(config2, dataItem))
+            : []
+          : composeInitialValues(config2, data[name]); // eslint-disable-line no-param-reassign
+        break;
+
       case 'booleanFields':
         const { default: defaultValue } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         // eslint-disable-next-line no-param-reassign

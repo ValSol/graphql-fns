@@ -47,6 +47,19 @@ describe('arrangeFormFields', () => {
     ],
   };
 
+  const imageConfig: ThingConfig = {
+    name: 'Image',
+    embedded: true,
+    textFields: [
+      {
+        name: 'fileId',
+      },
+      {
+        name: 'address',
+      },
+    ],
+  };
+
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Example',
@@ -77,20 +90,6 @@ describe('arrangeFormFields', () => {
       {
         name: 'intField2',
         default: 10,
-      },
-    ],
-
-    fileFields: [
-      {
-        name: 'fileField',
-        generalName: 'generalFile',
-        fileType: 'fileType',
-      },
-      {
-        name: 'fileField2',
-        generalName: 'generalFile',
-        fileType: 'fileType',
-        default: 'fileField/default/value',
       },
     ],
 
@@ -173,6 +172,18 @@ describe('arrangeFormFields', () => {
         config: thingConfig,
       },
     ],
+
+    fileFields: [
+      {
+        name: 'logo',
+        config: imageConfig,
+      },
+      {
+        name: 'pictures',
+        array: true,
+        config: imageConfig,
+      },
+    ],
   });
 
   test('should arrange fields', () => {
@@ -192,9 +203,6 @@ describe('arrangeFormFields', () => {
       // intFields
       { name: 'intField' },
       { name: 'intField2' },
-      // fileFields
-      { name: 'fileField' },
-      { name: 'fileField2' },
       // floatFields
       { name: 'floatField' },
       { name: 'floatField2' },
@@ -205,6 +213,9 @@ describe('arrangeFormFields', () => {
       { name: 'embeddedField1' },
       { name: 'embeddedField2' },
       { name: 'embeddedField3' },
+      // fileFields
+      { name: 'logo' },
+      { name: 'pictures' },
       // duplexFields
       { name: 'parent' },
       { name: 'children' },

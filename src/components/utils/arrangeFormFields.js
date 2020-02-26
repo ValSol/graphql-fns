@@ -52,14 +52,6 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
       return prev;
     }, result);
   }
-
-  if (fileFields) {
-    fileFields.reduce((prev, { name }) => {
-      prev.push({ name });
-      return prev;
-    }, result);
-  }
-
   if (floatFields) {
     floatFields.reduce((prev, { name }) => {
       prev.push({ name });
@@ -74,6 +66,12 @@ const arrangeFormFields = (thingConfig: ThingConfig): Array<FormField> => {
   }
   if (embeddedFields) {
     embeddedFields.reduce((prev, { name }) => {
+      prev.push({ name });
+      return prev;
+    }, result);
+  }
+  if (fileFields) {
+    fileFields.reduce((prev, { name }) => {
       prev.push({ name });
       return prev;
     }, result);

@@ -70,14 +70,6 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
           }
           break;
 
-        case 'fileFields':
-          if (array) {
-            prev[key] = item[key].join(', '); // eslint-disable-line no-param-reassign
-          } else {
-            prev[key] = item[key]; // eslint-disable-line no-param-reassign
-          }
-          break;
-
         case 'floatFields':
           if (array) {
             // eslint-disable-next-line no-param-reassign
@@ -139,6 +131,15 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
             prev[key] = item[key].map(() => 'embedded').join(', ');
           } else {
             prev[key] = 'embedded'; // eslint-disable-line no-param-reassign
+          }
+          break;
+
+        case 'fileFields':
+          if (array) {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = item[key].map(() => 'file').join(', ');
+          } else {
+            prev[key] = 'file'; // eslint-disable-line no-param-reassign
           }
           break;
 

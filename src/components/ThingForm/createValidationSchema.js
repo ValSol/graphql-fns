@@ -68,6 +68,10 @@ const createValidationSchema = (
         const { config } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         prev[name] = createValidationSchema(config, apolloClient, id); // eslint-disable-line no-param-reassign
         break;
+      case 'fileFields':
+        const { config: config2 } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
+        prev[name] = createValidationSchema(config2, apolloClient, id); // eslint-disable-line no-param-reassign
+        break;
       case 'textFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
         break;
@@ -76,9 +80,6 @@ const createValidationSchema = (
         break;
       case 'intFields':
         prev[name] = intSchema(); // eslint-disable-line no-param-reassign
-        break;
-      case 'fileFields':
-        prev[name] = yup.string(); // eslint-disable-line no-param-reassign
         break;
       case 'floatFields':
         prev[name] = floatSchema(); // eslint-disable-line no-param-reassign
@@ -134,7 +135,6 @@ const createValidationSchema = (
     if (
       fieldsObject[name].kind === 'dateTimeFields' ||
       fieldsObject[name].kind === 'intFields' ||
-      fieldsObject[name].kind === 'fileFields' ||
       fieldsObject[name].kind === 'floatFields' ||
       fieldsObject[name].kind === 'textFields'
     ) {
@@ -176,7 +176,10 @@ const createValidationSchema = (
       });
     }
 
-    if (array && !['booleanFields', 'embeddedFields', 'geospatialFields'].includes(kind)) {
+    if (
+      array &&
+      !['booleanFields', 'embeddedFields', 'fileFields', 'geospatialFields'].includes(kind)
+    ) {
       prev[name] = yup.array().of(required ? prev[name] : prev[name].required('Required')); // eslint-disable-line no-param-reassign
     } else if (array) {
       prev[name] = yup.array().of(prev[name]); // eslint-disable-line no-param-reassign
