@@ -49,15 +49,6 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
     }, result);
   }
 
-  if (fileFields) {
-    fileFields.reduce((prev, { name }) => {
-      if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
-      }
-      return prev;
-    }, result);
-  }
-
   if (intFields) {
     intFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
@@ -96,6 +87,21 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
 
   if (embeddedFields) {
     embeddedFields.reduce((prev, { name, config }) => {
+      if (includeField(name, include, exclude)) {
+        prev.push(`${'  '.repeat(shift)}${name} {`);
+        const nextInclude = include && include[name];
+        const nextExclude = exclude && exclude[name];
+        const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
+        // eslint-disable-next-line prefer-spread
+        prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push(`${'  '.repeat(shift)}}`);
+      }
+      return prev;
+    }, result);
+  }
+
+  if (fileFields) {
+    fileFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
         prev.push(`${'  '.repeat(shift)}${name} {`);
         const nextInclude = include && include[name];

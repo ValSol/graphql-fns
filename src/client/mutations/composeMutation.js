@@ -2,13 +2,15 @@
 import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
+import composeConcatenateThingMutationArgs from './composeConcatenateThingMutationArgs';
 import composeCreateManyThingsMutationArgs from './composeCreateManyThingsMutationArgs';
-import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
 import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
-
+import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
 import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
+import composeUploadFileToThingMutationResolver from './composeUploadFileToThingMutationResolver';
+import composeUploadManyFilesToThingMutationResolver from './composeUploadManyFilesToThingMutationResolver';
 
 const composeMutation = (
   mutationName: string,
@@ -35,8 +37,20 @@ const composeMutation = (
       head = composeDeleteThingMutationArgs(thingConfig);
       break;
 
+    case 'concatenateThing':
+      head = composeConcatenateThingMutationArgs(thingConfig);
+      break;
+
     case 'updateThing':
       head = composeUpdateThingMutationArgs(thingConfig);
+      break;
+
+    case 'uploadFileToThing':
+      head = composeUploadFileToThingMutationResolver(thingConfig);
+      break;
+
+    case 'uploadManyFilesToThing':
+      head = composeUploadManyFilesToThingMutationResolver(thingConfig);
       break;
 
     default:

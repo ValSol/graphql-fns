@@ -187,7 +187,7 @@ const composeGqlResolvers = (
           );
           if (uploadManyFilesToThingMutationResolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`uploadManyFileTo${name}`] = uploadManyFilesToThingMutationResolver;
+            prev.Mutation[`uploadManyFilesTo${name}`] = uploadManyFilesToThingMutationResolver;
           }
         }
 
