@@ -4,12 +4,11 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 import checkInventory from '../../utils/checkInventory';
 import executeAuthorisation from '../executeAuthorisation';
 import createConcatenateThingMutationResolver from './createConcatenateThingMutationResolver';
-import createUpdateThingMutationResolver from './createUpdateThingMutationResolver';
 
 type Args = { file: Object, options: { target: string }, whereOne: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createUploadFileToThingMutationResolver = (
+const createUploadManyFilesToThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -18,15 +17,8 @@ const createUploadFileToThingMutationResolver = (
   const { name } = thingConfig;
   const { saveFiles } = serversideConfig;
   if (!saveFiles) throw new TypeError('"saveFiles" callback have to be defined!');
-  const inventoryChain = ['Mutation', 'uploadFileToThing', name];
+  const inventoryChain = ['Mutation', 'uploadManyFilesToThing', name];
   if (!checkInventory(inventoryChain, inventory)) return null;
-
-  const updateThingMutationResolver = createUpdateThingMutationResolver(
-    thingConfig,
-    generalConfig,
-    serversideConfig,
-  );
-  if (!updateThingMutationResolver) return null;
 
   const concatenateThingMutationResolver = createConcatenateThingMutationResolver(
     thingConfig,
@@ -43,31 +35,16 @@ const createUploadFileToThingMutationResolver = (
       serversideConfig,
     });
 
-    const {
-      whereOne,
-      options: { target },
-    } = args;
+    const { whereOne } = args;
 
-    const { fileFields } = thingConfig;
-
-    const targetFieldObject = fileFields && fileFields.find(({ name: name2 }) => name2 === target);
-
-    if (!targetFieldObject) {
-      throw new TypeError(`Invalid target option "${target}" for upload file(s)`);
-    }
-
-    const isArray = targetFieldObject.array;
-
-    // to get data such as: { logo: { fileId: '', desktop: '/uploaded/cat.png', mobile: '/uploaded/mobile/cat.png'} }
+    // to get data such as: { pictures: [{ fileId: '', desktop: '/uploaded/pic1.png', mobile: '/uploaded/mobile/pic1.png'}] }
     const data: { [fieldName: string]: any } = await saveFiles({
       inventoryChain,
       resolverArgs,
       serversideConfig,
     });
 
-    const thing = isArray
-      ? await concatenateThingMutationResolver(parent, { whereOne, data }, context, info)
-      : await updateThingMutationResolver(parent, { whereOne, data }, context, info);
+    const thing = await concatenateThingMutationResolver(parent, { whereOne, data }, context, info);
 
     return thing;
   };
@@ -75,4 +52,4 @@ const createUploadFileToThingMutationResolver = (
   return resolver;
 };
 
-export default createUploadFileToThingMutationResolver;
+export default createUploadManyFilesToThingMutationResolver;

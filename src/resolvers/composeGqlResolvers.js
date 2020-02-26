@@ -8,7 +8,7 @@ import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import createThingConcatenateInputType from '../types/inputs/createThingConcatenateInputType';
 import createFileOfThingOptionsInputType from '../types/inputs/createFileOfThingOptionsInputType';
-// import createManyFilesOfThingOptionsInputType from '../types/inputs/createManyFilesOfThingOptionsInputType';
+import createManyFilesOfThingOptionsInputType from '../types/inputs/createManyFilesOfThingOptionsInputType';
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
@@ -22,7 +22,7 @@ import createConcatenateThingMutationResolver from './mutations/createConcatenat
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
 import createUploadFileToThingMutationResolver from './mutations/createUploadFileToThingMutationResolver';
-// import createUploadManyFilesToThingMutationResolver from './mutations/createUploadManyFilesToThingMutationResolver';
+import createUploadManyFilesToThingMutationResolver from './mutations/createUploadManyFilesToThingMutationResolver';
 
 import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
@@ -176,7 +176,6 @@ const composeGqlResolvers = (
           }
         }
 
-        /*
         const manyFilesOfThingOptionsInputType = createManyFilesOfThingOptionsInputType(
           thingConfig,
         );
@@ -188,10 +187,10 @@ const composeGqlResolvers = (
           );
           if (uploadManyFilesToThingMutationResolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`uploadFileTo${name}`] = uploadManyFilesToThingMutationResolver;
+            prev.Mutation[`uploadManyFileTo${name}`] = uploadManyFilesToThingMutationResolver;
           }
         }
-*/
+
         const customMutationNames = Object.keys(customMutation);
 
         customMutationNames.forEach(customName => {

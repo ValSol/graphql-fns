@@ -8,7 +8,6 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
     dateTimeFields,
     duplexFields,
     enumFields,
-    fileFields,
     floatFields,
     intFields,
     relationalFields,
@@ -41,13 +40,6 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   if (enumFields) {
     enumFields.reduce((prev, { name, index }) => {
       if (index) prev[name] = 'enumFields'; // eslint-disable-line no-param-reassign
-      return prev;
-    }, result);
-  }
-
-  if (fileFields) {
-    fileFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'fileFields'; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }

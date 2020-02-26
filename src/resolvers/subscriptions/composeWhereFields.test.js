@@ -75,25 +75,6 @@ describe('composeWhereFields', () => {
           unique: true,
         },
       ],
-      fileFields: [
-        {
-          name: 'fileFieldIndexed',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          index: true,
-        },
-        {
-          name: 'fileField',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-        },
-        {
-          name: 'fileFieldUnique',
-          generalName: 'generalFile',
-          fileType: 'fileType',
-          unique: true,
-        },
-      ],
       floatFields: [
         {
           name: 'floatIndexed',
@@ -139,7 +120,6 @@ describe('composeWhereFields', () => {
       textFieldIndexed: 'textFields',
       dateTimeFieldIndexed: 'dateTimeFields',
       intFieldIndexed: 'intFields',
-      fileFieldIndexed: 'fileFields',
       floatIndexed: 'floatFields',
       relationalFieldIndexed: 'relationalFields',
       duplexFieldIndexed: 'duplexFields',
