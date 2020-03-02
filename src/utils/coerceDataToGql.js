@@ -12,12 +12,15 @@ const coerceDataToGql = (
   data: Object,
   prevData: null | Object,
   thingConfig: ThingConfig,
+  skipUnusedFields?: boolean, // use when import data from sourse with extra fields
 ): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
   const { id, createdAt, updatedAt, ...rest } = data;
 
   const result = Object.keys(rest).reduce((prev, key) => {
+    if (skipUnusedFields && !fieldsObject[key]) return prev;
+
     const {
       attributes: { array },
       kind,

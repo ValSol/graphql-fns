@@ -84,7 +84,10 @@ const createImportThingsMutationResolver = (
       originalData = JSON.parse(content);
     }
 
-    const data = originalData.map(item => coerceDataToGql(item, null, thingConfig));
+    const skipUnusedFields = true;
+    const data = originalData.map(item =>
+      coerceDataToGql(item, null, thingConfig, skipUnusedFields),
+    );
 
     // code beneath is identical to code from createCreateManyThingsMutationResolver
 
@@ -115,7 +118,7 @@ const createImportThingsMutationResolver = (
       overallCore.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}Thing`, thingSchema2);
+        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
         promises.push(Thing2.bulkWrite(bulkItems));
       });
 
@@ -123,7 +126,7 @@ const createImportThingsMutationResolver = (
     }
 
     const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${name}Thing`, thingSchema);
+    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 

@@ -38,7 +38,7 @@ const createConcatenateThingMutationResolver = (
     const { mongooseConn } = context;
 
     const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${name}Thing`, thingSchema);
+    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;
@@ -75,7 +75,7 @@ const createConcatenateThingMutationResolver = (
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}Thing`, thingSchema2);
+        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
         promises.push(Thing2.bulkWrite(bulkItems));
       });
       await Promise.all(promises);

@@ -24,16 +24,18 @@ const createExportFile = async (
 ): Promise<Blob | null> => {
   const { name } = thingConfig;
 
+  let content;
   let type;
-  let content = items.map(item => coerceDataFromGql(item, thingConfig, true));
   let fileExtension;
   if (options && options.format === 'csv') {
+    const data = items.map(item => coerceDataFromGql(item, thingConfig, true));
+    content = await csvStringify2(data);
     type = 'text/csv';
-    content = await csvStringify2(content);
     fileExtension = 'csv';
   } else {
+    const data = items.map(item => coerceDataFromGql(item, thingConfig, true, true));
+    content = JSON.stringify(data, null, ' ');
     type = 'application/json';
-    content = JSON.stringify(content, null, ' ');
     fileExtension = 'json';
   }
 

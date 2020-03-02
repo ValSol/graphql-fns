@@ -44,7 +44,7 @@ const createUpdateThingMutationResolver = (
 
     const { name: thingName, duplexFields } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${thingName}Thing`, thingSchema);
+    const Thing = mongooseConn.model(`${thingName}_Thing`, thingSchema);
 
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce((prev, { name: name2 }) => {
@@ -78,7 +78,7 @@ const createUpdateThingMutationResolver = (
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}Thing`, thingSchema2);
+        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
         promises.push(Thing2.bulkWrite(bulkItems));
       });
       await Promise.all(promises);
