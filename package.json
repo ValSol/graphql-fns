@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.316",
+  "version": "0.1.2-beta.317",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -51,6 +51,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.38",
     "@material-ui/styles": "^4.8.2",
+    "apollo-cache-inmemory": "^1.6.5",
     "apollo-server": "^2.9.15",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -94,6 +95,7 @@
     "@material-ui/icons": "^4.x",
     "@material-ui/lab": "^4.x",
     "@material-ui/styles": "^4.x",
+    "apollo-cache-inmemory": "^1.x",
     "formik": "1.5.x",
     "formik-material-ui": "0.0.x",
     "graphql": "14.x",

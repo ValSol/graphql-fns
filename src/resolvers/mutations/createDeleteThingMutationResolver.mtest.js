@@ -155,9 +155,9 @@ describe('createDeleteThingMutationResolver', () => {
     } = createdPerson;
 
     const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('PersonThing', personSchema);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
     const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('PlaceThing', placeSchema);
+    const Place = mongooseConn.model('Place_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);

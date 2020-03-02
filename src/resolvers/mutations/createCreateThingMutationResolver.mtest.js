@@ -256,7 +256,7 @@ describe('createCreateThingMutationResolver', () => {
     const { friend: friendId, friends: friendIds } = createdPerson2;
 
     const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person2Thing', personSchema);
+    const Person = mongooseConn.model('Person2_Thing', personSchema);
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data2.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data2.friend.create.lastName);
@@ -400,9 +400,9 @@ describe('createCreateThingMutationResolver', () => {
     } = createdPerson;
 
     const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person3Thing', personSchema);
+    const Person = mongooseConn.model('Person3_Thing', personSchema);
     const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place2Thing', placeSchema);
+    const Place = mongooseConn.model('Place2_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -586,9 +586,9 @@ describe('createCreateThingMutationResolver', () => {
     const { friend: friendId, _id, location: locationId, locations: locationIds } = createdPerson;
 
     const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person4Thing', personSchema);
+    const Person = mongooseConn.model('Person4_Thing', personSchema);
     const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place3Thing', placeSchema);
+    const Place = mongooseConn.model('Place3_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
