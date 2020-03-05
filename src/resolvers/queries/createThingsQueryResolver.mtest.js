@@ -120,6 +120,8 @@ describe('createThingQueryResolver', () => {
     const restaurantConfig: ThingConfig = {};
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      booleanFields: [{ name: 'recommended', index: true }],
+
       textFields: [{ name: 'name' }],
       relationalFields: [
         {
@@ -191,11 +193,13 @@ describe('createThingQueryResolver', () => {
             name: 'Satori Lounge',
             point: { lng: 50.43673, lat: 30.515007 },
             point2: { lng: 50.43673, lat: 30.515007 },
+            recommended: true,
           },
           {
             name: 'NAM',
             point: { lng: 50.436149, lat: 30.515785 },
             point2: { lng: 50.436149, lat: 30.515785 },
+            recommended: true,
           },
         ],
       },
@@ -227,16 +231,13 @@ describe('createThingQueryResolver', () => {
     expect(restaurants2[1].name).toEqual('Mama Manana');
     expect(restaurants2[2].name).toEqual('Satori Lounge');
 
-    const near2: NearInput = {
-      geospatialField: 'point2',
-      coordinates: { lng: 50.435766, lat: 30.515742 },
-      maxDistance: 150,
+    const where = {
+      recommended: true,
     };
-    const restaurants3 = await Restaurants(null, { near: near2 }, { mongooseConn, pubsub }, info2);
-    expect(restaurants3.length).toBe(3);
+    const restaurants3 = await Restaurants(null, { near, where }, { mongooseConn, pubsub }, info2);
+    expect(restaurants3.length).toBe(2);
     expect(restaurants3[0].name).toEqual('NAM');
-    expect(restaurants3[1].name).toEqual('Mama Manana');
-    expect(restaurants3[2].name).toEqual('Satori Lounge');
+    expect(restaurants3[1].name).toEqual('Satori Lounge');
   });
 
   test('should create query things resolver for thing sorted by several fields', async () => {

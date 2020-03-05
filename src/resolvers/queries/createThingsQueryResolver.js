@@ -43,11 +43,13 @@ const createThingsQueryResolver = (
     const thingSchema = createThingSchema(thingConfig, enums);
 
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    const composedNear = near && composeNearInput(near);
-    const conditions = composedNear || where || {};
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
-    let query = Thing.find(conditions, projection, { lean: true });
+    let query = Thing.find({}, projection, { lean: true });
+
+    if (near) query = query.where(composeNearInput(near));
+
+    if (where) query = query.where(where);
 
     if (sort) {
       const { sortBy } = sort;
