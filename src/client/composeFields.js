@@ -3,8 +3,29 @@ import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
 
 // accessorial function
 const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
-  (!include || Object.keys(include).includes(name)) &&
-  (!exclude || !(Object.keys(exclude).includes(name) && exclude[name] === null));
+  (!include ||
+    Object.keys(include)
+      .map(
+        key =>
+          key
+            .trim()
+            .split(/\s+/)
+            .slice(-1)[0],
+      )
+      .includes(name)) &&
+  (!exclude || !(exclude[name] === null));
+
+const findNameWithAlias = (name: string, include: void | Object): string =>
+  include
+    ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs' doesn't know about that
+      Object.keys(include).find(
+        key =>
+          key
+            .trim()
+            .split(/\s+/)
+            .slice(-1)[0] === name,
+      )
+    : name;
 
 const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): Array<string> => {
   const {
@@ -34,7 +55,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (textFields) {
     textFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -43,7 +65,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (dateTimeFields) {
     dateTimeFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -52,7 +75,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (intFields) {
     intFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -61,7 +85,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (floatFields) {
     floatFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -70,7 +95,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (booleanFields) {
     booleanFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -79,7 +105,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (enumFields) {
     enumFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name}`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
       }
       return prev;
     }, result);
@@ -88,8 +115,9 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (embeddedFields) {
     embeddedFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
-        const nextInclude = include && include[name];
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
         // eslint-disable-next-line prefer-spread
@@ -103,8 +131,9 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (fileFields) {
     fileFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
-        const nextInclude = include && include[name];
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
         // eslint-disable-next-line prefer-spread
@@ -118,8 +147,9 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (relationalFields && depth) {
     relationalFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
-        const nextInclude = include && include[name];
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = {
           shift: shift + 1,
@@ -138,7 +168,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (relationalFields && !depth) {
     relationalFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         prev.push(`${'  '.repeat(shift)}  id`);
         prev.push(`${'  '.repeat(shift)}}`);
       }
@@ -149,8 +180,9 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (duplexFields && depth) {
     duplexFields.reduce((prev, { name, config }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
-        const nextInclude = include && include[name];
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = {
           shift: shift + 1,
@@ -169,7 +201,8 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (duplexFields && !depth) {
     duplexFields.reduce((prev, { name }) => {
       if (includeField(name, include, exclude)) {
-        prev.push(`${'  '.repeat(shift)}${name} {`);
+        const nameWithAlias = findNameWithAlias(name, include);
+        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         prev.push(`${'  '.repeat(shift)}  id`);
         prev.push(`${'  '.repeat(shift)}}`);
       }
@@ -180,9 +213,10 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name, geospatialType }) => {
       if (includeField(name, include, exclude)) {
+        const nameWithAlias = findNameWithAlias(name, include);
         if (geospatialType === 'Point') {
-          prev.push(`${'  '.repeat(shift)}${name} {`);
-          const nestedInculde = include && include[name];
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+          const nestedInculde = include && include[nameWithAlias];
           const nestedExclude = exclude && exclude[name];
           if (includeField('lng', nestedInculde, nestedExclude)) {
             prev.push(`${'  '.repeat(shift + 1)}lng`);
@@ -193,9 +227,13 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
           prev.push(`${'  '.repeat(shift)}}`);
         }
         if (geospatialType === 'Polygon') {
-          prev.push(`${'  '.repeat(shift)}${name} {`);
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
           const includeExteralRing =
-            includeField('externalRing', include && include[name], exclude && exclude[name]) &&
+            includeField(
+              'externalRing',
+              include && include[nameWithAlias],
+              exclude && exclude[name],
+            ) &&
             includeField(
               'ring',
               include && include[name] && include[name].externalRing,
@@ -238,7 +276,11 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
             prev.push(`${'  '.repeat(shift + 1)}}`);
           }
           const includeInternalRings =
-            includeField('internalRings', include && include[name], exclude && exclude[name]) &&
+            includeField(
+              'internalRings',
+              include && include[nameWithAlias],
+              exclude && exclude[name],
+            ) &&
             includeField(
               'ring',
               include && include[name] && include[name].internalsRing,

@@ -123,6 +123,49 @@ describe('composeFields', () => {
       expect(result).toEqual(expectedResult);
     });
 
+    test('should compose not nested fields with include aliases', () => {
+      const include = {
+        'textFieldAlias: textField': null,
+        'dateTimeFieldAlias: dateTimeField': null,
+        'intFieldAlias: intField': null,
+        'floatFieldAlias: floatField': null,
+        'booleanFieldAlias: booleanField': null,
+        'enumFieldAlias: enumField': null,
+        'geospatialPointAlias: geospatialPoint': null,
+        'geospatialPolygonAlias: geospatialPolygon': null,
+      };
+      const options: ClientFieldsOptions = { shift: 0, include };
+      const expectedResult = [
+        'textFieldAlias: textField',
+        'dateTimeFieldAlias: dateTimeField',
+        'intFieldAlias: intField',
+        'floatFieldAlias: floatField',
+        'booleanFieldAlias: booleanField',
+        'enumFieldAlias: enumField',
+        'geospatialPointAlias: geospatialPoint {',
+        '  lng',
+        '  lat',
+        '}',
+        'geospatialPolygonAlias: geospatialPolygon {',
+        '  externalRing {',
+        '    ring {',
+        '      lng',
+        '      lat',
+        '    }',
+        '  }',
+        '  internalRings {',
+        '    ring {',
+        '      lng',
+        '      lat',
+        '    }',
+        '  }',
+        '}',
+      ];
+
+      const result = composeFields(thingConfig, options);
+      expect(result).toEqual(expectedResult);
+    });
+
     test('should compose not nested fields with include option 1', () => {
       const include = {
         textField: null,
@@ -395,6 +438,49 @@ describe('composeFields', () => {
         },
       ],
     };
+
+    test('should compose embedded fields with alias', () => {
+      const include = { 'embeddedField1Alias: embeddedField1': null };
+      const options: ClientFieldsOptions = { shift: 0, include };
+      const expectedResult = [
+        'embeddedField1Alias: embeddedField1 {',
+        '  textField1',
+        '  embeddedField2 {',
+        '    textField2',
+        '    embeddedField3 {',
+        '      textField3',
+        '    }',
+        '  }',
+        '}',
+      ];
+
+      const result = composeFields(exampleConfig, options);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should compose embedded fields with alias 2', () => {
+      const include = {
+        embeddedField1: {
+          'textField1Alias: textField1': null,
+          'embeddedField2Alias: embeddedField2': null,
+        },
+      };
+      const options: ClientFieldsOptions = { shift: 0, include };
+      const expectedResult = [
+        'embeddedField1 {',
+        '  textField1Alias: textField1',
+        '  embeddedField2Alias: embeddedField2 {',
+        '    textField2',
+        '    embeddedField3 {',
+        '      textField3',
+        '    }',
+        '  }',
+        '}',
+      ];
+
+      const result = composeFields(exampleConfig, options);
+      expect(result).toEqual(expectedResult);
+    });
 
     test('should compose embedded fields', () => {
       const options: ClientFieldsOptions = { shift: 0 };
@@ -868,6 +954,52 @@ describe('composeFields', () => {
         '  firstName',
         '}',
         'children {',
+        '  secondName',
+        '}',
+      ];
+
+      const result = composeFields(personConfig, options);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should compose relatioanl and duplex fields with depth: 0 & include option with aliases', () => {
+      const include = {
+        id: null,
+        'friendsAlias: friends': null,
+        'parentAlias: parent': null,
+      };
+      const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
+      const expectedResult = [
+        'id',
+        'friendsAlias: friends {',
+        '  id',
+        '}',
+        'parentAlias: parent {',
+        '  id',
+        '}',
+      ];
+
+      const result = composeFields(personConfig, options);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should compose relatioanl and duplex fields with depth: 2 & include option with aliases', () => {
+      const include = {
+        id: null,
+        'friendsAlias: friends': { id: null },
+        'parentAlias: parent': { firstName: null },
+        'childrenAlias: children': { secondName: null },
+      };
+      const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
+      const expectedResult = [
+        'id',
+        'friendsAlias: friends {',
+        '  id',
+        '}',
+        'parentAlias: parent {',
+        '  firstName',
+        '}',
+        'childrenAlias: children {',
         '  secondName',
         '}',
       ];
