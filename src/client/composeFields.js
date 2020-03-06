@@ -17,7 +17,7 @@ const includeField = (name: string, include: void | Object, exclude: void | Obje
 
 const findNameWithAlias = (name: string, include: void | Object): string =>
   include
-    ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs' doesn't know about that
+    ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs doesn't know about that
       Object.keys(include).find(
         key =>
           key
