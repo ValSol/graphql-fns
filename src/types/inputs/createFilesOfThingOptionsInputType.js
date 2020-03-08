@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createFileOfThingOptionsInputType = (thingConfig: ThingConfig): string => {
+const createFilesOfThingOptionsInputType = (thingConfig: ThingConfig): string => {
   const { fileFields, name } = thingConfig;
 
   const fieldLines = fileFields ? fileFields.map(({ name: fieldName }) => `  ${fieldName}`) : [];
@@ -13,9 +13,10 @@ const createFileOfThingOptionsInputType = (thingConfig: ThingConfig): string => 
   return `enum ${name}FileNamesEnum {
 ${fieldLines.join('\n')}
 }
-input FileOf${name}OptionsInput {
-  target: ${name}FileNamesEnum!
+input FilesOf${name}OptionsInput {
+  targets: [${name}FileNamesEnum!]!
+  counts: [Int!]!
 }`;
 };
 
-export default createFileOfThingOptionsInputType;
+export default createFilesOfThingOptionsInputType;

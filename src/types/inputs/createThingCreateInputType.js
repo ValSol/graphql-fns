@@ -74,7 +74,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
       (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${relationalThingName}${
-            array ? 'CreateOrConcatenateChildrenInput' : 'CreateChildInput'
+            array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
           }${required ? '!' : ''}`,
         );
         return prev;
@@ -89,7 +89,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
       (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${relationalThingName}${
-            array ? 'CreateOrConcatenateChildrenInput' : 'CreateChildInput'
+            array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
           }${required ? '!' : ''}`,
         );
         return prev;
@@ -142,7 +142,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   connect: ID
   create: ${name}CreateInput
 }
-input ${name}CreateOrConcatenateChildrenInput {
+input ${name}CreateOrPushChildrenInput {
   connect: [ID!]
   create: [${name}CreateInput!]
 }`);

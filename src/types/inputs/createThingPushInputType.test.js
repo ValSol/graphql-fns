@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingCreateInputType from './createThingCreateInputType';
+import createPushIntoThingInputType from './createPushIntoThingInputType';
 
-describe('createThingCreateInputType', () => {
+describe('createPushIntoThingInputType', () => {
   test('should create thing input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -33,23 +33,35 @@ describe('createThingCreateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  textField1: String
-  textField2: String
-  textField3: String!
+    const expectedResult = `input PushIntoExampleInput {
   textField4: [String!]
-  textField5: [String!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
+  textField5: [String!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type with only scalar text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+        {
+          name: 'textField2',
+          default: 'default text',
+        },
+        {
+          name: 'textField3',
+          required: true,
+        },
+      ],
+    };
+    const expectedResult = '';
+
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -84,22 +96,12 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     });
-    const expectedResult = `input PersonCreateInput {
-  friends: PersonCreateOrPushChildrenInput!
+    const expectedResult = `input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -116,14 +118,15 @@ input PersonCreateOrPushChildrenInput {
         {
           name: 'province',
         },
+        {
+          name: 'tags',
+          array: true,
+        },
       ],
     };
-    const expectedResult = `input AddressCreateInput {
-  country: String!
-  province: String
-}`;
+    const expectedResult = '';
 
-    const result = createThingCreateInputType(addressConfig);
+    const result = createPushIntoThingInputType(addressConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -177,24 +180,12 @@ input PersonCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input PersonCreateInput {
-  firstName: String!
-  lastName: String!
-  location: AddressCreateInput!
-  locations: [AddressCreateInput!]!
-  place: AddressCreateInput
+    const expectedResult = `input PushIntoPersonInput {
+  locations: [AddressCreateInput!]
   places: [AddressCreateInput!]
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with duplex fields', () => {
@@ -256,24 +247,12 @@ input PersonCreateOrPushChildrenInput {
         },
       ],
     });
-    const expectedResult = `input PersonCreateInput {
-  firstName: String!
-  lastName: String!
-  friends: PersonCreateOrPushChildrenInput!
+    const expectedResult = `input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -323,26 +302,14 @@ input PersonCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  position: GeospatialPointInput!
-  precedingPosition: GeospatialPointInput
-  favoritePositions: [GeospatialPointInput!]!
+    const expectedResult = `input PushIntoExampleInput {
+  favoritePositions: [GeospatialPointInput!]
   worstPositions: [GeospatialPointInput!]
-  area: GeospatialPolygonInput!
-  precedingArea: GeospatialPolygonInput
-  favoriteAreas: [GeospatialPolygonInput!]!
+  favoriteAreas: [GeospatialPolygonInput!]
   worstAreas: [GeospatialPolygonInput!]
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -372,22 +339,12 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  field1: WeekdaysEnumeration
+    const expectedResult = `input PushIntoExampleInput {
   field2: [CuisinesEnumeration!]
-  field3: WeekdaysEnumeration!
-  field4: [CuisinesEnumeration!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
+  field4: [CuisinesEnumeration!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -418,23 +375,12 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  intField1: Int
-  intField2: Int
-  intField3: Int!
+    const expectedResult = `input PushIntoExampleInput {
   intField4: [Int!]
-  intField5: [Int!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
+  intField5: [Int!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -465,23 +411,12 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  floatField1: Float
-  floatField2: Float
-  floatField3: Float!
+    const expectedResult = `input PushIntoExampleInput {
   floatField4: [Float!]
-  floatField5: [Float!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
+  floatField5: [Float!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -512,23 +447,12 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
-  booleanField1: Boolean
-  booleanField2: Boolean
-  booleanField3: Boolean!
+    const expectedResult = `input PushIntoExampleInput {
   booleanField4: [Boolean!]
-  booleanField5: [Boolean!]!
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
+  booleanField5: [Boolean!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -546,12 +470,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ImageCreateInput {
-  fileId: String!
-  comment: String
-}`;
+    const expectedResult = '';
 
-    const result = createThingCreateInputType(imageConfig);
+    const result = createPushIntoThingInputType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -601,23 +522,12 @@ input ExampleCreateOrPushChildrenInput {
       ],
     });
 
-    const expectedResult = `input ExampleCreateInput {
-  textField: String
-  logo: ImageCreateInput!
-  hero: ImageCreateInput
-  pictures: [ImageCreateInput!]!
+    const expectedResult = `input PushIntoExampleInput {
+  pictures: [ImageCreateInput!]
   photos: [ImageCreateInput!]
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
-    const result = createThingCreateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

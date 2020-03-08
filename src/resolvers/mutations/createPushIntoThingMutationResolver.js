@@ -11,14 +11,14 @@ import updatePeriphery from './updatePeriphery';
 type Args = { whereOne: Object, data: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createConcatenateThingMutationResolver = (
+const createPushIntoThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  const inventoryChain = ['Mutation', 'concatenateThing', name];
+  const inventoryChain = ['Mutation', 'pushIntoThing', name];
   if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
@@ -110,4 +110,4 @@ const createConcatenateThingMutationResolver = (
   return resolver;
 };
 
-export default createConcatenateThingMutationResolver;
+export default createPushIntoThingMutationResolver;

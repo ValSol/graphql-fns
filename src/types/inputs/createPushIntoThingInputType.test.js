@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingConcatenateInputType from './createThingConcatenateInputType';
+import createPushIntoThingInputType from './createPushIntoThingInputType';
 
-describe('createThingConcatenateInputType', () => {
+describe('createPushIntoThingInputType', () => {
   test('should create thing input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -33,12 +33,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   textField4: [String!]
   textField5: [String!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -61,7 +61,7 @@ describe('createThingConcatenateInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -96,12 +96,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonConcatenateInput {
-  friends: PersonCreateOrConcatenateChildrenInput
-  enemies: PersonCreateOrConcatenateChildrenInput
+    const expectedResult = `input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
 }`;
 
-    const result = createThingConcatenateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -126,7 +126,7 @@ describe('createThingConcatenateInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createThingConcatenateInputType(addressConfig);
+    const result = createPushIntoThingInputType(addressConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -180,12 +180,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PersonConcatenateInput {
+    const expectedResult = `input PushIntoPersonInput {
   locations: [AddressCreateInput!]
   places: [AddressCreateInput!]
 }`;
 
-    const result = createThingConcatenateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with duplex fields', () => {
@@ -247,12 +247,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonConcatenateInput {
-  friends: PersonCreateOrConcatenateChildrenInput
-  enemies: PersonCreateOrConcatenateChildrenInput
+    const expectedResult = `input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
 }`;
 
-    const result = createThingConcatenateInputType(personConfig);
+    const result = createPushIntoThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -302,14 +302,14 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   favoritePositions: [GeospatialPointInput!]
   worstPositions: [GeospatialPointInput!]
   favoriteAreas: [GeospatialPolygonInput!]
   worstAreas: [GeospatialPolygonInput!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -339,12 +339,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   field2: [CuisinesEnumeration!]
   field4: [CuisinesEnumeration!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -375,12 +375,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   intField4: [Int!]
   intField5: [Int!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -411,12 +411,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   floatField4: [Float!]
   floatField5: [Float!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -447,12 +447,12 @@ describe('createThingConcatenateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -472,7 +472,7 @@ describe('createThingConcatenateInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createThingConcatenateInputType(imageConfig);
+    const result = createPushIntoThingInputType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -522,12 +522,12 @@ describe('createThingConcatenateInputType', () => {
       ],
     });
 
-    const expectedResult = `input ExampleConcatenateInput {
+    const expectedResult = `input PushIntoExampleInput {
   pictures: [ImageCreateInput!]
   photos: [ImageCreateInput!]
 }`;
 
-    const result = createThingConcatenateInputType(thingConfig);
+    const result = createPushIntoThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

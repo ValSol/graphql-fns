@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import createUploadFileToThingMutationResolver from './createUploadFileToThingMutationResolver';
+import createUploadFilesToThingMutationResolver from './createUploadFilesToThingMutationResolver';
 
-describe('createUploadFileToThingMutationResolver', () => {
+describe('createUploadFilesToThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create mutation add thing type', () => {
     const imageConfig: ThingConfig = {
@@ -36,15 +36,12 @@ describe('createUploadFileToThingMutationResolver', () => {
     });
 
     const serversideConfig = {
-      saveFiles: async () => ({
-        logo: {
-          fileId: '777',
-          address: '/image/logo',
-        },
-      }),
+      saveOriginalFile: async () => {},
+      saveDerivativeFiles: async () => {},
+      composeFileFieldsData: item => item,
     };
 
-    const result = createUploadFileToThingMutationResolver(
+    const result = createUploadFilesToThingMutationResolver(
       exampleConfig,
       generalConfig,
       serversideConfig,

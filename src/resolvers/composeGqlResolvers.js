@@ -6,9 +6,8 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
-import createThingConcatenateInputType from '../types/inputs/createThingConcatenateInputType';
-import createFileOfThingOptionsInputType from '../types/inputs/createFileOfThingOptionsInputType';
-import createManyFilesOfThingOptionsInputType from '../types/inputs/createManyFilesOfThingOptionsInputType';
+import createPushIntoThingInputType from '../types/inputs/createPushIntoThingInputType';
+import createFilesOfThingOptionsInputType from '../types/inputs/createFilesOfThingOptionsInputType';
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
@@ -18,11 +17,10 @@ import composeThingResolvers from './types/composeThingResolvers';
 import createCreateManyThingsMutationResolver from './mutations/createCreateManyThingsMutationResolver';
 import createCreateThingMutationResolver from './mutations/createCreateThingMutationResolver';
 import createImportThingsMutationResolver from './mutations/createImportThingsMutationResolver';
-import createConcatenateThingMutationResolver from './mutations/createConcatenateThingMutationResolver';
+import createPushIntoThingMutationResolver from './mutations/createPushIntoThingMutationResolver';
 import createUpdateThingMutationResolver from './mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from './mutations/createDeleteThingMutationResolver';
-import createUploadFileToThingMutationResolver from './mutations/createUploadFileToThingMutationResolver';
-import createUploadManyFilesToThingMutationResolver from './mutations/createUploadManyFilesToThingMutationResolver';
+import createUploadFilesToThingMutationResolver from './mutations/createUploadFilesToThingMutationResolver';
 
 import createCreatedThingSubscriptionResolver from './subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from './subscriptions/createUpdatedThingSubscriptionResolver';
@@ -130,16 +128,16 @@ const composeGqlResolvers = (
           prev.Mutation[`import${pluralize(name)}`] = importThingsMutationResolver;
         }
 
-        const thingConcatenateInputType = createThingConcatenateInputType(thingConfig);
-        if (thingConcatenateInputType) {
-          const concatenateThingMutationResolver = createConcatenateThingMutationResolver(
+        const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
+        if (pushIntoThingInputType) {
+          const pushIntoThingMutationResolver = createPushIntoThingMutationResolver(
             thingConfig,
             generalConfig,
             serversideConfig,
           );
-          if (concatenateThingMutationResolver) {
+          if (pushIntoThingMutationResolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`concatenate${name}`] = concatenateThingMutationResolver;
+            prev.Mutation[`push${name}`] = pushIntoThingMutationResolver;
           }
         }
 
@@ -163,31 +161,16 @@ const composeGqlResolvers = (
           prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
         }
 
-        const fileOfThingOptionsInputType = createFileOfThingOptionsInputType(thingConfig);
-        if (fileOfThingOptionsInputType) {
-          const uploadFileToThingMutationResolver = createUploadFileToThingMutationResolver(
+        const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
+        if (filesOfThingOptionsInputType) {
+          const uploadFilesToThingMutationResolver = createUploadFilesToThingMutationResolver(
             thingConfig,
             generalConfig,
             serversideConfig,
           );
-          if (uploadFileToThingMutationResolver) {
+          if (uploadFilesToThingMutationResolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`uploadFileTo${name}`] = uploadFileToThingMutationResolver;
-          }
-        }
-
-        const manyFilesOfThingOptionsInputType = createManyFilesOfThingOptionsInputType(
-          thingConfig,
-        );
-        if (manyFilesOfThingOptionsInputType) {
-          const uploadManyFilesToThingMutationResolver = createUploadManyFilesToThingMutationResolver(
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (uploadManyFilesToThingMutationResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`uploadManyFilesTo${name}`] = uploadManyFilesToThingMutationResolver;
+            prev.Mutation[`uploadFilesTo${name}`] = uploadFilesToThingMutationResolver;
           }
         }
 

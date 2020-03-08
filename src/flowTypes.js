@@ -313,7 +313,7 @@ type InverntoryOptions = {
   },
   +Mutation?: null | {
     // 'mutationName' may be: 'createThing', 'createManyThings', 'updateThing', 'deleteThing', ...
-    // ... 'concatenateThing', 'uploadFileToThing', 'uploadManyFilesToThing', or custom mutation
+    // ... 'pushIntoThing', 'uploadFilesToThing' or custom mutation
 
     +[mutationName: string]: thingNamesList,
   },
@@ -398,7 +398,8 @@ export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'concatenateThing', ...
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
+      // ... 'uploadFilesToThing' or custom mutation
       string,
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
@@ -406,8 +407,8 @@ export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'concatenateThing', ...
-      // ... 'uploadFileToThing', 'uploadManyFilesToThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
+      // ... 'uploadFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
     ]
@@ -462,20 +463,14 @@ export type ServersideConfig = {
   +getCredentials?: (
     context: Object,
   ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
-  +saveFiles?: ({
-    inventoryChain: ThreeSegmentInventoryChain,
-    resolverArgs: Object,
-    serversideConfig: ServersideConfig,
-  }) => Promise<{
-    // eslint-disable-next-line flowtype/space-after-type-colon
-    [fileFieldName: string]:
-      | {
-          [fileFieldAttrName: string]: any,
-        }
-      | Array<{
-          [fileFieldAttrName: string]: any,
-        }>,
-  }>,
+  +saveOriginalFile?: (file: Object, config: ThingConfig) => Promise<void>,
+  +saveDerivativeFiles?: (file: Object, config: ThingConfig) => Promise<void>,
+  +composeFileFieldsData?: (
+    files: Object,
+    options: Object,
+    date: Date,
+    config: ThingConfig,
+  ) => Array<Object>,
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

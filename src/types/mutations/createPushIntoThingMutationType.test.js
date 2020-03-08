@@ -3,10 +3,10 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createConcatenateThingMutationType from './createConcatenateThingMutationType';
+import createPushIntoThingMutationType from './createPushIntoThingMutationType';
 
-describe('createConcatenateThingMutationType', () => {
-  test('should concatenate mutation add thing type', () => {
+describe('createPushIntoThingMutationType', () => {
+  test('should push mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -34,13 +34,13 @@ describe('createConcatenateThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  concatenateExample(whereOne: ExampleWhereOneInput!, data: ExampleConcatenateInput!): Example!';
+      '  pushExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!';
 
-    const result = createConcatenateThingMutationType(thingConfig);
+    const result = createPushIntoThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should concatenate mutation add thing type', () => {
+  test('should push mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -59,7 +59,7 @@ describe('createConcatenateThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createConcatenateThingMutationType(thingConfig);
+    const result = createPushIntoThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

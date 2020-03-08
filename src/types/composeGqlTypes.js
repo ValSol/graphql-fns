@@ -5,9 +5,8 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import composeSignature from './composeSignature';
 import createThingType from './createThingType';
-import createFileOfThingOptionsInputType from './inputs/createFileOfThingOptionsInputType';
-import createManyFilesOfThingOptionsInputType from './inputs/createManyFilesOfThingOptionsInputType';
-import createThingConcatenateInputType from './inputs/createThingConcatenateInputType';
+import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
+import createPushIntoThingInputType from './inputs/createPushIntoThingInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
@@ -18,14 +17,13 @@ import createThingWhereOneInputType from './inputs/createThingWhereOneInputType'
 import createThingCountQueryType from './queries/createThingCountQueryType';
 import createThingQueryType from './queries/createThingQueryType';
 import createThingsQueryType from './queries/createThingsQueryType';
-import createConcatenateThingMutationType from './mutations/createConcatenateThingMutationType';
+import createPushIntoThingMutationType from './mutations/createPushIntoThingMutationType';
 import createCreateManyThingsMutationType from './mutations/createCreateManyThingsMutationType';
 import createCreateThingMutationType from './mutations/createCreateThingMutationType';
 import createImportThingsMutationType from './mutations/createImportThingsMutationType';
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
-import createUploadFileToThingMutationType from './mutations/createUploadFileToThingMutationType';
-import createUploadManyFilesToThingMutationType from './mutations/createUploadManyFilesToThingMutationType';
+import createUploadFilesToThingMutationType from './mutations/createUploadFilesToThingMutationType';
 
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
@@ -60,21 +58,17 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const thingCreateInputType = createThingCreateInputType(thingConfig);
             prev.push(thingCreateInputType);
           }
-          if (checkInventory(['Mutation', 'concatenateThing', name], inventory)) {
-            const thingConcatenateInputType = createThingConcatenateInputType(thingConfig);
-            if (thingConcatenateInputType) prev.push(thingConcatenateInputType);
+          if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
+            const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
+            if (pushIntoThingInputType) prev.push(pushIntoThingInputType);
           }
           if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
             const thingUpdateInputType = createThingUpdateInputType(thingConfig);
             prev.push(thingUpdateInputType);
           }
-          if (checkInventory(['Mutation', 'uploadFileToThing', name], inventory)) {
-            const fileOfThingInputType = createFileOfThingOptionsInputType(thingConfig);
-            if (fileOfThingInputType) prev.push(fileOfThingInputType);
-          }
-          if (checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory)) {
-            const manyFilesOfThingInputType = createManyFilesOfThingOptionsInputType(thingConfig);
-            if (manyFilesOfThingInputType) prev.push(manyFilesOfThingInputType);
+          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
+            const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
+            if (filesOfThingOptionsInputType) prev.push(filesOfThingOptionsInputType);
           }
           return prev;
         }, [])
@@ -163,9 +157,9 @@ ${thingQueryTypes.join('\n')}
             prev.push(createImportThingsMutationType(thingConfig));
           }
         }
-        if (checkInventory(['Mutation', 'concatenateThing', name], inventory)) {
-          const concatenateThingMutationType = createConcatenateThingMutationType(thingConfig);
-          if (concatenateThingMutationType) prev.push(concatenateThingMutationType);
+        if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
+          const pushIntoThingMutationType = createPushIntoThingMutationType(thingConfig);
+          if (pushIntoThingMutationType) prev.push(pushIntoThingMutationType);
         }
         if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
           prev.push(createUpdateThingMutationType(thingConfig));
@@ -173,15 +167,9 @@ ${thingQueryTypes.join('\n')}
         if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
           prev.push(createDeleteThingMutationType(thingConfig));
         }
-        if (checkInventory(['Mutation', 'uploadFileToThing', name], inventory)) {
-          const uploadFileToThingMutationType = createUploadFileToThingMutationType(thingConfig);
-          if (uploadFileToThingMutationType) prev.push(uploadFileToThingMutationType);
-        }
-        if (checkInventory(['Mutation', 'uploadManyFilesToThing', name], inventory)) {
-          const uploadManyFilesToThingMutationType = createUploadManyFilesToThingMutationType(
-            thingConfig,
-          );
-          if (uploadManyFilesToThingMutationType) prev.push(uploadManyFilesToThingMutationType);
+        if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
+          const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(thingConfig);
+          if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
         }
 
         customMutationNames.forEach(customName => {

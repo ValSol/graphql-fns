@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import createConcatenateThingMutationResolver from './createConcatenateThingMutationResolver';
+import createPushIntoThingMutationResolver from './createPushIntoThingMutationResolver';
 
-describe('createConcatenateThingMutationResolver', () => {
+describe('createPushIntoThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
   test('should create mutation add thing type', () => {
     const thingConfig: ThingConfig = {
@@ -35,7 +35,7 @@ describe('createConcatenateThingMutationResolver', () => {
     };
 
     const serversideConfig = {};
-    const result = createConcatenateThingMutationResolver(
+    const result = createPushIntoThingMutationResolver(
       thingConfig,
       generalConfig,
       serversideConfig,

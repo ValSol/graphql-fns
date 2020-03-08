@@ -12,21 +12,21 @@ const {
   default: createCreateThingMutationResolver,
 } = require('./createCreateThingMutationResolver');
 const {
-  default: createConcatenateThingMutationResolver,
-} = require('./createConcatenateThingMutationResolver');
+  default: createPushIntoThingMutationResolver,
+} = require('./createPushIntoThingMutationResolver');
 
 let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-concatenate-thing-mutation';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-push-thing-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
   pubsub = new PubSub();
 });
 
-describe('createConcatenateThingMutationResolver', () => {
+describe('createPushIntoThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
   const serversideConfig = {};
   test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
@@ -274,12 +274,12 @@ describe('createConcatenateThingMutationResolver', () => {
     expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
-    const concatenatePerson = createConcatenateThingMutationResolver(
+    const pushPerson = createPushIntoThingMutationResolver(
       personConfig,
       generalConfig,
       serversideConfig,
     );
-    if (!concatenatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    if (!pushPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
     const dataForUpdate = {
@@ -306,7 +306,7 @@ describe('createConcatenateThingMutationResolver', () => {
         ],
       },
     };
-    const updatedPerson = await concatenatePerson(
+    const updatedPerson = await pushPerson(
       null,
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },

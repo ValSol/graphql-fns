@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadManyFilesToThingMutationType from './createUploadManyFilesToThingMutationType';
+import createUploadFilesToThingMutationType from './createUploadFilesToThingMutationType';
 
-describe('createUploadManyFilesToThingMutationType', () => {
+describe('createUploadFilesToThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,47 +17,7 @@ describe('createUploadManyFilesToThingMutationType', () => {
     };
     const expectedResult = '';
 
-    const result = createUploadManyFilesToThingMutationType(thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create empty string if there are no array fileFields', () => {
-    const imageConfig: ThingConfig = {
-      name: 'Image',
-      embedded: true,
-      textFields: [
-        {
-          name: 'fileId',
-        },
-        {
-          name: 'address',
-        },
-      ],
-    };
-
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-          required: true,
-        },
-        {
-          name: 'hero',
-          config: imageConfig,
-        },
-      ],
-    });
-    const expectedResult = '';
-
-    const result = createUploadManyFilesToThingMutationType(thingConfig);
+    const result = createUploadFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -107,9 +67,9 @@ describe('createUploadManyFilesToThingMutationType', () => {
       ],
     });
     const expectedResult =
-      '  uploadManyFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: ManyFilesOfExampleOptionsInput!): Example!';
+      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
 
-    const result = createUploadManyFilesToThingMutationType(thingConfig);
+    const result = createUploadFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

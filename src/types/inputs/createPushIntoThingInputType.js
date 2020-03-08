@@ -2,7 +2,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingConcatenateInputType = (thingConfig: ThingConfig): string => {
+const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
   const {
     booleanFields,
     dateTimeFields,
@@ -81,7 +81,7 @@ const createThingConcatenateInputType = (thingConfig: ThingConfig): string => {
     relationalFields
       .filter(({ array }) => array)
       .reduce((prev, { name: name2, config: { name: relationalThingName } }) => {
-        prev.push(`  ${name2}: ${relationalThingName}CreateOrConcatenateChildrenInput`);
+        prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
         return prev;
       }, thingTypeArray);
   }
@@ -91,7 +91,7 @@ const createThingConcatenateInputType = (thingConfig: ThingConfig): string => {
     duplexFields
       .filter(({ array }) => array)
       .reduce((prev, { name: name2, config: { name: relationalThingName } }) => {
-        prev.push(`  ${name2}: ${relationalThingName}CreateOrConcatenateChildrenInput`);
+        prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
         return prev;
       }, thingTypeArray);
   }
@@ -126,7 +126,7 @@ const createThingConcatenateInputType = (thingConfig: ThingConfig): string => {
 
   if (!thingTypeArray.length) return '';
 
-  thingTypeArray.unshift(`input ${name}ConcatenateInput {`);
+  thingTypeArray.unshift(`input PushInto${name}Input {`);
   thingTypeArray.push('}');
 
   const result = thingTypeArray.join('\n');
@@ -134,4 +134,4 @@ const createThingConcatenateInputType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-export default createThingConcatenateInputType;
+export default createPushIntoThingInputType;
