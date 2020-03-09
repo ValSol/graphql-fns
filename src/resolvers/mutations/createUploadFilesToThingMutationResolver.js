@@ -2,9 +2,11 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import createFileSchema from '../../mongooseModels/createFileSchema';
 import executeAuthorisation from '../executeAuthorisation';
 import createPushIntoThingMutationResolver from './createPushIntoThingMutationResolver';
 import createUpdateThingMutationResolver from './createUpdateThingMutationResolver';
+import separateFileFieldsAttributes from './separateFileFieldsAttributes';
 import separateFileFieldsData from './separateFileFieldsData';
 
 type Args = {
@@ -21,13 +23,14 @@ const createUploadFilesToThingMutationResolver = (
 ): Function | null => {
   const { inventory } = generalConfig;
   const { name } = thingConfig;
-  const { saveOriginalFile, saveDerivativeFiles, composeFileFieldsData } = serversideConfig;
-  if (!composeFileFieldsData)
-    throw new TypeError('"composeFileFieldsData" callback have to be defined!');
-  if (!saveOriginalFile && !saveDerivativeFiles) {
-    throw new TypeError(
-      'At least one of "saveOriginalFile" or "saveDerivativeFiles" callbacks have to be defined!',
-    );
+  const { saveFiles, composeFileFieldsData } = serversideConfig;
+
+  if (!composeFileFieldsData) {
+    throw new TypeError('"composeFileFieldsData" callback have to be defined in serversideConfig!');
+  }
+
+  if (!saveFiles) {
+    throw new TypeError('"saveFiles" callback have to be defined in serversideConfig!');
   }
 
   const inventoryChain = ['Mutation', 'uploadFilesToThing', name];
@@ -56,10 +59,33 @@ const createUploadFilesToThingMutationResolver = (
     });
 
     const { whereOne, files, options } = args;
+    const { mongooseConn } = context;
 
-    // to get data such as: { logo: { fileId: '', desktop: '/uploaded/cat.png', mobile: '/uploaded/mobile/cat.png'} }
+    const filesUploaded = await Promise.all(files);
 
-    const fileFieldsData = composeFileFieldsData(files, options, new Date(), thingConfig);
+    const uploadDate = new Date();
+    const filesAttributes = await saveFiles(filesUploaded, uploadDate, thingConfig);
+
+    const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
+
+    const promises = [];
+    indexesByConfig.forEach((indexes, config) => {
+      const { name: name2 } = config;
+      const fileSchema = createFileSchema(config);
+      const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
+      indexes.forEach(index => {
+        promises[index] = FileModel.create(filesAttributes[index], {}, { lean: true });
+      });
+    });
+    // files attributes with _ids
+    const filesAttributes2 = await Promise.all(promises);
+
+    const fileFieldsData = composeFileFieldsData(
+      filesAttributes2,
+      options,
+      uploadDate,
+      thingConfig,
+    );
     const { forPush, forUpdate } = separateFileFieldsData(fileFieldsData, options, thingConfig);
 
     let thing;

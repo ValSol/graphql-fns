@@ -434,6 +434,13 @@ export type AuthData = {
   },
 };
 
+type FileAttributes = {
+  hash: string,
+  filename: string,
+  mimetype: string,
+  encoding: string,
+};
+
 export type ServersideConfig = {
   +Query?: {
     +[customQueryName: string]: (
@@ -463,13 +470,19 @@ export type ServersideConfig = {
   +getCredentials?: (
     context: Object,
   ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
-  +saveOriginalFile?: (file: Object, config: ThingConfig) => Promise<void>,
-  +saveDerivativeFiles?: (file: Object, config: ThingConfig) => Promise<void>,
-  +composeFileFieldsData?: (
-    files: Object,
-    options: Object,
+  +saveFiles?: (
+    files: Array<Object>,
     date: Date,
     config: ThingConfig,
+  ) => Promise<{
+    filesAttributes: Array<FileAttributes>,
+    indexesByConfig: Map<ThingConfig, Array<number>>,
+  }>,
+  +composeFileFieldsData?: (
+    filesAttributes: Array<FileAttributes>,
+    options: Object,
+    date: Date,
+    thingConfig: ThingConfig,
   ) => Array<Object>,
 };
 

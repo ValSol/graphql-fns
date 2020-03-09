@@ -139,13 +139,13 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
           return (
             <Table
+              {...tableProps}
               autoHeight
               height={height}
               isScrolling={isScrolling}
               onScroll={onChildScroll}
               scrollTop={scrollTop}
               width={width}
-              {...tableProps}
               rowClassName={this.getRowClassName}
             >
               {columns.map(({ dataKey, ...other }, index) => {

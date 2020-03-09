@@ -36,8 +36,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
     });
 
     const serversideConfig = {
-      saveOriginalFile: async () => {},
-      saveDerivativeFiles: async () => {},
+      saveFiles: async () => ({ filesAttributes: [], indexesByConfig: new Map() }),
       composeFileFieldsData: item => item,
     };
 
