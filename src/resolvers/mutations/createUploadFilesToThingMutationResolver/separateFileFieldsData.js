@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 
 type Result = {
   forUpdate: { [fileFieldName: string]: Object },

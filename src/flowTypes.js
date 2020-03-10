@@ -434,7 +434,8 @@ export type AuthData = {
   },
 };
 
-type FileAttributes = {
+export type FileAttributes = {
+  _id?: string,
   hash: string,
   filename: string,
   mimetype: string,
@@ -470,20 +471,12 @@ export type ServersideConfig = {
   +getCredentials?: (
     context: Object,
   ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
-  +saveFiles?: (
-    files: Array<Object>,
-    date: Date,
-    config: ThingConfig,
-  ) => Promise<{
-    filesAttributes: Array<FileAttributes>,
-    indexesByConfig: Map<ThingConfig, Array<number>>,
-  }>,
-  +composeFileFieldsData?: (
-    filesAttributes: Array<FileAttributes>,
-    options: Object,
-    date: Date,
-    thingConfig: ThingConfig,
-  ) => Array<Object>,
+  +saveFiles?: {
+    [fileFieldConfigName: string]: (file: Object, date: Date) => Promise<FileAttributes>,
+  },
+  +composeFileFieldsData?: {
+    [fileFieldConfigName: string]: (fileAttributes: FileAttributes, date: Date) => Object,
+  },
 };
 
 // eslint-disable-next-line flowtype/generic-spacing

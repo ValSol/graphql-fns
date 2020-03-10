@@ -1,11 +1,13 @@
 // @flow
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
-import createFileSchema from '../../mongooseModels/createFileSchema';
-import executeAuthorisation from '../executeAuthorisation';
-import createPushIntoThingMutationResolver from './createPushIntoThingMutationResolver';
-import createUpdateThingMutationResolver from './createUpdateThingMutationResolver';
+import checkInventory from '../../../utils/checkInventory';
+import createFileSchema from '../../../mongooseModels/createFileSchema';
+import executeAuthorisation from '../../executeAuthorisation';
+import composeAllFilesFieldsData from './composeAllFilesFieldsData';
+import createPushIntoThingMutationResolver from '../createPushIntoThingMutationResolver';
+import createUpdateThingMutationResolver from '../createUpdateThingMutationResolver';
+import saveAllFiles from './saveAllFiles';
 import separateFileFieldsAttributes from './separateFileFieldsAttributes';
 import separateFileFieldsData from './separateFileFieldsData';
 
@@ -26,11 +28,13 @@ const createUploadFilesToThingMutationResolver = (
   const { saveFiles, composeFileFieldsData } = serversideConfig;
 
   if (!composeFileFieldsData) {
-    throw new TypeError('"composeFileFieldsData" callback have to be defined in serversideConfig!');
+    throw new TypeError(
+      '"composeFileFieldsData" callbacks have to be defined in serversideConfig!',
+    );
   }
 
   if (!saveFiles) {
-    throw new TypeError('"saveFiles" callback have to be defined in serversideConfig!');
+    throw new TypeError('"saveFiles" callbacks have to be defined in serversideConfig!');
   }
 
   const inventoryChain = ['Mutation', 'uploadFilesToThing', name];
@@ -64,7 +68,13 @@ const createUploadFilesToThingMutationResolver = (
     const filesUploaded = await Promise.all(files);
 
     const uploadDate = new Date();
-    const filesAttributes = await saveFiles(filesUploaded, uploadDate, thingConfig);
+    const filesAttributes = await saveAllFiles(
+      filesUploaded,
+      uploadDate,
+      options,
+      thingConfig,
+      saveFiles,
+    );
 
     const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
 
@@ -80,11 +90,12 @@ const createUploadFilesToThingMutationResolver = (
     // files attributes with _ids
     const filesAttributes2 = await Promise.all(promises);
 
-    const fileFieldsData = composeFileFieldsData(
+    const fileFieldsData = composeAllFilesFieldsData(
       filesAttributes2,
-      options,
       uploadDate,
+      options,
       thingConfig,
+      composeFileFieldsData,
     );
     const { forPush, forUpdate } = separateFileFieldsData(fileFieldsData, options, thingConfig);
 

@@ -1,8 +1,8 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
-import createUploadFilesToThingMutationResolver from './createUploadFilesToThingMutationResolver';
+import createUploadFilesToThingMutationResolver from './index';
 
 describe('createUploadFilesToThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: [] };
@@ -36,8 +36,16 @@ describe('createUploadFilesToThingMutationResolver', () => {
     });
 
     const serversideConfig = {
-      saveFiles: async () => ({ filesAttributes: [], indexesByConfig: new Map() }),
-      composeFileFieldsData: item => item,
+      saveFiles: {
+        Image: async ({ filename, mimetype, encoding }) => ({
+          filename,
+          mimetype,
+          encoding,
+          hash: filename.slice(0, -4),
+        }),
+      },
+
+      composeFileFieldsData: { Image: item => item },
     };
 
     const result = createUploadFilesToThingMutationResolver(
