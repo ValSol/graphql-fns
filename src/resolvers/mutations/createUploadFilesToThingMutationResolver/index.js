@@ -79,16 +79,22 @@ const createUploadFilesToThingMutationResolver = (
     const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
 
     const promises = [];
+    const promises2 = [];
     indexesByConfig.forEach((indexes, config) => {
       const { name: name2 } = config;
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
       indexes.forEach(index => {
-        promises[index] = FileModel.create(filesAttributes[index], {}, { lean: true });
+        promises[index] = FileModel.create(filesAttributes[index]);
+        promises2[index] = filesAttributes[index];
       });
     });
+
     // files attributes with _ids
-    const filesAttributes2 = await Promise.all(promises);
+    const filesAttributes2 = (await Promise.all(promises)).map((item, i) => {
+      const { _id } = item.toObject();
+      return { ...filesAttributes[i], _id };
+    });
 
     const fileFieldsData = composeAllFilesFieldsData(
       filesAttributes2,
@@ -97,6 +103,7 @@ const createUploadFilesToThingMutationResolver = (
       thingConfig,
       composeFileFieldsData,
     );
+
     const { forPush, forUpdate } = separateFileFieldsData(fileFieldsData, options, thingConfig);
 
     let thing;

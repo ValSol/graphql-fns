@@ -26,19 +26,11 @@ const separateFileFieldsAttributes = (
   return targets.reduce((prev, name, i) => {
     const { config } = fieldsObject[name];
     const item = prev.get(config) || prev.set(config, []).get(config);
-
-    if (fieldsObject[name].array) {
-      const newIndex = index + counts[i];
-      for (let j = index; j < newIndex; j += 1) {
-        // $FlowFixMe
-        item.push(j);
-      }
-      index = newIndex;
-    } else {
+    for (let j = index; j < index + counts[i]; j += 1) {
       // $FlowFixMe
-      item.push(index);
-      index += 1;
+      item.push(j);
     }
+    index += counts[i];
     return prev;
   }, new Map());
 };

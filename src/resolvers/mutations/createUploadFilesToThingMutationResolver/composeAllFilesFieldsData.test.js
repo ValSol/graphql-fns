@@ -112,68 +112,78 @@ describe('composeAllFilesFieldsData', () => {
     };
 
     const composeFileFieldsData = {
-      Image: ({ hash, filename, _id }) => ({
-        fileId: _id,
-        desktop: `${hash}-desktop.${filename.slice(-3)}`,
-        tablet: `${hash}-tablet.${filename.slice(-3)}`,
-        mobile: `${hash}-mobile.${filename.slice(-3)}`,
-      }),
-      Photo: ({ hash, filename, _id }) => ({
-        fileId: _id,
-        desktop: `${hash}-desktop.${filename.slice(-3)}`,
-        tablet: `${hash}-tablet.${filename.slice(-3)}`,
-        mobile: `${hash}-mobile.${filename.slice(-3)}`,
-      }),
+      Image: ({ hash, filename, _id }, date) => {
+        const month = date.getMonth() + 1;
+        const month2 = month < 10 ? `0${month}` : month.toFixed();
+        const year = date.getFullYear();
+        return {
+          fileId: _id,
+          desktop: `/images/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
+          tablet: `/images/${year}_${month2}/${hash}_tablet.${filename.slice(-3)}`,
+          mobile: `/images/${year}_${month2}/${hash}_mobile.${filename.slice(-3)}`,
+        };
+      },
+      Photo: ({ hash, filename, _id }, date) => {
+        const month = date.getMonth() + 1;
+        const month2 = month < 10 ? `0${month}` : month.toFixed();
+        const year = date.getFullYear();
+        return {
+          fileId: _id,
+          desktop: `/photos/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
+          tablet: `/photos/${year}_${month2}/${hash}_tablet.${filename.slice(-3)}`,
+          mobile: `/photos/${year}_${month2}/${hash}_mobile.${filename.slice(-3)}`,
+        };
+      },
     };
 
     const expectedResult = [
       {
         fileId: '1',
-        desktop: 'pic1-desktop.png',
-        tablet: 'pic1-tablet.png',
-        mobile: 'pic1-mobile.png',
+        desktop: '/images/2020_02/pic1_desktop.png',
+        tablet: '/images/2020_02/pic1_tablet.png',
+        mobile: '/images/2020_02/pic1_mobile.png',
       },
       {
         fileId: '2',
-        desktop: 'pic2-desktop.png',
-        tablet: 'pic2-tablet.png',
-        mobile: 'pic2-mobile.png',
+        desktop: '/images/2020_02/pic2_desktop.png',
+        tablet: '/images/2020_02/pic2_tablet.png',
+        mobile: '/images/2020_02/pic2_mobile.png',
       },
       {
         fileId: '3',
-        desktop: 'photo1-desktop.jpg',
-        tablet: 'photo1-tablet.jpg',
-        mobile: 'photo1-mobile.jpg',
+        desktop: '/photos/2020_02/photo1_desktop.jpg',
+        tablet: '/photos/2020_02/photo1_tablet.jpg',
+        mobile: '/photos/2020_02/photo1_mobile.jpg',
       },
       {
         fileId: '4',
-        desktop: 'photo2-desktop.jpg',
-        tablet: 'photo2-tablet.jpg',
-        mobile: 'photo2-mobile.jpg',
+        desktop: '/photos/2020_02/photo2_desktop.jpg',
+        tablet: '/photos/2020_02/photo2_tablet.jpg',
+        mobile: '/photos/2020_02/photo2_mobile.jpg',
       },
       {
         fileId: '5',
-        desktop: 'photo3-desktop.jpg',
-        tablet: 'photo3-tablet.jpg',
-        mobile: 'photo3-mobile.jpg',
+        desktop: '/photos/2020_02/photo3_desktop.jpg',
+        tablet: '/photos/2020_02/photo3_tablet.jpg',
+        mobile: '/photos/2020_02/photo3_mobile.jpg',
       },
       {
         fileId: '6',
-        desktop: 'pic3-desktop.png',
-        tablet: 'pic3-tablet.png',
-        mobile: 'pic3-mobile.png',
+        desktop: '/images/2020_02/pic3_desktop.png',
+        tablet: '/images/2020_02/pic3_tablet.png',
+        mobile: '/images/2020_02/pic3_mobile.png',
       },
       {
         fileId: '7',
-        desktop: 'pic4-desktop.png',
-        tablet: 'pic4-tablet.png',
-        mobile: 'pic4-mobile.png',
+        desktop: '/images/2020_02/pic4_desktop.png',
+        tablet: '/images/2020_02/pic4_tablet.png',
+        mobile: '/images/2020_02/pic4_mobile.png',
       },
     ];
 
     const result = composeAllFilesFieldsData(
       filesAttributes,
-      new Date(),
+      new Date('2020-02-20T03:24:00'),
       options,
       thingConfig,
       composeFileFieldsData,

@@ -200,7 +200,7 @@ const composeThingSchemaProperties = (
     embeddedFields.reduce((prev, { array, name, config }) => {
       const obj = composeThingSchemaProperties(config, enums);
       // eslint-disable-next-line no-param-reassign
-      prev[name] = array ? [obj] : obj;
+      prev[name] = array ? [obj] : { type: new Schema(obj) };
       return prev;
     }, result);
   }
@@ -209,7 +209,7 @@ const composeThingSchemaProperties = (
     fileFields.reduce((prev, { array, name, config }) => {
       const obj = composeThingSchemaProperties(config, enums);
       // eslint-disable-next-line no-param-reassign
-      prev[name] = array ? [obj] : obj;
+      prev[name] = array ? [obj] : { type: new Schema(obj) };
       return prev;
     }, result);
   }

@@ -336,7 +336,7 @@ const processCreateInputData = (
           prev[key] = data2[key].map(value => transform(value, config));
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = transform(data2[key], config);
+          prev[key] = data2[key] === null ? null : transform(data2[key], config);
         }
       } else if (fileFieldsObject[key]) {
         const { array, config } = fileFieldsObject[key];
@@ -345,7 +345,7 @@ const processCreateInputData = (
           prev[key] = data2[key].map(value => transform(value, config));
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = transform(data2[key], config);
+          prev[key] = data2[key] === null ? null : transform(data2[key], config);
         }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];

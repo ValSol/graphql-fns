@@ -430,7 +430,9 @@ describe('createUpdateThingMutationResolver', () => {
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
-    expect(createdExample.embeddedField).toEqual(data.embeddedField);
+    expect(createdExample.embeddedField.embeddedTextField).toBe(
+      data.embeddedField.embeddedTextField,
+    );
     expect(createdExample.createdAt instanceof Date).toBeTruthy();
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
     const { id } = createdExample;
@@ -460,7 +462,9 @@ describe('createUpdateThingMutationResolver', () => {
     );
     expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
     expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
-    expect(updatedExample.embeddedField).toEqual(dataForUpdate.embeddedField);
+    expect(updatedExample.embeddedField.embeddedTextField).toBe(
+      dataForUpdate.embeddedField.embeddedTextField,
+    );
 
     const dataForUpdate2 = {
       textField1: 'text Field 1 Plus Plus',
@@ -475,7 +479,9 @@ describe('createUpdateThingMutationResolver', () => {
     );
     expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
     expect(updatedExample2.textField2).toBe(dataForUpdate.textField2);
-    expect(updatedExample2.embeddedField).toEqual(dataForUpdate.embeddedField);
+    expect(updatedExample2.embeddedField.embeddedTextField).toEqual(
+      dataForUpdate.embeddedField.embeddedTextField,
+    );
 
     const dataForUpdate3 = {
       textField1: 'text Field 1 Plus Plus Plus',
