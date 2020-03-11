@@ -472,7 +472,11 @@ export type ServersideConfig = {
     context: Object,
   ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
   +saveFiles?: {
-    [fileFieldConfigName: string]: (file: Object, date: Date) => Promise<FileAttributes>,
+    [fileFieldConfigName: string]: (
+      file: Object,
+      hash: string,
+      date: Date,
+    ) => Promise<FileAttributes>,
   },
   +composeFileFieldsData?: {
     [fileFieldConfigName: string]: (fileAttributes: FileAttributes, date: Date) => Object,

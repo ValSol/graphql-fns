@@ -13,7 +13,11 @@ import separateFileFieldsData from './separateFileFieldsData';
 
 type Args = {
   files: Object,
-  options: { targets: Array<string>, counts: Array<number> },
+  options: {
+    targets: Array<string>,
+    counts: Array<number>,
+    hashes: Array<string>,
+  },
   whereOne: Object,
 };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -62,36 +66,58 @@ const createUploadFilesToThingMutationResolver = (
       serversideConfig,
     });
 
-    const { whereOne, files, options } = args;
+    const {
+      whereOne,
+      files,
+      options,
+      options: { hashes },
+    } = args;
     const { mongooseConn } = context;
 
     const filesUploaded = await Promise.all(files);
 
+    const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
+
+    const promises = [];
+    indexesByConfig.forEach((indexes, config) => {
+      const { name: name2 } = config;
+      const fileSchema = createFileSchema(config);
+      const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
+      indexes.forEach(index => {
+        const hash = hashes[index];
+        promises[index] = FileModel.findOne({ hash }, {});
+      });
+    });
+
+    const alreadyCreatedFiles = await Promise.all(promises);
+
     const uploadDate = new Date();
     const filesAttributes = await saveAllFiles(
       filesUploaded,
+      alreadyCreatedFiles,
       uploadDate,
       options,
       thingConfig,
       saveFiles,
     );
 
-    const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
-
-    const promises = [];
     const promises2 = [];
     indexesByConfig.forEach((indexes, config) => {
       const { name: name2 } = config;
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
       indexes.forEach(index => {
-        promises[index] = FileModel.create(filesAttributes[index]);
-        promises2[index] = filesAttributes[index];
+        promises2[index] = alreadyCreatedFiles[index]
+          ? Promise.resolve(alreadyCreatedFiles[index])
+          : FileModel.create(filesAttributes[index]);
       });
     });
 
     // files attributes with _ids
-    const filesAttributes2 = (await Promise.all(promises)).map((item, i) => {
+    const filesAttributes2 = (await Promise.all(promises2)).map((item, i) => {
+      if (alreadyCreatedFiles[i]) {
+        return item;
+      }
       const { _id } = item.toObject();
       return { ...filesAttributes[i], _id };
     });

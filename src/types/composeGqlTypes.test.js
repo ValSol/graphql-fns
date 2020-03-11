@@ -215,6 +215,7 @@ enum ExampleFileNamesEnum {
 input FilesOfExampleOptionsInput {
   targets: [ExampleFileNamesEnum!]!
   counts: [Int!]!
+  hashes: [String!]!
 }
 input ImageCreateInput {
   fileId: String!

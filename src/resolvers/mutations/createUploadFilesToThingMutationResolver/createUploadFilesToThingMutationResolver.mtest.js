@@ -26,17 +26,17 @@ beforeAll(async () => {
 describe('createUploadFilesToThingMutationResolver', () => {
   const serversideConfig = {
     saveFiles: {
-      Image: async ({ filename, mimetype, encoding }) => ({
+      Image: async ({ filename, mimetype, encoding }, hash) => ({
         filename,
         mimetype,
         encoding,
-        hash: filename.slice(0, -4),
+        hash,
       }),
-      Photo: async ({ filename, mimetype, encoding }) => ({
+      Photo: async ({ filename, mimetype, encoding }, hash) => ({
         filename,
         mimetype,
         encoding,
-        hash: filename.slice(0, -4),
+        hash,
       }),
     },
 
@@ -213,6 +213,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
     const options = {
       targets: ['logo', 'header', 'photos', 'pictures'],
       counts: [1, 1, 3, 2],
+      hashes: ['pic1', 'pic2', 'photo1', 'photo2', 'photo3', 'pic3', 'pic4'],
     };
 
     const updatedExample = await uploadToThing(
@@ -253,5 +254,65 @@ describe('createUploadFilesToThingMutationResolver', () => {
     expect(updatedExample.photos[2].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
     expect(updatedExample.photos[2].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
     expect(updatedExample.photos[2].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+
+    const updatedExample2 = await uploadToThing(
+      null,
+      { files, whereOne, options },
+      { mongooseConn, pubsub },
+    );
+
+    expect(updatedExample2.textField).toBe('text Field');
+
+    expect(updatedExample2.logo.desktop).toBe('/images/2020_03/pic1_desktop.png');
+    expect(updatedExample2.logo.tablet).toBe('/images/2020_03/pic1_tablet.png');
+    expect(updatedExample2.logo.mobile).toBe('/images/2020_03/pic1_mobile.png');
+
+    expect(updatedExample2.header.desktop).toBe('/images/2020_03/pic2_desktop.png');
+    expect(updatedExample2.header.tablet).toBe('/images/2020_03/pic2_tablet.png');
+    expect(updatedExample2.header.mobile).toBe('/images/2020_03/pic2_mobile.png');
+
+    expect(updatedExample2.pictures.length).toBe(4);
+
+    expect(updatedExample2.pictures[0].desktop).toBe('/images/2020_03/pic3_desktop.png');
+    expect(updatedExample2.pictures[0].tablet).toBe('/images/2020_03/pic3_tablet.png');
+    expect(updatedExample2.pictures[0].mobile).toBe('/images/2020_03/pic3_mobile.png');
+
+    expect(updatedExample2.pictures[1].desktop).toBe('/images/2020_03/pic4_desktop.png');
+    expect(updatedExample2.pictures[1].tablet).toBe('/images/2020_03/pic4_tablet.png');
+    expect(updatedExample2.pictures[1].mobile).toBe('/images/2020_03/pic4_mobile.png');
+
+    expect(updatedExample2.pictures[2].desktop).toBe('/images/2020_03/pic3_desktop.png');
+    expect(updatedExample2.pictures[2].tablet).toBe('/images/2020_03/pic3_tablet.png');
+    expect(updatedExample2.pictures[2].mobile).toBe('/images/2020_03/pic3_mobile.png');
+
+    expect(updatedExample2.pictures[3].desktop).toBe('/images/2020_03/pic4_desktop.png');
+    expect(updatedExample2.pictures[3].tablet).toBe('/images/2020_03/pic4_tablet.png');
+    expect(updatedExample2.pictures[3].mobile).toBe('/images/2020_03/pic4_mobile.png');
+
+    expect(updatedExample2.photos.length).toBe(6);
+
+    expect(updatedExample2.photos[0].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
+    expect(updatedExample2.photos[0].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
+    expect(updatedExample2.photos[0].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+
+    expect(updatedExample2.photos[1].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
+    expect(updatedExample2.photos[1].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
+    expect(updatedExample2.photos[1].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+
+    expect(updatedExample2.photos[2].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
+    expect(updatedExample2.photos[2].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
+    expect(updatedExample2.photos[2].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+
+    expect(updatedExample2.photos[3].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
+    expect(updatedExample2.photos[3].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
+    expect(updatedExample2.photos[3].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+
+    expect(updatedExample2.photos[4].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
+    expect(updatedExample2.photos[4].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
+    expect(updatedExample2.photos[4].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+
+    expect(updatedExample2.photos[5].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
+    expect(updatedExample2.photos[5].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
+    expect(updatedExample2.photos[5].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
   });
 });

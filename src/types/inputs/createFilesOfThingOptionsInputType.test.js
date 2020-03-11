@@ -64,6 +64,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
 input FilesOfExampleOptionsInput {
   targets: [ExampleFileNamesEnum!]!
   counts: [Int!]!
+  hashes: [String!]!
 }`;
 
     const result = createFilesOfThingOptionsInputType(thingConfig);

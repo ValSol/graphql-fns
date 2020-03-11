@@ -109,6 +109,7 @@ describe('composeAllFilesFieldsData', () => {
     const options = {
       targets: ['logo', 'header', 'photos', 'pictures'],
       counts: [1, 1, 3, 2],
+      hashes: ['pic1', 'pic2', 'photo1', 'photo2', 'photo3', 'pic3', 'pic4'],
     };
 
     const composeFileFieldsData = {

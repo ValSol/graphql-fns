@@ -5,29 +5,42 @@ import composeFileFieldNameToConfigNameObject from './composeFileFieldNameToConf
 
 const saveAllFiles = async (
   filesUploaded: Array<Object>,
+  alreadyCreatedFiles: Array<Object>,
   uploadDate: Date,
   options: {
     targets: Array<string>,
     counts: Array<number>,
+    hashes: Array<string>,
   },
   thingConfig: ThingConfig,
   saveFiles: {
-    [fileFieldConfigName: string]: (file: Object, date: Date) => Promise<FileAttributes>,
+    [fileFieldConfigName: string]: (
+      file: Object,
+      hash: string,
+      date: Date,
+    ) => Promise<FileAttributes>,
   },
-): Promise<Array<FileAttributes>> => {
-  const { counts, targets } = options;
+): Promise<Array<FileAttributes | null>> => {
+  const { counts, hashes, targets } = options;
   const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(thingConfig);
 
   const promises = [];
   let index = 0;
   targets.forEach((fieldName, i) => {
     for (let j = index; j < index + counts[i]; j += 1) {
-      promises.push(saveFiles[nameToConfigNameObject[fieldName]](filesUploaded[j], uploadDate));
+      if (alreadyCreatedFiles[j]) {
+        promises.push(Promise.resolve(null));
+      } else {
+        promises.push(
+          saveFiles[nameToConfigNameObject[fieldName]](filesUploaded[j], hashes[j], uploadDate),
+        );
+      }
     }
     index += counts[i];
   });
 
-  const results = await Promise.all(promises);
+  // $FlowFixMe
+  const results: Array<FileAttributes | null> = await Promise.all(promises);
   return results;
 };
 

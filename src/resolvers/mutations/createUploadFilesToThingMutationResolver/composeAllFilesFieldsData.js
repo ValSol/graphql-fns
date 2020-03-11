@@ -9,6 +9,7 @@ const composeAllFilesFieldsData = (
   options: {
     targets: Array<string>,
     counts: Array<number>,
+    hashes: Array<string>,
   },
   thingConfig: ThingConfig,
   composeFileFieldsData: {

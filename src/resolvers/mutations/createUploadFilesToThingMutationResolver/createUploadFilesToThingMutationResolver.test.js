@@ -37,11 +37,11 @@ describe('createUploadFilesToThingMutationResolver', () => {
 
     const serversideConfig = {
       saveFiles: {
-        Image: async ({ filename, mimetype, encoding }) => ({
+        Image: async ({ filename, mimetype, encoding }, hash) => ({
           filename,
           mimetype,
           encoding,
-          hash: filename.slice(0, -4),
+          hash,
         }),
       },
 

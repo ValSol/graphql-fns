@@ -16,6 +16,7 @@ ${fieldLines.join('\n')}
 input FilesOf${name}OptionsInput {
   targets: [${name}FileNamesEnum!]!
   counts: [Int!]!
+  hashes: [String!]!
 }`;
 };
 

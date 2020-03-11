@@ -61,7 +61,11 @@ describe('separateFileFieldsData', () => {
       },
     ];
 
-    const options = { targets: ['logo', 'header', 'pictures'], counts: [1, 1, 2] };
+    const options = {
+      targets: ['logo', 'header', 'pictures'],
+      counts: [1, 1, 2],
+      hashes: ['pic1', 'pic2', 'pic3', 'pic4'],
+    };
 
     const result = separateFileFieldsData(data, options, exampleConfig);
 
