@@ -483,6 +483,12 @@ export type ServersideConfig = {
   },
 };
 
+export type UploadOptions = {|
+  targets: Array<string>, // fileFields names
+  counts: Array<number>, // count of uploaded files for each fileField
+  hashes: Array<string>, // hash of every uploaded file
+|};
+
 // eslint-disable-next-line flowtype/generic-spacing
 export type Periphery = Map<
   ThingConfig,

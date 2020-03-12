@@ -1,5 +1,10 @@
 // @flow
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
+import type {
+  GeneralConfig,
+  ServersideConfig,
+  ThingConfig,
+  UploadOptions,
+} from '../../../flowTypes';
 
 import checkInventory from '../../../utils/checkInventory';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
@@ -7,17 +12,14 @@ import executeAuthorisation from '../../executeAuthorisation';
 import composeAllFilesFieldsData from './composeAllFilesFieldsData';
 import createPushIntoThingMutationResolver from '../createPushIntoThingMutationResolver';
 import createUpdateThingMutationResolver from '../createUpdateThingMutationResolver';
+import getHashDoubles from './getHashDoubles';
 import saveAllFiles from './saveAllFiles';
 import separateFileFieldsAttributes from './separateFileFieldsAttributes';
 import separateFileFieldsData from './separateFileFieldsData';
 
 type Args = {
   files: Object,
-  options: {
-    targets: Array<string>,
-    counts: Array<number>,
-    hashes: Array<string>,
-  },
+  options: UploadOptions,
   whereOne: Object,
 };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -78,23 +80,30 @@ const createUploadFilesToThingMutationResolver = (
 
     const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
 
+    const hashDoubles = getHashDoubles(options, thingConfig);
+
     const promises = [];
     indexesByConfig.forEach((indexes, config) => {
       const { name: name2 } = config;
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
       indexes.forEach(index => {
-        const hash = hashes[index];
-        promises[index] = FileModel.findOne({ hash }, {});
+        if (hashDoubles[index] === null) {
+          const hash = hashes[index];
+          promises[index] = FileModel.findOne({ hash }, {});
+        } else {
+          // if there is double mock already uploaded file
+          promises[index] = Promise.resolve({});
+        }
       });
     });
 
-    const alreadyCreatedFiles = await Promise.all(promises);
+    const alreadyUploadedFiles = await Promise.all(promises);
 
     const uploadDate = new Date();
     const filesAttributes = await saveAllFiles(
       filesUploaded,
-      alreadyCreatedFiles,
+      alreadyUploadedFiles,
       uploadDate,
       options,
       thingConfig,
@@ -107,20 +116,32 @@ const createUploadFilesToThingMutationResolver = (
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
       indexes.forEach(index => {
-        promises2[index] = alreadyCreatedFiles[index]
-          ? Promise.resolve(alreadyCreatedFiles[index])
-          : FileModel.create(filesAttributes[index]);
+        if (alreadyUploadedFiles[index]) {
+          promises2[index] = Promise.resolve(alreadyUploadedFiles[index]);
+        } else {
+          promises2[index] = FileModel.create(filesAttributes[index]);
+        }
       });
     });
 
     // files attributes with _ids
-    const filesAttributes2 = (await Promise.all(promises2)).map((item, i) => {
-      if (alreadyCreatedFiles[i]) {
+    const filesAttributes2 = (await Promise.all(promises2))
+      .map((item, i) => {
+        if (hashDoubles[i] !== null) {
+          return null;
+        }
+        if (alreadyUploadedFiles[i]) {
+          return item;
+        }
+        const { _id } = item.toObject();
+        return { ...filesAttributes[i], _id };
+      })
+      .map((item, i, arr) => {
+        if (hashDoubles[i] !== null) {
+          return arr[hashDoubles[i]];
+        }
         return item;
-      }
-      const { _id } = item.toObject();
-      return { ...filesAttributes[i], _id };
-    });
+      });
 
     const fileFieldsData = composeAllFilesFieldsData(
       filesAttributes2,

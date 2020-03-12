@@ -1,16 +1,9 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { ThingConfig, UploadOptions } from '../../../flowTypes';
 
 type Result = Map<ThingConfig, Array<number>>;
 
-const separateFileFieldsAttributes = (
-  options: {
-    targets: Array<string>,
-    counts: Array<number>,
-    hashes: Array<string>,
-  },
-  thingConfig: ThingConfig,
-): Result => {
+const separateFileFieldsAttributes = (options: UploadOptions, thingConfig: ThingConfig): Result => {
   const { fileFields } = thingConfig;
 
   if (!fileFields) throw new TypeError('There are no fileFields for upload!');

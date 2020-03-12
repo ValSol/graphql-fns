@@ -1,5 +1,5 @@
 // @flow
-import type { FileAttributes, ThingConfig } from '../../../flowTypes';
+import type { FileAttributes, ThingConfig, UploadOptions } from '../../../flowTypes';
 
 import composeFileFieldNameToConfigNameObject from './composeFileFieldNameToConfigNameObject';
 
@@ -7,11 +7,7 @@ const saveAllFiles = async (
   filesUploaded: Array<Object>,
   alreadyCreatedFiles: Array<Object>,
   uploadDate: Date,
-  options: {
-    targets: Array<string>,
-    counts: Array<number>,
-    hashes: Array<string>,
-  },
+  options: UploadOptions,
   thingConfig: ThingConfig,
   saveFiles: {
     [fileFieldConfigName: string]: (

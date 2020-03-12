@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { ThingConfig, UploadOptions } from '../../../flowTypes';
 
 type Result = {
   forUpdate: { [fileFieldName: string]: Object },
@@ -8,11 +8,7 @@ type Result = {
 
 const separateFileFieldsData = (
   data: Array<Object>,
-  options: {
-    targets: Array<string>,
-    counts: Array<number>,
-    hashes: Array<string>,
-  },
+  options: UploadOptions,
   thingConfig: ThingConfig,
 ): Result => {
   const { fileFields } = thingConfig;

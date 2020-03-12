@@ -1,16 +1,12 @@
 // @flow
-import type { FileAttributes, ThingConfig } from '../../../flowTypes';
+import type { FileAttributes, ThingConfig, UploadOptions } from '../../../flowTypes';
 
 import composeFileFieldNameToConfigNameObject from './composeFileFieldNameToConfigNameObject';
 
 const composeAllFilesFieldsData = (
   filesAttributes: Array<Object>,
   uploadDate: Date,
-  options: {
-    targets: Array<string>,
-    counts: Array<number>,
-    hashes: Array<string>,
-  },
+  options: UploadOptions,
   thingConfig: ThingConfig,
   composeFileFieldsData: {
     [fileFieldConfigName: string]: (filesAttributes: FileAttributes, date: Date) => Object,
