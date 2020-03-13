@@ -30,7 +30,7 @@ export { default as createDeletedThingSubscriptionResolver } from './resolvers/s
 export { default as composeMutation } from './client/mutations/composeMutation';
 export { default as composeQuery } from './client/queries/composeQuery';
 export { default as composeSubscription } from './client/subscriptions/composeSubscription';
-export { default as createExportFile } from './client/createExportFile';
+export { default as createExportFile } from './client/utils/createExportFile';
 
 // admin
 export { default as Admin } from './components/Admin';

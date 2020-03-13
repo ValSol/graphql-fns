@@ -3,9 +3,9 @@
 import { defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 
-import type { ClientOptions, ThingConfig } from '../flowTypes';
+import type { ClientOptions, ThingConfig } from '../../flowTypes';
 
-import composeFrgament from './fragment/composeFragment';
+import composeFrgament from '../fragment/composeFragment';
 
 const createReadFragmentArg = (
   id: string,

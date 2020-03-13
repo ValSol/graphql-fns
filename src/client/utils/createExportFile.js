@@ -3,9 +3,9 @@
 import pluralize from 'pluralize';
 import csvStringify from 'csv-stringify';
 
-import type { ThingConfig } from '../flowTypes';
+import type { ThingConfig } from '../../flowTypes';
 
-import coerceDataFromGql from '../utils/coerceDataFromGql';
+import coerceDataFromGql from '../../utils/coerceDataFromGql';
 
 const csvStringify2 = data => {
   return new Promise((resolve, reject) => {

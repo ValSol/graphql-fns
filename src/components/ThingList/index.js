@@ -22,7 +22,7 @@ import Router, { useRouter } from 'next/router';
 import type { ThingConfig } from '../../flowTypes';
 
 import GeneralConfigContext from '../GeneralConfigContext';
-import createExportFile from '../../client/createExportFile';
+import createExportFile from '../../client/utils/createExportFile';
 import composeMutation from '../../client/mutations/composeMutation';
 import composeQuery from '../../client/queries/composeQuery';
 import { ThingListContext } from '../ThingListContext';
