@@ -55,51 +55,6 @@ describe('separateFileFieldsAttributes', () => {
   });
 
   test('should return wrapped object', () => {
-    // const attributes = [
-    //   {
-    //     hash: 'pic1',
-    //     filename: 'pic1.png',
-    //     mimetype: 'image/png',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'pic2',
-    //     filename: 'pic2.png',
-    //     mimetype: 'image/png',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'photo1',
-    //     filename: 'pic1.jpg',
-    //     mimetype: 'image/jpeg',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'photo2',
-    //     filename: 'pic2.jpg',
-    //     mimetype: 'image/jpeg',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'photo3',
-    //     filename: 'pic3.jpg',
-    //     mimetype: 'image/jpeg',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'pic3',
-    //     filename: 'pic3.png',
-    //     mimetype: 'image/png',
-    //     encoding: '7bit',
-    //   },
-    //   {
-    //     hash: 'pic4',
-    //     filename: 'pic4.png',
-    //     mimetype: 'image/png',
-    //     encoding: '7bit',
-    //   },
-    // ];
-
     const options = {
       targets: ['logo', 'header', 'photos', 'pictures'],
       counts: [1, 1, 3, 2],
