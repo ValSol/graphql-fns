@@ -1,46 +1,36 @@
 // @flow
 import getStream from 'get-stream';
-import csvParse from 'csv-parse';
+import csvParse from 'csv-parse/lib/sync';
 
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
-import coerceDataToGql from '../../utils/coerceDataToGql';
-import createThingSchema from '../../mongooseModels/createThingSchema';
-import executeAuthorisation from '../executeAuthorisation';
-import processCreateInputData from './processCreateInputData';
-import updatePeriphery from './updatePeriphery';
+import checkInventory from '../../../utils/checkInventory';
+import coerceDataToGql from '../../../utils/coerceDataToGql';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import executeAuthorisation from '../../executeAuthorisation';
+import processCreateInputData from '../processCreateInputData';
+import updatePeriphery from '../updatePeriphery';
 import allocateFieldsForCSV from './allocateFieldsForCSV';
 
-const csvParse2 = (data, fieldsForCSV) => {
-  return new Promise((resolve, reject) => {
-    csvParse(
-      data,
-      {
-        columns: true,
-        cast(value, context) {
-          if (fieldsForCSV.object.includes(context.column)) {
-            return JSON.parse(value);
-          }
-          if (fieldsForCSV.int.includes(context.column)) {
-            return value && Number.parseInt(value, 10);
-          }
-          if (fieldsForCSV.float.includes(context.column)) {
-            return value && Number.parseFloat(value);
-          }
-          if (fieldsForCSV.boolean.includes(context.column)) {
-            return !!value;
-          }
-          return value;
-        },
-      },
-      (err, output) => {
-        if (err) reject(err);
-        resolve(output);
-      },
-    );
+const csvParse2 = (data, fieldsForCSV) =>
+  csvParse(data, {
+    columns: true,
+    cast(value, context) {
+      if (fieldsForCSV.object.includes(context.column)) {
+        return JSON.parse(value);
+      }
+      if (fieldsForCSV.int.includes(context.column)) {
+        return value && Number.parseInt(value, 10);
+      }
+      if (fieldsForCSV.float.includes(context.column)) {
+        return value && Number.parseFloat(value);
+      }
+      if (fieldsForCSV.boolean.includes(context.column)) {
+        return !!value && !!Number.parseInt(value, 10);
+      }
+      return value;
+    },
   });
-};
 
 type Args = { file: Object, options?: { format: 'csv' | 'json' } }; // todo set DOM file type
 type Context = { mongooseConn: Object, pubsub?: Object };

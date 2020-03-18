@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.325",
+  "version": "0.1.2-beta.326",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -34,7 +34,6 @@
     "clsx": "^1.0.4",
     "csv-parse": "^4.8.3",
     "csv-stringify": "^5.3.6",
-    "fast-deep-equal": "^3.1.1",
     "get-stream": "^5.1.0",
     "graphql-scalars": "^1.0.5",
     "lodash": "^4.17.15",
@@ -69,6 +68,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
+    "fast-deep-equal": "^3.1.1",
     "flow-bin": "0.108.0",
     "flow-copy-source": "^2.0.9",
     "formik": "^2.0.10",
@@ -97,6 +97,7 @@
     "@material-ui/lab": "^4.x",
     "@material-ui/styles": "^4.x",
     "apollo-cache-inmemory": "^1.x",
+    "fast-deep-equal": "^3.1.1",
     "formik": "1.5.x",
     "formik-material-ui": "0.0.x",
     "graphql": "14.x",
