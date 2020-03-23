@@ -20,7 +20,7 @@ const createUpdatedThingFilter = (thingConfig: ThingConfig): DeletedThingFilter 
 
     const whereResult =
       !where ||
-      !Object.keys(where).some(key => {
+      !Object.keys(where).some((key) => {
         if (where[key] === undefined) return false;
         if (thing[key] === undefined) return true;
         if (whereFields[key] === 'dateTimeFields') {
@@ -36,7 +36,7 @@ const createUpdatedThingFilter = (thingConfig: ThingConfig): DeletedThingFilter 
 
     return (
       !whereOne ||
-      !Object.keys(whereOneFields).some(key => {
+      !Object.keys(whereOneFields).some((key) => {
         if (whereOne[key] === undefined) return false;
         if (key === 'id') {
           return whereOne[key] !== thing[key].toString();

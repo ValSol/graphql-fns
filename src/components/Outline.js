@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles((theme) => {
   const align = theme.direction === 'rtl' ? 'right' : 'left';
   const borderColor =
     theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';

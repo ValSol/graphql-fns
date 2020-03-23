@@ -3,7 +3,7 @@
 
 import { createBitwiseArray } from 'bitwise-array';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { BoleanVariant, EnumVariant, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import coerceListItems from './coerceListItems';
 import composeFilters from './composeFilters';
@@ -350,10 +350,13 @@ describe('createUseReducerArgs util', () => {
     const action = { type: 'FILTER', value: { booleanIndexedField: true } };
     const state = reducer(thirdState, action);
 
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedField: BoleanVariant = filters.booleanIndexedField; // eslint-disable-line prefer-destructuring
+
     const filters2 = {
       ...filters,
       booleanIndexedField: {
-        ...filters.booleanIndexedField,
+        ...booleanIndexedField,
         value: true,
       },
     };
@@ -388,10 +391,13 @@ describe('createUseReducerArgs util', () => {
     };
     const state = reducer(thirdState, action);
 
+    // $FlowFixMe flow dosn't understand that this is EnumField type
+    const enumIndexedField: EnumVariant = filters.enumIndexedField; // eslint-disable-line prefer-destructuring
+
     const filters2 = {
       ...filters,
       enumIndexedField: {
-        ...filters.enumIndexedField,
+        ...enumIndexedField,
         value: createBitwiseArray(weekDays, ['Tuesday']),
       },
     };
@@ -423,10 +429,13 @@ describe('createUseReducerArgs util', () => {
     const action = { type: 'SUCCESS', value: items };
     const state = reducer(thirdState, action);
 
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedField: BoleanVariant = filters.booleanIndexedField; // eslint-disable-line prefer-destructuring
+
     const filters2 = {
       ...filters,
       booleanIndexedField: {
-        ...filters.booleanIndexedField,
+        ...booleanIndexedField,
         value: true,
       },
     };
@@ -460,10 +469,13 @@ describe('createUseReducerArgs util', () => {
     const action = { type: 'SUCCESS', value: items };
     const state = reducer(thirdState, action);
 
+    // $FlowFixMe flow dosn't understand that this is EnumField type
+    const enumIndexedField: EnumVariant = filters.enumIndexedField; // eslint-disable-line prefer-destructuring
+
     const filters2 = {
       ...filters,
       enumIndexedField: {
-        ...filters.enumIndexedField,
+        ...enumIndexedField,
         value: createBitwiseArray(weekDays, ['Tuesday']),
       },
     };

@@ -11,7 +11,7 @@ const createReadFragmentArg = (
   id: string,
   thingConfig: ThingConfig,
   clientOptions: ClientOptions = {},
-  dataIdFromObject: Object => string = defaultDataIdFromObject,
+  dataIdFromObject: (Object) => string = defaultDataIdFromObject,
   customDataIdFromObjectArg?: Object,
 ): Object | null => {
   const { name } = thingConfig;

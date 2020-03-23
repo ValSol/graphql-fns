@@ -426,11 +426,12 @@ export type AuthData = {
       [thingName: string]: { +include?: Array<string>, +exclude?: Array<string> },
     },
     +applyCallback?: Inventory,
-    +collaback?: (
+    +callback?: (
       inventoryChain: ThreeSegmentInventoryChain,
       fields: Array<string>,
-      { parent: Object, args: Object, context: Object },
-    ) => Boolean,
+      id: string,
+      requestArgs: Object,
+    ) => Promise<Array<string>>,
   },
 };
 
@@ -539,13 +540,13 @@ export type ClientFieldsOptions = {
 
 export type RouterQuery = { create?: '', delete?: '', id?: string, thing: string };
 
-type BoleanVariant = { fieldVariant: 'booleanField', value: 'all' | boolean };
-type EnumVariant = {
+export type BoleanVariant = { fieldVariant: 'booleanField', value: 'all' | boolean };
+export type EnumVariant = {
   fieldVariant: 'enumField',
   value: 'all' | BitwiseArray,
   enumeration: Array<string>,
 };
-type EnumArrayVariant = {
+export type EnumArrayVariant = {
   fieldVariant: 'enumArrayField',
   value: 'all' | BitwiseArray,
   enumeration: Array<string>,

@@ -5,26 +5,14 @@ import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
 const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
   (!include ||
     Object.keys(include)
-      .map(
-        key =>
-          key
-            .trim()
-            .split(/\s+/)
-            .slice(-1)[0],
-      )
+      .map((key) => key.trim().split(/\s+/).slice(-1)[0])
       .includes(name)) &&
   (!exclude || !(exclude[name] === null));
 
 const findNameWithAlias = (name: string, include: void | Object): string =>
   include
     ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs doesn't know about that
-      Object.keys(include).find(
-        key =>
-          key
-            .trim()
-            .split(/\s+/)
-            .slice(-1)[0] === name,
-      )
+      Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
 
 const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): Array<string> => {

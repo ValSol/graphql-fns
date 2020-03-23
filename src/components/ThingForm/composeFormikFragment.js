@@ -26,7 +26,7 @@ import composeFlatFormikFields from './composeFlatFormikFields';
 import composeFormikFieldArrayChild from './composeFormikFieldArrayChild';
 import composeInitialValues from './composeInitialValues';
 
-const composeIndex = value => (value === -1 ? '' : `(${value + 1})`);
+const composeIndex = (value) => (value === -1 ? '' : `(${value + 1})`);
 
 const composeFields = (
   formikProps: Object,
@@ -57,7 +57,7 @@ const composeFields = (
           return array ? (
             // eslint-disable-next-line react/no-array-index-key
             <FieldArray key={i} name={path}>
-              {args => {
+              {(args) => {
                 const {
                   form: { isSubmitting, values },
                   push,
@@ -160,7 +160,7 @@ const composeFields = (
                     name: path,
                   }}
                   multiple
-                  renderValue={selected => (
+                  renderValue={(selected) => (
                     <div>
                       {selected.map((menuItem, index) => {
                         return (
@@ -173,7 +173,7 @@ const composeFields = (
                     </div>
                   )}
                 >
-                  {enumsObject[enumName].map(item => {
+                  {enumsObject[enumName].map((item) => {
                     return (
                       <MenuItem key={item} value={item}>
                         {`${item} ${composeIndex(value.indexOf(item))}`}
@@ -306,7 +306,7 @@ const composeFields = (
                   }}
                   name={path}
                 >
-                  {menuItems.map(item => (
+                  {menuItems.map((item) => (
                     <MenuItem key={item} value={item.trim()}>
                       {item}
                     </MenuItem>

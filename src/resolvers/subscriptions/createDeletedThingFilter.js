@@ -17,7 +17,7 @@ const createDeletedThingFilter = (thingConfig: ThingConfig): DeletedThingFilter 
     const thing = payload[`deleted${name}`];
 
     // the same code as in createDeletedThingFilter.js
-    return !Object.keys(where).some(key => {
+    return !Object.keys(where).some((key) => {
       if (!where[key] === undefined) return false;
       if (thing[key] === undefined) return true;
       if (whereFields[key] === 'dateTimeFields') {

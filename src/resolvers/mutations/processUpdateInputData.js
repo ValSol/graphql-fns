@@ -22,11 +22,11 @@ const processUpdateInputData = (data: Object, thingConfig: ThingConfig): Object 
       if (array) {
         if (geospatialType === 'Point') {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(value => pointFromGqlToMongo(value));
+          prev[key] = data[key].map((value) => pointFromGqlToMongo(value));
         }
         if (geospatialType === 'Polygon') {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(value => polygonFromGqlToMongo(value));
+          prev[key] = data[key].map((value) => polygonFromGqlToMongo(value));
         }
       } else {
         if (geospatialType === 'Point') {

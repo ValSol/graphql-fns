@@ -56,11 +56,11 @@ const composeThingResolvers = (
           if (!values || !values.length) return [];
 
           if (geospatialType === 'Point') {
-            return values.map(value => pointFromMongoToGql(value));
+            return values.map((value) => pointFromMongoToGql(value));
           }
 
           if (geospatialType === 'Polygon') {
-            return values.map(value => polygonFromMongoToGql(value));
+            return values.map((value) => polygonFromMongoToGql(value));
           }
 
           throw new TypeError(

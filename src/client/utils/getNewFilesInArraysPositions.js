@@ -7,7 +7,7 @@ import createNewFilesIndexListFromUploadArgs from './createNewFilesIndexListFrom
 const getNewFilesInArraysPositions = (
   values: Object,
   uploadArgs: { files: Array<Object>, options: UploadOptions },
-  getHashFromValue: Object => string,
+  getHashFromValue: (Object) => string,
   thingConfig: ThingConfig,
 ): { arrayFiledFieldName: Array<number> } => {
   const { fileFields } = thingConfig;

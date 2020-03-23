@@ -158,7 +158,7 @@ const composeFormikFieldArrayChild = (
                     disabled={disabled || isSubmitting}
                     label={`${itemLabel} #${i + 1}`}
                     name={`${name}[${i}]`}
-                    onDelete={index => remove(index)}
+                    onDelete={(index) => remove(index)}
                     required
                     type={geospatialType}
                   />

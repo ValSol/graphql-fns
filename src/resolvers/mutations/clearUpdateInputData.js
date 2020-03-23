@@ -18,9 +18,9 @@ const clearUpdateInputData = (data: Object, thingConfig: ThingConfig): Object =>
     if (fieldsObject[key].kind === 'embeddedFields' || fieldsObject[key].kind === 'fileFields') {
       const { config } = fieldsObject[key].attributes;
       if (array) {
-        prev[key] = data[key].map(item => clearUpdateInputData(item, config)); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].map((item) => clearUpdateInputData(item, config)); // eslint-disable-line no-param-reassign
       } else {
-        prev[key] = clearUpdateInputData(data[key], config); // eslint-disable-line no-param-reassign
+        prev[key] = data[key] && clearUpdateInputData(data[key], config); // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'duplexFields' || kind === 'relationalFields') {
       prev[key] = data[key].connect; // eslint-disable-line no-param-reassign

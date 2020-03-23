@@ -29,7 +29,7 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
   duplexFieldsArray.forEach(({ name, array, config, oppositeArray, oppositeName }) => {
     if (data[name]) {
       if (array) {
-        data[name].forEach(oppositeId => {
+        data[name].forEach((oppositeId) => {
           const item = {
             updateOne: {
               filter: {

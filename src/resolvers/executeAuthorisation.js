@@ -22,12 +22,16 @@ const executeAuthorisation = async ({
 }: Arg) => {
   const { authData, getCredentials, unrestricted } = serversideConfig;
   const { args, context, info } = resolverArgs;
-  if (getCredentials && !(unrestricted && checkInventory(inventoryChain, unrestricted))) {
+  if (
+    getCredentials && // getCredentials & authData are mutual used
+    authData &&
+    !(unrestricted && checkInventory(inventoryChain, unrestricted))
+  ) {
     if (!getCredentials) {
       throw new TypeError('Must set "getCredentials" config method!');
     }
 
-    let credentials2;
+    let credentials2 = null;
     if (!credentials) {
       credentials2 = await getCredentials(context);
     }

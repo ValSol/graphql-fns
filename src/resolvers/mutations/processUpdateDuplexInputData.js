@@ -33,7 +33,7 @@ const processUpdateDuplexInputData = (
     }, duplexFieldsObject);
   }
 
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     if (duplexFieldsObject[key]) {
       const { array, config, oppositeArray, oppositeConfig, oppositeName } = duplexFieldsObject[
         key
@@ -42,7 +42,7 @@ const processUpdateDuplexInputData = (
       if (array) {
         const oppositeIds = data[key];
 
-        oppositeIds.forEach(oppositeId => {
+        oppositeIds.forEach((oppositeId) => {
           const item = {
             updateOne: {
               filter: { _id: oppositeId },

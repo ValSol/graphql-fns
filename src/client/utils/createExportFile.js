@@ -7,7 +7,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import coerceDataFromGql from '../../utils/coerceDataFromGql';
 
-const csvStringify2 = data => {
+const csvStringify2 = (data) => {
   return new Promise((resolve, reject) => {
     csvStringify(data, { header: true }, (err, output) => {
       if (err) reject(err);
@@ -28,12 +28,12 @@ const createExportFile = async (
   let type;
   let fileExtension;
   if (options && options.format === 'csv') {
-    const data = items.map(item => coerceDataFromGql(item, thingConfig, true));
+    const data = items.map((item) => coerceDataFromGql(item, thingConfig, true));
     content = await csvStringify2(data);
     type = 'text/csv';
     fileExtension = 'csv';
   } else {
-    const data = items.map(item => coerceDataFromGql(item, thingConfig, true, true));
+    const data = items.map((item) => coerceDataFromGql(item, thingConfig, true, true));
     content = JSON.stringify(data, null, ' ');
     type = 'application/json';
     fileExtension = 'json';

@@ -59,7 +59,7 @@ const createUseReducerArgs = (generalConfig: GeneralConfig): Result => {
       const { value } = action;
       const { filters: currentFilters } = state;
       const filters = { ...currentFilters };
-      Object.keys(value).forEach(key => {
+      Object.keys(value).forEach((key) => {
         filters[key].value = value[key];
       });
 

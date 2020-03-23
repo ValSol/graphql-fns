@@ -54,7 +54,7 @@ const ThingListProvider = (props: Props) => {
         const { data } = await apolloClient.query({ query: thingQuery });
         // const fetchedItems = coerceListItems(data[pluralize(name)], config);
         const fetchedItems = data[pluralize(name)];
-        const value = fetchedItems.map(item => {
+        const value = fetchedItems.map((item) => {
           const obj = coerceDataFromGql(item, config);
           obj.id = item.id;
           return obj;

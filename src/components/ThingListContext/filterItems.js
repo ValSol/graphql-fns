@@ -1,4 +1,5 @@
 // @flow
+import BitwiseArray from 'bitwise-array';
 
 import type { AdminFilters } from '../../flowTypes';
 
@@ -8,16 +9,20 @@ const filterItems = (
   filters: AdminFilters,
 ): Array<Object> => {
   const result = decorated.reduce((prev, item, i) => {
-    const satisfy = Object.keys(filters).every(key => {
+    const satisfy = Object.keys(filters).every((key) => {
       const { fieldVariant, value } = filters[key];
       if (value === 'all') return true;
       if (fieldVariant === 'booleanField') {
         return value === item[key];
       }
-      // $FlowFixMe
+
+      if (!(value instanceof BitwiseArray)) {
+        // only to eliminate flowjs errors
+        throw new TypeError('Have to be BitwiseArray!');
+      }
+
       if (!value.count()) return !item[key].count();
 
-      // $FlowFixMe
       return value.and(item[key]).count();
     });
     if (satisfy) prev.push(items[i]);

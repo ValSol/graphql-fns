@@ -5,7 +5,7 @@ import type { ThingConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
-const isNotDate = date =>
+const isNotDate = (date) =>
   new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));
 
 const coerceDataToGql = (
@@ -34,9 +34,9 @@ const coerceDataToGql = (
       const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map(item => coerceDataToGql(item, null, config));
+        prev[key] = data[key].map((item) => coerceDataToGql(item, null, config));
       } else {
-        prev[key] = coerceDataToGql(data[key], null, config); // eslint-disable-line no-param-reassign
+        prev[key] = data[key] ? coerceDataToGql(data[key], null, config) : null; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'relationalFields' || kind === 'duplexFields') {
       if (array) {
@@ -52,13 +52,13 @@ const coerceDataToGql = (
       }
     } else if (kind === 'intFields' || kind === 'floatFields') {
       if (array) {
-        prev[key] = data[key].filter(item => item !== ''); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].filter((item) => item !== ''); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] === '' ? null : data[key]; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'dateTimeFields') {
       if (array) {
-        prev[key] = data[key].map(item => (isNotDate(item) ? null : item)).filter(Boolean); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].map((item) => (isNotDate(item) ? null : item)).filter(Boolean); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
       }
@@ -68,7 +68,7 @@ const coerceDataToGql = (
         if (array) {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
-            .map(item => {
+            .map((item) => {
               const { lng, lat } = item;
               return lng === '' || lat === '' ? null : item; // eslint-disable-line no-param-reassign
             })
@@ -81,7 +81,7 @@ const coerceDataToGql = (
         if (array) {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
-            .map(item => {
+            .map((item) => {
               // TODO expand test for all empty situations
               const {
                 externalRing: { ring: externalRing },

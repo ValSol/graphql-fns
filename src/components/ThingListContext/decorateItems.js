@@ -24,7 +24,7 @@ const decorateItems = (
   const decorated = items.reduce((prev, item) => {
     const { id } = item;
     const decoratedItem = { id };
-    Object.keys(filters).forEach(key => {
+    Object.keys(filters).forEach((key) => {
       // $FlowFixMe
       const { fieldVariant, enumeration: currentEnum } = filters[key];
       switch (fieldVariant) {

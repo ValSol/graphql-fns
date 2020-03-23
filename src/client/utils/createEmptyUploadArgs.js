@@ -2,7 +2,7 @@
 
 import type { UploadOptions } from '../../flowTypes';
 
-const createEmptyUploadArgs = (): { files: [], options: UploadOptions } => ({
+const createEmptyUploadArgs = (): { files: Array<Object>, options: UploadOptions } => ({
   files: [],
   options: { targets: [], counts: [], hashes: [] },
 });

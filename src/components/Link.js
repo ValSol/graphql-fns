@@ -18,7 +18,8 @@ const NextComposed = React.forwardRef(function NextComposed(props: Props, ref) {
 
   return (
     <NextLink href={href} prefetch={prefetch} as={as}>
-      <a ref={ref} {...other} />
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <a {...other} ref={ref} />
     </NextLink>
   );
 });
@@ -45,10 +46,12 @@ function Link(props: Props2) {
   });
 
   if (naked) {
-    return <NextComposed className={className} ref={innerRef} {...other} />;
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    return <NextComposed {...other} className={className} ref={innerRef} />;
   }
 
-  return <MuiLink component={NextComposed} className={className} ref={innerRef} {...other} />;
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <MuiLink {...other} component={NextComposed} className={className} ref={innerRef} />;
 }
 
 Link.defaultProps = {
@@ -58,5 +61,7 @@ Link.defaultProps = {
   onClick: null,
 };
 
-// eslint-disable-next-line react/no-multi-comp
-export default React.forwardRef<Props, 'a'>((props, ref) => <Link {...props} innerRef={ref} />);
+export default React.forwardRef<Props, HTMLAnchorElement>((props, ref) => (
+  // $FlowFixMe
+  <Link innerRef={ref} {...props} /> // eslint-disable-line  react/jsx-props-no-spreading
+));

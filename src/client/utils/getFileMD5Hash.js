@@ -20,7 +20,7 @@ const getFileMD5Hash = (file: Object): Promise<string> =>
       fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
     };
 
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       // $FlowFixMe
       spark.append(e.target.result); // Append array buffer
       currentChunk += 1;
@@ -32,7 +32,7 @@ const getFileMD5Hash = (file: Object): Promise<string> =>
       }
     };
 
-    fileReader.onerror = err => {
+    fileReader.onerror = (err) => {
       reject(err);
     };
 

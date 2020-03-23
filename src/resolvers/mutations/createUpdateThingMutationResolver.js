@@ -8,7 +8,7 @@ import processUpdateDuplexInputData from './processUpdateDuplexInputData';
 import processUpdateInputData from './processUpdateInputData';
 import processDeleteData from './processDeleteData';
 import updatePeriphery from './updatePeriphery';
-import clearUpdateInputDate from './clearUpdateInputData';
+import clearUpdateInputData from './clearUpdateInputData';
 
 type Args = { data: Object, whereOne: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -40,7 +40,7 @@ const createUpdateThingMutationResolver = (
 
     // now only remove 'connect'
     // TODO refactor to process 'connect' & 'create'
-    const data = clearUpdateInputDate(rawData, thingConfig);
+    const data = clearUpdateInputData(rawData, thingConfig);
 
     const { name: thingName, duplexFields } = thingConfig;
     const thingSchema = createThingSchema(thingConfig, enums);

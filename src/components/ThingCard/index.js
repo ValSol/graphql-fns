@@ -29,7 +29,7 @@ import composeThingCardContent from './composeThingCardContent';
 
 type Props = { config: ThingConfig };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(1),
   },
@@ -65,21 +65,20 @@ const ThingCard = (props: Props) => {
 
   return (
     <Card className={classes.card}>
-      {
-        <NoSsr>
-          <Query query={thingCountQuery}>
-            {({ data, error: thingCountQueryError, loading }) => {
-              if (loading) return 'Loading...';
+      <NoSsr>
+        <Query query={thingCountQuery}>
+          {({ data, error: thingCountQueryError, loading }) => {
+            if (loading) return 'Loading...';
 
-              if (thingCountQueryError) return <CardHeader title={name} />;
+            if (thingCountQueryError) return <CardHeader title={name} />;
 
-              if (!data) return null;
-              const count = data[`${name}Count`];
-              return <CardHeader title={name} subheader={`items: ${count}`} />;
-            }}
-          </Query>
-        </NoSsr>
-      }
+            if (!data) return null;
+            const count = data[`${name}Count`];
+            return <CardHeader title={name} subheader={`items: ${count}`} />;
+          }}
+        </Query>
+      </NoSsr>
+
       <CardActions>
         <Tooltip title={`All ${pluralize(name)}`}>
           <IconButton

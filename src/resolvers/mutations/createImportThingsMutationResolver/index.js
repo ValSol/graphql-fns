@@ -75,7 +75,7 @@ const createImportThingsMutationResolver = (
     }
 
     const skipUnusedFields = true;
-    const data = originalData.map(item =>
+    const data = originalData.map((item) =>
       coerceDataToGql(item, null, thingConfig, skipUnusedFields),
     );
 
@@ -87,7 +87,7 @@ const createImportThingsMutationResolver = (
     let overallPeriphery = null;
     const ids = [];
 
-    data.forEach(dataItem => {
+    data.forEach((dataItem) => {
       const { core, periphery, first } = processCreateInputData(
         dataItem,
         overallCore,
@@ -120,7 +120,7 @@ const createImportThingsMutationResolver = (
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 
-    const things2 = things.map(item => {
+    const things2 = things.map((item) => {
       const { _id: id, ...rest } = item;
       return { ...rest, id };
     });

@@ -17,7 +17,7 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
   );
 
   if (internalRingsArray && internalRingsArray.length) {
-    const internalRings = internalRingsArray.map(array =>
+    const internalRings = internalRingsArray.map((array) =>
       array.reduce(
         (prev, item) => {
           const [lng, lat] = item;

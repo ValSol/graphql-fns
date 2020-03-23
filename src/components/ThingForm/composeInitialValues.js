@@ -19,7 +19,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
         const { config } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
           ? data[name]
-            ? data[name].map(dataItem => composeInitialValues(config, dataItem))
+            ? data[name].map((dataItem) => composeInitialValues(config, dataItem))
             : []
           : composeInitialValues(config, data[name]); // eslint-disable-line no-param-reassign
         break;
@@ -28,7 +28,7 @@ const composeInitialValues = (thingConfig: ThingConfig, data?: Object = {}): Obj
         const { config: config2 } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
         prev[name] = array // eslint-disable-line no-param-reassign, no-nested-ternary
           ? data[name]
-            ? data[name].map(dataItem => composeInitialValues(config2, dataItem))
+            ? data[name].map((dataItem) => composeInitialValues(config2, dataItem))
             : []
           : composeInitialValues(config2, data[name]); // eslint-disable-line no-param-reassign
         break;

@@ -207,7 +207,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
         mimetype: 'image/png',
         encoding: '7bit',
       },
-    ].map(item => Promise.resolve(item));
+    ].map((item) => Promise.resolve(item));
 
     const whereOne = { id };
     const options = {
@@ -351,7 +351,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
         mimetype: 'image/png',
         encoding: '7bit',
       },
-    ].map(item => Promise.resolve(item));
+    ].map((item) => Promise.resolve(item));
 
     const options2 = {
       targets: ['logo', 'header', 'photos', 'pictures'],

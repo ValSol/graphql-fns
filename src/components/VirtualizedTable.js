@@ -30,7 +30,7 @@ type ProvidedProps = {
   classes: Object,
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   flexContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -54,8 +54,8 @@ const styles = theme => ({
 
 class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
   static defaultProps = {
-    headerHeight: 48, // eslint-disable-line react/default-props-match-prop-types
-    rowHeight: 48, // eslint-disable-line react/default-props-match-prop-types
+    headerHeight: 48,
+    rowHeight: 48,
   };
 
   getRowClassName = ({ index }) => {
@@ -139,6 +139,7 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
         {({ height, isScrolling, onChildScroll, scrollTop }) => {
           return (
             <Table
+              // eslint-disable-next-line react/jsx-props-no-spreading
               {...tableProps}
               autoHeight
               height={height}
@@ -152,7 +153,7 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
                 return (
                   <Column
                     key={dataKey}
-                    headerRenderer={headerProps =>
+                    headerRenderer={(headerProps) =>
                       this.headerRenderer({
                         ...headerProps,
                         columnIndex: index,
@@ -161,6 +162,7 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
                     className={classes.flexContainer}
                     cellRenderer={this.cellRenderer}
                     dataKey={dataKey}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...other}
                   />
                 );

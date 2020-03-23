@@ -45,7 +45,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
         }),
       },
 
-      composeFileFieldsData: { Image: item => item },
+      composeFileFieldsData: { Image: (item) => item },
     };
 
     const result = createUploadFilesToThingMutationResolver(

@@ -28,7 +28,7 @@ const createCustomResolver = (
     throw new TypeError(`Have to set "${methodKind}" of "${methodName}" `);
   }
 
-  const authDecorator = func => async (...argarray) => {
+  const authDecorator = (func) => async (...argarray) => {
     const [parent, args, context, info] = argarray;
     const resolverArgs = { parent, args, context, info };
     await executeAuthorisation({

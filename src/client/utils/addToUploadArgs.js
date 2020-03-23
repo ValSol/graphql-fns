@@ -10,7 +10,7 @@ const addToUploadArgs = async (
   newFiles: Array<Object>,
   fileFieldName: string,
   prevArgs: UploadArgs,
-  calculateHash: Object => Promise<string> = getFileMD5Hash,
+  calculateHash: (Object) => Promise<string> = getFileMD5Hash,
 ): Promise<Object> => {
   const prevFiles = prevArgs && prevArgs.files ? prevArgs && prevArgs.files : [];
   const prevOptions = (prevArgs && prevArgs.options) || {

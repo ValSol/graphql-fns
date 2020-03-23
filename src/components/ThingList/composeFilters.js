@@ -28,7 +28,7 @@ const composeFilters = (
   if (!Object.keys(filters)) return null;
   return (
     <>
-      {Object.keys(filters).map(key => {
+      {Object.keys(filters).map((key) => {
         // $FlowFixMe
         const { enumeration, fieldVariant, value } = filters[key];
         if (!masks[key]) return null;
@@ -72,7 +72,7 @@ const composeFilters = (
                 }
               }}
             >
-              {menuItems.map(item => (
+              {menuItems.map((item) => (
                 <MenuItem key={item} value={menuItemToValue(fieldVariant, item)}>
                   {item}
                 </MenuItem>

@@ -1,8 +1,9 @@
 [version]
-0.108.0
+0.121.0
 [ignore]
 .*/node_modules/.*/\(lib\|test\).*\.json$
 .*/node_modules/.*/\(src\).*\.js$
+.*/node_modules/graphql/subscription/mapAsyncIterator.js
 lib/.*
 
 [include]

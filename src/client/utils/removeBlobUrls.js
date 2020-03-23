@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 const removeBlobUrls = (
   values: Object,
-  getBlobUrlFromValue: any => string,
+  getBlobUrlFromValue: (any) => string,
   thingConfig: ThingConfig,
 ): void => {
   const { fileFields } = thingConfig;
@@ -13,7 +13,7 @@ const removeBlobUrls = (
 
   fileFields.forEach(({ array, name }) => {
     if (array) {
-      values[name].forEach(val => window.URL.revokeObjectURL(getBlobUrlFromValue(val)));
+      values[name].forEach((val) => window.URL.revokeObjectURL(getBlobUrlFromValue(val)));
     } else {
       window.URL.revokeObjectURL(getBlobUrlFromValue(values[name]));
     }

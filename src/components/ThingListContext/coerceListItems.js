@@ -8,7 +8,7 @@ const coerceDateTime = (value: string | Array<string>, array?: boolean): string 
     if (!Array.isArray(value)) {
       throw new TypeError(`Value have to be array!`);
     }
-    return value.map(item => `${item.slice(0, 10)} ${item.slice(11, 16)}`).join(', ');
+    return value.map((item) => `${item.slice(0, 10)} ${item.slice(11, 16)}`).join(', ');
   }
   if (!(typeof value === 'string')) {
     throw new TypeError(`Value have to be string!`);
@@ -19,7 +19,7 @@ const coerceDateTime = (value: string | Array<string>, array?: boolean): string 
 const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListColumn> => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
-  return items.map(item =>
+  return items.map((item) =>
     Object.keys(item).reduce((prev, key) => {
       if (key === '__typename') return prev;
 
@@ -55,7 +55,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
         case 'booleanFields':
           if (array) {
             // eslint-disable-next-line no-param-reassign
-            prev[key] = item[key].map(value => (value ? 'true' : 'false')).join(', ');
+            prev[key] = item[key].map((value) => (value ? 'true' : 'false')).join(', ');
           } else {
             prev[key] = item[key] ? 'true' : 'false'; // eslint-disable-line no-param-reassign
           }
@@ -111,7 +111,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
 
         case 'duplexFields':
           if (array) {
-            prev[key] = item[key].map(item2 => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
+            prev[key] = item[key].map((item2) => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
           } else {
             prev[key] = item[key] && item[key].id; // eslint-disable-line no-param-reassign
           }
@@ -119,7 +119,7 @@ const coerceListItems = (items: Object, thingConfig: ThingConfig): Array<ListCol
 
         case 'relationalFields':
           if (array) {
-            prev[key] = item[key].map(item2 => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
+            prev[key] = item[key].map((item2) => item2 && item2.id).join(', '); // eslint-disable-line no-param-reassign
           } else {
             prev[key] = item[key] && item[key].id; // eslint-disable-line no-param-reassign
           }

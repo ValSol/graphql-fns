@@ -3,7 +3,13 @@
 
 import { createBitwiseArray } from 'bitwise-array';
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type {
+  BoleanVariant,
+  EnumArrayVariant,
+  EnumVariant,
+  GeneralConfig,
+  ThingConfig,
+} from '../../flowTypes';
 
 import composeFilters from './composeFilters';
 import decorateItems from './decorateItems';
@@ -153,11 +159,15 @@ describe('filterItems', () => {
   const { decorated } = decorateItems(items, filters);
 
   test('should return items where booleanIndexedField = false', () => {
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedField: BoleanVariant = filters.booleanIndexedField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[0], items[2]];
+
     const filters2 = {
       ...filters,
       booleanIndexedField: {
-        ...filters.booleanIndexedField,
+        ...booleanIndexedField,
         value: false,
       },
     };
@@ -167,11 +177,15 @@ describe('filterItems', () => {
   });
 
   test('should return items where booleanIndexedField = false', () => {
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedField: BoleanVariant = filters.booleanIndexedField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[1]];
+
     const filters2 = {
       ...filters,
       booleanIndexedField: {
-        ...filters.booleanIndexedField,
+        ...booleanIndexedField,
         value: true,
       },
     };
@@ -181,11 +195,15 @@ describe('filterItems', () => {
   });
 
   test('should return items where booleanIndexedFalseField = true', () => {
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedFalseField: BoleanVariant = filters.booleanIndexedFalseField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [];
+
     const filters2 = {
       ...filters,
       booleanIndexedFalseField: {
-        ...filters.booleanIndexedFalseField,
+        ...booleanIndexedFalseField,
         value: true,
       },
     };
@@ -195,11 +213,15 @@ describe('filterItems', () => {
   });
 
   test('should return items where booleanIndexedFalseField = false', () => {
+    // $FlowFixMe flow dosn't understand that this is BoleanVariant type
+    const booleanIndexedFalseField: BoleanVariant = filters.booleanIndexedFalseField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = items;
+
     const filters2 = {
       ...filters,
       booleanIndexedFalseField: {
-        ...filters.booleanIndexedFalseField,
+        ...booleanIndexedFalseField,
         value: false,
       },
     };
@@ -209,11 +231,14 @@ describe('filterItems', () => {
   });
 
   test('should return items where enumIndexedField is empty', () => {
+    // $FlowFixMe flow dosn't understand that this is EnumField type
+    const enumIndexedField: EnumVariant = filters.enumIndexedField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[0]];
     const filters2 = {
       ...filters,
       enumIndexedField: {
-        ...filters.enumIndexedField,
+        ...enumIndexedField,
         value: createBitwiseArray(weekDays.length),
       },
     };
@@ -223,11 +248,14 @@ describe('filterItems', () => {
   });
 
   test('should return items where enumIndexedFieldArray is empty', () => {
+    // $FlowFixMe flow dosn't understand that this is enumArrayField type
+    const enumIndexedFieldArray: EnumArrayVariant = filters.enumIndexedFieldArray; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[1], items[2]];
     const filters2 = {
       ...filters,
       enumIndexedFieldArray: {
-        ...filters.enumIndexedFieldArray,
+        ...enumIndexedFieldArray,
         value: createBitwiseArray(weekDays.length),
       },
     };
@@ -237,11 +265,14 @@ describe('filterItems', () => {
   });
 
   test('should return items where enumIndexedField is "Wednesday" or "Tuesday"', () => {
+    // $FlowFixMe flow dosn't understand that this is enumArrayField type
+    const enumIndexedField: EnumField = filters.enumIndexedField; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[1], items[2]];
     const filters2 = {
       ...filters,
       enumIndexedField: {
-        ...filters.enumIndexedField,
+        ...enumIndexedField,
         value: createBitwiseArray(weekDays, ['Wednesday', 'Tuesday']),
       },
     };
@@ -251,11 +282,14 @@ describe('filterItems', () => {
   });
 
   test('should return items where enumIndexedFieldArray is "Wednesday" or "Tuesday"', () => {
+    // $FlowFixMe flow dosn't understand that this is enumArrayField type
+    const enumIndexedFieldArray: EnumArrayVariant = filters.enumIndexedFieldArray; // eslint-disable-line prefer-destructuring
+
     const expectedResult = [items[0]];
     const filters2 = {
       ...filters,
       enumIndexedFieldArray: {
-        ...filters.enumIndexedFieldArray,
+        ...enumIndexedFieldArray,
         value: createBitwiseArray(weekDays, ['Wednesday', 'Tuesday']),
       },
     };

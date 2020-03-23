@@ -57,16 +57,29 @@ describe('processUpdateInputData', () => {
     };
     const data = {
       point: { lng: 40, lat: 5 },
-      points: [{ lng: 12, lat: 23 }, { lng: 34, lat: 45 }],
+      points: [
+        { lng: 12, lat: 23 },
+        { lng: 34, lat: 45 },
+      ],
       polygon: {
         externalRing: {
-          ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+          ring: [
+            { lng: 0, lat: 0 },
+            { lng: 3, lat: 6 },
+            { lng: 6, lat: 1 },
+            { lng: 0, lat: 0 },
+          ],
         },
       },
       polygons: [
         {
           externalRing: {
-            ring: [{ lng: 0, lat: 0 }, { lng: 3, lat: 6 }, { lng: 6, lat: 1 }, { lng: 0, lat: 0 }],
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
           },
         },
       ],
@@ -74,15 +87,32 @@ describe('processUpdateInputData', () => {
 
     const expectedResult = {
       point: { type: 'Point', coordinates: [40, 5] },
-      points: [{ type: 'Point', coordinates: [12, 23] }, { type: 'Point', coordinates: [34, 45] }],
+      points: [
+        { type: 'Point', coordinates: [12, 23] },
+        { type: 'Point', coordinates: [34, 45] },
+      ],
       polygon: {
         type: 'Polygon',
-        coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
+        coordinates: [
+          [
+            [0, 0],
+            [3, 6],
+            [6, 1],
+            [0, 0],
+          ],
+        ],
       },
       polygons: [
         {
           type: 'Polygon',
-          coordinates: [[[0, 0], [3, 6], [6, 1], [0, 0]]],
+          coordinates: [
+            [
+              [0, 0],
+              [3, 6],
+              [6, 1],
+              [0, 0],
+            ],
+          ],
         },
       ],
     };

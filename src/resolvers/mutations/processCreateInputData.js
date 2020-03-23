@@ -158,7 +158,7 @@ const processCreateInputData = (
         if (data2[key].create) {
           if (array) {
             const ids = data2[key].connect || [];
-            data2[key].create.forEach(item => {
+            data2[key].create.forEach((item) => {
               // eslint-disable-next-line no-underscore-dangle
               const _id = mongooseTypes.ObjectId();
               ids.push(_id);
@@ -196,7 +196,7 @@ const processCreateInputData = (
             // eslint-disable-next-line no-param-reassign
             prev[key] = oppositeIds;
 
-            oppositeIds.forEach(oppositeId => {
+            oppositeIds.forEach((oppositeId) => {
               const item = {
                 updateOne: {
                   filter: { _id: oppositeId },
@@ -291,7 +291,7 @@ const processCreateInputData = (
         if (data2[key].create) {
           if (array) {
             const ids = data2[key].connect || [];
-            data2[key].create.forEach(item => {
+            data2[key].create.forEach((item) => {
               // eslint-disable-next-line no-underscore-dangle
               const _id = mongooseTypes.ObjectId();
               ids.push(_id);
@@ -333,7 +333,7 @@ const processCreateInputData = (
         const { array, config } = embeddedFieldsObject[key];
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data2[key].map(value => transform(value, config));
+          prev[key] = data2[key].map((value) => transform(value, config));
         } else {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key] === null ? null : transform(data2[key], config);
@@ -342,7 +342,7 @@ const processCreateInputData = (
         const { array, config } = fileFieldsObject[key];
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data2[key].map(value => transform(value, config));
+          prev[key] = data2[key].map((value) => transform(value, config));
         } else {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key] === null ? null : transform(data2[key], config);
@@ -352,11 +352,11 @@ const processCreateInputData = (
         if (array) {
           if (geospatialType === 'Point') {
             // eslint-disable-next-line no-param-reassign
-            prev[key] = data2[key].map(value => pointFromGqlToMongo(value));
+            prev[key] = data2[key].map((value) => pointFromGqlToMongo(value));
           }
           if (geospatialType === 'Polygon') {
             // eslint-disable-next-line no-param-reassign
-            prev[key] = data2[key].map(value => polygonFromGqlToMongo(value));
+            prev[key] = data2[key].map((value) => polygonFromGqlToMongo(value));
           }
         } else {
           if (geospatialType === 'Point') {

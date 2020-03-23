@@ -9,7 +9,7 @@ const createNewFilesIndexListFromUploadArgs = (
   fileFieldName: string,
   values: Object,
   uploadArgs: { files: Array<Object>, options: UploadOptions },
-  getHashFromValue: Object => string,
+  getHashFromValue: (Object) => string,
 ): Array<number> => {
   const hashes = getHashListFromUploadArgs(fileFieldName, uploadArgs);
   return createNewFilesIndexList(hashes, values[fileFieldName], getHashFromValue);

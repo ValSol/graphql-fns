@@ -87,7 +87,7 @@ const createUploadFilesToThingMutationResolver = (
       const { name: name2 } = config;
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
-      indexes.forEach(index => {
+      indexes.forEach((index) => {
         if (hashDoubles[index] === null) {
           const hash = hashes[index];
           promises[index] = FileModel.findOne({ hash }, {});
@@ -115,7 +115,7 @@ const createUploadFilesToThingMutationResolver = (
       const { name: name2 } = config;
       const fileSchema = createFileSchema(config);
       const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
-      indexes.forEach(index => {
+      indexes.forEach((index) => {
         if (alreadyUploadedFiles[index]) {
           promises2[index] = Promise.resolve(alreadyUploadedFiles[index]);
         } else {

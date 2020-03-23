@@ -11,7 +11,7 @@ describe('removeBlobUrls util', () => {
   const revoked = [];
 
   beforeEach(() => {
-    window.URL.revokeObjectURL = jest.fn(url => {
+    window.URL.revokeObjectURL = jest.fn((url) => {
       if (url) revoked.push(url);
     });
   });

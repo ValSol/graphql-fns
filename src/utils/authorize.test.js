@@ -30,7 +30,7 @@ describe('authorize', () => {
       },
     },
   };
-  const requestArgs = {};
+  const requestArgs = { parent: {}, args: {}, context: {} };
 
   test('should return fields for Customer query', async () => {
     const inventoryСhain = ['Query', 'thing', 'User'];
@@ -112,8 +112,8 @@ describe('authorize', () => {
   test('should return fields for null credetials mutation updateThing', async () => {
     const inventoryСhain = ['Mutation', 'createThing', 'TextExample'];
     const fields = ['text', 'textRequired', '​textItems', '​textRequiredItems'];
-    const roles = null;
-    const credentials = { roles, id: null };
+    const roles = [];
+    const credentials = { roles, id: '9' };
 
     const expectedResult = false;
     const result = await authorize(inventoryСhain, fields, credentials, requestArgs, data);

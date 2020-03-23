@@ -97,9 +97,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'textFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'textFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -189,9 +190,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'intFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'intFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -281,9 +283,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'floatFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'floatFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -354,9 +357,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'booleanFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'booleanFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -539,9 +543,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'duplexFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'duplexFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));
@@ -639,9 +644,10 @@ describe('composeFormikFieldArrayChild', () => {
       remove() {},
     };
 
-    const result = composeFormikFieldArrayChild({ attributes: {}, kind: 'dateTimeFields' }, false)(
-      props,
-    );
+    const result = composeFormikFieldArrayChild(
+      { attributes: {}, kind: 'dateTimeFields' },
+      false,
+    )(props);
 
     const result2 = JSON.parse(JSON.stringify(result));
     const expectedResult2 = JSON.parse(JSON.stringify(expectedResult));

@@ -46,7 +46,7 @@ const createCreateManyThingsMutationResolver = (
     let overallPeriphery = null;
     const ids = [];
 
-    data.forEach(dataItem => {
+    data.forEach((dataItem) => {
       const { core, periphery, first } = processCreateInputData(
         dataItem,
         overallCore,
@@ -79,7 +79,7 @@ const createCreateManyThingsMutationResolver = (
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 
-    const things2 = things.map(item => {
+    const things2 = things.map((item) => {
       const { _id: id, ...rest } = item;
       return { ...rest, id };
     });

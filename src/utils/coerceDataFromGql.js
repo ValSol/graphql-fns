@@ -24,7 +24,7 @@ const coerceDataFromGql = (
         prev[key] = ''; // eslint-disable-line no-param-reassign
       } else if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map(item => {
+        prev[key] = data[key].map((item) => {
           if (item === null) return '';
           const { id } = item;
           return id === null ? '' : id;
@@ -36,7 +36,7 @@ const coerceDataFromGql = (
     } else if (kind === 'dateTimeFields') {
       if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map(item => (item === null ? '' : item));
+        prev[key] = data[key].map((item) => (item === null ? '' : item));
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key] === null ? '' : data[key];
@@ -46,7 +46,7 @@ const coerceDataFromGql = (
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(item => {
+          prev[key] = data[key].map((item) => {
             if (!item) {
               return { lng: '', lat: '' };
             }
@@ -63,7 +63,7 @@ const coerceDataFromGql = (
       } else if (geospatialType === 'Polygon') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[key] = data[key].map(item =>
+          prev[key] = data[key].map((item) =>
             item === null
               ? {
                   externalRing: {
@@ -95,7 +95,7 @@ const coerceDataFromGql = (
       const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map(item =>
+        prev[key] = data[key].map((item) =>
           item === null ? composeEmptyValues(config) : coerceDataFromGql(item, config),
         );
       } else {

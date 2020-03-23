@@ -186,7 +186,7 @@ const ThingForm = (props: Props) => {
                             };
 
                         mutateThing({ variables })
-                          .then(result => {
+                          .then((result) => {
                             if (result) {
                               const { data: resultData } = result;
                               if (resultData) {
@@ -220,7 +220,7 @@ const ThingForm = (props: Props) => {
                       }}
                       validationSchema={createValidationSchema(thingConfig, apolloClient, id)}
                     >
-                      {formikProps => {
+                      {(formikProps) => {
                         const { dirty, errors, isSubmitting, resetForm } = formikProps;
 
                         const isError = !!Object.keys(errors).length;
@@ -302,7 +302,7 @@ const ThingForm = (props: Props) => {
                                     setOpen(false);
                                     const variables = { whereOne };
 
-                                    mutateThing({ variables }).then(result => {
+                                    mutateThing({ variables }).then((result) => {
                                       if (result) {
                                         const { data: resultData } = result;
                                         if (resultData) {

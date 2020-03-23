@@ -3,7 +3,7 @@
 const createNewFilesIndexList = (
   hashes: Array<string>,
   fileFieldValues: Array<Object>,
-  getHashFromValue: Object => string,
+  getHashFromValue: (Object) => string,
 ): Array<number> =>
   fileFieldValues.reduce((prev, value, i) => {
     const hash = getHashFromValue(value);

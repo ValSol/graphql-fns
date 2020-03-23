@@ -178,16 +178,8 @@ describe('createValidationSchema', () => {
 
     const expectedResult = yup.object().shape({
       intField1: yup.number().integer(),
-      intField2: yup
-        .number()
-        .integer()
-        .required(),
-      intField3: yup.array().of(
-        yup
-          .number()
-          .integer()
-          .required(),
-      ),
+      intField2: yup.number().integer().required(),
+      intField3: yup.array().of(yup.number().integer().required()),
     });
 
     const result = createValidationSchema(thingConfig);
@@ -357,26 +349,12 @@ describe('createValidationSchema', () => {
     });
 
     const geospatialPointSchema = yup.object().shape({
-      lat: yup
-        .number()
-        .min(-90)
-        .max(90),
-      lng: yup
-        .number()
-        .min(-180)
-        .max(180),
+      lat: yup.number().min(-90).max(90),
+      lng: yup.number().min(-180).max(180),
     });
     const geospatialPointRequiredSchema = yup.object().shape({
-      lat: yup
-        .number()
-        .min(-90)
-        .max(90)
-        .required(),
-      lng: yup
-        .number()
-        .min(-180)
-        .max(180)
-        .required(),
+      lat: yup.number().min(-90).max(90).required(),
+      lng: yup.number().min(-180).max(180).required(),
     });
     const expectedResult = yup.object().shape({
       geospatialField1: geospatialPointSchema.clone(),

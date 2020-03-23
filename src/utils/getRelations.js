@@ -6,7 +6,7 @@ type Result = { [ThingConfig]: Array<Object> };
 const getRelations = (thingConfig: ThingConfig, thingConfigs: Array<ThingConfig>): Result => {
   const result = new Map();
 
-  thingConfigs.forEach(currentThingConfig => {
+  thingConfigs.forEach((currentThingConfig) => {
     const { relationalFields, embedded } = currentThingConfig;
     if (relationalFields && !embedded) {
       const fields = relationalFields

@@ -54,7 +54,7 @@ const createThingsQueryResolver = (
     if (sort) {
       const { sortBy } = sort;
       const composedSortBy = composeSortInput(sortBy);
-      composedSortBy.forEach(sortItem => query.sort(sortItem));
+      composedSortBy.forEach((sortItem) => query.sort(sortItem));
     }
 
     if (pagination) {
@@ -65,7 +65,7 @@ const createThingsQueryResolver = (
     const things = await query.exec();
     if (!things) return [];
 
-    const result = things.map(item => {
+    const result = things.map((item) => {
       const { _id } = item;
       return { ...item, id: _id };
     });

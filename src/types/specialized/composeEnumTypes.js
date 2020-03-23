@@ -7,7 +7,7 @@ const composeEnumTypes = (generalConfig: GeneralConfig): string => {
   const linesArray = enums
     ? enums.reduce((prev, { name, enum: enumValue }) => {
         prev.push(`enum ${name}Enumeration {`);
-        enumValue.forEach(item => prev.push(`  ${item}`));
+        enumValue.forEach((item) => prev.push(`  ${item}`));
         prev.push('}');
         return prev;
       }, [])

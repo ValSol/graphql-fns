@@ -1,3 +1,5 @@
+// @flow
+
 import type { AuthData, ThreeSegmentInventoryChain } from '../flowTypes';
 
 import checkInventory from './checkInventory';
@@ -5,10 +7,10 @@ import checkInventory from './checkInventory';
 const authorize = async (
   inventoryChain: ThreeSegmentInventoryChain,
   fields: Array<string>,
-  credentials: { id: string, roles: Array<string> },
+  credentials: { id: string, roles: Array<string> } | null,
   requestArgs: { parent: Object, args: Object, context: Object },
   authData: AuthData,
-): Promise<Boolean> => {
+): Promise<boolean> => {
   if (!credentials || !credentials.roles || !credentials.roles.length || !credentials.id) {
     return false;
   }
@@ -24,6 +26,9 @@ const authorize = async (
     const allowRequest = request ? checkInventory(inventoryChain, request) : true;
     if (!allowRequest) {
       if (applyCallback && checkInventory(inventoryChain, applyCallback)) {
+        if (!callback) {
+          throw new TypeError('Must set "callback" for authorization!');
+        }
         promises.push(callback(inventoryChain, fields, id, requestArgs));
       }
 
@@ -62,7 +67,7 @@ const authorize = async (
 
   const results = await Promise.all(promises);
 
-  results.forEach(allowedFields => {
+  results.forEach((allowedFields) => {
     fields.reduce((prev, field) => {
       if (allowedFields.includes(field) && !result.includes(field)) {
         prev.push(field);
@@ -72,7 +77,8 @@ const authorize = async (
   });
 
   return (
-    result.every(field => fields.includes(field)) && fields.every(field => result.includes(field))
+    result.every((field) => fields.includes(field)) &&
+    fields.every((field) => result.includes(field))
   );
 };
 

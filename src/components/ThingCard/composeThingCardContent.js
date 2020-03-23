@@ -32,7 +32,7 @@ const composeThingCardContent = (
         const { attributes, kind } = fieldsObject[name];
 
         const attributes2 = Object.keys(attributes)
-          .filter(attr => {
+          .filter((attr) => {
             if (['config', 'enumName', 'kind', 'name', 'oppositeName'].includes(attr)) return false;
             // $FlowFixMe - no sense to check every field if it can have the attr
             return !!attributes[attr];
@@ -60,7 +60,7 @@ const composeThingCardContent = (
                 <ListItemText {...listItemTextProps} />
               </ListItem>
               <Embedded>
-                {enums3.map(label => (
+                {enums3.map((label) => (
                   <span key={label}>
                     <Chip label={label} />{' '}
                   </span>

@@ -80,7 +80,7 @@ const composeGqlResolvers = (
 
         const customQueryNames = Object.keys(customQuery);
 
-        customQueryNames.forEach(customName => {
+        customQueryNames.forEach((customName) => {
           const customQueryResolver = createCustomResolver(
             'Query',
             customName,
@@ -176,7 +176,7 @@ const composeGqlResolvers = (
 
         const customMutationNames = Object.keys(customMutation);
 
-        customMutationNames.forEach(customName => {
+        customMutationNames.forEach((customName) => {
           const customMutationResolver = createCustomResolver(
             'Mutation',
             customName,

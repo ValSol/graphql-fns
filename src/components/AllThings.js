@@ -25,7 +25,7 @@ const AllThings = () => {
       </Breadcrumbs>
       {thingConfigs
         .filter(({ embedded }) => !embedded)
-        .map(config => (
+        .map((config) => (
           <ThingCard key={config.name} config={config} />
         ))}
     </Container>

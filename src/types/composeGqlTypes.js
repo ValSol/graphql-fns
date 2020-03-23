@@ -46,7 +46,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
-  const thingTypes = thingConfigs.map(thingConfig => createThingType(thingConfig)).join('\n');
+  const thingTypes = thingConfigs.map((thingConfig) => createThingType(thingConfig)).join('\n');
 
   const thingInputTypes = allowMutations
     ? thingConfigs
@@ -122,7 +122,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           prev.push(createThingCountQueryType(thingConfig));
         }
 
-        customQueryNames.forEach(customName => {
+        customQueryNames.forEach((customName) => {
           if (checkInventory(['Query', customName, name], inventory)) {
             prev.push(`  ${composeSignature(customQuery[customName], thingConfig, generalConfig)}`);
           }
@@ -172,7 +172,7 @@ ${thingQueryTypes.join('\n')}
           if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
         }
 
-        customMutationNames.forEach(customName => {
+        customMutationNames.forEach((customName) => {
           if (checkInventory(['Mutation', customName, name], inventory)) {
             prev.push(
               `  ${composeSignature(customMutation[customName], thingConfig, generalConfig)}`,
