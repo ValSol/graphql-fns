@@ -39,10 +39,34 @@ const coerceDataToGql = (
         prev[key] = data[key] ? coerceDataToGql(data[key], null, config) : null; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'relationalFields' || kind === 'duplexFields') {
+      // $FlowFixMe
+      const { config } = fieldsObject[key].attributes;
       if (array) {
-        prev[key] = { connect: data[key] || [] }; // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        prev[key] =
+          !data[key] || !data[key].length
+            ? { connect: [] }
+            : data[key].reduce((prev2, item) => {
+                if (typeof item === 'string') {
+                  if (prev.connect) {
+                    prev2.connect.push(item);
+                  } else {
+                    prev2.connect = [item]; // eslint-disable-line no-param-reassign
+                  }
+                } else if (prev2.create) {
+                  prev2.create.push(coerceDataToGql(item, null, config));
+                } else {
+                  prev2.create = [coerceDataToGql(item, null, config)]; // eslint-disable-line no-param-reassign
+                }
+
+                return prev2;
+              }, {});
+      } else if (!data[key]) {
+        prev[key] = { connect: null }; // eslint-disable-line no-param-reassign
+      } else if (typeof data[key] === 'string') {
+        prev[key] = { connect: data[key] }; // eslint-disable-line no-param-reassign
       } else {
-        prev[key] = { connect: data[key] || null }; // eslint-disable-line no-param-reassign
+        prev[key] = { create: coerceDataToGql(data[key], null, config) }; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'enumFields') {
       if (array) {

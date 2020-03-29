@@ -107,6 +107,165 @@ describe('coerceDataToGql', () => {
     });
   });
 
+  describe('should coerce duplex fields to create new connected things', () => {
+    const thingConfig: ThingConfig = {};
+
+    const dupleConfig11: ThingConfig = {
+      name: 'Duple11',
+      textFields: [{ name: 'duplexTextField11' }],
+      duplexFields: [
+        {
+          name: 'oppositeDuplexField11',
+          config: thingConfig,
+          oppositeName: 'duplexField11',
+        },
+      ],
+    };
+
+    const dupleConfig12: ThingConfig = {
+      name: 'Duple12',
+      textFields: [{ name: 'duplexTextField12' }],
+      duplexFields: [
+        {
+          name: 'oppositeDuplexField12',
+          config: thingConfig,
+          oppositeName: 'duplexFields12',
+        },
+      ],
+    };
+
+    const dupleConfig21: ThingConfig = {
+      name: 'Duple21',
+      textFields: [{ name: 'duplexTextField21' }],
+      duplexFields: [
+        {
+          name: 'oppositeDuplexFields21',
+          config: thingConfig,
+          oppositeName: 'duplexField21',
+          array: true,
+        },
+      ],
+    };
+
+    const dupleConfig22: ThingConfig = {
+      name: 'Duple22',
+      textFields: [{ name: 'duplexTextField22' }],
+      duplexFields: [
+        {
+          name: 'oppositeDuplexFields22',
+          config: thingConfig,
+          oppositeName: 'duplexFields22',
+          array: true,
+        },
+      ],
+    };
+
+    Object.assign(thingConfig, {
+      name: 'Example',
+      duplexFields: [
+        {
+          name: 'duplexField11',
+          config: dupleConfig11,
+          oppositeName: 'oppositeDuplexField11',
+        },
+        {
+          name: 'duplexFields12',
+          config: dupleConfig12,
+          oppositeName: 'oppositeDuplexField12',
+          array: true,
+        },
+        {
+          name: 'duplexField21',
+          config: dupleConfig21,
+          oppositeName: 'oppositeDuplexFields21',
+        },
+        {
+          name: 'duplexFields22',
+          config: dupleConfig22,
+          oppositeName: 'oppositeDuplexFields22',
+          array: true,
+        },
+      ],
+    });
+    const data = {
+      duplexField11: { duplexTextField11: 'duplexTextField11 TEXT' },
+      duplexFields12: [{ duplexTextField12: 'duplexTextField12 TEXT' }, '5cefb33f05d6be4b7b59842a'],
+      duplexField21: { duplexTextField21: 'duplexTextField21 TEXT' },
+      duplexFields22: [{ duplexTextField22: 'duplexTextField22 TEXT' }, '5cefb33f05d6be4b7b59842b'],
+    };
+
+    test('null prev data', () => {
+      const prevData = null;
+
+      const expectedResult = {
+        duplexField11: { create: { duplexTextField11: 'duplexTextField11 TEXT' } },
+        duplexFields12: {
+          create: [{ duplexTextField12: 'duplexTextField12 TEXT' }],
+          connect: ['5cefb33f05d6be4b7b59842a'],
+        },
+        duplexField21: { create: { duplexTextField21: 'duplexTextField21 TEXT' } },
+        duplexFields22: {
+          create: [{ duplexTextField22: 'duplexTextField22 TEXT' }],
+          connect: ['5cefb33f05d6be4b7b59842b'],
+        },
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('should coerce relational fields to create new connected things', () => {
+    const thingConfig: ThingConfig = {};
+
+    const relationalConfig1: ThingConfig = {
+      name: 'Relational1',
+      textFields: [{ name: 'relationalTextField1' }],
+    };
+
+    const relationalConfig2: ThingConfig = {
+      name: 'Relational2',
+      textFields: [{ name: 'relationalTextField2' }],
+    };
+
+    Object.assign(thingConfig, {
+      name: 'Example',
+      relationalFields: [
+        {
+          name: 'relationalField1',
+          config: relationalConfig1,
+        },
+        {
+          name: 'relationalField2',
+          config: relationalConfig2,
+          array: true,
+        },
+      ],
+    });
+    const data = {
+      relationalField1: { relationalTextField1: 'relationalTextField1 TEXT' },
+      relationalField2: [
+        { relationalTextField2: 'relationalTextField2 TEXT' },
+        '5cefb33f05d6be4b7b59842a',
+      ],
+    };
+
+    test('null prev data', () => {
+      const prevData = null;
+
+      const expectedResult = {
+        relationalField1: { create: { relationalTextField1: 'relationalTextField1 TEXT' } },
+        relationalField2: {
+          create: [{ relationalTextField2: 'relationalTextField2 TEXT' }],
+          connect: ['5cefb33f05d6be4b7b59842a'],
+        },
+      };
+
+      const result = coerceDataToGql(data, prevData, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
   test('should coerce realational & duplex fields in embedded fields', () => {
     const thingConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
