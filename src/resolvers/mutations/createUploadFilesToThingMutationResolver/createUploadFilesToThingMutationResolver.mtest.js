@@ -26,25 +26,27 @@ beforeAll(async () => {
 describe('createUploadFilesToThingMutationResolver', () => {
   const serversideConfig = {
     saveFiles: {
-      Image: async ({ filename, mimetype, encoding }, hash) => ({
+      Image: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
         filename,
         mimetype,
         encoding,
         hash,
+        uploadedAt,
       }),
-      Photo: async ({ filename, mimetype, encoding }, hash) => ({
+      Photo: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
         filename,
         mimetype,
         encoding,
         hash,
+        uploadedAt,
       }),
     },
 
     composeFileFieldsData: {
-      Image: ({ hash, filename, _id }, date) => {
-        const month = date.getMonth() + 1;
+      Image: ({ hash, filename, _id, uploadedAt }) => {
+        const month = uploadedAt.getMonth() + 1;
         const month2 = month < 10 ? `0${month}` : month.toFixed();
-        const year = date.getFullYear();
+        const year = uploadedAt.getFullYear();
         return {
           fileId: _id,
           desktop: `/images/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
@@ -52,10 +54,10 @@ describe('createUploadFilesToThingMutationResolver', () => {
           mobile: `/images/${year}_${month2}/${hash}_mobile.${filename.slice(-3)}`,
         };
       },
-      Photo: ({ hash, filename, _id }, date) => {
-        const month = date.getMonth() + 1;
+      Photo: ({ hash, filename, _id, uploadedAt }) => {
+        const month = uploadedAt.getMonth() + 1;
         const month2 = month < 10 ? `0${month}` : month.toFixed();
-        const year = date.getFullYear();
+        const year = uploadedAt.getFullYear();
         return {
           fileId: _id,
           desktop: `/photos/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
@@ -221,39 +223,46 @@ describe('createUploadFilesToThingMutationResolver', () => {
       { files, whereOne, options },
       { mongooseConn, pubsub },
     );
+
+    const uploadedAt = new Date();
+    const month = uploadedAt.getMonth() + 1;
+    const month2 = month < 10 ? `0${month}` : month.toFixed();
+    const year = uploadedAt.getFullYear();
+    const datePath = `${year}_${month2}`;
+
     expect(updatedExample.textField).toBe('text Field');
 
-    expect(updatedExample.logo.desktop).toBe('/images/2020_03/pic1_desktop.png');
-    expect(updatedExample.logo.tablet).toBe('/images/2020_03/pic1_tablet.png');
-    expect(updatedExample.logo.mobile).toBe('/images/2020_03/pic1_mobile.png');
+    expect(updatedExample.logo.desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
+    expect(updatedExample.logo.tablet).toBe(`/images/${datePath}/pic1_tablet.png`);
+    expect(updatedExample.logo.mobile).toBe(`/images/${datePath}/pic1_mobile.png`);
 
-    expect(updatedExample.header.desktop).toBe('/images/2020_03/pic2_desktop.png');
-    expect(updatedExample.header.tablet).toBe('/images/2020_03/pic2_tablet.png');
-    expect(updatedExample.header.mobile).toBe('/images/2020_03/pic2_mobile.png');
+    expect(updatedExample.header.desktop).toBe(`/images/${datePath}/pic2_desktop.png`);
+    expect(updatedExample.header.tablet).toBe(`/images/${datePath}/pic2_tablet.png`);
+    expect(updatedExample.header.mobile).toBe(`/images/${datePath}/pic2_mobile.png`);
 
     expect(updatedExample.pictures.length).toBe(2);
 
-    expect(updatedExample.pictures[0].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample.pictures[0].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample.pictures[0].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample.pictures[0].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample.pictures[0].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample.pictures[0].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample.pictures[1].desktop).toBe('/images/2020_03/pic4_desktop.png');
-    expect(updatedExample.pictures[1].tablet).toBe('/images/2020_03/pic4_tablet.png');
-    expect(updatedExample.pictures[1].mobile).toBe('/images/2020_03/pic4_mobile.png');
+    expect(updatedExample.pictures[1].desktop).toBe(`/images/${datePath}/pic4_desktop.png`);
+    expect(updatedExample.pictures[1].tablet).toBe(`/images/${datePath}/pic4_tablet.png`);
+    expect(updatedExample.pictures[1].mobile).toBe(`/images/${datePath}/pic4_mobile.png`);
 
     expect(updatedExample.photos.length).toBe(3);
 
-    expect(updatedExample.photos[0].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample.photos[0].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample.photos[0].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample.photos[0].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample.photos[0].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample.photos[0].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample.photos[1].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
-    expect(updatedExample.photos[1].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
-    expect(updatedExample.photos[1].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+    expect(updatedExample.photos[1].desktop).toBe(`/photos/${datePath}/photo2_desktop.jpg`);
+    expect(updatedExample.photos[1].tablet).toBe(`/photos/${datePath}/photo2_tablet.jpg`);
+    expect(updatedExample.photos[1].mobile).toBe(`/photos/${datePath}/photo2_mobile.jpg`);
 
-    expect(updatedExample.photos[2].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
-    expect(updatedExample.photos[2].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
-    expect(updatedExample.photos[2].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+    expect(updatedExample.photos[2].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
+    expect(updatedExample.photos[2].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
+    expect(updatedExample.photos[2].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
 
     const updatedExample2 = await uploadToThing(
       null,
@@ -263,57 +272,57 @@ describe('createUploadFilesToThingMutationResolver', () => {
 
     expect(updatedExample2.textField).toBe('text Field');
 
-    expect(updatedExample2.logo.desktop).toBe('/images/2020_03/pic1_desktop.png');
-    expect(updatedExample2.logo.tablet).toBe('/images/2020_03/pic1_tablet.png');
-    expect(updatedExample2.logo.mobile).toBe('/images/2020_03/pic1_mobile.png');
+    expect(updatedExample2.logo.desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
+    expect(updatedExample2.logo.tablet).toBe(`/images/${datePath}/pic1_tablet.png`);
+    expect(updatedExample2.logo.mobile).toBe(`/images/${datePath}/pic1_mobile.png`);
 
-    expect(updatedExample2.header.desktop).toBe('/images/2020_03/pic2_desktop.png');
-    expect(updatedExample2.header.tablet).toBe('/images/2020_03/pic2_tablet.png');
-    expect(updatedExample2.header.mobile).toBe('/images/2020_03/pic2_mobile.png');
+    expect(updatedExample2.header.desktop).toBe(`/images/${datePath}/pic2_desktop.png`);
+    expect(updatedExample2.header.tablet).toBe(`/images/${datePath}/pic2_tablet.png`);
+    expect(updatedExample2.header.mobile).toBe(`/images/${datePath}/pic2_mobile.png`);
 
     expect(updatedExample2.pictures.length).toBe(4);
 
-    expect(updatedExample2.pictures[0].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample2.pictures[0].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample2.pictures[0].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample2.pictures[0].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample2.pictures[0].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample2.pictures[0].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample2.pictures[1].desktop).toBe('/images/2020_03/pic4_desktop.png');
-    expect(updatedExample2.pictures[1].tablet).toBe('/images/2020_03/pic4_tablet.png');
-    expect(updatedExample2.pictures[1].mobile).toBe('/images/2020_03/pic4_mobile.png');
+    expect(updatedExample2.pictures[1].desktop).toBe(`/images/${datePath}/pic4_desktop.png`);
+    expect(updatedExample2.pictures[1].tablet).toBe(`/images/${datePath}/pic4_tablet.png`);
+    expect(updatedExample2.pictures[1].mobile).toBe(`/images/${datePath}/pic4_mobile.png`);
 
-    expect(updatedExample2.pictures[2].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample2.pictures[2].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample2.pictures[2].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample2.pictures[2].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample2.pictures[2].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample2.pictures[2].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample2.pictures[3].desktop).toBe('/images/2020_03/pic4_desktop.png');
-    expect(updatedExample2.pictures[3].tablet).toBe('/images/2020_03/pic4_tablet.png');
-    expect(updatedExample2.pictures[3].mobile).toBe('/images/2020_03/pic4_mobile.png');
+    expect(updatedExample2.pictures[3].desktop).toBe(`/images/${datePath}/pic4_desktop.png`);
+    expect(updatedExample2.pictures[3].tablet).toBe(`/images/${datePath}/pic4_tablet.png`);
+    expect(updatedExample2.pictures[3].mobile).toBe(`/images/${datePath}/pic4_mobile.png`);
 
     expect(updatedExample2.photos.length).toBe(6);
 
-    expect(updatedExample2.photos[0].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample2.photos[0].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample2.photos[0].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample2.photos[0].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample2.photos[0].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample2.photos[0].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample2.photos[1].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
-    expect(updatedExample2.photos[1].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
-    expect(updatedExample2.photos[1].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+    expect(updatedExample2.photos[1].desktop).toBe(`/photos/${datePath}/photo2_desktop.jpg`);
+    expect(updatedExample2.photos[1].tablet).toBe(`/photos/${datePath}/photo2_tablet.jpg`);
+    expect(updatedExample2.photos[1].mobile).toBe(`/photos/${datePath}/photo2_mobile.jpg`);
 
-    expect(updatedExample2.photos[2].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
-    expect(updatedExample2.photos[2].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
-    expect(updatedExample2.photos[2].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+    expect(updatedExample2.photos[2].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
+    expect(updatedExample2.photos[2].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
+    expect(updatedExample2.photos[2].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
 
-    expect(updatedExample2.photos[3].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample2.photos[3].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample2.photos[3].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample2.photos[3].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample2.photos[3].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample2.photos[3].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample2.photos[4].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
-    expect(updatedExample2.photos[4].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
-    expect(updatedExample2.photos[4].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+    expect(updatedExample2.photos[4].desktop).toBe(`/photos/${datePath}/photo2_desktop.jpg`);
+    expect(updatedExample2.photos[4].tablet).toBe(`/photos/${datePath}/photo2_tablet.jpg`);
+    expect(updatedExample2.photos[4].mobile).toBe(`/photos/${datePath}/photo2_mobile.jpg`);
 
-    expect(updatedExample2.photos[5].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
-    expect(updatedExample2.photos[5].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
-    expect(updatedExample2.photos[5].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+    expect(updatedExample2.photos[5].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
+    expect(updatedExample2.photos[5].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
+    expect(updatedExample2.photos[5].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
 
     const files2 = [
       {
@@ -366,76 +375,76 @@ describe('createUploadFilesToThingMutationResolver', () => {
     );
     expect(updatedExample3.textField).toBe('text Field');
 
-    expect(updatedExample3.logo.desktop).toBe('/images/2020_03/pic1_desktop.png');
-    expect(updatedExample3.logo.tablet).toBe('/images/2020_03/pic1_tablet.png');
-    expect(updatedExample3.logo.mobile).toBe('/images/2020_03/pic1_mobile.png');
+    expect(updatedExample3.logo.desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
+    expect(updatedExample3.logo.tablet).toBe(`/images/${datePath}/pic1_tablet.png`);
+    expect(updatedExample3.logo.mobile).toBe(`/images/${datePath}/pic1_mobile.png`);
 
-    expect(updatedExample3.header.desktop).toBe('/images/2020_03/pic1_desktop.png');
-    expect(updatedExample3.header.tablet).toBe('/images/2020_03/pic1_tablet.png');
-    expect(updatedExample3.header.mobile).toBe('/images/2020_03/pic1_mobile.png');
+    expect(updatedExample3.header.desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
+    expect(updatedExample3.header.tablet).toBe(`/images/${datePath}/pic1_tablet.png`);
+    expect(updatedExample3.header.mobile).toBe(`/images/${datePath}/pic1_mobile.png`);
 
     expect(updatedExample3.pictures.length).toBe(6);
 
-    expect(updatedExample3.pictures[0].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample3.pictures[0].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample3.pictures[0].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample3.pictures[0].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample3.pictures[0].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample3.pictures[0].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample3.pictures[1].desktop).toBe('/images/2020_03/pic4_desktop.png');
-    expect(updatedExample3.pictures[1].tablet).toBe('/images/2020_03/pic4_tablet.png');
-    expect(updatedExample3.pictures[1].mobile).toBe('/images/2020_03/pic4_mobile.png');
+    expect(updatedExample3.pictures[1].desktop).toBe(`/images/${datePath}/pic4_desktop.png`);
+    expect(updatedExample3.pictures[1].tablet).toBe(`/images/${datePath}/pic4_tablet.png`);
+    expect(updatedExample3.pictures[1].mobile).toBe(`/images/${datePath}/pic4_mobile.png`);
 
-    expect(updatedExample3.pictures[2].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample3.pictures[2].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample3.pictures[2].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample3.pictures[2].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample3.pictures[2].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample3.pictures[2].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample3.pictures[3].desktop).toBe('/images/2020_03/pic4_desktop.png');
-    expect(updatedExample3.pictures[3].tablet).toBe('/images/2020_03/pic4_tablet.png');
-    expect(updatedExample3.pictures[3].mobile).toBe('/images/2020_03/pic4_mobile.png');
+    expect(updatedExample3.pictures[3].desktop).toBe(`/images/${datePath}/pic4_desktop.png`);
+    expect(updatedExample3.pictures[3].tablet).toBe(`/images/${datePath}/pic4_tablet.png`);
+    expect(updatedExample3.pictures[3].mobile).toBe(`/images/${datePath}/pic4_mobile.png`);
 
-    expect(updatedExample3.pictures[4].desktop).toBe('/images/2020_03/pic3_desktop.png');
-    expect(updatedExample3.pictures[4].tablet).toBe('/images/2020_03/pic3_tablet.png');
-    expect(updatedExample3.pictures[4].mobile).toBe('/images/2020_03/pic3_mobile.png');
+    expect(updatedExample3.pictures[4].desktop).toBe(`/images/${datePath}/pic3_desktop.png`);
+    expect(updatedExample3.pictures[4].tablet).toBe(`/images/${datePath}/pic3_tablet.png`);
+    expect(updatedExample3.pictures[4].mobile).toBe(`/images/${datePath}/pic3_mobile.png`);
 
-    expect(updatedExample3.pictures[5].desktop).toBe('/images/2020_03/pic1_desktop.png');
-    expect(updatedExample3.pictures[5].tablet).toBe('/images/2020_03/pic1_tablet.png');
-    expect(updatedExample3.pictures[5].mobile).toBe('/images/2020_03/pic1_mobile.png');
+    expect(updatedExample3.pictures[5].desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
+    expect(updatedExample3.pictures[5].tablet).toBe(`/images/${datePath}/pic1_tablet.png`);
+    expect(updatedExample3.pictures[5].mobile).toBe(`/images/${datePath}/pic1_mobile.png`);
 
     expect(updatedExample3.photos.length).toBe(9);
 
-    expect(updatedExample3.photos[0].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample3.photos[0].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample3.photos[0].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample3.photos[0].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample3.photos[0].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample3.photos[0].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample3.photos[1].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
-    expect(updatedExample3.photos[1].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
-    expect(updatedExample3.photos[1].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+    expect(updatedExample3.photos[1].desktop).toBe(`/photos/${datePath}/photo2_desktop.jpg`);
+    expect(updatedExample3.photos[1].tablet).toBe(`/photos/${datePath}/photo2_tablet.jpg`);
+    expect(updatedExample3.photos[1].mobile).toBe(`/photos/${datePath}/photo2_mobile.jpg`);
 
-    expect(updatedExample3.photos[2].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
-    expect(updatedExample3.photos[2].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
-    expect(updatedExample3.photos[2].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+    expect(updatedExample3.photos[2].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
+    expect(updatedExample3.photos[2].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
+    expect(updatedExample3.photos[2].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
 
-    expect(updatedExample3.photos[3].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample3.photos[3].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample3.photos[3].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample3.photos[3].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample3.photos[3].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample3.photos[3].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample3.photos[4].desktop).toBe('/photos/2020_03/photo2_desktop.jpg');
-    expect(updatedExample3.photos[4].tablet).toBe('/photos/2020_03/photo2_tablet.jpg');
-    expect(updatedExample3.photos[4].mobile).toBe('/photos/2020_03/photo2_mobile.jpg');
+    expect(updatedExample3.photos[4].desktop).toBe(`/photos/${datePath}/photo2_desktop.jpg`);
+    expect(updatedExample3.photos[4].tablet).toBe(`/photos/${datePath}/photo2_tablet.jpg`);
+    expect(updatedExample3.photos[4].mobile).toBe(`/photos/${datePath}/photo2_mobile.jpg`);
 
-    expect(updatedExample3.photos[5].desktop).toBe('/photos/2020_03/photo3_desktop.jpg');
-    expect(updatedExample3.photos[5].tablet).toBe('/photos/2020_03/photo3_tablet.jpg');
-    expect(updatedExample3.photos[5].mobile).toBe('/photos/2020_03/photo3_mobile.jpg');
+    expect(updatedExample3.photos[5].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
+    expect(updatedExample3.photos[5].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
+    expect(updatedExample3.photos[5].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
 
-    expect(updatedExample3.photos[6].desktop).toBe('/photos/2020_03/photo1_desktop.jpg');
-    expect(updatedExample3.photos[6].tablet).toBe('/photos/2020_03/photo1_tablet.jpg');
-    expect(updatedExample3.photos[6].mobile).toBe('/photos/2020_03/photo1_mobile.jpg');
+    expect(updatedExample3.photos[6].desktop).toBe(`/photos/${datePath}/photo1_desktop.jpg`);
+    expect(updatedExample3.photos[6].tablet).toBe(`/photos/${datePath}/photo1_tablet.jpg`);
+    expect(updatedExample3.photos[6].mobile).toBe(`/photos/${datePath}/photo1_mobile.jpg`);
 
-    expect(updatedExample3.photos[7].desktop).toBe('/photos/2020_03/pic1_desktop.png');
-    expect(updatedExample3.photos[7].tablet).toBe('/photos/2020_03/pic1_tablet.png');
-    expect(updatedExample3.photos[7].mobile).toBe('/photos/2020_03/pic1_mobile.png');
+    expect(updatedExample3.photos[7].desktop).toBe(`/photos/${datePath}/pic1_desktop.png`);
+    expect(updatedExample3.photos[7].tablet).toBe(`/photos/${datePath}/pic1_tablet.png`);
+    expect(updatedExample3.photos[7].mobile).toBe(`/photos/${datePath}/pic1_mobile.png`);
 
-    expect(updatedExample3.photos[8].desktop).toBe('/photos/2020_03/pic1_desktop.png');
-    expect(updatedExample3.photos[8].tablet).toBe('/photos/2020_03/pic1_tablet.png');
-    expect(updatedExample3.photos[8].mobile).toBe('/photos/2020_03/pic1_mobile.png');
+    expect(updatedExample3.photos[8].desktop).toBe(`/photos/${datePath}/pic1_desktop.png`);
+    expect(updatedExample3.photos[8].tablet).toBe(`/photos/${datePath}/pic1_tablet.png`);
+    expect(updatedExample3.photos[8].mobile).toBe(`/photos/${datePath}/pic1_mobile.png`);
   });
 });

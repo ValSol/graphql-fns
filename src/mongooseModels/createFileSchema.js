@@ -16,6 +16,7 @@ const createFileSchema = (thingConfig: ThingConfig): Object => {
     filename: String,
     mimetype: String,
     encoding: String,
+    uploadedAt: Date,
     hash: { type: String, unique: true },
   };
 

@@ -145,7 +145,6 @@ const createUploadFilesToThingMutationResolver = (
 
     const fileFieldsData = composeAllFilesFieldsData(
       filesAttributes2,
-      uploadDate,
       options,
       thingConfig,
       composeFileFieldsData,

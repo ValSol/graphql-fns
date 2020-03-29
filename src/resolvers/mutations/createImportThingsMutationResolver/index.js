@@ -17,7 +17,7 @@ const csvParse2 = (data, fieldsForCSV) =>
     columns: true,
     cast(value, context) {
       if (fieldsForCSV.object.includes(context.column)) {
-        return JSON.parse(value);
+        return value && JSON.parse(value);
       }
       if (fieldsForCSV.int.includes(context.column)) {
         return value && Number.parseInt(value, 10);

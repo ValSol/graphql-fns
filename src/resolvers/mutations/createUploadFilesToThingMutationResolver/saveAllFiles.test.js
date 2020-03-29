@@ -98,70 +98,80 @@ describe('saveAllFiles', () => {
   };
 
   const saveFiles = {
-    Image: async ({ filename, mimetype, encoding }, hash) => ({
+    Image: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
       filename,
       mimetype,
       encoding,
       hash,
+      uploadedAt,
     }),
-    Photo: async ({ filename, mimetype, encoding }, hash) => ({
+    Photo: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
       filename,
       mimetype,
       encoding,
       hash,
+      uploadedAt,
     }),
   };
 
   test('should return array of FilesAttributes', async () => {
     const alreadyCreatedFiles = [null, null, null, null, null, null, null];
+    const uploadedAt = new Date('2020-03-25 11:34:35');
     const expectedResult = [
       {
         hash: 'pic1',
         filename: 'pic1.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'pic2',
         filename: 'pic2.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'photo1',
         filename: 'photo1.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'photo2',
         filename: 'photo2.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'photo3',
         filename: 'photo3.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'pic3',
         filename: 'pic3.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'pic4',
         filename: 'pic4.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
     ];
     const result = await saveAllFiles(
       filesUploaded,
       alreadyCreatedFiles,
-      new Date(),
+      uploadedAt,
       options,
       thingConfig,
       saveFiles,
@@ -171,6 +181,7 @@ describe('saveAllFiles', () => {
   });
 
   test('should return array of FilesAttributes 2', async () => {
+    const uploadedAt = new Date('2020-03-25 11:34:35');
     const alreadyCreatedFiles = [
       null,
       {
@@ -179,6 +190,7 @@ describe('saveAllFiles', () => {
         filename: 'pic2.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       null,
       {
@@ -187,6 +199,7 @@ describe('saveAllFiles', () => {
         filename: 'photo2.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         _id: '3',
@@ -194,6 +207,7 @@ describe('saveAllFiles', () => {
         filename: 'photo3.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       null,
       null,
@@ -204,6 +218,7 @@ describe('saveAllFiles', () => {
         filename: 'pic1.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       null,
       {
@@ -211,6 +226,7 @@ describe('saveAllFiles', () => {
         filename: 'photo1.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt,
       },
       null,
       null,
@@ -219,18 +235,20 @@ describe('saveAllFiles', () => {
         filename: 'pic3.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
       {
         hash: 'pic4',
         filename: 'pic4.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt,
       },
     ];
     const result = await saveAllFiles(
       filesUploaded,
       alreadyCreatedFiles,
-      new Date(),
+      uploadedAt,
       options,
       thingConfig,
       saveFiles,

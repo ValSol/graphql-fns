@@ -5,11 +5,10 @@ import composeFileFieldNameToConfigNameObject from './composeFileFieldNameToConf
 
 const composeAllFilesFieldsData = (
   filesAttributes: Array<Object>,
-  uploadDate: Date,
   options: UploadOptions,
   thingConfig: ThingConfig,
   composeFileFieldsData: {
-    [fileFieldConfigName: string]: (filesAttributes: FileAttributes, date: Date) => Object,
+    [fileFieldConfigName: string]: (filesAttributes: FileAttributes) => Object,
   },
 ): Array<Object> => {
   const { counts, targets } = options;
@@ -19,10 +18,7 @@ const composeAllFilesFieldsData = (
   let index = 0;
   targets.forEach((fieldName, i) => {
     for (let j = index; j < index + counts[i]; j += 1) {
-      const result = composeFileFieldsData[nameToConfigNameObject[fieldName]](
-        filesAttributes[j],
-        uploadDate,
-      );
+      const result = composeFileFieldsData[nameToConfigNameObject[fieldName]](filesAttributes[j]);
       results.push(result);
     }
     index += counts[i];

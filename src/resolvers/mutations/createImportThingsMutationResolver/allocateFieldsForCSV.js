@@ -37,10 +37,8 @@ const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
   }
 
   if (duplexFields) {
-    duplexFields.forEach(({ name, array }) => {
-      if (array) {
-        result.object.push(name);
-      }
+    duplexFields.forEach(({ name }) => {
+      result.object.push(name);
     });
   }
 
@@ -100,10 +98,8 @@ const allocateFieldsForCSV = (thingConfig: ThingConfig): Result => {
   }
 
   if (relationalFields) {
-    relationalFields.forEach(({ name, array }) => {
-      if (array) {
-        result.object.push(name);
-      }
+    relationalFields.forEach(({ name }) => {
+      result.object.push(name);
     });
   }
 

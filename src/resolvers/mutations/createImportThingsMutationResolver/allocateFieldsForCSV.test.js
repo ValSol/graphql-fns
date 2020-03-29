@@ -80,7 +80,7 @@ describe('allocateFieldsForCSV', () => {
       boolean: [],
       float: [],
       int: [],
-      object: ['relationalArrayField'],
+      object: ['relationalField', 'relationalArrayField'],
     };
 
     expect(result).toEqual(expectedResult);
@@ -111,7 +111,7 @@ describe('allocateFieldsForCSV', () => {
       boolean: [],
       float: [],
       int: [],
-      object: ['duplexArrayField'],
+      object: ['duplexField', 'duplexArrayField'],
     };
 
     expect(result).toEqual(expectedResult);

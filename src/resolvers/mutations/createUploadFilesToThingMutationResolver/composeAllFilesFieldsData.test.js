@@ -54,6 +54,7 @@ describe('composeAllFilesFieldsData', () => {
   };
 
   test('should return array of FilesAttributes', () => {
+    const date = new Date('2020-02-25 11:34:35');
     const filesAttributes = [
       {
         _id: '1',
@@ -61,6 +62,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'pic1.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '2',
@@ -68,6 +70,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'pic2.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '3',
@@ -75,6 +78,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'photo1.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '4',
@@ -82,6 +86,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'photo2.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '5',
@@ -89,6 +94,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'photo3.jpg',
         mimetype: 'image/jpeg',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '6',
@@ -96,6 +102,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'pic3.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt: date,
       },
       {
         _id: '7',
@@ -103,6 +110,7 @@ describe('composeAllFilesFieldsData', () => {
         filename: 'pic4.png',
         mimetype: 'image/png',
         encoding: '7bit',
+        uploadedAt: date,
       },
     ];
 
@@ -113,10 +121,10 @@ describe('composeAllFilesFieldsData', () => {
     };
 
     const composeFileFieldsData = {
-      Image: ({ hash, filename, _id }, date) => {
-        const month = date.getMonth() + 1;
+      Image: ({ hash, filename, _id, uploadedAt }) => {
+        const month = uploadedAt.getMonth() + 1;
         const month2 = month < 10 ? `0${month}` : month.toFixed();
-        const year = date.getFullYear();
+        const year = uploadedAt.getFullYear();
         return {
           fileId: _id,
           desktop: `/images/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
@@ -124,10 +132,10 @@ describe('composeAllFilesFieldsData', () => {
           mobile: `/images/${year}_${month2}/${hash}_mobile.${filename.slice(-3)}`,
         };
       },
-      Photo: ({ hash, filename, _id }, date) => {
-        const month = date.getMonth() + 1;
+      Photo: ({ hash, filename, _id, uploadedAt }) => {
+        const month = uploadedAt.getMonth() + 1;
         const month2 = month < 10 ? `0${month}` : month.toFixed();
-        const year = date.getFullYear();
+        const year = uploadedAt.getFullYear();
         return {
           fileId: _id,
           desktop: `/photos/${year}_${month2}/${hash}_desktop.${filename.slice(-3)}`,
@@ -184,7 +192,6 @@ describe('composeAllFilesFieldsData', () => {
 
     const result = composeAllFilesFieldsData(
       filesAttributes,
-      new Date('2020-02-20T03:24:00'),
       options,
       thingConfig,
       composeFileFieldsData,

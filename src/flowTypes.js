@@ -441,6 +441,7 @@ export type FileAttributes = {
   filename: string,
   mimetype: string,
   encoding: string,
+  uploadedAt: Date,
 };
 
 export type ServersideConfig = {
@@ -480,7 +481,7 @@ export type ServersideConfig = {
     ) => Promise<FileAttributes>,
   },
   +composeFileFieldsData?: {
-    [fileFieldConfigName: string]: (fileAttributes: FileAttributes, date: Date) => Object,
+    [fileFieldConfigName: string]: (fileAttributes: FileAttributes) => Object,
   },
 };
 
