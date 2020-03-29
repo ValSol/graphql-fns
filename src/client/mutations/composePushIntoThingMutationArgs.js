@@ -5,8 +5,8 @@ const composePushIntoThingMutationArgs = (thingConfig: ThingConfig): Array<strin
   const { name } = thingConfig;
 
   const result = [
-    `mutation push${name}($whereOne: ${name}WhereOneInput!, $data: PushInto${name}Input!) {`,
-    `  push${name}(whereOne: $whereOne, data: $data) {`,
+    `mutation pushInto${name}($whereOne: ${name}WhereOneInput!, $data: PushInto${name}Input!) {`,
+    `  pushInto${name}(whereOne: $whereOne, data: $data) {`,
   ];
 
   return result;

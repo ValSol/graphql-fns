@@ -137,7 +137,7 @@ const composeGqlResolvers = (
           );
           if (pushIntoThingMutationResolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`push${name}`] = pushIntoThingMutationResolver;
+            prev.Mutation[`pushInto${name}`] = pushIntoThingMutationResolver;
           }
         }
 

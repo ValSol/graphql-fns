@@ -34,7 +34,7 @@ describe('createPushIntoThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  pushExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!';
+      '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!';
 
     const result = createPushIntoThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);

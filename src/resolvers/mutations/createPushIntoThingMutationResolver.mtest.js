@@ -274,12 +274,12 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
-    const pushPerson = createPushIntoThingMutationResolver(
+    const pushIntoPerson = createPushIntoThingMutationResolver(
       personConfig,
       generalConfig,
       serversideConfig,
     );
-    if (!pushPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    if (!pushIntoPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
     const dataForUpdate = {
@@ -306,7 +306,7 @@ describe('createPushIntoThingMutationResolver', () => {
         ],
       },
     };
-    const updatedPerson = await pushPerson(
+    const updatedPerson = await pushIntoPerson(
       null,
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },

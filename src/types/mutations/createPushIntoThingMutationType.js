@@ -10,7 +10,7 @@ const createPushIntoThingMutationType = (thingConfig: ThingConfig): string => {
   const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
 
   if (pushIntoThingInputType) {
-    return `  push${name}(whereOne: ${name}WhereOneInput!, data: PushInto${name}Input!): ${name}!`;
+    return `  pushInto${name}(whereOne: ${name}WhereOneInput!, data: PushInto${name}Input!): ${name}!`;
   }
 
   return '';

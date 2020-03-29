@@ -17,8 +17,8 @@ describe('composePushIntoThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation pushExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!) {',
-      '  pushExample(whereOne: $whereOne, data: $data) {',
+      'mutation pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!) {',
+      '  pushIntoExample(whereOne: $whereOne, data: $data) {',
     ];
 
     const result = composePushIntoThingMutationArgs(thingConfig);
