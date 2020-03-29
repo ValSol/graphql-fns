@@ -65,11 +65,9 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
+      (prev, { array, name: name2, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}${
-            required ? '!' : ''
-          }`,
+          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}`,
         );
         return prev;
       },
@@ -79,17 +77,12 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.reduce(
-      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
-        prev.push(
-          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}${
-            required ? '!' : ''
-          }`,
-        );
-        return prev;
-      },
-      thingTypeArray,
-    );
+    duplexFields.reduce((prev, { array, name: name2, config: { name: relationalThingName } }) => {
+      prev.push(
+        `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   if (embeddedFields) {

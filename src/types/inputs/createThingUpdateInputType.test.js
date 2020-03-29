@@ -83,9 +83,9 @@ input ExampleUpdateChildrenInput {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: PersonUpdateChildrenInput!
+  friends: PersonUpdateChildrenInput
   enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput!
+  location: PlaceUpdateChildInput
   favoritePlace: PlaceUpdateChildInput
 }
 input PersonUpdateChildInput {
@@ -149,9 +149,9 @@ input PersonUpdateChildrenInput {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: PersonUpdateChildrenInput!
+  friends: PersonUpdateChildrenInput
   enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput!
+  location: PlaceUpdateChildInput
   favoritePlace: PlaceUpdateChildInput
 }
 input PersonUpdateChildInput {

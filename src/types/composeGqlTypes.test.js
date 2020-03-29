@@ -612,9 +612,9 @@ input PushIntoPersonInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: PersonUpdateChildrenInput!
+  friends: PersonUpdateChildrenInput
   enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput!
+  location: PlaceUpdateChildInput
   favoritePlace: PlaceUpdateChildInput
 }
 input PersonUpdateChildInput {
@@ -972,9 +972,9 @@ input PushIntoPersonInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: PersonUpdateChildrenInput!
+  friends: PersonUpdateChildrenInput
   enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput!
+  location: PlaceUpdateChildInput
   favoritePlace: PlaceUpdateChildInput
 }
 input PersonUpdateChildInput {
