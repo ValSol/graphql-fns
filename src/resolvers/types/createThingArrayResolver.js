@@ -4,6 +4,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 
@@ -45,10 +46,7 @@ const createThingArrayResolver = (
 
     const things = await Thing.find({ _id: { $in: ids } }, projection, { lean: true });
 
-    const things2 = things.filter(Boolean).map((item) => ({
-      ...item,
-      id: item._id, // eslint-disable-line no-underscore-dangle
-    }));
+    const things2 = things.filter(Boolean).map((item) => addIdsToThing(item, thingConfig));
 
     return things2;
   };

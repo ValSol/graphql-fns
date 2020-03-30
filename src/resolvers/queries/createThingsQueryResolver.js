@@ -4,6 +4,7 @@ import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '..
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 import composeNearInput from './composeNearInput';
@@ -65,10 +66,7 @@ const createThingsQueryResolver = (
     const things = await query.exec();
     if (!things) return [];
 
-    const result = things.map((item) => {
-      const { _id } = item;
-      return { ...item, id: _id };
-    });
+    const result = things.map((item) => addIdsToThing(item, thingConfig));
 
     return result;
   };

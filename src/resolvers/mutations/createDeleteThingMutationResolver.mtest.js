@@ -148,7 +148,7 @@ describe('createDeleteThingMutationResolver', () => {
 
     const {
       friend: friendId,
-      _id,
+      id,
       location: locationId,
       locations: locationIds,
       favorities: favoritieIds,
@@ -162,7 +162,7 @@ describe('createDeleteThingMutationResolver', () => {
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data.friend.create.lastName);
-    expect(createdFriend.friend).toEqual(_id);
+    expect(createdFriend.friend).toEqual(id);
     expect(createdFriend.createdAt instanceof Date).toBeTruthy();
     expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
 
@@ -173,21 +173,21 @@ describe('createDeleteThingMutationResolver', () => {
 
     const createdLocation = await Place.findById(locationId);
     expect(createdLocation.name).toBe(data.location.create.name);
-    expect(createdLocation.citizens[0]).toEqual(_id);
+    expect(createdLocation.citizens[0]).toEqual(id);
     expect(createdLocation.createdAt instanceof Date).toBeTruthy();
     expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
 
     const createdLocations = await Place.find({ _id: { $in: locationIds } });
     expect(createdLocations[0].name).toBe(data.locations.create[0].name);
-    expect(createdLocations[0].curator).toEqual(_id);
+    expect(createdLocations[0].curator).toEqual(id);
     expect(createdLocations[1].name).toBe(data.locations.create[1].name);
-    expect(createdLocations[1].curator).toEqual(_id);
+    expect(createdLocations[1].curator).toEqual(id);
 
     const createdFavorities = await Place.find({ _id: { $in: favoritieIds } });
     expect(createdFavorities[0].name).toBe(data.favorities.create[0].name);
-    expect(createdFavorities[0].visitors[0]).toEqual(_id);
+    expect(createdFavorities[0].visitors[0]).toEqual(id);
     expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
-    expect(createdFavorities[1].visitors[0]).toEqual(_id);
+    expect(createdFavorities[1].visitors[0]).toEqual(id);
 
     const deletePerson = createDeleteThingMutationResolver(
       personConfig,
@@ -196,7 +196,7 @@ describe('createDeleteThingMutationResolver', () => {
     );
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = { id: _id };
+    const whereOne = { id };
     const deletedPerson = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);

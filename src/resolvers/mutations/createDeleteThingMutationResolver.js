@@ -3,6 +3,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import processDeleteData from './processDeleteData';
 
@@ -59,7 +60,7 @@ const createDeleteThingMutationResolver = (
 
     await Promise.all(promises);
 
-    thing.id = _id;
+    const thing2 = addIdsToThing(thing, thingConfig);
 
     const subscriptionInventoryChain = ['Subscription', 'deletedThing', name];
     if (checkInventory(subscriptionInventoryChain, inventory)) {
@@ -71,10 +72,10 @@ const createDeleteThingMutationResolver = (
       });
       const { pubsub } = context;
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-      pubsub.publish(`deleted-${name}`, { [`deleted${name}`]: thing });
+      pubsub.publish(`deleted-${name}`, { [`deleted${name}`]: thing2 });
     }
 
-    return thing;
+    return thing2;
   };
 
   return resolver;

@@ -393,7 +393,7 @@ describe('createCreateThingMutationResolver', () => {
 
     const {
       friend: friendId,
-      _id,
+      id,
       location: locationId,
       locations: locationIds,
       favorities: favoritieIds,
@@ -407,7 +407,7 @@ describe('createCreateThingMutationResolver', () => {
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data.friend.create.lastName);
-    expect(createdFriend.friend).toEqual(_id);
+    expect(createdFriend.friend).toEqual(id);
     expect(createdFriend.createdAt instanceof Date).toBeTruthy();
     expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
 
@@ -418,27 +418,27 @@ describe('createCreateThingMutationResolver', () => {
 
     const createdLocation = await Place.findById(locationId);
     expect(createdLocation.name).toBe(data.location.create.name);
-    expect(createdLocation.citizens[0]).toEqual(_id);
+    expect(createdLocation.citizens[0]).toEqual(id);
     expect(createdLocation.createdAt instanceof Date).toBeTruthy();
     expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
 
     const createdLocations = await Place.find({ _id: { $in: locationIds } });
     expect(createdLocations[0].name).toBe(data.locations.create[0].name);
-    expect(createdLocations[0].curator).toEqual(_id);
+    expect(createdLocations[0].curator).toEqual(id);
     expect(createdLocations[1].name).toBe(data.locations.create[1].name);
-    expect(createdLocations[1].curator).toEqual(_id);
+    expect(createdLocations[1].curator).toEqual(id);
 
     const createdFavorities = await Place.find({ _id: { $in: favoritieIds } });
     expect(createdFavorities[0].name).toBe(data.favorities.create[0].name);
-    expect(createdFavorities[0].visitors[0]).toEqual(_id);
+    expect(createdFavorities[0].visitors[0]).toEqual(id);
     expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
-    expect(createdFavorities[1].visitors[0]).toEqual(_id);
+    expect(createdFavorities[1].visitors[0]).toEqual(id);
 
     const data2 = {
       firstName: 'Nina',
       lastName: 'Richi',
       friend: {
-        connect: _id.toString(),
+        connect: id.toString(),
       },
       location: {
         connect: locationId.toString(),
@@ -459,13 +459,13 @@ describe('createCreateThingMutationResolver', () => {
 
     const {
       friend: friendId2,
-      _id: _id2,
+      id: id2,
       location: locationId2,
       locations: locationIds2,
       favorities: favoritieIds2,
     } = createdPerson2;
 
-    expect(friendId2).toEqual(_id);
+    expect(friendId2).toEqual(id);
     expect(locationId2).toEqual(locationId);
     expect(locationIds2).toEqual(locationIds);
     expect(favoritieIds2).toEqual(favoritieIds);
@@ -473,18 +473,18 @@ describe('createCreateThingMutationResolver', () => {
     const createdFriend2 = await Person.findById(friendId2);
     expect(createdFriend2.firstName).toBe(data.firstName);
     expect(createdFriend2.lastName).toBe(data.lastName);
-    expect(createdFriend2.friend).toEqual(_id2);
+    expect(createdFriend2.friend).toEqual(id2);
 
     const createdLocation2 = await Place.findById(locationId2);
-    expect(createdLocation2.citizens[1]).toEqual(_id2);
+    expect(createdLocation2.citizens[1]).toEqual(id2);
 
     const createdLocations2 = await Place.find({ _id: { $in: locationIds2 } });
-    expect(createdLocations2[0].curator).toEqual(_id2);
-    expect(createdLocations2[1].curator).toEqual(_id2);
+    expect(createdLocations2[0].curator).toEqual(id2);
+    expect(createdLocations2[1].curator).toEqual(id2);
 
     const createdFavorities2 = await Place.find({ _id: { $in: favoritieIds2 } });
-    expect(createdFavorities2[0].visitors[1]).toEqual(_id2);
-    expect(createdFavorities2[1].visitors[1]).toEqual(_id2);
+    expect(createdFavorities2[0].visitors[1]).toEqual(id2);
+    expect(createdFavorities2[1].visitors[1]).toEqual(id2);
   });
 
   test('should update mongodb documents using periphery objects', async () => {
@@ -583,7 +583,7 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
     expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
 
-    const { friend: friendId, _id, location: locationId, locations: locationIds } = createdPerson;
+    const { friend: friendId, id, location: locationId, locations: locationIds } = createdPerson;
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person4_Thing', personSchema);
@@ -593,7 +593,7 @@ describe('createCreateThingMutationResolver', () => {
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data.friend.create.lastName);
-    expect(createdFriend.friend).toEqual(_id);
+    expect(createdFriend.friend).toEqual(id);
     expect(createdFriend.createdAt instanceof Date).toBeTruthy();
     expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
 
@@ -604,21 +604,21 @@ describe('createCreateThingMutationResolver', () => {
 
     const createdLocation = await Place.findById(locationId);
     expect(createdLocation.name).toBe(data.location.create.name);
-    expect(createdLocation.citizens[0]).toEqual(_id);
+    expect(createdLocation.citizens[0]).toEqual(id);
     expect(createdLocation.createdAt instanceof Date).toBeTruthy();
     expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
 
     const createdLocations = await Place.find({ _id: { $in: locationIds } });
     expect(createdLocations[0].name).toBe(data.locations.create[0].name);
-    expect(createdLocations[0].curator).toEqual(_id);
+    expect(createdLocations[0].curator).toEqual(id);
     expect(createdLocations[1].name).toBe(data.locations.create[1].name);
-    expect(createdLocations[1].curator).toEqual(_id);
+    expect(createdLocations[1].curator).toEqual(id);
 
     const data2 = {
       firstName: 'Nina',
       lastName: 'Richi',
       friend: {
-        connect: _id,
+        connect: id,
       },
       location: {
         connect: locationId,

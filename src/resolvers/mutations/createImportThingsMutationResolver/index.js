@@ -8,6 +8,7 @@ import checkInventory from '../../../utils/checkInventory';
 import coerceDataToGql from '../../../utils/coerceDataToGql';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import executeAuthorisation from '../../executeAuthorisation';
+import addIdsToThing from '../../addIdsToThing';
 import processCreateInputData from '../processCreateInputData';
 import updatePeriphery from '../updatePeriphery';
 import allocateFieldsForCSV from './allocateFieldsForCSV';
@@ -120,10 +121,7 @@ const createImportThingsMutationResolver = (
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 
-    const things2 = things.map((item) => {
-      const { _id: id, ...rest } = item;
-      return { ...rest, id };
-    });
+    const things2 = things.map((item) => addIdsToThing(item, thingConfig));
 
     return things2;
   };

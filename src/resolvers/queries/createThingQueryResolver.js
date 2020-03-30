@@ -4,6 +4,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 
@@ -48,10 +49,8 @@ const createThingQueryResolver = (
     const thing = await Thing.findOne(conditions, projection, { lean: true });
     if (!thing) return null;
 
-    const { _id } = thing;
-
-    thing.id = _id;
-    return thing;
+    const thing2 = addIdsToThing(thing, thingConfig);
+    return thing2;
   };
 
   return resolver;

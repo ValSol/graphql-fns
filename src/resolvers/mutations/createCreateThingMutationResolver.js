@@ -3,6 +3,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
@@ -60,8 +61,7 @@ const createCreateThingMutationResolver = (
       thing = await Thing.findById(first._id, null, { lean: true });
     }
 
-    const { _id } = thing;
-    thing.id = _id;
+    const thing2 = addIdsToThing(thing, thingConfig);
 
     const subscriptionInventoryChain = ['Subscription', 'createdThing', name];
     if (checkInventory(subscriptionInventoryChain, inventory)) {
@@ -73,10 +73,10 @@ const createCreateThingMutationResolver = (
       });
       const { pubsub } = context;
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-      pubsub.publish(`created-${name}`, { [`created${name}`]: thing });
+      pubsub.publish(`created-${name}`, { [`created${name}`]: thing2 });
     }
 
-    return thing;
+    return thing2;
   };
 
   return resolver;

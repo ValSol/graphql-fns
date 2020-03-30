@@ -3,6 +3,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
@@ -79,11 +80,7 @@ const createCreateManyThingsMutationResolver = (
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 
-    const things2 = things.map((item) => {
-      const { _id: id, ...rest } = item;
-      return { ...rest, id };
-    });
-
+    const things2 = things.map((item) => addIdsToThing(item, thingConfig));
     return things2;
   };
 

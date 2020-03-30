@@ -3,6 +3,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import processForPushEach from './processForPushEach';
 import processCreateInputData from './processCreateInputData';
@@ -85,7 +86,8 @@ const createPushIntoThingMutationResolver = (
       new: true,
       lean: true,
     });
-    thing.id = _id;
+
+    const thing2 = addIdsToThing(thing, thingConfig);
 
     if (allowSubscription) {
       await executeAuthorisation({
@@ -98,13 +100,15 @@ const createPushIntoThingMutationResolver = (
       if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
       const updatedFields = Object.keys(data);
 
-      previousThing.id = _id;
-
-      const payload = { node: thing, previousNode: previousThing, updatedFields };
+      const payload = {
+        node: thing2,
+        previousNode: addIdsToThing(previousThing, thingConfig),
+        updatedFields,
+      };
       pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
     }
 
-    return thing;
+    return thing2;
   };
 
   return resolver;

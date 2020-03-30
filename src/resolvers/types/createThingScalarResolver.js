@@ -4,6 +4,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 
@@ -47,10 +48,9 @@ const createThingScalarResolver = (
 
     if (!thing) return null; // if there's broken link
 
-    const { _id } = thing;
-    thing.id = _id;
+    const thing2 = addIdsToThing(thing, thingConfig);
 
-    return thing;
+    return thing2;
   };
 
   return resolver;
