@@ -9,6 +9,7 @@ import composeFrgament from '../fragment/composeFragment';
 
 const createReadFragmentArg = (
   id: string,
+  fragmentName: string,
   thingConfig: ThingConfig,
   clientOptions: ClientOptions = {},
   dataIdFromObject: (Object) => string = defaultDataIdFromObject,
@@ -16,7 +17,7 @@ const createReadFragmentArg = (
 ): Object | null => {
   const { name } = thingConfig;
 
-  const fragment = gql(composeFrgament(thingConfig, clientOptions));
+  const fragment = gql(composeFrgament(fragmentName, thingConfig, clientOptions));
 
   const argObj = customDataIdFromObjectArg || { __typename: name, id };
   const dataId = dataIdFromObject(argObj);

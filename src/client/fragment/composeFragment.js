@@ -4,8 +4,12 @@ import type { ClientOptions, ThingConfig } from '../../flowTypes';
 import composeFields from '../composeFields';
 import composeThingFragmentArgs from './composeThingFragmentArgs';
 
-const composeFragment = (thingConfig: ThingConfig, clientOptions: ClientOptions = {}): string => {
-  const head = composeThingFragmentArgs(thingConfig);
+const composeFragment = (
+  fragmentName: string,
+  thingConfig: ThingConfig,
+  clientOptions: ClientOptions = {},
+): string => {
+  const head = composeThingFragmentArgs(fragmentName, thingConfig);
 
   const fields = composeFields(thingConfig, { ...clientOptions, shift: 1 });
 

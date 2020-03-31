@@ -17,14 +17,15 @@ describe('composeFragment', () => {
   };
 
   test('should compose fragment', () => {
-    const expectedResult = `fragment myExample on Example {
+    const fragmentName = 'firstExample';
+    const result = composeFragment(fragmentName, thingConfig);
+    const expectedResult = `fragment firstExample on Example {
   id
   createdAt
   updatedAt
   textField
 }`;
 
-    const result = composeFragment(thingConfig);
     expect(result).toBe(expectedResult);
   });
 });

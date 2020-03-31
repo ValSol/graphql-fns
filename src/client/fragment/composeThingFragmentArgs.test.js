@@ -16,9 +16,11 @@ describe('composeThingFragmentArgs', () => {
       ],
     };
 
-    const expectedResult = ['fragment myExample on Example {'];
+    const fragmentName = 'firstExample';
+    const result = composeThingFragmentArgs(fragmentName, thingConfig);
 
-    const result = composeThingFragmentArgs(thingConfig);
+    const expectedResult = ['fragment firstExample on Example {'];
+
     expect(result).toEqual(expectedResult);
   });
 });
