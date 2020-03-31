@@ -115,4 +115,93 @@ describe('addIdsToThing', () => {
     };
     expect(result).toEqual(expectedResult);
   });
+
+  test('shoud replace _ids by ids in fileFields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'desktop',
+        },
+        {
+          name: 'tablet',
+        },
+        {
+          name: 'mobile',
+        },
+      ],
+    };
+    const exampleConfig: ThingConfig = {
+      name: 'Example',
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'photos',
+          array: true,
+          config: imageConfig,
+        },
+      ],
+    };
+
+    const data = {
+      _id: '0',
+      textField: 'textField TEXT',
+
+      logo: {
+        _id: '1',
+        desktop: '/logo_desktop',
+        tablet: '/logo_tablet',
+        mobile: '/logo_mobile',
+      },
+      photos: [
+        {
+          _id: '2-1',
+          desktop: '/poto_1_desktop',
+          tablet: '/poto_1_tablet',
+          mobile: '/poto_1_mobile',
+        },
+        {
+          _id: '2-2',
+          desktop: '/poto_2_desktop',
+          tablet: '/poto_2_tablet',
+          mobile: '/poto_2_mobile',
+        },
+      ],
+    };
+
+    const result = addIdsToThing(data, exampleConfig);
+    const expectedResult = {
+      id: '0',
+      textField: 'textField TEXT',
+
+      logo: {
+        id: '1',
+        desktop: '/logo_desktop',
+        tablet: '/logo_tablet',
+        mobile: '/logo_mobile',
+      },
+      photos: [
+        {
+          id: '2-1',
+          desktop: '/poto_1_desktop',
+          tablet: '/poto_1_tablet',
+          mobile: '/poto_1_mobile',
+        },
+        {
+          id: '2-2',
+          desktop: '/poto_2_desktop',
+          tablet: '/poto_2_tablet',
+          mobile: '/poto_2_mobile',
+        },
+      ],
+    };
+    expect(result).toEqual(expectedResult);
+  });
 });

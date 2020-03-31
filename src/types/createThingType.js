@@ -23,7 +23,7 @@ const createThingType = (thingConfig: ThingConfig): string => {
     // use not required ID in embedded things...
     // ... to not provoke error for null embedded objects
     `type ${name} {
-  id: ID${embedded ? '' : '!'}`,
+  id: ID!`,
   ];
 
   if (!embedded) {

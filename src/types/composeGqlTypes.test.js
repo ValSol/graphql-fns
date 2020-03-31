@@ -153,7 +153,7 @@ type Example {
   position: GeospatialPoint
 }
 type Image {
-  id: ID
+  id: ID!
   fileId: String!
   address: String
 }
@@ -776,7 +776,7 @@ type Person {
   places: [Address!]!
 }
 type Address {
-  id: ID
+  id: ID!
   country: String!
   province: String
 }
