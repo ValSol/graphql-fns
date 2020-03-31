@@ -175,7 +175,7 @@ describe('createThingType', () => {
       ],
     };
     const expectedResult = `type Address {
-  id: ID!
+  id: ID
   country: String!
   province: String
 }`;
@@ -566,7 +566,7 @@ describe('createThingType', () => {
     };
 
     const expectedResult = `type Image {
-  id: ID!
+  id: ID
   fileId: String!
   address: String
 }`;
