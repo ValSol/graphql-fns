@@ -14,7 +14,7 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
     textFields,
   } = thingConfig;
 
-  const result = {};
+  const result = { id: 'idArray' };
 
   if (booleanFields) {
     booleanFields.reduce((prev, { name, index }) => {
@@ -24,8 +24,12 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   }
 
   if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'dateTimeFields'; // eslint-disable-line no-param-reassign
+    dateTimeFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'dateTimeFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'dateTimeFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }
@@ -45,15 +49,23 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   }
 
   if (floatFields) {
-    floatFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'floatFields'; // eslint-disable-line no-param-reassign
+    floatFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'floatFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'floatFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }
 
   if (intFields) {
-    intFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'intFields'; // eslint-disable-line no-param-reassign
+    intFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'intFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'intFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }
@@ -66,8 +78,12 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   }
 
   if (textFields) {
-    textFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'textFields'; // eslint-disable-line no-param-reassign
+    textFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'textFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'textFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }

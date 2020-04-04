@@ -9,6 +9,7 @@ import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 import composeNearInput from './composeNearInput';
 import composeSortInput from './composeSortInput';
+import composeWhereInput from './composeWhereInput';
 
 type Args = {
   where?: Object,
@@ -50,7 +51,8 @@ const createThingsQueryResolver = (
 
     if (near) query = query.where(composeNearInput(near));
 
-    if (where) query = query.where(where);
+    const where2 = composeWhereInput(where);
+    if (where2) query = query.where(where2);
 
     if (sort) {
       const { sortBy } = sort;

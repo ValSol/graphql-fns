@@ -16,7 +16,10 @@ describe('composeCreatedThingSubscriptionArgs', () => {
       ],
     };
 
-    const expectedResult = ['subscription createdExample {', '  createdExample {'];
+    const expectedResult = [
+      'subscription createdExample($where: ExampleWhereInput) {',
+      '  createdExample(where: $where) {',
+    ];
 
     const result = composeCreatedThingSubscriptionArgs(thingConfig);
     expect(result).toEqual(expectedResult);

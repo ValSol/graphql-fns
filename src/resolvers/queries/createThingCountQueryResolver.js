@@ -5,6 +5,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import executeAuthorisation from '../executeAuthorisation';
+import composeWhereInput from './composeWhereInput';
 
 type Args = {
   where?: Object,
@@ -37,7 +38,7 @@ const createThingCountQueryResolver = (
     const thingSchema = createThingSchema(thingConfig, enums);
 
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    const conditions = where || {};
+    const conditions = composeWhereInput(where) || {};
 
     const result = await Thing.countDocuments(conditions);
 

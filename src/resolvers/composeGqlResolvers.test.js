@@ -5,7 +5,7 @@ import type {
   GeneralConfig,
   Inventory,
   ServersideConfig,
-  SignatureMethods,
+  ActionSignatureMethods,
   ThingConfig,
 } from '../flowTypes';
 
@@ -520,11 +520,12 @@ describe('composeGqlResolvers', () => {
 
   test('should create resolvers for one thing with inventory for only one custom mutation', async () => {
     const createCustomLoadThingMutationResolver = () => () => 'test passed!';
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -558,11 +559,12 @@ describe('composeGqlResolvers', () => {
 
   test('should create resolvers for one thing with inventory for only one custom Query', async () => {
     const createCustomLoadThingMutationResolver = () => () => 'test passed!';
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {

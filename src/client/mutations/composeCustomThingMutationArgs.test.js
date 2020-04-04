@@ -1,17 +1,18 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, SignatureMethods, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../flowTypes';
 
 import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
 
 describe('composeCustomThingMutationArgs', () => {
   test('should compose customThing mutation without args', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `load${name}`,
       argNames: () => [],
       argTypes: () => [],
       type: ({ name }) => `${name}!`,
+      config: (thinConfig) => thinConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -36,11 +37,12 @@ describe('composeCustomThingMutationArgs', () => {
   });
 
   test('should compose customThing mutation with args', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
       type: ({ name }) => `${name}!`,
+      config: (thinConfig) => thinConfig,
     };
 
     const thingConfig: ThingConfig = {

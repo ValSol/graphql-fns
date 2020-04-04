@@ -1,13 +1,18 @@
 // @flow
 
-const getProjectionFromInfo = (info: Object): Object => {
-  const {
-    fieldNodes: [fieldNode],
-  } = info;
-  const {
-    selectionSet: { selections },
-  } = fieldNode;
-  const result = selections
+type Path = Array<string>;
+
+const getProjectionFromSelectionSet = (selectionSet, path: Path): { [fieldName: string]: 1 } => {
+  const { selections } = selectionSet;
+  if (path.length) {
+    const [fieldName, ...rest] = path;
+    const obj = selections.find(
+      ({ kind, name: { value } }) => kind === 'Field' && value === fieldName,
+    );
+    return obj ? getProjectionFromSelectionSet(obj.selectionSet, rest) : {};
+  }
+
+  return selections
     .filter(({ kind }) => kind === 'Field')
     .map(({ name: { value } }) => value)
     .filter((field) => field !== '__typename')
@@ -19,8 +24,16 @@ const getProjectionFromInfo = (info: Object): Object => {
       }
       return prev;
     }, {});
+};
 
-  return result;
+const getProjectionFromInfo = (info: Object, path?: Path): { [fieldName: string]: 1 } => {
+  const { fieldNodes } = info;
+  if (!fieldNodes) return info.projection; // use custom info in some cases when call resolver manually
+
+  const [fieldNode] = fieldNodes;
+  const { selectionSet } = fieldNode;
+
+  return getProjectionFromSelectionSet(selectionSet, path || []);
 };
 
 export default getProjectionFromInfo;

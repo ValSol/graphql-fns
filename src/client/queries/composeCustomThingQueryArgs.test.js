@@ -1,17 +1,18 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, SignatureMethods, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../flowTypes';
 
 import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 
 describe('composeCustomThingQueryArgs', () => {
   test('should compose customThing query without args', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `get${name}`,
       argNames: () => [],
       argTypes: () => [],
       type: ({ name }) => `${name}!`,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -36,11 +37,12 @@ describe('composeCustomThingQueryArgs', () => {
   });
 
   test('should compose customThing query with args', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
       type: ({ name }) => `${name}!`,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {

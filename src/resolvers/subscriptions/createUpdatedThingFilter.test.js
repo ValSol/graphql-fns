@@ -148,20 +148,20 @@ describe('createUpdatedThingFilter', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true if whereOne has correct id', () => {
+  test('should return true if where has correct id', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
-    const args = { whereOne: { id: '5cd82ca075fb194334d8c1d5' } };
+    const args = { where: { id: ['5cd82ca075fb194334d8c1d5'] } };
 
     const result = filter(payload, args);
 
     expect(result).toBe(true);
   });
 
-  test('should return false if whereOne has incorrect id', () => {
+  test('should return false if where has incorrect id', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
-    const args = { whereOne: { id: '5cd82ca075fb194334d8c1d6' } };
+    const args = { where: { id: ['5cd82ca075fb194334d8c1d6'] } };
 
     const result = filter(payload, args);
 
@@ -272,12 +272,12 @@ describe('createUpdatedThingFilter', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true if whereOne has only textField', () => {
+  test('should return true if where has only textField', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
     const args = {
-      whereOne: {
-        textFieldUnique: 'ABC',
+      where: {
+        textFieldUnique: ['ABC'],
       },
     };
 
@@ -286,12 +286,12 @@ describe('createUpdatedThingFilter', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true if whereOne has only intField', () => {
+  test('should return true if where has only intField', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
     const args = {
-      whereOne: {
-        intFieldUnique: 111,
+      where: {
+        intFieldUnique: [111],
       },
     };
 
@@ -300,12 +300,12 @@ describe('createUpdatedThingFilter', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true if whereOne has only floatField', () => {
+  test('should return true if where has only floatField', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
     const args = {
-      whereOne: {
-        floatFieldUnique: 0.12345,
+      where: {
+        floatFieldUnique: [0.12342, 0.12345],
       },
     };
 
@@ -314,12 +314,12 @@ describe('createUpdatedThingFilter', () => {
     expect(result).toBe(true);
   });
 
-  test('should return true if whereOne has only dateTimeField', () => {
+  test('should return true if where has only dateTimeField', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
     const args = {
-      whereOne: {
-        dateTimeFieldUnique: new Date('1982-05-25T22:00:00.000Z'),
+      where: {
+        dateTimeFieldUnique: [new Date('1982-05-25T22:00:00.000Z')],
       },
     };
 
@@ -332,13 +332,6 @@ describe('createUpdatedThingFilter', () => {
     const filter = createUpdatedThingFilter(thingConfig);
 
     const args = {
-      whereOne: {
-        id: '5cd82ca075fb194334d8c1d5',
-        textFieldUnique: 'ABC',
-        intFieldUnique: 111,
-        floatFieldUnique: 0.12345,
-        dateTimeFieldUnique: new Date('1982-05-25T22:00:00.000Z'),
-      },
       where: {
         textFieldIndexed: 'abc',
         intFieldIndexed: 123,

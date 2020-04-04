@@ -4,7 +4,7 @@ import type {
   GeneralConfig,
   Inventory,
   ServersideConfig,
-  SignatureMethods,
+  ActionSignatureMethods,
   ThingConfig,
 } from '../flowTypes';
 
@@ -14,7 +14,7 @@ describe('createCustomResolver', () => {
   const resultResolver = () => 'test passed!';
   const createCustomLoadThingMutationResolver = () => resultResolver;
 
-  const signatureMethods: SignatureMethods = {
+  const signatureMethods: ActionSignatureMethods = {
     name(thingConfig) {
       const { name } = thingConfig;
       return `load${name}`;
@@ -29,6 +29,7 @@ describe('createCustomResolver', () => {
       const { name } = thingConfig;
       return `[${name}!]!`;
     },
+    config: (thingConfig) => thingConfig,
   };
 
   const thingConfig: ThingConfig = {

@@ -6,6 +6,7 @@ import type {
   ThreeSegmentInventoryChain,
 } from '../flowTypes';
 
+import composeActionSignature from '../types/composeActionSignature';
 import executeAuthorisation from './executeAuthorisation';
 import checkInventory from '../utils/checkInventory';
 
@@ -17,7 +18,18 @@ const createCustomResolver = (
   serversideConfig: ServersideConfig,
 ): null | Function => {
   const { name } = thingConfig;
-  const { inventory } = generalConfig;
+
+  const { inventory, custom } = generalConfig;
+  if (!custom) {
+    throw new TypeError('"custom" property have to be defined!');
+  }
+  const { [methodKind]: methodFolder } = custom;
+  if (!methodFolder) {
+    throw new TypeError(`"${methodKind}" property have to be defined!`);
+  }
+  const { [methodName]: signatureMethods } = methodFolder;
+
+  if (!composeActionSignature(signatureMethods, thingConfig, generalConfig)) return null;
 
   // $FlowFixMe - cannot understand what the conflict between 'Query' & 'Mutation'
   const inventoryChain: ThreeSegmentInventoryChain = [methodKind, methodName, name];

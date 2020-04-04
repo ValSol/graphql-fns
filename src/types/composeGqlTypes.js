@@ -3,7 +3,8 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
-import composeSignature from './composeSignature';
+import composeActionSignature from './composeActionSignature';
+import composeObjectSignature from './composeObjectSignature';
 import createThingType from './createThingType';
 import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
 import createPushIntoThingInputType from './inputs/createPushIntoThingInputType';
@@ -38,6 +39,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const { thingConfigs, custom, inventory } = generalConfig;
 
   // eslint-disable-next-line no-nested-ternary
+  const customInputObject = custom ? (custom.Input ? custom.Input : {}) : {};
+  // eslint-disable-next-line no-nested-ternary
+  const customReturnObject = custom ? (custom.Return ? custom.Return : {}) : {};
+  // eslint-disable-next-line no-nested-ternary
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
@@ -46,7 +51,25 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
-  const thingTypes = thingConfigs.map((thingConfig) => createThingType(thingConfig)).join('\n');
+  const thingTypesArray = thingConfigs.map((thingConfig) => createThingType(thingConfig));
+
+  const customReturnObjectNames = Object.keys(customReturnObject);
+  thingConfigs
+    .filter(({ embedded }) => !embedded)
+    .reduce((prev, thingConfig) => {
+      customReturnObjectNames.forEach((customName) => {
+        const customReturnType = composeObjectSignature(
+          customReturnObject[customName],
+          thingConfig,
+          generalConfig,
+        );
+        if (customReturnType) prev.push(customReturnType);
+      });
+
+      return prev;
+    }, thingTypesArray);
+
+  const thingTypes = thingTypesArray.join('\n');
 
   const thingInputTypes = allowMutations
     ? thingConfigs
@@ -75,6 +98,8 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         .join('\n')
     : '';
 
+  const customInputObjectNames = Object.keys(customInputObject);
+  const input = true;
   const thingInputTypes2 = thingConfigs
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
@@ -91,8 +116,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         checkInventory(['Query', 'things', name], inventory) ||
         checkInventory(['Query', 'thingCount', name], inventory)
       ) {
-        const thingWhereInputType = createThingWhereInputType(thingConfig);
-        if (thingWhereInputType) prev.push(thingWhereInputType);
+        prev.push(createThingWhereInputType(thingConfig));
         const thingSortInputType = createThingSortInputType(thingConfig);
         if (thingSortInputType) prev.push(thingSortInputType);
         const thingPaginationInputType = createThingPaginationInputType(thingConfig);
@@ -100,6 +124,17 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         const thingNearInputType = createThingNearInputType(thingConfig);
         if (thingNearInputType) prev.push(thingNearInputType);
       }
+
+      customInputObjectNames.forEach((customName) => {
+        const customInputType = composeObjectSignature(
+          customInputObject[customName],
+          thingConfig,
+          generalConfig,
+          input,
+        );
+        if (customInputType) prev.push(customInputType);
+      });
+
       return prev;
     }, [])
     .join('\n');
@@ -124,7 +159,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
         customQueryNames.forEach((customName) => {
           if (checkInventory(['Query', customName, name], inventory)) {
-            prev.push(`  ${composeSignature(customQuery[customName], thingConfig, generalConfig)}`);
+            prev.push(
+              `  ${composeActionSignature(customQuery[customName], thingConfig, generalConfig)}`,
+            );
           }
         });
 
@@ -175,7 +212,7 @@ ${thingQueryTypes.join('\n')}
         customMutationNames.forEach((customName) => {
           if (checkInventory(['Mutation', customName, name], inventory)) {
             prev.push(
-              `  ${composeSignature(customMutation[customName], thingConfig, generalConfig)}`,
+              `  ${composeActionSignature(customMutation[customName], thingConfig, generalConfig)}`,
             );
           }
         });

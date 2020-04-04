@@ -9,7 +9,7 @@ describe('createThingsQueryType', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  Examples: [Example!]!';
+    const expectedResult = '  Examples(where: ExampleWhereInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -41,7 +41,8 @@ describe('createThingsQueryType', () => {
       name: 'Example',
       pagination: true,
     };
-    const expectedResult = '  Examples(pagination: ExamplePaginationInput): [Example!]!';
+    const expectedResult =
+      '  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -61,7 +62,8 @@ describe('createThingsQueryType', () => {
         },
       ],
     };
-    const expectedResult = '  Examples(near: ExampleNearInput): [Example!]!';
+    const expectedResult =
+      '  Examples(where: ExampleWhereInput, near: ExampleNearInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);

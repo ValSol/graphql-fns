@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.343",
+  "version": "0.1.2-beta.348",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {

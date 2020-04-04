@@ -17,8 +17,8 @@ describe('composeUpdatedThingSubscriptionArgs', () => {
     };
 
     const expectedResult = [
-      'subscription updatedExample($whereOne: ExampleWhereOneInput) {',
-      '  updatedExample(whereOne: $whereOne) {',
+      'subscription updatedExample($where: ExampleWhereInput) {',
+      '  updatedExample(where: $where) {',
     ];
 
     const result = composeUpdatedThingSubscriptionArgs(thingConfig);
@@ -37,8 +37,8 @@ describe('composeUpdatedThingSubscriptionArgs', () => {
     };
 
     const expectedResult = [
-      'subscription updatedExample($whereOne: ExampleWhereOneInput, $where: ExampleWhereInput) {',
-      '  updatedExample(whereOne: $whereOne, where: $where) {',
+      'subscription updatedExample($where: ExampleWhereInput) {',
+      '  updatedExample(where: $where) {',
     ];
 
     const result = composeUpdatedThingSubscriptionArgs(thingConfig);

@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, SignatureMethods, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../flowTypes';
 
 import composeMutation from './composeMutation';
 
 describe('composeMutation', () => {
-  const signatureMethods: SignatureMethods = {
+  const signatureMethods: ActionSignatureMethods = {
     name(thingConfig) {
       const { name } = thingConfig;
       return `load${name}`;
@@ -20,6 +20,9 @@ describe('composeMutation', () => {
     type(thingConfig) {
       const { name } = thingConfig;
       return `[${name}!]!`;
+    },
+    config(thingConfig) {
+      return thingConfig;
     },
   };
 

@@ -148,6 +148,7 @@ export type ListColumn = {|
 export type ThingConfig = {
   name: string,
   embedded?: boolean, // true if related to embeddedFields OR fileFields
+  custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
   pagination?: boolean,
 
   duplexFields?: $ReadOnlyArray<{
@@ -332,6 +333,32 @@ export type Inventory = {
 export type GeneralConfig = {
   +thingConfigs: $ReadOnlyArray<ThingConfig>,
   +custom?: {
+    +Input?: {
+      +[customInputName: string]: {
+        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +fieldNames: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +fieldTypes: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+      },
+    },
+    +Return?: {
+      +[customReturnName: string]: {
+        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +fieldNames: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+        +fieldTypes: (
+          thingConfig: ThingConfig,
+          generalConfig: GeneralConfig,
+        ) => $ReadOnlyArray<string>,
+      },
+    },
     +Query?: {
       +[customQueryName: string]: {
         +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
@@ -344,6 +371,7 @@ export type GeneralConfig = {
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
       },
     },
     +Mutation?: {
@@ -358,6 +386,7 @@ export type GeneralConfig = {
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
       },
     },
   },
@@ -367,12 +396,39 @@ export type GeneralConfig = {
 
 // equal to previous code of 'custom' property
 export type Custom = {
+  +Input?: {
+    +[customInputName: string]: {
+      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +fieldNames: (
+        thingConfig: ThingConfig,
+        generalConfig: GeneralConfig,
+      ) => $ReadOnlyArray<string>,
+      +fieldTypes: (
+        thingConfig: ThingConfig,
+        generalConfig: GeneralConfig,
+      ) => $ReadOnlyArray<string>,
+    },
+  },
+  +Return?: {
+    +[customReturnName: string]: {
+      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +fieldNames: (
+        thingConfig: ThingConfig,
+        generalConfig: GeneralConfig,
+      ) => $ReadOnlyArray<string>,
+      +fieldTypes: (
+        thingConfig: ThingConfig,
+        generalConfig: GeneralConfig,
+      ) => $ReadOnlyArray<string>,
+    },
+  },
   +Query?: {
     +[customQueryName: string]: {
       +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
       +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
       +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
       +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
     },
   },
   +Mutation?: {
@@ -381,16 +437,27 @@ export type Custom = {
       +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
       +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
       +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
     },
   },
 };
 
-export type SignatureMethods = {
-  // the same code as used above in GeneralConfig
+export type ActionSignatureMethods = {
+  // the same code as used above in GeneralConfig for Query & Mutation
+  // when the name method return "" (empty string) => action will be rejected
   +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
   +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+};
+
+export type ObjectSignatureMethods = {
+  // the same code as used above in GeneralConfig for Input & Return
+  // when the name method return "" (empty string) => object will be rejected
+  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +fieldNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
@@ -528,10 +595,7 @@ export type ClientOptions = {
   +depth?: number,
   +include?: Object,
   +exclude?: Object,
-  // custom mutation, query or subscription attributes
-  // 1st string - argName, 2nd - prefix of argType, 3d - suffix of argType
   +name?: string,
-  +args?: $ReadOnlyArray<[string, string, string]>,
 };
 
 export type ClientFieldsOptions = {

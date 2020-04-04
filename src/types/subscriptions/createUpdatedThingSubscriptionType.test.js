@@ -17,8 +17,7 @@ describe('createUpdatedThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult =
-      '  updatedExample(whereOne: ExampleWhereOneInput): UpdatedExamplePayload!';
+    const expectedResult = '  updatedExample(where: ExampleWhereInput): UpdatedExamplePayload!';
 
     const result = createUpdatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -38,8 +37,7 @@ describe('createUpdatedThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult =
-      '  updatedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): UpdatedExamplePayload!';
+    const expectedResult = '  updatedExample(where: ExampleWhereInput): UpdatedExamplePayload!';
 
     const result = createUpdatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);

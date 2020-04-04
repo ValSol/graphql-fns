@@ -1,8 +1,8 @@
 // @flow
-import type { GeneralConfig, SignatureMethods, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../flowTypes';
 
-const composeSignature = (
-  signatureMethods: SignatureMethods,
+const composeActionSignature = (
+  signatureMethods: ActionSignatureMethods,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): string => {
@@ -14,6 +14,10 @@ const composeSignature = (
   } = signatureMethods;
 
   const name = composeName(thingConfig, generalConfig);
+
+  // by making name = '' filter unnecessary action
+  if (!name) return '';
+
   const argNames = composeArgNames(thingConfig, generalConfig);
   const argTypes = composeArgTypes(thingConfig, generalConfig);
   const returningType = composeType(thingConfig, generalConfig);
@@ -27,4 +31,4 @@ const composeSignature = (
   return argNames.length ? `${name}(${args}): ${returningType}` : `${name}: ${returningType}`;
 };
 
-export default composeSignature;
+export default composeActionSignature;

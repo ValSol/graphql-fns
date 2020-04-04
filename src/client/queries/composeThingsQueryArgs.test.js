@@ -16,7 +16,10 @@ describe('composeThingsQueryArgs', () => {
       ],
     };
 
-    const expectedResult = ['query Examples {', '  Examples {'];
+    const expectedResult = [
+      'query Examples($where: ExampleWhereInput) {',
+      '  Examples(where: $where) {',
+    ];
 
     const result = composeThingsQueryArgs(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -54,8 +57,8 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($pagination: ExamplePaginationInput) {',
-      '  Examples(pagination: $pagination) {',
+      'query Examples($pagination: ExamplePaginationInput, $where: ExampleWhereInput) {',
+      '  Examples(pagination: $pagination, where: $where) {',
     ];
 
     const result = composeThingsQueryArgs(thingConfig);
@@ -74,8 +77,8 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($near: ExampleNearInput) {',
-      '  Examples(near: $near) {',
+      'query Examples($near: ExampleNearInput, $where: ExampleWhereInput) {',
+      '  Examples(near: $near, where: $where) {',
     ];
 
     const result = composeThingsQueryArgs(thingConfig);

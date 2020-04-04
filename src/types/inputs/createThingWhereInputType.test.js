@@ -15,9 +15,16 @@ describe('createThingWhereInputType', () => {
         {
           name: 'lastName',
         },
+        {
+          name: 'code',
+          unique: true,
+        },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
+  code: [String!]
+}`;
 
     const result = createThingWhereInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -38,6 +45,7 @@ describe('createThingWhereInputType', () => {
       ],
     };
     const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
   firstName: String
   lastName: String
 }`;
@@ -65,6 +73,7 @@ describe('createThingWhereInputType', () => {
       ],
     });
     const expectedResult = `input PersonWhereInput {
+  id: [ID!]
   spouse: ID
   friends: ID
 }`;
@@ -94,6 +103,7 @@ describe('createThingWhereInputType', () => {
       ],
     });
     const expectedResult = `input PersonWhereInput {
+  id: [ID!]
   spouse: ID
   friends: ID
 }`;
@@ -131,6 +141,7 @@ describe('createThingWhereInputType', () => {
       ],
     };
     const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
   field1: WeekdaysEnumeration
   field4: CuisinesEnumeration
 }`;
@@ -154,6 +165,7 @@ describe('createThingWhereInputType', () => {
       ],
     };
     const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
   firstName: Int
   lastName: Int
 }`;
@@ -177,6 +189,7 @@ describe('createThingWhereInputType', () => {
       ],
     };
     const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
   firstName: Float
   lastName: Float
 }`;
@@ -200,6 +213,7 @@ describe('createThingWhereInputType', () => {
       ],
     };
     const expectedResult = `input ExampleWhereInput {
+  id: [ID!]
   firstName: Boolean
   lastName: Boolean
 }`;

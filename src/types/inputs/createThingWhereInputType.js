@@ -15,87 +15,84 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
     relationalFields,
   } = thingConfig;
 
-  const indexedFields = [];
+  const fields = ['  id: [ID!]'];
 
   if (textFields) {
-    textFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: String`);
-        return prev;
-      }, indexedFields);
+    textFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique) {
+        fields.push(`  ${fieldName}: [String!]`);
+      } else if (index) {
+        fields.push(`  ${fieldName}: String`);
+      }
+    });
   }
 
   if (intFields) {
-    intFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: Int`);
-        return prev;
-      }, indexedFields);
+    intFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique) {
+        fields.push(`  ${fieldName}: [Int!]`);
+      } else if (index) {
+        fields.push(`  ${fieldName}: Int`);
+      }
+    });
   }
 
   if (floatFields) {
-    floatFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: Float`);
-        return prev;
-      }, indexedFields);
+    floatFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique) {
+        fields.push(`  ${fieldName}: [Float!]`);
+      } else if (index) {
+        fields.push(`  ${fieldName}: Float`);
+      }
+    });
   }
 
   if (dateTimeFields) {
-    dateTimeFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: DateTime`);
-        return prev;
-      }, indexedFields);
+    dateTimeFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique) {
+        fields.push(`  ${fieldName}: [DateTime!]`);
+      } else if (index) {
+        fields.push(`  ${fieldName}: DateTime`);
+      }
+    });
   }
 
   if (booleanFields) {
-    booleanFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: Boolean`);
-        return prev;
-      }, indexedFields);
+    booleanFields.forEach(({ name: fieldName, index }) => {
+      if (index) {
+        fields.push(`  ${fieldName}: Boolean`);
+      }
+    });
   }
 
   if (enumFields) {
-    enumFields
-      .filter(({ index }) => index)
-      .reduce((prev, { enumName, name: fieldName }) => {
-        prev.push(`  ${fieldName}: ${enumName}Enumeration`);
-        return prev;
-      }, indexedFields);
+    enumFields.forEach(({ name: fieldName, enumName, index }) => {
+      if (index) {
+        fields.push(`  ${fieldName}: ${enumName}Enumeration`);
+      }
+    });
   }
 
   if (relationalFields) {
-    relationalFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: ID`);
-        return prev;
-      }, indexedFields);
+    relationalFields.forEach(({ name: fieldName, index }) => {
+      if (index) {
+        fields.push(`  ${fieldName}: ID`);
+      }
+    });
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields
-      .filter(({ index }) => index)
-      .reduce((prev, { name: fieldName }) => {
-        prev.push(`  ${fieldName}: ID`);
-        return prev;
-      }, indexedFields);
+    duplexFields.forEach(({ name: fieldName, index }) => {
+      if (index) {
+        fields.push(`  ${fieldName}: ID`);
+      }
+    });
   }
 
-  const result = indexedFields.length
-    ? `input ${name}WhereInput {
-${indexedFields.join('\n')}
-}`
-    : '';
-
+  const result = `input ${name}WhereInput {
+${fields.join('\n')}
+}`;
   return result;
 };
 

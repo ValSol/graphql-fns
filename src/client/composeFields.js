@@ -21,6 +21,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
     dateTimeFields,
     duplexFields,
     embedded,
+    custom,
     embeddedFields,
     enumFields,
     fileFields,
@@ -34,11 +35,15 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
 
   const result = [];
 
-  if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
+  if (!custom) {
+    if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
 
-  if (!embedded) {
-    if (includeField('createdAt', include, exclude)) result.push(`${'  '.repeat(shift)}createdAt`);
-    if (includeField('updatedAt', include, exclude)) result.push(`${'  '.repeat(shift)}updatedAt`);
+    if (!embedded) {
+      if (includeField('createdAt', include, exclude))
+        result.push(`${'  '.repeat(shift)}createdAt`);
+      if (includeField('updatedAt', include, exclude))
+        result.push(`${'  '.repeat(shift)}updatedAt`);
+    }
   }
 
   if (textFields) {

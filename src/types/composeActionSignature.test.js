@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, SignatureMethods, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../flowTypes';
 
-import composeSignature from './composeSignature';
+import composeActionSignature from './composeActionSignature';
 
-describe('composeSignature', () => {
+describe('composeActionSignature', () => {
   test('should return correct results for empty args arrays', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name(thingConfig) {
         const { name } = thingConfig;
         return `get${name}`;
@@ -21,6 +21,7 @@ describe('composeSignature', () => {
         const { name } = thingConfig;
         return `[${name}!]!`;
       },
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -37,7 +38,7 @@ describe('composeSignature', () => {
     };
     const expectedResult = 'getExample: [Example!]!';
 
-    const result = composeSignature(signatureMethods, thingConfig, generalConfig);
+    const result = composeActionSignature(signatureMethods, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
@@ -57,6 +58,7 @@ describe('composeSignature', () => {
         const { name } = thingConfig;
         return `${name}!`;
       },
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -73,7 +75,44 @@ describe('composeSignature', () => {
 
     const expectedResult = 'getExample(path: String!, index: Int): Example!';
 
-    const result = composeSignature(queryParts, thingConfig, generalConfig);
+    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
+  test('should return empty results', () => {
+    const queryParts = {
+      name(thingConfig) {
+        const { name } = thingConfig;
+        return name === 'Example' ? '' : `get${name}`;
+      },
+      argNames() {
+        return ['path', 'index'];
+      },
+      argTypes() {
+        return ['String!', 'Int'];
+      },
+      type(thingConfig) {
+        const { name } = thingConfig;
+        return `${name}!`;
+      },
+      config: (thingConfig) => thingConfig,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const generalConfig: GeneralConfig = {
+      thingConfigs: [thingConfig],
+    };
+
+    const expectedResult = '';
+
+    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

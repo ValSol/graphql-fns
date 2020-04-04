@@ -121,8 +121,9 @@ describe('createThingQueryResolver', () => {
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
       booleanFields: [{ name: 'recommended', index: true }],
-
-      textFields: [{ name: 'name' }],
+      // unique: true causes geospatial fetch error
+      // textFields: [{ name: 'name' }, { name: 'num', unique: true }],
+      textFields: [{ name: 'name' }, { name: 'num' }],
       relationalFields: [
         {
           name: 'restaurants',
@@ -168,43 +169,51 @@ describe('createThingQueryResolver', () => {
             name: 'Fabbrica',
             point: { lng: 50.438198, lat: 30.515858 },
             point2: { lng: 50.438198, lat: 30.515858 },
+            num: '2',
           },
           {
             name: 'Fine Family',
             point: { lng: 50.438061, lat: 30.515879 },
             point2: { lng: 50.438061, lat: 30.515879 },
+            num: '3',
           },
           {
             name: 'Zhizn Zamechatelnykh Lyudey',
             point: { lng: 50.438007, lat: 30.515858 },
             point2: { lng: 50.438007, lat: 30.515858 },
+            num: '4',
           },
           {
             name: 'Georgian House',
             point: { lng: 50.437692, lat: 30.51583 },
             point2: { lng: 50.437692, lat: 30.51583 },
+            num: '5',
           },
           {
             name: 'Mama Manana',
             point: { lng: 50.437045, lat: 30.515803 },
             point2: { lng: 50.437045, lat: 30.515803 },
+            num: '6',
           },
           {
             name: 'Satori Lounge',
             point: { lng: 50.43673, lat: 30.515007 },
             point2: { lng: 50.43673, lat: 30.515007 },
             recommended: true,
+            num: '7',
           },
           {
             name: 'NAM',
             point: { lng: 50.436149, lat: 30.515785 },
             point2: { lng: 50.436149, lat: 30.515785 },
             recommended: true,
+            num: '8',
           },
         ],
       },
       point: { lng: 50.438198, lat: 30.515858 },
       point2: { lng: 50.438198, lat: 30.515858 },
+      num: '1',
     };
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
 
@@ -238,6 +247,101 @@ describe('createThingQueryResolver', () => {
     expect(restaurants3.length).toBe(2);
     expect(restaurants3[0].name).toEqual('NAM');
     expect(restaurants3[1].name).toEqual('Satori Lounge');
+
+    const where2 = {
+      id: [restaurants3[0].id, restaurants3[1].id],
+    };
+    const restaurants4 = await Restaurants(
+      null,
+      { where: where2 },
+      { mongooseConn, pubsub },
+      info2,
+    );
+    expect(restaurants4.length).toBe(2);
+  });
+
+  test('should create query things resolver for thing with unique field', async () => {
+    const restaurantConfig: ThingConfig = {};
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant2',
+      booleanFields: [{ name: 'recommended', index: true }],
+      textFields: [{ name: 'name' }, { name: 'num', unique: true }],
+      relationalFields: [
+        {
+          name: 'restaurants',
+          array: true,
+          config: restaurantConfig,
+        },
+      ],
+    });
+
+    const createRestaurant = createCreateThingMutationResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      name: 'Murakami',
+      restaurants: {
+        create: [
+          {
+            name: 'Fabbrica',
+            num: '2',
+          },
+          {
+            name: 'Fine Family',
+            num: '3',
+          },
+          {
+            name: 'Zhizn Zamechatelnykh Lyudey',
+            num: '4',
+          },
+          {
+            name: 'Georgian House',
+            num: '5',
+          },
+          {
+            name: 'Mama Manana',
+            num: '6',
+          },
+          {
+            name: 'Satori Lounge',
+            recommended: true,
+            num: '7',
+          },
+          {
+            name: 'NAM',
+            recommended: true,
+            num: '8',
+          },
+        ],
+      },
+      point: { lng: 50.438198, lat: 30.515858 },
+      point2: { lng: 50.438198, lat: 30.515858 },
+      num: '1',
+    };
+    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+
+    const Restaurants = createThingsQueryResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info);
+
+    expect(restaurants.length).toBe(8);
+    expect(restaurants[0].id).toEqual(createdRestaurant.id);
+
+    const where = {
+      num: ['4', '2', '8', '6'],
+    };
+    const restaurants2 = await Restaurants(null, { where }, { mongooseConn, pubsub }, info2);
+    expect(restaurants2.length).toBe(4);
   });
 
   test('should create query things resolver for thing sorted by several fields', async () => {

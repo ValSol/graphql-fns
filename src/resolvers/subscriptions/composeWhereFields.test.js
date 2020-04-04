@@ -115,12 +115,17 @@ describe('composeWhereFields', () => {
     });
 
     const expectedResults = {
+      id: 'idArray',
       booleanFieldIndexed: 'booleanFields',
       enumFieldIndexed: 'enumFields',
       textFieldIndexed: 'textFields',
+      textFieldUnique: 'textFieldsArray',
       dateTimeFieldIndexed: 'dateTimeFields',
+      dateTimeFieldUnique: 'dateTimeFieldsArray',
       intFieldIndexed: 'intFields',
+      intFieldUnique: 'intFieldsArray',
       floatIndexed: 'floatFields',
+      floatFieldUnique: 'floatFieldsArray',
       relationalFieldIndexed: 'relationalFields',
       duplexFieldIndexed: 'duplexFields',
     };

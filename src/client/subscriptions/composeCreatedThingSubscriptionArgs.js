@@ -1,17 +1,10 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingWhereInputType from '../../types/inputs/createThingWhereInputType';
-
 const composeCreatedThingSubscriptionArgs = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
 
-  const argsArray = [];
-
-  const ThingWhereInputType = createThingWhereInputType(thingConfig);
-  if (ThingWhereInputType) {
-    argsArray.push({ argName: 'where', argType: `${name}WhereInput` });
-  }
+  const argsArray = [{ argName: 'where', argType: `${name}WhereInput` }];
 
   if (!argsArray.length) {
     return [`subscription created${name} {`, `  created${name} {`];

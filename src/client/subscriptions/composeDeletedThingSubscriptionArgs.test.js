@@ -16,7 +16,10 @@ describe('composeDeletedThingSubscriptionArgs', () => {
       ],
     };
 
-    const expectedResult = ['subscription deletedExample {', '  deletedExample {'];
+    const expectedResult = [
+      'subscription deletedExample($where: ExampleWhereInput) {',
+      '  deletedExample(where: $where) {',
+    ];
 
     const result = composeDeletedThingSubscriptionArgs(thingConfig);
     expect(result).toEqual(expectedResult);

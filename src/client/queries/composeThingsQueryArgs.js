@@ -7,7 +7,6 @@ import type { ThingConfig } from '../../flowTypes';
 import createThingNearInputType from '../../types/inputs/createThingNearInputType';
 import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
 import createThingSortInputType from '../../types/inputs/createThingSortInputType';
-import createThingWhereInputType from '../../types/inputs/createThingWhereInputType';
 
 const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
@@ -23,10 +22,7 @@ const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
     argsArray.push({ argName: 'pagination', argType: `${name}PaginationInput` });
   }
 
-  const tThingWhereInputType = createThingWhereInputType(thingConfig);
-  if (tThingWhereInputType) {
-    argsArray.push({ argName: 'where', argType: `${name}WhereInput` });
-  }
+  argsArray.push({ argName: 'where', argType: `${name}WhereInput` });
 
   const thingSortInputType = createThingSortInputType(thingConfig);
   if (thingSortInputType) {

@@ -17,7 +17,7 @@ describe('createCreatedThingSubscriptionType', () => {
         },
       ],
     };
-    const expectedResult = '  createdExample: Example!';
+    const expectedResult = '  createdExample(where: ExampleWhereInput): Example!';
 
     const result = createCreatedThingSubscriptionType(thingConfig);
     expect(result).toEqual(expectedResult);

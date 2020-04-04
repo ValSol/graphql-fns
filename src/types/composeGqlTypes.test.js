@@ -1,7 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, Inventory, SignatureMethods, ThingConfig } from '../flowTypes';
+import type {
+  GeneralConfig,
+  Inventory,
+  ActionSignatureMethods,
+  ObjectSignatureMethods,
+  ThingConfig,
+} from '../flowTypes';
 
 import composeGqlTypes from './composeGqlTypes';
 
@@ -230,6 +236,8 @@ input ExampleWhereOneInput {
   textField1: ID
 }
 input ExampleWhereInput {
+  id: [ID!]
+  textField1: [String!]
   textField2: String
   textField3: String
   day: WeekdaysEnumeration
@@ -293,7 +301,7 @@ type Mutation {
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
-  updatedExample(whereOne: ExampleWhereOneInput, where: ExampleWhereInput): UpdatedExamplePayload!
+  updatedExample(where: ExampleWhereInput): UpdatedExamplePayload!
   deletedExample(where: ExampleWhereInput): Example!
 }`;
 
@@ -451,6 +459,9 @@ input Example2UpdateChildrenInput {
 input Example1WhereOneInput {
   id: ID!
 }
+input Example1WhereInput {
+  id: [ID!]
+}
 enum Example1GeospatialFieldNamesEnum {
   position
 }
@@ -461,6 +472,9 @@ input Example1NearInput {
 }
 input Example2WhereOneInput {
   id: ID!
+}
+input Example2WhereInput {
+  id: [ID!]
 }
 enum Example1FieldNamesEnum {
   textField1
@@ -485,11 +499,11 @@ type UpdatedExample2Payload {
 }
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
-  Example1s(near: Example1NearInput): [Example1!]!
-  Example1Count: Int!
+  Example1s(where: Example1WhereInput, near: Example1NearInput): [Example1!]!
+  Example1Count(where: Example1WhereInput): Int!
   Example2(whereOne: Example2WhereOneInput!): Example2
-  Example2s: [Example2!]!
-  Example2Count: Int!
+  Example2s(where: Example2WhereInput): [Example2!]!
+  Example2Count(where: Example2WhereInput): Int!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
@@ -505,12 +519,12 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
-  createdExample1: Example1!
-  updatedExample1(whereOne: Example1WhereOneInput): UpdatedExample1Payload!
-  deletedExample1: Example1!
-  createdExample2: Example2!
-  updatedExample2(whereOne: Example2WhereOneInput): UpdatedExample2Payload!
-  deletedExample2: Example2!
+  createdExample1(where: Example1WhereInput): Example1!
+  updatedExample1(where: Example1WhereInput): UpdatedExample1Payload!
+  deletedExample1(where: Example1WhereInput): Example1!
+  createdExample2(where: Example2WhereInput): Example2!
+  updatedExample2(where: Example2WhereInput): UpdatedExample2Payload!
+  deletedExample2(where: Example2WhereInput): Example2!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -646,8 +660,14 @@ input PlaceUpdateChildrenInput {
 input PersonWhereOneInput {
   id: ID!
 }
+input PersonWhereInput {
+  id: [ID!]
+}
 input PlaceWhereOneInput {
   id: ID!
+}
+input PlaceWhereInput {
+  id: [ID!]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -672,11 +692,11 @@ type UpdatedPlacePayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People: [Person!]!
-  PersonCount: Int!
+  People(where: PersonWhereInput): [Person!]!
+  PersonCount(where: PersonWhereInput): Int!
   Place(whereOne: PlaceWhereOneInput!): Place
-  Places: [Place!]!
-  PlaceCount: Int!
+  Places(where: PlaceWhereInput): [Place!]!
+  PlaceCount(where: PlaceWhereInput): Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -692,12 +712,12 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  createdPerson: Person!
-  updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson: Person!
-  createdPlace: Place!
-  updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
-  deletedPlace: Place!
+  createdPerson(where: PersonWhereInput): Person!
+  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
+  deletedPerson(where: PersonWhereInput): Person!
+  createdPlace(where: PlaceWhereInput): Place!
+  updatedPlace(where: PlaceWhereInput): UpdatedPlacePayload!
+  deletedPlace(where: PlaceWhereInput): Place!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -825,6 +845,9 @@ input AddressUpdateInput {
 input PersonWhereOneInput {
   id: ID!
 }
+input PersonWhereInput {
+  id: [ID!]
+}
 enum PersonFieldNamesEnum {
   firstName
   lastName
@@ -840,8 +863,8 @@ type UpdatedPersonPayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People: [Person!]!
-  PersonCount: Int!
+  People(where: PersonWhereInput): [Person!]!
+  PersonCount(where: PersonWhereInput): Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -852,9 +875,9 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
-  createdPerson: Person!
-  updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson: Person!
+  createdPerson(where: PersonWhereInput): Person!
+  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
+  deletedPerson(where: PersonWhereInput): Person!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1014,8 +1037,14 @@ input PlaceUpdateChildrenInput {
 input PersonWhereOneInput {
   id: ID!
 }
+input PersonWhereInput {
+  id: [ID!]
+}
 input PlaceWhereOneInput {
   id: ID!
+}
+input PlaceWhereInput {
+  id: [ID!]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1042,11 +1071,11 @@ type UpdatedPlacePayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People: [Person!]!
-  PersonCount: Int!
+  People(where: PersonWhereInput): [Person!]!
+  PersonCount(where: PersonWhereInput): Int!
   Place(whereOne: PlaceWhereOneInput!): Place
-  Places: [Place!]!
-  PlaceCount: Int!
+  Places(where: PlaceWhereInput): [Place!]!
+  PlaceCount(where: PlaceWhereInput): Int!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -1063,12 +1092,12 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
-  createdPerson: Person!
-  updatedPerson(whereOne: PersonWhereOneInput): UpdatedPersonPayload!
-  deletedPerson: Person!
-  createdPlace: Place!
-  updatedPlace(whereOne: PlaceWhereOneInput): UpdatedPlacePayload!
-  deletedPlace: Place!
+  createdPerson(where: PersonWhereInput): Person!
+  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
+  deletedPerson(where: PersonWhereInput): Person!
+  createdPlace(where: PlaceWhereInput): Place!
+  updatedPlace(where: PlaceWhereInput): UpdatedPlacePayload!
+  deletedPlace(where: PlaceWhereInput): Place!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1097,10 +1126,13 @@ type Example {
 input ExampleWhereOneInput {
   id: ID!
 }
+input ExampleWhereInput {
+  id: [ID!]
+}
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
-  Examples: [Example!]!
-  ExampleCount: Int!
+  Examples(where: ExampleWhereInput): [Example!]!
+  ExampleCount(where: ExampleWhereInput): Int!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1188,8 +1220,11 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
+input ExampleWhereInput {
+  id: [ID!]
+}
 type Query {
-  Examples: [Example!]!
+  Examples(where: ExampleWhereInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1215,8 +1250,11 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
+input ExampleWhereInput {
+  id: [ID!]
+}
 type Query {
-  Examples: [Example!]!
+  Examples(where: ExampleWhereInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1302,11 +1340,12 @@ type Mutation {
   });
 
   test('should create things types with inventory for only one custom mutation loadThing', () => {
-    const signatureMethods: SignatureMethods = {
+    const signatureMethods: ActionSignatureMethods = {
       name: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -1339,11 +1378,12 @@ type Mutation {
   });
 
   test('should create things types with inventory for only one custom query getThing', () => {
-    const signatureMethods: SignatureMethods = {
+    const getThing: ActionSignatureMethods = {
       name: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
+      config: (thingConfig) => thingConfig,
     };
 
     const thingConfig: ThingConfig = {
@@ -1358,7 +1398,7 @@ type Mutation {
 
     const thingConfigs = [thingConfig];
     const inventory: Inventory = { include: { Query: { getThing: null } } };
-    const custom = { Query: { getThing: signatureMethods } };
+    const custom = { Query: { getThing } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1369,6 +1409,69 @@ type Example {
 }
 type Query {
   getExample(path: String!): Example
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types with custom input and return objects', () => {
+    const thingInTimeRangeInput: ObjectSignatureMethods = {
+      name: ({ name }) => `${name}TimeRangeInput`,
+      fieldNames: () => ['start', 'end'],
+      fieldTypes: () => ['DateTime!', 'DateTime!'],
+    };
+
+    const thingInTimeRange: ObjectSignatureMethods = {
+      name: ({ name }) => `${name}InTimeRange`,
+      fieldNames: () => ['payload', 'start', 'end'],
+      fieldTypes: ({ name }) => [`${name}!`, 'DateTime!', 'DateTime!'],
+    };
+
+    const thingInTimeRangeQuery: ActionSignatureMethods = {
+      name: ({ name }) => `${name}InTimeRangeQuery`,
+      argNames: () => ['range'],
+      argTypes: ({ name }) => [`${name}TimeRangeInput!`],
+      type: ({ name }) => `${name}InTimeRange`,
+      config: (thingConfig) => thingConfig,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    const thingConfigs = [thingConfig];
+    const inventory: Inventory = { include: { Query: { thingInTimeRangeQuery: null } } };
+    const custom = {
+      Input: { thingInTimeRangeInput },
+      Return: { thingInTimeRange },
+      Query: { thingInTimeRangeQuery },
+    };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const expectedResult = `scalar DateTime
+type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type ExampleInTimeRange {
+  payload: Example!
+  start: DateTime!
+  end: DateTime!
+}
+input ExampleTimeRangeInput {
+  start: DateTime!
+  end: DateTime!
+}
+type Query {
+  ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): ExampleInTimeRange
 }`;
 
     const result = composeGqlTypes(generalConfig);

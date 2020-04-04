@@ -19,6 +19,8 @@ const composeMutation = (
 ): string => {
   let head;
 
+  let returnObjectConfig = thingConfig;
+
   switch (mutationName) {
     case 'createManyThings':
       head = composeCreateManyThingsMutationArgs(thingConfig);
@@ -50,9 +52,28 @@ const composeMutation = (
 
     default:
       head = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
+
+      const { custom } = generalConfig; // eslint-disable-line no-case-declarations
+      if (!custom) {
+        throw new TypeError('"custom" property have to be defined!');
+      }
+      const { Mutation } = custom; // eslint-disable-line no-case-declarations
+      if (!Mutation) {
+        throw new TypeError('"Return" property have to be defined!');
+      }
+      if (
+        !Mutation[mutationName] ||
+        !Mutation[mutationName].config ||
+        typeof Mutation[mutationName].config !== 'function'
+      ) {
+        throw new TypeError(
+          `Method "config" have to be defined for "${mutationName}" custom query`,
+        );
+      }
+      returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
   }
 
-  const fields = composeFields(thingConfig, { ...clientOptions, shift: 2 });
+  const fields = composeFields(returnObjectConfig, { ...clientOptions, shift: 2 });
 
   const resultArray = [...head, ...fields, '  }', '}'];
 

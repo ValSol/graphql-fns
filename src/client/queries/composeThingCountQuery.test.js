@@ -6,7 +6,7 @@ import type { ThingConfig } from '../../flowTypes';
 import composeThingCountQuery from './composeThingCountQuery';
 
 describe('composeThingCountQuery', () => {
-  test('should compose things query without args', () => {
+  test('should compose things query without indexed fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -16,8 +16,8 @@ describe('composeThingCountQuery', () => {
       ],
     };
 
-    const expectedResult = `query ExampleCount {
-  ExampleCount
+    const expectedResult = `query ExampleCount($where: ExampleWhereInput) {
+  ExampleCount(where: $where)
 }`;
 
     const result = composeThingCountQuery(thingConfig);
