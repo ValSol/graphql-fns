@@ -19,6 +19,9 @@ const coerceDataToGql = (
   const { id, createdAt, updatedAt, ...rest } = data;
 
   const result = Object.keys(rest).reduce((prev, key) => {
+    if (!fieldsObject[key]) {
+      throw new TypeError(`Found undeclared in thing "${thingConfig.name}" field "${key}"!`);
+    }
     if (skipUnusedFields && !fieldsObject[key]) return prev;
 
     const {
