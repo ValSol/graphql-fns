@@ -1,6 +1,6 @@
 // @flow
 
-import BitwiseArray from 'bitwise-array';
+import type { BitwiseArray } from 'bitwise-array/lib/flowTypes';
 
 export type MongodbGeospatialPoint = {|
   +type: 'Point',

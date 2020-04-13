@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.355",
+  "version": "0.1.2-beta.363",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
-    "bitwise-array": "^0.1.2",
+    "bitwise-array": "^0.1.12",
     "clsx": "^1.1.0",
     "csv-parse": "^4.8.8",
     "csv-stringify": "^5.3.6",

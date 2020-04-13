@@ -1,6 +1,7 @@
 // @flow
+import type { BitwiseArray } from 'bitwise-array/lib/flowTypes';
 
-import BitwiseArray, { createBitwiseArray } from 'bitwise-array';
+import { createBitwiseArray } from 'bitwise-array';
 
 import type { AdminFilters } from '../../flowTypes';
 
