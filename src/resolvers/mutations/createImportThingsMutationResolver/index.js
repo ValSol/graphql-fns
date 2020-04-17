@@ -17,17 +17,21 @@ const csvParse2 = (data, fieldsForCSV) =>
   csvParse(data, {
     columns: true,
     cast(value, context) {
-      if (fieldsForCSV.object.includes(context.column)) {
-        return value && JSON.parse(value);
-      }
-      if (fieldsForCSV.int.includes(context.column)) {
-        return value && Number.parseInt(value, 10);
-      }
-      if (fieldsForCSV.float.includes(context.column)) {
-        return value && Number.parseFloat(value);
-      }
-      if (fieldsForCSV.boolean.includes(context.column)) {
-        return !!value && !!Number.parseInt(value, 10);
+      try {
+        if (fieldsForCSV.object.includes(context.column)) {
+          return value && JSON.parse(value);
+        }
+        if (fieldsForCSV.int.includes(context.column)) {
+          return value && Number.parseInt(value, 10);
+        }
+        if (fieldsForCSV.float.includes(context.column)) {
+          return value && Number.parseFloat(value);
+        }
+        if (fieldsForCSV.boolean.includes(context.column)) {
+          return !!value && !!Number.parseInt(value, 10);
+        }
+      } catch (err) {
+        throw TypeError(`${err}\n for value="${value}" column="${context.column}"`);
       }
       return value;
     },
