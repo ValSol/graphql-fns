@@ -5,6 +5,7 @@ import composeFileFieldNameToConfigNameObject from './composeFileFieldNameToConf
 
 const composeAllFilesFieldsData = (
   filesAttributes: Array<Object>,
+  data?: Object,
   options: UploadOptions,
   thingConfig: ThingConfig,
   composeFileFieldsData: {
@@ -14,12 +15,20 @@ const composeAllFilesFieldsData = (
   const { counts, targets } = options;
   const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(thingConfig);
 
+  const data2 = data || {};
+
   const results = [];
   let index = 0;
   targets.forEach((fieldName, i) => {
+    const additionalData = nameToConfigNameObject[fieldName].array
+      ? data2[fieldName]
+      : data2[fieldName] && [data2[fieldName]];
     for (let j = index; j < index + counts[i]; j += 1) {
-      const result = composeFileFieldsData[nameToConfigNameObject[fieldName]](filesAttributes[j]);
-      results.push(result);
+      const result = composeFileFieldsData[nameToConfigNameObject[fieldName].configName](
+        filesAttributes[j],
+      );
+      const result2 = additionalData ? { ...additionalData[j - index], ...result } : result;
+      results.push(result2);
     }
     index += counts[i];
   });

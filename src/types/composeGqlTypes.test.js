@@ -223,6 +223,12 @@ input FilesOfExampleOptionsInput {
   counts: [Int!]!
   hashes: [String!]!
 }
+input UploadFilesToExampleInput {
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
+}
 input ImageCreateInput {
   fileId: String!
   address: String
@@ -297,7 +303,7 @@ type Mutation {
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
-  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!
+  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!

@@ -3,14 +3,14 @@ import type { ThingConfig } from '../../../flowTypes';
 
 const composeFileFieldNameToConfigNameObject = (
   thingConfig: ThingConfig,
-): { [fileFieldName: string]: string } => {
+): { [fileFieldName: string]: { configName: string, array?: boolean } } => {
   const { fileFields } = thingConfig;
 
   if (!fileFields) return {};
 
-  return fileFields.reduce((prev, { name, config: { name: configName } }) => {
+  return fileFields.reduce((prev, { name, array, config: { name: configName } }) => {
     // eslint-disable-next-line no-param-reassign
-    prev[name] = configName;
+    prev[name] = { configName, array };
     return prev;
   }, {});
 };

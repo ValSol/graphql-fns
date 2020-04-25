@@ -17,8 +17,8 @@ describe('composeUploadFilesToThingMutationResolver', () => {
     };
 
     const expectedResult = [
-      'mutation uploadFilesToExample($whereOne: ExampleWhereOneInput!, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!) {',
-      '  uploadFilesToExample(whereOne: $whereOne, files: $files, options: $options) {',
+      'mutation uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!) {',
+      '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options) {',
     ];
 
     const result = composeUploadFilesToThingMutationResolver(thingConfig);

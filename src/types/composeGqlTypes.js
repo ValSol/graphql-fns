@@ -11,6 +11,7 @@ import createPushIntoThingInputType from './inputs/createPushIntoThingInputType'
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
+import createUploadFilesToThingInputType from './inputs/createUploadFilesToThingInputType';
 import createThingNearInputType from './inputs/createThingNearInputType';
 import createThingSortInputType from './inputs/createThingSortInputType';
 import createThingWhereInputType from './inputs/createThingWhereInputType';
@@ -91,7 +92,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           }
           if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
             const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
-            if (filesOfThingOptionsInputType) prev.push(filesOfThingOptionsInputType);
+            const uploadFilesToThingInputType = createUploadFilesToThingInputType(thingConfig);
+            if (filesOfThingOptionsInputType) {
+              prev.push(filesOfThingOptionsInputType);
+              prev.push(uploadFilesToThingInputType);
+            }
           }
           return prev;
         }, [])

@@ -3,10 +3,10 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createPushIntoThingInputType from './createPushIntoThingInputType';
+import createUploadFilesToThingInputType from './createUploadFilesToThingInputType';
 
-describe('createPushIntoThingInputType', () => {
-  test('should create thing input type with text fields', () => {
+describe('createUploadFilesToThingInputType', () => {
+  test('should create empty string with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -33,16 +33,13 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  textField4: [String!]
-  textField5: [String!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with only scalar text fields', () => {
+  test('should create empty string with only scalar text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -61,11 +58,11 @@ describe('createPushIntoThingInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with relational fields', () => {
+  test('should create  empty string with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -96,12 +93,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(personConfig);
+    const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -126,11 +120,11 @@ describe('createPushIntoThingInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createPushIntoThingInputType(addressConfig);
+    const result = createUploadFilesToThingInputType(addressConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with embedded fields', () => {
+  test('should create  empty string with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
       embedded: true,
@@ -180,12 +174,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoPersonInput {
-  locations: [AddressCreateInput!]
-  places: [AddressCreateInput!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(personConfig);
+    const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should create thing input type with duplex fields', () => {
@@ -247,12 +238,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(personConfig);
+    const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -302,14 +290,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  favoritePositions: [GeospatialPointInput!]
-  worstPositions: [GeospatialPointInput!]
-  favoriteAreas: [GeospatialPolygonInput!]
-  worstAreas: [GeospatialPolygonInput!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -339,12 +322,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  field2: [CuisinesEnumeration!]
-  field4: [CuisinesEnumeration!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -375,12 +355,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  intField4: [Int!]
-  intField5: [Int!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -411,12 +388,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  floatField4: [Float!]
-  floatField5: [Float!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -447,12 +421,9 @@ describe('createPushIntoThingInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PushIntoExampleInput {
-  booleanField4: [Boolean!]
-  booleanField5: [Boolean!]
-}`;
+    const expectedResult = '';
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -472,11 +443,11 @@ describe('createPushIntoThingInputType', () => {
     };
     const expectedResult = '';
 
-    const result = createPushIntoThingInputType(imageConfig);
+    const result = createUploadFilesToThingInputType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with embedded fields', () => {
+  test('should create thing input type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
       embedded: true,
@@ -522,12 +493,14 @@ describe('createPushIntoThingInputType', () => {
       ],
     });
 
-    const expectedResult = `input PushIntoExampleInput {
-  pictures: [ImageCreateInput!]
-  photos: [ImageCreateInput!]
+    const expectedResult = `input UploadFilesToExampleInput {
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
 }`;
 
-    const result = createPushIntoThingInputType(thingConfig);
+    const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

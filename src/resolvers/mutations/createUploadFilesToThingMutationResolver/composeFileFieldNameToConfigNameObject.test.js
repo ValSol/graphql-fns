@@ -57,10 +57,10 @@ describe('composeFileFieldNameToConfigNameObject', () => {
     const result = composeFileFieldNameToConfigNameObject(thingConfig);
 
     const expectedResult = {
-      logo: 'Image',
-      header: 'Image',
-      pictures: 'Image',
-      photos: 'Photo',
+      logo: { configName: 'Image' },
+      header: { configName: 'Image' },
+      pictures: { configName: 'Image', array: true },
+      photos: { configName: 'Photo', array: true },
     };
 
     expect(result).toEqual(expectedResult);

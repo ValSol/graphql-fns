@@ -10,7 +10,7 @@ const createUploadFilesToThingMutationType = (thingConfig: ThingConfig): string 
   const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
 
   if (filesOfThingOptionsInputType) {
-    return `  uploadFilesTo${name}(whereOne: ${name}WhereOneInput!, files: [Upload!]!, options: FilesOf${name}OptionsInput!): ${name}!`;
+    return `  uploadFilesTo${name}(whereOne: ${name}WhereOneInput!, data: UploadFilesTo${name}Input, files: [Upload!]!, options: FilesOf${name}OptionsInput!): ${name}!`;
   }
 
   return '';

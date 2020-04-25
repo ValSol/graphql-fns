@@ -11,7 +11,7 @@ const getHashDoubles = (options: UploadOptions, thingConfig: ThingConfig): Array
   const indexes = {};
   let index = 0;
   return targets.reduce((prev, fieldName, i) => {
-    const configName = nameToConfigNameObject[fieldName];
+    const { configName } = nameToConfigNameObject[fieldName];
 
     for (let j = index; j < index + counts[i]; j += 1) {
       const key = `${configName}-${hashes[j]}`;

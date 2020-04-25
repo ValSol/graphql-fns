@@ -28,7 +28,11 @@ const saveAllFiles = async (
         promises.push(Promise.resolve(null));
       } else {
         promises.push(
-          saveFiles[nameToConfigNameObject[fieldName]](filesUploaded[j], hashes[j], uploadDate),
+          saveFiles[nameToConfigNameObject[fieldName].configName](
+            filesUploaded[j],
+            hashes[j],
+            uploadDate,
+          ),
         );
       }
     }

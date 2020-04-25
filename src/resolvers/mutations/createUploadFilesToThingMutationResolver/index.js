@@ -21,6 +21,7 @@ type Args = {
   files: Object,
   options: UploadOptions,
   whereOne: Object,
+  data: Object,
 };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
@@ -70,6 +71,7 @@ const createUploadFilesToThingMutationResolver = (
 
     const {
       whereOne,
+      data,
       files,
       options,
       options: { hashes },
@@ -145,6 +147,7 @@ const createUploadFilesToThingMutationResolver = (
 
     const fileFieldsData = composeAllFilesFieldsData(
       filesAttributes2,
+      data,
       options,
       thingConfig,
       composeFileFieldsData,

@@ -67,7 +67,7 @@ describe('createUploadFilesToThingMutationType', () => {
       ],
     });
     const expectedResult =
-      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
+      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
 
     const result = createUploadFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);
