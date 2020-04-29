@@ -79,9 +79,10 @@ const createImportThingsMutationResolver = (
       originalData = JSON.parse(content);
     }
 
+    const allFields = true;
     const skipUnusedFields = true;
     const data = originalData.map((item) =>
-      coerceDataToGql(item, null, thingConfig, skipUnusedFields),
+      coerceDataToGql(item, null, thingConfig, allFields, skipUnusedFields),
     );
 
     // code beneath is identical to code from createCreateManyThingsMutationResolver

@@ -12,6 +12,7 @@ const coerceDataToGql = (
   data: Object,
   prevData: null | Object,
   thingConfig: ThingConfig,
+  allFields?: boolean,
   skipUnusedFields?: boolean, // use when import data from sourse with extra fields
 ): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
@@ -37,9 +38,14 @@ const coerceDataToGql = (
       const { config } = fieldsObject[key].attributes;
       if (array) {
         // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map((item) => coerceDataToGql(item, null, config, skipUnusedFields));
+        prev[key] = data[key].map((item) =>
+          coerceDataToGql(item, null, config, allFields, skipUnusedFields),
+        );
       } else {
-        prev[key] = data[key] ? coerceDataToGql(data[key], null, config, skipUnusedFields) : null; // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = data[key]
+          ? coerceDataToGql(data[key], null, config, allFields, skipUnusedFields)
+          : null;
       }
     } else if (kind === 'relationalFields' || kind === 'duplexFields') {
       // $FlowFixMe
@@ -57,9 +63,11 @@ const coerceDataToGql = (
                     prev2.connect = [item]; // eslint-disable-line no-param-reassign
                   }
                 } else if (prev2.create) {
-                  prev2.create.push(coerceDataToGql(item, null, config, skipUnusedFields));
+                  prev2.create.push(
+                    coerceDataToGql(item, null, config, allFields, skipUnusedFields),
+                  );
                 } else {
-                  prev2.create = [coerceDataToGql(item, null, config, skipUnusedFields)]; // eslint-disable-line no-param-reassign
+                  prev2.create = [coerceDataToGql(item, null, config, allFields, skipUnusedFields)]; // eslint-disable-line no-param-reassign
                 }
 
                 return prev2;
@@ -69,7 +77,10 @@ const coerceDataToGql = (
       } else if (typeof data[key] === 'string') {
         prev[key] = { connect: data[key] }; // eslint-disable-line no-param-reassign
       } else {
-        prev[key] = { create: coerceDataToGql(data[key], null, config, skipUnusedFields) }; // eslint-disable-line no-param-reassign
+        // eslint-disable-next-line no-param-reassign
+        prev[key] = {
+          create: coerceDataToGql(data[key], null, config, allFields, skipUnusedFields),
+        };
       }
     } else if (kind === 'enumFields') {
       if (array) {
@@ -138,9 +149,11 @@ const coerceDataToGql = (
     return prev;
   }, {});
 
-  if (id) result.id = id;
-  if (createdAt) result.createdAt = createdAt;
-  if (updatedAt) result.updatedAt = updatedAt;
+  if (allFields) {
+    if (id) result.id = id;
+    if (createdAt) result.createdAt = createdAt;
+    if (updatedAt) result.updatedAt = updatedAt;
+  }
 
   return result;
 };

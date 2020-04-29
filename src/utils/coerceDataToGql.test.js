@@ -341,7 +341,8 @@ describe('coerceDataToGql', () => {
       ],
     };
 
-    const result = coerceDataToGql(data, prevData, thingConfig);
+    const allFields = true;
+    const result = coerceDataToGql(data, prevData, thingConfig, allFields);
     expect(result).toEqual(expectedResult);
   });
 
