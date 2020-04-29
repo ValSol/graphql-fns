@@ -96,12 +96,14 @@ const coerceDataFromGql = (
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
-          item === null ? composeEmptyValues(config) : coerceDataFromGql(item, config),
+          item === null ? composeEmptyValues(config) : coerceDataFromGql(item, config, allFields),
         );
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] =
-          data[key] === null ? composeEmptyValues(config) : coerceDataFromGql(data[key], config);
+          data[key] === null
+            ? composeEmptyValues(config)
+            : coerceDataFromGql(data[key], config, allFields);
       }
     } else {
       prev[key] = data[key] === null ? '' : data[key]; // eslint-disable-line no-param-reassign
