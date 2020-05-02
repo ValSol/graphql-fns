@@ -57,7 +57,7 @@ const coerceDataToGql = (
             ? { connect: [] }
             : data[key].reduce((prev2, item) => {
                 if (typeof item === 'string') {
-                  if (prev.connect) {
+                  if (prev2.connect) {
                     prev2.connect.push(item);
                   } else {
                     prev2.connect = [item]; // eslint-disable-line no-param-reassign
@@ -69,7 +69,6 @@ const coerceDataToGql = (
                 } else {
                   prev2.create = [coerceDataToGql(item, null, config, allFields, skipUnusedFields)]; // eslint-disable-line no-param-reassign
                 }
-
                 return prev2;
               }, {});
       } else if (!data[key]) {

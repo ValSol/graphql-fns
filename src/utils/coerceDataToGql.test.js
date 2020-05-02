@@ -42,9 +42,9 @@ describe('coerceDataToGql', () => {
     });
     const data = {
       relationalField: '5cefb33f05d6be4b7b59842b',
-      relationalFields: ['5cefb33f05d6be4b7b59842a'],
+      relationalFields: ['5cefb33f05d6be4b7b59842a', '5cefb33f05d6be4b7b59842b'],
       duplexField: '5cefb33f05d6be4b7b59842c',
-      duplexFields: ['5cefb33f05d6be4b7b59842d'],
+      duplexFields: ['5cefb33f05d6be4b7b59842d', '5cefb33f05d6be4b7b59842e'],
       enumField: '',
     };
 
@@ -53,9 +53,9 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {
         relationalField: { connect: '5cefb33f05d6be4b7b59842b' },
-        relationalFields: { connect: ['5cefb33f05d6be4b7b59842a'] },
+        relationalFields: { connect: ['5cefb33f05d6be4b7b59842a', '5cefb33f05d6be4b7b59842b'] },
         duplexField: { connect: '5cefb33f05d6be4b7b59842c' },
-        duplexFields: { connect: ['5cefb33f05d6be4b7b59842d'] },
+        duplexFields: { connect: ['5cefb33f05d6be4b7b59842d', '5cefb33f05d6be4b7b59842e'] },
       };
 
       const result = coerceDataToGql(data, prevData, thingConfig);
@@ -65,9 +65,9 @@ describe('coerceDataToGql', () => {
     test('some not changed prev data', () => {
       const prevData = {
         relationalField: '5cefb33f05d6be4b7b59842b',
-        relationalFields: ['5cefb33f05d6be4b7b59842a'],
+        relationalFields: ['5cefb33f05d6be4b7b59842a', '5cefb33f05d6be4b7b59842b'],
         duplexField: '5cefb33f05d6be4b7b59842c',
-        duplexFields: ['5cefb33f05d6be4b7b59842d'],
+        duplexFields: ['5cefb33f05d6be4b7b59842d', '5cefb33f05d6be4b7b59842e'],
         enumField: '',
       };
 
