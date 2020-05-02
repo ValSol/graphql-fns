@@ -15,44 +15,59 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
     relationalFields,
   } = thingConfig;
 
-  const fields = ['  id: [ID!]'];
+  const fields = [
+    `  id_in: [ID!]
+  id_nin: [ID!]`,
+  ];
 
   if (textFields) {
     textFields.forEach(({ name: fieldName, index, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}: [String!]`);
-      } else if (index) {
-        fields.push(`  ${fieldName}: String`);
+      if (unique || index) {
+        if (index) fields.push(`  ${fieldName}: String`);
+        fields.push(`  ${fieldName}_in: [String!]
+  ${fieldName}_nin: [String!]`);
       }
     });
   }
 
   if (intFields) {
     intFields.forEach(({ name: fieldName, index, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}: [Int!]`);
-      } else if (index) {
-        fields.push(`  ${fieldName}: Int`);
+      if (unique || index) {
+        if (index) fields.push(`  ${fieldName}: Int`);
+        fields.push(`  ${fieldName}_in: [Int!]
+  ${fieldName}_nin: [Int!]
+  ${fieldName}_gt: Int
+  ${fieldName}_gte: Int
+  ${fieldName}_lt: Int
+  ${fieldName}_lte: Int`);
       }
     });
   }
 
   if (floatFields) {
     floatFields.forEach(({ name: fieldName, index, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}: [Float!]`);
-      } else if (index) {
-        fields.push(`  ${fieldName}: Float`);
+      if (unique || index) {
+        if (index) fields.push(`  ${fieldName}: Float`);
+        fields.push(`  ${fieldName}_in: [Float!]
+  ${fieldName}_nin: [Float!]
+  ${fieldName}_gt: Float
+  ${fieldName}_gte: Float
+  ${fieldName}_lt: Float
+  ${fieldName}_lte: Float`);
       }
     });
   }
 
   if (dateTimeFields) {
     dateTimeFields.forEach(({ name: fieldName, index, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}: [DateTime!]`);
-      } else if (index) {
-        fields.push(`  ${fieldName}: DateTime`);
+      if (unique || index) {
+        if (index) fields.push(`  ${fieldName}: DateTime`);
+        fields.push(`  ${fieldName}_in: [DateTime!]
+  ${fieldName}_nin: [DateTime!]
+  ${fieldName}_gt: DateTime
+  ${fieldName}_gte: DateTime
+  ${fieldName}_lt: DateTime
+  ${fieldName}_lte: DateTime`);
       }
     });
   }
@@ -68,7 +83,9 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (enumFields) {
     enumFields.forEach(({ name: fieldName, enumName, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: ${enumName}Enumeration`);
+        fields.push(`  ${fieldName}: ${enumName}Enumeration
+  ${fieldName}_in: [${enumName}Enumeration!]
+  ${fieldName}_nin: [${enumName}Enumeration!]`);
       }
     });
   }
@@ -76,7 +93,9 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (relationalFields) {
     relationalFields.forEach(({ name: fieldName, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: ID`);
+        fields.push(`  ${fieldName}: ID
+  ${fieldName}_in: [ID!]
+  ${fieldName}_nin: [ID!]`);
       }
     });
   }
@@ -85,9 +104,18 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (duplexFields) {
     duplexFields.forEach(({ name: fieldName, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: ID`);
+        fields.push(`  ${fieldName}: ID
+  ${fieldName}_in: [ID!]
+  ${fieldName}_nin: [ID!]`);
       }
     });
+  }
+
+  if (fields.length > 1) {
+    fields.push(`  AND: [${name}WhereInput!]
+  NOT: [${name}WhereInput!]
+  NOR: [${name}WhereInput!]
+  OR: [${name}WhereInput!]`);
   }
 
   const result = `input ${name}WhereInput {

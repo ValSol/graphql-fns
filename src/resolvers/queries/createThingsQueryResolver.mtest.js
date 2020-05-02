@@ -249,7 +249,7 @@ describe('createThingQueryResolver', () => {
     expect(restaurants3[1].name).toEqual('Satori Lounge');
 
     const where2 = {
-      id: [restaurants3[0].id, restaurants3[1].id],
+      id_in: [restaurants3[0].id, restaurants3[1].id],
     };
     const restaurants4 = await Restaurants(
       null,
@@ -338,7 +338,7 @@ describe('createThingQueryResolver', () => {
     expect(restaurants[0].id).toEqual(createdRestaurant.id);
 
     const where = {
-      num: ['4', '2', '8', '6'],
+      num_in: ['4', '2', '8', '6'],
     };
     const restaurants2 = await Restaurants(null, { where }, { mongooseConn, pubsub }, info2);
     expect(restaurants2.length).toBe(4);

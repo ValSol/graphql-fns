@@ -38,7 +38,7 @@ const createThingCountQueryResolver = (
     const thingSchema = createThingSchema(thingConfig, enums);
 
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    const conditions = composeWhereInput(where) || {};
+    const conditions = composeWhereInput(where, thingConfig) || {};
 
     const result = await Thing.countDocuments(conditions);
 

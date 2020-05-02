@@ -242,12 +242,26 @@ input ExampleWhereOneInput {
   textField1: ID
 }
 input ExampleWhereInput {
-  id: [ID!]
-  textField1: [String!]
+  id_in: [ID!]
+  id_nin: [ID!]
+  textField1_in: [String!]
+  textField1_nin: [String!]
   textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
   textField3: String
+  textField3_in: [String!]
+  textField3_nin: [String!]
   day: WeekdaysEnumeration
+  day_in: [WeekdaysEnumeration!]
+  day_nin: [WeekdaysEnumeration!]
   cuisines: CuisinesEnumeration
+  cuisines_in: [CuisinesEnumeration!]
+  cuisines_nin: [CuisinesEnumeration!]
+  AND: [ExampleWhereInput!]
+  NOT: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
 }
 enum ExampleSortEnum {
   day_ASC
@@ -466,7 +480,8 @@ input Example1WhereOneInput {
   id: ID!
 }
 input Example1WhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 enum Example1GeospatialFieldNamesEnum {
   position
@@ -480,7 +495,8 @@ input Example2WhereOneInput {
   id: ID!
 }
 input Example2WhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 enum Example1FieldNamesEnum {
   textField1
@@ -667,13 +683,15 @@ input PersonWhereOneInput {
   id: ID!
 }
 input PersonWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 input PlaceWhereOneInput {
   id: ID!
 }
 input PlaceWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -852,7 +870,8 @@ input PersonWhereOneInput {
   id: ID!
 }
 input PersonWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1044,13 +1063,15 @@ input PersonWhereOneInput {
   id: ID!
 }
 input PersonWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 input PlaceWhereOneInput {
   id: ID!
 }
 input PlaceWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1133,7 +1154,8 @@ input ExampleWhereOneInput {
   id: ID!
 }
 input ExampleWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
@@ -1227,7 +1249,8 @@ type Example {
   textField: String
 }
 input ExampleWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 type Query {
   Examples(where: ExampleWhereInput): [Example!]!
@@ -1257,7 +1280,8 @@ type Example {
   textField: String
 }
 input ExampleWhereInput {
-  id: [ID!]
+  id_in: [ID!]
+  id_nin: [ID!]
 }
 type Query {
   Examples(where: ExampleWhereInput): [Example!]!

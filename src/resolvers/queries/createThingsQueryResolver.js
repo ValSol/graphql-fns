@@ -51,7 +51,7 @@ const createThingsQueryResolver = (
 
     if (near) query = query.where(composeNearInput(near));
 
-    const where2 = composeWhereInput(where);
+    const where2 = composeWhereInput(where, thingConfig);
     if (where2) query = query.where(where2);
 
     if (sort) {
