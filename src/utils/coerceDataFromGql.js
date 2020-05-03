@@ -34,13 +34,14 @@ const coerceDataFromGql = (
         prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
       }
     } else if (kind === 'dateTimeFields') {
-      if (array) {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key].map((item) => (item === null ? '' : item));
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = data[key] === null ? '' : data[key];
-      }
+      prev[key] = data[key]; // eslint-disable-line no-param-reassign
+      // if (array) {
+      //   // eslint-disable-next-line no-param-reassign
+      //   prev[key] = data[key].map((item) => (item === null ? '' : item));
+      // } else {
+      //   // eslint-disable-next-line no-param-reassign
+      //   prev[key] = data[key] === null ? '' : data[key];
+      // }
     } else if (fieldsObject[key].kind === 'geospatialFields') {
       const { geospatialType } = fieldsObject[key].attributes;
       if (geospatialType === 'Point') {

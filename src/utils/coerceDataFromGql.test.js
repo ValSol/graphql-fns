@@ -440,6 +440,31 @@ describe('coerceDataFromGql', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should coerce empty dateTime fields', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'dateTimeField',
+        },
+      ],
+    });
+
+    const data = {
+      id: '5cefb33f05d6be4b7b59842a',
+      dateTimeField: null,
+      __typename: 'Example',
+    };
+
+    const expectedResult = {
+      dateTimeField: null,
+    };
+
+    const result = coerceDataFromGql(data, thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should coerce geospatial fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
