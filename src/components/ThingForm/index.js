@@ -23,7 +23,7 @@ import SkipNext from '@material-ui/icons/SkipNext';
 import SkipPrevious from '@material-ui/icons/SkipPrevious';
 
 import gql from 'graphql-tag';
-import { Mutation, Query } from 'react-apollo';
+import { Mutation, Query } from '@apollo/react-components';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 

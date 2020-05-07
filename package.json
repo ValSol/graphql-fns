@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.373",
+  "version": "0.1.2-beta.375",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "commit": "git-cz",
     "flow": "flow check",
     "test:once": "jest",
-    "test:mongodb": "jest --config=jest.config.mongodb.js",
+    "test:mongodb": "jest --config=jest.config.mongodb.js --runInBand",
     "test": "jest --watch",
     "semantic-release": "semantic-release"
   },
@@ -41,6 +41,7 @@
     "spark-md5": "^3.0.1"
   },
   "devDependencies": {
+    "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.1.5",
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
@@ -83,7 +84,6 @@
     "next": "^9.3.6",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
-    "react-apollo": "^3.1.5",
     "react-dom": "^16.13.1",
     "react-virtualized": "^9.21.2",
     "rimraf": "^3.0.2",
@@ -91,6 +91,7 @@
     "yup": "^0.28.5"
   },
   "peerDependencies": {
+    "@apollo/react-components": "^3.1.5",
     "@apollo/react-hooks": "^3.x",
     "@material-ui/core": "^4.x",
     "@material-ui/icons": "^4.x",
@@ -106,7 +107,6 @@
     "mongoose": "5.x",
     "next": "9.x",
     "react": "16.9.x",
-    "react-apollo": "3.x",
     "react-dom": "16.9.x",
     "react-virtualized": "9.x",
     "yup": "0.27.x"

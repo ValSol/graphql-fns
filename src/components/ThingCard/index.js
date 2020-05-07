@@ -19,7 +19,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query } from '@apollo/react-components';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
