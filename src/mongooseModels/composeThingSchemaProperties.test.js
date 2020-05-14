@@ -36,6 +36,10 @@ describe('composeThingSchemaProperties', () => {
           required: true,
           array: true,
         },
+        {
+          name: 'textField6',
+          unique: true,
+        },
       ],
     };
     const expectedResult = {
@@ -59,6 +63,11 @@ describe('composeThingSchemaProperties', () => {
         type: [String],
         required: true,
         default: ['default text'],
+      },
+      textField6: {
+        type: String,
+        sparse: true,
+        unique: true,
       },
     };
 
@@ -704,6 +713,15 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           index: true,
         },
+        {
+          name: 'uniqueTime',
+          unique: true,
+        },
+        {
+          name: 'uniqueRequiredTime',
+          unique: true,
+          required: true,
+        },
       ],
     };
     const expectedResult = {
@@ -723,6 +741,16 @@ describe('composeThingSchemaProperties', () => {
         required: true,
         default: [new Date('1991-08-24'), new Date('1991-12-01')],
         index: true,
+      },
+      uniqueTime: {
+        type: Date,
+        unique: true,
+        sparse: true,
+      },
+      uniqueRequiredTime: {
+        type: Date,
+        unique: true,
+        required: true,
       },
     };
 
@@ -756,6 +784,10 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           index: true,
         },
+        {
+          name: 'intField_5',
+          unique: true,
+        },
       ],
     };
     const expectedResult = {
@@ -777,6 +809,11 @@ describe('composeThingSchemaProperties', () => {
         required: true,
         default: [10, 20, 30],
         index: true,
+      },
+      intField_5: {
+        type: Number,
+        unique: true,
+        sparse: true,
       },
     };
 
@@ -810,6 +847,10 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           index: true,
         },
+        {
+          name: 'floatField_5',
+          unique: true,
+        },
       ],
     };
     const expectedResult = {
@@ -831,6 +872,11 @@ describe('composeThingSchemaProperties', () => {
         required: true,
         default: [0.1, 0.2, 0.3],
         index: true,
+      },
+      floatField_5: {
+        type: Number,
+        unique: true,
+        sparse: true,
       },
     };
 

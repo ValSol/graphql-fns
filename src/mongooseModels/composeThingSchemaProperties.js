@@ -48,9 +48,12 @@ const composeThingSchemaProperties = (
       prev[name] = { type: array ? [String] : String }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (required) prev[name].required = true; // by default required = false
+      if (unique) {
+        prev[name].unique = true; // eslint-disable-line no-param-reassign
+        if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      }
+      if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }
@@ -76,9 +79,12 @@ const composeThingSchemaProperties = (
         prev[name] = { type: array ? [Date] : Date }; // eslint-disable-line no-param-reassign
         if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
         // eslint-disable-next-line no-param-reassign
-        if (required) prev[name].required = !!required; // by default required = false
-        if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-        if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+        if (required) prev[name].required = true; // by default required = false
+        if (unique) {
+          prev[name].unique = true; // eslint-disable-line no-param-reassign
+          if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+        }
+        if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
         return prev;
       },
       result,
@@ -103,9 +109,12 @@ const composeThingSchemaProperties = (
       prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (required) prev[name].required = true; // by default required = false
+      if (unique) {
+        prev[name].unique = true; // eslint-disable-line no-param-reassign
+        if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      }
+      if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }
@@ -128,9 +137,12 @@ const composeThingSchemaProperties = (
       prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (unique) prev[name].unique = !!unique; // eslint-disable-line no-param-reassign
-      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (required) prev[name].required = true; // by default required = false
+      if (unique) {
+        prev[name].unique = true; // eslint-disable-line no-param-reassign
+        if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      }
+      if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }
@@ -149,8 +161,8 @@ const composeThingSchemaProperties = (
       prev[name] = { type: array ? [Boolean] : Boolean }; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (required) prev[name].required = true; // by default required = false
+      if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
   }
@@ -165,8 +177,8 @@ const composeThingSchemaProperties = (
           ref: relationalThingName,
           type: Schema.Types.ObjectId,
         };
-        if (!required) obj.required = !!required; // by default required = true
-        if (index) obj.index = !!index;
+        if (!required) obj.required = false; // by default required = true
+        if (index) obj.index = true;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
         return prev;
@@ -186,8 +198,8 @@ const composeThingSchemaProperties = (
           ref: duplexThingName,
           type: Schema.Types.ObjectId,
         };
-        if (!required) obj.required = !!required; // by default required = true
-        if (index) obj.index = !!index;
+        if (!required) obj.required = false; // by default required = true
+        if (index) obj.index = true;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
         return prev;
@@ -227,7 +239,7 @@ const composeThingSchemaProperties = (
             index: '2dsphere',
           },
         };
-        if (required) obj.type.required = !!required; // by default required = false
+        if (required) obj.type.required = true; // by default required = false
 
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -241,7 +253,7 @@ const composeThingSchemaProperties = (
             type: [[[Number]]],
           },
         };
-        if (required) obj.type.required = !!required; // by default required = false
+        if (required) obj.type.required = true; // by default required = false
 
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -280,8 +292,8 @@ const composeThingSchemaProperties = (
         type: array ? [String] : String,
       };
       // eslint-disable-next-line no-param-reassign
-      if (required) prev[name].required = !!required; // by default required = false
-      if (index) prev[name].index = !!index; // eslint-disable-line no-param-reassign
+      if (required) prev[name].required = true; // by default required = false
+      if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
       if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
       return prev;
     }, result);
