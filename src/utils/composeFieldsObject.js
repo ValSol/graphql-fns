@@ -1,8 +1,11 @@
 // @flow
 import type { ThingConfig, ThingConfigObject } from '../flowTypes';
 
+const store = {};
+
 const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
   const {
+    name: thingName,
     booleanFields,
     dateTimeFields,
     duplexFields,
@@ -15,6 +18,9 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
     textFields,
     fileFields,
   } = thingConfig;
+
+  // use cache if no jest test environment
+  if (!process.env.JEST_WORKER_ID && store[thingName]) return store[thingName];
 
   const result = {};
 
@@ -116,6 +122,8 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
       return prev;
     }, result);
   }
+
+  store[thingName] = result;
 
   return result;
 };
