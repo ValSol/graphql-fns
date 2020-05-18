@@ -15,13 +15,18 @@ const createCreateManyThingsMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
+  inAnyCase?: boolean,
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
   const inventoryChain = ['Mutation', 'createThing', name];
   const inventoryChain2 = ['Mutation', 'createManyThings', name];
-  if (!checkInventory(inventoryChain, inventory) || !checkInventory(inventoryChain2, inventory))
+  if (
+    !inAnyCase &&
+    (!checkInventory(inventoryChain, inventory) || !checkInventory(inventoryChain2, inventory))
+  ) {
     return null;
+  }
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const resolverArgs = { parent, args, context, info };

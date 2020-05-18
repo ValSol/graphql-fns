@@ -35,7 +35,7 @@ const composeCustomThingMutationArgs = (
   }
 
   const args1 = argNames.map((argName, i) => `$${argName}: ${argTypes[i]}`).join(', ');
-  const args2 = argNames.map(argName => `${argName}: $${argName}`).join(', ');
+  const args2 = argNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
   const result = argNames.length
     ? [`mutation ${name}(${args1}) {`, `  ${name}(${args2}) {`]

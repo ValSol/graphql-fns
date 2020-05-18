@@ -29,6 +29,7 @@ const createUploadFilesToThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
+  inAnyCase?: boolean,
 ): Function | null => {
   const { inventory } = generalConfig;
   const { name } = thingConfig;
@@ -45,12 +46,15 @@ const createUploadFilesToThingMutationResolver = (
   }
 
   const inventoryChain = ['Mutation', 'uploadFilesToThing', name];
-  if (!checkInventory(inventoryChain, inventory)) return null;
+  if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
+    return null;
+  }
 
   const updateThingMutationResolver = createUpdateThingMutationResolver(
     thingConfig,
     generalConfig,
     serversideConfig,
+    inAnyCase,
   );
   if (!updateThingMutationResolver) return null;
 
@@ -58,6 +62,7 @@ const createUploadFilesToThingMutationResolver = (
     thingConfig,
     generalConfig,
     serversideConfig,
+    inAnyCase,
   );
   if (!pushIntoThingMutationResolver) return null;
 
