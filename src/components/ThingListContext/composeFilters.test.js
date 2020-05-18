@@ -82,7 +82,7 @@ describe('composeFilters', () => {
       },
     ];
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
 
     const generalConfig: GeneralConfig = { thingConfigs, enums };
 

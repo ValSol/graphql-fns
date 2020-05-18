@@ -61,7 +61,7 @@ describe('composeThingCardContent', () => {
       </>
     );
 
-    const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
+    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
     const result = composeThingCardContent(thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
@@ -189,7 +189,7 @@ describe('composeThingCardContent', () => {
       </>
     );
 
-    const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
+    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
     const result = composeThingCardContent(thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
@@ -257,7 +257,7 @@ describe('composeThingCardContent', () => {
       </>
     );
 
-    const generalConfig: GeneralConfig = { thingConfigs: [thingConfig] };
+    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
     const result = composeThingCardContent(thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));
@@ -329,7 +329,7 @@ describe('composeThingCardContent', () => {
         enum: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       },
     ];
-    const generalConfig: GeneralConfig = { thingConfigs: [thingConfig], enums };
+    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig }, enums };
     const result = composeThingCardContent(thingConfig, generalConfig);
 
     const result2 = JSON.parse(JSON.stringify(result));

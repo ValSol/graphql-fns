@@ -6,7 +6,7 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import composeThingResolvers from './composeThingResolvers';
 
 describe('composeThingResolvers', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create resolver for type', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',

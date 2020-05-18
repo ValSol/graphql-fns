@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 
 describe('createCreateManyThingsMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
 
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {

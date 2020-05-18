@@ -26,7 +26,7 @@ beforeAll(async () => {
 });
 
 describe('createDeleteThingMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {

@@ -39,7 +39,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
@@ -88,7 +88,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig1, thingConfig2];
+    const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
@@ -163,7 +163,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     });
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
@@ -246,7 +246,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [personConfig, addressConfig];
+    const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
@@ -325,7 +325,7 @@ describe('composeGqlResolvers', () => {
       ],
     });
 
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
@@ -406,7 +406,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
 
@@ -442,7 +442,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: null } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
@@ -462,7 +462,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: null } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
@@ -485,7 +485,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { thing: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
@@ -505,7 +505,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: { createThing: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
@@ -537,7 +537,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: { loadThing: null } } };
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
@@ -576,7 +576,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { getThing: null } } };
     const custom = { Query: { getThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };

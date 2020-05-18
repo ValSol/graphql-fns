@@ -23,7 +23,8 @@ const AllThings = () => {
         <Link href="/">Home</Link>
         <Typography color="textPrimary">All Things</Typography>
       </Breadcrumbs>
-      {thingConfigs
+      {Object.keys(thingConfigs)
+        .map((thingName) => thingConfigs[thingName])
         .filter(({ embedded }) => !embedded)
         .map((config) => (
           <ThingCard key={config.name} config={config} />

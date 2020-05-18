@@ -36,7 +36,7 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
@@ -99,7 +99,7 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const enums: Enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -164,7 +164,7 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = [personConfig, addressConfig];
+    const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
@@ -234,7 +234,7 @@ describe('graphql schema', () => {
         },
       ],
     });
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
@@ -304,7 +304,7 @@ describe('graphql schema', () => {
         },
       ],
     });
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     generalConfig.inventory = { include: { Mutation: null } };
     let typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;

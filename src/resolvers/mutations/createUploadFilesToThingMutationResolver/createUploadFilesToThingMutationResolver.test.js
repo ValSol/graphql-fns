@@ -5,7 +5,7 @@ import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 import createUploadFilesToThingMutationResolver from './index';
 
 describe('createUploadFilesToThingMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create mutation add thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',

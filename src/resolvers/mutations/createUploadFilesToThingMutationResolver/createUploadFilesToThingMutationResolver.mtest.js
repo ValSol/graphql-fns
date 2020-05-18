@@ -144,7 +144,9 @@ describe('createUploadFilesToThingMutationResolver', () => {
     ],
   });
 
-  const generalConfig: GeneralConfig = { thingConfigs: [imageConfig, photoConfig, exampleConfig] };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Image: imageConfig, Photo: photoConfig, Example: exampleConfig },
+  };
 
   test('should create mutation update thing resolver to update file field', async () => {
     const createExample = createCreateThingMutationResolver(

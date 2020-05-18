@@ -34,7 +34,7 @@ describe('composeMutation', () => {
       },
     ],
   };
-  const thingConfigs = [thingConfig];
+  const thingConfigs = { Example: thingConfig };
   const custom = { Mutation: { loadThing: signatureMethods } };
   const generalConfig: GeneralConfig = { thingConfigs, custom };
 

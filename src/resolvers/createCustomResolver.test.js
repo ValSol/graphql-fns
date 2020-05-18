@@ -41,7 +41,7 @@ describe('createCustomResolver', () => {
     ],
   };
 
-  const thingConfigs = [thingConfig];
+  const thingConfigs = { Example: thingConfig };
   const custom = { Mutation: { loadThing: signatureMethods } };
   const serversideConfig: ServersideConfig = {
     Mutation: { loadThing: createCustomLoadThingMutationResolver },

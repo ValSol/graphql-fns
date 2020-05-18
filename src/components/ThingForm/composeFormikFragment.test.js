@@ -77,7 +77,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -208,7 +208,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -326,7 +326,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
@@ -370,7 +370,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
@@ -425,7 +425,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -476,7 +476,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -507,7 +507,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
 
@@ -562,7 +562,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -634,7 +634,7 @@ describe('composeFormikFragment', () => {
         enum: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       },
     ];
-    const generalConfig = { thingConfigs: [thingConfig], enums };
+    const generalConfig = { thingConfigs: { Example: thingConfig }, enums };
 
     const result = composeFormikFragment(
       { errors: { enumField: 'Required' }, touched: { enumField: true }, values: {} },
@@ -679,7 +679,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -712,7 +712,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
@@ -777,7 +777,7 @@ describe('composeFormikFragment', () => {
       </>
     );
 
-    const generalConfig = { thingConfigs: [thingConfig] };
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
 
     const result = composeFormikFragment({}, {}, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);

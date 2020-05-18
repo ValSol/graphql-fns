@@ -24,7 +24,7 @@ beforeAll(async () => {
 });
 
 describe('createThingArrayResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
   test('should create type thing resolver', async () => {
     const placeConfig: ThingConfig = {};

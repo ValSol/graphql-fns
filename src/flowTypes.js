@@ -331,7 +331,7 @@ export type Inventory = {
 };
 
 export type GeneralConfig = {
-  +thingConfigs: $ReadOnlyArray<ThingConfig>,
+  +thingConfigs: { [thingConfigName: string]: ThingConfig },
   +custom?: {
     +Input?: {
       +[customInputName: string]: {

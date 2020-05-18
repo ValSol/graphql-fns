@@ -23,7 +23,7 @@ beforeAll(async () => {
 });
 
 describe('createThingCountQueryResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create query things resolver', async () => {
     const serversideConfig = {};
     const personConfig: ThingConfig = {};

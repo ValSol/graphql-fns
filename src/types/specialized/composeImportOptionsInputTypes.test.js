@@ -9,7 +9,7 @@ describe('composeImportOptionsInputTypes', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
       exclude: {
         Mutation: {
@@ -28,7 +28,7 @@ describe('composeImportOptionsInputTypes', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
       exclude: {
         Mutation: {
@@ -47,7 +47,7 @@ describe('composeImportOptionsInputTypes', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
       exclude: {
         Mutation: {
@@ -72,7 +72,7 @@ describe('composeImportOptionsInputTypes', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Place: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `enum ImportFormatEnum {
   csv

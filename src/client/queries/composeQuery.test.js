@@ -36,7 +36,7 @@ describe('composeQuery', () => {
     ],
   };
 
-  const thingConfigs = [thingConfig];
+  const thingConfigs = { Example: thingConfig };
   const custom = { Query: { getThing: signatureMethods } };
   const generalConfig: GeneralConfig = { thingConfigs, custom };
 

@@ -24,7 +24,7 @@ describe('composeCustomThingMutationArgs', () => {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const mutationName = 'loadThing';
     const custom = { Mutation: { [mutationName]: signatureMethods } };
 
@@ -54,7 +54,7 @@ describe('composeCustomThingMutationArgs', () => {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const mutationName = 'loadThing';
     const custom = { Mutation: { [mutationName]: signatureMethods } };
 

@@ -9,7 +9,7 @@ describe('composeGeospatialTypes', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = '';
 
@@ -26,7 +26,7 @@ describe('composeGeospatialTypes', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Place: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!
@@ -51,7 +51,7 @@ input GeospatialPointInput {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { District: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!

@@ -27,7 +27,7 @@ beforeAll(async () => {
 });
 
 describe('createPushIntoThingMutationResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
   test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};

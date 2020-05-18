@@ -6,11 +6,13 @@ import checkInventory from '../../utils/checkInventory';
 
 const composeImportOptionsInputTypes = (generalConfig: GeneralConfig): string => {
   const { thingConfigs, inventory } = generalConfig;
-  const thereIsImport = thingConfigs.some(
-    ({ name }) =>
-      checkInventory(['Mutation', 'createThing', name], inventory) &&
-      checkInventory(['Mutation', 'importThings', name], inventory),
-  );
+  const thereIsImport = Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
+    .some(
+      ({ name }) =>
+        checkInventory(['Mutation', 'createThing', name], inventory) &&
+        checkInventory(['Mutation', 'importThings', name], inventory),
+    );
 
   if (thereIsImport) {
     return `enum ImportFormatEnum {

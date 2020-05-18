@@ -147,7 +147,7 @@ describe('createUseReducerArgs util', () => {
     },
   ];
 
-  const generalConfig: GeneralConfig = { thingConfigs: [config], enums };
+  const generalConfig: GeneralConfig = { thingConfigs: { Example: config }, enums };
 
   const filters = composeFilters(config, generalConfig);
 

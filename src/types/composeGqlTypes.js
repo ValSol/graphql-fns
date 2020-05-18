@@ -52,10 +52,13 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
-  const thingTypesArray = thingConfigs.map((thingConfig) => createThingType(thingConfig));
+  const thingTypesArray = Object.keys(thingConfigs).map((thingName) =>
+    createThingType(thingConfigs[thingName]),
+  );
 
   const customReturnObjectNames = Object.keys(customReturnObject);
-  thingConfigs
+  Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
       customReturnObjectNames.forEach((customName) => {
@@ -73,7 +76,8 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const thingTypes = thingTypesArray.join('\n');
 
   const thingInputTypes = allowMutations
-    ? thingConfigs
+    ? Object.keys(thingConfigs)
+        .map((thingName) => thingConfigs[thingName])
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           // use ['Mutation', 'createThing'] not ['Mutation', 'updateThing', name] ...
@@ -105,7 +109,8 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const customInputObjectNames = Object.keys(customInputObject);
   const input = true;
-  const thingInputTypes2 = thingConfigs
+  const thingInputTypes2 = Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
@@ -148,7 +153,8 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   if (allowQueries) {
     const customQueryNames = Object.keys(customQuery);
 
-    thingConfigs
+    Object.keys(thingConfigs)
+      .map((thingName) => thingConfigs[thingName])
       .filter(({ embedded }) => !embedded)
       .reduce((prev, thingConfig) => {
         const { name } = thingConfig;
@@ -184,7 +190,8 @@ ${thingQueryTypes.join('\n')}
   if (allowMutations) {
     const customMutationNames = Object.keys(customMutation);
 
-    thingConfigs
+    Object.keys(thingConfigs)
+      .map((thingName) => thingConfigs[thingName])
       .filter(({ embedded }) => !embedded)
       .reduce((prev, thingConfig) => {
         const { name } = thingConfig;
@@ -233,7 +240,8 @@ ${thingMutationTypes.join('\n')}
     : '';
 
   const updatedThingPayloadTypes = allowSubscriptions
-    ? thingConfigs
+    ? Object.keys(thingConfigs)
+        .map((thingName) => thingConfigs[thingName])
         .filter(({ embedded }) => !embedded)
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
@@ -249,7 +257,8 @@ ${thingMutationTypes.join('\n')}
     : '';
 
   const thingSubscriptionTypes = allowSubscriptions
-    ? thingConfigs
+    ? Object.keys(thingConfigs)
+        .map((thingName) => thingConfigs[thingName])
         .filter(({ embedded }) => !embedded)
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;

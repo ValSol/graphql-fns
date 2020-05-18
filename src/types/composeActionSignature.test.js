@@ -34,7 +34,7 @@ describe('composeActionSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: [thingConfig],
+      thingConfigs: { Example: thingConfig },
     };
     const expectedResult = 'getExample: [Example!]!';
 
@@ -70,7 +70,7 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      thingConfigs: [thingConfig],
+      thingConfigs: { Example: thingConfig },
     };
 
     const expectedResult = 'getExample(path: String!, index: Int): Example!';
@@ -107,7 +107,7 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      thingConfigs: [thingConfig],
+      thingConfigs: { Example: thingConfig },
     };
 
     const expectedResult = '';

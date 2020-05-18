@@ -103,7 +103,7 @@ describe('composeGqlTypes', () => {
         },
       ],
     };
-    const thingConfigs = [thingConfig, imageConfig];
+    const thingConfigs = { Example: thingConfig, Image: imageConfig };
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -373,7 +373,7 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = [thingConfig1, thingConfig2];
+    const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 type GeospatialPoint {
@@ -598,7 +598,7 @@ type Subscription {
         },
       ],
     });
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 enum ImportFormatEnum {
@@ -798,7 +798,7 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = [personConfig, addressConfig];
+    const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 enum ImportFormatEnum {
@@ -968,7 +968,7 @@ type Subscription {
         },
       ],
     });
-    const thingConfigs = [personConfig, placeConfig];
+    const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
 enum ImportFormatEnum {
@@ -1140,7 +1140,7 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: null } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1177,7 +1177,7 @@ type Query {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: null } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1238,7 +1238,7 @@ type Mutation {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { things: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1269,7 +1269,7 @@ type Query {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { things: ['Example'] } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1301,7 +1301,7 @@ type Query {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: { createThing: null } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1340,7 +1340,7 @@ type Mutation {
         },
       ],
     };
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: { createThing: ['Example'] } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
@@ -1388,7 +1388,7 @@ type Mutation {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Mutation: { loadThing: null } } };
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
@@ -1426,7 +1426,7 @@ type Mutation {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { getThing: null } } };
     const custom = { Query: { getThing } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
@@ -1476,7 +1476,7 @@ type Query {
       ],
     };
 
-    const thingConfigs = [thingConfig];
+    const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { include: { Query: { thingInTimeRangeQuery: null } } };
     const custom = {
       Input: { thingInTimeRangeInput },

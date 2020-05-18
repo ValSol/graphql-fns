@@ -27,7 +27,7 @@ beforeAll(async () => {
 });
 
 describe('createThingQueryResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: [] };
+  const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
   test('should create query things resolver', async () => {
     const personConfig: ThingConfig = {};

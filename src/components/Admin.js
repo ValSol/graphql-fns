@@ -22,7 +22,7 @@ const Admin = (props: Props) => {
     generalConfig: { thingConfigs },
   } = props;
 
-  const thingConfig = thingConfigs.find(({ name }) => name === thing);
+  const thingConfig = thingConfigs[thing];
 
   let resultChild;
   if (!thingConfig) {

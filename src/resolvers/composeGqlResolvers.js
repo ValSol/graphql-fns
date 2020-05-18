@@ -48,7 +48,8 @@ const composeGqlResolvers = (
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
-  thingConfigs
+  Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
@@ -225,14 +226,16 @@ const composeGqlResolvers = (
       return prev;
     }, resolvers);
 
-  thingConfigs.reduce((prev, thingConfig) => {
-    const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
-    if (duplexFields || geospatialFields || relationalFields) {
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
-    }
-    return prev;
-  }, resolvers);
+  Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
+    .reduce((prev, thingConfig) => {
+      const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
+      if (duplexFields || geospatialFields || relationalFields) {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
+      }
+      return prev;
+    }, resolvers);
 
   return resolvers;
 };

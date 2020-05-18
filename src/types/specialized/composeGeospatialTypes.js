@@ -7,8 +7,10 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialPolygon = false;
 
-  for (let i = 0; i < thingConfigs.length; i += 1) {
-    const thingConfig = thingConfigs[i];
+  const thingConfigsArray = Object.keys(thingConfigs).map((thingName) => thingConfigs[thingName]);
+
+  for (let i = 0; i < thingConfigsArray.length; i += 1) {
+    const thingConfig = thingConfigsArray[i];
     const { geospatialFields } = thingConfig;
     if (
       geospatialFields &&
