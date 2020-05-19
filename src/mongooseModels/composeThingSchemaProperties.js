@@ -169,15 +169,26 @@ const composeThingSchemaProperties = (
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, config: { name: relationalThingName }, index, name, required }) => {
+      (prev, { array, config: { name: relationalThingName }, index, name, required, unique }) => {
         if (index && embedded) {
           throw new TypeError('Must not have an "index" field in an embedded document!');
         }
-        const obj: { ref: string, type: string, required?: boolean, index?: boolean } = {
+        const obj: {
+          ref: string,
+          type: string,
+          required?: boolean,
+          sparse?: boolean,
+          index?: boolean,
+          unique?: boolean,
+        } = {
           ref: relationalThingName,
           type: Schema.Types.ObjectId,
         };
         if (!required) obj.required = false; // by default required = true
+        if (unique) {
+          obj.unique = true; // eslint-disable-line no-param-reassign
+          if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
+        }
         if (index) obj.index = true;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;
@@ -192,13 +203,24 @@ const composeThingSchemaProperties = (
       throw new TypeError('Must not have an "duplexField" in an embedded document!');
     }
     duplexFields.reduce(
-      (prev, { array, config: { name: duplexThingName }, index, name, required }) => {
+      (prev, { array, config: { name: duplexThingName }, index, name, required, unique }) => {
         // the same code as for relationalFields
-        const obj: { ref: string, type: string, required?: boolean, index?: boolean } = {
+        const obj: {
+          ref: string,
+          type: string,
+          required?: boolean,
+          sparse?: boolean,
+          index?: boolean,
+          unique?: boolean,
+        } = {
           ref: duplexThingName,
           type: Schema.Types.ObjectId,
         };
         if (!required) obj.required = false; // by default required = true
+        if (unique) {
+          obj.unique = true; // eslint-disable-line no-param-reassign
+          if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
+        }
         if (index) obj.index = true;
         // eslint-disable-next-line no-param-reassign
         prev[name] = array ? [obj] : obj;

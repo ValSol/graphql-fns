@@ -35,8 +35,12 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   }
 
   if (duplexFields) {
-    duplexFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'duplexFields'; // eslint-disable-line no-param-reassign
+    duplexFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'duplexFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'duplexFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }
@@ -71,8 +75,12 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { name, index }) => {
-      if (index) prev[name] = 'relationalFields'; // eslint-disable-line no-param-reassign
+    relationalFields.reduce((prev, { name, index, unique }) => {
+      if (unique) {
+        prev[name] = 'relationalFieldsArray'; // eslint-disable-line no-param-reassign
+      } else if (index) {
+        prev[name] = 'relationalFields'; // eslint-disable-line no-param-reassign
+      }
       return prev;
     }, result);
   }

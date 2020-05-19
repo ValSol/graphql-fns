@@ -136,7 +136,9 @@ const createValidationSchema = (
       fieldsObject[name].kind === 'dateTimeFields' ||
       fieldsObject[name].kind === 'intFields' ||
       fieldsObject[name].kind === 'floatFields' ||
-      fieldsObject[name].kind === 'textFields'
+      fieldsObject[name].kind === 'textFields' ||
+      fieldsObject[name].kind === 'duplexFields' ||
+      fieldsObject[name].kind === 'relationalFields'
     ) {
       const { unique } = fieldsObject[name].attributes;
       if (unique) {

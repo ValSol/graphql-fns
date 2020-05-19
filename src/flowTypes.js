@@ -158,6 +158,7 @@ export type ThingConfig = {
     +index?: boolean,
     +oppositeName: string,
     +required?: boolean,
+    +unique?: boolean,
   }>,
   embeddedFields?: $ReadOnlyArray<{
     +name: string,
@@ -176,6 +177,7 @@ export type ThingConfig = {
     +array?: boolean,
     +config: ThingConfig,
     +index?: boolean,
+    +unique?: boolean,
     +required?: boolean,
   }>,
 
@@ -199,6 +201,7 @@ type DuplexField = {|
   +index?: boolean,
   +oppositeName: string,
   +required?: boolean,
+  +unique?: boolean,
 |};
 
 type EmbeddedField = {|
@@ -221,6 +224,7 @@ type RelationalField = {|
   +config: ThingConfig,
   +index?: boolean,
   +required?: boolean,
+  +unique?: boolean,
 |};
 
 export type FlatField =

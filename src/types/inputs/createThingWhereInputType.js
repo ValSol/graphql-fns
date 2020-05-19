@@ -91,8 +91,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   }
 
   if (relationalFields) {
-    relationalFields.forEach(({ name: fieldName, index }) => {
-      if (index) {
+    relationalFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]`);
@@ -102,8 +102,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.forEach(({ name: fieldName, index }) => {
-      if (index) {
+    duplexFields.forEach(({ name: fieldName, index, unique }) => {
+      if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]`);

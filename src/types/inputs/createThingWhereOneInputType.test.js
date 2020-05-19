@@ -17,6 +17,36 @@ describe('createThingWhereOneInputType', () => {
     const result = createThingWhereOneInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+  test('should create thing input type', () => {
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      duplexFields: [
+        {
+          name: 'original',
+          oppositeName: 'backup',
+          config: thingConfig,
+          required: true,
+          unique: true,
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'copy',
+          config: thingConfig,
+          unique: true,
+        },
+      ],
+    });
+    const expectedResult = `input ExampleWhereOneInput {
+  id: ID
+  original: ID
+  copy: ID
+}`;
+
+    const result = createThingWhereOneInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
   test('should create thing input type with several args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
