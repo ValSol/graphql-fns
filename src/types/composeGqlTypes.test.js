@@ -998,12 +998,28 @@ type Place {
   visitors: [Person!]!
 }
 input PersonCreateInput {
-  firstName: String!
-  lastName: String!
-  friends: PersonCreateOrPushChildrenInput!
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
   favoritePlace: PlaceCreateChildInput
+  firstName: String!
+  lastName: String!
+}
+input PersonCreateThru_friends_FieldInput {
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+  firstName: String!
+  lastName: String!
+}
+input PersonCreateThru_location_FieldInput {
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
+  firstName: String!
+  lastName: String!
 }
 input PersonCreateChildInput {
   connect: ID
@@ -1012,6 +1028,22 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+}
+input PersonCreateThru_friends_FieldChildInput {
+  connect: ID
+  create: PersonCreateThru_friends_FieldInput
+}
+input PersonCreateOrPushThru_friends_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_friends_FieldInput!]
+}
+input PersonCreateThru_location_FieldChildInput {
+  connect: ID
+  create: PersonCreateThru_location_FieldInput
+}
+input PersonCreateOrPushThru_location_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_location_FieldInput!]
 }
 input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
@@ -1032,9 +1064,9 @@ input PersonUpdateChildrenInput {
   connect: [ID!]
 }
 input PlaceCreateInput {
-  name: String
-  citizens: PersonCreateOrPushChildrenInput
+  citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
+  name: String
 }
 input PlaceCreateChildInput {
   connect: ID

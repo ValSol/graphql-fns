@@ -214,6 +214,7 @@ input PersonCreateOrPushChildrenInput {
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          required: true,
         },
       ],
     };
@@ -257,12 +258,28 @@ input PersonCreateOrPushChildrenInput {
       ],
     });
     const expectedResult = `input PersonCreateInput {
-  firstName: String!
-  lastName: String!
-  friends: PersonCreateOrPushChildrenInput!
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateChildInput
+  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
+  firstName: String!
+  lastName: String!
+}
+input PersonCreateThru_friends_FieldInput {
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
+  firstName: String!
+  lastName: String!
+}
+input PersonCreateThru_location_FieldInput {
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
+  firstName: String!
+  lastName: String!
 }
 input PersonCreateChildInput {
   connect: ID
@@ -271,6 +288,22 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+}
+input PersonCreateThru_friends_FieldChildInput {
+  connect: ID
+  create: PersonCreateThru_friends_FieldInput
+}
+input PersonCreateOrPushThru_friends_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_friends_FieldInput!]
+}
+input PersonCreateThru_location_FieldChildInput {
+  connect: ID
+  create: PersonCreateThru_location_FieldInput
+}
+input PersonCreateOrPushThru_location_FieldChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateThru_location_FieldInput!]
 }`;
 
     const result = createThingCreateInputType(personConfig);
