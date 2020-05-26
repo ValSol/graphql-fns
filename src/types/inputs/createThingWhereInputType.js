@@ -25,7 +25,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
       if (unique || index) {
         if (index) fields.push(`  ${fieldName}: String`);
         fields.push(`  ${fieldName}_in: [String!]
-  ${fieldName}_nin: [String!]`);
+  ${fieldName}_nin: [String!]
+  ${fieldName}_ne: String`);
       }
     });
   }
@@ -36,6 +37,7 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
         if (index) fields.push(`  ${fieldName}: Int`);
         fields.push(`  ${fieldName}_in: [Int!]
   ${fieldName}_nin: [Int!]
+  ${fieldName}_ne: Int
   ${fieldName}_gt: Int
   ${fieldName}_gte: Int
   ${fieldName}_lt: Int
@@ -50,6 +52,7 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
         if (index) fields.push(`  ${fieldName}: Float`);
         fields.push(`  ${fieldName}_in: [Float!]
   ${fieldName}_nin: [Float!]
+  ${fieldName}_ne: Float
   ${fieldName}_gt: Float
   ${fieldName}_gte: Float
   ${fieldName}_lt: Float
@@ -64,6 +67,7 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
         if (index) fields.push(`  ${fieldName}: DateTime`);
         fields.push(`  ${fieldName}_in: [DateTime!]
   ${fieldName}_nin: [DateTime!]
+  ${fieldName}_ne: DateTime
   ${fieldName}_gt: DateTime
   ${fieldName}_gte: DateTime
   ${fieldName}_lt: DateTime
@@ -85,7 +89,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
       if (index) {
         fields.push(`  ${fieldName}: ${enumName}Enumeration
   ${fieldName}_in: [${enumName}Enumeration!]
-  ${fieldName}_nin: [${enumName}Enumeration!]`);
+  ${fieldName}_nin: [${enumName}Enumeration!]
+  ${fieldName}_ne: ${enumName}Enumeration`);
       }
     });
   }
@@ -95,7 +100,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
-  ${fieldName}_nin: [ID!]`);
+  ${fieldName}_nin: [ID!]
+  ${fieldName}_ne: ID`);
       }
     });
   }
@@ -106,14 +112,14 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
-  ${fieldName}_nin: [ID!]`);
+  ${fieldName}_nin: [ID!]
+  ${fieldName}_ne: ID`);
       }
     });
   }
 
   if (fields.length > 1) {
     fields.push(`  AND: [${name}WhereInput!]
-  NOT: [${name}WhereInput!]
   NOR: [${name}WhereInput!]
   OR: [${name}WhereInput!]`);
   }

@@ -6,7 +6,8 @@ import type { ThingConfig } from '../../flowTypes';
 import composeWhereInput from './composeWhereInput';
 
 describe('composeWhereInput', () => {
-  const thingConfig: ThingConfig = {
+  const thingConfig: ThingConfig = {};
+  Object.assign(thingConfig, {
     name: 'Example',
     textFields: [
       {
@@ -42,7 +43,14 @@ describe('composeWhereInput', () => {
         index: true,
       },
     ],
-  };
+    relationalFields: [
+      {
+        name: 'relationalField',
+        index: true,
+        config: thingConfig,
+      },
+    ],
+  });
 
   test('should return null', () => {
     const where = undefined;
@@ -71,6 +79,7 @@ describe('composeWhereInput', () => {
       floatField2_gte: 180.0,
       intField_lt: 15,
       intField2_lte: 20,
+      relationalField: null,
     };
 
     const result = composeWhereInput(where, thingConfig);
@@ -82,6 +91,7 @@ describe('composeWhereInput', () => {
       floatField2: { $gte: 180.0 },
       intField: { $lt: 15 },
       intField2: { $lte: 20 },
+      relationalField: null,
     };
 
     expect(result).toEqual(expectedResult);

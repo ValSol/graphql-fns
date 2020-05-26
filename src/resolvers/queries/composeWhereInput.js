@@ -35,15 +35,20 @@ const composeWhereInput = (where: Object, thingConfig: ThingConfig): null | Obje
       result[key2] = {
         [`$${key.slice(-3)}`]: where[key].map((id) => Types.ObjectId(id)),
       };
-    } else if (key.slice(-3) === '_in' || key.slice(-3) === '_lt' || key.slice(-3) === '_gt') {
+    } else if (
+      key.slice(-3) === '_in' ||
+      key.slice(-3) === '_lt' ||
+      key.slice(-3) === '_gt' ||
+      key.slice(-3) === '_ne'
+    ) {
       result[key.slice(0, -3)] = { [`$${key.slice(-2)}`]: where[key] };
     } else if (key.slice(-4) === '_nin' || key.slice(-4) === '_lte' || key.slice(-4) === '_gte') {
       result[key.slice(0, -4)] = { [`$${key.slice(-3)}`]: where[key] };
-    } else if (key === 'AND' || key === 'NOT' || key === 'NOR' || key === 'OR') {
+    } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
         composeWhereInput(where2, thingConfig),
       );
-    } else if (idFields.includes(key)) {
+    } else if (idFields.includes(key) && where[key !== null]) {
       result[key] = Types.ObjectId(where[key]);
     } else {
       result[key] = where[key];

@@ -26,8 +26,8 @@ describe('createThingWhereInputType', () => {
   id_nin: [ID!]
   code_in: [String!]
   code_nin: [String!]
+  code_ne: String
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -56,11 +56,12 @@ describe('createThingWhereInputType', () => {
   firstName: String
   firstName_in: [String!]
   firstName_nin: [String!]
+  firstName_ne: String
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
+  lastName_ne: String
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -93,11 +94,12 @@ describe('createThingWhereInputType', () => {
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
+  spouse_ne: ID
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
+  friends_ne: ID
   AND: [PersonWhereInput!]
-  NOT: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }`;
@@ -132,11 +134,12 @@ describe('createThingWhereInputType', () => {
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
+  spouse_ne: ID
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
+  friends_ne: ID
   AND: [PersonWhereInput!]
-  NOT: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }`;
@@ -179,11 +182,12 @@ describe('createThingWhereInputType', () => {
   field1: WeekdaysEnumeration
   field1_in: [WeekdaysEnumeration!]
   field1_nin: [WeekdaysEnumeration!]
+  field1_ne: WeekdaysEnumeration
   field4: CuisinesEnumeration
   field4_in: [CuisinesEnumeration!]
   field4_nin: [CuisinesEnumeration!]
+  field4_ne: CuisinesEnumeration
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -212,6 +216,7 @@ describe('createThingWhereInputType', () => {
   firstName: Int
   firstName_in: [Int!]
   firstName_nin: [Int!]
+  firstName_ne: Int
   firstName_gt: Int
   firstName_gte: Int
   firstName_lt: Int
@@ -219,12 +224,12 @@ describe('createThingWhereInputType', () => {
   lastName: Int
   lastName_in: [Int!]
   lastName_nin: [Int!]
+  lastName_ne: Int
   lastName_gt: Int
   lastName_gte: Int
   lastName_lt: Int
   lastName_lte: Int
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -253,6 +258,7 @@ describe('createThingWhereInputType', () => {
   firstName: Float
   firstName_in: [Float!]
   firstName_nin: [Float!]
+  firstName_ne: Float
   firstName_gt: Float
   firstName_gte: Float
   firstName_lt: Float
@@ -260,12 +266,12 @@ describe('createThingWhereInputType', () => {
   lastName: Float
   lastName_in: [Float!]
   lastName_nin: [Float!]
+  lastName_ne: Float
   lastName_gt: Float
   lastName_gte: Float
   lastName_lt: Float
   lastName_lte: Float
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -294,6 +300,7 @@ describe('createThingWhereInputType', () => {
   firstName: DateTime
   firstName_in: [DateTime!]
   firstName_nin: [DateTime!]
+  firstName_ne: DateTime
   firstName_gt: DateTime
   firstName_gte: DateTime
   firstName_lt: DateTime
@@ -301,12 +308,12 @@ describe('createThingWhereInputType', () => {
   lastName: DateTime
   lastName_in: [DateTime!]
   lastName_nin: [DateTime!]
+  lastName_ne: DateTime
   lastName_gt: DateTime
   lastName_gte: DateTime
   lastName_lt: DateTime
   lastName_lte: DateTime
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;
@@ -335,7 +342,6 @@ describe('createThingWhereInputType', () => {
   firstName: Boolean
   lastName: Boolean
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }`;

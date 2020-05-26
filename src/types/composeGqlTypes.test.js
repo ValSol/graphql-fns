@@ -246,20 +246,24 @@ input ExampleWhereInput {
   id_nin: [ID!]
   textField1_in: [String!]
   textField1_nin: [String!]
+  textField1_ne: String
   textField2: String
   textField2_in: [String!]
   textField2_nin: [String!]
+  textField2_ne: String
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
+  textField3_ne: String
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
+  day_ne: WeekdaysEnumeration
   cuisines: CuisinesEnumeration
   cuisines_in: [CuisinesEnumeration!]
   cuisines_nin: [CuisinesEnumeration!]
+  cuisines_ne: CuisinesEnumeration
   AND: [ExampleWhereInput!]
-  NOT: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
