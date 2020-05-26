@@ -14,6 +14,7 @@ const coerceDataToGql = (
   thingConfig: ThingConfig,
   allFields?: boolean,
   skipUnusedFields?: boolean, // use when import data from sourse with extra fields
+  setNullForEmptyText?: boolean, // when create data to prevent creation text fields with "" value
 ): Object => {
   const fieldsObject = composeFieldsObject(thingConfig);
 
@@ -39,12 +40,19 @@ const coerceDataToGql = (
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
-          coerceDataToGql(item, null, config, allFields, skipUnusedFields),
+          coerceDataToGql(item, null, config, allFields, skipUnusedFields, setNullForEmptyText),
         );
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key]
-          ? coerceDataToGql(data[key], null, config, allFields, skipUnusedFields)
+          ? coerceDataToGql(
+              data[key],
+              null,
+              config,
+              allFields,
+              skipUnusedFields,
+              setNullForEmptyText,
+            )
           : null;
       }
     } else if (kind === 'relationalFields' || kind === 'duplexFields') {
@@ -64,10 +72,27 @@ const coerceDataToGql = (
                   }
                 } else if (prev2.create) {
                   prev2.create.push(
-                    coerceDataToGql(item, null, config, allFields, skipUnusedFields),
+                    coerceDataToGql(
+                      item,
+                      null,
+                      config,
+                      allFields,
+                      skipUnusedFields,
+                      setNullForEmptyText,
+                    ),
                   );
                 } else {
-                  prev2.create = [coerceDataToGql(item, null, config, allFields, skipUnusedFields)]; // eslint-disable-line no-param-reassign
+                  // eslint-disable-next-line no-param-reassign
+                  prev2.create = [
+                    coerceDataToGql(
+                      item,
+                      null,
+                      config,
+                      allFields,
+                      skipUnusedFields,
+                      setNullForEmptyText,
+                    ),
+                  ];
                 }
                 return prev2;
               }, {});
@@ -78,12 +103,25 @@ const coerceDataToGql = (
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = {
-          create: coerceDataToGql(data[key], null, config, allFields, skipUnusedFields),
+          create: coerceDataToGql(
+            data[key],
+            null,
+            config,
+            allFields,
+            skipUnusedFields,
+            setNullForEmptyText,
+          ),
         };
       }
     } else if (kind === 'enumFields') {
       if (array) {
         prev[key] = data[key]; // eslint-disable-line no-param-reassign
+      } else {
+        prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
+      }
+    } else if (kind === 'textFields' && setNullForEmptyText) {
+      if (array) {
+        prev[key] = data[key].filter((item) => item); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
       }
