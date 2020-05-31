@@ -90,10 +90,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
             if (pushIntoThingInputType) prev.push(pushIntoThingInputType);
           }
-          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
-            const thingUpdateInputType = createThingUpdateInputType(thingConfig);
-            prev.push(thingUpdateInputType);
-          }
+          // not check Inventory because may use not only for updateThing mutation ...
+          // ... but for embedded & file fields
+          const thingUpdateInputType = createThingUpdateInputType(thingConfig);
+          prev.push(thingUpdateInputType);
           if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
             const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
             const uploadFilesToThingInputType = createUploadFilesToThingInputType(thingConfig);

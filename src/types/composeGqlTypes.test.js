@@ -1358,6 +1358,15 @@ input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
+input ExampleUpdateInput {
+  textField: String
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
+}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -1397,6 +1406,15 @@ input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
+input ExampleUpdateInput {
+  textField: String
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
+}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -1434,6 +1452,15 @@ type Example {
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+input ExampleUpdateInput {
+  textField: String
+}
+input ExampleUpdateChildInput {
+  connect: ID
+}
+input ExampleUpdateChildrenInput {
+  connect: [ID!]
 }
 type Mutation {
   loadExample(path: String!): Example
