@@ -50,11 +50,13 @@ const createUploadFilesToThingMutationResolver = (
     return null;
   }
 
+  const inAnyCase2 = true;
+
   const updateThingMutationResolver = createUpdateThingMutationResolver(
     thingConfig,
     generalConfig,
     serversideConfig,
-    inAnyCase,
+    inAnyCase2,
   );
   if (!updateThingMutationResolver) return null;
 
@@ -62,7 +64,7 @@ const createUploadFilesToThingMutationResolver = (
     thingConfig,
     generalConfig,
     serversideConfig,
-    inAnyCase,
+    inAnyCase2,
   );
   if (!pushIntoThingMutationResolver) return null;
 
