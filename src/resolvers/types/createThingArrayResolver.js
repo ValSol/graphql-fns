@@ -2,11 +2,8 @@
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
-import createThingSchema from '../../mongooseModels/createThingSchema';
-import addIdsToThing from '../addIdsToThing';
+import createThingsQueryResolver from '../queries/createThingsQueryResolver';
 import executeAuthorisation from '../executeAuthorisation';
-import getProjectionFromInfo from '../getProjectionFromInfo';
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
@@ -16,11 +13,16 @@ const createThingArrayResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function => {
-  const { inventory } = generalConfig;
   const { name } = thingConfig;
 
+  const thingQueryResolver = createThingsQueryResolver(
+    thingConfig,
+    generalConfig,
+    serversideConfig,
+  );
+  if (!thingQueryResolver) return null;
+
   const inventoryChain = ['Query', 'things', name];
-  if (!checkInventory(inventoryChain, inventory)) return () => [];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const resolverArgs = { parent, args, context, info };
@@ -30,25 +32,15 @@ const createThingArrayResolver = (
       serversideConfig,
     });
 
-    const { enums } = generalConfig;
     const { fieldName } = info;
 
     const ids = parent[fieldName];
 
     if (!ids || !ids.length) return [];
 
-    const { mongooseConn } = context;
+    const things = await thingQueryResolver(null, { where: { id_in: ids } }, context, info);
 
-    const thingSchema = createThingSchema(thingConfig, enums);
-
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    const projection = getProjectionFromInfo(info);
-
-    const things = await Thing.find({ _id: { $in: ids } }, projection, { lean: true });
-
-    const things2 = things.filter(Boolean).map((item) => addIdsToThing(item, thingConfig));
-
-    return things2;
+    return things;
   };
 
   return resolver;
