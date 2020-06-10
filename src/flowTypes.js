@@ -350,19 +350,6 @@ export type GeneralConfig = {
         ) => $ReadOnlyArray<string>,
       },
     },
-    +Return?: {
-      +[customReturnName: string]: {
-        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        +fieldNames: (
-          thingConfig: ThingConfig,
-          generalConfig: GeneralConfig,
-        ) => $ReadOnlyArray<string>,
-        +fieldTypes: (
-          thingConfig: ThingConfig,
-          generalConfig: GeneralConfig,
-        ) => $ReadOnlyArray<string>,
-      },
-    },
     +Query?: {
       +[customQueryName: string]: {
         +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
@@ -394,6 +381,13 @@ export type GeneralConfig = {
       },
     },
   },
+  +derivative?: {
+    // whole derivative name = thingName + derivativeName
+    +[derivativeName: string]: {
+      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+    },
+  },
   +enums?: Enums,
   inventory?: Inventory,
 };
@@ -402,19 +396,6 @@ export type GeneralConfig = {
 export type Custom = {
   +Input?: {
     +[customInputName: string]: {
-      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +fieldNames: (
-        thingConfig: ThingConfig,
-        generalConfig: GeneralConfig,
-      ) => $ReadOnlyArray<string>,
-      +fieldTypes: (
-        thingConfig: ThingConfig,
-        generalConfig: GeneralConfig,
-      ) => $ReadOnlyArray<string>,
-    },
-  },
-  +Return?: {
-    +[customReturnName: string]: {
       +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
       +fieldNames: (
         thingConfig: ThingConfig,
@@ -457,11 +438,16 @@ export type ActionSignatureMethods = {
 };
 
 export type ObjectSignatureMethods = {
-  // the same code as used above in GeneralConfig for Input & Return
+  // the same code as used above in GeneralConfig for Input
   // when the name method return "" (empty string) => object will be rejected
   +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
   +fieldNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+};
+
+export type DerivativeSignatureMethods = {
+  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];

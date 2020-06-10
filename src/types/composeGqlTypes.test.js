@@ -5,6 +5,7 @@ import type {
   GeneralConfig,
   Inventory,
   ActionSignatureMethods,
+  DerivativeSignatureMethods,
   ObjectSignatureMethods,
   ThingConfig,
 } from '../flowTypes';
@@ -1515,10 +1516,16 @@ type Query {
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const thingInTimeRange: ObjectSignatureMethods = {
+    const thingInTimeRangeDerivative: DerivativeSignatureMethods = {
       name: ({ name }) => `${name}InTimeRange`,
-      fieldNames: () => ['payload', 'start', 'end'],
-      fieldTypes: ({ name }) => [`${name}!`, 'DateTime!', 'DateTime!'],
+      config: (config) => {
+        const { name } = config;
+        return {
+          ...config,
+          name: `${name}InTimeRange`,
+          dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
+        };
+      },
     };
 
     const thingInTimeRangeQuery: ActionSignatureMethods = {
@@ -1543,10 +1550,10 @@ type Query {
     const inventory: Inventory = { include: { Query: { thingInTimeRangeQuery: null } } };
     const custom = {
       Input: { thingInTimeRangeInput },
-      Return: { thingInTimeRange },
       Query: { thingInTimeRangeQuery },
     };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const derivative = { InTimeRange: thingInTimeRangeDerivative };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
 type Example {
   id: ID!
@@ -1555,9 +1562,12 @@ type Example {
   textField: String
 }
 type ExampleInTimeRange {
-  payload: Example!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
   start: DateTime!
-  end: DateTime!
+  end: DateTime
 }
 input ExampleTimeRangeInput {
   start: DateTime!

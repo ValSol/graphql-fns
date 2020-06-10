@@ -6,6 +6,7 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import composeDerivativeConfig from '../types/composeDerivativeConfig';
 import createPushIntoThingInputType from '../types/inputs/createPushIntoThingInputType';
 import createFilesOfThingOptionsInputType from '../types/inputs/createFilesOfThingOptionsInputType';
 import createCustomResolver from './createCustomResolver';
@@ -30,12 +31,13 @@ const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
-  const { thingConfigs, custom, inventory } = generalConfig;
+  const { thingConfigs, custom, inventory, derivative } = generalConfig;
 
   // eslint-disable-next-line no-nested-ternary
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
+  const derivativeConfigs = derivative || {};
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -233,6 +235,23 @@ const composeGqlResolvers = (
       if (duplexFields || geospatialFields || relationalFields) {
         // eslint-disable-next-line no-param-reassign
         prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
+
+        // process derivative objects fields
+        Object.keys(derivativeConfigs).forEach((derivativeKey) => {
+          const derivativeConfig = composeDerivativeConfig(
+            derivativeConfigs[derivativeKey],
+            thingConfig,
+            generalConfig,
+          );
+          if (derivativeConfig) {
+            // eslint-disable-next-line no-param-reassign
+            prev[`${name}${derivativeKey}`] = composeThingResolvers(
+              derivativeConfig,
+              generalConfig,
+              serversideConfig,
+            );
+          }
+        });
       }
       return prev;
     }, resolvers);

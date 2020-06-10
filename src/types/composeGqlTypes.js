@@ -4,6 +4,7 @@ import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
 import composeActionSignature from './composeActionSignature';
+import composeDerivativeConfig from './composeDerivativeConfig';
 import composeObjectSignature from './composeObjectSignature';
 import createThingType from './createThingType';
 import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
@@ -37,16 +38,15 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeImportOptionsInputTypes from './specialized/composeImportOptionsInputTypes';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs, custom, inventory } = generalConfig;
+  const { thingConfigs, custom, derivative, inventory } = generalConfig;
 
   // eslint-disable-next-line no-nested-ternary
   const customInputObject = custom ? (custom.Input ? custom.Input : {}) : {};
   // eslint-disable-next-line no-nested-ternary
-  const customReturnObject = custom ? (custom.Return ? custom.Return : {}) : {};
-  // eslint-disable-next-line no-nested-ternary
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
+  const derivativeConfigs = derivative || {};
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -56,18 +56,18 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     createThingType(thingConfigs[thingName]),
   );
 
-  const customReturnObjectNames = Object.keys(customReturnObject);
+  const derivativeConfigNames = Object.keys(derivativeConfigs);
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
-      customReturnObjectNames.forEach((customName) => {
-        const customReturnType = composeObjectSignature(
-          customReturnObject[customName],
+      derivativeConfigNames.forEach((derivativeConfigName) => {
+        const derivativeConfig = composeDerivativeConfig(
+          derivativeConfigs[derivativeConfigName],
           thingConfig,
           generalConfig,
         );
-        if (customReturnType) prev.push(customReturnType);
+        if (derivativeConfig) prev.push(createThingType(derivativeConfig));
       });
 
       return prev;
