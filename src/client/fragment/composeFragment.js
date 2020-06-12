@@ -1,5 +1,5 @@
 // @flow
-import type { ClientOptions, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
 import composeThingFragmentArgs from './composeThingFragmentArgs';
@@ -7,11 +7,12 @@ import composeThingFragmentArgs from './composeThingFragmentArgs';
 const composeFragment = (
   fragmentName: string,
   thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   const head = composeThingFragmentArgs(fragmentName, thingConfig);
 
-  const fields = composeFields(thingConfig, { ...clientOptions, shift: 1 });
+  const fields = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 1 });
 
   const resultArray = [...head, ...fields, '}'];
 

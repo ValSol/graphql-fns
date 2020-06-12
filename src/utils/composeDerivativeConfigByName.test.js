@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeSignatureMethods, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
 
 import composeDerivativeConfigByName from './composeDerivativeConfigByName';
 
@@ -15,12 +15,13 @@ describe('composeDerivativeConfigByName', () => {
         },
       ],
     };
-    const ForCatalog: DerivativeSignatureMethods = {
-      name: ({ name }) => `${name}ForCatalog`,
-      config: (config) => {
-        const { name } = config;
-        return { ...config, name: `${name}ForCatalog`, floatFields: [{ name: 'floatField' }] };
-      },
+    const ForCatalog: DerivativeAttributes = {
+      allowedRootNames: ['Example'],
+      suffix: 'ForCatalog',
+      config: (config) => ({
+        ...config,
+        floatFields: [{ name: 'floatField' }],
+      }),
     };
 
     const derivative = { ForCatalog };

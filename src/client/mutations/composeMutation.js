@@ -73,7 +73,7 @@ const composeMutation = (
       returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
   }
 
-  const fields = composeFields(returnObjectConfig, { ...clientOptions, shift: 2 });
+  const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });
 
   const resultArray = [...head, ...fields, '  }', '}'];
 

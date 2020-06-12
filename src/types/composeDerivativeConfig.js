@@ -1,19 +1,18 @@
 // @flow
-import type { DerivativeSignatureMethods, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
 
 const composeDerivativeConfig = (
-  signatureMethods: DerivativeSignatureMethods,
+  signatureMethods: DerivativeAttributes,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): null | ThingConfig => {
-  const { name: composeName, config: composeConfig } = signatureMethods;
+  const { name } = thingConfig;
 
-  const name = composeName(thingConfig, generalConfig);
+  const { suffix, config: composeConfig, allowedRootNames } = signatureMethods;
 
-  // by making name = '' filter unnecessary configs
-  if (!name) return null;
+  if (!allowedRootNames.includes(name)) return null;
 
-  return composeConfig(thingConfig, generalConfig);
+  return { ...composeConfig(thingConfig, generalConfig), name: `${name}${suffix}` };
 };
 
 export default composeDerivativeConfig;

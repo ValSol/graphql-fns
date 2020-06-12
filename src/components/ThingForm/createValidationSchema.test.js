@@ -19,11 +19,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       textField: yup.string(),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -39,12 +41,14 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       // ! test does not differentiate ".required('Required')" and ".required()",
       textField: yup.string().required('Required'),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -60,11 +64,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       textFields: yup.array().of(yup.string().required('Required')),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -90,11 +96,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Embedded: embeddedConfig, Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       embeddedField: yup.object().shape({ textField: yup.string().required('Required') }),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -120,11 +128,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Embedded: embeddedConfig, Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       embeddedFields: yup.array().of(yup.object().shape({ textField: yup.string() })),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -147,13 +157,15 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       floatField1: yup.number(),
       floatField2: yup.number().required(),
       floatField3: yup.array().of(yup.number().required()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -176,13 +188,15 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       intField1: yup.number().integer(),
       intField2: yup.number().integer().required(),
       intField3: yup.array().of(yup.number().integer().required()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -201,12 +215,14 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       booleanField1: yup.boolean(),
       booleanField2: yup.array().of(yup.boolean()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -232,13 +248,15 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       enumField1: yup.string(),
       enumField2: yup.string().required(),
       enumField3: yup.array().of(yup.string().required()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -272,6 +290,8 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       relationalField: yup
         .string()
@@ -293,7 +313,7 @@ describe('createValidationSchema', () => {
         .test('existence-Example', 'Existence', async function test2() {}), // eslint-disable-line no-empty-function
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -316,13 +336,15 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const expectedResult = yup.object().shape({
       dateTimeField1: yup.date(),
       dateTimeField2: yup.date().required(),
       dateTimeField3: yup.array().of(yup.date().required()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -348,6 +370,8 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     const geospatialPointSchema = yup.object().shape({
       lat: yup.number().min(-90).max(90),
       lng: yup.number().min(-180).max(180),
@@ -362,7 +386,7 @@ describe('createValidationSchema', () => {
       geospatialField3: yup.array().of(geospatialPointRequiredSchema.clone()),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -389,11 +413,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig, Image: imageConfig } };
+
     const expectedResult = yup.object().shape({
       logo: yup.object().shape({ fileId: yup.string().required('Required') }),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 
@@ -420,11 +446,13 @@ describe('createValidationSchema', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Example: thingConfig, Image: imageConfig } };
+
     const expectedResult = yup.object().shape({
       pictures: yup.array().of(yup.object().shape({ fileId: yup.string() })),
     });
 
-    const result = createValidationSchema(thingConfig);
+    const result = createValidationSchema(thingConfig, generalConfig);
     expect(result.describe()).toEqual(expectedResult.describe());
   });
 });

@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig, GeneralConfig } from '../../flowTypes';
 
 import composeSubscription from './composeSubscription';
 
@@ -15,6 +15,9 @@ describe('composeSubscription', () => {
       },
     ],
   };
+
+  const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
+
   test('should compose createdThing subscription', () => {
     const subscriptionName = 'createdThing';
     const expectedResult = `subscription createdExample($where: ExampleWhereInput) {
@@ -26,7 +29,7 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(subscriptionName, thingConfig);
+    const result = composeSubscription(subscriptionName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
@@ -41,7 +44,7 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(subscriptionName, thingConfig);
+    const result = composeSubscription(subscriptionName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
@@ -56,7 +59,7 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(subscriptionName, thingConfig);
+    const result = composeSubscription(subscriptionName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

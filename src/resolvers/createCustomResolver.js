@@ -42,16 +42,7 @@ const createCustomResolver = (
 
   const authDecorator = (func) => async (...argarray) => {
     const [parent, args, context, info] = argarray;
-    const resolverArgs = { parent, args, context, info };
-    await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-      returnScalar:
-        serversideConfig.returnScalar &&
-        serversideConfig.returnScalar[methodKind] &&
-        serversideConfig.returnScalar[methodKind][methodName],
-    });
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
     const result = await func(parent, args, context, info);
     return result;
   };

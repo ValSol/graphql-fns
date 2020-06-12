@@ -4,6 +4,8 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 
 import createThingsQueryResolver from '../queries/createThingsQueryResolver';
 import executeAuthorisation from '../executeAuthorisation';
+import createCustomResolver from '../createCustomResolver';
+import parseThingName from './parseThingName';
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
@@ -14,23 +16,28 @@ const createThingArrayResolver = (
   serversideConfig: ServersideConfig,
 ): Function => {
   const { name } = thingConfig;
+  const { thingConfigs } = generalConfig;
 
-  const thingQueryResolver = createThingsQueryResolver(
-    thingConfig,
-    generalConfig,
-    serversideConfig,
-  );
-  if (!thingQueryResolver) return null;
+  const { root: nameRoot, suffix: nameSuffix } = parseThingName(name, generalConfig);
 
-  const inventoryChain = ['Query', 'things', name];
+  const thingsQueryResolver = nameSuffix
+    ? createCustomResolver(
+        'Query',
+        `things${nameSuffix}`,
+        thingConfigs[nameRoot],
+        generalConfig,
+        serversideConfig,
+      )
+    : createThingsQueryResolver(thingConfig, generalConfig, serversideConfig);
+
+  if (!thingsQueryResolver) return null;
+
+  const inventoryChain = nameSuffix
+    ? ['Query', `things${nameSuffix}`, name]
+    : ['Query', 'things', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const resolverArgs = { parent, args, context, info };
-    await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-    });
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
 
     const { fieldName } = info;
 
@@ -38,7 +45,7 @@ const createThingArrayResolver = (
 
     if (!ids || !ids.length) return [];
 
-    const things = await thingQueryResolver(null, { where: { id_in: ids } }, context, info);
+    const things = await thingsQueryResolver(null, { where: { id_in: ids } }, context, info);
 
     return things;
   };

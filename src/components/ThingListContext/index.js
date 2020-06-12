@@ -48,7 +48,7 @@ const ThingListProvider = (props: Props) => {
     const fetchData = async () => {
       const { name } = config;
 
-      const thingQuery = gql(composeQuery('things', config, null));
+      const thingQuery = gql(composeQuery('things', config, generalConfig));
       // dispatch({ type: 'LOAD', config });
       try {
         const { data } = await apolloClient.query({ query: thingQuery });

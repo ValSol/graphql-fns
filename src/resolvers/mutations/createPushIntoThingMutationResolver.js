@@ -23,13 +23,8 @@ const createPushIntoThingMutationResolver = (
   const inventoryChain = ['Mutation', 'pushIntoThing', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const resolverArgs = { parent, args, context, info };
-    const credentials = await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-    });
+  const resolver = async (parent: Object, args: Args, context: Context): Object => {
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
 
     const {
       whereOne,
@@ -91,22 +86,18 @@ const createPushIntoThingMutationResolver = (
     const thing2 = addIdsToThing(thing, thingConfig);
 
     if (allowSubscription) {
-      await executeAuthorisation({
-        inventoryChain: subscriptionInventoryChain,
-        resolverArgs,
-        serversideConfig,
-        credentials,
-      });
-      const { pubsub } = context;
-      if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-      const updatedFields = Object.keys(data);
+      if (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig)) {
+        const { pubsub } = context;
+        if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
+        const updatedFields = Object.keys(data);
 
-      const payload = {
-        node: thing2,
-        previousNode: addIdsToThing(previousThing, thingConfig),
-        updatedFields,
-      };
-      pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
+        const payload = {
+          node: thing2,
+          previousNode: addIdsToThing(previousThing, thingConfig),
+          updatedFields,
+        };
+        pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
+      }
     }
 
     return thing2;

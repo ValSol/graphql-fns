@@ -1,52 +1,34 @@
 // @flow
 import type { ServersideConfig, ThreeSegmentInventoryChain } from '../flowTypes';
 
-import authorize from '../utils/authorize';
 import checkInventory from '../utils/checkInventory';
-import getProjectionFromInfo from './getProjectionFromInfo';
 
-type Arg = {
+const errMsg = (attr) =>
+  `"authData" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
+
+const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
-  resolverArgs: { parent: Object, args: Object, context: Object, info: Object },
+  context: Object,
   serversideConfig: ServersideConfig,
-  returnScalar?: boolean,
-  credentials?: null | { id: string, roles: Array<string> },
-};
+) => {
+  const { authData, getCredentials } = serversideConfig;
+  if (!authData && !getCredentials) return true;
 
-const executeAuthorisation = async ({
-  inventoryChain,
-  resolverArgs,
-  serversideConfig,
-  returnScalar,
-  credentials,
-}: Arg) => {
-  const { authData, getCredentials, unrestricted } = serversideConfig;
-  const { args, context, info } = resolverArgs;
-  if (
-    getCredentials && // getCredentials & authData are mutual used
-    authData &&
-    !(unrestricted && checkInventory(inventoryChain, unrestricted))
-  ) {
-    if (!getCredentials) {
-      throw new TypeError('Must set "getCredentials" config method!');
-    }
-
-    let credentials2 = null;
-    if (!credentials) {
-      credentials2 = await getCredentials(context);
-    }
-
-    const credentials3 = credentials || credentials2;
-    // if returnScalar use fake 'boo' field to check fields
-    const fields = returnScalar ? ['foo'] : Object.keys(getProjectionFromInfo(info));
-
-    const authorized = await authorize(inventoryChain, fields, credentials3, args, authData);
-    if (!authorized) {
-      throw new TypeError('Athorize Error!');
-    }
-    return credentials3;
+  if (!authData) {
+    throw new TypeError(errMsg('authData'));
   }
-  return null;
+  if (!getCredentials) {
+    throw new TypeError(errMsg('getCredentials'));
+  }
+  if (!authData['']) {
+    throw new TypeError(errMsg('Check for no roles have to be!'));
+  }
+
+  if (checkInventory(inventoryChain, authData[''])) return true;
+
+  const { roles } = await getCredentials(context);
+
+  return roles.some((role) => checkInventory(inventoryChain, authData[role]));
 };
 
 export default executeAuthorisation;

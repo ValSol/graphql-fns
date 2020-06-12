@@ -32,12 +32,7 @@ const createThingsQueryResolver = (
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const resolverArgs = { parent, args, context, info };
-    await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-    });
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
 
     const { near, pagination, sort, where } = args;
 

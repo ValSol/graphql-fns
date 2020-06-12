@@ -28,19 +28,9 @@ const createCreateManyThingsMutationResolver = (
     return null;
   }
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const resolverArgs = { parent, args, context, info };
-    const credentials = await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-    });
-    await executeAuthorisation({
-      inventoryChain: inventoryChain2,
-      resolverArgs,
-      serversideConfig,
-      credentials,
-    });
+  const resolver = async (parent: Object, args: Args, context: Context): Object => {
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
+    if (!(await executeAuthorisation(inventoryChain2, context, serversideConfig))) return null;
 
     const { data } = args;
 

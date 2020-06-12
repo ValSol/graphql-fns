@@ -28,7 +28,7 @@ import composeInitialValues from './composeInitialValues';
 
 const composeIndex = (value) => (value === -1 ? '' : `(${value + 1})`);
 
-const composeFields = (
+const composeFormikFields = (
   formikProps: Object,
   classes: { [className: string]: string },
   flatFormikFields: FlatFormikFields,
@@ -80,7 +80,7 @@ const composeFields = (
                             label={`${itemName} #${j + 1}`}
                             message={touch2 ? error3 : ''}
                           >
-                            {composeFields(
+                            {composeFormikFields(
                               formikProps,
                               classes,
                               child,
@@ -130,7 +130,7 @@ const composeFields = (
           ) : (
             // eslint-disable-next-line react/no-array-index-key
             <Outline key={i} error={!!error2 && touch} label={name} message={touch ? error2 : ''}>
-              {composeFields(formikProps, classes, child, enumsObject, disabled, path)}
+              {composeFormikFields(formikProps, classes, child, enumsObject, disabled, path)}
             </Outline>
           );
         }
@@ -342,7 +342,7 @@ const composeFormikFragment = (
       }, {})
     : {};
 
-  return composeFields(formikProps, classes, flatFormikFields, enumsObject, disabled2);
+  return composeFormikFields(formikProps, classes, flatFormikFields, enumsObject, disabled2);
 };
 
 export default composeFormikFragment;

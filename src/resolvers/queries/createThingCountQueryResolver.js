@@ -23,14 +23,8 @@ const createThingCountQueryResolver = (
   const inventoryChain = ['Query', 'thingCount', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const resolverArgs = { parent, args, context, info };
-    await executeAuthorisation({
-      inventoryChain,
-      resolverArgs,
-      serversideConfig,
-      returnScalar: true,
-    });
+  const resolver = async (parent: Object, args: Args, context: Context): Object => {
+    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
 
     const { where } = args;
 

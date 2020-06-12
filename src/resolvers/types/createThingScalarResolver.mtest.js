@@ -24,7 +24,6 @@ beforeAll(async () => {
 });
 
 describe('createThingScalarResolver', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
   test('should create type thing resolver', async () => {
     const placeConfig: ThingConfig = {};
@@ -48,6 +47,8 @@ describe('createThingScalarResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = { thingConfigs: { Place: placeConfig } };
 
     const createPlace = createCreateThingMutationResolver(
       placeConfig,

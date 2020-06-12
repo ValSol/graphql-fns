@@ -51,6 +51,8 @@ describe('composeFields', () => {
       ],
     };
 
+    const generalConfig = { thingConfigs: { Example: thingConfig } };
+
     test('should compose not nested fields with shift = 0', () => {
       const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
@@ -83,7 +85,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -119,7 +121,7 @@ describe('composeFields', () => {
         '  }',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -162,7 +164,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -189,7 +191,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -227,7 +229,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -260,7 +262,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -293,7 +295,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -320,7 +322,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -348,7 +350,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -376,7 +378,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, options);
+      const result = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -439,6 +441,15 @@ describe('composeFields', () => {
       ],
     };
 
+    const generalConfig = {
+      thingConfigs: {
+        Embedded1: embedded1Config,
+        Embedded2: embedded2Config,
+        Embedded3: embedded3Config,
+        Example: exampleConfig,
+      },
+    };
+
     test('should compose embedded fields with alias', () => {
       const include = { 'embeddedField1Alias: embeddedField1': null };
       const options: ClientFieldsOptions = { shift: 0, include };
@@ -457,7 +468,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -483,7 +494,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -508,7 +519,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -517,7 +528,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['textField'];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -539,7 +550,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -548,7 +559,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['embeddedField1 {', '  textField1', '}'];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -563,7 +574,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -572,7 +583,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = ['id', 'createdAt', 'updatedAt', 'textField'];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -590,7 +601,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -612,7 +623,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, options);
+      const result = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -651,6 +662,8 @@ describe('composeFields', () => {
       ],
     });
 
+    const generalConfig = { thingConfigs: { Person: personConfig } };
+
     test('should compose relatioanl and duplex fields without depth', () => {
       const options: ClientFieldsOptions = { shift: 0 };
       const expectedResult = [
@@ -670,7 +683,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -693,7 +706,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -755,7 +768,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -934,7 +947,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -947,7 +960,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
       const expectedResult = ['id', 'friends {', '  id', '}', 'parent {', '  id', '}'];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -972,7 +985,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -993,7 +1006,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1018,7 +1031,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1091,7 +1104,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1179,7 +1192,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, options);
+      const result = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });

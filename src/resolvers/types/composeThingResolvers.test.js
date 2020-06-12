@@ -6,7 +6,6 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import composeThingResolvers from './composeThingResolvers';
 
 describe('composeThingResolvers', () => {
-  const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create resolver for type', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -54,6 +53,9 @@ describe('composeThingResolvers', () => {
         },
       ],
     });
+    const generalConfig: GeneralConfig = {
+      thingConfigs: { Place: placeConfig, Person: personConfig },
+    };
 
     const serversideConfig = {};
 
@@ -127,6 +129,10 @@ describe('composeThingResolvers', () => {
 
     const serversideConfig = {};
 
+    const generalConfig: GeneralConfig = {
+      thingConfigs: { Place: placeConfig, Person: personConfig },
+    };
+
     const result = composeThingResolvers(personConfig, generalConfig, serversideConfig);
 
     expect(typeof result.friends).toBe('function');
@@ -157,6 +163,10 @@ describe('composeThingResolvers', () => {
           array: true,
         },
       ],
+    };
+
+    const generalConfig: GeneralConfig = {
+      thingConfigs: { Place: thingConfig },
     };
 
     const serversideConfig = {};

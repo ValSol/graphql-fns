@@ -16,9 +16,11 @@ describe('composeFragment', () => {
     ],
   };
 
+  const generalConfig = { thingConfigs: { Example: thingConfig } };
+
   test('should compose fragment', () => {
     const fragmentName = 'firstExample';
-    const result = composeFragment(fragmentName, thingConfig);
+    const result = composeFragment(fragmentName, thingConfig, generalConfig);
     const expectedResult = `fragment firstExample on Example {
   id
   createdAt

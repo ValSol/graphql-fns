@@ -5,7 +5,7 @@ import type {
   GeneralConfig,
   Inventory,
   ActionSignatureMethods,
-  DerivativeSignatureMethods,
+  DerivativeAttributes,
   ObjectSignatureMethods,
   ThingConfig,
 } from '../flowTypes';
@@ -1516,16 +1516,13 @@ type Query {
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const thingInTimeRangeDerivative: DerivativeSignatureMethods = {
-      name: ({ name }) => `${name}InTimeRange`,
-      config: (config) => {
-        const { name } = config;
-        return {
-          ...config,
-          name: `${name}InTimeRange`,
-          dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
-        };
-      },
+    const thingInTimeRangeDerivative: DerivativeAttributes = {
+      allowedRootNames: ['Example'],
+      suffix: 'InTimeRange',
+      config: (config) => ({
+        ...config,
+        dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
+      }),
     };
 
     const thingInTimeRangeQuery: ActionSignatureMethods = {

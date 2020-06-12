@@ -1,5 +1,6 @@
 // @flow
-import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
+
+import type { ThingConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
 
 // accessorial function
 const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
@@ -15,7 +16,11 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
       Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
 
-const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): Array<string> => {
+const composeFields = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+  options: ClientFieldsOptions,
+): Array<string> => {
   const {
     booleanFields,
     dateTimeFields,
@@ -115,7 +120,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
         const nextExclude = exclude && exclude[name];
         const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -131,7 +136,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
         const nextExclude = exclude && exclude[name];
         const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -152,7 +157,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
           exclude: nextExclude,
         };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -185,7 +190,7 @@ const composeFields = (thingConfig: ThingConfig, options: ClientFieldsOptions): 
           exclude: nextExclude,
         };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, nextOptions));
+        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;

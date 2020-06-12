@@ -6,6 +6,7 @@ const composeDerivativeConfigByName = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): ThingConfig => {
+  const { name } = thingConfig;
   const { derivative } = generalConfig;
 
   if (typeof derivative === 'undefined') {
@@ -13,9 +14,9 @@ const composeDerivativeConfigByName = (
   }
 
   const {
-    [derivativeConfigName]: { config: composeConfig },
+    [derivativeConfigName]: { config: composeConfig, suffix },
   } = derivative;
-  return composeConfig(thingConfig, generalConfig);
+  return { ...composeConfig(thingConfig, generalConfig), name: `${name}${suffix}` };
 };
 
 export default composeDerivativeConfigByName;

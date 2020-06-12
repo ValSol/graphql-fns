@@ -218,7 +218,12 @@ const ThingForm = (props: Props) => {
                           })
                           .catch(() => actions.setSubmitting(false));
                       }}
-                      validationSchema={createValidationSchema(thingConfig, apolloClient, id)}
+                      validationSchema={createValidationSchema(
+                        thingConfig,
+                        generalConfig,
+                        apolloClient,
+                        id,
+                      )}
                     >
                       {(formikProps) => {
                         const { dirty, errors, isSubmitting, resetForm } = formikProps;

@@ -10,7 +10,7 @@ import composeThingCountQuery from './composeThingCountQuery';
 const composeQuery = (
   queryName: string,
   thingConfig: ThingConfig,
-  generalConfig: null | GeneralConfig,
+  generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   let head = []; // assign "[]" to eliminate flowjs error
@@ -53,7 +53,7 @@ const composeQuery = (
       returnObjectConfig = Query[queryName].config(thingConfig, generalConfig);
   }
 
-  const fields = composeFields(returnObjectConfig, { ...clientOptions, shift: 2 });
+  const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });
 
   const resultArray = [...head, ...fields, '  }', '}'];
 

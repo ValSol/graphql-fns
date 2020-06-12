@@ -3,7 +3,7 @@
 import * as yup from 'yup';
 import gql from 'graphql-tag';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import composeQuery from '../../client/queries/composeQuery';
 import arrangeFormFields from '../utils/arrangeFormFields';
@@ -49,6 +49,7 @@ const geospatialPointSchema = ({ array, required }: GeospatialPointSchemaArgs): 
 
 const createValidationSchema = (
   thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
   apolloClient: Object,
   id?: string,
 ): Object => {
@@ -66,11 +67,11 @@ const createValidationSchema = (
     switch (fieldsObject[name].kind) {
       case 'embeddedFields':
         const { config } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
-        prev[name] = createValidationSchema(config, apolloClient, id); // eslint-disable-line no-param-reassign
+        prev[name] = createValidationSchema(config, generalConfig, apolloClient, id); // eslint-disable-line no-param-reassign
         break;
       case 'fileFields':
         const { config: config2 } = fieldsObject[name].attributes; // eslint-disable-line no-case-declarations
-        prev[name] = createValidationSchema(config2, apolloClient, id); // eslint-disable-line no-param-reassign
+        prev[name] = createValidationSchema(config2, generalConfig, apolloClient, id); // eslint-disable-line no-param-reassign
         break;
       case 'textFields':
         prev[name] = yup.string(); // eslint-disable-line no-param-reassign
@@ -147,7 +148,9 @@ const createValidationSchema = (
             `Unacceptable unique "${name}" field in embedded thing "${thingName}"!`,
           );
         }
-        const query = gql(composeQuery('thing', thingConfig, null, { include: { id: null } }));
+        const query = gql(
+          composeQuery('thing', thingConfig, generalConfig, { include: { id: null } }),
+        );
         // eslint-disable-next-line no-param-reassign
         prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
           value,
@@ -166,7 +169,7 @@ const createValidationSchema = (
       fieldsObject[name].kind === 'relationalFields'
     ) {
       const { config } = fieldsObject[name].attributes;
-      const query = gql(composeQuery('thing', config, null, { include: { id: null } }));
+      const query = gql(composeQuery('thing', config, generalConfig, { include: { id: null } }));
       const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign
       prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async function test2(value) {

@@ -1,5 +1,5 @@
 // @flow
-import type { ClientOptions, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
 import composeDeletedThingSubscriptionArgs from './composeDeletedThingSubscriptionArgs';
@@ -9,6 +9,7 @@ import composeUpdatedThingSubscriptionArgs from './composeUpdatedThingSubscripti
 const composeSubscription = (
   subscriptionName: 'createdThing' | 'deletedThing' | 'updatedThing',
   thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   let head;
@@ -30,7 +31,7 @@ const composeSubscription = (
       throw new TypeError(`Invalid subscription value "${subscriptionName}"!`);
   }
 
-  const fields = composeFields(thingConfig, { ...clientOptions, shift: 2 });
+  const fields = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 2 });
 
   const resultArray = [...head, ...fields, '  }', '}'];
 

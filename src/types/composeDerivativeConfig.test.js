@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeSignatureMethods, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
 
 import composeDerivativeConfig from './composeDerivativeConfig';
 
@@ -15,12 +15,13 @@ describe('composeDerivativeConfig', () => {
         },
       ],
     };
-    const thingForCatalog: DerivativeSignatureMethods = {
-      name: ({ name }) => `${name}ForCatalog`,
-      config: (config) => {
-        const { name } = config;
-        return { ...config, name: `${name}ForCatalog`, floatFields: [{ name: 'floatField' }] };
-      },
+    const thingForCatalog: DerivativeAttributes = {
+      allowedRootNames: ['Example'],
+      suffix: 'ForCatalog',
+      config: (config) => ({
+        ...config,
+        floatFields: [{ name: 'floatField' }],
+      }),
     };
 
     const generalConfig: GeneralConfig = {
@@ -57,12 +58,13 @@ describe('composeDerivativeConfig', () => {
         },
       ],
     };
-    const thingForCatalog: DerivativeSignatureMethods = {
-      name: ({ name }) => (name === 'Example' ? `${name}ForCatalog` : ''),
-      config: (config) => {
-        const { name } = config;
-        return { ...config, name: `${name}ForCatalog`, floatFields: [{ name: 'floatField' }] };
-      },
+    const thingForCatalog: DerivativeAttributes = {
+      allowedRootNames: ['Example'],
+      suffix: 'ForCatalog',
+      config: (config) => ({
+        ...config,
+        floatFields: [{ name: 'floatField' }],
+      }),
     };
 
     const generalConfig: GeneralConfig = {

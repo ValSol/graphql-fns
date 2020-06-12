@@ -382,9 +382,10 @@ export type GeneralConfig = {
     },
   },
   +derivative?: {
-    // whole derivative name = thingName + derivativeName
+    // whole derivative name = thingName (baseName) + derivativeName
     +[derivativeName: string]: {
-      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+      +allowedRootNames: Array<string>, // thingNames for which generatied derivative
+      +suffix: string,
       +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
     },
   },
@@ -445,8 +446,9 @@ export type ObjectSignatureMethods = {
   +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
 };
 
-export type DerivativeSignatureMethods = {
-  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+export type DerivativeAttributes = {
+  +allowedRootNames: Array<string>, // thingNames for which generatied derivative
+  +suffix: string,
   +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
 };
 
@@ -477,19 +479,8 @@ export type InventoryСhain =
   | ThreeSegmentInventoryChain;
 
 export type AuthData = {
-  [role: string]: {
-    +request?: Inventory,
-    +response?: {
-      [thingName: string]: { +include?: Array<string>, +exclude?: Array<string> },
-    },
-    +applyCallback?: Inventory,
-    +callback?: (
-      inventoryChain: ThreeSegmentInventoryChain,
-      fields: Array<string>,
-      id: string,
-      requestArgs: Object,
-    ) => Promise<Array<string>>,
-  },
+  // must be setted for all roles and plus for empty string ""
+  [role: string]: Inventory,
 };
 
 export type FileAttributes = {
@@ -524,12 +515,9 @@ export type ServersideConfig = {
       +[customMutationName: string]: boolean,
     },
   },
-  // "unrestricted" prevent using "authData" & "getCredentials" in defined cases
-  +unrestricted?: Inventory,
+
   +authData?: AuthData, // "authData" & "getCredentials" are mutualy used
-  +getCredentials?: (
-    context: Object,
-  ) => Promise<{ roles: Array<string>, id: string }> | Promise<null>,
+  +getCredentials?: (context: Object) => Promise<{ roles: Array<string> }>,
   +saveFiles?: {
     [fileFieldConfigName: string]: (
       file: Object,
