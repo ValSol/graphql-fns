@@ -1,6 +1,8 @@
 // @flow
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 
+import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+
 const composeCustomThingQueryArgs = (
   queryName: string,
   thingConfig: ThingConfig,
@@ -10,7 +12,7 @@ const composeCustomThingQueryArgs = (
     throw new TypeError('"generalConfig" property have to be defined!');
   }
 
-  const { custom } = generalConfig;
+  const custom = mergeDerivativeIntoCustom(generalConfig);
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');

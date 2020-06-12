@@ -6,9 +6,10 @@ import type {
   ThreeSegmentInventoryChain,
 } from '../flowTypes';
 
+import checkInventory from '../utils/checkInventory';
+import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from '../types/composeActionSignature';
 import executeAuthorisation from './executeAuthorisation';
-import checkInventory from '../utils/checkInventory';
 
 const createCustomResolver = (
   methodKind: 'Query' | 'Mutation',
@@ -19,7 +20,10 @@ const createCustomResolver = (
 ): null | Function => {
   const { name } = thingConfig;
 
-  const { inventory, custom } = generalConfig;
+  const { inventory } = generalConfig;
+
+  const custom = mergeDerivativeIntoCustom(generalConfig);
+
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
   }

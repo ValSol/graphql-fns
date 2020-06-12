@@ -6,6 +6,7 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../types/composeDerivativeConfig';
 import createPushIntoThingInputType from '../types/inputs/createPushIntoThingInputType';
 import createFilesOfThingOptionsInputType from '../types/inputs/createFilesOfThingOptionsInputType';
@@ -31,7 +32,9 @@ const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
-  const { thingConfigs, custom, inventory, derivative } = generalConfig;
+  const { thingConfigs, inventory, derivative } = generalConfig;
+
+  const custom = mergeDerivativeIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};

@@ -3,6 +3,7 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
+import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from './composeActionSignature';
 import composeDerivativeConfig from './composeDerivativeConfig';
 import composeObjectSignature from './composeObjectSignature';
@@ -38,7 +39,8 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeImportOptionsInputTypes from './specialized/composeImportOptionsInputTypes';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs, custom, derivative, inventory } = generalConfig;
+  const { thingConfigs, derivative, inventory } = generalConfig;
+  const custom = mergeDerivativeIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
   const customInputObject = custom ? (custom.Input ? custom.Input : {}) : {};

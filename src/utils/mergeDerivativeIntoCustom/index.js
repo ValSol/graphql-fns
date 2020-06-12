@@ -4,7 +4,12 @@ import type { Custom, GeneralConfig } from '../../flowTypes';
 import composeDerivativeThingQuery from './composeDerivativeThingQuery';
 import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
 
+const store = {};
+
 const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom => {
+  // use cache if no jest test environment
+  if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
+
   const { custom, derivative } = generalConfig;
 
   if (!derivative) return custom || null;
@@ -18,9 +23,13 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     return prev;
   }, {});
 
-  if (!custom) return { Query };
+  if (!custom) {
+    store.cache = { Query };
+  } else {
+    store.cache = { ...custom, Query: { ...Query, ...custom.Query } };
+  }
 
-  return { ...custom, Query: { ...Query, ...custom.Query } };
+  return store.cache;
 };
 
 export default mergeDerivativeIntoCustom;

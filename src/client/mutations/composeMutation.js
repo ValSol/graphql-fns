@@ -1,6 +1,7 @@
 // @flow
 import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
+import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeFields from '../composeFields';
 import composePushIntoThingMutationArgs from './composePushIntoThingMutationArgs';
 import composeCreateManyThingsMutationArgs from './composeCreateManyThingsMutationArgs';
@@ -53,7 +54,8 @@ const composeMutation = (
     default:
       head = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
 
-      const { custom } = generalConfig; // eslint-disable-line no-case-declarations
+      const custom = mergeDerivativeIntoCustom(generalConfig); // eslint-disable-line no-case-declarations
+
       if (!custom) {
         throw new TypeError('"custom" property have to be defined!');
       }
