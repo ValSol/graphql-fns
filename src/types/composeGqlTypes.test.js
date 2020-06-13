@@ -1517,7 +1517,7 @@ type Query {
     };
 
     const thingInTimeRangeDerivative: DerivativeAttributes = {
-      allowedRootNames: ['Example'],
+      allow: { thing: ['Example'], things: ['Example'] },
       suffix: 'InTimeRange',
       config: (config) => ({
         ...config,

@@ -384,7 +384,17 @@ export type GeneralConfig = {
   +derivative?: {
     // whole derivative name = thingName (baseName) + derivativeName
     +[derivativeName: string]: {
-      +allowedRootNames: Array<string>, // thingNames for which generatied derivative
+      +allow: {
+        // queries & mutations whith appropriate thingNames for which generatied derivative queries & mutations
+        thing?: Array<string>,
+        things?: Array<string>,
+        createThing?: Array<string>,
+        createManyThings?: Array<string>,
+        importThings?: Array<string>,
+        pushIntoThing?: Array<string>,
+        updateThing?: Array<string>,
+        uploadFilesToThing?: Array<string>,
+      },
       +suffix: string,
       +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
     },
@@ -447,8 +457,18 @@ export type ObjectSignatureMethods = {
 };
 
 export type DerivativeAttributes = {
-  +allowedRootNames: Array<string>, // thingNames for which generatied derivative
   +suffix: string,
+  +allow: {
+    // queries & mutations whith appropriate thingNames for which generatied derivative queries & mutations
+    thing?: Array<string>,
+    things?: Array<string>,
+    createThing?: Array<string>,
+    createManyThings?: Array<string>,
+    importThings?: Array<string>,
+    pushIntoThing?: Array<string>,
+    updateThing?: Array<string>,
+    uploadFilesToThing?: Array<string>,
+  },
   +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
 };
 

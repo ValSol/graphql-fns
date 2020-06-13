@@ -2,23 +2,24 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingQuery from './composeDerivativeThingQuery';
+import composeDerivativeUpdateThingMutation from './composeDerivativeUpdateThingMutation';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeThingQuery', () => {
+describe('composeDerivativeUpdateThingMutation', () => {
   test('should return correct derivative config', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
           name: 'textField',
+          array: true,
           index: true,
         },
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { thing: ['Example'], things: ['Example'] },
+      allow: { updateThing: ['Example'] },
       suffix: 'ForCatalog',
       config: (config) => ({
         ...config,
@@ -33,13 +34,15 @@ describe('composeDerivativeThingQuery', () => {
       derivative,
     };
 
-    const result = composeDerivativeThingQuery(ForCatalog);
+    const result = composeDerivativeUpdateThingMutation(ForCatalog);
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.thing && ForCatalog.allow.thing.includes(name) ? `${name}ForCatalog` : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }) => [`${name}WhereOneInput`],
+        ForCatalog.allow.updateThing && ForCatalog.allow.updateThing.includes(name)
+          ? `update${name}ForCatalog`
+          : '',
+      argNames: () => ['whereOne', 'data'],
+      argTypes: ({ name }) => [`${name}WhereOneInput!`, `${name}UpdateInput!`],
       type: ({ name }) => `${name}ForCatalog!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),

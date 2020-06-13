@@ -6,9 +6,9 @@ import type {
   ServersideConfig,
   ActionSignatureMethods,
   ThingConfig,
-} from '../flowTypes';
+} from '../../flowTypes';
 
-import createCustomResolver from './createCustomResolver';
+import createCustomResolver from './index';
 
 describe('createCustomResolver', () => {
   const resultResolver = () => 'test passed!';

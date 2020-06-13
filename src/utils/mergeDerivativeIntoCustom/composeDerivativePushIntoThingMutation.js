@@ -3,18 +3,19 @@ import type { ActionSignatureMethods, DerivativeAttributes } from '../../flowTyp
 
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
-const composeDerivativeThingQuery = ({
+const composeDerivativePushIntoThingMutation = ({
   allow,
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
-    name: ({ name }) => (allow.thing && allow.thing.includes(name) ? `${name}${suffix}` : ''),
-    argNames: () => ['whereOne'],
-    argTypes: ({ name }) => [`${name}WhereOneInput`],
+    name: ({ name }) =>
+      allow.pushIntoThing && allow.pushIntoThing.includes(name) ? `pushInto${name}${suffix}` : '',
+    argNames: () => ['whereOne', 'data'],
+    argTypes: ({ name }) => [`${name}WhereOneInput!`, `PushInto${name}Input!`],
     type: ({ name }) => `${name}${suffix}!`,
     config: (thingConfig, generalConfig) =>
       composeDerivativeConfigByName(suffix, thingConfig, generalConfig),
   };
 };
 
-export default composeDerivativeThingQuery;
+export default composeDerivativePushIntoThingMutation;

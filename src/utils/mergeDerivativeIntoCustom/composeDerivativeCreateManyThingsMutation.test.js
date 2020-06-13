@@ -1,24 +1,28 @@
 // @flow
 /* eslint-env jest */
+
+import pluralize from 'pluralize';
+
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingQuery from './composeDerivativeThingQuery';
+import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeThingQuery', () => {
+describe('composeDerivativeCreateManyThingsMutation', () => {
   test('should return correct derivative config', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
           name: 'textField',
+          array: true,
           index: true,
         },
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { thing: ['Example'], things: ['Example'] },
+      allow: { createManyThings: ['Example'] },
       suffix: 'ForCatalog',
       config: (config) => ({
         ...config,
@@ -33,14 +37,16 @@ describe('composeDerivativeThingQuery', () => {
       derivative,
     };
 
-    const result = composeDerivativeThingQuery(ForCatalog);
+    const result = composeDerivativeCreateManyThingsMutation(ForCatalog);
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.thing && ForCatalog.allow.thing.includes(name) ? `${name}ForCatalog` : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }) => [`${name}WhereOneInput`],
-      type: ({ name }) => `${name}ForCatalog!`,
+        ForCatalog.allow.createManyThings && ForCatalog.allow.createManyThings.includes(name)
+          ? `createMany${pluralize(name)}ForCatalog`
+          : '',
+      argNames: () => ['data'],
+      argTypes: ({ name }) => [`[${name}CreateInput!]!`],
+      type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
     };

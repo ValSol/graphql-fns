@@ -50,7 +50,10 @@ describe('composeDerivativeThingsQuery', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    allowedRootNames: ['Example', 'SortExample'],
+    allow: {
+      thing: ['Example', 'SortExample', 'PaginationExample', 'NearExample'],
+      things: ['Example', 'SortExample', 'PaginationExample', 'NearExample'],
+    },
     suffix: 'ForCatalog',
     config: (config) => ({
       ...config,
@@ -65,6 +68,7 @@ describe('composeDerivativeThingsQuery', () => {
       Example: thingConfig,
       SortExample: sortThingConfig,
       PaginationExample: paginationThingConfig,
+      NearExample: nearThingConfig,
     },
     derivative,
   };
@@ -74,7 +78,9 @@ describe('composeDerivativeThingsQuery', () => {
   test('should return inputs for "thingConfig"', () => {
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allowedRootNames.includes(name) ? `${pluralize(name)}ForCatalog` : '',
+        ForCatalog.allow.things && ForCatalog.allow.things.includes(name)
+          ? `${pluralize(name)}ForCatalog`
+          : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}WhereInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
@@ -92,7 +98,9 @@ describe('composeDerivativeThingsQuery', () => {
   test('should return inputs for "sortThingConfig"', () => {
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allowedRootNames.includes(name) ? `${pluralize(name)}ForCatalog` : '',
+        ForCatalog.allow.things && ForCatalog.allow.things.includes(name)
+          ? `${pluralize(name)}ForCatalog`
+          : '',
       argNames: () => ['where', 'sort'],
       argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
@@ -110,7 +118,9 @@ describe('composeDerivativeThingsQuery', () => {
   test('should return inputs for "paginationThingConfig"', () => {
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allowedRootNames.includes(name) ? `${pluralize(name)}ForCatalog` : '',
+        ForCatalog.allow.things && ForCatalog.allow.things.includes(name)
+          ? `${pluralize(name)}ForCatalog`
+          : '',
       argNames: () => ['where', 'pagination'],
       argTypes: ({ name }) => [`${name}WhereInput`, `${name}PaginationInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
@@ -132,7 +142,9 @@ describe('composeDerivativeThingsQuery', () => {
   test('should return inputs for "nearThingConfig"', () => {
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allowedRootNames.includes(name) ? `${pluralize(name)}ForCatalog` : '',
+        ForCatalog.allow.things && ForCatalog.allow.things.includes(name)
+          ? `${pluralize(name)}ForCatalog`
+          : '',
       argNames: () => ['where', 'near'],
       argTypes: ({ name }) => [`${name}WhereInput`, `${name}NearInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,

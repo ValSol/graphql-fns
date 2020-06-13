@@ -16,7 +16,7 @@ describe('composeDerivativeConfigByName', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allowedRootNames: ['Example'],
+      allow: { thing: ['Example'], things: ['Example'] },
       suffix: 'ForCatalog',
       config: (config) => ({
         ...config,

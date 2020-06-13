@@ -17,10 +17,11 @@ const aditionalInputs = (thingConfig: ThingConfig) => {
 };
 
 const composeDerivativeThingsQuery = ({
-  allowedRootNames,
+  allow,
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => ({
-  name: ({ name }) => (allowedRootNames.includes(name) ? `${pluralize(name)}${suffix}` : ''),
+  name: ({ name }) =>
+    allow.things && allow.things.includes(name) ? `${pluralize(name)}${suffix}` : '',
   argNames: (thingConfig, generalConfig) => {
     const result = ['where'];
 

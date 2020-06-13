@@ -8,9 +8,12 @@ const composeDerivativeConfig = (
 ): null | ThingConfig => {
   const { name } = thingConfig;
 
-  const { suffix, config: composeConfig, allowedRootNames } = signatureMethods;
+  const { suffix, config: composeConfig, allow } = signatureMethods;
 
-  if (!allowedRootNames.includes(name)) return null;
+  // 'allow[key] && ...' to prevent flowjs error
+  const allowed = Object.keys(allow).some((key) => allow[key] && allow[key].includes(name));
+
+  if (!allowed) return null;
 
   return { ...composeConfig(thingConfig, generalConfig), name: `${name}${suffix}` };
 };
