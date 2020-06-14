@@ -57,8 +57,12 @@ const createImportThingsMutationResolver = (
     return null;
   }
   const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
-    if (!(await executeAuthorisation(inventoryChain2, context, serversideConfig))) return null;
+    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
+      return null;
+    }
+    if (!inAnyCase && !(await executeAuthorisation(inventoryChain2, context, serversideConfig))) {
+      return null;
+    }
 
     const { file, options } = args;
     // const { filename, mimetype, encoding, createReadStream } = await file;

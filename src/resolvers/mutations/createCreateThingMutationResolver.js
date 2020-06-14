@@ -25,7 +25,9 @@ const createCreateThingMutationResolver = (
   }
 
   const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
+    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
+      return null;
+    }
 
     const { data } = args;
     const { mongooseConn } = context;
@@ -63,7 +65,10 @@ const createCreateThingMutationResolver = (
 
     const subscriptionInventoryChain = ['Subscription', 'createdThing', name];
     if (checkInventory(subscriptionInventoryChain, inventory)) {
-      if (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig)) {
+      if (
+        !inAnyCase &&
+        (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig))
+      ) {
         const { pubsub } = context;
         if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
         pubsub.publish(`created-${name}`, { [`created${name}`]: thing2 });

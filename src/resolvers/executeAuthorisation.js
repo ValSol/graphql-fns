@@ -28,7 +28,21 @@ const executeAuthorisation = async (
 
   const { roles } = await getCredentials(context);
 
-  return roles.some((role) => checkInventory(inventoryChain, authData[role]));
+  const allRoles = Object.keys(authData);
+  roles.forEach((role) => {
+    if (!allRoles.includes(role)) {
+      throw new Error(`Got unused in "authData" role: "${role}"!`);
+    }
+  });
+
+  const authResult = roles.some((role) => checkInventory(inventoryChain, authData[role]));
+  const [methodType, methodName, configName] = inventoryChain;
+
+  if (!authResult && methodType === 'Mutation') {
+    throw new TypeError(`Tried to execute prohibited mutation "${methodName}" on "${configName}"!`);
+  }
+
+  return authResult;
 };
 
 export default executeAuthorisation;

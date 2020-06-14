@@ -24,7 +24,9 @@ const createThingCountQueryResolver = (
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
+    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
+      return null;
+    }
 
     const { where } = args;
 

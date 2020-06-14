@@ -32,7 +32,7 @@ const createThingScalarResolver = (
   if (!thingQueryResolver) return null;
 
   const inventoryChain = nameSuffix
-    ? ['Query', `thing${nameSuffix}`, name]
+    ? ['Query', `thing${nameSuffix}`, nameRoot]
     : ['Query', 'thing', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {

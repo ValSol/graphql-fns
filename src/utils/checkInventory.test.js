@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { Inventory } from '../flowTypes';
+import type { AuthData, Inventory } from '../flowTypes';
 
 import checkInventory from './checkInventory';
 
@@ -331,5 +331,39 @@ describe('checkInventory', () => {
     const inventoryСhain = ['Query', 'thingCount', 'Invoice'];
     const result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
+  });
+
+  describe('checkInventory in authData', () => {
+    const authData: AuthData = {
+      '': {
+        include: {
+          Query: {
+            thingForCatalog: null,
+            thingsForCatalog: null,
+          },
+          Mutation: { renewThing: null, signinThing: null },
+        },
+      },
+      guest: {
+        include: {
+          Mutation: { renewThing: null, signinThing: null },
+        },
+      },
+      // editor: {},
+      // admin: { include: { Query: null, Mutation: null } },
+      // master: {},
+    };
+    test('should return correct results for AuthData guest', () => {
+      const roles = [''];
+      const inventoryСhain = ['Mutation', 'renewThing', 'User'];
+      const result = roles.some((role) => checkInventory(inventoryСhain, authData[role]));
+      expect(result).toBe(true);
+    });
+    test('should return correct results for AuthData guest', () => {
+      const roles = ['guest'];
+      const inventoryСhain = ['Mutation', 'signoutThing', 'User'];
+      const result = roles.some((role) => checkInventory(inventoryСhain, authData[role]));
+      expect(result).toBe(false);
+    });
   });
 });

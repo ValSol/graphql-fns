@@ -24,7 +24,9 @@ const createPushIntoThingMutationResolver = (
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
+    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
+      return null;
+    }
 
     const {
       whereOne,
@@ -86,7 +88,10 @@ const createPushIntoThingMutationResolver = (
     const thing2 = addIdsToThing(thing, thingConfig);
 
     if (allowSubscription) {
-      if (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig)) {
+      if (
+        !inAnyCase &&
+        (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig))
+      ) {
         const { pubsub } = context;
         if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
         const updatedFields = Object.keys(data);

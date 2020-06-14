@@ -33,7 +33,7 @@ const createThingArrayResolver = (
   if (!thingsQueryResolver) return null;
 
   const inventoryChain = nameSuffix
-    ? ['Query', `things${nameSuffix}`, name]
+    ? ['Query', `things${nameSuffix}`, nameRoot]
     : ['Query', 'things', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
