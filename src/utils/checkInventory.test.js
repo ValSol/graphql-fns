@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { AuthData, Inventory } from '../flowTypes';
+import type { InventoryByRoles, Inventory } from '../flowTypes';
 
 import checkInventory from './checkInventory';
 
@@ -333,8 +333,8 @@ describe('checkInventory', () => {
     expect(result).toBe(false);
   });
 
-  describe('checkInventory in authData', () => {
-    const authData: AuthData = {
+  describe('checkInventory in inventoryByRoles', () => {
+    const inventoryByRoles: InventoryByRoles = {
       '': {
         include: {
           Query: {
@@ -353,16 +353,16 @@ describe('checkInventory', () => {
       // admin: { include: { Query: null, Mutation: null } },
       // master: {},
     };
-    test('should return correct results for AuthData guest', () => {
+    test('should return correct results for InventoryByRoles guest', () => {
       const roles = [''];
       const inventoryСhain = ['Mutation', 'renewThing', 'User'];
-      const result = roles.some((role) => checkInventory(inventoryСhain, authData[role]));
+      const result = roles.some((role) => checkInventory(inventoryСhain, inventoryByRoles[role]));
       expect(result).toBe(true);
     });
-    test('should return correct results for AuthData guest', () => {
+    test('should return correct results for InventoryByRoles guest', () => {
       const roles = ['guest'];
       const inventoryСhain = ['Mutation', 'signoutThing', 'User'];
-      const result = roles.some((role) => checkInventory(inventoryСhain, authData[role]));
+      const result = roles.some((role) => checkInventory(inventoryСhain, inventoryByRoles[role]));
       expect(result).toBe(false);
     });
   });

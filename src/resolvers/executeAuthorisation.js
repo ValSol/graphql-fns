@@ -4,38 +4,46 @@ import type { ServersideConfig, ThreeSegmentInventoryChain } from '../flowTypes'
 import checkInventory from '../utils/checkInventory';
 
 const errMsg = (attr) =>
-  `"authData" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
+  `"inventoryByRoles" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   context: Object,
   serversideConfig: ServersideConfig,
 ) => {
-  const { authData, getCredentials } = serversideConfig;
-  if (!authData && !getCredentials) return true;
+  const { inventoryByRoles, getCredentials } = serversideConfig;
+  if (!inventoryByRoles && !getCredentials) return true;
 
-  if (!authData) {
-    throw new TypeError(errMsg('authData'));
+  if (!inventoryByRoles) {
+    throw new TypeError(errMsg('inventoryByRoles'));
   }
   if (!getCredentials) {
     throw new TypeError(errMsg('getCredentials'));
   }
-  if (!authData['']) {
+  if (!inventoryByRoles['']) {
     throw new TypeError(errMsg('Check for no roles have to be!'));
   }
 
-  if (checkInventory(inventoryChain, authData[''])) return true;
+  if (checkInventory(inventoryChain, inventoryByRoles[''])) return true;
 
   const { roles } = await getCredentials(context);
 
-  const allRoles = Object.keys(authData);
-  roles.forEach((role) => {
+  const allRoles = Object.keys(inventoryByRoles);
+  roles.forEach((compositeRole) => {
+    const [role] = compositeRole.split(':');
     if (!allRoles.includes(role)) {
-      throw new Error(`Got unused in "authData" role: "${role}"!`);
+      throw new Error(`Got unused in "inventoryByRoles" role: "${role}"!`);
     }
   });
 
-  const authResult = roles.some((role) => checkInventory(inventoryChain, authData[role]));
+  const authResult = roles.some((compositeRole) => {
+    const [role, thinName] = compositeRole.split(':');
+
+    return (
+      checkInventory(inventoryChain, inventoryByRoles[role]) &&
+      (!thinName || thinName === inventoryChain[2])
+    );
+  });
   const [methodType, methodName, configName] = inventoryChain;
 
   if (!authResult && methodType === 'Mutation') {
