@@ -13,8 +13,8 @@ describe('executeAuthorisation', () => {
     const serversideConfig: ServersideConfig = {};
 
     const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-    const expectedResult = true;
-    expect(result).toBe(expectedResult);
+    const expectedResult = [];
+    expect(result).toEqual(expectedResult);
   });
 
   describe('unauthentificated user', () => {
@@ -29,8 +29,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = true;
-      expect(result).toBe(expectedResult);
+      const expectedResult = [];
+      expect(result).toEqual(expectedResult);
     });
 
     test('should return false', async () => {
@@ -40,8 +40,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = false;
-      expect(result).toBe(expectedResult);
+      const expectedResult = null;
+      expect(result).toEqual(expectedResult);
     });
   });
 
@@ -58,8 +58,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = true;
-      expect(result).toBe(expectedResult);
+      const expectedResult = [];
+      expect(result).toEqual(expectedResult);
     });
 
     test('should return true', async () => {
@@ -69,8 +69,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = true;
-      expect(result).toBe(expectedResult);
+      const expectedResult = [];
+      expect(result).toEqual(expectedResult);
     });
 
     test('should return false', async () => {
@@ -80,8 +80,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = false;
-      expect(result).toBe(expectedResult);
+      const expectedResult = null;
+      expect(result).toEqual(expectedResult);
     });
   });
 
@@ -99,8 +99,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = true;
-      expect(result).toBe(expectedResult);
+      const expectedResult = [];
+      expect(result).toEqual(expectedResult);
     });
 
     test('should return false', async () => {
@@ -110,8 +110,8 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = false;
-      expect(result).toBe(expectedResult);
+      const expectedResult = null;
+      expect(result).toEqual(expectedResult);
     });
 
     test('should return true 2', async () => {
@@ -121,8 +121,25 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = true;
-      expect(result).toBe(expectedResult);
+      const expectedResult = [];
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should return true with filter', async () => {
+      const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
+      const getCredentials = () =>
+        Promise.resolve({
+          roles: [
+            'editor:Restaurant:{"editors":"12345"}',
+            'editor:Restaurant:{"cuisines":"Albanian"}',
+          ],
+        });
+
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+
+      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
+      const expectedResult = [{ editors: '12345' }, { cuisines: 'Albanian' }];
+      expect(result).toEqual(expectedResult);
     });
   });
 });

@@ -1,7 +1,7 @@
 // @flow
 import type { NearInput, NearMongodb } from '../../flowTypes';
 
-const composeWhereInput = (near: NearInput): NearMongodb => {
+const composeNearInput = (near: NearInput): NearMongodb => {
   const {
     geospatialField,
     coordinates: { lng, lat },
@@ -20,4 +20,4 @@ const composeWhereInput = (near: NearInput): NearMongodb => {
   };
 };
 
-export default composeWhereInput;
+export default composeNearInput;

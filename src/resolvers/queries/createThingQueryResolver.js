@@ -7,6 +7,7 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 
 type Args = { whereOne: { id: string } };
 type Context = { mongooseConn: Object };
@@ -23,10 +24,17 @@ const createThingQueryResolver = (
   const inventoryChain = ['Query', 'thing', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const { whereOne } = args;
 
@@ -40,7 +48,7 @@ const createThingQueryResolver = (
     if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in whereOne arg!');
     }
-    const conditions = whereOne.id ? { _id: whereOne.id } : whereOne;
+    const conditions = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 

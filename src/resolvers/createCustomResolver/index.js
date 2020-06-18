@@ -44,8 +44,9 @@ const createCustomResolver = (
   if (serversideConfig[methodKind] && serversideConfig[methodKind][methodName]) {
     const authDecorator = (func) => async (...argarray) => {
       const [parent, args, context, info] = argarray;
-      if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
-      const result = await func(parent, args, context, info);
+      const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+      if (!filter) return null;
+      const result = await func(parent, args, context, info, filter);
       return result;
     };
 
@@ -65,8 +66,9 @@ const createCustomResolver = (
   if (derivativeResolvers[methodKind] && derivativeResolvers[methodKind][methodName]) {
     const authDecorator = (func) => async (...argarray) => {
       const [parent, args, context, info] = argarray;
-      if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
-      const result = await func(parent, args, context, info);
+      const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+      if (!filter) return null;
+      const result = await func(parent, args, context, info, filter);
       return result;
     };
 

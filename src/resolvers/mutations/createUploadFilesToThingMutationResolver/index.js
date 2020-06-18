@@ -68,10 +68,17 @@ const createUploadFilesToThingMutationResolver = (
   );
   if (!pushIntoThingMutationResolver) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
     const {
       whereOne,
       data,
@@ -166,6 +173,7 @@ const createUploadFilesToThingMutationResolver = (
         { whereOne, data: forUpdate },
         context,
         info,
+        filter,
       );
     }
 
@@ -175,6 +183,7 @@ const createUploadFilesToThingMutationResolver = (
         { whereOne, data: forPush },
         context,
         info,
+        filter,
       );
     }
 

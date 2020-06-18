@@ -5,6 +5,7 @@ import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import processUpdateDuplexInputData from './processUpdateDuplexInputData';
 import processUpdateInputData from './processUpdateInputData';
 import processDeleteData from './processDeleteData';
@@ -25,10 +26,17 @@ const createUpdateThingMutationResolver = (
   const inventoryChain = ['Mutation', 'updateThing', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    ino: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const { mongooseConn } = context;
     const {
@@ -55,7 +63,8 @@ const createUpdateThingMutationResolver = (
     const mainData = processUpdateInputData(data, thingConfig);
 
     let _id = id; // eslint-disable-line no-underscore-dangle
-    const whereOne2 = id ? { _id } : whereOne;
+    // const whereOne2 = id ? { _id } : whereOne;
+    const whereOne2 = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
       ? {} // if subsciption ON - return empty projection - to get all fields of thing

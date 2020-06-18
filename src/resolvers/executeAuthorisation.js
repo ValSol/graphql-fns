@@ -12,7 +12,7 @@ const executeAuthorisation = async (
   serversideConfig: ServersideConfig,
 ) => {
   const { inventoryByRoles, getCredentials } = serversideConfig;
-  if (!inventoryByRoles && !getCredentials) return true;
+  if (!inventoryByRoles && !getCredentials) return [];
 
   if (!inventoryByRoles) {
     throw new TypeError(errMsg('inventoryByRoles'));
@@ -24,7 +24,7 @@ const executeAuthorisation = async (
     throw new TypeError(errMsg('Check for no roles have to be!'));
   }
 
-  if (checkInventory(inventoryChain, inventoryByRoles[''])) return true;
+  if (checkInventory(inventoryChain, inventoryByRoles[''])) return [];
 
   const { roles } = await getCredentials(context);
 
@@ -36,14 +36,22 @@ const executeAuthorisation = async (
     }
   });
 
-  const authResult = roles.some((compositeRole) => {
-    const [role, thinName] = compositeRole.split(':');
+  let authResult = null;
+  roles.forEach((compositeRole) => {
+    const [role, thingName, ...stringifiedFilter] = compositeRole.split(':');
 
-    return (
+    if (
       checkInventory(inventoryChain, inventoryByRoles[role]) &&
-      (!thinName || thinName === inventoryChain[2])
-    );
+      (!thingName || thingName === inventoryChain[2])
+    ) {
+      if (!authResult) authResult = [];
+      if (stringifiedFilter.length) {
+        const filter = JSON.parse(stringifiedFilter.join(':'));
+        authResult.push(filter);
+      }
+    }
   });
+
   const [methodType, methodName, configName] = inventoryChain;
 
   if (!authResult && methodType === 'Mutation') {

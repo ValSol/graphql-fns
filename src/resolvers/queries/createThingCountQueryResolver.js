@@ -5,7 +5,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTyp
 import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import executeAuthorisation from '../executeAuthorisation';
-import composeWhereInput from './composeWhereInput';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 
 type Args = {
   where?: Object,
@@ -23,10 +23,17 @@ const createThingCountQueryResolver = (
   const inventoryChain = ['Query', 'thingCount', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const { where } = args;
 
@@ -35,7 +42,7 @@ const createThingCountQueryResolver = (
     const thingSchema = createThingSchema(thingConfig, enums);
 
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    const conditions = composeWhereInput(where, thingConfig) || {};
+    const conditions = mergeWhereAndFilter(filter, where, thingConfig) || {};
 
     const result = await Thing.countDocuments(conditions);
 

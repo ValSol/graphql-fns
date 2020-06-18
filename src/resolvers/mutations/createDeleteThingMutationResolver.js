@@ -5,6 +5,7 @@ import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import processDeleteData from './processDeleteData';
 
 type Args = { whereOne: { id: string } };
@@ -22,10 +23,17 @@ const createDeleteThingMutationResolver = (
   const inventoryChain = ['Mutation', 'deleteThing', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const { whereOne } = args;
 
@@ -38,7 +46,8 @@ const createDeleteThingMutationResolver = (
     if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in where arg!');
     }
-    const conditions = whereOne.id ? { _id: whereOne.id } : whereOne;
+
+    const conditions = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const thing = await Thing.findOne(conditions, null, { lean: true });
     if (!thing) return null;

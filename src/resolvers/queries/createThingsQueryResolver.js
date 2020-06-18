@@ -7,9 +7,9 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import composeNearInput from './composeNearInput';
 import composeSortInput from './composeSortInput';
-import composeWhereInput from './composeWhereInput';
 
 type Args = {
   where?: Object,
@@ -31,10 +31,17 @@ const createThingsQueryResolver = (
   const inventoryChain = ['Query', 'things', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const { near, pagination, sort, where } = args;
 
@@ -49,7 +56,7 @@ const createThingsQueryResolver = (
 
     if (near) query = query.where(composeNearInput(near));
 
-    const where2 = composeWhereInput(where, thingConfig);
+    const where2 = mergeWhereAndFilter(filter, where, thingConfig);
     if (where2) query = query.where(where2);
 
     if (sort) {

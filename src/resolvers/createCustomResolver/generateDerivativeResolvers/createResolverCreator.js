@@ -23,8 +23,14 @@ const createResolverCreator = (queryOrMutationName: string, regularResolverCreat
     );
     if (!resolverCreator) return null;
 
-    const resolver = async (_: Object, args: Object, context: Object, info: Object) =>
-      regularResolver(_, args, context, info);
+    const resolver = async (
+      _: Object,
+      args: Object,
+      context: Object,
+      info: Object,
+      // transfer 'filter' into reguqlar resolver to know how to select data if inAnyCase = true
+      filter: Object,
+    ) => regularResolver(_, args, context, info, filter);
 
     return resolver;
   };

@@ -2,7 +2,7 @@
 
 import { Types } from 'mongoose';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
 const composeWhereInput = (where: Object, thingConfig: ThingConfig): null | Object => {
   if (!where || !Object.keys(where).length) return null;
@@ -50,6 +50,8 @@ const composeWhereInput = (where: Object, thingConfig: ThingConfig): null | Obje
       );
     } else if (idFields.includes(key) && where[key !== null]) {
       result[key] = Types.ObjectId(where[key]);
+    } else if (key === 'id') {
+      result._id = Types.ObjectId(where[key]); // eslint-disable-line no-underscore-dangle
     } else {
       result[key] = where[key];
     }

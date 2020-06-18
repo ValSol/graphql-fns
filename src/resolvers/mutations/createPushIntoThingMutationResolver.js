@@ -5,6 +5,7 @@ import checkInventory from '../../utils/checkInventory';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import processForPushEach from './processForPushEach';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
@@ -23,10 +24,17 @@ const createPushIntoThingMutationResolver = (
   const inventoryChain = ['Mutation', 'pushIntoThing', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: Object, args: Args, context: Context): Object => {
-    if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-      return null;
-    }
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Object,
+  ): Object => {
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    if (!filter) return null;
 
     const {
       whereOne,
@@ -41,6 +49,7 @@ const createPushIntoThingMutationResolver = (
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;
+    const whereOne3 = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     let previousThing = {};
     const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];
@@ -50,8 +59,13 @@ const createPushIntoThingMutationResolver = (
         ? {} // if subsciption ON - return empty projection - to get all fields of thing
         : { _id: 1 };
 
-      previousThing = await Thing.findOne(whereOne2, projection, { lean: true });
+      previousThing = await Thing.findOne(whereOne3, projection, { lean: true });
+      if (!previousThing) return null;
       _id = previousThing._id; // eslint-disable-line no-underscore-dangle
+    }
+    if (filter.length) {
+      const thing = Thing.findOne(whereOne3, { _id: 1 }, { lean: true });
+      if (!thing) return null;
     }
 
     const {
