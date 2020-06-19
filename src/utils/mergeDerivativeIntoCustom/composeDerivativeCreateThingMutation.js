@@ -9,7 +9,7 @@ const composeDerivativeCreateThingMutation = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.createThing && allow.createThing.includes(name) ? `create${name}${suffix}` : '',
+      allow[name] && allow[name].includes('createThing') ? `create${name}${suffix}` : '',
     argNames: () => ['data'],
     argTypes: ({ name }) => [`${name}CreateInput!`],
     type: ({ name }) => `${name}${suffix}!`,

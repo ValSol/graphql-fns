@@ -1517,12 +1517,11 @@ type Query {
     };
 
     const thingInTimeRangeDerivative: DerivativeAttributes = {
-      allow: { thing: ['Example'], things: ['Example'] },
+      allow: { Example: ['thing', 'things'] },
       suffix: 'InTimeRange',
-      config: (config) => ({
-        ...config,
-        dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
-      }),
+      addFields: {
+        Example: { dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }] },
+      },
     };
 
     const thingInTimeRangeQuery: ActionSignatureMethods = {

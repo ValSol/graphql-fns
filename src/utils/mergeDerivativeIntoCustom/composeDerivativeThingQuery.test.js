@@ -18,12 +18,11 @@ describe('composeDerivativeThingQuery', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { thing: ['Example'], things: ['Example'] },
+      allow: { Example: ['thing', 'things'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
+      Example: {
         floatFields: [{ name: 'floatField' }],
-      }),
+      },
     };
 
     const derivative = { ForCatalog };
@@ -37,7 +36,9 @@ describe('composeDerivativeThingQuery', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.thing && ForCatalog.allow.thing.includes(name) ? `${name}ForCatalog` : '',
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('thing')
+          ? `${name}ForCatalog`
+          : '',
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput`],
       type: ({ name }) => `${name}ForCatalog!`,

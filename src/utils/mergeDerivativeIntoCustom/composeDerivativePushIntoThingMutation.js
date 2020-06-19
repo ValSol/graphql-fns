@@ -9,7 +9,7 @@ const composeDerivativePushIntoThingMutation = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.pushIntoThing && allow.pushIntoThing.includes(name) ? `pushInto${name}${suffix}` : '',
+      allow[name] && allow[name].includes('pushIntoThing') ? `pushInto${name}${suffix}` : '',
     argNames: () => ['whereOne', 'data'],
     argTypes: ({ name }) => [`${name}WhereOneInput!`, `PushInto${name}Input!`],
     type: ({ name }) => `${name}${suffix}!`,

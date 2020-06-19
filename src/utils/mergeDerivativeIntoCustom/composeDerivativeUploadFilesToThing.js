@@ -9,7 +9,7 @@ const composeDerivativeUploadFilesToThing = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.uploadFilesToThing && allow.uploadFilesToThing.includes(name)
+      allow[name] && allow[name].includes('uploadFilesToThing')
         ? `uploadFilesTo${name}${suffix}`
         : '',
     argNames: () => ['whereOne', 'data', 'files', 'options'],

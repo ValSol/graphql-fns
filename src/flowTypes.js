@@ -334,6 +334,16 @@ export type Inventory = {
   +exclude?: null | InverntoryOptions,
 };
 
+type NotFieldyThingConfigFields = {
+  name: string,
+  embedded?: boolean,
+  custom?: boolean,
+  pagination?: boolean,
+  search?: $ReadOnlyArray<string>,
+  form?: $ReadOnlyArray<FormField>,
+  list?: $ReadOnlyArray<ListColumn>,
+};
+
 export type GeneralConfig = {
   +thingConfigs: { [thingConfigName: string]: ThingConfig },
   +custom?: {
@@ -384,19 +394,26 @@ export type GeneralConfig = {
   +derivative?: {
     // whole derivative name = thingName (baseName) + derivativeName
     +[derivativeName: string]: {
-      +allow: {
-        // queries & mutations whith appropriate thingNames for which generatied derivative queries & mutations
-        thing?: Array<string>,
-        things?: Array<string>,
-        createThing?: Array<string>,
-        createManyThings?: Array<string>,
-        importThings?: Array<string>,
-        pushIntoThing?: Array<string>,
-        updateThing?: Array<string>,
-        uploadFilesToThing?: Array<string>,
-      },
       +suffix: string,
-      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+      +allow: {
+        // eslint-disable-next-line flowtype/generic-spacing
+        [thingName: string]: Array<
+          | 'thing'
+          | 'things'
+          | 'createThing'
+          | 'createManyThings'
+          | 'importThings'
+          | 'pushIntoThing'
+          | 'updateThing'
+          | 'uploadFilesToThing',
+        >,
+      },
+      +includeFields?: { [thingName: string]: Array<string> },
+      +excludeFields?: { [thingName: string]: Array<string> },
+      +addFields?: {
+        [thingName: string]: $Diff<ThingConfig, NotFieldyThingConfigFields>,
+      },
+      +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
     },
   },
   +enums?: Enums,
@@ -459,17 +476,24 @@ export type ObjectSignatureMethods = {
 export type DerivativeAttributes = {
   +suffix: string,
   +allow: {
-    // queries & mutations whith appropriate thingNames for which generatied derivative queries & mutations
-    thing?: Array<string>,
-    things?: Array<string>,
-    createThing?: Array<string>,
-    createManyThings?: Array<string>,
-    importThings?: Array<string>,
-    pushIntoThing?: Array<string>,
-    updateThing?: Array<string>,
-    uploadFilesToThing?: Array<string>,
+    // eslint-disable-next-line flowtype/generic-spacing
+    [thingName: string]: Array<
+      | 'thing'
+      | 'things'
+      | 'createThing'
+      | 'createManyThings'
+      | 'importThings'
+      | 'pushIntoThing'
+      | 'updateThing'
+      | 'uploadFilesToThing',
+    >,
   },
-  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+  +includeFields?: { [thingName: string]: Array<string> },
+  +excludeFields?: { [thingName: string]: Array<string> },
+  +addFields?: {
+    [thingName: string]: $Diff<ThingConfig, NotFieldyThingConfigFields>,
+  },
+  +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];

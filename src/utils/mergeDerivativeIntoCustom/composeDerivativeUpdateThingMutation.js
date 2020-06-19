@@ -9,7 +9,7 @@ const composeDerivativeUpdateThingMutation = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.updateThing && allow.updateThing.includes(name) ? `update${name}${suffix}` : '',
+      allow[name] && allow[name].includes('updateThing') ? `update${name}${suffix}` : '',
     argNames: () => ['whereOne', 'data'],
     argTypes: ({ name }) => [`${name}WhereOneInput!`, `${name}UpdateInput!`],
     type: ({ name }) => `${name}${suffix}!`,

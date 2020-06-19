@@ -16,12 +16,13 @@ describe('composeDerivativeConfigByName', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { thing: ['Example'], things: ['Example'] },
+      allow: { Example: ['thing', 'things'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
-        floatFields: [{ name: 'floatField' }],
-      }),
+      addFields: {
+        Example: {
+          floatFields: [{ name: 'floatField' }],
+        },
+      },
     };
 
     const derivative = { ForCatalog };

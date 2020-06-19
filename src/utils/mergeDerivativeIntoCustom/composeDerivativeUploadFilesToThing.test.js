@@ -19,12 +19,11 @@ describe('composeDerivativeUploadFilesToThing', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { uploadFilesToThing: ['Example'] },
+      allow: { Example: ['uploadFilesToThing'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
+      Example: {
         floatFields: [{ name: 'floatField' }],
-      }),
+      },
     };
 
     const derivative = { ForCatalog };
@@ -38,7 +37,7 @@ describe('composeDerivativeUploadFilesToThing', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.uploadFilesToThing && ForCatalog.allow.uploadFilesToThing.includes(name)
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('uploadFilesToThing')
           ? `uploadFilesTo${name}ForCatalog`
           : '',
       argNames: () => ['whereOne', 'data', 'files', 'options'],

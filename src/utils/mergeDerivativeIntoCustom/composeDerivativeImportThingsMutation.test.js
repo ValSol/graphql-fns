@@ -22,12 +22,11 @@ describe('composeDerivativeImportThingsMutation', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { importThings: ['Example'] },
+      allow: { Example: ['importThings'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
+      Example: {
         floatFields: [{ name: 'floatField' }],
-      }),
+      },
     };
 
     const derivative = { ForCatalog };
@@ -41,7 +40,7 @@ describe('composeDerivativeImportThingsMutation', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.importThings && ForCatalog.allow.importThings.includes(name)
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('importThings')
           ? `import${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['file', 'options'],

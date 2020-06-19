@@ -21,7 +21,7 @@ const composeDerivativeThingsQuery = ({
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => ({
   name: ({ name }) =>
-    allow.things && allow.things.includes(name) ? `${pluralize(name)}${suffix}` : '',
+    allow[name] && allow[name].includes('things') ? `${pluralize(name)}${suffix}` : '',
   argNames: (thingConfig, generalConfig) => {
     const result = ['where'];
 

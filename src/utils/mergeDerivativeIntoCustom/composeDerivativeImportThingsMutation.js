@@ -12,7 +12,7 @@ const composeDerivativeImportThingsMutation = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.importThings && allow.importThings.includes(name)
+      allow[name] && allow[name].includes('importThings')
         ? `import${pluralize(name)}${suffix}`
         : '',
     argNames: () => ['file', 'options'],

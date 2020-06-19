@@ -19,12 +19,11 @@ describe('composeDerivativeCreateThingMutation', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { createThing: ['Example'] },
+      allow: { Example: ['createThing'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
+      Example: {
         floatFields: [{ name: 'floatField' }],
-      }),
+      },
     };
 
     const derivative = { ForCatalog };
@@ -38,7 +37,7 @@ describe('composeDerivativeCreateThingMutation', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.createThing && ForCatalog.allow.createThing.includes(name)
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('createThing')
           ? `create${name}ForCatalog`
           : '',
       argNames: () => ['data'],

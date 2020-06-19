@@ -12,7 +12,7 @@ const composeDerivativeCreateManyThingsMutation = ({
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
     name: ({ name }) =>
-      allow.createManyThings && allow.createManyThings.includes(name)
+      allow[name] && allow[name].includes('createManyThings')
         ? `createMany${pluralize(name)}${suffix}`
         : '',
     argNames: () => ['data'],

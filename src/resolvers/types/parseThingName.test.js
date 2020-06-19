@@ -28,9 +28,13 @@ describe('parseThingName', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    allow: { thing: ['Example'], things: ['Example'] },
+    allow: { Example: ['thing', 'things'] },
     suffix: 'ForCatalog',
-    config: (config) => config,
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
+    },
   };
 
   const thingConfigs = { Example: thingConfig };

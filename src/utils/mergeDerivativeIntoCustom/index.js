@@ -3,7 +3,13 @@ import type { Custom, GeneralConfig } from '../../flowTypes';
 
 import composeDerivativeThingQuery from './composeDerivativeThingQuery';
 import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
+
+import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
+import composeDerivativeCreateThingMutation from './composeDerivativeCreateThingMutation';
+import composeDerivativeImportThingsMutation from './composeDerivativeImportThingsMutation';
 import composeDerivativePushIntoThingMutation from './composeDerivativePushIntoThingMutation';
+import composeDerivativeUpdateThingMutation from './composeDerivativeUpdateThingMutation';
+import composeDerivativeUploadFilesToThing from './composeDerivativeUploadFilesToThing';
 
 const store = {};
 
@@ -15,13 +21,23 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
 
   if (!derivative) return custom || null;
 
+  const getAllowedMethods = (allow) =>
+    Object.keys(allow).reduce((prev, thingName) => {
+      allow[thingName].forEach((methodName) => {
+        prev[methodName] = true; // eslint-disable-line no-param-reassign
+      });
+      return prev;
+    }, {});
+
   const Query = Object.keys(derivative).reduce((prev, suffix) => {
     const { allow } = derivative[suffix];
-    if (allow.thing) {
+    const allowedMethods = getAllowedMethods(allow);
+
+    if (allowedMethods.thing) {
       // eslint-disable-next-line no-param-reassign
       prev[`thing${suffix}`] = composeDerivativeThingQuery(derivative[suffix]);
     }
-    if (allow.things) {
+    if (allowedMethods.things) {
       // eslint-disable-next-line no-param-reassign
       prev[`things${suffix}`] = composeDerivativeThingsQuery(derivative[suffix]);
     }
@@ -31,9 +47,33 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
 
   const Mutation = Object.keys(derivative).reduce((prev, suffix) => {
     const { allow } = derivative[suffix];
-    if (allow.pushIntoThing) {
+    const allowedMethods = getAllowedMethods(allow);
+
+    if (allowedMethods.createManyThings) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`createManyThings${suffix}`] = composeDerivativeCreateManyThingsMutation(
+        derivative[suffix],
+      );
+    }
+    if (allowedMethods.createThing) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`createThing${suffix}`] = composeDerivativeCreateThingMutation(derivative[suffix]);
+    }
+    if (allowedMethods.importThings) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`importThings${suffix}`] = composeDerivativeImportThingsMutation(derivative[suffix]);
+    }
+    if (allowedMethods.pushIntoThing) {
       // eslint-disable-next-line no-param-reassign
       prev[`pushIntoThing${suffix}`] = composeDerivativePushIntoThingMutation(derivative[suffix]);
+    }
+    if (allowedMethods.updateThing) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`updateThing${suffix}`] = composeDerivativeUpdateThingMutation(derivative[suffix]);
+    }
+    if (allowedMethods.uploadFilesToThing) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`uploadFilesToThing${suffix}`] = composeDerivativeUploadFilesToThing(derivative[suffix]);
     }
     return prev;
   }, {});

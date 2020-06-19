@@ -19,12 +19,11 @@ describe('composeDerivativePushIntoThingMutation', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { pushIntoThing: ['Example'] },
+      allow: { Example: ['pushIntoThing'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
+      Example: {
         floatFields: [{ name: 'floatField' }],
-      }),
+      },
     };
 
     const derivative = { ForCatalog };
@@ -38,7 +37,7 @@ describe('composeDerivativePushIntoThingMutation', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.pushIntoThing && ForCatalog.allow.pushIntoThing.includes(name)
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('pushIntoThing')
           ? `pushInto${name}ForCatalog`
           : '',
       argNames: () => ['whereOne', 'data'],

@@ -22,12 +22,13 @@ describe('composeDerivativeCreateManyThingsMutation', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { createManyThings: ['Example'] },
+      allow: { Example: ['createManyThings'] },
       suffix: 'ForCatalog',
-      config: (config) => ({
-        ...config,
-        floatFields: [{ name: 'floatField' }],
-      }),
+      addFields: {
+        Example: {
+          floatFields: [{ name: 'floatField' }],
+        },
+      },
     };
 
     const derivative = { ForCatalog };
@@ -41,7 +42,7 @@ describe('composeDerivativeCreateManyThingsMutation', () => {
 
     const expectedResult = {
       name: ({ name }) =>
-        ForCatalog.allow.createManyThings && ForCatalog.allow.createManyThings.includes(name)
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('createManyThings')
           ? `createMany${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['data'],

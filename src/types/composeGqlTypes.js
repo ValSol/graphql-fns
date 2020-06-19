@@ -5,7 +5,7 @@ import type { GeneralConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from './composeActionSignature';
-import composeDerivativeConfig from './composeDerivativeConfig';
+import composeDerivativeConfig from '../utils/composeDerivativeConfig';
 import composeObjectSignature from './composeObjectSignature';
 import createThingType from './createThingType';
 import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
