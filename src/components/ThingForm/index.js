@@ -102,16 +102,16 @@ const ThingForm = (props: Props) => {
   }, [id, filtered, name, pathname, toDelete]);
 
   const exclude = {
-    id: null,
-    createdAt: null,
-    updatedAt: null,
+    id: true,
+    createdAt: true,
+    updatedAt: true,
   };
   const thingQuery = gql(composeQuery('thing', thingConfig, generalConfig, { exclude }));
   const thingMutation = id // eslint-disable-line no-nested-ternary
     ? toDelete
       ? gql(composeMutation('deleteThing', thingConfig, generalConfig, { exclude }))
       : gql(composeMutation('updateThing', thingConfig, generalConfig, { exclude }))
-    : gql(composeMutation('createThing', thingConfig, generalConfig, { include: { id: null } }));
+    : gql(composeMutation('createThing', thingConfig, generalConfig, { include: { id: true } }));
 
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary

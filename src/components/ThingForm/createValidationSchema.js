@@ -149,7 +149,7 @@ const createValidationSchema = (
           );
         }
         const query = gql(
-          composeQuery('thing', thingConfig, generalConfig, { include: { id: null } }),
+          composeQuery('thing', thingConfig, generalConfig, { include: { id: true } }),
         );
         // eslint-disable-next-line no-param-reassign
         prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
@@ -169,7 +169,7 @@ const createValidationSchema = (
       fieldsObject[name].kind === 'relationalFields'
     ) {
       const { config } = fieldsObject[name].attributes;
-      const query = gql(composeQuery('thing', config, generalConfig, { include: { id: null } }));
+      const query = gql(composeQuery('thing', config, generalConfig, { include: { id: true } }));
       const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign
       prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async function test2(value) {

@@ -127,14 +127,14 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include aliases', () => {
       const include = {
-        'textFieldAlias: textField': null,
-        'dateTimeFieldAlias: dateTimeField': null,
-        'intFieldAlias: intField': null,
-        'floatFieldAlias: floatField': null,
-        'booleanFieldAlias: booleanField': null,
-        'enumFieldAlias: enumField': null,
-        'geospatialPointAlias: geospatialPoint': null,
-        'geospatialPolygonAlias: geospatialPolygon': null,
+        'textFieldAlias: textField': true,
+        'dateTimeFieldAlias: dateTimeField': true,
+        'intFieldAlias: intField': true,
+        'floatFieldAlias: floatField': true,
+        'booleanFieldAlias: booleanField': true,
+        'enumFieldAlias: enumField': true,
+        'geospatialPointAlias: geospatialPoint': true,
+        'geospatialPolygonAlias: geospatialPolygon': true,
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
@@ -170,10 +170,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include option 1', () => {
       const include = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: { ring: { lng: null } } },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: { ring: { lng: true } } },
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
@@ -197,10 +197,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with exclude option 1', () => {
       const exclude = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: { ring: { lng: null } } },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: { ring: { lng: true } } },
       };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
@@ -235,10 +235,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with exclude option 2', () => {
       const exclude = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: { ring: null } },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: { ring: true } },
       };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
@@ -268,10 +268,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with exclude option 3', () => {
       const exclude = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: null },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: true },
       };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
@@ -301,10 +301,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include option 2', () => {
       const include = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { internalRings: { ring: { lng: null } } },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { internalRings: { ring: { lng: true } } },
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
@@ -328,10 +328,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include option 3', () => {
       const include = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: { ring: null } },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: { ring: true } },
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
@@ -356,10 +356,10 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include option 4', () => {
       const include = {
-        textField: null,
-        intField: null,
-        geospatialPoint: { lng: null },
-        geospatialPolygon: { externalRing: null },
+        textField: true,
+        intField: true,
+        geospatialPoint: { lng: true },
+        geospatialPolygon: { externalRing: true },
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
@@ -451,7 +451,7 @@ describe('composeFields', () => {
     };
 
     test('should compose embedded fields with alias', () => {
-      const include = { 'embeddedField1Alias: embeddedField1': null };
+      const include = { 'embeddedField1Alias: embeddedField1': true };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'embeddedField1Alias: embeddedField1 {',
@@ -475,8 +475,8 @@ describe('composeFields', () => {
     test('should compose embedded fields with alias 2', () => {
       const include = {
         embeddedField1: {
-          'textField1Alias: textField1': null,
-          'embeddedField2Alias: embeddedField2': null,
+          'textField1Alias: textField1': true,
+          'embeddedField2Alias: embeddedField2': true,
         },
       };
       const options: ClientFieldsOptions = { shift: 0, include };
@@ -524,7 +524,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with include option 1', () => {
-      const include = { textField: null };
+      const include = { textField: true };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['textField'];
 
@@ -533,7 +533,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with include option 2', () => {
-      const include = { embeddedField1: null };
+      const include = { embeddedField1: true };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'embeddedField1 {',
@@ -555,7 +555,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with include option 3', () => {
-      const include = { embeddedField1: { textField1: null } };
+      const include = { embeddedField1: { textField1: true } };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['embeddedField1 {', '  textField1', '}'];
 
@@ -564,7 +564,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with include option 4', () => {
-      const include = { embeddedField1: { embeddedField2: { textField2: null } } };
+      const include = { embeddedField1: { embeddedField2: { textField2: true } } };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
         'embeddedField1 {',
@@ -579,7 +579,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with exclude option 1', () => {
-      const exclude = { embeddedField1: null };
+      const exclude = { embeddedField1: true };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = ['id', 'createdAt', 'updatedAt', 'textField'];
 
@@ -588,7 +588,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with exclude option 2', () => {
-      const exclude = { embeddedField1: { embeddedField2: null } };
+      const exclude = { embeddedField1: { embeddedField2: true } };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
@@ -606,7 +606,7 @@ describe('composeFields', () => {
     });
 
     test('should compose embedded fields with exclude option 3', () => {
-      const exclude = { embeddedField1: { embeddedField2: { embeddedField3: null } } };
+      const exclude = { embeddedField1: { embeddedField2: { embeddedField3: true } } };
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = [
         'id',
@@ -953,9 +953,9 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 0 & include option 1', () => {
       const include = {
-        id: null,
-        friends: null,
-        parent: null,
+        id: true,
+        friends: true,
+        parent: true,
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
       const expectedResult = ['id', 'friends {', '  id', '}', 'parent {', '  id', '}'];
@@ -966,10 +966,10 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 2 & include option 1', () => {
       const include = {
-        id: null,
-        friends: { id: null },
-        parent: { firstName: null },
-        children: { secondName: null },
+        id: true,
+        friends: { id: true },
+        parent: { firstName: true },
+        children: { secondName: true },
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
@@ -991,9 +991,9 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 0 & include option with aliases', () => {
       const include = {
-        id: null,
-        'friendsAlias: friends': null,
-        'parentAlias: parent': null,
+        id: true,
+        'friendsAlias: friends': true,
+        'parentAlias: parent': true,
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
       const expectedResult = [
@@ -1012,10 +1012,10 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 2 & include option with aliases', () => {
       const include = {
-        id: null,
-        'friendsAlias: friends': { id: null },
-        'parentAlias: parent': { firstName: null },
-        'childrenAlias: children': { secondName: null },
+        id: true,
+        'friendsAlias: friends': { id: true },
+        'parentAlias: parent': { firstName: true },
+        'childrenAlias: children': { secondName: true },
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
@@ -1037,10 +1037,10 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 2 & include option 2', () => {
       const include = {
-        id: null,
-        friends: { id: null, friends: null },
-        parent: { firstName: null, parent: null },
-        children: { secondName: null, children: null },
+        id: true,
+        friends: { id: true, friends: true },
+        parent: { firstName: true, parent: true },
+        children: { secondName: true, children: true },
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
@@ -1110,9 +1110,9 @@ describe('composeFields', () => {
 
     test('should compose relatioanl and duplex fields with depth: 2 & exclude option', () => {
       const exclude = {
-        friends: { parent: null, children: null },
-        parent: { friends: null, children: null },
-        children: { friends: null, parent: null },
+        friends: { parent: true, children: true },
+        parent: { friends: true, children: true },
+        children: { friends: true, parent: true },
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 2, exclude };
       const expectedResult = [

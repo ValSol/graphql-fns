@@ -3,15 +3,19 @@
 import type { ThingConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
 
 // accessorial function
-const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
-  (!include ||
-    Object.keys(include)
-      .map((key) => key.trim().split(/\s+/).slice(-1)[0])
-      .includes(name)) &&
-  (!exclude || !(exclude[name] === null));
+const includeField = (name: string, include: void | Object, exclude: void | Object): boolean => {
+  return (
+    (include === undefined ||
+      include === true ||
+      Object.keys(include)
+        .map((key) => key.trim().split(/\s+/).slice(-1)[0])
+        .includes(name)) &&
+    (exclude === undefined || exclude === true || !(exclude[name] === true))
+  );
+};
 
 const findNameWithAlias = (name: string, include: void | Object): string =>
-  include
+  include && include !== true
     ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs doesn't know about that
       Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
