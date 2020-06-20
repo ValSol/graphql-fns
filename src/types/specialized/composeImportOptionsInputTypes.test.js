@@ -32,7 +32,7 @@ describe('composeImportOptionsInputTypes', () => {
     const inventory: Inventory = {
       exclude: {
         Mutation: {
-          importThings: null,
+          importThings: true,
         },
       },
     };
@@ -51,7 +51,7 @@ describe('composeImportOptionsInputTypes', () => {
     const inventory: Inventory = {
       exclude: {
         Mutation: {
-          importThings: null,
+          importThings: true,
         },
       },
     };

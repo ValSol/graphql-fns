@@ -306,7 +306,7 @@ describe('graphql schema', () => {
     });
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
-    generalConfig.inventory = { include: { Mutation: null, Query: { thing: null, things: null } } };
+    generalConfig.inventory = { include: { Mutation: true, Query: { thing: true, things: true } } };
     let typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     let resolvers = composeGqlResolvers(generalConfig);
     let schema = makeExecutableSchema({
@@ -320,7 +320,7 @@ describe('graphql schema', () => {
 
     test('test schema with only createThing mutations in inventory', () => {
       generalConfig.inventory = {
-        include: { Mutation: { createThing: null }, Query: { thing: null, things: null } },
+        include: { Mutation: { createThing: true }, Query: { thing: true, things: true } },
       };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
@@ -334,7 +334,7 @@ describe('graphql schema', () => {
 
     test('test schema with only createPerson mutations in inventory', () => {
       generalConfig.inventory = {
-        include: { Mutation: { createThing: ['Person'] }, Query: { thing: null, things: null } },
+        include: { Mutation: { createThing: ['Person'] }, Query: { thing: true, things: true } },
       };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
@@ -347,7 +347,7 @@ describe('graphql schema', () => {
     });
 
     test('test schema with only quries in inventory', () => {
-      generalConfig.inventory = { include: { Query: null } };
+      generalConfig.inventory = { include: { Query: true } };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);
@@ -359,7 +359,7 @@ describe('graphql schema', () => {
     });
 
     test('test schema with only thing query in inventory', () => {
-      generalConfig.inventory = { include: { Query: { thing: null, things: null } } };
+      generalConfig.inventory = { include: { Query: { thing: true, things: true } } };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);

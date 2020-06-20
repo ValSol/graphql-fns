@@ -309,29 +309,38 @@ export type Enums = $ReadOnlyArray<{|
   +enum: $ReadOnlyArray<string>,
 |}>;
 
-type thingNamesList = null | $ReadOnlyArray<string>;
+type thingNamesList = true | $ReadOnlyArray<string>;
 
 type InverntoryOptions = {
-  +Query?: null | {
-    // 'queryName' may be: thing, things, thingCount, or any custom query names
-    +[queryName: string]: thingNamesList,
-  },
-  +Mutation?: null | {
-    // 'mutationName' may be: 'createThing', 'createManyThings', 'updateThing', 'deleteThing', ...
-    // ... 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+  // eslint-disable-next-line flowtype/space-after-type-colon
+  +Query?:
+    | true
+    | {
+        // 'queryName' may be: thing, things, thingCount, or any custom query names
+        +[queryName: string]: thingNamesList,
+      },
+  // eslint-disable-next-line flowtype/space-after-type-colon
+  +Mutation?:
+    | true
+    | {
+        // 'mutationName' may be: 'createThing', 'createManyThings', 'updateThing', 'deleteThing', ...
+        // ... 'pushIntoThing', 'uploadFilesToThing' or custom mutation
 
-    +[mutationName: string]: thingNamesList,
-  },
-  +Subscription?: null | {
-    +createdThing?: thingNamesList,
-    +updatedThing?: thingNamesList,
-    +deletedThing?: thingNamesList,
-  },
+        +[mutationName: string]: thingNamesList,
+      },
+  // eslint-disable-next-line flowtype/space-after-type-colon
+  +Subscription?:
+    | true
+    | {
+        +createdThing?: thingNamesList,
+        +updatedThing?: thingNamesList,
+        +deletedThing?: thingNamesList,
+      },
 };
 
 export type Inventory = {
-  +include?: null | InverntoryOptions,
-  +exclude?: null | InverntoryOptions,
+  +include?: true | InverntoryOptions,
+  +exclude?: true | InverntoryOptions,
 };
 
 type NotFieldyThingConfigFields = {

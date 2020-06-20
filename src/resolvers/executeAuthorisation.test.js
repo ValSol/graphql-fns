@@ -89,7 +89,7 @@ describe('executeAuthorisation', () => {
     const inventoryByRoles = {
       '': { include: { Query: { thingForView: ['Post'] } } },
       guest: { include: { Query: { thingsForView: ['Post'] } } },
-      editor: { include: { Query: { thingsForEdit: null } } },
+      editor: { include: { Query: { thingsForEdit: true } } },
     };
 
     test('should return true', async () => {

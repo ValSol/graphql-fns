@@ -8,7 +8,7 @@ const checkInventory = (inventoryСhain: InventoryСhain, inventory: Inventory =
   let currentInclude: Object = include;
   let currentExclude: Object = exclude;
   while (level < inventoryСhain.length) {
-    if (currentInclude) {
+    if (currentInclude && currentInclude !== true) {
       const keys = Array.isArray(currentInclude) ? currentInclude : Object.keys(currentInclude);
       if (!keys.includes(inventoryСhain[level])) return false;
       if (level + 1 < inventoryСhain.length) {
@@ -16,15 +16,15 @@ const checkInventory = (inventoryСhain: InventoryСhain, inventory: Inventory =
       }
     }
 
-    if (currentExclude) {
+    if (currentExclude && currentExclude !== true) {
       const keys = Array.isArray(currentExclude) ? currentExclude : Object.keys(currentExclude);
       if (keys.includes(inventoryСhain[level])) {
         currentExclude = Array.isArray(currentExclude)
-          ? null
+          ? true
           : currentExclude[inventoryСhain[level]];
-        if (currentExclude === null) return false;
+        if (currentExclude === true) return false;
       } else {
-        currentExclude = null;
+        currentExclude = true;
       }
     }
 

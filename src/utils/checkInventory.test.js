@@ -46,7 +46,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 1 level', () => {
-    const inventory: Inventory = { include: { Query: null } };
+    const inventory: Inventory = { include: { Query: true } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -86,7 +86,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 2 levels', () => {
-    const inventory: Inventory = { include: { Query: { thing: null } } };
+    const inventory: Inventory = { include: { Query: { thing: true } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -186,7 +186,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 1 level', () => {
-    const inventory: Inventory = { exclude: { Query: null } };
+    const inventory: Inventory = { exclude: { Query: true } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -226,7 +226,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 2 levels', () => {
-    const inventory: Inventory = { exclude: { Query: { thing: null } } };
+    const inventory: Inventory = { exclude: { Query: { thing: true } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -326,7 +326,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 3 levels', () => {
-    const inventory: Inventory = { exclude: { Query: { thingCount: null } } };
+    const inventory: Inventory = { exclude: { Query: { thingCount: true } } };
 
     const inventoryСhain = ['Query', 'thingCount', 'Invoice'];
     const result = checkInventory(inventoryСhain, inventory);
@@ -338,19 +338,19 @@ describe('checkInventory', () => {
       '': {
         include: {
           Query: {
-            thingForCatalog: null,
-            thingsForCatalog: null,
+            thingForCatalog: true,
+            thingsForCatalog: true,
           },
-          Mutation: { renewThing: null, signinThing: null },
+          Mutation: { renewThing: true, signinThing: true },
         },
       },
       guest: {
         include: {
-          Mutation: { renewThing: null, signinThing: null },
+          Mutation: { renewThing: true, signinThing: true },
         },
       },
       // editor: {},
-      // admin: { include: { Query: null, Mutation: null } },
+      // admin: { include: { Query: true, Mutation: true } },
       // master: {},
     };
     test('should return correct results for InventoryByRoles guest', () => {
