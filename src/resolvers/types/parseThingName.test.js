@@ -31,9 +31,9 @@ describe('parseThingName', () => {
     allow: { Example: ['thing', 'things'] },
     suffix: 'ForCatalog',
     addFields: {
-      Example: {
+      Example: () => ({
         floatFields: [{ name: 'floatField' }],
-      },
+      }),
     },
   };
 

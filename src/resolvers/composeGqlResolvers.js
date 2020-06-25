@@ -238,24 +238,25 @@ const composeGqlResolvers = (
       if (duplexFields || geospatialFields || relationalFields) {
         // eslint-disable-next-line no-param-reassign
         prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
-
-        // process derivative objects fields
-        Object.keys(derivativeConfigs).forEach((derivativeKey) => {
-          const derivativeConfig = composeDerivativeConfig(
-            derivativeConfigs[derivativeKey],
-            thingConfig,
-            generalConfig,
-          );
-          if (derivativeConfig) {
-            // eslint-disable-next-line no-param-reassign
-            prev[`${name}${derivativeKey}`] = composeThingResolvers(
-              derivativeConfig,
-              generalConfig,
-              serversideConfig,
-            );
-          }
-        });
       }
+
+      // process derivative objects fields
+      Object.keys(derivativeConfigs).forEach((derivativeKey) => {
+        const derivativeConfig = composeDerivativeConfig(
+          derivativeConfigs[derivativeKey],
+          thingConfig,
+          generalConfig,
+        );
+        if (derivativeConfig) {
+          // eslint-disable-next-line no-param-reassign
+          prev[`${name}${derivativeKey}`] = composeThingResolvers(
+            derivativeConfig,
+            generalConfig,
+            serversideConfig,
+          );
+        }
+      });
+
       return prev;
     }, resolvers);
 

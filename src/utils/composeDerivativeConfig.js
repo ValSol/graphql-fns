@@ -61,16 +61,15 @@ const composeDerivativeConfig = (
 
   if (addFields && addFields[rootThingName]) {
     const fieldsToAddObject = composeFieldsObject({
-      ...addFields[rootThingName],
+      ...addFields[rootThingName](generalConfig),
       name: `${rootThingName}${suffix}`,
     });
 
     Object.keys(fieldsToAddObject).forEach((fieldName) => {
       if (fieldsObject[fieldName]) {
         const { kind } = fieldsObject[fieldName];
-        // check for eliminate flowjs error
-        if (!thingConfig[kind]) throw new TypeError('Fields have to be set!');
-        thingConfig[kind].filter(({ name }) => name !== fieldName);
+        // $FlowFixMe
+        thingConfig[kind] = thingConfig[kind].filter(({ name }) => name !== fieldName);
       }
       const { kind, attributes: fieldToAdd } = fieldsToAddObject[fieldName];
       if (thingConfig[kind]) {

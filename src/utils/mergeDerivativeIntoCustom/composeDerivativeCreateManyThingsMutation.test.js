@@ -25,9 +25,9 @@ describe('composeDerivativeCreateManyThingsMutation', () => {
       allow: { Example: ['createManyThings'] },
       suffix: 'ForCatalog',
       addFields: {
-        Example: {
+        Example: () => ({
           floatFields: [{ name: 'floatField' }],
-        },
+        }),
       },
     };
 

@@ -62,10 +62,10 @@ describe('composeDerivativeThingsQuery', () => {
 
     suffix: 'ForCatalog',
     addFields: {
-      Example: addedFields,
-      SortExample: addedFields,
-      PaginationExample: addedFields,
-      NearExample: addedFields,
+      Example: () => addedFields,
+      SortExample: () => addedFields,
+      PaginationExample: () => addedFields,
+      NearExample: () => addedFields,
     },
   };
 
