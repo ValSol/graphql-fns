@@ -145,6 +145,63 @@ export type ListColumn = {|
   +width: number, // pixels
 |};
 
+type SimplifiedDuplexField = {
+  +name: string,
+  +array?: boolean,
+  +configName: string,
+  +index?: boolean,
+  +oppositeName: string,
+  +required?: boolean,
+  +unique?: boolean,
+};
+
+type SimplifiedEmbeddedField = {
+  +name: string,
+  +required?: boolean,
+  +array?: boolean,
+  +configName: string,
+};
+
+type SimplifiedFileField = {
+  +name: string,
+  +required?: boolean,
+  +array?: boolean,
+  +configName: string,
+};
+
+type SimplifiedRelationalField = {
+  +name: string,
+  +array?: boolean,
+  +configName: string,
+  +index?: boolean,
+  +unique?: boolean,
+  +required?: boolean,
+};
+
+export type SimplifiedThingConfig = {
+  name: string,
+  embedded?: boolean, // true if related to embeddedFields OR fileFields
+  custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
+  pagination?: boolean,
+
+  duplexFields?: $ReadOnlyArray<SimplifiedDuplexField>,
+  embeddedFields?: $ReadOnlyArray<SimplifiedEmbeddedField>,
+  fileFields?: $ReadOnlyArray<SimplifiedFileField>,
+  relationalFields?: $ReadOnlyArray<SimplifiedRelationalField>,
+
+  booleanFields?: $ReadOnlyArray<BooleanField>,
+  dateTimeFields?: $ReadOnlyArray<DateTimeField>,
+  enumFields?: $ReadOnlyArray<EnumField>,
+  geospatialFields?: $ReadOnlyArray<GeospatialField>,
+  intFields?: $ReadOnlyArray<IntField>,
+  floatFields?: $ReadOnlyArray<FloatField>,
+  textFields?: $ReadOnlyArray<TextField>,
+
+  search?: $ReadOnlyArray<string>, // array of search field names
+  form?: $ReadOnlyArray<FormField>,
+  list?: $ReadOnlyArray<ListColumn>,
+};
+
 export type ThingConfig = {
   name: string,
   embedded?: boolean, // true if related to embeddedFields OR fileFields
