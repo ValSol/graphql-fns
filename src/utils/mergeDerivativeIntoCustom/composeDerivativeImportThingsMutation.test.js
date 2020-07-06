@@ -39,7 +39,8 @@ describe('composeDerivativeImportThingsMutation', () => {
     const result = composeDerivativeImportThingsMutation(ForCatalog);
 
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'importThingsForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('importThings')
           ? `import${pluralize(name)}ForCatalog`
           : '',

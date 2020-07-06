@@ -8,7 +8,8 @@ import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
 describe('composeCustomThingMutationArgs', () => {
   test('should compose customThing mutation without args', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: ({ name }) => `load${name}`,
+      name: 'loadThing',
+      specificName: ({ name }) => `load${name}`,
       argNames: () => [],
       argTypes: () => [],
       type: ({ name }) => `${name}!`,
@@ -38,7 +39,8 @@ describe('composeCustomThingMutationArgs', () => {
 
   test('should compose customThing mutation with args', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: ({ name }) => `load${name}`,
+      name: 'loadThing',
+      specificName: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
       type: ({ name }) => `${name}!`,

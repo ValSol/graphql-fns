@@ -7,7 +7,8 @@ import composeMutation from './composeMutation';
 
 describe('composeMutation', () => {
   const signatureMethods: ActionSignatureMethods = {
-    name(thingConfig) {
+    name: 'loadThing',
+    specificName(thingConfig) {
       const { name } = thingConfig;
       return `load${name}`;
     },

@@ -415,7 +415,8 @@ export type GeneralConfig = {
   +custom?: {
     +Input?: {
       +[customInputName: string]: {
-        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +name: string,
+        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
         +fieldNames: (
           thingConfig: ThingConfig,
           generalConfig: GeneralConfig,
@@ -428,7 +429,8 @@ export type GeneralConfig = {
     },
     +Query?: {
       +[customQueryName: string]: {
-        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +name: string,
+        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
         +argNames: (
           thingConfig: ThingConfig,
           generalConfig: GeneralConfig,
@@ -443,7 +445,8 @@ export type GeneralConfig = {
     },
     +Mutation?: {
       +[customMutationName: string]: {
-        +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +name: string,
+        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
         +argNames: (
           thingConfig: ThingConfig,
           generalConfig: GeneralConfig,
@@ -488,57 +491,37 @@ export type GeneralConfig = {
   inventory?: Inventory,
 };
 
-// equal to previous code of 'custom' property
-export type Custom = {
-  +Input?: {
-    +[customInputName: string]: {
-      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +fieldNames: (
-        thingConfig: ThingConfig,
-        generalConfig: GeneralConfig,
-      ) => $ReadOnlyArray<string>,
-      +fieldTypes: (
-        thingConfig: ThingConfig,
-        generalConfig: GeneralConfig,
-      ) => $ReadOnlyArray<string>,
-    },
-  },
-  +Query?: {
-    +[customQueryName: string]: {
-      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-      +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-      +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
-    },
-  },
-  +Mutation?: {
-    +[customMutationName: string]: {
-      +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-      +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-      +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-      +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
-    },
-  },
+export type ObjectSignatureMethods = {
+  // the same code as used above in GeneralConfig for Input
+  // when the name method return "" (empty string) => object will be rejected
+  +name: string,
+  +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +fieldNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
 };
 
 export type ActionSignatureMethods = {
   // the same code as used above in GeneralConfig for Query & Mutation
   // when the name method return "" (empty string) => action will be rejected
-  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+  +name: string,
+  +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
   +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
   +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
 };
 
-export type ObjectSignatureMethods = {
-  // the same code as used above in GeneralConfig for Input
-  // when the name method return "" (empty string) => object will be rejected
-  +name: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  +fieldNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-  +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+// equal to previous code of 'custom' property
+export type Custom = {
+  +Input?: {
+    +[customInputName: string]: ObjectSignatureMethods,
+  },
+  +Query?: {
+    +[customQueryName: string]: ActionSignatureMethods,
+  },
+  +Mutation?: {
+    +[customMutationName: string]: ActionSignatureMethods,
+  },
 };
 
 export type DerivativeAttributes = {

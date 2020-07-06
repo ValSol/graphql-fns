@@ -7,7 +7,8 @@ import composeActionSignature from './composeActionSignature';
 describe('composeActionSignature', () => {
   test('should return correct results for empty args arrays', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name(thingConfig) {
+      name: 'getThing',
+      specificName(thingConfig) {
         const { name } = thingConfig;
         return `get${name}`;
       },
@@ -44,7 +45,8 @@ describe('composeActionSignature', () => {
 
   test('should return correct results for fulfilled args arrays', () => {
     const queryParts = {
-      name(thingConfig) {
+      name: 'getThing',
+      specificName(thingConfig) {
         const { name } = thingConfig;
         return `get${name}`;
       },
@@ -81,7 +83,8 @@ describe('composeActionSignature', () => {
 
   test('should return empty results', () => {
     const queryParts = {
-      name(thingConfig) {
+      name: 'getThing',
+      specificName(thingConfig) {
         const { name } = thingConfig;
         return name === 'Example' ? '' : `get${name}`;
       },

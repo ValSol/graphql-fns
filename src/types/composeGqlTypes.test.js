@@ -1426,7 +1426,8 @@ type Mutation {
 
   test('should create things types with inventory for only one custom mutation loadThing', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: ({ name }) => `load${name}`,
+      name: 'loadThing',
+      specificName: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
@@ -1473,7 +1474,8 @@ type Mutation {
 
   test('should create things types with inventory for only one custom query getThing', () => {
     const getThing: ActionSignatureMethods = {
-      name: ({ name }) => `get${name}`,
+      name: 'getThing',
+      specificName: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
@@ -1511,7 +1513,8 @@ type Query {
 
   test('should create things types with custom input and return objects', () => {
     const thingInTimeRangeInput: ObjectSignatureMethods = {
-      name: ({ name }) => `${name}TimeRangeInput`,
+      name: 'thingTimeRangeInput',
+      specificName: ({ name }) => `${name}TimeRangeInput`,
       fieldNames: () => ['start', 'end'],
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
@@ -1527,7 +1530,8 @@ type Query {
     };
 
     const thingInTimeRangeQuery: ActionSignatureMethods = {
-      name: ({ name }) => `${name}InTimeRangeQuery`,
+      name: 'thingInTimeRangeQuery',
+      specificName: ({ name }) => `${name}InTimeRangeQuery`,
       argNames: () => ['range'],
       argTypes: ({ name }) => [`${name}TimeRangeInput!`],
       type: ({ name }) => `${name}InTimeRange`,

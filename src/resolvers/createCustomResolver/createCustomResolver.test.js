@@ -15,7 +15,8 @@ describe('createCustomResolver', () => {
   const createCustomLoadThingMutationResolver = () => resultResolver;
 
   const signatureMethods: ActionSignatureMethods = {
-    name(thingConfig) {
+    name: 'loadThing',
+    specificName(thingConfig) {
       const { name } = thingConfig;
       return `load${name}`;
     },

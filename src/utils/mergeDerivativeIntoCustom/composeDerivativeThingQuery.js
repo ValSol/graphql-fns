@@ -8,7 +8,9 @@ const composeDerivativeThingQuery = ({
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
-    name: ({ name }) => (allow[name] && allow[name].includes('thing') ? `${name}${suffix}` : ''),
+    name: `thing${suffix}`,
+    specificName: ({ name }) =>
+      allow[name] && allow[name].includes('thing') ? `${name}${suffix}` : '',
     argNames: () => ['whereOne'],
     argTypes: ({ name }) => [`${name}WhereOneInput`],
     type: ({ name }) => `${name}${suffix}!`,

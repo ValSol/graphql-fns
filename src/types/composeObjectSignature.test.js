@@ -7,7 +7,8 @@ import composeObjectSignature from './composeObjectSignature';
 describe('composeObjectSignature', () => {
   test('should return correct custom input object type', () => {
     const thingTimeRangeInput: ObjectSignatureMethods = {
-      name: ({ name }) => `${name}TimeRangeInput`,
+      name: 'thingTimeRangeInput',
+      specificName: ({ name }) => `${name}TimeRangeInput`,
       fieldNames: () => ['start', 'end'],
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
@@ -37,7 +38,8 @@ describe('composeObjectSignature', () => {
 
   test('should return correct custom return object type', () => {
     const thingWithRating: ObjectSignatureMethods = {
-      name: ({ name }) => `${name}WithRating`,
+      name: 'thingTimeRangeInput',
+      specificName: ({ name }) => `${name}WithRating`,
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],
       config: (thingConfig) => thingConfig,
@@ -68,7 +70,8 @@ describe('composeObjectSignature', () => {
 
   test('should return empty string for custom return object type', () => {
     const thingWithRating: ObjectSignatureMethods = {
-      name: ({ name }) => (name === 'Example' ? '' : `${name}WithRating`),
+      name: 'thingTimeRangeInput',
+      specificName: ({ name }) => (name === 'Example' ? '' : `${name}WithRating`),
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],
       config: (thingConfig) => thingConfig,

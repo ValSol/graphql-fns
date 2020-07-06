@@ -36,7 +36,8 @@ describe('composeDerivativeUpdateThingMutation', () => {
     const result = composeDerivativeUpdateThingMutation(ForCatalog);
 
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'updateThingForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('updateThing')
           ? `update${name}ForCatalog`
           : '',

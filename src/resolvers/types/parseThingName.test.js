@@ -20,7 +20,8 @@ describe('parseThingName', () => {
     ],
   };
   const thingsForCatalog: ActionSignatureMethods = {
-    name: ({ name }) => `load${name}`,
+    name: 'loadThing',
+    specificName: ({ name }) => `load${name}`,
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,

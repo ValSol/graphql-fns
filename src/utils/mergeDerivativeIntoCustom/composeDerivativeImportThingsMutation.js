@@ -11,7 +11,8 @@ const composeDerivativeImportThingsMutation = ({
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
-    name: ({ name }) =>
+    name: `importThings${suffix}`,
+    specificName: ({ name }) =>
       allow[name] && allow[name].includes('importThings')
         ? `import${pluralize(name)}${suffix}`
         : '',

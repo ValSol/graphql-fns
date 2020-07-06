@@ -7,7 +7,8 @@ import composeQuery from './composeQuery';
 
 describe('composeQuery', () => {
   const signatureMethods: ActionSignatureMethods = {
-    name(thingConfig) {
+    name: 'getThing',
+    specificName(thingConfig) {
       const { name } = thingConfig;
       return `get${name}`;
     },

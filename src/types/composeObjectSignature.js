@@ -8,7 +8,7 @@ const composeObjectSignature = (
   input?: boolean,
 ): string => {
   const {
-    name: composeName,
+    specificName: composeName,
     fieldNames: composeFieldNames,
     fieldTypes: composeFieldTypes,
   } = signatureMethods;

@@ -36,7 +36,8 @@ describe('composeDerivativeCreateThingMutation', () => {
     const result = composeDerivativeCreateThingMutation(ForCatalog);
 
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'createThingForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('createThing')
           ? `create${name}ForCatalog`
           : '',

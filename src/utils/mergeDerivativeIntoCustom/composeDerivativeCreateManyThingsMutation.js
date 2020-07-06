@@ -11,7 +11,8 @@ const composeDerivativeCreateManyThingsMutation = ({
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => {
   return {
-    name: ({ name }) =>
+    name: `createManyThings${suffix}`,
+    specificName: ({ name }) =>
       allow[name] && allow[name].includes('createManyThings')
         ? `createMany${pluralize(name)}${suffix}`
         : '',

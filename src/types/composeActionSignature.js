@@ -7,7 +7,7 @@ const composeActionSignature = (
   generalConfig: GeneralConfig,
 ): string => {
   const {
-    name: composeName,
+    specificName: composeName,
     argNames: composeArgNames,
     argTypes: composeArgTypes,
     type: composeType,

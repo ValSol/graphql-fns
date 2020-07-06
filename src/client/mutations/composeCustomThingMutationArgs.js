@@ -24,9 +24,11 @@ const composeCustomThingMutationArgs = (
     throw new TypeError('"Mutation" property have to be defined!');
   }
 
-  const { name: composeName, argNames: composeArgNames, argTypes: composeArgTypes } = Mutation[
-    mutationName
-  ];
+  const {
+    specificName: composeName,
+    argNames: composeArgNames,
+    argTypes: composeArgTypes,
+  } = Mutation[mutationName];
 
   const name = composeName(thingConfig, generalConfig);
   const argNames = composeArgNames(thingConfig, generalConfig);

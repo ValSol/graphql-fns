@@ -85,7 +85,8 @@ describe('composeDerivativeThingsQuery', () => {
 
   test('should return inputs for "thingConfig"', () => {
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'thingsForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
@@ -105,7 +106,8 @@ describe('composeDerivativeThingsQuery', () => {
 
   test('should return inputs for "sortThingConfig"', () => {
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'thingsForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
@@ -125,7 +127,8 @@ describe('composeDerivativeThingsQuery', () => {
 
   test('should return inputs for "paginationThingConfig"', () => {
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'thingsForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
@@ -149,7 +152,8 @@ describe('composeDerivativeThingsQuery', () => {
 
   test('should return inputs for "nearThingConfig"', () => {
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'thingsForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',

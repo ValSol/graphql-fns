@@ -36,7 +36,8 @@ describe('composeDerivativePushIntoThingMutation', () => {
     const result = composeDerivativePushIntoThingMutation(ForCatalog);
 
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'pushIntoThingForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('pushIntoThing')
           ? `pushInto${name}ForCatalog`
           : '',

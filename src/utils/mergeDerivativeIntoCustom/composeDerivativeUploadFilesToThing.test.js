@@ -36,7 +36,8 @@ describe('composeDerivativeUploadFilesToThing', () => {
     const result = composeDerivativeUploadFilesToThing(ForCatalog);
 
     const expectedResult = {
-      name: ({ name }) =>
+      name: 'uploadFilesToThingForCatalog',
+      specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('uploadFilesToThing')
           ? `uploadFilesTo${name}ForCatalog`
           : '',

@@ -8,7 +8,8 @@ import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 describe('composeCustomThingQueryArgs', () => {
   test('should compose customThing query without args', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: ({ name }) => `get${name}`,
+      name: 'getThing',
+      specificName: ({ name }) => `get${name}`,
       argNames: () => [],
       argTypes: () => [],
       type: ({ name }) => `${name}!`,
@@ -38,7 +39,8 @@ describe('composeCustomThingQueryArgs', () => {
 
   test('should compose customThing query with args', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: ({ name }) => `load${name}`,
+      name: 'loadThing',
+      specificName: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
       type: ({ name }) => `${name}!`,
