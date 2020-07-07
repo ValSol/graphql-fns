@@ -36,9 +36,9 @@ describe('composeDerivativeConfig', () => {
         suffix: 'ForCatalog',
         includeFields: { Example: ['anotherField'] },
         addFields: {
-          Example: () => ({
+          Example: {
             floatFields: [{ name: 'floatField' }],
-          }),
+          },
         },
       };
 
@@ -73,9 +73,9 @@ describe('composeDerivativeConfig', () => {
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
-          Example: () => ({
+          Example: {
             floatFields: [{ name: 'floatField' }],
-          }),
+          },
         },
       };
 
@@ -110,9 +110,9 @@ describe('composeDerivativeConfig', () => {
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
-          Example: () => ({
+          Example: {
             floatFields: [{ name: 'anotherField' }],
-          }),
+          },
         },
       };
 
@@ -147,9 +147,9 @@ describe('composeDerivativeConfig', () => {
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
-          Example: () => ({
+          Example: {
             enumFields: [{ name: 'textField', index: true, enumName: 'enumeration' }],
-          }),
+          },
         },
       };
 
@@ -181,14 +181,14 @@ describe('composeDerivativeConfig', () => {
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
-          Example: (generalConfig) => ({
+          Example: {
             relationalFields: [
               {
                 name: 'additionalRelationalField',
-                config: generalConfig.thingConfigs.AdditionalExample,
+                configName: 'AdditionalExample',
               },
             ],
-          }),
+          },
         },
       };
 
@@ -233,9 +233,9 @@ describe('composeDerivativeConfig', () => {
       allow: { Example: ['thing', 'things'] },
       suffix: 'ForCatalog',
       addFields: {
-        Example: () => ({
+        Example: {
           floatFields: [{ name: 'anotherField' }],
-        }),
+        },
       },
     };
 
@@ -330,15 +330,15 @@ describe('composeDerivativeConfig', () => {
         allow: { TextExample2: ['thing', 'things'], RelationalExample2: ['thing', 'things'] },
         suffix: 'ForCatalog',
         addFields: {
-          RelationalExample2: (generalConfig) => ({
+          RelationalExample2: {
             relationalFields: [
               {
                 name: 'relationalField',
                 array: true,
-                config: generalConfig.thingConfigs.TextExample2,
+                configName: 'TextExample2',
               },
             ],
-          }),
+          },
         },
         derivativeFields: { RelationalExample2: { relationalField: 'ForCatalog' } },
       };

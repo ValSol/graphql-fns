@@ -1523,9 +1523,9 @@ type Query {
       allow: { Example: ['thing', 'things'] },
       suffix: 'InTimeRange',
       addFields: {
-        Example: () => ({
+        Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
-        }),
+        },
       },
     };
 

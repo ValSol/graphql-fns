@@ -480,9 +480,7 @@ export type GeneralConfig = {
       +includeFields?: { [thingName: string]: Array<string> },
       +excludeFields?: { [thingName: string]: Array<string> },
       +addFields?: {
-        [thingName: string]: (
-          generalConfig: GeneralConfig,
-        ) => $Diff<ThingConfig, NotFieldyThingConfigFields>,
+        [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
       },
       +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
     },
@@ -542,9 +540,7 @@ export type DerivativeAttributes = {
   +includeFields?: { [thingName: string]: Array<string> },
   +excludeFields?: { [thingName: string]: Array<string> },
   +addFields?: {
-    [thingName: string]: (
-      generalConfig: GeneralConfig,
-    ) => $Diff<ThingConfig, NotFieldyThingConfigFields>,
+    [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
   },
   +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
 };

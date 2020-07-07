@@ -2,6 +2,8 @@
 
 import type { ThingConfig, SimplifiedThingConfig } from '../flowTypes';
 
+import composeThingConfig from './composeThingConfig';
+
 const composeThingConfigs = (
   simplifiedThingConfigs: Array<SimplifiedThingConfig>,
 ): { [thingName: string]: ThingConfig } => {
@@ -16,64 +18,7 @@ const composeThingConfigs = (
 
   simplifiedThingConfigs.forEach((simplifiedThingConfig) => {
     const { name } = simplifiedThingConfig;
-    const {
-      embeddedFields: simplifiedEmbeddedFields,
-      fileFields: simplifiedFileFields,
-      duplexFields: simplifiedDuplexFields,
-      relationalFields: simplifiedRelationalFields,
-    } = simplifiedThingConfig;
-
-    if (simplifiedEmbeddedFields) {
-      result[name].embeddedFields = simplifiedEmbeddedFields.map((field) => {
-        const { configName, ...restField } = field;
-        const config = result[configName];
-        if (!config) {
-          throw new TypeError(
-            `Incorrect configName: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
-          );
-        }
-        return { ...restField, config };
-      });
-    }
-
-    if (simplifiedFileFields) {
-      result[name].fileFields = simplifiedFileFields.map((field) => {
-        const { configName, ...restField } = field;
-        const config = result[configName];
-        if (!config) {
-          throw new TypeError(
-            `Incorrect configName: "${configName}" in file field: "${field.name}" of simplified thingConfig: "${name}"!`,
-          );
-        }
-        return { ...restField, config };
-      });
-    }
-
-    if (simplifiedRelationalFields) {
-      result[name].relationalFields = simplifiedRelationalFields.map((field) => {
-        const { configName, ...restField } = field;
-        const config = result[configName];
-        if (!config) {
-          throw new TypeError(
-            `Incorrect configName: "${configName}" in relational field: "${field.name}" of simplified thingConfig: "${simplifiedThingConfig.name}"!`,
-          );
-        }
-        return { ...restField, config };
-      });
-    }
-
-    if (simplifiedDuplexFields) {
-      result[name].duplexFields = simplifiedDuplexFields.map((field) => {
-        const { configName, ...restField } = field;
-        const config = result[configName];
-        if (!config) {
-          throw new TypeError(
-            `Incorrect configName: "${configName}" in duplex field: "${field.name}" of simplified thingConfig: "${simplifiedThingConfig.name}"!`,
-          );
-        }
-        return { ...restField, config };
-      });
-    }
+    composeThingConfig(simplifiedThingConfig, result[name], result);
   });
 
   return result;

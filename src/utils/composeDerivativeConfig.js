@@ -2,6 +2,7 @@
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
+import composeThingConfig from './composeThingConfig';
 
 const store = {};
 
@@ -21,7 +22,7 @@ const composeDerivativeConfig = (
     includeFields,
   } = signatureMethods;
 
-  const { derivative } = generalConfig;
+  const { derivative, thingConfigs } = generalConfig;
 
   if (!allow[rootThingName]) return null;
 
@@ -60,10 +61,17 @@ const composeDerivativeConfig = (
   }
 
   if (addFields && addFields[rootThingName]) {
-    const fieldsToAddObject = composeFieldsObject({
-      ...addFields[rootThingName](generalConfig),
-      name: `${rootThingName}${suffix}`,
-    });
+    const addFields2 = {
+      ...addFields[rootThingName],
+      // name used also for cache results in composeFieldsObject util
+      name: `fieldsToAdd ${rootThingName}${suffix}`,
+    };
+
+    // $FlowFixMe
+    composeThingConfig(addFields[rootThingName], addFields2, thingConfigs);
+
+    // $FlowFixMe
+    const fieldsToAddObject = composeFieldsObject(addFields2);
 
     Object.keys(fieldsToAddObject).forEach((fieldName) => {
       if (fieldsObject[fieldName]) {
