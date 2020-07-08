@@ -19,7 +19,7 @@ describe('executeAuthorisation', () => {
 
   describe('unauthentificated user', () => {
     const inventoryByRoles = {
-      '': { include: { Query: { thing: ['Post'] } } },
+      '': { name: '', include: { Query: { thing: ['Post'] } } },
     };
 
     test('should return true', async () => {
@@ -47,8 +47,8 @@ describe('executeAuthorisation', () => {
 
   describe('guest user', () => {
     const inventoryByRoles = {
-      '': { include: { Query: { thing: ['Post'] } } },
-      guest: { include: { Query: { things: ['Post'] } } },
+      '': { name: '', include: { Query: { thing: ['Post'] } } },
+      guest: { name: 'guest', include: { Query: { things: ['Post'] } } },
     };
 
     test('should true as unauthorized', async () => {
@@ -87,9 +87,9 @@ describe('executeAuthorisation', () => {
 
   describe('editor user', () => {
     const inventoryByRoles = {
-      '': { include: { Query: { thingForView: ['Post'] } } },
-      guest: { include: { Query: { thingsForView: ['Post'] } } },
-      editor: { include: { Query: { thingsForEdit: true } } },
+      '': { name: '', include: { Query: { thingForView: ['Post'] } } },
+      guest: { name: 'guest', include: { Query: { thingsForView: ['Post'] } } },
+      editor: { name: 'editor', include: { Query: { thingsForEdit: true } } },
     };
 
     test('should return true', async () => {

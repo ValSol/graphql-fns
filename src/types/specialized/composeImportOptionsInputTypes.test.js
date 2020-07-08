@@ -11,6 +11,7 @@ describe('composeImportOptionsInputTypes', () => {
     };
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
+      name: 'test',
       exclude: {
         Mutation: {
           createThing: ['Example'],
@@ -30,6 +31,7 @@ describe('composeImportOptionsInputTypes', () => {
     };
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
+      name: 'test',
       exclude: {
         Mutation: {
           importThings: true,
@@ -49,6 +51,7 @@ describe('composeImportOptionsInputTypes', () => {
     };
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
+      name: 'test',
       exclude: {
         Mutation: {
           importThings: true,

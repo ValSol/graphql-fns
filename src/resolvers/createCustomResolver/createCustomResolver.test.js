@@ -49,7 +49,7 @@ describe('createCustomResolver', () => {
   };
 
   test('should return correct results for allowed custom mutation', async () => {
-    const inventory: Inventory = { include: { Mutation: { loadThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
 
     const result = createCustomResolver(
@@ -66,7 +66,7 @@ describe('createCustomResolver', () => {
   });
 
   test('should return correct results for allowed custom mutation 2', () => {
-    const inventory: Inventory = { include: { Mutation: { createThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
 
     const result = createCustomResolver(

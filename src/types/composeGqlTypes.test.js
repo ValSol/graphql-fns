@@ -1178,7 +1178,7 @@ type Subscription {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: true } };
+    const inventory: Inventory = { name: 'test', include: { Query: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1215,7 +1215,7 @@ type Query {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: true } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 enum ImportFormatEnum {
@@ -1276,7 +1276,7 @@ type Mutation {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { things: true } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { things: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1307,7 +1307,7 @@ type Query {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { things: ['Example'] } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { things: ['Example'] } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1339,7 +1339,7 @@ type Query {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: { createThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1387,7 +1387,10 @@ type Mutation {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: { createThing: ['Example'] } } };
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Mutation: { createThing: ['Example'] } },
+    };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 type Example {
@@ -1445,7 +1448,7 @@ type Mutation {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: { loadThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
@@ -1493,7 +1496,7 @@ type Mutation {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { getThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { getThing: true } } };
     const custom = { Query: { getThing } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
@@ -1549,7 +1552,10 @@ type Query {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { thingInTimeRangeQuery: true } } };
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Query: { thingInTimeRangeQuery: true } },
+    };
     const custom = {
       Input: { thingInTimeRangeInput },
       Query: { thingInTimeRangeQuery },

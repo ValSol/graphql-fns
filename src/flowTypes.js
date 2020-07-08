@@ -396,6 +396,7 @@ type InverntoryOptions = {
 };
 
 export type Inventory = {
+  +name: string,
   +include?: true | InverntoryOptions,
   +exclude?: true | InverntoryOptions,
 };

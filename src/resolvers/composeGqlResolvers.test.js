@@ -443,7 +443,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: true } };
+    const inventory: Inventory = { name: 'test', include: { Query: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
@@ -463,7 +463,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: true } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
@@ -486,7 +486,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { thing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { thing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query.ExampleCount).toBeUndefined();
@@ -506,7 +506,7 @@ describe('composeGqlResolvers', () => {
       ],
     };
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: { createThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
@@ -539,7 +539,7 @@ describe('composeGqlResolvers', () => {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Mutation: { loadThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {
@@ -579,7 +579,7 @@ describe('composeGqlResolvers', () => {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { include: { Query: { getThing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { getThing: true } } };
     const custom = { Query: { getThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {

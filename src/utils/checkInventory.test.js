@@ -6,7 +6,7 @@ import checkInventory from './checkInventory';
 
 describe('checkInventory', () => {
   test('should return correct results for empty inventory object', () => {
-    const inventory: Inventory = {};
+    const inventory: Inventory = { name: 'test' };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -46,7 +46,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 1 level', () => {
-    const inventory: Inventory = { include: { Query: true } };
+    const inventory: Inventory = { name: 'test', include: { Query: true } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -86,7 +86,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 2 levels', () => {
-    const inventory: Inventory = { include: { Query: { thing: true } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { thing: true } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -134,7 +134,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 3 levels', () => {
-    const inventory: Inventory = { include: { Query: { thing: ['User'] } } };
+    const inventory: Inventory = { name: 'test', include: { Query: { thing: ['User'] } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -186,7 +186,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 1 level', () => {
-    const inventory: Inventory = { exclude: { Query: true } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: true } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -226,7 +226,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 2 levels', () => {
-    const inventory: Inventory = { exclude: { Query: { thing: true } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { thing: true } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -274,7 +274,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 3 levels', () => {
-    const inventory: Inventory = { exclude: { Query: { thing: ['User'] } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { thing: ['User'] } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -326,7 +326,7 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory exclude object with 3 levels', () => {
-    const inventory: Inventory = { exclude: { Query: { thingCount: true } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { thingCount: true } } };
 
     const inventoryСhain = ['Query', 'thingCount', 'Invoice'];
     const result = checkInventory(inventoryСhain, inventory);
@@ -336,6 +336,7 @@ describe('checkInventory', () => {
   describe('checkInventory in inventoryByRoles', () => {
     const inventoryByRoles: InventoryByRoles = {
       '': {
+        name: '',
         include: {
           Query: {
             thingForCatalog: true,
@@ -345,6 +346,7 @@ describe('checkInventory', () => {
         },
       },
       guest: {
+        name: 'guest',
         include: {
           Mutation: { renewThing: true, signinThing: true },
         },
