@@ -373,7 +373,7 @@ type InverntoryOptions = {
   +Query?:
     | true
     | {
-        // 'queryName' may be: thing, things, thingCount, or any custom query names
+        // 'queryName' may be: thing, things, thingCount, 'thingDistinctValues' or any custom query names
         +[queryName: string]: thingNamesList,
       },
   // eslint-disable-next-line flowtype/space-after-type-colon
@@ -548,7 +548,7 @@ export type DerivativeAttributes = {
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
-  | ['Query', string] // "string" for 'thing', 'things', 'thingCount' or custom query
+  | ['Query', string] // "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues' or custom query
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
@@ -557,7 +557,7 @@ export type TwoSegmentInventoryChain =
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 export type ThreeSegmentInventoryChain =
-  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount' or custom query, second for thing name
+  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues' or custom query, second for thing name
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...

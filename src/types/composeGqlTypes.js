@@ -11,6 +11,7 @@ import createThingType from './createThingType';
 import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
 import createPushIntoThingInputType from './inputs/createPushIntoThingInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
+import createThingDistinctValuesOptionsInputType from './inputs/createThingDistinctValuesOptionsInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
 import createUploadFilesToThingInputType from './inputs/createUploadFilesToThingInputType';
@@ -19,6 +20,7 @@ import createThingSortInputType from './inputs/createThingSortInputType';
 import createThingWhereInputType from './inputs/createThingWhereInputType';
 import createThingWhereOneInputType from './inputs/createThingWhereOneInputType';
 import createThingCountQueryType from './queries/createThingCountQueryType';
+import createThingDistinctValuesQueryType from './queries/createThingDistinctValuesQueryType';
 import createThingQueryType from './queries/createThingQueryType';
 import createThingsQueryType from './queries/createThingsQueryType';
 import createPushIntoThingMutationType from './mutations/createPushIntoThingMutationType';
@@ -106,12 +108,31 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           }
           return prev;
         }, [])
-        .join('\n')
-    : '';
+    : [];
+
+  // eslint-disable-next-line
+  allowQueries
+    ? Object.keys(thingConfigs)
+        .map((thingName) => thingConfigs[thingName])
+        .filter(({ embedded }) => !embedded)
+        .reduce((prev, thingConfig) => {
+          const { name } = thingConfig;
+          if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
+            const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
+              thingConfig,
+            );
+            prev.push(thingDistinctValuesOptionsInputType);
+          }
+
+          return prev;
+        }, thingInputTypes)
+    : [];
+
+  const thingInputTypes2 = thingInputTypes.join('\n');
 
   const customInputObjectNames = Object.keys(customInputObject);
   const input = true;
-  const thingInputTypes2 = Object.keys(thingConfigs)
+  const thingInputTypes3 = Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
@@ -168,6 +189,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         }
         if (checkInventory(['Query', 'thingCount', name], inventory)) {
           prev.push(createThingCountQueryType(thingConfig));
+        }
+        if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
+          prev.push(createThingDistinctValuesQueryType(thingConfig));
         }
 
         customQueryNames.forEach((customName) => {
@@ -304,8 +328,8 @@ ${thingSubscriptionTypes}
 
   resultArray.push(thingTypes);
 
-  if (thingInputTypes) resultArray.push(thingInputTypes);
   if (thingInputTypes2) resultArray.push(thingInputTypes2);
+  if (thingInputTypes3) resultArray.push(thingInputTypes3);
   if (updatedThingPayloadTypes) resultArray.push(updatedThingPayloadTypes);
   if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
   if (thingMutationTypes2) resultArray.push(thingMutationTypes2);

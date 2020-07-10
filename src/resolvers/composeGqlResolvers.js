@@ -10,8 +10,11 @@ import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../utils/composeDerivativeConfig';
 import createPushIntoThingInputType from '../types/inputs/createPushIntoThingInputType';
 import createFilesOfThingOptionsInputType from '../types/inputs/createFilesOfThingOptionsInputType';
+import createThingDistinctValuesOptionsInputType from '../types/inputs/createThingDistinctValuesOptionsInputType';
+
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
+import createThingDistinctValuesQueryResolver from './queries/createThingDistinctValuesQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
 import createThingsQueryResolver from './queries/createThingsQueryResolver';
 import composeThingResolvers from './types/composeThingResolvers';
@@ -67,6 +70,21 @@ const composeGqlResolvers = (
         );
         // eslint-disable-next-line no-param-reassign
         if (thingCountQueryResolver) prev.Query[`${name}Count`] = thingCountQueryResolver;
+
+        const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
+          thingConfig,
+        );
+        if (thingDistinctValuesOptionsInputType) {
+          const thingDistinctValuesQueryResolver = createThingDistinctValuesQueryResolver(
+            thingConfig,
+            generalConfig,
+            serversideConfig,
+          );
+          if (thingDistinctValuesQueryResolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Query[`${name}DistinctValues`] = thingDistinctValuesQueryResolver;
+          }
+        }
 
         const thingQueryResolver = createThingQueryResolver(
           thingConfig,

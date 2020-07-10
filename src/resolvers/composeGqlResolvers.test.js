@@ -43,6 +43,7 @@ describe('composeGqlResolvers', () => {
     const generalConfig: GeneralConfig = { thingConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
+    expect(typeof result.Query.ExampleDistinctValues).toBe('function');
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
@@ -94,9 +95,11 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.Example1Count).toBe('function');
+    expect(typeof result.Query.Example1DistinctValues).toBe('function');
     expect(typeof result.Query.Example1).toBe('function');
     expect(typeof result.Query.Example1s).toBe('function');
     expect(typeof result.Query.Example2Count).toBe('function');
+    expect(typeof result.Query.Example2DistinctValues).toBe('function');
     expect(typeof result.Query.Example2).toBe('function');
     expect(typeof result.Query.Example2s).toBe('function');
     expect(typeof result.Mutation.createManyExample1s).toBe('function');
@@ -169,7 +172,9 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.PersonCount).toBe('function');
+    expect(typeof result.Query.PersonDistinctValues).toBe('function');
     expect(typeof result.Query.PlaceCount).toBe('function');
+    expect(typeof result.Query.PlaceDistinctValues).toBe('function');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Query.Place).toBe('function');
     expect(typeof result.Query.People).toBe('function');
@@ -252,6 +257,7 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.PersonCount).toBe('function');
+    expect(typeof result.Query.PersonDistinctValues).toBe('function');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Query.People).toBe('function');
     expect(typeof result.Mutation.createManyPeople).toBe('function');
@@ -331,7 +337,9 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.PersonCount).toBe('function');
+    expect(typeof result.Query.PersonDistinctValues).toBe('function');
     expect(typeof result.Query.PlaceCount).toBe('function');
+    expect(typeof result.Query.PlaceDistinctValues).toBe('function');
     expect(typeof result.Query.Person).toBe('function');
     expect(typeof result.Query.Place).toBe('function');
     expect(typeof result.Query.People).toBe('function');
@@ -412,6 +420,7 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.ExampleCount).toBe('function');
+    expect(result.Query.ExampleDistinctValues).toBeUndefined();
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
@@ -447,6 +456,7 @@ describe('composeGqlResolvers', () => {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
+    expect(typeof result.Query.ExampleDistinctValues).toBe('function');
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(result.Mutation).toBeUndefined();
@@ -490,6 +500,7 @@ describe('composeGqlResolvers', () => {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query.ExampleCount).toBeUndefined();
+    expect(result.Query.ExampleDistinctValues).toBeUndefined();
     expect(typeof result.Query.Example).toBe('function');
     expect(result.Query.Examples).toBeUndefined();
     expect(result.Mutation).toBeUndefined();
@@ -588,6 +599,7 @@ describe('composeGqlResolvers', () => {
     const result = composeGqlResolvers(generalConfig, serversideConfig);
     expect(result.Mutation).toBeUndefined();
     expect(result.Query.ExampleCount).toBeUndefined();
+    expect(result.Query.ExampleDistinctValues).toBeUndefined();
     expect(result.Query.Example).toBeUndefined();
     expect(result.Query.Examples).toBeUndefined();
     expect(result.Subscription).toBeUndefined();

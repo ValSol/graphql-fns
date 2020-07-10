@@ -7,6 +7,7 @@ import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 import composeThingQueryArgs from './composeThingQueryArgs';
 import composeThingsQueryArgs from './composeThingsQueryArgs';
 import composeThingCountQuery from './composeThingCountQuery';
+import composeThingDistinctValuesQuery from './composeThingDistinctValuesQuery';
 
 const composeQuery = (
   queryName: string,
@@ -29,6 +30,9 @@ const composeQuery = (
 
     case 'thingCount':
       return composeThingCountQuery(thingConfig);
+
+    case 'thingDistinctValues':
+      return composeThingDistinctValuesQuery(thingConfig);
 
     default:
       if (!generalConfig) {

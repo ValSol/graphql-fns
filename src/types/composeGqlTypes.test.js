@@ -238,6 +238,16 @@ input ImageUpdateInput {
   fileId: String
   address: String
 }
+enum ExampleTextNamesEnum {
+  textField1
+  textField2
+  textField3
+  textField4
+  textField5
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
@@ -314,6 +324,7 @@ type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -481,6 +492,21 @@ input Example2UpdateChildInput {
 input Example2UpdateChildrenInput {
   connect: [ID!]
 }
+enum Example1TextNamesEnum {
+  textField1
+  textField2
+  textField3
+}
+input Example1DistinctValuesOptionsInput {
+  target: Example1TextNamesEnum!
+}
+enum Example2TextNamesEnum {
+  textField1
+  textField2
+}
+input Example2DistinctValuesOptionsInput {
+  target: Example2TextNamesEnum!
+}
 input Example1WhereOneInput {
   id: ID!
 }
@@ -528,9 +554,11 @@ type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
   Example1s(where: Example1WhereInput, near: Example1NearInput): [Example1!]!
   Example1Count(where: Example1WhereInput): Int!
+  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
   Example2(whereOne: Example2WhereOneInput!): Example2
   Example2s(where: Example2WhereInput): [Example2!]!
   Example2Count(where: Example2WhereInput): Int!
+  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
   createExample1(data: Example1CreateInput!): Example1!
@@ -684,6 +712,19 @@ input PlaceUpdateChildInput {
 input PlaceUpdateChildrenInput {
   connect: [ID!]
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  title
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -723,9 +764,11 @@ type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People(where: PersonWhereInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places(where: PlaceWhereInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -871,6 +914,13 @@ input AddressUpdateInput {
   country: String
   province: String
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -895,6 +945,7 @@ type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People(where: PersonWhereInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -1096,6 +1147,19 @@ input PlaceUpdateChildInput {
 input PlaceUpdateChildrenInput {
   connect: [ID!]
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  name
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -1137,9 +1201,11 @@ type Query {
   Person(whereOne: PersonWhereOneInput!): Person
   People(where: PersonWhereInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Place(whereOne: PlaceWhereOneInput!): Place
   Places(where: PlaceWhereInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
   createPerson(data: PersonCreateInput!): Person!
@@ -1187,6 +1253,12 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -1198,6 +1270,7 @@ type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples(where: ExampleWhereInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);

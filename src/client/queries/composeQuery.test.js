@@ -78,6 +78,15 @@ describe('composeQuery', () => {
     expect(result).toBe(expectedResult);
   });
 
+  test('should compose thingDistinctValues query', () => {
+    const expectedResult = `query ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput) {
+  ExampleDistinctValues(where: $where, options: $options)
+}`;
+
+    const result = composeQuery('thingDistinctValues', thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
   test('should compose custom getThing query', () => {
     const expectedResult = `query getExample($path: String!) {
   getExample(path: $path) {
