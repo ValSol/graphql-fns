@@ -3,7 +3,15 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createThingSortInputType = (thingConfig: ThingConfig): string => {
-  const { booleanFields, enumFields, intFields, floatFields, textFields, name } = thingConfig;
+  const {
+    booleanFields,
+    dateTimeFields,
+    enumFields,
+    intFields,
+    floatFields,
+    textFields,
+    name,
+  } = thingConfig;
 
   const fieldLines = enumFields
     ? enumFields
@@ -13,6 +21,16 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
   ${fieldName}_DESC`,
         )
     : [];
+
+  if (dateTimeFields) {
+    dateTimeFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
   if (textFields) {
     textFields

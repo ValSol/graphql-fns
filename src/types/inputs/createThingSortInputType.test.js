@@ -170,4 +170,32 @@ input ExampleSortInput {
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create string with indexed datetime fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      dateTimeFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+    };
+    const expectedResult = `enum ExampleSortEnum {
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}`;
+
+    const result = createThingSortInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
