@@ -3,10 +3,11 @@
 const createNewFilesIndexList = (
   hashes: Array<string>,
   fileFieldValues: Array<Object>,
-  getHashFromValue: (Object) => string,
+  getHashFromValue: (value: Object, onlyBlob?: boolean) => string,
 ): Array<number> =>
   fileFieldValues.reduce((prev, value, i) => {
-    const hash = getHashFromValue(value);
+    const onlyBlob = true;
+    const hash = getHashFromValue(value, onlyBlob);
     if (hash) {
       const index = hashes.indexOf(hash);
       if (index === -1) {
