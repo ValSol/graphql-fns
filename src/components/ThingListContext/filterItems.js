@@ -1,5 +1,4 @@
 // @flow
-import BitwiseArray from 'bitwise-array';
 
 import type { AdminFilters } from '../../flowTypes';
 
@@ -16,10 +15,8 @@ const filterItems = (
         return value === item[key];
       }
 
-      if (!(value instanceof BitwiseArray)) {
-        // only to eliminate flowjs errors
-        throw new TypeError('Have to be BitwiseArray!');
-      }
+      // only to eliminate flowjs errors
+      if (typeof value === 'boolean') throw new TypeError('Have not to be Boolean!');
 
       if (!value.count()) return !item[key].count();
 
