@@ -13,14 +13,17 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
     name,
   } = thingConfig;
 
-  const fieldLines = enumFields
-    ? enumFields
-        .filter(({ array, index }) => !array && index)
-        .map(
-          ({ name: fieldName }) => `  ${fieldName}_ASC
-  ${fieldName}_DESC`,
-        )
-    : [];
+  const fieldLines = ['  createdAt_ASC', '  createdAt_DESC', '  updatedAt_ASC', '  updatedAt_DESC'];
+
+  if (enumFields) {
+    enumFields
+      .filter(({ array, index }) => !array && index)
+      .reduce((prev, { name: fieldName }) => {
+        prev.push(`  ${fieldName}_ASC
+  ${fieldName}_DESC`);
+        return prev;
+      }, fieldLines);
+  }
 
   if (dateTimeFields) {
     dateTimeFields

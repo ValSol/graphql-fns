@@ -6,7 +6,7 @@ import type { ThingConfig } from '../../flowTypes';
 import composeThingsQueryArgs from './composeThingsQueryArgs';
 
 describe('composeThingsQueryArgs', () => {
-  test('should compose things query without args', () => {
+  test('should compose things query with default args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,8 +17,8 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($where: ExampleWhereInput) {',
-      '  Examples(where: $where) {',
+      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
+      '  Examples(where: $where, sort: $sort) {',
     ];
 
     const result = composeThingsQueryArgs(thingConfig);
@@ -57,8 +57,8 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($pagination: ExamplePaginationInput, $where: ExampleWhereInput) {',
-      '  Examples(pagination: $pagination, where: $where) {',
+      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: ExamplePaginationInput) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
     const result = composeThingsQueryArgs(thingConfig);
@@ -77,8 +77,8 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($near: ExampleNearInput, $where: ExampleWhereInput) {',
-      '  Examples(near: $near, where: $where) {',
+      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $near: ExampleNearInput) {',
+      '  Examples(where: $where, sort: $sort, near: $near) {',
     ];
 
     const result = composeThingsQueryArgs(thingConfig);

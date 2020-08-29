@@ -6,14 +6,12 @@ import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '
 
 import createThingNearInputType from '../../types/inputs/createThingNearInputType';
 import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
-import createThingSortInputType from '../../types/inputs/createThingSortInputType';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
 const aditionalInputs = (thingConfig: ThingConfig) => {
-  const sort = createThingSortInputType(thingConfig);
   const pagination = createThingPaginationInputType(thingConfig);
   const near = createThingNearInputType(thingConfig);
-  return { sort, pagination, near };
+  return { pagination, near };
 };
 
 const composeDerivativeThingsQuery = ({
@@ -24,12 +22,11 @@ const composeDerivativeThingsQuery = ({
   specificName: ({ name }) =>
     allow[name] && allow[name].includes('things') ? `${pluralize(name)}${suffix}` : '',
   argNames: (thingConfig, generalConfig) => {
-    const result = ['where'];
+    const result = ['where', 'sort'];
 
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
-    const { sort, pagination, near } = aditionalInputs(derivativeConfig);
-    if (sort) result.push('sort');
+    const { pagination, near } = aditionalInputs(derivativeConfig);
     if (pagination) result.push('pagination');
     if (near) result.push('near');
 
@@ -37,12 +34,11 @@ const composeDerivativeThingsQuery = ({
   },
   argTypes: (thingConfig, generalConfig) => {
     const { name } = thingConfig;
-    const result = [`${name}WhereInput`];
+    const result = [`${name}WhereInput`, `${name}SortInput`];
 
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
-    const { sort, pagination, near } = aditionalInputs(derivativeConfig);
-    if (sort) result.push(`${name}SortInput`);
+    const { pagination, near } = aditionalInputs(derivativeConfig);
     if (pagination) result.push(`${name}PaginationInput`);
     if (near) result.push(`${name}NearInput`);
 

@@ -279,6 +279,10 @@ input ExampleWhereInput {
   OR: [ExampleWhereInput!]
 }
 enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   day_ASC
   day_DESC
   textField2_ASC
@@ -514,6 +518,15 @@ input Example1WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum Example1SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example1SortInput {
+  sortBy: [Example1SortEnum]
+}
 enum Example1GeospatialFieldNamesEnum {
   position
 }
@@ -528,6 +541,15 @@ input Example2WhereOneInput {
 input Example2WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+}
+enum Example2SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example2SortInput {
+  sortBy: [Example2SortEnum]
 }
 enum Example1FieldNamesEnum {
   textField1
@@ -552,11 +574,11 @@ type UpdatedExample2Payload {
 }
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
-  Example1s(where: Example1WhereInput, near: Example1NearInput): [Example1!]!
+  Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
   Example1Count(where: Example1WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
   Example2(whereOne: Example2WhereOneInput!): Example2
-  Example2s(where: Example2WhereInput): [Example2!]!
+  Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
   Example2Count(where: Example2WhereInput): Int!
   Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput): [String!]!
 }
@@ -732,12 +754,30 @@ input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
 input PlaceWhereOneInput {
   id: ID!
 }
 input PlaceWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+}
+enum PlaceSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PlaceSortInput {
+  sortBy: [PlaceSortEnum]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -762,11 +802,11 @@ type UpdatedPlacePayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Place(whereOne: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput): [Place!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
@@ -928,6 +968,15 @@ input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
 enum PersonFieldNamesEnum {
   firstName
   lastName
@@ -943,7 +992,7 @@ type UpdatedPersonPayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
 }
@@ -1167,12 +1216,30 @@ input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
 input PlaceWhereOneInput {
   id: ID!
 }
 input PlaceWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+}
+enum PlaceSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PlaceSortInput {
+  sortBy: [PlaceSortEnum]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1199,11 +1266,11 @@ type UpdatedPlacePayload {
 }
 type Query {
   Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput): [Person!]!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Place(whereOne: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput): [Place!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
@@ -1266,9 +1333,18 @@ input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
 }`;
@@ -1362,8 +1438,17 @@ input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
 type Query {
-  Examples(where: ExampleWhereInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1393,8 +1478,17 @@ input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
 }
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
 type Query {
-  Examples(where: ExampleWhereInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);

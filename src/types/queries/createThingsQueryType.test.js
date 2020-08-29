@@ -9,7 +9,8 @@ describe('createThingsQueryType', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  Examples(where: ExampleWhereInput): [Example!]!';
+    const expectedResult =
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -42,7 +43,7 @@ describe('createThingsQueryType', () => {
       pagination: true,
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, pagination: ExamplePaginationInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -63,7 +64,7 @@ describe('createThingsQueryType', () => {
       ],
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, near: ExampleNearInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput): [Example!]!';
 
     const result = createThingsQueryType(thingConfig);
     expect(result).toEqual(expectedResult);

@@ -6,11 +6,13 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingNearInputType from '../../types/inputs/createThingNearInputType';
 import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
-import createThingSortInputType from '../../types/inputs/createThingSortInputType';
 
 const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
-  const argsArray = [];
+  const argsArray = [
+    { argName: 'where', argType: `${name}WhereInput` },
+    { argName: 'sort', argType: `${name}SortInput` },
+  ];
 
   const thingNearInputType = createThingNearInputType(thingConfig);
   if (thingNearInputType) {
@@ -20,17 +22,6 @@ const composeThingCountQuery = (thingConfig: ThingConfig): Array<string> => {
   const thingPaginationInputType = createThingPaginationInputType(thingConfig);
   if (thingPaginationInputType) {
     argsArray.push({ argName: 'pagination', argType: `${name}PaginationInput` });
-  }
-
-  argsArray.push({ argName: 'where', argType: `${name}WhereInput` });
-
-  const thingSortInputType = createThingSortInputType(thingConfig);
-  if (thingSortInputType) {
-    argsArray.push({ argName: 'sort', argType: `${name}SortInput` });
-  }
-
-  if (!argsArray.length) {
-    return [`query ${pluralize(name)} {`, `  ${pluralize(name)} {`];
   }
 
   const args1 = argsArray.map(({ argName, argType }) => `$${argName}: ${argType}`).join(', ');

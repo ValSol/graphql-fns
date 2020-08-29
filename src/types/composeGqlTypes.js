@@ -150,8 +150,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         checkInventory(['Query', 'thingCount', name], inventory)
       ) {
         prev.push(createThingWhereInputType(thingConfig));
-        const thingSortInputType = createThingSortInputType(thingConfig);
-        if (thingSortInputType) prev.push(thingSortInputType);
+        prev.push(createThingSortInputType(thingConfig));
         const thingPaginationInputType = createThingPaginationInputType(thingConfig);
         if (thingPaginationInputType) prev.push(thingPaginationInputType);
         const thingNearInputType = createThingNearInputType(thingConfig);

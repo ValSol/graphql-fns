@@ -90,8 +90,8 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where'],
-      argTypes: ({ name }) => [`${name}WhereInput`],
+      argNames: () => ['where', 'sort'],
+      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -132,8 +132,8 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'pagination'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}PaginationInput`],
+      argNames: () => ['where', 'sort', 'pagination'],
+      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`, `${name}PaginationInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -157,8 +157,8 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'near'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}NearInput`],
+      argNames: () => ['where', 'sort', 'near'],
+      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`, `${name}NearInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),

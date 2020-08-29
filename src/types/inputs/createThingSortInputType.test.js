@@ -17,7 +17,15 @@ describe('createThingSortInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}`;
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -38,6 +46,10 @@ describe('createThingSortInputType', () => {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -74,6 +86,10 @@ input ExampleSortInput {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstCuisine_ASC
   firstCuisine_DESC
   secondCuisine_ASC
@@ -102,6 +118,10 @@ input ExampleSortInput {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -130,6 +150,10 @@ input ExampleSortInput {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -158,6 +182,10 @@ input ExampleSortInput {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstName_ASC
   firstName_DESC
   lastName_ASC
@@ -186,6 +214,10 @@ input ExampleSortInput {
       ],
     };
     const expectedResult = `enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   firstName_ASC
   firstName_DESC
   lastName_ASC
