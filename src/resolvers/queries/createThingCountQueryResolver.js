@@ -3,7 +3,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
-import createThingSchema from '../../mongooseModels/createThingSchema';
+import createThing from '../../mongooseModels/createThing';
 import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
 
@@ -39,9 +39,8 @@ const createThingCountQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const thingSchema = createThingSchema(thingConfig, enums);
+    const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
     const conditions = mergeWhereAndFilter(filter, where, thingConfig) || {};
 
     const result = await Thing.countDocuments(conditions);

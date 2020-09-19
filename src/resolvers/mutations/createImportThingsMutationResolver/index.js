@@ -6,6 +6,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flow
 
 import checkInventory from '../../../utils/checkInventory';
 import coerceDataToGql from '../../../utils/coerceDataToGql';
+import createThing from '../../../mongooseModels/createThing';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import executeAuthorisation from '../../executeAuthorisation';
 import addIdsToThing from '../../addIdsToThing';
@@ -119,8 +120,7 @@ const createImportThingsMutationResolver = (
       await Promise.all(promises);
     }
 
-    const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
+    const Thing = await createThing(mongooseConn, thingConfig, enums);
 
     const things = await Thing.find({ _id: { $in: ids } }, null, { lean: true });
 

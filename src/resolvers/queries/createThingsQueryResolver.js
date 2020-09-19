@@ -3,7 +3,7 @@
 import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
-import createThingSchema from '../../mongooseModels/createThingSchema';
+import createThing from '../../mongooseModels/createThing';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
@@ -47,9 +47,8 @@ const createThingsQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const thingSchema = createThingSchema(thingConfig, enums);
+    const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
     let query = Thing.find({}, projection, { lean: true });

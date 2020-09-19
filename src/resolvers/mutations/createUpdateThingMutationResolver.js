@@ -2,6 +2,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
@@ -49,10 +50,9 @@ const createUpdateThingMutationResolver = (
     // TODO refactor to process 'connect' & 'create'
     const data = clearUpdateInputData(rawData, thingConfig);
 
-    const { name: thingName, duplexFields } = thingConfig;
-    const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${thingName}_Thing`, thingSchema);
+    const Thing = await createThing(mongooseConn, thingConfig, enums);
 
+    const { duplexFields } = thingConfig;
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce((prev, { name: name2 }) => {
           if (data[name2]) prev[name2] = 1; // eslint-disable-line no-param-reassign

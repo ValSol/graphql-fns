@@ -2,6 +2,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
@@ -39,8 +40,7 @@ const createCreateThingMutationResolver = (
       thingConfig,
     );
 
-    const thingSchema = createThingSchema(thingConfig, enums);
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
+    const Thing = await createThing(mongooseConn, thingConfig, enums);
 
     await updatePeriphery(periphery, mongooseConn);
 
