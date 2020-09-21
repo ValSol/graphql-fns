@@ -42,9 +42,11 @@ describe('createThingUpdateInputType', () => {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -90,9 +92,11 @@ input ExampleUpdateChildrenInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -156,9 +160,11 @@ input PersonUpdateChildrenInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -225,9 +231,11 @@ input PersonUpdateChildrenInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -292,9 +300,11 @@ input PersonUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -335,9 +345,11 @@ input ExampleUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -380,9 +392,11 @@ input ExampleUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -425,9 +439,11 @@ input ExampleUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -470,9 +486,11 @@ input ExampleUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -557,9 +575,11 @@ input ExampleUpdateChildrenInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);

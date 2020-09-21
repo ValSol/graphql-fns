@@ -19,7 +19,7 @@ const processCreateInputData = (
   initialCore: null | Map<ThingConfig, Array<Object>>,
   initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
-  forConcatenation?: boolean,
+  forUpdate?: boolean,
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
 ): Object => {
@@ -144,6 +144,12 @@ const processCreateInputData = (
     }
 
     return Object.keys(data2).reduce((prev, key) => {
+      if (data2[key] === undefined) return prev;
+      if (forUpdate && data2[key] === null) {
+        prev[key] = null; // eslint-disable-line no-param-reassign
+        return prev;
+      }
+
       if (relationalFieldsObject[key]) {
         const { array, config } = relationalFieldsObject[key];
         if (!array && data2[key].create && data2[key].connect) {
@@ -369,8 +375,9 @@ const processCreateInputData = (
           }
         }
       } else if (scalarFieldsArray.includes(key)) {
-        // eslint-disable-next-line no-param-reassign
-        if (data2[key] !== null) prev[key] = data2[key];
+        if (data2[key] !== null) {
+          prev[key] = data2[key]; // eslint-disable-line no-param-reassign
+        }
       }
       return prev;
     }, {});
@@ -383,7 +390,7 @@ const processCreateInputData = (
     const document = transform(data3, config);
     if (!first) {
       first = document;
-      if (forConcatenation) continue; // eslint-disable-line no-continue
+      if (forUpdate) continue; // eslint-disable-line no-continue
     }
     const item = { insertOne: { document } };
 

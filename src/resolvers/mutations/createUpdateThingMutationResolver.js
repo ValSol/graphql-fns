@@ -7,11 +7,9 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
-import processUpdateDuplexInputData from './processUpdateDuplexInputData';
-import processUpdateInputData from './processUpdateInputData';
+import processCreateInputData from './processCreateInputData';
 import processDeleteData from './processDeleteData';
 import updatePeriphery from './updatePeriphery';
-import clearUpdateInputData from './clearUpdateInputData';
 
 type Args = { data: Object, whereOne: Object };
 type Context = { mongooseConn: Object, pubsub?: Object };
@@ -40,15 +38,7 @@ const createUpdateThingMutationResolver = (
     if (!filter) return null;
 
     const { mongooseConn } = context;
-    const {
-      whereOne,
-      whereOne: { id },
-      data: rawData,
-    } = args;
-
-    // now only remove 'connect'
-    // TODO refactor to process 'connect' & 'create'
-    const data = clearUpdateInputData(rawData, thingConfig);
+    const { whereOne, data } = args;
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
@@ -60,10 +50,6 @@ const createUpdateThingMutationResolver = (
         }, {})
       : {};
 
-    const mainData = processUpdateInputData(data, thingConfig);
-
-    let _id = id; // eslint-disable-line no-underscore-dangle
-    // const whereOne2 = id ? { _id } : whereOne;
     const whereOne2 = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
@@ -72,16 +58,28 @@ const createUpdateThingMutationResolver = (
 
     const previousThing = await Thing.findOne(whereOne2, projection, { lean: true });
 
-    let thing;
+    if (!previousThing) return null;
 
-    if (Object.keys(duplexFieldsProjection).length) {
-      const data2 = { ...data, _id };
-      const bulkItemsMap = processDeleteData(previousThing, thingConfig);
+    const coreForDeletions = Object.keys(duplexFieldsProjection).length
+      ? processDeleteData(previousThing, thingConfig)
+      : null;
 
-      const { core, periphery } = processUpdateDuplexInputData(data2, thingConfig, bulkItemsMap);
+    const {
+      core,
+      periphery,
+      single,
+      first: { _id, ...rest },
+    } = processCreateInputData(
+      { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
+      coreForDeletions,
+      null,
+      thingConfig,
+      true, // for update
+    );
 
-      await updatePeriphery(periphery, mongooseConn);
+    await updatePeriphery(periphery, mongooseConn);
 
+    if (!single) {
       const promises = [];
       core.forEach((bulkItems, config) => {
         const { name: name2 } = config;
@@ -90,21 +88,13 @@ const createUpdateThingMutationResolver = (
         promises.push(Thing2.bulkWrite(bulkItems));
       });
       await Promise.all(promises);
-
-      thing = await Thing.findOneAndUpdate({ _id }, mainData, {
-        new: true,
-        lean: true,
-      });
-    } else if (id) {
-      _id = id;
-      thing = await Thing.findOneAndUpdate({ _id }, mainData, { new: true, lean: true });
-    } else {
-      thing = await Thing.findOneAndUpdate(whereOne, mainData, { new: true, lean: true });
-      if (!thing) return null;
-      _id = thing._id; // eslint-disable-line no-underscore-dangle, prefer-destructuring
     }
+    const thing = await Thing.findOneAndUpdate({ _id }, rest, {
+      new: true,
+      lean: true,
+    });
 
-    thing = addIdsToThing(thing, thingConfig);
+    const thing2 = addIdsToThing(thing, thingConfig);
 
     const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];
     if (checkInventory(subscriptionInventoryChain, inventory)) {
@@ -117,7 +107,7 @@ const createUpdateThingMutationResolver = (
         const updatedFields = Object.keys(data);
 
         const payload = {
-          node: thing,
+          node: thing2,
           previousNode: addIdsToThing(previousThing, thingConfig),
           updatedFields,
         };
@@ -125,7 +115,7 @@ const createUpdateThingMutationResolver = (
       }
     }
 
-    return thing;
+    return thing2;
   };
 
   return resolver;

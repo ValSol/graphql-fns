@@ -209,9 +209,11 @@ input ExampleUpdateInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 enum ExampleFileNamesEnum {
   logo
@@ -464,9 +466,11 @@ input Example1UpdateInput {
 }
 input Example1UpdateChildInput {
   connect: ID
+  create: Example1CreateInput
 }
 input Example1UpdateChildrenInput {
   connect: [ID!]
+  create: [Example1CreateInput!]
 }
 input Example2CreateInput {
   textField1: [String!]
@@ -492,9 +496,11 @@ input Example2UpdateInput {
 }
 input Example2UpdateChildInput {
   connect: ID
+  create: Example2CreateInput
 }
 input Example2UpdateChildrenInput {
   connect: [ID!]
+  create: [Example2CreateInput!]
 }
 enum Example1TextNamesEnum {
   textField1
@@ -710,9 +716,11 @@ input PersonUpdateInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }
 input PlaceCreateInput {
   title: String!
@@ -730,9 +738,11 @@ input PlaceUpdateInput {
 }
 input PlaceUpdateChildInput {
   connect: ID
+  create: PlaceCreateInput
 }
 input PlaceUpdateChildrenInput {
   connect: [ID!]
+  create: [PlaceCreateInput!]
 }
 enum PersonTextNamesEnum {
   firstName
@@ -942,9 +952,11 @@ input PersonUpdateInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }
 input AddressCreateInput {
   country: String!
@@ -1164,9 +1176,11 @@ input PersonUpdateInput {
 }
 input PersonUpdateChildInput {
   connect: ID
+  create: PersonCreateInput
 }
 input PersonUpdateChildrenInput {
   connect: [ID!]
+  create: [PersonCreateInput!]
 }
 input PlaceCreateInput {
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
@@ -1192,9 +1206,11 @@ input PlaceUpdateInput {
 }
 input PlaceUpdateChildInput {
   connect: ID
+  create: PlaceCreateInput
 }
 input PlaceUpdateChildrenInput {
   connect: [ID!]
+  create: [PlaceCreateInput!]
 }
 enum PersonTextNamesEnum {
   firstName
@@ -1396,9 +1412,11 @@ input ExampleUpdateInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 input ExampleWhereOneInput {
   id: ID!
@@ -1531,9 +1549,11 @@ input ExampleUpdateInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -1582,9 +1602,11 @@ input ExampleUpdateInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -1630,9 +1652,11 @@ input ExampleUpdateInput {
 }
 input ExampleUpdateChildInput {
   connect: ID
+  create: ExampleCreateInput
 }
 input ExampleUpdateChildrenInput {
   connect: [ID!]
+  create: [ExampleCreateInput!]
 }
 type Mutation {
   loadExample(path: String!): Example

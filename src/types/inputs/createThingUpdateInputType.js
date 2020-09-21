@@ -114,9 +114,11 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   if (!embedded) {
     thingTypeArray.push(`input ${name}UpdateChildInput {
   connect: ID
+  create: ${name}CreateInput
 }
 input ${name}UpdateChildrenInput {
   connect: [ID!]
+  create: [${name}CreateInput!]
 }`);
   }
 

@@ -78,7 +78,7 @@ const createPushIntoThingMutationResolver = (
       null,
       null,
       thingConfig,
-      true, // forConcatenation
+      true, // for update
     );
 
     await updatePeriphery(periphery, mongooseConn);

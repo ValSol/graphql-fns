@@ -29,7 +29,7 @@ beforeAll(async () => {
 describe('createUpdateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
-  test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
+  describe('for things that have duplex fields', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
@@ -93,293 +93,380 @@ describe('createUpdateThingMutationResolver', () => {
         },
       ],
     });
+    test('should create mutation update thing resolver that create childrent things', async () => {
+      const createPerson = createCreateThingMutationResolver(
+        personConfig,
+        generalConfig,
+        serversideConfig,
+      );
+      expect(typeof createPerson).toBe('function');
+      if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+      const data = {
+        firstName: 'Hugo 2',
+        lastName: 'Boss 2',
+        friend: { create: null },
+        location: { create: null },
+        locations: { create: [] },
+        favorities: { create: [] },
+      };
 
-    const createPerson = createCreateThingMutationResolver(
-      personConfig,
-      generalConfig,
-      serversideConfig,
-    );
-    expect(typeof createPerson).toBe('function');
-    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      expect(createdPerson.firstName).toBe(data.firstName);
+      expect(createdPerson.lastName).toBe(data.lastName);
+      expect(createdPerson.createdAt instanceof Date).toBeTruthy();
+      expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
 
-    const data = {
-      firstName: 'Hugo',
-      lastName: 'Boss',
-      friend: {
-        create: {
-          firstName: 'Adam',
-          lastName: 'Mamedov',
-          location: {
-            create: {
-              name: 'Belarus',
+      const { id } = createdPerson;
+
+      const updatePerson = createUpdateThingMutationResolver(
+        personConfig,
+        generalConfig,
+        serversideConfig,
+      );
+      if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+      const dataForUpdate = {
+        firstName: 'Mark 2',
+        lastName: 'Tven 2',
+        friend: {
+          create: {
+            firstName: 'Karl 2',
+            lastName: 'Marx 2',
+            location: {
+              create: {
+                name: 'German 2',
+              },
             },
           },
         },
-      },
-      location: {
-        create: {
-          name: 'USA',
+        location: {
+          create: {
+            name: 'Canada 2',
+          },
         },
-      },
-      locations: {
-        create: [
-          {
-            name: 'China',
-          },
-          {
-            name: 'Ukraine',
-          },
-        ],
-      },
-      favorities: {
-        create: [
-          {
-            name: 'Australia',
-          },
-          {
-            name: 'Grate Britan',
-          },
-        ],
-      },
-    };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
-    expect(createdPerson.firstName).toBe(data.firstName);
-    expect(createdPerson.lastName).toBe(data.lastName);
-    expect(createdPerson.createdAt instanceof Date).toBeTruthy();
-    expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+        locations: {
+          create: [
+            {
+              name: 'Egipt 2',
+            },
+            {
+              name: 'Siria 2',
+            },
+          ],
+        },
+        favorities: {
+          create: [
+            {
+              name: 'Sudan 2',
+            },
+            {
+              name: 'Marocco 2',
+            },
+          ],
+        },
+      };
 
-    const {
-      friend: friendId,
-      id,
-      location: locationId,
-      locations: locationIds,
-      favorities: favoritieIds,
-    } = createdPerson;
+      const whereOne = { id };
 
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place_Thing', placeSchema);
+      const updatedPerson = await updatePerson(
+        null,
+        { whereOne, data: dataForUpdate },
+        { mongooseConn, pubsub },
+      );
+      expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
+      expect(updatedPerson.locations.length).toBe(2);
+      expect(updatedPerson.favorities.length).toBe(2);
+    });
 
-    const createdFriend = await Person.findById(friendId);
-    expect(createdFriend.firstName).toBe(data.friend.create.firstName);
-    expect(createdFriend.lastName).toBe(data.friend.create.lastName);
-    expect(createdFriend.friend).toEqual(id);
-    expect(createdFriend.createdAt instanceof Date).toBeTruthy();
-    expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
+    test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
+      const createPerson = createCreateThingMutationResolver(
+        personConfig,
+        generalConfig,
+        serversideConfig,
+      );
+      expect(typeof createPerson).toBe('function');
+      if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const createdFriendLocation = await Place.findById(createdFriend.location);
-    expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
-    expect(createdFriendLocation.citizens[0]).toEqual(createdFriend._id);
-
-    const createdLocation = await Place.findById(locationId);
-    expect(createdLocation.name).toBe(data.location.create.name);
-    expect(createdLocation.citizens[0]).toEqual(id);
-    expect(createdLocation.createdAt instanceof Date).toBeTruthy();
-    expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
-
-    const createdLocations = await Place.find({ _id: { $in: locationIds } });
-    expect(createdLocations[0].name).toBe(data.locations.create[0].name);
-    expect(createdLocations[0].curator).toEqual(id);
-    expect(createdLocations[1].name).toBe(data.locations.create[1].name);
-    expect(createdLocations[1].curator).toEqual(id);
-
-    const createdFavorities = await Place.find({ _id: { $in: favoritieIds } });
-    expect(createdFavorities[0].name).toBe(data.favorities.create[0].name);
-    expect(createdFavorities[0].visitors[0]).toEqual(id);
-    expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
-    expect(createdFavorities[1].visitors[0]).toEqual(id);
-
-    const data2 = {
-      firstName: 'Mark',
-      lastName: 'Tven',
-      friend: {
-        create: {
-          firstName: 'Karl',
-          lastName: 'Marx',
-          location: {
-            create: {
-              name: 'German',
+      const data = {
+        firstName: 'Hugo',
+        lastName: 'Boss',
+        friend: {
+          create: {
+            firstName: 'Adam',
+            lastName: 'Mamedov',
+            location: {
+              create: {
+                name: 'Belarus',
+              },
             },
           },
         },
-      },
-      location: {
-        create: {
-          name: 'Canada',
+        location: {
+          create: {
+            name: 'USA',
+          },
         },
-      },
-      locations: {
-        create: [
-          {
-            name: 'Egipt',
+        locations: {
+          create: [
+            {
+              name: 'China',
+            },
+            {
+              name: 'Ukraine',
+            },
+          ],
+        },
+        favorities: {
+          create: [
+            {
+              name: 'Australia',
+            },
+            {
+              name: 'Grate Britan',
+            },
+          ],
+        },
+      };
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      expect(createdPerson.firstName).toBe(data.firstName);
+      expect(createdPerson.lastName).toBe(data.lastName);
+      expect(createdPerson.createdAt instanceof Date).toBeTruthy();
+      expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+
+      const {
+        friend: friendId,
+        id,
+        location: locationId,
+        locations: locationIds,
+        favorities: favoritieIds,
+      } = createdPerson;
+
+      const personSchema = createThingSchema(personConfig);
+      const Person = mongooseConn.model('Person_Thing', personSchema);
+      const placeSchema = createThingSchema(placeConfig);
+      const Place = mongooseConn.model('Place_Thing', placeSchema);
+
+      const createdFriend = await Person.findById(friendId);
+      expect(createdFriend.firstName).toBe(data.friend.create.firstName);
+      expect(createdFriend.lastName).toBe(data.friend.create.lastName);
+      expect(createdFriend.friend).toEqual(id);
+      expect(createdFriend.createdAt instanceof Date).toBeTruthy();
+      expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
+
+      const createdFriendLocation = await Place.findById(createdFriend.location);
+      expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
+      expect(createdFriendLocation.citizens[0]).toEqual(createdFriend._id);
+
+      const createdLocation = await Place.findById(locationId);
+      expect(createdLocation.name).toBe(data.location.create.name);
+      expect(createdLocation.citizens[0]).toEqual(id);
+      expect(createdLocation.createdAt instanceof Date).toBeTruthy();
+      expect(createdLocation.updatedAt instanceof Date).toBeTruthy();
+
+      const createdLocations = await Place.find({ _id: { $in: locationIds } });
+      expect(createdLocations[0].name).toBe(data.locations.create[0].name);
+      expect(createdLocations[0].curator).toEqual(id);
+      expect(createdLocations[1].name).toBe(data.locations.create[1].name);
+      expect(createdLocations[1].curator).toEqual(id);
+
+      const createdFavorities = await Place.find({ _id: { $in: favoritieIds } });
+      expect(createdFavorities[0].name).toBe(data.favorities.create[0].name);
+      expect(createdFavorities[0].visitors[0]).toEqual(id);
+      expect(createdFavorities[1].name).toBe(data.favorities.create[1].name);
+      expect(createdFavorities[1].visitors[0]).toEqual(id);
+
+      const data2 = {
+        firstName: 'Mark',
+        lastName: 'Tven',
+        friend: {
+          create: {
+            firstName: 'Karl',
+            lastName: 'Marx',
+            location: {
+              create: {
+                name: 'German',
+              },
+            },
           },
-          {
-            name: 'Siria',
+        },
+        location: {
+          create: {
+            name: 'Canada',
           },
-        ],
-      },
-      favorities: {
-        create: [
-          {
-            name: 'Sudan',
-          },
-          {
-            name: 'Marocco',
-          },
-        ],
-      },
-    };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
-    expect(createdPerson2.firstName).toBe(data2.firstName);
-    expect(createdPerson2.lastName).toBe(data2.lastName);
-    expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
-    expect(createdPerson2.updatedAt instanceof Date).toBeTruthy();
+        },
+        locations: {
+          create: [
+            {
+              name: 'Egipt',
+            },
+            {
+              name: 'Siria',
+            },
+          ],
+        },
+        favorities: {
+          create: [
+            {
+              name: 'Sudan',
+            },
+            {
+              name: 'Marocco',
+            },
+          ],
+        },
+      };
+      const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+      expect(createdPerson2.firstName).toBe(data2.firstName);
+      expect(createdPerson2.lastName).toBe(data2.lastName);
+      expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
+      expect(createdPerson2.updatedAt instanceof Date).toBeTruthy();
 
-    const {
-      friend: friendId2,
-      id: id2,
-      location: locationId2,
-      locations: locationIds2,
-      favorities: favoritieIds2,
-    } = createdPerson2;
+      const {
+        friend: friendId2,
+        id: id2,
+        location: locationId2,
+        locations: locationIds2,
+        favorities: favoritieIds2,
+      } = createdPerson2;
 
-    const createdFriend2 = await Person.findById(friendId2);
-    expect(createdFriend2.firstName).toBe(data2.friend.create.firstName);
-    expect(createdFriend2.lastName).toBe(data2.friend.create.lastName);
-    expect(createdFriend2.friend).toEqual(id2);
-    expect(createdFriend2.createdAt instanceof Date).toBeTruthy();
-    expect(createdFriend2.updatedAt instanceof Date).toBeTruthy();
+      const createdFriend2 = await Person.findById(friendId2);
+      expect(createdFriend2.firstName).toBe(data2.friend.create.firstName);
+      expect(createdFriend2.lastName).toBe(data2.friend.create.lastName);
+      expect(createdFriend2.friend).toEqual(id2);
+      expect(createdFriend2.createdAt instanceof Date).toBeTruthy();
+      expect(createdFriend2.updatedAt instanceof Date).toBeTruthy();
 
-    const createdFriendLocation2 = await Place.findById(createdFriend2.location);
-    expect(createdFriendLocation2.name).toBe(data2.friend.create.location.create.name);
-    // eslint-disable-next-line
-    expect(createdFriendLocation2.citizens[0]).toEqual(createdFriend2._id);
+      const createdFriendLocation2 = await Place.findById(createdFriend2.location);
+      expect(createdFriendLocation2.name).toBe(data2.friend.create.location.create.name);
+      // eslint-disable-next-line
+      expect(createdFriendLocation2.citizens[0]).toEqual(createdFriend2._id);
 
-    const createdLocation2 = await Place.findById(locationId2);
-    expect(createdLocation2.name).toBe(data2.location.create.name);
-    expect(createdLocation2.citizens[0]).toEqual(id2);
-    expect(createdLocation2.createdAt instanceof Date).toBeTruthy();
-    expect(createdLocation2.updatedAt instanceof Date).toBeTruthy();
+      const createdLocation2 = await Place.findById(locationId2);
+      expect(createdLocation2.name).toBe(data2.location.create.name);
+      expect(createdLocation2.citizens[0]).toEqual(id2);
+      expect(createdLocation2.createdAt instanceof Date).toBeTruthy();
+      expect(createdLocation2.updatedAt instanceof Date).toBeTruthy();
 
-    const createdLocations2 = await Place.find({ _id: { $in: locationIds2 } });
-    expect(createdLocations2[0].name).toBe(data2.locations.create[0].name);
-    expect(createdLocations2[0].curator).toEqual(id2);
-    expect(createdLocations2[1].name).toBe(data2.locations.create[1].name);
-    expect(createdLocations2[1].curator).toEqual(id2);
+      const createdLocations2 = await Place.find({ _id: { $in: locationIds2 } });
+      expect(createdLocations2[0].name).toBe(data2.locations.create[0].name);
+      expect(createdLocations2[0].curator).toEqual(id2);
+      expect(createdLocations2[1].name).toBe(data2.locations.create[1].name);
+      expect(createdLocations2[1].curator).toEqual(id2);
 
-    const createdFavorities2 = await Place.find({ _id: { $in: favoritieIds2 } });
-    expect(createdFavorities2[0].name).toBe(data2.favorities.create[0].name);
-    expect(createdFavorities2[0].visitors[0]).toEqual(id2);
-    expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
-    expect(createdFavorities2[1].visitors[0]).toEqual(id2);
+      const createdFavorities2 = await Place.find({ _id: { $in: favoritieIds2 } });
+      expect(createdFavorities2[0].name).toBe(data2.favorities.create[0].name);
+      expect(createdFavorities2[0].visitors[0]).toEqual(id2);
+      expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
+      expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
-    const updatePerson = createUpdateThingMutationResolver(
-      personConfig,
-      generalConfig,
-      serversideConfig,
-    );
-    if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+      const updatePerson = createUpdateThingMutationResolver(
+        personConfig,
+        generalConfig,
+        serversideConfig,
+      );
+      if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = { id };
-    const dataForUpdate = {
-      firstName: 'Vasya',
-      lastName: 'Pupkin',
-      friend: { connect: createdFriend2._id },
-      location: { connect: createdLocation2._id },
-      locations: { connect: [createdLocations2[0]._id, createdLocations2[1]._id] },
-      favorities: { connect: [createdFavorities2[0]._id, createdFavorities2[1]._id] },
-    };
-    const updatedPerson = await updatePerson(
-      null,
-      { whereOne, data: dataForUpdate },
-      { mongooseConn, pubsub },
-    );
-    expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
-    expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
-    const {
-      friend: friendId3,
-      id: id3,
-      location: locationId3,
-      locations: locationIds3,
-      favorities: favoritieIds3,
-    } = updatedPerson;
+      const whereOne = { id };
+      const dataForUpdate = {
+        firstName: 'Vasya',
+        lastName: 'Pupkin',
+        friend: { connect: createdFriend2._id },
+        location: { connect: createdLocation2._id },
+        locations: { connect: [createdLocations2[0]._id, createdLocations2[1]._id] },
+        favorities: { connect: [createdFavorities2[0]._id, createdFavorities2[1]._id] },
+      };
+      const updatedPerson = await updatePerson(
+        null,
+        { whereOne, data: dataForUpdate },
+        { mongooseConn, pubsub },
+      );
+      expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
+      const {
+        friend: friendId3,
+        id: id3,
+        location: locationId3,
+        locations: locationIds3,
+        favorities: favoritieIds3,
+      } = updatedPerson;
 
-    expect(id).toEqual(id3);
+      expect(id).toEqual(id3);
 
-    const updatedFriend = await Person.findById(friendId3);
-    expect(updatedFriend.friend).toEqual(id3);
+      const updatedFriend = await Person.findById(friendId3);
+      expect(updatedFriend.friend).toEqual(id3);
 
-    const previousFriend = await Person.findById(friendId);
-    expect(previousFriend.friend).toBeUndefined();
+      const previousFriend = await Person.findById(friendId);
+      expect(previousFriend.friend).toBeUndefined();
 
-    const updatedLocation = await Place.findById(locationId3);
-    expect(updatedLocation.citizens.length).toBe(2);
+      const updatedLocation = await Place.findById(locationId3);
+      expect(updatedLocation.citizens.length).toBe(2);
 
-    expect(updatedLocation.citizens[0]).toEqual(id2);
-    expect(updatedLocation.citizens[1]).toEqual(id);
+      expect(updatedLocation.citizens[0]).toEqual(id2);
+      expect(updatedLocation.citizens[1]).toEqual(id);
 
-    const updatedLocations = await Place.find({ _id: { $in: locationIds3 } });
-    expect(updatedLocations[0].curator).toEqual(id);
-    expect(updatedLocations[1].curator).toEqual(id);
+      const updatedLocations = await Place.find({ _id: { $in: locationIds3 } });
+      expect(updatedLocations[0].curator).toEqual(id);
+      expect(updatedLocations[1].curator).toEqual(id);
 
-    const updatedFavorities = await Place.find({ _id: { $in: favoritieIds3 } });
-    expect(updatedFavorities[0].visitors.length).toBe(2);
-    expect(updatedFavorities[0].visitors[0]).toEqual(id2);
-    expect(updatedFavorities[0].visitors[1]).toEqual(id);
-    expect(updatedFavorities[1].visitors.length).toBe(2);
-    expect(updatedFavorities[1].visitors[0]).toEqual(id2);
-    expect(updatedFavorities[1].visitors[1]).toEqual(id);
+      const updatedFavorities = await Place.find({ _id: { $in: favoritieIds3 } });
+      expect(updatedFavorities[0].visitors.length).toBe(2);
+      expect(updatedFavorities[0].visitors[0]).toEqual(id2);
+      expect(updatedFavorities[0].visitors[1]).toEqual(id);
+      expect(updatedFavorities[1].visitors.length).toBe(2);
+      expect(updatedFavorities[1].visitors[0]).toEqual(id2);
+      expect(updatedFavorities[1].visitors[1]).toEqual(id);
 
-    const updatedPerson2 = await Person.findById(id2);
-    const {
-      friend: updatedFriendId2,
-      location: updatedLocationId2,
-      locations: updatedLocationsId2,
-      favorities: updatedFavoritieIds2,
-    } = updatedPerson2;
+      const updatedPerson2 = await Person.findById(id2);
+      const {
+        friend: updatedFriendId2,
+        location: updatedLocationId2,
+        locations: updatedLocationsId2,
+        favorities: updatedFavoritieIds2,
+      } = updatedPerson2;
 
-    expect(updatedFriendId2).toBeUndefined();
+      expect(updatedFriendId2).toBeUndefined();
 
-    const updatedLocation2 = await Place.findById(updatedLocationId2);
-    expect(updatedLocation2.citizens.length).toBe(2);
-    expect(updatedLocation2.citizens[0]).toEqual(id2);
-    expect(updatedLocation2.citizens[1]).toEqual(id);
+      const updatedLocation2 = await Place.findById(updatedLocationId2);
+      expect(updatedLocation2.citizens.length).toBe(2);
+      expect(updatedLocation2.citizens[0]).toEqual(id2);
+      expect(updatedLocation2.citizens[1]).toEqual(id);
 
-    const updatedLocations2 = await Place.find({ _id: { $in: updatedLocationsId2 } });
-    expect(updatedLocations2.length).toBe(0);
+      const updatedLocations2 = await Place.find({ _id: { $in: updatedLocationsId2 } });
+      expect(updatedLocations2.length).toBe(0);
 
-    const updatedFavorities2 = await Place.find({ _id: { $in: updatedFavoritieIds2 } });
-    expect(updatedFavorities2[0].visitors.length).toBe(2);
-    expect(updatedFavorities2[0].visitors[0]).toEqual(id2);
-    expect(updatedFavorities2[0].visitors[1]).toEqual(id);
-    expect(updatedFavorities2[1].visitors.length).toBe(2);
-    expect(updatedFavorities2[1].visitors[0]).toEqual(id2);
-    expect(updatedFavorities2[1].visitors[1]).toEqual(id);
+      const updatedFavorities2 = await Place.find({ _id: { $in: updatedFavoritieIds2 } });
+      expect(updatedFavorities2[0].visitors.length).toBe(2);
+      expect(updatedFavorities2[0].visitors[0]).toEqual(id2);
+      expect(updatedFavorities2[0].visitors[1]).toEqual(id);
+      expect(updatedFavorities2[1].visitors.length).toBe(2);
+      expect(updatedFavorities2[1].visitors[0]).toEqual(id2);
+      expect(updatedFavorities2[1].visitors[1]).toEqual(id);
 
-    const updatePlace = createUpdateThingMutationResolver(
-      placeConfig,
-      generalConfig,
-      serversideConfig,
-    );
-    if (!updatePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+      const updatePlace = createUpdateThingMutationResolver(
+        placeConfig,
+        generalConfig,
+        serversideConfig,
+      );
+      if (!updatePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne2 = { name: data.location.create.name };
-    const dataForUpdate2 = { name: 'Mexico' };
-    const updatedPlace = await updatePlace(
-      null,
-      { whereOne: whereOne2, data: dataForUpdate2 },
-      { mongooseConn, pubsub },
-    );
+      const whereOne2 = { name: data.location.create.name };
+      const dataForUpdate2 = { name: 'Mexico' };
+      const updatedPlace = await updatePlace(
+        null,
+        { whereOne: whereOne2, data: dataForUpdate2 },
+        { mongooseConn, pubsub },
+      );
 
-    expect(updatedPlace.name).toBe(dataForUpdate2.name);
+      expect(updatedPlace.name).toBe(dataForUpdate2.name);
 
-    const updatedPlace2 = await updatePlace(
-      null,
-      { whereOne: whereOne2, data: dataForUpdate2 },
-      { mongooseConn, pubsub },
-    );
-    expect(updatedPlace2).toBeNull();
+      const updatedPlace2 = await updatePlace(
+        null,
+        { whereOne: whereOne2, data: dataForUpdate2 },
+        { mongooseConn, pubsub },
+      );
+      expect(updatedPlace2).toBeNull();
+    });
   });
 
   test('should create mutation update thing resolver to remove embedded fields on null', async () => {
@@ -477,6 +564,7 @@ describe('createUpdateThingMutationResolver', () => {
       { whereOne, data: dataForUpdate2 },
       { mongooseConn, pubsub },
     );
+
     expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
     expect(updatedExample2.textField2).toBe(dataForUpdate.textField2);
     expect(updatedExample2.embeddedField.embeddedTextField).toEqual(
