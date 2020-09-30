@@ -2,6 +2,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import setByPositions from '../../utils/setByPositions';
 import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
@@ -9,7 +10,7 @@ import executeAuthorisation from '../executeAuthorisation';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 
-type Args = { data: Object };
+type Args = { data: Object, positions: { [key: string]: Array<number> } };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 const createCreateThingMutationResolver = (
@@ -30,7 +31,7 @@ const createCreateThingMutationResolver = (
       return null;
     }
 
-    const { data } = args;
+    const { data, positions } = args;
     const { mongooseConn } = context;
 
     const { core, periphery, single, first } = processCreateInputData(
@@ -59,6 +60,23 @@ const createCreateThingMutationResolver = (
       await Promise.all(promises);
       // eslint-disable-next-line no-underscore-dangle
       thing = await Thing.findById(first._id, null, { lean: true });
+    }
+
+    if (positions) {
+      const data2 = {};
+
+      Object.keys(positions).forEach((key) => {
+        if (!data[key].create) {
+          throw new TypeError(`There is not "create" field in "${key}" field to set positions!`);
+        }
+        data2[key] = setByPositions(thing[key], positions[key]);
+      });
+
+      // eslint-disable-next-line no-underscore-dangle
+      thing = await Thing.findOneAndUpdate({ _id: first._id }, data2, {
+        new: true,
+        lean: true,
+      });
     }
 
     const thing2 = addIdsToThing(thing, thingConfig);

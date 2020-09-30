@@ -232,6 +232,10 @@ input UploadFilesToExampleInput {
   pictures: [ImageUpdateInput!]
   photos: [ImageUpdateInput!]
 }
+input ExampleReorderUploadedInput {
+  pictures: [Int!]
+  photos: [Int!]
+}
 input ImageCreateInput {
   fileId: String!
   address: String
@@ -339,7 +343,7 @@ type Mutation {
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
-  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!
+  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -706,6 +710,10 @@ input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }
+input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -821,11 +829,11 @@ type Query {
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
-  createPerson(data: PersonCreateInput!): Person!
+  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
   createPlace(data: PlaceCreateInput!): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
@@ -1166,6 +1174,10 @@ input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }
+input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -1198,6 +1210,10 @@ input PlaceCreateOrPushChildrenInput {
 input PushIntoPlaceInput {
   citizens: PersonCreateOrPushChildrenInput
   visitors: PersonCreateOrPushChildrenInput
+}
+input PlaceReorderCreatedInput {
+  citizens: [Int!]
+  visitors: [Int!]
 }
 input PlaceUpdateInput {
   name: String
@@ -1291,17 +1307,17 @@ type Query {
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
 }
 type Mutation {
-  createPerson(data: PersonCreateInput!): Person!
+  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
   deletePerson(whereOne: PersonWhereOneInput!): Person
-  createPlace(data: PlaceCreateInput!): Place!
+  createPlace(data: PlaceCreateInput!, positions: PlaceReorderCreatedInput): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!): Place!
-  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, positions: PlaceReorderCreatedInput): Place!
   deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {

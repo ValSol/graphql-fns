@@ -7,7 +7,10 @@ import type {
 } from '../../../flowTypes';
 
 import checkInventory from '../../../utils/checkInventory';
+import setByPositions from '../../../utils/setByPositions';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createThing from '../../../mongooseModels/createThing';
+import addIdsToThing from '../../addIdsToThing';
 import executeAuthorisation from '../../executeAuthorisation';
 import composeAllFilesFieldsData from './composeAllFilesFieldsData';
 import createPushIntoThingMutationResolver from '../createPushIntoThingMutationResolver';
@@ -22,6 +25,7 @@ type Args = {
   options: UploadOptions,
   whereOne: Object,
   data: Object,
+  positions: { [key: string]: Array<number> },
 };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
@@ -31,7 +35,7 @@ const createUploadFilesToThingMutationResolver = (
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
 ): Function | null => {
-  const { inventory } = generalConfig;
+  const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
   const { saveFiles, composeFileFieldsData } = serversideConfig;
 
@@ -85,6 +89,7 @@ const createUploadFilesToThingMutationResolver = (
       files,
       options,
       options: { hashes },
+      positions,
     } = args;
     const { mongooseConn } = context;
 
@@ -178,16 +183,49 @@ const createUploadFilesToThingMutationResolver = (
     }
 
     if (Object.keys(forPush).length) {
+      const info2 = positions
+        ? {
+            projection: {
+              ...Object.keys(forPush).reduce(
+                (prev, key) => {
+                  prev[key] = 1; // eslint-disable-line no-param-reassign
+                  return prev;
+                },
+                { _id: 1 },
+              ),
+            },
+          }
+        : info;
+
       thing = await pushIntoThingMutationResolver(
         parent,
         { whereOne, data: forPush },
         context,
-        info,
+        info2,
         filter,
       );
+
+      if (positions) {
+        const data2 = {};
+
+        Object.keys(positions).forEach((key) => {
+          if (!forPush[key]) {
+            throw new TypeError(`There is not field "${key}" for push to set positions!`);
+          }
+          data2[key] = setByPositions(thing[key], positions[key]);
+        });
+
+        const Thing = await createThing(mongooseConn, thingConfig, enums);
+        thing = await Thing.findOneAndUpdate({ _id: thing.id }, data2, {
+          new: true,
+          lean: true,
+        });
+      }
     }
 
-    return thing;
+    const thing2 = addIdsToThing(thing, thingConfig);
+
+    return thing2;
   };
 
   return resolver;

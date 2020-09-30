@@ -13,6 +13,8 @@ import createPushIntoThingInputType from './inputs/createPushIntoThingInputType'
 import createThingCreateInputType from './inputs/createThingCreateInputType';
 import createThingDistinctValuesOptionsInputType from './inputs/createThingDistinctValuesOptionsInputType';
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
+import createThingReorderCreatedInputType from './inputs/createThingReorderCreatedInputType';
+import createThingReorderUploadedInputType from './inputs/createThingReorderUploadedInputType';
 import createThingUpdateInputType from './inputs/createThingUpdateInputType';
 import createUploadFilesToThingInputType from './inputs/createUploadFilesToThingInputType';
 import createThingNearInputType from './inputs/createThingNearInputType';
@@ -94,6 +96,13 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
             if (pushIntoThingInputType) prev.push(pushIntoThingInputType);
           }
+          if (
+            checkInventory(['Mutation', 'createThing'], inventory) ||
+            checkInventory(['Mutation', 'updateThing', name], inventory)
+          ) {
+            const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
+            if (thingReorderCreatedInputType) prev.push(thingReorderCreatedInputType);
+          }
           // not check Inventory because may use not only for updateThing mutation ...
           // ... but for embedded & file fields
           const thingUpdateInputType = createThingUpdateInputType(thingConfig);
@@ -104,6 +113,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
             if (filesOfThingOptionsInputType) {
               prev.push(filesOfThingOptionsInputType);
               prev.push(uploadFilesToThingInputType);
+
+              const thingReorderUploadedInputType = createThingReorderUploadedInputType(
+                thingConfig,
+              );
+              if (thingReorderUploadedInputType) prev.push(thingReorderUploadedInputType);
             }
           }
           return prev;

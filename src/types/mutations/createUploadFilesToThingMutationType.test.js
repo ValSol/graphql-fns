@@ -53,6 +53,47 @@ describe('createUploadFilesToThingMutationType', () => {
           name: 'hero',
           config: imageConfig,
         },
+      ],
+    });
+    const expectedResult =
+      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
+
+    const result = createUploadFilesToThingMutationType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create mutation upload file thing type', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      embedded: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          required: true,
+        },
+        {
+          name: 'hero',
+          config: imageConfig,
+        },
         {
           name: 'pictures',
           config: imageConfig,
@@ -67,7 +108,7 @@ describe('createUploadFilesToThingMutationType', () => {
       ],
     });
     const expectedResult =
-      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
+      '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!';
 
     const result = createUploadFilesToThingMutationType(thingConfig);
     expect(result).toEqual(expectedResult);

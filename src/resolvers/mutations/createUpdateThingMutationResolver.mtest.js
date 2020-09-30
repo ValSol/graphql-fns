@@ -147,20 +147,32 @@ describe('createUpdateThingMutationResolver', () => {
         locations: {
           create: [
             {
-              name: 'Egipt 2',
+              name: 'Nigeria',
             },
             {
-              name: 'Siria 2',
+              name: 'Ethiopia',
+            },
+            {
+              name: 'Egypt',
+            },
+            {
+              name: 'Congo',
             },
           ],
         },
         favorities: {
           create: [
             {
-              name: 'Sudan 2',
+              name: 'Tanzania',
             },
             {
-              name: 'Marocco 2',
+              name: 'South Africa',
+            },
+            {
+              name: 'Kenya',
+            },
+            {
+              name: 'Uganda',
             },
           ],
         },
@@ -175,8 +187,54 @@ describe('createUpdateThingMutationResolver', () => {
       );
       expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
-      expect(updatedPerson.locations.length).toBe(2);
-      expect(updatedPerson.favorities.length).toBe(2);
+      expect(updatedPerson.locations.length).toBe(4);
+      expect(updatedPerson.favorities.length).toBe(4);
+
+      const dataForUpdate2 = {
+        locations: {
+          connect: [...updatedPerson.locations],
+          create: [
+            {
+              name: 'Algeria',
+            },
+            {
+              name: 'Somalia',
+            },
+            {
+              name: 'Morocco',
+            },
+          ],
+        },
+        favorities: {
+          create: [
+            {
+              name: 'Mozambique',
+            },
+            {
+              name: 'Ghana',
+            },
+            {
+              name: 'Angola',
+            },
+          ],
+          connect: [...updatedPerson.favorities],
+        },
+      };
+
+      const positions = { locations: [0, 1, 2], favorities: [2, 3, 4] };
+
+      const updatedPerson2 = await updatePerson(
+        null,
+        { whereOne, data: dataForUpdate2, positions },
+        { mongooseConn, pubsub },
+      );
+      expect(updatedPerson2.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson2.lastName).toBe(dataForUpdate.lastName);
+      expect(updatedPerson2.locations.length).toBe(7);
+      expect(updatedPerson2.locations.slice(3)).toEqual(updatedPerson.locations);
+      expect(updatedPerson2.favorities.length).toBe(7);
+      expect(updatedPerson2.favorities.slice(0, 2)).toEqual(updatedPerson.favorities.slice(0, 2));
+      expect(updatedPerson2.favorities.slice(5)).toEqual(updatedPerson.favorities.slice(2));
     });
 
     test('should create mutation update thing resolver with wipe out duplex fields values', async () => {

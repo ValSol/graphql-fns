@@ -2,10 +2,18 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+import createThingReorderCreatedInputType from '../inputs/createThingReorderCreatedInputType';
+
 const createDeleteThingMutationType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  const result = `  update${name}(whereOne: ${name}WhereOneInput!, data: ${name}UpdateInput!): ${name}!`;
+  const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
+
+  const reorderField = thingReorderCreatedInputType
+    ? `, positions: ${name}ReorderCreatedInput`
+    : '';
+
+  const result = `  update${name}(whereOne: ${name}WhereOneInput!, data: ${name}UpdateInput!${reorderField}): ${name}!`;
   return result;
 };
 

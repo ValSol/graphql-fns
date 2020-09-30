@@ -2,6 +2,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
+import setByPositions from '../../utils/setByPositions';
 import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
@@ -11,7 +12,7 @@ import processCreateInputData from './processCreateInputData';
 import processDeleteData from './processDeleteData';
 import updatePeriphery from './updatePeriphery';
 
-type Args = { data: Object, whereOne: Object };
+type Args = { data: Object, whereOne: Object, positions: { [key: string]: Array<number> } };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 const createUpdateThingMutationResolver = (
@@ -38,7 +39,7 @@ const createUpdateThingMutationResolver = (
     if (!filter) return null;
 
     const { mongooseConn } = context;
-    const { whereOne, data } = args;
+    const { whereOne, data, positions } = args;
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
@@ -89,10 +90,27 @@ const createUpdateThingMutationResolver = (
       });
       await Promise.all(promises);
     }
-    const thing = await Thing.findOneAndUpdate({ _id }, rest, {
+
+    let thing = await Thing.findOneAndUpdate({ _id }, rest, {
       new: true,
       lean: true,
     });
+
+    if (positions) {
+      const data2 = {};
+
+      Object.keys(positions).forEach((key) => {
+        if (!data[key].create) {
+          throw new TypeError(`There is not "create" field in "${key}" field to set positions!`);
+        }
+        data2[key] = setByPositions(thing[key], positions[key]);
+      });
+
+      thing = await Thing.findOneAndUpdate({ _id }, data2, {
+        new: true,
+        lean: true,
+      });
+    }
 
     const thing2 = addIdsToThing(thing, thingConfig);
 
