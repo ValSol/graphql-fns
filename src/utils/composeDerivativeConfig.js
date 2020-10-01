@@ -33,6 +33,100 @@ const composeDerivativeConfig = (
 
   const fieldsObject = composeFieldsObject(rootThingConfig);
 
+  const allowThingNames = Object.keys(allow);
+
+  // *** check args correctness
+
+  if (excludeFields) {
+    Object.keys(excludeFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in excludeFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+
+    if (excludeFields[rootThingName]) {
+      excludeFields[rootThingName].forEach((fieldName) => {
+        if (!fieldsObject[fieldName]) {
+          throw new TypeError(
+            `Incorrect excludeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+          );
+        }
+      });
+    }
+  }
+
+  if (includeFields) {
+    Object.keys(includeFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in includeFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+
+    if (includeFields[rootThingName]) {
+      includeFields[rootThingName].forEach((fieldName) => {
+        if (!fieldsObject[fieldName]) {
+          throw new TypeError(
+            `Incorrect includeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+          );
+        }
+      });
+    }
+  }
+
+  if (addFields) {
+    Object.keys(addFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in addFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+  }
+
+  if (derivativeFields) {
+    Object.keys(derivativeFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in derivativeFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+
+    const addedDuplexFields =
+      addFields && addFields[rootThingName] && addFields[rootThingName].duplexFields
+        ? addFields[rootThingName].duplexFields.map(({ name }) => name)
+        : [];
+
+    const addedRelationalFields =
+      addFields && addFields[rootThingName] && addFields[rootThingName].relationalFields
+        ? addFields[rootThingName].relationalFields.map(({ name }) => name)
+        : [];
+
+    if (derivativeFields[rootThingName]) {
+      Object.keys(derivativeFields[rootThingName]).forEach((fieldName) => {
+        if (
+          !(
+            fieldsObject[fieldName] &&
+            (fieldsObject[fieldName].kind === 'relationalFields' ||
+              fieldsObject[fieldName].kind === 'duplexFields')
+          ) &&
+          !addedDuplexFields.includes(fieldName) &&
+          !addedRelationalFields.includes(fieldName)
+        ) {
+          throw new TypeError(
+            `Incorrect derivativeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+          );
+        }
+      });
+    }
+  }
+
+  // ***
+
   const thingConfig = { ...rootThingConfig, name: `${rootThingName}${suffix}` };
 
   store[`${rootThingName}${suffix}`] = thingConfig;

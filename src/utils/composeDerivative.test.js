@@ -26,6 +26,14 @@ describe('composeDerivative', () => {
       'creators',
     ];
 
+    const ForView: DerivativeAttributes = {
+      suffix: 'ForView',
+      allow: {
+        Restaurant: ['thing', 'things'],
+        Post: ['thing', 'things'],
+      },
+    };
+
     const ForApprove: DerivativeAttributes = {
       suffix: 'ForApprove',
       allow: {
@@ -64,9 +72,9 @@ describe('composeDerivative', () => {
         },
       },
     };
-    const result = composeDerivative([ForApprove]);
+    const result = composeDerivative([ForView, ForApprove]);
 
-    const expectedResult = { ForApprove };
+    const expectedResult = { ForView, ForApprove };
     expect(result).toEqual(expectedResult);
   });
 });
