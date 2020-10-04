@@ -66,6 +66,13 @@ describe('createUpdateThingMutationResolver', () => {
           required: true,
         },
       ],
+      relationalFields: [
+        {
+          name: 'sibling',
+          config: personConfig,
+          required: true,
+        },
+      ],
       duplexFields: [
         {
           name: 'friend',
@@ -93,6 +100,7 @@ describe('createUpdateThingMutationResolver', () => {
         },
       ],
     });
+
     test('should create mutation update thing resolver that create childrent things', async () => {
       const createPerson = createCreateThingMutationResolver(
         personConfig,
@@ -126,6 +134,9 @@ describe('createUpdateThingMutationResolver', () => {
       if (!updatePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
       const dataForUpdate = {
+        sibling: {
+          create: { firstName: 'Vasya', lastName: 'Pupkin', locations: [], favorities: [] },
+        },
         firstName: 'Mark 2',
         lastName: 'Tven 2',
         friend: {
@@ -185,10 +196,24 @@ describe('createUpdateThingMutationResolver', () => {
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
       );
+
+      expect(Boolean(updatedPerson.sibling)).toBe(true);
+      expect(Boolean(updatedPerson.friend)).toBe(true);
       expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson.locations.length).toBe(4);
       expect(updatedPerson.favorities.length).toBe(4);
+
+      const personSchema = createThingSchema(personConfig);
+      const Person = mongooseConn.model('Person_Thing', personSchema);
+
+      const friendId = updatedPerson.friend;
+
+      const createdFriend = await Person.findById(friendId);
+
+      expect(createdFriend.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend.lastName).toBe(dataForUpdate.friend.create.lastName);
+      expect(createdFriend.friend).toEqual(id);
 
       const dataForUpdate2 = {
         locations: {
@@ -228,6 +253,15 @@ describe('createUpdateThingMutationResolver', () => {
         { whereOne, data: dataForUpdate2, positions },
         { mongooseConn, pubsub },
       );
+
+      const createdFriend2 = await Person.findById(friendId);
+
+      expect(createdFriend2.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend2.lastName).toBe(dataForUpdate.friend.create.lastName);
+      expect(createdFriend2.friend).toEqual(id);
+
+      expect(Boolean(updatedPerson.sibling)).toBe(true);
+      expect(Boolean(updatedPerson.friend)).toBe(true);
       expect(updatedPerson2.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson2.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson2.locations.length).toBe(7);
@@ -235,6 +269,75 @@ describe('createUpdateThingMutationResolver', () => {
       expect(updatedPerson2.favorities.length).toBe(7);
       expect(updatedPerson2.favorities.slice(0, 2)).toEqual(updatedPerson.favorities.slice(0, 2));
       expect(updatedPerson2.favorities.slice(5)).toEqual(updatedPerson.favorities.slice(2));
+
+      const dataForUpdate3 = {
+        sibling: {
+          connect: null,
+        },
+        friend: {
+          create: {
+            firstName: 'Karl 3',
+            lastName: 'Marx 3',
+            location: {
+              create: {
+                name: 'German 3',
+              },
+            },
+          },
+        },
+      };
+
+      const updatedPerson3 = await updatePerson(
+        null,
+        { whereOne, data: dataForUpdate3 },
+        { mongooseConn, pubsub },
+      );
+
+      const createdFriend3 = await Person.findById(friendId);
+
+      expect(createdFriend3.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend3.lastName).toBe(dataForUpdate.friend.create.lastName);
+      expect(createdFriend3.friend).toEqual(undefined);
+
+      expect(updatedPerson3.sibling).toBe(null);
+      expect(Boolean(updatedPerson3.friend)).toBe(true);
+      expect(updatedPerson3.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson3.lastName).toBe(dataForUpdate.lastName);
+      expect(updatedPerson3.locations.length).toBe(7);
+      expect(updatedPerson3.locations.slice(3)).toEqual(updatedPerson.locations);
+      expect(updatedPerson3.favorities.length).toBe(7);
+      expect(updatedPerson3.favorities.slice(0, 2)).toEqual(updatedPerson.favorities.slice(0, 2));
+      expect(updatedPerson3.favorities.slice(5)).toEqual(updatedPerson.favorities.slice(2));
+
+      const friendId2 = updatedPerson3.friend;
+
+      const dataForUpdate4 = {
+        friend: {
+          connect: null,
+        },
+      };
+
+      const updatedPerson4 = await updatePerson(
+        null,
+        { whereOne, data: dataForUpdate4 },
+        { mongooseConn, pubsub },
+      );
+
+      const createdFriend4 = await Person.findById(friendId2);
+
+      expect(createdFriend4.firstName).toBe(dataForUpdate3.friend.create.firstName);
+      expect(createdFriend4.lastName).toBe(dataForUpdate3.friend.create.lastName);
+      expect(createdFriend4.friend).toEqual(undefined);
+
+      expect(updatedPerson4.sibling).toBe(null);
+      expect(updatedPerson4.friend).toBe(null);
+      expect(updatedPerson4.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson4.lastName).toBe(dataForUpdate.lastName);
+      expect(updatedPerson4.locations.length).toBe(7);
+      expect(updatedPerson4.locations.slice(3)).toEqual(updatedPerson.locations);
+      expect(updatedPerson4.favorities.length).toBe(7);
+      expect(updatedPerson4.favorities.slice(0, 2)).toEqual(updatedPerson.favorities.slice(0, 2));
+      expect(updatedPerson4.favorities.slice(5)).toEqual(updatedPerson.favorities.slice(2));
     });
 
     test('should create mutation update thing resolver with wipe out duplex fields values', async () => {

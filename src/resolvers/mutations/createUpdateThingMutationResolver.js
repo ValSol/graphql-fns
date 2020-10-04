@@ -10,6 +10,7 @@ import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import processCreateInputData from './processCreateInputData';
 import processDeleteData from './processDeleteData';
+import processDeleteDataPrepareArgs from './processDeleteDataPrepareArgs';
 import updatePeriphery from './updatePeriphery';
 
 type Args = { data: Object, whereOne: Object, positions: { [key: string]: Array<number> } };
@@ -45,10 +46,13 @@ const createUpdateThingMutationResolver = (
 
     const { duplexFields } = thingConfig;
     const duplexFieldsProjection = duplexFields
-      ? duplexFields.reduce((prev, { name: name2 }) => {
-          if (data[name2]) prev[name2] = 1; // eslint-disable-line no-param-reassign
-          return prev;
-        }, {})
+      ? duplexFields.reduce(
+          (prev, { name: name2 }) => {
+            prev[name2] = 1; // eslint-disable-line no-param-reassign
+            return prev;
+          },
+          { _id: 1 },
+        )
       : {};
 
     const whereOne2 = mergeWhereAndFilter(filter, whereOne, thingConfig);
@@ -62,7 +66,10 @@ const createUpdateThingMutationResolver = (
     if (!previousThing) return null;
 
     const coreForDeletions = Object.keys(duplexFieldsProjection).length
-      ? processDeleteData(previousThing, thingConfig)
+      ? processDeleteData(
+          processDeleteDataPrepareArgs(data, previousThing, thingConfig),
+          thingConfig,
+        )
       : null;
 
     const {

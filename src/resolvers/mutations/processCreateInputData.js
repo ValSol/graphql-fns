@@ -152,10 +152,14 @@ const processCreateInputData = (
 
       if (relationalFieldsObject[key]) {
         const { array, config } = relationalFieldsObject[key];
-        if (!array && data2[key].create && data2[key].connect) {
+        if (!array && data2[key].create !== undefined && data2[key].connect !== undefined) {
           throw new TypeError(
             `Simultaneous use "create" and "connect" keys with a relationalField "${key}" that not an array!`,
           );
+        }
+        if (!array && data2[key].connect === null) {
+          prev[key] = null; // eslint-disable-line no-param-reassign
+          return prev;
         }
         if (data2[key].connect) {
           // eslint-disable-next-line no-param-reassign
@@ -195,6 +199,10 @@ const processCreateInputData = (
           throw new TypeError(
             `Simultaneous use "create" and "connect" keys with a duplexField "${key}" that not an array!`,
           );
+        }
+        if (!array && data2[key].connect === null) {
+          prev[key] = null; // eslint-disable-line no-param-reassign
+          return prev;
         }
         if (data2[key].connect) {
           if (array) {
@@ -403,7 +411,7 @@ const processCreateInputData = (
   }
 
   let single = false;
-  if (core.size === 1) {
+  if (core.size === 1 && !initialCore) {
     const key = core.keys().next().value;
 
     if (!key) {
