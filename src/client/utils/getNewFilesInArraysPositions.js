@@ -9,7 +9,7 @@ const getNewFilesInArraysPositions = (
   uploadArgs: { files: Array<Object>, options: UploadOptions },
   getHashFromValue: (Object) => string,
   thingConfig: ThingConfig,
-): { arrayFiledFieldName: Array<number> } => {
+): { [arrayFiledFieldName: string]: Array<number> } => {
   const { fileFields } = thingConfig;
   if (!fileFields || !uploadArgs.files.length) return {};
 
