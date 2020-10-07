@@ -47,7 +47,12 @@ const createThingArrayResolver = (
 
     const things = await thingsQueryResolver(null, { where: { id_in: ids } }, context, info);
 
-    return things;
+    const thingsObject = things.reduce((prev, thing) => {
+      prev[thing.id] = thing; // eslint-disable-line no-param-reassign
+      return prev;
+    }, {});
+
+    return ids.map((id) => thingsObject[id]).filter(Boolean);
   };
 
   return resolver;
