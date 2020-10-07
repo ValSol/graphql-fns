@@ -9,9 +9,6 @@ const setByPositions = (arr: Array<any>, positions: Array<number>): Array<any> =
       `Too long positions array: "${positions.length}" but maximum: "${length}"!`,
     );
   }
-  if (!positions.length) {
-    throw new TypeError('Empty positions array!');
-  }
 
   const newArr = arr.slice(-positions.length);
 

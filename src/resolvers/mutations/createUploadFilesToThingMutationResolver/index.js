@@ -212,6 +212,11 @@ const createUploadFilesToThingMutationResolver = (
           if (!forPush[key]) {
             throw new TypeError(`There is not field "${key}" for push to set positions!`);
           }
+          if (forPush[key].length !== positions[key].length) {
+            throw new TypeError(
+              `Number of created childs: "${forPush[key].length}" but number of positions: "${positions[key].length}"!`,
+            );
+          }
           data2[key] = setByPositions(thing[key], positions[key]);
         });
 

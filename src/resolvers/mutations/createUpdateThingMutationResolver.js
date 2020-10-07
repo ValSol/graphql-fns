@@ -110,6 +110,11 @@ const createUpdateThingMutationResolver = (
         if (!data[key].create) {
           throw new TypeError(`There is not "create" field in "${key}" field to set positions!`);
         }
+        if (data[key].create.length !== positions[key].length) {
+          throw new TypeError(
+            `Number of created childs: "${data[key].create.length}" but number of positions: "${positions[key].length}"!`,
+          );
+        }
         data2[key] = setByPositions(thing[key], positions[key]);
       });
 
