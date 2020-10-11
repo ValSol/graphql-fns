@@ -207,14 +207,6 @@ input ExampleUpdateInput {
   photos: [ImageUpdateInput!]
   position: GeospatialPointInput
 }
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-}
 enum ExampleFileNamesEnum {
   logo
   hero
@@ -468,14 +460,6 @@ input Example1UpdateInput {
   textField3: String
   position: GeospatialPointInput
 }
-input Example1UpdateChildInput {
-  connect: ID
-  create: Example1CreateInput
-}
-input Example1UpdateChildrenInput {
-  connect: [ID!]
-  create: [Example1CreateInput!]
-}
 input Example2CreateInput {
   textField1: [String!]
   textField2: [String!]!
@@ -497,14 +481,6 @@ input Example2UpdateInput {
   textField1: [String!]
   textField2: [String!]
   area: GeospatialPolygonInput
-}
-input Example2UpdateChildInput {
-  connect: ID
-  create: Example2CreateInput
-}
-input Example2UpdateChildrenInput {
-  connect: [ID!]
-  create: [Example2CreateInput!]
 }
 enum Example1TextNamesEnum {
   textField1
@@ -717,18 +693,10 @@ input PersonReorderCreatedInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: PersonUpdateChildrenInput
-  enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput
-  favoritePlace: PlaceUpdateChildInput
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
 }
 input PlaceCreateInput {
   title: String!
@@ -743,14 +711,6 @@ input PlaceCreateOrPushChildrenInput {
 }
 input PlaceUpdateInput {
   title: String
-}
-input PlaceUpdateChildInput {
-  connect: ID
-  create: PlaceCreateInput
-}
-input PlaceUpdateChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
 }
 enum PersonTextNamesEnum {
   firstName
@@ -957,14 +917,6 @@ input PersonUpdateInput {
   locations: [AddressUpdateInput!]
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
 }
 input AddressCreateInput {
   country: String!
@@ -1181,18 +1133,10 @@ input PersonReorderCreatedInput {
 input PersonUpdateInput {
   firstName: String
   lastName: String
-  friends: PersonUpdateChildrenInput
-  enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput
-  favoritePlace: PlaceUpdateChildInput
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
 }
 input PlaceCreateInput {
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
@@ -1217,16 +1161,8 @@ input PlaceReorderCreatedInput {
 }
 input PlaceUpdateInput {
   name: String
-  citizens: PersonUpdateChildrenInput
-  visitors: PersonUpdateChildrenInput
-}
-input PlaceUpdateChildInput {
-  connect: ID
-  create: PlaceCreateInput
-}
-input PlaceUpdateChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
+  citizens: PersonCreateOrPushThru_location_FieldChildrenInput
+  visitors: PersonCreateOrPushChildrenInput
 }
 enum PersonTextNamesEnum {
   firstName
@@ -1426,14 +1362,6 @@ input ExampleCreateOrPushChildrenInput {
 input ExampleUpdateInput {
   textField: String
 }
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -1563,14 +1491,6 @@ input ExampleCreateOrPushChildrenInput {
 input ExampleUpdateInput {
   textField: String
 }
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -1616,14 +1536,6 @@ input ExampleCreateOrPushChildrenInput {
 input ExampleUpdateInput {
   textField: String
 }
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -1665,14 +1577,6 @@ type Example {
 }
 input ExampleUpdateInput {
   textField: String
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }
 type Mutation {
   loadExample(path: String!): Example

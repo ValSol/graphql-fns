@@ -2,9 +2,10 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+import isOppositeRequired from './isOppositeRequired';
+
 const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   const {
-    embedded,
     booleanFields,
     dateTimeFields,
     duplexFields,
@@ -67,7 +68,9 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
     relationalFields.reduce(
       (prev, { array, name: name2, config: { name: relationalThingName } }) => {
         prev.push(
-          `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}`,
+          `  ${name2}: ${relationalThingName}${
+            array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
+          }`,
         );
         return prev;
       },
@@ -77,12 +80,32 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.reduce((prev, { array, name: name2, config: { name: relationalThingName } }) => {
-      prev.push(
-        `  ${name2}: ${relationalThingName}${array ? 'UpdateChildrenInput' : 'UpdateChildInput'}`,
-      );
-      return prev;
-    }, thingTypeArray);
+    duplexFields.reduce(
+      (
+        prev,
+        { array, name: name2, oppositeName, config, config: { name: relationalThingName } },
+      ) => {
+        const oppositeRequired = isOppositeRequired(oppositeName, config);
+        if (oppositeRequired) {
+          prev.push(
+            `  ${name2}: ${relationalThingName}${
+              array
+                ? `CreateOrPushThru_${oppositeName}_FieldChildrenInput`
+                : `CreateThru_${oppositeName}_FieldChildInput`
+            }`,
+          );
+        } else {
+          prev.push(
+            `  ${name2}: ${relationalThingName}${
+              array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
+            }`,
+          );
+        }
+
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
   if (embeddedFields) {
@@ -110,17 +133,6 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   }
 
   thingTypeArray.push('}');
-
-  if (!embedded) {
-    thingTypeArray.push(`input ${name}UpdateChildInput {
-  connect: ID
-  create: ${name}CreateInput
-}
-input ${name}UpdateChildrenInput {
-  connect: [ID!]
-  create: [${name}CreateInput!]
-}`);
-  }
 
   const result = thingTypeArray.join('\n');
 

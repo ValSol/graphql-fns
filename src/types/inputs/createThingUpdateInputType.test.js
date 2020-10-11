@@ -39,14 +39,6 @@ describe('createThingUpdateInputType', () => {
   textField3: String
   textField4: [String!]
   textField5: [String!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -85,18 +77,10 @@ input ExampleUpdateChildrenInput {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: PersonUpdateChildrenInput
-  enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput
-  favoritePlace: PlaceUpdateChildInput
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -120,11 +104,22 @@ input PersonUpdateChildrenInput {
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          required: true,
         },
       ],
     };
     Object.assign(personConfig, {
       name: 'Person',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+        },
+        {
+          name: 'lastName',
+          required: true,
+        },
+      ],
       duplexFields: [
         {
           name: 'friends',
@@ -153,18 +148,12 @@ input PersonUpdateChildrenInput {
       ],
     });
     const expectedResult = `input PersonUpdateInput {
-  friends: PersonUpdateChildrenInput
-  enemies: PersonUpdateChildrenInput
-  location: PlaceUpdateChildInput
-  favoritePlace: PlaceUpdateChildInput
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
+  firstName: String
+  lastName: String
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateThru_visitors_FieldChildInput
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -228,14 +217,6 @@ input PersonUpdateChildrenInput {
   locations: [AddressUpdateInput!]
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
-}
-input PersonUpdateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonUpdateChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(personConfig);
@@ -297,14 +278,6 @@ input PersonUpdateChildrenInput {
   precedingArea: GeospatialPolygonInput
   favoriteAreas: [GeospatialPolygonInput!]
   worstAreas: [GeospatialPolygonInput!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -342,14 +315,6 @@ input ExampleUpdateChildrenInput {
   field2: [CuisinesEnumeration!]
   field3: WeekdaysEnumeration
   field4: [CuisinesEnumeration!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -389,14 +354,6 @@ input ExampleUpdateChildrenInput {
   intField3: Int
   intField4: [Int!]
   intField5: [Int!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -436,14 +393,6 @@ input ExampleUpdateChildrenInput {
   floatField3: Float
   floatField4: [Float!]
   floatField5: [Float!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -483,14 +432,6 @@ input ExampleUpdateChildrenInput {
   booleanField3: Boolean
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);
@@ -572,14 +513,6 @@ input ExampleUpdateChildrenInput {
   hero: ImageUpdateInput
   pictures: [ImageUpdateInput!]
   photos: [ImageUpdateInput!]
-}
-input ExampleUpdateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleUpdateChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
 }`;
 
     const result = createThingUpdateInputType(thingConfig);

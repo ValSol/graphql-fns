@@ -197,6 +197,78 @@ input PersonCreateOrPushChildrenInput {
     const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  describe('test menu & menuSections duplex fields (retrospective test)', () => {
+    const menuSectionConfig: ThingConfig = {};
+    const menuConfig: ThingConfig = {
+      name: 'Menu',
+      duplexFields: [
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          config: menuSectionConfig,
+          array: true,
+        },
+      ],
+    };
+    Object.assign(menuSectionConfig, {
+      name: 'MenuSection',
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuConfig,
+          required: true,
+        },
+      ],
+    });
+
+    test('should create thing input type for Menu duplex fields', () => {
+      const expectedResult = `input MenuCreateInput {
+  sections: MenuSectionCreateOrPushThru_menu_FieldChildrenInput
+}
+input MenuCreateChildInput {
+  connect: ID
+  create: MenuCreateInput
+}
+input MenuCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCreateInput!]
+}`;
+
+      const result = createThingCreateInputType(menuConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should create thing input type for Menu duplex fields', () => {
+      const expectedResult = `input MenuSectionCreateInput {
+  menu: MenuCreateChildInput!
+}
+input MenuSectionCreateThru_menu_FieldInput {
+  menu: MenuCreateChildInput
+}
+input MenuSectionCreateChildInput {
+  connect: ID
+  create: MenuSectionCreateInput
+}
+input MenuSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuSectionCreateInput!]
+}
+input MenuSectionCreateThru_menu_FieldChildInput {
+  connect: ID
+  create: MenuSectionCreateThru_menu_FieldInput
+}
+input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
+  connect: [ID!]
+  create: [MenuSectionCreateThru_menu_FieldInput!]
+}`;
+
+      const result = createThingCreateInputType(menuSectionConfig);
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
   test('should create thing input type with duplex fields', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {

@@ -2,15 +2,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const isOppositeRequired = (oppositeName, config) => {
-  const { name, duplexFields } = config;
-  if (!duplexFields) throw new TypeError(`Thing: "${name}" mast have duplexFields!`);
-  const oppositeField = duplexFields.find(({ name: fieldName }) => fieldName === oppositeName);
-  if (!oppositeField) {
-    throw new TypeError(`Thing: "${name}" mast have "${oppositeName}" duplexField!`);
-  }
-  return oppositeField.required;
-};
+import isOppositeRequired from './isOppositeRequired';
 
 const createThingCreateInputType = (thingConfig: ThingConfig): string => {
   const {
