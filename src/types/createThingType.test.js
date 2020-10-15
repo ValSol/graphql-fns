@@ -489,10 +489,10 @@ describe('createThingType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing type with embedded fields', () => {
+  test('should create thing type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -553,7 +553,7 @@ describe('createThingType', () => {
   test('should create file thing type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

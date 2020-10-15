@@ -640,7 +640,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create file thing input type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -663,7 +663,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing input type with embedded fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

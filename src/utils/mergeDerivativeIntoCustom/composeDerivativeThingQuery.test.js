@@ -42,7 +42,7 @@ describe('composeDerivativeThingQuery', () => {
           : '',
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput`],
-      type: ({ name }) => `${name}ForCatalog!`,
+      type: ({ name }) => `${name}ForCatalog`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
     };

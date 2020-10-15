@@ -491,7 +491,7 @@ describe('composeInitialValues', () => {
   test('should create the initial values with file field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -518,7 +518,7 @@ describe('composeInitialValues', () => {
   test('should create the initial values with file field and data', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -546,7 +546,7 @@ describe('composeInitialValues', () => {
   test('should create the initial values with file array field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -574,7 +574,7 @@ describe('composeInitialValues', () => {
   test('should create the initial values with file array field with data', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

@@ -7,7 +7,7 @@ import separateFileFieldsAttributes from './separateFileFieldsAttributes';
 describe('separateFileFieldsAttributes', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',
@@ -19,7 +19,7 @@ describe('separateFileFieldsAttributes', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',

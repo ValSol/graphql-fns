@@ -48,7 +48,7 @@ const composeFormikFields = (
         const path = prefix ? `${prefix}.${name}` : name;
         const touch = objectGet(touched, path);
         const error = objectGet(errors, path);
-        const error2 = typeof error === 'string' ? error : undefined; // for embedded fields
+        const error2 = typeof error === 'string' ? error : undefined; // for embedded or file fields
         if (flatFormikField.kind === 'embeddedFields' || flatFormikField.kind === 'fileFields') {
           const {
             attributes: { config },

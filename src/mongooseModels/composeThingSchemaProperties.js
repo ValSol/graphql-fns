@@ -21,6 +21,7 @@ const composeThingSchemaProperties = (
     embeddedFields,
     enumFields,
     intFields,
+    file,
     fileFields,
     floatFields,
     geospatialFields,
@@ -41,7 +42,7 @@ const composeThingSchemaProperties = (
         }
       }
 
-      if ((index || unique) && embedded) {
+      if ((index || unique) && (embedded || file)) {
         throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
       } // eslint-disable-next-line no-param-reassign
 
@@ -70,9 +71,9 @@ const composeThingSchemaProperties = (
           }
         }
 
-        if ((index || unique) && embedded) {
+        if ((index || unique) && (embedded || file)) {
           throw new TypeError(
-            'Must not have an "index" or "unique" field in an embedded document!',
+            'Must not have an "index" or "unique" field in an embedded OR file document!',
           );
         } // eslint-disable-next-line no-param-reassign
 
@@ -102,8 +103,10 @@ const composeThingSchemaProperties = (
         }
       }
 
-      if ((index || unique) && embedded) {
-        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      if ((index || unique) && (embedded || file)) {
+        throw new TypeError(
+          'Must not have an "index" or "unique" field in an embedded OR file document!',
+        );
       } // eslint-disable-next-line no-param-reassign
 
       prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
@@ -130,8 +133,10 @@ const composeThingSchemaProperties = (
         }
       }
 
-      if ((index || unique) && embedded) {
-        throw new TypeError('Must not have an "index" or "unique" field in an embedded document!');
+      if ((index || unique) && (embedded || file)) {
+        throw new TypeError(
+          'Must not have an "index" or "unique" field in an embedded OR file document!',
+        );
       } // eslint-disable-next-line no-param-reassign
 
       prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
@@ -170,8 +175,8 @@ const composeThingSchemaProperties = (
   if (relationalFields) {
     relationalFields.reduce(
       (prev, { array, config: { name: relationalThingName }, index, name, required, unique }) => {
-        if (index && embedded) {
-          throw new TypeError('Must not have an "index" field in an embedded document!');
+        if (index && (embedded || file)) {
+          throw new TypeError('Must not have an "index" field in an embedded OR file document!');
         }
         const obj: {
           ref: string,
@@ -199,8 +204,8 @@ const composeThingSchemaProperties = (
   }
 
   if (duplexFields) {
-    if (embedded) {
-      throw new TypeError('Must not have an "duplexField" in an embedded document!');
+    if (embedded || file) {
+      throw new TypeError('Must not have an "duplexField" in an embedded OR file document!');
     }
     duplexFields.reduce(
       (prev, { array, config: { name: duplexThingName }, index, name, required, unique }) => {
@@ -304,8 +309,8 @@ const composeThingSchemaProperties = (
         }
       }
 
-      if (index && embedded) {
-        throw new TypeError('Must not have an "index" field in an embedded document!');
+      if (index && (embedded || file)) {
+        throw new TypeError('Must not have an "index" field in an embedded OR file document!');
       }
 
       // eslint-disable-next-line no-param-reassign

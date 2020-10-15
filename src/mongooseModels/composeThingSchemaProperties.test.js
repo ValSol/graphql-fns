@@ -383,7 +383,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text and file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'desktop',

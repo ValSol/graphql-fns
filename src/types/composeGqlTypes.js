@@ -11,7 +11,10 @@ import createThingType from './createThingType';
 import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
 import createPushIntoThingInputType from './inputs/createPushIntoThingInputType';
 import createThingCreateInputType from './inputs/createThingCreateInputType';
+import createFileWhereInputType from './inputs/createFileWhereInputType';
+import createFileWhereOneInputType from './inputs/createFileWhereOneInputType';
 import createThingDistinctValuesOptionsInputType from './inputs/createThingDistinctValuesOptionsInputType';
+
 import createThingPaginationInputType from './inputs/createThingPaginationInputType';
 import createThingReorderCreatedInputType from './inputs/createThingReorderCreatedInputType';
 import createThingReorderUploadedInputType from './inputs/createThingReorderUploadedInputType';
@@ -21,6 +24,9 @@ import createThingNearInputType from './inputs/createThingNearInputType';
 import createThingSortInputType from './inputs/createThingSortInputType';
 import createThingWhereInputType from './inputs/createThingWhereInputType';
 import createThingWhereOneInputType from './inputs/createThingWhereOneInputType';
+import createThingFileQueryType from './queries/createThingFileQueryType';
+import createThingFilesQueryType from './queries/createThingFilesQueryType';
+import createThingFileCountQueryType from './queries/createThingFileCountQueryType';
 import createThingCountQueryType from './queries/createThingCountQueryType';
 import createThingDistinctValuesQueryType from './queries/createThingDistinctValuesQueryType';
 import createThingQueryType from './queries/createThingQueryType';
@@ -65,7 +71,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const derivativeConfigNames = Object.keys(derivativeConfigs);
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded }) => !embedded)
+    .filter(({ embedded, file }) => !(embedded || file))
     .reduce((prev, thingConfig) => {
       derivativeConfigNames.forEach((derivativeConfigName) => {
         const derivativeConfig = composeDerivativeConfig(
@@ -124,23 +130,36 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         }, [])
     : [];
 
-  // eslint-disable-next-line
-  allowQueries
-    ? Object.keys(thingConfigs)
-        .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded }) => !embedded)
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
-          if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
-            const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
-              thingConfig,
-            );
-            prev.push(thingDistinctValuesOptionsInputType);
-          }
+  if (allowQueries) {
+    Object.keys(thingConfigs)
+      .map((thingName) => thingConfigs[thingName])
+      .filter(({ embedded, file }) => !(embedded || file))
+      .reduce((prev, thingConfig) => {
+        const { name } = thingConfig;
 
-          return prev;
-        }, thingInputTypes)
-    : [];
+        if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
+          const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
+            thingConfig,
+          );
+          prev.push(thingDistinctValuesOptionsInputType);
+        }
+
+        return prev;
+      }, thingInputTypes);
+
+    if (checkInventory(['Query', 'thingFile'], inventory)) {
+      const fileWhereOneInputType = createFileWhereOneInputType(generalConfig);
+      if (fileWhereOneInputType) {
+        thingInputTypes.push(fileWhereOneInputType);
+      }
+    }
+    if (checkInventory(['Query', 'thingFiles'], inventory)) {
+      const fileWhereInputType = createFileWhereInputType(generalConfig);
+      if (fileWhereInputType) {
+        thingInputTypes.push(fileWhereInputType);
+      }
+    }
+  }
 
   const thingInputTypes2 = thingInputTypes.join('\n');
 
@@ -148,7 +167,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const input = true;
   const thingInputTypes3 = Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded }) => !embedded)
+    .filter(({ embedded, file }) => !(embedded || file))
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
       if (
@@ -193,27 +212,39 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
       .map((thingName) => thingConfigs[thingName])
       .filter(({ embedded }) => !embedded)
       .reduce((prev, thingConfig) => {
-        const { name } = thingConfig;
-        if (checkInventory(['Query', 'thing', name], inventory)) {
-          prev.push(createThingQueryType(thingConfig));
-        }
-        if (checkInventory(['Query', 'things', name], inventory)) {
-          prev.push(createThingsQueryType(thingConfig));
-        }
-        if (checkInventory(['Query', 'thingCount', name], inventory)) {
-          prev.push(createThingCountQueryType(thingConfig));
-        }
-        if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
-          prev.push(createThingDistinctValuesQueryType(thingConfig));
-        }
-
-        customQueryNames.forEach((customName) => {
-          if (checkInventory(['Query', customName, name], inventory)) {
-            prev.push(
-              `  ${composeActionSignature(customQuery[customName], thingConfig, generalConfig)}`,
-            );
+        const { file, name } = thingConfig;
+        if (file) {
+          if (checkInventory(['Query', 'thingFile', name], inventory)) {
+            prev.push(createThingFileQueryType(thingConfig));
           }
-        });
+          if (checkInventory(['Query', 'thingFiles', name], inventory)) {
+            prev.push(createThingFilesQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'thingFileCount', name], inventory)) {
+            prev.push(createThingFileCountQueryType(thingConfig));
+          }
+        } else {
+          if (checkInventory(['Query', 'thing', name], inventory)) {
+            prev.push(createThingQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'things', name], inventory)) {
+            prev.push(createThingsQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'thingCount', name], inventory)) {
+            prev.push(createThingCountQueryType(thingConfig));
+          }
+          if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
+            prev.push(createThingDistinctValuesQueryType(thingConfig));
+          }
+
+          customQueryNames.forEach((customName) => {
+            if (checkInventory(['Query', customName, name], inventory)) {
+              prev.push(
+                `  ${composeActionSignature(customQuery[customName], thingConfig, generalConfig)}`,
+              );
+            }
+          });
+        }
 
         return prev;
       }, thingQueryTypes);
@@ -231,7 +262,7 @@ ${thingQueryTypes.join('\n')}
 
     Object.keys(thingConfigs)
       .map((thingName) => thingConfigs[thingName])
-      .filter(({ embedded }) => !embedded)
+      .filter(({ embedded, file }) => !(embedded || file))
       .reduce((prev, thingConfig) => {
         const { name } = thingConfig;
         if (checkInventory(['Mutation', 'createThing', name], inventory)) {
@@ -281,7 +312,7 @@ ${thingMutationTypes.join('\n')}
   const updatedThingPayloadTypes = allowSubscriptions
     ? Object.keys(thingConfigs)
         .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded }) => !embedded)
+        .filter(({ embedded, file }) => !(embedded || file))
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (
@@ -298,7 +329,7 @@ ${thingMutationTypes.join('\n')}
   const thingSubscriptionTypes = allowSubscriptions
     ? Object.keys(thingConfigs)
         .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded }) => !embedded)
+        .filter(({ embedded, file }) => !(embedded || file))
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (

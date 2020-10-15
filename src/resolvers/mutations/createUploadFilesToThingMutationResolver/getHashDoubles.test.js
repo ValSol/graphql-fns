@@ -7,7 +7,7 @@ import getHashDoubles from './getHashDoubles';
 describe('getHashDoubles', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',
@@ -19,7 +19,7 @@ describe('getHashDoubles', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',

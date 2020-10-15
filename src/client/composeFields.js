@@ -30,6 +30,7 @@ const composeFields = (
     dateTimeFields,
     duplexFields,
     embedded,
+    file,
     custom,
     embeddedFields,
     enumFields,
@@ -47,7 +48,7 @@ const composeFields = (
   if (!custom) {
     if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
 
-    if (!embedded) {
+    if (!(embedded || file)) {
       if (includeField('createdAt', include, exclude))
         result.push(`${'  '.repeat(shift)}createdAt`);
       if (includeField('updatedAt', include, exclude))

@@ -26,7 +26,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
   test('should create string with indexed text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

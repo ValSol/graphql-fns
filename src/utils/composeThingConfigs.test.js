@@ -282,7 +282,7 @@ describe('composeThingConfigs', () => {
 
     const simplifiedImageConfig: SimplifiedThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -297,7 +297,7 @@ describe('composeThingConfigs', () => {
 
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

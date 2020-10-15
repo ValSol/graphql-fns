@@ -24,7 +24,7 @@ describe('createUploadFilesToThingMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -65,7 +65,7 @@ describe('createUploadFilesToThingMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

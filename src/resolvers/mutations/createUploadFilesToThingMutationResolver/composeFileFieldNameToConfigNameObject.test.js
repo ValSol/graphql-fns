@@ -8,7 +8,7 @@ describe('composeFileFieldNameToConfigNameObject', () => {
   test('should return wrapped object', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -20,7 +20,7 @@ describe('composeFileFieldNameToConfigNameObject', () => {
     };
     const photoConfig: ThingConfig = {
       name: 'Photo',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

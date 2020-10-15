@@ -916,7 +916,7 @@ describe('coerceDataToGql', () => {
   describe('should coerce file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

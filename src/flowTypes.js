@@ -180,7 +180,8 @@ type SimplifiedRelationalField = {
 
 export type SimplifiedThingConfig = {
   name: string,
-  embedded?: boolean, // true if related to embeddedFields OR fileFields
+  embedded?: boolean, // true if related to embeddedFields
+  file?: boolean, // true if related to fileFields
   custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
   pagination?: boolean,
 
@@ -204,7 +205,8 @@ export type SimplifiedThingConfig = {
 
 export type ThingConfig = {
   name: string,
-  embedded?: boolean, // true if related to embeddedFields OR fileFields
+  embedded?: boolean, // true if related to embeddedFields
+  file?: boolean, // true if related to fileFields
   custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
   pagination?: boolean,
 
@@ -548,7 +550,7 @@ export type DerivativeAttributes = {
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
-  | ['Query', string] // "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues' or custom query
+  | ['Query', string] // "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
@@ -557,7 +559,7 @@ export type TwoSegmentInventoryChain =
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 export type ThreeSegmentInventoryChain =
-  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues' or custom query, second for thing name
+  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query, second for thing name
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...

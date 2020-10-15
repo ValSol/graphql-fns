@@ -23,7 +23,7 @@ describe('removeBlobUrls util', () => {
   test('should return new list of values', () => {
     const imageConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

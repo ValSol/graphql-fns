@@ -25,7 +25,7 @@ const AllThings = () => {
       </Breadcrumbs>
       {Object.keys(thingConfigs)
         .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded }) => !embedded)
+        .filter(({ embedded, file }) => !(embedded || file))
         .map((config) => (
           <ThingCard key={config.name} config={config} />
         ))}

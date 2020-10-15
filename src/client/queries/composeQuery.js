@@ -7,7 +7,10 @@ import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 import composeThingQueryArgs from './composeThingQueryArgs';
 import composeThingsQueryArgs from './composeThingsQueryArgs';
 import composeThingCountQuery from './composeThingCountQuery';
+import composeThingFileCountQuery from './composeThingFileCountQuery';
 import composeThingDistinctValuesQuery from './composeThingDistinctValuesQuery';
+import composeThingFileQueryArgs from './composeThingFileQueryArgs';
+import composeThingFilesQueryArgs from './composeThingFilesQueryArgs';
 
 const composeQuery = (
   queryName: string,
@@ -31,8 +34,19 @@ const composeQuery = (
     case 'thingCount':
       return composeThingCountQuery(thingConfig);
 
+    case 'thingFileCount':
+      return composeThingFileCountQuery(thingConfig);
+
     case 'thingDistinctValues':
       return composeThingDistinctValuesQuery(thingConfig);
+
+    case 'thingFile':
+      head = composeThingFileQueryArgs(thingConfig);
+      break;
+
+    case 'thingFiles':
+      head = composeThingFilesQueryArgs(thingConfig);
+      break;
 
     default:
       if (!generalConfig) {

@@ -12,6 +12,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
     embedded,
     embeddedFields,
     enumFields,
+    file,
     fileFields,
     floatFields,
     intFields,
@@ -201,7 +202,7 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
 
   const thingTypeArray2 = thingTypeArray.map((arr) => arr.join('\n'));
 
-  if (!embedded) {
+  if (!(embedded || file)) {
     thingTypeArray2.push(`input ${name}CreateChildInput {
   connect: ID
   create: ${name}CreateInput

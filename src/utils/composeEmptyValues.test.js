@@ -80,7 +80,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with file field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'desktop',

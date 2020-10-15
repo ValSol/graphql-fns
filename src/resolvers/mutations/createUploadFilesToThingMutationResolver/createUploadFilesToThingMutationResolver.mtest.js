@@ -70,7 +70,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
 
   const imageConfig: ThingConfig = {
     name: 'Image',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',
@@ -92,7 +92,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',

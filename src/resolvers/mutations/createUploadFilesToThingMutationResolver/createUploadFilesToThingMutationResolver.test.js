@@ -9,7 +9,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

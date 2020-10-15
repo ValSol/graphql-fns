@@ -119,7 +119,7 @@ describe('addIdsToThing', () => {
   test('shoud replace _ids by ids in fileFields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

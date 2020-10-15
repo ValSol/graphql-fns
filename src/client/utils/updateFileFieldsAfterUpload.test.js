@@ -9,7 +9,7 @@ describe('updateFileFieldsAfterUpload util', () => {
   test('should return rearranged uploaded fileFields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

@@ -49,7 +49,7 @@ describe('arrangeFormFields', () => {
 
   const imageConfig: ThingConfig = {
     name: 'Image',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',

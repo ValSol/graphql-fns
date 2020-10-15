@@ -10,7 +10,7 @@ describe('getNewFilesInArraysPositions util', () => {
   test('should return new files index list', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

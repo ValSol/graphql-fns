@@ -198,7 +198,7 @@ describe('coerceDataFromGql', () => {
   test('should coerce file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -275,10 +275,10 @@ describe('coerceDataFromGql', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should coerce embedded null fields', () => {
+  test('should coerce file null fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

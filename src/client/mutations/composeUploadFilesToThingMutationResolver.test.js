@@ -28,7 +28,7 @@ describe('composeUploadFilesToThingMutationResolver', () => {
   test('should compose uploadFilesToThing mutation args ', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

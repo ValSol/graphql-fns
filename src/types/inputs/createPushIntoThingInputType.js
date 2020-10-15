@@ -10,6 +10,7 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
     embedded,
     embeddedFields,
     enumFields,
+    file,
     fileFields,
     floatFields,
     intFields,
@@ -19,7 +20,7 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
     name,
   } = thingConfig;
 
-  if (embedded) return '';
+  if (embedded || file) return '';
 
   const thingTypeArray = [];
 

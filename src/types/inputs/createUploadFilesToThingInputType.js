@@ -3,9 +3,9 @@
 import type { ThingConfig } from '../../flowTypes';
 
 const createUploadFilesToThingInputType = (thingConfig: ThingConfig): string => {
-  const { embedded, fileFields, name } = thingConfig;
+  const { embedded, file, fileFields, name } = thingConfig;
 
-  if (embedded) return '';
+  if (embedded || file) return '';
 
   const thingTypeArray = [];
 

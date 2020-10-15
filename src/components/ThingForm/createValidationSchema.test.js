@@ -393,7 +393,7 @@ describe('createValidationSchema', () => {
   test('should create the validation schema with file field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',
@@ -426,7 +426,7 @@ describe('createValidationSchema', () => {
   test('should create the validation schema with file array field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

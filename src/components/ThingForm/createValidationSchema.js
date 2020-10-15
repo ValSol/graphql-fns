@@ -53,7 +53,7 @@ const createValidationSchema = (
   apolloClient: Object,
   id?: string,
 ): Object => {
-  const { form, name: thingName, embedded } = thingConfig;
+  const { form, name: thingName, embedded, file } = thingConfig;
   const formFields = form || arrangeFormFields(thingConfig);
   const fieldsObject = composeFieldsObject(thingConfig);
   const object = formFields.reduce((prev, { name }) => {
@@ -143,9 +143,9 @@ const createValidationSchema = (
     ) {
       const { unique } = fieldsObject[name].attributes;
       if (unique) {
-        if (embedded) {
+        if (embedded || file) {
           throw new TypeError(
-            `Unacceptable unique "${name}" field in embedded thing "${thingName}"!`,
+            `Unacceptable unique "${name}" field in embedded OR file thing "${thingName}"!`,
           );
         }
         const query = gql(

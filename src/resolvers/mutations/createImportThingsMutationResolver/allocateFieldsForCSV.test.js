@@ -297,7 +297,7 @@ describe('allocateFieldsForCSV', () => {
   test('should return right allacation fields for file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      file: true,
       textFields: [
         {
           name: 'fileId',

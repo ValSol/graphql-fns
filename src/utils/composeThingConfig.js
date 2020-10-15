@@ -20,11 +20,19 @@ const composeThingConfig = (
     thingConfig.embeddedFields = simplifiedEmbeddedFields.map((field) => {
       const { configName, ...restField } = field;
       const config = thingConfigs[configName];
+
       if (!config) {
         throw new TypeError(
           `Incorrect configName: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
         );
       }
+
+      if (!config.embedded) {
+        throw new TypeError(
+          `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
+        );
+      }
+
       return { ...restField, config };
     });
   }
@@ -34,11 +42,19 @@ const composeThingConfig = (
     thingConfig.fileFields = simplifiedFileFields.map((field) => {
       const { configName, ...restField } = field;
       const config = thingConfigs[configName];
+
       if (!config) {
         throw new TypeError(
           `Incorrect configName: "${configName}" in file field: "${field.name}" of simplified thingConfig: "${name}"!`,
         );
       }
+
+      if (!config.file) {
+        throw new TypeError(
+          `Not file config: "${configName}" in file field: "${field.name}" of simplified thingConfig: "${name}"!`,
+        );
+      }
+
       return { ...restField, config };
     });
   }

@@ -13,7 +13,7 @@ const composeDerivativeThingQuery = ({
       allow[name] && allow[name].includes('thing') ? `${name}${suffix}` : '',
     argNames: () => ['whereOne'],
     argTypes: ({ name }) => [`${name}WhereOneInput`],
-    type: ({ name }) => `${name}${suffix}!`,
+    type: ({ name }) => `${name}${suffix}`,
     config: (thingConfig, generalConfig) =>
       composeDerivativeConfigByName(suffix, thingConfig, generalConfig),
   };

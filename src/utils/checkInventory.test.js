@@ -24,6 +24,10 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
+    inventoryСhain = ['Query', 'thingFile'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(true);
+
     inventoryСhain = ['Mutation', 'createThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
@@ -64,6 +68,10 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
+    inventoryСhain = ['Query', 'thingFile'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(true);
+
     inventoryСhain = ['Mutation', 'createThing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
@@ -86,7 +94,10 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 2 levels', () => {
-    const inventory: Inventory = { name: 'test', include: { Query: { thing: true } } };
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Query: { thing: true, thingFiles: true } },
+    };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -104,7 +115,15 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
+    inventoryСhain = ['Query', 'thingFiles'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(true);
+
     inventoryСhain = ['Query', 'things'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(false);
+
+    inventoryСhain = ['Query', 'thingFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
@@ -134,7 +153,10 @@ describe('checkInventory', () => {
   });
 
   test('should return correct results for inventory include object with 3 levels', () => {
-    const inventory: Inventory = { name: 'test', include: { Query: { thing: ['User'] } } };
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Query: { thing: ['User'], thingFile: ['Image'] } },
+    };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -151,6 +173,18 @@ describe('checkInventory', () => {
     inventoryСhain = ['Query', 'thing'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
+
+    inventoryСhain = ['Query', 'thingFile'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(true);
+
+    inventoryСhain = ['Query', 'thingFile', 'Image'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(true);
+
+    inventoryСhain = ['Query', 'thingFile', 'Logo'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(false);
 
     inventoryСhain = ['Query', 'things'];
     result = checkInventory(inventoryСhain, inventory);
@@ -201,6 +235,10 @@ describe('checkInventory', () => {
     expect(result).toBe(true);
 
     inventoryСhain = ['Query', 'thing'];
+    result = checkInventory(inventoryСhain, inventory);
+    expect(result).toBe(false);
+
+    inventoryСhain = ['Query', 'thingFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 

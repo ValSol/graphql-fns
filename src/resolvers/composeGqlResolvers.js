@@ -14,6 +14,9 @@ import createThingDistinctValuesOptionsInputType from '../types/inputs/createThi
 
 import createCustomResolver from './createCustomResolver';
 import createThingCountQueryResolver from './queries/createThingCountQueryResolver';
+import createThingFileCountQueryResolver from './queries/createThingFileCountQueryResolver';
+import createThingFileQueryResolver from './queries/createThingFileQueryResolver';
+import createThingFilesQueryResolver from './queries/createThingFilesQueryResolver';
 import createThingDistinctValuesQueryResolver from './queries/createThingDistinctValuesQueryResolver';
 import createThingQueryResolver from './queries/createThingQueryResolver';
 import createThingsQueryResolver from './queries/createThingsQueryResolver';
@@ -58,7 +61,7 @@ const composeGqlResolvers = (
 
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded }) => !embedded)
+    .filter(({ embedded, file }) => !(embedded || file))
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
 
@@ -246,6 +249,42 @@ const composeGqlResolvers = (
         }
       }
 
+      return prev;
+    }, resolvers);
+
+  Object.keys(thingConfigs)
+    .map((thingName) => thingConfigs[thingName])
+    .filter(({ file }) => file)
+    .reduce((prev, thingConfig) => {
+      const { name } = thingConfig;
+
+      if (allowQueries) {
+        const thingFileCountQueryResolver = createThingFileCountQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        if (thingFileCountQueryResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Query[`${name}FileCount`] = thingFileCountQueryResolver;
+        }
+
+        const thingFileQueryResolver = createThingFileQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        // eslint-disable-next-line no-param-reassign
+        if (thingFileQueryResolver) prev.Query[`${name}File`] = thingFileQueryResolver;
+
+        const thingFilesQueryResolver = createThingFilesQueryResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        // eslint-disable-next-line no-param-reassign
+        if (thingFilesQueryResolver) prev.Query[`${name}Files`] = thingFilesQueryResolver;
+      }
       return prev;
     }, resolvers);
 

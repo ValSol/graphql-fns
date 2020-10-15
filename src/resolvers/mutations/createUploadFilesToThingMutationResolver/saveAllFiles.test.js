@@ -7,7 +7,7 @@ import saveAllFiles from './saveAllFiles';
 describe('saveAllFiles', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',
@@ -19,7 +19,7 @@ describe('saveAllFiles', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    embedded: true,
+    file: true,
     textFields: [
       {
         name: 'fileId',
