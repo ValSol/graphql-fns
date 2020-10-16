@@ -44,6 +44,10 @@ const composeWhereInput = (where: Object, thingConfig: ThingConfig): null | Obje
       result[key.slice(0, -3)] = { [`$${key.slice(-2)}`]: where[key] };
     } else if (key.slice(-4) === '_nin' || key.slice(-4) === '_lte' || key.slice(-4) === '_gte') {
       result[key.slice(0, -4)] = { [`$${key.slice(-3)}`]: where[key] };
+    } else if (key.slice(-3) === '_re') {
+      result[key.slice(0, -3)] = {
+        $in: where[key].map((item) => new RegExp(item.pattern, item.flags)),
+      };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
         composeWhereInput(where2, thingConfig),

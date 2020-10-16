@@ -45,6 +45,7 @@ import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThi
 import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPayloadType';
 
 import composeEnumTypes from './specialized/composeEnumTypes';
+import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeImportOptionsInputTypes from './specialized/composeImportOptionsInputTypes';
 
@@ -359,7 +360,8 @@ ${thingMutationTypes.join('\n')}
 ${thingSubscriptionTypes}
 }`
     : '';
-  const resultArray = ['scalar DateTime'];
+
+  const resultArray = composeCommonUseTypes();
 
   const enumTypes = composeEnumTypes(generalConfig);
   if (enumTypes) resultArray.push(enumTypes);

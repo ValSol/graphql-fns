@@ -27,6 +27,7 @@ describe('createThingWhereInputType', () => {
   code_in: [String!]
   code_nin: [String!]
   code_ne: String
+  code_re: [RegExp!]
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -57,10 +58,12 @@ describe('createThingWhereInputType', () => {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_re: [RegExp!]
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_re: [RegExp!]
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -183,10 +186,12 @@ describe('createThingWhereInputType', () => {
   field1_in: [WeekdaysEnumeration!]
   field1_nin: [WeekdaysEnumeration!]
   field1_ne: WeekdaysEnumeration
+  field1_re: [RegExp!]
   field4: CuisinesEnumeration
   field4_in: [CuisinesEnumeration!]
   field4_nin: [CuisinesEnumeration!]
   field4_ne: CuisinesEnumeration
+  field4_re: [RegExp!]
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]

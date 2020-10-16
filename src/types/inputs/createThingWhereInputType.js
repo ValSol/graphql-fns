@@ -26,7 +26,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
         if (index) fields.push(`  ${fieldName}: String`);
         fields.push(`  ${fieldName}_in: [String!]
   ${fieldName}_nin: [String!]
-  ${fieldName}_ne: String`);
+  ${fieldName}_ne: String
+  ${fieldName}_re: [RegExp!]`);
       }
     });
   }
@@ -90,7 +91,8 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
         fields.push(`  ${fieldName}: ${enumName}Enumeration
   ${fieldName}_in: [${enumName}Enumeration!]
   ${fieldName}_nin: [${enumName}Enumeration!]
-  ${fieldName}_ne: ${enumName}Enumeration`);
+  ${fieldName}_ne: ${enumName}Enumeration
+  ${fieldName}_re: [RegExp!]`);
       }
     });
   }

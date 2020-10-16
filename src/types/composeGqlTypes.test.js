@@ -111,6 +111,10 @@ describe('composeGqlTypes', () => {
     ];
     const generalConfig: GeneralConfig = { thingConfigs, enums };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 enum WeekdaysEnumeration {
   a0
   a1
@@ -303,22 +307,27 @@ input ExampleWhereInput {
   textField1_in: [String!]
   textField1_nin: [String!]
   textField1_ne: String
+  textField1_re: [RegExp!]
   textField2: String
   textField2_in: [String!]
   textField2_nin: [String!]
   textField2_ne: String
+  textField2_re: [RegExp!]
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
   textField3_ne: String
+  textField3_re: [RegExp!]
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
   day_ne: WeekdaysEnumeration
+  day_re: [RegExp!]
   cuisines: CuisinesEnumeration
   cuisines_in: [CuisinesEnumeration!]
   cuisines_nin: [CuisinesEnumeration!]
   cuisines_ne: CuisinesEnumeration
+  cuisines_re: [RegExp!]
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -444,6 +453,10 @@ type Subscription {
     const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type GeospatialPoint {
   lng: Float!
   lat: Float!
@@ -692,6 +705,10 @@ type Subscription {
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 enum ImportFormatEnum {
   csv
   json
@@ -917,6 +934,10 @@ type Subscription {
     const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 enum ImportFormatEnum {
   csv
   json
@@ -1098,6 +1119,10 @@ type Subscription {
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 enum ImportFormatEnum {
   csv
   json
@@ -1332,6 +1357,10 @@ type Subscription {
     const inventory: Inventory = { name: 'test', include: { Query: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1385,6 +1414,10 @@ type Query {
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 enum ImportFormatEnum {
   csv
   json
@@ -1440,6 +1473,10 @@ type Mutation {
     const inventory: Inventory = { name: 'test', include: { Query: { things: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1480,6 +1517,10 @@ type Query {
     const inventory: Inventory = { name: 'test', include: { Query: { things: ['Example'] } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1521,6 +1562,10 @@ type Query {
     const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1566,6 +1611,10 @@ type Mutation {
     };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1619,6 +1668,10 @@ type Mutation {
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1661,6 +1714,10 @@ type Mutation {
     const custom = { Query: { getThing } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1724,6 +1781,10 @@ type Query {
     const derivative = { InTimeRange: thingInTimeRangeDerivative };
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
 type Example {
   id: ID!
   createdAt: DateTime!

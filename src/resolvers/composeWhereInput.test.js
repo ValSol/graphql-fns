@@ -74,7 +74,7 @@ describe('composeWhereInput', () => {
     const where = {
       name: 'Вася',
       code_in: ['Vasya-1', 'Vasya-2', 'Vasya-3'],
-      code2_nin: ['Misha-1', 'Misha-2', 'Misha-3'],
+      code2_re: [{ pattern: 'Misha' }, { pattern: 'sash', flags: 'i' }],
       floatField_gt: 77.3,
       floatField2_gte: 180.0,
       intField_lt: 15,
@@ -86,7 +86,7 @@ describe('composeWhereInput', () => {
     const expectedResult = {
       name: 'Вася',
       code: { $in: ['Vasya-1', 'Vasya-2', 'Vasya-3'] },
-      code2: { $nin: ['Misha-1', 'Misha-2', 'Misha-3'] },
+      code2: { $in: [/Misha/, /sash/i] },
       floatField: { $gt: 77.3 },
       floatField2: { $gte: 180.0 },
       intField: { $lt: 15 },
