@@ -16,6 +16,7 @@ type Args = {
   near?: NearInput,
   sort?: { sortBy: Array<string> },
   pagination?: { skip: number, first: number },
+  search: string,
 };
 type Context = { mongooseConn: Object };
 
@@ -43,7 +44,7 @@ const createThingsQueryResolver = (
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 
-    const { near, pagination, sort, where } = args;
+    const { near, pagination, sort, where, search } = args;
 
     const { mongooseConn } = context;
 
@@ -57,6 +58,8 @@ const createThingsQueryResolver = (
 
     const where2 = mergeWhereAndFilter(filter, where, thingConfig);
     if (where2) query = query.where(where2);
+
+    if (search) query = query.where({ $text: { $search: search } });
 
     if (sort) {
       const { sortBy } = sort;

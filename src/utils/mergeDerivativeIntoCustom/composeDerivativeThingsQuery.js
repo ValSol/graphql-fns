@@ -11,7 +11,10 @@ import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 const aditionalInputs = (thingConfig: ThingConfig) => {
   const pagination = createThingPaginationInputType(thingConfig);
   const near = createThingNearInputType(thingConfig);
-  return { pagination, near };
+  const search = thingConfig.textFields
+    ? thingConfig.textFields.some(({ weight }) => weight)
+    : false;
+  return { pagination, near, search };
 };
 
 const composeDerivativeThingsQuery = ({
@@ -26,9 +29,10 @@ const composeDerivativeThingsQuery = ({
 
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
-    const { pagination, near } = aditionalInputs(derivativeConfig);
+    const { pagination, near, search } = aditionalInputs(derivativeConfig);
     if (pagination) result.push('pagination');
     if (near) result.push('near');
+    if (search) result.push('search');
 
     return result;
   },
@@ -38,9 +42,10 @@ const composeDerivativeThingsQuery = ({
 
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
-    const { pagination, near } = aditionalInputs(derivativeConfig);
+    const { pagination, near, search } = aditionalInputs(derivativeConfig);
     if (pagination) result.push(`${name}PaginationInput`);
     if (near) result.push(`${name}NearInput`);
+    if (search) result.push('String');
 
     return result;
   },

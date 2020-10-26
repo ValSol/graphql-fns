@@ -71,6 +71,7 @@ type TextField =
       +unique?: boolean,
       +name: string,
       +default?: string,
+      +weight?: number,
     |}
   | {|
       +array: true,
@@ -79,6 +80,7 @@ type TextField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<string>,
+      +weight?: number,
     |};
 
 type DateTimeField =

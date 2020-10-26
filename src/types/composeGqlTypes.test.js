@@ -36,6 +36,7 @@ describe('composeGqlTypes', () => {
         {
           name: 'textField1',
           unique: true,
+          weight: 1,
         },
         {
           name: 'textField2',
@@ -380,7 +381,7 @@ type UpdatedExamplePayload {
 }
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   ImageFile(whereOne: FileWhereOneInput!): Image

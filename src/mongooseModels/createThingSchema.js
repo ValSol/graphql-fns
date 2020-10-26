@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 
 import type { Enums, ThingConfig } from '../flowTypes';
 
+import composeTextIndexProperties from './composeTextIndexProperties';
 import composeThingSchemaProperties from './composeThingSchemaProperties';
 
 const { Schema } = mongoose;
@@ -16,6 +17,15 @@ const createThingSchema = (thingConfig: ThingConfig, enums?: Enums = []): Object
 
   const thingSchemaProperties = composeThingSchemaProperties(thingConfig, enums);
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
+
+  const weights = composeTextIndexProperties(thingConfig);
+  const weightsKeys = Object.keys(weights);
+  if (weightsKeys.length) {
+    ThingSchema.index(
+      weightsKeys.reduce((prev, key) => ({ ...prev, [key]: 'text' }), {}),
+      { weights, name: 'TextIndex' },
+    );
+  }
 
   // to work dynamic adding fields
   mongoose.model(`${name}_Thing`, ThingSchema);

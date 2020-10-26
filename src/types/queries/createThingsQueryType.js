@@ -8,7 +8,7 @@ import createThingNearInputType from '../inputs/createThingNearInputType';
 import createThingPaginationInputType from '../inputs/createThingPaginationInputType';
 
 const createThingsQueryType = (thingConfig: ThingConfig): string => {
-  const { name } = thingConfig;
+  const { name, textFields } = thingConfig;
 
   const mutationArgs = [`where: ${name}WhereInput`, `sort: ${name}SortInput`];
 
@@ -17,6 +17,9 @@ const createThingsQueryType = (thingConfig: ThingConfig): string => {
 
   const thingNearInputType = createThingNearInputType(thingConfig);
   if (thingNearInputType) mutationArgs.push(`near: ${name}NearInput`);
+
+  const textIndex = textFields ? textFields.some(({ weight }) => weight) : false;
+  if (textIndex) mutationArgs.push('search: String');
 
   return `  ${pluralize(name)}(${mutationArgs.join(', ')}): [${name}!]!`;
 };

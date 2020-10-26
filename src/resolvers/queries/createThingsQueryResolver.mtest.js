@@ -351,10 +351,12 @@ describe('createThingQueryResolver', () => {
         {
           name: 'first',
           index: true,
+          weight: 1,
         },
         {
           name: 'second',
           index: true,
+          weight: 5,
         },
       ],
     };
@@ -452,5 +454,96 @@ describe('createThingQueryResolver', () => {
     expect(items2[7].second).toBe('b');
     expect(items2[8].first).toBe('c');
     expect(items2[8].second).toBe('a');
+  });
+
+  test('should create query things resolver for fullText index', async () => {
+    const tableItemConfig: ThingConfig = {
+      name: 'TableItem',
+      textFields: [
+        {
+          name: 'first',
+          index: true,
+          weight: 1,
+        },
+        {
+          name: 'second',
+          index: true,
+          weight: 5,
+        },
+      ],
+    };
+    const tableConfig: ThingConfig = {
+      name: 'Table',
+      relationalFields: [
+        {
+          name: 'items',
+          array: true,
+          config: tableItemConfig,
+        },
+      ],
+    };
+
+    const createTable = createCreateThingMutationResolver(
+      tableConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createTable).toBe('function');
+    if (!createTable) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      items: {
+        create: [
+          {
+            first: 'vasya & masha',
+            second: 'pupkin',
+          },
+          {
+            first: 'arnold',
+            second: 'ivanov & petrov',
+          },
+          {
+            first: 'masha',
+            second: 'chernova',
+          },
+          {
+            first: 'arnold',
+            second: 'kislyi',
+          },
+          {
+            first: 'masha',
+            second: 'nikman & pupkin',
+          },
+          {
+            first: 'vasya',
+            second: 'doparidze',
+          },
+        ],
+      },
+    };
+
+    await createTable(null, { data }, { mongooseConn, pubsub });
+
+    const Items = createThingsQueryResolver(tableItemConfig, generalConfig, serversideConfig);
+    if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort);
+
+    expect(items.length).toBe(15);
+
+    const search = 'arnold pupkin';
+
+    const items2 = await Items(null, { search }, { mongooseConn, pubsub }, infoForSort);
+
+    expect(items2.length).toBe(4);
+
+    expect(items2[0].first).toBe('arnold');
+    expect(items2[0].second).toBe('kislyi');
+    expect(items2[1].first).toBe('arnold');
+    expect(items2[1].second).toBe('ivanov & petrov');
+    expect(items2[2].first).toBe('vasya & masha');
+    expect(items2[2].second).toBe('pupkin');
+    expect(items2[3].first).toBe('masha');
+    expect(items2[3].second).toBe('nikman & pupkin');
   });
 });
