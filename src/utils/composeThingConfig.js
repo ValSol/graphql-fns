@@ -27,7 +27,7 @@ const composeThingConfig = (
         );
       }
 
-      if (!config.embedded) {
+      if (!config.embedded && !config.file) {
         throw new TypeError(
           `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
         );
