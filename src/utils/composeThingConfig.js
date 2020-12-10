@@ -27,10 +27,21 @@ const composeThingConfig = (
         );
       }
 
-      if (!config.embedded && !config.file) {
-        throw new TypeError(
-          `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
-        );
+      // check "&& name" to only
+      if (!config.embedded && !config.file && name) {
+        if (name) {
+          throw new TypeError(
+            `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
+          );
+        } else {
+          // name=undefined if thingConfig is a derivativeConfig
+          // eslint-disable-next-line no-console
+          console.warn(
+            '\x1b[33m',
+            `Not embedded config: "${configName}" in embedded field: "${field.name}"!`,
+            '\x1b[0m',
+          );
+        }
       }
 
       return { ...restField, config };
