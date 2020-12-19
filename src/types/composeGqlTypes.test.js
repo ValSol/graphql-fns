@@ -170,6 +170,7 @@ type Image {
   address: String
 }
 input ExampleCreateInput {
+  id: ID
   textField1: String
   textField2: String
   textField3: String!
@@ -505,6 +506,7 @@ type Example2 {
   area: GeospatialPolygon
 }
 input Example1CreateInput {
+  id: ID
   textField1: String
   textField2: String
   textField3: String!
@@ -525,6 +527,7 @@ input Example1UpdateInput {
   position: GeospatialPointInput
 }
 input Example2CreateInput {
+  id: ID
   textField1: [String!]
   textField2: [String!]!
   area: GeospatialPolygonInput
@@ -735,6 +738,7 @@ type Place {
   title: String!
 }
 input PersonCreateInput {
+  id: ID
   firstName: String!
   lastName: String!
   friends: PersonCreateOrPushChildrenInput!
@@ -767,6 +771,7 @@ input PersonUpdateInput {
   favoritePlace: PlaceCreateChildInput
 }
 input PlaceCreateInput {
+  id: ID
   title: String!
 }
 input PlaceCreateChildInput {
@@ -963,6 +968,7 @@ type Address {
   province: String
 }
 input PersonCreateInput {
+  id: ID
   firstName: String!
   lastName: String!
   location: AddressCreateInput!
@@ -1151,6 +1157,7 @@ type Place {
   visitors: [Person!]!
 }
 input PersonCreateInput {
+  id: ID
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
@@ -1215,6 +1222,7 @@ input PersonUpdateInput {
   favoritePlace: PlaceCreateChildInput
 }
 input PlaceCreateInput {
+  id: ID
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
   name: String
@@ -1433,6 +1441,7 @@ type Example {
   textField: String
 }
 input ExampleCreateInput {
+  id: ID
   textField: String
 }
 input ExampleCreateChildInput {
@@ -1574,6 +1583,7 @@ type Example {
   textField: String
 }
 input ExampleCreateInput {
+  id: ID
   textField: String
 }
 input ExampleCreateChildInput {
@@ -1623,6 +1633,7 @@ type Example {
   textField: String
 }
 input ExampleCreateInput {
+  id: ID
   textField: String
 }
 input ExampleCreateChildInput {

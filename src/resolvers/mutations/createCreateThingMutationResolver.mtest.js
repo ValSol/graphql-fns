@@ -62,6 +62,7 @@ describe('createCreateThingMutationResolver', () => {
     if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
+      id: '5fda15170d3fb7f5b0000000',
       textField1: 'textField1',
       textField2: 'textField2',
       textField3: 'textField3',

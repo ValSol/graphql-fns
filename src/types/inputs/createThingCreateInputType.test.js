@@ -34,6 +34,7 @@ describe('createThingCreateInputType', () => {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   textField1: String
   textField2: String
   textField3: String!
@@ -85,6 +86,7 @@ input ExampleCreateOrPushChildrenInput {
       ],
     });
     const expectedResult = `input PersonCreateInput {
+  id: ID
   friends: PersonCreateOrPushChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
@@ -178,6 +180,7 @@ input PersonCreateOrPushChildrenInput {
       ],
     };
     const expectedResult = `input PersonCreateInput {
+  id: ID
   firstName: String!
   lastName: String!
   location: AddressCreateInput!
@@ -225,6 +228,7 @@ input PersonCreateOrPushChildrenInput {
 
     test('should create thing input type for Menu duplex fields', () => {
       const expectedResult = `input MenuCreateInput {
+  id: ID
   sections: MenuSectionCreateOrPushThru_menu_FieldChildrenInput
 }
 input MenuCreateChildInput {
@@ -242,6 +246,7 @@ input MenuCreateOrPushChildrenInput {
 
     test('should create thing input type for Menu duplex fields', () => {
       const expectedResult = `input MenuSectionCreateInput {
+  id: ID
   menu: MenuCreateChildInput!
 }
 input MenuSectionCreateThru_menu_FieldInput {
@@ -330,6 +335,7 @@ input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
       ],
     });
     const expectedResult = `input PersonCreateInput {
+  id: ID
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput!
@@ -429,6 +435,7 @@ input PersonCreateOrPushThru_location_FieldChildrenInput {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   position: GeospatialPointInput!
   precedingPosition: GeospatialPointInput
   favoritePositions: [GeospatialPointInput!]!
@@ -478,6 +485,7 @@ input ExampleCreateOrPushChildrenInput {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   field1: WeekdaysEnumeration
   field2: [CuisinesEnumeration!]
   field3: WeekdaysEnumeration!
@@ -524,6 +532,7 @@ input ExampleCreateOrPushChildrenInput {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   intField1: Int
   intField2: Int
   intField3: Int!
@@ -571,6 +580,7 @@ input ExampleCreateOrPushChildrenInput {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   floatField1: Float
   floatField2: Float
   floatField3: Float!
@@ -618,6 +628,7 @@ input ExampleCreateOrPushChildrenInput {
       ],
     };
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   booleanField1: Boolean
   booleanField2: Boolean
   booleanField3: Boolean!
@@ -707,6 +718,7 @@ input ExampleCreateOrPushChildrenInput {
     });
 
     const expectedResult = `input ExampleCreateInput {
+  id: ID
   textField: String
   logo: ImageCreateInput!
   hero: ImageCreateInput

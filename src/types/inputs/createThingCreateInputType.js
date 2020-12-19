@@ -24,6 +24,10 @@ const createThingCreateInputType = (thingConfig: ThingConfig): string => {
 
   const thingTypeArray: Array<Array<string>> = [[`input ${name}CreateInput {`]];
 
+  if (!(embedded || file)) {
+    thingTypeArray[0].push('  id: ID');
+  }
+
   if (duplexFields) {
     duplexFields.reduce((prev, { name: name2, required }) => {
       if (required) {
