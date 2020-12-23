@@ -13,7 +13,8 @@ type Props = {
   prefetch?: boolean, // eslint-disable-line react/require-default-props
 };
 
-const NextComposed = React.forwardRef(function NextComposed(props: Props, ref) {
+// $FlowFixMe
+const NextComposed = React.forwardRef((props: Props, ref) => {
   const { as, href, prefetch, ...other } = props;
 
   return (
@@ -61,6 +62,7 @@ Link.defaultProps = {
   onClick: null,
 };
 
+// $FlowFixMe
 export default React.forwardRef<Props, HTMLAnchorElement>((props, ref) => (
   // $FlowFixMe
   <Link innerRef={ref} {...props} /> // eslint-disable-line  react/jsx-props-no-spreading

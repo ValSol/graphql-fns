@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,7 @@ import GeneralConfigContext from './GeneralConfigContext';
 import Link from './Link';
 import ThingCard from './ThingCard';
 
-const AllThings = () => {
+const AllThings: React.StatelessFunctionalComponent<{}> = () => {
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
 
   const { thingConfigs } = generalConfig;

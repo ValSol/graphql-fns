@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -64,7 +64,13 @@ type Props = {
   required?: boolean,
 };
 
-const Outline = ({ children, error, message, label, required }: Props) => {
+const Outline: React.StatelessFunctionalComponent<Props> = ({
+  children,
+  error,
+  message,
+  label,
+  required,
+}: Props) => {
   const classes = useStyles();
   return (
     <>
@@ -91,6 +97,7 @@ const Outline = ({ children, error, message, label, required }: Props) => {
   );
 };
 
+// $FlowFixMe
 Outline.defaultProps = {
   error: false,
   message: '',

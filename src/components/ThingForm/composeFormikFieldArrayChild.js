@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Field } from 'formik';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -46,7 +46,7 @@ type FieldAttrs = {
 const composeFormikFieldArrayChild = (
   { attributes: { geospatialType }, kind }: FieldAttrs,
   disabled: boolean,
-) => {
+): Object => {
   const formikFieldArrayChild = (props: Props) => {
     const {
       form: { isSubmitting, values },

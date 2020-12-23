@@ -23,7 +23,7 @@ const composeFilters = (
   state: AdminListContextState,
   dispatch: Function,
   classes: { [key: string]: string },
-) => {
+): Object => {
   const { filters, masks } = state;
   if (!Object.keys(filters)) return null;
   return (

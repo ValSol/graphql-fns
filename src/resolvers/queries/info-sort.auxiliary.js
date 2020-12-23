@@ -1,6 +1,6 @@
 // @flow
 
-export default {
+const info: Object = {
   fieldName: 'Example1',
   fieldNodes: [
     {
@@ -447,3 +447,5 @@ export default {
     },
   },
 };
+
+export default info;

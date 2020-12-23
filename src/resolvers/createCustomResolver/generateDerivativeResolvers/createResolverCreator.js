@@ -3,7 +3,16 @@ import type { ThingConfig, GeneralConfig, ServersideConfig } from '../../../flow
 
 const store = {};
 
-const createResolverCreator = (queryOrMutationName: string, regularResolverCreator: Function) => {
+type ResoverCreator = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
+) => null | Function;
+
+const createResolverCreator = (
+  queryOrMutationName: string,
+  regularResolverCreator: Function,
+): ResoverCreator => {
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[queryOrMutationName]) {
     return store[queryOrMutationName];

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { Field } from 'formik';
 
 import IconButton from '@material-ui/core/IconButton';
@@ -22,7 +22,16 @@ type Props = {
   type: 'Point' | 'Polygon',
 };
 
-const Geospatial = ({ disabled, error, label, message, name, onDelete, required, type }: Props) => {
+const Geospatial: React.StatelessFunctionalComponent<Props> = ({
+  disabled,
+  error,
+  label,
+  message,
+  name,
+  onDelete,
+  required,
+  type,
+}: Props) => {
   const fieldProps = {
     // eslint-disable-next-line react/no-array-index-key
     component: FormikTextField,
@@ -74,6 +83,7 @@ const Geospatial = ({ disabled, error, label, message, name, onDelete, required,
   );
 };
 
+// $FlowFixMe
 Geospatial.defaultProps = {
   error: false,
   onDelete: null,

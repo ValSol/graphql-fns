@@ -17,7 +17,7 @@ type Props = {
   generalConfig: GeneralConfig,
 };
 
-const ThingListContext = React.createContext<{
+const ThingListContext: Object = React.createContext<{
   state: AdminListContextState,
   dispatch: Function,
 }>({
@@ -36,7 +36,7 @@ const ThingListContext = React.createContext<{
   dispatch: () => {},
 });
 
-const ThingListProvider = (props: Props) => {
+const ThingListProvider: React.StatelessFunctionalComponent<Props> = (props: Props) => {
   const { children, generalConfig } = props;
   const apolloClient = useApolloClient();
   const { reducer, initialState } = createUseReducerArgs(generalConfig);

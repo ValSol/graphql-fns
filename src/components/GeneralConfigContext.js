@@ -4,6 +4,6 @@ import * as React from 'react';
 
 import type { GeneralConfig } from '../flowTypes';
 
-const GeneralConfigContext = React.createContext<GeneralConfig>({});
+const GeneralConfigContext: Object = React.createContext<GeneralConfig>({});
 
 export default GeneralConfigContext;

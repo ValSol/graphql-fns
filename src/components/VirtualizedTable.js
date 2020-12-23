@@ -52,11 +52,11 @@ const styles = (theme) => ({
   },
 });
 
+type DefaultProps = { headerHeight: number, rowHeight: number };
+
 class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
-  static defaultProps = {
-    headerHeight: 48,
-    rowHeight: 48,
-  };
+  // eslint-disable-next-line react/static-property-placement, react/default-props-match-prop-types
+  static defaultProps: DefaultProps = { headerHeight: 48, rowHeight: 48 };
 
   getRowClassName = ({ index }) => {
     const { classes } = this.props;
@@ -136,43 +136,40 @@ class VirtualizedTable extends React.PureComponent<Props & ProvidedProps> {
     const { classes, columns, width, ...tableProps } = this.props;
     return (
       <WindowScroller>
-        {({ height, isScrolling, onChildScroll, scrollTop }) => {
-          return (
-            <Table
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              {...tableProps}
-              autoHeight
-              height={height}
-              isScrolling={isScrolling}
-              onScroll={onChildScroll}
-              scrollTop={scrollTop}
-              width={width}
-              rowClassName={this.getRowClassName}
-            >
-              {columns.map(({ dataKey, ...other }, index) => {
-                return (
-                  <Column
-                    key={dataKey}
-                    headerRenderer={(headerProps) =>
-                      this.headerRenderer({
-                        ...headerProps,
-                        columnIndex: index,
-                      })
-                    }
-                    className={classes.flexContainer}
-                    cellRenderer={this.cellRenderer}
-                    dataKey={dataKey}
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    {...other}
-                  />
-                );
-              })}
-            </Table>
-          );
-        }}
+        {({ height, isScrolling, onChildScroll, scrollTop }) => (
+          <Table
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...tableProps}
+            autoHeight
+            height={height}
+            isScrolling={isScrolling}
+            onScroll={onChildScroll}
+            scrollTop={scrollTop}
+            width={width}
+            rowClassName={this.getRowClassName}
+          >
+            {columns.map(({ dataKey, ...other }, index) => (
+              <Column
+                key={dataKey}
+                headerRenderer={(headerProps) =>
+                  this.headerRenderer({
+                    ...headerProps,
+                    columnIndex: index,
+                  })
+                } // eslint-disable-line react/jsx-curly-newline
+                className={classes.flexContainer}
+                cellRenderer={this.cellRenderer}
+                dataKey={dataKey}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...other}
+              />
+            ))}
+          </Table>
+        )}
       </WindowScroller>
     );
   }
 }
 
+// $FlowFixMe
 export default withStyles(styles)(VirtualizedTable);

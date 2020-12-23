@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import clsx from 'clsx';
 import pluralize from 'pluralize';
 import Router, { useRouter } from 'next/router';
@@ -27,8 +27,6 @@ import GeneralConfigContext from '../GeneralConfigContext';
 import composeQuery from '../../client/queries/composeQuery';
 import composeThingCardContent from './composeThingCardContent';
 
-type Props = { config: ThingConfig };
-
 const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(1),
@@ -45,7 +43,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ThingCard = (props: Props) => {
+type Props = { config: ThingConfig };
+
+const ThingCard: React.StatelessFunctionalComponent<Props> = (props: Props) => {
+  const {
+    config,
+    config: { name },
+  } = props;
   const generalConfig: GeneralConfig = React.useContext(GeneralConfigContext);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -53,11 +57,6 @@ const ThingCard = (props: Props) => {
   function handleExpandClick() {
     setExpanded(!expanded);
   }
-
-  const {
-    config,
-    config: { name },
-  } = props;
 
   const thingCountQuery = gql(composeQuery('thingCount', config, generalConfig));
 

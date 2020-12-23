@@ -1,4 +1,5 @@
 // @flow
+
 import type { ServersideConfig, ThreeSegmentInventoryChain } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
@@ -10,7 +11,7 @@ const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   context: Object,
   serversideConfig: ServersideConfig,
-) => {
+): Promise<null | Array<Object>> => {
   const { inventoryByRoles, getCredentials } = serversideConfig;
   if (!inventoryByRoles && !getCredentials) return [];
 

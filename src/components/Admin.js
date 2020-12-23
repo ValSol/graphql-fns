@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 
 import type { GeneralConfig } from '../flowTypes';
@@ -13,7 +13,7 @@ import { ThingListProvider } from './ThingListContext';
 
 type Props = { generalConfig: GeneralConfig };
 
-const Admin = (props: Props) => {
+const Admin: React.StatelessFunctionalComponent<Props> = (props: Props) => {
   const {
     query: { create, id, thing },
   } = useRouter();

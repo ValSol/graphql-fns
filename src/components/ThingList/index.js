@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import pluralize from 'pluralize';
 
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 
 type Props = { thingConfig: ThingConfig };
 
-function ThingList(props: Props) {
+const ThingList: React.StatelessFunctionalComponent<Props> = (props: Props) => {
   const apolloClient = useApolloClient();
   const router = useRouter();
   const { pathname } = router;
@@ -242,6 +242,6 @@ function ThingList(props: Props) {
       <NoSsr>{resultChild}</NoSsr>
     </Container>
   );
-}
+};
 
 export default ThingList;
