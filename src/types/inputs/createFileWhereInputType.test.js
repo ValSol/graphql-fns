@@ -109,7 +109,6 @@ describe('createFileWhereInputType', () => {
     const expectedResult = `input FileWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
-  createdAt: DateTime
   createdAt_in: [DateTime!]
   createdAt_nin: [DateTime!]
   createdAt_ne: DateTime
@@ -117,7 +116,6 @@ describe('createFileWhereInputType', () => {
   createdAt_gte: DateTime
   createdAt_lt: DateTime
   createdAt_lte: DateTime
-  updatedAt: DateTime
   updatedAt_in: [DateTime!]
   updatedAt_nin: [DateTime!]
   updatedAt_ne: DateTime

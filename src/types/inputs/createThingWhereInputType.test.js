@@ -24,6 +24,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   code_in: [String!]
   code_nin: [String!]
   code_ne: String
@@ -54,6 +68,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   firstName: String
   firstName_in: [String!]
   firstName_nin: [String!]
@@ -94,6 +122,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
@@ -134,6 +176,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
@@ -182,6 +238,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   field1: WeekdaysEnumeration
   field1_in: [WeekdaysEnumeration!]
   field1_nin: [WeekdaysEnumeration!]
@@ -218,6 +288,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   firstName: Int
   firstName_in: [Int!]
   firstName_nin: [Int!]
@@ -260,6 +344,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   firstName: Float
   firstName_in: [Float!]
   firstName_nin: [Float!]
@@ -302,6 +400,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   firstName: DateTime
   firstName_in: [DateTime!]
   firstName_nin: [DateTime!]
@@ -344,6 +456,20 @@ describe('createThingWhereInputType', () => {
     const expectedResult = `input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
   firstName: Boolean
   lastName: Boolean
   AND: [ExampleWhereInput!]

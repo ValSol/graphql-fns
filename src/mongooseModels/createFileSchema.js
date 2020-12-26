@@ -21,6 +21,8 @@ const createFileSchema = (thingConfig: ThingConfig): Object => {
   };
 
   const FileSchema = new Schema(fileSchemaProperties, { timestamps: true });
+  FileSchema.index({ createdAt: 1 });
+  FileSchema.index({ updatedAt: 1 });
 
   // to work dynamic adding fields
   mongoose.model(`${name}_File`, FileSchema);

@@ -17,6 +17,8 @@ const createThingSchema = (thingConfig: ThingConfig, enums?: Enums = []): Object
 
   const thingSchemaProperties = composeThingSchemaProperties(thingConfig, enums);
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
+  ThingSchema.index({ createdAt: 1 });
+  ThingSchema.index({ updatedAt: 1 });
 
   const weights = composeTextIndexProperties(thingConfig);
   const weightsKeys = Object.keys(weights);
