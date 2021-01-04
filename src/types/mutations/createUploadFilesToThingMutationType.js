@@ -2,13 +2,13 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createFilesOfThingOptionsInputType from '../inputs/createFilesOfThingOptionsInputType';
+import createUploadFilesToThingInputType from '../inputs/createUploadFilesToThingInputType';
 import createThingReorderUploadedInputType from '../inputs/createThingReorderUploadedInputType';
 
 const createUploadFilesToThingMutationType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
+  const filesOfThingOptionsInputType = createUploadFilesToThingInputType(thingConfig);
 
   if (filesOfThingOptionsInputType) {
     const thingReorderUploadedInputType = createThingReorderUploadedInputType(thingConfig);
