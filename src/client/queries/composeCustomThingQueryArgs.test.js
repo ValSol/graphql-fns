@@ -7,6 +7,7 @@ import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 
 describe('composeCustomThingQueryArgs', () => {
   test('should compose customThing query without args', () => {
+    const prefixName = 'Home';
     const signatureMethods: ActionSignatureMethods = {
       name: 'getThing',
       specificName: ({ name }) => `get${name}`,
@@ -31,13 +32,14 @@ describe('composeCustomThingQueryArgs', () => {
 
     const generalConfig: GeneralConfig = { thingConfigs, custom };
 
-    const expectedResult = ['query getExample {', '  getExample {'];
+    const expectedResult = ['query Home_getExample {', '  getExample {'];
 
-    const result = composeCustomThingQueryArgs(queryName, thingConfig, generalConfig);
+    const result = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose customThing query with args', () => {
+    const prefixName = 'Home';
     const signatureMethods: ActionSignatureMethods = {
       name: 'loadThing',
       specificName: ({ name }) => `load${name}`,
@@ -63,11 +65,11 @@ describe('composeCustomThingQueryArgs', () => {
     const generalConfig: GeneralConfig = { thingConfigs, custom };
 
     const expectedResult = [
-      'query loadExample($path: String!, $index: Int) {',
+      'query Home_loadExample($path: String!, $index: Int) {',
       '  loadExample(path: $path, index: $index) {',
     ];
 
-    const result = composeCustomThingQueryArgs(queryName, thingConfig, generalConfig);
+    const result = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

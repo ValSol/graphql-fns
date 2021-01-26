@@ -1,10 +1,10 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const composeThingCountQuery = (thingConfig: ThingConfig): string => {
+const composeThingCountQuery = (prefixName: string, thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
-  return `query ${name}Count($where: ${name}WhereInput) {
+  return `query ${prefixName}_${name}Count($where: ${name}WhereInput) {
   ${name}Count(where: $where)
 }`;
 };

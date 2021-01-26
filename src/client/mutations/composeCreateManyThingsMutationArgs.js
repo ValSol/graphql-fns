@@ -4,11 +4,14 @@ import pluralize from 'pluralize';
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeCreateThingMutationArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeCreateThingMutationArgs = (
+  prefixName: string,
+  thingConfig: ThingConfig,
+): Array<string> => {
   const { name } = thingConfig;
 
   const result = [
-    `mutation createMany${pluralize(name)}($data: [${name}CreateInput!]!) {`,
+    `mutation ${prefixName}_createMany${pluralize(name)}($data: [${name}CreateInput!]!) {`,
     `  createMany${pluralize(name)}(data: $data) {`,
   ];
 

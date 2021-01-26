@@ -1,11 +1,11 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-const composeThingQueryArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeThingQueryArgs = (prefixName: string, thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
 
   const result = [
-    `query ${name}($whereOne: ${name}WhereOneInput!) {`,
+    `query ${prefixName}_${name}($whereOne: ${name}WhereOneInput!) {`,
     `  ${name}(whereOne: $whereOne) {`,
   ];
 

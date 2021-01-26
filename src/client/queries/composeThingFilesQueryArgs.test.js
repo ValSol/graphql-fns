@@ -7,6 +7,7 @@ import composeThingFilesQueryArgs from './composeThingFilesQueryArgs';
 
 describe('composeThingFileQueryArgs', () => {
   test('should compose thing query args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Image',
       file: true,
@@ -14,11 +15,11 @@ describe('composeThingFileQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query ImageFiles($where: FileWhereInput) {',
+      'query Home_ImageFiles($where: FileWhereInput) {',
       '  ImageFiles(where: $where) {',
     ];
 
-    const result = composeThingFilesQueryArgs(thingConfig);
+    const result = composeThingFilesQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

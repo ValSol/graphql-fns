@@ -13,6 +13,7 @@ import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
 import composeUploadFilesToThingMutationResolver from './composeUploadFilesToThingMutationResolver';
 
 const composeMutation = (
+  prefixName: string,
   mutationName: string,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
@@ -24,35 +25,35 @@ const composeMutation = (
 
   switch (mutationName) {
     case 'createManyThings':
-      head = composeCreateManyThingsMutationArgs(thingConfig);
+      head = composeCreateManyThingsMutationArgs(prefixName, thingConfig);
       break;
 
     case 'importThings':
-      head = composeImportThingsMutationArgs(thingConfig);
+      head = composeImportThingsMutationArgs(prefixName, thingConfig);
       break;
 
     case 'createThing':
-      head = composeCreateThingMutationArgs(thingConfig);
+      head = composeCreateThingMutationArgs(prefixName, thingConfig);
       break;
 
     case 'deleteThing':
-      head = composeDeleteThingMutationArgs(thingConfig);
+      head = composeDeleteThingMutationArgs(prefixName, thingConfig);
       break;
 
     case 'pushIntoThing':
-      head = composePushIntoThingMutationArgs(thingConfig);
+      head = composePushIntoThingMutationArgs(prefixName, thingConfig);
       break;
 
     case 'updateThing':
-      head = composeUpdateThingMutationArgs(thingConfig);
+      head = composeUpdateThingMutationArgs(prefixName, thingConfig);
       break;
 
     case 'uploadFilesToThing':
-      head = composeUploadFilesToThingMutationResolver(thingConfig);
+      head = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
       break;
 
     default:
-      head = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
+      head = composeCustomThingMutationArgs(prefixName, mutationName, thingConfig, generalConfig);
 
       const custom = mergeDerivativeIntoCustom(generalConfig); // eslint-disable-line no-case-declarations
 

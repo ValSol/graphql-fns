@@ -7,6 +7,7 @@ import composePushIntoThingMutationArgs from './composePushIntoThingMutationArgs
 
 describe('composePushIntoThingMutationArgs', () => {
   test('should compose pushIntoThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,11 +18,11 @@ describe('composePushIntoThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!) {',
+      'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!) {',
       '  pushIntoExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composePushIntoThingMutationArgs(thingConfig);
+    const result = composePushIntoThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

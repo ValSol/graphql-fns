@@ -13,6 +13,7 @@ import composeThingFileQueryArgs from './composeThingFileQueryArgs';
 import composeThingFilesQueryArgs from './composeThingFilesQueryArgs';
 
 const composeQuery = (
+  prefixName: string,
   queryName: string,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
@@ -24,35 +25,35 @@ const composeQuery = (
 
   switch (queryName) {
     case 'thing':
-      head = composeThingQueryArgs(thingConfig);
+      head = composeThingQueryArgs(prefixName, thingConfig);
       break;
 
     case 'things':
-      head = composeThingsQueryArgs(thingConfig);
+      head = composeThingsQueryArgs(prefixName, thingConfig);
       break;
 
     case 'thingCount':
-      return composeThingCountQuery(thingConfig);
+      return composeThingCountQuery(prefixName, thingConfig);
 
     case 'thingFileCount':
-      return composeThingFileCountQuery(thingConfig);
+      return composeThingFileCountQuery(prefixName, thingConfig);
 
     case 'thingDistinctValues':
-      return composeThingDistinctValuesQuery(thingConfig);
+      return composeThingDistinctValuesQuery(prefixName, thingConfig);
 
     case 'thingFile':
-      head = composeThingFileQueryArgs(thingConfig);
+      head = composeThingFileQueryArgs(prefixName, thingConfig);
       break;
 
     case 'thingFiles':
-      head = composeThingFilesQueryArgs(thingConfig);
+      head = composeThingFilesQueryArgs(prefixName, thingConfig);
       break;
 
     default:
       if (!generalConfig) {
         throw new TypeError('"generalConfig" have to be defined!');
       }
-      head = composeCustomThingQueryArgs(queryName, thingConfig, generalConfig);
+      head = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
 
       const custom = mergeDerivativeIntoCustom(generalConfig); // eslint-disable-line no-case-declarations
       if (!custom) {

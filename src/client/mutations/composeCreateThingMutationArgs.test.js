@@ -7,6 +7,7 @@ import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
 
 describe('composeCreateThingMutationArgs', () => {
   test('should compose createThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,15 +18,16 @@ describe('composeCreateThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation createExample($data: ExampleCreateInput!) {',
+      'mutation Home_createExample($data: ExampleCreateInput!) {',
       '  createExample(data: $data) {',
     ];
 
-    const result = composeCreateThingMutationArgs(thingConfig);
+    const result = composeCreateThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose createThing with reorder mutation args ', () => {
+    const prefixName = 'Home';
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -58,11 +60,11 @@ describe('composeCreateThingMutationArgs', () => {
     });
 
     const expectedResult = [
-      'mutation createPerson($data: PersonCreateInput!, $positions: PersonReorderCreatedInput) {',
+      'mutation Home_createPerson($data: PersonCreateInput!, $positions: PersonReorderCreatedInput) {',
       '  createPerson(data: $data, positions: $positions) {',
     ];
 
-    const result = composeCreateThingMutationArgs(personConfig);
+    const result = composeCreateThingMutationArgs(prefixName, personConfig);
     expect(result).toEqual(expectedResult);
   });
 });

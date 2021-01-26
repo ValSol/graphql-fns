@@ -27,6 +27,8 @@ describe('composeMutation', () => {
     },
   };
 
+  const prefixName = 'Home';
+
   const thingConfig: ThingConfig = {
     name: 'Example',
     textFields: [
@@ -41,7 +43,7 @@ describe('composeMutation', () => {
 
   test('should compose createThing mutation', () => {
     const mutationName = 'createThing';
-    const expectedResult = `mutation createExample($data: ExampleCreateInput!) {
+    const expectedResult = `mutation Home_createExample($data: ExampleCreateInput!) {
   createExample(data: $data) {
     id
     createdAt
@@ -50,13 +52,13 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose createManyThings mutation', () => {
     const mutationName = 'createManyThings';
-    const expectedResult = `mutation createManyExamples($data: [ExampleCreateInput!]!) {
+    const expectedResult = `mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {
   createManyExamples(data: $data) {
     id
     createdAt
@@ -65,13 +67,13 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose deleteThing mutation', () => {
     const mutationName = 'deleteThing';
-    const expectedResult = `mutation deleteExample($whereOne: ExampleWhereOneInput!) {
+    const expectedResult = `mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {
   deleteExample(whereOne: $whereOne) {
     id
     createdAt
@@ -80,13 +82,13 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose updateThing mutation', () => {
     const mutationName = 'updateThing';
-    const expectedResult = `mutation updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {
+    const expectedResult = `mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {
   updateExample(whereOne: $whereOne, data: $data) {
     id
     createdAt
@@ -95,13 +97,13 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose custom loadThing mutation', () => {
     const mutationName = 'loadThing';
-    const expectedResult = `mutation loadExample($path: String!) {
+    const expectedResult = `mutation Home_loadExample($path: String!) {
   loadExample(path: $path) {
     id
     createdAt
@@ -110,7 +112,7 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

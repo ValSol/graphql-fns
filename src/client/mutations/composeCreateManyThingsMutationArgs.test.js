@@ -7,6 +7,7 @@ import composeCreateThingMutationArgs from './composeCreateManyThingsMutationArg
 
 describe('composeCreateManyThingsMutationArgs', () => {
   test('should compose createThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,11 +18,11 @@ describe('composeCreateManyThingsMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation createManyExamples($data: [ExampleCreateInput!]!) {',
+      'mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {',
       '  createManyExamples(data: $data) {',
     ];
 
-    const result = composeCreateThingMutationArgs(thingConfig);
+    const result = composeCreateThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -7,6 +7,7 @@ import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
 
 describe('composeDeleteThingMutationArgs', () => {
   test('should compose deleteThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,11 +18,11 @@ describe('composeDeleteThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation deleteExample($whereOne: ExampleWhereOneInput!) {',
+      'mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {',
       '  deleteExample(whereOne: $whereOne) {',
     ];
 
-    const result = composeDeleteThingMutationArgs(thingConfig);
+    const result = composeDeleteThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -3,7 +3,10 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingReorderCreatedInputType from '../../types/inputs/createThingReorderCreatedInputType';
 
-const composeUpdateThingMutationArgs = (thingConfig: ThingConfig): Array<string> => {
+const composeUpdateThingMutationArgs = (
+  prefixName: string,
+  thingConfig: ThingConfig,
+): Array<string> => {
   const { name } = thingConfig;
 
   const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
@@ -13,7 +16,7 @@ const composeUpdateThingMutationArgs = (thingConfig: ThingConfig): Array<string>
     : ['', ''];
 
   const result = [
-    `mutation update${name}($whereOne: ${name}WhereOneInput!, $data: ${name}UpdateInput!${reorderField[0]}) {`,
+    `mutation ${prefixName}_update${name}($whereOne: ${name}WhereOneInput!, $data: ${name}UpdateInput!${reorderField[0]}) {`,
     `  update${name}(whereOne: $whereOne, data: $data${reorderField[1]}) {`,
   ];
 

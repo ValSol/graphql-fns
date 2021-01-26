@@ -48,7 +48,9 @@ const ThingListProvider: React.StatelessFunctionalComponent<Props> = (props: Pro
     const fetchData = async () => {
       const { name } = config;
 
-      const thingQuery = gql(composeQuery('things', config, generalConfig));
+      const thingQuery = gql(
+        composeQuery('Admin_ThingListContext', 'things', config, generalConfig),
+      );
       // dispatch({ type: 'LOAD', config });
       try {
         const { data } = await apolloClient.query({ query: thingQuery });

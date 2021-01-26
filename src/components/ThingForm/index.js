@@ -106,12 +106,26 @@ const ThingForm: React.StatelessFunctionalComponent<Props> = (props: Props) => {
     createdAt: true,
     updatedAt: true,
   };
-  const thingQuery = gql(composeQuery('thing', thingConfig, generalConfig, { exclude }));
+  const thingQuery = gql(
+    composeQuery('Admin_ThingForm_Validation', 'thing', thingConfig, generalConfig, { exclude }),
+  );
   const thingMutation = id // eslint-disable-line no-nested-ternary
     ? toDelete
-      ? gql(composeMutation('deleteThing', thingConfig, generalConfig, { exclude }))
-      : gql(composeMutation('updateThing', thingConfig, generalConfig, { exclude }))
-    : gql(composeMutation('createThing', thingConfig, generalConfig, { include: { id: true } }));
+      ? gql(
+          composeMutation('Admin_ThingForm_Validation', 'deleteThing', thingConfig, generalConfig, {
+            exclude,
+          }),
+        )
+      : gql(
+          composeMutation('Admin_ThingForm_Validation', 'updateThing', thingConfig, generalConfig, {
+            exclude,
+          }),
+        )
+    : gql(
+        composeMutation('Admin_ThingForm_Validation', 'createThing', thingConfig, generalConfig, {
+          include: { id: true },
+        }),
+      );
 
   const whereOne = { id };
   // eslint-disable-next-line no-nested-ternary

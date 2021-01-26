@@ -149,12 +149,12 @@ const createValidationSchema = (
           );
         }
         const query = gql(
-          composeQuery('thing', thingConfig, generalConfig, { include: { id: true } }),
+          composeQuery('Admin_ThingForm_Validation_1', 'thing', thingConfig, generalConfig, {
+            include: { id: true },
+          }),
         );
         // eslint-disable-next-line no-param-reassign
-        prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async function test(
-          value,
-        ) {
+        prev[name] = prev[name].test(`unique-${thingName}-${name}`, 'Unique', async (value) => {
           if (!value) return true;
           const whereOne = { [name]: value };
           const { data } = await apolloClient.query({ query, variables: { whereOne } });
@@ -169,10 +169,14 @@ const createValidationSchema = (
       fieldsObject[name].kind === 'relationalFields'
     ) {
       const { config } = fieldsObject[name].attributes;
-      const query = gql(composeQuery('thing', config, generalConfig, { include: { id: true } }));
+      const query = gql(
+        composeQuery('Admin_ThingForm_Validation_2', 'thing', config, generalConfig, {
+          include: { id: true },
+        }),
+      );
       const { name: name2 } = config;
       // eslint-disable-next-line no-param-reassign
-      prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async function test2(value) {
+      prev[name] = prev[name].test(`existence-${name2}`, 'Existence', async (value) => {
         if (!value || !idReqExp.test(value)) return true;
         const whereOne = { id: value };
         const { data } = await apolloClient.query({ query, variables: { whereOne } });

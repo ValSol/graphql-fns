@@ -7,6 +7,7 @@ import composeUploadFilesToThingMutationResolver from './composeUploadFilesToThi
 
 describe('composeUploadFilesToThingMutationResolver', () => {
   test('should compose uploadFilesToThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,15 +18,16 @@ describe('composeUploadFilesToThingMutationResolver', () => {
     };
 
     const expectedResult = [
-      'mutation uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!) {',
+      'mutation Home_uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!) {',
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options) {',
     ];
 
-    const result = composeUploadFilesToThingMutationResolver(thingConfig);
+    const result = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose uploadFilesToThing mutation args ', () => {
+    const prefixName = 'Home';
     const imageConfig: ThingConfig = {
       name: 'Image',
       file: true,
@@ -72,11 +74,11 @@ describe('composeUploadFilesToThingMutationResolver', () => {
     });
 
     const expectedResult = [
-      'mutation uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!, $positions: ExampleReorderUploadedInput) {',
+      'mutation Home_uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!, $positions: ExampleReorderUploadedInput) {',
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options, positions: $positions) {',
     ];
 
-    const result = composeUploadFilesToThingMutationResolver(thingConfig);
+    const result = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

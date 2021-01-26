@@ -7,6 +7,7 @@ import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
 
 describe('composeUpdateThingMutationArgs', () => {
   test('should compose updateThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,15 +18,16 @@ describe('composeUpdateThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {',
+      'mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {',
       '  updateExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeUpdateThingMutationArgs(thingConfig);
+    const result = composeUpdateThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose updateThing with reorder mutation args ', () => {
+    const prefixName = 'Home';
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -58,11 +60,11 @@ describe('composeUpdateThingMutationArgs', () => {
     });
 
     const expectedResult = [
-      'mutation updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!, $positions: PersonReorderCreatedInput) {',
+      'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!, $positions: PersonReorderCreatedInput) {',
       '  updatePerson(whereOne: $whereOne, data: $data, positions: $positions) {',
     ];
 
-    const result = composeUpdateThingMutationArgs(personConfig);
+    const result = composeUpdateThingMutationArgs(prefixName, personConfig);
     expect(result).toEqual(expectedResult);
   });
 });

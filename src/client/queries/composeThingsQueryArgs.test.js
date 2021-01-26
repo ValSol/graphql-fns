@@ -6,6 +6,7 @@ import type { ThingConfig } from '../../flowTypes';
 import composeThingsQueryArgs from './composeThingsQueryArgs';
 
 describe('composeThingsQueryArgs', () => {
+  const prefixName = 'Home';
   test('should compose things query with default args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -17,11 +18,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
       '  Examples(where: $where, sort: $sort) {',
     ];
 
-    const result = composeThingsQueryArgs(thingConfig);
+    const result = composeThingsQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -37,11 +38,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
       '  Examples(where: $where, sort: $sort) {',
     ];
 
-    const result = composeThingsQueryArgs(thingConfig);
+    const result = composeThingsQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -57,11 +58,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: ExamplePaginationInput) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: ExamplePaginationInput) {',
       '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
-    const result = composeThingsQueryArgs(thingConfig);
+    const result = composeThingsQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -77,11 +78,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $near: ExampleNearInput) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $near: ExampleNearInput) {',
       '  Examples(where: $where, sort: $sort, near: $near) {',
     ];
 
-    const result = composeThingsQueryArgs(thingConfig);
+    const result = composeThingsQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

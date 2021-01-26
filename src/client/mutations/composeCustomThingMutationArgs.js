@@ -4,6 +4,7 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 
 const composeCustomThingMutationArgs = (
+  prefixName: string,
   mutationName: string,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
@@ -42,8 +43,8 @@ const composeCustomThingMutationArgs = (
   const args2 = argNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
   const result = argNames.length
-    ? [`mutation ${name}(${args1}) {`, `  ${name}(${args2}) {`]
-    : [`mutation ${name} {`, `  ${name} {`];
+    ? [`mutation ${prefixName}_${name}(${args1}) {`, `  ${name}(${args2}) {`]
+    : [`mutation ${prefixName}_${name} {`, `  ${name} {`];
 
   return result;
 };

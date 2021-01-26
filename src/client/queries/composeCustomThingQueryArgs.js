@@ -4,6 +4,7 @@ import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 
 const composeCustomThingQueryArgs = (
+  prefixName: string,
   queryName: string,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
@@ -40,8 +41,8 @@ const composeCustomThingQueryArgs = (
   const args2 = argNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
   const result = argNames.length
-    ? [`query ${name}(${args1}) {`, `  ${name}(${args2}) {`]
-    : [`query ${name} {`, `  ${name} {`];
+    ? [`query ${prefixName}_${name}(${args1}) {`, `  ${name}(${args2}) {`]
+    : [`query ${prefixName}_${name} {`, `  ${name} {`];
 
   return result;
 };

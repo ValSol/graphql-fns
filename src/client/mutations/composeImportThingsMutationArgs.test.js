@@ -7,6 +7,7 @@ import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 
 describe('composeImportThingsMutationArgs', () => {
   test('should compose createThing mutation args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,11 +18,11 @@ describe('composeImportThingsMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation importExamples($file: Upload!, $options: ImportOptionsInput) {',
+      'mutation Home_importExamples($file: Upload!, $options: ImportOptionsInput) {',
       '  importExamples(file: $file, options: $options) {',
     ];
 
-    const result = composeImportThingsMutationArgs(thingConfig);
+    const result = composeImportThingsMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

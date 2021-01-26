@@ -66,7 +66,7 @@ const ThingList: React.StatelessFunctionalComponent<Props> = (props: Props) => {
   const handleExport = React.useCallback(
     async (format: 'csv' | 'json') => {
       if (!config) return; // to prevent flowjs warnings
-      const query = gql(composeQuery('things', config, generalConfig));
+      const query = gql(composeQuery('Admin_ThingList', 'things', config, generalConfig));
       const where = Object.keys(filters).reduce((prev, key) => {
         // $FlowFixMe
         const { enumeration, fieldVariant, value } = filters[key];
@@ -95,7 +95,9 @@ const ThingList: React.StatelessFunctionalComponent<Props> = (props: Props) => {
     async (files, format) => {
       if (files && files.length) {
         if (!config) return; // to prevent flowjs warnings
-        const mutation = gql(composeMutation('importThings', config, generalConfig));
+        const mutation = gql(
+          composeMutation('Admin_ThingList', 'importThings', config, generalConfig),
+        );
         try {
           const variables = { file: files[0], options: { format } };
           await apolloClient.mutate({ mutation, variables });

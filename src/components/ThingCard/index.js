@@ -58,7 +58,7 @@ const ThingCard: React.StatelessFunctionalComponent<Props> = (props: Props) => {
     setExpanded(!expanded);
   }
 
-  const thingCountQuery = gql(composeQuery('thingCount', config, generalConfig));
+  const thingCountQuery = gql(composeQuery('Admin_ThingCard', 'thingCount', config, generalConfig));
 
   const cardContent = composeThingCardContent(config, generalConfig);
 

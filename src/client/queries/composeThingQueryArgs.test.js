@@ -7,6 +7,7 @@ import composeThingQueryArgs from './composeThingQueryArgs';
 
 describe('composeThingQueryArgs', () => {
   test('should compose thing query args ', () => {
+    const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -17,11 +18,11 @@ describe('composeThingQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Example($whereOne: ExampleWhereOneInput!) {',
+      'query Home_Example($whereOne: ExampleWhereOneInput!) {',
       '  Example(whereOne: $whereOne) {',
     ];
 
-    const result = composeThingQueryArgs(thingConfig);
+    const result = composeThingQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

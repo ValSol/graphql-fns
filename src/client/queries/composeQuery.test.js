@@ -6,6 +6,7 @@ import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../f
 import composeQuery from './composeQuery';
 
 describe('composeQuery', () => {
+  const prefixName = 'Home';
   const signatureMethods: ActionSignatureMethods = {
     name: 'getThing',
     specificName(thingConfig) {
@@ -42,7 +43,7 @@ describe('composeQuery', () => {
   const generalConfig: GeneralConfig = { thingConfigs, custom };
 
   test('should compose thing query', () => {
-    const expectedResult = `query Example($whereOne: ExampleWhereOneInput!) {
+    const expectedResult = `query Home_Example($whereOne: ExampleWhereOneInput!) {
   Example(whereOne: $whereOne) {
     id
     createdAt
@@ -51,12 +52,12 @@ describe('composeQuery', () => {
   }
 }`;
 
-    const result = composeQuery('thing', thingConfig, generalConfig);
+    const result = composeQuery(prefixName, 'thing', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose things query', () => {
-    const expectedResult = `query Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {
+    const expectedResult = `query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {
   Examples(where: $where, sort: $sort) {
     id
     createdAt
@@ -65,30 +66,30 @@ describe('composeQuery', () => {
   }
 }`;
 
-    const result = composeQuery('things', thingConfig, generalConfig);
+    const result = composeQuery(prefixName, 'things', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose thingCount query', () => {
-    const expectedResult = `query ExampleCount($where: ExampleWhereInput) {
+    const expectedResult = `query Home_ExampleCount($where: ExampleWhereInput) {
   ExampleCount(where: $where)
 }`;
 
-    const result = composeQuery('thingCount', thingConfig, generalConfig);
+    const result = composeQuery(prefixName, 'thingCount', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose thingDistinctValues query', () => {
-    const expectedResult = `query ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput) {
+    const expectedResult = `query Home_ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput) {
   ExampleDistinctValues(where: $where, options: $options)
 }`;
 
-    const result = composeQuery('thingDistinctValues', thingConfig, generalConfig);
+    const result = composeQuery(prefixName, 'thingDistinctValues', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should compose custom getThing query', () => {
-    const expectedResult = `query getExample($path: String!) {
+    const expectedResult = `query Home_getExample($path: String!) {
   getExample(path: $path) {
     id
     createdAt
@@ -97,7 +98,7 @@ describe('composeQuery', () => {
   }
 }`;
 
-    const result = composeQuery('getThing', thingConfig, generalConfig);
+    const result = composeQuery(prefixName, 'getThing', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

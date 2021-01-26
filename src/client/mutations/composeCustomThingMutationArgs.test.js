@@ -7,6 +7,7 @@ import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
 
 describe('composeCustomThingMutationArgs', () => {
   test('should compose customThing mutation without args', () => {
+    const prefixName = 'Home';
     const signatureMethods: ActionSignatureMethods = {
       name: 'loadThing',
       specificName: ({ name }) => `load${name}`,
@@ -31,13 +32,19 @@ describe('composeCustomThingMutationArgs', () => {
 
     const generalConfig: GeneralConfig = { thingConfigs, custom };
 
-    const expectedResult = ['mutation loadExample {', '  loadExample {'];
+    const expectedResult = ['mutation Home_loadExample {', '  loadExample {'];
 
-    const result = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
+    const result = composeCustomThingMutationArgs(
+      prefixName,
+      mutationName,
+      thingConfig,
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose customThing mutation with args', () => {
+    const prefixName = 'Home';
     const signatureMethods: ActionSignatureMethods = {
       name: 'loadThing',
       specificName: ({ name }) => `load${name}`,
@@ -63,11 +70,16 @@ describe('composeCustomThingMutationArgs', () => {
     const generalConfig: GeneralConfig = { thingConfigs, custom };
 
     const expectedResult = [
-      'mutation loadExample($path: String!, $index: Int) {',
+      'mutation Home_loadExample($path: String!, $index: Int) {',
       '  loadExample(path: $path, index: $index) {',
     ];
 
-    const result = composeCustomThingMutationArgs(mutationName, thingConfig, generalConfig);
+    const result = composeCustomThingMutationArgs(
+      prefixName,
+      mutationName,
+      thingConfig,
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 });
