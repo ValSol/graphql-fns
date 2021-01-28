@@ -445,7 +445,7 @@ export type GeneralConfig = {
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
       },
     },
     +Mutation?: {
@@ -461,7 +461,7 @@ export type GeneralConfig = {
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
       },
     },
   },
@@ -511,7 +511,7 @@ export type ActionSignatureMethods = {
   +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => ThingConfig,
+  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
 };
 
 // equal to previous code of 'custom' property

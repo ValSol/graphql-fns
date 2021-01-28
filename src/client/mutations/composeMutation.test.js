@@ -6,7 +6,7 @@ import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../f
 import composeMutation from './composeMutation';
 
 describe('composeMutation', () => {
-  const signatureMethods: ActionSignatureMethods = {
+  const loadThing: ActionSignatureMethods = {
     name: 'loadThing',
     specificName(thingConfig) {
       const { name } = thingConfig;
@@ -27,6 +27,22 @@ describe('composeMutation', () => {
     },
   };
 
+  const tokenForThing: ActionSignatureMethods = {
+    name: 'tokenForThing',
+    specificName(thingConfig) {
+      const { name } = thingConfig;
+      return `tokenFor${name}`;
+    },
+    argNames() {
+      return ['path'];
+    },
+    argTypes() {
+      return ['String!'];
+    },
+    type: () => 'String',
+    config: () => null,
+  };
+
   const prefixName = 'Home';
 
   const thingConfig: ThingConfig = {
@@ -38,7 +54,7 @@ describe('composeMutation', () => {
     ],
   };
   const thingConfigs = { Example: thingConfig };
-  const custom = { Mutation: { loadThing: signatureMethods } };
+  const custom = { Mutation: { loadThing, tokenForThing } };
   const generalConfig: GeneralConfig = { thingConfigs, custom };
 
   test('should compose createThing mutation', () => {
@@ -110,6 +126,16 @@ describe('composeMutation', () => {
     updatedAt
     textField
   }
+}`;
+
+    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
+  test('should compose custom tokenForThing mutation', () => {
+    const mutationName = 'tokenForThing';
+    const expectedResult = `mutation Home_tokenForExample($path: String!) {
+  tokenForExample(path: $path)
 }`;
 
     const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);

@@ -7,7 +7,7 @@ import composeQuery from './composeQuery';
 
 describe('composeQuery', () => {
   const prefixName = 'Home';
-  const signatureMethods: ActionSignatureMethods = {
+  const getThing: ActionSignatureMethods = {
     name: 'getThing',
     specificName(thingConfig) {
       const { name } = thingConfig;
@@ -28,6 +28,22 @@ describe('composeQuery', () => {
     },
   };
 
+  const tokenForThing: ActionSignatureMethods = {
+    name: 'tokenForThing',
+    specificName(thingConfig) {
+      const { name } = thingConfig;
+      return `tokenFor${name}`;
+    },
+    argNames() {
+      return ['path'];
+    },
+    argTypes() {
+      return ['String!'];
+    },
+    type: () => 'String',
+    config: () => null,
+  };
+
   const thingConfig: ThingConfig = {
     name: 'Example',
     textFields: [
@@ -39,7 +55,7 @@ describe('composeQuery', () => {
   };
 
   const thingConfigs = { Example: thingConfig };
-  const custom = { Query: { getThing: signatureMethods } };
+  const custom = { Query: { getThing, tokenForThing } };
   const generalConfig: GeneralConfig = { thingConfigs, custom };
 
   test('should compose thing query', () => {
@@ -99,6 +115,15 @@ describe('composeQuery', () => {
 }`;
 
     const result = composeQuery(prefixName, 'getThing', thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
+
+  test('should compose custom tokenForThing query', () => {
+    const expectedResult = `query Home_tokenForExample($path: String!) {
+  tokenForExample(path: $path)
+}`;
+
+    const result = composeQuery(prefixName, 'tokenForThing', thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

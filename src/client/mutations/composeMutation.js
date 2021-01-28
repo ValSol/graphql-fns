@@ -62,7 +62,7 @@ const composeMutation = (
       }
       const { Mutation } = custom; // eslint-disable-line no-case-declarations
       if (!Mutation) {
-        throw new TypeError('"Return" property have to be defined!');
+        throw new TypeError('"Mutation" property have to be defined!');
       }
       if (
         !Mutation[mutationName] ||
@@ -73,7 +73,13 @@ const composeMutation = (
           `Method "config" have to be defined for "${mutationName}" custom query`,
         );
       }
+
       returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
+
+      if (returnObjectConfig === null) {
+        const tail = head[head.length - 1].slice(0, -2);
+        return [...head.slice(0, -1), tail, '}'].join('\n');
+      }
   }
 
   const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });

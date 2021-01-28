@@ -118,4 +118,39 @@ describe('composeActionSignature', () => {
     const result = composeActionSignature(queryParts, thingConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
+
+  test('should return action that return scalar', () => {
+    const queryParts = {
+      name: 'tokenOfThing',
+      specificName(thingConfig) {
+        const { name } = thingConfig;
+        return `tokenOf${name}`;
+      },
+      argNames() {
+        return ['path', 'index'];
+      },
+      argTypes() {
+        return ['String!', 'Int'];
+      },
+      type: () => 'String!',
+      config: () => null,
+    };
+
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const generalConfig: GeneralConfig = {
+      thingConfigs: { Example: thingConfig },
+    };
+
+    const expectedResult = 'tokenOfExample(path: String!, index: Int): String!';
+
+    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
+    expect(result).toBe(expectedResult);
+  });
 });

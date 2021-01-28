@@ -61,7 +61,7 @@ const composeQuery = (
       }
       const { Query } = custom; // eslint-disable-line no-case-declarations
       if (!Query) {
-        throw new TypeError('"Return" property have to be defined!');
+        throw new TypeError('"Query" property have to be defined!');
       }
       if (
         !Query[queryName] ||
@@ -70,7 +70,13 @@ const composeQuery = (
       ) {
         throw new TypeError(`Method "config" have to be defined for "${queryName}" custom query`);
       }
+
       returnObjectConfig = Query[queryName].config(thingConfig, generalConfig);
+
+      if (returnObjectConfig === null) {
+        const tail = head[head.length - 1].slice(0, -2);
+        return [...head.slice(0, -1), tail, '}'].join('\n');
+      }
   }
 
   const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });
