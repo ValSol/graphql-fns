@@ -32,7 +32,7 @@ const csvParse2 = (data, fieldsForCSV) =>
           return !!value && !!Number.parseInt(value, 10);
         }
       } catch (err) {
-        throw TypeError(`${err}\n for value="${value}" column="${context.column}"`);
+        throw new TypeError(`${err}\n for value="${value}" column="${context.column}"`);
       }
       return value;
     },

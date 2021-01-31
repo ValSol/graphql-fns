@@ -8,10 +8,10 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
   const result = derivativeAttributesArray.reduce((prev, item) => {
     const { suffix } = item;
     if (!suffix) {
-      throw TypeError('Derivative attributes must have suffix!');
+      throw new TypeError('Derivative attributes must have suffix!');
     }
     if (prev[suffix]) {
-      throw TypeError(`Unique derivative attributes suffix: "${suffix}" is used twice!`);
+      throw new TypeError(`Unique derivative attributes suffix: "${suffix}" is used twice!`);
     }
 
     prev[suffix] = item; // eslint-disable-line no-param-reassign
@@ -29,7 +29,7 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
         const thingDerivativeFields = derivativeFields[thingName];
         Object.keys(thingDerivativeFields).forEach((fieldName) => {
           if (!derivativeKeys.includes(thingDerivativeFields[fieldName])) {
-            throw TypeError(
+            throw new TypeError(
               `Incorrect derivative suffix: "${thingDerivativeFields[fieldName]}" for derivativeField: "${fieldName}" for thingName: "${thingName}" in derivative: "${suffix}"`,
             );
           }

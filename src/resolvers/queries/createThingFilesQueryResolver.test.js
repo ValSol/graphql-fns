@@ -28,7 +28,7 @@ describe('createThingFilesQueryResolver', () => {
     const serversideConfig = {
       composeFileFieldsData: {
         Image: ({ hash, _id }) => {
-          if (!_id) throw TypeError('Have to define _id in composeFileFieldsData args!');
+          if (!_id) throw new TypeError('Have to define _id in composeFileFieldsData args!');
           const fullPath = `/images/`;
           return {
             fileId: _id,

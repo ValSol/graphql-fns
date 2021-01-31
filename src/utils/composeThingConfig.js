@@ -2,6 +2,8 @@
 
 import type { ThingConfig, SimplifiedThingConfig } from '../flowTypes';
 
+const forbiddenFieldNames = ['in', 'nin', 'ne', 'gt', 'gte', 'lt', 'lte', 're'];
+
 const composeThingConfig = (
   simplifiedThingConfig: SimplifiedThingConfig,
   thingConfig: ThingConfig,
@@ -14,6 +16,23 @@ const composeThingConfig = (
     duplexFields: simplifiedDuplexFields,
     relationalFields: simplifiedRelationalFields,
   } = simplifiedThingConfig;
+
+  // check field names
+  Object.keys(simplifiedThingConfig)
+    .filter((key) => key.endsWith('Fields'))
+    .forEach((key) => {
+      // $FlowFixMe
+      simplifiedThingConfig[key].forEach(({ name: fieldName }) => {
+        if (fieldName.search('_') !== -1) {
+          throw new TypeError(
+            `Forbidden to use "_" (underscore) in field name: "${fieldName}" in thing: "${name}"!`,
+          );
+        }
+        if (forbiddenFieldNames.includes(fieldName)) {
+          throw new TypeError(`Forbidden field name: "${fieldName}" in thing: "${name}"!`);
+        }
+      });
+    });
 
   if (simplifiedEmbeddedFields) {
     // eslint-disable-next-line no-param-reassign

@@ -8,10 +8,10 @@ const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
   const result = inventories.reduce((prev, inventory) => {
     const { name } = inventory;
     if (typeof name === 'undefined') {
-      throw TypeError('Inventory of role must have name!');
+      throw new TypeError('Inventory of role must have name!');
     }
     if (prev[name]) {
-      throw TypeError(`Unique role name: "${name}" is used twice!`);
+      throw new TypeError(`Unique role name: "${name}" is used twice!`);
     }
 
     prev[name] = inventory; // eslint-disable-line no-param-reassign

@@ -19,7 +19,7 @@ const composeCustom = (arg: Arg): Custom => {
     Input.forEach((item) => {
       const { name } = item;
       if (tmp[name]) {
-        throw TypeError(
+        throw new TypeError(
           `Unique custom input name: "${name}" already was used in custom ${tmp[name]}!`,
         );
       }
@@ -33,7 +33,7 @@ const composeCustom = (arg: Arg): Custom => {
     Query.forEach((item) => {
       const { name } = item;
       if (tmp[name]) {
-        throw TypeError(
+        throw new TypeError(
           `Unique custom query name: "${name}" already was used in custom ${tmp[name]}!`,
         );
       }
@@ -47,7 +47,7 @@ const composeCustom = (arg: Arg): Custom => {
     Mutation.forEach((item) => {
       const { name } = item;
       if (tmp[name]) {
-        throw TypeError(
+        throw new TypeError(
           `Unique custom mutation name: "${name}" already was used in custom ${tmp[name]}!`,
         );
       }
