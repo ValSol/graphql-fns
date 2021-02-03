@@ -45,7 +45,7 @@ const createThingDistinctValuesQueryResolver = (
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const conditions = mergeWhereAndFilter(filter, where, thingConfig) || {};
+    const { where: conditions } = mergeWhereAndFilter(filter, where, thingConfig) || {};
 
     const result = await Thing.distinct(target, conditions);
 

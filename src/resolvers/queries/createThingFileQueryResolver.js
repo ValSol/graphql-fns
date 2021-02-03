@@ -52,7 +52,7 @@ const createThingFilesQueryResolver = (
     if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in whereOne arg!');
     }
-    const conditions = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { where: conditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = {};
 

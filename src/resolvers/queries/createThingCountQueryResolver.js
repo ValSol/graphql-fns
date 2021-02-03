@@ -1,14 +1,17 @@
 // @flow
 
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/checkInventory';
 import createThing from '../../mongooseModels/createThing';
 import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
+import composeNearForAggregateInput from './composeNearForAggregateInput';
 
 type Args = {
   where?: Object,
+  near?: NearInput,
+  search?: string,
 };
 type Context = { mongooseConn: Object };
 
@@ -35,13 +38,37 @@ const createThingCountQueryResolver = (
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 
-    const { where } = args;
+    const { near, where, search } = args;
 
     const { mongooseConn } = context;
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const conditions = mergeWhereAndFilter(filter, where, thingConfig) || {};
+    const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, thingConfig) || {};
+
+    if (lookups.length || near || search) {
+      const arg = [...lookups];
+
+      if (near) {
+        const geoNear = composeNearForAggregateInput(near);
+
+        arg.unshift({ $geoNear: geoNear });
+      }
+
+      if (search) {
+        arg.unshift({ $match: { $text: { $search: search } } });
+      }
+
+      if (Object.keys(conditions).length) {
+        arg.push({ $match: conditions });
+      }
+
+      arg.push({ $count: 'count' });
+
+      const [{ count }] = await Thing.aggregate(arg).exec();
+
+      return count;
+    }
 
     const result = await Thing.countDocuments(conditions);
 

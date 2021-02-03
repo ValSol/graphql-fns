@@ -47,7 +47,7 @@ const createDeleteThingMutationResolver = (
       throw new TypeError('Expected exactly one key in where arg!');
     }
 
-    const conditions = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { where: conditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const thing = await Thing.findOne(conditions, null, { lean: true });
     if (!thing) return null;

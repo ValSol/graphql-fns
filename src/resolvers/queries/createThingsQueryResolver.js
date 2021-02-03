@@ -8,7 +8,9 @@ import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import getProjectionFromInfo from '../getProjectionFromInfo';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
+import composeNearForAggregateInput from './composeNearForAggregateInput';
 import composeNearInput from './composeNearInput';
+import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
 
 type Args = {
@@ -16,7 +18,7 @@ type Args = {
   near?: NearInput,
   sort?: { sortBy: Array<string> },
   pagination?: { skip: number, first: number },
-  search: string,
+  search?: string,
 };
 type Context = { mongooseConn: Object };
 
@@ -52,12 +54,60 @@ const createThingsQueryResolver = (
 
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
+    const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, thingConfig);
+
+    if (lookups.length) {
+      const arg = [...lookups];
+
+      if (near) {
+        const geoNear = composeNearForAggregateInput(near);
+
+        arg.unshift({ $geoNear: geoNear });
+      }
+
+      if (search) {
+        arg.unshift({ $sort: { score: { $meta: 'textScore' } } });
+        arg.unshift({ $match: { $text: { $search: search } } });
+      }
+
+      if (Object.keys(where2).length) {
+        arg.push({ $match: where2 });
+      }
+
+      if (sort) {
+        const { sortBy } = sort;
+        const sortInputs = composeSortForAggregateInput(sortBy);
+        Array.prototype.push.apply(arg, sortInputs);
+      }
+
+      if (pagination) {
+        const { skip, first: limit } = pagination;
+
+        if (skip > 0) {
+          arg.push({ $skip: skip });
+        }
+
+        if (limit > 0) {
+          arg.push({ $limit: limit });
+        }
+      }
+
+      arg.push({ $project: projection });
+
+      const things = await Thing.aggregate(arg).exec();
+
+      if (!things) return [];
+
+      const result = things.map((item) => addIdsToThing(item, thingConfig));
+
+      return result;
+    }
+
     let query = Thing.find({}, projection, { lean: true });
 
     if (near) query = query.where(composeNearInput(near));
 
-    const where2 = mergeWhereAndFilter(filter, where, thingConfig);
-    if (where2) query = query.where(where2);
+    if (Object.keys(where2).length) query = query.where(where2);
 
     if (search) query = query.where({ $text: { $search: search } });
 

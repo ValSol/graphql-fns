@@ -48,7 +48,7 @@ const createThingFilesQueryResolver = (
     const fileSchema = createFileSchema(thingConfig);
     const FileModel = mongooseConn.model(`${name}_File`, fileSchema);
 
-    const conditions = mergeWhereAndFilter(filter, where, thingConfig);
+    const { where: conditions } = mergeWhereAndFilter(filter, where, thingConfig);
 
     const projection = {};
 

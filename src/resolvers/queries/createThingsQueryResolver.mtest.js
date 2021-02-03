@@ -114,6 +114,10 @@ describe('createThingQueryResolver', () => {
     const people4 = await People(null, { pagination }, { mongooseConn, pubsub }, info);
 
     expect(people4.length).toBe(3);
+
+    const where3 = { friends__position: 'programmer' };
+    const people5 = await People(null, { where: where3 }, { mongooseConn, pubsub }, info);
+    expect(people5.length).toBe(1);
   });
 
   test('should create query things resolver for thing with geospatial fields', async () => {
@@ -545,5 +549,129 @@ describe('createThingQueryResolver', () => {
     expect(items2[2].second).toBe('pupkin');
     expect(items2[3].first).toBe('masha');
     expect(items2[3].second).toBe('nikman & pupkin');
+  });
+
+  test('should create query things resolver to aggregate result', async () => {
+    const childConfig: ThingConfig = {
+      name: 'Child',
+      textFields: [
+        {
+          name: 'textFields',
+          array: true,
+          index: true,
+        },
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const parentConfig: ThingConfig = {
+      name: 'Parent',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          weight: 1,
+        },
+      ],
+      geospatialFields: [
+        {
+          name: 'point',
+          geospatialType: 'Point',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'child',
+          index: true,
+          config: childConfig,
+        },
+      ],
+    };
+
+    const coords = [
+      { lng: 50.428, lat: 30.61 },
+      { lng: 50.427, lat: 30.611 },
+      { lng: 50.426, lat: 30.612 },
+      { lng: 50.425, lat: 30.613 },
+      { lng: 50.424, lat: 30.614 },
+      { lng: 50.423, lat: 30.615 },
+      { lng: 50.422, lat: 30.616 },
+      { lng: 50.421, lat: 30.617 },
+      { lng: 50.42, lat: 30.618 },
+      { lng: 50.429, lat: 30.619 },
+      { lng: 50.41, lat: 30.63 },
+      { lng: 50.411, lat: 30.631 },
+      { lng: 50.412, lat: 30.632 },
+      { lng: 50.413, lat: 30.633 },
+      { lng: 50.414, lat: 30.634 },
+      { lng: 50.415, lat: 30.635 },
+      { lng: 50.416, lat: 30.636 },
+      { lng: 50.417, lat: 30.637 },
+      { lng: 50.418, lat: 30.638 },
+      { lng: 50.419, lat: 30.639 },
+    ];
+
+    const createParent = createCreateThingMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createParent).toBe('function');
+    if (!createParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    for (let i = 0; i < 20; i += 1) {
+      const data = {
+        name: `name${Math.floor(i / 3)}`,
+        point: coords[i],
+        child: {
+          create: {
+            textFields: [`text-${i}`],
+            textField: i < 15 ? 'first' : 'second',
+          },
+        },
+      };
+      // eslint-disable-next-line no-await-in-loop
+      await createParent(null, { data }, { mongooseConn, pubsub });
+    }
+
+    const Parents = createThingsQueryResolver(parentConfig, generalConfig, serversideConfig);
+    if (!Parents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const where = { child__textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] };
+    const parents = await Parents(null, { where }, { mongooseConn, pubsub }, infoForSort);
+
+    expect(parents.length).toBe(3);
+
+    const where2 = { child__textField: 'first' };
+    const pagination = { skip: 3, first: 7 };
+    const sort = { sortBy: ['name_DESC'] };
+    const parents2 = await Parents(
+      null,
+      { pagination, sort, where: where2 },
+      { mongooseConn, pubsub },
+      infoForSort,
+    );
+
+    expect(parents2.length).toBe(7);
+
+    const near: NearInput = {
+      geospatialField: 'point',
+      coordinates: { lng: 50.425, lat: 30.615 },
+      maxDistance: 1500,
+    };
+
+    const parents3 = await Parents(null, { near, where }, { mongooseConn, pubsub }, infoForSort);
+    expect(parents3.length).toBe(2);
+
+    const search = 'name2';
+    const parents4 = await Parents(
+      null,
+      { search, where: where2 },
+      { mongooseConn, pubsub },
+      infoForSort,
+    );
+    expect(parents4.length).toBe(3);
   });
 });

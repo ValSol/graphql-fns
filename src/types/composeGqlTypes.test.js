@@ -395,7 +395,7 @@ type UpdatedExamplePayload {
 type Query {
   Example(whereOne: ExampleWhereOneInput!): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput, search: String): [Example!]!
-  ExampleCount(where: ExampleWhereInput): Int!
+  ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   ImageFile(whereOne: FileWhereOneInput!): Image
   ImageFiles(where: FileWhereInput): [Image!]!
@@ -596,6 +596,9 @@ input Example1WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [Example1WhereInput!]
+  NOR: [Example1WhereInput!]
+  OR: [Example1WhereInput!]
 }
 enum Example1SortEnum {
   createdAt_ASC
@@ -634,6 +637,9 @@ input Example2WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [Example2WhereInput!]
+  NOR: [Example2WhereInput!]
+  OR: [Example2WhereInput!]
 }
 enum Example2SortEnum {
   createdAt_ASC
@@ -668,7 +674,7 @@ type UpdatedExample2Payload {
 type Query {
   Example1(whereOne: Example1WhereOneInput!): Example1
   Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
-  Example1Count(where: Example1WhereInput): Int!
+  Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
   Example2(whereOne: Example2WhereOneInput!): Example2
   Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
@@ -858,6 +864,9 @@ input PersonWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
 }
 enum PersonSortEnum {
   createdAt_ASC
@@ -888,6 +897,9 @@ input PlaceWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [PlaceWhereInput!]
+  NOR: [PlaceWhereInput!]
+  OR: [PlaceWhereInput!]
 }
 enum PlaceSortEnum {
   createdAt_ASC
@@ -1099,6 +1111,9 @@ input PersonWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
 }
 enum PersonSortEnum {
   createdAt_ASC
@@ -1363,6 +1378,9 @@ input PersonWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
 }
 enum PersonSortEnum {
   createdAt_ASC
@@ -1393,6 +1411,9 @@ input PlaceWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [PlaceWhereInput!]
+  NOR: [PlaceWhereInput!]
+  OR: [PlaceWhereInput!]
 }
 enum PlaceSortEnum {
   createdAt_ASC
@@ -1512,6 +1533,9 @@ input ExampleWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
 }
 enum ExampleSortEnum {
   createdAt_ASC
@@ -1634,6 +1658,9 @@ input ExampleWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
 }
 enum ExampleSortEnum {
   createdAt_ASC
@@ -1692,6 +1719,9 @@ input ExampleWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
 }
 enum ExampleSortEnum {
   createdAt_ASC

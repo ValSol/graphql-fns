@@ -49,7 +49,7 @@ const createPushIntoThingMutationResolver = (
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;
-    const whereOne3 = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { where: whereOne3 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     let previousThing = {};
     const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];

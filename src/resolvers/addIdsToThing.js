@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig } from '../flowTypes';
 
-const addFilter = (data: Object, thingConfig: ThingConfig): Object => {
+const addIdsToThing = (data: Object, thingConfig: ThingConfig): Object => {
   const { embeddedFields, fileFields } = thingConfig;
 
   const { _id: id, ...rest } = data;
@@ -13,10 +13,10 @@ const addFilter = (data: Object, thingConfig: ThingConfig): Object => {
       if (data[name]) {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = data[name].map((item) => addFilter(item, config));
+          prev[name] = data[name].map((item) => addIdsToThing(item, config));
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = addFilter(data[name], config);
+          prev[name] = addIdsToThing(data[name], config);
         }
       }
       return prev;
@@ -28,10 +28,10 @@ const addFilter = (data: Object, thingConfig: ThingConfig): Object => {
       if (data[name]) {
         if (array) {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = data[name].map((item) => addFilter(item, config));
+          prev[name] = data[name].map((item) => addIdsToThing(item, config));
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = addFilter(data[name], config);
+          prev[name] = addIdsToThing(data[name], config);
         }
       }
       return prev;
@@ -41,4 +41,4 @@ const addFilter = (data: Object, thingConfig: ThingConfig): Object => {
   return result;
 };
 
-export default addFilter;
+export default addIdsToThing;

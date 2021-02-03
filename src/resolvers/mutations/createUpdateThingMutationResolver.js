@@ -55,7 +55,7 @@ const createUpdateThingMutationResolver = (
         )
       : {};
 
-    const whereOne2 = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { where: whereOne2 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
       ? {} // if subsciption ON - return empty projection - to get all fields of thing

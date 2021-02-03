@@ -2,46 +2,45 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const createThingWhereInputType = (thingConfig: ThingConfig): string => {
+const composeScalarFields = (thingConfig: ThingConfig, parentFieldName?: string): string => {
   const {
-    name,
     booleanFields,
     enumFields,
     dateTimeFields,
-    duplexFields,
     intFields,
     floatFields,
     textFields,
-    relationalFields,
   } = thingConfig;
 
+  const prefix = parentFieldName ? `${parentFieldName}__` : '';
+
   const fields = [
-    `  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime`,
+    `  ${prefix}id_in: [ID!]
+  ${prefix}id_nin: [ID!]
+  ${prefix}createdAt_in: [DateTime!]
+  ${prefix}createdAt_nin: [DateTime!]
+  ${prefix}createdAt_ne: DateTime
+  ${prefix}createdAt_gt: DateTime
+  ${prefix}createdAt_gte: DateTime
+  ${prefix}createdAt_lt: DateTime
+  ${prefix}createdAt_lte: DateTime
+  ${prefix}updatedAt_in: [DateTime!]
+  ${prefix}updatedAt_nin: [DateTime!]
+  ${prefix}updatedAt_ne: DateTime
+  ${prefix}updatedAt_gt: DateTime
+  ${prefix}updatedAt_gte: DateTime
+  ${prefix}updatedAt_lt: DateTime
+  ${prefix}updatedAt_lte: DateTime`,
   ];
 
   if (textFields) {
     textFields.forEach(({ name: fieldName, index, unique }) => {
       if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: String`);
-        fields.push(`  ${fieldName}_in: [String!]
-  ${fieldName}_nin: [String!]
-  ${fieldName}_ne: String
-  ${fieldName}_re: [RegExp!]`);
+        if (index) fields.push(`  ${prefix}${fieldName}: String`);
+        fields.push(`  ${prefix}${fieldName}_in: [String!]
+  ${prefix}${fieldName}_nin: [String!]
+  ${prefix}${fieldName}_ne: String
+  ${prefix}${fieldName}_re: [RegExp!]`);
       }
     });
   }
@@ -49,14 +48,14 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (intFields) {
     intFields.forEach(({ name: fieldName, index, unique }) => {
       if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: Int`);
-        fields.push(`  ${fieldName}_in: [Int!]
-  ${fieldName}_nin: [Int!]
-  ${fieldName}_ne: Int
-  ${fieldName}_gt: Int
-  ${fieldName}_gte: Int
-  ${fieldName}_lt: Int
-  ${fieldName}_lte: Int`);
+        if (index) fields.push(`  ${prefix}${fieldName}: Int`);
+        fields.push(`  ${prefix}${fieldName}_in: [Int!]
+  ${prefix}${fieldName}_nin: [Int!]
+  ${prefix}${fieldName}_ne: Int
+  ${prefix}${fieldName}_gt: Int
+  ${prefix}${fieldName}_gte: Int
+  ${prefix}${fieldName}_lt: Int
+  ${prefix}${fieldName}_lte: Int`);
       }
     });
   }
@@ -64,14 +63,14 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (floatFields) {
     floatFields.forEach(({ name: fieldName, index, unique }) => {
       if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: Float`);
-        fields.push(`  ${fieldName}_in: [Float!]
-  ${fieldName}_nin: [Float!]
-  ${fieldName}_ne: Float
-  ${fieldName}_gt: Float
-  ${fieldName}_gte: Float
-  ${fieldName}_lt: Float
-  ${fieldName}_lte: Float`);
+        if (index) fields.push(`  ${prefix}${fieldName}: Float`);
+        fields.push(`  ${prefix}${fieldName}_in: [Float!]
+  ${prefix}${fieldName}_nin: [Float!]
+  ${prefix}${fieldName}_ne: Float
+  ${prefix}${fieldName}_gt: Float
+  ${prefix}${fieldName}_gte: Float
+  ${prefix}${fieldName}_lt: Float
+  ${prefix}${fieldName}_lte: Float`);
       }
     });
   }
@@ -79,14 +78,14 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (dateTimeFields) {
     dateTimeFields.forEach(({ name: fieldName, index, unique }) => {
       if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: DateTime`);
-        fields.push(`  ${fieldName}_in: [DateTime!]
-  ${fieldName}_nin: [DateTime!]
-  ${fieldName}_ne: DateTime
-  ${fieldName}_gt: DateTime
-  ${fieldName}_gte: DateTime
-  ${fieldName}_lt: DateTime
-  ${fieldName}_lte: DateTime`);
+        if (index) fields.push(`  ${prefix}${fieldName}: DateTime`);
+        fields.push(`  ${prefix}${fieldName}_in: [DateTime!]
+  ${prefix}${fieldName}_nin: [DateTime!]
+  ${prefix}${fieldName}_ne: DateTime
+  ${prefix}${fieldName}_gt: DateTime
+  ${prefix}${fieldName}_gte: DateTime
+  ${prefix}${fieldName}_lt: DateTime
+  ${prefix}${fieldName}_lte: DateTime`);
       }
     });
   }
@@ -94,7 +93,7 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (booleanFields) {
     booleanFields.forEach(({ name: fieldName, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: Boolean`);
+        fields.push(`  ${prefix}${fieldName}: Boolean`);
       }
     });
   }
@@ -102,43 +101,51 @@ const createThingWhereInputType = (thingConfig: ThingConfig): string => {
   if (enumFields) {
     enumFields.forEach(({ name: fieldName, enumName, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: ${enumName}Enumeration
-  ${fieldName}_in: [${enumName}Enumeration!]
-  ${fieldName}_nin: [${enumName}Enumeration!]
-  ${fieldName}_ne: ${enumName}Enumeration
-  ${fieldName}_re: [RegExp!]`);
+        fields.push(`  ${prefix}${fieldName}: ${enumName}Enumeration
+  ${prefix}${fieldName}_in: [${enumName}Enumeration!]
+  ${prefix}${fieldName}_nin: [${enumName}Enumeration!]
+  ${prefix}${fieldName}_ne: ${enumName}Enumeration
+  ${prefix}${fieldName}_re: [RegExp!]`);
       }
     });
   }
 
+  return fields.join('\n');
+};
+
+const createThingWhereInputType = (thingConfig: ThingConfig): string => {
+  const { name, duplexFields, relationalFields } = thingConfig;
+
+  const fields = [composeScalarFields(thingConfig)];
+
   if (relationalFields) {
-    relationalFields.forEach(({ name: fieldName, index, unique }) => {
+    relationalFields.forEach(({ name: fieldName, index, unique, config }) => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]
-  ${fieldName}_ne: ID`);
+  ${fieldName}_ne: ID
+${composeScalarFields(config, fieldName)}`);
       }
     });
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.forEach(({ name: fieldName, index, unique }) => {
+    duplexFields.forEach(({ name: fieldName, config, index, unique }) => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]
-  ${fieldName}_ne: ID`);
+  ${fieldName}_ne: ID
+${composeScalarFields(config, fieldName)}`);
       }
     });
   }
 
-  if (fields.length > 1) {
-    fields.push(`  AND: [${name}WhereInput!]
+  fields.push(`  AND: [${name}WhereInput!]
   NOR: [${name}WhereInput!]
   OR: [${name}WhereInput!]`);
-  }
 
   const result = `input ${name}WhereInput {
 ${fields.join('\n')}

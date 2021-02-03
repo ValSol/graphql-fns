@@ -663,6 +663,23 @@ export type NearMongodb = {
   },
 };
 
+export type NearForAggregateMongodb = {
+  near: MongodbGeospatialPoint,
+  maxDistance: number,
+  distanceField: string,
+  key: string,
+  spherical: true,
+};
+
+export type LookupMongodb = {
+  $lookup: {
+    from: string,
+    localField: string,
+    foreignField: '_id',
+    as: string,
+  },
+};
+
 export type Subscribe = {
   subscribe: (_: Object, { name: string }, { pubsub: Object }) => Object,
 };

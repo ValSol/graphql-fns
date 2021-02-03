@@ -46,11 +46,12 @@ const createThingQueryResolver = (
     if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in whereOne arg!');
     }
-    const conditions = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { where: conditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 
     const thing = await Thing.findOne(conditions, projection, { lean: true });
+
     if (!thing) return null;
 
     const thing2 = addIdsToThing(thing, thingConfig);
