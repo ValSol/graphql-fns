@@ -115,7 +115,7 @@ describe('createThingQueryResolver', () => {
 
     expect(people4.length).toBe(3);
 
-    const where3 = { friends__position: 'programmer' };
+    const where3 = { friends_: { position: 'programmer' } };
     const people5 = await People(null, { where: where3 }, { mongooseConn, pubsub }, info);
     expect(people5.length).toBe(1);
   });
@@ -639,12 +639,12 @@ describe('createThingQueryResolver', () => {
     const Parents = createThingsQueryResolver(parentConfig, generalConfig, serversideConfig);
     if (!Parents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where = { child__textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] };
+    const where = { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } };
     const parents = await Parents(null, { where }, { mongooseConn, pubsub }, infoForSort);
 
     expect(parents.length).toBe(3);
 
-    const where2 = { child__textField: 'first' };
+    const where2 = { child_: { textField: 'first' } };
     const pagination = { skip: 3, first: 7 };
     const sort = { sortBy: ['name_DESC'] };
     const parents2 = await Parents(

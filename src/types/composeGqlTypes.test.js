@@ -301,6 +301,48 @@ input ExampleWhereOneInput {
   id: ID
   textField1: ID
 }
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField1_in: [String!]
+  textField1_nin: [String!]
+  textField1_ne: String
+  textField1_re: [RegExp!]
+  textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
+  textField2_ne: String
+  textField2_re: [RegExp!]
+  textField3: String
+  textField3_in: [String!]
+  textField3_nin: [String!]
+  textField3_ne: String
+  textField3_re: [RegExp!]
+  day: WeekdaysEnumeration
+  day_in: [WeekdaysEnumeration!]
+  day_nin: [WeekdaysEnumeration!]
+  day_ne: WeekdaysEnumeration
+  day_re: [RegExp!]
+  cuisines: CuisinesEnumeration
+  cuisines_in: [CuisinesEnumeration!]
+  cuisines_nin: [CuisinesEnumeration!]
+  cuisines_ne: CuisinesEnumeration
+  cuisines_re: [RegExp!]
+}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -579,6 +621,24 @@ input Example2DistinctValuesOptionsInput {
 input Example1WhereOneInput {
   id: ID!
 }
+input Example1WhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
 input Example1WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -619,6 +679,24 @@ input Example1NearInput {
 }
 input Example2WhereOneInput {
   id: ID!
+}
+input Example2WhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input Example2WhereInput {
   id_in: [ID!]
@@ -847,6 +925,24 @@ input PlaceDistinctValuesOptionsInput {
 input PersonWhereOneInput {
   id: ID!
 }
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -879,6 +975,24 @@ input PersonSortInput {
 }
 input PlaceWhereOneInput {
   id: ID!
+}
+input PlaceWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input PlaceWhereInput {
   id_in: [ID!]
@@ -1093,6 +1207,24 @@ input PersonDistinctValuesOptionsInput {
 }
 input PersonWhereOneInput {
   id: ID!
+}
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1361,6 +1493,24 @@ input PlaceDistinctValuesOptionsInput {
 input PersonWhereOneInput {
   id: ID!
 }
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1393,6 +1543,24 @@ input PersonSortInput {
 }
 input PlaceWhereOneInput {
   id: ID!
+}
+input PlaceWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input PlaceWhereInput {
   id_in: [ID!]
@@ -1515,6 +1683,24 @@ input ExampleDistinctValuesOptionsInput {
 }
 input ExampleWhereOneInput {
   id: ID!
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -1641,6 +1827,24 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1701,6 +1905,24 @@ type Example {
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 input ExampleWhereInput {
   id_in: [ID!]

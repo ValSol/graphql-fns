@@ -4,18 +4,17 @@ import { Types } from 'mongoose';
 
 import type { LookupMongodb, ThingConfig } from '../flowTypes';
 
-import composeFieldsObject from '../utils/composeFieldsObject';
+import composeRelationalKey from './composeRelationalKey';
 
 const composeWhereInputRecursively = (
   where: Object,
-  lookupObject: { [fieldName: string]: string },
+  parentFieldName: string,
+  lookupArray: Array<string>,
   thingConfig: ThingConfig,
 ): Object => {
   if (!where || !Object.keys(where).length) return {};
 
   const { duplexFields, relationalFields } = thingConfig;
-
-  const fieldsObject = composeFieldsObject(thingConfig);
 
   const idFields = ['id'];
   if (duplexFields) {
@@ -31,34 +30,19 @@ const composeWhereInputRecursively = (
     }, idFields);
   }
 
+  const prefix = parentFieldName ? `${parentFieldName}.` : '';
+
   const result = {};
-  Object.keys(where).forEach((rawKey) => {
-    const rawKeyArr = rawKey.split('__');
-    const { key, parentField } =
-      rawKeyArr.length === 2
-        ? { parentField: rawKeyArr[0], key: rawKeyArr[1] }
-        : { parentField: '', key: rawKey };
-
-    const prefix = parentField ? `${parentField}_.` : '';
-
-    if (parentField) {
-      const {
-        attributes: {
-          // $FlowFixMe
-          config: { name: thingName },
-        },
-      } = fieldsObject[parentField];
-
-      lookupObject[parentField] = thingName; // eslint-disable-line no-param-reassign
-    }
-
+  Object.keys(where).forEach((key) => {
     if (key.slice(-3) === '_in' && idFields.includes(key.slice(0, -3))) {
       const key2 = key.slice(0, -3) === 'id' ? '_id' : key.slice(0, -3);
+
       result[`${prefix}${key2}`] = {
         [`$${key.slice(-2)}`]: where[key].map((id) => id && Types.ObjectId(id)),
       };
     } else if (key.slice(-4) === '_nin' && idFields.includes(key.slice(0, -4))) {
       const key2 = key.slice(0, -4) === 'id' ? '_id' : key.slice(0, -4);
+
       result[`${prefix}${key2}`] = {
         [`$${key.slice(-3)}`]: where[key].map((id) => id && Types.ObjectId(id)),
       };
@@ -68,22 +52,40 @@ const composeWhereInputRecursively = (
       key.slice(-3) === '_gt' ||
       key.slice(-3) === '_ne'
     ) {
-      result[`${prefix}${key.slice(0, -3)}`] = { [`$${key.slice(-2)}`]: where[rawKey] };
+      result[`${prefix}${key.slice(0, -3)}`] = { [`$${key.slice(-2)}`]: where[key] };
     } else if (key.slice(-4) === '_nin' || key.slice(-4) === '_lte' || key.slice(-4) === '_gte') {
-      result[`${prefix}${key.slice(0, -4)}`] = { [`$${key.slice(-3)}`]: where[rawKey] };
+      result[`${prefix}${key.slice(0, -4)}`] = { [`$${key.slice(-3)}`]: where[key] };
     } else if (key.slice(-3) === '_re') {
       result[`${prefix}${key.slice(0, -3)}`] = {
-        $in: where[rawKey].map((item) => new RegExp(item.pattern, item.flags)),
+        $in: where[key].map((item) => new RegExp(item.pattern, item.flags)),
       };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
-      result[`$${key.toLowerCase()}`] = where[rawKey].map((where2) =>
-        composeWhereInputRecursively(where2, lookupObject, thingConfig),
+      result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
+        composeWhereInputRecursively(where2, parentFieldName, lookupArray, thingConfig),
       );
     } else if (idFields.includes(key)) {
       const key2 = key === 'id' ? '_id' : key;
-      result[`${prefix}${key2}`] = where[rawKey] && Types.ObjectId(where[rawKey]);
+      result[key2] = where[key] && Types.ObjectId(where[key]);
+    } else if (key.endsWith('_')) {
+      if (parentFieldName) {
+        throw new TypeError(
+          `Restricted relational field: "${key}" becouse not empty "${parentFieldName}" parentField!`,
+        );
+      }
+
+      const { relationalKey, thingConfig: thingConfig2, value } = composeRelationalKey(
+        { [key]: where[key] },
+        lookupArray,
+        thingConfig,
+      );
+
+      const result2 = composeWhereInputRecursively(value, relationalKey, lookupArray, thingConfig2);
+
+      Object.keys(result2).forEach((key2) => {
+        result[key2] = result2[key2];
+      });
     } else {
-      result[`${prefix}${key}`] = where[rawKey];
+      result[`${prefix}${key}`] = where[key];
     }
   });
   return result;
@@ -93,18 +95,18 @@ const composeWhereInput = (
   where: Object,
   thingConfig: ThingConfig,
 ): { where: Object, lookups: Array<LookupMongodb> } => {
-  const lookupObject = {};
-  const where2 = composeWhereInputRecursively(where, lookupObject, thingConfig);
+  const lookupArray = [];
+  const where2 = composeWhereInputRecursively(where, '', lookupArray, thingConfig);
 
-  const lookups = Object.keys(lookupObject).reduce((prev, parentFieldName) => {
-    const thingName = lookupObject[parentFieldName];
+  const lookups = lookupArray.reduce((prev, fieldThingPair) => {
+    const [parentFieldName, fieldName, thingName] = fieldThingPair.split(':');
 
     prev.push({
       $lookup: {
         from: `${thingName.toLowerCase()}_things`,
-        localField: parentFieldName,
+        localField: `${parentFieldName}${parentFieldName ? '.' : ''}${fieldName.slice(0, -1)}`,
         foreignField: '_id',
-        as: `${parentFieldName}_`,
+        as: `${parentFieldName}${fieldName}`,
       },
     });
 

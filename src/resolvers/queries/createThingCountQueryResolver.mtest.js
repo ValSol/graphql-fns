@@ -208,7 +208,7 @@ describe('createThingCountQueryResolver', () => {
     );
     if (!ParentCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const where = { child__textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] };
+    const where = { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } };
     const parentCount = await ParentCount(null, { where }, { mongooseConn, pubsub });
 
     expect(parentCount).toBe(3);
@@ -222,7 +222,7 @@ describe('createThingCountQueryResolver', () => {
     const parentCount2 = await ParentCount(null, { near, where }, { mongooseConn, pubsub });
     expect(parentCount2).toBe(2);
 
-    const where2 = { child__textField: 'first' };
+    const where2 = { child_: { textField: 'first' } };
     const search = 'name2';
     const parentCount3 = await ParentCount(
       null,

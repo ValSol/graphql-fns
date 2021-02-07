@@ -152,15 +152,17 @@ describe('composeWhereInput', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for flat data', () => {
+  test('should return result for relational where', () => {
     const where = {
-      relationalField__name: 'Вася',
-      relationalField__code_in: ['Vasya-1', 'Vasya-2', 'Vasya-3'],
-      relationalField__code2_re: [{ pattern: 'Misha' }, { pattern: 'sash', flags: 'i' }],
-      relationalField__floatField_gt: 77.3,
-      relationalField__floatField2_gte: 180.0,
-      relationalField__intField_lt: 15,
-      relationalField__intField2_lte: 20,
+      relationalField_: {
+        name: 'Вася',
+        code_in: ['Vasya-1', 'Vasya-2', 'Vasya-3'],
+        code2_re: [{ pattern: 'Misha' }, { pattern: 'sash', flags: 'i' }],
+        floatField_gt: 77.3,
+        floatField2_gte: 180.0,
+        intField_lt: 15,
+        intField2_lte: 20,
+      },
     };
 
     const result = composeWhereInput(where, thingConfig);
@@ -181,6 +183,123 @@ describe('composeWhereInput', () => {
             localField: 'relationalField',
             foreignField: '_id',
             as: 'relationalField_',
+          },
+        },
+      ],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for tree for relational where', () => {
+    const menusectionConfig: ThingConfig = {};
+    const menuConfig: ThingConfig = {};
+    const restaurantConfig: ThingConfig = {};
+
+    const accessConfig = {
+      name: 'Access',
+
+      textFields: [
+        {
+          name: 'restaurantEditors',
+          index: true,
+          array: true,
+        },
+      ],
+    };
+
+    Object.assign(menusectionConfig, {
+      name: 'Menusection',
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuConfig,
+          required: true,
+          index: true,
+        },
+      ],
+    });
+
+    Object.assign(menuConfig, {
+      name: 'Menu',
+      duplexFields: [
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          array: true,
+          config: menusectionConfig,
+          required: true,
+          index: true,
+        },
+        {
+          name: 'restaurant',
+          oppositeName: 'menu',
+          config: restaurantConfig,
+          required: true,
+          index: true,
+        },
+      ],
+    });
+
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'restaurant',
+          config: menuConfig,
+          index: true,
+        },
+      ],
+
+      relationalFields: [
+        {
+          name: 'access',
+          config: accessConfig,
+          index: true,
+        },
+      ],
+    });
+
+    const where = {
+      menu_: {
+        restaurant_: {
+          access_: {
+            restaurantEditors: '5f85ad539905d61fb73346a2',
+          },
+        },
+      },
+    };
+
+    const result = composeWhereInput(where, menusectionConfig);
+    const expectedResult = {
+      where: {
+        'menu_restaurant_access_.restaurantEditors': '5f85ad539905d61fb73346a2',
+      },
+      lookups: [
+        {
+          $lookup: {
+            from: 'menu_things',
+            localField: 'menu',
+            foreignField: '_id',
+            as: 'menu_',
+          },
+        },
+        {
+          $lookup: {
+            from: 'restaurant_things',
+            localField: 'menu_.restaurant',
+            foreignField: '_id',
+            as: 'menu_restaurant_',
+          },
+        },
+        {
+          $lookup: {
+            from: 'access_things',
+            localField: 'menu_restaurant_.access',
+            foreignField: '_id',
+            as: 'menu_restaurant_access_',
           },
         },
       ],
