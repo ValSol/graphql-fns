@@ -5,44 +5,44 @@ import type { ServersideConfig, ThreeSegmentInventoryChain } from '../flowTypes'
 import checkInventory from '../utils/checkInventory';
 
 const errMsg = (attr) =>
-  `"inventoryByRoles" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
+  `"inventoryByRights" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   context: Object,
   serversideConfig: ServersideConfig,
 ): Promise<null | Array<Object>> => {
-  const { inventoryByRoles, getCredentials } = serversideConfig;
-  if (!inventoryByRoles && !getCredentials) return [];
+  const { inventoryByRights, getCredentials } = serversideConfig;
+  if (!inventoryByRights && !getCredentials) return [];
 
-  if (!inventoryByRoles) {
-    throw new TypeError(errMsg('inventoryByRoles'));
+  if (!inventoryByRights) {
+    throw new TypeError(errMsg('inventoryByRights'));
   }
   if (!getCredentials) {
     throw new TypeError(errMsg('getCredentials'));
   }
-  if (!inventoryByRoles['']) {
-    throw new TypeError(errMsg('Check for no roles have to be!'));
+  if (!inventoryByRights['']) {
+    throw new TypeError(errMsg('Check for no rights have to be!'));
   }
 
-  if (checkInventory(inventoryChain, inventoryByRoles[''])) return [];
+  if (checkInventory(inventoryChain, inventoryByRights[''])) return [];
 
-  const { roles } = await getCredentials(context);
+  const { rights } = await getCredentials(context);
 
-  const allRoles = Object.keys(inventoryByRoles);
-  roles.forEach((compositeRole) => {
-    const [role] = compositeRole.split(':');
-    if (!allRoles.includes(role)) {
-      throw new Error(`Got unused in "inventoryByRoles" role: "${role}"!`);
+  const allRights = Object.keys(inventoryByRights);
+  rights.forEach((compositeRight) => {
+    const [right] = compositeRight.split(':');
+    if (!allRights.includes(right)) {
+      throw new Error(`Got unused in "inventoryByRights" right: "${right}"!`);
     }
   });
 
   let authResult = null;
-  roles.forEach((compositeRole) => {
-    const [role, thingName, ...stringifiedFilter] = compositeRole.split(':');
+  rights.forEach((compositeRight) => {
+    const [right, thingName, ...stringifiedFilter] = compositeRight.split(':');
 
     if (
-      checkInventory(inventoryChain, inventoryByRoles[role]) &&
+      checkInventory(inventoryChain, inventoryByRights[right]) &&
       (!thingName || thingName === inventoryChain[2])
     ) {
       if (!authResult) authResult = [];

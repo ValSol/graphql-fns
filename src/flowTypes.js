@@ -576,9 +576,9 @@ export type InventoryСhain =
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;
 
-export type InventoryByRoles = {
-  // must be setted for all roles and plus for empty string ""
-  [role: string]: Inventory,
+export type InventoryByRights = {
+  // must be setted for all rights and plus for empty string ""
+  [right: string]: Inventory,
 };
 
 export type FileAttributes = {
@@ -614,8 +614,8 @@ export type ServersideConfig = {
     },
   },
 
-  +inventoryByRoles?: InventoryByRoles, // "inventoryByRoles" & "getCredentials" are mutualy used
-  +getCredentials?: (context: Object) => Promise<{ roles: Array<string> }>,
+  +inventoryByRights?: InventoryByRights, // "inventoryByRights" & "getCredentials" are mutualy used
+  +getCredentials?: (context: Object) => Promise<{ rights: Array<string> }>,
   +saveFiles?: {
     [fileFieldConfigName: string]: (
       file: Object,

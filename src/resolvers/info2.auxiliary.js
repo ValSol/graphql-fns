@@ -540,7 +540,7 @@ export default {
       RestaurantCommentListWhereInput: 'RestaurantCommentListWhereInput',
       UserWhereOneInput: 'UserWhereOneInput',
       User: 'User',
-      RolesEnumeration: 'RolesEnumeration',
+      RightsEnumeration: 'RightsEnumeration',
       UserWhereInput: 'UserWhereInput',
       UserSortInput: 'UserSortInput',
       UserSortEnum: 'UserSortEnum',

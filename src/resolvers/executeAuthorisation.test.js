@@ -18,15 +18,15 @@ describe('executeAuthorisation', () => {
   });
 
   describe('unauthentificated user', () => {
-    const inventoryByRoles = {
+    const inventoryByRights = {
       '': { name: '', include: { Query: { thing: ['Post'] } } },
     };
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
-      const getCredentials = () => Promise.resolve({ roles: [] });
+      const getCredentials = () => Promise.resolve({ rights: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -35,9 +35,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'thing', 'User'];
-      const getCredentials = () => Promise.resolve({ roles: [] });
+      const getCredentials = () => Promise.resolve({ rights: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -46,16 +46,16 @@ describe('executeAuthorisation', () => {
   });
 
   describe('guest user', () => {
-    const inventoryByRoles = {
+    const inventoryByRights = {
       '': { name: '', include: { Query: { thing: ['Post'] } } },
       guest: { name: 'guest', include: { Query: { things: ['Post'] } } },
     };
 
     test('should true as unauthorized', async () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
-      const getCredentials = () => Promise.resolve({ roles: ['guest'] });
+      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -64,9 +64,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'things', 'Post'];
-      const getCredentials = () => Promise.resolve({ roles: ['guest'] });
+      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -75,9 +75,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'things', 'User'];
-      const getCredentials = () => Promise.resolve({ roles: ['guest'] });
+      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -86,7 +86,7 @@ describe('executeAuthorisation', () => {
   });
 
   describe('editor user', () => {
-    const inventoryByRoles = {
+    const inventoryByRights = {
       '': { name: '', include: { Query: { thingForView: ['Post'] } } },
       guest: { name: 'guest', include: { Query: { thingsForView: ['Post'] } } },
       editor: { name: 'editor', include: { Query: { thingsForEdit: true } } },
@@ -94,9 +94,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ roles: ['editor:Restaurant'] });
+      const getCredentials = () => Promise.resolve({ rights: ['editor:Restaurant'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -105,9 +105,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ roles: ['editor:Hotel'] });
+      const getCredentials = () => Promise.resolve({ rights: ['editor:Hotel'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -116,9 +116,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true 2', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ roles: ['editor'] });
+      const getCredentials = () => Promise.resolve({ rights: ['editor'] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -129,13 +129,13 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
       const getCredentials = () =>
         Promise.resolve({
-          roles: [
+          rights: [
             'editor:Restaurant:{"editors":"12345"}',
             'editor:Restaurant:{"cuisines":"Albanian"}',
           ],
         });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRoles };
+      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [{ editors: '12345' }, { cuisines: 'Albanian' }];

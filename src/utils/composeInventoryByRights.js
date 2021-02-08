@@ -2,16 +2,16 @@
 
 import type { Inventory } from '../flowTypes';
 
-type Result = { [roleName: string]: Inventory };
+type Result = { [rightName: string]: Inventory };
 
-const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
+const composeInventoryByRights = (inventories: Array<Inventory>): Result => {
   const result = inventories.reduce((prev, inventory) => {
     const { name } = inventory;
     if (typeof name === 'undefined') {
-      throw new TypeError('Inventory of role must have name!');
+      throw new TypeError('Inventory of right must have name!');
     }
     if (prev[name]) {
-      throw new TypeError(`Unique role name: "${name}" is used twice!`);
+      throw new TypeError(`Unique right name: "${name}" is used twice!`);
     }
 
     prev[name] = inventory; // eslint-disable-line no-param-reassign
@@ -22,4 +22,4 @@ const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
   return result;
 };
 
-export default composeInventoryByRoles;
+export default composeInventoryByRights;
