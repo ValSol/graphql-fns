@@ -55,13 +55,31 @@ const createUpdateThingMutationResolver = (
         )
       : {};
 
-    const { where: whereOne2 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { lookups, where: whereOne2 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+
+    let whereOne3 = whereOne2;
+
+    if (lookups.length) {
+      const arg = [...lookups];
+
+      if (Object.keys(whereOne2).length) {
+        arg.push({ $match: whereOne2 });
+      }
+
+      arg.push({ $project: { _id: 1 } });
+
+      const [thing] = await Thing.aggregate(arg).exec();
+
+      if (!thing) return null;
+
+      whereOne3 = { _id: thing._id }; // eslint-disable-line no-underscore-dangle
+    }
 
     const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
       ? {} // if subsciption ON - return empty projection - to get all fields of thing
       : duplexFieldsProjection;
 
-    const previousThing = await Thing.findOne(whereOne2, projection, { lean: true });
+    const previousThing = await Thing.findOne(whereOne3, projection, { lean: true });
 
     if (!previousThing) return null;
 

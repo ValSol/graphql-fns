@@ -8,7 +8,7 @@ import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
 
 type Args = {
-  where: Object,
+  where?: Object,
   options: { target: string },
 };
 type Context = { mongooseConn: Object };
@@ -45,7 +45,23 @@ const createThingDistinctValuesQueryResolver = (
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const { where: conditions } = mergeWhereAndFilter(filter, where, thingConfig) || {};
+    const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, thingConfig) || {};
+
+    if (lookups.length) {
+      const arg = [...lookups];
+
+      if (Object.keys(conditions).length) {
+        arg.push({ $match: conditions });
+      }
+
+      arg.push({ $project: { _id: 1 } });
+
+      const ids = await Thing.aggregate(arg).exec();
+
+      const result = await Thing.distinct(target, { _id: { $in: ids } });
+
+      return result.filter(Boolean);
+    }
 
     const result = await Thing.distinct(target, conditions);
 

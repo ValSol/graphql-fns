@@ -46,9 +46,27 @@ const createThingQueryResolver = (
     if (whereOneKeys.length !== 1) {
       throw new TypeError('Expected exactly one key in whereOne arg!');
     }
-    const { where: conditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
 
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
+
+    const { lookups, where: conditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+
+    if (lookups.length) {
+      const arg = [...lookups];
+
+      if (Object.keys(conditions).length) {
+        arg.push({ $match: conditions });
+      }
+
+      arg.push({ $project: projection });
+
+      const [thing] = await Thing.aggregate(arg).exec();
+
+      if (!thing) return null;
+
+      const thing2 = addIdsToThing(thing, thingConfig);
+      return thing2;
+    }
 
     const thing = await Thing.findOne(conditions, projection, { lean: true });
 

@@ -117,4 +117,78 @@ describe('createThingDistinctValuesQueryResolver', () => {
     );
     expect(distinctValues3).toEqual(['boss', 'programmer']);
   });
+
+  test('should create query thing DistinctValues resolver to aggregate result', async () => {
+    const serversideConfig = {};
+
+    const childConfig: ThingConfig = {
+      name: 'Child',
+      textFields: [
+        {
+          name: 'textFields',
+          array: true,
+          index: true,
+        },
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const parentConfig: ThingConfig = {
+      name: 'Parent',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          weight: 1,
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'child',
+          index: true,
+          config: childConfig,
+        },
+      ],
+    };
+
+    const createParent = createCreateThingMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createParent).toBe('function');
+    if (!createParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    for (let i = 0; i < 20; i += 1) {
+      const data = {
+        name: `name${Math.floor(i / 3)}`,
+        child: {
+          create: {
+            textFields: [`text-${i}`],
+            textField: i < 15 ? 'first' : 'second',
+          },
+        },
+      };
+      // eslint-disable-next-line no-await-in-loop
+      await createParent(null, { data }, { mongooseConn, pubsub });
+    }
+
+    const DistinctValues = createThingDistinctValuesQueryResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    if (!DistinctValues) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const where = { child_: { textFields_in: ['text-3', 'text-4', 'text-12', 'text-99'] } };
+    const options = { target: 'name' };
+    const distinctValues3 = await DistinctValues(
+      null,
+      { options, where },
+      { mongooseConn, pubsub },
+    );
+    expect(distinctValues3).toEqual(['name1', 'name4']);
+  });
 });

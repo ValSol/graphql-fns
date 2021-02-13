@@ -49,7 +49,25 @@ const createPushIntoThingMutationResolver = (
 
     let _id = id; // eslint-disable-line no-underscore-dangle
     const whereOne2 = id ? { _id } : whereOne;
-    const { where: whereOne3 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { lookups, where: whereOne3 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+
+    let conditions = whereOne3;
+
+    if (lookups.length) {
+      const arg = [...lookups];
+
+      if (Object.keys(whereOne3).length) {
+        arg.push({ $match: whereOne3 });
+      }
+
+      arg.push({ $project: { _id: 1 } });
+
+      const [thing] = await Thing.aggregate(arg).exec();
+
+      if (!thing) return null;
+
+      conditions = { _id: thing._id }; // eslint-disable-line no-underscore-dangle
+    }
 
     let previousThing = {};
     const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];
@@ -59,12 +77,12 @@ const createPushIntoThingMutationResolver = (
         ? {} // if subsciption ON - return empty projection - to get all fields of thing
         : { _id: 1 };
 
-      previousThing = await Thing.findOne(whereOne3, projection, { lean: true });
+      previousThing = await Thing.findOne(conditions, projection, { lean: true });
       if (!previousThing) return null;
       _id = previousThing._id; // eslint-disable-line no-underscore-dangle
     }
     if (filter.length) {
-      const thing = Thing.findOne(whereOne3, { _id: 1 }, { lean: true });
+      const thing = Thing.findOne(conditions, { _id: 1 }, { lean: true });
       if (!thing) return null;
     }
 
