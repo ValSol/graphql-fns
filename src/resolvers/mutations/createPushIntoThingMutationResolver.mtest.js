@@ -29,6 +29,7 @@ beforeAll(async () => {
 describe('createPushIntoThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};
+
   test('should create mutation pushInto thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -274,6 +275,10 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdFavorities2[1].name).toBe(data2.favorities.create[1].name);
     expect(createdFavorities2[1].visitors[0]).toEqual(id2);
 
+    const locationsCount = await Place.countDocuments();
+
+    expect(locationsCount).toEqual(12);
+
     const pushIntoPerson = createPushIntoThingMutationResolver(
       personConfig,
       generalConfig,
@@ -311,12 +316,17 @@ describe('createPushIntoThingMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
     );
+
     const { id: id3, locations: locations3, favorities: favorities3 } = updatedPerson;
 
     expect(locations3.length).toBe(7);
     expect(favorities3.length).toBe(5);
 
     expect(id).toEqual(id3);
+
+    const locationsCount2 = await Place.countDocuments();
+
+    expect(locationsCount2).toBe(locationsCount + 4);
   });
 
   test('should create mutation updateThing resolver to aggregate result', async () => {
@@ -352,6 +362,12 @@ describe('createPushIntoThingMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          index: true,
+          config: childConfig,
+        },
+        {
+          name: 'childs',
+          array: true,
           index: true,
           config: childConfig,
         },
@@ -395,8 +411,13 @@ describe('createPushIntoThingMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1, places: 1 } };
-    const data = { places: ['newPlace-1', 'newPlace-2'] };
+    const info = { projection: { _id: 1, name: 1, places: 1, child: 1, childs: 1 } };
+    const data = {
+      places: ['newPlace-1', 'newPlace-2'],
+      childs: {
+        create: [{ textFields: ['textFields-pushed-1'], textField: 'textField-pushed-1' }],
+      },
+    };
     const updatedParent = await pushIntoPerson(
       null,
       { data, whereOne },
@@ -421,5 +442,90 @@ describe('createPushIntoThingMutationResolver', () => {
     );
 
     expect(updatedParent2).toBe(null);
+  });
+
+  test('should create mutation updateThing resolver to aggregate result', async () => {
+    const childConfig: ThingConfig = {
+      name: 'Child2',
+      textFields: [
+        {
+          name: 'textFields',
+          array: true,
+          index: true,
+        },
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const parentConfig: ThingConfig = {
+      name: 'Parent2',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          weight: 1,
+        },
+        {
+          name: 'places',
+          index: true,
+          array: true,
+        },
+      ],
+
+      relationalFields: [
+        {
+          name: 'childs',
+          array: true,
+          index: true,
+          config: childConfig,
+        },
+      ],
+    };
+
+    const createParent = createCreateThingMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createParent).toBe('function');
+    if (!createParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    await createParent(null, { data: { name: 'ParentName' } }, { mongooseConn, pubsub });
+
+    const pushIntoPerson = createPushIntoThingMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    if (!pushIntoPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const whereOne = { name: 'ParentName' };
+
+    const info = { projection: { _id: 1, name: 1, places: 1, childs: 1 } };
+    const data = {
+      childs: {
+        create: [
+          { textFields: ['textFields-pushed-1'], textField: 'textField-pushed-1' },
+          // { textFields: ['textFields-pushed-2'], textField: 'textField-pushed-2' },
+        ],
+      },
+    };
+    const updatedParent = await pushIntoPerson(
+      null,
+      { data, whereOne },
+      { mongooseConn, pubsub },
+      info,
+    );
+
+    expect(updatedParent.places).toEqual([]);
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child2_Thing', childSchema);
+
+    const childs = await Child.find();
+
+    expect(childs.length).toEqual(1);
   });
 });

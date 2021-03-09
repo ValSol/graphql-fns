@@ -30,6 +30,8 @@ const processCreateInputData = (
     { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: thingConfig },
   ];
 
+  let bulkOperationsCount = 0;
+
   const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
     const {
       booleanFields,
@@ -152,7 +154,7 @@ const processCreateInputData = (
 
       if (relationalFieldsObject[key]) {
         const { array, config } = relationalFieldsObject[key];
-        if (!array && data2[key].create !== undefined && data2[key].connect !== undefined) {
+        if (!array && data2[key].create && data2[key].connect) {
           throw new TypeError(
             `Simultaneous use "create" and "connect" keys with a relationalField "${key}" that not an array!`,
           );
@@ -211,6 +213,7 @@ const processCreateInputData = (
             prev[key] = oppositeIds;
 
             oppositeIds.forEach((oppositeId) => {
+              bulkOperationsCount += 1;
               const item = {
                 updateOne: {
                   filter: { _id: oppositeId },
@@ -256,7 +259,7 @@ const processCreateInputData = (
             const { connect: oppositeId } = data2[key];
             // eslint-disable-next-line no-param-reassign
             prev[key] = oppositeId;
-
+            bulkOperationsCount += 1;
             const item = {
               updateOne: {
                 filter: { _id: oppositeId },
@@ -395,7 +398,10 @@ const processCreateInputData = (
   while (prepared.length) {
     const { data: data3, config } = prepared.shift();
 
+    bulkOperationsCount += 1;
+
     const document = transform(data3, config);
+
     if (!first) {
       first = document;
       if (forUpdate) continue; // eslint-disable-line no-continue
@@ -410,23 +416,7 @@ const processCreateInputData = (
     }
   }
 
-  let single = false;
-  if (core.size === 1 && !initialCore) {
-    const key = core.keys().next().value;
-
-    if (!key) {
-      throw new TypeError('Expected an config object as key of "core" Map');
-    }
-    const array = core.get(key);
-
-    if (!array) {
-      throw new TypeError('Expected an array as value of "core" Map');
-    }
-
-    if (array.length === 1) {
-      single = true;
-    }
-  }
+  const single = !initialCore && bulkOperationsCount === 1;
 
   return { core, periphery, single, first };
 };
