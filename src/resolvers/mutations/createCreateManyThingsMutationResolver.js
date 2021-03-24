@@ -6,6 +6,7 @@ import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
+import incCounters from './incCounters';
 import processCreateInputData from './processCreateInputData';
 import updatePeriphery from './updatePeriphery';
 
@@ -64,8 +65,10 @@ const createCreateManyThingsMutationResolver = (
     if (overallPeriphery && overallCore) {
       await updatePeriphery(overallPeriphery, mongooseConn);
 
+      const coreWithCounters = await incCounters(overallCore, mongooseConn);
+
       const promises = [];
-      overallCore.forEach((bulkItems, config) => {
+      coreWithCounters.forEach((bulkItems, config) => {
         const { name: name2 } = config;
         const thingSchema2 = createThingSchema(config, enums);
         const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);

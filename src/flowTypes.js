@@ -186,6 +186,7 @@ export type SimplifiedThingConfig = {
   file?: boolean, // true if related to fileFields
   custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
   pagination?: boolean,
+  counter?: boolean, // if true thing has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<SimplifiedDuplexField>,
   embeddedFields?: $ReadOnlyArray<SimplifiedEmbeddedField>,
@@ -211,6 +212,7 @@ export type ThingConfig = {
   file?: boolean, // true if related to fileFields
   custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
   pagination?: boolean,
+  counter?: boolean, // if true thing has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<{
     +name: string,
@@ -410,6 +412,7 @@ type NotFieldyThingConfigFields = {
   embedded?: boolean,
   custom?: boolean,
   pagination?: boolean,
+  counter?: boolean,
   search?: $ReadOnlyArray<string>,
   form?: $ReadOnlyArray<FormField>,
   list?: $ReadOnlyArray<ListColumn>,

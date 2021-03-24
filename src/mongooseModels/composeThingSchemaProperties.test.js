@@ -935,4 +935,29 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(thingConfig, enums);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should compose schema properties with text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      counter: true,
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+    const expectedResult = {
+      counter: {
+        required: true,
+        type: Number,
+        unique: true,
+      },
+      textField: {
+        type: String,
+      },
+    };
+
+    const result = composeThingSchemaProperties(thingConfig, []);
+    expect(result).toEqual(expectedResult);
+  });
 });

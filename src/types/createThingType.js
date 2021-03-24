@@ -5,6 +5,7 @@ import type { ThingConfig } from '../flowTypes';
 const createThingType = (thingConfig: ThingConfig): string => {
   const {
     embedded,
+    counter,
     file,
     booleanFields,
     dateTimeFields,
@@ -30,6 +31,10 @@ const createThingType = (thingConfig: ThingConfig): string => {
   if (!(embedded || file)) {
     thingTypeArray.push(`  createdAt: DateTime!
   updatedAt: DateTime!`);
+  }
+
+  if (counter) {
+    thingTypeArray.push('  counter: Int!');
   }
 
   if (textFields) {

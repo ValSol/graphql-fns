@@ -802,4 +802,72 @@ input ExampleWhereInput {
     const result = createThingWhereInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return inputType with counter field', () => {
+    const thingConfig = {
+      name: 'Example',
+      counter: true,
+      textFields: [
+        {
+          name: 'firstName',
+        },
+      ],
+    };
+    const expectedResult = `input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  counter_in: [Int!]
+  counter_nin: [Int!]
+  counter_ne: Int
+  counter_gt: Int
+  counter_gte: Int
+  counter_lt: Int
+  counter_lte: Int
+}
+input ExampleWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  counter_in: [Int!]
+  counter_nin: [Int!]
+  counter_ne: Int
+  counter_gt: Int
+  counter_gte: Int
+  counter_lt: Int
+  counter_lte: Int
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
+}`;
+
+    const result = createThingWhereInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

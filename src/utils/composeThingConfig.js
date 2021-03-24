@@ -2,7 +2,20 @@
 
 import type { ThingConfig, SimplifiedThingConfig } from '../flowTypes';
 
-const forbiddenFieldNames = ['in', 'nin', 'ne', 'gt', 'gte', 'lt', 'lte', 're'];
+const forbiddenFieldNames = [
+  'in',
+  'nin',
+  'ne',
+  'gt',
+  'gte',
+  'lt',
+  'lte',
+  're',
+  'id',
+  'createdAt',
+  'updatedAt',
+  'counter',
+];
 
 const composeThingConfig = (
   simplifiedThingConfig: SimplifiedThingConfig,

@@ -8,7 +8,7 @@ import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 
 type ProcessCreateInputDataResult = {
-  core: { [ThingConfig]: Array<Object> },
+  core: Map<ThingConfig, Array<Object>>,
   periphery: Periphery,
   single: Boolean,
   first: Object,

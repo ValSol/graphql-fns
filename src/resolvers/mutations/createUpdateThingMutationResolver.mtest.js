@@ -56,6 +56,7 @@ describe('createUpdateThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      counter: true,
       textFields: [
         {
           name: 'firstName',
@@ -123,6 +124,7 @@ describe('createUpdateThingMutationResolver', () => {
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
       expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+      expect(createdPerson.counter).toBe(1);
 
       const { id } = createdPerson;
 
@@ -203,9 +205,18 @@ describe('createUpdateThingMutationResolver', () => {
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson.locations.length).toBe(4);
       expect(updatedPerson.favorities.length).toBe(4);
+      expect(updatedPerson.counter).toBe(1);
 
       const personSchema = createThingSchema(personConfig);
       const Person = mongooseConn.model('Person_Thing', personSchema);
+
+      const siblingId = updatedPerson.sibling;
+
+      const createdSibling = await Person.findById(siblingId);
+
+      expect(createdSibling.firstName).toBe(dataForUpdate.sibling.create.firstName);
+      expect(createdSibling.lastName).toBe(dataForUpdate.sibling.create.lastName);
+      expect(createdSibling.counter).toBe(2);
 
       const friendId = updatedPerson.friend;
 
@@ -214,6 +225,7 @@ describe('createUpdateThingMutationResolver', () => {
       expect(createdFriend.firstName).toBe(dataForUpdate.friend.create.firstName);
       expect(createdFriend.lastName).toBe(dataForUpdate.friend.create.lastName);
       expect(createdFriend.friend).toEqual(id);
+      expect(createdFriend.counter).toBe(3);
 
       const dataForUpdate2 = {
         locations: {
@@ -394,6 +406,7 @@ describe('createUpdateThingMutationResolver', () => {
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
       expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+      expect(createdPerson.counter).toBe(5);
 
       const {
         friend: friendId,

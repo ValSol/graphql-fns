@@ -4,7 +4,11 @@ import mongoose from 'mongoose';
 
 import type { Enums, ThingConfig } from '../flowTypes';
 
-type ThingSchemaProperty = { type: String | [String], default: string, required: boolean };
+type ThingSchemaProperty = {
+  type: Function | [Function],
+  default?: string,
+  required?: boolean,
+};
 type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 
 const { Schema } = mongoose;
@@ -15,6 +19,7 @@ const composeThingSchemaProperties = (
 ): ThingSchemaProperties => {
   const {
     booleanFields,
+    counter,
     duplexFields,
     dateTimeFields,
     embedded,
@@ -30,6 +35,14 @@ const composeThingSchemaProperties = (
   } = thingConfig;
 
   const result = {};
+
+  if (counter) {
+    result.counter = {
+      type: Number,
+      unique: true,
+      required: true,
+    };
+  }
 
   if (textFields) {
     textFields.reduce((prev, { array, default: defaultValue, index, name, required, unique }) => {

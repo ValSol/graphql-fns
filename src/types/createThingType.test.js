@@ -574,4 +574,26 @@ describe('createThingType', () => {
     const result = createThingType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create thing type with Text fields and counter field', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      counter: true,
+      textFields: [
+        {
+          name: 'textField1',
+        },
+      ],
+    };
+    const expectedResult = `type Example {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  counter: Int!
+  textField1: String
+}`;
+
+    const result = createThingType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

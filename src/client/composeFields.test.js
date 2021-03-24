@@ -8,6 +8,7 @@ describe('composeFields', () => {
   describe('not nested fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      counter: true,
       textFields: [
         {
           name: 'textField',
@@ -59,6 +60,7 @@ describe('composeFields', () => {
         'id',
         'createdAt',
         'updatedAt',
+        'counter',
         'textField',
         'dateTimeField',
         'intField',
@@ -95,6 +97,7 @@ describe('composeFields', () => {
         '  id',
         '  createdAt',
         '  updatedAt',
+        '  counter',
         '  textField',
         '  dateTimeField',
         '  intField',
@@ -170,6 +173,7 @@ describe('composeFields', () => {
 
     test('should compose not nested fields with include option 1', () => {
       const include = {
+        counter: true,
         textField: true,
         intField: true,
         geospatialPoint: { lng: true },
@@ -177,6 +181,7 @@ describe('composeFields', () => {
       };
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = [
+        'counter',
         'textField',
         'intField',
         'geospatialPoint {',
@@ -207,6 +212,7 @@ describe('composeFields', () => {
         'id',
         'createdAt',
         'updatedAt',
+        'counter',
         'dateTimeField',
         'floatField',
         'booleanField',
@@ -245,6 +251,7 @@ describe('composeFields', () => {
         'id',
         'createdAt',
         'updatedAt',
+        'counter',
         'dateTimeField',
         'floatField',
         'booleanField',
@@ -278,6 +285,7 @@ describe('composeFields', () => {
         'id',
         'createdAt',
         'updatedAt',
+        'counter',
         'dateTimeField',
         'floatField',
         'booleanField',

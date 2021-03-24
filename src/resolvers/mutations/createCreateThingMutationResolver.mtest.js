@@ -28,6 +28,7 @@ describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      counter: true,
       textFields: [
         {
           name: 'textField1',
@@ -62,7 +63,6 @@ describe('createCreateThingMutationResolver', () => {
     if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
-      id: '5fda15170d3fb7f5b0000000',
       textField1: 'textField1',
       textField2: 'textField2',
       textField3: 'textField3',
@@ -71,6 +71,8 @@ describe('createCreateThingMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample2 = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample3 = await createExample(null, { data }, { mongooseConn, pubsub });
 
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -79,6 +81,9 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdExample.textField5).toEqual(data.textField5);
     expect(createdExample.createdAt instanceof Date).toBeTruthy();
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
+    expect(createdExample.counter).toBe(1);
+    expect(createdExample2.counter).toBe(2);
+    expect(createdExample3.counter).toBe(3);
   });
   test('should create mutation add thing resolver adding relations', async () => {
     const personConfig: ThingConfig = {};
@@ -153,6 +158,7 @@ describe('createCreateThingMutationResolver', () => {
     const personConfig = {};
     Object.assign(personConfig, {
       name: 'Person2',
+      counter: true,
       textFields: [
         {
           name: 'firstName',
@@ -199,6 +205,7 @@ describe('createCreateThingMutationResolver', () => {
     };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -267,10 +274,13 @@ describe('createCreateThingMutationResolver', () => {
     const createdFriends = await Person.find({ _id: { $in: friendIds } });
     expect(createdFriends[0].firstName).toBe(data.firstName);
     expect(createdFriends[0].lastName).toBe(data.lastName);
+    expect(createdFriends[0].counter).toBe(1);
     expect(createdFriends[1].firstName).toBe(data2.friends.create[0].firstName);
     expect(createdFriends[1].lastName).toBe(data2.friends.create[0].lastName);
+    expect(createdFriends[1].counter).toBe(4);
     expect(createdFriends[2].firstName).toBe(data2.friends.create[1].firstName);
     expect(createdFriends[2].lastName).toBe(data2.friends.create[1].lastName);
+    expect(createdFriends[2].counter).toBe(5);
   });
 
   test('should create mutation add thing resolver that create duplex related things', async () => {

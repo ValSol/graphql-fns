@@ -57,6 +57,7 @@ describe('createPushIntoThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      counter: true,
       textFields: [
         {
           name: 'firstName',
@@ -148,6 +149,7 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
     expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
+    expect(createdPerson.counter).toBe(1);
 
     const {
       friend: friendId,
@@ -168,6 +170,7 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdFriend.friend).toEqual(id);
     expect(createdFriend.createdAt instanceof Date).toBeTruthy();
     expect(createdFriend.updatedAt instanceof Date).toBeTruthy();
+    expect(createdFriend.counter).toBe(2);
 
     const createdFriendLocation = await Place.findById(createdFriend.location);
     expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
@@ -236,6 +239,7 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
     expect(createdPerson2.updatedAt instanceof Date).toBeTruthy();
+    expect(createdPerson2.counter).toBe(3);
 
     const {
       friend: friendId2,
@@ -251,6 +255,7 @@ describe('createPushIntoThingMutationResolver', () => {
     expect(createdFriend2.friend).toEqual(id2);
     expect(createdFriend2.createdAt instanceof Date).toBeTruthy();
     expect(createdFriend2.updatedAt instanceof Date).toBeTruthy();
+    expect(createdFriend2.counter).toBe(4);
 
     const createdFriendLocation2 = await Place.findById(createdFriend2.location);
     expect(createdFriendLocation2.name).toBe(data2.friend.create.location.create.name);

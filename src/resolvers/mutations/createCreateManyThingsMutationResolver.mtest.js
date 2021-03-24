@@ -23,6 +23,7 @@ describe('createCreateManyThingsMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      counter: true,
       textFields: [
         {
           name: 'textField1',
@@ -82,6 +83,7 @@ describe('createCreateManyThingsMutationResolver', () => {
     expect(createdExamples[0].textField5).toEqual(data[0].textField5);
     expect(createdExamples[0].createdAt instanceof Date).toBeTruthy();
     expect(createdExamples[0].updatedAt instanceof Date).toBeTruthy();
+    expect(createdExamples[0].counter).toBe(1);
 
     expect(createdExamples[1].textField1).toBe(data[1].textField1);
     expect(createdExamples[1].textField2).toBe(data[1].textField2);
@@ -90,11 +92,12 @@ describe('createCreateManyThingsMutationResolver', () => {
     expect(createdExamples[1].textField5).toEqual(data[1].textField5);
     expect(createdExamples[1].createdAt instanceof Date).toBeTruthy();
     expect(createdExamples[1].updatedAt instanceof Date).toBeTruthy();
+    expect(createdExamples[1].counter).toBe(2);
   });
 
   test('should create mutation create many thing resolver with id', async () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'Example2',
       textFields: [
         {
           name: 'textField1',

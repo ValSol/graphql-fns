@@ -2,20 +2,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-const composeFields = (thingConfig: ThingConfig): string => {
-  const {
-    booleanFields,
-    enumFields,
-    dateTimeFields,
-    duplexFields,
-    intFields,
-    floatFields,
-    relationalFields,
-    textFields,
-  } = thingConfig;
-
-  const fields = [
-    `  id_in: [ID!]
+const defaultFields = `  id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
   createdAt_nin: [DateTime!]
@@ -30,8 +17,31 @@ const composeFields = (thingConfig: ThingConfig): string => {
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
-  updatedAt_lte: DateTime`,
-  ];
+  updatedAt_lte: DateTime`;
+
+const counterFields = `
+  counter_in: [Int!]
+  counter_nin: [Int!]
+  counter_ne: Int
+  counter_gt: Int
+  counter_gte: Int
+  counter_lt: Int
+  counter_lte: Int`;
+
+const composeFields = (thingConfig: ThingConfig): string => {
+  const {
+    booleanFields,
+    enumFields,
+    dateTimeFields,
+    duplexFields,
+    intFields,
+    floatFields,
+    relationalFields,
+    textFields,
+    counter,
+  } = thingConfig;
+
+  const fields = [`${defaultFields}${counter ? counterFields : ''}`];
 
   if (textFields) {
     textFields.forEach(({ name: fieldName, index, unique }) => {

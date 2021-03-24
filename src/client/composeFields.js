@@ -3,16 +3,13 @@
 import type { ThingConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
 
 // accessorial function
-const includeField = (name: string, include: void | Object, exclude: void | Object): boolean => {
-  return (
-    (include === undefined ||
-      include === true ||
-      Object.keys(include)
-        .map((key) => key.trim().split(/\s+/).slice(-1)[0])
-        .includes(name)) &&
-    (exclude === undefined || exclude === true || !(exclude[name] === true))
-  );
-};
+const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
+  (include === undefined ||
+    include === true ||
+    Object.keys(include)
+      .map((key) => key.trim().split(/\s+/).slice(-1)[0])
+      .includes(name)) &&
+  (exclude === undefined || exclude === true || !(exclude[name] === true));
 
 const findNameWithAlias = (name: string, include: void | Object): string =>
   include && include !== true
@@ -27,6 +24,7 @@ const composeFields = (
 ): Array<string> => {
   const {
     booleanFields,
+    counter,
     dateTimeFields,
     duplexFields,
     embedded,
@@ -49,10 +47,15 @@ const composeFields = (
     if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
 
     if (!(embedded || file)) {
-      if (includeField('createdAt', include, exclude))
+      if (includeField('createdAt', include, exclude)) {
         result.push(`${'  '.repeat(shift)}createdAt`);
-      if (includeField('updatedAt', include, exclude))
+      }
+      if (includeField('updatedAt', include, exclude)) {
         result.push(`${'  '.repeat(shift)}updatedAt`);
+      }
+      if (counter && includeField('counter', include, exclude)) {
+        result.push(`${'  '.repeat(shift)}counter`);
+      }
     }
   }
 
