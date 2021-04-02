@@ -21,9 +21,10 @@ const createCreatedThingSubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: withFilter((_, args, { pubsub }) => {
-      return pubsub.asyncIterator(`created-${name}`);
-    }, createCreatedThingFilter(thingConfig)),
+    subscribe: withFilter(
+      (_, args, { pubsub }) => pubsub.asyncIterator(`created-${name}`),
+      createCreatedThingFilter(thingConfig),
+    ),
   };
 
   return resolver;

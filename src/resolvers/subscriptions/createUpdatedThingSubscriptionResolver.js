@@ -21,9 +21,10 @@ const createUpdatedThingSubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: withFilter((_, args, { pubsub }) => {
-      return pubsub.asyncIterator(`updated-${name}`);
-    }, createUpdatedThingFilter(thingConfig)),
+    subscribe: withFilter(
+      (_, args, { pubsub }) => pubsub.asyncIterator(`updated-${name}`),
+      createUpdatedThingFilter(thingConfig),
+    ),
   };
 
   return resolver;

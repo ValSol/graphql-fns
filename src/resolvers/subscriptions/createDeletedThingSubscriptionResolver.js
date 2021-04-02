@@ -21,9 +21,10 @@ const createDeletedThingSubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: withFilter((_, args, { pubsub }) => {
-      return pubsub.asyncIterator(`deleted-${name}`);
-    }, createDeletedThingFilter(thingConfig)),
+    subscribe: withFilter(
+      (_, args, { pubsub }) => pubsub.asyncIterator(`deleted-${name}`),
+      createDeletedThingFilter(thingConfig),
+    ),
   };
 
   return resolver;

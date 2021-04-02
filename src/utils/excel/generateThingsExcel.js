@@ -4,19 +4,8 @@ import ExcelJS from 'exceljs';
 
 import type { GeneralConfig } from '../../flowTypes';
 
-const composeWorksheetName = (name, wb) => {
-  const name2 = name.length > 32 ? `${name.slice(0, 28)}...` : name;
-  const ws = wb.getWorksheet(name2);
-  if (!ws) {
-    return name2;
-  }
-
-  const num = ` (${(parseInt(name2.split(' (')[1], 10) || 1) + 1})`;
-  const prefix = name2.split(' (')[0];
-  const name3 =
-    prefix.length + num.length > 32 ? `${prefix.slice(0, 28 - num.length)}...` : `${prefix}${num}`;
-  return composeWorksheetName(name3, wb);
-};
+import composeWorksheetName from './composeWorksheetName';
+import fitWidth from './fitWidth';
 
 const filterFields = ({ suffix, derivative, fields, firstThingName, fieldType }) => {
   if (!suffix) return fields;
@@ -451,6 +440,8 @@ const generateThingsExcel = async (
     });
 
     ws.columns = columns;
+
+    fitWidth(ws, [10, null, null, null, null]);
   });
 
   await wb.xlsx.writeFile(filePath);
