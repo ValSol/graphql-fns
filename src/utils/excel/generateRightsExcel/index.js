@@ -4,9 +4,10 @@ import ExcelJS from 'exceljs';
 
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
+import composeSpecificActionName from '../composeSpecificActionName';
 import composeWorksheetName from '../composeWorksheetName';
 import fitWidth from '../fitWidth';
-import composeSpecificActionName from './composeSpecificActionName';
+import ordinaryActionTypes from '../ordinaryActionTypes';
 import createValidActionsMatrix from './createValidActionsMatrix';
 import createValidDerivativeOrCustomActionsMatrix from './createValidDerivativeOrCustomActionsMatrix';
 import extractDataFromCustom from './extractDataFromCustom';
@@ -32,26 +33,6 @@ const ordinaryActionNames = [
   'deletedThing',
   'updatedThing',
 ];
-
-const ordinaryActionTypes = {
-  thingCount: 'Query',
-  thingDistinctValues: 'Query',
-  thingFileCount: 'Query',
-  thingFile: 'Query',
-  thingFiles: 'Query',
-  thing: 'Query',
-  things: 'Query',
-  importThings: 'Mutation',
-  uploadFilesToThing: 'Mutation',
-  createManyThings: 'Mutation',
-  createThing: 'Mutation',
-  deleteThing: 'Mutation',
-  pushIntoThing: 'Mutation',
-  updateThing: 'Mutation',
-  createdThing: 'Subscription',
-  deletedThing: 'Subscription',
-  updatedThing: 'Subscription',
-};
 
 const actionTypeToArgb = {
   Query: 'FFFFFF00',

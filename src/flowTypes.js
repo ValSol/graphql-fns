@@ -267,14 +267,14 @@ type DuplexField = {|
   +unique?: boolean,
 |};
 
-type EmbeddedField = {|
+export type EmbeddedField = {|
   +name: string,
   +required?: boolean,
   +array?: boolean,
   +config: ThingConfig,
 |};
 
-type FileField = {|
+export type FileField = {|
   +name: string,
   +required?: boolean,
   +array?: boolean,

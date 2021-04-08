@@ -12,7 +12,6 @@ import processDeleteData from './processDeleteData';
 type Args = { whereOne: { id: string } };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-// TODO update to remove garbage from relation fields that relate to deleted object
 const createDeleteThingMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
