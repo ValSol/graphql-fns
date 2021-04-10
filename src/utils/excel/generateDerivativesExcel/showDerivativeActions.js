@@ -46,12 +46,13 @@ const showDerivativeActions = (args: Args) => {
   const actions = [...queryNames, ...mutationNames];
 
   actions.forEach((actionName, i) => {
-    ws.getCell(2 + i, col).value = actionName;
+    const actionNameWithSuffix = `${actionName}${suffix}`;
+    ws.getCell(2 + i, col).value = actionNameWithSuffix;
     ws.getCell(2 + i, col2).value = composeSpecificActionName({
-      actionName,
+      actionName: actionNameWithSuffix,
       thingName: firstThingName,
     });
-    const argb = ordinaryActionTypes[actionName] === 'Query' ? 'FFFFFF00' : 'FFADFF2F';
+    const argb = ordinaryActionTypes[actionName] === 'Query' ? 'FFFFB266' : 'FF9999FF';
     ws.getCell(2 + i, col).fill = {
       type: 'pattern',
       pattern: 'solid',
