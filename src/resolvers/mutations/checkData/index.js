@@ -7,10 +7,11 @@ import extractExternalReferences from './extractExternalReferences';
 import getExternalReferences from './getExternalReferences';
 import patchExternalReferences from './patchExternalReferences';
 
-const checkDataToCreate = async (
+const checkData = async (
   preData: { [key: string]: any },
   preFilter: Array<Object>,
   thingConfig: ThingConfig,
+  toCreate: boolean,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   context: Object,
@@ -18,7 +19,12 @@ const checkDataToCreate = async (
   if (!preFilter.length) {
     return true;
   }
-  const externalReferencesArgs = extractExternalReferences(preData, preFilter, thingConfig);
+  const externalReferencesArgs = extractExternalReferences(
+    preData,
+    preFilter,
+    thingConfig,
+    toCreate,
+  );
 
   const externalReferences = await getExternalReferences(
     externalReferencesArgs,
@@ -32,6 +38,7 @@ const checkDataToCreate = async (
     preData,
     preFilter,
     thingConfig,
+    toCreate,
   );
 
   const notCreateObjectId = true;
@@ -41,4 +48,4 @@ const checkDataToCreate = async (
   return query.test(data);
 };
 
-export default checkDataToCreate;
+export default checkData;

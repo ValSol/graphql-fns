@@ -7,7 +7,7 @@ import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
-import checkDataToCreate from './checkDataToCreate';
+import checkData from './checkData';
 import incCounter from './incCounter';
 import incCounters from './incCounters';
 import processCreateInputData from './processCreateInputData';
@@ -48,10 +48,12 @@ const createCreateThingMutationResolver = (
 
     const { data, positions } = args;
 
-    const allowCreate = await checkDataToCreate(
+    const toCreate = true;
+    const allowCreate = await checkData(
       data,
       filter,
       thingConfig,
+      toCreate,
       generalConfig,
       serversideConfig,
       context,

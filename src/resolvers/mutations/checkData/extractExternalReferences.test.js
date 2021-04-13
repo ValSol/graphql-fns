@@ -91,8 +91,9 @@ describe('extractExternalReferences util', () => {
       slug: 'Post slug',
     };
     const filter = [{}];
+    const toCreate = true;
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractExternalReferences(data, filter, postConfig, toCreate);
 
     const expectedResult = [];
 
@@ -105,8 +106,9 @@ describe('extractExternalReferences util', () => {
       restaurant: { connect: 'restaurantId' },
     };
     const filter = [{ restaurant_: { access_: { postCreators: 'userId' } } }];
+    const toCreate = true;
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractExternalReferences(data, filter, postConfig, toCreate);
 
     const expectedResult = [
       ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
@@ -127,8 +129,9 @@ describe('extractExternalReferences util', () => {
         restaurants_: { access_: { postEditors: 'userId' } },
       },
     ];
+    const toCreate = true;
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractExternalReferences(data, filter, postConfig, toCreate);
 
     const expectedResult = [
       ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
@@ -153,14 +156,36 @@ describe('extractExternalReferences util', () => {
         ],
       },
     ];
+    const toCreate = true;
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractExternalReferences(data, filter, postConfig, toCreate);
 
     const expectedResult = [
       ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
       ['Restaurant', 'restaurantId-1', [{ access_: { postEditors: 'userId' } }]],
       ['Restaurant', 'restaurantId-2', [{ access_: { postEditors: 'userId' } }]],
     ];
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return external references for update', () => {
+    const data = {
+      slug: 'Post slug',
+    };
+    const filter = [
+      {
+        AND: [
+          { restaurant_: { access_: { postCreators: 'userId' } } },
+          { restaurants_: { access_: { postEditors: 'userId' } } },
+        ],
+      },
+    ];
+    const toCreate = false;
+
+    const result = extractExternalReferences(data, filter, postConfig, toCreate);
+
+    const expectedResult = [];
 
     expect(result).toEqual(expectedResult);
   });

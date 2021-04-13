@@ -1031,4 +1031,165 @@ describe('createUpdateThingMutationResolver', () => {
 
     expect(updatedParent2).toBe(null);
   });
+
+  test('should create mutation updateThing resolver to update document using checkData', async () => {
+    const accessConfig: ThingConfig = {
+      name: 'Access',
+
+      textFields: [
+        { name: 'postCreators', array: true, index: true },
+        { name: 'postEditors', array: true, index: true },
+        { name: 'postPublishers', array: true, index: true },
+        { name: 'postTogglers', array: true, index: true },
+        { name: 'restaurantCreators', array: true, index: true },
+        { name: 'restaurantEditors', array: true, index: true },
+        { name: 'restaurantPublishers', array: true, index: true },
+        { name: 'restaurantTogglers', array: true, index: true },
+      ],
+    };
+
+    const postConfig: ThingConfig = {};
+    const restaurantConfig: ThingConfig = {};
+
+    Object.assign(postConfig, {
+      name: 'Post',
+
+      textFields: [{ name: 'slug' }, { name: 'type' }],
+
+      relationalFields: [
+        {
+          name: 'restaurant',
+          config: restaurantConfig,
+          index: true,
+        },
+        {
+          name: 'restaurants',
+          config: restaurantConfig,
+          array: true,
+          index: true,
+        },
+      ],
+    });
+
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+
+      textFields: [{ name: 'slug' }],
+
+      relationalFields: [
+        {
+          name: 'access',
+          config: accessConfig,
+          index: true,
+        },
+      ],
+    });
+
+    const generalConfig2: GeneralConfig = {
+      thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
+    };
+
+    const createRestaurant = createCreateThingMutationResolver(
+      restaurantConfig,
+      generalConfig2,
+      serversideConfig,
+    );
+
+    expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      slug: 'Pantagruel',
+      access: {
+        create: {
+          postCreators: ['1234567890'],
+        },
+      },
+    };
+
+    const { id: restaurantId } = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+
+    const createPost = createCreateThingMutationResolver(
+      postConfig,
+      generalConfig2,
+      serversideConfig,
+      true,
+    );
+
+    expect(typeof createPost).toBe('function');
+    if (!createPost) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const postData = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: restaurantId },
+    };
+
+    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
+      { restaurant_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post.restaurant.toString()).toEqual(restaurantId.toString());
+    expect(post.slug).toBe(postData.slug);
+
+    const updatePost = createUpdateThingMutationResolver(
+      postConfig,
+      generalConfig2,
+      serversideConfig,
+      true,
+    );
+
+    expect(typeof updatePost).toBe('function');
+    if (!updatePost) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const whereOne = { id: post.id.toString() };
+
+    const dataToUpdate = {
+      restaurant: { connect: '6073f383f1b1bcd591983c92' },
+    };
+
+    const updatedPost = await updatePost(
+      null,
+      { whereOne, data: dataToUpdate },
+      { mongooseConn, pubsub },
+      null,
+      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    );
+
+    expect(updatedPost).toBe(null);
+
+    const dataToUpdate2 = {
+      restaurant: { connect: restaurantId },
+      slug: 'updatedSlug',
+    };
+
+    const updatedPost2 = await updatePost(
+      null,
+      { whereOne, data: dataToUpdate2 },
+      { mongooseConn, pubsub },
+      null,
+      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    );
+
+    expect(updatedPost2.slug).toBe(dataToUpdate2.slug);
+
+    const dataToUpdate3 = {
+      type: 'toProfessionals',
+    };
+
+    const updatedPost3 = await updatePost(
+      null,
+      { whereOne, data: dataToUpdate3 },
+      { mongooseConn, pubsub },
+      null,
+      [
+        {
+          restaurant_: { access_: { postCreators: '1234567890' } },
+          type_in: ['newsFeed', 'events'],
+        },
+      ],
+    );
+
+    expect(updatedPost3).toBe(null);
+  });
 });

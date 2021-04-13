@@ -2,7 +2,7 @@
 import type { ThingConfig } from '../../../flowTypes';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 
-const patch = (externalReferences, data, filterObj, fieldsObj) => {
+const patch = (externalReferences, data, toCreate, filterObj, fieldsObj) => {
   const updatedFilterObj = {};
 
   // --- this piece of code must to run along with the piece of code in extractExternalReferences
@@ -16,6 +16,10 @@ const patch = (externalReferences, data, filterObj, fieldsObj) => {
         throw new TypeError(`Field "${key2}" does not have "config" attribute!`);
       }
       const { array } = attributes;
+
+      if (!data[key2] && !toCreate) {
+        return;
+      }
 
       const {
         [key2]: { connect },
@@ -40,7 +44,9 @@ const patch = (externalReferences, data, filterObj, fieldsObj) => {
     } else if (key === 'AND' || key === 'OR') {
       updatedFilterObj[key] = [];
       filterObj[key].forEach((filterObj2) =>
-        updatedFilterObj[key].push(patch(externalReferences, data, filterObj2, fieldsObj)),
+        updatedFilterObj[key].push(
+          patch(externalReferences, data, toCreate, filterObj2, fieldsObj),
+        ),
       );
     } else {
       updatedFilterObj[key] = filterObj[key];
@@ -80,11 +86,12 @@ const patchExternalReferences = (
   prevData: { [key: string]: any },
   prevFilter: Array<Object>,
   thingConfig: ThingConfig,
+  toCreate: boolean,
 ): { data: { [key: string]: any }, filter: Array<Object> } => {
   const fieldsObj = composeFieldsObject(thingConfig);
 
   const filter = prevFilter.map((filterObj) =>
-    patch(externalReferences, prevData, filterObj, fieldsObj),
+    patch(externalReferences, prevData, toCreate, filterObj, fieldsObj),
   );
 
   const data = processData(prevData, fieldsObj);

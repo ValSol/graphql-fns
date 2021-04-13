@@ -8,6 +8,7 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
+import checkData from './checkData';
 import incCounters from './incCounters';
 import processCreateInputData from './processCreateInputData';
 import processDeleteData from './processDeleteData';
@@ -40,8 +41,22 @@ const createUpdateThingMutationResolver = (
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 
-    const { mongooseConn } = context;
     const { whereOne, data, positions } = args;
+
+    const toCreate = false;
+    const allowCreate = await checkData(
+      data,
+      filter,
+      thingConfig,
+      toCreate,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
+
+    if (!allowCreate) return null;
+
+    const { mongooseConn } = context;
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 

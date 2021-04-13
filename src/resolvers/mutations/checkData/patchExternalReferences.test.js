@@ -93,8 +93,9 @@ describe('patchExternalReferences util', () => {
       slug: 'Post slug',
     };
     const filter = [{}];
+    const toCreate = true;
 
-    const result = patchExternalReferences(externalReferences, data, filter, postConfig);
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
 
     const expectedResult = {
       data: {
@@ -114,8 +115,9 @@ describe('patchExternalReferences util', () => {
       restaurant: { connect: 'restaurantId' },
     };
     const filter = [{ restaurant_: { access_: { postCreators: 'userId' } } }];
+    const toCreate = true;
 
-    const result = patchExternalReferences(externalReferences, data, filter, postConfig);
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
 
     const expectedResult = {
       data: {
@@ -142,8 +144,9 @@ describe('patchExternalReferences util', () => {
         restaurants_: { access_: { postEditors: 'userId' } },
       },
     ];
+    const toCreate = true;
 
-    const result = patchExternalReferences(externalReferences, data, filter, postConfig);
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
 
     const expectedResult = {
       data: {
@@ -175,8 +178,9 @@ describe('patchExternalReferences util', () => {
         ],
       },
     ];
+    const toCreate = true;
 
-    const result = patchExternalReferences(externalReferences, data, filter, postConfig);
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
 
     const expectedResult = {
       data: {
@@ -193,6 +197,33 @@ describe('patchExternalReferences util', () => {
           ],
         },
       ],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return external references to update', () => {
+    const externalReferences = ['restaurantId', 'restaurantId-1', 'restaurantId-2'];
+
+    const data = {
+      slug: 'Post slug',
+    };
+    const filter = [
+      {
+        AND: [
+          { restaurant_: { access_: { postCreators: 'userId' } } },
+          { restaurants_: { access_: { postEditors: 'userId' } } },
+        ],
+      },
+    ];
+    const toCreate = false;
+
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
+
+    const expectedResult = {
+      data: { slug: 'Post slug' },
+
+      filter: [{ AND: [{}, {}] }],
     };
 
     expect(result).toEqual(expectedResult);
