@@ -11,6 +11,7 @@ const composeWhereInputRecursively = (
   parentFieldName: string,
   lookupArray: Array<string>,
   thingConfig: ThingConfig,
+  notCreateObjectId?: boolean,
 ): Object => {
   if (!where || !Object.keys(where).length) return {};
 
@@ -38,13 +39,17 @@ const composeWhereInputRecursively = (
       const key2 = key.slice(0, -3) === 'id' ? '_id' : key.slice(0, -3);
 
       result[`${prefix}${key2}`] = {
-        [`$${key.slice(-2)}`]: where[key].map((id) => id && Types.ObjectId(id)),
+        [`$${key.slice(-2)}`]: where[key].map(
+          (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
+        ),
       };
     } else if (key.slice(-4) === '_nin' && idFields.includes(key.slice(0, -4))) {
       const key2 = key.slice(0, -4) === 'id' ? '_id' : key.slice(0, -4);
 
       result[`${prefix}${key2}`] = {
-        [`$${key.slice(-3)}`]: where[key].map((id) => id && Types.ObjectId(id)),
+        [`$${key.slice(-3)}`]: where[key].map(
+          (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
+        ),
       };
     } else if (
       key.slice(-3) === '_in' ||
@@ -61,11 +66,17 @@ const composeWhereInputRecursively = (
       };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
-        composeWhereInputRecursively(where2, parentFieldName, lookupArray, thingConfig),
+        composeWhereInputRecursively(
+          where2,
+          parentFieldName,
+          lookupArray,
+          thingConfig,
+          notCreateObjectId,
+        ),
       );
     } else if (idFields.includes(key)) {
       const key2 = key === 'id' ? '_id' : key;
-      result[key2] = where[key] && Types.ObjectId(where[key]);
+      result[key2] = where[key] && (notCreateObjectId ? where[key] : Types.ObjectId(where[key]));
     } else if (key.endsWith('_')) {
       if (parentFieldName) {
         throw new TypeError(
@@ -79,7 +90,13 @@ const composeWhereInputRecursively = (
         thingConfig,
       );
 
-      const result2 = composeWhereInputRecursively(value, relationalKey, lookupArray, thingConfig2);
+      const result2 = composeWhereInputRecursively(
+        value,
+        relationalKey,
+        lookupArray,
+        thingConfig2,
+        notCreateObjectId,
+      );
 
       Object.keys(result2).forEach((key2) => {
         result[key2] = result2[key2];
@@ -94,9 +111,16 @@ const composeWhereInputRecursively = (
 const composeWhereInput = (
   where: Object,
   thingConfig: ThingConfig,
+  notCreateObjectId?: boolean,
 ): { where: Object, lookups: Array<LookupMongodb> } => {
   const lookupArray = [];
-  const where2 = composeWhereInputRecursively(where, '', lookupArray, thingConfig);
+  const where2 = composeWhereInputRecursively(
+    where,
+    '',
+    lookupArray,
+    thingConfig,
+    notCreateObjectId,
+  );
 
   const lookups = lookupArray.reduce((prev, fieldThingPair) => {
     const [parentFieldName, fieldName, thingName] = fieldThingPair.split(':');

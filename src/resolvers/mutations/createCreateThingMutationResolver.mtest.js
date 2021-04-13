@@ -653,4 +653,234 @@ describe('createCreateThingMutationResolver', () => {
     const oldCreatedFriend = await Person.findById(friendId);
     expect(oldCreatedFriend.friend).toBeUndefined();
   });
+
+  test('should create mongodb documents using checkData', async () => {
+    const accessConfig: ThingConfig = {
+      name: 'Access',
+
+      textFields: [
+        { name: 'postCreators', array: true, index: true },
+        { name: 'postEditors', array: true, index: true },
+        { name: 'postPublishers', array: true, index: true },
+        { name: 'postTogglers', array: true, index: true },
+        { name: 'restaurantCreators', array: true, index: true },
+        { name: 'restaurantEditors', array: true, index: true },
+        { name: 'restaurantPublishers', array: true, index: true },
+        { name: 'restaurantTogglers', array: true, index: true },
+      ],
+    };
+
+    const postConfig: ThingConfig = {};
+    const restaurantConfig: ThingConfig = {};
+
+    Object.assign(postConfig, {
+      name: 'Post',
+
+      textFields: [{ name: 'slug' }, { name: 'type' }],
+
+      relationalFields: [
+        {
+          name: 'restaurant',
+          config: restaurantConfig,
+          index: true,
+        },
+        {
+          name: 'restaurants',
+          config: restaurantConfig,
+          array: true,
+          index: true,
+        },
+      ],
+    });
+
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+
+      textFields: [{ name: 'slug' }],
+
+      relationalFields: [
+        {
+          name: 'access',
+          config: accessConfig,
+          index: true,
+        },
+      ],
+    });
+
+    const generalConfig2: GeneralConfig = {
+      thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
+    };
+
+    const createRestaurant = createCreateThingMutationResolver(
+      restaurantConfig,
+      generalConfig2,
+      serversideConfig,
+    );
+
+    expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      slug: 'Pantagruel',
+      access: {
+        create: {
+          postCreators: ['1234567890'],
+        },
+      },
+    };
+
+    const { id: restaurantId } = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+
+    const createPost = createCreateThingMutationResolver(
+      postConfig,
+      generalConfig2,
+      serversideConfig,
+      true,
+    );
+
+    expect(typeof createPost).toBe('function');
+    if (!createPost) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const postData = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: restaurantId },
+    };
+
+    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
+      { restaurant_: { access_: { postCreators: '9876543210' } } },
+    ]);
+
+    expect(post).toBe(null);
+
+    const post2 = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
+      { restaurant_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post2.restaurant.toString()).toBe(restaurantId.toString());
+
+    const postData3 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: null },
+    };
+
+    const post3 = await createPost(null, { data: postData3 }, { mongooseConn, pubsub }, null, [
+      { restaurant_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post3).toBe(null);
+
+    const postData4 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurants: { connect: [restaurantId] },
+    };
+
+    const post4 = await createPost(null, { data: postData4 }, { mongooseConn, pubsub }, null, [
+      { restaurants_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post4.restaurants[0].toString()).toBe(restaurantId.toString());
+
+    const postData5 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurants: { connect: [] },
+    };
+
+    const post5 = await createPost(null, { data: postData5 }, { mongooseConn, pubsub }, null, [
+      { restaurants_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post5).toBe(null);
+
+    const postData6 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurants: { connect: [restaurantId, `${restaurantId.toString().slice(0, -1)}a`] },
+    };
+
+    const post6 = await createPost(null, { data: postData6 }, { mongooseConn, pubsub }, null, [
+      { restaurants_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post6.restaurants[0].toString()).toBe(restaurantId.toString());
+
+    const postData7 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurants: { connect: ['6073f383f1b1bcd591983c92'] },
+    };
+
+    const post7 = await createPost(null, { data: postData7 }, { mongooseConn, pubsub }, null, [
+      { restaurants_: { access_: { postCreators: '1234567890' } } },
+    ]);
+
+    expect(post7).toBe(null);
+
+    const postData8 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: restaurantId },
+      restaurants: { connect: [restaurantId] },
+    };
+
+    const post8 = await createPost(null, { data: postData8 }, { mongooseConn, pubsub }, null, [
+      {
+        restaurants_: { access_: { postCreators: '1234567890' } },
+        restaurant_: { access_: { postCreators: '1234567890' } },
+      },
+    ]);
+
+    expect(post8.restaurants[0].toString()).toBe(restaurantId.toString());
+
+    const postData9 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: '6073f383f1b1bcd591983c92' },
+      restaurants: { connect: [restaurantId] },
+    };
+
+    const post9 = await createPost(null, { data: postData9 }, { mongooseConn, pubsub }, null, [
+      {
+        restaurants_: { access_: { postCreators: '1234567890' } },
+        restaurant_: { access_: { postCreators: '1234567890' } },
+      },
+    ]);
+
+    expect(post9).toBe(null);
+
+    const postData10 = {
+      slug: 'news',
+      type: 'newsFeed',
+      restaurant: { connect: restaurantId },
+      restaurants: { connect: [restaurantId] },
+    };
+
+    const post10 = await createPost(null, { data: postData10 }, { mongooseConn, pubsub }, null, [
+      {
+        type: 'newsFeed',
+        restaurant_: { access_: { postCreators: '1234567890' } },
+      },
+    ]);
+
+    expect(post10.type).toBe(postData10.type);
+
+    const postData11 = {
+      slug: 'news',
+      type: 'toProfessionals',
+      restaurant: { connect: restaurantId },
+      restaurants: { connect: [restaurantId] },
+    };
+
+    const post11 = await createPost(null, { data: postData11 }, { mongooseConn, pubsub }, null, [
+      {
+        type: 'newsFeed',
+        restaurant_: { access_: { postCreators: '1234567890' } },
+      },
+    ]);
+
+    expect(post11).toBe(null);
+  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.507",
+  "version": "0.1.2-beta.511",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -37,6 +37,7 @@
     "get-stream": "^6.0.0",
     "graphql-scalars": "^1.7.0",
     "lodash": "^4.17.20",
+    "mingo": "^4.1.2",
     "pluralize": "^8.0.0",
     "spark-md5": "^3.0.1"
   },

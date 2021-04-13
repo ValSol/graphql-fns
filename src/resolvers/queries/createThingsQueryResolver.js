@@ -39,7 +39,7 @@ const createThingsQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilter: Object,
+    parentFilter: Array<Object>,
   ): Object => {
     const filter = inAnyCase
       ? parentFilter

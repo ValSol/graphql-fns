@@ -32,8 +32,8 @@ const createUpdateThingMutationResolver = (
     parent: Object,
     args: Args,
     context: Context,
-    ino: Object,
-    parentFilter: Object,
+    info: Object,
+    parentFilter: Array<Object>,
   ): Object => {
     const filter = inAnyCase
       ? parentFilter

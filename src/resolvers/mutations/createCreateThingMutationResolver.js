@@ -7,6 +7,7 @@ import createThing from '../../mongooseModels/createThing';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 import addIdsToThing from '../addIdsToThing';
 import executeAuthorisation from '../executeAuthorisation';
+import checkDataToCreate from './checkDataToCreate';
 import incCounter from './incCounter';
 import incCounters from './incCounters';
 import processCreateInputData from './processCreateInputData';
@@ -28,12 +29,36 @@ const createCreateThingMutationResolver = (
     return null;
   }
 
-  const resolver = async (parent: Object, args: Args, context: Context): Object => {
+  const resolver = async (
+    parent: Object,
+    args: Args,
+    context: Context,
+    info: Object,
+    parentFilter: Array<Object>,
+  ): Object => {
     if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
       return null;
     }
 
+    const filter = inAnyCase
+      ? parentFilter
+      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+
+    if (!filter) return null;
+
     const { data, positions } = args;
+
+    const allowCreate = await checkDataToCreate(
+      data,
+      filter,
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
+
+    if (!allowCreate) return null;
+
     const { mongooseConn } = context;
 
     const { core, periphery, single, first } = processCreateInputData(

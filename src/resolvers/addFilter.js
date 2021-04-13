@@ -1,6 +1,6 @@
 // @flow
 
-const addFilter = (filter: Object, where: Object): Object => {
+const addFilter = (filter: Array<Object>, where: Object): Object => {
   if (!filter.length) return where;
 
   if (!where || !Object.keys(where).length) {

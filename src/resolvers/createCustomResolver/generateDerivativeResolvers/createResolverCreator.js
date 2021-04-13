@@ -38,7 +38,7 @@ const createResolverCreator = (
       context: Object,
       info: Object,
       // transfer 'filter' into reguqlar resolver to know how to select data if inAnyCase = true
-      filter: Object,
+      filter: Array<Object>,
     ) => regularResolver(_, args, context, info, filter);
 
     return resolver;
