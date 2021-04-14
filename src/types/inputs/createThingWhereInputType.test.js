@@ -109,11 +109,13 @@ input ExampleWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -137,11 +139,13 @@ input ExampleWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -202,16 +206,19 @@ input ExampleWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
+  spouse_exists: Boolean
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -240,16 +247,19 @@ input PersonWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
+  spouse_exists: Boolean
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -317,16 +327,19 @@ input PersonWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
+  spouse_exists: Boolean
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -355,16 +368,19 @@ input PersonWhereInput {
   firstName_nin: [String!]
   firstName_ne: String
   firstName_re: [RegExp!]
+  firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
   lastName_re: [RegExp!]
+  lastName_exists: Boolean
   spouse: ID
   spouse_in: [ID!]
   spouse_nin: [ID!]
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
+  spouse_exists: Boolean
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -429,6 +445,7 @@ input PersonWhereInput {
   field1_nin: [WeekdaysEnumeration!]
   field1_ne: WeekdaysEnumeration
   field1_re: [RegExp!]
+  field1_exists: Boolean
   field4: CuisinesEnumeration
   field4_in: [CuisinesEnumeration!]
   field4_nin: [CuisinesEnumeration!]
@@ -457,6 +474,7 @@ input ExampleWhereInput {
   field1_nin: [WeekdaysEnumeration!]
   field1_ne: WeekdaysEnumeration
   field1_re: [RegExp!]
+  field1_exists: Boolean
   field4: CuisinesEnumeration
   field4_in: [CuisinesEnumeration!]
   field4_nin: [CuisinesEnumeration!]
@@ -510,6 +528,7 @@ input ExampleWhereInput {
   firstName_gte: Int
   firstName_lt: Int
   firstName_lte: Int
+  firstName_exists: Boolean
   lastName: Int
   lastName_in: [Int!]
   lastName_nin: [Int!]
@@ -518,6 +537,7 @@ input ExampleWhereInput {
   lastName_gte: Int
   lastName_lt: Int
   lastName_lte: Int
+  lastName_exists: Boolean
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -544,6 +564,7 @@ input ExampleWhereInput {
   firstName_gte: Int
   firstName_lt: Int
   firstName_lte: Int
+  firstName_exists: Boolean
   lastName: Int
   lastName_in: [Int!]
   lastName_nin: [Int!]
@@ -552,6 +573,7 @@ input ExampleWhereInput {
   lastName_gte: Int
   lastName_lt: Int
   lastName_lte: Int
+  lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -600,6 +622,7 @@ input ExampleWhereInput {
   firstName_gte: Float
   firstName_lt: Float
   firstName_lte: Float
+  firstName_exists: Boolean
   lastName: Float
   lastName_in: [Float!]
   lastName_nin: [Float!]
@@ -608,6 +631,7 @@ input ExampleWhereInput {
   lastName_gte: Float
   lastName_lt: Float
   lastName_lte: Float
+  lastName_exists: Boolean
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -634,6 +658,7 @@ input ExampleWhereInput {
   firstName_gte: Float
   firstName_lt: Float
   firstName_lte: Float
+  firstName_exists: Boolean
   lastName: Float
   lastName_in: [Float!]
   lastName_nin: [Float!]
@@ -642,6 +667,7 @@ input ExampleWhereInput {
   lastName_gte: Float
   lastName_lt: Float
   lastName_lte: Float
+  lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -690,6 +716,7 @@ input ExampleWhereInput {
   firstName_gte: DateTime
   firstName_lt: DateTime
   firstName_lte: DateTime
+  firstName_exists: Boolean
   lastName: DateTime
   lastName_in: [DateTime!]
   lastName_nin: [DateTime!]
@@ -698,6 +725,7 @@ input ExampleWhereInput {
   lastName_gte: DateTime
   lastName_lt: DateTime
   lastName_lte: DateTime
+  lastName_exists: Boolean
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -724,6 +752,7 @@ input ExampleWhereInput {
   firstName_gte: DateTime
   firstName_lt: DateTime
   firstName_lte: DateTime
+  firstName_exists: Boolean
   lastName: DateTime
   lastName_in: [DateTime!]
   lastName_nin: [DateTime!]
@@ -732,6 +761,7 @@ input ExampleWhereInput {
   lastName_gte: DateTime
   lastName_lt: DateTime
   lastName_lte: DateTime
+  lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -773,7 +803,9 @@ input ExampleWhereInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   firstName: Boolean
+  firstName_exists: Boolean
   lastName: Boolean
+  lastName_exists: Boolean
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -793,7 +825,9 @@ input ExampleWhereInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   firstName: Boolean
+  firstName_exists: Boolean
   lastName: Boolean
+  lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]

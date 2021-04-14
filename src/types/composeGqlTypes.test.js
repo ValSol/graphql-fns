@@ -327,16 +327,19 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField2_nin: [String!]
   textField2_ne: String
   textField2_re: [RegExp!]
+  textField2_exists: Boolean
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
   textField3_ne: String
   textField3_re: [RegExp!]
+  textField3_exists: Boolean
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
   day_ne: WeekdaysEnumeration
   day_re: [RegExp!]
+  day_exists: Boolean
   cuisines: CuisinesEnumeration
   cuisines_in: [CuisinesEnumeration!]
   cuisines_nin: [CuisinesEnumeration!]
@@ -369,16 +372,19 @@ input ExampleWhereInput {
   textField2_nin: [String!]
   textField2_ne: String
   textField2_re: [RegExp!]
+  textField2_exists: Boolean
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
   textField3_ne: String
   textField3_re: [RegExp!]
+  textField3_exists: Boolean
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
   day_ne: WeekdaysEnumeration
   day_re: [RegExp!]
+  day_exists: Boolean
   cuisines: CuisinesEnumeration
   cuisines_in: [CuisinesEnumeration!]
   cuisines_nin: [CuisinesEnumeration!]

@@ -42,6 +42,10 @@ describe('composeWhereInput', () => {
         name: 'intField2',
         index: true,
       },
+      {
+        name: 'intField3',
+        index: true,
+      },
     ],
     relationalFields: [
       {
@@ -79,6 +83,7 @@ describe('composeWhereInput', () => {
       floatField2_gte: 180.0,
       intField_lt: 15,
       intField2_lte: 20,
+      intField3_exists: true,
       relationalField: null,
     };
 
@@ -92,6 +97,7 @@ describe('composeWhereInput', () => {
         floatField2: { $gte: 180.0 },
         intField: { $lt: 15 },
         intField2: { $lte: 20 },
+        intField3: { $exists: true },
         relationalField: null,
       },
       lookups: [],
@@ -121,6 +127,9 @@ describe('composeWhereInput', () => {
             {
               intField2_lte: 20,
             },
+            {
+              intField3_exists: false,
+            },
           ],
         },
       ],
@@ -142,6 +151,7 @@ describe('composeWhereInput', () => {
               { floatField2: { $gte: 180.0 } },
               { intField: { $lt: 15 } },
               { intField2: { $lte: 20 } },
+              { intField3: { $exists: false } },
             ],
           },
         ],
@@ -162,6 +172,7 @@ describe('composeWhereInput', () => {
         floatField2_gte: 180.0,
         intField_lt: 15,
         intField2_lte: 20,
+        intField3_exists: true,
       },
     };
 
@@ -175,6 +186,7 @@ describe('composeWhereInput', () => {
         'relationalField_.floatField2': { $gte: 180.0 },
         'relationalField_.intField': { $lt: 15 },
         'relationalField_.intField2': { $lte: 20 },
+        'relationalField_.intField3': { $exists: true },
       },
       lookups: [
         {

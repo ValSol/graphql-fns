@@ -64,6 +64,8 @@ const composeWhereInputRecursively = (
       result[`${prefix}${key.slice(0, -3)}`] = {
         $in: where[key].map((item) => new RegExp(item.pattern, item.flags)),
       };
+    } else if (key.endsWith('_exists')) {
+      result[`${prefix}${key.slice(0, -7)}`] = { [`$${key.slice(-6)}`]: where[key] };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
         composeWhereInputRecursively(

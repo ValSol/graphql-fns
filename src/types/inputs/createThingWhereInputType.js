@@ -44,7 +44,7 @@ const composeFields = (thingConfig: ThingConfig): string => {
   const fields = [`${defaultFields}${counter ? counterFields : ''}`];
 
   if (textFields) {
-    textFields.forEach(({ name: fieldName, index, unique }) => {
+    textFields.forEach(({ name: fieldName, array, index, unique }) => {
       if (unique || index) {
         if (index) fields.push(`  ${fieldName}: String`);
         fields.push(`  ${fieldName}_in: [String!]
@@ -52,11 +52,14 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_ne: String
   ${fieldName}_re: [RegExp!]`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   if (intFields) {
-    intFields.forEach(({ name: fieldName, index, unique }) => {
+    intFields.forEach(({ name: fieldName, array, index, unique }) => {
       if (unique || index) {
         if (index) fields.push(`  ${fieldName}: Int`);
         fields.push(`  ${fieldName}_in: [Int!]
@@ -67,11 +70,14 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_lt: Int
   ${fieldName}_lte: Int`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   if (floatFields) {
-    floatFields.forEach(({ name: fieldName, index, unique }) => {
+    floatFields.forEach(({ name: fieldName, array, index, unique }) => {
       if (unique || index) {
         if (index) fields.push(`  ${fieldName}: Float`);
         fields.push(`  ${fieldName}_in: [Float!]
@@ -82,11 +88,14 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_lt: Float
   ${fieldName}_lte: Float`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   if (dateTimeFields) {
-    dateTimeFields.forEach(({ name: fieldName, index, unique }) => {
+    dateTimeFields.forEach(({ name: fieldName, array, index, unique }) => {
       if (unique || index) {
         if (index) fields.push(`  ${fieldName}: DateTime`);
         fields.push(`  ${fieldName}_in: [DateTime!]
@@ -97,19 +106,25 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_lt: DateTime
   ${fieldName}_lte: DateTime`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   if (booleanFields) {
-    booleanFields.forEach(({ name: fieldName, index }) => {
+    booleanFields.forEach(({ name: fieldName, array, index }) => {
       if (index) {
         fields.push(`  ${fieldName}: Boolean`);
+      }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
       }
     });
   }
 
   if (enumFields) {
-    enumFields.forEach(({ name: fieldName, enumName, index }) => {
+    enumFields.forEach(({ name: fieldName, enumName, array, index }) => {
       if (index) {
         fields.push(`  ${fieldName}: ${enumName}Enumeration
   ${fieldName}_in: [${enumName}Enumeration!]
@@ -117,11 +132,14 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_ne: ${enumName}Enumeration
   ${fieldName}_re: [RegExp!]`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   if (relationalFields) {
-    relationalFields.forEach(({ name: fieldName, index, unique, config }) => {
+    relationalFields.forEach(({ name: fieldName, array, index, unique, config }) => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
@@ -129,18 +147,24 @@ const composeFields = (thingConfig: ThingConfig): string => {
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
       }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
+      }
     });
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.forEach(({ name: fieldName, config, index, unique }) => {
+    duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+      }
+      if (index && !array) {
+        fields.push(`  ${fieldName}_exists: Boolean`);
       }
     });
   }
