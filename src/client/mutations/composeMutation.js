@@ -21,6 +21,10 @@ const composeMutation = (
 ): string => {
   let head;
 
+  if (!thingConfig) {
+    throw new TypeError('thingConfig must be defined!');
+  }
+
   let returnObjectConfig = thingConfig;
 
   switch (mutationName) {

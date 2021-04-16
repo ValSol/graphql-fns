@@ -27,7 +27,19 @@ describe('patchExternalReferences util', () => {
   Object.assign(postConfig, {
     name: 'Post',
 
-    textFields: [{ name: 'slug' }],
+    textFields: [
+      {
+        name: 'slug',
+      },
+      {
+        name: 'type',
+        index: true,
+      },
+      {
+        name: 'subType',
+        index: true,
+      },
+    ],
 
     enumFields: [
       {
@@ -207,12 +219,52 @@ describe('patchExternalReferences util', () => {
 
     const data = {
       slug: 'Post slug',
+      type: 'newsFeed',
+      subType: 'afisha',
     };
     const filter = [
       {
         AND: [
           { restaurant_: { access_: { postCreators: 'userId' } } },
           { restaurants_: { access_: { postEditors: 'userId' } } },
+          { OR: [{ type: 'newsFeed' }, { subType_in: ['afisha', 'actions'] }] },
+        ],
+      },
+    ];
+    const toCreate = false;
+
+    const result = patchExternalReferences(externalReferences, data, filter, postConfig, toCreate);
+
+    const expectedResult = {
+      data: { slug: 'Post slug', type: 'newsFeed', subType: 'afisha' },
+
+      filter: [
+        { AND: [{}, {}, { OR: [{ type: 'newsFeed' }, { subType_in: ['afisha', 'actions'] }] }] },
+      ],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return external references to update 2', () => {
+    const externalReferences = ['restaurantId', 'restaurantId-1', 'restaurantId-2'];
+
+    const data = {
+      slug: 'Post slug',
+    };
+    const filter = [
+      {
+        AND: [
+          {
+            restaurant_: { access_: { postCreators: 'userId' } },
+            type: 'newsFeed',
+            slug_exists: true,
+          },
+          {
+            restaurants_: { access_: { postEditors: 'userId' } },
+            subType_in: ['afisha', 'actions'],
+            slug_exists: true,
+          },
         ],
       },
     ];
@@ -223,7 +275,7 @@ describe('patchExternalReferences util', () => {
     const expectedResult = {
       data: { slug: 'Post slug' },
 
-      filter: [{ AND: [{}, {}] }],
+      filter: [{ AND: [{ slug_exists: true }, { slug_exists: true }] }],
     };
 
     expect(result).toEqual(expectedResult);

@@ -10,6 +10,10 @@ const composeFragment = (
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
+  if (!thingConfig) {
+    throw new TypeError('thingConfig must be defined!');
+  }
+
   const head = composeThingFragmentArgs(fragmentName, thingConfig);
 
   const fields = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 1 });

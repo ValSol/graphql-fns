@@ -8,6 +8,7 @@ const patch = (externalReferences, data, toCreate, filterObj, fieldsObj) => {
   // --- this piece of code must to run along with the piece of code in extractExternalReferences
 
   Object.keys(filterObj).forEach((key) => {
+    const [baseKey] = key.split('_');
     if (key.endsWith('_')) {
       const key2 = key.slice(0, -1);
       const { attributes } = fieldsObj[key2];
@@ -48,7 +49,7 @@ const patch = (externalReferences, data, toCreate, filterObj, fieldsObj) => {
           patch(externalReferences, data, toCreate, filterObj2, fieldsObj),
         ),
       );
-    } else {
+    } else if (data[baseKey] !== undefined) {
       updatedFilterObj[key] = filterObj[key];
     }
   });

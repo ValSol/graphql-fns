@@ -21,6 +21,10 @@ const composeQuery = (
 ): string => {
   let head = []; // assign "[]" to eliminate flowjs error
 
+  if (!thingConfig) {
+    throw new TypeError('thingConfig must be defined!');
+  }
+
   let returnObjectConfig = thingConfig;
 
   switch (queryName) {
