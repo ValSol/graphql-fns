@@ -55,6 +55,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
       }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+      }
     });
   }
 
@@ -72,6 +76,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
+      }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
       }
     });
   }
@@ -91,6 +99,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
       }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+      }
     });
   }
 
@@ -109,6 +121,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
       }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+      }
     });
   }
 
@@ -119,6 +135,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
+      }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
       }
     });
   }
@@ -135,6 +155,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
       }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+      }
     });
   }
 
@@ -149,6 +173,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
+      }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
       }
     });
   }
@@ -165,6 +193,10 @@ const composeFields = (thingConfig: ThingConfig): string => {
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
+      }
+      if (index && array) {
+        fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
       }
     });
   }

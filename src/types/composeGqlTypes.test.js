@@ -345,6 +345,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   cuisines_nin: [CuisinesEnumeration!]
   cuisines_ne: CuisinesEnumeration
   cuisines_re: [RegExp!]
+  cuisines_size: Int
+  cuisines_notsize: Int
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -390,6 +392,8 @@ input ExampleWhereInput {
   cuisines_nin: [CuisinesEnumeration!]
   cuisines_ne: CuisinesEnumeration
   cuisines_re: [RegExp!]
+  cuisines_size: Int
+  cuisines_notsize: Int
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]

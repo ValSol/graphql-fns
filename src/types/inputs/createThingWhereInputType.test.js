@@ -224,6 +224,8 @@ input ExampleWhereInput {
   friends_nin: [ID!]
   friends_ne: ID
   friends_: PersonWhereWithoutBooleanOperationsInput
+  friends_size: Int
+  friends_notsize: Int
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -265,6 +267,8 @@ input PersonWhereInput {
   friends_nin: [ID!]
   friends_ne: ID
   friends_: PersonWhereWithoutBooleanOperationsInput
+  friends_size: Int
+  friends_notsize: Int
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
@@ -345,6 +349,8 @@ input PersonWhereInput {
   friends_nin: [ID!]
   friends_ne: ID
   friends_: PersonWhereWithoutBooleanOperationsInput
+  friends_size: Int
+  friends_notsize: Int
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -386,6 +392,8 @@ input PersonWhereInput {
   friends_nin: [ID!]
   friends_ne: ID
   friends_: PersonWhereWithoutBooleanOperationsInput
+  friends_size: Int
+  friends_notsize: Int
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
@@ -451,6 +459,8 @@ input PersonWhereInput {
   field4_nin: [CuisinesEnumeration!]
   field4_ne: CuisinesEnumeration
   field4_re: [RegExp!]
+  field4_size: Int
+  field4_notsize: Int
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -480,6 +490,8 @@ input ExampleWhereInput {
   field4_nin: [CuisinesEnumeration!]
   field4_ne: CuisinesEnumeration
   field4_re: [RegExp!]
+  field4_size: Int
+  field4_notsize: Int
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]

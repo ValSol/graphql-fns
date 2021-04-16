@@ -46,12 +46,28 @@ describe('composeWhereInput', () => {
         name: 'intField3',
         index: true,
       },
+      {
+        name: 'intFields',
+        index: true,
+        array: true,
+      },
+      {
+        name: 'intFields2',
+        index: true,
+        array: true,
+      },
     ],
     relationalFields: [
       {
         name: 'relationalField',
         index: true,
         config: thingConfig,
+      },
+      {
+        name: 'relationalFields',
+        index: true,
+        config: thingConfig,
+        array: true,
       },
     ],
   });
@@ -84,7 +100,10 @@ describe('composeWhereInput', () => {
       intField_lt: 15,
       intField2_lte: 20,
       intField3_exists: true,
+      intFields_size: 1,
+      intFields2_notsize: 0,
       relationalField: null,
+      relationalFields_size: 1,
     };
 
     const result = composeWhereInput(where, thingConfig);
@@ -98,7 +117,10 @@ describe('composeWhereInput', () => {
         intField: { $lt: 15 },
         intField2: { $lte: 20 },
         intField3: { $exists: true },
+        intFields: { $size: 1 },
+        intFields2: { $not: { $size: 0 } },
         relationalField: null,
+        relationalFields: { $size: 1 },
       },
       lookups: [],
     };
