@@ -5,7 +5,7 @@ import mingo from 'mingo';
 
 import type { ThingConfig } from '../../../flowTypes';
 
-import mergeWhereAndFilter from '../../mergeWhereAndFilter';
+import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 describe('patchExternalReferences util', () => {
   const accessConfig: ThingConfig = {

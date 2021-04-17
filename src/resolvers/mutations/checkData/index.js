@@ -2,7 +2,7 @@
 import mingo from 'mingo';
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
-import mergeWhereAndFilter from '../../mergeWhereAndFilter';
+import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import extractExternalReferences from './extractExternalReferences';
 import getExternalReferences from './getExternalReferences';
 import patchExternalReferences from './patchExternalReferences';

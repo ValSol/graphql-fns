@@ -9,7 +9,7 @@ import type {
 import checkInventory from '../../utils/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from '../../types/composeActionSignature';
-import executeAuthorisation from '../executeAuthorisation';
+import executeAuthorisation from '../utils/executeAuthorisation';
 import generateDerivativeResolvers from './generateDerivativeResolvers';
 
 const createCustomResolver = (

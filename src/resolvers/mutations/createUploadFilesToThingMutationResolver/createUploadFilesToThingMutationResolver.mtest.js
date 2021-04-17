@@ -120,6 +120,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
       {
         name: 'logo',
         config: imageConfig,
+        index: true,
       },
       {
         name: 'header',
@@ -134,6 +135,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
         name: 'photos',
         config: photoConfig,
         array: true,
+        index: true,
       },
     ],
 
@@ -172,6 +174,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
       exampleConfig,
       generalConfig,
       serversideConfig,
+      true,
     );
     if (!uploadToThing) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -224,6 +227,8 @@ describe('createUploadFilesToThingMutationResolver', () => {
       null,
       { files, whereOne, options },
       { mongooseConn, pubsub },
+      null,
+      [],
     );
 
     const uploadedAt = new Date();
@@ -270,6 +275,8 @@ describe('createUploadFilesToThingMutationResolver', () => {
       null,
       { files, whereOne, options },
       { mongooseConn, pubsub },
+      null,
+      [],
     );
 
     expect(updatedExample2.textField).toBe('text Field');
@@ -372,11 +379,16 @@ describe('createUploadFilesToThingMutationResolver', () => {
 
     const positions = { photos: [0, 3, 5] };
 
+    const filter = [{ logo_exists: true, photos_size: 3 }];
+
     const updatedExample3 = await uploadToThing(
       null,
       { files: files2, whereOne, options: options2, positions },
       { mongooseConn, pubsub },
+      null,
+      filter,
     );
+
     expect(updatedExample3.textField).toBe('text Field');
 
     expect(updatedExample3.logo.desktop).toBe(`/images/${datePath}/pic1_desktop.png`);
@@ -450,5 +462,17 @@ describe('createUploadFilesToThingMutationResolver', () => {
     expect(updatedExample3.photos[8].desktop).toBe(`/photos/${datePath}/photo3_desktop.jpg`);
     expect(updatedExample3.photos[8].tablet).toBe(`/photos/${datePath}/photo3_tablet.jpg`);
     expect(updatedExample3.photos[8].mobile).toBe(`/photos/${datePath}/photo3_mobile.jpg`);
+
+    const filter2 = [{ logo_exists: true, photos_size: 2 }];
+
+    const updatedExample4 = await uploadToThing(
+      null,
+      { files: files2, whereOne, options: options2, positions },
+      { mongooseConn, pubsub },
+      null,
+      filter2,
+    );
+
+    expect(updatedExample4).toBe(null);
   });
 });

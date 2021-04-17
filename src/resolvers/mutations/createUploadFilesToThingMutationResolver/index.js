@@ -8,17 +8,14 @@ import type {
 
 import checkInventory from '../../../utils/checkInventory';
 import setByPositions from '../../../utils/setByPositions';
-import createFileSchema from '../../../mongooseModels/createFileSchema';
 import createThing from '../../../mongooseModels/createThing';
-import addIdsToThing from '../../addIdsToThing';
-import executeAuthorisation from '../../executeAuthorisation';
-import composeAllFilesFieldsData from './composeAllFilesFieldsData';
+import addIdsToThing from '../../utils/addIdsToThing';
+import executeAuthorisation from '../../utils/executeAuthorisation';
+import checkData from '../checkData';
 import createPushIntoThingMutationResolver from '../createPushIntoThingMutationResolver';
 import createUpdateThingMutationResolver from '../createUpdateThingMutationResolver';
-import getHashDoubles from './getHashDoubles';
-import saveAllFiles from './saveAllFiles';
-import separateFileFieldsAttributes from './separateFileFieldsAttributes';
-import separateFileFieldsData from './separateFileFieldsData';
+import processUploadedFiles from '../processUploadedFiles';
+import composeMockFilesData from './composeMockFilesData';
 
 type Args = {
   files: Object,
@@ -83,92 +80,41 @@ const createUploadFilesToThingMutationResolver = (
       ? parentFilter
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
-    const {
-      whereOne,
-      data,
-      files,
-      options,
-      options: { hashes },
-      positions,
-    } = args;
+    const { whereOne, data, files, options, positions } = args;
     const { mongooseConn } = context;
 
     const filesUploaded = await Promise.all(files);
 
-    const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
-
-    const hashDoubles = getHashDoubles(options, thingConfig);
-
-    const promises = [];
-    indexesByConfig.forEach((indexes, config) => {
-      const { name: name2 } = config;
-      const fileSchema = createFileSchema(config);
-      const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
-      indexes.forEach((index) => {
-        if (hashDoubles[index] === null) {
-          const hash = hashes[index];
-          promises[index] = FileModel.findOne({ hash }, {});
-        } else {
-          // if there is double mock already uploaded file
-          promises[index] = Promise.resolve({});
-        }
-      });
-    });
-
-    const alreadyUploadedFiles = await Promise.all(promises);
-
-    const uploadDate = new Date();
-    const filesAttributes = await saveAllFiles(
-      filesUploaded,
-      alreadyUploadedFiles,
-      uploadDate,
+    const toCreate = false;
+    const mockFilesData = composeMockFilesData(
       options,
-      thingConfig,
-      saveFiles,
-    );
-
-    const promises2 = [];
-    indexesByConfig.forEach((indexes, config) => {
-      const { name: name2 } = config;
-      const fileSchema = createFileSchema(config);
-      const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
-      indexes.forEach((index) => {
-        if (alreadyUploadedFiles[index]) {
-          promises2[index] = Promise.resolve(alreadyUploadedFiles[index]);
-        } else {
-          promises2[index] = FileModel.create(filesAttributes[index]);
-        }
-      });
-    });
-
-    // files attributes with _ids
-    const filesAttributes2 = (await Promise.all(promises2))
-      .map((item, i) => {
-        if (hashDoubles[i] !== null) {
-          return null;
-        }
-        if (alreadyUploadedFiles[i]) {
-          return item;
-        }
-        const { _id } = item.toObject();
-        return { ...filesAttributes[i], _id };
-      })
-      .map((item, i, arr) => {
-        if (hashDoubles[i] !== null) {
-          return arr[hashDoubles[i]];
-        }
-        return item;
-      });
-
-    const fileFieldsData = composeAllFilesFieldsData(
-      filesAttributes2,
       data,
-      options,
+      filesUploaded,
       thingConfig,
       composeFileFieldsData,
     );
+    // check filter upfront data that uploading so if there is limit
+    const allowCreate = await checkData(
+      mockFilesData,
+      filter,
+      thingConfig,
+      toCreate,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
 
-    const { forPush, forUpdate } = separateFileFieldsData(fileFieldsData, options, thingConfig);
+    if (!allowCreate) return null;
+
+    const { forPush, forUpdate } = await processUploadedFiles({
+      context,
+      data,
+      filesUploaded,
+      mongooseConn,
+      options,
+      serversideConfig,
+      thingConfig,
+    });
 
     let thing;
 
@@ -178,7 +124,7 @@ const createUploadFilesToThingMutationResolver = (
         { whereOne, data: forUpdate },
         context,
         info,
-        filter,
+        [],
       );
     }
 
@@ -202,7 +148,7 @@ const createUploadFilesToThingMutationResolver = (
         { whereOne, data: forPush },
         context,
         info2,
-        filter,
+        [],
       );
 
       if (positions) {
