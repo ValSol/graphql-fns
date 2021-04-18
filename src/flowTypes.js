@@ -476,9 +476,12 @@ export type GeneralConfig = {
         // eslint-disable-next-line flowtype/generic-spacing
         [thingName: string]: Array<
           | 'thing'
+          | 'thingCount'
+          | 'thingDistinctValues'
           | 'things'
           | 'createThing'
           | 'createManyThings'
+          | 'deleteThing'
           | 'importThings'
           | 'pushIntoThing'
           | 'updateThing'
@@ -536,9 +539,12 @@ export type DerivativeAttributes = {
     // eslint-disable-next-line flowtype/generic-spacing
     [thingName: string]: Array<
       | 'thing'
+      | 'thingCount'
+      | 'thingDistinctValues'
       | 'things'
       | 'createThing'
       | 'createManyThings'
+      | 'deleteThing'
       | 'importThings'
       | 'pushIntoThing'
       | 'updateThing'

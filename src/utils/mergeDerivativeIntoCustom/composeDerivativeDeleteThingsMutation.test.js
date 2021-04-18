@@ -1,26 +1,14 @@
 // @flow
 /* eslint-env jest */
+
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeUploadFilesToThing from './composeDerivativeUploadFilesToThing';
+import composeDerivativeDeleteThingsMutation from './composeDerivativeDeleteThingsMutation';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeUploadFilesToThing', () => {
+describe('composeDerivativeDeleteThingsMutation', () => {
   test('should return correct derivative config', () => {
-    const imageConfig: ThingConfig = {
-      name: 'Image',
-      file: true,
-      textFields: [
-        {
-          name: 'fileId',
-        },
-        {
-          name: 'address',
-        },
-      ],
-    };
-
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
@@ -30,18 +18,14 @@ describe('composeDerivativeUploadFilesToThing', () => {
           index: true,
         },
       ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-        },
-      ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['uploadFilesToThing'] },
+      allow: { Example: ['deleteThing'] },
       suffix: 'ForCatalog',
-      Example: {
-        floatFields: [{ name: 'floatField' }],
+      addFields: {
+        Example: () => ({
+          floatFields: [{ name: 'floatField' }],
+        }),
       },
     };
 
@@ -52,22 +36,17 @@ describe('composeDerivativeUploadFilesToThing', () => {
       derivative,
     };
 
-    const result = composeDerivativeUploadFilesToThing(ForCatalog);
+    const result = composeDerivativeDeleteThingsMutation(ForCatalog);
 
     const expectedResult = {
-      name: 'uploadFilesToThingForCatalog',
+      name: 'deleteThingForCatalog',
       specificName: ({ name }) =>
-        ForCatalog.allow[name] && ForCatalog.allow[name].includes('uploadFilesToThing')
-          ? `uploadFilesTo${name}ForCatalog`
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('deleteThing')
+          ? `delete${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne', 'data', 'files', 'options'],
-      argTypes: ({ name }) => [
-        `${name}WhereOneInput!`,
-        `UploadFilesTo${name}Input`,
-        '[Upload!]!',
-        `FilesOf${name}OptionsInput!`,
-      ],
-      type: ({ name }) => `${name}ForCatalog!`,
+      argNames: () => ['whereOne'],
+      argTypes: ({ name }) => [`${name}WhereOneInput!`],
+      type: ({ name }) => `${name}ForCatalog`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
     };

@@ -1,27 +1,30 @@
 // @flow
 /* eslint-env jest */
+
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingQuery from './composeDerivativeThingQuery';
-import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
+import composeDerivativeThingDistinctValuesQuery from './composeDerivativeThingDistinctValuesQuery';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeThingQuery', () => {
+describe('composeDerivativeThingDistinctValuesQuery', () => {
   test('should return correct derivative config', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       textFields: [
         {
           name: 'textField',
+          array: true,
           index: true,
         },
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['thing', 'things'] },
+      allow: { Example: ['thingDistinctValues'] },
       suffix: 'ForCatalog',
-      Example: {
-        floatFields: [{ name: 'floatField' }],
+      addFields: {
+        Example: () => ({
+          floatFields: [{ name: 'floatField' }],
+        }),
       },
     };
 
@@ -32,19 +35,18 @@ describe('composeDerivativeThingQuery', () => {
       derivative,
     };
 
-    const result = composeDerivativeThingQuery(ForCatalog);
+    const result = composeDerivativeThingDistinctValuesQuery(ForCatalog);
 
     const expectedResult = {
-      name: 'thing',
+      name: 'thingDistinctValuesForCatalog',
       specificName: ({ name }) =>
-        ForCatalog.allow[name] && ForCatalog.allow[name].includes('thing')
-          ? `${name}ForCatalog`
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingDistinctValues')
+          ? `${name}DistinctValuesForCatalog`
           : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }) => [`${name}WhereOneInput!`],
-      type: ({ name }) => `${name}ForCatalog`,
-      config: (thingConfig2, generalConfig2) =>
-        composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
+      argNames: () => ['where', 'options'],
+      argTypes: ({ name }) => [`${name}WhereInput`, `${name}DistinctValuesOptionsInput`],
+      type: () => '[String!]!',
+      config: () => null,
     };
 
     const result2 = composeActionSignature(result, thingConfig, generalConfig);

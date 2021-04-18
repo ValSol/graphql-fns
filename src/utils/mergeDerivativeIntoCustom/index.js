@@ -1,11 +1,14 @@
 // @flow
 import type { Custom, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeThingCountQuery from './composeDerivativeThingCountQuery';
+import composeDerivativeThingDistinctValuesQuery from './composeDerivativeThingDistinctValuesQuery';
 import composeDerivativeThingQuery from './composeDerivativeThingQuery';
 import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
 
 import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
 import composeDerivativeCreateThingMutation from './composeDerivativeCreateThingMutation';
+import composeDerivativeDeleteThingsMutation from './composeDerivativeDeleteThingsMutation';
 import composeDerivativeImportThingsMutation from './composeDerivativeImportThingsMutation';
 import composeDerivativePushIntoThingMutation from './composeDerivativePushIntoThingMutation';
 import composeDerivativeUpdateThingMutation from './composeDerivativeUpdateThingMutation';
@@ -41,6 +44,16 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
       // eslint-disable-next-line no-param-reassign
       prev[`things${suffix}`] = composeDerivativeThingsQuery(derivative[suffix]);
     }
+    if (allowedMethods.thingCount) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingCount${suffix}`] = composeDerivativeThingCountQuery(derivative[suffix]);
+    }
+    if (allowedMethods.thingCount) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingDistinctValues${suffix}`] = composeDerivativeThingDistinctValuesQuery(
+        derivative[suffix],
+      );
+    }
 
     return prev;
   }, {});
@@ -58,6 +71,10 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     if (allowedMethods.createThing) {
       // eslint-disable-next-line no-param-reassign
       prev[`createThing${suffix}`] = composeDerivativeCreateThingMutation(derivative[suffix]);
+    }
+    if (allowedMethods.deleteThing) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`deleteThing${suffix}`] = composeDerivativeDeleteThingsMutation(derivative[suffix]);
     }
     if (allowedMethods.importThings) {
       // eslint-disable-next-line no-param-reassign

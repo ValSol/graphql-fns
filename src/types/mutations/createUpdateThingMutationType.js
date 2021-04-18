@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingReorderCreatedInputType from '../inputs/createThingReorderCreatedInputType';
 
-const createDeleteThingMutationType = (thingConfig: ThingConfig): string => {
+const createUpdateThingMutationType = (thingConfig: ThingConfig): string => {
   const { name } = thingConfig;
 
   const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
@@ -17,4 +17,4 @@ const createDeleteThingMutationType = (thingConfig: ThingConfig): string => {
   return result;
 };
 
-export default createDeleteThingMutationType;
+export default createUpdateThingMutationType;

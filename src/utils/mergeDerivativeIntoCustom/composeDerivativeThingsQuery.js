@@ -2,20 +2,31 @@
 
 import pluralize from 'pluralize';
 
-import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes } from '../../flowTypes';
 
 import createThingNearInputType from '../../types/inputs/createThingNearInputType';
 import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
+import composeArgs from './composeArgs';
 
-const aditionalInputs = (thingConfig: ThingConfig) => {
-  const pagination = createThingPaginationInputType(thingConfig);
-  const near = createThingNearInputType(thingConfig);
-  const search = thingConfig.textFields
-    ? thingConfig.textFields.some(({ weight }) => weight)
-    : false;
-  return { pagination, near, search };
-};
+const predicates = [
+  () => true,
+  () => true,
+  createThingPaginationInputType,
+  createThingNearInputType,
+  (thingConfig) =>
+    thingConfig.textFields ? thingConfig.textFields.some(({ weight }) => weight) : false,
+];
+
+const argNames = [() => 'where', () => 'sort', () => 'pagination', () => 'near', () => 'search'];
+
+const argTypes = [
+  (name) => `${name}WhereInput`,
+  (name) => `${name}SortInput`,
+  (name) => `${name}PaginationInput`,
+  (name) => `${name}NearInput`,
+  () => 'String',
+];
 
 const composeDerivativeThingsQuery = ({
   allow,
@@ -24,31 +35,8 @@ const composeDerivativeThingsQuery = ({
   name: `things${suffix}`,
   specificName: ({ name }) =>
     allow[name] && allow[name].includes('things') ? `${pluralize(name)}${suffix}` : '',
-  argNames: (thingConfig, generalConfig) => {
-    const result = ['where', 'sort'];
-
-    const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
-
-    const { pagination, near, search } = aditionalInputs(derivativeConfig);
-    if (pagination) result.push('pagination');
-    if (near) result.push('near');
-    if (search) result.push('search');
-
-    return result;
-  },
-  argTypes: (thingConfig, generalConfig) => {
-    const { name } = thingConfig;
-    const result = [`${name}WhereInput`, `${name}SortInput`];
-
-    const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
-
-    const { pagination, near, search } = aditionalInputs(derivativeConfig);
-    if (pagination) result.push(`${name}PaginationInput`);
-    if (near) result.push(`${name}NearInput`);
-    if (search) result.push('String');
-
-    return result;
-  },
+  argNames: composeArgs(argNames, predicates, suffix),
+  argTypes: composeArgs(argTypes, predicates, suffix),
   type: ({ name }) => `[${name}${suffix}!]!`,
   config: (thingConfig, generalConfig) =>
     composeDerivativeConfigByName(suffix, thingConfig, generalConfig),

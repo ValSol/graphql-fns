@@ -454,7 +454,7 @@ type Query {
   ImageFileCount(where: FileWhereInput): Int!
 }
 type Mutation {
-  createExample(data: ExampleCreateInput!): Example!
+  createExample(data: ExampleCreateInput!, optionsForUpload: FilesOfExampleOptionsInput, dataForUpload: UploadFilesToExampleInput): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
