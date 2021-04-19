@@ -8,11 +8,11 @@ import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
 
 import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
 import composeDerivativeCreateThingMutation from './composeDerivativeCreateThingMutation';
-import composeDerivativeDeleteThingsMutation from './composeDerivativeDeleteThingsMutation';
+import composeDerivativeDeleteThingMutation from './composeDerivativeDeleteThingMutation';
 import composeDerivativeImportThingsMutation from './composeDerivativeImportThingsMutation';
 import composeDerivativePushIntoThingMutation from './composeDerivativePushIntoThingMutation';
 import composeDerivativeUpdateThingMutation from './composeDerivativeUpdateThingMutation';
-import composeDerivativeUploadFilesToThing from './composeDerivativeUploadFilesToThing';
+import composeDerivativeUploadFilesToThingMutation from './composeDerivativeUploadFilesToThingMutation';
 
 const store = {};
 
@@ -74,7 +74,7 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     }
     if (allowedMethods.deleteThing) {
       // eslint-disable-next-line no-param-reassign
-      prev[`deleteThing${suffix}`] = composeDerivativeDeleteThingsMutation(derivative[suffix]);
+      prev[`deleteThing${suffix}`] = composeDerivativeDeleteThingMutation(derivative[suffix]);
     }
     if (allowedMethods.importThings) {
       // eslint-disable-next-line no-param-reassign
@@ -90,7 +90,9 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     }
     if (allowedMethods.uploadFilesToThing) {
       // eslint-disable-next-line no-param-reassign
-      prev[`uploadFilesToThing${suffix}`] = composeDerivativeUploadFilesToThing(derivative[suffix]);
+      prev[`uploadFilesToThing${suffix}`] = composeDerivativeUploadFilesToThingMutation(
+        derivative[suffix],
+      );
     }
     return prev;
   }, {});

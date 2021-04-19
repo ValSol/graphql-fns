@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingFileCountQuery from './composeThingFileCountQuery';
+import composeThingFileCountQueryArgs from './composeThingFileCountQueryArgs';
 
 describe('composeThingFileCountQuery', () => {
   test('should compose things query', () => {
@@ -18,7 +18,7 @@ describe('composeThingFileCountQuery', () => {
   ImageFileCount(where: $where)
 }`;
 
-    const result = composeThingFileCountQuery(prefixName, thingConfig);
+    const result = composeThingFileCountQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

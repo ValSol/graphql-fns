@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingDistinctValuesQuery from './composeThingDistinctValuesQuery';
+import composeThingDistinctValuesQueryArgs from './composeThingDistinctValuesQueryArgs';
 
-describe('composeThingDistinctValuesQuery', () => {
+describe('composeThingDistinctValuesQueryArgs', () => {
   test('should compose thing distinct values query with ExampleWhereInput and where args', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
@@ -21,7 +21,7 @@ describe('composeThingDistinctValuesQuery', () => {
   ExampleDistinctValues(where: $where, options: $options)
 }`;
 
-    const result = composeThingDistinctValuesQuery(prefixName, thingConfig);
+    const result = composeThingDistinctValuesQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

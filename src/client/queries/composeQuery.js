@@ -6,9 +6,9 @@ import composeFields from '../composeFields';
 import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 import composeThingQueryArgs from './composeThingQueryArgs';
 import composeThingsQueryArgs from './composeThingsQueryArgs';
-import composeThingCountQuery from './composeThingCountQuery';
-import composeThingFileCountQuery from './composeThingFileCountQuery';
-import composeThingDistinctValuesQuery from './composeThingDistinctValuesQuery';
+import composeThingCountQueryArgs from './composeThingCountQueryArgs';
+import composeThingFileCountQueryArgs from './composeThingFileCountQueryArgs';
+import composeThingDistinctValuesQueryArgs from './composeThingDistinctValuesQueryArgs';
 import composeThingFileQueryArgs from './composeThingFileQueryArgs';
 import composeThingFilesQueryArgs from './composeThingFilesQueryArgs';
 
@@ -37,13 +37,13 @@ const composeQuery = (
       break;
 
     case 'thingCount':
-      return composeThingCountQuery(prefixName, thingConfig);
+      return composeThingCountQueryArgs(prefixName, thingConfig);
 
     case 'thingFileCount':
-      return composeThingFileCountQuery(prefixName, thingConfig);
+      return composeThingFileCountQueryArgs(prefixName, thingConfig);
 
     case 'thingDistinctValues':
-      return composeThingDistinctValuesQuery(prefixName, thingConfig);
+      return composeThingDistinctValuesQueryArgs(prefixName, thingConfig);
 
     case 'thingFile':
       head = composeThingFileQueryArgs(prefixName, thingConfig);

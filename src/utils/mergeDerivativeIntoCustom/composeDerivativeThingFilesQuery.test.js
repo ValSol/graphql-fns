@@ -1,51 +1,48 @@
 // @flow
 /* eslint-env jest */
-
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeDeleteThingsMutation from './composeDerivativeDeleteThingsMutation';
+import composeDerivativeThingFilesQuery from './composeDerivativeThingFilesQuery';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeDeleteThingsMutation', () => {
+describe('composeDerivativeThingFilesQuery', () => {
   test('should return correct derivative config', () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'Photo',
+      file: true,
       textFields: [
         {
           name: 'textField',
-          array: true,
           index: true,
         },
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['deleteThing'] },
+      allow: { Photo: ['thingFiles'] },
       suffix: 'ForCatalog',
-      addFields: {
-        Example: () => ({
-          floatFields: [{ name: 'floatField' }],
-        }),
+      Photo: {
+        floatFields: [{ name: 'floatField' }],
       },
     };
 
     const derivative = { ForCatalog };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      thingConfigs: { Photo: thingConfig },
       derivative,
     };
 
-    const result = composeDerivativeDeleteThingsMutation(ForCatalog);
+    const result = composeDerivativeThingFilesQuery(ForCatalog);
 
     const expectedResult = {
-      name: 'deleteThingForCatalog',
+      name: 'thingFiles',
       specificName: ({ name }) =>
-        ForCatalog.allow[name] && ForCatalog.allow[name].includes('deleteThing')
-          ? `delete${name}ForCatalog`
+        ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingFiles')
+          ? `${name}FilesForCatalog`
           : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }) => [`${name}WhereOneInput!`],
+      argNames: () => ['where'],
+      argTypes: () => ['FileWhereInput'],
       type: ({ name }) => `${name}ForCatalog`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),

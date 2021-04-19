@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingCountQuery from './composeThingCountQuery';
+import composeThingCountQueryArgs from './composeThingCountQueryArgs';
 
-describe('composeThingCountQuery', () => {
+describe('composeThingCountQueryArgs', () => {
   test('should compose things query without indexed fields', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
@@ -21,7 +21,7 @@ describe('composeThingCountQuery', () => {
   ExampleCount(where: $where)
 }`;
 
-    const result = composeThingCountQuery(prefixName, thingConfig);
+    const result = composeThingCountQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -41,7 +41,7 @@ describe('composeThingCountQuery', () => {
   ExampleCount(where: $where)
 }`;
 
-    const result = composeThingCountQuery(prefixName, thingConfig);
+    const result = composeThingCountQueryArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

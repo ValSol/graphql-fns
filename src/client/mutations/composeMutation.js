@@ -10,7 +10,7 @@ import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
 import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
 import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
-import composeUploadFilesToThingMutationResolver from './composeUploadFilesToThingMutationResolver';
+import composeUploadFilesToThingMutationArgs from './composeUploadFilesToThingMutationArgs';
 
 const composeMutation = (
   prefixName: string,
@@ -53,7 +53,7 @@ const composeMutation = (
       break;
 
     case 'uploadFilesToThing':
-      head = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
+      head = composeUploadFilesToThingMutationArgs(prefixName, thingConfig);
       break;
 
     default:

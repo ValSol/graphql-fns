@@ -1,5 +1,4 @@
 // @flow
-
 import type { ActionSignatureMethods, DerivativeAttributes } from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
@@ -9,15 +8,15 @@ const predicates = [() => true];
 
 const argNames = [() => 'whereOne'];
 
-const argTypes = [(name) => `${name}WhereOneInput!`];
+const argTypes = [() => 'FileWhereOneInput!'];
 
-const composeDerivativeDeleteThingsMutation = ({
+const composeDerivativeThingFileQuery = ({
   allow,
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => ({
-  name: `deleteThing${suffix}`,
+  name: `thingFile${suffix}`,
   specificName: ({ name }) =>
-    allow[name] && allow[name].includes('deleteThing') ? `delete${name}${suffix}` : '',
+    allow[name] && allow[name].includes('thingFile') ? `${name}File${suffix}` : '',
   argNames: composeArgs(argNames, predicates, suffix),
   argTypes: composeArgs(argTypes, predicates, suffix),
   type: ({ name }) => `${name}${suffix}`,
@@ -25,4 +24,4 @@ const composeDerivativeDeleteThingsMutation = ({
     composeDerivativeConfigByName(suffix, thingConfig, generalConfig),
 });
 
-export default composeDerivativeDeleteThingsMutation;
+export default composeDerivativeThingFileQuery;

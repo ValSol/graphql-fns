@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeUploadFilesToThingMutationResolver from './composeUploadFilesToThingMutationResolver';
+import composeUploadFilesToThingMutationArgs from './composeUploadFilesToThingMutationArgs';
 
 describe('composeUploadFilesToThingMutationResolver', () => {
   test('should compose uploadFilesToThing mutation args ', () => {
@@ -22,7 +22,7 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options) {',
     ];
 
-    const result = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
+    const result = composeUploadFilesToThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -78,7 +78,7 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options, positions: $positions) {',
     ];
 
-    const result = composeUploadFilesToThingMutationResolver(prefixName, thingConfig);
+    const result = composeUploadFilesToThingMutationArgs(prefixName, thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

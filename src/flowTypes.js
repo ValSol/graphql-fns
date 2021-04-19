@@ -479,13 +479,17 @@ export type GeneralConfig = {
           | 'thingCount'
           | 'thingDistinctValues'
           | 'things'
+          | 'thingFileCount'
+          | 'thingFile'
+          | 'thingFiles'
           | 'createThing'
           | 'createManyThings'
           | 'deleteThing'
           | 'importThings'
           | 'pushIntoThing'
           | 'updateThing'
-          | 'uploadFilesToThing',
+          | 'uploadFilesToThing'
+          | 'uploadThingFiles',
         >,
       },
       +includeFields?: { [thingName: string]: Array<string> },
@@ -542,13 +546,17 @@ export type DerivativeAttributes = {
       | 'thingCount'
       | 'thingDistinctValues'
       | 'things'
+      | 'thingFileCount'
+      | 'thingFile'
+      | 'thingFiles'
       | 'createThing'
       | 'createManyThings'
       | 'deleteThing'
       | 'importThings'
       | 'pushIntoThing'
       | 'updateThing'
-      | 'uploadFilesToThing',
+      | 'uploadFilesToThing'
+      | 'uploadThingFiles',
     >,
   },
   +includeFields?: { [thingName: string]: Array<string> },

@@ -454,13 +454,14 @@ type Query {
   ImageFileCount(where: FileWhereInput): Int!
 }
 type Mutation {
-  createExample(data: ExampleCreateInput!, optionsForUpload: FilesOfExampleOptionsInput, dataForUpload: UploadFilesToExampleInput): Example!
+  createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
+  uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!

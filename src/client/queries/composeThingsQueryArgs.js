@@ -4,28 +4,13 @@ import pluralize from 'pluralize';
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingNearInputType from '../../types/inputs/createThingNearInputType';
-import createThingPaginationInputType from '../../types/inputs/createThingPaginationInputType';
+import composeDerivativeThingsQuery from '../../utils/mergeDerivativeIntoCustom/composeDerivativeThingsQuery';
+import composeOptionalActionArgs from '../utils/composeOptionalActionArgs';
 
 const composeThingsQueryArgs = (prefixName: string, thingConfig: ThingConfig): Array<string> => {
   const { name } = thingConfig;
-  const argsArray = [
-    { argName: 'where', argType: `${name}WhereInput` },
-    { argName: 'sort', argType: `${name}SortInput` },
-  ];
 
-  const thingNearInputType = createThingNearInputType(thingConfig);
-  if (thingNearInputType) {
-    argsArray.push({ argName: 'near', argType: `${name}NearInput` });
-  }
-
-  const thingPaginationInputType = createThingPaginationInputType(thingConfig);
-  if (thingPaginationInputType) {
-    argsArray.push({ argName: 'pagination', argType: `${name}PaginationInput` });
-  }
-
-  const args1 = argsArray.map(({ argName, argType }) => `$${argName}: ${argType}`).join(', ');
-  const args2 = argsArray.map(({ argName }) => `${argName}: $${argName}`).join(', ');
+  const { args1, args2 } = composeOptionalActionArgs(thingConfig, composeDerivativeThingsQuery);
 
   return [`query ${prefixName}_${pluralize(name)}(${args1}) {`, `  ${pluralize(name)}(${args2}) {`];
 };

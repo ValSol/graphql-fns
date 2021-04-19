@@ -2,11 +2,11 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeUploadFilesToThing from './composeDerivativeUploadFilesToThing';
+import composeDerivativeUploadFilesToThingMutation from './composeDerivativeUploadFilesToThingMutation';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
 
-describe('composeDerivativeUploadFilesToThing', () => {
+describe('composeDerivativeUploadFilesToThingMutation', () => {
   test('should return correct derivative config', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
@@ -52,7 +52,7 @@ describe('composeDerivativeUploadFilesToThing', () => {
       derivative,
     };
 
-    const result = composeDerivativeUploadFilesToThing(ForCatalog);
+    const result = composeDerivativeUploadFilesToThingMutation(ForCatalog);
 
     const expectedResult = {
       name: 'uploadFilesToThingForCatalog',

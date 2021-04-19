@@ -1,7 +1,8 @@
 // @flow
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingReorderCreatedInputType from '../../types/inputs/createThingReorderCreatedInputType';
+import composeDerivativeUpdateThingMutation from '../../utils/mergeDerivativeIntoCustom/composeDerivativeUpdateThingMutation';
+import composeOptionalActionArgs from '../utils/composeOptionalActionArgs';
 
 const composeUpdateThingMutationArgs = (
   prefixName: string,
@@ -9,15 +10,14 @@ const composeUpdateThingMutationArgs = (
 ): Array<string> => {
   const { name } = thingConfig;
 
-  const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
-
-  const reorderField = thingReorderCreatedInputType
-    ? [`, $positions: ${name}ReorderCreatedInput`, ', positions: $positions']
-    : ['', ''];
+  const { args1, args2 } = composeOptionalActionArgs(
+    thingConfig,
+    composeDerivativeUpdateThingMutation,
+  );
 
   const result = [
-    `mutation ${prefixName}_update${name}($whereOne: ${name}WhereOneInput!, $data: ${name}UpdateInput!${reorderField[0]}) {`,
-    `  update${name}(whereOne: $whereOne, data: $data${reorderField[1]}) {`,
+    `mutation ${prefixName}_update${name}(${args1}) {`,
+    `  update${name}(${args2}) {`,
   ];
 
   return result;

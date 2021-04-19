@@ -10,6 +10,7 @@ const ordinaryActionTypes = {
   things: 'Query',
   importThings: 'Mutation',
   uploadFilesToThing: 'Mutation',
+  uploadThingFiles: 'Mutation',
   createManyThings: 'Mutation',
   createThing: 'Mutation',
   deleteThing: 'Mutation',

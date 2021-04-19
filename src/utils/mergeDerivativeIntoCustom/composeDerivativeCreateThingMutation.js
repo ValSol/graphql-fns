@@ -1,27 +1,15 @@
 // @flow
 import type { ActionSignatureMethods, DerivativeAttributes } from '../../flowTypes';
 
-import createFilesOfThingOptionsInputType from '../../types/inputs/createFilesOfThingOptionsInputType';
 import createThingReorderCreatedInputType from '../../types/inputs/createThingReorderCreatedInputType';
-import createUploadFilesToThingInputType from '../../types/inputs/createUploadFilesToThingInputType';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeArgs from './composeArgs';
 
-const predicates = [
-  () => true,
-  createThingReorderCreatedInputType,
-  createFilesOfThingOptionsInputType,
-  createUploadFilesToThingInputType,
-];
+const predicates = [() => true, createThingReorderCreatedInputType];
 
-const argNames = [() => 'data', () => 'positions', () => 'optionsForUpload', () => 'dataForUpload'];
+const argNames = [() => 'data', () => 'positions'];
 
-const argTypes = [
-  (name) => `${name}CreateInput!`,
-  (name) => `${name}ReorderCreatedInput`,
-  (name) => `FilesOf${name}OptionsInput`,
-  (name) => `UploadFilesTo${name}Input`,
-];
+const argTypes = [(name) => `${name}CreateInput!`, (name) => `${name}ReorderCreatedInput`];
 
 const composeDerivativeCreateThingMutation = ({
   allow,

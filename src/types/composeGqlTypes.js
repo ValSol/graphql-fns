@@ -38,6 +38,7 @@ import createImportThingsMutationType from './mutations/createImportThingsMutati
 import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
 import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
 import createUploadFilesToThingMutationType from './mutations/createUploadFilesToThingMutationType';
+import createUploadThingFilesMutationType from './mutations/createUploadThingFilesMutationType';
 
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
@@ -263,43 +264,54 @@ ${thingQueryTypes.join('\n')}
 
     Object.keys(thingConfigs)
       .map((thingName) => thingConfigs[thingName])
-      .filter(({ embedded, file }) => !(embedded || file))
+      .filter(({ embedded }) => !embedded)
       .reduce((prev, thingConfig) => {
-        const { name } = thingConfig;
-        if (checkInventory(['Mutation', 'createThing', name], inventory)) {
-          prev.push(createCreateThingMutationType(thingConfig));
-
-          if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
-            prev.push(createCreateManyThingsMutationType(thingConfig));
+        const { name, file } = thingConfig;
+        if (file) {
+          if (checkInventory(['Mutation', 'uploadThingFiles', name], inventory)) {
+            prev.push(createUploadThingFilesMutationType(thingConfig));
           }
+        } else {
+          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
+            prev.push(createCreateThingMutationType(thingConfig));
 
-          if (checkInventory(['Mutation', 'importThings', name], inventory)) {
-            prev.push(createImportThingsMutationType(thingConfig));
+            if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
+              prev.push(createCreateManyThingsMutationType(thingConfig));
+            }
+
+            if (checkInventory(['Mutation', 'importThings', name], inventory)) {
+              prev.push(createImportThingsMutationType(thingConfig));
+            }
           }
-        }
-        if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
-          const pushIntoThingMutationType = createPushIntoThingMutationType(thingConfig);
-          if (pushIntoThingMutationType) prev.push(pushIntoThingMutationType);
-        }
-        if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
-          prev.push(createUpdateThingMutationType(thingConfig));
-        }
-        if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
-          prev.push(createDeleteThingMutationType(thingConfig));
-        }
-        if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
-          const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(thingConfig);
-          if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
-        }
-
-        customMutationNames.forEach((customName) => {
-          if (checkInventory(['Mutation', customName, name], inventory)) {
-            prev.push(
-              `  ${composeActionSignature(customMutation[customName], thingConfig, generalConfig)}`,
+          if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
+            const pushIntoThingMutationType = createPushIntoThingMutationType(thingConfig);
+            if (pushIntoThingMutationType) prev.push(pushIntoThingMutationType);
+          }
+          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
+            prev.push(createUpdateThingMutationType(thingConfig));
+          }
+          if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
+            prev.push(createDeleteThingMutationType(thingConfig));
+          }
+          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
+            const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(
+              thingConfig,
             );
+            if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
           }
-        });
 
+          customMutationNames.forEach((customName) => {
+            if (checkInventory(['Mutation', customName, name], inventory)) {
+              prev.push(
+                `  ${composeActionSignature(
+                  customMutation[customName],
+                  thingConfig,
+                  generalConfig,
+                )}`,
+              );
+            }
+          });
+        }
         return prev;
       }, thingMutationTypes);
   }

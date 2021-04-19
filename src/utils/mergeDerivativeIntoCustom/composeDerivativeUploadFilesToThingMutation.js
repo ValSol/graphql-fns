@@ -30,7 +30,7 @@ const argTypes = [
   (name) => `${name}ReorderUploadedInput`,
 ];
 
-const composeDerivativeUploadFilesToThing = ({
+const composeDerivativeUploadFilesToThingMutation = ({
   allow,
   suffix,
 }: DerivativeAttributes): ActionSignatureMethods => ({
@@ -52,4 +52,4 @@ const composeDerivativeUploadFilesToThing = ({
     composeDerivativeConfigByName(suffix, thingConfig, generalConfig),
 });
 
-export default composeDerivativeUploadFilesToThing;
+export default composeDerivativeUploadFilesToThingMutation;

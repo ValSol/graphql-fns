@@ -12,7 +12,9 @@ const composeArgs = (
   generalConfig: GeneralConfig,
 ): Array<string> => {
   const { name } = thingConfig;
-  const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
+  const derivativeConfig = suffix
+    ? composeDerivativeConfigByName(suffix, thingConfig, generalConfig)
+    : thingConfig; // empty suffix for 'fakeDerivativeAction' for client functionality
   return nameGenerators
     .map((nameGenerator) => nameGenerator(name))
     .filter((foo, i) => predicates[i](derivativeConfig));
