@@ -18,13 +18,13 @@ const composeDerivativePushIntoThingMutation = ({
   name: `pushIntoThing${suffix}`,
   specificName: (thingConfig, generalConfig) => {
     const { name } = thingConfig;
+    if (!(allow[name] && allow[name].includes('pushIntoThing'))) return '';
+
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
     const pushInto = createPushIntoThingInputType(derivativeConfig);
 
-    return pushInto && allow[name] && allow[name].includes('pushIntoThing')
-      ? `pushInto${name}${suffix}`
-      : '';
+    return pushInto ? `pushInto${name}${suffix}` : '';
   },
   argNames: composeArgs(argNames, predicates, suffix),
   argTypes: composeArgs(argTypes, predicates, suffix),

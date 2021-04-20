@@ -37,13 +37,13 @@ const composeDerivativeUploadFilesToThingMutation = ({
   name: `uploadFilesToThing${suffix}`,
   specificName: (thingConfig, generalConfig) => {
     const { name } = thingConfig;
+    if (!(allow[name] && allow[name].includes('uploadFilesToThing'))) return '';
+
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
     const filesInput = createFilesOfThingOptionsInputType(derivativeConfig);
 
-    return filesInput && allow[name] && allow[name].includes('uploadFilesToThing')
-      ? `uploadFilesTo${name}${suffix}`
-      : '';
+    return filesInput ? `uploadFilesTo${name}${suffix}` : '';
   },
   argNames: composeArgs(argNames, predicates, suffix),
   argTypes: composeArgs(argTypes, predicates, suffix),

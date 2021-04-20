@@ -70,14 +70,14 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     createThingType(thingConfigs[thingName]),
   );
 
-  const derivativeConfigNames = Object.keys(derivativeConfigs);
+  const derivativeSuffixes = Object.keys(derivativeConfigs);
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded, file }) => !(embedded || file))
+    .filter(({ embedded }) => !embedded)
     .reduce((prev, thingConfig) => {
-      derivativeConfigNames.forEach((derivativeConfigName) => {
+      derivativeSuffixes.forEach((derivativeSuffix) => {
         const derivativeConfig = composeDerivativeConfig(
-          derivativeConfigs[derivativeConfigName],
+          derivativeConfigs[derivativeSuffix],
           thingConfig,
           generalConfig,
         );

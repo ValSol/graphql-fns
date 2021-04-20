@@ -19,13 +19,13 @@ const composeDerivativeThingDistinctValuesQuery = ({
   name: `thingDistinctValues${suffix}`,
   specificName: (thingConfig, generalConfig) => {
     const { name } = thingConfig;
+    if (!(allow[name] && allow[name].includes('thingDistinctValues'))) return '';
+
     const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
 
     const distinctValues = createThingDistinctValuesOptionsInputType(derivativeConfig);
 
-    return distinctValues && allow[name] && allow[name].includes('thingDistinctValues')
-      ? `${name}DistinctValues${suffix}`
-      : '';
+    return distinctValues ? `${name}DistinctValues${suffix}` : '';
   },
   argNames: composeArgs(argNames, predicates, suffix),
   argTypes: composeArgs(argTypes, predicates, suffix),

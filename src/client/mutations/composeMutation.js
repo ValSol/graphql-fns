@@ -11,6 +11,7 @@ import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
 import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
 import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
 import composeUploadFilesToThingMutationArgs from './composeUploadFilesToThingMutationArgs';
+import composeUploadThingFilesMutationArgs from './composeUploadThingFilesMutationArgs';
 
 const composeMutation = (
   prefixName: string,
@@ -54,6 +55,10 @@ const composeMutation = (
 
     case 'uploadFilesToThing':
       head = composeUploadFilesToThingMutationArgs(prefixName, thingConfig);
+      break;
+
+    case 'uploadThingFiles':
+      head = composeUploadThingFilesMutationArgs(prefixName, thingConfig);
       break;
 
     default:

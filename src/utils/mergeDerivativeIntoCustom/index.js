@@ -5,6 +5,9 @@ import composeDerivativeThingCountQuery from './composeDerivativeThingCountQuery
 import composeDerivativeThingDistinctValuesQuery from './composeDerivativeThingDistinctValuesQuery';
 import composeDerivativeThingQuery from './composeDerivativeThingQuery';
 import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
+import composeDerivativeThingFileCountQuery from './composeDerivativeThingFileCountQuery';
+import composeDerivativeThingFileQuery from './composeDerivativeThingFileQuery';
+import composeDerivativeThingFilesQuery from './composeDerivativeThingFilesQuery';
 
 import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
 import composeDerivativeCreateThingMutation from './composeDerivativeCreateThingMutation';
@@ -13,6 +16,7 @@ import composeDerivativeImportThingsMutation from './composeDerivativeImportThin
 import composeDerivativePushIntoThingMutation from './composeDerivativePushIntoThingMutation';
 import composeDerivativeUpdateThingMutation from './composeDerivativeUpdateThingMutation';
 import composeDerivativeUploadFilesToThingMutation from './composeDerivativeUploadFilesToThingMutation';
+import composeDerivativeUploadThingFilesMutation from './composeDerivativeUploadThingFilesMutation';
 
 const store = {};
 
@@ -54,6 +58,18 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
         derivative[suffix],
       );
     }
+    if (allowedMethods.thingFileCount) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingFileCount${suffix}`] = composeDerivativeThingFileCountQuery(derivative[suffix]);
+    }
+    if (allowedMethods.thingFile) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingFile${suffix}`] = composeDerivativeThingFileQuery(derivative[suffix]);
+    }
+    if (allowedMethods.thingFiles) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingFiles${suffix}`] = composeDerivativeThingFilesQuery(derivative[suffix]);
+    }
 
     return prev;
   }, {});
@@ -91,6 +107,12 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     if (allowedMethods.uploadFilesToThing) {
       // eslint-disable-next-line no-param-reassign
       prev[`uploadFilesToThing${suffix}`] = composeDerivativeUploadFilesToThingMutation(
+        derivative[suffix],
+      );
+    }
+    if (allowedMethods.uploadThingFiles) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`uploadThingFiles${suffix}`] = composeDerivativeUploadThingFilesMutation(
         derivative[suffix],
       );
     }

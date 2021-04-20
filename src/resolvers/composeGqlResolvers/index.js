@@ -29,6 +29,7 @@ import createPushIntoThingMutationResolver from '../mutations/createPushIntoThin
 import createUpdateThingMutationResolver from '../mutations/createUpdateThingMutationResolver';
 import createDeleteThingMutationResolver from '../mutations/createDeleteThingMutationResolver';
 import createUploadFilesToThingMutationResolver from '../mutations/createUploadFilesToThingMutationResolver';
+import createUploadThingFilesMutationResolver from '../mutations/createUploadThingFilesMutationResolver';
 
 import createCreatedThingSubscriptionResolver from '../subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from '../subscriptions/createUpdatedThingSubscriptionResolver';
@@ -285,6 +286,18 @@ const composeGqlResolvers = (
         // eslint-disable-next-line no-param-reassign
         if (thingFilesQueryResolver) prev.Query[`${name}Files`] = thingFilesQueryResolver;
       }
+      if (allowMutations) {
+        const uploadThingFilesMutationResolver = createUploadThingFilesMutationResolver(
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        if (uploadThingFilesMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[`upload${name}Files`] = uploadThingFilesMutationResolver;
+        }
+      }
+
       return prev;
     }, resolvers);
 
