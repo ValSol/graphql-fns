@@ -4,7 +4,7 @@ import ExcelJS from 'exceljs';
 
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
-import composeSpecificActionName from '../composeSpecificActionName';
+import composeSpecificActionName from '../../composeSpecificActionName';
 import composeWorksheetName from '../composeWorksheetName';
 import fitWidth from '../fitWidth';
 import ordinaryActionTypes from '../ordinaryActionTypes';

@@ -122,7 +122,7 @@ describe('composeDerivativeThingCountQuery', () => {
 
   test('should return inputs for "paginationThingConfig"', () => {
     const expectedResult = {
-      name: 'thingsForCatalog',
+      name: 'thingCountForCatalog',
       specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingCount')
           ? `${name}CountForCatalog`
@@ -146,7 +146,7 @@ describe('composeDerivativeThingCountQuery', () => {
 
   test('should return inputs for "nearThingConfig"', () => {
     const expectedResult = {
-      name: 'thingsForCatalog',
+      name: 'thingCountForCatalog',
       specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingCount')
           ? `${name}CountForCatalog`

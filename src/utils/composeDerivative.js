@@ -4,6 +4,24 @@ import type { DerivativeAttributes } from '../flowTypes';
 
 type Result = { [derivativeName: string]: DerivativeAttributes };
 
+const actionGenericNames = [
+  'thing',
+  'thingCount',
+  'thingDistinctValues',
+  'things',
+  'thingFileCount',
+  'thingFile',
+  'thingFiles',
+  'createThing',
+  'createManyThings',
+  'deleteThing',
+  'importThings',
+  'pushIntoThing',
+  'updateThing',
+  'uploadFilesToThing',
+  'uploadThingFiles',
+];
+
 const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes>): Result => {
   const result = derivativeAttributesArray.reduce((prev, item) => {
     const { suffix } = item;
@@ -23,7 +41,14 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
 
   const derivativeKeys = Object.keys(result);
 
-  derivativeAttributesArray.forEach(({ derivativeFields, suffix }) => {
+  derivativeAttributesArray.forEach(({ allow, derivativeFields, suffix }) => {
+    Object.keys(allow).forEach((key) => {
+      allow[key].forEach((actionGenericName) => {
+        if (!actionGenericNames.includes(actionGenericName)) {
+          throw new TypeError(`Incorrect action generic name: "${actionGenericName}"!`);
+        }
+      });
+    });
     if (derivativeFields) {
       Object.keys(derivativeFields).forEach((thingName) => {
         const thingDerivativeFields = derivativeFields[thingName];

@@ -2,7 +2,7 @@
 
 import type { DerivativeAttributes } from '../../../flowTypes';
 
-import composeSpecificActionName from '../composeSpecificActionName';
+import composeSpecificActionName from '../../composeSpecificActionName';
 import ordinaryActionTypes from '../ordinaryActionTypes';
 
 type Args = {

@@ -36,7 +36,7 @@ describe('composeDerivativeThingFileQuery', () => {
     const result = composeDerivativeThingFileQuery(ForCatalog);
 
     const expectedResult = {
-      name: 'thingFile',
+      name: 'thingFileForCatalog',
       specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingFile')
           ? `${name}FileForCatalog`

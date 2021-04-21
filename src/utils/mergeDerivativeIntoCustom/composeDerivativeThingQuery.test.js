@@ -35,7 +35,7 @@ describe('composeDerivativeThingQuery', () => {
     const result = composeDerivativeThingQuery(ForCatalog);
 
     const expectedResult = {
-      name: 'thing',
+      name: 'thingForCatalog',
       specificName: ({ name }) =>
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('thing')
           ? `${name}ForCatalog`

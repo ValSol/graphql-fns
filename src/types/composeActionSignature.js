@@ -1,22 +1,34 @@
 // @flow
 import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../flowTypes';
 
+import composeSpecificActionName from '../utils/composeSpecificActionName';
+
 const composeActionSignature = (
   signatureMethods: ActionSignatureMethods,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
 ): string => {
   const {
+    name: actionName,
     specificName: composeName,
     argNames: composeArgNames,
     argTypes: composeArgTypes,
     type: composeType,
   } = signatureMethods;
 
-  const name = composeName(thingConfig, generalConfig);
+  const specificName = composeName(thingConfig, generalConfig);
 
   // by making name = '' filter unnecessary action
-  if (!name) return '';
+  if (!specificName) return '';
+
+  // *** test correctness of the specificName name
+  const { name: thingName } = thingConfig;
+  if (specificName !== composeSpecificActionName({ actionName, thingName })) {
+    throw new TypeError(
+      `Specific action name: "${specificName}" is not corresponding with generic action name "${actionName}"!`,
+    );
+  }
+  // ***
 
   const argNames = composeArgNames(thingConfig, generalConfig);
   const argTypes = composeArgTypes(thingConfig, generalConfig);
@@ -28,7 +40,9 @@ const composeActionSignature = (
 
   const args = argNames.map((argName, i) => `${argName}: ${argTypes[i]}`).join(', ');
 
-  return argNames.length ? `${name}(${args}): ${returningType}` : `${name}: ${returningType}`;
+  return argNames.length
+    ? `${specificName}(${args}): ${returningType}`
+    : `${specificName}: ${returningType}`;
 };
 
 export default composeActionSignature;
