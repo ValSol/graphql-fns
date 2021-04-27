@@ -10,9 +10,13 @@ describe('createThingWhereOneInputType', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const expectedResult = `input ExampleWhereOneInput {
+    const expectedResult = [
+      'ExampleWhereOneInput',
+      `input ExampleWhereOneInput {
   id: ID!
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingWhereOneInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -38,11 +42,15 @@ describe('createThingWhereOneInputType', () => {
         },
       ],
     });
-    const expectedResult = `input ExampleWhereOneInput {
+    const expectedResult = [
+      'ExampleWhereOneInput',
+      `input ExampleWhereOneInput {
   id: ID
   original: ID
   copy: ID
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingWhereOneInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -82,16 +90,21 @@ describe('createThingWhereOneInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleWhereOneInput {
+    const expectedResult = [
+      'ExampleWhereOneInput',
+      `input ExampleWhereOneInput {
   id: ID
   email: ID
   userId: ID
   perosonaNum: Int
   perosonaNumber: Float
   birthday: DateTime
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingWhereOneInputType(thingConfig);
+
     expect(result).toEqual(expectedResult);
   });
 });

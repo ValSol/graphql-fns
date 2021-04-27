@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createCreateThingMutationType from './createCreateThingMutationType';
+import createThingMutationAttributes from '../actionAttributes/createThingMutationAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createCreateThingMutationType', () => {
   test('should create mutation add thing type', () => {
@@ -11,8 +12,10 @@ describe('createCreateThingMutationType', () => {
       name: 'Example',
     };
     const expectedResult = '  createExample(data: ExampleCreateInput!): Example!';
+    const dic = {};
 
-    const result = createCreateThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, createThingMutationAttributes, dic);
+
     expect(result).toEqual(expectedResult);
   });
 
@@ -50,7 +53,9 @@ describe('createCreateThingMutationType', () => {
     const expectedResult =
       '  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!';
 
-    const result = createCreateThingMutationType(personConfig);
+    const dic = {};
+
+    const result = composeStandardActionSignature(personConfig, createThingMutationAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -1,11 +1,12 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createThingReorderCreatedInputType = (thingConfig: ThingConfig): string => {
+const createThingReorderCreatedInputType: InputCreator = (thingConfig) => {
   const { duplexFields, relationalFields, name } = thingConfig;
 
-  // const thingTypeArray = [`input ${name}UpdateInput {`];
+  const inputName = `${name}ReorderCreatedInput`;
+
   const thingTypeArray = [];
 
   if (relationalFields) {
@@ -27,14 +28,14 @@ const createThingReorderCreatedInputType = (thingConfig: ThingConfig): string =>
     }, thingTypeArray);
   }
 
-  if (!thingTypeArray.length) return '';
+  if (!thingTypeArray.length) return [inputName, '', {}];
 
   thingTypeArray.unshift(`input ${name}ReorderCreatedInput {`);
   thingTypeArray.push('}');
 
-  const result = thingTypeArray.join('\n');
+  const inputDefinition = thingTypeArray.join('\n');
 
-  return result;
+  return [inputName, inputDefinition, {}];
 };
 
 export default createThingReorderCreatedInputType;

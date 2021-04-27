@@ -2,15 +2,16 @@
 import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
 import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
-import composeThingQueryArgs from './composeThingQueryArgs';
-import composeThingsQueryArgs from './composeThingsQueryArgs';
-import composeThingCountQueryArgs from './composeThingCountQueryArgs';
-import composeThingFileCountQueryArgs from './composeThingFileCountQueryArgs';
-import composeThingDistinctValuesQueryArgs from './composeThingDistinctValuesQueryArgs';
-import composeThingFileQueryArgs from './composeThingFileQueryArgs';
-import composeThingFilesQueryArgs from './composeThingFilesQueryArgs';
+import thingCountQueryAttributes from '../../types/actionAttributes/thingCountQueryAttributes';
+import thingDistinctValuesQueryAttributes from '../../types/actionAttributes/thingDistinctValuesQueryAttributes';
+import thingFileCountQueryAttributes from '../../types/actionAttributes/thingFileCountQueryAttributes';
+import thingFileQueryAttributes from '../../types/actionAttributes/thingFileQueryAttributes';
+import thingFilesQueryAttributes from '../../types/actionAttributes/thingFilesQueryAttributes';
+import thingQueryAttributes from '../../types/actionAttributes/thingQueryAttributes';
+import thingsQueryAttributes from '../../types/actionAttributes/thingsQueryAttributes';
 
 const composeQuery = (
   prefixName: string,
@@ -29,28 +30,31 @@ const composeQuery = (
 
   switch (queryName) {
     case 'thing':
-      head = composeThingQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingQueryAttributes);
       break;
 
     case 'things':
-      head = composeThingsQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
       break;
 
     case 'thingCount':
-      return composeThingCountQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes);
+      break;
 
     case 'thingFileCount':
-      return composeThingFileCountQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingFileCountQueryAttributes);
+      break;
 
     case 'thingDistinctValues':
-      return composeThingDistinctValuesQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingDistinctValuesQueryAttributes);
+      break;
 
     case 'thingFile':
-      head = composeThingFileQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingFileQueryAttributes);
       break;
 
     case 'thingFiles':
-      head = composeThingFilesQueryArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, thingFilesQueryAttributes);
       break;
 
     default:
@@ -82,6 +86,8 @@ const composeQuery = (
         return [...head.slice(0, -1), tail, '}'].join('\n');
       }
   }
+
+  if (head.length === 1) return head[0];
 
   const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });
 

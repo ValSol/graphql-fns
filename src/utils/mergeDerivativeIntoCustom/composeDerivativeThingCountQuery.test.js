@@ -3,8 +3,9 @@
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingCountQuery from './composeDerivativeThingCountQuery';
+import thingCountQueryAttributes from '../../types/actionAttributes/thingCountQueryAttributes';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeThingCountQuery', () => {
   const thingConfig: ThingConfig = {
@@ -78,7 +79,7 @@ describe('composeDerivativeThingCountQuery', () => {
     derivative,
   };
 
-  const result = composeDerivativeThingCountQuery(ForCatalog);
+  const result = composeCustomAction(ForCatalog, thingCountQueryAttributes);
 
   test('should return inputs for "thingConfig"', () => {
     const expectedResult = {
@@ -88,7 +89,7 @@ describe('composeDerivativeThingCountQuery', () => {
           ? `${name}CountForCatalog`
           : '',
       argNames: () => ['where'],
-      argTypes: ({ name }) => [`${name}WhereInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       type: () => 'Int!',
       config: () => null,
     };
@@ -108,7 +109,7 @@ describe('composeDerivativeThingCountQuery', () => {
           ? `${name}CountForCatalog`
           : '',
       argNames: () => ['where'],
-      argTypes: ({ name }) => [`${name}WhereInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       type: () => 'Int!',
       config: () => null,
     };
@@ -128,7 +129,7 @@ describe('composeDerivativeThingCountQuery', () => {
           ? `${name}CountForCatalog`
           : '',
       argNames: () => ['where'],
-      argTypes: ({ name }) => [`${name}WhereInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       type: () => 'Int!',
       config: () => null,
     };
@@ -152,7 +153,7 @@ describe('composeDerivativeThingCountQuery', () => {
           ? `${name}CountForCatalog`
           : '',
       argNames: () => ['where', 'near'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}NearInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogNearInput`],
       type: () => 'Int!',
       config: () => null,
     };

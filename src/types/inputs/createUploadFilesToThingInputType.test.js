@@ -3,6 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+import createThingUpdateInputType from './createThingUpdateInputType';
 import createUploadFilesToThingInputType from './createUploadFilesToThingInputType';
 
 describe('createUploadFilesToThingInputType', () => {
@@ -33,7 +34,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -56,7 +57,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -93,7 +94,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     });
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToPersonInput', '', {}];
 
     const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -118,7 +119,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToAddressInput', '', {}];
 
     const result = createUploadFilesToThingInputType(addressConfig);
     expect(result).toEqual(expectedResult);
@@ -174,7 +175,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToPersonInput', '', {}];
 
     const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -238,7 +239,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     });
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToPersonInput', '', {}];
 
     const result = createUploadFilesToThingInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -290,7 +291,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -322,7 +323,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -355,7 +356,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -388,7 +389,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -421,7 +422,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToExampleInput', '', {}];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -441,7 +442,7 @@ describe('createUploadFilesToThingInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['UploadFilesToImageInput', '', {}];
 
     const result = createUploadFilesToThingInputType(imageConfig);
     expect(result).toEqual(expectedResult);
@@ -493,12 +494,16 @@ describe('createUploadFilesToThingInputType', () => {
       ],
     });
 
-    const expectedResult = `input UploadFilesToExampleInput {
+    const expectedResult = [
+      'UploadFilesToExampleInput',
+      `input UploadFilesToExampleInput {
   logo: ImageUpdateInput
   hero: ImageUpdateInput
   pictures: [ImageUpdateInput!]
   photos: [ImageUpdateInput!]
-}`;
+}`,
+      { ImageUpdateInput: [createThingUpdateInputType, imageConfig] },
+    ];
 
     const result = createUploadFilesToThingInputType(thingConfig);
     expect(result).toEqual(expectedResult);

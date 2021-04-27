@@ -1,8 +1,8 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
+const createThingWhereOneInputType: InputCreator = (thingConfig) => {
   const {
     dateTimeFields,
     duplexFields,
@@ -12,6 +12,8 @@ const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
     relationalFields,
     textFields,
   } = thingConfig;
+
+  const inputName = `${name}WhereOneInput`;
 
   const fieldLines = [];
 
@@ -57,18 +59,17 @@ const createThingWhereOneInputType = (thingConfig: ThingConfig): string => {
     }, fieldLines);
   }
 
-  const uniqueFields = fieldLines.join('\n');
-
-  if (uniqueFields) {
-    return `input ${name}WhereOneInput {
-  id: ID
-${uniqueFields}
-}`;
+  if (fieldLines.length) {
+    fieldLines.unshift('  id: ID');
+  } else {
+    fieldLines.unshift('  id: ID!');
   }
 
-  return `input ${name}WhereOneInput {
-  id: ID!
+  const inputDefinition = `input ${name}WhereOneInput {
+${fieldLines.join('\n')}
 }`;
+
+  return [inputName, inputDefinition, {}];
 };
 
 export default createThingWhereOneInputType;

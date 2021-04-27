@@ -38,7 +38,7 @@ describe('composeObjectSignature', () => {
 
   test('should return correct custom return object type', () => {
     const thingWithRating: ObjectSignatureMethods = {
-      name: 'thingTimeRangeInput',
+      name: 'thingWithRating',
       specificName: ({ name }) => `${name}WithRating`,
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],
@@ -70,7 +70,7 @@ describe('composeObjectSignature', () => {
 
   test('should return empty string for custom return object type', () => {
     const thingWithRating: ObjectSignatureMethods = {
-      name: 'thingTimeRangeInput',
+      name: 'thingWithRating',
       specificName: ({ name }) => (name === 'Example' ? '' : `${name}WithRating`),
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],

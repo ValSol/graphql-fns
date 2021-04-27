@@ -106,6 +106,7 @@ describe('graphql schema', () => {
     ];
     const generalConfig: GeneralConfig = { thingConfigs, enums };
     const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -168,10 +169,12 @@ describe('graphql schema', () => {
     const generalConfig: GeneralConfig = { thingConfigs };
     const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     const resolvers = composeGqlResolvers(generalConfig);
+
     const schema = makeExecutableSchema({
       typeDefs,
       resolvers,
     });
+
     expect(schema).not.toBeUndefined();
   });
 

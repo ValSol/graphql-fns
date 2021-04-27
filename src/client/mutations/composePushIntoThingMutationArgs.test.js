@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composePushIntoThingMutationArgs from './composePushIntoThingMutationArgs';
+import pushIntoThingMutationAttributes from '../../types/actionAttributes/pushIntoThingMutationAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composePushIntoThingMutationArgs', () => {
   test('should compose pushIntoThing mutation args ', () => {
@@ -13,6 +14,7 @@ describe('composePushIntoThingMutationArgs', () => {
       textFields: [
         {
           name: 'textField',
+          array: true,
         },
       ],
     };
@@ -22,7 +24,7 @@ describe('composePushIntoThingMutationArgs', () => {
       '  pushIntoExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composePushIntoThingMutationArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, pushIntoThingMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

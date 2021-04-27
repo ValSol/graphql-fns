@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingQueryArgs from './composeThingQueryArgs';
+import thingQueryAttributes from '../../types/actionAttributes/thingQueryAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeThingQueryArgs', () => {
   test('should compose thing query args ', () => {
@@ -22,7 +23,7 @@ describe('composeThingQueryArgs', () => {
       '  Example(whereOne: $whereOne) {',
     ];
 
-    const result = composeThingQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

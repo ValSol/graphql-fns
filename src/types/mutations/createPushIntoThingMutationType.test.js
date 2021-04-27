@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createPushIntoThingMutationType from './createPushIntoThingMutationType';
+import pushIntoThingMutationAttributes from '../actionAttributes/pushIntoThingMutationAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createPushIntoThingMutationType', () => {
   test('should push mutation add thing type', () => {
@@ -35,8 +36,13 @@ describe('createPushIntoThingMutationType', () => {
     };
     const expectedResult =
       '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!';
+    const dic = {};
 
-    const result = createPushIntoThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      pushIntoThingMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -58,8 +64,13 @@ describe('createPushIntoThingMutationType', () => {
       ],
     };
     const expectedResult = '';
+    const dic = {};
 
-    const result = createPushIntoThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      pushIntoThingMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

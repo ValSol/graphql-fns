@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadThingFilesMutationType from './createUploadThingFilesMutationType';
+import uploadThingFilesMutationAttributes from '../actionAttributes/uploadThingFilesMutationAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createUploadThingFilesMutationType', () => {
   test('should create mutation upload file thing type', () => {
@@ -22,7 +23,33 @@ describe('createUploadThingFilesMutationType', () => {
 
     const expectedResult = '  uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!';
 
-    const result = createUploadThingFilesMutationType(imageConfig);
+    const dic = {};
+
+    const result = composeStandardActionSignature(
+      imageConfig,
+      uploadThingFilesMutationAttributes,
+      dic,
+    );
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create empty string if theris not file thing', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'first name',
+        },
+      ],
+    };
+    const expectedResult = '';
+    const dic = {};
+
+    const result = composeStandardActionSignature(
+      thingConfig,
+      uploadThingFilesMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

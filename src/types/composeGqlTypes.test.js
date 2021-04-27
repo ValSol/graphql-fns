@@ -111,6 +111,7 @@ describe('composeGqlTypes', () => {
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
     const generalConfig: GeneralConfig = { thingConfigs, enums };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
@@ -140,13 +141,6 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -168,185 +162,6 @@ type Image {
   id: ID!
   fileId: String!
   address: String
-}
-input ExampleCreateInput {
-  id: ID
-  textField1: String
-  textField2: String
-  textField3: String!
-  textField4: [String!]
-  textField5: [String!]!
-  day: WeekdaysEnumeration
-  cuisines: [CuisinesEnumeration!]!
-  logo: ImageCreateInput!
-  hero: ImageCreateInput
-  pictures: [ImageCreateInput!]!
-  photos: [ImageCreateInput!]
-  position: GeospatialPointInput
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-}
-input PushIntoExampleInput {
-  textField4: [String!]
-  textField5: [String!]
-  cuisines: [CuisinesEnumeration!]
-  pictures: [ImageCreateInput!]
-  photos: [ImageCreateInput!]
-}
-input ExampleUpdateInput {
-  textField1: String
-  textField2: String
-  textField3: String
-  textField4: [String!]
-  textField5: [String!]
-  day: WeekdaysEnumeration
-  cuisines: [CuisinesEnumeration!]
-  logo: ImageUpdateInput
-  hero: ImageUpdateInput
-  pictures: [ImageUpdateInput!]
-  photos: [ImageUpdateInput!]
-  position: GeospatialPointInput
-}
-enum ExampleFileNamesEnum {
-  logo
-  hero
-  pictures
-  photos
-}
-input FilesOfExampleOptionsInput {
-  targets: [ExampleFileNamesEnum!]!
-  counts: [Int!]!
-  hashes: [String!]!
-}
-input UploadFilesToExampleInput {
-  logo: ImageUpdateInput
-  hero: ImageUpdateInput
-  pictures: [ImageUpdateInput!]
-  photos: [ImageUpdateInput!]
-}
-input ExampleReorderUploadedInput {
-  pictures: [Int!]
-  photos: [Int!]
-}
-input ImageCreateInput {
-  fileId: String!
-  address: String
-}
-input ImageUpdateInput {
-  fileId: String
-  address: String
-}
-enum ExampleTextNamesEnum {
-  textField1
-  textField2
-  textField3
-  textField4
-  textField5
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
-input FileWhereOneInput {
-  id: ID
-  hash: String
-}
-input FileWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  uploadedAt: DateTime
-  uploadedAt_in: [DateTime!]
-  uploadedAt_nin: [DateTime!]
-  uploadedAt_ne: DateTime
-  uploadedAt_gt: DateTime
-  uploadedAt_gte: DateTime
-  uploadedAt_lt: DateTime
-  uploadedAt_lte: DateTime
-  filename_in: [String!]
-  filename_nin: [String!]
-  filename_ne: String
-  mimetype_in: [String!]
-  mimetype_nin: [String!]
-  mimetype_ne: String
-  encoding_in: [String!]
-  encoding_nin: [String!]
-  encoding_ne: String
-  hash_in: [String!]
-  hash_nin: [String!]
-  hash_ne: String
-  AND: [FileWhereInput!]
-  NOR: [FileWhereInput!]
-  OR: [FileWhereInput!]
-}
-input ExampleWhereOneInput {
-  id: ID
-  textField1: ID
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField1_in: [String!]
-  textField1_nin: [String!]
-  textField1_ne: String
-  textField1_re: [RegExp!]
-  textField2: String
-  textField2_in: [String!]
-  textField2_nin: [String!]
-  textField2_ne: String
-  textField2_re: [RegExp!]
-  textField2_exists: Boolean
-  textField3: String
-  textField3_in: [String!]
-  textField3_nin: [String!]
-  textField3_ne: String
-  textField3_re: [RegExp!]
-  textField3_exists: Boolean
-  day: WeekdaysEnumeration
-  day_in: [WeekdaysEnumeration!]
-  day_nin: [WeekdaysEnumeration!]
-  day_ne: WeekdaysEnumeration
-  day_re: [RegExp!]
-  day_exists: Boolean
-  cuisines: CuisinesEnumeration
-  cuisines_in: [CuisinesEnumeration!]
-  cuisines_nin: [CuisinesEnumeration!]
-  cuisines_ne: CuisinesEnumeration
-  cuisines_re: [RegExp!]
-  cuisines_size: Int
-  cuisines_notsize: Int
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -398,6 +213,120 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField1_in: [String!]
+  textField1_nin: [String!]
+  textField1_ne: String
+  textField1_re: [RegExp!]
+  textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
+  textField2_ne: String
+  textField2_re: [RegExp!]
+  textField2_exists: Boolean
+  textField3: String
+  textField3_in: [String!]
+  textField3_nin: [String!]
+  textField3_ne: String
+  textField3_re: [RegExp!]
+  textField3_exists: Boolean
+  day: WeekdaysEnumeration
+  day_in: [WeekdaysEnumeration!]
+  day_nin: [WeekdaysEnumeration!]
+  day_ne: WeekdaysEnumeration
+  day_re: [RegExp!]
+  day_exists: Boolean
+  cuisines: CuisinesEnumeration
+  cuisines_in: [CuisinesEnumeration!]
+  cuisines_nin: [CuisinesEnumeration!]
+  cuisines_ne: CuisinesEnumeration
+  cuisines_re: [RegExp!]
+  cuisines_size: Int
+  cuisines_notsize: Int
+}
+enum ExampleGeospatialFieldNamesEnum {
+  position
+}
+input ExampleNearInput {
+  geospatialField: ExampleGeospatialFieldNamesEnum
+  coordinates: GeospatialPointInput
+  maxDistance: Float
+}
+enum ExampleTextNamesEnum {
+  textField1
+  textField2
+  textField3
+  textField4
+  textField5
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
+input FileWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  uploadedAt: DateTime
+  uploadedAt_in: [DateTime!]
+  uploadedAt_nin: [DateTime!]
+  uploadedAt_ne: DateTime
+  uploadedAt_gt: DateTime
+  uploadedAt_gte: DateTime
+  uploadedAt_lt: DateTime
+  uploadedAt_lte: DateTime
+  filename_in: [String!]
+  filename_nin: [String!]
+  filename_ne: String
+  mimetype_in: [String!]
+  mimetype_nin: [String!]
+  mimetype_ne: String
+  encoding_in: [String!]
+  encoding_nin: [String!]
+  encoding_ne: String
+  hash_in: [String!]
+  hash_nin: [String!]
+  hash_ne: String
+  AND: [FileWhereInput!]
+  NOR: [FileWhereInput!]
+  OR: [FileWhereInput!]
+}
+input FileWhereOneInput {
+  id: ID
+  hash: String
+}
+input ExampleWhereOneInput {
+  id: ID
+  textField1: ID
+}
 enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -413,17 +342,89 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
-input ExamplePaginationInput {
+input PaginationInput {
   skip: Int
   first: Int
 }
-enum ExampleGeospatialFieldNamesEnum {
-  position
+input ExampleCreateInput {
+  id: ID
+  textField1: String
+  textField2: String
+  textField3: String!
+  textField4: [String!]
+  textField5: [String!]!
+  day: WeekdaysEnumeration
+  cuisines: [CuisinesEnumeration!]!
+  logo: ImageCreateInput!
+  hero: ImageCreateInput
+  pictures: [ImageCreateInput!]!
+  photos: [ImageCreateInput!]
+  position: GeospatialPointInput
 }
-input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
-  maxDistance: Float
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+}
+input ImageCreateInput {
+  fileId: String!
+  address: String
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoExampleInput {
+  textField4: [String!]
+  textField5: [String!]
+  cuisines: [CuisinesEnumeration!]
+  pictures: [ImageCreateInput!]
+  photos: [ImageCreateInput!]
+}
+input ExampleUpdateInput {
+  textField1: String
+  textField2: String
+  textField3: String
+  textField4: [String!]
+  textField5: [String!]
+  day: WeekdaysEnumeration
+  cuisines: [CuisinesEnumeration!]
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
+  position: GeospatialPointInput
+}
+input ImageUpdateInput {
+  fileId: String
+  address: String
+}
+input UploadFilesToExampleInput {
+  logo: ImageUpdateInput
+  hero: ImageUpdateInput
+  pictures: [ImageUpdateInput!]
+  photos: [ImageUpdateInput!]
+}
+enum ExampleFileNamesEnum {
+  logo
+  hero
+  pictures
+  photos
+}
+input FilesOfExampleOptionsInput {
+  targets: [ExampleFileNamesEnum!]!
+  counts: [Int!]!
+  hashes: [String!]!
+}
+input ExampleReorderUploadedInput {
+  pictures: [Int!]
+  photos: [Int!]
 }
 enum ExampleFieldNamesEnum {
   textField1
@@ -445,21 +446,21 @@ type UpdatedExamplePayload {
   updatedFields: [ExampleFieldNamesEnum!]
 }
 type Query {
-  Example(whereOne: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  ImageFile(whereOne: FileWhereOneInput!): Image
-  ImageFiles(where: FileWhereInput): [Image!]!
   ImageFileCount(where: FileWhereInput): Int!
+  ImageFile(whereOne: FileWhereOneInput!): Image!
+  ImageFiles(where: FileWhereInput): [Image!]!
+  Example(whereOne: ExampleWhereOneInput!): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
 }
 type Mutation {
-  createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
+  createExample(data: ExampleCreateInput!): Example!
+  deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
-  deleteExample(whereOne: ExampleWhereOneInput!): Example
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
   uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!
 }
@@ -519,6 +520,7 @@ type Subscription {
     };
     const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
     const generalConfig: GeneralConfig = { thingConfigs };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
@@ -546,13 +548,6 @@ input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 type Example1 {
   id: ID!
   createdAt: DateTime!
@@ -569,86 +564,6 @@ type Example2 {
   textField1: [String!]!
   textField2: [String!]!
   area: GeospatialPolygon
-}
-input Example1CreateInput {
-  id: ID
-  textField1: String
-  textField2: String
-  textField3: String!
-  position: GeospatialPointInput
-}
-input Example1CreateChildInput {
-  connect: ID
-  create: Example1CreateInput
-}
-input Example1CreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [Example1CreateInput!]
-}
-input Example1UpdateInput {
-  textField1: String
-  textField2: String
-  textField3: String
-  position: GeospatialPointInput
-}
-input Example2CreateInput {
-  id: ID
-  textField1: [String!]
-  textField2: [String!]!
-  area: GeospatialPolygonInput
-}
-input Example2CreateChildInput {
-  connect: ID
-  create: Example2CreateInput
-}
-input Example2CreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [Example2CreateInput!]
-}
-input PushIntoExample2Input {
-  textField1: [String!]
-  textField2: [String!]
-}
-input Example2UpdateInput {
-  textField1: [String!]
-  textField2: [String!]
-  area: GeospatialPolygonInput
-}
-enum Example1TextNamesEnum {
-  textField1
-  textField2
-  textField3
-}
-input Example1DistinctValuesOptionsInput {
-  target: Example1TextNamesEnum!
-}
-enum Example2TextNamesEnum {
-  textField1
-  textField2
-}
-input Example2DistinctValuesOptionsInput {
-  target: Example2TextNamesEnum!
-}
-input Example1WhereOneInput {
-  id: ID!
-}
-input Example1WhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input Example1WhereInput {
   id_in: [ID!]
@@ -671,27 +586,7 @@ input Example1WhereInput {
   NOR: [Example1WhereInput!]
   OR: [Example1WhereInput!]
 }
-enum Example1SortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input Example1SortInput {
-  sortBy: [Example1SortEnum]
-}
-enum Example1GeospatialFieldNamesEnum {
-  position
-}
-input Example1NearInput {
-  geospatialField: Example1GeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
-  maxDistance: Float
-}
-input Example2WhereOneInput {
-  id: ID!
-}
-input Example2WhereWithoutBooleanOperationsInput {
+input Example1WhereWithoutBooleanOperationsInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -708,6 +603,14 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+}
+enum Example1GeospatialFieldNamesEnum {
+  position
+}
+input Example1NearInput {
+  geospatialField: Example1GeospatialFieldNamesEnum
+  coordinates: GeospatialPointInput
+  maxDistance: Float
 }
 input Example2WhereInput {
   id_in: [ID!]
@@ -730,6 +633,54 @@ input Example2WhereInput {
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
 }
+input Example2WhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum Example1TextNamesEnum {
+  textField1
+  textField2
+  textField3
+}
+input Example1DistinctValuesOptionsInput {
+  target: Example1TextNamesEnum!
+}
+enum Example2TextNamesEnum {
+  textField1
+  textField2
+}
+input Example2DistinctValuesOptionsInput {
+  target: Example2TextNamesEnum!
+}
+input Example1WhereOneInput {
+  id: ID!
+}
+input Example2WhereOneInput {
+  id: ID!
+}
+enum Example1SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example1SortInput {
+  sortBy: [Example1SortEnum]
+}
 enum Example2SortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -738,6 +689,57 @@ enum Example2SortEnum {
 }
 input Example2SortInput {
   sortBy: [Example2SortEnum]
+}
+input Example1CreateInput {
+  id: ID
+  textField1: String
+  textField2: String
+  textField3: String!
+  position: GeospatialPointInput
+}
+input Example1CreateChildInput {
+  connect: ID
+  create: Example1CreateInput
+}
+input Example1CreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [Example1CreateInput!]
+}
+input Example2CreateInput {
+  id: ID
+  textField1: [String!]
+  textField2: [String!]!
+  area: GeospatialPolygonInput
+}
+input Example2CreateChildInput {
+  connect: ID
+  create: Example2CreateInput
+}
+input Example2CreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [Example2CreateInput!]
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoExample2Input {
+  textField1: [String!]
+  textField2: [String!]
+}
+input Example1UpdateInput {
+  textField1: String
+  textField2: String
+  textField3: String
+  position: GeospatialPointInput
+}
+input Example2UpdateInput {
+  textField1: [String!]
+  textField2: [String!]
+  area: GeospatialPolygonInput
 }
 enum Example1FieldNamesEnum {
   textField1
@@ -761,27 +763,27 @@ type UpdatedExample2Payload {
   updatedFields: [Example2FieldNamesEnum!]
 }
 type Query {
-  Example1(whereOne: Example1WhereOneInput!): Example1
-  Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
-  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
-  Example2(whereOne: Example2WhereOneInput!): Example2
-  Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
   Example2Count(where: Example2WhereInput): Int!
+  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
   Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput): [String!]!
+  Example1(whereOne: Example1WhereOneInput!): Example1!
+  Example2(whereOne: Example2WhereOneInput!): Example2!
+  Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
+  Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
 }
 type Mutation {
-  createExample1(data: Example1CreateInput!): Example1!
   createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
-  importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
-  updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
-  deleteExample1(whereOne: Example1WhereOneInput!): Example1
-  createExample2(data: Example2CreateInput!): Example2!
   createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
+  createExample1(data: Example1CreateInput!): Example1!
+  createExample2(data: Example2CreateInput!): Example2!
+  deleteExample1(whereOne: Example1WhereOneInput!): Example1!
+  deleteExample2(whereOne: Example2WhereOneInput!): Example2!
+  importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!): Example2!
+  updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
-  deleteExample2(whereOne: Example2WhereOneInput!): Example2
 }
 type Subscription {
   createdExample1(where: Example1WhereInput): Example1!
@@ -843,17 +845,11 @@ type Subscription {
     });
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
   flags: String
-}
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
 }
 type Person {
   id: ID!
@@ -871,88 +867,6 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   title: String!
-}
-input PersonCreateInput {
-  id: ID
-  firstName: String!
-  lastName: String!
-  friends: PersonCreateOrPushChildrenInput!
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput!
-  favoritePlace: PlaceCreateChildInput
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-}
-input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}
-input PersonReorderCreatedInput {
-  friends: [Int!]
-  enemies: [Int!]
-}
-input PersonUpdateInput {
-  firstName: String
-  lastName: String
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput
-  favoritePlace: PlaceCreateChildInput
-}
-input PlaceCreateInput {
-  id: ID
-  title: String!
-}
-input PlaceCreateChildInput {
-  connect: ID
-  create: PlaceCreateInput
-}
-input PlaceCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PlaceCreateInput!]
-}
-input PlaceUpdateInput {
-  title: String
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  title
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -975,19 +889,7 @@ input PersonWhereInput {
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }
-enum PersonSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input PersonSortInput {
-  sortBy: [PersonSortEnum]
-}
-input PlaceWhereOneInput {
-  id: ID!
-}
-input PlaceWhereWithoutBooleanOperationsInput {
+input PersonWhereWithoutBooleanOperationsInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -1026,6 +928,52 @@ input PlaceWhereInput {
   NOR: [PlaceWhereInput!]
   OR: [PlaceWhereInput!]
 }
+input PlaceWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  title
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
 enum PlaceSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1034,6 +982,61 @@ enum PlaceSortEnum {
 }
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
+}
+input PersonCreateInput {
+  id: ID
+  firstName: String!
+  lastName: String!
+  friends: PersonCreateOrPushChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}
+input PlaceCreateInput {
+  id: ID
+  title: String!
+}
+input PlaceCreateChildInput {
+  connect: ID
+  create: PlaceCreateInput
+}
+input PlaceCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PlaceCreateInput!]
+}
+input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+}
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
+}
+input PlaceUpdateInput {
+  title: String
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1057,27 +1060,27 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
-  Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
-  Place(whereOne: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
+  Person(whereOne: PersonWhereOneInput!): Person!
+  Place(whereOne: PlaceWhereOneInput!): Place!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
 }
 type Mutation {
-  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
+  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
+  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
+  createPlace(data: PlaceCreateInput!): Place!
+  deletePerson(whereOne: PersonWhereOneInput!): Person!
+  deletePlace(whereOne: PlaceWhereOneInput!): Place!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
+  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
-  deletePerson(whereOne: PersonWhereOneInput!): Person
-  createPlace(data: PlaceCreateInput!): Place!
-  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
-  deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -1144,17 +1147,11 @@ type Subscription {
     };
     const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
   flags: String
-}
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
 }
 type Person {
   id: ID!
@@ -1171,71 +1168,6 @@ type Address {
   id: ID!
   country: String!
   province: String
-}
-input PersonCreateInput {
-  id: ID
-  firstName: String!
-  lastName: String!
-  location: AddressCreateInput!
-  locations: [AddressCreateInput!]!
-  place: AddressCreateInput
-  places: [AddressCreateInput!]
-}
-input PersonCreateChildInput {
-  connect: ID
-  create: PersonCreateInput
-}
-input PersonCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [PersonCreateInput!]
-}
-input PushIntoPersonInput {
-  locations: [AddressCreateInput!]
-  places: [AddressCreateInput!]
-}
-input PersonUpdateInput {
-  firstName: String
-  lastName: String
-  location: AddressUpdateInput
-  locations: [AddressUpdateInput!]
-  place: AddressUpdateInput
-  places: [AddressUpdateInput!]
-}
-input AddressCreateInput {
-  country: String!
-  province: String
-}
-input AddressUpdateInput {
-  country: String
-  province: String
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1258,6 +1190,34 @@ input PersonWhereInput {
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
 }
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+input PersonWhereOneInput {
+  id: ID!
+}
 enum PersonSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1266,6 +1226,50 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+input PersonCreateInput {
+  id: ID
+  firstName: String!
+  lastName: String!
+  location: AddressCreateInput!
+  locations: [AddressCreateInput!]!
+  place: AddressCreateInput
+  places: [AddressCreateInput!]
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}
+input AddressCreateInput {
+  country: String!
+  province: String
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoPersonInput {
+  locations: [AddressCreateInput!]
+  places: [AddressCreateInput!]
+}
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  location: AddressUpdateInput
+  locations: [AddressUpdateInput!]
+  place: AddressUpdateInput
+  places: [AddressUpdateInput!]
+}
+input AddressUpdateInput {
+  country: String
+  province: String
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1281,18 +1285,18 @@ type UpdatedPersonPayload {
   updatedFields: [PersonFieldNamesEnum!]
 }
 type Query {
-  Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
+  Person(whereOne: PersonWhereOneInput!): Person!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
 }
 type Mutation {
-  createPerson(data: PersonCreateInput!): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
+  createPerson(data: PersonCreateInput!): Person!
+  deletePerson(whereOne: PersonWhereOneInput!): Person!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
-  deletePerson(whereOne: PersonWhereOneInput!): Person
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -1365,17 +1369,11 @@ type Subscription {
     });
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
   flags: String
-}
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
 }
 type Person {
   id: ID!
@@ -1395,6 +1393,121 @@ type Place {
   name: String
   citizens: [Person!]!
   visitors: [Person!]!
+}
+input PersonWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+}
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+input PlaceWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PlaceWhereInput!]
+  NOR: [PlaceWhereInput!]
+  OR: [PlaceWhereInput!]
+}
+input PlaceWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  name
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
+enum PlaceSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PlaceSortInput {
+  sortBy: [PlaceSortEnum]
 }
 input PersonCreateInput {
   id: ID
@@ -1445,22 +1558,6 @@ input PersonCreateOrPushThru_location_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_location_FieldInput!]
 }
-input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-}
-input PersonReorderCreatedInput {
-  friends: [Int!]
-  enemies: [Int!]
-}
-input PersonUpdateInput {
-  firstName: String
-  lastName: String
-  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
-  enemies: PersonCreateOrPushChildrenInput
-  location: PlaceCreateChildInput
-  favoritePlace: PlaceCreateChildInput
-}
 input PlaceCreateInput {
   id: ID
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
@@ -1475,133 +1572,41 @@ input PlaceCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
 }
-input PushIntoPlaceInput {
-  citizens: PersonCreateOrPushChildrenInput
-  visitors: PersonCreateOrPushChildrenInput
+input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
 }
 input PlaceReorderCreatedInput {
   citizens: [Int!]
   visitors: [Int!]
 }
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoPersonInput {
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+}
+input PushIntoPlaceInput {
+  citizens: PersonCreateOrPushChildrenInput
+  visitors: PersonCreateOrPushChildrenInput
+}
+input PersonUpdateInput {
+  firstName: String
+  lastName: String
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
+}
 input PlaceUpdateInput {
   name: String
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  name
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PersonWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
-input PersonWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  AND: [PersonWhereInput!]
-  NOR: [PersonWhereInput!]
-  OR: [PersonWhereInput!]
-}
-enum PersonSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input PersonSortInput {
-  sortBy: [PersonSortEnum]
-}
-input PlaceWhereOneInput {
-  id: ID!
-}
-input PlaceWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
-input PlaceWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  AND: [PlaceWhereInput!]
-  NOR: [PlaceWhereInput!]
-  OR: [PlaceWhereInput!]
-}
-enum PlaceSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input PlaceSortInput {
-  sortBy: [PlaceSortEnum]
 }
 enum PersonFieldNamesEnum {
   firstName
@@ -1627,28 +1632,28 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
-  Person(whereOne: PersonWhereOneInput!): Person
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
-  Place(whereOne: PlaceWhereOneInput!): Place
-  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PlaceCount(where: PlaceWhereInput): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
+  Person(whereOne: PersonWhereOneInput!): Person!
+  Place(whereOne: PlaceWhereOneInput!): Place!
+  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
 }
 type Mutation {
-  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
-  deletePerson(whereOne: PersonWhereOneInput!): Person
-  createPlace(data: PlaceCreateInput!, positions: PlaceReorderCreatedInput): Place!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
+  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
+  createPlace(data: PlaceCreateInput!, positions: PlaceReorderCreatedInput): Place!
+  deletePerson(whereOne: PersonWhereOneInput!): Person!
+  deletePlace(whereOne: PlaceWhereOneInput!): Place!
+  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!): Place!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, positions: PlaceReorderCreatedInput): Place!
-  deletePlace(whereOne: PlaceWhereOneInput!): Place
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -1686,33 +1691,6 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
-input ExampleWhereOneInput {
-  id: ID!
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1734,6 +1712,33 @@ input ExampleWhereInput {
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
 }
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
 enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1744,10 +1749,10 @@ input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
 type Query {
-  Example(whereOne: ExampleWhereOneInput!): Example
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
+  Example(whereOne: ExampleWhereOneInput!): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1767,17 +1772,11 @@ type Query {
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
   flags: String
-}
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
 }
 type Example {
   id: ID!
@@ -1797,18 +1796,25 @@ input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
-input ExampleUpdateInput {
-  textField: String
-}
 input ExampleWhereOneInput {
   id: ID!
 }
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input ExampleUpdateInput {
+  textField: String
+}
 type Mutation {
-  createExample(data: ExampleCreateInput!): Example!
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
+  createExample(data: ExampleCreateInput!): Example!
+  deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
-  deleteExample(whereOne: ExampleWhereOneInput!): Example
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1827,6 +1833,7 @@ type Mutation {
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = { name: 'test', include: { Query: { things: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
+
     const expectedResult = `scalar DateTime
 input RegExp {
   pattern: String!
@@ -1837,24 +1844,6 @@ type Example {
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -1876,6 +1865,24 @@ input ExampleWhereInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 enum ExampleSortEnum {
   createdAt_ASC
@@ -1917,24 +1924,6 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1955,6 +1944,24 @@ input ExampleWhereInput {
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 enum ExampleSortEnum {
   createdAt_ASC
@@ -2009,9 +2016,6 @@ input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
-input ExampleUpdateInput {
-  textField: String
-}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -2059,9 +2063,6 @@ input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
 }
-input ExampleUpdateInput {
-  textField: String
-}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -2103,9 +2104,6 @@ type Example {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  textField: String
-}
-input ExampleUpdateInput {
   textField: String
 }
 type Mutation {
@@ -2167,9 +2165,9 @@ type Query {
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const thingInTimeRangeDerivative: DerivativeAttributes = {
-      allow: { Example: ['thing', 'things'] },
-      suffix: 'InTimeRange',
+    const ForCatalogDerivative: DerivativeAttributes = {
+      allow: { Example: ['things', 'updateThing'] },
+      suffix: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -2199,13 +2197,17 @@ type Query {
     const thingConfigs = { Example: thingConfig };
     const inventory: Inventory = {
       name: 'test',
-      include: { Query: { thingInTimeRangeQuery: true } },
+      include: {
+        Query: { thingsForCatalog: true, things: true },
+        Mutation: { updateThingForCatalog: true },
+      },
+      // include: { Query: true, Mutation: true },
     };
     const custom = {
       Input: { thingInTimeRangeInput },
       Query: { thingInTimeRangeQuery },
     };
-    const derivative = { InTimeRange: thingInTimeRangeDerivative };
+    const derivative = { ForCatalog: ForCatalogDerivative };
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
 input RegExp {
@@ -2218,7 +2220,7 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
-type ExampleInTimeRange {
+type ExampleForCatalog {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2226,12 +2228,148 @@ type ExampleInTimeRange {
   start: DateTime!
   end: DateTime
 }
+input ExampleWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField: String
+  textField_in: [String!]
+  textField_nin: [String!]
+  textField_ne: String
+  textField_re: [RegExp!]
+  textField_exists: Boolean
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField: String
+  textField_in: [String!]
+  textField_nin: [String!]
+  textField_ne: String
+  textField_re: [RegExp!]
+  textField_exists: Boolean
+}
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  textField_ASC
+  textField_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
+input ExampleForCatalogWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField: String
+  textField_in: [String!]
+  textField_nin: [String!]
+  textField_ne: String
+  textField_re: [RegExp!]
+  textField_exists: Boolean
+  AND: [ExampleForCatalogWhereInput!]
+  NOR: [ExampleForCatalogWhereInput!]
+  OR: [ExampleForCatalogWhereInput!]
+}
+input ExampleForCatalogWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField: String
+  textField_in: [String!]
+  textField_nin: [String!]
+  textField_ne: String
+  textField_re: [RegExp!]
+  textField_exists: Boolean
+}
+enum ExampleForCatalogSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  textField_ASC
+  textField_DESC
+}
+input ExampleForCatalogSortInput {
+  sortBy: [ExampleForCatalogSortEnum]
+}
+input ExampleForCatalogWhereOneInput {
+  id: ID!
+}
+input ExampleForCatalogUpdateInput {
+  textField: String
+  start: DateTime
+  end: DateTime
+}
 input ExampleTimeRangeInput {
   start: DateTime!
   end: DateTime!
 }
 type Query {
-  ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): ExampleInTimeRange
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput): [ExampleForCatalog!]!
+}
+type Mutation {
+  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForCatalog!
 }`;
 
     const result = composeGqlTypes(generalConfig);

@@ -17,7 +17,9 @@ describe('createThingSortInputType', () => {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -25,7 +27,9 @@ describe('createThingSortInputType', () => {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -45,7 +49,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -57,7 +63,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -85,7 +93,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -97,7 +107,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -117,7 +129,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -129,7 +143,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -149,7 +165,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -161,7 +179,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -181,7 +201,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -193,7 +215,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -213,7 +237,9 @@ input ExampleSortInput {
         },
       ],
     };
-    const expectedResult = `enum ExampleSortEnum {
+    const expectedResult = [
+      'ExampleSortInput',
+      `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -225,7 +251,9 @@ input ExampleSortInput {
 }
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingSortInputType(thingConfig);
     expect(result).toEqual(expectedResult);

@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
+import deleteThingMutationAttributes from '../../types/actionAttributes/deleteThingMutationAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeDeleteThingMutationArgs', () => {
   test('should compose deleteThing mutation args ', () => {
@@ -22,7 +23,7 @@ describe('composeDeleteThingMutationArgs', () => {
       '  deleteExample(whereOne: $whereOne) {',
     ];
 
-    const result = composeDeleteThingMutationArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, deleteThingMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

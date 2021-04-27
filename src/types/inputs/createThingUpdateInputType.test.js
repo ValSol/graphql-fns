@@ -3,6 +3,7 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+import createThingCreateInputType from './createThingCreateInputType';
 import createThingUpdateInputType from './createThingUpdateInputType';
 
 describe('createThingUpdateInputType', () => {
@@ -33,13 +34,17 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   textField1: String
   textField2: String
   textField3: String
   textField4: [String!]
   textField5: [String!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -76,12 +81,19 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonUpdateInput {
+    const expectedResult = [
+      'PersonUpdateInput',
+      `input PersonUpdateInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput
   favoritePlace: PlaceCreateChildInput
-}`;
+}`,
+      {
+        PlaceCreateInput: [createThingCreateInputType, placeConfig],
+        PersonCreateInput: [createThingCreateInputType, personConfig],
+      },
+    ];
 
     const result = createThingUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -147,14 +159,21 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonUpdateInput {
+    const expectedResult = [
+      'PersonUpdateInput',
+      `input PersonUpdateInput {
   firstName: String
   lastName: String
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput
   enemies: PersonCreateOrPushChildrenInput
   location: PlaceCreateChildInput
   favoritePlace: PlaceCreateThru_visitors_FieldChildInput
-}`;
+}`,
+      {
+        PlaceCreateInput: [createThingCreateInputType, placeConfig],
+        PersonCreateInput: [createThingCreateInputType, personConfig],
+      },
+    ];
 
     const result = createThingUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -210,14 +229,20 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input PersonUpdateInput {
+    const expectedResult = [
+      'PersonUpdateInput',
+      `input PersonUpdateInput {
   firstName: String
   lastName: String
   location: AddressUpdateInput
   locations: [AddressUpdateInput!]
   place: AddressUpdateInput
   places: [AddressUpdateInput!]
-}`;
+}`,
+      {
+        AddressUpdateInput: [createThingUpdateInputType, addressConfig],
+      },
+    ];
 
     const result = createThingUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -269,7 +294,9 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   position: GeospatialPointInput
   precedingPosition: GeospatialPointInput
   favoritePositions: [GeospatialPointInput!]
@@ -278,7 +305,9 @@ describe('createThingUpdateInputType', () => {
   precedingArea: GeospatialPolygonInput
   favoriteAreas: [GeospatialPolygonInput!]
   worstAreas: [GeospatialPolygonInput!]
-}`;
+}`,
+      {},
+    ];
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
@@ -310,12 +339,16 @@ describe('createThingUpdateInputType', () => {
       ],
     };
 
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   field1: WeekdaysEnumeration
   field2: [CuisinesEnumeration!]
   field3: WeekdaysEnumeration
   field4: [CuisinesEnumeration!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -348,13 +381,17 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   intField1: Int
   intField2: Int
   intField3: Int
   intField4: [Int!]
   intField5: [Int!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -387,13 +424,17 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   floatField1: Float
   floatField2: Float
   floatField3: Float
   floatField4: [Float!]
   floatField5: [Float!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -426,13 +467,17 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   booleanField1: Boolean
   booleanField2: Boolean
   booleanField3: Boolean
   booleanField4: [Boolean!]
   booleanField5: [Boolean!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -452,10 +497,14 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ImageUpdateInput {
+    const expectedResult = [
+      'ImageUpdateInput',
+      `input ImageUpdateInput {
   fileId: String
   comment: String
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingUpdateInputType(imageConfig);
     expect(result).toEqual(expectedResult);
@@ -507,13 +556,19 @@ describe('createThingUpdateInputType', () => {
       ],
     });
 
-    const expectedResult = `input ExampleUpdateInput {
+    const expectedResult = [
+      'ExampleUpdateInput',
+      `input ExampleUpdateInput {
   textField: String
   logo: ImageUpdateInput
   hero: ImageUpdateInput
   pictures: [ImageUpdateInput!]
   photos: [ImageUpdateInput!]
-}`;
+}`,
+      {
+        ImageUpdateInput: [createThingUpdateInputType, imageConfig],
+      },
+    ];
 
     const result = createThingUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);

@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator, ThingConfig } from '../../flowTypes';
 
 const defaultFields = `  id_in: [ID!]
   id_nin: [ID!]
@@ -28,7 +28,10 @@ const counterFields = `
   counter_lt: Int
   counter_lte: Int`;
 
-const composeFields = (thingConfig: ThingConfig): string => {
+const composeFields = (
+  thingConfig: ThingConfig,
+  childChain: { [inputSpecificName: string]: ThingConfig },
+): string => {
   const {
     booleanFields,
     enumFields,
@@ -178,6 +181,8 @@ const composeFields = (thingConfig: ThingConfig): string => {
         fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
       }
+
+      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
     });
   }
 
@@ -198,30 +203,42 @@ const composeFields = (thingConfig: ThingConfig): string => {
         fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
       }
+
+      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
     });
   }
 
   return fields.join('\n');
 };
 
-const createThingWhereInputType = (thingConfig: ThingConfig): string => {
+const createThingWhereInputType: InputCreator = (thingConfig) => {
   const { name } = thingConfig;
 
-  const fields = [composeFields(thingConfig)];
+  const inputName = `${name}WhereInput`;
+  const preChildChain = {};
+
+  const fields = composeFields(thingConfig, preChildChain);
 
   const result = [
-    `input ${name}WhereWithoutBooleanOperationsInput {`,
-    ...fields,
-    '}',
     `input ${name}WhereInput {`,
-    ...fields,
+    fields,
     `  AND: [${name}WhereInput!]
   NOR: [${name}WhereInput!]
   OR: [${name}WhereInput!]
 }`,
-  ].join('\n');
+    `input ${name}WhereWithoutBooleanOperationsInput {`,
+    fields,
+    '}',
+  ];
 
-  return result;
+  const inputDefinition = result.join('\n');
+
+  const childChain = Object.keys(preChildChain).reduce((prev, inputName2) => {
+    prev[inputName2] = [createThingWhereInputType, preChildChain[inputName2]]; // eslint-disable-line no-param-reassign
+    return prev;
+  }, {});
+
+  return [inputName, inputDefinition, childChain];
 };
 
 export default createThingWhereInputType;

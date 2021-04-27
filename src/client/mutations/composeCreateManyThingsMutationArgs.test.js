@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeCreateThingMutationArgs from './composeCreateManyThingsMutationArgs';
+import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeCreateManyThingsMutationArgs', () => {
   test('should compose createThing mutation args ', () => {
@@ -22,7 +23,7 @@ describe('composeCreateManyThingsMutationArgs', () => {
       '  createManyExamples(data: $data) {',
     ];
 
-    const result = composeCreateThingMutationArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, createManyThingsMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

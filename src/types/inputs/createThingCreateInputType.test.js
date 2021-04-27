@@ -33,7 +33,9 @@ describe('createThingCreateInputType', () => {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   textField1: String
   textField2: String
@@ -48,7 +50,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -85,7 +89,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     });
-    const expectedResult = `input PersonCreateInput {
+    const expectedResult = [
+      'PersonCreateInput',
+      `input PersonCreateInput {
   id: ID
   friends: PersonCreateOrPushChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
@@ -99,7 +105,12 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
-}`;
+}`,
+      {
+        PersonCreateInput: [createThingCreateInputType, personConfig],
+        PlaceCreateInput: [createThingCreateInputType, placeConfig],
+      },
+    ];
 
     const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -120,10 +131,14 @@ input PersonCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input AddressCreateInput {
+    const expectedResult = [
+      'AddressCreateInput',
+      `input AddressCreateInput {
   country: String!
   province: String
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(addressConfig);
     expect(result).toEqual(expectedResult);
@@ -179,7 +194,9 @@ input PersonCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input PersonCreateInput {
+    const expectedResult = [
+      'PersonCreateInput',
+      `input PersonCreateInput {
   id: ID
   firstName: String!
   lastName: String!
@@ -195,7 +212,9 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
-}`;
+}`,
+      { AddressCreateInput: [createThingCreateInputType, addressConfig] },
+    ];
 
     const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -227,7 +246,9 @@ input PersonCreateOrPushChildrenInput {
     });
 
     test('should create thing input type for Menu duplex fields', () => {
-      const expectedResult = `input MenuCreateInput {
+      const expectedResult = [
+        'MenuCreateInput',
+        `input MenuCreateInput {
   id: ID
   sections: MenuSectionCreateOrPushThru_menu_FieldChildrenInput
 }
@@ -238,14 +259,18 @@ input MenuCreateChildInput {
 input MenuCreateOrPushChildrenInput {
   connect: [ID!]
   create: [MenuCreateInput!]
-}`;
+}`,
+        { MenuSectionCreateInput: [createThingCreateInputType, menuSectionConfig] },
+      ];
 
       const result = createThingCreateInputType(menuConfig);
       expect(result).toEqual(expectedResult);
     });
 
     test('should create thing input type for Menu duplex fields', () => {
-      const expectedResult = `input MenuSectionCreateInput {
+      const expectedResult = [
+        'MenuSectionCreateInput',
+        `input MenuSectionCreateInput {
   id: ID
   menu: MenuCreateChildInput!
 }
@@ -267,7 +292,9 @@ input MenuSectionCreateThru_menu_FieldChildInput {
 input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
   connect: [ID!]
   create: [MenuSectionCreateThru_menu_FieldInput!]
-}`;
+}`,
+        { MenuCreateInput: [createThingCreateInputType, menuConfig] },
+      ];
 
       const result = createThingCreateInputType(menuSectionConfig);
       expect(result).toEqual(expectedResult);
@@ -334,7 +361,9 @@ input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
         },
       ],
     });
-    const expectedResult = `input PersonCreateInput {
+    const expectedResult = [
+      'PersonCreateInput',
+      `input PersonCreateInput {
   id: ID
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
   enemies: PersonCreateOrPushChildrenInput
@@ -382,7 +411,12 @@ input PersonCreateThru_location_FieldChildInput {
 input PersonCreateOrPushThru_location_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_location_FieldInput!]
-}`;
+}`,
+      {
+        PersonCreateInput: [createThingCreateInputType, personConfig],
+        PlaceCreateInput: [createThingCreateInputType, placeConfig],
+      },
+    ];
 
     const result = createThingCreateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -434,7 +468,9 @@ input PersonCreateOrPushThru_location_FieldChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   position: GeospatialPointInput!
   precedingPosition: GeospatialPointInput
@@ -452,7 +488,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -484,7 +522,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   field1: WeekdaysEnumeration
   field2: [CuisinesEnumeration!]
@@ -498,7 +538,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -531,7 +573,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   intField1: Int
   intField2: Int
@@ -546,7 +590,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -579,7 +625,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   floatField1: Float
   floatField2: Float
@@ -594,7 +642,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -627,7 +677,9 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   booleanField1: Boolean
   booleanField2: Boolean
@@ -642,7 +694,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -662,10 +716,14 @@ input ExampleCreateOrPushChildrenInput {
         },
       ],
     };
-    const expectedResult = `input ImageCreateInput {
+    const expectedResult = [
+      'ImageCreateInput',
+      `input ImageCreateInput {
   fileId: String!
   comment: String
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingCreateInputType(imageConfig);
     expect(result).toEqual(expectedResult);
@@ -717,7 +775,9 @@ input ExampleCreateOrPushChildrenInput {
       ],
     });
 
-    const expectedResult = `input ExampleCreateInput {
+    const expectedResult = [
+      'ExampleCreateInput',
+      `input ExampleCreateInput {
   id: ID
   textField: String
   logo: ImageCreateInput!
@@ -732,7 +792,9 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
-}`;
+}`,
+      { ImageCreateInput: [createThingCreateInputType, imageConfig] },
+    ];
 
     const result = createThingCreateInputType(thingConfig);
     expect(result).toEqual(expectedResult);

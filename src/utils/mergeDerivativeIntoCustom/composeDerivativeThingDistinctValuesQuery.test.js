@@ -3,39 +3,40 @@
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingDistinctValuesQuery from './composeDerivativeThingDistinctValuesQuery';
+import thingDistinctValuesQueryAttributes from '../../types/actionAttributes/thingDistinctValuesQueryAttributes';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeThingDistinctValuesQuery', () => {
-  test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-          array: true,
-          index: true,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['thingDistinctValues'] },
-      suffix: 'ForCatalog',
-      addFields: {
-        Example: () => ({
-          floatFields: [{ name: 'floatField' }],
-        }),
+  const thingConfig: ThingConfig = {
+    name: 'Example',
+    textFields: [
+      {
+        name: 'textField',
+        array: true,
+        index: true,
       },
-    };
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Example: ['thingDistinctValues'] },
+    suffix: 'ForCatalog',
+    addFields: {
+      Example: () => ({
+        floatFields: [{ name: 'floatField' }],
+      }),
+    },
+  };
 
-    const derivative = { ForCatalog };
+  const derivative = { ForCatalog };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
-      derivative,
-    };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Example: thingConfig },
+    derivative,
+  };
 
-    const result = composeDerivativeThingDistinctValuesQuery(ForCatalog);
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, thingDistinctValuesQueryAttributes);
 
     const expectedResult = {
       name: 'thingDistinctValuesForCatalog',
@@ -44,7 +45,10 @@ describe('composeDerivativeThingDistinctValuesQuery', () => {
           ? `${name}DistinctValuesForCatalog`
           : '',
       argNames: () => ['where', 'options'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}DistinctValuesOptionsInput`],
+      argTypes: ({ name }) => [
+        `${name}ForCatalogWhereInput`,
+        `${name}ForCatalogDistinctValuesOptionsInput`,
+      ],
       type: () => '[String!]!',
       config: () => null,
     };

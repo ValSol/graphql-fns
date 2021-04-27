@@ -1,29 +1,40 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createUploadFilesToThingInputType = (thingConfig: ThingConfig): string => {
+import createThingUpdateInputType from './createThingUpdateInputType';
+
+const createUploadFilesToThingInputType: InputCreator = (thingConfig) => {
   const { embedded, file, fileFields, name } = thingConfig;
 
-  if (embedded || file) return '';
+  const inputName = `UploadFilesTo${name}Input`;
+
+  if (embedded || file) return [inputName, '', {}];
 
   const thingTypeArray = [];
+  const childChain = {};
 
   if (fileFields) {
-    fileFields.reduce((prev, { name: name2, array, config: { name: embeddedName } }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    fileFields.reduce(
+      (prev, { name: name2, array, config: config2, config: { name: embeddedName } }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+
+        childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config2];
+
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
-  if (!thingTypeArray.length) return '';
+  if (!thingTypeArray.length) return [inputName, '', {}];
 
   thingTypeArray.unshift(`input UploadFilesTo${name}Input {`);
   thingTypeArray.push('}');
 
-  const result = thingTypeArray.join('\n');
+  const inputDefinition = thingTypeArray.join('\n');
 
-  return result;
+  return [inputName, inputDefinition, childChain];
 };
 
 export default createUploadFilesToThingInputType;

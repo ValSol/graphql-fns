@@ -1,8 +1,8 @@
 //  @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createThingSortInputType = (thingConfig: ThingConfig): string => {
+const createThingSortInputType: InputCreator = (thingConfig) => {
   const {
     booleanFields,
     dateTimeFields,
@@ -12,6 +12,8 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
     textFields,
     name,
   } = thingConfig;
+
+  const inputName = `${name}SortInput`;
 
   const fieldLines = ['  createdAt_ASC', '  createdAt_DESC', '  updatedAt_ASC', '  updatedAt_DESC'];
 
@@ -75,14 +77,16 @@ const createThingSortInputType = (thingConfig: ThingConfig): string => {
       }, fieldLines);
   }
 
-  if (!fieldLines.length) return '';
+  if (!fieldLines.length) return [inputName, '', {}];
 
-  return `enum ${name}SortEnum {
+  const inputDefinition = `enum ${name}SortEnum {
 ${fieldLines.join('\n')}
 }
 input ${name}SortInput {
   sortBy: [${name}SortEnum]
 }`;
+
+  return [inputName, inputDefinition, {}];
 };
 
 export default createThingSortInputType;

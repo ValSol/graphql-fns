@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUploadFilesToThingMutationType from './createUploadFilesToThingMutationType';
+import uploadFilesToThingMutationAttributes from '../actionAttributes/uploadFilesToThingMutationAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createUploadFilesToThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
@@ -16,8 +17,13 @@ describe('createUploadFilesToThingMutationType', () => {
       ],
     };
     const expectedResult = '';
+    const dic = {};
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      uploadFilesToThingMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -57,8 +63,13 @@ describe('createUploadFilesToThingMutationType', () => {
     });
     const expectedResult =
       '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
+    const dic = {};
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      uploadFilesToThingMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -109,8 +120,13 @@ describe('createUploadFilesToThingMutationType', () => {
     });
     const expectedResult =
       '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!';
+    const dic = {};
 
-    const result = createUploadFilesToThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      uploadFilesToThingMutationAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

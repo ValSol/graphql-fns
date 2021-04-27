@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingCountQueryArgs from './composeThingCountQueryArgs';
+import thingCountQueryAttributes from '../../types/actionAttributes/thingCountQueryAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeThingCountQueryArgs', () => {
   test('should compose things query without indexed fields', () => {
@@ -17,11 +18,13 @@ describe('composeThingCountQueryArgs', () => {
       ],
     };
 
-    const expectedResult = `query Home_ExampleCount($where: ExampleWhereInput) {
+    const expectedResult = [
+      `query Home_ExampleCount($where: ExampleWhereInput) {
   ExampleCount(where: $where)
-}`;
+}`,
+    ];
 
-    const result = composeThingCountQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 
@@ -37,11 +40,13 @@ describe('composeThingCountQueryArgs', () => {
       ],
     };
 
-    const expectedResult = `query Home_ExampleCount($where: ExampleWhereInput) {
+    const expectedResult = [
+      `query Home_ExampleCount($where: ExampleWhereInput) {
   ExampleCount(where: $where)
-}`;
+}`,
+    ];
 
-    const result = composeThingCountQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

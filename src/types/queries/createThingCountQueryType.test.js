@@ -2,7 +2,8 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingCountQueryType from './createThingCountQueryType';
+import thingCountQueryAttributes from '../actionAttributes/thingCountQueryAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createThingCountQueryType', () => {
   test('should create query things type without index fields', () => {
@@ -18,8 +19,9 @@ describe('createThingCountQueryType', () => {
       ],
     };
     const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
+    const dic = {};
 
-    const result = createThingCountQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingCountQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -39,7 +41,9 @@ describe('createThingCountQueryType', () => {
     };
     const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
 
-    const result = createThingCountQueryType(thingConfig);
+    const dic = {};
+
+    const result = composeStandardActionSignature(thingConfig, thingCountQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 });

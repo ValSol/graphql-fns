@@ -17,7 +17,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['FilesOfExampleOptionsInput', '', {}];
 
     const result = createFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -57,7 +57,9 @@ describe('createUploadFilesToThingOptionsInputType', () => {
         },
       ],
     });
-    const expectedResult = `enum ExampleFileNamesEnum {
+    const expectedResult = [
+      'FilesOfExampleOptionsInput',
+      `enum ExampleFileNamesEnum {
   logo
   pictures
 }
@@ -65,7 +67,9 @@ input FilesOfExampleOptionsInput {
   targets: [ExampleFileNamesEnum!]!
   counts: [Int!]!
   hashes: [String!]!
-}`;
+}`,
+      {},
+    ];
 
     const result = createFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);

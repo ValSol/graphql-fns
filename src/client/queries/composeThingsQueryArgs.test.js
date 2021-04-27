@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingsQueryArgs from './composeThingsQueryArgs';
+import thingsQueryAttributes from '../../types/actionAttributes/thingsQueryAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeThingsQueryArgs', () => {
   const prefixName = 'Home';
@@ -22,7 +23,7 @@ describe('composeThingsQueryArgs', () => {
       '  Examples(where: $where, sort: $sort) {',
     ];
 
-    const result = composeThingsQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 
@@ -42,11 +43,11 @@ describe('composeThingsQueryArgs', () => {
       '  Examples(where: $where, sort: $sort) {',
     ];
 
-    const result = composeThingsQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should compose things query with ExamplePaginationInput args', () => {
+  test('should compose things query with PaginationInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
       pagination: true,
@@ -58,11 +59,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: ExamplePaginationInput) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
       '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
-    const result = composeThingsQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 
@@ -82,7 +83,7 @@ describe('composeThingsQueryArgs', () => {
       '  Examples(where: $where, sort: $sort, near: $near) {',
     ];
 
-    const result = composeThingsQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

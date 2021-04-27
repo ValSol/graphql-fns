@@ -3,16 +3,18 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingQueryType from './createThingQueryType';
+import thingQueryAttributes from '../actionAttributes/thingQueryAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createThingQueryType', () => {
   test('should create query only thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
     };
-    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!): Example';
+    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!): Example!';
+    const dic = {};
 
-    const result = createThingQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 });

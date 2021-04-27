@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeUploadThingFilesMutationArgs from './composeUploadThingFilesMutationArgs';
+import uploadThingFilesMutationAttributes from '../../types/actionAttributes/uploadThingFilesMutationAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUploadFilesToThingMutationResolver', () => {
   test('should compose uploadFilesToThing mutation args ', () => {
@@ -26,7 +27,7 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadImageFiles(files: $files, hashes: $hashes) {',
     ];
 
-    const result = composeUploadThingFilesMutationArgs(prefixName, imageConfig);
+    const result = composeActionArgs(prefixName, imageConfig, uploadThingFilesMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

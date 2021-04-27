@@ -3,42 +3,14 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/checkInventory';
-import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
-import composeActionSignature from './composeActionSignature';
 import composeDerivativeConfig from '../utils/composeDerivativeConfig';
+import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
+import collectDerivativeInputs from './collectDerivativeInputs';
+import composeActionSignature from './composeActionSignature';
 import composeObjectSignature from './composeObjectSignature';
 import createThingType from './createThingType';
-import createFilesOfThingOptionsInputType from './inputs/createFilesOfThingOptionsInputType';
-import createPushIntoThingInputType from './inputs/createPushIntoThingInputType';
-import createThingCreateInputType from './inputs/createThingCreateInputType';
-import createFileWhereInputType from './inputs/createFileWhereInputType';
-import createFileWhereOneInputType from './inputs/createFileWhereOneInputType';
-import createThingDistinctValuesOptionsInputType from './inputs/createThingDistinctValuesOptionsInputType';
 
-import createThingPaginationInputType from './inputs/createThingPaginationInputType';
-import createThingReorderCreatedInputType from './inputs/createThingReorderCreatedInputType';
-import createThingReorderUploadedInputType from './inputs/createThingReorderUploadedInputType';
-import createThingUpdateInputType from './inputs/createThingUpdateInputType';
-import createUploadFilesToThingInputType from './inputs/createUploadFilesToThingInputType';
-import createThingNearInputType from './inputs/createThingNearInputType';
-import createThingSortInputType from './inputs/createThingSortInputType';
-import createThingWhereInputType from './inputs/createThingWhereInputType';
-import createThingWhereOneInputType from './inputs/createThingWhereOneInputType';
-import createThingFileQueryType from './queries/createThingFileQueryType';
-import createThingFilesQueryType from './queries/createThingFilesQueryType';
-import createThingFileCountQueryType from './queries/createThingFileCountQueryType';
-import createThingCountQueryType from './queries/createThingCountQueryType';
-import createThingDistinctValuesQueryType from './queries/createThingDistinctValuesQueryType';
-import createThingQueryType from './queries/createThingQueryType';
-import createThingsQueryType from './queries/createThingsQueryType';
-import createPushIntoThingMutationType from './mutations/createPushIntoThingMutationType';
-import createCreateManyThingsMutationType from './mutations/createCreateManyThingsMutationType';
-import createCreateThingMutationType from './mutations/createCreateThingMutationType';
-import createImportThingsMutationType from './mutations/createImportThingsMutationType';
-import createUpdateThingMutationType from './mutations/createUpdateThingMutationType';
-import createDeleteThingMutationType from './mutations/createDeleteThingMutationType';
-import createUploadFilesToThingMutationType from './mutations/createUploadFilesToThingMutationType';
-import createUploadThingFilesMutationType from './mutations/createUploadThingFilesMutationType';
+import { mutationAttributes, queryAttributes } from './actionAttributes';
 
 import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
 import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
@@ -48,10 +20,11 @@ import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPay
 import composeEnumTypes from './specialized/composeEnumTypes';
 import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
-import composeImportOptionsInputTypes from './specialized/composeImportOptionsInputTypes';
+import composeStandardActionSignature from './composeStandardActionSignature';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs, derivative, inventory } = generalConfig;
+  const { thingConfigs, derivative: preDerivative, inventory } = generalConfig;
+
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
@@ -60,197 +33,96 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
-  const derivativeConfigs = derivative || {};
+  const derivative = preDerivative || {};
 
-  const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
+
+  const thingNames = Object.keys(thingConfigs);
+
+  // 1. generate standard objects' signatures
 
   const thingTypesArray = Object.keys(thingConfigs).map((thingName) =>
     createThingType(thingConfigs[thingName]),
   );
 
-  const derivativeSuffixes = Object.keys(derivativeConfigs);
-  Object.keys(thingConfigs)
-    .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded }) => !embedded)
-    .reduce((prev, thingConfig) => {
-      derivativeSuffixes.forEach((derivativeSuffix) => {
-        const derivativeConfig = composeDerivativeConfig(
-          derivativeConfigs[derivativeSuffix],
-          thingConfig,
-          generalConfig,
-        );
-        if (derivativeConfig) prev.push(createThingType(derivativeConfig));
-      });
+  // 2. generate derivative objects' signatures
 
-      return prev;
-    }, thingTypesArray);
+  Object.keys(derivative || {}).reduce((prev, suffix) => {
+    const { allow } = derivative[suffix];
+    Object.keys(allow).forEach((thingName) => {
+      const derivativeConfig = composeDerivativeConfig(
+        derivative[suffix],
+        thingConfigs[thingName],
+        generalConfig,
+      );
+      if (derivativeConfig) prev.push(createThingType(derivativeConfig));
+    });
+
+    return prev;
+  }, thingTypesArray);
 
   const thingTypes = thingTypesArray.join('\n');
 
-  const thingInputTypes = allowMutations
-    ? Object.keys(thingConfigs)
-        .map((thingName) => thingConfigs[thingName])
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
-          // use ['Mutation', 'createThing'] not ['Mutation', 'updateThing', name] ...
-          // ... to let creation of children things of other types
-          if (checkInventory(['Mutation', 'createThing'], inventory)) {
-            const thingCreateInputType = createThingCreateInputType(thingConfig);
-            prev.push(thingCreateInputType);
-          }
-          if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
-            const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
-            if (pushIntoThingInputType) prev.push(pushIntoThingInputType);
-          }
-          if (
-            checkInventory(['Mutation', 'createThing'], inventory) ||
-            checkInventory(['Mutation', 'updateThing', name], inventory)
-          ) {
-            const thingReorderCreatedInputType = createThingReorderCreatedInputType(thingConfig);
-            if (thingReorderCreatedInputType) prev.push(thingReorderCreatedInputType);
-          }
-          // not check Inventory because may use not only for updateThing mutation ...
-          // ... but for embedded & file fields
-          const thingUpdateInputType = createThingUpdateInputType(thingConfig);
-          prev.push(thingUpdateInputType);
-          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
-            const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
-            const uploadFilesToThingInputType = createUploadFilesToThingInputType(thingConfig);
-            if (filesOfThingOptionsInputType) {
-              prev.push(filesOfThingOptionsInputType);
-              prev.push(uploadFilesToThingInputType);
+  // 3. generate standard actions' signatures ...
+  // ... AND add to "input dic" standard inputs
 
-              const thingReorderUploadedInputType = createThingReorderUploadedInputType(
-                thingConfig,
-              );
-              if (thingReorderUploadedInputType) prev.push(thingReorderUploadedInputType);
-            }
-          }
-          return prev;
-        }, [])
-    : [];
+  const inputDic = {};
+  const thingQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
+    thingNames.forEach((thingName) => {
+      const action = composeStandardActionSignature(
+        thingConfigs[thingName],
+        queryAttributes[actionName],
+        inputDic,
+        inventory,
+      );
+      if (action) prev.push(action);
+    });
+    return prev;
+  }, []);
 
-  if (allowQueries) {
-    Object.keys(thingConfigs)
-      .map((thingName) => thingConfigs[thingName])
-      .filter(({ embedded, file }) => !(embedded || file))
-      .reduce((prev, thingConfig) => {
-        const { name } = thingConfig;
+  const thingMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
+    thingNames.forEach((thingName) => {
+      const action = composeStandardActionSignature(
+        thingConfigs[thingName],
+        mutationAttributes[actionName],
+        inputDic,
+        inventory,
+      );
+      if (action) prev.push(action);
+    });
+    return prev;
+  }, []);
 
-        if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
-          const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
-            thingConfig,
-          );
-          prev.push(thingDistinctValuesOptionsInputType);
-        }
+  // 4. generate custom actions' signatures
 
-        return prev;
-      }, thingInputTypes);
-
-    if (checkInventory(['Query', 'thingFile'], inventory)) {
-      const fileWhereOneInputType = createFileWhereOneInputType(generalConfig);
-      if (fileWhereOneInputType) {
-        thingInputTypes.push(fileWhereOneInputType);
-      }
-    }
-    if (checkInventory(['Query', 'thingFiles'], inventory)) {
-      const fileWhereInputType = createFileWhereInputType(generalConfig);
-      if (fileWhereInputType) {
-        thingInputTypes.push(fileWhereInputType);
-      }
-    }
-  }
-
-  const thingInputTypes2 = thingInputTypes.join('\n');
-
-  const customInputObjectNames = Object.keys(customInputObject);
-  const input = true;
-  const thingInputTypes3 = Object.keys(thingConfigs)
-    .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded, file }) => !(embedded || file))
-    .reduce((prev, thingConfig) => {
-      const { name } = thingConfig;
-      if (
-        checkInventory(['Query', 'thing', name], inventory) ||
-        checkInventory(['Mutation', 'updateThing', name], inventory) ||
-        checkInventory(['Mutation', 'deleteThing', name], inventory)
-      ) {
-        const thingWhereOneInputType = createThingWhereOneInputType(thingConfig);
-        prev.push(thingWhereOneInputType);
-      }
-      if (
-        checkInventory(['Query', 'things', name], inventory) ||
-        checkInventory(['Query', 'thingCount', name], inventory)
-      ) {
-        prev.push(createThingWhereInputType(thingConfig));
-        prev.push(createThingSortInputType(thingConfig));
-        const thingPaginationInputType = createThingPaginationInputType(thingConfig);
-        if (thingPaginationInputType) prev.push(thingPaginationInputType);
-        const thingNearInputType = createThingNearInputType(thingConfig);
-        if (thingNearInputType) prev.push(thingNearInputType);
-      }
-
-      customInputObjectNames.forEach((customName) => {
-        const customInputType = composeObjectSignature(
-          customInputObject[customName],
-          thingConfig,
+  thingNames.forEach((thingName) => {
+    Object.keys(customQuery).forEach((customName) => {
+      if (checkInventory(['Query', customName, thingName], inventory)) {
+        const action = composeActionSignature(
+          customQuery[customName],
+          thingConfigs[thingName],
           generalConfig,
-          input,
         );
-        if (customInputType) prev.push(customInputType);
-      });
-
-      return prev;
-    }, [])
-    .join('\n');
-
-  const thingQueryTypes = [];
-  if (allowQueries) {
-    const customQueryNames = Object.keys(customQuery);
-
-    Object.keys(thingConfigs)
-      .map((thingName) => thingConfigs[thingName])
-      .filter(({ embedded }) => !embedded)
-      .reduce((prev, thingConfig) => {
-        const { file, name } = thingConfig;
-        if (file) {
-          if (checkInventory(['Query', 'thingFile', name], inventory)) {
-            prev.push(createThingFileQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'thingFiles', name], inventory)) {
-            prev.push(createThingFilesQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'thingFileCount', name], inventory)) {
-            prev.push(createThingFileCountQueryType(thingConfig));
-          }
-        } else {
-          if (checkInventory(['Query', 'thing', name], inventory)) {
-            prev.push(createThingQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'things', name], inventory)) {
-            prev.push(createThingsQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'thingCount', name], inventory)) {
-            prev.push(createThingCountQueryType(thingConfig));
-          }
-          if (checkInventory(['Query', 'thingDistinctValues', name], inventory)) {
-            prev.push(createThingDistinctValuesQueryType(thingConfig));
-          }
-
-          customQueryNames.forEach((customName) => {
-            if (checkInventory(['Query', customName, name], inventory)) {
-              prev.push(
-                `  ${composeActionSignature(customQuery[customName], thingConfig, generalConfig)}`,
-              );
-            }
-          });
+        if (action) {
+          thingQueryTypes.push(`  ${action}`);
         }
+      }
+    });
 
-        return prev;
-      }, thingQueryTypes);
-  }
+    Object.keys(customMutation).forEach((customName) => {
+      if (checkInventory(['Mutation', customName, thingName], inventory)) {
+        const action = composeActionSignature(
+          customMutation[customName],
+          thingConfigs[thingName],
+          generalConfig,
+        );
+        if (action) {
+          thingMutationTypes.push(`  ${action}`);
+        }
+      }
+    });
+  });
 
   const thingQueryTypes2 = thingQueryTypes.length
     ? `type Query {
@@ -258,69 +130,45 @@ ${thingQueryTypes.join('\n')}
 }`
     : '';
 
-  const thingMutationTypes = [];
-  if (allowMutations) {
-    const customMutationNames = Object.keys(customMutation);
-
-    Object.keys(thingConfigs)
-      .map((thingName) => thingConfigs[thingName])
-      .filter(({ embedded }) => !embedded)
-      .reduce((prev, thingConfig) => {
-        const { name, file } = thingConfig;
-        if (file) {
-          if (checkInventory(['Mutation', 'uploadThingFiles', name], inventory)) {
-            prev.push(createUploadThingFilesMutationType(thingConfig));
-          }
-        } else {
-          if (checkInventory(['Mutation', 'createThing', name], inventory)) {
-            prev.push(createCreateThingMutationType(thingConfig));
-
-            if (checkInventory(['Mutation', 'createManyThings', name], inventory)) {
-              prev.push(createCreateManyThingsMutationType(thingConfig));
-            }
-
-            if (checkInventory(['Mutation', 'importThings', name], inventory)) {
-              prev.push(createImportThingsMutationType(thingConfig));
-            }
-          }
-          if (checkInventory(['Mutation', 'pushIntoThing', name], inventory)) {
-            const pushIntoThingMutationType = createPushIntoThingMutationType(thingConfig);
-            if (pushIntoThingMutationType) prev.push(pushIntoThingMutationType);
-          }
-          if (checkInventory(['Mutation', 'updateThing', name], inventory)) {
-            prev.push(createUpdateThingMutationType(thingConfig));
-          }
-          if (checkInventory(['Mutation', 'deleteThing', name], inventory)) {
-            prev.push(createDeleteThingMutationType(thingConfig));
-          }
-          if (checkInventory(['Mutation', 'uploadFilesToThing', name], inventory)) {
-            const uploadFilesToThingMutationType = createUploadFilesToThingMutationType(
-              thingConfig,
-            );
-            if (uploadFilesToThingMutationType) prev.push(uploadFilesToThingMutationType);
-          }
-
-          customMutationNames.forEach((customName) => {
-            if (checkInventory(['Mutation', customName, name], inventory)) {
-              prev.push(
-                `  ${composeActionSignature(
-                  customMutation[customName],
-                  thingConfig,
-                  generalConfig,
-                )}`,
-              );
-            }
-          });
-        }
-        return prev;
-      }, thingMutationTypes);
-  }
-
   const thingMutationTypes2 = thingMutationTypes.length
     ? `type Mutation {
 ${thingMutationTypes.join('\n')}
 }`
     : '';
+
+  // 5. add to "input dic" derivative inputs
+
+  collectDerivativeInputs(generalConfig, inputDic);
+
+  // 6. add to "input dic" custom inputs
+
+  const customInputObjectNames = Object.keys(customInputObject);
+  const input = true;
+  thingNames.reduce((prev, thingName) => {
+    customInputObjectNames.forEach((customName) => {
+      const customInputType = composeObjectSignature(
+        customInputObject[customName],
+        thingConfigs[thingName],
+        generalConfig,
+        input,
+      );
+      if (customInputType) {
+        const key = customInputObject[customName].specificName(
+          thingConfigs[thingName],
+          generalConfig,
+        );
+        prev[key] = customInputType; // eslint-disable-line no-param-reassign
+      }
+    });
+
+    return prev;
+  }, inputDic);
+
+  const inputs = Object.keys(inputDic)
+    .map((inputName) => inputDic[inputName])
+    .join('\n');
+
+  // prepare subscriptions
 
   const updatedThingPayloadTypes = allowSubscriptions
     ? Object.keys(thingConfigs)
@@ -381,13 +229,9 @@ ${thingSubscriptionTypes}
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);
 
-  const importOptionsInputTypes = composeImportOptionsInputTypes(generalConfig);
-  if (importOptionsInputTypes) resultArray.push(importOptionsInputTypes);
-
   resultArray.push(thingTypes);
 
-  if (thingInputTypes2) resultArray.push(thingInputTypes2);
-  if (thingInputTypes3) resultArray.push(thingInputTypes3);
+  if (inputs) resultArray.push(inputs);
   if (updatedThingPayloadTypes) resultArray.push(updatedThingPayloadTypes);
   if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
   if (thingMutationTypes2) resultArray.push(thingMutationTypes2);

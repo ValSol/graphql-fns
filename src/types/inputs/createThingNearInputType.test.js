@@ -17,7 +17,7 @@ describe('createThingNearInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleNearInput', '', {}];
 
     const result = createThingNearInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -42,14 +42,18 @@ describe('createThingNearInputType', () => {
         },
       ],
     };
-    const expectedResult = `enum ExampleGeospatialFieldNamesEnum {
+    const expectedResult = [
+      'ExampleNearInput',
+      `enum ExampleGeospatialFieldNamesEnum {
   position
 }
 input ExampleNearInput {
   geospatialField: ExampleGeospatialFieldNamesEnum
   coordinates: GeospatialPointInput
   maxDistance: Float
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingNearInputType(thingConfig);
     expect(result).toEqual(expectedResult);

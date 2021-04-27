@@ -1,8 +1,10 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
+import createThingCreateInputType from './createThingCreateInputType';
+
+const createPushIntoThingInputType: InputCreator = (thingConfig) => {
   const {
     booleanFields,
     dateTimeFields,
@@ -20,9 +22,12 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
     name,
   } = thingConfig;
 
-  if (embedded || file) return '';
+  const inputName = `PushInto${name}Input`;
+
+  if (embedded || file) return [inputName, '', {}];
 
   const thingTypeArray = [];
+  const childChain = {};
 
   if (textFields) {
     textFields
@@ -81,8 +86,11 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
   if (relationalFields) {
     relationalFields
       .filter(({ array }) => array)
-      .reduce((prev, { name: name2, config: { name: relationalThingName } }) => {
+      .reduce((prev, { name: name2, config: config2, config: { name: relationalThingName } }) => {
         prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
+
+        childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config2];
+
         return prev;
       }, thingTypeArray);
   }
@@ -91,8 +99,11 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
   if (duplexFields) {
     duplexFields
       .filter(({ array }) => array)
-      .reduce((prev, { name: name2, config: { name: relationalThingName } }) => {
+      .reduce((prev, { name: name2, config: config2, config: { name: relationalThingName } }) => {
         prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
+
+        childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config2];
+
         return prev;
       }, thingTypeArray);
   }
@@ -100,8 +111,11 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
   if (embeddedFields) {
     embeddedFields
       .filter(({ array }) => array)
-      .reduce((prev, { name: name2, config: { name: embeddedName } }) => {
+      .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
+
+        childChain[`${embeddedName}CreateInput`] = [createThingCreateInputType, config2];
+
         return prev;
       }, thingTypeArray);
   }
@@ -110,8 +124,11 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
   if (fileFields) {
     fileFields
       .filter(({ array }) => array)
-      .reduce((prev, { name: name2, config: { name: embeddedName } }) => {
+      .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
+
+        childChain[`${embeddedName}CreateInput`] = [createThingCreateInputType, config2];
+
         return prev;
       }, thingTypeArray);
   }
@@ -125,14 +142,14 @@ const createPushIntoThingInputType = (thingConfig: ThingConfig): string => {
       }, thingTypeArray);
   }
 
-  if (!thingTypeArray.length) return '';
+  if (!thingTypeArray.length) return [inputName, '', {}];
 
   thingTypeArray.unshift(`input PushInto${name}Input {`);
   thingTypeArray.push('}');
 
-  const result = thingTypeArray.join('\n');
+  const inputDefinition = thingTypeArray.join('\n');
 
-  return result;
+  return [inputName, inputDefinition, childChain];
 };
 
 export default createPushIntoThingInputType;

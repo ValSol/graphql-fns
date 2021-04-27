@@ -2,16 +2,17 @@
 import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
-import composePushIntoThingMutationArgs from './composePushIntoThingMutationArgs';
-import composeCreateManyThingsMutationArgs from './composeCreateManyThingsMutationArgs';
-import composeCreateThingMutationArgs from './composeCreateThingMutationArgs';
+import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
+import createThingMutationAttributes from '../../types/actionAttributes/createThingMutationAttributes';
+import deleteThingMutationAttributes from '../../types/actionAttributes/deleteThingMutationAttributes';
+import importThingsMutationAttributes from '../../types/actionAttributes/importThingsMutationAttributes';
+import pushIntoThingMutationAttributes from '../../types/actionAttributes/pushIntoThingMutationAttributes';
+import updateThingMutationAttributes from '../../types/actionAttributes/updateThingMutationAttributes';
+import uploadFilesToThingMutationAttributes from '../../types/actionAttributes/uploadFilesToThingMutationAttributes';
+import uploadThingFilesMutationAttributes from '../../types/actionAttributes/uploadThingFilesMutationAttributes';
 import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
-import composeImportThingsMutationArgs from './composeImportThingsMutationArgs';
-import composeDeleteThingMutationArgs from './composeDeleteThingMutationArgs';
-import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
-import composeUploadFilesToThingMutationArgs from './composeUploadFilesToThingMutationArgs';
-import composeUploadThingFilesMutationArgs from './composeUploadThingFilesMutationArgs';
 
 const composeMutation = (
   prefixName: string,
@@ -30,35 +31,35 @@ const composeMutation = (
 
   switch (mutationName) {
     case 'createManyThings':
-      head = composeCreateManyThingsMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, createManyThingsMutationAttributes);
       break;
 
     case 'importThings':
-      head = composeImportThingsMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, importThingsMutationAttributes);
       break;
 
     case 'createThing':
-      head = composeCreateThingMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, createThingMutationAttributes);
       break;
 
     case 'deleteThing':
-      head = composeDeleteThingMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, deleteThingMutationAttributes);
       break;
 
     case 'pushIntoThing':
-      head = composePushIntoThingMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, pushIntoThingMutationAttributes);
       break;
 
     case 'updateThing':
-      head = composeUpdateThingMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, updateThingMutationAttributes);
       break;
 
     case 'uploadFilesToThing':
-      head = composeUploadFilesToThingMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, uploadFilesToThingMutationAttributes);
       break;
 
     case 'uploadThingFiles':
-      head = composeUploadThingFilesMutationArgs(prefixName, thingConfig);
+      head = composeActionArgs(prefixName, thingConfig, uploadThingFilesMutationAttributes);
       break;
 
     default:

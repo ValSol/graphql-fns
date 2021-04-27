@@ -1,17 +1,12 @@
 // @flow
 
-import type { GeneralConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createFileWhereInputType = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs } = generalConfig;
+const createFileWhereInputType: InputCreator = (thingConfig) => {
+  const inputName = 'FileWhereInput';
 
-  const thereAreFiles = Object.keys(thingConfigs).some(
-    (key) => thingConfigs[key] && thingConfigs[key].file,
-  );
-
-  if (!thereAreFiles) return '';
-
-  return `input FileWhereInput {
+  const inputDefinition = thingConfig.file
+    ? `input FileWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -51,7 +46,10 @@ const createFileWhereInputType = (generalConfig: GeneralConfig): string => {
   AND: [FileWhereInput!]
   NOR: [FileWhereInput!]
   OR: [FileWhereInput!]
-}`;
+}`
+    : '';
+
+  return [inputName, inputDefinition, {}];
 };
 
 export default createFileWhereInputType;

@@ -469,8 +469,8 @@ export type GeneralConfig = {
     },
   },
   +derivative?: {
-    // whole derivative name = thingName (baseName) + derivativeName
-    +[derivativeName: string]: {
+    // whole derivative name = thingName (baseName) + suffix
+    +[suffix: string]: {
       +suffix: string,
       +allow: {
         // eslint-disable-next-line flowtype/generic-spacing
@@ -740,4 +740,20 @@ export type AdminListContextState = {
   filters: AdminFilters,
   config: ThingConfig | null,
   outdated: boolean,
+};
+
+export type InputCreator = (
+  thingConfig: ThingConfig,
+) => [string, string, { [inputSpecificName: string]: [InputCreator, ThingConfig] }];
+
+export type ActionAttributes = {
+  actionGeneralName: (suffix?: string) => string,
+  actionType: 'mutation' | 'query',
+  actionAllowed: (thingConfig: ThingConfig) => boolean,
+  actionName: (baseName: string, suffix?: string) => string,
+  inputCreators: Array<InputCreator>, // TODO inputCreators
+  argNames: Array<string>,
+  argTypes: Array<(name: string) => string>,
+  actionReturnString: (suffix: string) => (thingConfig: ThingConfig) => string,
+  actionReturnConfig: boolean,
 };

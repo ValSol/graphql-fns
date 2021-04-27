@@ -1,9 +1,11 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createThingReorderUploadedInputType = (thingConfig: ThingConfig): string => {
+const createThingReorderUploadedInputType: InputCreator = (thingConfig) => {
   const { fileFields, name } = thingConfig;
+
+  const inputName = `${name}ReorderUploadedInput`;
 
   const thingTypeArray = [];
 
@@ -17,14 +19,14 @@ const createThingReorderUploadedInputType = (thingConfig: ThingConfig): string =
     }, thingTypeArray);
   }
 
-  if (!thingTypeArray.length) return '';
+  if (!thingTypeArray.length) return [inputName, '', {}];
 
   thingTypeArray.unshift(`input ${name}ReorderUploadedInput {`);
   thingTypeArray.push('}');
 
-  const result = thingTypeArray.join('\n');
+  const inputDefinition = thingTypeArray.join('\n');
 
-  return result;
+  return [inputName, inputDefinition, {}];
 };
 
 export default createThingReorderUploadedInputType;

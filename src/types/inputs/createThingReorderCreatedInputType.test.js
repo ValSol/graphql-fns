@@ -33,7 +33,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -70,10 +70,14 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonReorderCreatedInput {
+    const expectedResult = [
+      'PersonReorderCreatedInput',
+      `input PersonReorderCreatedInput {
   friends: [Int!]
   enemies: [Int!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingReorderCreatedInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -128,10 +132,14 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     });
-    const expectedResult = `input PersonReorderCreatedInput {
+    const expectedResult = [
+      'PersonReorderCreatedInput',
+      `input PersonReorderCreatedInput {
   friends: [Int!]
   enemies: [Int!]
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingReorderCreatedInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -187,7 +195,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['PersonReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -239,7 +247,8 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
+
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
@@ -271,7 +280,7 @@ describe('createThingReorderCreatedInputType', () => {
       ],
     };
 
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -304,7 +313,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -337,7 +346,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -370,7 +379,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -390,7 +399,7 @@ describe('createThingReorderCreatedInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ImageReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(imageConfig);
     expect(result).toEqual(expectedResult);
@@ -442,7 +451,7 @@ describe('createThingReorderCreatedInputType', () => {
       ],
     });
 
-    const expectedResult = '';
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
     const result = createThingReorderCreatedInputType(thingConfig);
     expect(result).toEqual(expectedResult);

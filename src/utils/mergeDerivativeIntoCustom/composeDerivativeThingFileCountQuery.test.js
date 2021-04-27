@@ -2,38 +2,39 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingFileCountQuery from './composeDerivativeThingFileCountQuery';
+import thingFileCountQueryAttributes from '../../types/actionAttributes/thingFileCountQueryAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeThingFileCountQuery', () => {
-  test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Photo',
-      file: true,
-      textFields: [
-        {
-          name: 'textField',
-          index: true,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Photo: ['thingFileCount'] },
-      suffix: 'ForCatalog',
-      Photo: {
-        floatFields: [{ name: 'floatField' }],
+  const thingConfig: ThingConfig = {
+    name: 'Photo',
+    file: true,
+    textFields: [
+      {
+        name: 'textField',
+        index: true,
       },
-    };
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Photo: ['thingFileCount'] },
+    suffix: 'ForCatalog',
+    Photo: {
+      floatFields: [{ name: 'floatField' }],
+    },
+  };
 
-    const derivative = { ForCatalog };
+  const derivative = { ForCatalog };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Photo: thingConfig },
-      derivative,
-    };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Photo: thingConfig },
+    derivative,
+  };
 
-    const result = composeDerivativeThingFileCountQuery(ForCatalog);
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, thingFileCountQueryAttributes);
 
     const expectedResult = {
       name: 'thingFileCountForCatalog',
@@ -43,7 +44,7 @@ describe('composeDerivativeThingFileCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: () => ['FileWhereInput'],
-      type: ({ name }) => `${name}ForCatalog`,
+      type: () => 'Int!',
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
     };

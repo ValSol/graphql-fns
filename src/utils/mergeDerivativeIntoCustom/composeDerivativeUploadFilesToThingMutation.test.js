@@ -2,57 +2,58 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeUploadFilesToThingMutation from './composeDerivativeUploadFilesToThingMutation';
+import uploadFilesToThingMutationAttributes from '../../types/actionAttributes/uploadFilesToThingMutationAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeUploadFilesToThingMutation', () => {
-  test('should return correct derivative config', () => {
-    const imageConfig: ThingConfig = {
-      name: 'Image',
-      file: true,
-      textFields: [
-        {
-          name: 'fileId',
-        },
-        {
-          name: 'address',
-        },
-      ],
-    };
-
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-          array: true,
-          index: true,
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['uploadFilesToThing'] },
-      suffix: 'ForCatalog',
-      Example: {
-        floatFields: [{ name: 'floatField' }],
+  const imageConfig: ThingConfig = {
+    name: 'Image',
+    file: true,
+    textFields: [
+      {
+        name: 'fileId',
       },
-    };
+      {
+        name: 'address',
+      },
+    ],
+  };
 
-    const derivative = { ForCatalog };
+  const thingConfig: ThingConfig = {
+    name: 'Example',
+    textFields: [
+      {
+        name: 'textField',
+        array: true,
+        index: true,
+      },
+    ],
+    fileFields: [
+      {
+        name: 'logo',
+        config: imageConfig,
+      },
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Example: ['uploadFilesToThing'] },
+    suffix: 'ForCatalog',
+    Example: {
+      floatFields: [{ name: 'floatField' }],
+    },
+  };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
-      derivative,
-    };
+  const derivative = { ForCatalog };
 
-    const result = composeDerivativeUploadFilesToThingMutation(ForCatalog);
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Example: thingConfig },
+    derivative,
+  };
+
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, uploadFilesToThingMutationAttributes);
 
     const expectedResult = {
       name: 'uploadFilesToThingForCatalog',
@@ -62,10 +63,10 @@ describe('composeDerivativeUploadFilesToThingMutation', () => {
           : '',
       argNames: () => ['whereOne', 'data', 'files', 'options'],
       argTypes: ({ name }) => [
-        `${name}WhereOneInput!`,
-        `UploadFilesTo${name}Input`,
+        `${name}ForCatalogWhereOneInput!`,
+        `UploadFilesTo${name}ForCatalogInput`,
         '[Upload!]!',
-        `FilesOf${name}OptionsInput!`,
+        `FilesOf${name}ForCatalogOptionsInput!`,
       ],
       type: ({ name }) => `${name}ForCatalog!`,
       config: (thingConfig2, generalConfig2) =>

@@ -5,38 +5,39 @@ import pluralize from 'pluralize';
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeImportThingsMutation from './composeDerivativeImportThingsMutation';
+import importThingsMutationAttributes from '../../types/actionAttributes/importThingsMutationAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeImportThingsMutation', () => {
-  test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-          array: true,
-          index: true,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['importThings'] },
-      suffix: 'ForCatalog',
-      Example: {
-        floatFields: [{ name: 'floatField' }],
+  const thingConfig: ThingConfig = {
+    name: 'Example',
+    textFields: [
+      {
+        name: 'textField',
+        array: true,
+        index: true,
       },
-    };
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Example: ['importThings'] },
+    suffix: 'ForCatalog',
+    Example: {
+      floatFields: [{ name: 'floatField' }],
+    },
+  };
 
-    const derivative = { ForCatalog };
+  const derivative = { ForCatalog };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
-      derivative,
-    };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Example: thingConfig },
+    derivative,
+  };
 
-    const result = composeDerivativeImportThingsMutation(ForCatalog);
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, importThingsMutationAttributes);
 
     const expectedResult = {
       name: 'importThingsForCatalog',

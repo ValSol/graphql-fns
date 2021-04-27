@@ -5,40 +5,41 @@ import pluralize from 'pluralize';
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeCreateManyThingsMutation from './composeDerivativeCreateManyThingsMutation';
+import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeCreateManyThingsMutation', () => {
-  test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-          array: true,
-          index: true,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['createManyThings'] },
-      suffix: 'ForCatalog',
-      addFields: {
-        Example: () => ({
-          floatFields: [{ name: 'floatField' }],
-        }),
+  const thingConfig: ThingConfig = {
+    name: 'Example',
+    textFields: [
+      {
+        name: 'textField',
+        array: true,
+        index: true,
       },
-    };
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Example: ['createManyThings'] },
+    suffix: 'ForCatalog',
+    addFields: {
+      Example: () => ({
+        floatFields: [{ name: 'floatField' }],
+      }),
+    },
+  };
 
-    const derivative = { ForCatalog };
+  const derivative = { ForCatalog };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
-      derivative,
-    };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Example: thingConfig },
+    derivative,
+  };
 
-    const result = composeDerivativeCreateManyThingsMutation(ForCatalog);
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, createManyThingsMutationAttributes);
 
     const expectedResult = {
       name: 'createManyThingsForCatalog',
@@ -47,7 +48,7 @@ describe('composeDerivativeCreateManyThingsMutation', () => {
           ? `createMany${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['data'],
-      argTypes: ({ name }) => [`[${name}CreateInput!]!`],
+      argTypes: ({ name }) => [`[${name}ForCatalogCreateInput!]!`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),

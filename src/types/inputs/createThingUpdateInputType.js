@@ -1,10 +1,11 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
+import createThingCreateInputType from './createThingCreateInputType';
 import isOppositeRequired from './isOppositeRequired';
 
-const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
+const createThingUpdateInputType: InputCreator = (thingConfig) => {
   const {
     booleanFields,
     dateTimeFields,
@@ -19,6 +20,9 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
     textFields,
     name,
   } = thingConfig;
+
+  const inputName = `${name}UpdateInput`;
+  const childChain = {};
 
   const thingTypeArray = [`input ${name}UpdateInput {`];
 
@@ -66,12 +70,15 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, name: name2, config: { name: relationalThingName } }) => {
+      (prev, { array, name: name2, config, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${relationalThingName}${
             array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
           }`,
         );
+
+        childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config];
+
         return prev;
       },
       thingTypeArray,
@@ -102,6 +109,8 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
           );
         }
 
+        childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config];
+
         return prev;
       },
       thingTypeArray,
@@ -109,16 +118,25 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
   }
 
   if (embeddedFields) {
-    embeddedFields.reduce((prev, { array, name: name2, config: { name: embeddedName } }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    embeddedFields.reduce(
+      (prev, { array, name: name2, config, config: { name: embeddedName } }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+
+        childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config];
+
+        return prev;
+      },
+      thingTypeArray,
+    );
   }
 
   // the same code as for embeddedFields
   if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2, config: { name: embeddedName } }) => {
+    fileFields.reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
       prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+
+      childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config];
+
       return prev;
     }, thingTypeArray);
   }
@@ -134,9 +152,9 @@ const createThingUpdateInputType = (thingConfig: ThingConfig): string => {
 
   thingTypeArray.push('}');
 
-  const result = thingTypeArray.join('\n');
+  const inputDefinition = thingTypeArray.join('\n');
 
-  return result;
+  return [inputName, inputDefinition, childChain];
 };
 
 export default createThingUpdateInputType;

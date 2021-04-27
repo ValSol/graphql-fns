@@ -3,40 +3,41 @@
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeDeleteThingMutation from './composeDerivativeDeleteThingMutation';
+import deleteThingMutationAttributes from '../../types/actionAttributes/deleteThingMutationAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeDeleteThingMutation', () => {
-  test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-          array: true,
-          index: true,
-        },
-      ],
-    };
-    const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['deleteThing'] },
-      suffix: 'ForCatalog',
-      addFields: {
-        Example: () => ({
-          floatFields: [{ name: 'floatField' }],
-        }),
+  const thingConfig: ThingConfig = {
+    name: 'Example',
+    textFields: [
+      {
+        name: 'textField',
+        array: true,
+        index: true,
       },
-    };
+    ],
+  };
+  const ForCatalog: DerivativeAttributes = {
+    allow: { Example: ['deleteThing'] },
+    suffix: 'ForCatalog',
+    addFields: {
+      Example: () => ({
+        floatFields: [{ name: 'floatField' }],
+      }),
+    },
+  };
 
-    const derivative = { ForCatalog };
+  const derivative = { ForCatalog };
 
-    const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
-      derivative,
-    };
+  const generalConfig: GeneralConfig = {
+    thingConfigs: { Example: thingConfig },
+    derivative,
+  };
 
-    const result = composeDerivativeDeleteThingMutation(ForCatalog);
+  test('should return correct derivative config', () => {
+    const result = composeCustomAction(ForCatalog, deleteThingMutationAttributes);
 
     const expectedResult = {
       name: 'deleteThingForCatalog',
@@ -45,8 +46,8 @@ describe('composeDerivativeDeleteThingMutation', () => {
           ? `delete${name}ForCatalog`
           : '',
       argNames: () => ['whereOne'],
-      argTypes: ({ name }) => [`${name}WhereOneInput!`],
-      type: ({ name }) => `${name}ForCatalog`,
+      argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`],
+      type: ({ name }) => `${name}ForCatalog!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
     };

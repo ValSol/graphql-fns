@@ -18,7 +18,7 @@ const composeActionSignature = (
 
   const specificName = composeName(thingConfig, generalConfig);
 
-  // by making name = '' filter unnecessary action
+  // by making specificName = '' filter unnecessary action
   if (!specificName) return '';
 
   // *** test correctness of the specificName name

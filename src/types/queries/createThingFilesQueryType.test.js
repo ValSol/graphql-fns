@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingFilesQueryType from './createThingFilesQueryType';
+import thingFilesQueryAttributes from '../actionAttributes/thingFilesQueryAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createThingFilesQueryType', () => {
   test('should create query only thing type', () => {
@@ -12,8 +13,9 @@ describe('createThingFilesQueryType', () => {
       file: true,
     };
     const expectedResult = '  ExampleFiles(where: FileWhereInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingFilesQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingFilesQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 });

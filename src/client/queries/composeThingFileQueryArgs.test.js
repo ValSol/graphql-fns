@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingFileQueryArgs from './composeThingFileQueryArgs';
+import thingFileQueryAttributes from '../../types/actionAttributes/thingFileQueryAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeThingFileQueryArgs', () => {
   test('should compose thing query args ', () => {
@@ -19,7 +20,7 @@ describe('composeThingFileQueryArgs', () => {
       '  ImageFile(whereOne: $whereOne) {',
     ];
 
-    const result = composeThingFileQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingFileQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

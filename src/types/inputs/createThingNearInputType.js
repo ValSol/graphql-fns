@@ -1,27 +1,31 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { InputCreator } from '../../flowTypes';
 
-const createThingNearInputType = (thingConfig: ThingConfig): string => {
+const createThingNearInputType: InputCreator = (thingConfig) => {
   const { name, geospatialFields } = thingConfig;
+
+  const inputName = `${name}NearInput`;
 
   const fieldLines = geospatialFields
     ? geospatialFields
         // for 'near' query will use only scalar points
         .filter(({ array, geospatialType }) => !array && geospatialType === 'Point')
         .map(({ name: fieldName }) => `  ${fieldName}`)
-    : [];
+    : {};
 
-  if (!fieldLines.length) return '';
-
-  return `enum ${name}GeospatialFieldNamesEnum {
+  const inputDefinition = fieldLines.length
+    ? `enum ${name}GeospatialFieldNamesEnum {
 ${fieldLines.join('\n')}
 }
 input ${name}NearInput {
   geospatialField: ${name}GeospatialFieldNamesEnum
   coordinates: GeospatialPointInput
   maxDistance: Float
-}`;
+}`
+    : '';
+
+  return [inputName, inputDefinition, {}];
 };
 
 export default createThingNearInputType;

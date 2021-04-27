@@ -2,7 +2,8 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingsQueryType from './createThingsQueryType';
+import thingsQueryAttributes from '../actionAttributes/thingsQueryAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createThingsQueryType', () => {
   test('should create query things type without index fields', () => {
@@ -11,8 +12,9 @@ describe('createThingsQueryType', () => {
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -32,8 +34,9 @@ describe('createThingsQueryType', () => {
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -53,8 +56,9 @@ describe('createThingsQueryType', () => {
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, search: String): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -64,9 +68,10 @@ describe('createThingsQueryType', () => {
       pagination: true,
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -86,8 +91,9 @@ describe('createThingsQueryType', () => {
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
@@ -117,9 +123,10 @@ describe('createThingsQueryType', () => {
       ],
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: ExamplePaginationInput, near: ExampleNearInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
+    const dic = {};
 
-    const result = createThingsQueryType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -5,9 +5,10 @@ import pluralize from 'pluralize';
 
 import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import composeDerivativeThingsQuery from './composeDerivativeThingsQuery';
+import thingsQueryAttributes from '../../types/actionAttributes/thingsQueryAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeThingsQuery', () => {
   const thingConfig: ThingConfig = {
@@ -81,7 +82,7 @@ describe('composeDerivativeThingsQuery', () => {
     derivative,
   };
 
-  const result = composeDerivativeThingsQuery(ForCatalog);
+  const result = composeCustomAction(ForCatalog, thingsQueryAttributes);
 
   test('should return inputs for "thingConfig"', () => {
     const expectedResult = {
@@ -91,7 +92,7 @@ describe('composeDerivativeThingsQuery', () => {
           ? `${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['where', 'sort'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogSortInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -112,7 +113,7 @@ describe('composeDerivativeThingsQuery', () => {
           ? `${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['where', 'sort'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`],
+      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogSortInput`],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -133,7 +134,11 @@ describe('composeDerivativeThingsQuery', () => {
           ? `${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['where', 'sort', 'pagination'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`, `${name}PaginationInput`],
+      argTypes: ({ name }) => [
+        `${name}ForCatalogWhereInput`,
+        `${name}ForCatalogSortInput`,
+        'PaginationInput',
+      ],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -158,7 +163,11 @@ describe('composeDerivativeThingsQuery', () => {
           ? `${pluralize(name)}ForCatalog`
           : '',
       argNames: () => ['where', 'sort', 'near'],
-      argTypes: ({ name }) => [`${name}WhereInput`, `${name}SortInput`, `${name}NearInput`],
+      argTypes: ({ name }) => [
+        `${name}ForCatalogWhereInput`,
+        `${name}ForCatalogSortInput`,
+        `${name}ForCatalogNearInput`,
+      ],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),

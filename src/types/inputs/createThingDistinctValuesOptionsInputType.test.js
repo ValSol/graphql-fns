@@ -17,7 +17,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
         },
       ],
     };
-    const expectedResult = '';
+    const expectedResult = ['ExampleDistinctValuesOptionsInput', '', {}];
 
     const result = createThingDistinctValuesOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
@@ -36,13 +36,17 @@ describe('createUploadFilesToThingOptionsInputType', () => {
         },
       ],
     };
-    const expectedResult = `enum ExampleTextNamesEnum {
+    const expectedResult = [
+      'ExampleDistinctValuesOptionsInput',
+      `enum ExampleTextNamesEnum {
   textField
   textFieldArray
 }
 input ExampleDistinctValuesOptionsInput {
   target: ExampleTextNamesEnum!
-}`;
+}`,
+      {},
+    ];
 
     const result = createThingDistinctValuesOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);

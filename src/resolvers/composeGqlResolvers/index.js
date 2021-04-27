@@ -78,7 +78,7 @@ const composeGqlResolvers = (
         const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
           thingConfig,
         );
-        if (thingDistinctValuesOptionsInputType) {
+        if (thingDistinctValuesOptionsInputType[1]) {
           const thingDistinctValuesQueryResolver = createThingDistinctValuesQueryResolver(
             thingConfig,
             generalConfig,
@@ -157,7 +157,7 @@ const composeGqlResolvers = (
         }
 
         const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
-        if (pushIntoThingInputType) {
+        if (pushIntoThingInputType[1]) {
           const pushIntoThingMutationResolver = createPushIntoThingMutationResolver(
             thingConfig,
             generalConfig,
@@ -190,7 +190,7 @@ const composeGqlResolvers = (
         }
 
         const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
-        if (filesOfThingOptionsInputType) {
+        if (filesOfThingOptionsInputType[1]) {
           const uploadFilesToThingMutationResolver = createUploadFilesToThingMutationResolver(
             thingConfig,
             generalConfig,

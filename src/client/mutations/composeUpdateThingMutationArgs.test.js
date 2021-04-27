@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeUpdateThingMutationArgs from './composeUpdateThingMutationArgs';
+import updateThingMutationAttributes from '../../types/actionAttributes/updateThingMutationAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUpdateThingMutationArgs', () => {
   test('should compose updateThing mutation args ', () => {
@@ -22,7 +23,7 @@ describe('composeUpdateThingMutationArgs', () => {
       '  updateExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeUpdateThingMutationArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, updateThingMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 
@@ -64,7 +65,7 @@ describe('composeUpdateThingMutationArgs', () => {
       '  updatePerson(whereOne: $whereOne, data: $data, positions: $positions) {',
     ];
 
-    const result = composeUpdateThingMutationArgs(prefixName, personConfig);
+    const result = composeActionArgs(prefixName, personConfig, updateThingMutationAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

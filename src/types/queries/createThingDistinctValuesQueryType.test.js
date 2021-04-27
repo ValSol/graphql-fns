@@ -2,7 +2,8 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingDistinctValuesQueryType from './createThingDistinctValuesQueryType';
+import thingDistinctValuesQueryAttributes from '../actionAttributes/thingDistinctValuesQueryAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createThingDistinctValuesQueryType', () => {
   test('should return empty string if there is not textFields', () => {
@@ -18,8 +19,13 @@ describe('createThingDistinctValuesQueryType', () => {
       ],
     };
     const expectedResult = '';
+    const dic = {};
 
-    const result = createThingDistinctValuesQueryType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      thingDistinctValuesQueryAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -38,8 +44,13 @@ describe('createThingDistinctValuesQueryType', () => {
     };
     const expectedResult =
       '  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!';
+    const dic = {};
 
-    const result = createThingDistinctValuesQueryType(thingConfig);
+    const result = composeStandardActionSignature(
+      thingConfig,
+      thingDistinctValuesQueryAttributes,
+      dic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

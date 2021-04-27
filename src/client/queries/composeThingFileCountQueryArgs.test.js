@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import composeThingFileCountQueryArgs from './composeThingFileCountQueryArgs';
+import thingFileCountQueryAttributes from '../../types/actionAttributes/thingFileCountQueryAttributes';
+import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeThingFileCountQuery', () => {
   test('should compose things query', () => {
@@ -14,11 +15,13 @@ describe('composeThingFileCountQuery', () => {
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 
-    const expectedResult = `query Home_ImageFileCount($where: FileWhereInput) {
+    const expectedResult = [
+      `query Home_ImageFileCount($where: FileWhereInput) {
   ImageFileCount(where: $where)
-}`;
+}`,
+    ];
 
-    const result = composeThingFileCountQueryArgs(prefixName, thingConfig);
+    const result = composeActionArgs(prefixName, thingConfig, thingFileCountQueryAttributes);
     expect(result).toEqual(expectedResult);
   });
 });

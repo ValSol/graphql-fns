@@ -3,7 +3,8 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createUpdateThingMutationType from './createUpdateThingMutationType';
+import updateThingMutationAttributes from '../actionAttributes/updateThingMutationAttributes';
+import composeStandardActionSignature from '../composeStandardActionSignature';
 
 describe('createUpdateThingMutationType', () => {
   test('should create mutation update thing type', () => {
@@ -17,12 +18,19 @@ describe('createUpdateThingMutationType', () => {
     };
     const expectedResult =
       '  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!';
+    const dic = {};
 
-    const result = createUpdateThingMutationType(thingConfig);
+    const result = composeStandardActionSignature(thingConfig, updateThingMutationAttributes, dic);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create mutation update thing type with ReorderCreatedInputType', () => {
+    const addressConfig: ThingConfig = {
+      name: 'Address',
+      embedded: true,
+      textFields: [{ name: 'city' }],
+    };
+
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'name' }],
@@ -30,6 +38,9 @@ describe('createUpdateThingMutationType', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+
+      embeddedFields: [{ name: 'address', config: addressConfig }],
+
       relationalFields: [
         {
           name: 'friends',
@@ -55,8 +66,62 @@ describe('createUpdateThingMutationType', () => {
     });
     const expectedResult =
       '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!';
+    const dic = {};
 
-    const result = createUpdateThingMutationType(personConfig);
+    const result = composeStandardActionSignature(personConfig, updateThingMutationAttributes, dic);
     expect(result).toEqual(expectedResult);
+
+    const expectedDic = {
+      PersonWhereOneInput: `input PersonWhereOneInput {
+  id: ID!
+}`,
+      PersonUpdateInput: `input PersonUpdateInput {
+  friends: PersonCreateOrPushChildrenInput
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput
+  favoritePlace: PlaceCreateChildInput
+  address: AddressUpdateInput
+}`,
+      PersonCreateInput: `input PersonCreateInput {
+  id: ID
+  friends: PersonCreateOrPushChildrenInput!
+  enemies: PersonCreateOrPushChildrenInput
+  location: PlaceCreateChildInput!
+  favoritePlace: PlaceCreateChildInput
+  address: AddressCreateInput
+}
+input PersonCreateChildInput {
+  connect: ID
+  create: PersonCreateInput
+}
+input PersonCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PersonCreateInput!]
+}`,
+      PlaceCreateInput: `input PlaceCreateInput {
+  id: ID
+  name: String
+}
+input PlaceCreateChildInput {
+  connect: ID
+  create: PlaceCreateInput
+}
+input PlaceCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [PlaceCreateInput!]
+}`,
+      AddressCreateInput: `input AddressCreateInput {
+  city: String
+}`,
+      AddressUpdateInput: `input AddressUpdateInput {
+  city: String
+}`,
+      PersonReorderCreatedInput: `input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}`,
+    };
+
+    expect(dic).toEqual(expectedDic);
   });
 });
