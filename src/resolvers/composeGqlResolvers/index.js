@@ -1,6 +1,5 @@
 // @flow
 
-import pluralize from 'pluralize';
 import { DateTimeResolver } from 'graphql-scalars';
 
 import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
@@ -8,28 +7,13 @@ import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 import checkInventory from '../../utils/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
-import createPushIntoThingInputType from '../../types/inputs/createPushIntoThingInputType';
-import createFilesOfThingOptionsInputType from '../../types/inputs/createFilesOfThingOptionsInputType';
-import createThingDistinctValuesOptionsInputType from '../../types/inputs/createThingDistinctValuesOptionsInputType';
 
-import createCustomResolver from '../createCustomResolver';
-import createThingCountQueryResolver from '../queries/createThingCountQueryResolver';
-import createThingFileCountQueryResolver from '../queries/createThingFileCountQueryResolver';
-import createThingFileQueryResolver from '../queries/createThingFileQueryResolver';
-import createThingFilesQueryResolver from '../queries/createThingFilesQueryResolver';
-import createThingDistinctValuesQueryResolver from '../queries/createThingDistinctValuesQueryResolver';
-import createThingQueryResolver from '../queries/createThingQueryResolver';
-import createThingsQueryResolver from '../queries/createThingsQueryResolver';
+import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
+
 import composeThingResolvers from '../types/composeThingResolvers';
-
-import createCreateManyThingsMutationResolver from '../mutations/createCreateManyThingsMutationResolver';
-import createCreateThingMutationResolver from '../mutations/createCreateThingMutationResolver';
-import createImportThingsMutationResolver from '../mutations/createImportThingsMutationResolver';
-import createPushIntoThingMutationResolver from '../mutations/createPushIntoThingMutationResolver';
-import createUpdateThingMutationResolver from '../mutations/createUpdateThingMutationResolver';
-import createDeleteThingMutationResolver from '../mutations/createDeleteThingMutationResolver';
-import createUploadFilesToThingMutationResolver from '../mutations/createUploadFilesToThingMutationResolver';
-import createUploadThingFilesMutationResolver from '../mutations/createUploadThingFilesMutationResolver';
+import createCustomResolver from '../createCustomResolver';
+import queries from '../queries';
+import mutations from '../mutations';
 
 import createCreatedThingSubscriptionResolver from '../subscriptions/createCreatedThingSubscriptionResolver';
 import createUpdatedThingSubscriptionResolver from '../subscriptions/createUpdatedThingSubscriptionResolver';
@@ -60,166 +44,76 @@ const composeGqlResolvers = (
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
+  Object.keys(thingConfigs).reduce((prev, thingName) => {
+    const thingConfig = thingConfigs[thingName];
+    if (allowQueries) {
+      Object.keys(queryAttributes).forEach((actionName) => {
+        if (queryAttributes[actionName].actionAllowed(thingConfig)) {
+          const resolver = queries[actionName](thingConfig, generalConfig, serversideConfig);
+          if (resolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Query[queryAttributes[actionName].actionName(thingName)] = resolver;
+          }
+        }
+      });
+
+      const customQueryNames = Object.keys(customQuery);
+
+      customQueryNames.forEach((customName) => {
+        const customQueryResolver = createCustomResolver(
+          'Query',
+          customName,
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        if (customQueryResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Query[
+            customQuery[customName].specificName(thingConfig, generalConfig)
+          ] = customQueryResolver;
+        }
+      });
+    }
+
+    if (allowMutations) {
+      Object.keys(mutationAttributes).forEach((actionName) => {
+        if (mutationAttributes[actionName].actionAllowed(thingConfig)) {
+          const resolver = mutations[actionName](thingConfig, generalConfig, serversideConfig);
+          if (resolver) {
+            // eslint-disable-next-line no-param-reassign
+            prev.Mutation[mutationAttributes[actionName].actionName(thingName)] = resolver;
+          }
+        }
+      });
+
+      const customMutationNames = Object.keys(customMutation);
+
+      customMutationNames.forEach((customName) => {
+        const customMutationResolver = createCustomResolver(
+          'Mutation',
+          customName,
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+        );
+        if (customMutationResolver) {
+          // eslint-disable-next-line no-param-reassign
+          prev.Mutation[
+            customMutation[customName].specificName(thingConfig, generalConfig)
+          ] = customMutationResolver;
+        }
+      });
+    }
+
+    return prev;
+  }, resolvers);
+
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
     .filter(({ embedded, file }) => !(embedded || file))
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
-
-      if (allowQueries) {
-        const thingCountQueryResolver = createThingCountQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        // eslint-disable-next-line no-param-reassign
-        if (thingCountQueryResolver) prev.Query[`${name}Count`] = thingCountQueryResolver;
-
-        const thingDistinctValuesOptionsInputType = createThingDistinctValuesOptionsInputType(
-          thingConfig,
-        );
-        if (thingDistinctValuesOptionsInputType[1]) {
-          const thingDistinctValuesQueryResolver = createThingDistinctValuesQueryResolver(
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (thingDistinctValuesQueryResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Query[`${name}DistinctValues`] = thingDistinctValuesQueryResolver;
-          }
-        }
-
-        const thingQueryResolver = createThingQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        // eslint-disable-next-line no-param-reassign
-        if (thingQueryResolver) prev.Query[name] = thingQueryResolver;
-
-        const thingsQueryResolver = createThingsQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        // eslint-disable-next-line no-param-reassign
-        if (thingsQueryResolver) prev.Query[pluralize(name)] = thingsQueryResolver;
-
-        const customQueryNames = Object.keys(customQuery);
-
-        customQueryNames.forEach((customName) => {
-          const customQueryResolver = createCustomResolver(
-            'Query',
-            customName,
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (customQueryResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Query[
-              customQuery[customName].specificName(thingConfig, generalConfig)
-            ] = customQueryResolver;
-          }
-        });
-      }
-
-      if (allowMutations) {
-        const createThingMutationResolver = createCreateThingMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (createThingMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`create${name}`] = createThingMutationResolver;
-        }
-
-        const createManyThingsMutationResolver = createCreateManyThingsMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (createManyThingsMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`createMany${pluralize(name)}`] = createManyThingsMutationResolver;
-        }
-
-        const importThingsMutationResolver = createImportThingsMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (importThingsMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`import${pluralize(name)}`] = importThingsMutationResolver;
-        }
-
-        const pushIntoThingInputType = createPushIntoThingInputType(thingConfig);
-        if (pushIntoThingInputType[1]) {
-          const pushIntoThingMutationResolver = createPushIntoThingMutationResolver(
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (pushIntoThingMutationResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`pushInto${name}`] = pushIntoThingMutationResolver;
-          }
-        }
-
-        const updateThingMutationResolver = createUpdateThingMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (updateThingMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`update${name}`] = updateThingMutationResolver;
-        }
-
-        const deleteThingMutationResolver = createDeleteThingMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (deleteThingMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`delete${name}`] = deleteThingMutationResolver;
-        }
-
-        const filesOfThingOptionsInputType = createFilesOfThingOptionsInputType(thingConfig);
-        if (filesOfThingOptionsInputType[1]) {
-          const uploadFilesToThingMutationResolver = createUploadFilesToThingMutationResolver(
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (uploadFilesToThingMutationResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Mutation[`uploadFilesTo${name}`] = uploadFilesToThingMutationResolver;
-          }
-        }
-
-        const customMutationNames = Object.keys(customMutation);
-
-        customMutationNames.forEach((customName) => {
-          const customMutationResolver = createCustomResolver(
-            'Mutation',
-            customName,
-            thingConfig,
-            generalConfig,
-            serversideConfig,
-          );
-          if (customMutationResolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Mutation[
-              customMutation[customName].specificName(thingConfig, generalConfig)
-            ] = customMutationResolver;
-          }
-        });
-      }
 
       if (allowSubscriptions) {
         const createdThingSubscriptionResolver = createCreatedThingSubscriptionResolver(
@@ -247,54 +141,6 @@ const composeGqlResolvers = (
         if (updatedThingSubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Subscription[`updated${name}`] = updatedThingSubscriptionResolver;
-        }
-      }
-
-      return prev;
-    }, resolvers);
-
-  Object.keys(thingConfigs)
-    .map((thingName) => thingConfigs[thingName])
-    .filter(({ file }) => file)
-    .reduce((prev, thingConfig) => {
-      const { name } = thingConfig;
-
-      if (allowQueries) {
-        const thingFileCountQueryResolver = createThingFileCountQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (thingFileCountQueryResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Query[`${name}FileCount`] = thingFileCountQueryResolver;
-        }
-
-        const thingFileQueryResolver = createThingFileQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        // eslint-disable-next-line no-param-reassign
-        if (thingFileQueryResolver) prev.Query[`${name}File`] = thingFileQueryResolver;
-
-        const thingFilesQueryResolver = createThingFilesQueryResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        // eslint-disable-next-line no-param-reassign
-        if (thingFilesQueryResolver) prev.Query[`${name}Files`] = thingFilesQueryResolver;
-      }
-      if (allowMutations) {
-        const uploadThingFilesMutationResolver = createUploadThingFilesMutationResolver(
-          thingConfig,
-          generalConfig,
-          serversideConfig,
-        );
-        if (uploadThingFilesMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
-          prev.Mutation[`upload${name}Files`] = uploadThingFilesMutationResolver;
         }
       }
 
