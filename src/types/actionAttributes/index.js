@@ -1,5 +1,7 @@
 // @flow
 
+import type { ActionAttributes } from '../../flowTypes';
+
 import createManyThings from './createManyThingsMutationAttributes';
 import thingDistinctValues from './thingDistinctValuesQueryAttributes';
 import thingCount from './thingCountQueryAttributes';
@@ -34,26 +36,23 @@ const actionAttributes = {
   uploadThingFiles,
 };
 
-const mutationAttributes = {
-  createManyThings,
-  createThing,
-  deleteThing,
-  importThings,
-  pushIntoThing,
-  updateThing,
-  uploadFilesToThing,
-  uploadThingFiles,
-};
+const mutationAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
+  actionAttributes,
+).reduce((prev, actionName) => {
+  if (actionAttributes[actionName].actionType === 'mutation') {
+    prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+  }
+  return prev;
+}, {});
 
-const queryAttributes = {
-  thingCount,
-  thingDistinctValues,
-  thingFileCount,
-  thingFile,
-  thingFiles,
-  thing,
-  things,
-};
+const queryAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
+  actionAttributes,
+).reduce((prev, actionName) => {
+  if (actionAttributes[actionName].actionType === 'query') {
+    prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+  }
+  return prev;
+}, {});
 
 export { mutationAttributes, queryAttributes };
 export default actionAttributes;
