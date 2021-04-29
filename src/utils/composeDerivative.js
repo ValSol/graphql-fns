@@ -2,25 +2,12 @@
 
 import type { DerivativeAttributes } from '../flowTypes';
 
+// import only to get all standard action NAMES
+import actionAttributes from '../types/actionAttributes';
+
 type Result = { [derivativeName: string]: DerivativeAttributes };
 
-const actionGenericNames = [
-  'thing',
-  'thingCount',
-  'thingDistinctValues',
-  'things',
-  'thingFileCount',
-  'thingFile',
-  'thingFiles',
-  'createThing',
-  'createManyThings',
-  'deleteThing',
-  'importThings',
-  'pushIntoThing',
-  'updateThing',
-  'uploadFilesToThing',
-  'uploadThingFiles',
-];
+const actionGenericNames = Object.keys(actionAttributes);
 
 const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes>): Result => {
   const result = derivativeAttributesArray.reduce((prev, item) => {

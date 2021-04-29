@@ -3,7 +3,7 @@
 import type { DerivativeAttributes } from '../../../flowTypes';
 
 type Arg = {
-  actionTypes: { [actionName: string]: string }, //  'Query' | 'Mutation' | 'Subscription'
+  actionTypes: { [actionName: string]: 'Query' | 'Mutation' | 'Subscription' },
   derivative: { [suffix: string]: DerivativeAttributes },
 };
 

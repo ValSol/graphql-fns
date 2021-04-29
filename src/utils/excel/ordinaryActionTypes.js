@@ -1,24 +1,22 @@
 // @flow
 
-const ordinaryActionTypes = {
-  thingCount: 'Query',
-  thingDistinctValues: 'Query',
-  thingFileCount: 'Query',
-  thingFile: 'Query',
-  thingFiles: 'Query',
-  thing: 'Query',
-  things: 'Query',
-  importThings: 'Mutation',
-  uploadFilesToThing: 'Mutation',
-  uploadThingFiles: 'Mutation',
-  createManyThings: 'Mutation',
-  createThing: 'Mutation',
-  deleteThing: 'Mutation',
-  pushIntoThing: 'Mutation',
-  updateThing: 'Mutation',
-  createdThing: 'Subscription',
-  deletedThing: 'Subscription',
-  updatedThing: 'Subscription',
-};
+import actionAttributes from '../../types/actionAttributes';
+
+const transformType = { mutation: 'Mutation', query: 'Query' };
+
+const ordinaryActionTypes: {
+  [actionName: string]: 'Query' | 'Mutation' | 'Subscription',
+} = Object.keys(actionAttributes).reduce(
+  (prev, actionName) => {
+    // $FlowFixMe
+    prev[actionName] = transformType[actionAttributes[actionName].actionType]; //  eslint-disable-line no-param-reassign
+    return prev;
+  },
+  {
+    createdThing: 'Subscription',
+    deletedThing: 'Subscription',
+    updatedThing: 'Subscription',
+  },
+);
 
 export default ordinaryActionTypes;

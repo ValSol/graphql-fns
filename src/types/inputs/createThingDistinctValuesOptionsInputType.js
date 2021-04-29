@@ -1,5 +1,4 @@
 //  @flow
-// COMEBACK
 
 import type { InputCreator } from '../../flowTypes';
 

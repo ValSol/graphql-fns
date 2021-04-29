@@ -6,7 +6,7 @@ import checkInventory from '../../checkInventory';
 
 type Arg = {
   actionNames: Array<string>,
-  actionTypes: { [actionName: string]: string }, // 'Query' | 'Mutation' | 'Subscription'
+  actionTypes: { [actionName: string]: 'Query' | 'Mutation' | 'Subscription' },
   inventory?: Inventory,
   inventory2?: Inventory,
   thingNames: Array<string>,

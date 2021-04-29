@@ -4,6 +4,9 @@ import ExcelJS from 'exceljs';
 
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
+// import only to get all standard action NAMES
+import actionAttributes from '../../../types/actionAttributes';
+
 import composeSpecificActionName from '../../composeSpecificActionName';
 import composeWorksheetName from '../composeWorksheetName';
 import fitWidth from '../fitWidth';
@@ -14,25 +17,7 @@ import extractDataFromCustom from './extractDataFromCustom';
 import extractDataFromDerivative from './extractDataFromDerivative';
 import squeezeMatrix from './squeezeMatrix';
 
-const ordinaryActionNames = [
-  'thingCount',
-  'thingDistinctValues',
-  'thingFileCount',
-  'thingFile',
-  'thingFiles',
-  'thing',
-  'things',
-  'importThings',
-  'uploadFilesToThing',
-  'createManyThings',
-  'createThing',
-  'deleteThing',
-  'pushIntoThing',
-  'updateThing',
-  'createdThing',
-  'deletedThing',
-  'updatedThing',
-];
+const ordinaryActionNames = Object.keys(actionAttributes);
 
 const actionTypeToArgb = {
   Query: 'FFFFFF00',
