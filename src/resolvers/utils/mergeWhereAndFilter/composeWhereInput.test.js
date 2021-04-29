@@ -98,6 +98,7 @@ describe('composeWhereInput', () => {
       floatField_gt: 77.3,
       floatField2_gte: 180.0,
       intField_lt: 15,
+      intField_gt: 10,
       intField2_lte: 20,
       intField3_exists: true,
       intFields_size: 1,
@@ -109,12 +110,12 @@ describe('composeWhereInput', () => {
     const result = composeWhereInput(where, thingConfig);
     const expectedResult = {
       where: {
-        name: 'Вася',
+        name: { $eq: 'Вася' },
         code: { $in: ['Vasya-1', 'Vasya-2', 'Vasya-3'] },
         code2: { $in: [/Misha/, /sash/i] },
         floatField: { $gt: 77.3 },
         floatField2: { $gte: 180.0 },
-        intField: { $lt: 15 },
+        intField: { $lt: 15, $gt: 10 },
         intField2: { $lte: 20 },
         intField3: { $exists: true },
         intFields: { $size: 1 },
@@ -163,7 +164,7 @@ describe('composeWhereInput', () => {
         $or: [
           {
             $and: [
-              { name: 'Вася' },
+              { name: { $eq: 'Вася' } },
               { code2: { $nin: ['Misha-1', 'Misha-2', 'Misha-3'] } },
               { floatField: { $gt: 77.3 } },
             ],
@@ -201,7 +202,7 @@ describe('composeWhereInput', () => {
     const result = composeWhereInput(where, thingConfig);
     const expectedResult = {
       where: {
-        'relationalField_.name': 'Вася',
+        'relationalField_.name': { $eq: 'Вася' },
         'relationalField_.code': { $in: ['Vasya-1', 'Vasya-2', 'Vasya-3'] },
         'relationalField_.code2': { $in: [/Misha/, /sash/i] },
         'relationalField_.floatField': { $gt: 77.3 },
@@ -309,7 +310,7 @@ describe('composeWhereInput', () => {
     const result = composeWhereInput(where, menusectionConfig);
     const expectedResult = {
       where: {
-        'menu_restaurant_access_.restaurantEditors': '5f85ad539905d61fb73346a2',
+        'menu_restaurant_access_.restaurantEditors': { $eq: '5f85ad539905d61fb73346a2' },
       },
       lookups: [
         {

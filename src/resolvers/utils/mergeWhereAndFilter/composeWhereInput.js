@@ -38,38 +38,66 @@ const composeWhereInputRecursively = (
     if (key.slice(-3) === '_in' && idFields.includes(key.slice(0, -3))) {
       const key2 = key.slice(0, -3) === 'id' ? '_id' : key.slice(0, -3);
 
-      result[`${prefix}${key2}`] = {
-        [`$${key.slice(-2)}`]: where[key].map(
-          (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
-        ),
-      };
+      if (!result[`${prefix}${key2}`]) {
+        result[`${prefix}${key2}`] = {};
+      }
+
+      result[`${prefix}${key2}`][`$${key.slice(-2)}`] = where[key].map(
+        (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
+      );
     } else if (key.slice(-4) === '_nin' && idFields.includes(key.slice(0, -4))) {
       const key2 = key.slice(0, -4) === 'id' ? '_id' : key.slice(0, -4);
 
-      result[`${prefix}${key2}`] = {
-        [`$${key.slice(-3)}`]: where[key].map(
-          (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
-        ),
-      };
+      if (!result[`${prefix}${key2}`]) {
+        result[`${prefix}${key2}`] = {};
+      }
+
+      result[`${prefix}${key2}`][`$${key.slice(-3)}`] = where[key].map(
+        (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
+      );
     } else if (
       key.slice(-3) === '_in' ||
       key.slice(-3) === '_lt' ||
       key.slice(-3) === '_gt' ||
       key.slice(-3) === '_ne'
     ) {
-      result[`${prefix}${key.slice(0, -3)}`] = { [`$${key.slice(-2)}`]: where[key] };
+      if (!result[`${prefix}${key.slice(0, -3)}`]) {
+        result[`${prefix}${key.slice(0, -3)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -3)}`][`$${key.slice(-2)}`] = where[key];
     } else if (key.slice(-4) === '_nin' || key.slice(-4) === '_lte' || key.slice(-4) === '_gte') {
-      result[`${prefix}${key.slice(0, -4)}`] = { [`$${key.slice(-3)}`]: where[key] };
+      if (!result[`${prefix}${key.slice(0, -4)}`]) {
+        result[`${prefix}${key.slice(0, -4)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -4)}`][`$${key.slice(-3)}`] = where[key];
     } else if (key.slice(-3) === '_re') {
-      result[`${prefix}${key.slice(0, -3)}`] = {
-        $in: where[key].map((item) => new RegExp(item.pattern, item.flags)),
-      };
+      if (!result[`${prefix}${key.slice(0, -3)}`]) {
+        result[`${prefix}${key.slice(0, -3)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -3)}`].$in = where[key].map(
+        (item) => new RegExp(item.pattern, item.flags),
+      );
     } else if (key.endsWith('_exists')) {
-      result[`${prefix}${key.slice(0, -7)}`] = { [`$${key.slice(-6)}`]: where[key] };
+      if (!result[`${prefix}${key.slice(0, -7)}`]) {
+        result[`${prefix}${key.slice(0, -7)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -7)}`][`$${key.slice(-6)}`] = where[key];
     } else if (key.endsWith('_size')) {
-      result[`${prefix}${key.slice(0, -5)}`] = { [`$${key.slice(-4)}`]: where[key] };
+      if (!result[`${prefix}${key.slice(0, -5)}`]) {
+        result[`${prefix}${key.slice(0, -5)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -5)}`][`$${key.slice(-4)}`] = where[key];
     } else if (key.endsWith('_notsize')) {
-      result[`${prefix}${key.slice(0, -8)}`] = { $not: { [`$${key.slice(-4)}`]: where[key] } };
+      if (!result[`${prefix}${key.slice(0, -8)}`]) {
+        result[`${prefix}${key.slice(0, -8)}`] = {};
+      }
+
+      result[`${prefix}${key.slice(0, -8)}`].$not = { [`$${key.slice(-4)}`]: where[key] };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
         composeWhereInputRecursively(
@@ -108,7 +136,11 @@ const composeWhereInputRecursively = (
         result[key2] = result2[key2];
       });
     } else {
-      result[`${prefix}${key}`] = where[key];
+      if (!result[`${prefix}${key}`]) {
+        result[`${prefix}${key}`] = {};
+      }
+
+      result[`${prefix}${key}`].$eq = where[key];
     }
   });
   return result;
