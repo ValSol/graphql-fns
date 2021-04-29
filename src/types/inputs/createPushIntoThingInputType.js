@@ -31,7 +31,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (textFields) {
     textFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2 }) => {
         prev.push(`  ${name2}: [String!]`);
         return prev;
@@ -40,7 +40,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (intFields) {
     intFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2 }) => {
         prev.push(`  ${name2}: [Int!]`);
         return prev;
@@ -49,7 +49,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (floatFields) {
     floatFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2 }) => {
         prev.push(`  ${name2}: [Float!]`);
         return prev;
@@ -58,7 +58,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (dateTimeFields) {
     dateTimeFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2 }) => {
         prev.push(`  ${name2}: [DateTime!]`);
         return prev;
@@ -67,7 +67,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (booleanFields) {
     booleanFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2 }) => {
         prev.push(`  ${name2}: [Boolean!]`);
         return prev;
@@ -76,7 +76,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (enumFields) {
     enumFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { enumName, name: name2 }) => {
         prev.push(`  ${name2}: [${enumName}Enumeration!]`);
         return prev;
@@ -85,7 +85,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (relationalFields) {
     relationalFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2, config: config2, config: { name: relationalThingName } }) => {
         prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
 
@@ -98,7 +98,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
   // the same code as for relationalFields
   if (duplexFields) {
     duplexFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2, config: config2, config: { name: relationalThingName } }) => {
         prev.push(`  ${name2}: ${relationalThingName}CreateOrPushChildrenInput`);
 
@@ -110,7 +110,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (embeddedFields) {
     embeddedFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
 
@@ -123,7 +123,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
   // the same code as for embeddedFields
   if (fileFields) {
     fileFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
 
@@ -135,7 +135,7 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
 
   if (geospatialFields) {
     geospatialFields
-      .filter(({ array }) => array)
+      .filter(({ array, freeze }) => array && !freeze)
       .reduce((prev, { name: name2, geospatialType }) => {
         prev.push(`  ${name2}: [Geospatial${geospatialType}Input!]`);
         return prev;

@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingReorderUploadedInputType from './createThingReorderUploadedInputType';
+import createThingReorderCreatedWhenUpdateInputType from './createThingReorderCreatedWhenUpdateInputType';
 
-describe('createThingReorderUploadedInputType', () => {
+describe('createThingReorderCreatedWhenUpdateInputType', () => {
   test('should create thing reorder input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -33,9 +33,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -68,11 +68,63 @@ describe('createThingReorderUploadedInputType', () => {
           name: 'favoritePlace',
           config: placeConfig,
         },
+        {
+          name: 'favoritePlaces',
+          config: placeConfig,
+          array: true,
+          freeze: true,
+        },
       ],
     });
-    const expectedResult = ['PersonReorderUploadedInput', '', {}];
+    const expectedResult = [
+      'PersonReorderCreatedInput',
+      `input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}`,
+      {},
+    ];
 
-    const result = createThingReorderUploadedInputType(personConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing reorder empty input type with freezed relational fields', () => {
+    const placeConfig: ThingConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+    };
+    const personConfig: ThingConfig = {};
+    Object.assign(personConfig, {
+      name: 'Person',
+      relationalFields: [
+        {
+          name: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+          freeze: true,
+        },
+        {
+          name: 'enemies',
+          config: personConfig,
+          array: true,
+          freeze: true,
+        },
+        {
+          name: 'location',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          config: placeConfig,
+        },
+      ],
+    });
+    const expectedResult = ['PersonReorderCreatedInput', '', {}];
+
+    const result = createThingReorderCreatedWhenUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -91,6 +143,12 @@ describe('createThingReorderUploadedInputType', () => {
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors2',
+          oppositeName: 'favoritePlace2',
           array: true,
           config: personConfig,
         },
@@ -123,11 +181,82 @@ describe('createThingReorderUploadedInputType', () => {
           oppositeName: 'visitors',
           config: placeConfig,
         },
+        {
+          name: 'favoritePlaces',
+          oppositeName: 'visitors2',
+          config: placeConfig,
+          array: true,
+          freeze: true,
+        },
       ],
     });
-    const expectedResult = ['PersonReorderUploadedInput', '', {}];
+    const expectedResult = [
+      'PersonReorderCreatedInput',
+      `input PersonReorderCreatedInput {
+  friends: [Int!]
+  enemies: [Int!]
+}`,
+      {},
+    ];
 
-    const result = createThingReorderUploadedInputType(personConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create empty input type with freezed duplex fields', () => {
+    const personConfig: ThingConfig = {};
+    const placeConfig: ThingConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+      duplexFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+      ],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      duplexFields: [
+        {
+          name: 'friends',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          required: true,
+          freeze: true,
+        },
+        {
+          name: 'enemies',
+          oppositeName: 'enemies',
+          array: true,
+          config: personConfig,
+          freeze: true,
+        },
+        {
+          name: 'location',
+          oppositeName: 'citizens',
+          config: placeConfig,
+          required: true,
+        },
+        {
+          name: 'favoritePlace',
+          oppositeName: 'visitors',
+          config: placeConfig,
+        },
+      ],
+    });
+    const expectedResult = ['PersonReorderCreatedInput', '', {}];
+
+    const result = createThingReorderCreatedWhenUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -181,9 +310,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['PersonReorderUploadedInput', '', {}];
+    const expectedResult = ['PersonReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(personConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -233,8 +362,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
+
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -265,9 +395,9 @@ describe('createThingReorderUploadedInputType', () => {
       ],
     };
 
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -298,9 +428,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -331,9 +461,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -364,9 +494,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -384,9 +514,9 @@ describe('createThingReorderUploadedInputType', () => {
         },
       ],
     };
-    const expectedResult = ['ImageReorderUploadedInput', '', {}];
+    const expectedResult = ['ImageReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(imageConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(imageConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -419,13 +549,6 @@ describe('createThingReorderUploadedInputType', () => {
           required: true,
         },
         {
-          name: 'logos',
-          config: imageConfig,
-          required: true,
-          array: true,
-          freeze: true,
-        },
-        {
           name: 'hero',
           config: imageConfig,
         },
@@ -443,70 +566,9 @@ describe('createThingReorderUploadedInputType', () => {
       ],
     });
 
-    const expectedResult = [
-      'ExampleReorderUploadedInput',
-      `input ExampleReorderUploadedInput {
-  pictures: [Int!]
-  photos: [Int!]
-}`,
-      {},
-    ];
+    const expectedResult = ['ExampleReorderCreatedInput', '', {}];
 
-    const result = createThingReorderUploadedInputType(thingConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create empty input type with file fields', () => {
-    const imageConfig: ThingConfig = {
-      name: 'Image',
-      file: true,
-      textFields: [
-        {
-          name: 'fileId',
-        },
-        {
-          name: 'address',
-        },
-      ],
-    };
-
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
-      name: 'Example',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-          required: true,
-        },
-        {
-          name: 'hero',
-          config: imageConfig,
-        },
-        {
-          name: 'pictures',
-          config: imageConfig,
-          array: true,
-          required: true,
-          freeze: true,
-        },
-        {
-          name: 'photos',
-          config: imageConfig,
-          array: true,
-          freeze: true,
-        },
-      ],
-    });
-
-    const expectedResult = ['ExampleReorderUploadedInput', '', {}];
-
-    const result = createThingReorderUploadedInputType(thingConfig);
+    const result = createThingReorderCreatedWhenUpdateInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
 });

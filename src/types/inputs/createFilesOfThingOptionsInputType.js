@@ -7,7 +7,9 @@ const createFilesOfThingOptionsInputType: InputCreator = (thingConfig) => {
 
   const inputName = `FilesOf${name}OptionsInput`;
 
-  const fieldLines = fileFields ? fileFields.map(({ name: fieldName }) => `  ${fieldName}`) : [];
+  const fieldLines = (fileFields || [])
+    .filter(({ freeze }) => !freeze)
+    .map(({ name: fieldName }) => `  ${fieldName}`);
 
   const inputDefinition = fieldLines.length
     ? `enum ${name}FileNamesEnum {

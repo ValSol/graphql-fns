@@ -74,4 +74,110 @@ input FilesOfExampleOptionsInput {
     const result = createFilesOfThingOptionsInputType(thingConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create empty string where freeze fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logo',
+          config: imageConfig,
+          freeze: true,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+          freeze: true,
+        },
+      ],
+    });
+    const expectedResult = ['FilesOfExampleOptionsInput', '', {}];
+
+    const result = createFilesOfThingOptionsInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create string without freeze fields', () => {
+    const imageConfig: ThingConfig = {
+      name: 'Image',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
+    const thingConfig: ThingConfig = {};
+    Object.assign(thingConfig, {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+      fileFields: [
+        {
+          name: 'logos',
+          config: imageConfig,
+          freeze: true,
+          array: true,
+        },
+        {
+          name: 'pictures',
+          config: imageConfig,
+          array: true,
+        },
+        {
+          name: 'logo',
+          config: imageConfig,
+        },
+        {
+          name: 'picture',
+          config: imageConfig,
+          freeze: true,
+          array: true,
+        },
+      ],
+    });
+    const expectedResult = [
+      'FilesOfExampleOptionsInput',
+      `enum ExampleFileNamesEnum {
+  pictures
+  logo
+}
+input FilesOfExampleOptionsInput {
+  targets: [ExampleFileNamesEnum!]!
+  counts: [Int!]!
+  hashes: [String!]!
+}`,
+      {},
+    ];
+
+    const result = createFilesOfThingOptionsInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

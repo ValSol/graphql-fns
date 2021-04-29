@@ -15,16 +15,15 @@ const createUploadFilesToThingInputType: InputCreator = (thingConfig) => {
   const childChain = {};
 
   if (fileFields) {
-    fileFields.reduce(
-      (prev, { name: name2, array, config: config2, config: { name: embeddedName } }) => {
+    fileFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { name: name2, array, config: config2, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
 
         childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config2];
 
         return prev;
-      },
-      thingTypeArray,
-    );
+      }, thingTypeArray);
   }
 
   if (!thingTypeArray.length) return [inputName, '', {}];

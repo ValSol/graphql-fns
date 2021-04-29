@@ -27,6 +27,7 @@ type BooleanField =
       +name: string,
       +array?: false,
       +default?: boolean,
+      +freeze?: boolean,
       +index?: boolean,
       +required?: boolean,
     |}
@@ -34,6 +35,7 @@ type BooleanField =
       +name: string,
       +array: true,
       +default?: $ReadOnlyArray<boolean>,
+      +freeze?: boolean,
       +index?: boolean,
       +required?: boolean,
     |};
@@ -43,6 +45,7 @@ type EnumField =
       +name: string,
       +array?: false,
       +default?: string,
+      +freeze?: boolean,
       +index?: boolean,
       +required?: boolean,
       +enumName: string, // name to compose graphql types
@@ -51,6 +54,7 @@ type EnumField =
       +name: string,
       +array: true,
       +default?: $ReadOnlyArray<string>,
+      +freeze?: boolean,
       +index?: boolean,
       +required?: boolean,
       +enumName: string, // name to compose graphql types
@@ -61,6 +65,7 @@ type GeospatialField = {|
   +required?: boolean,
   +geospatialType: 'Point' | 'Polygon',
   +array?: boolean,
+  +freeze?: boolean,
 |};
 
 type TextField =
@@ -71,6 +76,7 @@ type TextField =
       +unique?: boolean,
       +name: string,
       +default?: string,
+      +freeze?: boolean,
       +weight?: number,
     |}
   | {|
@@ -80,6 +86,7 @@ type TextField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<string>,
+      +freeze?: boolean,
       +weight?: number,
     |};
 
@@ -91,6 +98,7 @@ type DateTimeField =
       +unique?: boolean,
       +name: string,
       +default?: Date,
+      +freeze?: boolean,
     |}
   | {|
       +array: true,
@@ -99,6 +107,7 @@ type DateTimeField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<Date>,
+      +freeze?: boolean,
     |};
 
 type IntField =
@@ -109,6 +118,7 @@ type IntField =
       +unique?: boolean,
       +name: string,
       +default?: number,
+      +freeze?: boolean,
     |}
   | {|
       +array: true,
@@ -117,6 +127,7 @@ type IntField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<number>,
+      +freeze?: boolean,
     |};
 
 type FloatField =
@@ -127,6 +138,7 @@ type FloatField =
       +unique?: boolean,
       +name: string,
       +default?: number,
+      +freeze?: boolean,
     |}
   | {|
       +array: true,
@@ -135,6 +147,7 @@ type FloatField =
       +unique?: boolean,
       +name: string,
       +default?: $ReadOnlyArray<number>,
+      +freeze?: boolean,
     |};
 
 export type FormField = {|
@@ -155,6 +168,7 @@ type SimplifiedDuplexField = {
   +oppositeName: string,
   +required?: boolean,
   +unique?: boolean,
+  +freeze?: boolean,
 };
 
 type SimplifiedEmbeddedField = {
@@ -162,6 +176,7 @@ type SimplifiedEmbeddedField = {
   +required?: boolean,
   +array?: boolean,
   +configName: string,
+  +freeze?: boolean,
 };
 
 type SimplifiedFileField = {
@@ -169,6 +184,7 @@ type SimplifiedFileField = {
   +required?: boolean,
   +array?: boolean,
   +configName: string,
+  +freeze?: boolean,
 };
 
 type SimplifiedRelationalField = {
@@ -178,6 +194,7 @@ type SimplifiedRelationalField = {
   +index?: boolean,
   +unique?: boolean,
   +required?: boolean,
+  +freeze?: boolean,
 };
 
 export type SimplifiedThingConfig = {
@@ -222,18 +239,21 @@ export type ThingConfig = {
     +oppositeName: string,
     +required?: boolean,
     +unique?: boolean,
+    +freeze?: boolean,
   }>,
   embeddedFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
     +array?: boolean,
     +config: ThingConfig,
+    +freeze?: boolean,
   }>,
   fileFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
     +array?: boolean,
     +config: ThingConfig,
+    +freeze?: boolean,
   }>,
   relationalFields?: $ReadOnlyArray<{
     +name: string,
@@ -242,6 +262,7 @@ export type ThingConfig = {
     +index?: boolean,
     +unique?: boolean,
     +required?: boolean,
+    +freeze?: boolean,
   }>,
 
   booleanFields?: $ReadOnlyArray<BooleanField>,
@@ -265,6 +286,7 @@ type DuplexField = {|
   +oppositeName: string,
   +required?: boolean,
   +unique?: boolean,
+  +freeze?: boolean,
 |};
 
 export type EmbeddedField = {|
@@ -272,6 +294,7 @@ export type EmbeddedField = {|
   +required?: boolean,
   +array?: boolean,
   +config: ThingConfig,
+  +freeze?: boolean,
 |};
 
 export type FileField = {|
@@ -279,6 +302,7 @@ export type FileField = {|
   +required?: boolean,
   +array?: boolean,
   +config: ThingConfig,
+  +freeze?: boolean,
 |};
 
 type RelationalField = {|
@@ -288,6 +312,7 @@ type RelationalField = {|
   +index?: boolean,
   +required?: boolean,
   +unique?: boolean,
+  +freeze?: boolean,
 |};
 
 export type FlatField =

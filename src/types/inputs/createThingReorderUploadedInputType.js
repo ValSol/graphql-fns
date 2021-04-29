@@ -11,8 +11,8 @@ const createThingReorderUploadedInputType: InputCreator = (thingConfig) => {
 
   // the same code as for embeddedFields
   if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2 }) => {
-      if (array) {
+    fileFields.reduce((prev, { array, freeze, name: name2 }) => {
+      if (array && !freeze) {
         prev.push(`  ${name2}: [Int!]`);
       }
       return prev;

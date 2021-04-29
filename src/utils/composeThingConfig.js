@@ -22,7 +22,7 @@ const composeThingConfig = (
   thingConfig: ThingConfig,
   thingConfigs: { [thingName: string]: ThingConfig },
 ) => {
-  const { name } = simplifiedThingConfig;
+  const { name, embedded, file } = simplifiedThingConfig;
   const {
     embeddedFields: simplifiedEmbeddedFields,
     fileFields: simplifiedFileFields,
@@ -35,7 +35,7 @@ const composeThingConfig = (
     .filter((key) => key.endsWith('Fields'))
     .forEach((key) => {
       // $FlowFixMe
-      simplifiedThingConfig[key].forEach(({ name: fieldName }) => {
+      simplifiedThingConfig[key].forEach(({ name: fieldName, freeze }) => {
         if (fieldName.search('_') !== -1) {
           throw new TypeError(
             `Forbidden to use "_" (underscore) in field name: "${fieldName}" in thing: "${name}"!`,
@@ -43,6 +43,13 @@ const composeThingConfig = (
         }
         if (forbiddenFieldNames.includes(fieldName)) {
           throw new TypeError(`Forbidden field name: "${fieldName}" in thing: "${name}"!`);
+        }
+        if (freeze && (embedded || file)) {
+          throw new TypeError(
+            `Forbidden freeze field: "${fieldName}" in ${
+              embedded ? 'embedded' : 'file'
+            } thing: "${name}"!`,
+          );
         }
       });
     });

@@ -32,6 +32,13 @@ describe('createPushIntoThingInputType', () => {
           required: true,
           array: true,
         },
+        {
+          name: 'textField6',
+          default: ['default text'],
+          required: true,
+          array: true,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -61,6 +68,34 @@ describe('createPushIntoThingInputType', () => {
         {
           name: 'textField3',
           required: true,
+        },
+        {
+          name: 'textField4',
+          array: true,
+          freeze: true,
+        },
+      ],
+    };
+    const expectedResult = ['PushIntoExampleInput', '', {}];
+
+    const result = createPushIntoThingInputType(thingConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create thing input type with only freeze array text fields', () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField1',
+          array: true,
+          freeze: true,
+        },
+        {
+          name: 'textField2',
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     };
@@ -98,6 +133,13 @@ describe('createPushIntoThingInputType', () => {
         {
           name: 'favoritePlace',
           config: placeConfig,
+        },
+        {
+          name: 'location2',
+          config: placeConfig,
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     });
@@ -192,6 +234,12 @@ describe('createPushIntoThingInputType', () => {
           array: true,
           config: addressConfig,
         },
+        {
+          name: 'places2',
+          array: true,
+          config: addressConfig,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -222,6 +270,12 @@ describe('createPushIntoThingInputType', () => {
         },
         {
           name: 'visitors',
+          oppositeName: 'favoritePlace',
+          array: true,
+          config: personConfig,
+        },
+        {
+          name: 'visitors2',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
@@ -265,6 +319,12 @@ describe('createPushIntoThingInputType', () => {
           oppositeName: 'visitors',
           config: placeConfig,
         },
+        {
+          name: 'favoritePlace2',
+          oppositeName: 'visitors2',
+          config: placeConfig,
+          freeze: true,
+        },
       ],
     });
     const expectedResult = [
@@ -301,6 +361,13 @@ describe('createPushIntoThingInputType', () => {
           array: true,
           geospatialType: 'Point',
           required: true,
+        },
+        {
+          name: 'favoritePositions2',
+          array: true,
+          geospatialType: 'Point',
+          required: true,
+          freeze: true,
         },
         {
           name: 'worstPositions',
@@ -368,6 +435,13 @@ describe('createPushIntoThingInputType', () => {
           enumName: 'Cuisines',
           required: true,
         },
+        {
+          name: 'field5',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -407,6 +481,12 @@ describe('createPushIntoThingInputType', () => {
           default: [55],
           required: true,
           array: true,
+        },
+        {
+          name: 'intField6',
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     };
@@ -448,6 +528,12 @@ describe('createPushIntoThingInputType', () => {
           required: true,
           array: true,
         },
+        {
+          name: 'floatField5',
+          required: true,
+          array: true,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -487,6 +573,12 @@ describe('createPushIntoThingInputType', () => {
           default: [true, true],
           required: true,
           array: true,
+        },
+        {
+          name: 'booleanField6',
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     };
@@ -565,6 +657,12 @@ describe('createPushIntoThingInputType', () => {
           name: 'photos',
           config: imageConfig,
           array: true,
+        },
+        {
+          name: 'photos2',
+          config: imageConfig,
+          array: true,
+          freeze: true,
         },
       ],
     });

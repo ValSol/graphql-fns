@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType';
 import createThingUpdateInputType from '../inputs/createThingUpdateInputType';
-import createThingReorderCreatedInputType from '../inputs/createThingReorderCreatedInputType';
+import createThingReorderCreatedWhenUpdateInputType from '../inputs/createThingReorderCreatedWhenUpdateInputType';
 
 const actionType = 'mutation';
 
@@ -15,7 +15,7 @@ const actionName = (baseName: string, suffix?: string = ''): string => `update${
 const inputCreators = [
   createThingWhereOneInputType,
   createThingUpdateInputType,
-  createThingReorderCreatedInputType,
+  createThingReorderCreatedWhenUpdateInputType,
 ];
 
 const argNames = ['whereOne', 'data', 'positions'];

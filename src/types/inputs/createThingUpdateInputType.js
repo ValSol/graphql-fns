@@ -27,50 +27,63 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
   const thingTypeArray = [`input ${name}UpdateInput {`];
 
   if (textFields) {
-    textFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    textFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (intFields) {
-    intFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    intFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (floatFields) {
-    floatFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}Float${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    floatFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}Float${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    dateTimeFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (booleanFields) {
-    booleanFields.reduce((prev, { array, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    booleanFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (enumFields) {
-    enumFields.reduce((prev, { array, enumName, name: name2 }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]' : ''}`);
-      return prev;
-    }, thingTypeArray);
+    enumFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, enumName, name: name2 }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]' : ''}`);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (relationalFields) {
-    relationalFields.reduce(
-      (prev, { array, name: name2, config, config: { name: relationalThingName } }) => {
+    relationalFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2, config, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${relationalThingName}${
             array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
@@ -80,75 +93,80 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
         childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config];
 
         return prev;
-      },
-      thingTypeArray,
-    );
+      }, thingTypeArray);
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.reduce(
-      (
-        prev,
-        { array, name: name2, oppositeName, config, config: { name: relationalThingName } },
-      ) => {
-        const oppositeRequired = isOppositeRequired(oppositeName, config);
-        if (oppositeRequired) {
-          prev.push(
-            `  ${name2}: ${relationalThingName}${
-              array
-                ? `CreateOrPushThru_${oppositeName}_FieldChildrenInput`
-                : `CreateThru_${oppositeName}_FieldChildInput`
-            }`,
-          );
-        } else {
-          prev.push(
-            `  ${name2}: ${relationalThingName}${
-              array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
-            }`,
-          );
-        }
+    duplexFields
+      .filter(({ freeze }) => !freeze)
+      .reduce(
+        (
+          prev,
+          { array, name: name2, oppositeName, config, config: { name: relationalThingName } },
+        ) => {
+          const oppositeRequired = isOppositeRequired(oppositeName, config);
+          if (oppositeRequired) {
+            prev.push(
+              `  ${name2}: ${relationalThingName}${
+                array
+                  ? `CreateOrPushThru_${oppositeName}_FieldChildrenInput`
+                  : `CreateThru_${oppositeName}_FieldChildInput`
+              }`,
+            );
+          } else {
+            prev.push(
+              `  ${name2}: ${relationalThingName}${
+                array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
+              }`,
+            );
+          }
 
-        childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config];
+          childChain[`${relationalThingName}CreateInput`] = [createThingCreateInputType, config];
 
-        return prev;
-      },
-      thingTypeArray,
-    );
+          return prev;
+        },
+        thingTypeArray,
+      );
   }
 
   if (embeddedFields) {
-    embeddedFields.reduce(
-      (prev, { array, name: name2, config, config: { name: embeddedName } }) => {
+    embeddedFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
 
         childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config];
 
         return prev;
-      },
-      thingTypeArray,
-    );
+      }, thingTypeArray);
   }
 
   // the same code as for embeddedFields
   if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
-      prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
+    fileFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
+        prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
 
-      childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config];
+        childChain[`${embeddedName}UpdateInput`] = [createThingUpdateInputType, config];
 
-      return prev;
-    }, thingTypeArray);
+        return prev;
+      }, thingTypeArray);
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name: name2, geospatialType }) => {
-      prev.push(
-        `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}`,
-      );
-      return prev;
-    }, thingTypeArray);
+    geospatialFields
+      .filter(({ freeze }) => !freeze)
+      .reduce((prev, { array, name: name2, geospatialType }) => {
+        prev.push(
+          `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}`,
+        );
+        return prev;
+      }, thingTypeArray);
   }
+
+  if (thingTypeArray.length === 1) return [inputName, '', {}];
 
   thingTypeArray.push('}');
 

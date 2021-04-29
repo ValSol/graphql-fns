@@ -32,6 +32,15 @@ describe('createThingUpdateInputType', () => {
           required: true,
           array: true,
         },
+        {
+          name: 'textField6',
+          freeze: true,
+        },
+        {
+          name: 'textField7',
+          array: true,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -94,6 +103,34 @@ describe('createThingUpdateInputType', () => {
         PersonCreateInput: [createThingCreateInputType, personConfig],
       },
     ];
+
+    const result = createThingUpdateInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create empty input type with relational fields', () => {
+    const placeConfig: ThingConfig = {
+      name: 'Place',
+      textFields: [{ name: 'name' }],
+    };
+    const personConfig: ThingConfig = {};
+    Object.assign(personConfig, {
+      name: 'Person',
+      relationalFields: [
+        {
+          name: 'location',
+          config: placeConfig,
+          required: true,
+          freeze: true,
+        },
+        {
+          name: 'favoritePlace',
+          config: placeConfig,
+          freeze: true,
+        },
+      ],
+    });
+    const expectedResult = ['PersonUpdateInput', '', {}];
 
     const result = createThingUpdateInputType(personConfig);
     expect(result).toEqual(expectedResult);
@@ -227,6 +264,12 @@ describe('createThingUpdateInputType', () => {
           array: true,
           config: addressConfig,
         },
+        {
+          name: 'places2',
+          array: true,
+          config: addressConfig,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -271,6 +314,12 @@ describe('createThingUpdateInputType', () => {
           name: 'worstPositions',
           array: true,
           geospatialType: 'Point',
+        },
+        {
+          name: 'worstPositions2',
+          array: true,
+          geospatialType: 'Point',
+          freeze: true,
         },
         {
           name: 'area',
@@ -336,6 +385,13 @@ describe('createThingUpdateInputType', () => {
           enumName: 'Cuisines',
           required: true,
         },
+        {
+          name: 'field5',
+          array: true,
+          enumName: 'Cuisines',
+          required: true,
+          freeze: true,
+        },
       ],
     };
 
@@ -378,6 +434,12 @@ describe('createThingUpdateInputType', () => {
           default: [55],
           required: true,
           array: true,
+        },
+        {
+          name: 'intField5',
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     };
@@ -422,6 +484,12 @@ describe('createThingUpdateInputType', () => {
           required: true,
           array: true,
         },
+        {
+          name: 'floatField5',
+          required: true,
+          array: true,
+          freeze: true,
+        },
       ],
     };
     const expectedResult = [
@@ -464,6 +532,12 @@ describe('createThingUpdateInputType', () => {
           default: [true, true],
           required: true,
           array: true,
+        },
+        {
+          name: 'booleanField5',
+          required: true,
+          array: true,
+          freeze: true,
         },
       ],
     };
@@ -523,6 +597,18 @@ describe('createThingUpdateInputType', () => {
         },
       ],
     };
+    const photoConfig: ThingConfig = {
+      name: 'Photo',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
 
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
@@ -552,6 +638,11 @@ describe('createThingUpdateInputType', () => {
           name: 'photos',
           config: imageConfig,
           array: true,
+        },
+        {
+          name: 'photo',
+          config: photoConfig,
+          freeze: true,
         },
       ],
     });

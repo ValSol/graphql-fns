@@ -462,6 +462,19 @@ describe('createUploadFilesToThingInputType', () => {
       ],
     };
 
+    const photoConfig: ThingConfig = {
+      name: 'Photo',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+        },
+        {
+          name: 'address',
+        },
+      ],
+    };
+
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -490,6 +503,11 @@ describe('createUploadFilesToThingInputType', () => {
           name: 'photos',
           config: imageConfig,
           array: true,
+        },
+        {
+          name: 'photo',
+          config: photoConfig,
+          freeze: true,
         },
       ],
     });
