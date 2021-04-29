@@ -9,14 +9,15 @@ import actionAttributes from '../../../types/actionAttributes';
 
 import composeSpecificActionName from '../../composeSpecificActionName';
 import composeWorksheetName from '../composeWorksheetName';
+import constants from '../constants';
 import fitWidth from '../fitWidth';
-import ordinaryActionTypes from '../ordinaryActionTypes';
 import createValidActionsMatrix from './createValidActionsMatrix';
 import createValidDerivativeOrCustomActionsMatrix from './createValidDerivativeOrCustomActionsMatrix';
 import extractDataFromCustom from './extractDataFromCustom';
 import extractDataFromDerivative from './extractDataFromDerivative';
 import squeezeMatrix from './squeezeMatrix';
 
+const { ordinaryActionTypes } = constants;
 const ordinaryActionNames = Object.keys(actionAttributes);
 
 const actionTypeToArgb = {

@@ -5,9 +5,12 @@ import ExcelJS from 'exceljs';
 import type { GeneralConfig } from '../../../flowTypes';
 
 import composeWorksheetName from '../composeWorksheetName';
+import constants from '../constants';
 import fitWidth from '../fitWidth';
 import showColumnGroupOfFields from '../showColumnGroupOfFields';
 import showDerivativeActions from './showDerivativeActions';
+
+const { fieldAttrCount } = constants;
 
 const generateDerivativesExcel = async (
   generalConfig: GeneralConfig,
@@ -41,7 +44,7 @@ const generateDerivativesExcel = async (
         [`${firstThingName}${suffix}`, suffix],
       ];
 
-      const columnGroupShift = i * 12;
+      const columnGroupShift = i * (2 * (fieldAttrCount + 1) + 2);
 
       showColumnGroupOfFields({
         columnGroupShift,
@@ -58,7 +61,11 @@ const generateDerivativesExcel = async (
 
     ws.columns = columns;
 
-    fitWidth(ws, [5, null, null, null, null, 5, null, null, null, null, 5, 5]);
+    // to compose array: [5, null, null, null, null, null, 5, null, null, null, null, null, 5, 5]
+    const fieldAttrWidths = new Array(fieldAttrCount).fill(null);
+    const widths = [5, ...fieldAttrWidths, 5, ...fieldAttrWidths, 5, 5];
+
+    fitWidth(ws, widths);
   });
 
   await wb.xlsx.writeFile(filePath);

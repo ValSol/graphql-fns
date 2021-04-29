@@ -1,5 +1,11 @@
 // @flow
 
+import type { ThingConfig } from '../../flowTypes';
+
+import constants from './constants';
+
+const { fieldAttrCount } = constants;
+
 type Args = {
   argb: string,
   columnGroupShift: number,
@@ -17,18 +23,33 @@ type Args2 = {
   index?: boolean,
   unique?: boolean,
   weight?: number,
+  freeze?: boolean,
+  config: ThingConfig,
+  oppositeName?: string,
+  enumName?: string,
+};
+
+const composeName = ({ name, config, enumName, oppositeName }) => {
+  if (enumName) return `${name} - ${enumName}`;
+
+  if (config) {
+    if (oppositeName) return `${name} - ${config.name} - ${oppositeName}`;
+
+    return `${name} - ${config.name}`;
+  }
+  return name;
 };
 
 const showField = (args: Args): Function => (args2: Args2) => {
   const { argb, columnGroupShift, fieldType, lastRow, usedNames, ws, i } = args;
-  const { name, required, array } = args2;
+  const { name, required, array, index, unique, freeze } = args2;
   if (!usedNames[name]) {
     lastRow.current += 1; // eslint-disable-line no-param-reassign
     usedNames[name] = lastRow.current; // eslint-disable-line no-param-reassign
   }
   const row = ws.getRow(usedNames[name]);
-  const col = columnGroupShift + i * 5 + 1;
-  row.getCell(col).value = name;
+  const col = columnGroupShift + i * (fieldAttrCount + 1) + 1;
+  row.getCell(col).value = composeName(args2);
   row.getCell(col).fill = {
     type: 'pattern',
     pattern: 'solid',
@@ -48,14 +69,14 @@ const showField = (args: Args): Function => (args2: Args2) => {
       fgColor: { argb: 'FF006666' },
     };
   }
-  if (args2.index) {
+  if (index) {
     row.getCell(col + 2).fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FF660000' },
     };
   }
-  if (args2.unique) {
+  if (unique) {
     row.getCell(col + 2).fill = {
       type: 'pattern',
       pattern: 'solid',
@@ -69,9 +90,16 @@ const showField = (args: Args): Function => (args2: Args2) => {
       fgColor: { argb: 'FF0000FF' },
     };
   }
+  if (freeze) {
+    row.getCell(col + 4).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'F666666F' },
+    };
+  }
   if (args2.weight) {
-    row.getCell(col + 4).value = args2.weight;
-    row.getCell(col + 4).alignment = { horizontal: 'center' };
+    row.getCell(col + fieldAttrCount).value = args2.weight;
+    row.getCell(col + fieldAttrCount).alignment = { horizontal: 'center' };
   }
 };
 

@@ -19,4 +19,6 @@ const ordinaryActionTypes: {
   },
 );
 
-export default ordinaryActionTypes;
+const fieldAttrCount = 5;
+
+export default { ordinaryActionTypes, fieldAttrCount };

@@ -4,6 +4,9 @@ import type { GeneralConfig } from '../../flowTypes';
 
 import composeDerivativeFields from './composeDerivativeFields';
 import showField from './showField';
+import constants from './constants';
+
+const { fieldAttrCount } = constants;
 
 type Args = {
   columnGroupShift: number,
@@ -24,18 +27,29 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([thingName, suffix], i) => {
-      ws.mergeCells(1, columnGroupShift + i * 5 + 1, 1, columnGroupShift + i * 5 + 5);
-      ws.getCell(1, columnGroupShift + i * 5 + 1).alignment = { horizontal: 'center' };
-      ws.getCell(1, columnGroupShift + i * 5 + 1).value = thingName;
-      ws.getCell(1, columnGroupShift + i * 5 + 1).style = {
+      ws.mergeCells(
+        1,
+        columnGroupShift + i * (fieldAttrCount + 1) + 1,
+        1,
+        columnGroupShift + i * (fieldAttrCount + 1) + (fieldAttrCount + 1),
+      );
+      ws.getCell(1, columnGroupShift + i * (fieldAttrCount + 1) + 1).alignment = {
+        horizontal: 'center',
+      };
+      ws.getCell(1, columnGroupShift + i * (fieldAttrCount + 1) + 1).value = thingName;
+      ws.getCell(1, columnGroupShift + i * (fieldAttrCount + 1) + 1).style = {
         font: { bold: true },
         alignment: { horizontal: 'center' },
       };
 
-      columns.push({ width: 24 }, { width: 2.4 }, { width: 2.4 }, { width: 2.4 }, { width: 5 });
+      columns.push({ width: 24 });
+      for (let j = 0; j < fieldAttrCount - 1; j += 1) {
+        columns.push({ width: 2.4 });
+      }
+      columns.push({ width: 5 });
 
       if (suffix) {
-        ws.getCell(1, columnGroupShift + i * 5 + 1).fill = {
+        ws.getCell(1, columnGroupShift + i * (fieldAttrCount + 1) + 1).fill = {
           type: 'pattern',
           pattern: 'solid',
           fgColor: { argb: 'FFE0E0E0' },

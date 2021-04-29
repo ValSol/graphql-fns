@@ -3,7 +3,9 @@
 import type { DerivativeAttributes } from '../../../flowTypes';
 
 import composeSpecificActionName from '../../composeSpecificActionName';
-import ordinaryActionTypes from '../ordinaryActionTypes';
+import constants from '../constants';
+
+const { fieldAttrCount, ordinaryActionTypes } = constants;
 
 type Args = {
   columnGroupShift: number,
@@ -16,7 +18,7 @@ type Args = {
 
 const showDerivativeActions = (args: Args) => {
   const { columnGroupShift, columns, derivative, firstThingName, suffix, ws } = args;
-  const col = columnGroupShift + 11;
+  const col = columnGroupShift + ((fieldAttrCount + 1) * 2 + 1);
   const col2 = col + 1;
   ws.mergeCells(1, col, 1, col2);
   ws.getCell(1, col).alignment = { horizontal: 'center' };

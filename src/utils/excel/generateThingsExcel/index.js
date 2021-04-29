@@ -5,8 +5,11 @@ import ExcelJS from 'exceljs';
 import type { GeneralConfig } from '../../../flowTypes';
 
 import composeWorksheetName from '../composeWorksheetName';
+import constants from '../constants';
 import fitWidth from '../fitWidth';
 import showColumnGroupOfFields from '../showColumnGroupOfFields';
+
+const { fieldAttrCount } = constants;
 
 const generateThingsExcel = async (
   generalConfig: GeneralConfig,
@@ -38,7 +41,7 @@ const generateThingsExcel = async (
     const worksheetName = composeWorksheetName(firstThingName, wb);
 
     const ws = wb.addWorksheet(worksheetName, {
-      views: [{ state: 'frozen', xSplit: 5, ySplit: 1 }],
+      views: [{ state: 'frozen', xSplit: fieldAttrCount + 1, ySplit: 1 }],
     });
 
     const thingNamesWithSuffixes = derivative
@@ -66,7 +69,9 @@ const generateThingsExcel = async (
 
     ws.columns = columns;
 
-    fitWidth(ws, [10, null, null, null, null]);
+    const widths = new Array(fieldAttrCount).fill(null);
+    widths.unshift(10);
+    fitWidth(ws, widths);
   });
 
   await wb.xlsx.writeFile(filePath);
