@@ -9,10 +9,10 @@ import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import processDeleteData from '../processDeleteData';
 
-type Args = { whereOne: { id: string } };
+type Args = { whereOne: Array<{ id: string }> };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-const createDeleteThingMutationResolver = (
+const createDeleteManyThingsMutationResolver = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -20,7 +20,7 @@ const createDeleteThingMutationResolver = (
 ): Function | null => {
   const { enums, inventory } = generalConfig;
   const { name } = thingConfig;
-  const inventoryChain = ['Mutation', 'deleteThing', name];
+  const inventoryChain = ['Mutation', 'deleteManyThings', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (
@@ -41,12 +41,18 @@ const createDeleteThingMutationResolver = (
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
-    const whereOneKeys = Object.keys(whereOne);
-    if (whereOneKeys.length !== 1) {
-      throw new TypeError('Expected exactly one key in where arg!');
-    }
+    whereOne.forEach((item) => {
+      const whereOneKeys = Object.keys(item);
+      if (whereOneKeys.length !== 1) {
+        throw new TypeError('Expected exactly one key in where arg!');
+      }
+    });
 
-    const { lookups, where: preConditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
+    const { lookups, where: preConditions } = mergeWhereAndFilter(
+      filter,
+      { OR: whereOne },
+      thingConfig,
+    );
 
     let conditions = preConditions;
 
@@ -59,19 +65,24 @@ const createDeleteThingMutationResolver = (
 
       arg.push({ $project: { _id: 1 } });
 
-      const [thing] = await Thing.aggregate(arg).exec();
+      const things = await Thing.aggregate(arg).exec();
 
-      if (!thing) return null;
+      if (things.length !== whereOne.length) return null;
 
-      conditions = { _id: thing._id }; // eslint-disable-line no-underscore-dangle
+      conditions = { _id: { $in: things.map(({ _id }) => _id) } };
     }
 
-    const thing = await Thing.findOne(conditions, null, { lean: true });
-    if (!thing) return null;
+    const things = await Thing.find(conditions, null, { lean: true });
+    if (things.length !== whereOne.length) return null;
 
     const promises = [];
     const toDelete = true;
-    const bulkItemsMap = processDeleteData(thing, null, thingConfig, toDelete);
+
+    let bulkItemsMap = new Map();
+    things.forEach((thing) => {
+      bulkItemsMap = processDeleteData(thing, bulkItemsMap, thingConfig, toDelete);
+    });
+
     bulkItemsMap.forEach((bulkItems, config) => {
       const { name: name2 } = config;
       const thingSchema2 = createThingSchema(config, enums);
@@ -81,24 +92,12 @@ const createDeleteThingMutationResolver = (
 
     await Promise.all(promises);
 
-    const thing2 = addIdsToThing(thing, thingConfig);
+    const things2 = things.map((thing) => addIdsToThing(thing, thingConfig));
 
-    const subscriptionInventoryChain = ['Subscription', 'deletedThing', name];
-    if (checkInventory(subscriptionInventoryChain, inventory)) {
-      if (
-        !inAnyCase &&
-        (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig))
-      ) {
-        const { pubsub } = context;
-        if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-        pubsub.publish(`deleted-${name}`, { [`deleted${name}`]: thing2 });
-      }
-    }
-
-    return thing2;
+    return things2;
   };
 
   return resolver;
 };
 
-export default createDeleteThingMutationResolver;
+export default createDeleteManyThingsMutationResolver;

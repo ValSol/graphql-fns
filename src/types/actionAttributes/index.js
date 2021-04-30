@@ -11,6 +11,7 @@ import thingFiles from './thingFilesQueryAttributes';
 import thing from './thingQueryAttributes';
 import things from './thingsQueryAttributes';
 import createThing from './createThingMutationAttributes';
+import deleteManyThings from './deleteManyThingsMutationAttributes';
 import deleteThing from './deleteThingMutationAttributes';
 import importThings from './importThingsMutationAttributes';
 import pushIntoThing from './pushIntoThingMutationAttributes';
@@ -21,6 +22,7 @@ import uploadThingFiles from './uploadThingFilesMutationAttributes';
 const actionAttributes = {
   createManyThings,
   createThing,
+  deleteManyThings,
   deleteThing,
   importThings,
   pushIntoThing,

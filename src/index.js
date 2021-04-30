@@ -10,11 +10,20 @@ export { default as composeGqlTypes } from './types/composeGqlTypes';
 // mutation resolvers
 export { default as createCreateManyThingsMutationResolver } from './resolvers/mutations/createCreateManyThingsMutationResolver';
 export { default as createCreateThingMutationResolver } from './resolvers/mutations/createCreateThingMutationResolver';
-export { default as createUpdateThingMutationResolver } from './resolvers/mutations/createUpdateThingMutationResolver';
 export { default as createDeleteThingMutationResolver } from './resolvers/mutations/createDeleteThingMutationResolver';
+export { default as createDeleteManyThingsMutationResolver } from './resolvers/mutations/createDeleteManyThingsMutationResolver';
+export { default as createImportThingsMutationResolver } from './resolvers/mutations/createImportThingsMutationResolver';
+export { default as createPushIntoThingMutationResolver } from './resolvers/mutations/createPushIntoThingMutationResolver';
+export { default as createUpdateThingMutationResolver } from './resolvers/mutations/createUpdateThingMutationResolver';
+export { default as createUploadFilesToThingMutationResolver } from './resolvers/mutations/createUploadFilesToThingMutationResolver';
+export { default as createUploadThingFilesMutationResolver } from './resolvers/mutations/createUploadThingFilesMutationResolver';
 
 // query resolvers
+export { default as createThingDistinctValuesQueryResolver } from './resolvers/queries/createThingDistinctValuesQueryResolver';
 export { default as createThingCountQueryResolver } from './resolvers/queries/createThingCountQueryResolver';
+export { default as createThingFileCountQueryResolver } from './resolvers/queries/createThingFileCountQueryResolver';
+export { default as createThingFileQueryResolver } from './resolvers/queries/createThingFileQueryResolver';
+export { default as createThingFilesQueryResolver } from './resolvers/queries/createThingFilesQueryResolver';
 export { default as createThingQueryResolver } from './resolvers/queries/createThingQueryResolver';
 export { default as createThingsQueryResolver } from './resolvers/queries/createThingsQueryResolver';
 

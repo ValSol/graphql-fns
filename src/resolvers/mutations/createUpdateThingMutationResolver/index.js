@@ -102,6 +102,7 @@ const createUpdateThingMutationResolver = (
     const coreForDeletions = Object.keys(duplexFieldsProjection).length
       ? processDeleteData(
           processDeleteDataPrepareArgs(data, previousThing, thingConfig),
+          null,
           thingConfig,
         )
       : null;

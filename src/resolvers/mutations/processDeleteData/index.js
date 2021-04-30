@@ -3,15 +3,20 @@ import type { ThingConfig } from '../../../flowTypes';
 
 type ProcessDeleteDataResult = Map<ThingConfig, Array<Object>>;
 
-const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDeleteDataResult => {
+const processDeleteData = (
+  data: Object,
+  initialCore: null | Map<ThingConfig, Array<Object>>,
+  thingConfig: ThingConfig,
+  forDelete?: boolean,
+): ProcessDeleteDataResult => {
   // eslint-disable-next-line no-unused-vars
   const { _id } = data;
   const { duplexFields } = thingConfig;
 
-  const duplexFieldsArray = [];
-  if (duplexFields) {
-    duplexFields.reduce((prev, { name, oppositeName, array, config }) => {
+  const duplexFieldsArray = (duplexFields || []).reduce(
+    (prev, { name, oppositeName, array, config }) => {
       if (!config.duplexFields) {
+        // to prevent flowjs error
         throw new TypeError('Expected a duplexFields in config!');
       }
       const duplexField = config.duplexFields.find(({ name: name2 }) => name2 === oppositeName);
@@ -21,10 +26,22 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
       const { array: oppositeArray, config: oppositeConfig } = duplexField;
       prev.push({ array, config, name, oppositeArray, oppositeConfig, oppositeName });
       return prev;
-    }, duplexFieldsArray);
-  }
+    },
+    [],
+  );
 
-  const result = new Map();
+  const core = initialCore || new Map();
+
+  if (forDelete) {
+    const item = { deleteOne: { filter: { _id } } };
+
+    const resultItem = core.get(thingConfig);
+    if (resultItem) {
+      resultItem.push(item);
+    } else {
+      core.set(thingConfig, [item]);
+    }
+  }
 
   duplexFieldsArray.forEach(({ name, array, config, oppositeArray, oppositeName }) => {
     if (data[name]) {
@@ -48,11 +65,11 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
                   },
             },
           };
-          const resultItem = result.get(config);
+          const resultItem = core.get(config);
           if (resultItem) {
             resultItem.push(item);
           } else {
-            result.set(config, [item]);
+            core.set(config, [item]);
           }
         });
       } else {
@@ -75,17 +92,17 @@ const processDeleteData = (data: Object, thingConfig: ThingConfig): ProcessDelet
                 },
           },
         };
-        const resultItem = result.get(config);
+        const resultItem = core.get(config);
         if (resultItem) {
           resultItem.push(item);
         } else {
-          result.set(config, [item]);
+          core.set(config, [item]);
         }
       }
     }
   });
 
-  return result;
+  return core;
 };
 
 export default processDeleteData;

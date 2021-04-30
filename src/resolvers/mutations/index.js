@@ -3,6 +3,7 @@
 import createManyThings from './createCreateManyThingsMutationResolver';
 import createThing from './createCreateThingMutationResolver';
 import deleteThing from './createDeleteThingMutationResolver';
+import deleteManyThings from './createDeleteManyThingsMutationResolver';
 import importThings from './createImportThingsMutationResolver';
 import pushIntoThing from './createPushIntoThingMutationResolver';
 import updateThing from './createUpdateThingMutationResolver';
@@ -13,6 +14,7 @@ const mutations = {
   createManyThings,
   createThing,
   deleteThing,
+  deleteManyThings,
   importThings,
   pushIntoThing,
   updateThing,
