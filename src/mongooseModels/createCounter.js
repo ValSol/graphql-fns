@@ -15,10 +15,10 @@ const createCounter = (mongooseConn: Object): Object => {
     counterSchema = new Schema(schemaProperties);
 
     // to work dynamic adding fields
-    mongoose.model('counter', counterSchema);
+    mongoose.model('Counter_Variable', counterSchema);
   }
 
-  return mongooseConn.model('counter', counterSchema);
+  return mongooseConn.model('Counter_Variable', counterSchema);
 };
 
 export default createCounter;
