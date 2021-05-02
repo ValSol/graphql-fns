@@ -65,7 +65,7 @@ const createCreateThingMutationResolver = (
       core,
       periphery,
       mains: [first],
-    } = processCreateInputData(data, [], null, null, thingConfig);
+    } = processCreateInputData(data, [], null, null, thingConfig, 'create');
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 

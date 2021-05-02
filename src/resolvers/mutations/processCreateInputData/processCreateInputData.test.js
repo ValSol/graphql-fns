@@ -92,7 +92,15 @@ describe('processCreateInputData', () => {
         },
       ],
     };
-    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      thingConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -158,7 +166,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      thingConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -251,7 +267,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      thingConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -330,7 +354,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      personConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -473,7 +505,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      personConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -678,7 +718,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      personConfig,
+      'create',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -742,21 +790,25 @@ describe('processCreateInputData', () => {
 
     const core = new Map();
     const item = {
-      insertOne: {
-        document: {
+      updateOne: {
+        filter: {
           _id: '16',
-          textField1: 'textField1-Value',
-          textField2: 'textField2-Value',
-          embeddedField1: {
-            textField_e1: 'textField_e1-value',
-            embeddedField2S: [
-              {
-                textField_e2: 'textField_e2-value-1',
-              },
-              {
-                textField_e2: 'textField_e2-value-2',
-              },
-            ],
+        },
+        update: {
+          $set: {
+            textField1: 'textField1-Value',
+            textField2: 'textField2-Value',
+            embeddedField1: {
+              textField_e1: 'textField_e1-value',
+              embeddedField2S: [
+                {
+                  textField_e2: 'textField_e2-value-1',
+                },
+                {
+                  textField_e2: 'textField_e2-value-2',
+                },
+              ],
+            },
           },
         },
       },
@@ -788,7 +840,15 @@ describe('processCreateInputData', () => {
       ],
     };
 
-    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(
+      data,
+      [],
+      null,
+      null,
+      thingConfig,
+      'update',
+      mongooseTypes,
+    );
 
     expect(result).toEqual(expectedResult);
   });

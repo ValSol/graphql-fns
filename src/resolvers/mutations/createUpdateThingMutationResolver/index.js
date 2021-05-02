@@ -109,36 +109,37 @@ const createUpdateThingMutationResolver = (
     const {
       core,
       periphery,
-      single,
-      mains: [{ _id, ...rest }],
+      mains: [{ _id }],
     } = processCreateInputData(
       { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
       [],
       coreForDeletions,
       null,
       thingConfig,
-      true, // for update
+      'update', // for update
     );
 
     await updatePeriphery(periphery, mongooseConn);
 
-    if (!single) {
-      const coreWithCounters = await incCounters(core, mongooseConn);
+    const coreWithCounters = await incCounters(core, mongooseConn);
 
-      const promises = [];
-      coreWithCounters.forEach((bulkItems, config) => {
-        const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
-        promises.push(Thing2.bulkWrite(bulkItems));
-      });
-      await Promise.all(promises);
-    }
-
-    const thing = await Thing.findOneAndUpdate({ _id }, rest, {
-      new: true,
-      lean: true,
+    const promises = [];
+    coreWithCounters.forEach((bulkItems, config) => {
+      const { name: name2 } = config;
+      const thingSchema2 = createThingSchema(config, enums);
+      const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
+      promises.push(Thing2.bulkWrite(bulkItems));
     });
+    await Promise.all(promises);
+
+    const thing = await Thing.findOne(
+      { _id },
+      {},
+      {
+        new: true,
+        lean: true,
+      },
+    );
 
     const thing2 = addIdsToThing(thing, thingConfig);
 

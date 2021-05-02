@@ -8,7 +8,6 @@ import addIdsToThing from '../../utils/addIdsToThing';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import incCounters from '../incCounters';
-import processForPushEach from './processForPushEach';
 import processCreateInputData from '../processCreateInputData';
 import updatePeriphery from '../updatePeriphery';
 
@@ -87,40 +86,37 @@ const createPushIntoThingMutationResolver = (
       if (!thing) return null;
     }
 
-    const {
-      core,
-      periphery,
-      single,
-      mains: [{ _id: _id2, ...rest }],
-    } = processCreateInputData(
+    const { core, periphery } = processCreateInputData(
       { ...data, id: _id },
       [],
       null,
 
       null,
       thingConfig,
-      true, // for update
+      'push',
     );
 
     await updatePeriphery(periphery, mongooseConn);
 
-    if (!single) {
-      const coreWithCounters = await incCounters(core, mongooseConn);
+    const coreWithCounters = await incCounters(core, mongooseConn);
 
-      const promises = [];
-      coreWithCounters.forEach((bulkItems, config) => {
-        const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
-        promises.push(Thing2.bulkWrite(bulkItems));
-      });
-      await Promise.all(promises);
-    }
-    const dataForConcatenation = processForPushEach(rest);
-    const thing = await Thing.findOneAndUpdate({ _id }, dataForConcatenation, {
-      new: true,
-      lean: true,
+    const promises = [];
+    coreWithCounters.forEach((bulkItems, config) => {
+      const { name: name2 } = config;
+      const thingSchema2 = createThingSchema(config, enums);
+      const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
+      promises.push(Thing2.bulkWrite(bulkItems));
     });
+    await Promise.all(promises);
+
+    const thing = await Thing.findOne(
+      { _id },
+      {},
+      {
+        new: true,
+        lean: true,
+      },
+    );
 
     const thing2 = addIdsToThing(thing, thingConfig);
 

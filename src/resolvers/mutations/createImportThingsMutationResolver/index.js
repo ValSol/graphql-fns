@@ -91,19 +91,23 @@ const createImportThingsMutationResolver = (
 
     let overallCore = null;
     let overallPeriphery = null;
-    const ids = [];
+    const mains = [];
 
     data.forEach((dataItem) => {
-      const {
-        core,
-        periphery,
-        mains: [first],
-      } = processCreateInputData(dataItem, [], overallCore, overallPeriphery, thingConfig);
+      const { core, periphery } = processCreateInputData(
+        dataItem,
+        mains,
+        overallCore,
+        overallPeriphery,
+        thingConfig,
+        'create',
+      );
       // eslint-disable-next-line no-underscore-dangle
-      ids.push(first._id);
       overallCore = core;
       overallPeriphery = periphery;
     });
+
+    const ids = mains.map(({ _id }) => _id);
 
     // if check to eliminate flowjs error
     if (overallPeriphery && overallCore) {

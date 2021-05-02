@@ -6,6 +6,7 @@ import type { Periphery, ThingConfig } from '../../../flowTypes';
 
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
+import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
 
 type ProcessCreateInputDataResult = {
@@ -21,7 +22,7 @@ const processCreateInputData = (
   initialCore: null | Map<ThingConfig, Array<Object>>,
   initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
-  forUpdate?: boolean,
+  processingKind: 'create' | 'update' | 'push',
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
 ): Object => {
@@ -149,7 +150,7 @@ const processCreateInputData = (
 
     return Object.keys(data2).reduce((prev, key) => {
       if (data2[key] === undefined) return prev;
-      if (forUpdate && data2[key] === null) {
+      if (processingKind === 'update' && data2[key] === null) {
         prev[key] = null; // eslint-disable-line no-param-reassign
         return prev;
       }
@@ -418,12 +419,32 @@ const processCreateInputData = (
 
     const document = transform(data3, config);
 
+    let item = null;
     if (first) {
       mains.push(document);
       first = false;
-      if (forUpdate) continue; // eslint-disable-line no-continue
+      if (processingKind === 'update') {
+        // $FlowFixMe
+        const { _id, ...$set } = document;
+        item = {
+          updateOne: {
+            filter: { _id },
+            update: { $set },
+          },
+        };
+      } else if (processingKind === 'push') {
+        // $FlowFixMe
+        const { _id, ...rest } = document;
+        item = {
+          updateOne: {
+            filter: { _id },
+            // $FlowFixMe
+            update: processForPushEach(rest),
+          },
+        };
+      }
     }
-    const item = { insertOne: { document } };
+    item = item || { insertOne: { document } };
 
     const coreItem = core.get(config);
     if (coreItem) {
