@@ -65,7 +65,7 @@ describe('createUpdateThingMutationType', () => {
       ],
     });
     const expectedResult =
-      '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!';
+      '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!';
     const dic = {};
 
     const result = composeStandardActionSignature(personConfig, updateThingMutationAttributes, dic);
@@ -97,6 +97,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }`,
       PlaceCreateInput: `input PlaceCreateInput {
   id: ID
@@ -109,16 +110,13 @@ input PlaceCreateChildInput {
 input PlaceCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
+  createPositions: [Int!]
 }`,
       AddressCreateInput: `input AddressCreateInput {
   city: String
 }`,
       AddressUpdateInput: `input AddressUpdateInput {
   city: String
-}`,
-      PersonReorderCreatedInput: `input PersonReorderCreatedInput {
-  friends: [Int!]
-  enemies: [Int!]
 }`,
     };
 

@@ -61,8 +61,8 @@ describe('composeUpdateThingMutationArgs', () => {
     });
 
     const expectedResult = [
-      'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!, $positions: PersonReorderCreatedInput) {',
-      '  updatePerson(whereOne: $whereOne, data: $data, positions: $positions) {',
+      'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!) {',
+      '  updatePerson(whereOne: $whereOne, data: $data) {',
     ];
 
     const result = composeActionArgs(prefixName, personConfig, updateThingMutationAttributes);

@@ -79,18 +79,20 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single,
-      first: {
-        _id: '1',
-        intField1: 0,
-        intField2: 55,
-        floatField1: 0.0,
-        floatField2: 5.5,
-        textField1: 'textField1-Value',
-        textField2: 'textField2-Value',
-        booleanField1: false,
-      },
+      mains: [
+        {
+          _id: '1',
+          intField1: 0,
+          intField2: 55,
+          floatField1: 0.0,
+          floatField2: 5.5,
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          booleanField1: false,
+        },
+      ],
     };
-    const result = processCreateInputData(data, null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -145,16 +147,18 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single,
-      first: {
-        _id: '2',
-        textField1: 'textField1-Value',
-        textField2: 'textField2-Value',
-        relationalField1: '5caf757d62552d713461f420',
-        relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
-      },
+      mains: [
+        {
+          _id: '2',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          relationalField1: '5caf757d62552d713461f420',
+          relationalField2: ['5caf757d62552d713461f420', '5cb0ab5a448c440720cf2594'],
+        },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -231,21 +235,23 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single,
-      first: {
-        _id: '3',
-        textField1: 'textField1-Value',
-        textField2: 'textField2-Value',
-        embeddedField1: {
-          textField_e1: 'textField_e1-value',
-          embeddedField2: {
-            textField_e2: 'textField_e2-value',
-            relationalField: '5caf757d62552d713461f420',
+      mains: [
+        {
+          _id: '3',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          embeddedField1: {
+            textField_e1: 'textField_e1-value',
+            embeddedField2: {
+              textField_e2: 'textField_e2-value',
+              relationalField: '5caf757d62552d713461f420',
+            },
           },
         },
-      },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -284,6 +290,7 @@ describe('processCreateInputData', () => {
       favorites: {
         connect: ['777'],
         create: [{ city: 'Odesa' }, { city: 'Chernygiv' }, { city: 'Zhitomyr' }],
+        createPositions: [0, 3, 2],
       },
     };
 
@@ -296,7 +303,7 @@ describe('processCreateInputData', () => {
             firstName: 'Vasya',
             lastName: 'Pupkin',
             location: '5',
-            favorites: ['777', '6', '7', '8'],
+            favorites: ['6', '777', '8', '7'],
           },
         },
       },
@@ -312,16 +319,18 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single: false,
-      first: {
-        _id: '4',
-        firstName: 'Vasya',
-        lastName: 'Pupkin',
-        location: '5',
-        favorites: ['777', '6', '7', '8'],
-      },
+      mains: [
+        {
+          _id: '4',
+          firstName: 'Vasya',
+          lastName: 'Pupkin',
+          location: '5',
+          favorites: ['6', '777', '8', '7'],
+        },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -392,6 +401,7 @@ describe('processCreateInputData', () => {
       favorites: {
         connect: ['777'],
         create: [{ name: 'Odesa' }, { name: 'Chernygiv' }, { name: 'Zhitomyr' }],
+        createPositions: [0, 3, 2],
       },
     };
 
@@ -405,7 +415,7 @@ describe('processCreateInputData', () => {
             lastName: 'Pupkin',
             friend: '10',
             location: '11',
-            favorites: ['777', '12', '13', '14'],
+            favorites: ['12', '777', '14', '13'],
           },
         },
       },
@@ -451,17 +461,19 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single: false,
-      first: {
-        _id: '9',
-        firstName: 'Vasya',
-        lastName: 'Pupkin',
-        friend: '10',
-        location: '11',
-        favorites: ['777', '12', '13', '14'],
-      },
+      mains: [
+        {
+          _id: '9',
+          firstName: 'Vasya',
+          lastName: 'Pupkin',
+          friend: '10',
+          location: '11',
+          favorites: ['12', '777', '14', '13'],
+        },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -653,18 +665,20 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single: false,
-      first: {
-        _id: '15',
-        firstName: 'Vasya',
-        lastName: 'Pupkin',
-        friend: '111',
-        location: '222',
-        locations: ['333', '444'],
-        favorites: ['555', '666'],
-      },
+      mains: [
+        {
+          _id: '15',
+          firstName: 'Vasya',
+          lastName: 'Pupkin',
+          friend: '111',
+          location: '222',
+          locations: ['333', '444'],
+          favorites: ['555', '666'],
+        },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, personConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, personConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });
@@ -754,25 +768,27 @@ describe('processCreateInputData', () => {
       core,
       periphery,
       single,
-      first: {
-        _id: '16',
-        textField1: 'textField1-Value',
-        textField2: 'textField2-Value',
-        embeddedField1: {
-          textField_e1: 'textField_e1-value',
-          embeddedField2S: [
-            {
-              textField_e2: 'textField_e2-value-1',
-            },
-            {
-              textField_e2: 'textField_e2-value-2',
-            },
-          ],
+      mains: [
+        {
+          _id: '16',
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          embeddedField1: {
+            textField_e1: 'textField_e1-value',
+            embeddedField2S: [
+              {
+                textField_e2: 'textField_e2-value-1',
+              },
+              {
+                textField_e2: 'textField_e2-value-2',
+              },
+            ],
+          },
         },
-      },
+      ],
     };
 
-    const result = processCreateInputData(data, null, null, thingConfig, false, mongooseTypes);
+    const result = processCreateInputData(data, [], null, null, thingConfig, false, mongooseTypes);
 
     expect(result).toEqual(expectedResult);
   });

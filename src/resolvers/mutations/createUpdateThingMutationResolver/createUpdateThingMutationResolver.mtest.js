@@ -239,6 +239,7 @@ describe('createUpdateThingMutationResolver', () => {
               name: 'Morocco',
             },
           ],
+          createPositions: [0, 1, 2],
         },
         favorities: {
           create: [
@@ -252,15 +253,16 @@ describe('createUpdateThingMutationResolver', () => {
               name: 'Angola',
             },
           ],
+          createPositions: [2, 3, 4],
           connect: [...updatedPerson.favorities],
         },
       };
 
-      const positions = { locations: [0, 1, 2], favorities: [2, 3, 4] };
+      // const positions = { locations: [0, 1, 2], favorities: [2, 3, 4] };
 
       const updatedPerson2 = await updatePerson(
         null,
-        { whereOne, data: dataForUpdate2, positions },
+        { whereOne, data: dataForUpdate2 },
         { mongooseConn, pubsub },
       );
 

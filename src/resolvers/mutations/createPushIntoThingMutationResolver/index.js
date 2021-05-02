@@ -91,10 +91,12 @@ const createPushIntoThingMutationResolver = (
       core,
       periphery,
       single,
-      first: { _id: _id2, ...rest },
+      mains: [{ _id: _id2, ...rest }],
     } = processCreateInputData(
       { ...data, id: _id },
+      [],
       null,
+
       null,
       thingConfig,
       true, // for update

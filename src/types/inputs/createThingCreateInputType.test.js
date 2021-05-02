@@ -50,6 +50,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -105,6 +106,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }`,
       {
         PersonCreateInput: [createThingCreateInputType, personConfig],
@@ -212,6 +214,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }`,
       { AddressCreateInput: [createThingCreateInputType, addressConfig] },
     ];
@@ -259,6 +262,7 @@ input MenuCreateChildInput {
 input MenuCreateOrPushChildrenInput {
   connect: [ID!]
   create: [MenuCreateInput!]
+  createPositions: [Int!]
 }`,
         { MenuSectionCreateInput: [createThingCreateInputType, menuSectionConfig] },
       ];
@@ -284,6 +288,7 @@ input MenuSectionCreateChildInput {
 input MenuSectionCreateOrPushChildrenInput {
   connect: [ID!]
   create: [MenuSectionCreateInput!]
+  createPositions: [Int!]
 }
 input MenuSectionCreateThru_menu_FieldChildInput {
   connect: ID
@@ -292,6 +297,7 @@ input MenuSectionCreateThru_menu_FieldChildInput {
 input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
   connect: [ID!]
   create: [MenuSectionCreateThru_menu_FieldInput!]
+  createPositions: [Int!]
 }`,
         { MenuCreateInput: [createThingCreateInputType, menuConfig] },
       ];
@@ -395,6 +401,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }
 input PersonCreateThru_friends_FieldChildInput {
   connect: ID
@@ -403,6 +410,7 @@ input PersonCreateThru_friends_FieldChildInput {
 input PersonCreateOrPushThru_friends_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_friends_FieldInput!]
+  createPositions: [Int!]
 }
 input PersonCreateThru_location_FieldChildInput {
   connect: ID
@@ -411,6 +419,7 @@ input PersonCreateThru_location_FieldChildInput {
 input PersonCreateOrPushThru_location_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_location_FieldInput!]
+  createPositions: [Int!]
 }`,
       {
         PersonCreateInput: [createThingCreateInputType, personConfig],
@@ -488,6 +497,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -538,6 +548,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -590,6 +601,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -642,6 +654,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -694,6 +707,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       {},
     ];
@@ -792,6 +806,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
       { ImageCreateInput: [createThingCreateInputType, imageConfig] },
     ];

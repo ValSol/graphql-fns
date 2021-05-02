@@ -61,8 +61,8 @@ describe('composeCreateThingMutationArgs', () => {
     });
 
     const expectedResult = [
-      'mutation Home_createPerson($data: PersonCreateInput!, $positions: PersonReorderCreatedInput) {',
-      '  createPerson(data: $data, positions: $positions) {',
+      'mutation Home_createPerson($data: PersonCreateInput!) {',
+      '  createPerson(data: $data) {',
     ];
 
     const result = composeActionArgs(prefixName, personConfig, createThingMutationAttributes);

@@ -230,6 +230,7 @@ const createThingCreateInputType: InputCreator = (thingConfig) => {
 input ${name}CreateOrPushChildrenInput {
   connect: [ID!]
   create: [${name}CreateInput!]
+  createPositions: [Int!]
 }`);
 
     if (duplexFields) {
@@ -242,6 +243,7 @@ input ${name}CreateOrPushChildrenInput {
 input ${name}CreateOrPushThru_${name2}_FieldChildrenInput {
   connect: [ID!]
   create: [${name}CreateThru_${name2}_FieldInput!]
+  createPositions: [Int!]
 }`);
         }
         return prev;

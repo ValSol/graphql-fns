@@ -50,8 +50,7 @@ describe('createCreateThingMutationType', () => {
         },
       ],
     });
-    const expectedResult =
-      '  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!';
+    const expectedResult = '  createPerson(data: PersonCreateInput!): Person!';
 
     const dic = {};
 

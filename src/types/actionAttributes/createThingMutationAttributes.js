@@ -3,7 +3,6 @@
 import type { ThingConfig } from '../../flowTypes';
 
 import createThingCreateInputType from '../inputs/createThingCreateInputType';
-import createThingReorderCreatedInputType from '../inputs/createThingReorderCreatedInputType';
 
 const actionType = 'mutation';
 
@@ -11,14 +10,11 @@ const actionGeneralName = (suffix?: string = ''): string => `createThing${suffix
 
 const actionName = (baseName: string, suffix?: string = ''): string => `create${baseName}${suffix}`;
 
-const inputCreators = [createThingCreateInputType, createThingReorderCreatedInputType];
+const inputCreators = [createThingCreateInputType];
 
-const argNames = ['data', 'positions'];
+const argNames = ['data'];
 
-const argTypes = [
-  (name: string): string => `${name}CreateInput!`,
-  (name: string): string => `${name}ReorderCreatedInput`,
-];
+const argTypes = [(name: string): string => `${name}CreateInput!`];
 
 const actionReturnConfig = true;
 

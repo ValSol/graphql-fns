@@ -2,13 +2,11 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
 import checkInventory from '../../../utils/checkInventory';
-import setByPositions from '../../../utils/setByPositions';
 import createThing from '../../../mongooseModels/createThing';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import addIdsToThing from '../../utils/addIdsToThing';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import checkData from '../checkData';
-import incCounter from './incCounter';
 import incCounters from '../incCounters';
 import processCreateInputData from '../processCreateInputData';
 import updatePeriphery from '../updatePeriphery';
@@ -46,7 +44,7 @@ const createCreateThingMutationResolver = (
 
     if (!filter) return null;
 
-    const { data, positions } = args;
+    const { data } = args;
 
     const toCreate = true;
     const allowCreate = await checkData(
@@ -63,52 +61,27 @@ const createCreateThingMutationResolver = (
 
     const { mongooseConn } = context;
 
-    const { core, periphery, single, first } = processCreateInputData(
-      data,
-      null,
-      null,
-      thingConfig,
-    );
+    const {
+      core,
+      periphery,
+      mains: [first],
+    } = processCreateInputData(data, [], null, null, thingConfig);
 
     const Thing = await createThing(mongooseConn, thingConfig, enums);
 
     await updatePeriphery(periphery, mongooseConn);
 
-    let thing;
-    if (single) {
-      const singleWithCounters = await incCounter(first, thingConfig, mongooseConn);
-      const result = await Thing.create(singleWithCounters);
-      thing = result.toObject();
-    } else {
-      const coreWithCounters = await incCounters(core, mongooseConn);
-      const promises = [];
-      coreWithCounters.forEach((bulkItems, config) => {
-        const { name: name2 } = config;
-        const thingSchema2 = createThingSchema(config, enums);
-        const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
-        promises.push(Thing2.bulkWrite(bulkItems));
-      });
-      await Promise.all(promises);
-      // eslint-disable-next-line no-underscore-dangle
-      thing = await Thing.findById(first._id, null, { lean: true });
-    }
-
-    if (positions) {
-      const data2 = {};
-
-      Object.keys(positions).forEach((key) => {
-        if (!data[key].create) {
-          throw new TypeError(`There is not "create" field in "${key}" field to set positions!`);
-        }
-        data2[key] = setByPositions(thing[key], positions[key]);
-      });
-
-      // eslint-disable-next-line no-underscore-dangle
-      thing = await Thing.findOneAndUpdate({ _id: first._id }, data2, {
-        new: true,
-        lean: true,
-      });
-    }
+    const coreWithCounters = await incCounters(core, mongooseConn);
+    const promises = [];
+    coreWithCounters.forEach((bulkItems, config) => {
+      const { name: name2 } = config;
+      const thingSchema2 = createThingSchema(config, enums);
+      const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
+      promises.push(Thing2.bulkWrite(bulkItems));
+    });
+    await Promise.all(promises);
+    // eslint-disable-next-line no-underscore-dangle
+    const thing = await Thing.findById(first._id, null, { lean: true });
 
     const thing2 = addIdsToThing(thing, thingConfig);
 

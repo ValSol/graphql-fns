@@ -94,12 +94,11 @@ const createImportThingsMutationResolver = (
     const ids = [];
 
     data.forEach((dataItem) => {
-      const { core, periphery, first } = processCreateInputData(
-        dataItem,
-        overallCore,
-        overallPeriphery,
-        thingConfig,
-      );
+      const {
+        core,
+        periphery,
+        mains: [first],
+      } = processCreateInputData(dataItem, [], overallCore, overallPeriphery, thingConfig);
       // eslint-disable-next-line no-underscore-dangle
       ids.push(first._id);
       overallCore = core;

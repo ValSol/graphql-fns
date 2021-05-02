@@ -2,7 +2,6 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
 import checkInventory from '../../../utils/checkInventory';
-import setByPositions from '../../../utils/setByPositions';
 import createThing from '../../../mongooseModels/createThing';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import addIdsToThing from '../../utils/addIdsToThing';
@@ -41,7 +40,7 @@ const createUpdateThingMutationResolver = (
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 
-    const { whereOne, data, positions } = args;
+    const { whereOne, data } = args;
 
     const toCreate = false;
     const allowCreate = await checkData(
@@ -111,9 +110,10 @@ const createUpdateThingMutationResolver = (
       core,
       periphery,
       single,
-      first: { _id, ...rest },
+      mains: [{ _id, ...rest }],
     } = processCreateInputData(
       { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
+      [],
       coreForDeletions,
       null,
       thingConfig,
@@ -135,31 +135,10 @@ const createUpdateThingMutationResolver = (
       await Promise.all(promises);
     }
 
-    let thing = await Thing.findOneAndUpdate({ _id }, rest, {
+    const thing = await Thing.findOneAndUpdate({ _id }, rest, {
       new: true,
       lean: true,
     });
-
-    if (positions) {
-      const data2 = {};
-
-      Object.keys(positions).forEach((key) => {
-        if (!data[key].create) {
-          throw new TypeError(`There is not "create" field in "${key}" field to set positions!`);
-        }
-        if (data[key].create.length !== positions[key].length) {
-          throw new TypeError(
-            `Number of created childs: "${data[key].create.length}" but number of positions: "${positions[key].length}"!`,
-          );
-        }
-        data2[key] = setByPositions(thing[key], positions[key]);
-      });
-
-      thing = await Thing.findOneAndUpdate({ _id }, data2, {
-        new: true,
-        lean: true,
-      });
-    }
 
     const thing2 = addIdsToThing(thing, thingConfig);
 

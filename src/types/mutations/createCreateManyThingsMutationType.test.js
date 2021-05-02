@@ -34,6 +34,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }`,
     };
 

@@ -6,16 +6,18 @@ import type { Periphery, ThingConfig } from '../../../flowTypes';
 
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
+import renumeratePositions from './renumeratePositions';
 
 type ProcessCreateInputDataResult = {
   core: Map<ThingConfig, Array<Object>>,
   periphery: Periphery,
   single: Boolean,
-  first: Object,
+  mains: Array<Object>,
 };
 
 const processCreateInputData = (
   data: Object,
+  mains: Array<Object>,
   initialCore: null | Map<ThingConfig, Array<Object>>,
   initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
@@ -170,10 +172,17 @@ const processCreateInputData = (
         if (data2[key].create) {
           if (array) {
             const ids = data2[key].connect || [];
-            data2[key].create.forEach((item) => {
+
+            const positions = renumeratePositions(
+              data2[key].createPositions,
+              data2[key].create.length,
+              ids.length,
+            );
+
+            data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
               const _id = mongooseTypes.ObjectId();
-              ids.push(_id);
+              ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: { ...item, _id },
                 config,
@@ -308,10 +317,17 @@ const processCreateInputData = (
         if (data2[key].create) {
           if (array) {
             const ids = data2[key].connect || [];
-            data2[key].create.forEach((item) => {
+
+            const positions = renumeratePositions(
+              data2[key].createPositions,
+              data2[key].create.length,
+              ids.length,
+            );
+
+            data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
               const _id = mongooseTypes.ObjectId();
-              ids.push(_id);
+              ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: {
                   ...item,
@@ -394,7 +410,7 @@ const processCreateInputData = (
     }, {});
   };
 
-  let first = null;
+  let first = true;
   while (prepared.length) {
     const { data: data3, config } = prepared.shift();
 
@@ -402,8 +418,9 @@ const processCreateInputData = (
 
     const document = transform(data3, config);
 
-    if (!first) {
-      first = document;
+    if (first) {
+      mains.push(document);
+      first = false;
       if (forUpdate) continue; // eslint-disable-line no-continue
     }
     const item = { insertOne: { document } };
@@ -418,7 +435,7 @@ const processCreateInputData = (
 
   const single = !initialCore && bulkOperationsCount === 1;
 
-  return { core, periphery, single, first };
+  return { core, periphery, single, mains };
 };
 
 export default processCreateInputData;

@@ -368,6 +368,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }
 input ImageCreateInput {
   fileId: String!
@@ -705,6 +706,7 @@ input Example1CreateChildInput {
 input Example1CreateOrPushChildrenInput {
   connect: [ID!]
   create: [Example1CreateInput!]
+  createPositions: [Int!]
 }
 input Example2CreateInput {
   id: ID
@@ -719,6 +721,7 @@ input Example2CreateChildInput {
 input Example2CreateOrPushChildrenInput {
   connect: [ID!]
   create: [Example2CreateInput!]
+  createPositions: [Int!]
 }
 enum ImportFormatEnum {
   csv
@@ -1002,6 +1005,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }
 input PlaceCreateInput {
   id: ID
@@ -1014,10 +1018,7 @@ input PlaceCreateChildInput {
 input PlaceCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
-}
-input PersonReorderCreatedInput {
-  friends: [Int!]
-  enemies: [Int!]
+  createPositions: [Int!]
 }
 enum ImportFormatEnum {
   csv
@@ -1075,7 +1076,7 @@ type Query {
 type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
+  createPerson(data: PersonCreateInput!): Person!
   createPlace(data: PlaceCreateInput!): Place!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
@@ -1084,7 +1085,7 @@ type Mutation {
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }
 type Subscription {
@@ -1248,6 +1249,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }
 input AddressCreateInput {
   country: String!
@@ -1547,6 +1549,7 @@ input PersonCreateChildInput {
 input PersonCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PersonCreateInput!]
+  createPositions: [Int!]
 }
 input PersonCreateThru_friends_FieldChildInput {
   connect: ID
@@ -1555,6 +1558,7 @@ input PersonCreateThru_friends_FieldChildInput {
 input PersonCreateOrPushThru_friends_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_friends_FieldInput!]
+  createPositions: [Int!]
 }
 input PersonCreateThru_location_FieldChildInput {
   connect: ID
@@ -1563,6 +1567,7 @@ input PersonCreateThru_location_FieldChildInput {
 input PersonCreateOrPushThru_location_FieldChildrenInput {
   connect: [ID!]
   create: [PersonCreateThru_location_FieldInput!]
+  createPositions: [Int!]
 }
 input PlaceCreateInput {
   id: ID
@@ -1577,14 +1582,7 @@ input PlaceCreateChildInput {
 input PlaceCreateOrPushChildrenInput {
   connect: [ID!]
   create: [PlaceCreateInput!]
-}
-input PersonReorderCreatedInput {
-  friends: [Int!]
-  enemies: [Int!]
-}
-input PlaceReorderCreatedInput {
-  citizens: [Int!]
-  visitors: [Int!]
+  createPositions: [Int!]
 }
 enum ImportFormatEnum {
   csv
@@ -1650,8 +1648,8 @@ type Query {
 type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  createPerson(data: PersonCreateInput!, positions: PersonReorderCreatedInput): Person!
-  createPlace(data: PlaceCreateInput!, positions: PlaceReorderCreatedInput): Place!
+  createPerson(data: PersonCreateInput!): Person!
+  createPlace(data: PlaceCreateInput!): Place!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
@@ -1660,8 +1658,8 @@ type Mutation {
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!): Place!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, positions: PersonReorderCreatedInput): Person!
-  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, positions: PlaceReorderCreatedInput): Place!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -1803,6 +1801,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }
 input ExampleWhereOneInput {
   id: ID!
@@ -2024,6 +2023,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
@@ -2071,6 +2071,7 @@ input ExampleCreateChildInput {
 input ExampleCreateOrPushChildrenInput {
   connect: [ID!]
   create: [ExampleCreateInput!]
+  createPositions: [Int!]
 }
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
