@@ -1,104 +1,19 @@
 // @flow
+
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
-import createThing from '../../../mongooseModels/createThing';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import addIdsToThing from '../../utils/addIdsToThing';
-import executeAuthorisation from '../../utils/executeAuthorisation';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import processDeleteData from '../processDeleteData';
+import composeStandardMutationResolver from '../composeStandardMutationResolver';
+import deleteThingResolverAttributes from './deleteThingResolverAttributes';
 
-type Args = { whereOne: { id: string } };
-type Context = { mongooseConn: Object, pubsub?: Object };
-
-const createDeleteThingMutationResolver = (
+type Result = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
-): Function | null => {
-  const { enums, inventory } = generalConfig;
-  const { name } = thingConfig;
-  const inventoryChain = ['Mutation', 'deleteThing', name];
-  if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
+) => Function | null;
 
-  const resolver = async (
-    parent: Object,
-    args: Args,
-    context: Context,
-    info: Object,
-    parentFilter: Array<Object>,
-  ): Object => {
-    const filter = inAnyCase
-      ? parentFilter
-      : await executeAuthorisation(inventoryChain, context, serversideConfig);
-    if (!filter) return null;
+const creatDeleteThingMutationResolver: Result = composeStandardMutationResolver(
+  deleteThingResolverAttributes,
+);
 
-    const { whereOne } = args;
-
-    const { mongooseConn } = context;
-
-    const Thing = await createThing(mongooseConn, thingConfig, enums);
-
-    const whereOneKeys = Object.keys(whereOne);
-    if (whereOneKeys.length !== 1) {
-      throw new TypeError('Expected exactly one key in where arg!');
-    }
-
-    const { lookups, where: preConditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);
-
-    let conditions = preConditions;
-
-    if (lookups.length) {
-      const arg = [...lookups];
-
-      if (Object.keys(preConditions).length) {
-        arg.push({ $match: preConditions });
-      }
-
-      arg.push({ $project: { _id: 1 } });
-
-      const [thing] = await Thing.aggregate(arg).exec();
-
-      if (!thing) return null;
-
-      conditions = { _id: thing._id }; // eslint-disable-line no-underscore-dangle
-    }
-
-    const thing = await Thing.findOne(conditions, null, { lean: true });
-    if (!thing) return null;
-
-    const promises = [];
-    const toDelete = true;
-    const bulkItemsMap = processDeleteData(thing, null, thingConfig, toDelete);
-    bulkItemsMap.forEach((bulkItems, config) => {
-      const { name: name2 } = config;
-      const thingSchema2 = createThingSchema(config, enums);
-      const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
-      promises.push(Thing2.bulkWrite(bulkItems));
-    });
-
-    await Promise.all(promises);
-
-    const thing2 = addIdsToThing(thing, thingConfig);
-
-    const subscriptionInventoryChain = ['Subscription', 'deletedThing', name];
-    if (checkInventory(subscriptionInventoryChain, inventory)) {
-      if (
-        !inAnyCase &&
-        (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig))
-      ) {
-        const { pubsub } = context;
-        if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-        pubsub.publish(`deleted-${name}`, { [`deleted${name}`]: thing2 });
-      }
-    }
-
-    return thing2;
-  };
-
-  return resolver;
-};
-
-export default createDeleteThingMutationResolver;
+export default creatDeleteThingMutationResolver;

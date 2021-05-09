@@ -3,7 +3,11 @@ import type { Periphery } from '../../flowTypes';
 
 import createThingSchema from '../../mongooseModels/createThingSchema';
 
-const updatePeriphery = async (periphery: Periphery, mongooseConn: Object): Promise<void> => {
+const updatePeriphery = async (
+  periphery: Periphery,
+  mongooseConn: Object,
+  session: Object = null,
+): Promise<void> => {
   const promises = [];
   periphery.forEach((obj, config) => {
     const { name: configName } = config;
@@ -42,7 +46,7 @@ const updatePeriphery = async (periphery: Periphery, mongooseConn: Object): Prom
             )
             .filter(Boolean);
 
-          return Thing2.bulkWrite(bulkItems);
+          return Thing2.bulkWrite(bulkItems, { session });
         }),
       );
     });

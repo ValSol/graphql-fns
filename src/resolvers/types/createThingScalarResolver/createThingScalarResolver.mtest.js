@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
@@ -47,6 +48,12 @@ describe('createThingScalarResolver', () => {
         },
       ],
     });
+
+    const exampleSchema = createThingSchema(placeConfig);
+    const Example = mongooseConn.model('Place_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const generalConfig: GeneralConfig = { thingConfigs: { Place: placeConfig } };
 

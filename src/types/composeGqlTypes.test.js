@@ -388,6 +388,13 @@ input PushIntoExampleInput {
   pictures: [ImageCreateInput!]
   photos: [ImageCreateInput!]
 }
+input ExamplePushPositionsInput {
+  textField4: [Int!]
+  textField5: [Int!]
+  cuisines: [Int!]
+  pictures: [Int!]
+  photos: [Int!]
+}
 input ExampleUpdateInput {
   textField1: String
   textField2: String
@@ -461,7 +468,7 @@ type Mutation {
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
-  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!
+  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
   uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!
@@ -734,6 +741,10 @@ input PushIntoExample2Input {
   textField1: [String!]
   textField2: [String!]
 }
+input Example2PushPositionsInput {
+  textField1: [Int!]
+  textField2: [Int!]
+}
 input Example1UpdateInput {
   textField1: String
   textField2: String
@@ -787,7 +798,7 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!): Example2!
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
-  pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!): Example2!
+  pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput): Example2!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
 }
@@ -1031,6 +1042,10 @@ input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }
+input PersonPushPositionsInput {
+  friends: [Int!]
+  enemies: [Int!]
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -1084,7 +1099,7 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }
@@ -1266,6 +1281,10 @@ input PushIntoPersonInput {
   locations: [AddressCreateInput!]
   places: [AddressCreateInput!]
 }
+input PersonPushPositionsInput {
+  locations: [Int!]
+  places: [Int!]
+}
 input PersonUpdateInput {
   firstName: String
   lastName: String
@@ -1303,7 +1322,7 @@ type Mutation {
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
 }
 type Subscription {
@@ -1595,9 +1614,17 @@ input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }
+input PersonPushPositionsInput {
+  friends: [Int!]
+  enemies: [Int!]
+}
 input PushIntoPlaceInput {
   citizens: PersonCreateOrPushChildrenInput
   visitors: PersonCreateOrPushChildrenInput
+}
+input PlacePushPositionsInput {
+  citizens: [Int!]
+  visitors: [Int!]
 }
 input PersonUpdateInput {
   firstName: String
@@ -1656,8 +1683,8 @@ type Mutation {
   deletePlace(whereOne: PlaceWhereOneInput!): Place!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!): Person!
-  pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!): Place!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
+  pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput): Place!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }

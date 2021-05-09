@@ -4,6 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType';
 import createPushIntoThingInputType from '../inputs/createPushIntoThingInputType';
+import createThingPushPositionsInputType from '../inputs/createThingPushPositionsInputType';
 
 const actionType = 'mutation';
 
@@ -12,13 +13,18 @@ const actionGeneralName = (suffix?: string = ''): string => `pushIntoThing${suff
 const actionName = (baseName: string, suffix?: string = ''): string =>
   `pushInto${baseName}${suffix}`;
 
-const inputCreators = [createThingWhereOneInputType, createPushIntoThingInputType];
+const inputCreators = [
+  createThingWhereOneInputType,
+  createPushIntoThingInputType,
+  createThingPushPositionsInputType,
+];
 
-const argNames = ['whereOne', 'data'];
+const argNames = ['whereOne', 'data', 'positions'];
 
 const argTypes = [
   (name: string): string => `${name}WhereOneInput!`,
   (name: string): string => `PushInto${name}Input!`,
+  (name: string): string => `${name}PushPositionsInput`,
 ];
 
 const actionReturnConfig = true;

@@ -89,6 +89,17 @@ describe('createDeleteThingMutationResolver', () => {
         },
       ],
     });
+
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.createCollection();
+
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const serversideConfig = {};
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -151,11 +162,6 @@ describe('createDeleteThingMutationResolver', () => {
       locations: locationIds,
       favorities: favoritieIds,
     } = createdPerson;
-
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -266,6 +272,16 @@ describe('createDeleteThingMutationResolver', () => {
         },
       ],
     };
+
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

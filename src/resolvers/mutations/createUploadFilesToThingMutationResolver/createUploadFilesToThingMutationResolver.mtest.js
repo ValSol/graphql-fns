@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
 } = require('../createCreateThingMutationResolver');
@@ -151,6 +152,12 @@ describe('createUploadFilesToThingMutationResolver', () => {
   };
 
   test('should create mutation update thing resolver to update file field', async () => {
+    const parentSchema = createThingSchema(exampleConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createExample = createCreateThingMutationResolver(
       exampleConfig,
       generalConfig,
@@ -223,11 +230,13 @@ describe('createUploadFilesToThingMutationResolver', () => {
       hashes: ['pic1', 'pic2', 'photo1', 'photo2', 'photo3', 'pic3', 'pic4'],
     };
 
+    const projection = {};
+
     const updatedExample = await uploadToThing(
       null,
       { files, whereOne, options },
       { mongooseConn, pubsub },
-      null,
+      { projection },
       [],
     );
 
@@ -275,7 +284,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
       null,
       { files, whereOne, options },
       { mongooseConn, pubsub },
-      null,
+      { projection },
       [],
     );
 
@@ -385,7 +394,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
       null,
       { files: files2, whereOne, options: options2, positions },
       { mongooseConn, pubsub },
-      null,
+      { projection },
       filter,
     );
 
@@ -469,7 +478,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
       null,
       { files: files2, whereOne, options: options2, positions },
       { mongooseConn, pubsub },
-      null,
+      { projection },
       filter2,
     );
 

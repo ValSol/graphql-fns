@@ -73,12 +73,11 @@ describe('processCreateInputData', () => {
     };
 
     core.set(thingConfig, [item]);
-    const single = true;
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
-      single,
+
       mains: [
         {
           _id: '1',
@@ -99,6 +98,7 @@ describe('processCreateInputData', () => {
       null,
       thingConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -149,12 +149,11 @@ describe('processCreateInputData', () => {
       },
     };
     core.set(thingConfig, [item]);
-    const single = true;
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
-      single,
+
       mains: [
         {
           _id: '2',
@@ -173,6 +172,7 @@ describe('processCreateInputData', () => {
       null,
       thingConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -245,12 +245,11 @@ describe('processCreateInputData', () => {
       },
     };
     core.set(thingConfig, [item]);
-    const single = true;
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
-      single,
+
       mains: [
         {
           _id: '3',
@@ -274,6 +273,7 @@ describe('processCreateInputData', () => {
       null,
       thingConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -342,7 +342,6 @@ describe('processCreateInputData', () => {
     const expectedResult = {
       core,
       periphery,
-      single: false,
       mains: [
         {
           _id: '4',
@@ -361,6 +360,7 @@ describe('processCreateInputData', () => {
       null,
       personConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -492,7 +492,6 @@ describe('processCreateInputData', () => {
     const expectedResult = {
       core,
       periphery,
-      single: false,
       mains: [
         {
           _id: '9',
@@ -512,6 +511,7 @@ describe('processCreateInputData', () => {
       null,
       personConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -704,7 +704,6 @@ describe('processCreateInputData', () => {
     const expectedResult = {
       core,
       periphery,
-      single: false,
       mains: [
         {
           _id: '15',
@@ -725,6 +724,7 @@ describe('processCreateInputData', () => {
       null,
       personConfig,
       'create',
+      undefined,
       mongooseTypes,
     );
 
@@ -814,12 +814,11 @@ describe('processCreateInputData', () => {
       },
     };
     core.set(thingConfig, [item]);
-    const single = true;
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
       periphery,
-      single,
+
       mains: [
         {
           _id: '16',
@@ -847,6 +846,7 @@ describe('processCreateInputData', () => {
       null,
       thingConfig,
       'update',
+      undefined,
       mongooseTypes,
     );
 

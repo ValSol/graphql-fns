@@ -12,7 +12,6 @@ import renumeratePositions from './renumeratePositions';
 type ProcessCreateInputDataResult = {
   core: Map<ThingConfig, Array<Object>>,
   periphery: Periphery,
-  single: Boolean,
   mains: Array<Object>,
 };
 
@@ -23,9 +22,10 @@ const processCreateInputData = (
   initialPeriphery: null | Periphery,
   thingConfig: ThingConfig,
   processingKind: 'create' | 'update' | 'push',
+  rootFieldsPositions?: Object = {},
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
-): Object => {
+): ProcessCreateInputDataResult => {
   const core = initialCore || new Map();
   const periphery = initialPeriphery || new Map();
   const { id } = data;
@@ -33,9 +33,7 @@ const processCreateInputData = (
     { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: thingConfig },
   ];
 
-  let bulkOperationsCount = 0;
-
-  const transform = (data2: Object, thingConfig2: ThingConfig): ProcessCreateInputDataResult => {
+  const transform = (data2: Object, thingConfig2: ThingConfig): Object => {
     const {
       booleanFields,
       dateTimeFields,
@@ -223,7 +221,6 @@ const processCreateInputData = (
             prev[key] = oppositeIds;
 
             oppositeIds.forEach((oppositeId) => {
-              bulkOperationsCount += 1;
               const item = {
                 updateOne: {
                   filter: { _id: oppositeId },
@@ -269,7 +266,7 @@ const processCreateInputData = (
             const { connect: oppositeId } = data2[key];
             // eslint-disable-next-line no-param-reassign
             prev[key] = oppositeId;
-            bulkOperationsCount += 1;
+
             const item = {
               updateOne: {
                 filter: { _id: oppositeId },
@@ -415,8 +412,6 @@ const processCreateInputData = (
   while (prepared.length) {
     const { data: data3, config } = prepared.shift();
 
-    bulkOperationsCount += 1;
-
     const document = transform(data3, config);
 
     let item = null;
@@ -426,37 +421,37 @@ const processCreateInputData = (
       if (processingKind === 'update') {
         // $FlowFixMe
         const { _id, ...$set } = document;
-        item = {
-          updateOne: {
-            filter: { _id },
-            update: { $set },
+        item = [
+          {
+            updateOne: {
+              filter: { _id },
+              update: { $set },
+            },
           },
-        };
+        ];
       } else if (processingKind === 'push') {
         // $FlowFixMe
         const { _id, ...rest } = document;
-        item = {
+
+        item = processForPushEach(rest, rootFieldsPositions).map((update) => ({
           updateOne: {
             filter: { _id },
-            // $FlowFixMe
-            update: processForPushEach(rest),
+            update,
           },
-        };
+        }));
       }
     }
-    item = item || { insertOne: { document } };
+    item = item || [{ insertOne: { document } }];
 
     const coreItem = core.get(config);
     if (coreItem) {
-      coreItem.push(item);
+      coreItem.push(...item);
     } else {
-      core.set(config, [item]);
+      core.set(config, [...item]);
     }
   }
 
-  const single = !initialCore && bulkOperationsCount === 1;
-
-  return { core, periphery, single, mains };
+  return { core, periphery, mains };
 };
 
 export default processCreateInputData;

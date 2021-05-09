@@ -5,6 +5,7 @@ import type { GeneralConfig, NearInput, ThingConfig } from '../../../flowTypes';
 const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
+const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const mongoOptions = require('../../../../test/mongo-options');
 const {
   default: createCreateThingMutationResolver,
@@ -62,6 +63,12 @@ describe('createThingQueryResolver', () => {
         },
       ],
     });
+
+    const exampleSchema = createThingSchema(personConfig);
+    const Example = mongooseConn.model('Person_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -156,6 +163,12 @@ describe('createThingQueryResolver', () => {
         },
       ],
     });
+
+    const exampleSchema = createThingSchema(restaurantConfig);
+    const Example = mongooseConn.model('Restaurant_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,
@@ -279,6 +292,10 @@ describe('createThingQueryResolver', () => {
       ],
     });
 
+    const exampleSchema = createThingSchema(restaurantConfig);
+    const Example = mongooseConn.model('Restaurant2_Thing', exampleSchema);
+    await Example.createCollection();
+
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,
       generalConfig,
@@ -374,6 +391,16 @@ describe('createThingQueryResolver', () => {
         },
       ],
     };
+
+    const exampleSchema = createThingSchema(tableConfig);
+    const Example = mongooseConn.model('Table_Thing', exampleSchema);
+    await Example.createCollection();
+
+    const example2Schema = createThingSchema(tableItemConfig);
+    const Example2 = mongooseConn.model('TableItem_Thing', example2Schema);
+    await Example2.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createTable = createCreateThingMutationResolver(
       tableConfig,
@@ -589,6 +616,16 @@ describe('createThingQueryResolver', () => {
         },
       ],
     };
+
+    const exampleSchema = createThingSchema(parentConfig);
+    const Example = mongooseConn.model('Parent_Thing', exampleSchema);
+    await Example.createCollection();
+
+    const example2Schema = createThingSchema(childConfig);
+    const Example2 = mongooseConn.model('Child_Thing', example2Schema);
+    await Example2.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const coords = [
       { lng: 50.428, lat: 30.61 },

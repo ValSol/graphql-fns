@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
@@ -54,6 +55,12 @@ describe('createThingQueryResolver', () => {
         },
       ],
     };
+
+    const exampleSchema = createThingSchema(thingConfig);
+    const ExampleThing = mongooseConn.model('Example_Thing', exampleSchema);
+    await ExampleThing.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createExample = createCreateThingMutationResolver(
       thingConfig,
@@ -131,6 +138,16 @@ describe('createThingQueryResolver', () => {
         },
       ],
     };
+
+    const exampleSchema = createThingSchema(parentConfig);
+    const ExampleThing = mongooseConn.model('Parent_Thing', exampleSchema);
+    await ExampleThing.createCollection();
+
+    const exampleSchema2 = createThingSchema(childConfig);
+    const ExampleThing2 = mongooseConn.model('Child_Thing', exampleSchema2);
+    await ExampleThing2.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

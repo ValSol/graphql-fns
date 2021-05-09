@@ -1,171 +1,19 @@
 // @flow
+
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
-import createThing from '../../../mongooseModels/createThing';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import addIdsToThing from '../../utils/addIdsToThing';
-import executeAuthorisation from '../../utils/executeAuthorisation';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import checkData from '../checkData';
-import incCounters from '../incCounters';
-import processCreateInputData from '../processCreateInputData';
-import processDeleteData from '../processDeleteData';
-import processDeleteDataPrepareArgs from './processDeleteDataPrepareArgs';
-import updatePeriphery from '../updatePeriphery';
+import composeStandardMutationResolver from '../composeStandardMutationResolver';
+import updateThingResolverAttributes from './updateThingResolverAttributes';
 
-type Args = { data: Object, whereOne: Object, positions: { [key: string]: Array<number> } };
-type Context = { mongooseConn: Object, pubsub?: Object };
-
-const createUpdateThingMutationResolver = (
+type Result = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
-): Function | null => {
-  const { enums, inventory } = generalConfig;
-  const { name } = thingConfig;
-  const inventoryChain = ['Mutation', 'updateThing', name];
-  if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
+) => Function | null;
 
-  const resolver = async (
-    parent: Object,
-    args: Args,
-    context: Context,
-    info: Object,
-    parentFilter: Array<Object>,
-  ): Object => {
-    const filter = inAnyCase
-      ? parentFilter
-      : await executeAuthorisation(inventoryChain, context, serversideConfig);
-    if (!filter) return null;
-
-    const { whereOne, data } = args;
-
-    const toCreate = false;
-    const allowCreate = await checkData(
-      data,
-      filter,
-      thingConfig,
-      toCreate,
-      generalConfig,
-      serversideConfig,
-      context,
-    );
-
-    if (!allowCreate) return null;
-
-    const { mongooseConn } = context;
-
-    const Thing = await createThing(mongooseConn, thingConfig, enums);
-
-    const { duplexFields } = thingConfig;
-    const duplexFieldsProjection = duplexFields
-      ? duplexFields.reduce(
-          (prev, { name: name2 }) => {
-            prev[name2] = 1; // eslint-disable-line no-param-reassign
-            return prev;
-          },
-          { _id: 1 },
-        )
-      : {};
-
-    const { lookups, where: whereOne2 } = mergeWhereAndFilter(filter, whereOne, thingConfig);
-
-    let whereOne3 = whereOne2;
-
-    if (lookups.length) {
-      const arg = [...lookups];
-
-      if (Object.keys(whereOne2).length) {
-        arg.push({ $match: whereOne2 });
-      }
-
-      arg.push({ $project: { _id: 1 } });
-
-      const [thing] = await Thing.aggregate(arg).exec();
-
-      if (!thing) return null;
-
-      whereOne3 = { _id: thing._id }; // eslint-disable-line no-underscore-dangle
-    }
-
-    const projection = checkInventory(['Subscription', 'updatedThing', name], inventory)
-      ? {} // if subsciption ON - return empty projection - to get all fields of thing
-      : duplexFieldsProjection;
-
-    const previousThing = await Thing.findOne(whereOne3, projection, { lean: true });
-
-    if (!previousThing) return null;
-
-    const coreForDeletions = Object.keys(duplexFieldsProjection).length
-      ? processDeleteData(
-          processDeleteDataPrepareArgs(data, previousThing, thingConfig),
-          null,
-          thingConfig,
-        )
-      : null;
-
-    const {
-      core,
-      periphery,
-      mains: [{ _id }],
-    } = processCreateInputData(
-      { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
-      [],
-      coreForDeletions,
-      null,
-      thingConfig,
-      'update', // for update
-    );
-
-    await updatePeriphery(periphery, mongooseConn);
-
-    const coreWithCounters = await incCounters(core, mongooseConn);
-
-    const promises = [];
-    coreWithCounters.forEach((bulkItems, config) => {
-      const { name: name2 } = config;
-      const thingSchema2 = createThingSchema(config, enums);
-      const Thing2 = mongooseConn.model(`${name2}_Thing`, thingSchema2);
-      promises.push(Thing2.bulkWrite(bulkItems));
-    });
-    await Promise.all(promises);
-
-    const thing = await Thing.findOne(
-      { _id },
-      {},
-      {
-        new: true,
-        lean: true,
-      },
-    );
-
-    const thing2 = addIdsToThing(thing, thingConfig);
-
-    const subscriptionInventoryChain = ['Subscription', 'updatedThing', name];
-    if (checkInventory(subscriptionInventoryChain, inventory)) {
-      if (
-        !inAnyCase &&
-        (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig))
-      ) {
-        const { pubsub } = context;
-        if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
-        const updatedFields = Object.keys(data);
-
-        const payload = {
-          node: thing2,
-          previousNode: addIdsToThing(previousThing, thingConfig),
-          updatedFields,
-        };
-        pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
-      }
-    }
-
-    return thing2;
-  };
-
-  return resolver;
-};
+const createUpdateThingMutationResolver: Result = composeStandardMutationResolver(
+  updateThingResolverAttributes,
+);
 
 export default createUpdateThingMutationResolver;

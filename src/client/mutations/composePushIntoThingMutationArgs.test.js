@@ -20,8 +20,8 @@ describe('composePushIntoThingMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!) {',
-      '  pushIntoExample(whereOne: $whereOne, data: $data) {',
+      'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!, $positions: ExamplePushPositionsInput) {',
+      '  pushIntoExample(whereOne: $whereOne, data: $data, positions: $positions) {',
     ];
 
     const result = composeActionArgs(prefixName, thingConfig, pushIntoThingMutationAttributes);

@@ -89,6 +89,17 @@ describe('createDeleteManyThingsMutationResolver', () => {
         },
       ],
     });
+
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.createCollection();
+
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const serversideConfig = {};
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -152,11 +163,6 @@ describe('createDeleteManyThingsMutationResolver', () => {
       favorities: favoritieIds,
     } = createdPerson;
 
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place_Thing', placeSchema);
-
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data.friend.create.lastName);
@@ -194,8 +200,19 @@ describe('createDeleteManyThingsMutationResolver', () => {
     );
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
+    const info = {
+      projection: {
+        firstName: 1,
+        lastName: 1,
+        friend: 1,
+        location: 1,
+        locations: 1,
+        favorities: 1,
+      },
+    };
+
     const whereOne = [{ id }];
-    const [deletedPerson] = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
+    const [deletedPerson] = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info);
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
 
@@ -213,7 +230,7 @@ describe('createDeleteManyThingsMutationResolver', () => {
     expect(createdFavorities2[0].visitors.length).toEqual(0);
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
-    const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
+    const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info);
     expect(deletedPerson2).toBeNull();
 
     const deletePlace = createDeleteManyThingsMutationResolver(
@@ -223,11 +240,23 @@ describe('createDeleteManyThingsMutationResolver', () => {
     );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
+    const info2 = { projection: { name: 1 } };
+
     const where2 = [{ name: data.location.create.name }];
-    const [deletedPlace] = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
+    const [deletedPlace] = await deletePlace(
+      null,
+      { whereOne: where2 },
+      { mongooseConn, pubsub },
+      info2,
+    );
     expect(deletedPlace.name).toBe(data.location.create.name);
 
-    const deletedPlace2 = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
+    const deletedPlace2 = await deletePlace(
+      null,
+      { whereOne: where2 },
+      { mongooseConn, pubsub },
+      info2,
+    );
     expect(deletedPlace2).toBeNull();
   });
 
@@ -266,6 +295,16 @@ describe('createDeleteManyThingsMutationResolver', () => {
         },
       ],
     };
+
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

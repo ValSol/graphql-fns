@@ -94,6 +94,16 @@ describe('createPushIntoThingMutationResolver', () => {
       ],
     });
 
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.createCollection();
+
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createPerson = createCreateThingMutationResolver(
       personConfig,
       generalConfig,
@@ -143,6 +153,7 @@ describe('createPushIntoThingMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -156,11 +167,6 @@ describe('createPushIntoThingMutationResolver', () => {
       locations: locationIds,
       favorities: favoritieIds,
     } = createdPerson;
-
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -314,6 +320,7 @@ describe('createPushIntoThingMutationResolver', () => {
         ],
       },
     };
+
     const updatedPerson = await pushIntoPerson(
       null,
       { whereOne, data: dataForUpdate },
@@ -376,6 +383,16 @@ describe('createPushIntoThingMutationResolver', () => {
         },
       ],
     };
+
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -487,6 +504,16 @@ describe('createPushIntoThingMutationResolver', () => {
       ],
     };
 
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent2_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child2_Thing', childSchema);
+    await Child.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createParent = createCreateThingMutationResolver(
       parentConfig,
       generalConfig,
@@ -524,11 +551,60 @@ describe('createPushIntoThingMutationResolver', () => {
 
     expect(updatedParent.places).toEqual([]);
 
-    const childSchema = createThingSchema(childConfig);
-    const Child = mongooseConn.model('Child2_Thing', childSchema);
-
     const childs = await Child.find();
 
     expect(childs.length).toEqual(1);
+  });
+
+  test('return simple int array', async () => {
+    const exampleConfig: ThingConfig = {
+      name: 'Example',
+      intFields: [
+        {
+          name: 'numbers',
+          array: true,
+        },
+      ],
+    };
+
+    const exampleSchema = createThingSchema(exampleConfig);
+    const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
+    const createExample = createCreateThingMutationResolver(
+      exampleConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createExample).toBe('function');
+    if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const createdExample = await createExample(
+      null,
+      { data: { numbers: [1, 2, 4, 5, 7] } },
+      { mongooseConn, pubsub },
+    );
+
+    const pushIntoExample = createPushIntoThingMutationResolver(
+      exampleConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    if (!pushIntoExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const whereOne = { id: createdExample.id };
+
+    const data = { numbers: [9, 3, 0, 6, 8] };
+    const positions = { numbers: [9, 3, 0, 6, 8] };
+    const pushedExample = await pushIntoExample(
+      null,
+      { data, positions, whereOne },
+      { mongooseConn, pubsub },
+      null,
+    );
+
+    expect(pushedExample.numbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 });

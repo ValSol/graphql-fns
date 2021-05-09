@@ -101,6 +101,16 @@ describe('createUpdateThingMutationResolver', () => {
     });
 
     test('should create mutation update thing resolver that create childrent things', async () => {
+      const personSchema = createThingSchema(personConfig);
+      const Person = mongooseConn.model('Person_Thing', personSchema);
+      await Person.createCollection();
+
+      const placeSchema = createThingSchema(placeConfig);
+      const Place = mongooseConn.model('Place_Thing', placeSchema);
+      await Place.createCollection();
+
+      await new Promise((resolve) => setTimeout(resolve, 250));
+
       const createPerson = createCreateThingMutationResolver(
         personConfig,
         generalConfig,
@@ -204,9 +214,6 @@ describe('createUpdateThingMutationResolver', () => {
       expect(updatedPerson.locations.length).toBe(4);
       expect(updatedPerson.favorities.length).toBe(4);
       expect(updatedPerson.counter).toBe(1);
-
-      const personSchema = createThingSchema(personConfig);
-      const Person = mongooseConn.model('Person_Thing', personSchema);
 
       const siblingId = updatedPerson.sibling;
 
@@ -353,6 +360,16 @@ describe('createUpdateThingMutationResolver', () => {
     });
 
     test('should create mutation update thing resolver with wipe out duplex fields values', async () => {
+      const personSchema = createThingSchema(personConfig);
+      const Person = mongooseConn.model('Person_Thing', personSchema);
+      await Person.createCollection();
+
+      const placeSchema = createThingSchema(placeConfig);
+      const Place = mongooseConn.model('Place_Thing', placeSchema);
+      await Place.createCollection();
+
+      await new Promise((resolve) => setTimeout(resolve, 250));
+
       const createPerson = createCreateThingMutationResolver(
         personConfig,
         generalConfig,
@@ -415,11 +432,6 @@ describe('createUpdateThingMutationResolver', () => {
         locations: locationIds,
         favorities: favoritieIds,
       } = createdPerson;
-
-      const personSchema = createThingSchema(personConfig);
-      const Person = mongooseConn.model('Person_Thing', personSchema);
-      const placeSchema = createThingSchema(placeConfig);
-      const Place = mongooseConn.model('Place_Thing', placeSchema);
 
       const createdFriend = await Person.findById(friendId);
       expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -672,6 +684,12 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     };
 
+    const exampleSchema = createThingSchema(exampleConfig);
+    const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createExample = createCreateThingMutationResolver(
       exampleConfig,
       generalConfig,
@@ -697,9 +715,6 @@ describe('createUpdateThingMutationResolver', () => {
     expect(createdExample.createdAt instanceof Date).toBeTruthy();
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
     const { id } = createdExample;
-
-    const exampleSchema = createThingSchema(exampleConfig);
-    const Example = mongooseConn.model('Example_Thing', exampleSchema);
 
     const updateExample = createUpdateThingMutationResolver(
       exampleConfig,
@@ -791,6 +806,12 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     };
 
+    const mainSchema = createThingSchema(mainConfig);
+    const Main = mongooseConn.model('Main_Thing', mainSchema);
+    await Main.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createMain = createCreateThingMutationResolver(
       mainConfig,
       generalConfig,
@@ -876,6 +897,12 @@ describe('createUpdateThingMutationResolver', () => {
         },
       ],
     };
+
+    const mainSchema = createThingSchema(mainConfig);
+    const Main = mongooseConn.model('Main2_Thing', mainSchema);
+    await Main.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createMain = createCreateThingMutationResolver(
       mainConfig,
@@ -967,6 +994,16 @@ describe('createUpdateThingMutationResolver', () => {
         },
       ],
     };
+
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -1084,6 +1121,22 @@ describe('createUpdateThingMutationResolver', () => {
         },
       ],
     });
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
+    const accessSchema = createThingSchema(accessConfig);
+    const Access = mongooseConn.model('Access_Thing', accessSchema);
+    await Access.createCollection();
+
+    const postSchema = createThingSchema(postConfig);
+    const Post = mongooseConn.model('Post_Thing', postSchema);
+    await Post.createCollection();
+
+    const restaurantSchema = createThingSchema(restaurantConfig);
+    const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const generalConfig2: GeneralConfig = {
       thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },

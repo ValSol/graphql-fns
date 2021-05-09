@@ -16,7 +16,6 @@ beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
   pubsub = new PubSub();
 });
 
@@ -52,6 +51,12 @@ describe('createCreateThingMutationResolver', () => {
       ],
     };
 
+    const exampleSchema = createThingSchema(thingConfig);
+    const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createExample = createCreateThingMutationResolver(
       thingConfig,
       generalConfig,
@@ -83,6 +88,7 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdExample2.counter).toBe(2);
     expect(createdExample3.counter).toBe(3);
   });
+
   test('should create mutation add thing resolver adding relations', async () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
@@ -109,6 +115,12 @@ describe('createCreateThingMutationResolver', () => {
         },
       ],
     });
+
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -146,6 +158,7 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdPerson2.friend.toString()).toBe(data2.friend.connect.toString());
     expect(createdPerson2.friends[0].toString()).toBe(data2.friends.connect[0].toString());
   });
+
   test('should create mutation add thing resolver that create related things', async () => {
     const cityConfig = { name: 'City', textFields: [{ name: 'name' }] };
     const placeConfig = {
@@ -188,6 +201,20 @@ describe('createCreateThingMutationResolver', () => {
         },
       ],
     });
+
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person2_Thing', personSchema);
+    await Person.createCollection();
+
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.createCollection();
+
+    const citySchema = createThingSchema(cityConfig);
+    const City = mongooseConn.model('City_Thing', citySchema);
+    await City.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -261,8 +288,6 @@ describe('createCreateThingMutationResolver', () => {
 
     const { friend: friendId, friends: friendIds } = createdPerson2;
 
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person2_Thing', personSchema);
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data2.friend.create.firstName);
     expect(createdFriend.lastName).toBe(data2.friend.create.lastName);
@@ -346,6 +371,16 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person3_Thing', personSchema);
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place2_Thing', placeSchema);
+
+    await Person.createCollection();
+    await Place.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createPerson = createCreateThingMutationResolver(
       personConfig,
       generalConfig,
@@ -407,11 +442,6 @@ describe('createCreateThingMutationResolver', () => {
       locations: locationIds,
       favorities: favoritieIds,
     } = createdPerson;
-
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person3_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place2_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -547,6 +577,16 @@ describe('createCreateThingMutationResolver', () => {
       ],
     });
 
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person4_Thing', personSchema);
+    const placeSchema = createThingSchema(placeConfig);
+    const Place = mongooseConn.model('Place3_Thing', placeSchema);
+
+    await Person.createCollection();
+    await Place.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+
     const createPerson = createCreateThingMutationResolver(
       personConfig,
       generalConfig,
@@ -593,11 +633,6 @@ describe('createCreateThingMutationResolver', () => {
     expect(createdPerson.updatedAt instanceof Date).toBeTruthy();
 
     const { friend: friendId, id, location: locationId, locations: locationIds } = createdPerson;
-
-    const personSchema = createThingSchema(personConfig);
-    const Person = mongooseConn.model('Person4_Thing', personSchema);
-    const placeSchema = createThingSchema(placeConfig);
-    const Place = mongooseConn.model('Place3_Thing', placeSchema);
 
     const createdFriend = await Person.findById(friendId);
     expect(createdFriend.firstName).toBe(data.friend.create.firstName);
@@ -650,6 +685,22 @@ describe('createCreateThingMutationResolver', () => {
 
     const oldCreatedFriend = await Person.findById(friendId);
     expect(oldCreatedFriend.friend).toBeUndefined();
+
+    // const session = await mongooseConn.startSession();
+
+    // session.startTransaction();
+    // await Person.create([{ firstName: 'firstNameTest', lastName: 'lastNameTest' }], {
+    //   session,
+    // });
+    // // await session.abortTransaction();
+    // let doc = await Person.findOne({ firstName: 'firstNameTest' });
+    // expect(doc).toBe(null);
+
+    // await session.commitTransaction();
+    // session.endSession();
+
+    // doc = await Person.findOne({ firstName: 'firstNameTest' });
+    // expect(doc.firstName).toBe('firstNameTest');
   });
 
   test('should create mongodb documents using checkData', async () => {
@@ -708,6 +759,20 @@ describe('createCreateThingMutationResolver', () => {
     const generalConfig2: GeneralConfig = {
       thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
     };
+
+    const accessSchema = createThingSchema(accessConfig);
+    const Access = mongooseConn.model('Access_Thing', accessSchema);
+    await Access.createCollection();
+
+    const postSchema = createThingSchema(postConfig);
+    const Post = mongooseConn.model('Post_Thing', postSchema);
+    await Post.createCollection();
+
+    const restaurantSchema = createThingSchema(restaurantConfig);
+    const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.createCollection();
+
+    await new Promise((resolve) => setTimeout(resolve, 400));
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,

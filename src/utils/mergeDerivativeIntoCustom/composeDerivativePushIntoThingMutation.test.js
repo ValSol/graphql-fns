@@ -42,10 +42,11 @@ describe('composeDerivativePushIntoThingMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('pushIntoThing')
           ? `pushInto${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne', 'data'],
+      argNames: () => ['whereOne', 'data', 'positions'],
       argTypes: ({ name }) => [
         `${name}ForCatalogWhereOneInput!`,
         `PushInto${name}ForCatalogInput!`,
+        `${name}ForCatalogPushPositionsInput`,
       ],
       type: ({ name }) => `${name}ForCatalog!`,
       config: (thingConfig2, generalConfig2) =>

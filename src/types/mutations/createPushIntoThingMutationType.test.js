@@ -35,7 +35,7 @@ describe('createPushIntoThingMutationType', () => {
       ],
     };
     const expectedResult =
-      '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!): Example!';
+      '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!';
     const dic = {};
 
     const result = composeStandardActionSignature(
