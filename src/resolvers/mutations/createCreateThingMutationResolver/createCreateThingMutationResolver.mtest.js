@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const { default: createCreateThingMutationResolver } = require('./index');
 
@@ -21,7 +22,7 @@ beforeAll(async () => {
 
 describe('createCreateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
-  const serversideConfig = {};
+  const serversideConfig = { transactions: true };
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
@@ -55,7 +56,7 @@ describe('createCreateThingMutationResolver', () => {
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       thingConfig,
@@ -120,7 +121,7 @@ describe('createCreateThingMutationResolver', () => {
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -214,7 +215,7 @@ describe('createCreateThingMutationResolver', () => {
     const City = mongooseConn.model('City_Thing', citySchema);
     await City.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -379,7 +380,7 @@ describe('createCreateThingMutationResolver', () => {
     await Person.createCollection();
     await Place.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -585,7 +586,7 @@ describe('createCreateThingMutationResolver', () => {
     await Person.createCollection();
     await Place.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -772,7 +773,7 @@ describe('createCreateThingMutationResolver', () => {
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await sleep(400);
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,

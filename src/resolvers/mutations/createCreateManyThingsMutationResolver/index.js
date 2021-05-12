@@ -3,7 +3,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
 import composeStandardMutationResolver from '../composeStandardMutationResolver';
-import createManyThingsResolverAttributes from './createManyThingsResolverAttributes';
+import resolverAttributes from './resolverAttributes';
 
 type Result = (
   thingConfig: ThingConfig,
@@ -13,7 +13,7 @@ type Result = (
 ) => Function | null;
 
 const createCreateManyThingsMutationResolver: Result = composeStandardMutationResolver(
-  createManyThingsResolverAttributes,
+  resolverAttributes,
 );
 
 export default createCreateManyThingsMutationResolver;

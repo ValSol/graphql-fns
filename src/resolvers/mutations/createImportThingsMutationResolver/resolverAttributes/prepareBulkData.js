@@ -32,7 +32,11 @@ const csvParse2 = (data, fieldsForCSV) =>
     },
   });
 
-const prepareBulkData: PrepareBulkData = async (resolverCreatorArg, resolverArg) => {
+const prepareBulkData: PrepareBulkData = async (
+  resolverCreatorArg,
+  resolverArg,
+  prevPreparedData,
+) => {
   const { thingConfig } = resolverCreatorArg;
   const { args } = resolverArg;
 
@@ -55,21 +59,10 @@ const prepareBulkData: PrepareBulkData = async (resolverCreatorArg, resolverArg)
     coerceDataToGql(item, null, thingConfig, allFields, skipUnusedFields),
   );
 
-  let preparedData = {
-    core: new Map(),
-    periphery: new Map(),
-    mains: [],
-  };
+  let preparedData = prevPreparedData;
 
   data.forEach((dataItem) => {
-    preparedData = processCreateInputData(
-      dataItem,
-      preparedData.mains,
-      preparedData.core,
-      preparedData.periphery,
-      thingConfig,
-      'create',
-    );
+    preparedData = processCreateInputData(dataItem, preparedData, thingConfig, 'create');
   });
 
   return preparedData;

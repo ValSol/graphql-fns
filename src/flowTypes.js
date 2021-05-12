@@ -633,6 +633,7 @@ export type FileAttributes = {
 };
 
 export type ServersideConfig = {
+  +transactions?: boolean,
   +Query?: {
     +[customQueryName: string]: (
       thingConfig: ThingConfig,

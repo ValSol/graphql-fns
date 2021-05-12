@@ -14,6 +14,7 @@ const mongooseTypes = {
 
 describe('processCreateInputData', () => {
   test('should create object with scalar fields', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
     const thingConfig: ThingConfig = {
       name: 'Thing',
       textFields: [
@@ -93,9 +94,7 @@ describe('processCreateInputData', () => {
     };
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       thingConfig,
       'create',
       undefined,
@@ -106,6 +105,7 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object with self relation fields', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Thing',
@@ -167,9 +167,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       thingConfig,
       'create',
       undefined,
@@ -180,6 +178,7 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object with embedded fields with relation fields', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
     const embedded1Config: ThingConfig = {};
 
     const embedded2Config: ThingConfig = {};
@@ -268,9 +267,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       thingConfig,
       'create',
       undefined,
@@ -281,6 +278,8 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+
     const placeConfig: ThingConfig = {
       name: 'Place',
       textFields: [{ name: 'city' }],
@@ -355,9 +354,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       personConfig,
       'create',
       undefined,
@@ -368,6 +365,8 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs with duplex fields along with create', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+
     const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
@@ -506,9 +505,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       personConfig,
       'create',
       undefined,
@@ -519,6 +516,8 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object and children objectcs with duplex fields along with connect', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+
     const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
@@ -719,9 +718,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       personConfig,
       'create',
       undefined,
@@ -732,6 +729,8 @@ describe('processCreateInputData', () => {
   });
 
   test('should create object with array of embedded fields', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+
     const embedded1Config: ThingConfig = {};
 
     const embedded2Config: ThingConfig = {};
@@ -841,9 +840,7 @@ describe('processCreateInputData', () => {
 
     const result = processCreateInputData(
       data,
-      [],
-      null,
-      null,
+      preparedData,
       thingConfig,
       'update',
       undefined,

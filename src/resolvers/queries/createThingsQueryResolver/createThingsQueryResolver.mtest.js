@@ -5,8 +5,9 @@ import type { GeneralConfig, NearInput, ThingConfig } from '../../../flowTypes';
 const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
+const { default: sleep } = require('../../../utils/sleep');
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
@@ -68,7 +69,7 @@ describe('createThingQueryResolver', () => {
     const Example = mongooseConn.model('Person_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -168,7 +169,7 @@ describe('createThingQueryResolver', () => {
     const Example = mongooseConn.model('Restaurant_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,
@@ -400,7 +401,7 @@ describe('createThingQueryResolver', () => {
     const Example2 = mongooseConn.model('TableItem_Thing', example2Schema);
     await Example2.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createTable = createCreateThingMutationResolver(
       tableConfig,
@@ -625,7 +626,7 @@ describe('createThingQueryResolver', () => {
     const Example2 = mongooseConn.model('Child_Thing', example2Schema);
     await Example2.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const coords = [
       { lng: 50.428, lat: 30.61 },

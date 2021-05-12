@@ -8,6 +8,7 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
+const { default: sleep } = require('../../../utils/sleep');
 const {
   default: createCreateThingMutationResolver,
 } = require('../createCreateThingMutationResolver');
@@ -26,7 +27,7 @@ beforeAll(async () => {
 
 describe('createUpdateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
-  const serversideConfig = {};
+  const serversideConfig = { transactions: true };
   describe('for things that have duplex fields', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
@@ -109,7 +110,7 @@ describe('createUpdateThingMutationResolver', () => {
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
 
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      await sleep(250);
 
       const createPerson = createCreateThingMutationResolver(
         personConfig,
@@ -368,7 +369,7 @@ describe('createUpdateThingMutationResolver', () => {
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
 
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      await sleep(250);
 
       const createPerson = createCreateThingMutationResolver(
         personConfig,
@@ -688,7 +689,7 @@ describe('createUpdateThingMutationResolver', () => {
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       exampleConfig,
@@ -810,7 +811,7 @@ describe('createUpdateThingMutationResolver', () => {
     const Main = mongooseConn.model('Main_Thing', mainSchema);
     await Main.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createMain = createCreateThingMutationResolver(
       mainConfig,
@@ -902,7 +903,7 @@ describe('createUpdateThingMutationResolver', () => {
     const Main = mongooseConn.model('Main2_Thing', mainSchema);
     await Main.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createMain = createCreateThingMutationResolver(
       mainConfig,
@@ -1003,7 +1004,7 @@ describe('createUpdateThingMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -1122,7 +1123,7 @@ describe('createUpdateThingMutationResolver', () => {
       ],
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const accessSchema = createThingSchema(accessConfig);
     const Access = mongooseConn.model('Access_Thing', accessSchema);
@@ -1136,7 +1137,7 @@ describe('createUpdateThingMutationResolver', () => {
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(500);
 
     const generalConfig2: GeneralConfig = {
       thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },

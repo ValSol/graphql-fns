@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -98,9 +99,9 @@ describe('createDeleteManyThingsMutationResolver', () => {
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
-    const serversideConfig = {};
+    const serversideConfig = { transactions: true };
     const createPerson = createCreateThingMutationResolver(
       personConfig,
       generalConfig,
@@ -261,7 +262,7 @@ describe('createDeleteManyThingsMutationResolver', () => {
   });
 
   test('should create mutation deleteThing resolver to aggregate result', async () => {
-    const serversideConfig = {};
+    const serversideConfig = { transactions: true };
 
     const childConfig: ThingConfig = {
       name: 'Child',
@@ -304,7 +305,7 @@ describe('createDeleteManyThingsMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

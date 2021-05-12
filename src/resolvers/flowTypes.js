@@ -19,30 +19,17 @@ type ResolverArg = {
   parentFilter: Array<Object>,
 };
 
-type Result = {
+export type PreparedData = {
+  mains: Array<Object>,
   core: Map<ThingConfig, Array<Object>>,
   periphery: Periphery,
-  mains: Array<Object>,
-  array: boolean,
-  results: { previous: boolean, current: boolean },
-  finalResult: ({ previous: Array<ThingConfig>, current: Array<ThingConfig> }) => any,
-  subscription: null | (({ previous: Array<ThingConfig>, current: Array<ThingConfig> }) => void),
 };
-
-export type PrepareDataTo = (
-  resolverCreatorArg: ResolverCreatorArg,
-  resolverArg: ResolverArg,
-) => Promise<null | Result>;
 
 export type PrepareBulkData = (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  previous: Array<Object>,
-) => Promise<{
-  core: Map<ThingConfig, Array<Object>>,
-  periphery: Periphery,
-  mains: Array<Object>,
-}>;
+  preparedData: PreparedData,
+) => Promise<PreparedData>;
 
 export type Report = (
   resolverCreatorArg: ResolverCreatorArg,

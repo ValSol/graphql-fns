@@ -3,20 +3,21 @@ import type { PrepareBulkData } from '../../../flowTypes';
 
 import processDeleteData from '../../processDeleteData';
 
-const prepareBulkData: PrepareBulkData = async (resolverCreatorArg, resolverArg, previous) => {
+const prepareBulkData: PrepareBulkData = async (
+  resolverCreatorArg,
+  resolverArg,
+  prevPreparedData,
+) => {
   const { thingConfig } = resolverCreatorArg;
 
   const toDelete = true;
-  let core = new Map();
-  previous.forEach((thing) => {
+  let { core } = prevPreparedData;
+  const { mains } = prevPreparedData;
+  mains.forEach((thing) => {
     core = processDeleteData(thing, core, thingConfig, toDelete);
   });
 
-  const periphery = new Map();
-
-  const mains = previous.map(({ _id }) => _id);
-
-  return { core, periphery, mains };
+  return { ...prevPreparedData, core };
 };
 
 export default prepareBulkData;

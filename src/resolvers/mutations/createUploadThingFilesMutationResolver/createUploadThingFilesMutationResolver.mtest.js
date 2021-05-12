@@ -22,6 +22,7 @@ beforeAll(async () => {
 
 describe('createUploadThingFilesMutationResolver', () => {
   const serversideConfig = {
+    transactions: true,
     saveFiles: {
       Image: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
         filename,

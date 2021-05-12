@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -26,7 +27,7 @@ beforeAll(async () => {
 
 describe('createPushIntoThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
-  const serversideConfig = {};
+  const serversideConfig = { transactions: true };
 
   test('should create mutation pushInto thing resolver with wipe out duplex fields values', async () => {
     const personConfig: ThingConfig = {};
@@ -102,7 +103,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -392,7 +393,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -512,7 +513,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const Child = mongooseConn.model('Child2_Thing', childSchema);
     await Child.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -571,7 +572,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       exampleConfig,

@@ -2,6 +2,7 @@
 import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
 import createThingSchema from '../../../mongooseModels/createThingSchema';
+import optimizeBulk from './optimizeBulk';
 
 type Context = { mongooseConn: Object, pubsub?: Object };
 
@@ -19,7 +20,7 @@ const executeBulkItems = async (
     const { name } = config;
     const thingSchema = createThingSchema(config, enums);
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    promises.push(Thing.bulkWrite(bulkItems, { session }));
+    promises.push(Thing.bulkWrite(optimizeBulk(bulkItems), { session }));
   });
   return Promise.all(promises);
 };

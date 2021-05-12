@@ -3,7 +3,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
 import composeStandardMutationResolver from '../composeStandardMutationResolver';
-import deleteManyThingsResolverAttributes from './deleteManyThingsResolverAttributes';
+import resolverAttributes from './resolverAttributes';
 
 type Result = (
   thingConfig: ThingConfig,
@@ -13,7 +13,7 @@ type Result = (
 ) => Function | null;
 
 const createDeleteManyThingsMutationResolver: Result = composeStandardMutationResolver(
-  deleteManyThingsResolverAttributes,
+  resolverAttributes,
 );
 
 export default createDeleteManyThingsMutationResolver;

@@ -3,7 +3,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
 import composeStandardMutationResolver from '../composeStandardMutationResolver';
-import pushIntoThingResolverAttributes from './pushIntoThingResolverAttributes';
+import resolverAttributes from './resolverAttributes';
 
 type Result = (
   thingConfig: ThingConfig,
@@ -13,7 +13,7 @@ type Result = (
 ) => Function | null;
 
 const createPushIntoThingMutationResolver: Result = composeStandardMutationResolver(
-  pushIntoThingResolverAttributes,
+  resolverAttributes,
 );
 
 export default createPushIntoThingMutationResolver;

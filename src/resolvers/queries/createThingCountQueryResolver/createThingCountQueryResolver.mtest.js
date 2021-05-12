@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -65,7 +66,7 @@ describe('createThingCountQueryResolver', () => {
     const Example = mongooseConn.model('Person_Thing', exampleSchema);
     await Example.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -170,7 +171,7 @@ describe('createThingCountQueryResolver', () => {
     const Example2 = mongooseConn.model('Child_Thing', exampleSchema2);
     await Example2.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const coords = [
       { lng: 50.428, lat: 30.61 },

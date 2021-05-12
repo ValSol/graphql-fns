@@ -5,7 +5,11 @@ import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../processDeleteDataPrepareArgs';
 
-const prepareBulkData: PrepareBulkData = async (resolverCreatorArg, resolverArg, previous) => {
+const prepareBulkData: PrepareBulkData = async (
+  resolverCreatorArg,
+  resolverArg,
+  prevPreparedData,
+) => {
   const { thingConfig } = resolverCreatorArg;
   const { args } = resolverArg;
 
@@ -22,21 +26,22 @@ const prepareBulkData: PrepareBulkData = async (resolverCreatorArg, resolverArg,
       )
     : {};
 
-  const [previousThing] = previous;
+  const {
+    core,
+    mains: [previousThing],
+  } = prevPreparedData;
 
   const coreForDeletions = Object.keys(duplexFieldsProjection).length
     ? processDeleteData(
         processDeleteDataPrepareArgs(data, previousThing, thingConfig),
-        null,
+        core,
         thingConfig,
       )
-    : null;
+    : core;
 
   const preparedData = processCreateInputData(
     { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
-    [],
-    coreForDeletions,
-    null,
+    { ...prevPreparedData, core: coreForDeletions },
     thingConfig,
     'update', // for update
   );

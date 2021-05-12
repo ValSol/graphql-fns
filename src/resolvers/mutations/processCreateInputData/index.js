@@ -3,6 +3,7 @@
 import { Types } from 'mongoose';
 
 import type { Periphery, ThingConfig } from '../../../flowTypes';
+import type { PreparedData } from '../../flowTypes';
 
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
@@ -17,17 +18,14 @@ type ProcessCreateInputDataResult = {
 
 const processCreateInputData = (
   data: Object,
-  mains: Array<Object>,
-  initialCore: null | Map<ThingConfig, Array<Object>>,
-  initialPeriphery: null | Periphery,
+  preparedData: PreparedData,
   thingConfig: ThingConfig,
   processingKind: 'create' | 'update' | 'push',
   rootFieldsPositions?: Object = {},
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
 ): ProcessCreateInputDataResult => {
-  const core = initialCore || new Map();
-  const periphery = initialPeriphery || new Map();
+  const { mains, core, periphery } = preparedData;
   const { id } = data;
   const prepared = [
     { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: thingConfig },

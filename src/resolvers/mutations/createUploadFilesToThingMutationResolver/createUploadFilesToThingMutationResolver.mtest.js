@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
+const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -26,6 +27,7 @@ beforeAll(async () => {
 
 describe('createUploadFilesToThingMutationResolver', () => {
   const serversideConfig = {
+    transactions: true,
     saveFiles: {
       Image: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({
         filename,
@@ -156,7 +158,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       exampleConfig,

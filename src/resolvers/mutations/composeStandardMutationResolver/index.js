@@ -37,6 +37,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
     inAnyCase?: boolean,
   ): Function | null => {
     const { inventory } = generalConfig;
+    const { transactions } = serversideConfig;
     const { name } = thingConfig;
 
     const inventoryChain = ['Mutation', actionGeneralName, name];
@@ -74,7 +75,8 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       if (!prepareBulkData) {
         throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
       }
-      const preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, previous);
+      const prevPreparedData = { core: new Map(), periphery: new Map(), mains: previous };
+      const preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, prevPreparedData);
 
       if (!preparedData) return null;
 
@@ -85,9 +87,11 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       const result = {};
       result.previous = previous;
 
-      const session = await mongooseConn.startSession();
+      const session = transactions ? await mongooseConn.startSession() : null;
       try {
-        session.startTransaction();
+        if (session) {
+          session.startTransaction();
+        }
 
         if (periphery && periphery.size) {
           await updatePeriphery(periphery, mongooseConn);
@@ -97,11 +101,15 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
         await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
-        await session.commitTransaction();
-        session.endSession();
+        if (session) {
+          await session.commitTransaction();
+          session.endSession();
+        }
       } catch (err) {
-        await session.abortTransaction();
-        session.endSession();
+        if (session) {
+          await session.abortTransaction();
+          session.endSession();
+        }
 
         throw new Error(err);
       }
