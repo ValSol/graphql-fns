@@ -50,7 +50,7 @@ const optimizeBulk = (preparedData: Array<Object>): Array<Object> => {
         document: { _id: id },
       } = insertOne;
       if (
-        !categorizedBulkOperations.deleteOne[id] ||
+        categorizedBulkOperations.deleteOne[id] === undefined ||
         insertAfterDeleteAndIndexEqualLastInsert(i, id, categorizedBulkOperations)
       ) {
         result.push(item);
@@ -60,7 +60,7 @@ const optimizeBulk = (preparedData: Array<Object>): Array<Object> => {
         filter: { _id: id },
       } = updateOne;
       if (
-        !categorizedBulkOperations.deleteOne[id] ||
+        categorizedBulkOperations.deleteOne[id] === undefined ||
         insertAfterDeleteAndIndexAfterLastInsert(i, id, categorizedBulkOperations)
       ) {
         result.push(item);

@@ -10,12 +10,7 @@ import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 import composeMockFilesData from '../composeMockFilesData';
 
-const get: GetPrevious = async (
-  actionGeneralName,
-  resolverCreatorArg,
-  resolverArg,
-  customFilter,
-) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { args, context, info, parentFilter } = resolverArg;
   const { inventory, enums } = generalConfig;
@@ -24,12 +19,10 @@ const get: GetPrevious = async (
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
 
-  const filter =
-    customFilter ||
-    (inAnyCase
-      ? parentFilter
-      : // $FlowFixMe
-        await executeAuthorisation(inventoryChain, context, serversideConfig));
+  const filter = inAnyCase
+    ? parentFilter
+    : // $FlowFixMe
+      await executeAuthorisation(inventoryChain, context, serversideConfig);
 
   if (!filter) return null;
 

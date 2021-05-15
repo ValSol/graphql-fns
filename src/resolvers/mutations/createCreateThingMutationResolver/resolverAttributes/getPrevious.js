@@ -5,24 +5,17 @@ import type { GetPrevious } from '../../../flowTypes';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (
-  actionGeneralName,
-  resolverCreatorArg,
-  resolverArg,
-  customFilter,
-) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { args, context, parentFilter } = resolverArg;
   const { name } = thingConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
 
-  const filter =
-    customFilter ||
-    (inAnyCase
-      ? parentFilter
-      : // $FlowFixMe
-        await executeAuthorisation(inventoryChain, context, serversideConfig));
+  const filter = inAnyCase
+    ? parentFilter
+    : // $FlowFixMe
+      await executeAuthorisation(inventoryChain, context, serversideConfig);
 
   if (!filter) return null;
 

@@ -40,7 +40,6 @@ export type GetPrevious = (
   actionGeneralName: string,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  filter?: Array<Object>,
 ) => Promise<null | Array<Object>>;
 
 export type Loophole = (

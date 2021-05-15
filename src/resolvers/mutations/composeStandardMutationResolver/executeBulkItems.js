@@ -20,7 +20,11 @@ const executeBulkItems = async (
     const { name } = config;
     const thingSchema = createThingSchema(config, enums);
     const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
-    promises.push(Thing.bulkWrite(optimizeBulk(bulkItems), { session }));
+
+    const optimizedBulkItems = optimizeBulk(bulkItems);
+    if (optimizedBulkItems.length) {
+      promises.push(Thing.bulkWrite(optimizedBulkItems, { session }));
+    }
   });
   return Promise.all(promises);
 };

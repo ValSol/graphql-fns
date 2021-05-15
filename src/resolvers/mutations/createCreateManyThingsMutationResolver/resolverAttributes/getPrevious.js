@@ -3,12 +3,7 @@ import type { GetPrevious } from '../../../flowTypes';
 
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 
-const getPrevious: GetPrevious = async (
-  actionGeneralName,
-  resolverCreatorArg,
-  resolverArg,
-  customFilter,
-) => {
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { context, parentFilter } = resolverArg;
   const { name } = thingConfig;
@@ -18,12 +13,10 @@ const getPrevious: GetPrevious = async (
     return null;
   }
 
-  const filter =
-    customFilter ||
-    (inAnyCase
-      ? parentFilter
-      : // $FlowFixMe
-        await executeAuthorisation(inventoryChain, context, serversideConfig));
+  const filter = inAnyCase
+    ? parentFilter
+    : // $FlowFixMe
+      await executeAuthorisation(inventoryChain, context, serversideConfig);
 
   return filter && [];
 };

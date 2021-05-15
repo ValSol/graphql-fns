@@ -5,12 +5,7 @@ import createThing from '../../../../mongooseModels/createThing';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
-const get: GetPrevious = async (
-  actionGeneralName,
-  resolverCreatorArg,
-  resolverArg,
-  customFilter,
-) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { args, context, parentFilter } = resolverArg;
   const { enums } = generalConfig;
@@ -21,12 +16,10 @@ const get: GetPrevious = async (
     return null;
   }
 
-  const filter =
-    customFilter ||
-    (inAnyCase
-      ? parentFilter
-      : // $FlowFixMe
-        await executeAuthorisation(inventoryChain, context, serversideConfig));
+  const filter = inAnyCase
+    ? parentFilter
+    : // $FlowFixMe
+      await executeAuthorisation(inventoryChain, context, serversideConfig);
 
   if (!filter) return null;
 

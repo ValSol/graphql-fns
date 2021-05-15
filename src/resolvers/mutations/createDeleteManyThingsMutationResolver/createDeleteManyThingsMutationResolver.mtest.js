@@ -250,6 +250,8 @@ describe('createDeleteManyThingsMutationResolver', () => {
       { mongooseConn, pubsub },
       info2,
     );
+
+    expect(deletedPlace.id).not.toBe(undefined);
     expect(deletedPlace.name).toBe(data.location.create.name);
 
     const deletedPlace2 = await deletePlace(

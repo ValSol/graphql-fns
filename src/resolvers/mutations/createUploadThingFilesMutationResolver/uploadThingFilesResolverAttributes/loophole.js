@@ -4,12 +4,7 @@ import type { GetPrevious } from '../../../flowTypes';
 import createFileSchema from '../../../../mongooseModels/createFileSchema';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 
-const getPrevious: GetPrevious = async (
-  actionGeneralName,
-  resolverCreatorArg,
-  resolverArg,
-  customFilter,
-) => {
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { args, context, parentFilter } = resolverArg;
   const { name } = thingConfig;
@@ -19,12 +14,10 @@ const getPrevious: GetPrevious = async (
     return null;
   }
 
-  const filter =
-    customFilter ||
-    (inAnyCase
-      ? parentFilter
-      : // $FlowFixMe
-        await executeAuthorisation(inventoryChain, context, serversideConfig));
+  const filter = inAnyCase
+    ? parentFilter
+    : // $FlowFixMe
+      await executeAuthorisation(inventoryChain, context, serversideConfig);
 
   if (!filter) return null;
 

@@ -2,6 +2,7 @@
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 import type { ResolverAttributes } from '../../flowTypes';
 
+import addIdsToThing from '../../utils/addIdsToThing';
 import checkInventory from '../../../utils/checkInventory';
 import incCounters from '../incCounters';
 import updatePeriphery from '../updatePeriphery';
@@ -85,7 +86,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       const { core, periphery } = preparedData;
 
       const result = {};
-      result.previous = previous;
+      result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
 
       const session = transactions ? await mongooseConn.startSession() : null;
       try {
