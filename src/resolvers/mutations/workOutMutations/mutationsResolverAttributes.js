@@ -6,6 +6,7 @@ import deleteManyThings from '../createDeleteManyThingsMutationResolver/resolver
 import deleteThing from '../createDeleteThingMutationResolver/resolverAttributes';
 import importThings from '../createImportThingsMutationResolver/resolverAttributes';
 import pushIntoThing from '../createPushIntoThingMutationResolver/resolverAttributes';
+import updateManyThings from '../createUpdateManyThingsMutationResolver/resolverAttributes';
 import updateThing from '../createUpdateThingMutationResolver/resolverAttributes';
 import uploadFilesToThing from '../createUploadFilesToThingMutationResolver/resolverAttributes';
 
@@ -16,6 +17,7 @@ const mutationsResolverAttributes = {
   deleteThing,
   importThings,
   pushIntoThing,
+  updateManyThings,
   updateThing,
   uploadFilesToThing,
 };

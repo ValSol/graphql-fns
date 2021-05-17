@@ -14,6 +14,7 @@ export { default as createDeleteThingMutationResolver } from './resolvers/mutati
 export { default as createDeleteManyThingsMutationResolver } from './resolvers/mutations/createDeleteManyThingsMutationResolver';
 export { default as createImportThingsMutationResolver } from './resolvers/mutations/createImportThingsMutationResolver';
 export { default as createPushIntoThingMutationResolver } from './resolvers/mutations/createPushIntoThingMutationResolver';
+export { default as createUpdateManyThingsMutationResolver } from './resolvers/mutations/createUpdateManyThingsMutationResolver';
 export { default as createUpdateThingMutationResolver } from './resolvers/mutations/createUpdateThingMutationResolver';
 export { default as createUploadFilesToThingMutationResolver } from './resolvers/mutations/createUploadFilesToThingMutationResolver';
 export { default as createUploadThingFilesMutationResolver } from './resolvers/mutations/createUploadThingFilesMutationResolver';

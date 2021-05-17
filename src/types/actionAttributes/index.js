@@ -15,6 +15,7 @@ import deleteManyThings from './deleteManyThingsMutationAttributes';
 import deleteThing from './deleteThingMutationAttributes';
 import importThings from './importThingsMutationAttributes';
 import pushIntoThing from './pushIntoThingMutationAttributes';
+import updateManyThings from './updateManyThingsMutationAttributes';
 import updateThing from './updateThingMutationAttributes';
 import uploadFilesToThing from './uploadFilesToThingMutationAttributes';
 import uploadThingFiles from './uploadThingFilesMutationAttributes';
@@ -33,6 +34,7 @@ const actionAttributes = {
   thingFiles,
   thing,
   things,
+  updateManyThings,
   updateThing,
   uploadFilesToThing,
   uploadThingFiles,

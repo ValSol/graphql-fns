@@ -7,6 +7,7 @@ import deleteManyThings from './createDeleteManyThingsMutationResolver';
 import importThings from './createImportThingsMutationResolver';
 import pushIntoThing from './createPushIntoThingMutationResolver';
 import updateThing from './createUpdateThingMutationResolver';
+import updateManyThings from './createUpdateManyThingsMutationResolver';
 import uploadFilesToThing from './createUploadFilesToThingMutationResolver';
 import uploadThingFiles from './createUploadThingFilesMutationResolver';
 
@@ -17,6 +18,7 @@ const mutations = {
   deleteManyThings,
   importThings,
   pushIntoThing,
+  updateManyThings,
   updateThing,
   uploadFilesToThing,
   uploadThingFiles,

@@ -3,7 +3,7 @@
 
 import type { ThingConfig } from '../../../flowTypes';
 
-import processDeleteDataPrepareArgs from './processDeleteDataPrepareArgs';
+import processDeleteDataPrepareArgs from './index';
 
 describe('processDeleteDataPrepareArgs', () => {
   const personConfig: ThingConfig = {};

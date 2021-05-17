@@ -469,6 +469,7 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!
+  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
   uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!
@@ -799,6 +800,8 @@ type Mutation {
   importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
   importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput): Example2!
+  updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!): [Example1!]!
+  updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!): [Example2!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
 }
@@ -1100,6 +1103,8 @@ type Mutation {
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
+  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }
@@ -1323,6 +1328,7 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!): Person!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
 }
 type Subscription {
@@ -1685,6 +1691,8 @@ type Mutation {
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput): Place!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
+  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
 }
@@ -1849,6 +1857,7 @@ type Mutation {
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
+  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
 }`;
 
