@@ -74,6 +74,8 @@ const optimizeBulk = (preparedData: Array<Object>): Array<Object> => {
       } else if (deleteAfterInsert(id, categorizedBulkOperations) && !idsForDelete.includes(id)) {
         idsForDelete.push(id);
       }
+    } else {
+      result.push(item); // updateMany
     }
   });
 

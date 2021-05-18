@@ -11,10 +11,12 @@ import thingFiles from './thingFilesQueryAttributes';
 import thing from './thingQueryAttributes';
 import things from './thingsQueryAttributes';
 import createThing from './createThingMutationAttributes';
+import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
 import deleteManyThings from './deleteManyThingsMutationAttributes';
 import deleteThing from './deleteThingMutationAttributes';
 import importThings from './importThingsMutationAttributes';
 import pushIntoThing from './pushIntoThingMutationAttributes';
+import updateFilteredThings from './updateFilteredThingsMutationAttributes';
 import updateManyThings from './updateManyThingsMutationAttributes';
 import updateThing from './updateThingMutationAttributes';
 import uploadFilesToThing from './uploadFilesToThingMutationAttributes';
@@ -23,6 +25,7 @@ import uploadThingFiles from './uploadThingFilesMutationAttributes';
 const actionAttributes = {
   createManyThings,
   createThing,
+  deleteFilteredThings,
   deleteManyThings,
   deleteThing,
   importThings,
@@ -34,6 +37,7 @@ const actionAttributes = {
   thingFiles,
   thing,
   things,
+  updateFilteredThings,
   updateManyThings,
   updateThing,
   uploadFilesToThing,

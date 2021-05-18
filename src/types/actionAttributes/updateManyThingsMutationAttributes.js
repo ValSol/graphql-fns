@@ -31,7 +31,7 @@ const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
 const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
   `[${name}${suffix}!]!`;
 
-const updateThingMutationAttributes = {
+const updateManyThingsMutationAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -43,4 +43,4 @@ const updateThingMutationAttributes = {
   actionAllowed,
 };
 
-export default updateThingMutationAttributes;
+export default updateManyThingsMutationAttributes;

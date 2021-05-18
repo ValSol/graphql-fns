@@ -1,4 +1,5 @@
 // @flow
+import deepEqual from 'fast-deep-equal';
 
 import { Types } from 'mongoose';
 
@@ -16,11 +17,28 @@ type ProcessCreateInputDataResult = {
   mains: Array<Object>,
 };
 
+const getUpdateMany = (rest, arr) => {
+  const filteredArr = arr.filter(({ updateMany }) => updateMany);
+
+  if (!filteredArr.length) return null;
+
+  const [obj] = filteredArr.slice(-1);
+  if (!obj) return null;
+  const {
+    updateMany: {
+      filter,
+      update: { $set },
+    },
+  } = obj;
+
+  return deepEqual(rest, $set) ? filter : null;
+};
+
 const processCreateInputData = (
   data: Object,
   preparedData: PreparedData,
   thingConfig: ThingConfig,
-  processingKind: 'create' | 'update' | 'push',
+  processingKind: 'create' | 'update' | 'push' | 'updateMany',
   rootFieldsPositions?: Object = {},
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
@@ -437,6 +455,24 @@ const processCreateInputData = (
             update,
           },
         }));
+      } else if (processingKind === 'updateMany') {
+        // $FlowFixMe
+        const { _id, ...$set } = document;
+        const arr = core.get(config);
+        const filter = arr && getUpdateMany($set, arr);
+        if (filter) {
+          filter._id.$in.push(_id); // eslint-disable-line no-underscore-dangle
+          continue; // eslint-disable-line no-continue
+        } else {
+          item = [
+            {
+              updateMany: {
+                filter: { _id: { $in: [_id] } },
+                update: { $set },
+              },
+            },
+          ];
+        }
       }
     }
     item = item || [{ insertOne: { document } }];

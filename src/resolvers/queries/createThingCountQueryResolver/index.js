@@ -4,9 +4,9 @@ import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '..
 
 import checkInventory from '../../../utils/checkInventory';
 import createThing from '../../../mongooseModels/createThing';
+import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import composeNearForAggregateInput from '../composeNearForAggregateInput';
 
 type Args = {
   where?: Object,

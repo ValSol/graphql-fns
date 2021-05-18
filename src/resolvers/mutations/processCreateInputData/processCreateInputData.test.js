@@ -849,4 +849,166 @@ describe('processCreateInputData', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return result with updateMany items', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+    const thingConfig: ThingConfig = {
+      name: 'Thing',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+        {
+          name: 'textField2',
+        },
+      ],
+      intFields: [
+        {
+          name: 'intField1',
+        },
+        {
+          name: 'intField2',
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField1',
+        },
+        {
+          name: 'floatField2',
+        },
+      ],
+      booleanFields: [
+        {
+          name: 'booleanField1',
+        },
+      ],
+    };
+    const data = {
+      id: '117',
+      textField1: 'textField1-Value',
+      textField2: 'textField2-Value',
+      intField1: 0,
+      intField2: 55,
+      floatField1: 0.0,
+      floatField2: 5.5,
+      booleanField1: false,
+    };
+
+    const core = new Map();
+    const item = {
+      updateMany: {
+        filter: { _id: { $in: ['117'] } },
+        update: {
+          $set: {
+            intField1: 0,
+            intField2: 55,
+            textField1: 'textField1-Value',
+            textField2: 'textField2-Value',
+            floatField1: 0.0,
+            floatField2: 5.5,
+            booleanField1: false,
+          },
+        },
+      },
+    };
+
+    core.set(thingConfig, [item]);
+    const periphery: Periphery = new Map();
+    const expectedResult = {
+      core,
+      periphery,
+
+      mains: [
+        {
+          _id: '117',
+          intField1: 0,
+          intField2: 55,
+          floatField1: 0.0,
+          floatField2: 5.5,
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          booleanField1: false,
+        },
+      ],
+    };
+    const preparedData2 = processCreateInputData(
+      data,
+      preparedData,
+      thingConfig,
+      'updateMany',
+      undefined,
+      mongooseTypes,
+    );
+
+    expect(preparedData2).toEqual(expectedResult);
+
+    const data2 = {
+      id: '118',
+      textField1: 'textField1-Value',
+      textField2: 'textField2-Value',
+      intField1: 0,
+      intField2: 55,
+      floatField1: 0.0,
+      floatField2: 5.5,
+      booleanField1: false,
+    };
+
+    const item2 = {
+      updateMany: {
+        filter: { _id: { $in: ['117', '118'] } },
+        update: {
+          $set: {
+            intField1: 0,
+            intField2: 55,
+            textField1: 'textField1-Value',
+            textField2: 'textField2-Value',
+            floatField1: 0.0,
+            floatField2: 5.5,
+            booleanField1: false,
+          },
+        },
+      },
+    };
+
+    core.set(thingConfig, [item2]);
+    const expectedResult2 = {
+      core,
+      periphery,
+
+      mains: [
+        {
+          _id: '117',
+          intField1: 0,
+          intField2: 55,
+          floatField1: 0.0,
+          floatField2: 5.5,
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          booleanField1: false,
+        },
+        {
+          _id: '118',
+          intField1: 0,
+          intField2: 55,
+          floatField1: 0.0,
+          floatField2: 5.5,
+          textField1: 'textField1-Value',
+          textField2: 'textField2-Value',
+          booleanField1: false,
+        },
+      ],
+    };
+
+    const result = processCreateInputData(
+      data2,
+      preparedData2,
+      thingConfig,
+      'updateMany',
+      undefined,
+      mongooseTypes,
+    );
+
+    expect(result).toEqual(expectedResult2);
+  });
 });

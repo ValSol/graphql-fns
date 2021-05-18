@@ -9,7 +9,7 @@ type Result = {
 const categorizeBulkOperations = (preparedData: Array<Object>): Result =>
   preparedData.reduce(
     (prev, item, i) => {
-      const { updateOne, insertOne, deleteOne } = item;
+      const { updateOne, updateMany, insertOne, deleteOne } = item;
       if (deleteOne) {
         const { filter } = deleteOne;
 
@@ -18,11 +18,11 @@ const categorizeBulkOperations = (preparedData: Array<Object>): Result =>
         const { document: filter } = insertOne;
 
         prev.insertOne[filter._id] = i; // eslint-disable-line no-underscore-dangle, no-param-reassign
-      } else if (!updateOne) {
+      } else if (!(updateOne || updateMany)) {
         throw new TypeError(
           `Got bulk item: ${JSON.stringify(
             item,
-          )} that not "updateOne" or "deleteOne" or "insertOne"!`,
+          )} that not "updateOne" or "updateMany" or "deleteOne" or "insertOne"!`,
         );
       }
       return prev;

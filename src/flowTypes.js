@@ -509,9 +509,12 @@ export type GeneralConfig = {
           | 'thingFiles'
           | 'createThing'
           | 'createManyThings'
+          | 'deleteFilteredThings'
+          | 'deleteManyThings'
           | 'deleteThing'
           | 'importThings'
           | 'pushIntoThing'
+          | 'updateFilteredThings'
           | 'updateManyThings'
           | 'updateThing'
           | 'uploadFilesToThing'
@@ -577,9 +580,12 @@ export type DerivativeAttributes = {
       | 'thingFiles'
       | 'createThing'
       | 'createManyThings'
+      | 'deleteFilteredThings'
+      | 'deleteManyThings'
       | 'deleteThing'
       | 'importThings'
       | 'pushIntoThing'
+      | 'updateFilteredThings'
       | 'updateManyThings'
       | 'updateThing'
       | 'uploadFilesToThing'
@@ -599,8 +605,8 @@ export type TwoSegmentInventoryChain =
   | ['Query', string] // "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
-      // ... 'uploadFilesToThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // ... 'deleteThing', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
@@ -608,8 +614,8 @@ export type ThreeSegmentInventoryChain =
   | ['Query', string, string] // first "string" for 'thing', 'things', 'thingCount', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query, second for thing name
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', 'pushIntoThing', ...
-      // ... 'uploadFilesToThing' or custom mutation
+      // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // ... 'deleteThing', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
     ]

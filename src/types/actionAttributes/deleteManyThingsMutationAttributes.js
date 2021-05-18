@@ -27,7 +27,7 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
 const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
   `[${name}${suffix}!]!`;
 
-const deleteThingMutationAttributes = {
+const deleteManyThingsMutationAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -39,4 +39,4 @@ const deleteThingMutationAttributes = {
   actionAllowed,
 };
 
-export default deleteThingMutationAttributes;
+export default deleteManyThingsMutationAttributes;
