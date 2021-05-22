@@ -1,7 +1,7 @@
 // @flow
 import type { Inventory, InventoryСhain } from '../flowTypes';
 
-const store = {};
+const store = Object.create(null);
 
 const checkInventory = (inventoryСhain: InventoryСhain, inventory: Inventory = {}): boolean => {
   const { include, exclude, name } = inventory;

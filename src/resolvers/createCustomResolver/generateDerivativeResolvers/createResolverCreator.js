@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig, GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
-const store = {};
+const store = Object.create(null);
 
 type ResoverCreator = (
   thingConfig: ThingConfig,

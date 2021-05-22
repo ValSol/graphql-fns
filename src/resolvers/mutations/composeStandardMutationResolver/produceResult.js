@@ -41,6 +41,7 @@ const produceResult = async (
   const thing = await Thing.findById(first._id, null, { lean: true });
 
   const thing2 = addIdsToThing(thing, thingConfig);
+
   return [thing2];
 };
 

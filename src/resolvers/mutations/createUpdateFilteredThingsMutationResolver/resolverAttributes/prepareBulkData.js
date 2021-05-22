@@ -40,7 +40,7 @@ const prepareBulkData: PrepareBulkData = async (
       : coreForDeletions;
   });
 
-  let preparedData = { ...prevPreparedData, core: coreForDeletions };
+  let preparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };
 
   previousThings.forEach((previousThing) => {
     preparedData = processCreateInputData(

@@ -3,19 +3,13 @@ import deepEqual from 'fast-deep-equal';
 
 import { Types } from 'mongoose';
 
-import type { Periphery, ThingConfig } from '../../../flowTypes';
+import type { ThingConfig } from '../../../flowTypes';
 import type { PreparedData } from '../../flowTypes';
 
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
-
-type ProcessCreateInputDataResult = {
-  core: Map<ThingConfig, Array<Object>>,
-  periphery: Periphery,
-  mains: Array<Object>,
-};
 
 const getUpdateMany = (rest, arr) => {
   const filteredArr = arr.filter(({ updateMany }) => updateMany);
@@ -42,7 +36,7 @@ const processCreateInputData = (
   rootFieldsPositions?: Object = {},
   // use mongoose Types in args to let mocking the ObjectId() in tests
   mongooseTypes?: Object = Types,
-): ProcessCreateInputDataResult => {
+): PreparedData => {
   const { mains, core, periphery } = preparedData;
   const { id } = data;
   const prepared = [

@@ -5,7 +5,7 @@ import queries from '../../queries';
 import mutations from '../../mutations';
 import createResolverCreator from './createResolverCreator';
 
-const store = {};
+const store = Object.create(null);
 
 const getAllowedActions = (allow) =>
   Object.keys(allow).reduce((prev, thingName) => {

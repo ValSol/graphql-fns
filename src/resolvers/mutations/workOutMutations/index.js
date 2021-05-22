@@ -39,7 +39,7 @@ const workOutMutations = async (
 
   let preparedData = preparedBulkData;
 
-  const results = [];
+  const previouses = [];
   for (let i = 0; i < standardMutationsArgs.length; i += 1) {
     const mutationArgs = standardMutationsArgs[i];
 
@@ -51,22 +51,13 @@ const workOutMutations = async (
       args,
       info: infoInArgs,
       parentFilter: parentFilterInArgs,
-      returnResult,
-      returnReport,
     } = mutationArgs;
 
     const parent = parentInArgs || null;
     const info = infoInArgs || { projection: {} };
     const parentFilter = parentFilterInArgs || [];
 
-    const {
-      array,
-      getPrevious,
-      produceCurrent,
-      prepareBulkData,
-      report,
-      finalResult,
-    } = mutationsResolverAttributes[actionGeneralName];
+    const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
     const { name } = thingConfig;
 
@@ -92,6 +83,7 @@ const workOutMutations = async (
 
     // eslint-disable-next-line no-await-in-loop
     const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
+
     if (!previous) {
       throw new TypeError(
         `Not got preivous for "${actionGeneralName}" mutation for "${name}" thing!`,
@@ -108,31 +100,7 @@ const workOutMutations = async (
       );
     }
 
-    const result = returnResult ? {} : null;
-    if (result) {
-      result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
-    }
-
-    if (result && produceCurrent) {
-      // eslint-disable-next-line no-await-in-loop
-      result.current = await produceResult(
-        preparedData,
-        thingConfig,
-        generalConfig,
-        context,
-        array,
-      );
-    }
-
-    if (result && returnReport) {
-      // eslint-disable-next-line no-await-in-loop
-      const subscription = await report(resolverCreatorArg, resolverArg);
-      if (subscription) {
-        subscription(result);
-      }
-    }
-
-    results.push(result && finalResult(result));
+    previouses.push(previous);
   }
 
   const { core, periphery } = preparedData;
@@ -165,7 +133,77 @@ const workOutMutations = async (
     throw new Error(err);
   }
 
-  return results;
+  const finalResults = [];
+
+  for (let i = 0; i < standardMutationsArgs.length; i += 1) {
+    const mutationArgs = standardMutationsArgs[i];
+
+    const {
+      actionGeneralName,
+      thingConfig,
+      inAnyCase,
+      parent: parentInArgs,
+      args,
+      info: infoInArgs,
+      parentFilter: parentFilterInArgs,
+      returnReport,
+      returnResult,
+    } = mutationArgs;
+
+    const parent = parentInArgs || null;
+    const info = infoInArgs || { projection: {} };
+    const parentFilter = parentFilterInArgs || [];
+
+    const { array, produceCurrent, report, finalResult } = mutationsResolverAttributes[
+      actionGeneralName
+    ];
+
+    const resolverCreatorArg = {
+      thingConfig,
+      generalConfig,
+      serversideConfig,
+      inAnyCase,
+    };
+
+    const resolverArg = {
+      parent,
+      args,
+      context,
+      info,
+      parentFilter,
+    };
+
+    const previous = previouses[i];
+    const result = returnResult ? {} : null;
+
+    if (result) {
+      result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
+    }
+
+    if (result && produceCurrent) {
+      const fakePreparedData = { core: new Map(), periphery: new Map(), mains: previous };
+      // eslint-disable-next-line no-await-in-loop
+      result.current = await produceResult(
+        fakePreparedData,
+        thingConfig,
+        generalConfig,
+        context,
+        array,
+      );
+    }
+
+    if (result && returnReport) {
+      // eslint-disable-next-line no-await-in-loop
+      const subscription = await report(resolverCreatorArg, resolverArg);
+      if (subscription) {
+        subscription(result);
+      }
+    }
+
+    finalResults.push(result && finalResult(result));
+  }
+
+  return finalResults;
 };
 
 export default workOutMutations;

@@ -4,7 +4,7 @@ import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTy
 import composeFieldsObject from './composeFieldsObject';
 import composeThingConfig from './composeThingConfig';
 
-const store = {};
+const store = Object.create(null);
 
 const composeDerivativeConfig = (
   signatureMethods: DerivativeAttributes,

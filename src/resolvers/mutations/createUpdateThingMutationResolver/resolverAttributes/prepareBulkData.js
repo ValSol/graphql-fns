@@ -41,7 +41,7 @@ const prepareBulkData: PrepareBulkData = async (
 
   const preparedData = processCreateInputData(
     { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
-    { ...prevPreparedData, core: coreForDeletions },
+    { ...prevPreparedData, core: coreForDeletions, mains: [] },
     thingConfig,
     'update',
   );

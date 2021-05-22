@@ -19,7 +19,7 @@ import uploadFilesToThingMutationAttributes from '../../types/actionAttributes/u
 import uploadThingFilesMutationAttributes from '../../types/actionAttributes/uploadThingFilesMutationAttributes';
 import composeCustomAction from './composeCustomAction';
 
-const store = {};
+const store = Object.create(null);
 
 const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom => {
   // use cache if no jest test environment

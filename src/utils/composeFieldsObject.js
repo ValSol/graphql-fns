@@ -1,7 +1,7 @@
 // @flow
 import type { ThingConfig, ThingConfigObject } from '../flowTypes';
 
-const store = {};
+const store = Object.create(null);
 
 const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
   const {

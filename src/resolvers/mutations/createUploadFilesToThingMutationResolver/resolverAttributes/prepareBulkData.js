@@ -32,14 +32,14 @@ const prepareBulkData: PrepareBulkData = async (
 
   const preparedDataForUpdate = processCreateInputData(
     { ...forUpdate, id: previous._id }, // eslint-disable-line no-underscore-dangle
-    prevPreparedData,
+    { ...prevPreparedData, mains: [] },
     thingConfig,
     'update', // for update
   );
 
   const preparedData = processCreateInputData(
     { ...forPush, id: previous._id }, // eslint-disable-line no-underscore-dangle
-    preparedDataForUpdate,
+    { ...preparedDataForUpdate, mains: [] },
     thingConfig,
     'push',
     positions,
