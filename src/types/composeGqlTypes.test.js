@@ -2490,4 +2490,143 @@ type Mutation {
     const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create derivative inputs for custom types with inventory for only one custom query getThing', () => {
+    const childNameFromParenName = { Menu: 'MenuSection' };
+
+    const updateThingWithChildren: ActionSignatureMethods = {
+      name: 'updateThingWithChildren',
+      specificName: ({ name }) => (name === 'Menu' ? `update${name}WithChildren` : ''),
+      argNames: () => ['whereOne', 'data', 'childWhereOne', 'childData', 'deleteWhereOne'],
+      argTypes: ({ name }) => [
+        `${name}WhereOneInput!`,
+        `${name}UpdateInput`,
+        `[${childNameFromParenName[name]}WhereOneInput!]!`,
+        `[${childNameFromParenName[name]}UpdateInput!]!`,
+        `[${childNameFromParenName[name]}WhereOneInput!]!`,
+      ],
+      type: ({ name }) => name,
+      config: (thingConfig) => thingConfig,
+    };
+
+    const menuSectionConfig: ThingConfig = {};
+    const menuConfig: ThingConfig = {
+      name: 'Menu',
+      textFields: [
+        {
+          name: 'menuName',
+          index: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'sections',
+          config: menuSectionConfig,
+          oppositeName: 'root',
+          array: true,
+        },
+      ],
+    };
+
+    Object.assign(menuSectionConfig, {
+      name: 'MenuSection',
+      textFields: [
+        {
+          name: 'menuSectionName',
+          index: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'root',
+          config: menuConfig,
+          oppositeName: 'sections',
+        },
+      ],
+    });
+
+    const thingConfigs = { Menu: menuConfig, MenuSection: menuSectionConfig };
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Mutation: { updateThingWithChildren: ['Menu'] } },
+    };
+    const custom = { Mutation: { updateThingWithChildren } };
+    const derivativeInputs = {
+      '': {
+        suffix: '',
+        allow: {
+          Menu: ['thingWhereOneInput', 'thingUpdateInput'],
+          MenuSection: ['thingWhereOneInput', 'thingUpdateInput'],
+        },
+      },
+    };
+    const generalConfig: GeneralConfig = { thingConfigs, custom, derivativeInputs, inventory };
+    const expectedResult = `scalar DateTime
+input RegExp {
+  pattern: String!
+  flags: String
+}
+type Menu {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  menuName: String
+  sections: [MenuSection!]!
+}
+type MenuSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  menuSectionName: String
+  root: Menu
+}
+input MenuWhereOneInput {
+  id: ID!
+}
+input MenuUpdateInput {
+  menuName: String
+  sections: MenuSectionCreateOrPushChildrenInput
+}
+input MenuSectionCreateInput {
+  id: ID
+  root: MenuCreateChildInput
+  menuSectionName: String
+}
+input MenuSectionCreateChildInput {
+  connect: ID
+  create: MenuSectionCreateInput
+}
+input MenuSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuSectionCreateInput!]
+  createPositions: [Int!]
+}
+input MenuCreateInput {
+  id: ID
+  sections: MenuSectionCreateOrPushChildrenInput
+  menuName: String
+}
+input MenuCreateChildInput {
+  connect: ID
+  create: MenuCreateInput
+}
+input MenuCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCreateInput!]
+  createPositions: [Int!]
+}
+input MenuSectionWhereOneInput {
+  id: ID!
+}
+input MenuSectionUpdateInput {
+  menuSectionName: String
+  root: MenuCreateChildInput
+}
+type Mutation {
+  updateMenuWithChildren(whereOne: MenuWhereOneInput!, data: MenuUpdateInput, childWhereOne: [MenuSectionWhereOneInput!]!, childData: [MenuSectionUpdateInput!]!, deleteWhereOne: [MenuSectionWhereOneInput!]!): Menu
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -443,6 +443,31 @@ type NotFieldyThingConfigFields = {
   list?: $ReadOnlyArray<ListColumn>,
 };
 
+export type DerivativeInputs = {
+  suffix: string,
+  +allow: {
+    // eslint-disable-next-line flowtype/generic-spacing
+    [thingName: string]: Array<
+      | 'FilesOfThingOptionsInput'
+      | 'FileWhereInput'
+      | 'FileWhereOneInput'
+      | 'ImportOptionsInput'
+      | 'PaginationInput'
+      | 'PushIntoThingInput'
+      | 'thingCreateInput'
+      | 'thingDistinctValuesOptionsInput'
+      | 'thingNearInput'
+      | 'thingPushPositionsInput'
+      | 'thingReorderUploadedInput'
+      | 'thingSortInput'
+      | 'thingUpdateInput'
+      | 'thingWhereInput'
+      | 'thingWhereOneInput'
+      | 'UploadFilesToThingInput',
+    >,
+  },
+};
+
 export type GeneralConfig = {
   +thingConfigs: { [thingConfigName: string]: ThingConfig },
   +custom?: {
@@ -529,6 +554,7 @@ export type GeneralConfig = {
       +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
     },
   },
+  +derivativeInputs?: { +[suffix: string]: DerivativeInputs },
   +enums?: Enums,
   inventory?: Inventory,
 };
