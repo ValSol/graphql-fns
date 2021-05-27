@@ -185,5 +185,8 @@ describe('createCreateManyThingsMutationResolver', () => {
     expect(createdExamples[1].textField5).toEqual(data[0].textField5);
     expect(createdExamples[1].createdAt.toISOString()).toEqual(data[0].createdAt);
     expect(createdExamples[1].updatedAt.toISOString()).toEqual(data[0].updatedAt);
+
+    const createdExamples2 = await createManyExamples(null, { data: [] }, { mongooseConn });
+    expect(createdExamples2).toEqual([]);
   });
 });

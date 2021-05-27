@@ -359,10 +359,26 @@ describe('createDeleteManyThingsMutationResolver', () => {
         returnResult: true,
       },
       {
+        actionGeneralName: 'deleteManyThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          whereOne: [],
+        },
+        returnResult: true,
+      },
+      {
         actionGeneralName: 'createManyThings',
         thingConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'deleteManyThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          whereOne: [],
         },
         returnResult: true,
       },
@@ -372,15 +388,19 @@ describe('createDeleteManyThingsMutationResolver', () => {
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const [resultToCreateExampleClones, resultToCreateExamples] = await workOutMutations(
-      standardMutationsArgsToCreateManyThings,
-      commonResolverCreatorArg,
-    );
+    const [
+      resultToCreateExampleClones,
+      resultEmptyDeleteExampleClones,
+      resultToCreateExamples,
+      resultEmptyDeleteExamples,
+    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name }) => ({ name }))).toEqual(
       dataToCreateExampleClones,
     );
+    expect(resultEmptyDeleteExampleClones).toEqual([]);
     expect(resultToCreateExamples.map(({ name }) => ({ name }))).toEqual(dataToCreateExamples);
+    expect(resultEmptyDeleteExamples).toEqual([]);
 
     const whereOneToDeleteManyExampleClones = resultToCreateExampleClones.map(({ id }) => ({ id }));
 
@@ -460,9 +480,41 @@ describe('createDeleteManyThingsMutationResolver', () => {
       },
       {
         actionGeneralName: 'createManyThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          data: [],
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'deleteFilteredThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          where: { name: 'Name-is-absent' },
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'createManyThings',
         thingConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'createManyThings',
+        thingConfig: exampleConfig,
+        args: {
+          data: [],
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'deleteFilteredThings',
+        thingConfig: exampleConfig,
+        args: {
+          where: { name: 'Name-is-absent' },
         },
         returnResult: true,
       },
@@ -472,17 +524,25 @@ describe('createDeleteManyThingsMutationResolver', () => {
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const [resultToCreateExampleClones, resultToCreateExamples] = await workOutMutations(
-      standardMutationsArgsToCreateManyThings,
-      commonResolverCreatorArg,
-    );
+    const [
+      resultToCreateExampleClones,
+      emptyResultToCreateExampleClones,
+      emptyResultToDeleteExampleClones,
+      resultToCreateExamples,
+      emptyResultToCreateExamples,
+      emptyResultToDeleteExamples,
+    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones,
     );
+    expect(emptyResultToCreateExampleClones).toEqual([]);
+    expect(emptyResultToDeleteExampleClones).toEqual([]);
     expect(resultToCreateExamples.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExamples,
     );
+    expect(emptyResultToCreateExamples).toEqual([]);
+    expect(emptyResultToDeleteExamples).toEqual([]);
 
     const whereToDeleteExampleClones = { label: 'aaa' };
     const whereToDeleteExamples = { label: 'xxx' };
@@ -567,10 +627,28 @@ describe('createDeleteManyThingsMutationResolver', () => {
         returnResult: true,
       },
       {
+        actionGeneralName: 'updateManyThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          whereOne: [],
+          data: [],
+        },
+        returnResult: true,
+      },
+      {
         actionGeneralName: 'createManyThings',
         thingConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'updateManyThings',
+        thingConfig: exampleConfig,
+        args: {
+          whereOne: [],
+          data: [],
         },
         returnResult: true,
       },
@@ -580,15 +658,19 @@ describe('createDeleteManyThingsMutationResolver', () => {
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const [resultToCreateExampleClones, resultToCreateExamples] = await workOutMutations(
-      standardMutationsArgsToCreateManyThings,
-      commonResolverCreatorArg,
-    );
+    const [
+      resultToCreateExampleClones,
+      emptyResultToUpdateExampleClones,
+      resultToCreateExamples,
+      emptyResultToUpdateExamples,
+    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name }) => ({ name }))).toEqual(
       dataToCreateExampleClones,
     );
+    expect(emptyResultToUpdateExampleClones).toEqual([]);
     expect(resultToCreateExamples.map(({ name }) => ({ name }))).toEqual(dataToCreateExamples);
+    expect(emptyResultToUpdateExamples).toEqual([]);
 
     const whereOneToUpdateManyExampleClones = resultToCreateExampleClones.map(({ id }) => ({ id }));
 
@@ -680,10 +762,28 @@ describe('createDeleteManyThingsMutationResolver', () => {
         returnResult: true,
       },
       {
+        actionGeneralName: 'updateFilteredThings',
+        thingConfig: exampleCloneConfig,
+        args: {
+          where: { name: 'Name-is-absent' },
+          data: { label: 'not-to-change' },
+        },
+        returnResult: true,
+      },
+      {
         actionGeneralName: 'createManyThings',
         thingConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
+        },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'updateFilteredThings',
+        thingConfig: exampleConfig,
+        args: {
+          where: { name: 'Name-is-absent' },
+          data: { label: 'not-to-change' },
         },
         returnResult: true,
       },
@@ -693,17 +793,21 @@ describe('createDeleteManyThingsMutationResolver', () => {
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const [resultToCreateExampleClones, resultToCreateExamples] = await workOutMutations(
-      standardMutationsArgsToCreateManyThings,
-      commonResolverCreatorArg,
-    );
+    const [
+      resultToCreateExampleClones,
+      emptyResultToUpdateExampleClones,
+      resultToCreateExamples,
+      emptyResultToUpdateExamples,
+    ] = await workOutMutations(standardMutationsArgsToCreateManyThings, commonResolverCreatorArg);
 
     expect(resultToCreateExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones,
     );
+    expect(emptyResultToUpdateExampleClones).toEqual([]);
     expect(resultToCreateExamples.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExamples,
     );
+    expect(emptyResultToUpdateExamples).toEqual([]);
 
     const dataToUpdateExampleClones = { label: 'updateFiltered updated' };
     const dataToUpdateExamples = { label: 'updateFiltered updated2' };

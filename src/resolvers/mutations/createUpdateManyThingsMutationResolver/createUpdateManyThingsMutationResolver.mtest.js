@@ -1256,6 +1256,16 @@ describe('createUpdateManyThingsMutationResolver', () => {
 
     expect(updatedPost2.slug).toBe(dataToUpdate2[0].slug);
 
+    const emptyUpdatedPosts = await updateManyPosts(
+      null,
+      { whereOne: [], data: [] },
+      { mongooseConn, pubsub },
+      null,
+      [],
+    );
+
+    expect(emptyUpdatedPosts).toEqual([]);
+
     const dataToUpdate3 = [
       {
         type: 'toProfessionals',

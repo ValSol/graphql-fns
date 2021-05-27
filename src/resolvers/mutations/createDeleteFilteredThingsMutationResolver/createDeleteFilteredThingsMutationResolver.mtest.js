@@ -263,7 +263,7 @@ describe('createDeleteFilteredThingsMutationResolver', () => {
     expect(deletedPlace2).toEqual([]);
   });
 
-  test('should create mutation deleteThing resolver to aggregate result', async () => {
+  test('should create mutation deleteFilteredThings resolver to aggregate result', async () => {
     const serversideConfig = { transactions: true };
 
     const childConfig: ThingConfig = {
@@ -365,5 +365,88 @@ describe('createDeleteFilteredThingsMutationResolver', () => {
     );
 
     expect(deletedParent2).toEqual([]);
+  });
+
+  test('should create mutation deleteFilteredThings resolver to return []', async () => {
+    const serversideConfig = { transactions: true };
+
+    const childConfig: ThingConfig = {
+      name: 'Child',
+      textFields: [
+        {
+          name: 'textFields',
+          array: true,
+          index: true,
+        },
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+    const parentConfig: ThingConfig = {
+      name: 'Parent',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          weight: 1,
+        },
+      ],
+
+      relationalFields: [
+        {
+          name: 'child',
+          index: true,
+          config: childConfig,
+        },
+      ],
+    };
+
+    const parentSchema = createThingSchema(parentConfig);
+    const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.createCollection();
+
+    const childSchema = createThingSchema(childConfig);
+    const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.createCollection();
+
+    await sleep(250);
+
+    const createParent = createCreateThingMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createParent).toBe('function');
+    if (!createParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    for (let i = 0; i < 20; i += 1) {
+      const data = {
+        name: `name-${i}`,
+        child: {
+          create: {
+            textFields: [`text-${i}`],
+            textField: i < 15 ? 'first' : 'second',
+          },
+        },
+      };
+      // eslint-disable-next-line no-await-in-loop
+      await createParent(null, { data }, { mongooseConn, pubsub });
+    }
+
+    const deletePerson = createDeleteFilteredThingsMutationResolver(
+      parentConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const where = { name: 'name-is-absent' };
+
+    const info = { projection: { _id: 1, name: 1 } };
+    const deletedParents = await deletePerson(null, { where }, { mongooseConn, pubsub }, info);
+
+    expect(deletedParents).toEqual([]);
   });
 });

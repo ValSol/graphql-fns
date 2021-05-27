@@ -513,7 +513,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const Child = mongooseConn.model('Child2_Thing', childSchema);
     await Child.createCollection();
 
-    await sleep(250);
+    await sleep(1000);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

@@ -37,6 +37,8 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     }
   });
 
+  if (!whereOne.length) return [];
+
   const { lookups, where: preConditions } = mergeWhereAndFilter(
     filter,
     { OR: whereOne },

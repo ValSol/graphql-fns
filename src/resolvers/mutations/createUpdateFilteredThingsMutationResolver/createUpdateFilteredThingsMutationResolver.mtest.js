@@ -1236,5 +1236,18 @@ describe('createUpdateFilteredThingsMutationResolver', () => {
     );
 
     expect(updatedPosts2).toEqual([]);
+
+    const dataToUpdate4 = {
+      type: 'toProfessionals 2',
+    };
+    const updatedPosts3 = await updateFilteredPosts(
+      null,
+      { where: { slug: 'name is absent' }, data: dataToUpdate4 },
+      { mongooseConn, pubsub },
+      null,
+      [],
+    );
+
+    expect(updatedPosts3).toEqual([]);
   });
 });

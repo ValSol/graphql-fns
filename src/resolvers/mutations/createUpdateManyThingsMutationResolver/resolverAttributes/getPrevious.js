@@ -24,6 +24,14 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const { data, whereOne } = args;
 
+  if (whereOne.length !== data.length) {
+    throw new TypeError(
+      `Length of whereOne is "${whereOne.length}", length of data is "${data.length}" but have to be equal!`,
+    );
+  }
+
+  if (!whereOne.length) return [];
+
   const toCreate = false;
 
   for (let i = 0; i < data.length; i += 1) {
