@@ -20,9 +20,13 @@ const composeDerivativeConfig = (
     derivativeFields,
     excludeFields,
     includeFields,
+    freezedFields,
+    unfreezedFields,
   } = signatureMethods;
 
   const { derivative, thingConfigs } = generalConfig;
+
+  if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 
   if (!allow[rootThingName]) return null;
 
@@ -71,6 +75,46 @@ const composeDerivativeConfig = (
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
             `Incorrect includeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+          );
+        }
+      });
+    }
+  }
+
+  if (freezedFields) {
+    Object.keys(freezedFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in freezedFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+
+    if (freezedFields[rootThingName]) {
+      freezedFields[rootThingName].forEach((fieldName) => {
+        if (!fieldsObject[fieldName]) {
+          throw new TypeError(
+            `Incorrect freezedFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+          );
+        }
+      });
+    }
+  }
+
+  if (unfreezedFields) {
+    Object.keys(unfreezedFields).forEach((thingName) => {
+      if (!allowThingNames.includes(thingName)) {
+        throw new TypeError(
+          `Incorrect thingName key: "${thingName}" in unfreezedFields of "${suffix}" derivative!`,
+        );
+      }
+    });
+
+    if (unfreezedFields[rootThingName]) {
+      unfreezedFields[rootThingName].forEach((fieldName) => {
+        if (!fieldsObject[fieldName]) {
+          throw new TypeError(
+            `Incorrect unfreezedFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -184,8 +228,6 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
-
   if (derivativeFields && derivativeFields[rootThingName]) {
     Object.keys(thingConfig).forEach((key) => {
       if (key === 'relationalFields' || key === 'duplexFields') {
@@ -207,6 +249,38 @@ const composeDerivativeConfig = (
           // $FlowFixMe
           return { ...item, config };
         });
+      }
+    });
+  }
+
+  if (freezedFields && freezedFields[rootThingName]) {
+    Object.keys(thingConfig).forEach((key) => {
+      if (key.slice(-6) === 'Fields') {
+        // $FlowFixMe
+        thingConfig[key] = thingConfig[key].map((field) =>
+          // $FlowFixMe
+          freezedFields[rootThingName].includes(field.name)
+            ? // $FlowFixMe
+              { ...field, freeze: true }
+            : // $FlowFixMe
+              { ...field, freeze: false },
+        );
+      }
+    });
+  }
+
+  if (unfreezedFields && unfreezedFields[rootThingName]) {
+    Object.keys(thingConfig).forEach((key) => {
+      if (key.slice(-6) === 'Fields') {
+        // $FlowFixMe
+        thingConfig[key] = thingConfig[key].map((field) =>
+          // $FlowFixMe
+          unfreezedFields[rootThingName].includes(field.name)
+            ? // $FlowFixMe
+              { ...field, freeze: false }
+            : // $FlowFixMe
+              { ...field, freeze: true },
+        );
       }
     });
   }

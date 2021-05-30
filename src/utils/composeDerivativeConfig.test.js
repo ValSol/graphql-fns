@@ -67,6 +67,72 @@ describe('composeDerivativeConfig', () => {
       expect(result).toEqual(expectedResult);
     });
 
+    test('should return correct derivative config with freezed field', () => {
+      const ForCatalog: DerivativeAttributes = {
+        allow: { Example: ['thing', 'things'] },
+        suffix: 'ForCatalog',
+        freezedFields: { Example: ['textField'] },
+      };
+
+      const generalConfig: GeneralConfig = {
+        thingConfigs: { Example: thingConfig },
+        derivative: { ForCatalog },
+      };
+
+      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+
+      const expectedResult = {
+        name: 'ExampleForCatalog',
+        textFields: [
+          {
+            name: 'textField',
+            index: true,
+            freeze: true,
+          },
+          {
+            name: 'anotherField',
+            index: true,
+            freeze: false,
+          },
+        ],
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should return correct derivative config with unfreezed field', () => {
+      const ForCatalog: DerivativeAttributes = {
+        allow: { Example: ['thing', 'things'] },
+        suffix: 'ForCatalog',
+        unfreezedFields: { Example: ['textField'] },
+      };
+
+      const generalConfig: GeneralConfig = {
+        thingConfigs: { Example: thingConfig },
+        derivative: { ForCatalog },
+      };
+
+      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+
+      const expectedResult = {
+        name: 'ExampleForCatalog',
+        textFields: [
+          {
+            name: 'textField',
+            index: true,
+            freeze: false,
+          },
+          {
+            name: 'anotherField',
+            index: true,
+            freeze: true,
+          },
+        ],
+      };
+
+      expect(result).toEqual(expectedResult);
+    });
+
     test('should return correct derivative config with excluded field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['thing', 'things'] },

@@ -548,6 +548,8 @@ export type GeneralConfig = {
       },
       +includeFields?: { [thingName: string]: Array<string> },
       +excludeFields?: { [thingName: string]: Array<string> },
+      +freezedFields?: { [thingName: string]: Array<string> },
+      +unfreezedFields?: { [thingName: string]: Array<string> },
       +addFields?: {
         [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
       },
@@ -620,6 +622,8 @@ export type DerivativeAttributes = {
   },
   +includeFields?: { [thingName: string]: Array<string> },
   +excludeFields?: { [thingName: string]: Array<string> },
+  +freezedFields?: { [thingName: string]: Array<string> },
+  +unfreezedFields?: { [thingName: string]: Array<string> },
   +addFields?: {
     [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
   },
