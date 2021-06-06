@@ -92,7 +92,10 @@ const createThingsQueryResolver = (
         }
       }
 
-      arg.push({ $project: projection });
+      if (!search) {
+        // not use "$project" if used "search" to prevent error: field names may not start with '$'
+        arg.push({ $project: projection });
+      }
 
       const things = await Thing.aggregate(arg).exec();
 

@@ -113,7 +113,7 @@ describe('createThingDistinctValuesQueryResolver', () => {
       { options: options2 },
       { mongooseConn, pubsub },
     );
-    expect(distinctValues2).toEqual(['Boss', 'Mashkin', 'Daskin', 'Prashkin', 'Bzhezinsky']);
+    expect(distinctValues2).toEqual(['Boss', 'Bzhezinsky', 'Daskin', 'Mashkin', 'Prashkin']);
 
     const options3 = { target: 'position' };
     const distinctValues3 = await DistinctValues(
