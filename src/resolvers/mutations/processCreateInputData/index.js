@@ -190,7 +190,7 @@ const processCreateInputData = (
 
             data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
-              const _id = mongooseTypes.ObjectId();
+              const _id = item.id || mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: { ...item, _id },
@@ -201,7 +201,7 @@ const processCreateInputData = (
             prev[key] = ids;
           } else {
             // eslint-disable-next-line no-underscore-dangle
-            const _id = mongooseTypes.ObjectId();
+            const _id = data2[key].create.id || mongooseTypes.ObjectId();
 
             prepared.push({
               data: { ...data2[key].create, _id },
@@ -334,7 +334,7 @@ const processCreateInputData = (
 
             data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
-              const _id = mongooseTypes.ObjectId();
+              const _id = item.id || mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: {
@@ -350,7 +350,7 @@ const processCreateInputData = (
             prev[key] = ids;
           } else {
             // eslint-disable-next-line no-underscore-dangle
-            const _id = mongooseTypes.ObjectId();
+            const _id = data2[key].create.id || mongooseTypes.ObjectId();
 
             prepared.push({
               data: {
