@@ -51,7 +51,43 @@ const composeDerivativeFields = ({
       : []
     : [];
 
-  return [...filteredFields, ...addFields];
+  const allFields = [...filteredFields, ...addFields];
+
+  // eslint-disable-next-line no-nested-ternary
+  const freezedFields = derivative
+    ? // eslint-disable-next-line no-nested-ternary
+      derivative[suffix].freezedFields
+      ? derivative[suffix].freezedFields[firstThingName] || []
+      : []
+    : [];
+
+  const allFieldsFreezed = !freezedFields.length
+    ? allFields
+    : allFields.map((field) =>
+        freezedFields.includes(field.name)
+          ? // $FlowFixMe
+            { ...field, freeze: true }
+          : { ...field, freeze: false },
+      );
+
+  // eslint-disable-next-line no-nested-ternary
+  const unfreezedFields = derivative
+    ? // eslint-disable-next-line no-nested-ternary
+      derivative[suffix].unfreezedFields
+      ? derivative[suffix].unfreezedFields[firstThingName] || []
+      : []
+    : [];
+
+  const allFieldsUnfreezed = !unfreezedFields.length
+    ? allFieldsFreezed
+    : allFieldsFreezed.map((field) =>
+        unfreezedFields.includes(field.name)
+          ? // $FlowFixMe
+            { ...field, freeze: false }
+          : { ...field, freeze: true },
+      );
+
+  return allFieldsUnfreezed;
 };
 
 export default composeDerivativeFields;
