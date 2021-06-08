@@ -4,6 +4,7 @@ import type { PreparedData } from '../../flowTypes';
 
 import addIdsToThing from '../../utils/addIdsToThing';
 import checkInventory from '../../../utils/checkInventory';
+import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
 import updatePeriphery from '../updatePeriphery';
 import executeBulkItems from '../composeStandardMutationResolver/executeBulkItems';
@@ -107,6 +108,7 @@ const workOutMutations = async (
   const { mongooseConn } = context;
 
   const session = transactions ? await mongooseConn.startSession() : null;
+
   try {
     if (session) {
       session.startTransaction();
@@ -130,7 +132,41 @@ const workOutMutations = async (
       session.endSession();
     }
 
-    throw new Error(err);
+    // second try to execute the same functionality in a new transaction
+
+    const session2 = transactions ? await mongooseConn.startSession() : null;
+
+    if (!session2) {
+      throw new Error(err);
+    }
+
+    await sleep(50);
+
+    try {
+      if (session2) {
+        session2.startTransaction();
+      }
+
+      if (periphery && periphery.size) {
+        await updatePeriphery(periphery, mongooseConn);
+      }
+
+      const coreWithCounters = await incCounters(core, mongooseConn);
+
+      await executeBulkItems(coreWithCounters, generalConfig, context, session2);
+
+      if (session2) {
+        await session2.commitTransaction();
+        session2.endSession();
+      }
+    } catch (err2) {
+      if (session2) {
+        await session2.abortTransaction();
+        session2.endSession();
+      }
+
+      throw new Error(err2);
+    }
   }
 
   const finalResults = [];
