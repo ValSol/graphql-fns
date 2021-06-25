@@ -307,7 +307,7 @@ describe('createDeleteFilteredThingsMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await sleep(250);
+    await sleep(500);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

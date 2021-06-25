@@ -159,8 +159,8 @@ const processCreateInputData = (
     return Object.keys(data2).reduce((prev, key) => {
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
-        prev[key] = null; // eslint-disable-line no-param-reassign
-        return prev;
+        if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
+        prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
       }
 
       if (relationalFieldsObject[key]) {
@@ -171,7 +171,11 @@ const processCreateInputData = (
           );
         }
         if (!array && data2[key].connect === null) {
-          prev[key] = null; // eslint-disable-line no-param-reassign
+          if (processingKind === 'update') {
+            if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
+            prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+          }
+
           return prev;
         }
         if (data2[key].connect) {
@@ -221,7 +225,11 @@ const processCreateInputData = (
           );
         }
         if (!array && data2[key].connect === null) {
-          prev[key] = null; // eslint-disable-line no-param-reassign
+          if (processingKind === 'update') {
+            if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
+            prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+          }
+
           return prev;
         }
         if (data2[key].connect) {
@@ -430,12 +438,15 @@ const processCreateInputData = (
       first = false;
       if (processingKind === 'update') {
         // $FlowFixMe
-        const { _id, ...$set } = document;
+        const { _id, $unset, ...$set } = document;
+        const update = {};
+        if ($set) update.$set = $set;
+        if ($unset) update.$unset = $unset;
         item = [
           {
             updateOne: {
               filter: { _id },
-              update: { $set },
+              update,
             },
           },
         ];

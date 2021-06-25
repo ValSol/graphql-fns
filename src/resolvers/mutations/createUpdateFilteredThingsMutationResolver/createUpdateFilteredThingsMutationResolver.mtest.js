@@ -316,7 +316,7 @@ describe('createUpdateFilteredThingsMutationResolver', () => {
       expect(createdFriend3.lastName).toBe(dataForUpdate.friend.create.lastName);
       expect(createdFriend3.friend).toEqual(undefined);
 
-      expect(updatedPerson3.sibling).toBe(null);
+      expect(updatedPerson3.sibling).toBe(undefined);
       expect(Boolean(updatedPerson3.friend)).toBe(true);
       expect(updatedPerson3.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson3.lastName).toBe(dataForUpdate.lastName);
@@ -345,8 +345,8 @@ describe('createUpdateFilteredThingsMutationResolver', () => {
       expect(createdFriend4.lastName).toBe(dataForUpdate3.friend.create.lastName);
       expect(createdFriend4.friend).toEqual(undefined);
 
-      expect(updatedPerson4.sibling).toBe(null);
-      expect(updatedPerson4.friend).toBe(null);
+      expect(updatedPerson4.sibling).toBe(undefined);
+      expect(updatedPerson4.friend).toBe(undefined);
       expect(updatedPerson4.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson4.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson4.locations.length).toBe(7);
@@ -768,12 +768,12 @@ describe('createUpdateFilteredThingsMutationResolver', () => {
       { mongooseConn, pubsub },
     );
     expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
-    expect(updatedExample3.textField2).toBe(dataForUpdate3.textField2);
+    expect(updatedExample3.textField2).toBe(undefined);
 
     const updatedExample31 = await Example.findById(id);
     const updatedExample32 = updatedExample31.toObject();
     expect(updatedExample32.textField1).toBe(dataForUpdate3.textField1);
-    expect(updatedExample32.textField2).toBe(dataForUpdate3.textField2);
+    expect(updatedExample32.textField2).toBe(undefined);
   });
 
   test('should create mutation update thing resolver to update embedded array field', async () => {
