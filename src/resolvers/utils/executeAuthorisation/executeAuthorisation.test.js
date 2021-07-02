@@ -24,9 +24,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
-      const getCredentials = () => Promise.resolve({ rights: [] });
+      const getActionFilter = () => Promise.resolve({ '': [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -35,9 +35,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'thing', 'User'];
-      const getCredentials = () => Promise.resolve({ rights: [] });
+      const getActionFilter = () => Promise.resolve({ '': [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -53,9 +53,9 @@ describe('executeAuthorisation', () => {
 
     test('should true as unauthorized', async () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
-      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
+      const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -64,9 +64,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'things', 'Post'];
-      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
+      const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -75,9 +75,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'things', 'User'];
-      const getCredentials = () => Promise.resolve({ rights: ['guest'] });
+      const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -90,13 +90,14 @@ describe('executeAuthorisation', () => {
       '': { name: '', include: { Query: { thingForView: ['Post'] } } },
       guest: { name: 'guest', include: { Query: { thingsForView: ['Post'] } } },
       editor: { name: 'editor', include: { Query: { thingsForEdit: true } } },
+      toggler: { name: 'editor', include: { Query: { thingsForEdit: true } } },
     };
 
     test('should return true', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ rights: ['editor:Restaurant'] });
+      const getActionFilter = () => Promise.resolve({ editor: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -105,9 +106,9 @@ describe('executeAuthorisation', () => {
 
     test('should return false', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ rights: ['editor:Hotel'] });
+      const getActionFilter = () => Promise.resolve({});
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -116,9 +117,9 @@ describe('executeAuthorisation', () => {
 
     test('should return true 2', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () => Promise.resolve({ rights: ['editor'] });
+      const getActionFilter = () => Promise.resolve({ editor: [] });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -127,18 +128,35 @@ describe('executeAuthorisation', () => {
 
     test('should return true with filter', async () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
-      const getCredentials = () =>
+      const getActionFilter = () =>
         Promise.resolve({
-          rights: [
-            'editor:Restaurant:{"editors":"12345"}',
-            'editor:Restaurant:{"cuisines":"Albanian"}',
-          ],
+          editor: [{ editors: '12345' }, { cuisines: 'Albanian' }],
         });
 
-      const serversideConfig: ServersideConfig = { getCredentials, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [{ editors: '12345' }, { cuisines: 'Albanian' }];
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('should return true with filter', async () => {
+      const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
+      const getActionFilter = () =>
+        Promise.resolve({
+          editor: [{ editors: '12345' }, { cuisines: 'Albanian' }],
+          toggler: [{ editors: '54321' }, { cuisines_ne: 'Albanian' }],
+        });
+
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+
+      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
+      const expectedResult = [
+        { editors: '12345' },
+        { cuisines: 'Albanian' },
+        { editors: '54321' },
+        { cuisines_ne: 'Albanian' },
+      ];
       expect(result).toEqual(expectedResult);
     });
   });

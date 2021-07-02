@@ -695,8 +695,11 @@ export type ServersideConfig = {
     },
   },
 
-  +inventoryByRights?: InventoryByRights, // "inventoryByRights" & "getCredentials" are mutualy used
-  +getCredentials?: (context: Object) => Promise<{ rights: Array<string> }>,
+  +inventoryByRights?: InventoryByRights, // "inventoryByRights" & "getActionFilter" are mutualy used
+  +getActionFilter?: (
+    thingName: string,
+    context: Object,
+  ) => Promise<{ [reight: string]: Array<Object> }>,
   +saveFiles?: {
     [fileFieldConfigName: string]: (
       file: Object,

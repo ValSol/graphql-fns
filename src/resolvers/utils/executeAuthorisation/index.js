@@ -5,21 +5,21 @@ import type { ServersideConfig, ThreeSegmentInventoryChain } from '../../../flow
 import checkInventory from '../../../utils/checkInventory';
 
 const errMsg = (attr) =>
-  `"inventoryByRights" & "getCredentials" must be mutually setted, but "${attr}" is undefined!`;
+  `"inventoryByRights" & "getActionFilter" must be mutually setted, but "${attr}" is undefined!`;
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   context: Object,
   serversideConfig: ServersideConfig,
 ): Promise<null | Array<Object>> => {
-  const { inventoryByRights, getCredentials } = serversideConfig;
-  if (!inventoryByRights && !getCredentials) return [];
+  const { inventoryByRights, getActionFilter } = serversideConfig;
+  if (!inventoryByRights && !getActionFilter) return [];
 
   if (!inventoryByRights) {
     throw new TypeError(errMsg('inventoryByRights'));
   }
-  if (!getCredentials) {
-    throw new TypeError(errMsg('getCredentials'));
+  if (!getActionFilter) {
+    throw new TypeError(errMsg('getActionFilter'));
   }
   if (!inventoryByRights['']) {
     throw new TypeError(errMsg('Check for no rights have to be!'));
@@ -27,31 +27,36 @@ const executeAuthorisation = async (
 
   if (checkInventory(inventoryChain, inventoryByRights[''])) return [];
 
-  const { rights } = await getCredentials(context);
+  const [, , thingName] = inventoryChain;
+
+  const filterObject = await getActionFilter(thingName, context);
 
   const allRights = Object.keys(inventoryByRights);
-  rights.forEach((compositeRight) => {
-    const [right] = compositeRight.split(':');
+  const rights = Object.keys(filterObject);
+
+  if (!rights.length) return null;
+
+  rights.forEach((right) => {
     if (!allRights.includes(right)) {
       throw new Error(`Got unused in "inventoryByRights" right: "${right}"!`);
     }
   });
 
   let authResult = null;
-  rights.forEach((compositeRight) => {
-    const [right, thingName, ...stringifiedFilter] = compositeRight.split(':');
 
-    if (
-      checkInventory(inventoryChain, inventoryByRights[right]) &&
-      (!thingName || thingName === inventoryChain[2])
-    ) {
-      if (!authResult) authResult = [];
-      if (stringifiedFilter.length) {
-        const filter = JSON.parse(stringifiedFilter.join(':'));
-        authResult.push(filter);
+  for (let i = 0; i < rights.length; i += 1) {
+    const right = rights[i];
+
+    if (checkInventory(inventoryChain, inventoryByRights[right])) {
+      if (!filterObject[right].length) {
+        return [];
       }
+
+      if (!authResult) authResult = [];
+
+      authResult.push(...filterObject[right]);
     }
-  });
+  }
 
   const [methodType, methodName, configName] = inventoryChain;
 
