@@ -54,7 +54,9 @@ const executeAuthorisation = async (
 
       if (!authResult) authResult = [];
 
-      authResult.push(...filterObject[right]);
+      if (filterObject[right].length) {
+        authResult.push(...filterObject[right]);
+      }
     }
   }
 

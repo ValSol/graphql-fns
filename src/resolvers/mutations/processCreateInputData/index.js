@@ -484,7 +484,9 @@ const processCreateInputData = (
 
     const coreItem = core.get(config);
     if (coreItem) {
-      coreItem.push(...item);
+      if (item.length) {
+        coreItem.push(...item);
+      }
     } else {
       core.set(config, [...item]);
     }

@@ -32,15 +32,14 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!whereOne.length) return [];
 
-  const toCreate = false;
-
+  const processingKind = 'update';
   for (let i = 0; i < data.length; i += 1) {
     // eslint-disable-next-line no-await-in-loop
     const allowCreate = await checkData(
-      data[i],
+      { data: data[i], whereOne: whereOne[i] },
       filter,
       thingConfig,
-      toCreate,
+      processingKind,
       generalConfig,
       serversideConfig,
       context,

@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../../flowTypes';
 
-import extractExternalReferences from './extractExternalReferences';
+import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
 
-describe('extractExternalReferences util', () => {
+describe('extractMissingAndPushDataFields util', () => {
   const accessConfig: ThingConfig = {
     name: 'Access',
 
@@ -77,6 +77,15 @@ describe('extractExternalReferences util', () => {
 
     textFields: [{ name: 'slug' }],
 
+    enumFields: [
+      {
+        name: 'cuisines',
+        enumName: 'Cuisines',
+        array: true,
+        index: true,
+      },
+    ],
+
     relationalFields: [
       {
         name: 'access',
@@ -86,81 +95,63 @@ describe('extractExternalReferences util', () => {
     ],
   });
 
-  test('should return not modified query', () => {
+  test('should return empty object', () => {
     const data = {
       slug: 'Post slug',
     };
     const filter = [{}];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingAndPushDataFields(data, filter, restaurantConfig);
 
-    const expectedResult = [];
+    const expectedResult = {};
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return external references', () => {
+  test('should return empty object 2', () => {
     const data = {
       slug: 'Post slug',
       restaurant: { connect: 'restaurantId' },
     };
     const filter = [{ restaurant_: { access_: { postCreators: 'userId' } } }];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingAndPushDataFields(data, filter, postConfig);
 
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-    ];
+    const expectedResult = {};
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return external references 2', () => {
+  test('should return projection', () => {
     const data = {
       slug: 'Post slug',
       restaurant: { connect: 'restaurantId' },
-      restaurants: { connect: ['restaurantId-1', 'restaurantId-2'] },
+    };
+    const filter = [{ restaurant_: { access_: { postCreators: 'userId' } }, restaurants: [] }];
+
+    const result = extractMissingAndPushDataFields(data, filter, postConfig);
+
+    const expectedResult = { _id: 1, restaurants: 1 };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return projection 2', () => {
+    const data = {
+      restaurant: { connect: 'restaurantId' },
+      restaurants: ['restaurantId2'],
     };
     const filter = [
       {
         restaurant_: { access_: { postCreators: 'userId' } },
-        restaurants_: { access_: { postEditors: 'userId' } },
+        restaurants_in: ['restaurantId2'],
+        slug: 'test',
       },
     ];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingAndPushDataFields(data, filter, postConfig);
 
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-      ['Restaurant', 'restaurantId-1', [{ access_: { postEditors: 'userId' } }]],
-      ['Restaurant', 'restaurantId-2', [{ access_: { postEditors: 'userId' } }]],
-    ];
-
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should return external references 3', () => {
-    const data = {
-      slug: 'Post slug',
-      restaurant: { connect: 'restaurantId' },
-      restaurants: { connect: ['restaurantId-1', 'restaurantId-2'] },
-    };
-    const filter = [
-      {
-        AND: [
-          { restaurant_: { access_: { postCreators: 'userId' } } },
-          { restaurants_: { access_: { postEditors: 'userId' } } },
-        ],
-      },
-    ];
-
-    const result = extractExternalReferences(data, filter, postConfig);
-
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-      ['Restaurant', 'restaurantId-1', [{ access_: { postEditors: 'userId' } }]],
-      ['Restaurant', 'restaurantId-2', [{ access_: { postEditors: 'userId' } }]],
-    ];
+    const expectedResult = { _id: 1, restaurants: 1, slug: 1 };
 
     expect(result).toEqual(expectedResult);
   });

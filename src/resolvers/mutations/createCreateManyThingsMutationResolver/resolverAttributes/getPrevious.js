@@ -2,10 +2,11 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import executeAuthorisation from '../../../utils/executeAuthorisation';
+import checkData from '../../checkData';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { thingConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { context, parentFilter } = resolverArg;
+  const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
+  const { args, context, parentFilter } = resolverArg;
   const { name } = thingConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
@@ -17,6 +18,23 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     ? parentFilter
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
+
+  const { data } = args;
+  const processingKind = 'create';
+  for (let i = 0; i < data.length; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    const allowCreate = await checkData(
+      { data: data[i] },
+      filter,
+      thingConfig,
+      processingKind,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
+
+    if (!allowCreate) return null;
+  }
 
   return filter && [];
 };

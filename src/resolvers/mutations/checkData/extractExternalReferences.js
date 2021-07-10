@@ -2,7 +2,7 @@
 import type { ThingConfig } from '../../../flowTypes';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 
-const extract = (data, toCreate, filterObj, fieldsObj, result) => {
+const extract = (data, filterObj, fieldsObj, result) => {
   // --- this piece of code must to run along with the piece of code in patchExternalReferences
 
   Object.keys(filterObj).forEach((key) => {
@@ -17,10 +17,6 @@ const extract = (data, toCreate, filterObj, fieldsObj, result) => {
         array,
         config: { name },
       } = attributes;
-
-      if (!data[key2] && !toCreate) {
-        return;
-      }
 
       const {
         [key2]: { connect },
@@ -38,29 +34,24 @@ const extract = (data, toCreate, filterObj, fieldsObj, result) => {
         result.push([name, connect, [filterObj[key]]]);
       }
     } else if (key === 'AND' || key === 'OR') {
-      filterObj[key].forEach((filterObj2) =>
-        extract(data, toCreate, filterObj2, fieldsObj, result),
-      );
+      filterObj[key].forEach((filterObj2) => extract(data, filterObj2, fieldsObj, result));
     }
   });
-
-  // ---
 };
 
-const patchExternalReferences = (
+const extractExternalReferences = (
   data: { [key: string]: any },
   filter: Array<Object>,
   thingConfig: ThingConfig,
-  toCreate: boolean,
 ): Array<[string, string, [Object]]> => {
   const fieldsObj = composeFieldsObject(thingConfig);
 
   const result = [];
 
   filter.forEach((filterObj) => {
-    extract(data, toCreate, filterObj, fieldsObj, result);
+    extract(data, filterObj, fieldsObj, result);
   });
   return result;
 };
 
-export default patchExternalReferences;
+export default extractExternalReferences;

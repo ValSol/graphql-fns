@@ -92,7 +92,7 @@ describe('patchExternalReferences util', () => {
     ],
   });
 
-  test('should return external references to update 2', () => {
+  test('should return true', () => {
     const data = {
       restaurants: ['5f10131484fbb2003bf1b8fb'],
       ukTitle: 'Тест українською 23',

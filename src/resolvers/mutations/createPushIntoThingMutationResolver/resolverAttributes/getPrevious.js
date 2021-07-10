@@ -6,7 +6,7 @@ import checkInventory from '../../../../utils/checkInventory';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import createThing from '../../../../mongooseModels/createThing';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-// import checkData from '../../checkData';
+import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
@@ -28,18 +28,18 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     whereOne: { id },
   } = args;
 
-  // const toCreate = false;
-  // const allowCreate = await checkData(
-  //   data,
-  //   filter,
-  //   thingConfig,
-  //   toCreate,
-  //   generalConfig,
-  //   serversideConfig,
-  //   context,
-  // );
+  const processingKind = 'push';
+  const allowCreate = await checkData(
+    args,
+    filter,
+    thingConfig,
+    processingKind,
+    generalConfig,
+    serversideConfig,
+    context,
+  );
 
-  // if (!allowCreate) return null;
+  if (!allowCreate) return null;
 
   const { mongooseConn } = context;
 

@@ -19,14 +19,12 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!filter) return null;
 
-  const { data } = args;
-
-  const toCreate = true;
+  const processingKind = 'create';
   const allowCreate = await checkData(
-    data,
+    args,
     filter,
     thingConfig,
-    toCreate,
+    processingKind,
     generalConfig,
     serversideConfig,
     context,

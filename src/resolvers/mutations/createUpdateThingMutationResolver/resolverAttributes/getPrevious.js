@@ -23,14 +23,14 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!filter) return null;
 
-  const { data, whereOne } = args;
+  const { whereOne } = args;
 
-  const toCreate = false;
+  const processingKind = 'update';
   const allowCreate = await checkData(
-    data,
+    args,
     filter,
     thingConfig,
-    toCreate,
+    processingKind,
     generalConfig,
     serversideConfig,
     context,

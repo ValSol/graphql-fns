@@ -25,21 +25,6 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const { data, near, where, search } = args;
 
-  const toCreate = false;
-
-  // eslint-disable-next-line no-await-in-loop
-  const allowCreate = await checkData(
-    data,
-    filter,
-    thingConfig,
-    toCreate,
-    generalConfig,
-    serversideConfig,
-    context,
-  );
-
-  if (!allowCreate) return [];
-
   const { mongooseConn } = context;
 
   const Thing = await createThing(mongooseConn, thingConfig, enums);
@@ -89,7 +74,27 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const previousThings = await Thing.find(conditions, duplexFieldsProjection, { lean: true });
 
-  return previousThings;
+  const previousThings2 = [];
+  const processingKind = 'update';
+  for (let i = 0; i < previousThings.length; i += 1) {
+    const previousThing = previousThings[i];
+    const { _id: id } = previousThing;
+
+    // eslint-disable-next-line no-await-in-loop
+    const allowCreate = await checkData(
+      { data, whereOne: { id } },
+      filter,
+      thingConfig,
+      processingKind,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
+
+    if (allowCreate) previousThings2.push(previousThing);
+  }
+
+  return previousThings2;
 };
 
 export default get;

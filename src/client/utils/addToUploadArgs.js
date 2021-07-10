@@ -33,10 +33,10 @@ const addToUploadArgs = async (
 
   const index = targets.indexOf(fileFieldName);
   if (index === -1) {
-    files.push(...newFiles);
+    if (newFiles.length) files.push(...newFiles);
     targets.push(fileFieldName);
     counts.push(newFiles.length);
-    hashes.push(...newHashes);
+    if (newHashes.length) hashes.push(...newHashes);
   } else {
     const hashIndex = counts.reduce((prev, count, i) => (i > index ? prev : prev + count), 0);
     hashes.splice(hashIndex, 0, ...newHashes);

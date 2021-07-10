@@ -3,9 +3,9 @@
 
 import type { ThingConfig } from '../../../flowTypes';
 
-import extractExternalReferences from './extractExternalReferences';
+import extractMissingDataFields from './extractMissingDataFields';
 
-describe('extractExternalReferences util', () => {
+describe('extractMissingDataFields util', () => {
   const accessConfig: ThingConfig = {
     name: 'Access',
 
@@ -92,9 +92,9 @@ describe('extractExternalReferences util', () => {
     };
     const filter = [{}];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingDataFields(data, filter);
 
-    const expectedResult = [];
+    const expectedResult = {};
 
     expect(result).toEqual(expectedResult);
   });
@@ -106,11 +106,9 @@ describe('extractExternalReferences util', () => {
     };
     const filter = [{ restaurant_: { access_: { postCreators: 'userId' } } }];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingDataFields(data, filter);
 
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-    ];
+    const expectedResult = {};
 
     expect(result).toEqual(expectedResult);
   });
@@ -128,13 +126,9 @@ describe('extractExternalReferences util', () => {
       },
     ];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingDataFields(data, filter);
 
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-      ['Restaurant', 'restaurantId-1', [{ access_: { postEditors: 'userId' } }]],
-      ['Restaurant', 'restaurantId-2', [{ access_: { postEditors: 'userId' } }]],
-    ];
+    const expectedResult = {};
 
     expect(result).toEqual(expectedResult);
   });
@@ -154,13 +148,29 @@ describe('extractExternalReferences util', () => {
       },
     ];
 
-    const result = extractExternalReferences(data, filter, postConfig);
+    const result = extractMissingDataFields(data, filter);
 
-    const expectedResult = [
-      ['Restaurant', 'restaurantId', [{ access_: { postCreators: 'userId' } }]],
-      ['Restaurant', 'restaurantId-1', [{ access_: { postEditors: 'userId' } }]],
-      ['Restaurant', 'restaurantId-2', [{ access_: { postEditors: 'userId' } }]],
+    const expectedResult = {};
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return external references for update', () => {
+    const data = {
+      slug: 'Post slug',
+    };
+    const filter = [
+      {
+        AND: [
+          { show: true, restaurant_: { access_: { postCreators: 'userId' } } },
+          { restaurants_: { access_: { postEditors: 'userId' } } },
+        ],
+      },
     ];
+
+    const result = extractMissingDataFields(data, filter);
+
+    const expectedResult = { _id: 1, show: 1, restaurant: 1, restaurants: 1 };
 
     expect(result).toEqual(expectedResult);
   });

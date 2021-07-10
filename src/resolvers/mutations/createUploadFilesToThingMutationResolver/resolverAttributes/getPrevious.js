@@ -41,7 +41,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const filesUploaded = await Promise.all(files);
 
-  const toCreate = false;
+  const processingKind = 'update';
   const mockFilesData = composeMockFilesData(
     options,
     data,
@@ -51,10 +51,10 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   );
   // check filter upfront data that uploading so if there is limit
   const allowCreate = await checkData(
-    mockFilesData,
+    { data: mockFilesData, whereOne },
     filter,
     thingConfig,
-    toCreate,
+    processingKind,
     generalConfig,
     serversideConfig,
     context,
