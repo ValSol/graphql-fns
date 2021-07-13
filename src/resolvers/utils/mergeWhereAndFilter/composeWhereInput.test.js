@@ -352,4 +352,62 @@ describe('composeWhereInput', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return result for tree for relational where', () => {
+    const restaurantLevelConfig: ThingConfig = {
+      name: 'RestaurantLevel',
+
+      textFields: [
+        {
+          name: 'submitter',
+          index: true,
+          freeze: true,
+        },
+      ],
+
+      intFields: [
+        {
+          name: 'servicePackage',
+          required: true,
+          index: true,
+        },
+        { name: 'termIndex' },
+      ],
+    };
+
+    const where = {
+      OR: [
+        { submitter: null },
+        { submitter_exists: false },
+        { submitter: '5efb534ec7761f003b58646a' },
+      ],
+    };
+
+    const result = composeWhereInput(where, restaurantLevelConfig);
+
+    const expectedResult = {
+      lookups: [],
+      where: {
+        $or: [
+          {
+            submitter: {
+              $eq: null,
+            },
+          },
+          {
+            submitter: {
+              $exists: false,
+            },
+          },
+          {
+            submitter: {
+              $eq: '5efb534ec7761f003b58646a',
+            },
+          },
+        ],
+      },
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
 });

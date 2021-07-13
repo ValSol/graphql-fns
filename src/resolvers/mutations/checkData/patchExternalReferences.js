@@ -8,7 +8,6 @@ const patch = (externalReferences, data, filterObj, fieldsObj) => {
   // --- this piece of code must to run along with the piece of code in extractExternalReferences
 
   Object.keys(filterObj).forEach((key) => {
-    const [baseKey] = key.split('_');
     if (key.endsWith('_')) {
       const key2 = key.slice(0, -1);
       const { attributes } = fieldsObj[key2];
@@ -39,19 +38,20 @@ const patch = (externalReferences, data, filterObj, fieldsObj) => {
         }
       }
     } else if (key === 'AND' || key === 'OR') {
-      updatedFilterObj[key] = [];
+      const tmpArr = [];
       filterObj[key].forEach((filterObj2) => {
         const updatedFilterObjItem = patch(externalReferences, data, filterObj2, fieldsObj);
         if (Object.keys(updatedFilterObjItem).length) {
-          updatedFilterObj[key].push(updatedFilterObjItem);
+          tmpArr.push(updatedFilterObjItem);
         }
       });
-    } else if (data[baseKey] !== undefined) {
+      if (tmpArr.length) {
+        updatedFilterObj[key] = tmpArr;
+      }
+    } else {
       updatedFilterObj[key] = filterObj[key];
     }
   });
-
-  // ---
 
   return updatedFilterObj;
 };
