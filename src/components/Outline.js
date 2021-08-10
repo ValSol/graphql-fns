@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => {
       borderRadius: theme.shape.borderRadius,
       borderStyle: 'solid',
       borderWidth: 1,
+      borderColor: theme.palette.text.disabled,
       marginBottom: theme.spacing(1),
       // Match the Input Label
       transition: theme.transitions.create([`padding-${align}`, 'border-color', 'border-width'], {
