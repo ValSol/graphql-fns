@@ -56,7 +56,7 @@ const getMissingData = async ({
     } else {
       const { kind } = fieldsObj[key];
       if (kind === 'duplexFields' || kind === 'relationalFields') {
-        result[key] = { connect: thing2[key] };
+        result[key] = { connect: thing2[key] || null };
       } else {
         result[key] = thing2[key];
       }
