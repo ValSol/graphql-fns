@@ -243,7 +243,9 @@ const composeDerivativeConfig = (
             ? store[`${currentConfig.name}${suffix2}`]
             : composeDerivativeConfig(derivative[suffix2], currentConfig, generalConfig);
           if (!config) {
-            throw new TypeError('Can not set derivative config!');
+            throw new TypeError(
+              `Can not set derivative config for thingName: "${currentConfig.name}" & derivative suffix:"${suffix2}"!`,
+            );
           }
 
           // $FlowFixMe
