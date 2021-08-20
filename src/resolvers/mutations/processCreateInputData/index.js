@@ -160,7 +160,10 @@ const processCreateInputData = (
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
         if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
+
         prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+
+        return prev;
       }
 
       if (relationalFieldsObject[key]) {
