@@ -68,7 +68,6 @@ describe('createDeleteThingMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
-          required: true,
         },
         {
           name: 'location',

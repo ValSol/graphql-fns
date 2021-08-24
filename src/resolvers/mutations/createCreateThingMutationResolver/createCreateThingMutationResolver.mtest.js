@@ -329,6 +329,7 @@ describe('createCreateThingMutationResolver', () => {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          required: true,
         },
       ],
     };
@@ -349,7 +350,7 @@ describe('createCreateThingMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
-          required: true,
+          // required: true,
         },
         {
           name: 'location',

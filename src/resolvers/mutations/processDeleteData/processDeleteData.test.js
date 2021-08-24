@@ -47,7 +47,6 @@ describe('processDeleteData', () => {
           name: 'spouse',
           oppositeName: 'spouse',
           config: personConfig,
-          required: true,
         },
         {
           name: 'location',
@@ -205,7 +204,6 @@ describe('processDeleteData', () => {
           name: 'spouse',
           oppositeName: 'spouse',
           config: personConfig,
-          required: true,
         },
         {
           name: 'location',

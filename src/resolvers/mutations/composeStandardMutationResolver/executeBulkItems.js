@@ -23,7 +23,7 @@ const executeBulkItems = async (
 
     const optimizedBulkItems = optimizeBulk(bulkItems);
     if (optimizedBulkItems.length) {
-      promises.push(Thing.bulkWrite(optimizedBulkItems, { session }));
+      promises.push(Thing.bulkWrite(optimizedBulkItems, { session, strict: true }));
     }
   });
   return Promise.all(promises);

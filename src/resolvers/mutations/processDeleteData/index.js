@@ -1,6 +1,8 @@
 // @flow
 import type { ThingConfig } from '../../../flowTypes';
 
+import composeFieldsObject from '../../../utils/composeFieldsObject';
+
 type ProcessDeleteDataResult = Map<ThingConfig, Array<Object>>;
 
 const processDeleteData = (
@@ -65,6 +67,14 @@ const processDeleteData = (
                   },
             },
           };
+
+          const fieldsObject = composeFieldsObject(config);
+
+          if (item.updateOne.update.$unset && fieldsObject[oppositeName].attributes.required) {
+            throw new TypeError(
+              `5 Try unset required field: "${oppositeName}" of thing: "${config.name}"!`,
+            );
+          }
           const resultItem = core.get(config);
           if (resultItem) {
             resultItem.push(item);
@@ -92,6 +102,14 @@ const processDeleteData = (
                 },
           },
         };
+
+        const fieldsObject = composeFieldsObject(config);
+
+        if (item.updateOne.update.$unset && fieldsObject[oppositeName].attributes.required) {
+          throw new TypeError(
+            `6 Try unset required field: "${oppositeName}" of thing: "${config.name}"!`,
+          );
+        }
         const resultItem = core.get(config);
         if (resultItem) {
           resultItem.push(item);

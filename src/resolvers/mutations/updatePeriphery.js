@@ -1,6 +1,7 @@
 // @flow
 import type { Periphery } from '../../flowTypes';
 
+import composeFieldsObject from '../../utils/composeFieldsObject';
 import createThingSchema from '../../mongooseModels/createThingSchema';
 
 const updatePeriphery = async (
@@ -21,7 +22,15 @@ const updatePeriphery = async (
       const Thing2 = mongooseConn.model(`${configName2}_Thing`, thingSchema2);
 
       promises.push(
-        Thing.find({ _id: { $in: oppositeIds } }, { [oppositeName]: 1 }).then((items) => {
+        Thing.find(
+          {
+            _id: { $in: oppositeIds },
+            [oppositeName]: { $exists: true, $ne: null },
+          },
+          {
+            [oppositeName]: 1,
+          },
+        ).then((items) => {
           const bulkItems = items
             .map((item, i) =>
               item
@@ -46,7 +55,17 @@ const updatePeriphery = async (
             )
             .filter(Boolean);
 
-          return Thing2.bulkWrite(bulkItems, { session });
+          if (bulkItems.some((item) => item.updateOne.update.$unset)) {
+            const fieldsObject = composeFieldsObject(oppositeConfig);
+
+            if (fieldsObject[name].attributes.required) {
+              throw new TypeError(
+                `1 Try unset required field: "${name}" of thing: "${oppositeConfig.name}"!`,
+              );
+            }
+          }
+
+          return Thing2.bulkWrite(bulkItems, { session, strict: true });
         }),
       );
     });

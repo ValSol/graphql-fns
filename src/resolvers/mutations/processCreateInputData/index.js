@@ -6,6 +6,7 @@ import { Types } from 'mongoose';
 import type { ThingConfig } from '../../../flowTypes';
 import type { PreparedData } from '../../flowTypes';
 
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
@@ -57,6 +58,8 @@ const processCreateInputData = (
       relationalFields,
       textFields,
     } = thingConfig2;
+
+    const fieldsObject = composeFieldsObject(thingConfig2);
 
     const relationalFieldsObject = {};
     if (relationalFields) {
@@ -159,6 +162,15 @@ const processCreateInputData = (
     return Object.keys(data2).reduce((prev, key) => {
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
+        if (fieldsObject[key].attributes.required) {
+          throw new TypeError(
+            `2 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+          );
+        }
+        if (fieldsObject[key].attributes.array) {
+          throw new TypeError(`Try unset array field: "${key}" of thing: "${thingConfig2.name}"!`);
+        }
+
         if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
 
         prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
@@ -175,6 +187,11 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
+            if (fieldsObject[key].attributes.required) {
+              throw new TypeError(
+                `3 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+              );
+            }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
             prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
           }
@@ -229,6 +246,11 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
+            if (fieldsObject[key].attributes.required) {
+              throw new TypeError(
+                `4 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+              );
+            }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
             prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
           }

@@ -70,7 +70,6 @@ describe('createUpdateThingMutationResolver', () => {
         {
           name: 'sibling',
           config: personConfig,
-          required: true,
         },
       ],
       duplexFields: [
@@ -78,7 +77,6 @@ describe('createUpdateThingMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
-          required: true,
         },
         {
           name: 'location',
