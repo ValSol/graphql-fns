@@ -164,7 +164,7 @@ const processCreateInputData = (
       if (processingKind === 'update' && data2[key] === null) {
         if (fieldsObject[key].attributes.required) {
           throw new TypeError(
-            `2 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+            `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
           );
         }
         if (fieldsObject[key].attributes.array) {
@@ -189,7 +189,7 @@ const processCreateInputData = (
           if (processingKind === 'update') {
             if (fieldsObject[key].attributes.required) {
               throw new TypeError(
-                `3 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+                `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
               );
             }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
@@ -248,7 +248,7 @@ const processCreateInputData = (
           if (processingKind === 'update') {
             if (fieldsObject[key].attributes.required) {
               throw new TypeError(
-                `4 Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
+                `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
               );
             }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign

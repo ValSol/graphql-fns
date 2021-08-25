@@ -5,57 +5,57 @@ import type { ServersideConfig, ThreeSegmentInventoryChain } from '../../../flow
 import checkInventory from '../../../utils/checkInventory';
 
 const errMsg = (attr) =>
-  `"inventoryByRights" & "getActionFilter" must be mutually setted, but "${attr}" is undefined!`;
+  `"inventoryByPermissions" & "getActionFilter" must be mutually setted, but "${attr}" is undefined!`;
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   context: Object,
   serversideConfig: ServersideConfig,
 ): Promise<null | Array<Object>> => {
-  const { inventoryByRights, getActionFilter } = serversideConfig;
-  if (!inventoryByRights && !getActionFilter) return [];
+  const { inventoryByPermissions, getActionFilter } = serversideConfig;
+  if (!inventoryByPermissions && !getActionFilter) return [];
 
-  if (!inventoryByRights) {
-    throw new TypeError(errMsg('inventoryByRights'));
+  if (!inventoryByPermissions) {
+    throw new TypeError(errMsg('inventoryByPermissions'));
   }
   if (!getActionFilter) {
     throw new TypeError(errMsg('getActionFilter'));
   }
-  if (!inventoryByRights['']) {
-    throw new TypeError(errMsg('Check for no rights have to be!'));
+  if (!inventoryByPermissions['']) {
+    throw new TypeError(errMsg('Check for no permissions have to be!'));
   }
 
-  if (checkInventory(inventoryChain, inventoryByRights[''])) return [];
+  if (checkInventory(inventoryChain, inventoryByPermissions[''])) return [];
 
   const [, , thingName] = inventoryChain;
 
   const filterObject = await getActionFilter(thingName, context);
 
-  const allRights = Object.keys(inventoryByRights);
-  const rights = Object.keys(filterObject);
+  const allPermissions = Object.keys(inventoryByPermissions);
+  const permissions = Object.keys(filterObject);
 
-  if (!rights.length) return null;
+  if (!permissions.length) return null;
 
-  rights.forEach((right) => {
-    if (!allRights.includes(right)) {
-      throw new Error(`Got unused in "inventoryByRights" right: "${right}"!`);
+  permissions.forEach((permission) => {
+    if (!allPermissions.includes(permission)) {
+      throw new Error(`Got unused in "inventoryByPermissions" permission: "${permission}"!`);
     }
   });
 
   let authResult = null;
 
-  for (let i = 0; i < rights.length; i += 1) {
-    const right = rights[i];
+  for (let i = 0; i < permissions.length; i += 1) {
+    const permission = permissions[i];
 
-    if (checkInventory(inventoryChain, inventoryByRights[right])) {
-      if (!filterObject[right].length) {
+    if (checkInventory(inventoryChain, inventoryByPermissions[permission])) {
+      if (!filterObject[permission].length) {
         return [];
       }
 
       if (!authResult) authResult = [];
 
-      if (filterObject[right].length) {
-        authResult.push(...filterObject[right]);
+      if (filterObject[permission].length) {
+        authResult.push(...filterObject[permission]);
       }
     }
   }

@@ -18,7 +18,7 @@ describe('executeAuthorisation', () => {
   });
 
   describe('unauthentificated user', () => {
-    const inventoryByRights = {
+    const inventoryByPermissions = {
       '': { name: '', include: { Query: { thing: ['Post'] } } },
     };
 
@@ -26,7 +26,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
       const getActionFilter = () => Promise.resolve({ '': [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -37,7 +37,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thing', 'User'];
       const getActionFilter = () => Promise.resolve({ '': [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -46,7 +46,7 @@ describe('executeAuthorisation', () => {
   });
 
   describe('guest user', () => {
-    const inventoryByRights = {
+    const inventoryByPermissions = {
       '': { name: '', include: { Query: { thing: ['Post'] } } },
       guest: { name: 'guest', include: { Query: { things: ['Post'] } } },
     };
@@ -55,7 +55,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thing', 'Post'];
       const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -66,7 +66,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'things', 'Post'];
       const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -77,7 +77,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'things', 'User'];
       const getActionFilter = () => Promise.resolve({ guest: [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -86,7 +86,7 @@ describe('executeAuthorisation', () => {
   });
 
   describe('editor user', () => {
-    const inventoryByRights = {
+    const inventoryByPermissions = {
       '': { name: '', include: { Query: { thingForView: ['Post'] } } },
       guest: { name: 'guest', include: { Query: { thingsForView: ['Post'] } } },
       editor: { name: 'editor', include: { Query: { thingsForEdit: true } } },
@@ -97,7 +97,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
       const getActionFilter = () => Promise.resolve({ editor: [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -108,7 +108,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
       const getActionFilter = () => Promise.resolve({});
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = null;
@@ -119,7 +119,7 @@ describe('executeAuthorisation', () => {
       const inventoryChain = ['Query', 'thingsForEdit', 'Restaurant'];
       const getActionFilter = () => Promise.resolve({ editor: [] });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [];
@@ -133,7 +133,7 @@ describe('executeAuthorisation', () => {
           editor: [{ editors: '12345' }, { cuisines: 'Albanian' }],
         });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [{ editors: '12345' }, { cuisines: 'Albanian' }];
@@ -148,7 +148,7 @@ describe('executeAuthorisation', () => {
           toggler: [{ editors: '54321' }, { cuisines_ne: 'Albanian' }],
         });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByRights };
+      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = [

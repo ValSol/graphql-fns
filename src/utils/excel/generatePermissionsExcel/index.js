@@ -33,11 +33,11 @@ const actionTypeToArgb = {
 const generateExcel = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  filePath: string = 'rights.xlsx',
+  filePath: string = 'permissions.xlsx',
 ) => {
   const { custom, derivative, inventory, thingConfigs } = generalConfig;
 
-  const inventoryByRights = serversideConfig.inventoryByRights || {
+  const inventoryByPermissions = serversideConfig.inventoryByPermissions || {
     'General Action List': undefined,
   };
 
@@ -52,7 +52,7 @@ const generateExcel = async (
   wb.created = new Date();
   wb.modified = new Date();
 
-  const rightNames = Object.keys(inventoryByRights);
+  const permissionNames = Object.keys(inventoryByPermissions);
 
   let dataFromDerivative = {
     derivativeActionNames: [],
@@ -93,8 +93,8 @@ const generateExcel = async (
     ...dataFromCustom.customActionTypes,
   };
 
-  rightNames.forEach((rightName) => {
-    const worksheetName = composeWorksheetName(rightName, wb);
+  permissionNames.forEach((permissionName) => {
+    const worksheetName = composeWorksheetName(permissionName, wb);
 
     const ws = wb.addWorksheet(worksheetName, {
       views: [{ state: 'frozen', xSplit: 1, ySplit: 1 }],
@@ -104,7 +104,7 @@ const generateExcel = async (
       actionNames: ordinaryActionNames,
       actionTypes: ordinaryActionTypes,
       inventory,
-      inventory2: inventoryByRights[rightName],
+      inventory2: inventoryByPermissions[permissionName],
       thingNames,
     });
 
@@ -120,7 +120,7 @@ const generateExcel = async (
         actionNames: derivativeActionNames,
         actionTypes: derivativeActionTypes,
         inventory,
-        inventory2: inventoryByRights[rightName],
+        inventory2: inventoryByPermissions[permissionName],
         thingNames,
         thingNamesByActions: thingNamesByDerivativeActions,
       });
@@ -134,7 +134,7 @@ const generateExcel = async (
         actionNames: customActionNames,
         actionTypes: customActionTypes,
         inventory,
-        inventory2: inventoryByRights[rightName],
+        inventory2: inventoryByPermissions[permissionName],
         thingNames,
         thingNamesByActions: thingNamesByCustomActions,
       });

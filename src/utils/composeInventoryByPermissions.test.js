@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { Inventory } from '../flowTypes';
 
-import composeInventoryByRights from './composeInventoryByRights';
+import composeInventoryByPermissions from './composeInventoryByPermissions';
 
-describe('composeInventoryByRights', () => {
+describe('composeInventoryByPermissions', () => {
   test('compose simple thingConfigs', () => {
     const empty: Inventory = {
       name: '',
@@ -104,7 +104,7 @@ describe('composeInventoryByRights', () => {
 
     const inventories = [empty, guest, informer, editor, publisher, toggler, creator];
 
-    const result = composeInventoryByRights(inventories);
+    const result = composeInventoryByPermissions(inventories);
 
     const expectedResult = { '': empty, guest, informer, editor, publisher, toggler, creator };
     expect(result).toEqual(expectedResult);

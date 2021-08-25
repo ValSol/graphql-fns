@@ -656,9 +656,9 @@ export type InventoryСhain =
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;
 
-export type InventoryByRights = {
-  // must be setted for all rights and plus for empty string ""
-  [right: string]: Inventory,
+export type InventoryByPermissions = {
+  // must be setted for all permissions and plus for empty string ""
+  [permission: string]: Inventory,
 };
 
 export type FileAttributes = {
@@ -695,7 +695,7 @@ export type ServersideConfig = {
     },
   },
 
-  +inventoryByRights?: InventoryByRights, // "inventoryByRights" & "getActionFilter" are mutualy used
+  +inventoryByPermissions?: InventoryByPermissions, // "inventoryByPermissions" & "getActionFilter" are mutualy used
   +getActionFilter?: (
     thingName: string,
     context: Object,

@@ -60,7 +60,7 @@ const updatePeriphery = async (
 
             if (fieldsObject[name].attributes.required) {
               throw new TypeError(
-                `1 Try unset required field: "${name}" of thing: "${oppositeConfig.name}"!`,
+                `Try unset required field: "${name}" of thing: "${oppositeConfig.name}"!`,
               );
             }
           }
