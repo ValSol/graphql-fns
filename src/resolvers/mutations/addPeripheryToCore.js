@@ -1,14 +1,15 @@
 // @flow
-import type { Periphery } from '../../flowTypes';
+import type { Periphery, ThingConfig } from '../../flowTypes';
 
-import composeFieldsObject from '../../utils/composeFieldsObject';
 import createThingSchema from '../../mongooseModels/createThingSchema';
+
+type Result = Map<ThingConfig, Array<Object>>;
 
 const updatePeriphery = async (
   periphery: Periphery,
+  core: Map<ThingConfig, Array<Object>>,
   mongooseConn: Object,
-  session: Object = null,
-): Promise<void> => {
+): Promise<Result> => {
   const promises = [];
   periphery.forEach((obj, config) => {
     const { name: configName } = config;
@@ -17,9 +18,6 @@ const updatePeriphery = async (
 
     Object.keys(obj).forEach((oppositeName) => {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];
-      const { name: configName2 } = oppositeConfig;
-      const thingSchema2 = createThingSchema(oppositeConfig);
-      const Thing2 = mongooseConn.model(`${configName2}_Thing`, thingSchema2);
 
       promises.push(
         Thing.find(
@@ -55,23 +53,21 @@ const updatePeriphery = async (
             )
             .filter(Boolean);
 
-          if (bulkItems.some((item) => item.updateOne.update.$unset)) {
-            const fieldsObject = composeFieldsObject(oppositeConfig);
-
-            if (fieldsObject[name].attributes.required) {
-              throw new TypeError(
-                `Try unset required field: "${name}" of thing: "${oppositeConfig.name}"!`,
-              );
-            }
+          const resultItem = core.get(oppositeConfig);
+          if (resultItem) {
+            bulkItems.reverse();
+            resultItem.unshift(...bulkItems);
+          } else {
+            core.set(oppositeConfig, bulkItems);
           }
-
-          return Thing2.bulkWrite(bulkItems, { session, strict: true });
         }),
       );
     });
   });
 
   await Promise.all(promises);
+
+  return core;
 };
 
 export default updatePeriphery;

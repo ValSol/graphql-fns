@@ -6,8 +6,9 @@ import addIdsToThing from '../../utils/addIdsToThing';
 import checkInventory from '../../../utils/checkInventory';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
-import updatePeriphery from '../updatePeriphery';
-import executeBulkItems from '../composeStandardMutationResolver/executeBulkItems';
+import addPeripheryToCore from '../addPeripheryToCore';
+import executeBulkItems from '../executeBulkItems';
+import optimizeBulkItems from '../optimizeBulkItems';
 import produceResult from '../composeStandardMutationResolver/produceResult';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
 
@@ -107,18 +108,18 @@ const workOutMutations = async (
   const { core, periphery } = preparedData;
   const { mongooseConn } = context;
 
-  const session = transactions ? await mongooseConn.startSession() : null;
+  const coreWithPeriphery =
+    periphery && periphery.size ? await addPeripheryToCore(periphery, core, mongooseConn) : core;
 
+  const optimizedCore = optimizeBulkItems(coreWithPeriphery);
+
+  const session = transactions ? await mongooseConn.startSession() : null;
   try {
     if (session) {
       session.startTransaction();
     }
 
-    if (periphery && periphery.size) {
-      await updatePeriphery(periphery, mongooseConn);
-    }
-
-    const coreWithCounters = await incCounters(core, mongooseConn);
+    const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
     await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
@@ -147,11 +148,7 @@ const workOutMutations = async (
         session2.startTransaction();
       }
 
-      if (periphery && periphery.size) {
-        await updatePeriphery(periphery, mongooseConn);
-      }
-
-      const coreWithCounters = await incCounters(core, mongooseConn);
+      const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
       await executeBulkItems(coreWithCounters, generalConfig, context, session2);
 

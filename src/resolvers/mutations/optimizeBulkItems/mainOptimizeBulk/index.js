@@ -37,7 +37,7 @@ const insertAfterDeleteAndIndexEqualLastInsert = (index, id, categorizedBulkOper
   return index === lastInsertIndex;
 };
 
-const optimizeBulk = (preparedData: Array<Object>): Array<Object> => {
+const mainOptimizeBulk = (preparedData: Array<Object>): Array<Object> => {
   const categorizedBulkOperations = categorizeBulkOperations(preparedData);
 
   const result = [];
@@ -92,4 +92,4 @@ const optimizeBulk = (preparedData: Array<Object>): Array<Object> => {
   return result;
 };
 
-export default optimizeBulk;
+export default mainOptimizeBulk;

@@ -19,7 +19,7 @@ let pubsub;
 const exampleConfig: ThingConfig = {
   name: 'Example',
 
-  textFields: [{ name: 'name' }, { name: 'label' }],
+  textFields: [{ name: 'name', required: true }, { name: 'label' }],
   intFields: [{ name: 'counts', array: true }],
 };
 
@@ -196,7 +196,19 @@ describe('createDeleteManyThingsMutationResolver', () => {
       {
         actionGeneralName: 'updateThing',
         thingConfig: exampleConfig,
+        args: { whereOne: { id: createdExample.id }, data: { name: null } },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: exampleConfig,
         args: { whereOne: { id: createdExample.id }, data: { label: 'test' } },
+        returnResult: true,
+      },
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: exampleConfig,
+        args: { whereOne: { id: createdExample.id }, data: { name: 'Name' } },
         returnResult: true,
       },
     ];

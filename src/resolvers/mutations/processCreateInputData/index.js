@@ -162,11 +162,6 @@ const processCreateInputData = (
     return Object.keys(data2).reduce((prev, key) => {
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
-        if (fieldsObject[key].attributes.required) {
-          throw new TypeError(
-            `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
-          );
-        }
         if (fieldsObject[key].attributes.array) {
           throw new TypeError(`Try unset array field: "${key}" of thing: "${thingConfig2.name}"!`);
         }
@@ -187,11 +182,6 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
-            if (fieldsObject[key].attributes.required) {
-              throw new TypeError(
-                `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
-              );
-            }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
             prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
           }
@@ -246,11 +236,6 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
-            if (fieldsObject[key].attributes.required) {
-              throw new TypeError(
-                `Try unset required field: "${key}" of thing: "${thingConfig2.name}"!`,
-              );
-            }
             if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
             prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
           }
