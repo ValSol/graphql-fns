@@ -8,6 +8,7 @@ import thingFileQueryAttributes from '../../types/actionAttributes/thingFileQuer
 import thingFilesQueryAttributes from '../../types/actionAttributes/thingFilesQueryAttributes';
 import thingQueryAttributes from '../../types/actionAttributes/thingQueryAttributes';
 import thingsQueryAttributes from '../../types/actionAttributes/thingsQueryAttributes';
+import thingsByUniqueQueryAttributes from '../../types/actionAttributes/thingsByUniqueQueryAttributes';
 
 import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
 import createThingMutationAttributes from '../../types/actionAttributes/createThingMutationAttributes';
@@ -48,6 +49,13 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     if (allowedMethods.things) {
       // eslint-disable-next-line no-param-reassign
       prev[`things${suffix}`] = composeCustomAction(derivative[suffix], thingsQueryAttributes);
+    }
+    if (allowedMethods.thingsByUnique) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`thingsByUnique${suffix}`] = composeCustomAction(
+        derivative[suffix],
+        thingsByUniqueQueryAttributes,
+      );
     }
     if (allowedMethods.thingCount) {
       // eslint-disable-next-line no-param-reassign

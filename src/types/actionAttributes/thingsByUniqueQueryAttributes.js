@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 
 import type { ThingConfig } from '../../flowTypes';
 
-import createThingWhereInputType from '../inputs/createThingWhereInputType';
+import createThingWhereByUniqueInputType from '../inputs/createThingWhereByUniqueInputType';
 import createThingSortInputType from '../inputs/createThingSortInputType';
 import createPaginationInputType from '../inputs/createPaginationInputType';
 import createThingNearInputType from '../inputs/createThingNearInputType';
@@ -12,13 +12,13 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'query';
 
-const actionGeneralName = (suffix?: string = ''): string => `things${suffix}`;
+const actionGeneralName = (suffix?: string = ''): string => `thingsByUnique${suffix}`;
 
 const actionName = (baseName: string, suffix?: string = ''): string =>
-  `${pluralize(baseName)}${suffix}`;
+  `${pluralize(baseName)}ByUnique${suffix}`;
 
 const inputCreators = [
-  createThingWhereInputType,
+  createThingWhereByUniqueInputType,
   createThingSortInputType,
   createPaginationInputType,
   createThingNearInputType,
@@ -28,7 +28,7 @@ const inputCreators = [
 const argNames = ['where', 'sort', 'pagination', 'near', 'search'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput`,
+  (name: string): string => `${name}WhereByUniqueInput!`,
   (name: string): string => `${name}SortInput`,
   (name: string): string => 'PaginationInput', // eslint-disable-line no-unused-vars
   (name: string): string => `${name}NearInput`,
@@ -43,7 +43,7 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
 const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
   `[${name}${suffix}!]!`;
 
-const thingsQueryAttributes = {
+const thingsByUniqueQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -55,4 +55,4 @@ const thingsQueryAttributes = {
   actionAllowed,
 };
 
-export default thingsQueryAttributes;
+export default thingsByUniqueQueryAttributes;

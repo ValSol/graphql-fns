@@ -44,6 +44,7 @@ const createThingsQueryResolver = (
     const filter = inAnyCase
       ? parentFilter
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
+
     if (!filter) return null;
 
     const { near, pagination, sort, where, search } = args;

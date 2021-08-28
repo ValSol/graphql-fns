@@ -346,6 +346,10 @@ input PaginationInput {
   skip: Int
   first: Int
 }
+input ExampleWhereByUniqueInput {
+  id_in: [ID!]
+  textField1_in: [String!]
+}
 input ExampleCreateInput {
   id: ID
   textField1: String
@@ -461,6 +465,7 @@ type Query {
   ImageFiles(where: FileWhereInput): [Image!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
 }
 type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
@@ -702,6 +707,12 @@ enum Example2SortEnum {
 input Example2SortInput {
   sortBy: [Example2SortEnum]
 }
+input Example1WhereByUniqueInput {
+  id_in: [ID!]
+}
+input Example2WhereByUniqueInput {
+  id_in: [ID!]
+}
 input Example1CreateInput {
   id: ID
   textField1: String
@@ -789,6 +800,8 @@ type Query {
   Example2(whereOne: Example2WhereOneInput!): Example2!
   Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
   Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
+  Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
+  Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput): [Example2!]!
 }
 type Mutation {
   createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
@@ -1009,6 +1022,12 @@ enum PlaceSortEnum {
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
 }
+input PersonWhereByUniqueInput {
+  id_in: [ID!]
+}
+input PlaceWhereByUniqueInput {
+  id_in: [ID!]
+}
 input PersonCreateInput {
   id: ID
   firstName: String!
@@ -1096,6 +1115,8 @@ type Query {
   Place(whereOne: PlaceWhereOneInput!): Place!
   People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
+  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
 type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
@@ -1263,6 +1284,9 @@ enum PersonSortEnum {
 input PersonSortInput {
   sortBy: [PersonSortEnum]
 }
+input PersonWhereByUniqueInput {
+  id_in: [ID!]
+}
 input PersonCreateInput {
   id: ID
   firstName: String!
@@ -1330,6 +1354,7 @@ type Query {
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
   People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
 }
 type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
@@ -1554,6 +1579,12 @@ enum PlaceSortEnum {
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
 }
+input PersonWhereByUniqueInput {
+  id_in: [ID!]
+}
+input PlaceWhereByUniqueInput {
+  id_in: [ID!]
+}
 input PersonCreateInput {
   id: ID
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
@@ -1689,6 +1720,8 @@ type Query {
   Place(whereOne: PlaceWhereOneInput!): Place!
   People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
+  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
 type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
@@ -1805,11 +1838,15 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+input ExampleWhereByUniqueInput {
+  id_in: [ID!]
+}
 type Query {
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);

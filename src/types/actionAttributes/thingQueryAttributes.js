@@ -24,7 +24,7 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
 const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
   `${name}${suffix}!`;
 
-const thingFileQueryAttributes = {
+const thingQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -36,4 +36,4 @@ const thingFileQueryAttributes = {
   actionAllowed,
 };
 
-export default thingFileQueryAttributes;
+export default thingQueryAttributes;

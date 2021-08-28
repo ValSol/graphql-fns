@@ -10,6 +10,7 @@ import thingFile from './thingFileQueryAttributes';
 import thingFiles from './thingFilesQueryAttributes';
 import thing from './thingQueryAttributes';
 import things from './thingsQueryAttributes';
+import thingsByUnique from './thingsByUniqueQueryAttributes';
 import createThing from './createThingMutationAttributes';
 import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
 import deleteManyThings from './deleteManyThingsMutationAttributes';
@@ -37,6 +38,7 @@ const actionAttributes = {
   thingFiles,
   thing,
   things,
+  thingsByUnique,
   updateFilteredThings,
   updateManyThings,
   updateThing,

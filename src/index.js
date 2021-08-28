@@ -27,6 +27,7 @@ export { default as createThingFileQueryResolver } from './resolvers/queries/cre
 export { default as createThingFilesQueryResolver } from './resolvers/queries/createThingFilesQueryResolver';
 export { default as createThingQueryResolver } from './resolvers/queries/createThingQueryResolver';
 export { default as createThingsQueryResolver } from './resolvers/queries/createThingsQueryResolver';
+export { default as createThingsByUniqueQueryResolver } from './resolvers/queries/createThingsByUniqueQueryResolver';
 
 // subscription resolvers
 export { default as createCreatedThingSubscriptionResolver } from './resolvers/subscriptions/createCreatedThingSubscriptionResolver';

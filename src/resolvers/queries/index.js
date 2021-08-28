@@ -7,6 +7,7 @@ import thingFile from './createThingFileQueryResolver';
 import thingFiles from './createThingFilesQueryResolver';
 import thing from './createThingQueryResolver';
 import things from './createThingsQueryResolver';
+import thingsByUnique from './createThingsByUniqueQueryResolver';
 
 const queries = {
   thingCount,
@@ -16,6 +17,7 @@ const queries = {
   thingFiles,
   thing,
   things,
+  thingsByUnique,
 };
 
 export default queries;
