@@ -526,9 +526,11 @@ export type GeneralConfig = {
         // eslint-disable-next-line flowtype/generic-spacing
         [thingName: string]: Array<
           | 'thing'
+          | 'childThing'
           | 'thingCount'
           | 'thingDistinctValues'
           | 'things'
+          | 'childThings'
           | 'thingsByUnique'
           | 'thingFileCount'
           | 'thingFile'
@@ -601,9 +603,11 @@ export type DerivativeAttributes = {
     // eslint-disable-next-line flowtype/generic-spacing
     [thingName: string]: Array<
       | 'thing'
+      | 'childThing'
       | 'thingCount'
       | 'thingDistinctValues'
       | 'things'
+      | 'childThings'
       | 'thingsByUnique'
       | 'thingFileCount'
       | 'thingFile'
@@ -634,7 +638,11 @@ export type DerivativeAttributes = {
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
-  | ['Query', string] // "string" for 'thing', 'things', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query
+  | [
+      'Query',
+      // "string" for 'thing', 'childThing', 'things', 'childThings', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query
+      string,
+    ]
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
@@ -643,7 +651,12 @@ export type TwoSegmentInventoryChain =
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
 export type ThreeSegmentInventoryChain =
-  | ['Query', string, string] // first "string" for 'thing', 'things', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query, second for thing name
+  | [
+      'Query',
+      // first "string" for 'thing', 'childThing', 'things', 'childThings', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query, second for thing name
+      string,
+      string,
+    ]
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...

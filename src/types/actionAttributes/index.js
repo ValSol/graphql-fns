@@ -2,6 +2,8 @@
 
 import type { ActionAttributes } from '../../flowTypes';
 
+import childThing from './childThingQueryAttributes';
+import childThings from './childThingsQueryAttributes';
 import createManyThings from './createManyThingsMutationAttributes';
 import thingDistinctValues from './thingDistinctValuesQueryAttributes';
 import thingCount from './thingCountQueryAttributes';
@@ -24,6 +26,8 @@ import uploadFilesToThing from './uploadFilesToThingMutationAttributes';
 import uploadThingFiles from './uploadThingFilesMutationAttributes';
 
 const actionAttributes = {
+  childThing,
+  childThings,
   createManyThings,
   createThing,
   deleteFilteredThings,

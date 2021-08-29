@@ -13,7 +13,8 @@ const composeCustomThingQueryArgs = (
     throw new TypeError('"generalConfig" property have to be defined!');
   }
 
-  const custom = mergeDerivativeIntoCustom(generalConfig);
+  const forClient = true;
+  const custom = mergeDerivativeIntoCustom(generalConfig, forClient);
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');

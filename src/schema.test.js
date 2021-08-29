@@ -311,8 +311,12 @@ describe('graphql schema', () => {
     const generalConfig: GeneralConfig = { thingConfigs };
     generalConfig.inventory = {
       name: 'test',
-      include: { Mutation: true, Query: { thing: true, things: true } },
+      include: {
+        Mutation: true,
+        Query: { thing: true, things: true, childThing: true, childThings: true },
+      },
     };
+
     let typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
     let resolvers = composeGqlResolvers(generalConfig);
     let schema = makeExecutableSchema({
@@ -327,7 +331,10 @@ describe('graphql schema', () => {
     test('test schema with only createThing mutations in inventory', () => {
       generalConfig.inventory = {
         name: 'test',
-        include: { Mutation: { createThing: true }, Query: { thing: true, things: true } },
+        include: {
+          Mutation: { createThing: true },
+          Query: { childThing: true, childThings: true },
+        },
       };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
@@ -342,7 +349,10 @@ describe('graphql schema', () => {
     test('test schema with only createPerson mutations in inventory', () => {
       generalConfig.inventory = {
         name: 'test',
-        include: { Mutation: { createThing: ['Person'] }, Query: { thing: true, things: true } },
+        include: {
+          Mutation: { createThing: ['Person'] },
+          Query: { childThing: true, childThings: true },
+        },
       };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
@@ -367,7 +377,10 @@ describe('graphql schema', () => {
     });
 
     test('test schema with only thing query in inventory', () => {
-      generalConfig.inventory = { name: 'test', include: { Query: { thing: true, things: true } } };
+      generalConfig.inventory = {
+        name: 'test',
+        include: { Query: { childThing: true, childThings: true } },
+      };
 
       typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
       resolvers = composeGqlResolvers(generalConfig);

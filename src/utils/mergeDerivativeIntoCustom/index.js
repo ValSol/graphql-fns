@@ -1,6 +1,8 @@
 // @flow
 import type { Custom, GeneralConfig } from '../../flowTypes';
 
+import childThingQueryAttributes from '../../types/actionAttributes/childThingQueryAttributes';
+import childThingsQueryAttributes from '../../types/actionAttributes/childThingsQueryAttributes';
 import thingCountQueryAttributes from '../../types/actionAttributes/thingCountQueryAttributes';
 import thingDistinctValuesQueryAttributes from '../../types/actionAttributes/thingDistinctValuesQueryAttributes';
 import thingFileCountQueryAttributes from '../../types/actionAttributes/thingFileCountQueryAttributes';
@@ -22,7 +24,10 @@ import composeCustomAction from './composeCustomAction';
 
 const store = Object.create(null);
 
-const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom => {
+const mergeDerivativeIntoCustom = (
+  generalConfig: GeneralConfig,
+  forClient?: boolean,
+): null | Custom => {
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
 
@@ -42,6 +47,20 @@ const mergeDerivativeIntoCustom = (generalConfig: GeneralConfig): null | Custom 
     const { allow } = derivative[suffix];
     const allowedMethods = getAllowedMethods(allow);
 
+    if (!forClient && allowedMethods.childThing) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`childThing${suffix}`] = composeCustomAction(
+        derivative[suffix],
+        childThingQueryAttributes,
+      );
+    }
+    if (!forClient && allowedMethods.childThings) {
+      // eslint-disable-next-line no-param-reassign
+      prev[`childThings${suffix}`] = composeCustomAction(
+        derivative[suffix],
+        childThingsQueryAttributes,
+      );
+    }
     if (allowedMethods.thing) {
       // eslint-disable-next-line no-param-reassign
       prev[`thing${suffix}`] = composeCustomAction(derivative[suffix], thingQueryAttributes);

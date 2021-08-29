@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import createThingsQueryResolver from '../../queries/createThingsQueryResolver';
+import createChildThingsQueryResolver from '../../queries/createChildThingsQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
 import parseThingName from '../parseThingName';
@@ -20,39 +20,40 @@ const createThingArrayResolver = (
 
   const { root: nameRoot, suffix: nameSuffix } = parseThingName(name, generalConfig);
 
-  const thingsQueryResolver = nameSuffix
+  const childThingsQueryResolver = nameSuffix
     ? createCustomResolver(
         'Query',
-        `things${nameSuffix}`,
+        `childThings${nameSuffix}`,
         thingConfigs[nameRoot],
         generalConfig,
         serversideConfig,
       )
-    : createThingsQueryResolver(thingConfig, generalConfig, serversideConfig);
+    : createChildThingsQueryResolver(thingConfig, generalConfig, serversideConfig);
 
-  if (!thingsQueryResolver) return null;
+  if (!childThingsQueryResolver) {
+    throw new TypeError(
+      `Not defined childThingsQueryResolver "${
+        nameSuffix ? `childThings${nameSuffix}` : 'childThings'
+      }" for thing: "${thingConfigs[nameRoot].name}"!`,
+    );
+  }
 
   const inventoryChain = nameSuffix
-    ? ['Query', `things${nameSuffix}`, nameRoot]
-    : ['Query', 'things', name];
+    ? ['Query', `childThings${nameSuffix}`, nameRoot]
+    : ['Query', 'childThings', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    if (!(await executeAuthorisation(inventoryChain, context, serversideConfig))) return null;
+    const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
 
-    const { fieldName } = info;
+    if (!filter) {
+      throw new TypeError(
+        `Not authorized resolver: "${
+          nameSuffix ? `childThings${nameSuffix}` : 'childThings'
+        }" for thing: "${thingConfigs[nameRoot].name}"!`,
+      );
+    }
 
-    const ids = parent[fieldName];
-
-    if (!ids || !ids.length) return [];
-
-    const things = await thingsQueryResolver(null, { where: { id_in: ids } }, context, info);
-
-    const thingsObject = things.reduce((prev, thing) => {
-      prev[thing.id] = thing; // eslint-disable-line no-param-reassign
-      return prev;
-    }, {});
-
-    return ids.map((id) => thingsObject[id]).filter(Boolean);
+    return childThingsQueryResolver(parent, args, context, info, filter);
   };
 
   return resolver;

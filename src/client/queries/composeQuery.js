@@ -7,6 +7,14 @@ import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
 import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
 
+const attributesWithoutChildren = Object.keys(queryAttributes).reduce((prev, queyrName) => {
+  if (queyrName !== 'childThings' && queyrName !== 'childThing') {
+    prev[queyrName] = queryAttributes[queyrName]; // eslint-disable-line no-param-reassign
+  }
+
+  return prev;
+}, {});
+
 const composeQuery = (
   prefixName: string,
   queryName: string,
@@ -22,15 +30,16 @@ const composeQuery = (
 
   let returnObjectConfig = thingConfig;
 
-  if (queryAttributes[queryName]) {
-    head = composeActionArgs(prefixName, thingConfig, queryAttributes[queryName]);
+  if (attributesWithoutChildren[queryName]) {
+    head = composeActionArgs(prefixName, thingConfig, attributesWithoutChildren[queryName]);
   } else {
     if (!generalConfig) {
       throw new TypeError('"generalConfig" have to be defined!');
     }
     head = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
 
-    const custom = mergeDerivativeIntoCustom(generalConfig); // eslint-disable-line no-case-declarations
+    const forClient = true;
+    const custom = mergeDerivativeIntoCustom(generalConfig, forClient); // eslint-disable-line no-case-declarations
     if (!custom) {
       throw new TypeError('"custom" property have to be defined!');
     }

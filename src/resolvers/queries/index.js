@@ -1,5 +1,7 @@
 // @flow
 
+import childThing from './createChildThingQueryResolver';
+import childThings from './createChildThingsQueryResolver';
 import thingDistinctValues from './createThingDistinctValuesQueryResolver';
 import thingCount from './createThingCountQueryResolver';
 import thingFileCount from './createThingFileCountQueryResolver';
@@ -10,6 +12,8 @@ import things from './createThingsQueryResolver';
 import thingsByUnique from './createThingsByUniqueQueryResolver';
 
 const queries = {
+  childThing,
+  childThings,
   thingCount,
   thingDistinctValues,
   thingFileCount,

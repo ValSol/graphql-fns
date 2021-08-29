@@ -34,6 +34,10 @@ const createCustomResolver = (
   }
   const { [methodName]: signatureMethods } = methodFolder;
 
+  if (!signatureMethods) {
+    throw new TypeError(`Got undefiend signatureMethods for "${methodName}" methodName!`);
+  }
+
   if (!composeActionSignature(signatureMethods, thingConfig, generalConfig)) return null;
 
   // $FlowFixMe - cannot understand what the conflict between 'Query' & 'Mutation'

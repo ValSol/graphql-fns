@@ -27,7 +27,8 @@ const composeMutation = (
   } else {
     head = composeCustomThingMutationArgs(prefixName, mutationName, thingConfig, generalConfig);
 
-    const custom = mergeDerivativeIntoCustom(generalConfig); // eslint-disable-line no-case-declarations
+    const forClient = true;
+    const custom = mergeDerivativeIntoCustom(generalConfig, forClient); // eslint-disable-line no-case-declarations
 
     if (!custom) {
       throw new TypeError('"custom" property have to be defined!');

@@ -163,6 +163,10 @@ type Image {
   fileId: String!
   address: String
 }
+input ExampleWhereOneInput {
+  id: ID
+  textField1: ID
+}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -260,6 +264,25 @@ input ExampleWhereWithoutBooleanOperationsInput {
   cuisines_size: Int
   cuisines_notsize: Int
 }
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  day_ASC
+  day_DESC
+  textField2_ASC
+  textField2_DESC
+  textField3_ASC
+  textField3_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 enum ExampleGeospatialFieldNamesEnum {
   position
 }
@@ -322,29 +345,6 @@ input FileWhereInput {
 input FileWhereOneInput {
   id: ID
   hash: String
-}
-input ExampleWhereOneInput {
-  id: ID
-  textField1: ID
-}
-enum ExampleSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  day_ASC
-  day_DESC
-  textField2_ASC
-  textField2_DESC
-  textField3_ASC
-  textField3_DESC
-}
-input ExampleSortInput {
-  sortBy: [ExampleSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
 }
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
@@ -458,6 +458,8 @@ type UpdatedExamplePayload {
   updatedFields: [ExampleFieldNamesEnum!]
 }
 type Query {
+  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExamples(where: ExampleWhereInput!, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   ImageFileCount(where: FileWhereInput): Int!
@@ -582,6 +584,12 @@ type Example2 {
   textField2: [String!]!
   area: GeospatialPolygon
 }
+input Example1WhereOneInput {
+  id: ID!
+}
+input Example2WhereOneInput {
+  id: ID!
+}
 input Example1WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -620,6 +628,15 @@ input Example1WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+}
+enum Example1SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example1SortInput {
+  sortBy: [Example1SortEnum]
 }
 enum Example1GeospatialFieldNamesEnum {
   position
@@ -668,6 +685,15 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+enum Example2SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example2SortInput {
+  sortBy: [Example2SortEnum]
+}
 enum Example1TextNamesEnum {
   textField1
   textField2
@@ -682,30 +708,6 @@ enum Example2TextNamesEnum {
 }
 input Example2DistinctValuesOptionsInput {
   target: Example2TextNamesEnum!
-}
-input Example1WhereOneInput {
-  id: ID!
-}
-input Example2WhereOneInput {
-  id: ID!
-}
-enum Example1SortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input Example1SortInput {
-  sortBy: [Example1SortEnum]
-}
-enum Example2SortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input Example2SortInput {
-  sortBy: [Example2SortEnum]
 }
 input Example1WhereByUniqueInput {
   id_in: [ID!]
@@ -792,6 +794,10 @@ type UpdatedExample2Payload {
   updatedFields: [Example2FieldNamesEnum!]
 }
 type Query {
+  childExample1(whereOne: Example1WhereOneInput!): Example1!
+  childExample2(whereOne: Example2WhereOneInput!): Example2!
+  childExample1s(where: Example1WhereInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
+  childExample2s(where: Example2WhereInput!, sort: Example2SortInput): [Example2!]!
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example2Count(where: Example2WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
@@ -907,6 +913,12 @@ type Place {
   updatedAt: DateTime!
   title: String!
 }
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -985,25 +997,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  title
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PlaceWhereOneInput {
-  id: ID!
-}
 enum PersonSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1021,6 +1014,19 @@ enum PlaceSortEnum {
 }
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  title
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -1107,6 +1113,10 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
+  childPerson(whereOne: PersonWhereOneInput!): Person!
+  childPlace(whereOne: PlaceWhereOneInput!): Place!
+  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
+  childPlaces(where: PlaceWhereInput!, sort: PlaceSortInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -1226,6 +1236,9 @@ type Address {
   country: String!
   province: String
 }
+input PersonWhereOneInput {
+  id: ID!
+}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1265,16 +1278,6 @@ input PersonWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
 enum PersonSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1283,6 +1286,13 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -1350,6 +1360,8 @@ type UpdatedPersonPayload {
   updatedFields: [PersonFieldNamesEnum!]
 }
 type Query {
+  childPerson(whereOne: PersonWhereOneInput!): Person!
+  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
@@ -1464,6 +1476,12 @@ type Place {
   citizens: [Person!]!
   visitors: [Person!]!
 }
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
+}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1542,25 +1560,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  name
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PlaceWhereOneInput {
-  id: ID!
-}
 enum PersonSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1578,6 +1577,19 @@ enum PlaceSortEnum {
 }
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
+}
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  name
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -1712,6 +1724,10 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
+  childPerson(whereOne: PersonWhereOneInput!): Person!
+  childPlace(whereOne: PlaceWhereOneInput!): Place!
+  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
+  childPlaces(where: PlaceWhereInput!, sort: PlaceSortInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -1781,6 +1797,9 @@ type Example {
   updatedAt: DateTime!
   textField: String
 }
+input ExampleWhereOneInput {
+  id: ID!
+}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1820,15 +1839,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
-input ExampleWhereOneInput {
-  id: ID!
-}
 enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -1838,10 +1848,18 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
 }
 type Query {
+  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExamples(where: ExampleWhereInput!, sort: ExampleSortInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
