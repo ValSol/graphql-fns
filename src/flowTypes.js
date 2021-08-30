@@ -830,7 +830,7 @@ export type InputCreator = (
 
 export type ActionAttributes = {
   actionGeneralName: (suffix?: string) => string,
-  actionType: 'mutation' | 'query',
+  actionType: 'Mutation' | 'Query',
   actionAllowed: (thingConfig: ThingConfig) => boolean,
   actionName: (baseName: string, suffix?: string) => string,
   inputCreators: Array<InputCreator>, // TODO inputCreators

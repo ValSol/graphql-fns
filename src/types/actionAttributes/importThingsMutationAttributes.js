@@ -6,7 +6,7 @@ import type { InputCreator, ThingConfig } from '../../flowTypes';
 
 import createImportOptionsInputTypes from '../inputs/createImportOptionsInputTypes';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `importThings${suffix}`;
 

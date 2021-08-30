@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createFileWhereOneInputType from '../inputs/createFileWhereOneInputType';
 
-const actionType = 'query';
+const actionType = 'Query';
 
 const actionGeneralName = (suffix?: string = ''): string => `thingFile${suffix}`;
 

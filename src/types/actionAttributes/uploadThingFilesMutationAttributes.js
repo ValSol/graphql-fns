@@ -2,7 +2,7 @@
 
 import type { InputCreator, ThingConfig } from '../../flowTypes';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `uploadThingFiles${suffix}`;
 

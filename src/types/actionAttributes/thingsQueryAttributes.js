@@ -10,7 +10,7 @@ import createPaginationInputType from '../inputs/createPaginationInputType';
 import createThingNearInputType from '../inputs/createThingNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
-const actionType = 'query';
+const actionType = 'Query';
 
 const actionGeneralName = (suffix?: string = ''): string => `things${suffix}`;
 

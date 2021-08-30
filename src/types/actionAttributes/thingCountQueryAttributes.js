@@ -6,7 +6,7 @@ import createThingWhereInputType from '../inputs/createThingWhereInputType';
 import createThingNearInputType from '../inputs/createThingNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
-const actionType = 'query';
+const actionType = 'Query';
 
 const actionGeneralName = (suffix?: string = ''): string => `thingCount${suffix}`;
 

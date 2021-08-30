@@ -7,7 +7,7 @@ import createUploadFilesToThingInputType from '../inputs/createUploadFilesToThin
 import createFilesOfThingOptionsInputType from '../inputs/createFilesOfThingOptionsInputType';
 import createThingReorderUploadedInputType from '../inputs/createThingReorderUploadedInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `uploadFilesToThing${suffix}`;
 

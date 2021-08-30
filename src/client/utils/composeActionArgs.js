@@ -38,9 +38,12 @@ const composeActionArgs = (
   const args2 = filteredArgNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
   return actionReturnConfig
-    ? [`${actionType} ${prefix}_${specificName}(${args1}) {`, `  ${specificName}(${args2}) {`]
+    ? [
+        `${actionType.toLowerCase()} ${prefix}_${specificName}(${args1}) {`,
+        `  ${specificName}(${args2}) {`,
+      ]
     : [
-        `${actionType} ${prefix}_${specificName}(${args1}) {
+        `${actionType.toLowerCase()} ${prefix}_${specificName}(${args1}) {
   ${specificName}(${args2})
 }`,
       ];

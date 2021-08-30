@@ -27,7 +27,7 @@ describe('composeCustomThingQueryArgs', () => {
     };
 
     const thingConfigs = { Example: thingConfig };
-    const queryName = 'Thing';
+    const queryName = 'getThing';
     const custom = { Query: { [queryName]: signatureMethods } };
 
     const generalConfig: GeneralConfig = { thingConfigs, custom };

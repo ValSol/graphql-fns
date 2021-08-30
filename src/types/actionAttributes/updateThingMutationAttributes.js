@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../flowTypes';
 import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType';
 import createThingUpdateInputType from '../inputs/createThingUpdateInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `updateThing${suffix}`;
 

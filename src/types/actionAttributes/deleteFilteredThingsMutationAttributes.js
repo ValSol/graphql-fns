@@ -8,7 +8,7 @@ import createThingWhereInputType from '../inputs/createThingWhereInputType';
 import createThingNearInputType from '../inputs/createThingNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `deleteFilteredThings${suffix}`;
 

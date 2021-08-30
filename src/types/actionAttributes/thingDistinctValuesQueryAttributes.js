@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../flowTypes';
 import createThingWhereInputType from '../inputs/createThingWhereInputType';
 import createThingDistinctValuesOptionsInputType from '../inputs/createThingDistinctValuesOptionsInputType';
 
-const actionType = 'query';
+const actionType = 'Query';
 
 const actionGeneralName = (suffix?: string = ''): string => `thingDistinctValues${suffix}`;
 

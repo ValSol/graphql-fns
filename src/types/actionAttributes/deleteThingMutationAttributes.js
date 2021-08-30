@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `deleteThing${suffix}`;
 

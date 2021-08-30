@@ -6,11 +6,6 @@ import checkInventory from '../../utils/checkInventory';
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import fillDic from '../inputs/fillDic';
 
-const transformDic = {
-  mutation: 'Mutation',
-  query: 'Query',
-};
-
 const injectDerivativeActionInputs = (
   suffix: string,
   thingConfig: ThingConfig,
@@ -34,7 +29,7 @@ const injectDerivativeActionInputs = (
   if (
     inventory &&
     // $FlowFixMe
-    !checkInventory([transformDic[actionType], actionGeneralName(suffix), configName], inventory)
+    !checkInventory([actionType, actionGeneralName(suffix), configName], inventory)
   ) {
     return;
   }

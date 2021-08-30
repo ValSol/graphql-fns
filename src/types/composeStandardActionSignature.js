@@ -5,11 +5,6 @@ import type { ActionAttributes, Inventory, ThingConfig } from '../flowTypes';
 import checkInventory from '../utils/checkInventory';
 import fillDic from './inputs/fillDic';
 
-const transformDic = {
-  mutation: 'Mutation',
-  query: 'Query',
-};
-
 const composeStandardActionSignature = (
   thingConfig: ThingConfig,
   actionAttributes: ActionAttributes,
@@ -33,7 +28,7 @@ const composeStandardActionSignature = (
   if (
     inventory &&
     // $FlowFixMe
-    !checkInventory([transformDic[actionType], actionGeneralName(), configName], inventory)
+    !checkInventory([actionType, actionGeneralName(), configName], inventory)
   ) {
     return '';
   }

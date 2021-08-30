@@ -6,7 +6,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingCreateInputType from '../inputs/createThingCreateInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `createManyThings${suffix}`;
 

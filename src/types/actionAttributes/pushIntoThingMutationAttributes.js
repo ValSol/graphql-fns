@@ -6,7 +6,7 @@ import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType
 import createPushIntoThingInputType from '../inputs/createPushIntoThingInputType';
 import createThingPushPositionsInputType from '../inputs/createThingPushPositionsInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `pushIntoThing${suffix}`;
 

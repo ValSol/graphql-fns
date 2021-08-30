@@ -53,7 +53,7 @@ const actionAttributes = {
 const mutationAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
   actionAttributes,
 ).reduce((prev, actionName) => {
-  if (actionAttributes[actionName].actionType === 'mutation') {
+  if (actionAttributes[actionName].actionType === 'Mutation') {
     prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
   }
   return prev;
@@ -62,7 +62,7 @@ const mutationAttributes: { [actionName: string]: ActionAttributes } = Object.ke
 const queryAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
   actionAttributes,
 ).reduce((prev, actionName) => {
-  if (actionAttributes[actionName].actionType === 'query') {
+  if (actionAttributes[actionName].actionType === 'Query') {
     prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
   }
   return prev;

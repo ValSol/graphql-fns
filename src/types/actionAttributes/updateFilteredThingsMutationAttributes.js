@@ -9,7 +9,7 @@ import createThingNearInputType from '../inputs/createThingNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 import createThingUpdateInputType from '../inputs/createThingUpdateInputType';
 
-const actionType = 'mutation';
+const actionType = 'Mutation';
 
 const actionGeneralName = (suffix?: string = ''): string => `updateFilteredThings${suffix}`;
 

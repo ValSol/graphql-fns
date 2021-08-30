@@ -4,7 +4,7 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingWhereOneInputType from '../inputs/createThingWhereOneInputType';
 
-const actionType = 'query';
+const actionType = 'Query';
 
 const actionGeneralName = (suffix?: string = ''): string => `childThing${suffix}`;
 
