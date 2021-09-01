@@ -401,14 +401,14 @@ type thingNamesList = true | $ReadOnlyArray<string>;
 
 type InverntoryOptions = {
   // eslint-disable-next-line flowtype/space-after-type-colon
-  +Query?:
+  Query?:
     | true
     | {
         // 'queryName' may be: thing, things, , 'thingDistinctValues' or any custom query names
         +[queryName: string]: thingNamesList,
       },
   // eslint-disable-next-line flowtype/space-after-type-colon
-  +Mutation?:
+  Mutation?:
     | true
     | {
         // 'mutationName' may be: 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', ...
@@ -417,7 +417,7 @@ type InverntoryOptions = {
         +[mutationName: string]: thingNamesList,
       },
   // eslint-disable-next-line flowtype/space-after-type-colon
-  +Subscription?:
+  Subscription?:
     | true
     | {
         +createdThing?: thingNamesList,
@@ -427,9 +427,9 @@ type InverntoryOptions = {
 };
 
 export type Inventory = {
-  +name: string,
-  +include?: true | InverntoryOptions,
-  +exclude?: true | InverntoryOptions,
+  name: string,
+  include?: true | InverntoryOptions,
+  exclude?: true | InverntoryOptions,
 };
 
 type NotFieldyThingConfigFields = {

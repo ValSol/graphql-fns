@@ -38,7 +38,7 @@ const composeCustom = (arg: Arg): Custom => {
         );
       }
       result.Query[name] = item;
-      tmp[name] = 'query';
+      tmp[name] = 'Query';
     });
   }
 
@@ -52,7 +52,7 @@ const composeCustom = (arg: Arg): Custom => {
         );
       }
       result.Mutation[name] = item;
-      tmp[name] = 'mutation';
+      tmp[name] = 'Mutation';
     });
   }
 

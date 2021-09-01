@@ -339,7 +339,10 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with derivate field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { TextExample: ['thing', 'things'], RelationalExample: ['thing', 'things'] },
+        allow: {
+          TextExample: ['thing', 'childThings'],
+          RelationalExample: ['thing', 'childThings'],
+        },
         suffix: 'ForCatalog',
         derivativeFields: { RelationalExample: { relationalField: 'ForCatalog' } },
       };
@@ -393,7 +396,10 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with added derivate field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { TextExample2: ['thing', 'things'], RelationalExample2: ['thing', 'things'] },
+        allow: {
+          TextExample2: ['thing', 'childThings'],
+          RelationalExample2: ['thing', 'childThings'],
+        },
         suffix: 'ForCatalog',
         addFields: {
           RelationalExample2: {

@@ -233,15 +233,25 @@ const composeDerivativeConfig = (
       if (key === 'relationalFields' || key === 'duplexFields') {
         // $FlowFixMe
         thingConfig[key] = thingConfig[key].map((item) => {
-          const { name, config: currentConfig } = item;
+          const { name, array, config: currentConfig } = item;
+
           if (!derivativeFields[rootThingName][name]) {
             // $FlowFixMe
             return item;
           }
+
           const suffix2 = derivativeFields[rootThingName][name];
-          const config = store[`${currentConfig.name}${suffix2}`]
-            ? store[`${currentConfig.name}${suffix2}`]
-            : composeDerivativeConfig(derivative[suffix2], currentConfig, generalConfig);
+
+          const childQuery = array ? 'childThings' : 'childThing';
+          if (!derivative[suffix2].allow[currentConfig.name].includes(childQuery)) {
+            throw new TypeError(
+              `Have to set "${childQuery}" as "allow" for suffix: "${suffix2}" & thing: "${currentConfig.name}"!`,
+            );
+          }
+
+          const config =
+            store[`${currentConfig.name}${suffix2}`] ||
+            composeDerivativeConfig(derivative[suffix2], currentConfig, generalConfig);
           if (!config) {
             throw new TypeError(
               `Can not set derivative config for thingName: "${currentConfig.name}" & derivative suffix:"${suffix2}"!`,
