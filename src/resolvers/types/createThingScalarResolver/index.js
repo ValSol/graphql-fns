@@ -53,7 +53,18 @@ const createThingScalarResolver = (
       );
     }
 
-    return childThingQueryResolver(parent, args, context, info, filter);
+    if (!parent) {
+      throw new TypeError(
+        `Got undefined parent in resolver: "childThing${nameSuffix || ''}" for thing: "${name}"!`,
+      );
+    }
+    const { fieldName } = info;
+
+    const id = parent[fieldName]; // eslint-disable-line camelcase
+
+    const whereOne = { id };
+
+    return childThingQueryResolver(parent, { ...args, whereOne }, context, info, filter);
   };
 
   return resolver;

@@ -12,8 +12,6 @@ const createChildThingQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
-  const { name } = thingConfig;
-
   const thingQueryResolver = createThingQueryResolver(
     thingConfig,
     generalConfig,
@@ -28,18 +26,7 @@ const createChildThingQueryResolver = (
     context: Context,
     info: Object,
     parentFilter: Array<Object>,
-  ): Object => {
-    if (!parent) {
-      throw new TypeError(`Got undefined parent in resolver: "childThing" for thing: "${name}"!`);
-    }
-    const { fieldName } = info;
-
-    const id = parent[fieldName]; // eslint-disable-line camelcase
-
-    const whereOne = { id };
-
-    return thingQueryResolver(null, { ...args, whereOne }, context, info, parentFilter);
-  };
+  ): Object => thingQueryResolver(parent, args, context, info, parentFilter);
 
   return resolver;
 };

@@ -7,7 +7,7 @@ import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
 import parseThingName from '../parseThingName';
 
-type Args = { where: { id: string } };
+type Args = { where: Object, sort: Object };
 type Context = { mongooseConn: Object };
 
 const createThingArrayResolver = (
@@ -53,7 +53,38 @@ const createThingArrayResolver = (
       );
     }
 
-    return childThingsQueryResolver(parent, args, context, info, filter);
+    if (!parent) {
+      throw new TypeError(
+        `Got undefined parent in resolver: "childThings${nameSuffix || ''}" for thing: "${name}"!`,
+      );
+    }
+
+    const { fieldName } = info;
+
+    const id_in = parent[fieldName]; // eslint-disable-line camelcase
+
+    if (!id_in || !id_in.length) return []; // eslint-disable-line camelcase
+
+    const { where, sort } = args || {};
+
+    const were2 = where ? { AND: [where, id_in] } : { id_in }; // eslint-disable-line camelcase
+
+    const things = await childThingsQueryResolver(
+      parent,
+      { ...args, where: were2 },
+      context,
+      info,
+      filter,
+    );
+
+    if (sort) return things;
+
+    const thingsObject = things.reduce((prev, thing) => {
+      prev[thing.id] = thing; // eslint-disable-line no-param-reassign
+      return prev;
+    }, {});
+
+    return id_in.map((id) => thingsObject[id]).filter(Boolean);
   };
 
   return resolver;
