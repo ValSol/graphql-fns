@@ -1,29 +1,42 @@
 // @flow
 
-import type { DerivativeAttributes } from '../../flowTypes';
+import type { DerivativeAttributes, GeneralConfig } from '../../flowTypes';
 import type { ActionToParse, ParsedAction } from './flowTypes';
 
 const actionToDerivative = (
   actionToParse: ActionToParse,
   parsedAction: ParsedAction,
   derivativeAttributes: { [suffix: string]: DerivativeAttributes },
+  generalConfig: GeneralConfig,
 ): { [suffix: string]: DerivativeAttributes } => {
-  const { thingName } = actionToParse;
-  const { baseAction, creationType, suffix } = parsedAction;
+  const { actionName, thingName } = actionToParse;
+  const { baseAction, creationType, suffix, thingConfig } = parsedAction;
 
-  if (creationType !== 'derivative') return derivativeAttributes;
+  const { thingConfigs } = generalConfig;
+
+  if (creationType !== 'derivative' && (!thingConfig || thingConfigs[thingConfig.name])) {
+    return derivativeAttributes;
+  }
+
+  const returningThingName = thingConfig ? thingConfig.name.slice(0, -suffix.length) : thingName;
+
+  if (!thingConfigs[returningThingName]) return derivativeAttributes;
 
   if (!derivativeAttributes[suffix]) {
     derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign
   }
 
-  if (!derivativeAttributes[suffix].allow[thingName]) {
-    derivativeAttributes[suffix].allow[thingName] = []; // eslint-disable-line no-param-reassign
+  if (!derivativeAttributes[suffix].allow[returningThingName]) {
+    derivativeAttributes[suffix].allow[returningThingName] = []; // eslint-disable-line no-param-reassign
   }
 
-  if (!derivativeAttributes[suffix].allow[thingName].includes(baseAction)) {
+  if (
+    baseAction &&
+    baseAction !== actionName &&
+    !derivativeAttributes[suffix].allow[returningThingName].includes(baseAction)
+  ) {
     // $FlowFixMe
-    derivativeAttributes[suffix].allow[thingName].push(baseAction);
+    derivativeAttributes[suffix].allow[returningThingName].push(baseAction);
   }
 
   return derivativeAttributes;

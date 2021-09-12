@@ -24,7 +24,7 @@ const parseAction = (
 
   const parsedAction = parseActionName(actionToParse, generalConfig);
 
-  actionToDerivative(actionToParse, parsedAction, derivativeAttributes);
+  actionToDerivative(actionToParse, parsedAction, derivativeAttributes, generalConfig);
 
   actionToInventory(actionToParse, parsedAction, inventoryByPermissions, suffixToPermission);
 

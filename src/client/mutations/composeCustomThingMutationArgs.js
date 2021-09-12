@@ -26,6 +26,10 @@ const composeCustomThingMutationArgs = (
     throw new TypeError('"Mutation" property have to be defined!');
   }
 
+  if (!Mutation[mutationName]) {
+    throw new TypeError(`Custom Mutation "${mutationName}" not found!`);
+  }
+
   const {
     specificName: composeName,
     argNames: composeArgNames,

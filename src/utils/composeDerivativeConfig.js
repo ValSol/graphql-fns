@@ -28,7 +28,7 @@ const composeDerivativeConfig = (
 
   if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 
-  if (!allow[rootThingName]) return null;
+  if (!allow[rootThingName]) return null; // not error but negative result of function!
 
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[`${rootThingName}${suffix}`]) {

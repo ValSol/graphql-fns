@@ -839,3 +839,11 @@ export type ActionAttributes = {
   actionReturnString: (suffix: string) => (thingConfig: ThingConfig) => string,
   actionReturnConfig: boolean,
 };
+
+export type GqlActionData = {
+  actionType: string,
+  actionName: string,
+  suffix?: string,
+  thingName: string,
+  composeOptions: Function,
+};

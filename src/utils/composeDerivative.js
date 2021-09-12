@@ -30,10 +30,6 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
 
   derivativeAttributesArray.forEach(({ allow, derivativeFields, suffix }) => {
     Object.keys(allow).forEach((key) => {
-      if (!allow[key].length) {
-        throw new TypeError(`List "allow" is empty for suffix: "${suffix}" & thing: "${key}"!`);
-      }
-
       allow[key].forEach((actionGenericName) => {
         if (!actionGenericNames.includes(actionGenericName)) {
           throw new TypeError(`Incorrect action generic name: "${actionGenericName}"!`);

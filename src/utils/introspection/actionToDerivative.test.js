@@ -1,7 +1,8 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import actionToDerivative from './actionToDerivative';
 
 describe('actionToDerivative', () => {
@@ -64,32 +65,74 @@ describe('actionToDerivative', () => {
     ],
   });
 
+  const signatureMethods: ActionSignatureMethods = {
+    name: 'getThing',
+    specificName: ({ name }) => `get${name}`,
+    argNames: () => [],
+    argTypes: () => [],
+    type: ({ name }) => `${name}!`,
+    config: (thingConfig) => thingConfig,
+  };
+
+  const ForCatalog: DerivativeAttributes = {
+    suffix: 'ForCatalog',
+    allow: {
+      Person: ['thingsByUnique', 'childThings', 'childThing'],
+      Place: ['childThing'],
+      Country: ['childThing'],
+    },
+
+    derivativeFields: {
+      Person: {
+        friends: 'ForCatalog',
+        place: 'ForCatalog',
+        parent: 'ForCatalog',
+        children: 'ForCatalog',
+      },
+      Place: {
+        country: 'ForCatalog',
+      },
+    },
+  };
+
+  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const queryName = 'getThing';
+  const custom = { Query: { [queryName]: signatureMethods } };
+  const derivative = { ForCatalog };
+
+  const generalConfig = { thingConfigs, custom, derivative };
+
   test('have to return derivativeAttributes with Person: [thingsByUnique]', () => {
     const actionToParse = {
       actionType: 'Query',
-      actionName: 'thingsByUniqueForCabinet',
+      actionName: 'thingsByUniqueForCatalog',
       thingName: 'Person',
     };
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: personConfig,
+      thingConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
       baseAction: 'thingsByUnique',
-      suffix: 'ForCabinet',
+      suffix: 'ForCatalog',
     };
 
     const derivativeAttributes = {};
 
     const expectedResult = {
-      ForCabinet: {
-        suffix: 'ForCabinet',
+      ForCatalog: {
+        suffix: 'ForCatalog',
         allow: {
           Person: ['thingsByUnique'],
         },
       },
     };
 
-    const result = actionToDerivative(actionToParse, parsedAction, derivativeAttributes);
+    const result = actionToDerivative(
+      actionToParse,
+      parsedAction,
+      derivativeAttributes,
+      generalConfig,
+    );
 
     expect(result).toEqual(expectedResult);
   });
@@ -97,20 +140,20 @@ describe('actionToDerivative', () => {
   test('have to return derivativeAttributes with Person: [things]', () => {
     const actionToParse = {
       actionType: 'Query',
-      actionName: 'thingsForCabinet',
+      actionName: 'thingsForCatalog',
       thingName: 'Person',
     };
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: personConfig,
+      thingConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
       baseAction: 'things',
-      suffix: 'ForCabinet',
+      suffix: 'ForCatalog',
     };
 
     const derivativeAttributes = {
-      ForCabinet: {
-        suffix: 'ForCabinet',
+      ForCatalog: {
+        suffix: 'ForCatalog',
         allow: {
           Person: ['thingsByUnique'],
         },
@@ -118,15 +161,20 @@ describe('actionToDerivative', () => {
     };
 
     const expectedResult = {
-      ForCabinet: {
-        suffix: 'ForCabinet',
+      ForCatalog: {
+        suffix: 'ForCatalog',
         allow: {
           Person: ['thingsByUnique', 'things'],
         },
       },
     };
 
-    const result = actionToDerivative(actionToParse, parsedAction, derivativeAttributes);
+    const result = actionToDerivative(
+      actionToParse,
+      parsedAction,
+      derivativeAttributes,
+      generalConfig,
+    );
 
     expect(result).toEqual(expectedResult);
   });

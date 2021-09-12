@@ -26,6 +26,10 @@ const composeCustomThingQueryArgs = (
     throw new TypeError('"Query" property have to be defined!');
   }
 
+  if (!Query[queryName]) {
+    throw new TypeError(`Custom Query "${queryName}" not found!`);
+  }
+
   const { specificName: composeName, argNames: composeArgNames, argTypes: composeArgTypes } = Query[
     queryName
   ];
