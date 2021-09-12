@@ -459,7 +459,7 @@ type UpdatedExamplePayload {
 }
 type Query {
   childExample(whereOne: ExampleWhereOneInput!): Example!
-  childExamples(where: ExampleWhereInput!, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
+  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   ImageFileCount(where: FileWhereInput): Int!
@@ -796,8 +796,8 @@ type UpdatedExample2Payload {
 type Query {
   childExample1(whereOne: Example1WhereOneInput!): Example1!
   childExample2(whereOne: Example2WhereOneInput!): Example2!
-  childExample1s(where: Example1WhereInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
-  childExample2s(where: Example2WhereInput!, sort: Example2SortInput): [Example2!]!
+  childExample1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
+  childExample2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example2Count(where: Example2WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
@@ -902,8 +902,8 @@ type Person {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends: [Person!]!
-  enemies: [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }
@@ -912,12 +912,6 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   title: String!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PlaceWhereOneInput {
-  id: ID!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1005,6 +999,12 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
 }
 enum PlaceSortEnum {
   createdAt_ASC
@@ -1115,8 +1115,8 @@ type UpdatedPlacePayload {
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
-  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
-  childPlaces(where: PlaceWhereInput!, sort: PlaceSortInput): [Place!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -1361,7 +1361,7 @@ type UpdatedPersonPayload {
 }
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
-  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
@@ -1463,8 +1463,8 @@ type Person {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends: [Person!]!
-  enemies: [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }
@@ -1473,14 +1473,8 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String
-  citizens: [Person!]!
-  visitors: [Person!]!
-}
-input PersonWhereOneInput {
-  id: ID!
-}
-input PlaceWhereOneInput {
-  id: ID!
+  citizens(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  visitors(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1568,6 +1562,12 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+input PersonWhereOneInput {
+  id: ID!
+}
+input PlaceWhereOneInput {
+  id: ID!
 }
 enum PlaceSortEnum {
   createdAt_ASC
@@ -1726,8 +1726,8 @@ type UpdatedPlacePayload {
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
-  childPeople(where: PersonWhereInput!, sort: PersonSortInput): [Person!]!
-  childPlaces(where: PlaceWhereInput!, sort: PlaceSortInput): [Place!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -1859,7 +1859,7 @@ input ExampleWhereByUniqueInput {
 }
 type Query {
   childExample(whereOne: ExampleWhereOneInput!): Example!
-  childExamples(where: ExampleWhereInput!, sort: ExampleSortInput): [Example!]!
+  childExamples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
@@ -2626,7 +2626,7 @@ type Menu {
   createdAt: DateTime!
   updatedAt: DateTime!
   menuName: String
-  sections: [MenuSection!]!
+  sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput): [MenuSection!]!
 }
 type MenuSection {
   id: ID!
@@ -2634,6 +2634,119 @@ type MenuSection {
   updatedAt: DateTime!
   menuSectionName: String
   root: Menu
+}
+input MenuSectionWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  menuSectionName: String
+  menuSectionName_in: [String!]
+  menuSectionName_nin: [String!]
+  menuSectionName_ne: String
+  menuSectionName_re: [RegExp!]
+  menuSectionName_exists: Boolean
+  AND: [MenuSectionWhereInput!]
+  NOR: [MenuSectionWhereInput!]
+  OR: [MenuSectionWhereInput!]
+}
+input MenuSectionWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  menuSectionName: String
+  menuSectionName_in: [String!]
+  menuSectionName_nin: [String!]
+  menuSectionName_ne: String
+  menuSectionName_re: [RegExp!]
+  menuSectionName_exists: Boolean
+}
+input MenuWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  menuName: String
+  menuName_in: [String!]
+  menuName_nin: [String!]
+  menuName_ne: String
+  menuName_re: [RegExp!]
+  menuName_exists: Boolean
+  AND: [MenuWhereInput!]
+  NOR: [MenuWhereInput!]
+  OR: [MenuWhereInput!]
+}
+input MenuWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  menuName: String
+  menuName_in: [String!]
+  menuName_nin: [String!]
+  menuName_ne: String
+  menuName_re: [RegExp!]
+  menuName_exists: Boolean
+}
+enum MenuSectionSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  menuSectionName_ASC
+  menuSectionName_DESC
+}
+input MenuSectionSortInput {
+  sortBy: [MenuSectionSortEnum]
 }
 input MenuWhereOneInput {
   id: ID!

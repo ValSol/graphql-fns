@@ -40,10 +40,12 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const thingNames = Object.keys(thingConfigs);
 
+  const inputDic = {};
+
   // 1. generate standard objects' signatures
 
   const thingTypesArray = Object.keys(thingConfigs).map((thingName) =>
-    createThingType(thingConfigs[thingName]),
+    createThingType(thingConfigs[thingName], inputDic),
   );
 
   // 2. generate derivative objects' signatures
@@ -56,7 +58,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
         thingConfigs[thingName],
         generalConfig,
       );
-      if (derivativeConfig) prev.push(createThingType(derivativeConfig));
+      if (derivativeConfig) prev.push(createThingType(derivativeConfig, inputDic));
     });
 
     return prev;
@@ -67,7 +69,6 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   // 3. generate standard actions' signatures ...
   // ... AND add to "input dic" standard inputs
 
-  const inputDic = {};
   const thingQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
     thingNames.forEach((thingName) => {
       const action = composeStandardActionSignature(

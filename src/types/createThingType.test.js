@@ -44,7 +44,7 @@ describe('createThingType', () => {
   textField5: [String!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -83,13 +83,13 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  friends: [Person!]!
-  enemies: [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }`;
 
-    const result = createThingType(personConfig);
+    const result = createThingType(personConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -155,7 +155,7 @@ describe('createThingType', () => {
   places: [Address!]!
 }`;
 
-    const result = createThingType(personConfig);
+    const result = createThingType(personConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -180,7 +180,7 @@ describe('createThingType', () => {
   province: String
 }`;
 
-    const result = createThingType(addressConfig);
+    const result = createThingType(addressConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -249,13 +249,13 @@ describe('createThingType', () => {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends: [Person!]!
-  enemies: [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }`;
 
-    const result = createThingType(personConfig);
+    const result = createThingType(personConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -319,7 +319,7 @@ describe('createThingType', () => {
   worstAreas: [GeospatialPolygon!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -359,7 +359,7 @@ describe('createThingType', () => {
   field4: [CuisinesEnumeration!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -401,7 +401,7 @@ describe('createThingType', () => {
   intField5: [Int!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -443,7 +443,7 @@ describe('createThingType', () => {
   floatField5: [Float!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -485,7 +485,7 @@ describe('createThingType', () => {
   booleanField5: [Boolean!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -546,7 +546,7 @@ describe('createThingType', () => {
   photos: [Image!]!
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -571,7 +571,7 @@ describe('createThingType', () => {
   address: String
 }`;
 
-    const result = createThingType(imageConfig);
+    const result = createThingType(imageConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -593,7 +593,7 @@ describe('createThingType', () => {
   textField1: String
 }`;
 
-    const result = createThingType(thingConfig);
+    const result = createThingType(thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 });

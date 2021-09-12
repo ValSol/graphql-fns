@@ -2,7 +2,12 @@
 
 import type { ThingConfig } from '../flowTypes';
 
-const createThingType = (thingConfig: ThingConfig): string => {
+import composeChildActionSignature from './composeChildActionSignature';
+
+const createThingType = (
+  thingConfig: ThingConfig,
+  dic: { [inputName: string]: string },
+): string => {
   const {
     embedded,
     counter,
@@ -100,32 +105,28 @@ const createThingType = (thingConfig: ThingConfig): string => {
   }
 
   if (relationalFields) {
-    relationalFields.reduce(
-      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
-        prev.push(
-          `  ${name2}: ${array ? '[' : ''}${relationalThingName}${array ? '!]!' : ''}${
-            !array && required ? '!' : ''
-          }`,
-        );
-        return prev;
-      },
-      thingTypeArray,
-    );
+    relationalFields.reduce((prev, { array, name: name2, required, config }) => {
+      const { name: relationalThingName } = config;
+      prev.push(
+        `  ${name2}${array ? `(${composeChildActionSignature(config, dic)})` : ''}: ${
+          array ? '[' : ''
+        }${relationalThingName}${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   // the same code as for relationalFields
   if (duplexFields) {
-    duplexFields.reduce(
-      (prev, { array, name: name2, required, config: { name: relationalThingName } }) => {
-        prev.push(
-          `  ${name2}: ${array ? '[' : ''}${relationalThingName}${array ? '!]!' : ''}${
-            !array && required ? '!' : ''
-          }`,
-        );
-        return prev;
-      },
-      thingTypeArray,
-    );
+    duplexFields.reduce((prev, { array, name: name2, required, config }) => {
+      const { name: relationalThingName } = config;
+      prev.push(
+        `  ${name2}${array ? `(${composeChildActionSignature(config, dic)})` : ''}: ${
+          array ? '[' : ''
+        }${relationalThingName}${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+      );
+      return prev;
+    }, thingTypeArray);
   }
 
   if (embeddedFields) {

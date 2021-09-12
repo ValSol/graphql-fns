@@ -28,7 +28,7 @@ const inputCreators = [
 const argNames = ['where', 'sort', 'pagination', 'near', 'search'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput!`,
+  (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}SortInput`,
   (name: string): string => 'PaginationInput', // eslint-disable-line no-unused-vars
   (name: string): string => `${name}NearInput`,
