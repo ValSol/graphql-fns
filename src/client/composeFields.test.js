@@ -87,7 +87,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -124,7 +124,7 @@ describe('composeFields', () => {
         '  }',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -167,7 +167,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -196,7 +196,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -235,7 +235,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -269,7 +269,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -303,7 +303,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -330,7 +330,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -358,7 +358,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -386,7 +386,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(thingConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -476,7 +476,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -502,7 +502,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -527,7 +527,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -536,7 +536,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['textField'];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -558,7 +558,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -567,7 +567,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, include };
       const expectedResult = ['embeddedField1 {', '  textField1', '}'];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -582,7 +582,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -591,7 +591,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, exclude };
       const expectedResult = ['id', 'createdAt', 'updatedAt', 'textField'];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -609,7 +609,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -631,7 +631,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(exampleConfig, generalConfig, options);
+      const { fields: result } = composeFields(exampleConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -680,19 +680,30 @@ describe('composeFields', () => {
         'updatedAt',
         'firstName',
         'secondName',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '}',
         'parent {',
         '  id',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  id',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result, childArgs } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
+
+      const expectedChildArgs = {
+        friends_where: 'PersonWhereInput',
+        friends_sort: 'PersonSortInput',
+        friends_pagination: 'PaginationInput',
+        children_where: 'PersonWhereInput',
+        children_sort: 'PersonSortInput',
+        children_pagination: 'PaginationInput',
+      };
+
+      expect(childArgs).toEqual(expectedChildArgs);
     });
 
     test('should compose relatioanl and duplex fields with depth: 0', () => {
@@ -703,18 +714,18 @@ describe('composeFields', () => {
         'updatedAt',
         'firstName',
         'secondName',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '}',
         'parent {',
         '  id',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  id',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -726,19 +737,19 @@ describe('composeFields', () => {
         'updatedAt',
         'firstName',
         'secondName',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $friends_friends_where, sort: $friends_friends_sort, pagination: $friends_friends_pagination) {',
         '    id',
         '  }',
         '  parent {',
         '    id',
         '  }',
-        '  children {',
+        '  children(where: $friends_children_where, sort: $friends_children_sort, pagination: $friends_children_pagination) {',
         '    id',
         '  }',
         '}',
@@ -748,36 +759,64 @@ describe('composeFields', () => {
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $parent_friends_where, sort: $parent_friends_sort, pagination: $parent_friends_pagination) {',
         '    id',
         '  }',
         '  parent {',
         '    id',
         '  }',
-        '  children {',
+        '  children(where: $parent_children_where, sort: $parent_children_sort, pagination: $parent_children_pagination) {',
         '    id',
         '  }',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $children_friends_where, sort: $children_friends_sort, pagination: $children_friends_pagination) {',
         '    id',
         '  }',
         '  parent {',
         '    id',
         '  }',
-        '  children {',
+        '  children(where: $children_children_where, sort: $children_children_sort, pagination: $children_children_pagination) {',
         '    id',
         '  }',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result, childArgs } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
+
+      const expectedChildArgs = {
+        children_children_pagination: 'PaginationInput',
+        children_children_sort: 'PersonSortInput',
+        children_children_where: 'PersonWhereInput',
+        children_friends_pagination: 'PaginationInput',
+        children_friends_sort: 'PersonSortInput',
+        children_friends_where: 'PersonWhereInput',
+        children_pagination: 'PaginationInput',
+        children_sort: 'PersonSortInput',
+        children_where: 'PersonWhereInput',
+        friends_children_pagination: 'PaginationInput',
+        friends_children_sort: 'PersonSortInput',
+        friends_children_where: 'PersonWhereInput',
+        friends_friends_pagination: 'PaginationInput',
+        friends_friends_sort: 'PersonSortInput',
+        friends_friends_where: 'PersonWhereInput',
+        friends_pagination: 'PaginationInput',
+        friends_sort: 'PersonSortInput',
+        friends_where: 'PersonWhereInput',
+        parent_children_pagination: 'PaginationInput',
+        parent_children_sort: 'PersonSortInput',
+        parent_children_where: 'PersonWhereInput',
+        parent_friends_pagination: 'PaginationInput',
+        parent_friends_sort: 'PersonSortInput',
+        parent_friends_where: 'PersonWhereInput',
+      };
+      expect(childArgs).toEqual(expectedChildArgs);
     });
 
     test('should compose relatioanl and duplex fields with depth: 2', () => {
@@ -788,25 +827,25 @@ describe('composeFields', () => {
         'updatedAt',
         'firstName',
         'secondName',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $friends_friends_where, sort: $friends_friends_sort, pagination: $friends_friends_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $friends_friends_friends_where, sort: $friends_friends_friends_sort, pagination: $friends_friends_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $friends_friends_children_where, sort: $friends_friends_children_sort, pagination: $friends_friends_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -816,29 +855,29 @@ describe('composeFields', () => {
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $friends_parent_friends_where, sort: $friends_parent_friends_sort, pagination: $friends_parent_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $friends_parent_children_where, sort: $friends_parent_children_sort, pagination: $friends_parent_children_pagination) {',
         '      id',
         '    }',
         '  }',
-        '  children {',
+        '  children(where: $friends_children_where, sort: $friends_children_sort, pagination: $friends_children_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $friends_children_friends_where, sort: $friends_children_friends_sort, pagination: $friends_children_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $friends_children_children_where, sort: $friends_children_children_sort, pagination: $friends_children_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -849,19 +888,19 @@ describe('composeFields', () => {
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $parent_friends_where, sort: $parent_friends_sort, pagination: $parent_friends_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $parent_friends_friends_where, sort: $parent_friends_friends_sort, pagination: $parent_friends_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $parent_friends_children_where, sort: $parent_friends_children_sort, pagination: $parent_friends_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -871,52 +910,52 @@ describe('composeFields', () => {
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $parent_parent_friends_where, sort: $parent_parent_friends_sort, pagination: $parent_parent_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $parent_parent_children_where, sort: $parent_parent_children_sort, pagination: $parent_parent_children_pagination) {',
         '      id',
         '    }',
         '  }',
-        '  children {',
+        '  children(where: $parent_children_where, sort: $parent_children_sort, pagination: $parent_children_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $parent_children_friends_where, sort: $parent_children_friends_sort, pagination: $parent_children_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $parent_children_children_where, sort: $parent_children_children_sort, pagination: $parent_children_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $children_friends_where, sort: $children_friends_sort, pagination: $children_friends_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $children_friends_friends_where, sort: $children_friends_friends_sort, pagination: $children_friends_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $children_friends_children_where, sort: $children_friends_children_sort, pagination: $children_friends_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -926,36 +965,36 @@ describe('composeFields', () => {
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $children_parent_friends_where, sort: $children_parent_friends_sort, pagination: $children_parent_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $children_parent_children_where, sort: $children_parent_children_sort, pagination: $children_parent_children_pagination) {',
         '      id',
         '    }',
         '  }',
-        '  children {',
+        '  children(where: $children_children_where, sort: $children_children_sort, pagination: $children_children_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $children_children_friends_where, sort: $children_children_friends_sort, pagination: $children_children_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $children_children_children_where, sort: $children_children_children_sort, pagination: $children_children_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -966,9 +1005,17 @@ describe('composeFields', () => {
         parent: true,
       };
       const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
-      const expectedResult = ['id', 'friends {', '  id', '}', 'parent {', '  id', '}'];
+      const expectedResult = [
+        'id',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
+        '  id',
+        '}',
+        'parent {',
+        '  id',
+        '}',
+      ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -982,18 +1029,18 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
         'id',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '}',
         'parent {',
         '  firstName',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  secondName',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1006,7 +1053,7 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 0, include };
       const expectedResult = [
         'id',
-        'friendsAlias: friends {',
+        'friendsAlias: friends(where: $friendsAlias_where, sort: $friendsAlias_sort, pagination: $friendsAlias_pagination) {',
         '  id',
         '}',
         'parentAlias: parent {',
@@ -1014,7 +1061,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1028,18 +1075,18 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
         'id',
-        'friendsAlias: friends {',
+        'friendsAlias: friends(where: $friendsAlias_where, sort: $friendsAlias_sort, pagination: $friendsAlias_pagination) {',
         '  id',
         '}',
         'parentAlias: parent {',
         '  firstName',
         '}',
-        'childrenAlias: children {',
+        'childrenAlias: children(where: $childrenAlias_where, sort: $childrenAlias_sort, pagination: $childrenAlias_pagination) {',
         '  secondName',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1053,21 +1100,21 @@ describe('composeFields', () => {
       const options: ClientFieldsOptions = { shift: 0, depth: 2, include };
       const expectedResult = [
         'id',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
-        '  friends {',
+        '  friends(where: $friends_friends_where, sort: $friends_friends_sort, pagination: $friends_friends_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $friends_friends_friends_where, sort: $friends_friends_friends_sort, pagination: $friends_friends_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $friends_friends_children_where, sort: $friends_friends_children_sort, pagination: $friends_friends_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -1080,39 +1127,39 @@ describe('composeFields', () => {
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $parent_parent_friends_where, sort: $parent_parent_friends_sort, pagination: $parent_parent_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $parent_parent_children_where, sort: $parent_parent_children_sort, pagination: $parent_parent_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  secondName',
-        '  children {',
+        '  children(where: $children_children_where, sort: $children_children_sort, pagination: $children_children_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $children_children_friends_where, sort: $children_children_friends_sort, pagination: $children_children_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $children_children_children_where, sort: $children_children_children_sort, pagination: $children_children_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1129,25 +1176,25 @@ describe('composeFields', () => {
         'updatedAt',
         'firstName',
         'secondName',
-        'friends {',
+        'friends(where: $friends_where, sort: $friends_sort, pagination: $friends_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  friends {',
+        '  friends(where: $friends_friends_where, sort: $friends_friends_sort, pagination: $friends_friends_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $friends_friends_friends_where, sort: $friends_friends_friends_sort, pagination: $friends_friends_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $friends_friends_children_where, sort: $friends_friends_children_sort, pagination: $friends_friends_children_pagination) {',
         '      id',
         '    }',
         '  }',
@@ -1164,43 +1211,43 @@ describe('composeFields', () => {
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $parent_parent_friends_where, sort: $parent_parent_friends_sort, pagination: $parent_parent_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $parent_parent_children_where, sort: $parent_parent_children_sort, pagination: $parent_parent_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
-        'children {',
+        'children(where: $children_where, sort: $children_sort, pagination: $children_pagination) {',
         '  id',
         '  createdAt',
         '  updatedAt',
         '  firstName',
         '  secondName',
-        '  children {',
+        '  children(where: $children_children_where, sort: $children_children_sort, pagination: $children_children_pagination) {',
         '    id',
         '    createdAt',
         '    updatedAt',
         '    firstName',
         '    secondName',
-        '    friends {',
+        '    friends(where: $children_children_friends_where, sort: $children_children_friends_sort, pagination: $children_children_friends_pagination) {',
         '      id',
         '    }',
         '    parent {',
         '      id',
         '    }',
-        '    children {',
+        '    children(where: $children_children_children_where, sort: $children_children_children_sort, pagination: $children_children_children_pagination) {',
         '      id',
         '    }',
         '  }',
         '}',
       ];
 
-      const result = composeFields(personConfig, generalConfig, options);
+      const { fields: result } = composeFields(personConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });

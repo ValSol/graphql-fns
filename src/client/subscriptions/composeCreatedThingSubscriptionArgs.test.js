@@ -8,21 +8,32 @@ import composeCreatedThingSubscriptionArgs from './composeCreatedThingSubscripti
 describe('composeCreatedThingSubscriptionArgs', () => {
   const prefixName = 'Home';
   test('should compose things query without args', () => {
-    const thingConfig: ThingConfig = {
+    const thingConfig = {};
+
+    Object.assign(thingConfig, {
       name: 'Example',
       textFields: [
         {
           name: 'textField',
         },
       ],
-    };
+      relationalFields: [
+        {
+          name: 'examples',
+          array: true,
+          config: thingConfig,
+        },
+      ],
+    });
+
+    const childArgs = { examples_where: 'ExampleWhereInput', examples_sort: 'ExampleSortInput' };
 
     const expectedResult = [
-      'subscription Home_createdExample($where: ExampleWhereInput) {',
+      'subscription Home_createdExample($where: ExampleWhereInput, $examples_where: ExampleWhereInput, $examples_sort: ExampleSortInput) {',
       '  createdExample(where: $where) {',
     ];
 
-    const result = composeCreatedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeCreatedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
     expect(result).toEqual(expectedResult);
   });
 
@@ -42,7 +53,7 @@ describe('composeCreatedThingSubscriptionArgs', () => {
       '  createdExample(where: $where) {',
     ];
 
-    const result = composeCreatedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeCreatedThingSubscriptionArgs(prefixName, thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 });

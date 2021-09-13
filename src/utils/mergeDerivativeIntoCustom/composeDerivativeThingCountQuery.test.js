@@ -29,7 +29,6 @@ describe('composeDerivativeThingCountQuery', () => {
 
   const paginationThingConfig: ThingConfig = {
     name: 'PaginationExample',
-    pagination: true,
     textFields: [
       {
         name: 'textField',

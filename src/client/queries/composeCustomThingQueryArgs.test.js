@@ -34,7 +34,13 @@ describe('composeCustomThingQueryArgs', () => {
 
     const expectedResult = ['query Home_getExample {', '  getExample {'];
 
-    const result = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
+    const result = composeCustomThingQueryArgs(
+      prefixName,
+      queryName,
+      thingConfig,
+      generalConfig,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -69,7 +75,13 @@ describe('composeCustomThingQueryArgs', () => {
       '  loadExample(path: $path, index: $index) {',
     ];
 
-    const result = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig);
+    const result = composeCustomThingQueryArgs(
+      prefixName,
+      queryName,
+      thingConfig,
+      generalConfig,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

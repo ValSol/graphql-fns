@@ -2,6 +2,14 @@
 
 import type { ThingConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
 
+import composeChildActionSignature from '../types/composeChildActionSignature';
+
+type ClientFieldsOptionsWithChildArgs = {
+  ...ClientFieldsOptions,
+  currentChild: string,
+  childArgs: { [argName: string]: string },
+};
+
 // accessorial function
 const includeField = (name: string, include: void | Object, exclude: void | Object): boolean =>
   (include === undefined ||
@@ -17,10 +25,31 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
       Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
 
-const composeFields = (
+const getNameOrAlias = (nameWithAlias) => nameWithAlias.split(': ')[0];
+
+const composeChildArgs = (currentChild, thingConfig) =>
+  composeChildActionSignature(thingConfig)
+    .split(', ')
+    .filter(Boolean)
+    .reduce((prev, item) => {
+      const [argName, argType] = item.split(': ');
+      prev[`${currentChild}_${argName}`] = argType; // eslint-disable-line no-param-reassign
+      return prev;
+    }, {});
+
+const composeChildArgsStr = (childArgs) =>
+  Object.keys(childArgs)
+    .map((key) => {
+      const keyArr = key.split('_');
+      const bareName = keyArr[keyArr.length - 1];
+      return `${bareName}: $${key}`;
+    })
+    .join(', ');
+
+const composeFieldsWithChildArgs = (
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
-  options: ClientFieldsOptions,
+  options: ClientFieldsOptionsWithChildArgs,
 ): Array<string> => {
   const {
     booleanFields,
@@ -39,7 +68,7 @@ const composeFields = (
     relationalFields,
     textFields,
   } = thingConfig;
-  const { shift, depth, include, exclude } = options;
+  const { childArgs, currentChild, depth, include, exclude, shift } = options;
 
   const result = [];
 
@@ -126,9 +155,15 @@ const composeFields = (
         prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
-        const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
+        const nextOptions = {
+          childArgs,
+          currentChild,
+          shift: shift + 1,
+          include: nextInclude,
+          exclude: nextExclude,
+        };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
+        prev.push.apply(prev, composeFieldsWithChildArgs(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -142,9 +177,15 @@ const composeFields = (
         prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
-        const nextOptions = { shift: shift + 1, include: nextInclude, exclude: nextExclude };
+        const nextOptions = {
+          childArgs,
+          currentChild,
+          shift: shift + 1,
+          include: nextInclude,
+          exclude: nextExclude,
+        };
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
+        prev.push.apply(prev, composeFieldsWithChildArgs(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -152,20 +193,32 @@ const composeFields = (
   }
 
   if (relationalFields && depth) {
-    relationalFields.reduce((prev, { name, config }) => {
+    relationalFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
+        const nameOrAlias = getNameOrAlias(nameWithAlias);
+        const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
         const nextOptions = {
+          childArgs,
+          currentChild: newCurrentChild,
           shift: shift + 1,
           depth: depth - 1,
           include: nextInclude,
           exclude: nextExclude,
         };
+        if (array) {
+          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
+        prev.push.apply(prev, composeFieldsWithChildArgs(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -173,10 +226,20 @@ const composeFields = (
   }
 
   if (relationalFields && !depth) {
-    relationalFields.reduce((prev, { name }) => {
+    relationalFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        if (array) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
         prev.push(`${'  '.repeat(shift)}  id`);
         prev.push(`${'  '.repeat(shift)}}`);
       }
@@ -185,20 +248,32 @@ const composeFields = (
   }
 
   if (duplexFields && depth) {
-    duplexFields.reduce((prev, { name, config }) => {
+    duplexFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
+        const nameOrAlias = getNameOrAlias(nameWithAlias);
+        const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
         const nextOptions = {
+          childArgs,
+          currentChild: newCurrentChild,
           shift: shift + 1,
           depth: depth - 1,
           include: nextInclude,
           exclude: nextExclude,
         };
+        if (array) {
+          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
         // eslint-disable-next-line prefer-spread
-        prev.push.apply(prev, composeFields(config, generalConfig, nextOptions));
+        prev.push.apply(prev, composeFieldsWithChildArgs(config, generalConfig, nextOptions));
         prev.push(`${'  '.repeat(shift)}}`);
       }
       return prev;
@@ -206,13 +281,24 @@ const composeFields = (
   }
 
   if (duplexFields && !depth) {
-    duplexFields.reduce((prev, { name }) => {
+    duplexFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        if (array) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
         prev.push(`${'  '.repeat(shift)}  id`);
         prev.push(`${'  '.repeat(shift)}}`);
       }
+
       return prev;
     }, result);
   }
@@ -337,6 +423,20 @@ const composeFields = (
   }
 
   return result;
+};
+
+const composeFields = (
+  thingConfig: ThingConfig,
+  generalConfig: GeneralConfig,
+  options: ClientFieldsOptions,
+): { fields: Array<string>, childArgs: { [argName: string]: string } } => {
+  const childArgs = {};
+  const fields = composeFieldsWithChildArgs(thingConfig, generalConfig, {
+    ...options,
+    currentChild: '',
+    childArgs,
+  });
+  return { fields, childArgs };
 };
 
 export default composeFields;

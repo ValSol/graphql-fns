@@ -83,8 +83,8 @@ describe('createThingType', () => {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }`;
@@ -249,8 +249,8 @@ describe('createThingType', () => {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }`;

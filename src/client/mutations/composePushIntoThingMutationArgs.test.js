@@ -24,7 +24,7 @@ describe('composePushIntoThingMutationArgs', () => {
       '  pushIntoExample(whereOne: $whereOne, data: $data, positions: $positions) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, pushIntoThingMutationAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, pushIntoThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

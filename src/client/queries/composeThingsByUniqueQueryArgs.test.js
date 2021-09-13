@@ -23,7 +23,7 @@ describe('composeThingsQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -43,14 +43,13 @@ describe('composeThingsQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose things query with PaginationInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: true,
       textFields: [
         {
           name: 'textField',
@@ -59,11 +58,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $pagination: PaginationInput) {',
-      '  ExamplesByUnique(where: $where, sort: $sort, pagination: $pagination) {',
+      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
+      '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -83,7 +82,7 @@ describe('composeThingsQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort, near: $near) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsByUniqueQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

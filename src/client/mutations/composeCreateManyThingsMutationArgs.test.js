@@ -23,7 +23,12 @@ describe('composeCreateManyThingsMutationArgs', () => {
       '  createManyExamples(data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, createManyThingsMutationAttributes);
+    const result = composeActionArgs(
+      prefixName,
+      thingConfig,
+      createManyThingsMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

@@ -8,6 +8,7 @@ const composeCustomThingMutationArgs = (
   mutationName: string,
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
+  childArgs: { [argName: string]: string },
 ): Array<string> => {
   if (!generalConfig) {
     throw new TypeError('"generalConfig" property have to be defined!');
@@ -34,6 +35,7 @@ const composeCustomThingMutationArgs = (
     specificName: composeName,
     argNames: composeArgNames,
     argTypes: composeArgTypes,
+    config: composeConfig,
   } = Mutation[mutationName];
 
   const name = composeName(thingConfig, generalConfig);
@@ -44,12 +46,20 @@ const composeCustomThingMutationArgs = (
     throw new TypeError('argNames & argTypes arrays have to have equal length!');
   }
 
-  const args1 = argNames.map((argName, i) => `$${argName}: ${argTypes[i]}`).join(', ');
+  const args1arr = argNames.map((argName, i) => `$${argName}: ${argTypes[i]}`);
+  Object.keys(childArgs).forEach((argName) => {
+    args1arr.push(`$${argName}: ${childArgs[argName]}`);
+  });
+  const args1 = args1arr.join(', ');
+
   const args2 = argNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
-  const result = argNames.length
-    ? [`mutation ${prefixName}_${name}(${args1}) {`, `  ${name}(${args2}) {`]
-    : [`mutation ${prefixName}_${name} {`, `  ${name} {`];
+  const returnConfig = composeConfig(thingConfig, generalConfig);
+
+  const result = [
+    `mutation ${prefixName}_${name}${args1 ? `(${args1})` : ''} {`,
+    `  ${name}${args2 ? `(${args2})` : ''}${returnConfig ? ' {' : ''}`,
+  ];
 
   return result;
 };

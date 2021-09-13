@@ -23,7 +23,7 @@ describe('composeCreateThingMutationArgs', () => {
       '  createExample(data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, createThingMutationAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, createThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -65,7 +65,7 @@ describe('composeCreateThingMutationArgs', () => {
       '  createPerson(data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, personConfig, createThingMutationAttributes);
+    const result = composeActionArgs(prefixName, personConfig, createThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

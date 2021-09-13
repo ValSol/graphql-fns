@@ -32,7 +32,6 @@ describe('composeDerivativeThingsQuery', () => {
 
   const paginationThingConfig: ThingConfig = {
     name: 'PaginationExample',
-    pagination: true,
     textFields: [
       {
         name: 'textField',
@@ -91,8 +90,12 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort'],
-      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogSortInput`],
+      argNames: () => ['where', 'sort', 'pagination'],
+      argTypes: ({ name }) => [
+        `${name}ForCatalogWhereInput`,
+        `${name}ForCatalogSortInput`,
+        'PaginationInput',
+      ],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -112,8 +115,12 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort'],
-      argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogSortInput`],
+      argNames: () => ['where', 'sort', 'pagination'],
+      argTypes: ({ name }) => [
+        `${name}ForCatalogWhereInput`,
+        `${name}ForCatalogSortInput`,
+        'PaginationInput',
+      ],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', thingConfig2, generalConfig2),
@@ -162,10 +169,11 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('things')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'near'],
+      argNames: () => ['where', 'sort', 'pagination', 'near'],
       argTypes: ({ name }) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogSortInput`,
+        'PaginationInput',
         `${name}ForCatalogNearInput`,
       ],
       type: ({ name }) => `[${name}ForCatalog!]!`,

@@ -23,7 +23,7 @@ describe('composeUpdateThingMutationArgs', () => {
       '  updateExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, updateThingMutationAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, updateThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -65,7 +65,7 @@ describe('composeUpdateThingMutationArgs', () => {
       '  updatePerson(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, personConfig, updateThingMutationAttributes);
+    const result = composeActionArgs(prefixName, personConfig, updateThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

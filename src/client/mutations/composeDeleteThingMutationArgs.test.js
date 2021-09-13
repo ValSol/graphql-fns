@@ -23,7 +23,7 @@ describe('composeDeleteThingMutationArgs', () => {
       '  deleteExample(whereOne: $whereOne) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, deleteThingMutationAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, deleteThingMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

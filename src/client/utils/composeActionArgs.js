@@ -6,6 +6,7 @@ const composeActionArgs = (
   prefix: string,
   thingConfig: ThingConfig,
   actionAttributes: ActionAttributes,
+  childArgs: { [argName: string]: string },
 ): Array<string> | string => {
   const {
     actionAllowed,
@@ -32,9 +33,14 @@ const composeActionArgs = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const args1 = filteredArgNames
-    .map((argName, i) => `$${argName}: ${filteredArgTypes[i](configName)}`)
-    .join(', ');
+  const args1arr = filteredArgNames.map(
+    (argName, i) => `$${argName}: ${filteredArgTypes[i](configName)}`,
+  );
+  Object.keys(childArgs).forEach((argName) => {
+    args1arr.push(`$${argName}: ${childArgs[argName]}`);
+  });
+  const args1 = args1arr.join(', ');
+
   const args2 = filteredArgNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
   return actionReturnConfig

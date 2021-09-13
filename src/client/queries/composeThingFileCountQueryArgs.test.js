@@ -21,7 +21,7 @@ describe('composeThingFileCountQuery', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingFileCountQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingFileCountQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

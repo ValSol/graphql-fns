@@ -20,7 +20,7 @@ describe('composeThingFileQueryArgs', () => {
       '  ImageFiles(where: $where) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingFilesQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingFilesQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

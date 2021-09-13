@@ -14,50 +14,74 @@ const composeMutation = (
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
-  let head;
-
   if (!thingConfig) {
     throw new TypeError('thingConfig must be defined!');
   }
 
-  let returnObjectConfig = thingConfig;
-
   if (mutationAttributes[mutationName]) {
-    head = composeActionArgs(prefixName, thingConfig, mutationAttributes[mutationName]);
-  } else {
-    head = composeCustomThingMutationArgs(prefixName, mutationName, thingConfig, generalConfig);
+    const { childArgs, fields } = composeFields(thingConfig, generalConfig, {
+      ...clientOptions,
+      shift: 2,
+    });
 
-    const forClient = true;
-    const custom = mergeDerivativeIntoCustom(generalConfig, forClient); // eslint-disable-line no-case-declarations
+    const head = composeActionArgs(
+      prefixName,
+      thingConfig,
+      mutationAttributes[mutationName],
+      childArgs,
+    );
 
-    if (!custom) {
-      throw new TypeError('"custom" property have to be defined!');
-    }
-    const { Mutation } = custom; // eslint-disable-line no-case-declarations
-    if (!Mutation) {
-      throw new TypeError('"Mutation" property have to be defined!');
-    }
-    if (
-      !Mutation[mutationName] ||
-      !Mutation[mutationName].config ||
-      typeof Mutation[mutationName].config !== 'function'
-    ) {
-      throw new TypeError(`Method "config" have to be defined for "${mutationName}" custom query`);
-    }
-
-    returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
-
-    if (returnObjectConfig === null) {
-      const tail = head[head.length - 1].slice(0, -2);
-      return [...head.slice(0, -1), tail, '}'].join('\n');
-    }
+    return [...head, ...fields, '  }', '}'].join('\n');
   }
 
-  const fields = composeFields(returnObjectConfig, generalConfig, { ...clientOptions, shift: 2 });
+  if (!generalConfig) {
+    throw new TypeError('"generalConfig" have to be defined!');
+  }
 
-  const resultArray = [...head, ...fields, '  }', '}'];
+  const forClient = true;
+  const custom = mergeDerivativeIntoCustom(generalConfig, forClient); // eslint-disable-line no-case-declarations
+  if (!custom) {
+    throw new TypeError('"custom" property have to be defined!');
+  }
+  const { Mutation } = custom; // eslint-disable-line no-case-declarations
+  if (!Mutation) {
+    throw new TypeError('"Mutation" property have to be defined!');
+  }
+  if (
+    !Mutation[mutationName] ||
+    !Mutation[mutationName].config ||
+    typeof Mutation[mutationName].config !== 'function'
+  ) {
+    throw new TypeError(`Method "config" have to be defined for "${mutationName}" custom query`);
+  }
 
-  return resultArray.join('\n');
+  const returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
+
+  if (returnObjectConfig === null) {
+    const head = composeCustomThingMutationArgs(
+      prefixName,
+      mutationName,
+      thingConfig,
+      generalConfig,
+      {},
+    );
+    return [...head, '}'].join('\n');
+  }
+
+  const { childArgs, fields } = composeFields(returnObjectConfig, generalConfig, {
+    ...clientOptions,
+    shift: 2,
+  });
+
+  const head = composeCustomThingMutationArgs(
+    prefixName,
+    mutationName,
+    thingConfig,
+    generalConfig,
+    childArgs,
+  );
+
+  return [...head, ...fields, '  }', '}'].join('\n');
 };
 
 export default composeMutation;

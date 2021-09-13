@@ -31,7 +31,6 @@ describe('createThingDistinctValuesQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
-      pagination: true,
       textFields: [
         {
           name: 'firstName',

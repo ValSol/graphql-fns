@@ -11,7 +11,7 @@ describe('createThingsQueryType', () => {
       name: 'Example',
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
@@ -33,7 +33,7 @@ describe('createThingsQueryType', () => {
       ],
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
@@ -55,7 +55,7 @@ describe('createThingsQueryType', () => {
       ],
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, search: String): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String): [Example!]!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
@@ -65,7 +65,6 @@ describe('createThingsQueryType', () => {
   test('should create query things type with pagination arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: true,
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
@@ -90,7 +89,7 @@ describe('createThingsQueryType', () => {
       ],
     };
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingsQueryAttributes, dic);
@@ -100,7 +99,6 @@ describe('createThingsQueryType', () => {
   test('should create query things type with were, pagination and near args', () => {
     const thingConfig = {
       name: 'Example',
-      pagination: true,
       textFields: [
         {
           name: 'firstName',

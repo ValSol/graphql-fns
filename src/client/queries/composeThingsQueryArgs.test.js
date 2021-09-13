@@ -19,11 +19,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
-      '  Examples(where: $where, sort: $sort) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -39,18 +39,17 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput) {',
-      '  Examples(where: $where, sort: $sort) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose things query with PaginationInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: true,
       textFields: [
         {
           name: 'textField',
@@ -63,7 +62,7 @@ describe('composeThingsQueryArgs', () => {
       '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -79,11 +78,11 @@ describe('composeThingsQueryArgs', () => {
     };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $near: ExampleNearInput) {',
-      '  Examples(where: $where, sort: $sort, near: $near) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $near: ExampleNearInput) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination, near: $near) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingsQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

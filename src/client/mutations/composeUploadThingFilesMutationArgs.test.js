@@ -27,7 +27,12 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadImageFiles(files: $files, hashes: $hashes) {',
     ];
 
-    const result = composeActionArgs(prefixName, imageConfig, uploadThingFilesMutationAttributes);
+    const result = composeActionArgs(
+      prefixName,
+      imageConfig,
+      uploadThingFilesMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

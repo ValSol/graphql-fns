@@ -22,7 +22,7 @@ describe('composeDeletedThingSubscriptionArgs', () => {
       '  deletedExample(where: $where) {',
     ];
 
-    const result = composeDeletedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeDeletedThingSubscriptionArgs(prefixName, thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -42,7 +42,7 @@ describe('composeDeletedThingSubscriptionArgs', () => {
       '  deletedExample(where: $where) {',
     ];
 
-    const result = composeDeletedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeDeletedThingSubscriptionArgs(prefixName, thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 });

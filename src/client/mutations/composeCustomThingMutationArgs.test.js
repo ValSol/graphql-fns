@@ -17,14 +17,25 @@ describe('composeCustomThingMutationArgs', () => {
       config: (thinConfig) => thinConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const thingConfig = {};
+
+    Object.assign(thingConfig, {
       name: 'Example',
       textFields: [
         {
           name: 'textField',
         },
       ],
-    };
+      relationalFields: [
+        {
+          name: 'examples',
+          array: true,
+          config: thingConfig,
+        },
+      ],
+    });
+
+    const childArgs = { examples_where: 'ExampleWhereInput' };
 
     const thingConfigs = { Example: thingConfig };
     const mutationName = 'loadThing';
@@ -32,13 +43,17 @@ describe('composeCustomThingMutationArgs', () => {
 
     const generalConfig: GeneralConfig = { thingConfigs, custom };
 
-    const expectedResult = ['mutation Home_loadExample {', '  loadExample {'];
+    const expectedResult = [
+      'mutation Home_loadExample($examples_where: ExampleWhereInput) {',
+      '  loadExample {',
+    ];
 
     const result = composeCustomThingMutationArgs(
       prefixName,
       mutationName,
       thingConfig,
       generalConfig,
+      childArgs,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -79,6 +94,7 @@ describe('composeCustomThingMutationArgs', () => {
       mutationName,
       thingConfig,
       generalConfig,
+      {},
     );
     expect(result).toEqual(expectedResult);
   });

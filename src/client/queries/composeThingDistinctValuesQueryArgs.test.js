@@ -24,7 +24,12 @@ describe('composeThingDistinctValuesQueryArgs', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingDistinctValuesQueryAttributes);
+    const result = composeActionArgs(
+      prefixName,
+      thingConfig,
+      thingDistinctValuesQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

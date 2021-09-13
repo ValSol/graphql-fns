@@ -48,7 +48,12 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, uploadFilesToThingMutationAttributes);
+    const result = composeActionArgs(
+      prefixName,
+      thingConfig,
+      uploadFilesToThingMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -104,7 +109,12 @@ describe('composeUploadFilesToThingMutationResolver', () => {
       '  uploadFilesToExample(whereOne: $whereOne, data: $data, files: $files, options: $options, positions: $positions) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, uploadFilesToThingMutationAttributes);
+    const result = composeActionArgs(
+      prefixName,
+      thingConfig,
+      uploadFilesToThingMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

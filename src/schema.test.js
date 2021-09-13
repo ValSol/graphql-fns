@@ -50,7 +50,6 @@ describe('graphql schema', () => {
   test('test schema with enumerations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: true,
       textFields: [
         {
           name: 'textField1',

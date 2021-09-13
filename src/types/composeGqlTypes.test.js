@@ -30,7 +30,6 @@ describe('composeGqlTypes', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
-      pagination: true,
 
       textFields: [
         {
@@ -467,7 +466,7 @@ type Query {
   ImageFiles(where: FileWhereInput): [Image!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
-  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String): [Example!]!
 }
 type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
@@ -638,6 +637,10 @@ enum Example1SortEnum {
 input Example1SortInput {
   sortBy: [Example1SortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 enum Example1GeospatialFieldNamesEnum {
   position
 }
@@ -796,16 +799,16 @@ type UpdatedExample2Payload {
 type Query {
   childExample1(whereOne: Example1WhereOneInput!): Example1!
   childExample2(whereOne: Example2WhereOneInput!): Example2!
-  childExample1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
-  childExample2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
+  childExample1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
+  childExample2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example2Count(where: Example2WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
   Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput): [String!]!
   Example1(whereOne: Example1WhereOneInput!): Example1!
   Example2(whereOne: Example2WhereOneInput!): Example2!
-  Example1s(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
-  Example2s(where: Example2WhereInput, sort: Example2SortInput): [Example2!]!
+  Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
+  Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
   Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
   Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput): [Example2!]!
 }
@@ -902,8 +905,8 @@ type Person {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }
@@ -999,6 +1002,10 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input PersonWhereOneInput {
   id: ID!
@@ -1115,16 +1122,16 @@ type UpdatedPlacePayload {
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
-  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
   Place(whereOne: PlaceWhereOneInput!): Place!
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
@@ -1287,6 +1294,10 @@ enum PersonSortEnum {
 input PersonSortInput {
   sortBy: [PersonSortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 enum PersonTextNamesEnum {
   firstName
   lastName
@@ -1361,11 +1372,11 @@ type UpdatedPersonPayload {
 }
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
-  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
 }
 type Mutation {
@@ -1463,8 +1474,8 @@ type Person {
   updatedAt: DateTime!
   firstName: String!
   lastName: String!
-  friends(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  enemies(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
 }
@@ -1473,8 +1484,8 @@ type Place {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String
-  citizens(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  visitors(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
+  citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1562,6 +1573,10 @@ enum PersonSortEnum {
 }
 input PersonSortInput {
   sortBy: [PersonSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input PersonWhereOneInput {
   id: ID!
@@ -1726,16 +1741,16 @@ type UpdatedPlacePayload {
 type Query {
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
-  childPeople(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
   Place(whereOne: PlaceWhereOneInput!): Place!
-  People(where: PersonWhereInput, sort: PersonSortInput): [Person!]!
-  Places(where: PlaceWhereInput, sort: PlaceSortInput): [Place!]!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
@@ -1848,6 +1863,10 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 enum ExampleTextNamesEnum {
   textField
 }
@@ -1859,11 +1878,11 @@ input ExampleWhereByUniqueInput {
 }
 type Query {
   childExample(whereOne: ExampleWhereOneInput!): Example!
-  childExamples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
 }`;
 
@@ -2061,8 +2080,12 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 type Query {
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -2140,8 +2163,12 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 type Query {
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -2460,6 +2487,10 @@ enum ExampleSortEnum {
 input ExampleSortInput {
   sortBy: [ExampleSortEnum]
 }
+input PaginationInput {
+  skip: Int
+  first: Int
+}
 input ExampleForCatalogWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2535,8 +2566,8 @@ input ExampleTimeRangeInput {
   end: DateTime!
 }
 type Query {
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput): [Example!]!
-  ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput): [ExampleForCatalog!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput): [ExampleForCatalog!]!
 }
 type Mutation {
   updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForCatalog!
@@ -2626,7 +2657,7 @@ type Menu {
   createdAt: DateTime!
   updatedAt: DateTime!
   menuName: String
-  sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput): [MenuSection!]!
+  sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
 }
 type MenuSection {
   id: ID!
@@ -2747,6 +2778,10 @@ enum MenuSectionSortEnum {
 }
 input MenuSectionSortInput {
   sortBy: [MenuSectionSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input MenuWhereOneInput {
   id: ID!

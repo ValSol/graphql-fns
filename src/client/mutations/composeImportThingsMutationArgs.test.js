@@ -23,7 +23,7 @@ describe('composeImportThingsMutationArgs', () => {
       '  importExamples(file: $file, options: $options) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, importThingsMutationAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, importThingsMutationAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

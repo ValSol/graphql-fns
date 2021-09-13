@@ -8,7 +8,7 @@ import childThings from './actionAttributes/childThingsQueryAttributes';
 
 const composeChildActionSignature = (
   thingConfig: ThingConfig,
-  dic: { [inputName: string]: string },
+  dic?: { [inputName: string]: string },
   inventory?: Inventory,
 ): string => {
   const {
@@ -39,7 +39,7 @@ const composeChildActionSignature = (
   inputCreators.forEach((inputCreator) => {
     const [inputName, inputDefinition, childChain] = inputCreator(thingConfig);
     toShow.push(Boolean(inputDefinition));
-    if (inputName && !dic[inputName] && inputDefinition) {
+    if (dic && inputName && !dic[inputName] && inputDefinition) {
       dic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
       fillDic(childChain, dic);
     }

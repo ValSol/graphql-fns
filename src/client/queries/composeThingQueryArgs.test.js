@@ -23,7 +23,7 @@ describe('composeThingQueryArgs', () => {
       '  Example(whereOne: $whereOne) {',
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

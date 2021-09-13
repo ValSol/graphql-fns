@@ -15,27 +15,27 @@ const composeSubscription = (
 ): string => {
   let head;
 
+  const { childArgs, fields } = composeFields(thingConfig, generalConfig, {
+    ...clientOptions,
+    shift: 2,
+  });
+
   switch (subscriptionName) {
     case 'createdThing':
-      head = composeCreatedThingSubscriptionArgs(prefixName, thingConfig);
+      head = composeCreatedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
       break;
 
     case 'deletedThing':
-      head = composeDeletedThingSubscriptionArgs(prefixName, thingConfig);
+      head = composeDeletedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
       break;
 
     case 'updatedThing':
-      head = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig);
+      head = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
       break;
 
     default:
       throw new TypeError(`Invalid subscription value "${subscriptionName}"!`);
   }
-
-  const fields = composeFields(thingConfig, generalConfig, {
-    ...clientOptions,
-    shift: 2,
-  });
 
   const resultArray = [...head, ...fields, '  }', '}'];
 

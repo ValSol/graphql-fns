@@ -16,7 +16,7 @@ const composeFragment = (
 
   const head = composeThingFragmentArgs(fragmentName, thingConfig);
 
-  const fields = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 1 });
+  const { fields } = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 1 });
 
   const resultArray = [...head, ...fields, '}'];
 

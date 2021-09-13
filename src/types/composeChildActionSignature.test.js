@@ -22,7 +22,8 @@ describe('composeChildActionSignature util', () => {
     const dic = {};
 
     const result = await composeChildActionSignature(thingConfig, dic);
-    const expectedResult = 'where: ExampleWhereInput, sort: ExampleSortInput, search: String';
+    const expectedResult =
+      'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
     expect(result).toEqual(expectedResult);
 
@@ -80,6 +81,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField_size: Int
   textField_notsize: Int
 }`,
+      PaginationInput: `input PaginationInput {
+  skip: Int
+  first: Int
+}`,
       ExampleSortInput: `enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -92,5 +97,25 @@ input ExampleSortInput {
     };
 
     expect(dic).toEqual(expectedDic);
+  });
+
+  test('should return right result without dic', async () => {
+    const thingConfig: ThingConfig = {
+      name: 'Example',
+      textFields: [
+        {
+          name: 'textField',
+          array: true,
+          index: true,
+          weight: 1,
+        },
+      ],
+    };
+
+    const result = await composeChildActionSignature(thingConfig);
+    const expectedResult =
+      'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
+
+    expect(result).toEqual(expectedResult);
   });
 });

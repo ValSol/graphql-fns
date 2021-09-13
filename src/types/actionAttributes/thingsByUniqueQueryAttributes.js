@@ -6,7 +6,6 @@ import type { ThingConfig } from '../../flowTypes';
 
 import createThingWhereByUniqueInputType from '../inputs/createThingWhereByUniqueInputType';
 import createThingSortInputType from '../inputs/createThingSortInputType';
-import createPaginationInputType from '../inputs/createPaginationInputType';
 import createThingNearInputType from '../inputs/createThingNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
@@ -20,17 +19,15 @@ const actionName = (baseName: string, suffix?: string = ''): string =>
 const inputCreators = [
   createThingWhereByUniqueInputType,
   createThingSortInputType,
-  createPaginationInputType,
   createThingNearInputType,
   createStringInputTypeForSearch,
 ];
 
-const argNames = ['where', 'sort', 'pagination', 'near', 'search'];
+const argNames = ['where', 'sort', 'near', 'search'];
 
 const argTypes = [
   (name: string): string => `${name}WhereByUniqueInput!`,
   (name: string): string => `${name}SortInput`,
-  (name: string): string => 'PaginationInput', // eslint-disable-line no-unused-vars
   (name: string): string => `${name}NearInput`,
   (name: string): string => 'String', // eslint-disable-line no-unused-vars
 ];

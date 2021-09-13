@@ -22,7 +22,7 @@ describe('composeUpdatedThingSubscriptionArgs', () => {
       '  updatedExample(where: $where) {',
     ];
 
-    const result = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -42,7 +42,7 @@ describe('composeUpdatedThingSubscriptionArgs', () => {
       '  updatedExample(where: $where) {',
     ];
 
-    const result = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig);
+    const result = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig, {});
     expect(result).toEqual(expectedResult);
   });
 });

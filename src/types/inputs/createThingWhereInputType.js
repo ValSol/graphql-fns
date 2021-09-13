@@ -28,7 +28,7 @@ const counterFields = `
   counter_lt: Int
   counter_lte: Int`;
 
-const composeFields = (
+const composeInputFields = (
   thingConfig: ThingConfig,
   childChain: { [inputSpecificName: string]: ThingConfig },
 ): string => {
@@ -217,7 +217,7 @@ const createThingWhereInputType: InputCreator = (thingConfig) => {
   const inputName = `${name}WhereInput`;
   const preChildChain = {};
 
-  const fields = composeFields(thingConfig, preChildChain);
+  const fields = composeInputFields(thingConfig, preChildChain);
 
   const result = [
     `input ${name}WhereInput {`,

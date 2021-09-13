@@ -24,7 +24,7 @@ describe('composeThingCountQueryArgs', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -46,7 +46,7 @@ describe('composeThingCountQueryArgs', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes);
+    const result = composeActionArgs(prefixName, thingConfig, thingCountQueryAttributes, {});
     expect(result).toEqual(expectedResult);
   });
 });

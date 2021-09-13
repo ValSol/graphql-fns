@@ -32,7 +32,6 @@ describe('composeDerivativeThingsQuery', () => {
 
   const paginationThingConfig: ThingConfig = {
     name: 'PaginationExample',
-    pagination: true,
     textFields: [
       {
         name: 'textField',
@@ -139,11 +138,10 @@ describe('composeDerivativeThingsQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('thingsByUnique')
           ? `${pluralize(name)}ByUniqueForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'pagination'],
+      argNames: () => ['where', 'sort'],
       argTypes: ({ name }) => [
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
-        'PaginationInput',
       ],
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (thingConfig2, generalConfig2) =>
