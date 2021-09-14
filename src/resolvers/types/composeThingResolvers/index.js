@@ -2,12 +2,17 @@
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
+import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createThingArrayResolver from '../createThingArrayResolver';
 import createThingScalarResolver from '../createThingScalarResolver';
+import fieldArrayResolver from '../fieldArrayResolver';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
 
 type ThingResolver = { [key: string]: Function };
+
+type Args = { slice: { begin?: number, end?: number } };
+type Context = { mongooseConn: Object };
 
 const composeThingResolvers = (
   thingConfig: ThingConfig,
@@ -15,8 +20,21 @@ const composeThingResolvers = (
   serversideConfig: ServersideConfig,
 ): ThingResolver => {
   const { duplexFields, geospatialFields, relationalFields } = thingConfig;
+  const fieldsObject = composeFieldsObject(thingConfig);
 
   const resolvers = {};
+
+  Object.keys(fieldsObject).forEach((fieldName) => {
+    const {
+      attributes: { array },
+      kind,
+    } = fieldsObject[fieldName];
+    if (kind === 'relationalFields' || kind === 'duplexFields' || kind === 'geospatialFields') {
+      return;
+    }
+
+    if (array) resolvers[fieldName] = fieldArrayResolver;
+  });
 
   if (relationalFields) {
     relationalFields.reduce((prev, { array, name, config }) => {
@@ -50,9 +68,9 @@ const composeThingResolvers = (
 
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name, array, geospatialType }) => {
-      const resolver = (parent: Object): Object => {
+      const resolver = (parent: Object, args: Args, context: Context, info: Object): Object => {
         if (array) {
-          const values = parent[name];
+          const values = fieldArrayResolver(parent, args, context, info);
           if (!values || !values.length) return [];
 
           if (geospatialType === 'Point') {

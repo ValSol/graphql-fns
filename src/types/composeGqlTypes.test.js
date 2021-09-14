@@ -116,6 +116,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 enum WeekdaysEnumeration {
   a0
   a1
@@ -147,14 +151,14 @@ type Example {
   textField1: String
   textField2: String
   textField3: String!
-  textField4: [String!]!
-  textField5: [String!]!
+  textField4(slice: SliceInput): [String!]!
+  textField5(slice: SliceInput): [String!]!
   day: WeekdaysEnumeration
-  cuisines: [CuisinesEnumeration!]!
+  cuisines(slice: SliceInput): [CuisinesEnumeration!]!
   logo: Image!
   hero: Image
-  pictures: [Image!]!
-  photos: [Image!]!
+  pictures(slice: SliceInput): [Image!]!
+  photos(slice: SliceInput): [Image!]!
   position: GeospatialPoint
 }
 type Image {
@@ -544,6 +548,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type GeospatialPoint {
   lng: Float!
   lat: Float!
@@ -579,8 +587,8 @@ type Example2 {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  textField1: [String!]!
-  textField2: [String!]!
+  textField1(slice: SliceInput): [String!]!
+  textField2(slice: SliceInput): [String!]!
   area: GeospatialPolygon
 }
 input Example1WhereOneInput {
@@ -898,6 +906,10 @@ type Subscription {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Person {
   id: ID!
@@ -1227,6 +1239,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type Person {
   id: ID!
   createdAt: DateTime!
@@ -1234,9 +1250,9 @@ type Person {
   firstName: String!
   lastName: String!
   location: Address!
-  locations: [Address!]!
+  locations(slice: SliceInput): [Address!]!
   place: Address
-  places: [Address!]!
+  places(slice: SliceInput): [Address!]!
 }
 type Address {
   id: ID!
@@ -1467,6 +1483,10 @@ type Subscription {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Person {
   id: ID!
@@ -1806,6 +1826,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -1908,6 +1932,10 @@ type Query {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Example {
   id: ID!
@@ -2026,6 +2054,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -2108,6 +2140,10 @@ type Query {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Example {
   id: ID!
@@ -2193,6 +2229,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -2240,6 +2280,10 @@ type Mutation {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Example {
   id: ID!
@@ -2297,6 +2341,10 @@ input RegExp {
   pattern: String!
   flags: String
 }
+input SliceInput {
+  begin: Int
+  end: Int
+}
 type Example {
   id: ID!
   createdAt: DateTime!
@@ -2339,6 +2387,10 @@ type Mutation {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Example {
   id: ID!
@@ -2410,6 +2462,10 @@ type Query {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Example {
   id: ID!
@@ -2651,6 +2707,10 @@ type Mutation {
 input RegExp {
   pattern: String!
   flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
 }
 type Menu {
   id: ID!

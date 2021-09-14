@@ -40,8 +40,8 @@ describe('createThingType', () => {
   textField1: String
   textField2: String
   textField3: String!
-  textField4: [String!]!
-  textField5: [String!]!
+  textField4(slice: SliceInput): [String!]!
+  textField5(slice: SliceInput): [String!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -150,9 +150,9 @@ describe('createThingType', () => {
   firstName: String!
   lastName: String!
   location: Address!
-  locations: [Address!]!
+  locations(slice: SliceInput): [Address!]!
   place: Address
-  places: [Address!]!
+  places(slice: SliceInput): [Address!]!
 }`;
 
     const result = createThingType(personConfig, {});
@@ -311,12 +311,12 @@ describe('createThingType', () => {
   updatedAt: DateTime!
   position: GeospatialPoint!
   precedingPosition: GeospatialPoint
-  favoritePositions: [GeospatialPoint!]!
-  worstPositions: [GeospatialPoint!]!
+  favoritePositions(slice: SliceInput): [GeospatialPoint!]!
+  worstPositions(slice: SliceInput): [GeospatialPoint!]!
   area: GeospatialPolygon!
   precedingArea: GeospatialPolygon
-  favoriteAreas: [GeospatialPolygon!]!
-  worstAreas: [GeospatialPolygon!]!
+  favoriteAreas(slice: SliceInput): [GeospatialPolygon!]!
+  worstAreas(slice: SliceInput): [GeospatialPolygon!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -354,9 +354,9 @@ describe('createThingType', () => {
   createdAt: DateTime!
   updatedAt: DateTime!
   field1: WeekdaysEnumeration
-  field2: [CuisinesEnumeration!]!
+  field2(slice: SliceInput): [CuisinesEnumeration!]!
   field3: WeekdaysEnumeration!
-  field4: [CuisinesEnumeration!]!
+  field4(slice: SliceInput): [CuisinesEnumeration!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -397,8 +397,8 @@ describe('createThingType', () => {
   intField1: Int
   intField2: Int
   intField3: Int!
-  intField4: [Int!]!
-  intField5: [Int!]!
+  intField4(slice: SliceInput): [Int!]!
+  intField5(slice: SliceInput): [Int!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -439,8 +439,8 @@ describe('createThingType', () => {
   floatField1: Float
   floatField2: Float
   floatField3: Float!
-  floatField4: [Float!]!
-  floatField5: [Float!]!
+  floatField4(slice: SliceInput): [Float!]!
+  floatField5(slice: SliceInput): [Float!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -481,8 +481,8 @@ describe('createThingType', () => {
   booleanField1: Boolean
   booleanField2: Boolean
   booleanField3: Boolean!
-  booleanField4: [Boolean!]!
-  booleanField5: [Boolean!]!
+  booleanField4(slice: SliceInput): [Boolean!]!
+  booleanField5(slice: SliceInput): [Boolean!]!
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -542,8 +542,8 @@ describe('createThingType', () => {
   textField: String
   logo: Image!
   hero: Image
-  pictures: [Image!]!
-  photos: [Image!]!
+  pictures(slice: SliceInput): [Image!]!
+  photos(slice: SliceInput): [Image!]!
 }`;
 
     const result = createThingType(thingConfig, {});

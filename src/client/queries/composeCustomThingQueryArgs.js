@@ -56,9 +56,10 @@ const composeCustomThingQueryArgs = (
 
   const returnConfig = composeConfig(thingConfig, generalConfig);
 
-  const result = argNames.length
-    ? [`query ${prefixName}_${name}(${args1}) {`, `  ${name}(${args2}) {`]
-    : [`query ${prefixName}_${name} {`, `  ${name}${returnConfig ? ' {' : ''}`];
+  const result = [
+    `query ${prefixName}_${name}${args1arr.length ? `(${args1})` : ''} {`,
+    `  ${name}${args2 ? `(${args2})` : ''}${returnConfig ? ' {' : ''}`,
+  ];
 
   return result;
 };

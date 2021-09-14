@@ -6,6 +6,10 @@ const composeCommonUseTypes = (): Array<string> => [
   pattern: String!
   flags: String
 }`,
+  `input SliceInput {
+  begin: Int
+  end: Int
+}`,
 ];
 
 export default composeCommonUseTypes;

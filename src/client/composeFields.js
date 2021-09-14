@@ -37,6 +37,8 @@ const composeChildArgs = (currentChild, thingConfig) =>
       return prev;
     }, {});
 
+const composeArrArgs = (currentChild) => ({ [`${currentChild}_slice`]: 'SliceInput' });
+
 const composeChildArgsStr = (childArgs) =>
   Object.keys(childArgs)
     .map((key) => {
@@ -89,70 +91,142 @@ const composeFieldsWithChildArgs = (
   }
 
   if (textFields) {
-    textFields.reduce((prev, { name }) => {
+    textFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { name }) => {
+    dateTimeFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (intFields) {
-    intFields.reduce((prev, { name }) => {
+    intFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (floatFields) {
-    floatFields.reduce((prev, { name }) => {
+    floatFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (booleanFields) {
-    booleanFields.reduce((prev, { name }) => {
+    booleanFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (enumFields) {
-    enumFields.reduce((prev, { name }) => {
+    enumFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)})`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias}`);
+        }
       }
       return prev;
     }, result);
   }
 
   if (embeddedFields) {
-    embeddedFields.reduce((prev, { name, config }) => {
+    embeddedFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
+
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = {
@@ -171,10 +245,22 @@ const composeFieldsWithChildArgs = (
   }
 
   if (fileFields) {
-    fileFields.reduce((prev, { name, config }) => {
+    fileFields.reduce((prev, { name, array, config }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+
+        if (array && !embedded) {
+          const nameOrAlias = getNameOrAlias(nameWithAlias);
+          const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+          const currentChildArgs = composeArrArgs(newCurrentChild);
+          Object.assign(childArgs, currentChildArgs);
+          prev.push(
+            `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+          );
+        } else {
+          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+        }
+
         const nextInclude = include && include[nameWithAlias];
         const nextExclude = exclude && exclude[name];
         const nextOptions = {
@@ -304,11 +390,22 @@ const composeFieldsWithChildArgs = (
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { name, geospatialType }) => {
+    geospatialFields.reduce((prev, { name, array, geospatialType }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
         if (geospatialType === 'Point') {
-          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+          if (array && !embedded) {
+            const nameOrAlias = getNameOrAlias(nameWithAlias);
+            const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+            const currentChildArgs = composeArrArgs(newCurrentChild);
+            Object.assign(childArgs, currentChildArgs);
+            prev.push(
+              `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+            );
+          } else {
+            prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+          }
+
           const nestedInculde = include && include[nameWithAlias];
           const nestedExclude = exclude && exclude[name];
           if (includeField('lng', nestedInculde, nestedExclude)) {
@@ -320,7 +417,18 @@ const composeFieldsWithChildArgs = (
           prev.push(`${'  '.repeat(shift)}}`);
         }
         if (geospatialType === 'Polygon') {
-          prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+          if (array && !embedded) {
+            const nameOrAlias = getNameOrAlias(nameWithAlias);
+            const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
+            const currentChildArgs = composeArrArgs(newCurrentChild);
+            Object.assign(childArgs, currentChildArgs);
+            prev.push(
+              `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
+            );
+          } else {
+            prev.push(`${'  '.repeat(shift)}${nameWithAlias} {`);
+          }
+
           const includeExteralRing =
             includeField(
               'externalRing',

@@ -57,7 +57,7 @@ const composeCustomThingMutationArgs = (
   const returnConfig = composeConfig(thingConfig, generalConfig);
 
   const result = [
-    `mutation ${prefixName}_${name}${args1 ? `(${args1})` : ''} {`,
+    `mutation ${prefixName}_${name}${args1arr.length ? `(${args1})` : ''} {`,
     `  ${name}${args2 ? `(${args2})` : ''}${returnConfig ? ' {' : ''}`,
   ];
 

@@ -4,6 +4,8 @@ import type { ThingConfig } from '../flowTypes';
 
 import composeChildActionSignature from './composeChildActionSignature';
 
+const arrayArgs = '(slice: SliceInput)';
+
 const createThingType = (
   thingConfig: ThingConfig,
   dic: { [inputName: string]: string },
@@ -45,7 +47,7 @@ const createThingType = (
   if (textFields) {
     textFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );
@@ -56,7 +58,9 @@ const createThingType = (
   if (intFields) {
     intFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Int${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Int${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
       );
       return prev;
     }, thingTypeArray);
@@ -65,7 +69,9 @@ const createThingType = (
   if (floatFields) {
     floatFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Float${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Float${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
       );
       return prev;
     }, thingTypeArray);
@@ -74,7 +80,7 @@ const createThingType = (
   if (dateTimeFields) {
     dateTimeFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]!' : ''}${
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}DateTime${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );
@@ -85,7 +91,7 @@ const createThingType = (
   if (booleanFields) {
     booleanFields.reduce((prev, { array, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]!' : ''}${
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Boolean${array ? '!]!' : ''}${
           !array && required ? '!' : ''
         }`,
       );
@@ -96,9 +102,9 @@ const createThingType = (
   if (enumFields) {
     enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${enumName}Enumeration${
+          array ? '!]!' : ''
+        }${!array && required ? '!' : ''}`,
       );
       return prev;
     }, thingTypeArray);
@@ -133,9 +139,9 @@ const createThingType = (
     embeddedFields.reduce(
       (prev, { array, name: name2, required, config: { name: embeddedName } }) => {
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}${embeddedName}${array ? '!]!' : ''}${
-            !array && required ? '!' : ''
-          }`,
+          `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${embeddedName}${
+            array ? '!]!' : ''
+          }${!array && required ? '!' : ''}`,
         );
         return prev;
       },
@@ -147,9 +153,9 @@ const createThingType = (
   if (fileFields) {
     fileFields.reduce((prev, { array, name: name2, required, config: { name: embeddedName } }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}${embeddedName}${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${embeddedName}${
+          array ? '!]!' : ''
+        }${!array && required ? '!' : ''}`,
       );
       return prev;
     }, thingTypeArray);
@@ -158,9 +164,9 @@ const createThingType = (
   if (geospatialFields) {
     geospatialFields.reduce((prev, { array, name: name2, geospatialType, required }) => {
       prev.push(
-        `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
+        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Geospatial${geospatialType}${
+          array ? '!]!' : ''
+        }${!array && required ? '!' : ''}`,
       );
       return prev;
     }, thingTypeArray);

@@ -11,6 +11,10 @@ describe('composeCommonUseTypes', () => {
   pattern: String!
   flags: String
 }`,
+      `input SliceInput {
+  begin: Int
+  end: Int
+}`,
     ];
 
     const result = composeCommonUseTypes();

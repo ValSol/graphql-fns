@@ -2,7 +2,7 @@
 
 import type { InputCreator } from '../../flowTypes';
 
-const createPaginationInputType: InputCreator = (thingConfig) => {
+const createPaginationInputType: InputCreator = () => {
   const inputName = 'PaginationInput';
 
   const inputDefinition = `input PaginationInput {
