@@ -2,7 +2,7 @@
 
 import type { Report } from '../../../flowTypes';
 
-import checkInventory from '../../../../utils/checkInventory';
+import checkInventory from '../../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {

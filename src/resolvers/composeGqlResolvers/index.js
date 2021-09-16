@@ -4,7 +4,7 @@ import { DateTimeResolver } from 'graphql-scalars';
 
 import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
+import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 

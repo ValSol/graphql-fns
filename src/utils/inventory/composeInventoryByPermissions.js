@@ -1,6 +1,6 @@
 // @flow
 
-import type { Inventory } from '../flowTypes';
+import type { Inventory } from '../../flowTypes';
 
 type Result = { [permissionName: string]: Inventory };
 

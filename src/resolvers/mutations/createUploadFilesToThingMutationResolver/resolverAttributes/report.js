@@ -2,7 +2,7 @@
 
 import type { Report } from '../../../flowTypes';
 
-import checkInventory from '../../../../utils/checkInventory';
+import checkInventory from '../../../../utils/inventory/checkInventory';
 import addIdsToThing from '../../../utils/addIdsToThing';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 

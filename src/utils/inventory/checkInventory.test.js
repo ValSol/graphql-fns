@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { InventoryByPermissions, Inventory } from '../flowTypes';
+import type { InventoryByPermissions, Inventory } from '../../flowTypes';
 
 import checkInventory from './checkInventory';
 

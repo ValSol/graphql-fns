@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
+import checkInventory from '../../../utils/inventory/checkInventory';
 import createThing from '../../../mongooseModels/createThing';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import executeAuthorisation from '../../utils/executeAuthorisation';

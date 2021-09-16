@@ -3,7 +3,7 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flow
 import type { ResolverAttributes } from '../../flowTypes';
 
 import addIdsToThing from '../../utils/addIdsToThing';
-import checkInventory from '../../../utils/checkInventory';
+import checkInventory from '../../../utils/inventory/checkInventory';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';

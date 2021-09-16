@@ -2,7 +2,7 @@
 
 import type { ActionAttributes, Inventory, ThingConfig } from '../flowTypes';
 
-import checkInventory from '../utils/checkInventory';
+import checkInventory from '../utils/inventory/checkInventory';
 import fillDic from './inputs/fillDic';
 
 const composeStandardActionSignature = (

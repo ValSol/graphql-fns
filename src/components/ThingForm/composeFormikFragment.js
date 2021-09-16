@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import lodashGet from 'lodash.get';
+import pluralize from 'pluralize';
 import { Field, FieldArray } from 'formik';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -15,8 +17,6 @@ import {
   TextField as FormikTextField,
   Select as FormikSelect,
 } from 'formik-material-ui';
-import { get as objectGet } from 'lodash/object';
-import pluralize from 'pluralize';
 
 import type { GeneralConfig, FlatFormikFields, ThingConfig } from '../../flowTypes';
 
@@ -46,8 +46,8 @@ const composeFormikFields = (
           kind,
         } = flatFormikField;
         const path = prefix ? `${prefix}.${name}` : name;
-        const touch = objectGet(touched, path);
-        const error = objectGet(errors, path);
+        const touch = lodashGet(touched, path);
+        const error = lodashGet(errors, path);
         const error2 = typeof error === 'string' ? error : undefined; // for embedded or file fields
         if (flatFormikField.kind === 'embeddedFields' || flatFormikField.kind === 'fileFields') {
           const {
@@ -68,8 +68,8 @@ const composeFormikFields = (
 
                 return (
                   <>
-                    {objectGet(values, path) &&
-                      objectGet(values, path).map((item, j) => {
+                    {lodashGet(values, path) &&
+                      lodashGet(values, path).map((item, j) => {
                         const error3 = error && typeof error[j] === 'string' ? error[j] : undefined;
                         const touch2 = touch && touch[j];
                         return (
@@ -140,7 +140,7 @@ const composeFormikFields = (
             const {
               attributes: { enumName },
             } = flatFormikField;
-            const value = objectGet(allValues, path);
+            const value = lodashGet(allValues, path);
             return (
               <FormControl
                 // eslint-disable-next-line react/no-array-index-key

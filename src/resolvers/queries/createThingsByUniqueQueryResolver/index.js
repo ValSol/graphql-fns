@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, NearInput, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
+import checkInventory from '../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createThingsQueryResolver from '../createThingsQueryResolver';
 

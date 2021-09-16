@@ -2,7 +2,7 @@
 
 import type { GeneralConfig } from '../flowTypes';
 
-import checkInventory from '../utils/checkInventory';
+import checkInventory from '../utils/inventory/checkInventory';
 import composeDerivativeConfig from '../utils/composeDerivativeConfig';
 import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import collectDerivativeInputs from './collectDerivativeInputs';

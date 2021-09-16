@@ -2,7 +2,7 @@
 
 import type { ServersideConfig, ThreeSegmentInventoryChain } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
+import checkInventory from '../../../utils/inventory/checkInventory';
 
 const errMsg = (attr) =>
   `"inventoryByPermissions" & "getActionFilter" must be mutually setted, but "${attr}" is undefined!`;

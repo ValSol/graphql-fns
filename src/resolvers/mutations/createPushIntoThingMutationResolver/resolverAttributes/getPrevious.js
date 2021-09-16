@@ -2,7 +2,7 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
-import checkInventory from '../../../../utils/checkInventory';
+import checkInventory from '../../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import createThing from '../../../../mongooseModels/createThing';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';

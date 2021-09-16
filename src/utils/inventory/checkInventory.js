@@ -1,5 +1,5 @@
 // @flow
-import type { Inventory, InventoryСhain } from '../flowTypes';
+import type { Inventory, InventoryСhain } from '../../flowTypes';
 
 const store = Object.create(null);
 

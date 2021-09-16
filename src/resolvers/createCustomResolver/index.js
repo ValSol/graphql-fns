@@ -6,7 +6,7 @@ import type {
   ThreeSegmentInventoryChain,
 } from '../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
+import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from '../../types/composeActionSignature';
 import executeAuthorisation from '../utils/executeAuthorisation';

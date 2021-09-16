@@ -2,7 +2,7 @@
 
 import type { Inventory, ThreeSegmentInventoryChain } from '../../../flowTypes';
 
-import checkInventory from '../../checkInventory';
+import checkInventory from '../../inventory/checkInventory';
 
 type Arg = {
   actionNames: Array<string>,

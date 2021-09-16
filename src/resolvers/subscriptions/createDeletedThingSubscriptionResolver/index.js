@@ -4,7 +4,7 @@ import { withFilter } from 'graphql-subscriptions';
 
 import type { GeneralConfig, Subscribe, ThingConfig } from '../../../flowTypes';
 
-import checkInventory from '../../../utils/checkInventory';
+import checkInventory from '../../../utils/inventory/checkInventory';
 import createDeletedThingFilter from './createDeletedThingFilter';
 
 const createDeletedThingSubscriptionResolver = (

@@ -14,7 +14,8 @@ import {
   CheckboxWithLabel as FormikCheckbox,
 } from 'formik-material-ui';
 
-import { get as objectGet } from 'lodash/object';
+import lodashGet from 'lodash.get';
+
 import pluralize from 'pluralize';
 
 import Geospatial from '../Geospatial';
@@ -69,8 +70,8 @@ const composeFormikFieldArrayChild = (
 
     return (
       <>
-        {objectGet(values, name) &&
-          objectGet(values, name).map((item, i) => {
+        {lodashGet(values, name) &&
+          lodashGet(values, name).map((item, i) => {
             const tooltip =
               disabled || isSubmitting ? (
                 <DeleteIcon />

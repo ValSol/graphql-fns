@@ -2,7 +2,7 @@
 
 import type { ActionAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
 
-import checkInventory from '../../utils/checkInventory';
+import checkInventory from '../../utils/inventory/checkInventory';
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import fillDic from '../inputs/fillDic';
 
