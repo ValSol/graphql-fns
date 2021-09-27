@@ -67,11 +67,11 @@ const createThingArrayResolver = (
 
     const { where, sort } = args || {};
 
-    const were2 = where ? { AND: [where, id_in] } : { id_in }; // eslint-disable-line camelcase
+    const where2 = where ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
 
     const things = await childThingsQueryResolver(
       parent,
-      { ...args, where: were2 },
+      { ...args, where: where2 },
       context,
       info,
       filter,

@@ -476,11 +476,13 @@ type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   createExample(data: ExampleCreateInput!): Example!
   deleteFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String): [Example!]!
+  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!
   updateFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!): [Example!]!
+  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!): Int!
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
@@ -827,6 +829,8 @@ type Mutation {
   createExample2(data: Example2CreateInput!): Example2!
   deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput): [Example1!]!
   deleteFilteredExample2s(where: Example2WhereInput): [Example2!]!
+  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput): Int!
+  deleteFilteredExample2sReturnScalar(where: Example2WhereInput): Int!
   deleteManyExample1s(whereOne: [Example1WhereOneInput!]!): [Example1!]!
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!): Example1!
@@ -836,6 +840,8 @@ type Mutation {
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!): [Example1!]!
   updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!): [Example2!]!
+  updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!): Int!
+  updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!): Int!
   updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!): [Example1!]!
   updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!): [Example2!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
@@ -1154,6 +1160,8 @@ type Mutation {
   createPlace(data: PlaceCreateInput!): Place!
   deleteFilteredPeople(where: PersonWhereInput): [Person!]!
   deleteFilteredPlaces(where: PlaceWhereInput): [Place!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
+  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
@@ -1163,6 +1171,8 @@ type Mutation {
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!): [Place!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
+  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!): Int!
   updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
   updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
@@ -1399,11 +1409,13 @@ type Mutation {
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   createPerson(data: PersonCreateInput!): Person!
   deleteFilteredPeople(where: PersonWhereInput): [Person!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
   updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
 }
@@ -1781,6 +1793,8 @@ type Mutation {
   createPlace(data: PlaceCreateInput!): Place!
   deleteFilteredPeople(where: PersonWhereInput): [Person!]!
   deleteFilteredPlaces(where: PlaceWhereInput): [Place!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
+  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
@@ -1791,6 +1805,8 @@ type Mutation {
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!): [Place!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
+  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!): Int!
   updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
   updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
@@ -2024,10 +2040,12 @@ type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
   createExample(data: ExampleCreateInput!): Example!
   deleteFilteredExamples(where: ExampleWhereInput): [Example!]!
+  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!): Example!
   importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
   updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!): [Example!]!
+  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!): Int!
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
 }`;

@@ -6,9 +6,9 @@ import getPrevious from './getPrevious';
 import prepareBulkData from './prepareBulkData';
 import report from './report';
 
-const deleteManyThingsResolverAttributes: ResolverAttributes = {
+const deleteThingResolverAttributes: ResolverAttributes = {
   actionGeneralName: 'deleteThing',
-  array: true,
+  array: false,
   getPrevious,
   produceCurrent: false,
   prepareBulkData,
@@ -16,4 +16,4 @@ const deleteManyThingsResolverAttributes: ResolverAttributes = {
   finalResult: ({ previous: [previous] }) => previous,
 };
 
-export default deleteManyThingsResolverAttributes;
+export default deleteThingResolverAttributes;

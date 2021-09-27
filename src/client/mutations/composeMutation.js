@@ -28,8 +28,10 @@ const composeMutation = (
       prefixName,
       thingConfig,
       mutationAttributes[mutationName],
-      childArgs,
+      mutationAttributes[mutationName].actionReturnConfig ? childArgs : {},
     );
+
+    if (head.length === 1) return head[0];
 
     return [...head, ...fields, '  }', '}'].join('\n');
   }
@@ -80,6 +82,8 @@ const composeMutation = (
     generalConfig,
     childArgs,
   );
+
+  if (head.length === 1) return head[0];
 
   return [...head, ...fields, '  }', '}'].join('\n');
 };

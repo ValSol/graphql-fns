@@ -36,7 +36,7 @@ const composeQuery = (
       prefixName,
       thingConfig,
       attributesWithoutChildren[queryName],
-      childArgs,
+      attributesWithoutChildren[queryName].actionReturnConfig ? childArgs : {},
     );
 
     if (head.length === 1) return head[0];
