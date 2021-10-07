@@ -33,6 +33,10 @@ const getProjectionFromInfo = (info: Object, path?: Path): { [fieldName: string]
   const [fieldNode] = fieldNodes;
   const { selectionSet } = fieldNode;
 
+  if (!selectionSet) {
+    return { _id: 1 };
+  }
+
   return getProjectionFromSelectionSet(selectionSet, path || []);
 };
 
