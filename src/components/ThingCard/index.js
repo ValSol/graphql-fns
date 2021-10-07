@@ -4,7 +4,8 @@ import * as React from 'react';
 import clsx from 'clsx';
 import pluralize from 'pluralize';
 import Router, { useRouter } from 'next/router';
-
+import { gql } from '@apollo/client';
+import { Query } from '@apollo/client/react/components';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -17,9 +18,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import ViewListIcon from '@material-ui/icons/ViewList';
-
-import gql from 'graphql-tag';
-import { Query } from '@apollo/react-components';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 

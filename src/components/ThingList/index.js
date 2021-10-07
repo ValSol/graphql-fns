@@ -15,8 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import gql from 'graphql-tag';
-import { useApolloClient } from '@apollo/react-hooks';
+import { gql, useApolloClient } from '@apollo/client';
 import Router, { useRouter } from 'next/router';
 
 import type { ThingConfig } from '../../flowTypes';

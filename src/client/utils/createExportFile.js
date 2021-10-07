@@ -7,14 +7,13 @@ import type { ThingConfig } from '../../flowTypes';
 
 import coerceDataFromGql from '../../utils/coerceDataFromGql';
 
-const csvStringify2 = (data) => {
-  return new Promise((resolve, reject) => {
+const csvStringify2 = (data) =>
+  new Promise((resolve, reject) => {
     csvStringify(data, { header: true }, (err, output) => {
       if (err) reject(err);
       resolve(output);
     });
   });
-};
 
 const createExportFile = async (
   items: Array<Object>,

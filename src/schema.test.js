@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import { makeExecutableSchema } from 'apollo-server';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import type { Enums, GeneralConfig, ThingConfig } from './flowTypes';
 
@@ -38,7 +38,7 @@ describe('graphql schema', () => {
     };
     const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+    const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -104,7 +104,7 @@ describe('graphql schema', () => {
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
     const generalConfig: GeneralConfig = { thingConfigs, enums };
-    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+    const typeDefs = composeGqlTypes(generalConfig);
 
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -166,7 +166,7 @@ describe('graphql schema', () => {
     };
     const thingConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+    const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
 
     const schema = makeExecutableSchema({
@@ -238,7 +238,7 @@ describe('graphql schema', () => {
     });
     const thingConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
-    const typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+    const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
       typeDefs,
@@ -316,7 +316,7 @@ describe('graphql schema', () => {
       },
     };
 
-    let typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+    let typeDefs = composeGqlTypes(generalConfig);
     let resolvers = composeGqlResolvers(generalConfig);
     let schema = makeExecutableSchema({
       typeDefs,
@@ -336,7 +336,7 @@ describe('graphql schema', () => {
         },
       };
 
-      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+      typeDefs = composeGqlTypes(generalConfig);
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -354,7 +354,7 @@ describe('graphql schema', () => {
         },
       };
 
-      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+      typeDefs = composeGqlTypes(generalConfig);
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -366,7 +366,7 @@ describe('graphql schema', () => {
     test('test schema with only quries in inventory', () => {
       generalConfig.inventory = { name: 'test', include: { Query: true } };
 
-      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+      typeDefs = composeGqlTypes(generalConfig);
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,
@@ -381,7 +381,7 @@ describe('graphql schema', () => {
         include: { Query: { childThing: true, childThings: true } },
       };
 
-      typeDefs = `scalar Upload\n${composeGqlTypes(generalConfig)}`;
+      typeDefs = composeGqlTypes(generalConfig);
       resolvers = composeGqlResolvers(generalConfig);
       schema = makeExecutableSchema({
         typeDefs,

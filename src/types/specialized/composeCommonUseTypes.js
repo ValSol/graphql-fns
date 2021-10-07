@@ -2,6 +2,7 @@
 
 const composeCommonUseTypes = (): Array<string> => [
   'scalar DateTime',
+  'scalar Upload',
   `input RegExp {
   pattern: String!
   flags: String

@@ -22,8 +22,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import SkipNext from '@material-ui/icons/SkipNext';
 import SkipPrevious from '@material-ui/icons/SkipPrevious';
 
-import gql from 'graphql-tag';
-import { Mutation, Query } from '@apollo/react-components';
+import { gql } from '@apollo/client';
+import { Mutation, Query } from '@apollo/client/react/components';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 

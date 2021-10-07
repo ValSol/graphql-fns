@@ -7,6 +7,7 @@ describe('composeCommonUseTypes', () => {
   test('should return correct string', () => {
     const expectedResult = [
       'scalar DateTime',
+      'scalar Upload',
       `input RegExp {
   pattern: String!
   flags: String

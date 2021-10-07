@@ -1,6 +1,8 @@
 // @flow
 
 import { DateTimeResolver } from 'graphql-scalars';
+// import GraphQLUpload from 'graphql-upload/public/GraphQLUpload';
+import { GraphQLUpload } from 'graphql-upload';
 
 import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 
@@ -40,6 +42,7 @@ const composeGqlResolvers = (
   const resolvers = {};
 
   resolvers.DateTime = DateTimeResolver;
+  resolvers.Upload = GraphQLUpload;
   if (allowQueries) resolvers.Query = {};
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};

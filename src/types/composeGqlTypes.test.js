@@ -112,6 +112,7 @@ describe('composeGqlTypes', () => {
     const generalConfig: GeneralConfig = { thingConfigs, enums };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -546,6 +547,7 @@ type Subscription {
     const generalConfig: GeneralConfig = { thingConfigs };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -909,6 +911,7 @@ type Subscription {
     const generalConfig: GeneralConfig = { thingConfigs };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -1245,6 +1248,7 @@ type Subscription {
     const generalConfig: GeneralConfig = { thingConfigs };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -1492,6 +1496,7 @@ type Subscription {
     const generalConfig: GeneralConfig = { thingConfigs };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -1838,6 +1843,7 @@ type Subscription {
     const inventory: Inventory = { name: 'test', include: { Query: true } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -1945,6 +1951,7 @@ type Query {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2068,6 +2075,7 @@ type Mutation {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
 
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2155,6 +2163,7 @@ type Query {
     const inventory: Inventory = { name: 'test', include: { Query: { things: ['Example'] } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2243,6 +2252,7 @@ type Query {
     const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2295,6 +2305,7 @@ type Mutation {
     };
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2355,6 +2366,7 @@ type Mutation {
     const custom = { Mutation: { loadThing: signatureMethods } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2402,6 +2414,7 @@ type Mutation {
     const custom = { Query: { getThing } };
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2477,6 +2490,7 @@ type Query {
     const derivative = { ForCatalog: ForCatalogDerivative };
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String
@@ -2722,6 +2736,7 @@ type Mutation {
     };
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivativeInputs, inventory };
     const expectedResult = `scalar DateTime
+scalar Upload
 input RegExp {
   pattern: String!
   flags: String

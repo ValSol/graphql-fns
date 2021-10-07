@@ -3,8 +3,7 @@
 import * as React from 'react';
 import pluralize from 'pluralize';
 
-import { useApolloClient } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { gql, useApolloClient } from '@apollo/client';
 
 import type { AdminListContextState, GeneralConfig } from '../../flowTypes';
 

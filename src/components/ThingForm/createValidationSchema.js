@@ -1,7 +1,7 @@
 // @flow
 
 import * as yup from 'yup';
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 import type { GeneralConfig, ThingConfig } from '../../flowTypes';
 

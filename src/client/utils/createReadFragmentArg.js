@@ -1,7 +1,7 @@
 // @flow
 
-import { defaultDataIdFromObject } from 'apollo-cache-inmemory';
-import gql from 'graphql-tag';
+import { defaultDataIdFromObject } from '@apollo/client/cache';
+import { gql } from '@apollo/client';
 
 import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
 
