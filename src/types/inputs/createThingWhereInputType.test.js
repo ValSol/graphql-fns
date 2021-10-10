@@ -849,8 +849,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   firstName: Boolean
+  firstName_ne: Boolean
   firstName_exists: Boolean
   lastName: Boolean
+  lastName_ne: Boolean
   lastName_exists: Boolean
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
@@ -874,8 +876,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   firstName: Boolean
+  firstName_ne: Boolean
   firstName_exists: Boolean
   lastName: Boolean
+  lastName_ne: Boolean
   lastName_exists: Boolean
 }`,
       {},

@@ -134,7 +134,8 @@ const composeInputFields = (
   if (booleanFields) {
     booleanFields.forEach(({ name: fieldName, array, index }) => {
       if (index) {
-        fields.push(`  ${fieldName}: Boolean`);
+        fields.push(`  ${fieldName}: Boolean
+  ${fieldName}_ne: Boolean`);
       }
       if (index && !array) {
         fields.push(`  ${fieldName}_exists: Boolean`);
