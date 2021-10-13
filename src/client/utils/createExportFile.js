@@ -19,13 +19,14 @@ const createExportFile = async (
   items: Array<Object>,
   thingConfig: ThingConfig,
   //  if returnBlob="true" return blob with items data, if returnBlob="false" create "downloaded" file and return null
-  options?: { format: 'csv' | 'json', returnBlob?: boolean },
+  options?: { format: 'csv' | 'json', fileName?: string, returnBlob?: boolean },
 ): Promise<Blob | null> => {
   const { name } = thingConfig;
 
   let content;
   let type;
   let fileExtension;
+
   if (options && options.format === 'csv') {
     const data = items.map((item) => coerceDataFromGql(item, thingConfig, true));
     content = await csvStringify2(data);
@@ -47,7 +48,8 @@ const createExportFile = async (
   const objectURL = URL.createObjectURL(blob);
 
   const now = new Date();
-  const fileName = `${pluralize(name)} ${now.toISOString()}`;
+  const fileName =
+    options && options.fileName ? options.fileName : `${pluralize(name)} ${now.toISOString()}`;
 
   const link = document.createElement('a');
   link.style.display = 'none';
