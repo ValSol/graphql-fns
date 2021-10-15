@@ -33,7 +33,7 @@ const extract = (data, filterObj, fieldsObj, result) => {
       } else {
         result.push([name, connect, [filterObj[key]]]);
       }
-    } else if (key === 'AND' || key === 'OR') {
+    } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       filterObj[key].forEach((filterObj2) => extract(data, filterObj2, fieldsObj, result));
     }
   });

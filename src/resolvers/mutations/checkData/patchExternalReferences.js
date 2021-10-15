@@ -37,7 +37,7 @@ const patch = (externalReferences, data, filterObj, fieldsObj) => {
           updatedFilterObj[`${key2}_ne`] = connect;
         }
       }
-    } else if (key === 'AND' || key === 'OR') {
+    } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       const tmpArr = [];
       filterObj[key].forEach((filterObj2) => {
         const updatedFilterObjItem = patch(externalReferences, data, filterObj2, fieldsObj);

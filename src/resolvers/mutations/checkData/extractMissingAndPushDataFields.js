@@ -8,7 +8,7 @@ import getInputFieldNames from '../../../utils/getInputFieldNames';
 const extract = (data, filterObj, pushFields, result) => {
   Object.keys(filterObj).forEach((key) => {
     const [key2] = key.split('_');
-    if (key === 'AND' || key === 'OR') {
+    if (key === 'AND' || key === 'OR' || key === 'NOR') {
       filterObj[key].forEach((filterObj2) => extract(data, filterObj2, pushFields, result));
     } else if (data[key2] === undefined || pushFields.includes(key2)) {
       result[key2] = 1; // eslint-disable-line no-param-reassign

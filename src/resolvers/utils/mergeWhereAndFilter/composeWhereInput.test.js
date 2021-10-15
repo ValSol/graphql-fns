@@ -150,7 +150,7 @@ describe('composeWhereInput', () => {
           ],
         },
         {
-          AND: [
+          NOR: [
             {
               floatField2_gte: 180.0,
             },
@@ -180,7 +180,7 @@ describe('composeWhereInput', () => {
             ],
           },
           {
-            $and: [
+            $nor: [
               { floatField2: { $gte: 180.0 } },
               { intField: { $lt: 15 } },
               { intField2: { $lte: 20 } },
