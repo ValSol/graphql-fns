@@ -32,6 +32,17 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!whereOne.length) return [];
 
+  const [whereKey] = Object.keys(whereOne[0]);
+
+  const incorrectWhreOneItem = whereOne.find((item) => !item[whereKey]);
+  if (incorrectWhreOneItem) {
+    throw new TypeError(
+      `Incorrect key in whereOne item: "${JSON.stringify(
+        incorrectWhreOneItem,
+      )}" instead of "${whereKey}"!`,
+    );
+  }
+
   const processingKind = 'update';
   for (let i = 0; i < data.length; i += 1) {
     // eslint-disable-next-line no-await-in-loop
@@ -63,6 +74,10 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       )
     : {};
 
+  if (whereKey !== 'id') {
+    duplexFieldsProjection[whereKey] = 1;
+  }
+
   const { lookups, where: whereOne2 } = mergeWhereAndFilter(filter, { OR: whereOne }, thingConfig);
 
   let whereOne3 = whereOne2;
@@ -87,7 +102,16 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!previousThings || previousThings.length !== whereOne.length) return null;
 
-  return previousThings;
+  const whereKey2 = whereKey === 'id' ? '_id' : whereKey;
+
+  const previousThingsObject = previousThings.reduce((prev, thing) => {
+    prev[thing[whereKey2]] = thing; // eslint-disable-line no-param-reassign
+    return prev;
+  }, {});
+
+  const result = whereOne.map(({ [whereKey]: key }) => previousThingsObject[key]);
+
+  return result;
 };
 
 export default get;

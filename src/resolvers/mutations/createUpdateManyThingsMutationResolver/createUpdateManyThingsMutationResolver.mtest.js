@@ -647,6 +647,7 @@ describe('createUpdateManyThingsMutationResolver', () => {
       if (!updateManyPlaces) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
       const whereOne2 = [{ name: data.location.create.name }];
+
       const dataForUpdate2 = [{ name: 'Mexico' }];
       const [updatedPlace] = await updateManyPlaces(
         null,
@@ -1054,14 +1055,7 @@ describe('createUpdateManyThingsMutationResolver', () => {
     );
     if (!updateManyPersons) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = [
-      {
-        AND: [
-          { name: 'name-2' },
-          { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } },
-        ],
-      },
-    ];
+    const whereOne = [{ name: 'name-2' }];
 
     const info = { projection: { _id: 1, name: 1 } };
     const data = [{ name: 'updatedName' }];
@@ -1074,23 +1068,17 @@ describe('createUpdateManyThingsMutationResolver', () => {
 
     expect(updatedParent.name).toBe('updatedName');
 
-    const whereOne2 = [
-      {
-        AND: [
-          { name: 'name-1' },
-          { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } },
-        ],
-      },
-    ];
+    const whereOne2 = [{ name: 'name-1' }];
 
     const updatedParents = await updateManyPersons(
       null,
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
+      [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }],
     );
 
-    expect(updatedParents).toBe(null);
+    expect(updatedParents[0].name).toBe(data[0].name);
   });
 
   test('should create mutation updateThing resolver to update document using checkData', async () => {
