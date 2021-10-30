@@ -72,13 +72,18 @@ const processCreateInputData = (
 
     const duplexFieldsObject = {};
     if (duplexFields) {
-      duplexFields.reduce((prev, { name, oppositeName, array, config }) => {
+      duplexFields.reduce((prev, { name, oppositeName, parent, array, config }) => {
         if (!config.duplexFields) {
           throw new TypeError('Expected a duplexFields in config!');
         }
         const duplexField = config.duplexFields.find(({ name: name2 }) => name2 === oppositeName);
         if (!duplexField) {
-          throw new TypeError(`Expected a duplexField with name "${oppositeName}"!`);
+          throw new TypeError(`Expected the duplexField with name "${oppositeName}"!`);
+        }
+        if (parent && duplexField.parent) {
+          throw new TypeError(
+            `Got the both opposite duplexFields ${name} && "${oppositeName}" are parent!`,
+          );
         }
         const { array: oppositeArray, config: oppositeConfig } = duplexField;
         // eslint-disable-next-line
