@@ -18,6 +18,7 @@ import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
 import deleteFilteredThingsReturnScalar from './deleteFilteredThingsReturnScalarMutationAttributes';
 import deleteManyThings from './deleteManyThingsMutationAttributes';
 import deleteThing from './deleteThingMutationAttributes';
+import deleteThingWithChildren from './deleteThingWithChildrenMutationAttributes';
 import importThings from './importThingsMutationAttributes';
 import pushIntoThing from './pushIntoThingMutationAttributes';
 import updateFilteredThings from './updateFilteredThingsMutationAttributes';
@@ -36,6 +37,7 @@ const actionAttributes = {
   deleteFilteredThingsReturnScalar,
   deleteManyThings,
   deleteThing,
+  deleteThingWithChildren,
   importThings,
   pushIntoThing,
   thingCount,

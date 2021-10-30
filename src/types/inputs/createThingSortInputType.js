@@ -2,7 +2,7 @@
 
 import type { InputCreator } from '../../flowTypes';
 
-const createThingSortInputType: InputCreator = (thingConfig) => {
+const createDeleteThingWithChildrenSortInputType: InputCreator = (thingConfig) => {
   const {
     booleanFields,
     dateTimeFields,
@@ -89,4 +89,4 @@ input ${name}SortInput {
   return [inputName, inputDefinition, {}];
 };
 
-export default createThingSortInputType;
+export default createDeleteThingWithChildrenSortInputType;

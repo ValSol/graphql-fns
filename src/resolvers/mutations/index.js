@@ -3,6 +3,7 @@
 import createManyThings from './createCreateManyThingsMutationResolver';
 import createThing from './createCreateThingMutationResolver';
 import deleteThing from './createDeleteThingMutationResolver';
+import deleteThingWithChildren from './createDeleteThingWithChildrenMutationResolver';
 import deleteFilteredThings from './createDeleteFilteredThingsMutationResolver';
 import deleteFilteredThingsReturnScalar from './createDeleteFilteredThingsReturnScalarMutationResolver';
 import deleteManyThings from './createDeleteManyThingsMutationResolver';
@@ -19,6 +20,7 @@ const mutations = {
   createManyThings,
   createThing,
   deleteThing,
+  deleteThingWithChildren,
   deleteFilteredThings,
   deleteFilteredThingsReturnScalar,
   deleteManyThings,

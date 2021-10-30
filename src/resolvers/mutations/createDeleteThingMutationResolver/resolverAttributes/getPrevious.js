@@ -5,7 +5,7 @@ import createThing from '../../../../mongooseModels/createThing';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
   const { args, context, parentFilter } = resolverArg;
   const { enums } = generalConfig;
@@ -60,4 +60,4 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   return [thing];
 };
 
-export default get;
+export default getPrevious;

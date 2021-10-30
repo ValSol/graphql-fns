@@ -11,6 +11,7 @@ export { default as composeGqlTypes } from './types/composeGqlTypes';
 export { default as createCreateManyThingsMutationResolver } from './resolvers/mutations/createCreateManyThingsMutationResolver';
 export { default as createCreateThingMutationResolver } from './resolvers/mutations/createCreateThingMutationResolver';
 export { default as createDeleteThingMutationResolver } from './resolvers/mutations/createDeleteThingMutationResolver';
+export { default as createDeleteThingWithChildrenMutationResolver } from './resolvers/mutations/createDeleteThingWithChildrenMutationResolver';
 export { default as createDeleteManyThingsMutationResolver } from './resolvers/mutations/createDeleteManyThingsMutationResolver';
 export { default as createImportThingsMutationResolver } from './resolvers/mutations/createImportThingsMutationResolver';
 export { default as createPushIntoThingMutationResolver } from './resolvers/mutations/createPushIntoThingMutationResolver';

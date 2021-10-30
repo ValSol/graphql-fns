@@ -169,6 +169,7 @@ type SimplifiedDuplexField = {
   +required?: boolean,
   +unique?: boolean,
   +freeze?: boolean,
+  +parent?: boolean,
 };
 
 type SimplifiedEmbeddedField = {
@@ -238,6 +239,7 @@ export type ThingConfig = {
     +required?: boolean,
     +unique?: boolean,
     +freeze?: boolean,
+    +parent?: boolean,
   }>,
   embeddedFields?: $ReadOnlyArray<{
     +name: string,
@@ -276,7 +278,7 @@ export type ThingConfig = {
   list?: $ReadOnlyArray<ListColumn>,
 };
 
-type DuplexField = {|
+export type DuplexField = {|
   +name: string,
   +array?: boolean,
   +config: ThingConfig,
@@ -285,6 +287,7 @@ type DuplexField = {|
   +required?: boolean,
   +unique?: boolean,
   +freeze?: boolean,
+  +parent?: boolean,
 |};
 
 export type EmbeddedField = {|
@@ -537,6 +540,7 @@ export type GeneralConfig = {
           | 'deleteFilteredThings'
           | 'deleteManyThings'
           | 'deleteThing'
+          | 'deleteThingWithChildren'
           | 'importThings'
           | 'pushIntoThing'
           | 'updateFilteredThings'
@@ -614,6 +618,7 @@ export type DerivativeAttributes = {
       | 'deleteFilteredThings'
       | 'deleteManyThings'
       | 'deleteThing'
+      | 'deleteThingWithChildren'
       | 'importThings'
       | 'pushIntoThing'
       | 'updateFilteredThings'
@@ -643,7 +648,7 @@ export type TwoSegmentInventoryChain =
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
-      // ... 'deleteThing', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+      // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
     ]
   | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
@@ -657,7 +662,7 @@ export type ThreeSegmentInventoryChain =
   | [
       'Mutation',
       // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
-      // ... 'deleteThing', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+      // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
     ]

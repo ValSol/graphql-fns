@@ -1716,6 +1716,13 @@ input PlaceCreateOrPushChildrenInput {
   create: [PlaceCreateInput!]
   createPositions: [Int!]
 }
+enum deletePlaceWithChildrenOptionsEnum {
+  citizens
+  visitors
+}
+input deletePlaceWithChildrenOptionsInput {
+  fieldsToDelete: [deletePlaceWithChildrenOptionsEnum]
+}
 enum ImportFormatEnum {
   csv
   json
@@ -1804,6 +1811,7 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
   deletePlace(whereOne: PlaceWhereOneInput!): Place!
+  deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput): Place!
   importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
   importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
