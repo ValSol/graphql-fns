@@ -16,7 +16,10 @@ import thingsByUnique from './thingsByUniqueQueryAttributes';
 import createThing from './createThingMutationAttributes';
 import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
 import deleteFilteredThingsReturnScalar from './deleteFilteredThingsReturnScalarMutationAttributes';
+import deleteFilteredThingsWithChildren from './deleteFilteredThingsWithChildrenMutationAttributes';
+import deleteFilteredThingsWithChildrenReturnScalar from './deleteFilteredThingsWithChildrenReturnScalarMutationAttributes';
 import deleteManyThings from './deleteManyThingsMutationAttributes';
+import deleteManyThingsWithChildren from './deleteManyThingsWithChildrenMutationAttributes';
 import deleteThing from './deleteThingMutationAttributes';
 import deleteThingWithChildren from './deleteThingWithChildrenMutationAttributes';
 import importThings from './importThingsMutationAttributes';
@@ -35,7 +38,10 @@ const actionAttributes = {
   createThing,
   deleteFilteredThings,
   deleteFilteredThingsReturnScalar,
+  deleteFilteredThingsWithChildren,
+  deleteFilteredThingsWithChildrenReturnScalar,
   deleteManyThings,
+  deleteManyThingsWithChildren,
   deleteThing,
   deleteThingWithChildren,
   importThings,

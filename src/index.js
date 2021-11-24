@@ -12,9 +12,13 @@ export { default as createCreateManyThingsMutationResolver } from './resolvers/m
 export { default as createCreateThingMutationResolver } from './resolvers/mutations/createCreateThingMutationResolver';
 export { default as createDeleteThingMutationResolver } from './resolvers/mutations/createDeleteThingMutationResolver';
 export { default as createDeleteThingWithChildrenMutationResolver } from './resolvers/mutations/createDeleteThingWithChildrenMutationResolver';
+export { default as createDeleteFilteredThingsMutationResolver } from './resolvers/mutations/createDeleteFilteredThingsMutationResolver';
+export { default as createDeleteFilteredThingsWithChildrenMutationResolver } from './resolvers/mutations/createDeleteFilteredThingsWithChildrenMutationResolver';
 export { default as createDeleteManyThingsMutationResolver } from './resolvers/mutations/createDeleteManyThingsMutationResolver';
+export { default as createDeleteManyThingsWithChildrenMutationResolver } from './resolvers/mutations/createDeleteManyThingsWithChildrenMutationResolver';
 export { default as createImportThingsMutationResolver } from './resolvers/mutations/createImportThingsMutationResolver';
 export { default as createPushIntoThingMutationResolver } from './resolvers/mutations/createPushIntoThingMutationResolver';
+export { default as createUpdateFilteredThingsMutationResolver } from './resolvers/mutations/createUpdateFilteredThingsMutationResolver';
 export { default as createUpdateManyThingsMutationResolver } from './resolvers/mutations/createUpdateManyThingsMutationResolver';
 export { default as createUpdateThingMutationResolver } from './resolvers/mutations/createUpdateThingMutationResolver';
 export { default as createUploadFilesToThingMutationResolver } from './resolvers/mutations/createUploadFilesToThingMutationResolver';

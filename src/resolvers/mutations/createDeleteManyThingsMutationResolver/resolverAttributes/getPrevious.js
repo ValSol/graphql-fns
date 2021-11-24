@@ -65,6 +65,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const projection = getProjectionFromInfo(info);
 
+  (thingConfig.duplexFields || []).reduce((prev, { name: name2 }) => {
+    prev[name2] = 1; // eslint-disable-line no-param-reassign
+    return prev;
+  }, projection);
+
   const things = await Thing.find(conditions, projection, { lean: true });
   if (things.length !== whereOne.length) return null;
 

@@ -6,7 +6,7 @@ import createThing from '../../../../mongooseModels/createThing';
 import processDeleteData from '../../processDeleteData';
 
 const getNotArrayOppositeDuplexFields = (thingConfig) =>
-  getOppositeFields(thingConfig).filter(([, { array, parent }]) => !(array || parent));
+  getOppositeFields(thingConfig).filter(([{ parent }, { array }]) => parent && !array);
 
 const processEveryField = async (
   fields,
@@ -95,7 +95,7 @@ const prepareBulkData: PrepareBulkData = async (
 ) => {
   const {
     args: { options },
-    context,
+    context: { mongooseConn },
   } = resolverArg;
   const {
     thingConfig,
@@ -116,12 +116,15 @@ const prepareBulkData: PrepareBulkData = async (
     ? notArrayOppositeDuplexFields.filter(([{ name }]) => options.fieldsToDelete.includes(name))
     : notArrayOppositeDuplexFields;
 
-  if (fieldsToDelete.length) {
-    const [thing] = mains;
-    const usedIds = { [thingConfig.name]: [thing._id.toString()] }; // eslint-disable-line no-underscore-dangle
+  const usedIds = { [thingConfig.name]: [] }; // eslint-disable-line no-underscore-dangle
 
-    const { mongooseConn } = context;
+  for (let i = 0; i < mains.length; i += 1) {
+    const thing = mains[i];
+    core = processDeleteData(thing, core, thingConfig, toDelete);
 
+    usedIds[thingConfig.name].push(thing._id.toString()); // eslint-disable-line no-underscore-dangle
+
+    // eslint-disable-next-line no-await-in-loop
     await processEveryField(
       fieldsToDelete,
       thing,

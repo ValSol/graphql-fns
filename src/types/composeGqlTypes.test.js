@@ -1807,8 +1807,11 @@ type Mutation {
   deleteFilteredPlaces(where: PlaceWhereInput): [Place!]!
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
   deleteFilteredPlacesReturnScalar(where: PlaceWhereInput): Int!
+  deleteFilteredPlacesWithChildren(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput): [Place!]!
+  deleteFilteredPlacesWithChildrenReturnScalar(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
+  deleteManyPlacesWithChildren(whereOne: [PlaceWhereOneInput!]!, options: deletePlaceWithChildrenOptionsInput): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!): Person!
   deletePlace(whereOne: PlaceWhereOneInput!): Place!
   deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput): Place!
