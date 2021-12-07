@@ -3,12 +3,7 @@
 type Args = { slice: { begin?: number, end?: number } };
 type Context = { mongooseConn: Object };
 
-const fieldArrayResolver = async (
-  parent: Object,
-  args: Args,
-  context: Context,
-  info: Object,
-): Object => {
+const fieldArrayResolver = (parent: Object, args: Args, context: Context, info: Object): Object => {
   const { fieldName } = info;
 
   const arr = parent[fieldName];
