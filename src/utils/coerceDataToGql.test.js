@@ -1107,6 +1107,74 @@ describe('coerceDataToGql', () => {
     test('prev data null', () => {
       const prevData = null;
 
+      const data2 = {
+        geospatialFieldPoint: {
+          __typename: 'GeospatialPoint',
+          lng: 50.426982,
+          lat: 30.615328,
+        },
+        geospatialFieldPolygon: {
+          externalRing: {
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
+          },
+          internalRings: [
+            {
+              ring: [
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+                { lng: 2, lat: 2 },
+              ],
+            },
+          ],
+        },
+      };
+
+      const expectedResult = {
+        geospatialFieldPoint: {
+          lng: 50.426982,
+          lat: 30.615328,
+        },
+        geospatialFieldPolygon: {
+          externalRing: {
+            ring: [
+              { lng: 0, lat: 0 },
+              { lng: 3, lat: 6 },
+              { lng: 6, lat: 1 },
+              { lng: 0, lat: 0 },
+            ],
+          },
+          internalRings: [
+            {
+              ring: [
+                { lng: 2, lat: 2 },
+                { lng: 3, lat: 3 },
+                { lng: 4, lat: 2 },
+                { lng: 2, lat: 2 },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = coerceDataToGql(
+        data2,
+        prevData,
+        thingConfig,
+        false, // allFields,
+        true, // skipUnusedFields
+      );
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('prev data null', () => {
+      const prevData = null;
+
       const expectedResult = {
         geospatialFieldPoint: {
           lng: 50.426982,

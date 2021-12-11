@@ -151,19 +151,22 @@ const coerceDataToGql = (
           prev[key] = data[key]
             .map((item) => {
               const { lng, lat } = item;
-              return lng === '' || lat === '' ? null : item; // eslint-disable-line no-param-reassign
+              const item2 = skipUnusedFields ? { lng, lat } : item;
+              return lng === '' || lat === '' ? null : item2; // eslint-disable-line no-param-reassign
             })
             .filter(Boolean);
         } else {
           const { lng, lat } = data[key];
-          prev[key] = lng === '' || lat === '' ? null : data[key]; // eslint-disable-line no-param-reassign
+          const item = skipUnusedFields ? { lng, lat } : data[key];
+          prev[key] = lng === '' || lat === '' ? null : item; // eslint-disable-line no-param-reassign
         }
       } else if (geospatialType === 'Polygon') {
+        // TODO expand test for skipUnusedFields situations
+        // TODO expand test for all empty situations
         if (array) {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
             .map((item) => {
-              // TODO expand test for all empty situations
               const {
                 externalRing: { ring: externalRing },
               } = item;
@@ -171,7 +174,6 @@ const coerceDataToGql = (
             })
             .filter(Boolean);
         } else {
-          // TODO expand test for all empty situations
           const {
             externalRing: { ring: externalRing },
           } = data[key];
