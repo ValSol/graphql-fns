@@ -1,26 +1,9 @@
 // @flow
 import type { Custom, GeneralConfig } from '../../flowTypes';
 
-import childThingQueryAttributes from '../../types/actionAttributes/childThingQueryAttributes';
-import childThingsQueryAttributes from '../../types/actionAttributes/childThingsQueryAttributes';
-import thingCountQueryAttributes from '../../types/actionAttributes/thingCountQueryAttributes';
-import thingDistinctValuesQueryAttributes from '../../types/actionAttributes/thingDistinctValuesQueryAttributes';
-import thingFileCountQueryAttributes from '../../types/actionAttributes/thingFileCountQueryAttributes';
-import thingFileQueryAttributes from '../../types/actionAttributes/thingFileQueryAttributes';
-import thingFilesQueryAttributes from '../../types/actionAttributes/thingFilesQueryAttributes';
-import thingQueryAttributes from '../../types/actionAttributes/thingQueryAttributes';
-import thingsQueryAttributes from '../../types/actionAttributes/thingsQueryAttributes';
-import thingsByUniqueQueryAttributes from '../../types/actionAttributes/thingsByUniqueQueryAttributes';
-
-import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
-import createThingMutationAttributes from '../../types/actionAttributes/createThingMutationAttributes';
-import deleteThingMutationAttributes from '../../types/actionAttributes/deleteThingMutationAttributes';
-import importThingsMutationAttributes from '../../types/actionAttributes/importThingsMutationAttributes';
-import pushIntoThingMutationAttributes from '../../types/actionAttributes/pushIntoThingMutationAttributes';
-import updateThingMutationAttributes from '../../types/actionAttributes/updateThingMutationAttributes';
-import uploadFilesToThingMutationAttributes from '../../types/actionAttributes/uploadFilesToThingMutationAttributes';
-import uploadThingFilesMutationAttributes from '../../types/actionAttributes/uploadThingFilesMutationAttributes';
 import composeCustomAction from './composeCustomAction';
+
+import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
 const store = Object.create(null);
 
@@ -47,70 +30,15 @@ const mergeDerivativeIntoCustom = (
     const { allow } = derivative[suffix];
     const allowedMethods = getAllowedMethods(allow);
 
-    if (!forClient && allowedMethods.childThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`childThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        childThingQueryAttributes,
-      );
-    }
-    if (!forClient && allowedMethods.childThings) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`childThings${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        childThingsQueryAttributes,
-      );
-    }
-    if (allowedMethods.thing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thing${suffix}`] = composeCustomAction(derivative[suffix], thingQueryAttributes);
-    }
-    if (allowedMethods.things) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`things${suffix}`] = composeCustomAction(derivative[suffix], thingsQueryAttributes);
-    }
-    if (allowedMethods.thingsByUnique) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingsByUnique${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingsByUniqueQueryAttributes,
-      );
-    }
-    if (allowedMethods.thingCount) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingCount${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingCountQueryAttributes,
-      );
-    }
-    if (allowedMethods.thingCount) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingDistinctValues${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingDistinctValuesQueryAttributes,
-      );
-    }
-    if (allowedMethods.thingFileCount) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingFileCount${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingFileCountQueryAttributes,
-      );
-    }
-    if (allowedMethods.thingFile) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingFile${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingFileQueryAttributes,
-      );
-    }
-    if (allowedMethods.thingFiles) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`thingFiles${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        thingFilesQueryAttributes,
-      );
-    }
+    Object.keys(queryAttributes).forEach((key) => {
+      if (!forClient && allowedMethods[key]) {
+        // eslint-disable-next-line no-param-reassign
+        prev[queryAttributes[key].actionGeneralName(suffix)] = composeCustomAction(
+          derivative[suffix],
+          queryAttributes[key],
+        );
+      }
+    });
 
     return prev;
   }, {});
@@ -119,62 +47,16 @@ const mergeDerivativeIntoCustom = (
     const { allow } = derivative[suffix];
     const allowedMethods = getAllowedMethods(allow);
 
-    if (allowedMethods.createManyThings) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`createManyThings${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        createManyThingsMutationAttributes,
-      );
-    }
-    if (allowedMethods.createThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`createThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        createThingMutationAttributes,
-      );
-    }
-    if (allowedMethods.deleteThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`deleteThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        deleteThingMutationAttributes,
-      );
-    }
-    if (allowedMethods.importThings) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`importThings${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        importThingsMutationAttributes,
-      );
-    }
-    if (allowedMethods.pushIntoThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`pushIntoThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        pushIntoThingMutationAttributes,
-      );
-    }
-    if (allowedMethods.updateThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`updateThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        updateThingMutationAttributes,
-      );
-    }
-    if (allowedMethods.uploadFilesToThing) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`uploadFilesToThing${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        uploadFilesToThingMutationAttributes,
-      );
-    }
-    if (allowedMethods.uploadThingFiles) {
-      // eslint-disable-next-line no-param-reassign
-      prev[`uploadThingFiles${suffix}`] = composeCustomAction(
-        derivative[suffix],
-        uploadThingFilesMutationAttributes,
-      );
-    }
+    Object.keys(mutationAttributes).forEach((key) => {
+      if (!forClient && allowedMethods[key]) {
+        // eslint-disable-next-line no-param-reassign
+        prev[mutationAttributes[key].actionGeneralName(suffix)] = composeCustomAction(
+          derivative[suffix],
+          mutationAttributes[key],
+        );
+      }
+    });
+
     return prev;
   }, {});
 

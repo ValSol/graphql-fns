@@ -1649,6 +1649,37 @@ input PersonWhereByUniqueInput {
 input PlaceWhereByUniqueInput {
   id_in: [ID!]
 }
+input PersonCopyWhereOnesInput {
+  friends: PersonWhereOneInput
+  enemies: PersonWhereOneInput
+}
+enum copyPersonThroughfriendsOptionsEnum {
+  firstName
+  lastName
+  enemies
+  location
+  favoritePlace
+}
+enum copyPersonThroughenemiesOptionsEnum {
+  firstName
+  lastName
+  friends
+  location
+  favoritePlace
+}
+input copyPersonThroughfriendsOptionInput {
+  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]!
+}
+input copyPersonThroughenemiesOptionInput {
+  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]!
+}
+input copyPersonOptionsInput {
+  friends: copyPersonThroughfriendsOptionInput
+  enemies: copyPersonThroughenemiesOptionInput
+}
+input PersonWhereOneToCopyInput {
+  id: ID!
+}
 input PersonCreateInput {
   id: ID
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput!
@@ -1799,6 +1830,7 @@ type Query {
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
 type Mutation {
+  copyPerson(whereOnes: PersonCopyWhereOnesInput!, options: copyPersonOptionsInput, whereOne: PersonWhereOneToCopyInput): Person!
   createManyPeople(data: [PersonCreateInput!]!): [Person!]!
   createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
   createPerson(data: PersonCreateInput!): Person!

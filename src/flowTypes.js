@@ -412,7 +412,7 @@ type InverntoryOptions = {
   Mutation?:
     | true
     | {
-        // 'mutationName' may be: 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', ...
+        // 'mutationName' may be: 'copyThing', 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', ...
         // ... 'pushIntoThing', 'uploadFilesToThing' or custom mutation
 
         +[mutationName: string]: thingNamesList,
@@ -535,6 +535,7 @@ export type GeneralConfig = {
           | 'thingFileCount'
           | 'thingFile'
           | 'thingFiles'
+          | 'copyThing'
           | 'createThing'
           | 'createManyThings'
           | 'deleteFilteredThings'
@@ -618,6 +619,7 @@ export type DerivativeAttributes = {
       | 'thingFileCount'
       | 'thingFile'
       | 'thingFiles'
+      | 'copyThing'
       | 'createThing'
       | 'createManyThings'
       | 'deleteFilteredThings'
@@ -657,7 +659,7 @@ export type TwoSegmentInventoryChain =
     ]
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // "string" for 'copyThing', 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
       // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
     ]
@@ -671,7 +673,7 @@ export type ThreeSegmentInventoryChain =
     ]
   | [
       'Mutation',
-      // "string" for 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // "string" for 'copyThing', 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
       // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
