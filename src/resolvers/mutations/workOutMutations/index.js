@@ -113,56 +113,41 @@ const workOutMutations = async (
 
   const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
-  const session = transactions ? await mongooseConn.startSession() : null;
-  try {
-    if (session) {
-      session.startTransaction();
-    }
-
-    const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
-
-    await executeBulkItems(coreWithCounters, generalConfig, context, session);
-
-    if (session) {
-      await session.commitTransaction();
-      session.endSession();
-    }
-  } catch (err) {
-    if (session) {
-      await session.abortTransaction();
-      session.endSession();
-    }
-
-    // second try to execute the same functionality in a new transaction
-
-    const session2 = transactions ? await mongooseConn.startSession() : null;
-
-    if (!session2) {
-      throw new Error(err);
-    }
-
-    await sleep(50);
-
+  const tryCount = 7;
+  for (let i = 0; i < tryCount; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    const session = transactions ? await mongooseConn.startSession() : null;
     try {
-      if (session2) {
-        session2.startTransaction();
+      if (session) {
+        session.startTransaction();
       }
 
+      // eslint-disable-next-line no-await-in-loop
       const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
-      await executeBulkItems(coreWithCounters, generalConfig, context, session2);
+      // eslint-disable-next-line no-await-in-loop
+      await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
-      if (session2) {
-        await session2.commitTransaction();
-        session2.endSession();
-      }
-    } catch (err2) {
-      if (session2) {
-        await session2.abortTransaction();
-        session2.endSession();
+      if (session) {
+        // eslint-disable-next-line no-await-in-loop
+        await session.commitTransaction();
+        session.endSession();
       }
 
-      throw new Error(err2);
+      break;
+    } catch (err) {
+      if (session) {
+        // eslint-disable-next-line no-await-in-loop
+        await session.abortTransaction();
+        session.endSession();
+      }
+
+      if (i === tryCount - 1) {
+        throw new Error(err);
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      await sleep(2 ** i * 10);
     }
   }
 

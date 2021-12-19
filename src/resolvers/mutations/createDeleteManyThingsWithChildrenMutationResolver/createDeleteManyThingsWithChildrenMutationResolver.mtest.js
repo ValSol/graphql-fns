@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -286,8 +285,6 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
     schema = createThingSchema(postCloneConfig);
     const PostClone = mongooseConn.model('PostClone_Thing', schema);
     await PostClone.createCollection();
-
-    await sleep(250);
 
     const serversideConfig = { transactions: true };
     const createRestaurant = createCreateThingMutationResolver(

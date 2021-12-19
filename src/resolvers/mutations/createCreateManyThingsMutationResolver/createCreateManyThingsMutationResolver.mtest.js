@@ -5,7 +5,6 @@ import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 const mongoose = require('mongoose');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const { default: createCreateManyThingsMutationResolver } = require('./index');
 
@@ -52,8 +51,6 @@ describe('createCreateManyThingsMutationResolver', () => {
     const exampleSchema = createThingSchema(thingConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
-
-    await sleep(250);
 
     const serversideConfig = { transactions: true };
     const createManyExamples = createCreateManyThingsMutationResolver(
@@ -134,8 +131,6 @@ describe('createCreateManyThingsMutationResolver', () => {
     const exampleSchema = createThingSchema(thingConfig);
     const Example = mongooseConn.model('Example2_Thing', exampleSchema);
     await Example.createCollection();
-
-    await sleep(250);
 
     const createManyExamples = createCreateManyThingsMutationResolver(
       thingConfig,

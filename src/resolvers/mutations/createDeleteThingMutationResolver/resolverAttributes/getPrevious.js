@@ -31,7 +31,9 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
   const whereOneKeys = Object.keys(whereOne);
   if (whereOneKeys.length !== 1) {
-    throw new TypeError('Expected exactly one key in where arg!');
+    throw new TypeError(
+      `Expected exactly one key in whereOne arg!, but have: ${whereOneKeys.length}!`,
+    );
   }
 
   const { lookups, where: preConditions } = mergeWhereAndFilter(filter, whereOne, thingConfig);

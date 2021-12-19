@@ -9,13 +9,16 @@ const prepareBulkData: PrepareBulkData = async (
   prevPreparedData,
 ) => {
   const { thingConfig } = resolverCreatorArg;
-  const { args } = resolverArg;
 
-  const { data } = args;
+  const {
+    mains: [data],
+  } = prevPreparedData;
 
-  const preparedData = processCreateInputData(data, prevPreparedData, thingConfig, 'create');
+  if (data.id) {
+    return processCreateInputData(data, { ...prevPreparedData, mains: [] }, thingConfig, 'update');
+  }
 
-  return preparedData;
+  return processCreateInputData(data, { ...prevPreparedData, mains: [] }, thingConfig, 'create');
 };
 
 export default prepareBulkData;

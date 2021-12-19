@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -157,8 +156,6 @@ describe('createUploadFilesToThingMutationResolver', () => {
     const parentSchema = createThingSchema(exampleConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
-
-    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       exampleConfig,

@@ -1,8 +1,8 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { ThingConfig } from '../flowTypes';
 
-import composeFieldsObject from '../../utils/composeFieldsObject';
+import composeFieldsObject from './composeFieldsObject';
 
 const getMatchingFields = (config: ThingConfig, config2: ThingConfig): Array<string> => {
   const fieldsObject = composeFieldsObject(config);

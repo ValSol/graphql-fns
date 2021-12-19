@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const { default: createCreateThingMutationResolver } = require('./index');
 
@@ -55,8 +54,6 @@ describe('createCreateThingMutationResolver', () => {
     const exampleSchema = createThingSchema(thingConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
-
-    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       thingConfig,
@@ -120,8 +117,6 @@ describe('createCreateThingMutationResolver', () => {
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
-
-    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -214,8 +209,6 @@ describe('createCreateThingMutationResolver', () => {
     const citySchema = createThingSchema(cityConfig);
     const City = mongooseConn.model('City_Thing', citySchema);
     await City.createCollection();
-
-    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -380,8 +373,6 @@ describe('createCreateThingMutationResolver', () => {
 
     await Person.createCollection();
     await Place.createCollection();
-
-    await sleep(250);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -587,8 +578,6 @@ describe('createCreateThingMutationResolver', () => {
     await Person.createCollection();
     await Place.createCollection();
 
-    await sleep(250);
-
     const createPerson = createCreateThingMutationResolver(
       personConfig,
       generalConfig,
@@ -773,8 +762,6 @@ describe('createCreateThingMutationResolver', () => {
     const restaurantSchema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
-
-    await sleep(400);
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,

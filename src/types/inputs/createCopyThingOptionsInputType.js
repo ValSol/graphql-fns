@@ -2,7 +2,7 @@
 
 import type { InputCreator } from '../../flowTypes';
 
-import getMatchingFields from './getMatchingFields';
+import getMatchingFields from '../../utils/getMatchingFields';
 
 const createCopyThingOptionsInputType: InputCreator = (thingConfig) => {
   const { name, duplexFields } = thingConfig;

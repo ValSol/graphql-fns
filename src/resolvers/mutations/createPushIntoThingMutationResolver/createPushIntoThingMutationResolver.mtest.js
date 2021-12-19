@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -102,8 +101,6 @@ describe('createPushIntoThingMutationResolver', () => {
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
-
-    await sleep(500);
 
     const createPerson = createCreateThingMutationResolver(
       personConfig,
@@ -393,8 +390,6 @@ describe('createPushIntoThingMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await sleep(500);
-
     const createParent = createCreateThingMutationResolver(
       parentConfig,
       generalConfig,
@@ -513,8 +508,6 @@ describe('createPushIntoThingMutationResolver', () => {
     const Child = mongooseConn.model('Child2_Thing', childSchema);
     await Child.createCollection();
 
-    await sleep(1000);
-
     const createParent = createCreateThingMutationResolver(
       parentConfig,
       generalConfig,
@@ -571,8 +564,6 @@ describe('createPushIntoThingMutationResolver', () => {
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
-
-    await sleep(250);
 
     const createExample = createCreateThingMutationResolver(
       exampleConfig,

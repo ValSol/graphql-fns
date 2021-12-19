@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
@@ -97,8 +96,6 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
-
-    await sleep(250);
 
     const serversideConfig = { transactions: true };
     const createPerson = createCreateThingMutationResolver(
@@ -304,8 +301,6 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
-    await sleep(500);
-
     const createParent = createCreateThingMutationResolver(
       parentConfig,
       generalConfig,
@@ -407,8 +402,6 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
-
-    await sleep(250);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,

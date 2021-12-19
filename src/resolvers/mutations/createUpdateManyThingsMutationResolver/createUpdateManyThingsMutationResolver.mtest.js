@@ -8,7 +8,6 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const { default: sleep } = require('../../../utils/sleep');
 const {
   default: createCreateThingMutationResolver,
 } = require('../createCreateThingMutationResolver');
@@ -107,8 +106,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
       const placeSchema = createThingSchema(placeConfig);
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
-
-      await sleep(250);
 
       const createPerson = createCreateThingMutationResolver(
         personConfig,
@@ -374,8 +371,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
       const placeSchema = createThingSchema(placeConfig);
       const Place = mongooseConn.model('Place_Thing', placeSchema);
       await Place.createCollection();
-
-      await sleep(250);
 
       const createPerson = createCreateThingMutationResolver(
         personConfig,
@@ -699,8 +694,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
 
-    await sleep(250);
-
     const createExample = createCreateThingMutationResolver(
       exampleConfig,
       generalConfig,
@@ -827,8 +820,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
     const Main = mongooseConn.model('Main_Thing', mainSchema);
     await Main.createCollection();
 
-    await sleep(250);
-
     const createMain = createCreateThingMutationResolver(
       mainConfig,
       generalConfig,
@@ -920,8 +911,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
     const mainSchema = createThingSchema(mainConfig);
     const Main = mongooseConn.model('Main2_Thing', mainSchema);
     await Main.createCollection();
-
-    await sleep(250);
 
     const createMain = createCreateThingMutationResolver(
       mainConfig,
@@ -1023,8 +1012,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
-
-    await sleep(500);
 
     const createParent = createCreateThingMutationResolver(
       parentConfig,
@@ -1134,8 +1121,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
       ],
     });
 
-    await sleep(250);
-
     const accessSchema = createThingSchema(accessConfig);
     const Access = mongooseConn.model('Access_Thing', accessSchema);
     await Access.createCollection();
@@ -1147,8 +1132,6 @@ describe('createUpdateManyThingsMutationResolver', () => {
     const restaurantSchema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
-
-    await sleep(500);
 
     const generalConfig2: GeneralConfig = {
       thingConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
