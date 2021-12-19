@@ -3,7 +3,7 @@
 import type { ResolverAttributes } from '../../../flowTypes';
 
 import getPrevious from './getPrevious';
-import prepareBulkData from './prepareBulkData';
+import prepareBulkData from '../../createDeleteThingMutationResolver/resolverAttributes/prepareBulkData';
 
 const deleteManyThingsResolverAttributes: ResolverAttributes = {
   actionGeneralName: 'deleteManyThings',

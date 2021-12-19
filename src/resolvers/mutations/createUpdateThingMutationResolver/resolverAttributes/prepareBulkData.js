@@ -26,25 +26,30 @@ const prepareBulkData: PrepareBulkData = async (
       )
     : {};
 
-  const {
-    core,
-    mains: [previousThing],
-  } = prevPreparedData;
+  const { core, mains: previousThings } = prevPreparedData;
 
-  const coreForDeletions = Object.keys(duplexFieldsProjection).length
-    ? processDeleteData(
-        processDeleteDataPrepareArgs(data, previousThing, thingConfig),
-        core,
-        thingConfig,
-      )
-    : core;
+  let coreForDeletions = core;
 
-  const preparedData = processCreateInputData(
-    { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
-    { ...prevPreparedData, core: coreForDeletions, mains: [] },
-    thingConfig,
-    'update',
-  );
+  previousThings.forEach((previousThing) => {
+    coreForDeletions = Object.keys(duplexFieldsProjection).length
+      ? processDeleteData(
+          processDeleteDataPrepareArgs(data, previousThing, thingConfig),
+          coreForDeletions,
+          thingConfig,
+        )
+      : coreForDeletions;
+  });
+
+  let preparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };
+
+  previousThings.forEach((previousThing) => {
+    preparedData = processCreateInputData(
+      { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
+      preparedData,
+      thingConfig,
+      'update',
+    );
+  });
 
   return preparedData;
 };

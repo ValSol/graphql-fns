@@ -3,7 +3,7 @@
 import type { ResolverAttributes } from '../../../flowTypes';
 
 import getPrevious from './getPrevious';
-import prepareBulkData from './prepareBulkData';
+import prepareBulkData from '../../createUpdateThingMutationResolver/resolverAttributes/prepareBulkData';
 
 const updateThingResolverAttributes: ResolverAttributes = {
   actionGeneralName: 'updateFilteredThings',
