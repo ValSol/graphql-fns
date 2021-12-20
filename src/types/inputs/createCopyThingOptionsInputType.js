@@ -18,13 +18,12 @@ const createCopyThingOptionsInputType: InputCreator = (thingConfig) => {
   const fieldLines = [];
 
   duplexFields.forEach(({ config, name: fieldName }) => {
-    const matchingFields = getMatchingFields(thingConfig, config);
+    const matchingFields = getMatchingFields(thingConfig, config).filter(
+      (matchingField) => matchingField !== fieldName,
+    );
     if (matchingFields.length) {
       enumLines.push(`enum copy${name}Through${fieldName}OptionsEnum {
-${matchingFields
-  .filter((matchingField) => matchingField !== fieldName)
-  .map((enumItem) => `  ${enumItem}`)
-  .join('\n')}
+${matchingFields.map((enumItem) => `  ${enumItem}`).join('\n')}
 }`);
 
       inputLines.push(`input copy${name}Through${fieldName}OptionInput {

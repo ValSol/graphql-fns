@@ -14,10 +14,13 @@ const createThingWhereOneToCopyInputType: InputCreator = (thingConfig) => {
     return [inputName, '', {}];
   }
 
-  const notEmptyResult = duplexFields.some(({ oppositeName, config }) => {
-    if (getMatchingFields(thingConfig, config).length) {
+  const notEmptyResult = duplexFields.some(({ name: name2, oppositeName, config }) => {
+    if (
+      getMatchingFields(thingConfig, config).filter((matchingField) => matchingField !== name2)
+        .length
+    ) {
       const oppositeField = (config.duplexFields || []).find(
-        ({ name: name2 }) => name2 === oppositeName,
+        ({ name: name3 }) => name3 === oppositeName,
       );
 
       return oppositeField && oppositeField.array;

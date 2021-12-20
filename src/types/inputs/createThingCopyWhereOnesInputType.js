@@ -19,7 +19,10 @@ const createThingToCopyWhereOneInputType: InputCreator = (thingConfig) => {
   const childChain = {};
 
   duplexFields.forEach(({ name: fieldName, config }) => {
-    if (getMatchingFields(thingConfig, config).length) {
+    if (
+      getMatchingFields(thingConfig, config).filter((matchingField) => matchingField !== fieldName)
+        .length
+    ) {
       fieldLines.push(`  ${fieldName}: ${config.name}WhereOneInput`);
 
       childChain[`${config.name}WhereOneInput`] = [createThingWhereOneInputType, config];
