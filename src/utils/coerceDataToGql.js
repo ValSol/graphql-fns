@@ -1,5 +1,6 @@
 // @flow
 import deepEqual from 'fast-deep-equal';
+import { Types } from 'mongoose';
 
 import type { ThingConfig } from '../flowTypes';
 
@@ -7,6 +8,8 @@ import composeFieldsObject from './composeFieldsObject';
 
 const isNotDate = (date) =>
   new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));
+
+const { ObjectId } = Types;
 
 const coerceDataToGql = (
   data: Object,
@@ -63,7 +66,9 @@ const coerceDataToGql = (
         prev[key] =
           !data[key] || !data[key].length
             ? { connect: [] }
-            : data[key].reduce((prev2, item) => {
+            : data[key].reduce((prev2, preItem) => {
+                const item = preItem instanceof ObjectId ? preItem.toString() : preItem;
+
                 if (typeof item === 'string') {
                   if (prev2.connect) {
                     prev2.connect.push(item);
@@ -98,20 +103,24 @@ const coerceDataToGql = (
               }, {});
       } else if (!data[key]) {
         prev[key] = { connect: null }; // eslint-disable-line no-param-reassign
-      } else if (typeof data[key] === 'string') {
-        prev[key] = { connect: data[key] }; // eslint-disable-line no-param-reassign
       } else {
-        // eslint-disable-next-line no-param-reassign
-        prev[key] = {
-          create: coerceDataToGql(
-            data[key],
-            null,
-            config,
-            allFields,
-            skipUnusedFields,
-            setNullForEmptyText,
-          ),
-        };
+        const keyData = data[key] instanceof ObjectId ? data[key].toString() : data[key];
+
+        if (typeof keyData === 'string') {
+          prev[key] = { connect: keyData }; // eslint-disable-line no-param-reassign
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = {
+            create: coerceDataToGql(
+              data[key],
+              null,
+              config,
+              allFields,
+              skipUnusedFields,
+              setNullForEmptyText,
+            ),
+          };
+        }
       }
     } else if (kind === 'enumFields') {
       if (array) {
