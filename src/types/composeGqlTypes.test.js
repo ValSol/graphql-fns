@@ -13,7 +13,7 @@ import type {
 import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
-  test('should create things types for one thing', () => {
+  test('should create things types to copy with children', () => {
     const menuCloneConfig: ThingConfig = {};
     const menuSectionConfig: ThingConfig = {};
     const menuCloneSectionConfig: ThingConfig = {};

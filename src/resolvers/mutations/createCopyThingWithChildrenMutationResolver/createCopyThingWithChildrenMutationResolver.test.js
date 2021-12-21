@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
 
-import createCopyThingMutationResolver from './index';
+import createCopyThingWithChildrenMutationResolver from './index';
 
-describe('createCopyThingMutationResolver', () => {
+describe('createCopyThingWithChildrenMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const menuCloneConfig: ThingConfig = {};
     const menuSectionConfig: ThingConfig = {};
@@ -112,7 +112,11 @@ describe('createCopyThingMutationResolver', () => {
     const generalConfig: GeneralConfig = { thingConfigs };
 
     const serversideConfig = {};
-    const result = createCopyThingMutationResolver(menuConfig, generalConfig, serversideConfig);
+    const result = createCopyThingWithChildrenMutationResolver(
+      menuConfig,
+      generalConfig,
+      serversideConfig,
+    );
 
     expect(typeof result).toBe('function');
   });
