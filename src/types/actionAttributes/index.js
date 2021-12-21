@@ -5,6 +5,7 @@ import type { ActionAttributes } from '../../flowTypes';
 import childThing from './childThingQueryAttributes';
 import childThings from './childThingsQueryAttributes';
 import copyThing from './copyThingMutationAttributes';
+import copyThingWithChildren from './copyThingWithChildrenMutationAttributes';
 import createManyThings from './createManyThingsMutationAttributes';
 import thingDistinctValues from './thingDistinctValuesQueryAttributes';
 import thingCount from './thingCountQueryAttributes';
@@ -36,6 +37,7 @@ const actionAttributes = {
   childThing,
   childThings,
   copyThing,
+  copyThingWithChildren,
   createManyThings,
   createThing,
   deleteFilteredThings,

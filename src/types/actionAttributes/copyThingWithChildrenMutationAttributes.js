@@ -2,15 +2,17 @@
 
 import type { ThingConfig } from '../../flowTypes';
 
+import getOppositeFields from '../../utils/getOppositeFields';
 import createCopyThingOptionsInputType from '../inputs/createCopyThingOptionsInputType';
 import createThingCopyWhereOnesInputType from '../inputs/createThingCopyWhereOnesInputType';
 import createThingWhereOneToCopyInputType from '../inputs/createThingWhereOneToCopyInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string => `copyThing${suffix}`;
+const actionGeneralName = (suffix?: string = ''): string => `copyThingWithChildren${suffix}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string => `copy${baseName}${suffix}`;
+const actionName = (baseName: string, suffix?: string = ''): string =>
+  `copy${baseName}WithChildren${suffix}`;
 
 const inputCreators = [
   createThingCopyWhereOnesInputType,
@@ -30,12 +32,15 @@ const actionReturnConfig = true;
 
 const actionAllowed = (thingConfig: ThingConfig): boolean =>
   !(thingConfig.embedded || thingConfig.file) &&
-  Boolean(createThingCopyWhereOnesInputType(thingConfig)[1]);
+  Boolean(createThingCopyWhereOnesInputType(thingConfig)[1]) &&
+  Boolean(
+    getOppositeFields(thingConfig).filter(([, { array, parent }]) => !(array || parent)).length,
+  );
 
 const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
   `${name}${suffix}!`;
 
-const copyThingMutationAttributes = {
+const copyThingWithChildrenMutationAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -47,4 +52,4 @@ const copyThingMutationAttributes = {
   actionAllowed,
 };
 
-export default copyThingMutationAttributes;
+export default copyThingWithChildrenMutationAttributes;

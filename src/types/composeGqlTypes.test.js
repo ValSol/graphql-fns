@@ -14,6 +14,725 @@ import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
   test('should create things types for one thing', () => {
+    const menuCloneConfig: ThingConfig = {};
+    const menuSectionConfig: ThingConfig = {};
+    const menuCloneSectionConfig: ThingConfig = {};
+    const menuConfig: ThingConfig = {
+      name: 'Menu',
+
+      textFields: [
+        {
+          name: 'name',
+          required: true,
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'clone',
+          oppositeName: 'original',
+          config: menuCloneConfig,
+          parent: true,
+        },
+
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          array: true,
+          config: menuSectionConfig,
+          parent: true,
+        },
+      ],
+    };
+
+    Object.assign(menuCloneConfig, {
+      name: 'MenuClone',
+
+      textFields: [
+        {
+          name: 'name',
+          required: true,
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'original',
+          oppositeName: 'clone',
+          config: menuConfig,
+        },
+
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          array: true,
+          config: menuCloneSectionConfig,
+          parent: true,
+        },
+      ],
+    });
+
+    Object.assign(menuSectionConfig, {
+      name: 'MenuSection',
+
+      textFields: [
+        {
+          name: 'name',
+          required: true,
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuConfig,
+        },
+      ],
+    });
+
+    Object.assign(menuCloneSectionConfig, {
+      name: 'MenuCloneSection',
+
+      textFields: [
+        {
+          name: 'name',
+          required: true,
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuCloneConfig,
+        },
+      ],
+    });
+
+    const thingConfigs = {
+      Menu: menuConfig,
+      MenuClone: menuCloneConfig,
+      MenuSection: menuSectionConfig,
+      MenuCloneSection: menuCloneSectionConfig,
+    };
+
+    const generalConfig: GeneralConfig = { thingConfigs };
+
+    const expectedResult = `scalar DateTime
+scalar Upload
+input RegExp {
+  pattern: String!
+  flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
+}
+type Menu {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  clone: MenuClone
+  sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+}
+type MenuClone {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  original: Menu
+  sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+}
+type MenuSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  menu: Menu
+}
+type MenuCloneSection {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  menu: MenuClone
+}
+input MenuSectionWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuSectionWhereInput!]
+  NOR: [MenuSectionWhereInput!]
+  OR: [MenuSectionWhereInput!]
+}
+input MenuSectionWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+input MenuWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuWhereInput!]
+  NOR: [MenuWhereInput!]
+  OR: [MenuWhereInput!]
+}
+input MenuWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+input MenuCloneWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuCloneWhereInput!]
+  NOR: [MenuCloneWhereInput!]
+  OR: [MenuCloneWhereInput!]
+}
+input MenuCloneWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+input MenuCloneSectionWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuCloneSectionWhereInput!]
+  NOR: [MenuCloneSectionWhereInput!]
+  OR: [MenuCloneSectionWhereInput!]
+}
+input MenuCloneSectionWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum MenuSectionSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuSectionSortInput {
+  sortBy: [MenuSectionSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
+}
+enum MenuCloneSectionSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuCloneSectionSortInput {
+  sortBy: [MenuCloneSectionSortEnum]
+}
+input MenuWhereOneInput {
+  id: ID!
+}
+input MenuCloneWhereOneInput {
+  id: ID!
+}
+input MenuSectionWhereOneInput {
+  id: ID!
+}
+input MenuCloneSectionWhereOneInput {
+  id: ID!
+}
+enum MenuSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuSortInput {
+  sortBy: [MenuSortEnum]
+}
+enum MenuCloneSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuCloneSortInput {
+  sortBy: [MenuCloneSortEnum]
+}
+enum MenuTextNamesEnum {
+  name
+}
+input MenuDistinctValuesOptionsInput {
+  target: MenuTextNamesEnum!
+}
+enum MenuCloneTextNamesEnum {
+  name
+}
+input MenuCloneDistinctValuesOptionsInput {
+  target: MenuCloneTextNamesEnum!
+}
+enum MenuSectionTextNamesEnum {
+  name
+}
+input MenuSectionDistinctValuesOptionsInput {
+  target: MenuSectionTextNamesEnum!
+}
+enum MenuCloneSectionTextNamesEnum {
+  name
+}
+input MenuCloneSectionDistinctValuesOptionsInput {
+  target: MenuCloneSectionTextNamesEnum!
+}
+input MenuWhereByUniqueInput {
+  id_in: [ID!]
+}
+input MenuCloneWhereByUniqueInput {
+  id_in: [ID!]
+}
+input MenuSectionWhereByUniqueInput {
+  id_in: [ID!]
+}
+input MenuCloneSectionWhereByUniqueInput {
+  id_in: [ID!]
+}
+input MenuCopyWhereOnesInput {
+  clone: MenuCloneWhereOneInput
+  sections: MenuSectionWhereOneInput
+}
+enum copyMenuThroughcloneOptionsEnum {
+  name
+  sections
+}
+enum copyMenuThroughsectionsOptionsEnum {
+  name
+}
+input copyMenuThroughcloneOptionInput {
+  fieldsToCopy: [copyMenuThroughcloneOptionsEnum!]!
+}
+input copyMenuThroughsectionsOptionInput {
+  fieldsToCopy: [copyMenuThroughsectionsOptionsEnum!]!
+}
+input copyMenuOptionsInput {
+  clone: copyMenuThroughcloneOptionInput
+  sections: copyMenuThroughsectionsOptionInput
+}
+input MenuCloneCopyWhereOnesInput {
+  original: MenuWhereOneInput
+  sections: MenuCloneSectionWhereOneInput
+}
+enum copyMenuCloneThroughoriginalOptionsEnum {
+  name
+  sections
+}
+enum copyMenuCloneThroughsectionsOptionsEnum {
+  name
+}
+input copyMenuCloneThroughoriginalOptionInput {
+  fieldsToCopy: [copyMenuCloneThroughoriginalOptionsEnum!]!
+}
+input copyMenuCloneThroughsectionsOptionInput {
+  fieldsToCopy: [copyMenuCloneThroughsectionsOptionsEnum!]!
+}
+input copyMenuCloneOptionsInput {
+  original: copyMenuCloneThroughoriginalOptionInput
+  sections: copyMenuCloneThroughsectionsOptionInput
+}
+input MenuSectionCopyWhereOnesInput {
+  menu: MenuWhereOneInput
+}
+enum copyMenuSectionThroughmenuOptionsEnum {
+  name
+}
+input copyMenuSectionThroughmenuOptionInput {
+  fieldsToCopy: [copyMenuSectionThroughmenuOptionsEnum!]!
+}
+input copyMenuSectionOptionsInput {
+  menu: copyMenuSectionThroughmenuOptionInput
+}
+input MenuSectionWhereOneToCopyInput {
+  id: ID!
+}
+input MenuCloneSectionCopyWhereOnesInput {
+  menu: MenuCloneWhereOneInput
+}
+enum copyMenuCloneSectionThroughmenuOptionsEnum {
+  name
+}
+input copyMenuCloneSectionThroughmenuOptionInput {
+  fieldsToCopy: [copyMenuCloneSectionThroughmenuOptionsEnum!]!
+}
+input copyMenuCloneSectionOptionsInput {
+  menu: copyMenuCloneSectionThroughmenuOptionInput
+}
+input MenuCloneSectionWhereOneToCopyInput {
+  id: ID!
+}
+input MenuCreateInput {
+  id: ID
+  clone: MenuCloneCreateChildInput
+  sections: MenuSectionCreateOrPushChildrenInput
+  name: String!
+}
+input MenuCreateChildInput {
+  connect: ID
+  create: MenuCreateInput
+}
+input MenuCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCreateInput!]
+  createPositions: [Int!]
+}
+input MenuCloneCreateInput {
+  id: ID
+  original: MenuCreateChildInput
+  sections: MenuCloneSectionCreateOrPushChildrenInput
+  name: String!
+}
+input MenuCloneCreateChildInput {
+  connect: ID
+  create: MenuCloneCreateInput
+}
+input MenuCloneCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCloneCreateInput!]
+  createPositions: [Int!]
+}
+input MenuCloneSectionCreateInput {
+  id: ID
+  menu: MenuCloneCreateChildInput
+  name: String!
+}
+input MenuCloneSectionCreateChildInput {
+  connect: ID
+  create: MenuCloneSectionCreateInput
+}
+input MenuCloneSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuCloneSectionCreateInput!]
+  createPositions: [Int!]
+}
+input MenuSectionCreateInput {
+  id: ID
+  menu: MenuCreateChildInput
+  name: String!
+}
+input MenuSectionCreateChildInput {
+  connect: ID
+  create: MenuSectionCreateInput
+}
+input MenuSectionCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [MenuSectionCreateInput!]
+  createPositions: [Int!]
+}
+enum deleteMenuWithChildrenOptionsEnum {
+  clone
+  sections
+}
+input deleteMenuWithChildrenOptionsInput {
+  fieldsToDelete: [deleteMenuWithChildrenOptionsEnum]
+}
+enum deleteMenuCloneWithChildrenOptionsEnum {
+  sections
+}
+input deleteMenuCloneWithChildrenOptionsInput {
+  fieldsToDelete: [deleteMenuCloneWithChildrenOptionsEnum]
+}
+enum ImportFormatEnum {
+  csv
+  json
+}
+input ImportOptionsInput {
+  format: ImportFormatEnum
+}
+input PushIntoMenuInput {
+  sections: MenuSectionCreateOrPushChildrenInput
+}
+input MenuPushPositionsInput {
+  sections: [Int!]
+}
+input PushIntoMenuCloneInput {
+  sections: MenuCloneSectionCreateOrPushChildrenInput
+}
+input MenuClonePushPositionsInput {
+  sections: [Int!]
+}
+input MenuUpdateInput {
+  name: String
+  clone: MenuCloneCreateChildInput
+  sections: MenuSectionCreateOrPushChildrenInput
+}
+input MenuCloneUpdateInput {
+  name: String
+  original: MenuCreateChildInput
+  sections: MenuCloneSectionCreateOrPushChildrenInput
+}
+input MenuSectionUpdateInput {
+  name: String
+  menu: MenuCreateChildInput
+}
+input MenuCloneSectionUpdateInput {
+  name: String
+  menu: MenuCloneCreateChildInput
+}
+enum MenuFieldNamesEnum {
+  name
+  clone
+  sections
+}
+type UpdatedMenuPayload {
+  node: Menu
+  previousNode: Menu
+  updatedFields: [MenuFieldNamesEnum!]
+}
+enum MenuCloneFieldNamesEnum {
+  name
+  original
+  sections
+}
+type UpdatedMenuClonePayload {
+  node: MenuClone
+  previousNode: MenuClone
+  updatedFields: [MenuCloneFieldNamesEnum!]
+}
+enum MenuSectionFieldNamesEnum {
+  name
+  menu
+}
+type UpdatedMenuSectionPayload {
+  node: MenuSection
+  previousNode: MenuSection
+  updatedFields: [MenuSectionFieldNamesEnum!]
+}
+enum MenuCloneSectionFieldNamesEnum {
+  name
+  menu
+}
+type UpdatedMenuCloneSectionPayload {
+  node: MenuCloneSection
+  previousNode: MenuCloneSection
+  updatedFields: [MenuCloneSectionFieldNamesEnum!]
+}
+type Query {
+  childMenu(whereOne: MenuWhereOneInput!): Menu!
+  childMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
+  childMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
+  childMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
+  childMenus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput): [Menu!]!
+  childMenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
+  childMenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+  childMenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  MenuCount(where: MenuWhereInput): Int!
+  MenuCloneCount(where: MenuCloneWhereInput): Int!
+  MenuSectionCount(where: MenuSectionWhereInput): Int!
+  MenuCloneSectionCount(where: MenuCloneSectionWhereInput): Int!
+  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput): [String!]!
+  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput): [String!]!
+  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput): [String!]!
+  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput): [String!]!
+  Menu(whereOne: MenuWhereOneInput!): Menu!
+  MenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
+  MenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
+  MenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
+  Menus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput): [Menu!]!
+  MenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
+  MenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+  MenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  MenusByUnique(where: MenuWhereByUniqueInput!, sort: MenuSortInput): [Menu!]!
+  MenuClonesByUnique(where: MenuCloneWhereByUniqueInput!, sort: MenuCloneSortInput): [MenuClone!]!
+  MenuSectionsByUnique(where: MenuSectionWhereByUniqueInput!, sort: MenuSectionSortInput): [MenuSection!]!
+  MenuCloneSectionsByUnique(where: MenuCloneSectionWhereByUniqueInput!, sort: MenuCloneSectionSortInput): [MenuCloneSection!]!
+}
+type Mutation {
+  copyMenu(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput): Menu!
+  copyMenuClone(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput): MenuClone!
+  copyMenuSection(whereOnes: MenuSectionCopyWhereOnesInput!, options: copyMenuSectionOptionsInput, whereOne: MenuSectionWhereOneToCopyInput): MenuSection!
+  copyMenuCloneSection(whereOnes: MenuCloneSectionCopyWhereOnesInput!, options: copyMenuCloneSectionOptionsInput, whereOne: MenuCloneSectionWhereOneToCopyInput): MenuCloneSection!
+  copyMenuWithChildren(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput): Menu!
+  copyMenuCloneWithChildren(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput): MenuClone!
+  createManyMenus(data: [MenuCreateInput!]!): [Menu!]!
+  createManyMenuClones(data: [MenuCloneCreateInput!]!): [MenuClone!]!
+  createManyMenuSections(data: [MenuSectionCreateInput!]!): [MenuSection!]!
+  createManyMenuCloneSections(data: [MenuCloneSectionCreateInput!]!): [MenuCloneSection!]!
+  createMenu(data: MenuCreateInput!): Menu!
+  createMenuClone(data: MenuCloneCreateInput!): MenuClone!
+  createMenuSection(data: MenuSectionCreateInput!): MenuSection!
+  createMenuCloneSection(data: MenuCloneSectionCreateInput!): MenuCloneSection!
+  deleteFilteredMenus(where: MenuWhereInput): [Menu!]!
+  deleteFilteredMenuClones(where: MenuCloneWhereInput): [MenuClone!]!
+  deleteFilteredMenuSections(where: MenuSectionWhereInput): [MenuSection!]!
+  deleteFilteredMenuCloneSections(where: MenuCloneSectionWhereInput): [MenuCloneSection!]!
+  deleteFilteredMenusReturnScalar(where: MenuWhereInput): Int!
+  deleteFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput): Int!
+  deleteFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput): Int!
+  deleteFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput): Int!
+  deleteFilteredMenusWithChildren(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput): [Menu!]!
+  deleteFilteredMenuClonesWithChildren(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput): [MenuClone!]!
+  deleteFilteredMenusWithChildrenReturnScalar(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput): Int!
+  deleteFilteredMenuClonesWithChildrenReturnScalar(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput): Int!
+  deleteManyMenus(whereOne: [MenuWhereOneInput!]!): [Menu!]!
+  deleteManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!): [MenuClone!]!
+  deleteManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!): [MenuSection!]!
+  deleteManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!): [MenuCloneSection!]!
+  deleteManyMenusWithChildren(whereOne: [MenuWhereOneInput!]!, options: deleteMenuWithChildrenOptionsInput): [Menu!]!
+  deleteManyMenuClonesWithChildren(whereOne: [MenuCloneWhereOneInput!]!, options: deleteMenuCloneWithChildrenOptionsInput): [MenuClone!]!
+  deleteMenu(whereOne: MenuWhereOneInput!): Menu!
+  deleteMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
+  deleteMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
+  deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
+  deleteMenuWithChildren(whereOne: MenuWhereOneInput!, options: deleteMenuWithChildrenOptionsInput): Menu!
+  deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput): MenuClone!
+  importMenus(file: Upload!, options: ImportOptionsInput): [Menu!]!
+  importMenuClones(file: Upload!, options: ImportOptionsInput): [MenuClone!]!
+  importMenuSections(file: Upload!, options: ImportOptionsInput): [MenuSection!]!
+  importMenuCloneSections(file: Upload!, options: ImportOptionsInput): [MenuCloneSection!]!
+  pushIntoMenu(whereOne: MenuWhereOneInput!, data: PushIntoMenuInput!, positions: MenuPushPositionsInput): Menu!
+  pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput): MenuClone!
+  updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!): [Menu!]!
+  updateFilteredMenuClones(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!): [MenuClone!]!
+  updateFilteredMenuSections(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!): [MenuSection!]!
+  updateFilteredMenuCloneSections(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!): [MenuCloneSection!]!
+  updateFilteredMenusReturnScalar(where: MenuWhereInput, data: MenuUpdateInput!): Int!
+  updateFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!): Int!
+  updateFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!): Int!
+  updateFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!): Int!
+  updateManyMenus(whereOne: [MenuWhereOneInput!]!, data: [MenuUpdateInput!]!): [Menu!]!
+  updateManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, data: [MenuCloneUpdateInput!]!): [MenuClone!]!
+  updateManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, data: [MenuSectionUpdateInput!]!): [MenuSection!]!
+  updateManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, data: [MenuCloneSectionUpdateInput!]!): [MenuCloneSection!]!
+  updateMenu(whereOne: MenuWhereOneInput!, data: MenuUpdateInput!): Menu!
+  updateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneUpdateInput!): MenuClone!
+  updateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionUpdateInput!): MenuSection!
+  updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!): MenuCloneSection!
+}
+type Subscription {
+  createdMenu(where: MenuWhereInput): Menu!
+  updatedMenu(where: MenuWhereInput): UpdatedMenuPayload!
+  deletedMenu(where: MenuWhereInput): Menu!
+  createdMenuClone(where: MenuCloneWhereInput): MenuClone!
+  updatedMenuClone(where: MenuCloneWhereInput): UpdatedMenuClonePayload!
+  deletedMenuClone(where: MenuCloneWhereInput): MenuClone!
+  createdMenuSection(where: MenuSectionWhereInput): MenuSection!
+  updatedMenuSection(where: MenuSectionWhereInput): UpdatedMenuSectionPayload!
+  deletedMenuSection(where: MenuSectionWhereInput): MenuSection!
+  createdMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
+  updatedMenuCloneSection(where: MenuCloneSectionWhereInput): UpdatedMenuCloneSectionPayload!
+  deletedMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create things types for one thing', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
       file: true,
