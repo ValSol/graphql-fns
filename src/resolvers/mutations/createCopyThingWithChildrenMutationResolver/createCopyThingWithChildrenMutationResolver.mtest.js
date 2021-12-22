@@ -72,6 +72,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         name: 'original',
         oppositeName: 'clone',
         config: menuConfig,
+        required: true,
       },
 
       {
@@ -144,6 +145,10 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     const menuCloneSchema = createThingSchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
     await MenuClone.createCollection();
+
+    const menuCloneSectionSchema = createThingSchema(menuCloneSectionConfig);
+    const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
+    await MenuCloneSection.createCollection();
 
     const createMenu = createCreateThingMutationResolver(
       menuConfig,

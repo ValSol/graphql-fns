@@ -43,7 +43,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   );
 
   if (!fieldsPair) {
-    throw new TypeError(`Not found duplex field: "${fieldName}!"`);
+    throw new TypeError(
+      `Not found appropriate duplex field: "${fieldName}" in thing: "${thingConfig.name}"!`,
+    );
   }
 
   let optionFields = null;
@@ -79,9 +81,6 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     );
   }
 
-  const CopiedThing = await createThing(mongooseConn, config, enums);
-  const Thing = await createThing(mongooseConn, thingConfig, enums);
-
   const matchingFieldsProjection = matchingFields.reduce(
     (prev, matchingField) => {
       prev[matchingField] = 1; // eslint-disable-line no-param-reassign
@@ -89,6 +88,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     },
     { _id: 1, [oppositeName]: 1 },
   );
+
+  const CopiedThing = await createThing(mongooseConn, config, enums);
+  const Thing = await createThing(mongooseConn, thingConfig, enums);
 
   const { where } = composeWhereInput(whereOnes[fieldName], config);
   const thing = await CopiedThing.findOne(where, matchingFieldsProjection, { lean: true });
