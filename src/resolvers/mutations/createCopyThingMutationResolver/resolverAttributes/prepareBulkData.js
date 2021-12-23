@@ -1,6 +1,7 @@
 // @flow
 import type { PrepareBulkData } from '../../../flowTypes';
 
+import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
 import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../processDeleteDataPrepareArgs';
@@ -12,7 +13,12 @@ const prepareBulkData: PrepareBulkData = async (
 ) => {
   const { thingConfig } = resolverCreatorArg;
 
-  const { core, mains: previousThings } = prevPreparedData;
+  const { core, mains } = prevPreparedData;
+
+  const previousThings = mains.map((previousThing) => ({
+    ...fromMongoToGqlDataArg(previousThing, thingConfig),
+    id: previousThing.id,
+  }));
 
   if (previousThings[0].id) {
     const { duplexFields } = thingConfig;

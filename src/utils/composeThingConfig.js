@@ -15,6 +15,8 @@ const forbiddenFieldNames = [
   'createdAt',
   'updatedAt',
   'counter',
+  'connect',
+  'create',
 ];
 
 const composeThingConfig = (

@@ -1,8 +1,13 @@
 // @flow
+
+import { Types } from 'mongoose';
+
 import type { ThingConfig } from '../../../flowTypes';
 
 const { default: pointFromMongoToGql } = require('../pointFromMongoToGql');
 const { default: polygonFromMongoToGql } = require('../polygonFromMongoToGql');
+
+const { ObjectId } = Types;
 
 const geospatialFromMongToGql = (item) => {
   const { type } = item;
@@ -60,14 +65,25 @@ const fromMongoToGqlDataArg = (data: Object, thingConfig: ThingConfig): Object =
   }
 
   if (relationalFields) {
-    relationalFields.reduce((prev, { name, array }) => {
+    relationalFields.reduce((prev, { name, array, config }) => {
       if (data[name]) {
         if (array) {
+          if (!data[name].length) {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { connect: [] };
+          } else if (data[name][0] instanceof ObjectId || typeof data[name][0] === 'string') {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { connect: data[name] };
+          } else {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { create: data[name].map((item) => fromMongoToGqlDataArg(item, config)) };
+          }
+        } else if (data[name] instanceof ObjectId || typeof data[name] === 'string') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = { connect: data[name] };
+          prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
       }
       return prev;
@@ -75,14 +91,25 @@ const fromMongoToGqlDataArg = (data: Object, thingConfig: ThingConfig): Object =
   }
 
   if (duplexFields) {
-    duplexFields.reduce((prev, { name, array }) => {
+    duplexFields.reduce((prev, { name, array, config }) => {
       if (data[name]) {
         if (array) {
+          if (!data[name].length) {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { connect: [] };
+          } else if (data[name][0] instanceof ObjectId || typeof data[name][0] === 'string') {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { connect: data[name] };
+          } else {
+            // eslint-disable-next-line no-param-reassign
+            prev[name] = { create: data[name].map((item) => fromMongoToGqlDataArg(item, config)) };
+          }
+        } else if (data[name] instanceof ObjectId || typeof data[name] === 'string') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {
           // eslint-disable-next-line no-param-reassign
-          prev[name] = { connect: data[name] };
+          prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
       }
       return prev;

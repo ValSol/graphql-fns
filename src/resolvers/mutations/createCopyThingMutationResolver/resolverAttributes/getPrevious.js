@@ -5,7 +5,7 @@ import type { GetPrevious } from '../../../flowTypes';
 import createThing from '../../../../mongooseModels/createThing';
 import getMatchingFields from '../../../../utils/getMatchingFields';
 import getOppositeFields from '../../../../utils/getOppositeFields';
-import coerceDataToGql from '../../../../utils/coerceDataToGql';
+import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereInput';
 import checkData from '../../checkData';
@@ -142,11 +142,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     rawData[fieldName] = array ? [thing._id] : thing._id; // eslint-disable-line no-underscore-dangle
   }
 
-  const data = coerceDataToGql(rawData, null, thingConfig);
+  const data = fromMongoToGqlDataArg(rawData, thingConfig);
 
   if (id) {
-    const data2 = coerceDataToGql(rawData2, null, thingConfig);
-
     const processingKind = 'update';
     const allowCopy = await checkData(
       { whereOne: { id }, data },
@@ -158,7 +156,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       context,
     );
 
-    return allowCopy && [{ ...data2, id }, data];
+    return allowCopy && [{ ...rawData2, id }, rawData];
   }
 
   const processingKind = 'create';
@@ -172,7 +170,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     context,
   );
 
-  return allowCopy && [data];
+  return allowCopy && [rawData];
 };
 
 export default get;

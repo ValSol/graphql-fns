@@ -13,6 +13,9 @@ const {
 // const {
 //   default: createUpdateThingMutationResolver,
 // } = require('../createUpdateThingMutationResolver');
+const { default: createThingQueryResolver } = require('../../queries/createThingQueryResolver');
+const { default: createThingsQueryResolver } = require('../../queries/createThingsQueryResolver');
+
 const { default: createCopyThingWithChildrenMutationResolver } = require('./index');
 
 let mongooseConn;
@@ -26,10 +29,79 @@ beforeAll(async () => {
 });
 
 describe('createCopyThingWithChildrenMutationResolver', () => {
+  const restaurantCloneConfig: ThingConfig = {};
+  const menuConfig: ThingConfig = {};
   const menuCloneConfig: ThingConfig = {};
   const menuSectionConfig: ThingConfig = {};
   const menuCloneSectionConfig: ThingConfig = {};
-  const menuConfig: ThingConfig = {
+  const restaurantConfig = {
+    name: 'Restaurant',
+
+    textFields: [
+      {
+        name: 'name',
+        required: true,
+      },
+    ],
+
+    geospatialFields: [
+      {
+        name: 'coordinates',
+        geospatialType: 'Point',
+      },
+    ],
+
+    duplexFields: [
+      {
+        name: 'clone',
+        oppositeName: 'original',
+        config: restaurantCloneConfig,
+        parent: true,
+      },
+
+      {
+        name: 'menu',
+        oppositeName: 'restaurant',
+        config: menuConfig,
+        parent: true,
+      },
+    ],
+  };
+
+  Object.assign(restaurantCloneConfig, {
+    name: 'RestaurantClone',
+
+    textFields: [
+      {
+        name: 'name',
+        required: true,
+      },
+    ],
+
+    geospatialFields: [
+      {
+        name: 'coordinates',
+        geospatialType: 'Point',
+      },
+    ],
+
+    duplexFields: [
+      {
+        name: 'original',
+        oppositeName: 'clone',
+        config: restaurantConfig,
+      },
+
+      {
+        name: 'menu',
+        oppositeName: 'restaurant',
+        config: menuCloneConfig,
+        parent: true,
+      },
+    ],
+  });
+
+  Object.assign(menuConfig, {
     name: 'Menu',
 
     textFields: [
@@ -41,10 +113,9 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     duplexFields: [
       {
-        name: 'clone',
-        oppositeName: 'original',
-        config: menuCloneConfig,
-        parent: true,
+        name: 'restaurant',
+        oppositeName: 'menu',
+        config: restaurantConfig,
       },
 
       {
@@ -55,7 +126,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         parent: true,
       },
     ],
-  };
+  });
 
   Object.assign(menuCloneConfig, {
     name: 'MenuClone',
@@ -69,10 +140,9 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     duplexFields: [
       {
-        name: 'original',
-        oppositeName: 'clone',
-        config: menuConfig,
-        required: true,
+        name: 'restaurant',
+        oppositeName: 'menu',
+        config: restaurantCloneConfig,
       },
 
       {
@@ -124,6 +194,8 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
   });
 
   const thingConfigs = {
+    Restaurant: restaurantConfig,
+    RestaurantClone: restaurantCloneConfig,
     Menu: menuConfig,
     MenuClone: menuCloneConfig,
     MenuSection: menuSectionConfig,
@@ -134,6 +206,14 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
   const serversideConfig = { transactions: true };
 
   test('should create mutation add thing resolver', async () => {
+    const restaurantSchema = createThingSchema(restaurantConfig);
+    const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.createCollection();
+
+    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
+    await RestaurantClone.createCollection();
+
     const menuSchema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.createCollection();
@@ -150,46 +230,92 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
     await MenuCloneSection.createCollection();
 
-    const createMenu = createCreateThingMutationResolver(
-      menuConfig,
+    const createRestaurant = createCreateThingMutationResolver(
+      restaurantConfig,
       generalConfig,
       serversideConfig,
     );
-    expect(typeof createMenu).toBe('function');
-    if (!createMenu) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
-      name: 'Menu Name',
-      sections: {
-        create: [
-          { name: 'Section Name 1' },
-          { name: 'Section Name 2' },
-          { name: 'Section Name 3' },
-        ],
+      name: 'Romashka Restaurant',
+      coordinates: { lng: 50.419, lat: 30.639 },
+      menu: {
+        create: {
+          name: 'Menu Name',
+          sections: {
+            create: [
+              { name: 'Section Name 1' },
+              { name: 'Section Name 2' },
+              { name: 'Section Name 3' },
+            ],
+          },
+        },
       },
     };
 
-    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub });
-    expect(createdMenu.name).toBe(data.name);
-    expect(createdMenu.sections.length).toBe(3);
+    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    expect(createdRestaurant.name).toBe(data.name);
 
-    const copyMenuCloneWithChildren = createCopyThingWithChildrenMutationResolver(
+    const copyRestaurantCloneWithChildren = createCopyThingWithChildrenMutationResolver(
+      restaurantCloneConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof copyRestaurantCloneWithChildren).toBe('function');
+    if (!copyRestaurantCloneWithChildren) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const restaurantClone = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+    expect(restaurantClone.name).toBe(data.name);
+    expect({
+      lng: restaurantClone.coordinates.coordinates[0],
+      lat: restaurantClone.coordinates.coordinates[1],
+    }).toEqual(data.coordinates);
+    expect(restaurantClone.original.toString()).toBe(createdRestaurant.id.toString());
+
+    const menuCloneQuery = createThingQueryResolver(
       menuCloneConfig,
       generalConfig,
       serversideConfig,
     );
-    expect(typeof copyMenuCloneWithChildren).toBe('function');
-    if (!copyMenuCloneWithChildren) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    expect(typeof menuCloneQuery).toBe('function');
+    if (!menuCloneQuery) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const personClone = await copyMenuCloneWithChildren(
+    const menuClone = await menuCloneQuery(
       null,
-      {
-        whereOnes: { original: { id: createdMenu.id } },
-      },
+      { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1 } },
     );
-    expect(personClone.name).toBe(data.name);
-    expect(personClone.sections.length).toBe(3);
-    expect(personClone.original.toString()).toBe(createdMenu.id.toString());
+
+    expect(menuClone.name).toBe(data.menu.create.name);
+
+    const sectionsCloneQuery = createThingsQueryResolver(
+      menuCloneSectionConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof sectionsCloneQuery).toBe('function');
+    if (!sectionsCloneQuery) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const sectionsClone = await sectionsCloneQuery(
+      null,
+      { where: { id_id: menuClone.sections } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1 } },
+    );
+
+    expect(sectionsClone.length).toBe(data.menu.create.sections.create.length);
+
+    sectionsClone.forEach((section, i) => {
+      expect(section.name).toBe(data.menu.create.sections.create[i].name);
+    });
   });
 });

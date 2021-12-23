@@ -10,8 +10,8 @@
     "build:flow": "flow-copy-source src lib --ignore \"**/*.mtest.js\" --ignore \"**/*.test.js\"",
     "commit": "git-cz",
     "flow": "flow check",
-    "test:once": "jest",
-    "test:mongodb": "jest --config=jest.config.mongodb.js --runInBand",
+    "test:once": "jest --verbose false",
+    "test:mongodb": "jest --config=jest.config.mongodb.js --runInBand --verbose false",
     "test": "jest --watch",
     "semantic-release": "semantic-release"
   },

@@ -2,8 +2,9 @@
 import type { PrepareBulkData } from '../../../flowTypes';
 import type { Enums, ThingConfig } from '../../../../flowTypes';
 
-import createThing from '../../../../mongooseModels/createThing';
 import getMatchingFields from '../../../../utils/getMatchingFields';
+import createThing from '../../../../mongooseModels/createThing';
+import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
 import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../processDeleteDataPrepareArgs';
@@ -88,21 +89,9 @@ const composeCreateTree = async (
 
         const rangeredCopiedThings = copiedThing[fieldName].map((id) => copiedThingsObject[id]);
 
-        result[fieldName] = {
-          create: rangeredCopiedThings.map((copiedThing2) =>
-            composeCreateTree(
-              copiedThing2,
-              null,
-              thingConfig2,
-              copiedThingConfig2,
-              enums,
-              mongooseConn,
-            ),
-          ),
-        };
-        result[fieldName].create = [];
+        result[fieldName] = [];
         for (let j = 0; j < rangeredCopiedThings.length; j += 1) {
-          result[fieldName].create.push(
+          result[fieldName].push(
             // eslint-disable-next-line no-await-in-loop
             await composeCreateTree(
               rangeredCopiedThings[j],
@@ -122,18 +111,15 @@ const composeCreateTree = async (
         });
 
         // eslint-disable-next-line no-await-in-loop
-        result[fieldName] = {
-          // eslint-disable-next-line no-await-in-loop
-          create: await composeCreateTree(
-            copiedThing2,
-            null,
-            copiedThingConfig2,
-            thingConfig2,
-            enums,
-            mongooseConn,
-            oppositeName,
-          ),
-        };
+        result[fieldName] = await composeCreateTree(
+          copiedThing2,
+          null,
+          copiedThingConfig2,
+          thingConfig2,
+          enums,
+          mongooseConn,
+          oppositeName,
+        );
       }
     } else if (projection[fieldName]) {
       result[fieldName] = copiedThing[fieldName];
@@ -168,12 +154,6 @@ const prepareBulkData: PrepareBulkData = async (
     throw new TypeError(`Not found duplex field: "${fieldName}" in thing: "${thingConfig.name}"!`);
   }
   const { config: copiedThingConfig } = fieldToConnect;
-
-  const { duplexFieldsToCopy } = composeProjectionAndDuplexFieldsToCopy(
-    fieldName,
-    thingConfig,
-    copiedThingConfig,
-  );
 
   if (previousThings[0].id) {
     const { duplexFields } = thingConfig;
@@ -225,16 +205,7 @@ const prepareBulkData: PrepareBulkData = async (
   let preparedData = { ...prevPreparedData, mains: [] };
 
   for (let i = 0; i < previousThings.length; i += 1) {
-    const dataItem = previousThings[i];
-
-    const copiedThing = Object.keys(dataItem).reduce((prev, thingFieldName) => {
-      if (duplexFieldsToCopy[thingFieldName]) {
-        prev[thingFieldName] = dataItem[thingFieldName].connect; // eslint-disable-line no-param-reassign
-      } else {
-        prev[thingFieldName] = dataItem[thingFieldName]; // eslint-disable-line no-param-reassign
-      }
-      return prev;
-    }, {});
+    const copiedThing = previousThings[i];
 
     // eslint-disable-next-line no-await-in-loop
     const tree = await composeCreateTree(
@@ -246,12 +217,9 @@ const prepareBulkData: PrepareBulkData = async (
       mongooseConn,
     );
 
-    preparedData = processCreateInputData(
-      Object.assign(dataItem, tree),
-      preparedData,
-      thingConfig,
-      'create',
-    );
+    const tree2 = fromMongoToGqlDataArg(Object.assign(copiedThing, tree), thingConfig);
+
+    preparedData = processCreateInputData(tree2, preparedData, thingConfig, 'create');
   }
 
   return preparedData;
