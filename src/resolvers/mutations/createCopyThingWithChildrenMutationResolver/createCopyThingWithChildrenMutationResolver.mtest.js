@@ -10,9 +10,9 @@ const { default: createThingSchema } = require('../../../mongooseModels/createTh
 const {
   default: createCreateThingMutationResolver,
 } = require('../createCreateThingMutationResolver');
-// const {
-//   default: createUpdateThingMutationResolver,
-// } = require('../createUpdateThingMutationResolver');
+const {
+  default: createUpdateThingMutationResolver,
+} = require('../createUpdateThingMutationResolver');
 const { default: createThingQueryResolver } = require('../../queries/createThingQueryResolver');
 const { default: createThingsQueryResolver } = require('../../queries/createThingsQueryResolver');
 
@@ -292,10 +292,11 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
     );
 
     expect(menuClone.name).toBe(data.menu.create.name);
+    expect(restaurantClone.id.toString()).toBe(menuClone.restaurant.toString());
 
     const sectionsCloneQuery = createThingsQueryResolver(
       menuCloneSectionConfig,
@@ -316,6 +317,151 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     sectionsClone.forEach((section, i) => {
       expect(section.name).toBe(data.menu.create.sections.create[i].name);
+    });
+
+    const updateRestaurant = createUpdateThingMutationResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof updateRestaurant).toBe('function');
+    if (!updateRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const restaurantDataToUpdate = {
+      name: 'Updated Romashka Restaurant',
+    };
+
+    const updatedRestaurant = await updateRestaurant(
+      null,
+      { whereOne: { id: createdRestaurant.id }, data: restaurantDataToUpdate },
+      { mongooseConn, pubsub },
+    );
+
+    expect(updatedRestaurant.name).toBe(restaurantDataToUpdate.name);
+
+    const restaurantClone2 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    expect(restaurantClone2.name).toBe(restaurantDataToUpdate.name);
+    expect(restaurantClone2.menu.toString()).toBe(menuClone.id.toString());
+
+    const updateMenu = createUpdateThingMutationResolver(
+      menuConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof updateMenu).toBe('function');
+    if (!updateMenu) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const menuDataToUpdate = {
+      name: 'Updated Menu Name',
+    };
+
+    const updatedMenu = await updateMenu(
+      null,
+      { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate },
+      { mongooseConn, pubsub },
+    );
+
+    expect(updatedMenu.name).toBe(menuDataToUpdate.name);
+
+    const restaurantClone3 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    expect(restaurantClone3.menu.toString()).not.toBe(menuClone.id.toString());
+
+    const menuClone2 = await menuCloneQuery(
+      null,
+      { whereOne: { id: restaurantClone3.menu.toString() } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
+    );
+
+    expect(restaurantClone3.menu.toString()).toBe(menuClone2.id.toString());
+    expect(restaurantClone3.id.toString()).toBe(menuClone2.restaurant.toString());
+
+    const sectionsClone2 = await sectionsCloneQuery(
+      null,
+      { where: { id_id: menuClone.sections } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, menu: 1 } },
+    );
+
+    expect(sectionsClone2.length).toBe(data.menu.create.sections.create.length);
+
+    sectionsClone2.forEach((section, i) => {
+      expect(section.name).toBe(data.menu.create.sections.create[i].name);
+      expect(section.id.toString()).toBe(sectionsClone[i].id.toString());
+      expect(section.menu.toString()).toBe(restaurantClone3.menu.toString());
+    });
+
+    const updateMenuSection = createUpdateThingMutationResolver(
+      menuSectionConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof updateMenuSection).toBe('function');
+    if (!updateMenuSection) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const sectionDataToUpdate = {
+      name: 'Updated Section Name 2',
+    };
+
+    const menuSection = await updateMenuSection(
+      null,
+      { whereOne: { id: updatedMenu.sections[1].toString() }, data: sectionDataToUpdate },
+      { mongooseConn, pubsub },
+    );
+
+    expect(menuSection.name).toBe(sectionDataToUpdate.name);
+
+    const restaurantClone4 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    const menuClone3 = await menuCloneQuery(
+      null,
+      { whereOne: { id: restaurantClone4.menu.toString() } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
+    );
+
+    const sectionsClone3 = await sectionsCloneQuery(
+      null,
+      { where: { id_id: menuClone3.sections } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, menu: 1 } },
+    );
+
+    const sectionsClonesObject = sectionsClone3.reduce((prev, item) => {
+      prev[item.id] = item; // eslint-disable-line no-param-reassign
+      return prev;
+    }, {});
+
+    menuClone3.sections.forEach((id, i) => {
+      const section = sectionsClonesObject[id];
+      if (i === 1) {
+        expect(section.name).toBe(sectionDataToUpdate.name);
+        expect(section.id.toString()).not.toBe(menuClone2.sections[i].toString());
+      } else {
+        expect(section.name).toBe(data.menu.create.sections.create[i].name);
+        expect(section.id.toString()).toBe(menuClone2.sections[i].toString());
+      }
+      expect(section.menu.toString()).toBe(restaurantClone4.menu.toString());
     });
   });
 });

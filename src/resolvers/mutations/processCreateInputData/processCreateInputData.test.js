@@ -1011,4 +1011,177 @@ describe('processCreateInputData', () => {
 
     expect(result).toEqual(expectedResult2);
   });
+
+  test('should create object and children objectcs with duplex fields along with connect', () => {
+    const preparedData = { mains: [], core: new Map(), periphery: new Map() };
+
+    const menuConfig: ThingConfig = {};
+    const menuSectionConfig: ThingConfig = {};
+    const restaurantConfig: ThingConfig = {
+      name: 'Restaurant',
+
+      textFields: [{ name: 'title' }],
+
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'restaurant',
+          config: menuConfig,
+        },
+      ],
+    };
+
+    Object.assign(menuConfig, {
+      name: 'Menu',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'restaurant',
+          oppositeName: 'menu',
+          config: restaurantConfig,
+          required: true,
+        },
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          config: menuSectionConfig,
+          array: true,
+        },
+      ],
+    });
+
+    Object.assign(menuSectionConfig, {
+      name: 'menuSectionConfig',
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+        },
+      ],
+      duplexFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuConfig,
+          required: true,
+        },
+      ],
+    });
+
+    const data = {
+      id: '500',
+      title: 'Restaurant Title',
+      menu: {
+        create: {
+          title: 'Menu Title',
+          sections: {
+            connect: ['510', '520'],
+            create: [{ title: 'Menu Section 2' }],
+            createPositions: [1],
+          },
+        },
+      },
+    };
+
+    const core = new Map();
+    core.set(restaurantConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '500',
+          },
+          update: {
+            $set: {
+              menu: '17',
+              title: 'Restaurant Title',
+            },
+          },
+        },
+      },
+    ]);
+
+    core.set(menuConfig, [
+      {
+        insertOne: {
+          document: {
+            _id: '17',
+            title: 'Menu Title',
+            restaurant: '500',
+            sections: ['510', '18', '520'],
+          },
+        },
+      },
+    ]);
+
+    core.set(menuSectionConfig, [
+      {
+        updateOne: {
+          filter: {
+            _id: '510',
+          },
+          update: {
+            menu: '17',
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            _id: '520',
+          },
+          update: {
+            menu: '17',
+          },
+        },
+      },
+      {
+        insertOne: {
+          document: {
+            _id: '18',
+            title: 'Menu Section 2',
+            menu: '17',
+          },
+        },
+      },
+    ]);
+
+    const periphery: Periphery = new Map();
+
+    periphery.set(menuSectionConfig, {
+      menu: {
+        oppositeIds: ['510', '520'],
+        array: true,
+        name: 'sections',
+        oppositeConfig: menuConfig,
+      },
+    });
+
+    const expectedResult = {
+      core,
+      periphery,
+      mains: [
+        {
+          _id: '500',
+          title: 'Restaurant Title',
+          menu: '17',
+        },
+      ],
+    };
+
+    const result = processCreateInputData(
+      data,
+      preparedData,
+      restaurantConfig,
+      'update',
+      undefined,
+      mongooseTypes,
+    );
+
+    expect(result).toEqual(expectedResult);
+  });
 });

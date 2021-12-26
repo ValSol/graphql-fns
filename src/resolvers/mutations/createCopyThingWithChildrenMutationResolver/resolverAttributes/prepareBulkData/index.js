@@ -1,4 +1,5 @@
 // @flow
+
 import type { PrepareBulkData } from '../../../../flowTypes';
 
 import fromMongoToGqlDataArg from '../../../../types/fromMongoToGqlDataArg';
@@ -6,6 +7,7 @@ import processCreateInputData from '../../../processCreateInputData';
 import processDeleteData from '../../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../../processDeleteDataPrepareArgs';
 import composeCreateTree from './composeCreateTree';
+import mixTrees from './mixTrees';
 
 const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,
@@ -47,35 +49,63 @@ const prepareBulkData: PrepareBulkData = async (
 
     let coreForDeletions = core;
 
-    const pairedPreviouseThings = previousThings.reduce((prev, copiedThing, i) => {
+    const pairedPreviouseThings = previousThings.reduce((prev, previousThing, i) => {
       if (!(i % 2)) {
-        prev.push([copiedThing]);
+        prev.push([previousThing]);
       } else {
-        prev[prev.length - 1].push(copiedThing);
+        prev[prev.length - 1].push(previousThing);
       }
       return prev;
     }, []);
 
-    pairedPreviouseThings.forEach(([copiedThing, data]) => {
+    pairedPreviouseThings.forEach(([currentThing, copiedThing]) => {
       coreForDeletions = Object.keys(duplexFieldsProjection).length
         ? processDeleteData(
-            processDeleteDataPrepareArgs(data, copiedThing, thingConfig),
+            processDeleteDataPrepareArgs(copiedThing, currentThing, thingConfig),
             coreForDeletions,
             thingConfig,
           )
         : coreForDeletions;
     });
 
-    let preparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };
+    let preparedData = { ...prevPreparedData, core, mains: [] };
 
-    pairedPreviouseThings.forEach(([copiedThing, data]) => {
+    for (let i = 0; i < pairedPreviouseThings.length; i += 1) {
+      const [currentThing, copiedThing] = pairedPreviouseThings[i];
+
+      // eslint-disable-next-line no-await-in-loop
+      const tree = await composeCreateTree(
+        copiedThing,
+        copiedThingConfig,
+        thingConfig,
+        enums,
+        mongooseConn,
+        null,
+      );
+
+      const idsAndThingConfigs = [{}];
+
+      // eslint-disable-next-line no-await-in-loop
+      const currentTree = await composeCreateTree(
+        currentThing,
+        thingConfig,
+        copiedThingConfig,
+        enums,
+        mongooseConn,
+        idsAndThingConfigs,
+      );
+
+      const mixedTrees = mixTrees(tree, currentTree, idsAndThingConfigs, core);
+
+      const tree2 = fromMongoToGqlDataArg(Object.assign(copiedThing, mixedTrees), thingConfig);
+
       preparedData = processCreateInputData(
-        { ...data, id: copiedThing.id }, // eslint-disable-line no-underscore-dangle
+        { ...tree2, id: currentThing.id }, // eslint-disable-line no-underscore-dangle
         preparedData,
         thingConfig,
         'update',
       );
-    });
+    }
 
     return preparedData;
   }
