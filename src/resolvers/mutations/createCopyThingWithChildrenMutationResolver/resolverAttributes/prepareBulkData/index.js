@@ -83,7 +83,7 @@ const prepareBulkData: PrepareBulkData = async (
         null,
       );
 
-      const idsAndThingConfigs = [{}];
+      const idsAndThingConfigs = [{}, currentThing, thingConfig];
 
       // eslint-disable-next-line no-await-in-loop
       const currentTree = await composeCreateTree(
@@ -115,7 +115,7 @@ const prepareBulkData: PrepareBulkData = async (
   for (let i = 0; i < previousThings.length; i += 1) {
     const copiedThing = previousThings[i];
 
-    const idsAndThingConfigs = [{}];
+    const idsAndThingConfigs = [{}, {}, thingConfig];
 
     // eslint-disable-next-line no-await-in-loop
     const tree = await composeCreateTree(

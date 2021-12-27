@@ -13,6 +13,9 @@ const {
 const {
   default: createUpdateThingMutationResolver,
 } = require('../createUpdateThingMutationResolver');
+const {
+  default: createDeleteManyThingsMutationResolver,
+} = require('../createDeleteManyThingsMutationResolver');
 const { default: createThingQueryResolver } = require('../../queries/createThingQueryResolver');
 const { default: createThingsQueryResolver } = require('../../queries/createThingsQueryResolver');
 
@@ -308,7 +311,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     const sectionsClone = await sectionsCloneQuery(
       null,
-      { where: { id_id: menuClone.sections } },
+      { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1 } },
     );
@@ -392,7 +395,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     const sectionsClone2 = await sectionsCloneQuery(
       null,
-      { where: { id_id: menuClone.sections } },
+      { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
     );
@@ -442,7 +445,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
 
     const sectionsClone3 = await sectionsCloneQuery(
       null,
-      { where: { id_id: menuClone3.sections } },
+      { where: { id_in: menuClone3.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
     );
@@ -463,5 +466,131 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
       }
       expect(section.menu.toString()).toBe(restaurantClone4.menu.toString());
     });
+
+    const menuDataToUpdate2 = {
+      sections: {
+        connect: [updatedMenu.sections[1], updatedMenu.sections[2], updatedMenu.sections[0]],
+      },
+    };
+
+    await updateMenu(
+      null,
+      { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate2 },
+      { mongooseConn, pubsub },
+    );
+
+    const restaurantClone5 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    const menuClone4 = await menuCloneQuery(
+      null,
+      { whereOne: { id: restaurantClone5.menu.toString() } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
+    );
+
+    expect(menuClone4.sections[0].toString()).toBe(menuClone3.sections[1].toString());
+    expect(menuClone4.sections[1].toString()).toBe(menuClone3.sections[2].toString());
+    expect(menuClone4.sections[2].toString()).toBe(menuClone3.sections[0].toString());
+
+    const menuDataToUpdate3 = {
+      sections: {
+        connect: [updatedMenu.sections[1], updatedMenu.sections[2], updatedMenu.sections[0]],
+        create: [
+          { name: 'Added Section Name 1' },
+          { name: 'Added Section Name 2' },
+          { name: 'Added Section Name 3' },
+        ],
+        createPositions: [0, 2, 5],
+      },
+    };
+
+    await updateMenu(
+      null,
+      { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate3 },
+      { mongooseConn, pubsub },
+    );
+
+    const restaurantClone6 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    const menuClone5 = await menuCloneQuery(
+      null,
+      { whereOne: { id: restaurantClone6.menu.toString() } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
+    );
+
+    expect(menuClone5.sections.length).toBe(6);
+    expect(menuClone5.sections[1].toString()).toBe(menuClone3.sections[1].toString());
+    expect(menuClone5.sections[3].toString()).toBe(menuClone3.sections[2].toString());
+    expect(menuClone5.sections[4].toString()).toBe(menuClone3.sections[0].toString());
+
+    const sectionsClone4 = await sectionsCloneQuery(
+      null,
+      { where: { id_in: menuClone5.sections } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, menu: 1 } },
+    );
+
+    const sectionsClonesObject2 = sectionsClone4.reduce((prev, item) => {
+      prev[item.id] = item; // eslint-disable-line no-param-reassign
+      return prev;
+    }, {});
+
+    expect(sectionsClonesObject2[menuClone5.sections[0]].name).toBe(
+      menuDataToUpdate3.sections.create[0].name,
+    );
+    expect(sectionsClonesObject2[menuClone5.sections[2]].name).toBe(
+      menuDataToUpdate3.sections.create[1].name,
+    );
+    expect(sectionsClonesObject2[menuClone5.sections[5]].name).toBe(
+      menuDataToUpdate3.sections.create[2].name,
+    );
+
+    const deleteManySections = createDeleteManyThingsMutationResolver(
+      menuSectionConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof deleteManySections).toBe('function');
+    if (!deleteManySections) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    await deleteManySections(
+      null,
+      { whereOne: updatedMenu.sections.map((id) => ({ id: id.toString() })) },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, menu: 1 } },
+    );
+
+    const restaurantClone7 = await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    const menuClone6 = await menuCloneQuery(
+      null,
+      { whereOne: { id: restaurantClone7.menu.toString() } },
+      { mongooseConn, pubsub },
+      { projection: { name: 1, sections: 1, restaurant: 1 } },
+    );
+
+    expect(menuClone6.sections.length).toBe(3);
+    expect(menuClone6.sections[0].toString()).toBe(menuClone5.sections[0].toString());
+    expect(menuClone6.sections[1].toString()).toBe(menuClone5.sections[2].toString());
+    expect(menuClone6.sections[2].toString()).toBe(menuClone5.sections[5].toString());
   });
 });

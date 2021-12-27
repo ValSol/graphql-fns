@@ -4,33 +4,60 @@ import deepEqual from 'fast-deep-equal';
 
 import type { ThingConfig } from '../../../../../flowTypes';
 
+import composeFieldsObject from '../../../../../utils/composeFieldsObject';
 import processDeleteData from '../../../processDeleteData';
 
 const mixTrees = (
   tree: Object,
   tree2: Object,
-  idsAndThingConfigs: null | [Object] | [Object, string, Object, ThingConfig],
+  idsAndThingConfigs: null | [Object, Object, ThingConfig],
   core: Map<ThingConfig, Array<Object>>,
 ): Object => {
-  if (!idsAndThingConfigs) {
-    throw new TypeError('idsAndThingConfigs not defined!');
-  }
-  if (!idsAndThingConfigs) return {};
+  if (!idsAndThingConfigs) return tree;
 
-  const [currentBranch] = idsAndThingConfigs;
+  const [currentBranch, , parentThingConfig] = idsAndThingConfigs;
 
   const fieldNames = Object.keys(currentBranch);
 
-  const result = fieldNames.reduce((prev, fieldName) => {
-    if (currentBranch[fieldName][0] && Array.isArray(currentBranch[fieldName][0])) {
-      prev[fieldName] = []; // eslint-disable-line no-param-reassign
-      currentBranch[fieldName].forEach((idsAndThingConfigs2, i) => {
-        if (deepEqual(tree[fieldName][i], tree2[fieldName][i])) {
-          const [, { _id: id }] = currentBranch[fieldName][i];
+  const fieldsObject = composeFieldsObject(parentThingConfig);
 
+  const result = fieldNames.reduce((prev, fieldName) => {
+    if (tree2[fieldName] === undefined) {
+      prev[fieldName] = tree[fieldName]; // eslint-disable-line no-param-reassign
+
+      return prev;
+    }
+
+    const {
+      attributes: { array },
+    } = fieldsObject[fieldName];
+
+    if (array) {
+      const unusedTreeIndexes = [];
+      const usedTree2Indexes = [];
+      prev[fieldName] = []; // eslint-disable-line no-param-reassign
+      tree[fieldName].forEach((treeItem, i) => {
+        const index = tree2[fieldName].findIndex((tree2Item) => deepEqual(treeItem, tree2Item));
+
+        if (index !== -1 && !usedTree2Indexes.includes(index)) {
+          usedTree2Indexes.push(index);
+          const [, { _id: id }] = currentBranch[fieldName][index];
           prev[fieldName].push(id);
         } else {
-          const [, thing, thingConfig] = currentBranch[fieldName][i];
+          unusedTreeIndexes.push(i);
+          prev[fieldName].push(null); // insert dummy value to replace in next loop
+        }
+      });
+
+      unusedTreeIndexes.forEach((i) => {
+        const firstUnusedTree2Index = tree2[fieldName].findIndex(
+          (item, j) => !usedTree2Indexes.includes(j),
+        );
+
+        if (firstUnusedTree2Index !== -1) {
+          usedTree2Indexes.push(firstUnusedTree2Index);
+
+          const [, thing, thingConfig] = currentBranch[fieldName][firstUnusedTree2Index];
 
           processDeleteData(
             thing,
@@ -39,8 +66,28 @@ const mixTrees = (
             true, // forDelete
           );
 
-          prev[fieldName].push(
-            mixTrees(tree[fieldName][i], tree2[fieldName][i], idsAndThingConfigs2, core),
+          // eslint-disable-next-line no-param-reassign
+          prev[fieldName][i] = mixTrees(
+            tree[fieldName][i],
+            tree2[fieldName][firstUnusedTree2Index],
+            currentBranch[fieldName][firstUnusedTree2Index],
+            core,
+          );
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[fieldName][i] = mixTrees(tree[fieldName][i], {}, null, core);
+        }
+      });
+
+      tree2[fieldName].forEach((tree2Item, i) => {
+        if (!usedTree2Indexes.includes(i)) {
+          const [, thing, thingConfig] = currentBranch[fieldName][i];
+
+          processDeleteData(
+            thing,
+            core,
+            thingConfig,
+            true, // forDelete
           );
         }
       });

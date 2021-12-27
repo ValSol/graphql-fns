@@ -43,7 +43,7 @@ const composeCreateTree = async (
   secondThingConfig: ThingConfig,
   enums?: Enums,
   mongooseConn: Object,
-  idsAndThingConfigs: null | [Object] | [Object, Object, ThingConfig],
+  idsAndThingConfigs: null | [Object, Object, ThingConfig],
   oppositeFieldName?: string,
 ): Object => {
   const { duplexFieldsToCopy, projection } = composeProjectionAndDuplexFieldsToCopy(
