@@ -6,6 +6,7 @@ import type { ThingConfig } from '../../../../../flowTypes';
 
 import composeFieldsObject from '../../../../../utils/composeFieldsObject';
 import processDeleteData from '../../../processDeleteData';
+import deleteTree from './deleteTree';
 
 const mixTrees = (
   tree: Object,
@@ -22,17 +23,17 @@ const mixTrees = (
   const fieldsObject = composeFieldsObject(parentThingConfig);
 
   const result = fieldNames.reduce((prev, fieldName) => {
-    if (tree2[fieldName] === undefined) {
-      prev[fieldName] = tree[fieldName]; // eslint-disable-line no-param-reassign
-
-      return prev;
-    }
-
     const {
       attributes: { array },
     } = fieldsObject[fieldName];
 
     if (array) {
+      if (tree[fieldName] === undefined) {
+        currentBranch.forEach((currentBranchItem) => deleteTree(currentBranchItem, core));
+
+        return prev;
+      }
+
       const unusedTreeIndexes = [];
       const usedTree2Indexes = [];
       prev[fieldName] = []; // eslint-disable-line no-param-reassign
@@ -81,16 +82,11 @@ const mixTrees = (
 
       tree2[fieldName].forEach((tree2Item, i) => {
         if (!usedTree2Indexes.includes(i)) {
-          const [, thing, thingConfig] = currentBranch[fieldName][i];
-
-          processDeleteData(
-            thing,
-            core,
-            thingConfig,
-            true, // forDelete
-          );
+          deleteTree(currentBranch[fieldName][i], core);
         }
       });
+    } else if (tree[fieldName] === undefined) {
+      deleteTree(currentBranch[fieldName], core);
     } else if (deepEqual(tree[fieldName], tree2[fieldName])) {
       const [, { _id: id }] = currentBranch[fieldName];
 

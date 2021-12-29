@@ -14,8 +14,8 @@ const {
   default: createUpdateThingMutationResolver,
 } = require('../createUpdateThingMutationResolver');
 const {
-  default: createDeleteManyThingsMutationResolver,
-} = require('../createDeleteManyThingsMutationResolver');
+  default: createDeleteManyThingsWithChildrenMutationResolver,
+} = require('../createDeleteManyThingsWithChildrenMutationResolver');
 const { default: createThingQueryResolver } = require('../../queries/createThingQueryResolver');
 const { default: createThingsQueryResolver } = require('../../queries/createThingsQueryResolver');
 
@@ -36,7 +36,9 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
   const menuConfig: ThingConfig = {};
   const menuCloneConfig: ThingConfig = {};
   const menuSectionConfig: ThingConfig = {};
-  const menuCloneSectionConfig: ThingConfig = {};
+  const menuSectionCloneConfig: ThingConfig = {};
+  const menuSubSectionConfig: ThingConfig = {};
+  const menuSubSectionCloneConfig: ThingConfig = {};
   const restaurantConfig = {
     name: 'Restaurant',
 
@@ -152,7 +154,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         name: 'sections',
         oppositeName: 'menu',
         array: true,
-        config: menuCloneSectionConfig,
+        config: menuSectionCloneConfig,
         parent: true,
       },
     ],
@@ -174,10 +176,17 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         oppositeName: 'sections',
         config: menuConfig,
       },
+      {
+        name: 'subSections',
+        oppositeName: 'section',
+        config: menuSubSectionConfig,
+        array: true,
+        parent: true,
+      },
     ],
   });
 
-  Object.assign(menuCloneSectionConfig, {
+  Object.assign(menuSectionCloneConfig, {
     name: 'MenuCloneSection',
 
     textFields: [
@@ -193,6 +202,53 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         oppositeName: 'sections',
         config: menuCloneConfig,
       },
+      {
+        name: 'subSections',
+        oppositeName: 'section',
+        config: menuSubSectionCloneConfig,
+        array: true,
+        parent: true,
+      },
+    ],
+  });
+
+  Object.assign(menuSubSectionConfig, {
+    name: 'MenuSubSection',
+
+    textFields: [
+      {
+        name: 'name',
+        required: true,
+      },
+    ],
+
+    duplexFields: [
+      {
+        name: 'section',
+        oppositeName: 'subSections',
+        config: menuSectionConfig,
+        required: true,
+      },
+    ],
+  });
+
+  Object.assign(menuSubSectionCloneConfig, {
+    name: 'MenuCloneSubSection',
+
+    textFields: [
+      {
+        name: 'name',
+        required: true,
+      },
+    ],
+
+    duplexFields: [
+      {
+        name: 'section',
+        oppositeName: 'subSections',
+        config: menuSectionCloneConfig,
+        required: true,
+      },
     ],
   });
 
@@ -202,7 +258,9 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     Menu: menuConfig,
     MenuClone: menuCloneConfig,
     MenuSection: menuSectionConfig,
-    MenuCloneSection: menuCloneSectionConfig,
+    MenuCloneSection: menuSectionCloneConfig,
+    MenuSubSection: menuSubSectionConfig,
+    MenuCloneSubSection: menuSubSectionCloneConfig,
   };
 
   const generalConfig: GeneralConfig = { thingConfigs };
@@ -229,9 +287,20 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
     await MenuClone.createCollection();
 
-    const menuCloneSectionSchema = createThingSchema(menuCloneSectionConfig);
+    const menuCloneSectionSchema = createThingSchema(menuSectionCloneConfig);
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
     await MenuCloneSection.createCollection();
+
+    const menuSubSectionSchema = createThingSchema(menuSubSectionConfig);
+    const MenuSubSection = mongooseConn.model('MenuSubSection_Thing', menuSubSectionSchema);
+    await MenuSubSection.createCollection();
+
+    const menuCloneSubSectionSchema = createThingSchema(menuSubSectionCloneConfig);
+    const MenuCloneSubSection = mongooseConn.model(
+      'MenuCloneSubSection_Thing',
+      menuCloneSubSectionSchema,
+    );
+    await MenuCloneSubSection.createCollection();
 
     const createRestaurant = createCreateThingMutationResolver(
       restaurantConfig,
@@ -249,9 +318,23 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
           name: 'Menu Name',
           sections: {
             create: [
-              { name: 'Section Name 1' },
-              { name: 'Section Name 2' },
-              { name: 'Section Name 3' },
+              {
+                name: 'Section Name 1',
+                subSections: {
+                  create: [{ name: 'Sub Section Name 1-1' }, { name: 'Sub Section Name 1-2' }],
+                  connect: [],
+                },
+              },
+              {
+                name: 'Section Name 2',
+                subSections: { connect: [] },
+              },
+              {
+                name: 'Section Name 3',
+                subSections: {
+                  create: [{ name: 'Sub Section Name 3-1' }, { name: 'Sub Section Name 3-2' }],
+                },
+              },
             ],
           },
         },
@@ -302,7 +385,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     expect(restaurantClone.id.toString()).toBe(menuClone.restaurant.toString());
 
     const sectionsCloneQuery = createThingsQueryResolver(
-      menuCloneSectionConfig,
+      menuSectionCloneConfig,
       generalConfig,
       serversideConfig,
     );
@@ -503,7 +586,15 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
         connect: [updatedMenu.sections[1], updatedMenu.sections[2], updatedMenu.sections[0]],
         create: [
           { name: 'Added Section Name 1' },
-          { name: 'Added Section Name 2' },
+          {
+            name: 'Added Section Name 2',
+            subSections: {
+              create: [
+                { name: 'Added Sub Section Name 2-1 ' },
+                { name: 'Added Sub Section Name 2-2' },
+              ],
+            },
+          },
           { name: 'Added Section Name 3' },
         ],
         createPositions: [0, 2, 5],
@@ -558,7 +649,7 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
       menuDataToUpdate3.sections.create[2].name,
     );
 
-    const deleteManySections = createDeleteManyThingsMutationResolver(
+    const deleteManySections = createDeleteManyThingsWithChildrenMutationResolver(
       menuSectionConfig,
       generalConfig,
       serversideConfig,
@@ -592,5 +683,54 @@ describe('createCopyThingWithChildrenMutationResolver', () => {
     expect(menuClone6.sections[0].toString()).toBe(menuClone5.sections[0].toString());
     expect(menuClone6.sections[1].toString()).toBe(menuClone5.sections[2].toString());
     expect(menuClone6.sections[2].toString()).toBe(menuClone5.sections[5].toString());
+
+    const deleteManyMenusWithChildren = createDeleteManyThingsWithChildrenMutationResolver(
+      menuConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof deleteManyMenusWithChildren).toBe('function');
+    if (!deleteManyMenusWithChildren) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    await deleteManyMenusWithChildren(
+      null,
+      { whereOne: [{ id: createdRestaurant.menu }] },
+      { mongooseConn, pubsub },
+      { projection: { name: 1 } },
+    );
+
+    await copyRestaurantCloneWithChildren(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id } },
+      },
+      { mongooseConn, pubsub },
+    );
+
+    const sectionsClone5 = await sectionsCloneQuery(
+      null,
+      {},
+      { mongooseConn, pubsub },
+      { projection: { name: 1 } },
+    );
+
+    expect(sectionsClone5).toEqual([]);
+
+    const subSectionsCloneQuery = createThingsQueryResolver(
+      menuSubSectionCloneConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof subSectionsCloneQuery).toBe('function');
+    if (!subSectionsCloneQuery) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const subSectionsClone = await subSectionsCloneQuery(
+      null,
+      {},
+      { mongooseConn, pubsub },
+      { projection: { name: 1 } },
+    );
+
+    expect(subSectionsClone).toEqual([]);
   });
 });

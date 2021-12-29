@@ -55,6 +55,7 @@ const composeCreateTree = async (
   const [currentBranch] = idsAndThingConfigs || [null];
 
   const result = {};
+
   const thingFieldNames = Object.keys(thing);
 
   for (let i = 0; i < thingFieldNames.length; i += 1) {
@@ -101,8 +102,8 @@ const composeCreateTree = async (
             // eslint-disable-next-line no-await-in-loop
             await composeCreateTree(
               rangeredThing,
-              secondThingConfig2,
               thingConfig2,
+              secondThingConfig2,
               enums,
               mongooseConn,
               currentBranch ? currentBranch[fieldName][j] : null,
@@ -110,6 +111,8 @@ const composeCreateTree = async (
             ),
           );
         }
+      } else if (!thing[fieldName]) {
+        continue; // eslint-disable-line no-continue
       } else {
         // eslint-disable-next-line no-await-in-loop
         const thing2 = await Thing.findOne({ _id: thing[fieldName] }, null, {
