@@ -1,5 +1,7 @@
 // @flow
 
+import copyManyThings from './createCopyManyThingsMutationResolver';
+import copyManyThingsWithChildren from './createCopyManyThingsWithChildrenMutationResolver';
 import copyThing from './createCopyThingMutationResolver';
 import copyThingWithChildren from './createCopyThingWithChildrenMutationResolver';
 import createManyThings from './createCreateManyThingsMutationResolver';
@@ -22,6 +24,8 @@ import uploadFilesToThing from './createUploadFilesToThingMutationResolver';
 import uploadThingFiles from './createUploadThingFilesMutationResolver';
 
 const mutations = {
+  copyManyThings,
+  copyManyThingsWithChildren,
   copyThing,
   copyThingWithChildren,
   createManyThings,

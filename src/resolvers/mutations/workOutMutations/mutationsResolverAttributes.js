@@ -1,5 +1,7 @@
 // @flow
 
+import copyManyThings from '../createCopyManyThingsMutationResolver/resolverAttributes';
+import copyManyThingsWithChildren from '../createCopyManyThingsWithChildrenMutationResolver/resolverAttributes';
 import copyThing from '../createCopyThingMutationResolver/resolverAttributes';
 import copyThingWithChildren from '../createCopyThingWithChildrenMutationResolver/resolverAttributes';
 import createManyThings from '../createCreateManyThingsMutationResolver/resolverAttributes';
@@ -21,6 +23,8 @@ import updateThing from '../createUpdateThingMutationResolver/resolverAttributes
 import uploadFilesToThing from '../createUploadFilesToThingMutationResolver/resolverAttributes';
 
 const mutationsResolverAttributes = {
+  copyManyThings,
+  copyManyThingsWithChildren,
   copyThing,
   copyThingWithChildren,
   createManyThings,

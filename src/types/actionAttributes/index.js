@@ -4,6 +4,8 @@ import type { ActionAttributes } from '../../flowTypes';
 
 import childThing from './childThingQueryAttributes';
 import childThings from './childThingsQueryAttributes';
+import copyManyThings from './copyManyThingsMutationAttributes';
+import copyManyThingsWithChildren from './copyManyThingsWithChildrenMutationAttributes';
 import copyThing from './copyThingMutationAttributes';
 import copyThingWithChildren from './copyThingWithChildrenMutationAttributes';
 import createManyThings from './createManyThingsMutationAttributes';
@@ -36,6 +38,8 @@ import uploadThingFiles from './uploadThingFilesMutationAttributes';
 const actionAttributes = {
   childThing,
   childThings,
+  copyManyThings,
+  copyManyThingsWithChildren,
   copyThing,
   copyThingWithChildren,
   createManyThings,

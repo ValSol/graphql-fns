@@ -536,7 +536,9 @@ export type GeneralConfig = {
           | 'thingFile'
           | 'thingFiles'
           | 'copyThing'
+          | 'copyManyThings'
           | 'copyThingWithChildren'
+          | 'copyManyThingsWithChildren'
           | 'createThing'
           | 'createManyThings'
           | 'deleteFilteredThings'
@@ -621,7 +623,9 @@ export type DerivativeAttributes = {
       | 'thingFile'
       | 'thingFiles'
       | 'copyThing'
+      | 'copyManyThings'
       | 'copyThingWithChildren'
+      | 'copyManyThingsWithChildren'
       | 'createThing'
       | 'createManyThings'
       | 'deleteFilteredThings'
@@ -661,8 +665,8 @@ export type TwoSegmentInventoryChain =
     ]
   | [
       'Mutation',
-      // "string" for 'copyThing', 'copyThingWithChildren', 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings',
-      // ... 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // "string" for 'copyThing', 'copyManyThings', 'copyThingWithChildren', 'copyManyThingsWithChildren', 'createThing', 'createManyThings',
+      // ... 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
       // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
     ]
@@ -676,8 +680,8 @@ export type ThreeSegmentInventoryChain =
     ]
   | [
       'Mutation',
-      // "string" for 'copyThing', 'copyThingWithChildren', 'createThing', 'createManyThings', 'updateFilteredThings', 'updateManyThings',
-      // ... 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
+      // "string" for 'copyThing', 'copyManyThings', 'copyThingWithChildren', 'copyManyThingsWithChildren', 'createThing', 'createManyThings',
+      // ... 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
       // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
       string,
       string, //  second "string" for thing name
