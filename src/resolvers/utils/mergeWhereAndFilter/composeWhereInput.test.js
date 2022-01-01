@@ -100,6 +100,16 @@ describe('composeWhereInput', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should return replace _id ', () => {
+    const where = { OR: [{ id: '6096802438f0d5bb46164881' }] };
+
+    const expectedResult = { where: { $or: [{ _id: '6096802438f0d5bb46164881' }] }, lookups: [] };
+    const notCreateObjectId = true;
+    const result = composeWhereInput(where, thingConfig, notCreateObjectId);
+
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should return result for flat data', () => {
     const where = {
       name: 'Вася',

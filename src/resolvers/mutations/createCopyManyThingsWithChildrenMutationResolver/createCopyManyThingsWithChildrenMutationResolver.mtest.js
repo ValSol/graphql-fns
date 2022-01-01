@@ -208,7 +208,7 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs };
   const serversideConfig = { transactions: true };
 
-  test.skip('should create mutation add thing resolver', async () => {
+  test('should create mutation add thing resolver', async () => {
     const restaurantSchema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
@@ -261,21 +261,22 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
     const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
     expect(createdRestaurant.name).toBe(data.name);
 
-    const copyRestaurantCloneWithChildren = createCopyManyThingsWithChildrenMutationResolver(
+    const copyManyRestaurantCloneWithChildrens = createCopyManyThingsWithChildrenMutationResolver(
       restaurantCloneConfig,
       generalConfig,
       serversideConfig,
     );
-    expect(typeof copyRestaurantCloneWithChildren).toBe('function');
-    if (!copyRestaurantCloneWithChildren) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    expect(typeof copyManyRestaurantCloneWithChildrens).toBe('function');
+    if (!copyManyRestaurantCloneWithChildrens) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const restaurantClone = await copyRestaurantCloneWithChildren(
+    const restaurantClones = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
+    const [restaurantClone] = restaurantClones;
     expect(restaurantClone.name).toBe(data.name);
     expect({
       lng: restaurantClone.coordinates.coordinates[0],
@@ -342,14 +343,14 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
 
     expect(updatedRestaurant.name).toBe(restaurantDataToUpdate.name);
 
-    const restaurantClone2 = await copyRestaurantCloneWithChildren(
+    const restaurantClones2 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
-
+    const [restaurantClone2] = restaurantClones2;
     expect(restaurantClone2.name).toBe(restaurantDataToUpdate.name);
     expect(restaurantClone2.menu.toString()).toBe(menuClone.id.toString());
 
@@ -373,14 +374,15 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
 
     expect(updatedMenu.name).toBe(menuDataToUpdate.name);
 
-    const restaurantClone3 = await copyRestaurantCloneWithChildren(
+    const restaurantClones3 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
 
+    const [restaurantClone3] = restaurantClones3;
     expect(restaurantClone3.menu.toString()).not.toBe(menuClone.id.toString());
 
     const menuClone2 = await menuCloneQuery(
@@ -428,13 +430,15 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
 
     expect(menuSection.name).toBe(sectionDataToUpdate.name);
 
-    const restaurantClone4 = await copyRestaurantCloneWithChildren(
+    const restaurantClones4 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
+
+    const [restaurantClone4] = restaurantClones4;
 
     const menuClone3 = await menuCloneQuery(
       null,
@@ -479,13 +483,15 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
       { mongooseConn, pubsub },
     );
 
-    const restaurantClone5 = await copyRestaurantCloneWithChildren(
+    const restaurantClones5 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
+
+    const [restaurantClone5] = restaurantClones5;
 
     const menuClone4 = await menuCloneQuery(
       null,
@@ -516,13 +522,15 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
       { mongooseConn, pubsub },
     );
 
-    const restaurantClone6 = await copyRestaurantCloneWithChildren(
+    const restaurantClones6 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
+
+    const [restaurantClone6] = restaurantClones6;
 
     const menuClone5 = await menuCloneQuery(
       null,
@@ -573,13 +581,14 @@ describe('createCopyManyThingsWithChildrenMutationResolver', () => {
       { projection: { name: 1, menu: 1 } },
     );
 
-    const restaurantClone7 = await copyRestaurantCloneWithChildren(
+    const restaurantClones7 = await copyManyRestaurantCloneWithChildrens(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
     );
+    const [restaurantClone7] = restaurantClones7;
 
     const menuClone6 = await menuCloneQuery(
       null,

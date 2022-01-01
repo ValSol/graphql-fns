@@ -25,7 +25,7 @@ const prepareBulkData: PrepareBulkData = async (
     args: { whereOnes },
     context: { mongooseConn },
   } = resolverArg;
-  const whereOnesKeys = Object.keys(whereOnes);
+  const whereOnesKeys = Object.keys(Array.isArray(whereOnes) ? whereOnes[0] : whereOnes);
 
   const [fieldName] = whereOnesKeys;
 

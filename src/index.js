@@ -8,6 +8,10 @@ export { default as composeGqlResolvers } from './resolvers/composeGqlResolvers'
 export { default as composeGqlTypes } from './types/composeGqlTypes';
 
 // mutation resolvers
+export { default as createCopyManyThingsMutationResolver } from './resolvers/mutations/createCopyManyThingsMutationResolver';
+export { default as createCopyManyThingsWithChildrenMutationResolver } from './resolvers/mutations/createCopyManyThingsWithChildrenMutationResolver';
+export { default as createCopyThingMutationResolver } from './resolvers/mutations/createCopyThingMutationResolver';
+export { default as createCopyThingWithChildrenMutationResolver } from './resolvers/mutations/createCopyThingWithChildrenMutationResolver';
 export { default as createCreateManyThingsMutationResolver } from './resolvers/mutations/createCreateManyThingsMutationResolver';
 export { default as createCreateThingMutationResolver } from './resolvers/mutations/createCreateThingMutationResolver';
 export { default as createDeleteThingMutationResolver } from './resolvers/mutations/createDeleteThingMutationResolver';
