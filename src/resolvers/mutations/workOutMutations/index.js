@@ -38,95 +38,103 @@ const workOutMutations = async (
   const { generalConfig, serversideConfig, context } = commonResolverCreatorArg;
   const { inventory } = generalConfig;
   const { transactions } = serversideConfig;
-
-  let preparedData = preparedBulkData;
-
-  const previouses = [];
-  for (let i = 0; i < standardMutationsArgs.length; i += 1) {
-    const mutationArgs = standardMutationsArgs[i];
-
-    const {
-      actionGeneralName,
-      thingConfig,
-      inAnyCase,
-      parent: parentInArgs,
-      args,
-      info: infoInArgs,
-      parentFilter: parentFilterInArgs,
-    } = mutationArgs;
-
-    const parent = parentInArgs || null;
-    const info = infoInArgs || { projection: {} };
-    const parentFilter = parentFilterInArgs || [];
-
-    const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
-
-    const { name } = thingConfig;
-
-    const inventoryChain = ['Mutation', actionGeneralName, name];
-    if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
-      throw new TypeError(`Not authorized "${actionGeneralName}" mutation for "${name}" thing!`);
-    }
-
-    const resolverCreatorArg = {
-      thingConfig,
-      generalConfig,
-      serversideConfig,
-      inAnyCase,
-    };
-
-    const resolverArg = {
-      parent,
-      args,
-      context,
-      info,
-      parentFilter,
-    };
-
-    // eslint-disable-next-line no-await-in-loop
-    const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
-
-    if (!previous) {
-      throw new TypeError(
-        `Not got preivous for "${actionGeneralName}" mutation for "${name}" thing!`,
-      );
-    }
-
-    const { core, periphery } = preparedData;
-    const preparedData2 = { core, periphery, mains: previous };
-    // eslint-disable-next-line no-await-in-loop
-    preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, preparedData2);
-    if (!preparedData) {
-      throw new TypeError(
-        `Not got preparedData for "${actionGeneralName}" mutation for "${name}" thing!`,
-      );
-    }
-
-    previouses.push(previous);
-  }
-
-  const { core, periphery } = preparedData;
   const { mongooseConn } = context;
 
-  const coreWithPeriphery =
-    periphery && periphery.size ? await addPeripheryToCore(periphery, core, mongooseConn) : core;
-
-  const optimizedCore = optimizeBulkItems(coreWithPeriphery);
+  let previouses = [];
 
   const tryCount = 7;
-  for (let i = 0; i < tryCount; i += 1) {
+
+  for (let j = 0; j < tryCount; j += 1) {
+    let preparedData = preparedBulkData;
     // eslint-disable-next-line no-await-in-loop
     const session = transactions ? await mongooseConn.startSession() : null;
+
     try {
       if (session) {
         session.startTransaction();
       }
 
+      previouses = [];
+      for (let i = 0; i < standardMutationsArgs.length; i += 1) {
+        const mutationArgs = standardMutationsArgs[i];
+
+        const {
+          actionGeneralName,
+          thingConfig,
+          inAnyCase,
+          parent: parentInArgs,
+          args,
+          info: infoInArgs,
+          parentFilter: parentFilterInArgs,
+        } = mutationArgs;
+
+        const parent = parentInArgs || null;
+        const info = infoInArgs || { projection: {} };
+        const parentFilter = parentFilterInArgs || [];
+
+        const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
+
+        const { name } = thingConfig;
+
+        const inventoryChain = ['Mutation', actionGeneralName, name];
+        if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
+          throw new TypeError(
+            `Not authorized "${actionGeneralName}" mutation for "${name}" thing!`,
+          );
+        }
+
+        const resolverCreatorArg = {
+          thingConfig,
+          generalConfig,
+          serversideConfig,
+          inAnyCase,
+        };
+
+        const resolverArg = {
+          parent,
+          args,
+          context,
+          info,
+          parentFilter,
+        };
+
+        // eslint-disable-next-line no-await-in-loop
+        const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
+
+        if (!previous) {
+          throw new TypeError(
+            `Not got preivous for "${actionGeneralName}" mutation for "${name}" thing!`,
+          );
+        }
+
+        const { core, periphery } = preparedData;
+        const preparedData2 = { core, periphery, mains: previous };
+        // eslint-disable-next-line no-await-in-loop
+        preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, preparedData2);
+        if (!preparedData) {
+          throw new TypeError(
+            `Not got preparedData for "${actionGeneralName}" mutation for "${name}" thing!`,
+          );
+        }
+
+        previouses.push(previous);
+      }
+
+      const { core, periphery } = preparedData;
+
+      const coreWithPeriphery =
+        periphery && periphery.size
+          ? // eslint-disable-next-line no-await-in-loop
+            await addPeripheryToCore(periphery, core, mongooseConn)
+          : core;
+
+      const optimizedCore = optimizeBulkItems(coreWithPeriphery);
+
       // eslint-disable-next-line no-await-in-loop
       const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
       // eslint-disable-next-line no-await-in-loop
-      await executeBulkItems(coreWithCounters, generalConfig, context, session);
+      await executeBulkItems(coreWithCounters, generalConfig, context, null);
 
       if (session) {
         // eslint-disable-next-line no-await-in-loop
@@ -142,15 +150,14 @@ const workOutMutations = async (
         session.endSession();
       }
 
-      if (i === tryCount - 1) {
+      if (j === tryCount - 1) {
         throw new Error(err);
       }
 
       // eslint-disable-next-line no-await-in-loop
-      await sleep(2 ** i * 10);
+      await sleep(2 ** j * 10);
     }
   }
-
   const finalResults = [];
 
   for (let i = 0; i < standardMutationsArgs.length; i += 1) {

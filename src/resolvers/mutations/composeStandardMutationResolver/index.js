@@ -63,41 +63,22 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       };
 
       const resolverArg = { parent, args, context, info, parentFilter };
+      const { mongooseConn } = context;
 
       if (loophole) {
         return loophole(actionGeneralName, resolverCreatorArg, resolverArg);
       }
 
-      if (!getPrevious) {
-        throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
-      }
-      const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
-
-      if (!previous) return null;
-
-      if (!prepareBulkData) {
-        throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
-      }
-      const prevPreparedData = { core: new Map(), periphery: new Map(), mains: previous };
-      const preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, prevPreparedData);
-
-      if (!preparedData) return null;
-
-      const { mongooseConn } = context;
-
-      const { core, periphery } = preparedData;
-
       const result = {};
-      result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
-
-      const coreWithPeriphery =
-        periphery && periphery.size
-          ? await addPeripheryToCore(periphery, core, mongooseConn)
-          : core;
-
-      const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
       const tryCount = 7;
+
+      let preparedData = {
+        core: new Map(),
+        periphery: new Map(),
+        mains: [],
+      };
+
       for (let i = 0; i < tryCount; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const session = transactions ? await mongooseConn.startSession() : null;
@@ -106,6 +87,49 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             session.startTransaction();
           }
+
+          if (!getPrevious) {
+            throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
+          }
+          // eslint-disable-next-line no-await-in-loop
+          const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
+
+          if (!previous) {
+            if (session) {
+              // eslint-disable-next-line no-await-in-loop
+              await session.abortTransaction();
+              session.endSession();
+            }
+            return null;
+          }
+
+          result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
+
+          if (!prepareBulkData) {
+            throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
+          }
+          const prevPreparedData = { core: new Map(), periphery: new Map(), mains: previous };
+          // eslint-disable-next-line no-await-in-loop
+          preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, prevPreparedData);
+
+          if (!preparedData) {
+            if (session) {
+              // eslint-disable-next-line no-await-in-loop
+              await session.abortTransaction();
+              session.endSession();
+            }
+            return null;
+          }
+
+          const { core, periphery } = preparedData;
+
+          const coreWithPeriphery =
+            periphery && periphery.size
+              ? // eslint-disable-next-line no-await-in-loop
+                await addPeripheryToCore(periphery, core, mongooseConn)
+              : core;
+
+          const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
           // eslint-disable-next-line no-await-in-loop
           const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
@@ -137,6 +161,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       }
 
       if (produceCurrent) {
+        // eslint-disable-next-line no-await-in-loop
         result.current = await produceResult(
           preparedData,
           thingConfig,
@@ -157,6 +182,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       if (!finalResult) {
         throw new TypeError(`report have to be setted for "${actionGeneralName}"`);
       }
+
       return finalResult(result);
     };
 

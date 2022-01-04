@@ -30,6 +30,12 @@ const exampleCloneConfig: ThingConfig = {
 };
 
 const childConfig: ThingConfig = {};
+const personConfig: ThingConfig = {};
+const personCloneConfig: ThingConfig = {};
+const menuConfig: ThingConfig = {};
+const menuCloneConfig: ThingConfig = {};
+const menuSectionConfig: ThingConfig = {};
+const menuSectionCloneConfig: ThingConfig = {};
 const parentConfig: ThingConfig = {
   name: 'Parent',
   textFields: [{ name: 'name' }],
@@ -55,12 +61,155 @@ Object.assign(childConfig, {
   ],
 });
 
+Object.assign(personConfig, {
+  name: 'Person',
+  textFields: [
+    {
+      name: 'firstName',
+      required: true,
+    },
+    {
+      name: 'lastName',
+    },
+  ],
+  duplexFields: [
+    {
+      name: 'clone',
+      oppositeName: 'original',
+      config: personCloneConfig,
+    },
+  ],
+});
+
+Object.assign(personCloneConfig, {
+  name: 'PersonClone',
+
+  textFields: [
+    {
+      name: 'firstName',
+      required: true,
+    },
+
+    {
+      name: 'lastName',
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'original',
+      oppositeName: 'clone',
+      config: personConfig,
+      required: true,
+    },
+  ],
+});
+
+Object.assign(menuConfig, {
+  name: 'Menu',
+
+  textFields: [
+    {
+      name: 'name',
+      required: true,
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'clone',
+      oppositeName: 'original',
+      config: menuCloneConfig,
+    },
+
+    {
+      name: 'sections',
+      oppositeName: 'menu',
+      array: true,
+      config: menuSectionConfig,
+      parent: true,
+    },
+  ],
+});
+
+Object.assign(menuCloneConfig, {
+  name: 'MenuClone',
+
+  textFields: [
+    {
+      name: 'name',
+      required: true,
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'original',
+      oppositeName: 'clone',
+      config: menuConfig,
+      required: true,
+    },
+
+    {
+      name: 'sections',
+      oppositeName: 'menu',
+      array: true,
+      config: menuSectionCloneConfig,
+      parent: true,
+    },
+  ],
+});
+
+Object.assign(menuSectionConfig, {
+  name: 'MenuSection',
+
+  textFields: [
+    {
+      name: 'name',
+      required: true,
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'menu',
+      oppositeName: 'sections',
+      config: menuConfig,
+    },
+  ],
+});
+
+Object.assign(menuSectionCloneConfig, {
+  name: 'MenuCloneSection',
+
+  textFields: [
+    {
+      name: 'name',
+      required: true,
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'menu',
+      oppositeName: 'sections',
+      config: menuCloneConfig,
+    },
+  ],
+});
+
 const generalConfig: GeneralConfig = {
   thingConfigs: {
     Parent: parentConfig,
     Child: childConfig,
     Example: exampleConfig,
     ExampleClone: exampleCloneConfig,
+    Person: personConfig,
+    PersonClone: personCloneConfig,
+    Menu: menuConfig,
+    MenuClone: menuCloneConfig,
+    MenuSection: menuSectionConfig,
+    MenuCloneSection: menuSectionCloneConfig,
   },
 };
 
@@ -90,7 +239,7 @@ beforeAll(async () => {
   await ExampleClone.createCollection();
 });
 
-describe('createDeleteManyThingsMutationResolver', () => {
+describe('workOutMutations', () => {
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
     const createPerson = createCreateThingMutationResolver(
       parentConfig,
@@ -881,5 +1030,325 @@ describe('createDeleteManyThingsMutationResolver', () => {
     expect(examples.map(({ name }) => ({ name }))).toEqual(
       resultToUpdateFilteredExamples.map(({ name }) => ({ name })),
     );
+  });
+
+  test('should create resolvers for chain of 1 copyThing', async () => {
+    const personSchema = createThingSchema(personConfig);
+    const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.createCollection();
+
+    const personCloneSchema = createThingSchema(personCloneConfig);
+    const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
+    await PersonClone.createCollection();
+
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = { firstName: 'Hugo', lastName: 'Boss' };
+
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    expect(createdPerson.firstName).toBe(data.firstName);
+    expect(createdPerson.lastName).toBe(data.lastName);
+
+    const standardMutationsArgsToCopyThing = [
+      {
+        actionGeneralName: 'copyThing',
+        thingConfig: personCloneConfig,
+        args: {
+          whereOnes: { original: { id: createdPerson.id } },
+        },
+        returnResult: true,
+      },
+    ];
+
+    const context = { mongooseConn, pubsub };
+
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    const [personClone] = await workOutMutations(
+      standardMutationsArgsToCopyThing,
+      commonResolverCreatorArg,
+    );
+
+    expect(personClone.firstName).toBe(data.firstName);
+    expect(personClone.lastName).toBe(data.lastName);
+    expect(personClone.original.toString()).toBe(createdPerson.id.toString());
+
+    const dataToUpdate = { firstName: 'Hugo2', lastName: 'Boss2' };
+
+    const standardMutationsArgsToUpdateThing = [
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: personConfig,
+        args: {
+          whereOne: { id: createdPerson.id },
+          data: dataToUpdate,
+        },
+        returnResult: true,
+      },
+    ];
+
+    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+
+    const [personClone2] = await workOutMutations(
+      standardMutationsArgsToCopyThing,
+      commonResolverCreatorArg,
+    );
+
+    expect(personClone2.firstName).toBe(dataToUpdate.firstName);
+    expect(personClone2.lastName).toBe(dataToUpdate.lastName);
+    expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
+  });
+
+  test('should create resolvers for chain of 1 copyThingWithChildren', async () => {
+    const menuSchema = createThingSchema(menuConfig);
+    const Menu = mongooseConn.model('Menu_Thing', menuSchema);
+    await Menu.createCollection();
+
+    const menuSectionSchema = createThingSchema(menuSectionConfig);
+    const MenuSection = mongooseConn.model('MenuSection_Thing', menuSectionSchema);
+    await MenuSection.createCollection();
+
+    const menuCloneSchema = createThingSchema(menuCloneConfig);
+    const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
+    await MenuClone.createCollection();
+
+    const menuCloneSectionSchema = createThingSchema(menuSectionCloneConfig);
+    const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
+    await MenuCloneSection.createCollection();
+
+    const createMenu = createCreateThingMutationResolver(
+      menuConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createMenu).toBe('function');
+    if (!createMenu) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      name: 'Menu Name',
+      sections: {
+        create: [
+          {
+            name: 'Section Name 1',
+          },
+          {
+            name: 'Section Name 2',
+          },
+          {
+            name: 'Section Name 3',
+          },
+        ],
+      },
+    };
+    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub });
+    expect(createdMenu.name).toBe(data.name);
+    expect(createdMenu.sections.length).toBe(data.sections.create.length);
+
+    const standardMutationsArgsToCopyThingWithChildren = [
+      {
+        actionGeneralName: 'copyThingWithChildren',
+        thingConfig: menuCloneConfig,
+        args: {
+          whereOnes: { original: { id: createdMenu.id } },
+        },
+        returnResult: true,
+      },
+    ];
+
+    const context = { mongooseConn, pubsub };
+
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    const [menuClone] = await workOutMutations(
+      standardMutationsArgsToCopyThingWithChildren,
+      commonResolverCreatorArg,
+    );
+
+    expect(menuClone.name).toBe(data.name);
+    expect(menuClone.sections.length).toBe(data.sections.create.length);
+    expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
+
+    const dataToUpdate = { name: 'Menu Updated Name' };
+
+    const standardMutationsArgsToUpdateThing = [
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: menuConfig,
+        args: {
+          whereOne: { id: createdMenu.id },
+          data: dataToUpdate,
+        },
+        returnResult: false,
+      },
+    ];
+
+    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+
+    const [menuClone2] = await workOutMutations(
+      standardMutationsArgsToCopyThingWithChildren,
+      commonResolverCreatorArg,
+    );
+
+    expect(menuClone2.name).toBe(dataToUpdate.name);
+    expect(menuClone2.sections.length).toBe(data.sections.create.length);
+    expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
+  });
+
+  test('should create resolvers for chain of 1 copyManyThings', async () => {
+    const createPerson = createCreateThingMutationResolver(
+      personConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createPerson).toBe('function');
+    if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = { firstName: 'Vasy', lastName: 'Pupkin' };
+
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    expect(createdPerson.firstName).toBe(data.firstName);
+    expect(createdPerson.lastName).toBe(data.lastName);
+
+    const standardMutationsArgsToCopyManyThings = [
+      {
+        actionGeneralName: 'copyManyThings',
+        thingConfig: personCloneConfig,
+        args: {
+          whereOnes: [{ original: { id: createdPerson.id } }],
+        },
+        returnResult: true,
+      },
+    ];
+
+    const context = { mongooseConn, pubsub };
+
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    const [personClones] = await workOutMutations(
+      standardMutationsArgsToCopyManyThings,
+      commonResolverCreatorArg,
+    );
+
+    const [personClone] = personClones;
+
+    expect(personClone.firstName).toBe(data.firstName);
+    expect(personClone.lastName).toBe(data.lastName);
+    expect(personClone.original.toString()).toBe(createdPerson.id.toString());
+
+    const dataToUpdate = { firstName: 'Hugo2', lastName: 'Boss2' };
+
+    const standardMutationsArgsToUpdateThing = [
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: personConfig,
+        args: {
+          whereOne: { id: createdPerson.id },
+          data: dataToUpdate,
+        },
+        returnResult: true,
+      },
+    ];
+
+    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+
+    const [personClones2] = await workOutMutations(
+      standardMutationsArgsToCopyManyThings,
+      commonResolverCreatorArg,
+    );
+
+    const [personClone2] = personClones2;
+
+    expect(personClone2.firstName).toBe(dataToUpdate.firstName);
+    expect(personClone2.lastName).toBe(dataToUpdate.lastName);
+    expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
+  });
+
+  test('should create resolvers for chain of 1 copyManyThingsWithChildren', async () => {
+    const createMenu = createCreateThingMutationResolver(
+      menuConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createMenu).toBe('function');
+    if (!createMenu) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const data = {
+      name: 'Menu Name2',
+      sections: {
+        create: [
+          {
+            name: 'Section Name 1',
+          },
+          {
+            name: 'Section Name 2',
+          },
+          {
+            name: 'Section Name 3',
+          },
+        ],
+      },
+    };
+    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub });
+    expect(createdMenu.name).toBe(data.name);
+    expect(createdMenu.sections.length).toBe(data.sections.create.length);
+
+    const standardMutationsArgsToCopyManyThingsWithChildren = [
+      {
+        actionGeneralName: 'copyManyThingsWithChildren',
+        thingConfig: menuCloneConfig,
+        args: {
+          whereOnes: [{ original: { id: createdMenu.id } }],
+        },
+        returnResult: true,
+      },
+    ];
+
+    const context = { mongooseConn, pubsub };
+
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    const [menuClones] = await workOutMutations(
+      standardMutationsArgsToCopyManyThingsWithChildren,
+      commonResolverCreatorArg,
+    );
+
+    const [menuClone] = menuClones;
+
+    expect(menuClone.name).toBe(data.name);
+    expect(menuClone.sections.length).toBe(data.sections.create.length);
+    expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
+
+    const dataToUpdate = { name: 'Menu Updated Name2' };
+
+    const standardMutationsArgsToUpdateThing = [
+      {
+        actionGeneralName: 'updateThing',
+        thingConfig: menuConfig,
+        args: {
+          whereOne: { id: createdMenu.id },
+          data: dataToUpdate,
+        },
+        returnResult: false,
+      },
+    ];
+
+    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+
+    const [menuClones2] = await workOutMutations(
+      standardMutationsArgsToCopyManyThingsWithChildren,
+      commonResolverCreatorArg,
+    );
+
+    const [menuClone2] = menuClones2;
+
+    expect(menuClone2.name).toBe(dataToUpdate.name);
+    expect(menuClone2.sections.length).toBe(data.sections.create.length);
+    expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
   });
 });
