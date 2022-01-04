@@ -5,6 +5,8 @@ import composeCustomAction from './composeCustomAction';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
+const forClientActions = ['childThing', 'childThings'];
+
 const store = Object.create(null);
 
 const mergeDerivativeIntoCustom = (
@@ -30,12 +32,12 @@ const mergeDerivativeIntoCustom = (
     const { allow } = derivative[suffix];
     const allowedMethods = getAllowedMethods(allow);
 
-    Object.keys(queryAttributes).forEach((key) => {
-      if (!forClient && allowedMethods[key]) {
+    Object.keys(queryAttributes).forEach((actionName) => {
+      if ((!forClientActions.includes(actionName) || !forClient) && allowedMethods[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[queryAttributes[key].actionGeneralName(suffix)] = composeCustomAction(
+        prev[queryAttributes[actionName].actionGeneralName(suffix)] = composeCustomAction(
           derivative[suffix],
-          queryAttributes[key],
+          queryAttributes[actionName],
         );
       }
     });
@@ -47,12 +49,12 @@ const mergeDerivativeIntoCustom = (
     const { allow } = derivative[suffix];
     const allowedMethods = getAllowedMethods(allow);
 
-    Object.keys(mutationAttributes).forEach((key) => {
-      if (!forClient && allowedMethods[key]) {
+    Object.keys(mutationAttributes).forEach((actionName) => {
+      if (allowedMethods[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[mutationAttributes[key].actionGeneralName(suffix)] = composeCustomAction(
+        prev[mutationAttributes[actionName].actionGeneralName(suffix)] = composeCustomAction(
           derivative[suffix],
-          mutationAttributes[key],
+          mutationAttributes[actionName],
         );
       }
     });
