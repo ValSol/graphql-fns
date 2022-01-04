@@ -2,18 +2,12 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
-import createThing from '../../../../mongooseModels/createThing';
-import getMatchingFields from '../../../../utils/getMatchingFields';
-import getOppositeFields from '../../../../utils/getOppositeFields';
-import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
-import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereInput';
-import checkData from '../../checkData';
+import getCommonData from './getCommonData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { thingConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, parentFilter } = resolverArg;
-  const { enums } = generalConfig;
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+  const { thingConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
+  const { context, parentFilter } = resolverArg;
   const { name } = thingConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
@@ -25,212 +19,27 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   if (!filter) return null;
 
-  const { whereOnes, whereOne, options } = args;
+  const result = await getCommonData(resolverCreatorArg, resolverArg, filter);
 
-  whereOnes.forEach((item) => {
-    const whereOnesKeys = Object.keys(item);
-    if (whereOnesKeys.length !== 1) {
-      throw new TypeError('Expected exactly one key in where arg!');
-    }
-  });
+  if (!result) return result;
 
-  if (!whereOnes.length) return [];
+  if (!result.length) return null;
 
-  if (whereOne && whereOne.length !== whereOnes.length) {
-    throw new TypeError(
-      `wehreOne length: ${whereOne.length} not equal whereOnes length: ${whereOnes.length}!`,
-    );
-  }
+  const [item1] = result;
 
-  const { mongooseConn } = context;
-
-  const [fieldName] = Object.keys(whereOnes[0]);
-
-  const incorrectWhreOnesItem = whereOnes.find((item) => !item[fieldName]);
-  if (incorrectWhreOnesItem) {
-    throw new TypeError(
-      `Incorrect key in whereOne item: "${JSON.stringify(
-        incorrectWhreOnesItem,
-      )}" instead of "${fieldName}"!`,
-    );
-  }
-
-  const fieldsPair = getOppositeFields(thingConfig).find(
-    ([{ name: name2 }]) => name2 === fieldName,
-  );
-
-  if (!fieldsPair) {
-    throw new TypeError(
-      `Not found appropriate duplex field: "${fieldName}" in thing: "${thingConfig.name}"!`,
-    );
-  }
-
-  let optionFields = null;
-
-  if (options) {
-    const optionsKeys = Object.keys(options);
-    if (optionsKeys.length !== 1) {
-      throw new TypeError(
-        `Expected exactly one key in options arg!, but have: ${optionsKeys.length}!`,
-      );
-    }
-
-    if (optionsKeys[0] !== fieldName) {
-      throw new TypeError(
-        `Expected "options key" to be equal to "whereOnes key": "${fieldName}", but it is "${optionsKeys[0]}"!`,
-      );
-    }
-
-    optionFields = options[fieldName].fieldsToCopy;
-  }
-
-  const [{ array, config, oppositeName }, { array: oppositeArray }] = fieldsPair;
-
-  const matchingFields = getMatchingFields(thingConfig, config).filter((matchingField) => {
-    if (matchingField === fieldName) return false;
-
-    return optionFields ? optionFields.includes(matchingField) : true;
-  });
-
-  if (!matchingFields.length) {
-    throw TypeError(
-      `Expected at least one matching field in "${name}" and "${config.name}" things!`,
-    );
-  }
-
-  const matchingFieldsProjection = matchingFields.reduce(
-    (prev, matchingField) => {
-      prev[matchingField] = 1; // eslint-disable-line no-param-reassign
-      return prev;
-    },
-    { _id: 1, [oppositeName]: 1 },
-  );
-
-  const CopiedThing = await createThing(mongooseConn, config, enums);
-  const Thing = await createThing(mongooseConn, thingConfig, enums);
-
-  const { where } = composeWhereInput({ OR: whereOnes.map((item) => item[fieldName]) }, config);
-  const things = await CopiedThing.find(where, matchingFieldsProjection, { lean: true });
-
-  if (things.length !== whereOnes.length) return null;
-
-  let ids = null;
-
-  let things2 = null;
-
-  if (!oppositeArray) {
-    if (whereOne) {
-      throw new TypeError('Needless whereOne arg!');
-    }
-
-    const thingsWithOppositeName = things.filter((thing) => thing[oppositeName]);
-
-    if (thingsWithOppositeName.length && thingsWithOppositeName.length !== things.length) {
-      throw new TypeError(`Inconsistent link with copiedFrom & copiedTo things!`);
-    }
-
-    if (thingsWithOppositeName.length) {
-      ids = things.map((thing) => thing[oppositeName].toString());
-
-      things2 = await Thing.find({ _id: { $in: ids } }, matchingFieldsProjection, {
-        lean: true,
-      });
-    }
-  } else if (whereOne) {
-    const { where: where2 } = composeWhereInput({ OR: whereOne }, thingConfig);
-    things2 = await Thing.find(where2, matchingFieldsProjection, { lean: true });
-
-    ids = things2.map((thing2) => thing2._id.toString()); // eslint-disable-line no-underscore-dangle
-
-    things.forEach((thing, i) => {
-      if (!ids) {
-        // to prevent flowjs error
-        throw new TypeError('Got "ids" that null!');
+  // eslint-disable-next-line no-underscore-dangle
+  if (item1._id) {
+    const result2 = result.reduce((prev, item, i) => {
+      if (!(i % 2)) {
+        prev.push(item);
       }
-      if (!thing[oppositeName].map((id2) => id2.toString()).includes(ids[i])) {
-        throw new TypeError(`Try to copy to unconnected "${name}" thing with id: "${ids[i]}"!`); // eslint-disable-line no-underscore-dangle
-      }
-    });
-  }
-
-  const { rawData, rawData2 } = things.reduce(
-    (prev, thing, i) => {
-      const item = matchingFields.reduce(
-        (prev2, matchingField) => {
-          prev2.rawData[matchingField] = // eslint-disable-line no-param-reassign
-            thing[matchingField] === undefined ? null : thing[matchingField];
-
-          if (things2) {
-            const thing2 = things2[i];
-
-            prev2.rawData2[matchingField] = // eslint-disable-line no-param-reassign
-              thing2[matchingField] === undefined ? null : thing2[matchingField];
-          }
-          return prev2;
-        },
-        { rawData: {}, rawData2: {} },
-      );
-
-      prev.rawData.push(item.rawData);
-      prev.rawData2.push(item.rawData2);
-
       return prev;
-    },
-    { rawData: [], rawData2: [] },
-  );
+    }, []);
 
-  if (!ids) {
-    rawData.forEach((item, i) => {
-      item[fieldName] = array ? [things[i]._id] : things[i]._id; // eslint-disable-line no-underscore-dangle, no-param-reassign
-    });
+    return result2;
   }
 
-  let allowCopy = true;
-  const result = [];
-
-  for (let i = 0; i < rawData.length; i += 1) {
-    const data = fromMongoToGqlDataArg(rawData[i], thingConfig);
-
-    if (ids) {
-      const processingKind = 'update';
-      const id = ids[i];
-
-      allowCopy =
-        allowCopy &&
-        // eslint-disable-next-line no-await-in-loop
-        (await checkData(
-          { whereOne: { id }, data },
-          filter,
-          thingConfig,
-          processingKind,
-          generalConfig,
-          serversideConfig,
-          context,
-        ));
-
-      result.push({ ...rawData2[i], id });
-      result.push(rawData[i]);
-    } else {
-      const processingKind = 'create';
-
-      allowCopy =
-        allowCopy &&
-        // eslint-disable-next-line no-await-in-loop
-        (await checkData(
-          { data },
-          filter,
-          thingConfig,
-          processingKind,
-          generalConfig,
-          serversideConfig,
-          context,
-        ));
-
-      result.push(rawData[i]);
-    }
-  }
-
-  return allowCopy && result;
+  return [];
 };
 
-export default get;
+export default getPrevious;

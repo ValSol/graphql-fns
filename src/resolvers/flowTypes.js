@@ -4,14 +4,14 @@ import type { GeneralConfig, Periphery, ServersideConfig, ThingConfig } from '..
 
 type Context = { mongooseConn: Object, pubsub?: Object };
 
-type ResolverCreatorArg = {
+export type ResolverCreatorArg = {
   thingConfig: ThingConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
 };
 
-type ResolverArg = {
+export type ResolverArg = {
   parent: Object,
   args: Object,
   context: Context,

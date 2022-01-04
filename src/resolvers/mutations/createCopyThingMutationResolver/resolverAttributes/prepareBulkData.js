@@ -5,6 +5,8 @@ import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
 import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../processDeleteDataPrepareArgs';
+import getCommonManyData from '../../createCopyManyThingsMutationResolver/resolverAttributes/getCommonData';
+import getCommonData from './getCommonData';
 
 const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,
@@ -12,15 +14,25 @@ const prepareBulkData: PrepareBulkData = async (
   prevPreparedData,
 ) => {
   const { thingConfig } = resolverCreatorArg;
+  const {
+    args: { whereOnes },
+  } = resolverArg;
+  const { core } = prevPreparedData;
 
-  const { core, mains } = prevPreparedData;
+  const getMains = Array.isArray(whereOnes) ? getCommonManyData : getCommonData;
+
+  // $FlowFixMe
+  const mains = await getMains(resolverCreatorArg, resolverArg);
+
+  if (!mains) return mains;
 
   const previousThings = mains.map((previousThing) => ({
     ...fromMongoToGqlDataArg(previousThing, thingConfig),
-    id: previousThing.id,
+    _id: previousThing._id, // eslint-disable-line no-underscore-dangle
   }));
 
-  if (previousThings[0].id) {
+  // eslint-disable-next-line no-underscore-dangle
+  if (previousThings[0]._id) {
     const { duplexFields } = thingConfig;
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce(
@@ -57,7 +69,7 @@ const prepareBulkData: PrepareBulkData = async (
 
     pairedPreviouseThings.forEach(([previousThing, data]) => {
       preparedData = processCreateInputData(
-        { ...data, id: previousThing.id }, // eslint-disable-line no-underscore-dangle
+        { ...data, id: previousThing._id }, // eslint-disable-line no-underscore-dangle
         preparedData,
         thingConfig,
         'update',
@@ -67,7 +79,7 @@ const prepareBulkData: PrepareBulkData = async (
     return preparedData;
   }
 
-  let preparedData = { ...prevPreparedData, mains: [] };
+  let preparedData = prevPreparedData;
 
   previousThings.forEach((dataItem) => {
     preparedData = processCreateInputData(dataItem, preparedData, thingConfig, 'create');

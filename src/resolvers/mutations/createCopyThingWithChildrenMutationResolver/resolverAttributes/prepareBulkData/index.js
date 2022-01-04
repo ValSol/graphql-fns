@@ -6,6 +6,9 @@ import fromMongoToGqlDataArg from '../../../../types/fromMongoToGqlDataArg';
 import processCreateInputData from '../../../processCreateInputData';
 import processDeleteData from '../../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../../processDeleteDataPrepareArgs';
+import getCommonManyData from '../../../createCopyManyThingsMutationResolver/resolverAttributes/getCommonData';
+import getCommonData from '../../../createCopyThingMutationResolver/resolverAttributes/getCommonData';
+
 import composeCreateTree from './composeCreateTree';
 import mixTrees from './mixTrees';
 
@@ -18,13 +21,17 @@ const prepareBulkData: PrepareBulkData = async (
     thingConfig,
     generalConfig: { enums },
   } = resolverCreatorArg;
-
-  const { core, mains: previousThings } = prevPreparedData;
-
   const {
     args: { whereOnes },
     context: { mongooseConn },
   } = resolverArg;
+  const { core } = prevPreparedData;
+
+  const getPrefiousThings = Array.isArray(whereOnes) ? getCommonManyData : getCommonData;
+
+  // $FlowFixMe
+  const previousThings = await getPrefiousThings(resolverCreatorArg, resolverArg);
+
   const whereOnesKeys = Object.keys(Array.isArray(whereOnes) ? whereOnes[0] : whereOnes);
 
   const [fieldName] = whereOnesKeys;
@@ -35,7 +42,10 @@ const prepareBulkData: PrepareBulkData = async (
   }
   const { config: copiedThingConfig } = fieldToConnect;
 
-  if (previousThings[0].id) {
+  if (!previousThings) return previousThings; // to prevent flowjs error
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (previousThings[0]._id) {
     const { duplexFields } = thingConfig;
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce(
@@ -100,7 +110,7 @@ const prepareBulkData: PrepareBulkData = async (
       const tree2 = fromMongoToGqlDataArg(Object.assign(copiedThing, mixedTrees), thingConfig);
 
       preparedData = processCreateInputData(
-        { ...tree2, id: currentThing.id }, // eslint-disable-line no-underscore-dangle
+        { ...tree2, id: currentThing._id }, // eslint-disable-line no-underscore-dangle
         preparedData,
         thingConfig,
         'update',
@@ -110,7 +120,7 @@ const prepareBulkData: PrepareBulkData = async (
     return preparedData;
   }
 
-  let preparedData = { ...prevPreparedData, mains: [] };
+  let preparedData = prevPreparedData;
 
   for (let i = 0; i < previousThings.length; i += 1) {
     const copiedThing = previousThings[i];

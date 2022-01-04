@@ -164,6 +164,7 @@ describe('createCopyManyThingsMutationResolver', () => {
       },
       { mongooseConn, pubsub },
     );
+
     const [personClone] = personClones;
     expect(personClone.firstName).toBe(data[0].firstName);
     expect(personClone.lastName).toBe(undefined);

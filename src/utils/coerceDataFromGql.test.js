@@ -5,7 +5,7 @@ import type { ThingConfig } from '../flowTypes';
 import coerceDataFromGql from './coerceDataFromGql';
 
 describe('coerceDataFromGql', () => {
-  test('should coerce realational & duplex fields', () => {
+  describe('should coerce realational & duplex fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
@@ -29,22 +29,43 @@ describe('coerceDataFromGql', () => {
       ],
     });
 
-    const data = {
-      id: '5cefb33f05d6be4b7b59842a',
-      relationalField: { id: '5cefb33f05d6be4b7b59842b' },
-      relationalField2: [{ id: '5cefb33f05d6be4b7b598421' }, { id: '5cefb33f05d6be4b7b598422' }],
-      duplexField: { id: '5cefb33f05d6be4b7b59842c' },
-      __typename: 'Example',
-    };
+    test('with defined fields', () => {
+      const data = {
+        id: '5cefb33f05d6be4b7b59842a',
+        relationalField: { id: '5cefb33f05d6be4b7b59842b' },
+        relationalField2: [{ id: '5cefb33f05d6be4b7b598421' }, { id: '5cefb33f05d6be4b7b598422' }],
+        duplexField: { id: '5cefb33f05d6be4b7b59842c' },
+        __typename: 'Example',
+      };
 
-    const expectedResult = {
-      relationalField: '5cefb33f05d6be4b7b59842b',
-      relationalField2: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'],
-      duplexField: '5cefb33f05d6be4b7b59842c',
-    };
+      const expectedResult = {
+        relationalField: '5cefb33f05d6be4b7b59842b',
+        relationalField2: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'],
+        duplexField: '5cefb33f05d6be4b7b59842c',
+      };
 
-    const result = coerceDataFromGql(data, thingConfig);
-    expect(result).toEqual(expectedResult);
+      const result = coerceDataFromGql(data, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
+
+    test('with undefined fields', () => {
+      const data = {
+        id: '5cefb33f05d6be4b7b59842a',
+        relationalField: null,
+        relationalField2: [{ id: '5cefb33f05d6be4b7b598421' }, { id: '5cefb33f05d6be4b7b598422' }],
+        duplexField: null,
+        __typename: 'Example',
+      };
+
+      const expectedResult = {
+        relationalField: '',
+        relationalField2: ['5cefb33f05d6be4b7b598421', '5cefb33f05d6be4b7b598422'],
+        duplexField: '',
+      };
+
+      const result = coerceDataFromGql(data, thingConfig);
+      expect(result).toEqual(expectedResult);
+    });
   });
 
   test('should coerce realational & duplex fields in embedded fields', () => {

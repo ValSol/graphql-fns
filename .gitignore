@@ -1,5 +1,5 @@
 flow-typed
 lib
 node_modules
-
+.vscode
 *.log
