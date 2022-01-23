@@ -53,4 +53,4 @@ export { default as composeSubscription } from './client/subscriptions/composeSu
 export { default as createExportFile } from './client/utils/createExportFile';
 
 // admin
-export { default as Admin } from './components/Admin';
+// export { default as Admin } from './components/Admin';
