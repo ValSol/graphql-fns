@@ -48,8 +48,10 @@ const composeGqlServersideAction = (
     }
   }
 
+  const inAnyCase = true; // not check permissions if serverside execution
+
   return {
-    resolver: resolver(thingConfigs[thingName], generalConfig, serversideConfig),
+    resolver: resolver(thingConfigs[thingName], generalConfig, serversideConfig, inAnyCase),
     projection: composeProjectionFromOptions(gqlActionData, generalConfig, optionsArg),
   };
 };
