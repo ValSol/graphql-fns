@@ -24,13 +24,8 @@ const geospatialFromMongToGql = (item) => {
 };
 
 const fromMongoToGqlDataArg = (data: Object, thingConfig: ThingConfig): Object => {
-  const {
-    embeddedFields,
-    fileFields,
-    relationalFields,
-    duplexFields,
-    geospatialFields,
-  } = thingConfig;
+  const { embeddedFields, fileFields, relationalFields, duplexFields, geospatialFields } =
+    thingConfig;
 
   const { id, ...result } = data;
 

@@ -2,9 +2,9 @@
 /* eslint-env jest */
 import type { ThingConfig } from '../flowTypes';
 
-import coerceDataToGql from './coerceDataToGql';
+import coerceDataToGqlServerSide from './coerceDataToGqlServerSide';
 
-describe('coerceDataToGql', () => {
+describe('coerceDataToGqlServerSide', () => {
   describe('should coerce realational & duplex & enum fields', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
@@ -58,7 +58,7 @@ describe('coerceDataToGql', () => {
         duplexFields: { connect: ['5cefb33f05d6be4b7b59842d', '5cefb33f05d6be4b7b59842e'] },
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -73,7 +73,7 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -102,7 +102,7 @@ describe('coerceDataToGql', () => {
         enumField: null,
       };
 
-      const result = coerceDataToGql(data2, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data2, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -210,7 +210,7 @@ describe('coerceDataToGql', () => {
         },
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -261,7 +261,7 @@ describe('coerceDataToGql', () => {
         },
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -342,7 +342,7 @@ describe('coerceDataToGql', () => {
     };
 
     const allFields = true;
-    const result = coerceDataToGql(data, prevData, thingConfig, allFields);
+    const result = coerceDataToGqlServerSide(data, prevData, thingConfig, allFields);
     expect(result).toEqual(expectedResult);
   });
 
@@ -598,7 +598,7 @@ describe('coerceDataToGql', () => {
         ],
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -693,7 +693,7 @@ describe('coerceDataToGql', () => {
         ],
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -908,7 +908,7 @@ describe('coerceDataToGql', () => {
         },
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -987,7 +987,7 @@ describe('coerceDataToGql', () => {
         ],
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1012,7 +1012,7 @@ describe('coerceDataToGql', () => {
         pictures: [],
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1057,7 +1057,7 @@ describe('coerceDataToGql', () => {
         textField: 'text field',
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -1162,7 +1162,7 @@ describe('coerceDataToGql', () => {
         },
       };
 
-      const result = coerceDataToGql(
+      const result = coerceDataToGqlServerSide(
         data2,
         prevData,
         thingConfig,
@@ -1202,7 +1202,7 @@ describe('coerceDataToGql', () => {
         },
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1236,7 +1236,7 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1299,7 +1299,7 @@ describe('coerceDataToGql', () => {
         geospatialFieldPolygon: null,
       };
 
-      const result = coerceDataToGql(data2, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data2, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -1333,7 +1333,7 @@ describe('coerceDataToGql', () => {
         geospatialField: null,
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1348,7 +1348,7 @@ describe('coerceDataToGql', () => {
         geospatialField: null,
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -1374,7 +1374,7 @@ describe('coerceDataToGql', () => {
         dateTimeField: '2019-06-01T01:00',
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1385,7 +1385,7 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1402,7 +1402,7 @@ describe('coerceDataToGql', () => {
         dateTimeField: null,
       };
 
-      const result = coerceDataToGql(data2, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data2, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });
@@ -1447,7 +1447,7 @@ describe('coerceDataToGql', () => {
         floatFields: [0.4],
       };
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1461,7 +1461,7 @@ describe('coerceDataToGql', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGql(data, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1487,7 +1487,7 @@ describe('coerceDataToGql', () => {
         floatFields: [],
       };
 
-      const result = coerceDataToGql(data2, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data2, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1513,7 +1513,7 @@ describe('coerceDataToGql', () => {
         floatFields: [0],
       };
 
-      const result = coerceDataToGql(data2, prevData, thingConfig);
+      const result = coerceDataToGqlServerSide(data2, prevData, thingConfig);
       expect(result).toEqual(expectedResult);
     });
   });

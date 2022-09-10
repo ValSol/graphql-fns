@@ -1,6 +1,5 @@
 // @flow
 import deepEqual from 'fast-deep-equal';
-import { Types } from 'mongoose';
 
 import type { ThingConfig } from '../flowTypes';
 
@@ -9,9 +8,8 @@ import composeFieldsObject from './composeFieldsObject';
 const isNotDate = (date) =>
   new Date(date).toString() === 'Invalid Date' || Number.isNaN(new Date(date));
 
-const { ObjectId } = Types;
-
-const coerceDataToGql = (
+const coerceDataToGqlBasic = (
+  ObjectId: Object,
   data: Object,
   prevData: null | Object,
   thingConfig: ThingConfig,
@@ -43,12 +41,21 @@ const coerceDataToGql = (
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
-          coerceDataToGql(item, null, config, allFields, skipUnusedFields, setNullForEmptyText),
+          coerceDataToGqlBasic(
+            ObjectId,
+            item,
+            null,
+            config,
+            allFields,
+            skipUnusedFields,
+            setNullForEmptyText,
+          ),
         );
       } else {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key]
-          ? coerceDataToGql(
+          ? coerceDataToGqlBasic(
+              ObjectId,
               data[key],
               null,
               config,
@@ -77,7 +84,8 @@ const coerceDataToGql = (
                   }
                 } else if (prev2.create) {
                   prev2.create.push(
-                    coerceDataToGql(
+                    coerceDataToGqlBasic(
+                      ObjectId,
                       item,
                       null,
                       config,
@@ -89,7 +97,8 @@ const coerceDataToGql = (
                 } else {
                   // eslint-disable-next-line no-param-reassign
                   prev2.create = [
-                    coerceDataToGql(
+                    coerceDataToGqlBasic(
+                      ObjectId,
                       item,
                       null,
                       config,
@@ -111,7 +120,8 @@ const coerceDataToGql = (
         } else {
           // eslint-disable-next-line no-param-reassign
           prev[key] = {
-            create: coerceDataToGql(
+            create: coerceDataToGqlBasic(
+              ObjectId,
               data[key],
               null,
               config,
@@ -206,4 +216,4 @@ const coerceDataToGql = (
   return result;
 };
 
-export default coerceDataToGql;
+export default coerceDataToGqlBasic;

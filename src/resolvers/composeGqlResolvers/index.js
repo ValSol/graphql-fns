@@ -72,9 +72,8 @@ const composeGqlResolvers = (
         );
         if (customQueryResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Query[
-            customQuery[customName].specificName(thingConfig, generalConfig)
-          ] = customQueryResolver;
+          prev.Query[customQuery[customName].specificName(thingConfig, generalConfig)] =
+            customQueryResolver;
         }
       });
     }
@@ -102,9 +101,8 @@ const composeGqlResolvers = (
         );
         if (customMutationResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Mutation[
-            customMutation[customName].specificName(thingConfig, generalConfig)
-          ] = customMutationResolver;
+          prev.Mutation[customMutation[customName].specificName(thingConfig, generalConfig)] =
+            customMutationResolver;
         }
       });
     }

@@ -4,7 +4,7 @@ import csvParse from 'csv-parse/lib/sync';
 
 import type { PrepareBulkData } from '../../../flowTypes';
 
-import coerceDataToGql from '../../../../utils/coerceDataToGql';
+import coerceDataToGqlServerSide from '../../../../utils/coerceDataToGqlServerSide';
 import processCreateInputData from '../../processCreateInputData';
 import allocateFieldsForCSV from '../allocateFieldsForCSV';
 
@@ -56,7 +56,7 @@ const prepareBulkData: PrepareBulkData = async (
   const allFields = true;
   const skipUnusedFields = true;
   const data = originalData.map((item) =>
-    coerceDataToGql(item, null, thingConfig, allFields, skipUnusedFields),
+    coerceDataToGqlServerSide(item, null, thingConfig, allFields, skipUnusedFields),
   );
 
   let preparedData = prevPreparedData;
