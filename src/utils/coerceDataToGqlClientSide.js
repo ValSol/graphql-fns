@@ -4,7 +4,7 @@ import type { ThingConfig } from '../flowTypes';
 
 import coerceDataToGqlBasic from './coerceDataToGqlBasic';
 
-const ObjectId = Object;
+const ObjectId = null;
 
 const coerceDataToGqlClientSide = (
   data: Object,

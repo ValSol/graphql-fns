@@ -74,7 +74,7 @@ const coerceDataToGqlBasic = (
           !data[key] || !data[key].length
             ? { connect: [] }
             : data[key].reduce((prev2, preItem) => {
-                const item = preItem instanceof ObjectId ? preItem.toString() : preItem;
+                const item = ObjectId && preItem instanceof ObjectId ? preItem.toString() : preItem;
 
                 if (typeof item === 'string') {
                   if (prev2.connect) {
@@ -113,7 +113,8 @@ const coerceDataToGqlBasic = (
       } else if (!data[key]) {
         prev[key] = { connect: null }; // eslint-disable-line no-param-reassign
       } else {
-        const keyData = data[key] instanceof ObjectId ? data[key].toString() : data[key];
+        const keyData =
+          ObjectId && data[key] instanceof ObjectId ? data[key].toString() : data[key];
 
         if (typeof keyData === 'string') {
           prev[key] = { connect: keyData }; // eslint-disable-line no-param-reassign

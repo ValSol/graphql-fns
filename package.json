@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.675",
+  "version": "0.1.2-beta.676",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -48,6 +48,7 @@
     "@babel/core": "^7.19.0",
     "@babel/eslint-parser": "^7.18.9",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-syntax-flow": "^7.18.6",
     "@babel/preset-env": "^7.19.0",
     "@babel/preset-react": "^7.18.6",
     "@graphql-tools/schema": "^9.0.3",
