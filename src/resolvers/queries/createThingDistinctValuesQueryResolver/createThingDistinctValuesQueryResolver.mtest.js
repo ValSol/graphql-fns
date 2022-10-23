@@ -24,6 +24,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createThingDistinctValuesQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create query things resolver', async () => {

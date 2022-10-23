@@ -19,6 +19,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createCreateThingMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = { transactions: true };

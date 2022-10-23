@@ -25,8 +25,10 @@ const actionReturnConfig = true;
 const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
   !(derivativeConfig.embedded || derivativeConfig.file);
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `${name}${suffix}!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `${name}${suffix}!`;
 
 const updateThingMutationAttributes = {
   actionGeneralName,

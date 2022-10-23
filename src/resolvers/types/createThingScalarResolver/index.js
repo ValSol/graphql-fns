@@ -5,7 +5,8 @@ import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flow
 import createChildThingQueryResolver from '../../queries/createChildThingQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
-import parseThingName from '../parseThingName';
+import parseThingName from '../../utils/parseThingName';
+import resolverDecorator from '../../utils/resolverDecorator';
 
 type Args = { where: { id: string } };
 type Context = { mongooseConn: Object };
@@ -28,7 +29,11 @@ const createThingScalarResolver = (
         generalConfig,
         serversideConfig,
       )
-    : createChildThingQueryResolver(thingConfig, generalConfig, serversideConfig);
+    : resolverDecorator(
+        createChildThingQueryResolver(thingConfig, generalConfig, serversideConfig),
+        thingConfig,
+        thingConfig,
+      );
 
   if (!childThingQueryResolver) {
     throw new TypeError(

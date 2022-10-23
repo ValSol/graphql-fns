@@ -31,6 +31,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createCopyThingWithChildrenMutationResolver', () => {
   const restaurantCloneConfig: ThingConfig = {};
   const menuConfig: ThingConfig = {};

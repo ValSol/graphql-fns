@@ -239,6 +239,10 @@ beforeAll(async () => {
   await ExampleClone.createCollection();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('workOutMutations', () => {
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
     const createPerson = createCreateThingMutationResolver(
@@ -733,13 +737,8 @@ describe('workOutMutations', () => {
     const exampleClonesBeforeDelete = await ExampleClone.find(whereToDeleteExampleClones);
     const examplesBeforeDelete = await Example.find(whereToDeleteExamples);
 
-    const [
-      resultToDeleteFilteredExampleClones,
-      resultToDeleteFilteredExamples,
-    ] = await workOutMutations(
-      standardMutationsArgsToDeleteFilteredThings,
-      commonResolverCreatorArg,
-    );
+    const [resultToDeleteFilteredExampleClones, resultToDeleteFilteredExamples] =
+      await workOutMutations(standardMutationsArgsToDeleteFilteredThings, commonResolverCreatorArg);
 
     expect(resultToDeleteFilteredExampleClones.map(({ name, label }) => ({ name, label }))).toEqual(
       dataToCreateExampleClones.filter(({ label }) => label === 'aaa'),
@@ -991,13 +990,8 @@ describe('workOutMutations', () => {
       },
     ];
 
-    const [
-      resultToUpdateFilteredExampleClones,
-      resultToUpdateFilteredExamples,
-    ] = await workOutMutations(
-      standardMutationsArgsToUpdateFilteredThings,
-      commonResolverCreatorArg,
-    );
+    const [resultToUpdateFilteredExampleClones, resultToUpdateFilteredExamples] =
+      await workOutMutations(standardMutationsArgsToUpdateFilteredThings, commonResolverCreatorArg);
 
     expect(resultToUpdateFilteredExampleClones.map(({ label }) => ({ label }))).toEqual(
       dataToCreateExampleClones

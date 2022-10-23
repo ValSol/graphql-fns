@@ -7,11 +7,12 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: sleep } = require('../../../utils/sleep');
+const { default: toGlobalId } = require('../../utils/toGlobalId');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
-const { default: info } = require('./scalar-info.auxiliary.js');
+const { default: info } = require('./scalar-info.auxiliary');
 const { default: createThingScalarResolver } = require('./index');
 
 let mongooseConn;
@@ -23,6 +24,10 @@ beforeAll(async () => {
   await mongooseConn.connection.db.dropDatabase();
 
   pubsub = new PubSub();
+});
+
+afterAll(async () => {
+  mongooseConn.connection.close();
 });
 
 describe('createThingScalarResolver', () => {
@@ -73,12 +78,12 @@ describe('createThingScalarResolver', () => {
     const { id } = createdPlace;
 
     const Place = createThingScalarResolver(placeConfig, generalConfig, serversideConfig);
-    const parent = { friend: id };
+    const parent = { friend: toGlobalId(id, 'Place') };
     const place = await Place(parent, null, { mongooseConn, pubsub }, info);
 
     expect(place.title).toBe(data.title);
 
-    const parent2 = { friend: '5cd82d6075fb194334d8c1d7' };
+    const parent2 = { friend: toGlobalId('5cd82d6075fb194334d8c1d7', 'Place') };
     const place2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
 
     expect(place2).toBeNull();

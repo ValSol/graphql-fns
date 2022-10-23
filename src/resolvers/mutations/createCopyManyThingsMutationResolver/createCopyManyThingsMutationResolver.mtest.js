@@ -25,6 +25,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createCopyManyThingsMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = { transactions: true };

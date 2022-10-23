@@ -12,6 +12,7 @@ import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
+import resolverDecorator from '../utils/resolverDecorator';
 import composeThingResolvers from '../types/composeThingResolvers';
 import createCustomResolver from '../createCustomResolver';
 import queries from '../queries';
@@ -30,9 +31,9 @@ const composeGqlResolvers = (
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
-  const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
+  const customQuery = custom?.Query || {};
   // eslint-disable-next-line no-nested-ternary
-  const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
+  const customMutation = custom?.Mutation || {};
   const derivativeConfigs = derivative || {};
 
   const allowQueries = checkInventory(['Query'], inventory);
@@ -55,7 +56,11 @@ const composeGqlResolvers = (
           const resolver = queries[actionName](thingConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Query[queryAttributes[actionName].actionName(thingName)] = resolver;
+            prev.Query[queryAttributes[actionName].actionName(thingName)] = resolverDecorator(
+              resolver,
+              thingConfig,
+              queryAttributes[actionName].actionReturnConfig ? thingConfig : null,
+            );
           }
         }
       });
@@ -70,6 +75,7 @@ const composeGqlResolvers = (
           generalConfig,
           serversideConfig,
         );
+
         if (customQueryResolver) {
           // eslint-disable-next-line no-param-reassign
           prev.Query[customQuery[customName].specificName(thingConfig, generalConfig)] =
@@ -84,7 +90,11 @@ const composeGqlResolvers = (
           const resolver = mutations[actionName](thingConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[mutationAttributes[actionName].actionName(thingName)] = resolver;
+            prev.Mutation[mutationAttributes[actionName].actionName(thingName)] = resolverDecorator(
+              resolver,
+              thingConfig,
+              mutationAttributes[actionName].actionReturnConfig ? thingConfig : null,
+            );
           }
         }
       });
@@ -164,6 +174,7 @@ const composeGqlResolvers = (
           thingConfig,
           generalConfig,
         );
+
         if (derivativeConfig) {
           // eslint-disable-next-line no-param-reassign
           prev[`${name}${derivativeKey}`] = composeThingResolvers(

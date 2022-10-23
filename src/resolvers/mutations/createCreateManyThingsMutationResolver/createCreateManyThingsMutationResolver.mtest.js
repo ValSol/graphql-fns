@@ -16,6 +16,10 @@ beforeAll(async () => {
   await mongooseConn.connection.db.dropDatabase();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createCreateManyThingsMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
 

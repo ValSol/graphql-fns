@@ -23,6 +23,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createDeleteThingWithChildrenMutationResolver', () => {
   const menuConfig: ThingConfig = {};
   const menuCloneConfig: ThingConfig = {};

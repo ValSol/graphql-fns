@@ -7,11 +7,12 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: sleep } = require('../../../utils/sleep');
+const { default: toGlobalId } = require('../../utils/toGlobalId');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
-const { default: info } = require('./array-info.auxiliary.js');
+const { default: info } = require('./array-info.auxiliary');
 const { default: createThingArrayResolver } = require('./index');
 
 let mongooseConn;
@@ -23,6 +24,10 @@ beforeAll(async () => {
   await mongooseConn.connection.db.dropDatabase();
 
   pubsub = new PubSub();
+});
+
+afterAll(async () => {
+  mongooseConn.connection.close();
 });
 
 describe('createThingArrayResolver', () => {
@@ -73,13 +78,20 @@ describe('createThingArrayResolver', () => {
     const { id } = createdPlace;
 
     const Place = createThingArrayResolver(placeConfig, generalConfig, serversideConfig);
-    const parent = { friends: [id] };
+    const parent = { friends: [toGlobalId(id, 'Place')] };
     const places = await Place(parent, null, { mongooseConn, pubsub }, info);
+
     const [place] = places;
 
     expect(place.title).toBe(data.title);
 
-    const parent2 = { friends: ['5cd82d6075fb194334d8c1d7', id, '5cd82d6075fb194334d8c1d8'] };
+    const parent2 = {
+      friends: [
+        toGlobalId('5cd82d6075fb194334d8c1d7', 'Place'),
+        toGlobalId(id, 'Place'),
+        toGlobalId('5cd82d6075fb194334d8c1d8', 'Place'),
+      ],
+    };
     const places2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
     const [place2] = places2;
 

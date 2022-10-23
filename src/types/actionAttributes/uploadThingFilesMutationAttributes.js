@@ -33,8 +33,10 @@ const actionReturnConfig = true;
 
 const actionAllowed = (derivativeConfig: ThingConfig): boolean => Boolean(derivativeConfig.file);
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `[${name}${suffix}!]!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `[${name}${suffix}!]!`;
 
 const uploadThingFilesMutationAttributes = {
   actionGeneralName,

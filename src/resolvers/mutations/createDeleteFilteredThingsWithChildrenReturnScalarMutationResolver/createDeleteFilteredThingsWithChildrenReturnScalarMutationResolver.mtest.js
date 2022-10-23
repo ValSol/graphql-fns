@@ -32,6 +32,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', () => {
   const menuConfig: ThingConfig = {};
   const menuCloneConfig: ThingConfig = {};
@@ -498,7 +502,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
     const menusCloneDeletedCount = await deleteMenuClone(
       null,
-      { where: [{ id_in: [menuCloneId.toString()] }] },
+      { where: { id_in: [menuCloneId.toString()] } },
       { mongooseConn, pubsub },
       info,
     );

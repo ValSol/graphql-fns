@@ -24,6 +24,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createThingCountQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {};

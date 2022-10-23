@@ -27,9 +27,14 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
   !(thingConfig.embedded || thingConfig.file) &&
   Boolean(createThingDistinctValuesOptionsInputType(thingConfig)[1]);
 
-// eslint-disable-next-line no-unused-vars
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  '[String!]!';
+const actionReturnString =
+  (
+    // eslint-disable-next-line no-unused-vars
+    suffix: string,
+  ): ((thingConfig: ThingConfig) => string) =>
+  // eslint-disable-next-line no-unused-vars
+  ({ name }) =>
+    '[String!]!';
 
 const thingDistinctValuesQueryAttributes = {
   actionGeneralName,

@@ -30,8 +30,10 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
     getOppositeFields(thingConfig).filter(([, { array, parent }]) => !(array || parent)).length,
   );
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `${name}${suffix}!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `${name}${suffix}!`;
 
 const deleteThingWithChildrenMutationAttributes = {
   actionGeneralName,

@@ -20,6 +20,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createUploadThingFilesMutationResolver', () => {
   const serversideConfig = {
     transactions: true,

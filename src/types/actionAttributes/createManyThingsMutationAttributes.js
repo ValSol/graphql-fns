@@ -24,8 +24,10 @@ const actionReturnConfig = true;
 const actionAllowed = (thingConfig: ThingConfig): boolean =>
   !(thingConfig.embedded || thingConfig.file);
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `[${name}${suffix}!]!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `[${name}${suffix}!]!`;
 
 const createManyThingsMutationAttributes = {
   actionGeneralName,

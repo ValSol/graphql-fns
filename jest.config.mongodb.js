@@ -1,1 +1,1 @@
-module.exports = { preset: '@shelf/jest-mongodb' };
+module.exports = { preset: '@shelf/jest-mongodb', testMatch: ['<rootDir>/**/*.mtest.js'] };

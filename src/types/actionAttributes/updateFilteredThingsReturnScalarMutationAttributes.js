@@ -38,9 +38,14 @@ const actionReturnConfig = false;
 const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
   !(derivativeConfig.embedded || derivativeConfig.file);
 
-// eslint-disable-next-line no-unused-vars
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  'Int!';
+const actionReturnString =
+  (
+    // eslint-disable-next-line no-unused-vars
+    suffix: string,
+  ): ((thingConfig: ThingConfig) => string) =>
+  // eslint-disable-next-line no-unused-vars
+  ({ name }) =>
+    'Int!';
 
 const updateFilteredThingsReturnScalarMutationAttributes = {
   actionGeneralName,

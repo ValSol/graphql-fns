@@ -18,6 +18,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createFieldArrayResolver', () => {
   test('should create type thing resolver', async () => {
     const parent = {

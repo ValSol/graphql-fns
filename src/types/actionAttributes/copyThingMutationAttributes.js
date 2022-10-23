@@ -32,8 +32,10 @@ const actionAllowed = (thingConfig: ThingConfig): boolean =>
   !(thingConfig.embedded || thingConfig.file) &&
   Boolean(createThingCopyWhereOnesInputType(thingConfig)[1]);
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `${name}${suffix}!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `${name}${suffix}!`;
 
 const copyThingMutationAttributes = {
   actionGeneralName,

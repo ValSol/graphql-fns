@@ -23,6 +23,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {

@@ -21,9 +21,14 @@ const actionReturnConfig = false;
 
 const actionAllowed = (thingConfig: ThingConfig): boolean => Boolean(thingConfig.file);
 
-// eslint-disable-next-line no-unused-vars
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  'Int!';
+const actionReturnString =
+  (
+    // eslint-disable-next-line no-unused-vars
+    suffix: string,
+  ): ((thingConfig: ThingConfig) => string) =>
+  // eslint-disable-next-line no-unused-vars
+  ({ name }) =>
+    'Int!';
 
 const thingFileCountQueryAttributes = {
   actionGeneralName,

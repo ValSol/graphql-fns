@@ -10,6 +10,7 @@ import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from '../../types/composeActionSignature';
 import executeAuthorisation from '../utils/executeAuthorisation';
+import resolverDecorator from '../utils/resolverDecorator';
 import generateDerivativeResolvers from './generateDerivativeResolvers';
 
 const createCustomResolver = (
@@ -45,14 +46,21 @@ const createCustomResolver = (
 
   if (!checkInventory(inventoryChain, inventory)) return null;
 
+  const { config: configCreator } = signatureMethods;
+
+  const returnConfig = configCreator(thingConfig, generalConfig);
+
   if (serversideConfig[methodKind] && serversideConfig[methodKind][methodName]) {
-    const authDecorator = (func) => async (...argarray) => {
-      const [parent, args, context, info] = argarray;
-      const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      if (!filter) return null;
-      const result = await func(parent, args, context, info, filter);
-      return result;
-    };
+    const authDecorator =
+      (func) =>
+      async (...argarray) => {
+        const [parent, args, context, info] = argarray;
+        const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+        if (!filter) return null;
+
+        const result = await func(parent, args, context, info, filter);
+        return result;
+      };
 
     return authDecorator(
       serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
@@ -68,16 +76,24 @@ const createCustomResolver = (
   }
 
   if (derivativeResolvers[methodKind] && derivativeResolvers[methodKind][methodName]) {
-    const authDecorator = (func) => async (...argarray) => {
-      const [parent, args, context, info] = argarray;
-      const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      if (!filter) return null;
-      const result = await func(parent, args, context, info, filter);
-      return result;
-    };
+    const authDecorator =
+      (func) =>
+      async (...argarray) => {
+        const [parent, args, context, info] = argarray;
+        const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+        if (!filter) return null;
 
-    return authDecorator(
-      derivativeResolvers[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+        const result = await func(parent, args, context, info, filter);
+        return result;
+      };
+
+    return resolverDecorator(
+      authDecorator(
+        derivativeResolvers[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+      ),
+      thingConfig,
+      returnConfig,
+      generalConfig,
     );
   }
 

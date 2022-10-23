@@ -42,8 +42,10 @@ const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
   !(derivativeConfig.embedded || derivativeConfig.file) &&
   Boolean(createFilesOfThingOptionsInputType(derivativeConfig)[1]); // eslint-disable-line no-unused-vars
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `${name}${suffix}!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `${name}${suffix}!`;
 
 const uploadFilesToThingMutationAttributes = {
   actionGeneralName,

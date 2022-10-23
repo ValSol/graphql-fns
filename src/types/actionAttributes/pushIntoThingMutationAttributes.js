@@ -33,8 +33,10 @@ const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
   !(derivativeConfig.embedded || derivativeConfig.file) &&
   Boolean(createPushIntoThingInputType(derivativeConfig)[1]);
 
-const actionReturnString = (suffix: string): ((thingConfig: ThingConfig) => string) => ({ name }) =>
-  `${name}${suffix}!`;
+const actionReturnString =
+  (suffix: string): ((thingConfig: ThingConfig) => string) =>
+  ({ name }) =>
+    `${name}${suffix}!`;
 
 const pushIntoThingMutationAttributes = {
   actionGeneralName,

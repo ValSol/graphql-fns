@@ -29,6 +29,10 @@ beforeAll(async () => {
   pubsub = new PubSub();
 });
 
+afterAll(async () => {
+  mongooseConn.connection.close();
+});
+
 describe('createDeleteFilteredThingsWithChildrenMutationResolver', () => {
   const menuConfig: ThingConfig = {};
   const menuCloneConfig: ThingConfig = {};
@@ -495,7 +499,7 @@ describe('createDeleteFilteredThingsWithChildrenMutationResolver', () => {
 
     const [menuCloneDeleted] = await deleteMenuClone(
       null,
-      { where: [{ id_in: [menuCloneId.toString()] }] },
+      { where: { id_in: [menuCloneId.toString()] } },
       { mongooseConn, pubsub },
       info,
     );
