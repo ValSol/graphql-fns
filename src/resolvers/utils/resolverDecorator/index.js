@@ -17,6 +17,8 @@ const resolverDecorator =
 
     const rawResult = await func(parent, transformBefore(args, thingConfig), ...rest);
 
+    if (!rawResult) return null;
+
     if (Array.isArray(rawResult)) {
       return rawResult.map((item) => transformAfter(item, returnConfig, generalConfig));
     }

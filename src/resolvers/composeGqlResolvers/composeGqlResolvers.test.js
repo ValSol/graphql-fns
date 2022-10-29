@@ -565,7 +565,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Mutation.deleteExample).toBeUndefined();
     expect(result.Subscription).toBeUndefined();
     expect(typeof result.Mutation.loadExample).toBe('function');
-    const customMutationResult = await result.Mutation.loadExample();
+    const customMutationResult = await result.Mutation.loadExample(null, {}, {}); // parent, args, context
     expect(customMutationResult).toBe('test passed!');
   });
 
@@ -604,7 +604,7 @@ describe('composeGqlResolvers', () => {
     expect(result.Query.Examples).toBeUndefined();
     expect(result.Subscription).toBeUndefined();
     expect(typeof result.Query.getExample).toBe('function');
-    const customQueryResult = await result.Query.getExample();
+    const customQueryResult = await result.Query.getExample(null, {}, {}); // parent, args, context
     expect(customQueryResult).toBe('test passed!');
   });
 });

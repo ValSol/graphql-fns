@@ -5,7 +5,7 @@ import type { ThingConfig } from '../../../../flowTypes';
 import fromGlobalId from '../../fromGlobalId';
 
 const processItem = ({ id: globalId, ...rest }) => {
-  if (!globalId) return rest;
+  if (!globalId) return { id: globalId, ...rest };
 
   const { _id: id } = fromGlobalId(globalId);
 

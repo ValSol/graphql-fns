@@ -60,7 +60,7 @@ describe('createCustomResolver', () => {
       serversideConfig,
     );
     // $FlowFixMe
-    const result2 = await result();
+    const result2 = await result(null, {}, {}); // parent, args, context
     const resultResolver2 = await resultResolver();
     expect(result2).toBe(resultResolver2);
   });

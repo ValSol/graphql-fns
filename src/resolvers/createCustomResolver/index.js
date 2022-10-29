@@ -62,8 +62,13 @@ const createCustomResolver = (
         return result;
       };
 
-    return authDecorator(
-      serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+    return resolverDecorator(
+      authDecorator(
+        serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+      ),
+      thingConfig,
+      returnConfig,
+      generalConfig,
     );
   }
 
