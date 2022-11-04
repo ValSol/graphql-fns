@@ -9,14 +9,8 @@ const createThingWhereByUniqueInputType: InputCreator = (thingConfig) => {
 
   const inputName = `${name}WhereByUniqueInput`;
 
-  const {
-    dateTimeFields,
-    duplexFields,
-    intFields,
-    floatFields,
-    relationalFields,
-    textFields,
-  } = thingConfig;
+  const { dateTimeFields, duplexFields, intFields, floatFields, relationalFields, textFields } =
+    thingConfig;
 
   const fields = [defaultFields];
 

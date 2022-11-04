@@ -855,7 +855,7 @@ export type ActionAttributes = {
   actionType: 'Mutation' | 'Query',
   actionAllowed: (thingConfig: ThingConfig) => boolean,
   actionName: (baseName: string, suffix?: string) => string,
-  inputCreators: Array<InputCreator>, // TODO inputCreators
+  inputCreators: Array<InputCreator>,
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
   actionReturnString: (suffix: string) => (thingConfig: ThingConfig) => string,

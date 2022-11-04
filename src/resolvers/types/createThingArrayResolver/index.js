@@ -2,6 +2,7 @@
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
+import childThingsQueryAttributes from '../../../types/actionAttributes/childThingsQueryAttributes';
 import createChildThingsQueryResolver from '../../queries/createChildThingsQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
@@ -31,7 +32,7 @@ const createThingArrayResolver = (
       )
     : resolverDecorator(
         createChildThingsQueryResolver(thingConfig, generalConfig, serversideConfig),
-        thingConfig,
+        childThingsQueryAttributes,
         thingConfig,
       );
 

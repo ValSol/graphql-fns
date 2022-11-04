@@ -3,15 +3,8 @@
 import type { InputCreator } from '../../flowTypes';
 
 const createDeleteThingWithChildrenSortInputType: InputCreator = (thingConfig) => {
-  const {
-    booleanFields,
-    dateTimeFields,
-    enumFields,
-    intFields,
-    floatFields,
-    textFields,
-    name,
-  } = thingConfig;
+  const { booleanFields, dateTimeFields, enumFields, intFields, floatFields, textFields, name } =
+    thingConfig;
 
   const inputName = `${name}SortInput`;
 

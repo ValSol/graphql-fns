@@ -12,8 +12,8 @@ const processField = (globalId) => {
   return id;
 };
 
-const transformWhere = (where: Object, thingConfig: ThingConfig): Object => {
-  const { duplexFields, relationalFields } = thingConfig;
+const transformWhere = (where: Object, thingConfig: ThingConfig | null): Object => {
+  const { duplexFields, relationalFields } = thingConfig || {};
 
   const fieldsObject = [...(duplexFields || []), ...(relationalFields || [])].reduce(
     (prev, field) => {

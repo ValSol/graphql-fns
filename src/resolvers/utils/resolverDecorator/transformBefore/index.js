@@ -2,35 +2,22 @@
 
 import type { ThingConfig } from '../../../../flowTypes';
 
-import transformData from './transformData';
-import transformWhere from './transformWhere';
-import transformWhereOne from './transformWhereOne';
-import transformWhereOnes from './transformWhereOnes';
+type ArgNamesToTransformers = { [argName: string]: [Function, ThingConfig | null] };
 
-const transformBefore = (args: Object, thingConfig: ThingConfig): Object => {
-  const { data, where, whereOne, whereOnes, ...rest } = args;
+const transformBefore = (
+  args: Object,
+  argNamesToTransformers: ArgNamesToTransformers,
+): { [argName: string]: Object } =>
+  Object.keys(args).reduce((prev, key) => {
+    if (argNamesToTransformers[key]) {
+      const [transformer, thingConfig] = argNamesToTransformers[key];
 
-  const result: { data?: Object, where?: Object, whereOne?: Object, whereOnes?: Object } = {
-    ...rest,
-  };
+      prev[key] = transformer(args[key], thingConfig); // eslint-disable-line no-param-reassign
+    } else {
+      prev[key] = args[key]; // eslint-disable-line no-param-reassign
+    }
 
-  if (data) {
-    result.data = transformData(data);
-  }
-
-  if (where) {
-    result.where = transformWhere(where, thingConfig);
-  }
-
-  if (whereOne) {
-    result.whereOne = transformWhereOne(whereOne);
-  }
-
-  if (whereOnes) {
-    result.whereOnes = transformWhereOnes(whereOnes, thingConfig);
-  }
-
-  return result;
-};
+    return prev;
+  }, {});
 
 export default transformBefore;

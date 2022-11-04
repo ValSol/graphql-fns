@@ -58,8 +58,8 @@ const composeGqlResolvers = (
             // eslint-disable-next-line no-param-reassign
             prev.Query[queryAttributes[actionName].actionName(thingName)] = resolverDecorator(
               resolver,
+              queryAttributes[actionName],
               thingConfig,
-              queryAttributes[actionName].actionReturnConfig ? thingConfig : null,
             );
           }
         }
@@ -92,8 +92,8 @@ const composeGqlResolvers = (
             // eslint-disable-next-line no-param-reassign
             prev.Mutation[mutationAttributes[actionName].actionName(thingName)] = resolverDecorator(
               resolver,
+              mutationAttributes[actionName],
               thingConfig,
-              mutationAttributes[actionName].actionReturnConfig ? thingConfig : null,
             );
           }
         }

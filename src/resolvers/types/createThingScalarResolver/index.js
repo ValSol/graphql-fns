@@ -2,6 +2,7 @@
 
 import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
 
+import childThingQueryAttributes from '../../../types/actionAttributes/childThingQueryAttributes';
 import createChildThingQueryResolver from '../../queries/createChildThingQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
@@ -31,7 +32,7 @@ const createThingScalarResolver = (
       )
     : resolverDecorator(
         createChildThingQueryResolver(thingConfig, generalConfig, serversideConfig),
-        thingConfig,
+        childThingQueryAttributes,
         thingConfig,
       );
 

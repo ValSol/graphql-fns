@@ -10,7 +10,7 @@ import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeActionSignature from '../../types/composeActionSignature';
 import executeAuthorisation from '../utils/executeAuthorisation';
-import resolverDecorator from '../utils/resolverDecorator';
+import customResolverDecorator from '../utils/resolverDecorator/customResolverDecorator';
 import generateDerivativeResolvers from './generateDerivativeResolvers';
 
 const createCustomResolver = (
@@ -46,10 +46,6 @@ const createCustomResolver = (
 
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  const { config: configCreator } = signatureMethods;
-
-  const returnConfig = configCreator(thingConfig, generalConfig);
-
   if (serversideConfig[methodKind] && serversideConfig[methodKind][methodName]) {
     const authDecorator =
       (func) =>
@@ -62,12 +58,12 @@ const createCustomResolver = (
         return result;
       };
 
-    return resolverDecorator(
+    return customResolverDecorator(
       authDecorator(
         serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
       ),
+      signatureMethods,
       thingConfig,
-      returnConfig,
       generalConfig,
     );
   }
@@ -92,12 +88,12 @@ const createCustomResolver = (
         return result;
       };
 
-    return resolverDecorator(
+    return customResolverDecorator(
       authDecorator(
         derivativeResolvers[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
       ),
+      signatureMethods,
       thingConfig,
-      returnConfig,
       generalConfig,
     );
   }
