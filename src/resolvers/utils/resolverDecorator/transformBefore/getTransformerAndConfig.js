@@ -5,6 +5,8 @@ import type { GeneralConfig, ThingConfig } from '../../../../flowTypes';
 import composeDerivativeConfig from '../../../../utils/composeDerivativeConfig';
 import parseThingName from '../../parseThingName';
 import transformData from './transformData';
+import transformFileWhere from './transformFileWhere';
+import transformFileWhereOne from './transformFileWhereOne';
 import transformWhere from './transformWhere';
 import transformWhereOne from './transformWhereOne';
 import transformWhereOnes from './transformWhereOnes';
@@ -16,11 +18,11 @@ const argTypesInParts = [
   ['', 'UpdateInput', transformData, true],
   ['UploadFilesTo', 'Input', transformData, true],
   ['', 'WhereInput', transformWhere, false],
-  ['FileWhereInput', 'FileWhereInput', transformWhere, true],
+  ['FileWhereInput', 'FileWhereInput', transformFileWhere, true],
   ['', 'WhereByUniqueInput', transformWhere, false],
   ['', 'WhereOneInput', transformWhereOne, false],
   ['', 'WhereOneToCopyInput', transformWhereOne, false],
-  ['FileWhereOneInput', 'FileWhereOneInput', transformWhereOne, true],
+  ['FileWhereOneInput', 'FileWhereOneInput', transformFileWhereOne, true],
   ['', 'CopyWhereOnesInput', transformWhereOnes, false],
 ];
 

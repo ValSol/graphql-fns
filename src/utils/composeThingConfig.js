@@ -27,8 +27,8 @@ const composeThingConfig = (
   const { name, embedded, file } = simplifiedThingConfig;
   const {
     embeddedFields: simplifiedEmbeddedFields,
-    fileFields: simplifiedFileFields,
     duplexFields: simplifiedDuplexFields,
+    fileFields: simplifiedFileFields,
     relationalFields: simplifiedRelationalFields,
   } = simplifiedThingConfig;
 
@@ -135,6 +135,7 @@ const composeThingConfig = (
           `Incorrect configName: "${configName}" in duplex field: "${field.name}" of simplified thingConfig: "${simplifiedThingConfig.name}"!`,
         );
       }
+
       return { ...restField, config };
     });
   }

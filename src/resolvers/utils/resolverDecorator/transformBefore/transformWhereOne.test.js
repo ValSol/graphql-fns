@@ -6,80 +6,79 @@ import type { ThingConfig } from '../../../../flowTypes';
 import toGlobalId from '../../toGlobalId';
 import transformWhereOne from './transformWhereOne';
 
-const personConfig: ThingConfig = {};
-const personCloneConfig: ThingConfig = {};
-
-Object.assign(personConfig, {
-  name: 'Person',
-  textFields: [
-    {
-      name: 'firstName',
-      required: true,
-    },
-    {
-      name: 'lastName',
-    },
-  ],
-  duplexFields: [
-    {
-      name: 'friends',
-      oppositeName: 'friends',
-      config: personConfig,
-      array: true,
-      required: true,
-    },
-    {
-      name: 'enemies',
-      oppositeName: 'enemies',
-      array: true,
-      config: personConfig,
-    },
-    {
-      name: 'clone',
-      oppositeName: 'original',
-      config: personCloneConfig,
-      unique: true,
-    },
-    {
-      name: 'clones',
-      array: true,
-      oppositeName: 'oneOforiginals',
-      config: personCloneConfig,
-    },
-  ],
-});
-
-Object.assign(personCloneConfig, {
-  name: 'PersonClone',
-
-  textFields: [
-    {
-      name: 'firstName',
-      required: true,
-    },
-
-    {
-      name: 'lastName',
-    },
-  ],
-
-  duplexFields: [
-    {
-      name: 'original',
-      oppositeName: 'clone',
-      config: personConfig,
-      required: true,
-    },
-
-    {
-      name: 'oneOforiginals',
-      oppositeName: 'clones',
-      config: personConfig,
-    },
-  ],
-});
-
 describe('transformWhereOne', () => {
+  const personConfig: ThingConfig = {};
+  const personCloneConfig: ThingConfig = {};
+
+  Object.assign(personConfig, {
+    name: 'Person',
+    textFields: [
+      {
+        name: 'firstName',
+        required: true,
+      },
+      {
+        name: 'lastName',
+      },
+    ],
+    duplexFields: [
+      {
+        name: 'friends',
+        oppositeName: 'friends',
+        config: personConfig,
+        array: true,
+        required: true,
+      },
+      {
+        name: 'enemies',
+        oppositeName: 'enemies',
+        array: true,
+        config: personConfig,
+      },
+      {
+        name: 'clone',
+        oppositeName: 'original',
+        config: personCloneConfig,
+        unique: true,
+      },
+      {
+        name: 'clones',
+        array: true,
+        oppositeName: 'oneOforiginals',
+        config: personCloneConfig,
+      },
+    ],
+  });
+
+  Object.assign(personCloneConfig, {
+    name: 'PersonClone',
+
+    textFields: [
+      {
+        name: 'firstName',
+        required: true,
+      },
+
+      {
+        name: 'lastName',
+      },
+    ],
+
+    duplexFields: [
+      {
+        name: 'original',
+        oppositeName: 'clone',
+        config: personConfig,
+        required: true,
+      },
+
+      {
+        name: 'oneOforiginals',
+        oppositeName: 'clones',
+        config: personConfig,
+      },
+    ],
+  });
   test('check single id transform', async () => {
     const id = '1234567890';
     const whereOne = { id: toGlobalId(id, 'thingName') };

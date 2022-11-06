@@ -29,7 +29,7 @@ const processWhere = (whereOnes, duplexFieldsObject) =>
     return prev;
   }, {});
 
-const transformWhereOne = (whereOnes: Object, thingConfig: ThingConfig): Object => {
+const transformWhereOnes = (whereOnes: Object, thingConfig: ThingConfig): Object => {
   const { duplexFields } = thingConfig;
 
   const duplexFieldsObject = (duplexFields || []).reduce((prev, duplexField) => {
@@ -45,4 +45,4 @@ const transformWhereOne = (whereOnes: Object, thingConfig: ThingConfig): Object 
   return processWhere(whereOnes, duplexFieldsObject);
 };
 
-export default transformWhereOne;
+export default transformWhereOnes;

@@ -5,6 +5,8 @@ import type { ActionAttributes, ThingConfig } from '../../../flowTypes';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
+import transformFileWhere from './transformBefore/transformFileWhere';
+import transformFileWhereOne from './transformBefore/transformFileWhereOne';
 import transformWhere from './transformBefore/transformWhere';
 import transformWhereOne from './transformBefore/transformWhereOne';
 import transformWhereOnes from './transformBefore/transformWhereOnes';
@@ -16,11 +18,11 @@ const argTypesPrefixPlusSuffixes = [
   ['UpdateInput', transformData, true],
   ['UploadFilesToInput', transformData, true],
   ['WhereInput', transformWhere, false],
-  ['FileWhereInputFileWhereInput', transformWhere, true],
+  ['FileWhereInputFileWhereInput', transformFileWhere, true],
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereOneToCopyInput', transformWhereOne, false],
-  ['FileWhereOneInputFileWhereOneInput', transformWhereOne, true],
+  ['FileWhereOneInputFileWhereOneInput', transformFileWhereOne, true],
   ['CopyWhereOnesInput', transformWhereOnes, false],
 ];
 

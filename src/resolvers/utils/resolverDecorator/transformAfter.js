@@ -9,6 +9,7 @@ const transformAfter = (
   item: Object,
   thingConfig: null | ThingConfig,
   generalConfig: null | GeneralConfig,
+  isChild: boolean = false,
 ): Object => {
   if (!thingConfig) {
     return item;
@@ -22,7 +23,8 @@ const transformAfter = (
     return item;
   }
 
-  const { duplexFields, embedded, embeddedFields, fileFields, relationalFields } = thingConfig;
+  const { duplexFields, embedded, embeddedFields, file, fileFields, relationalFields } =
+    thingConfig;
 
   const transformedFields = [...(duplexFields || []), ...(relationalFields || [])].reduce(
     (prev, { array, config, name }) => {
@@ -56,10 +58,10 @@ const transformAfter = (
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[name] = item[name].map(
-          (item2) => item2 && transformAfter(item2, config, generalConfig),
+          (item2) => item2 && transformAfter(item2, config, generalConfig, true),
         );
       } else {
-        prev[name] = transformAfter(item[name], config, generalConfig); // eslint-disable-line no-param-reassign
+        prev[name] = transformAfter(item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
       }
 
       return prev;
@@ -71,14 +73,14 @@ const transformAfter = (
 
   let globalId;
 
-  if (embedded) {
+  if (isChild && (embedded || file)) {
     globalId = id;
-  } else if (!generalConfig) {
-    globalId = toGlobalId(id, thingConfig.name); // eslint-disable-line no-param-reassign
-  } else {
+  } else if (generalConfig) {
     const { root: rootName, suffix } = parseThingName(thingConfig.name, generalConfig);
 
     globalId = toGlobalId(id, rootName, suffix); // eslint-disable-line no-param-reassign
+  } else {
+    globalId = toGlobalId(id, thingConfig.name); // eslint-disable-line no-param-reassign
   }
 
   return {
