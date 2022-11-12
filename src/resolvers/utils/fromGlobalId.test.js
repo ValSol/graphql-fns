@@ -23,7 +23,7 @@ describe('fromGlobalId', () => {
 
     const result = fromGlobalId(globalId);
 
-    const expectedResult = { _id: null };
+    const expectedResult = { _id: null, thingName: '', suffix: '' };
 
     expect(result).toEqual(expectedResult);
   });

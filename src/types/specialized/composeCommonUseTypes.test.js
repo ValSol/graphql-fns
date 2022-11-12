@@ -8,6 +8,9 @@ describe('composeCommonUseTypes', () => {
     const expectedResult = [
       'scalar DateTime',
       'scalar Upload',
+      `interface Node {
+  id: ID!
+}`,
       `input RegExp {
   pattern: String!
   flags: String

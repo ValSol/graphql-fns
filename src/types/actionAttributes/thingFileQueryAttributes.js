@@ -18,7 +18,8 @@ const argTypes = [(name: string): string => 'FileWhereOneInput!']; // eslint-dis
 
 const actionReturnConfig = true;
 
-const actionAllowed = (thingConfig: ThingConfig): boolean => Boolean(thingConfig.file);
+const actionAllowed = (thingConfig: ThingConfig): boolean =>
+  Boolean(thingConfig.file && thingConfig.name.startsWith('Root'));
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

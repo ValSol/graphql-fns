@@ -46,7 +46,10 @@ const createThingFilesQueryResolver = (
     const { mongooseConn } = context;
 
     const fileSchema = createFileSchema(thingConfig);
-    const FileModel = mongooseConn.model(`${name}_File`, fileSchema);
+
+    const nakedName = name.slice('Root'.length);
+
+    const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 
     const whereOneKeys = Object.keys(whereOne);
     if (whereOneKeys.length !== 1) {
@@ -60,7 +63,7 @@ const createThingFilesQueryResolver = (
 
     if (!fileData) return null;
 
-    const fileFields = composeFileFieldsData[name](fileData);
+    const fileFields = composeFileFieldsData[nakedName](fileData);
 
     return { ...fileFields, ...fileData, id: fileData._id }; // eslint-disable-line no-underscore-dangle
   };

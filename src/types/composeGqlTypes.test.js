@@ -121,6 +121,9 @@ describe('composeGqlTypes', () => {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -129,7 +132,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Menu {
+type Menu implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -137,7 +140,7 @@ type Menu {
   clone: MenuClone
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
 }
-type MenuClone {
+type MenuClone implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -145,14 +148,14 @@ type MenuClone {
   original: Menu
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
 }
-type MenuSection {
+type MenuSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
   menu: Menu
 }
-type MenuCloneSection {
+type MenuCloneSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -622,6 +625,7 @@ type UpdatedMenuCloneSectionPayload {
   updatedFields: [MenuCloneSectionFieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childMenu(whereOne: MenuWhereOneInput!): Menu!
   childMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
   childMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
@@ -746,9 +750,30 @@ type Subscription {
         {
           name: 'fileId',
           required: true,
+          freeze: true,
         },
         {
           name: 'address',
+          freeze: true,
+        },
+        {
+          name: 'text',
+        },
+      ],
+    };
+
+    const rootImageConfig: ThingConfig = {
+      name: 'RootImage',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+          freeze: true,
+        },
+        {
+          name: 'address',
+          freeze: true,
         },
       ],
     };
@@ -829,7 +854,7 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig, Image: imageConfig };
+    const thingConfigs = { Example: thingConfig, Image: imageConfig, RootImage: rootImageConfig };
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -838,6 +863,9 @@ type Subscription {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -870,7 +898,7 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -888,6 +916,12 @@ type Example {
   position: GeospatialPoint
 }
 type Image {
+  id: ID!
+  fileId: String!
+  address: String
+  text: String
+}
+type RootImage implements Node {
   id: ID!
   fileId: String!
   address: String
@@ -1106,6 +1140,7 @@ input ExampleCreateOrPushChildrenInput {
 input ImageCreateInput {
   fileId: String!
   address: String
+  text: String
 }
 enum ImportFormatEnum {
   csv
@@ -1145,6 +1180,7 @@ input ExampleUpdateInput {
 input ImageUpdateInput {
   fileId: String
   address: String
+  text: String
 }
 input UploadFilesToExampleInput {
   logo: ImageUpdateInput
@@ -1187,13 +1223,14 @@ type UpdatedExamplePayload {
   updatedFields: [ExampleFieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childExample(whereOne: ExampleWhereOneInput!): Example!
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  ImageFileCount(where: FileWhereInput): Int!
-  ImageFile(whereOne: FileWhereOneInput!): Image!
-  ImageFiles(where: FileWhereInput): [Image!]!
+  RootImageFileCount(where: FileWhereInput): Int!
+  RootImageFile(whereOne: FileWhereOneInput!): RootImage!
+  RootImageFiles(where: FileWhereInput): [RootImage!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String): [Example!]!
@@ -1212,7 +1249,7 @@ type Mutation {
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
-  uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!
+  uploadRootImageFiles(files: [Upload!]!, hashes: [String!]!): [RootImage!]!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -1273,6 +1310,9 @@ type Subscription {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -1303,7 +1343,7 @@ input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
 }
-type Example1 {
+type Example1 implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1312,7 +1352,7 @@ type Example1 {
   textField3: String!
   position: GeospatialPoint
 }
-type Example2 {
+type Example2 implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1534,6 +1574,7 @@ type UpdatedExample2Payload {
   updatedFields: [Example2FieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childExample1(whereOne: Example1WhereOneInput!): Example1!
   childExample2(whereOne: Example2WhereOneInput!): Example2!
   childExample1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
@@ -1637,6 +1678,9 @@ type Subscription {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -1645,7 +1689,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Person {
+type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1656,7 +1700,7 @@ type Person {
   location: Place!
   favoritePlace: Place
 }
-type Place {
+type Place implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1866,6 +1910,7 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
@@ -1974,6 +2019,9 @@ type Subscription {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -1982,7 +2030,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Person {
+type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2126,6 +2174,7 @@ type UpdatedPersonPayload {
   updatedFields: [PersonFieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   PersonCount(where: PersonWhereInput): Int!
@@ -2222,6 +2271,9 @@ type Subscription {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -2230,7 +2282,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Person {
+type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2241,7 +2293,7 @@ type Person {
   location: Place!
   favoritePlace: Place
 }
-type Place {
+type Place implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2539,6 +2591,7 @@ type UpdatedPlacePayload {
   updatedFields: [PlaceFieldNamesEnum!]
 }
 type Query {
+  node(id: ID!): Node
   childPerson(whereOne: PersonWhereOneInput!): Person!
   childPlace(whereOne: PlaceWhereOneInput!): Place!
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
@@ -2613,6 +2666,9 @@ type Subscription {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -2621,7 +2677,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2692,6 +2748,7 @@ input ExampleWhereByUniqueInput {
   id_in: [ID!]
 }
 type Query {
+  node(id: ID!): Node
   childExample(whereOne: ExampleWhereOneInput!): Example!
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExampleCount(where: ExampleWhereInput): Int!
@@ -2721,6 +2778,9 @@ type Query {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -2729,7 +2789,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2845,6 +2905,9 @@ type Mutation {
 
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -2853,7 +2916,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2912,6 +2975,7 @@ input PaginationInput {
   first: Int
 }
 type Query {
+  node(id: ID!): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
 }`;
 
@@ -2933,6 +2997,9 @@ type Query {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -2941,7 +3008,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -3000,6 +3067,7 @@ input PaginationInput {
   first: Int
 }
 type Query {
+  node(id: ID!): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
 }`;
 
@@ -3022,6 +3090,9 @@ type Query {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3030,7 +3101,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -3075,6 +3146,9 @@ type Mutation {
     const generalConfig: GeneralConfig = { thingConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3083,7 +3157,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -3136,6 +3210,9 @@ type Mutation {
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3144,7 +3221,7 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -3184,6 +3261,9 @@ type Mutation {
     const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3192,13 +3272,14 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
 }
 type Query {
+  node(id: ID!): Node
   getExample(path: String!): Example
 }`;
 
@@ -3260,6 +3341,9 @@ type Query {
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3268,13 +3352,13 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example {
+type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
 }
-type ExampleForCatalog {
+type ExampleForCatalog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -3423,6 +3507,7 @@ input ExampleTimeRangeInput {
   end: DateTime!
 }
 type Query {
+  node(id: ID!): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput): [ExampleForCatalog!]!
 }
@@ -3506,6 +3591,9 @@ type Mutation {
     const generalConfig: GeneralConfig = { thingConfigs, custom, derivativeInputs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
+interface Node {
+  id: ID!
+}
 input RegExp {
   pattern: String!
   flags: String
@@ -3514,14 +3602,14 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Menu {
+type Menu implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   menuName: String
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
 }
-type MenuSection {
+type MenuSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!

@@ -9,7 +9,7 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createUploadThingFilesMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
-      name: 'Image',
+      name: 'RootImage',
       file: true,
       textFields: [
         {
@@ -21,7 +21,8 @@ describe('createUploadThingFilesMutationType', () => {
       ],
     };
 
-    const expectedResult = '  uploadImageFiles(files: [Upload!]!, hashes: [String!]!): [Image!]!';
+    const expectedResult =
+      '  uploadRootImageFiles(files: [Upload!]!, hashes: [String!]!): [RootImage!]!';
 
     const dic = {};
 

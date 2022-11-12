@@ -9,7 +9,7 @@ import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeThingFilesQuery', () => {
   const thingConfig: ThingConfig = {
-    name: 'Photo',
+    name: 'RootPhoto',
     file: true,
     textFields: [
       {
@@ -19,9 +19,9 @@ describe('composeDerivativeThingFilesQuery', () => {
     ],
   };
   const ForCatalog: DerivativeAttributes = {
-    allow: { Photo: ['thingFiles'] },
+    allow: { RootPhoto: ['thingFiles'] },
     suffix: 'ForCatalog',
-    Photo: {
+    RootPhoto: {
       floatFields: [{ name: 'floatField' }],
     },
   };
@@ -29,7 +29,7 @@ describe('composeDerivativeThingFilesQuery', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    thingConfigs: { Photo: thingConfig },
+    thingConfigs: { RootPhoto: thingConfig },
     derivative,
   };
 

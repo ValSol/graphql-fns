@@ -15,6 +15,7 @@ import { mutationAttributes, queryAttributes } from '../../types/actionAttribute
 import resolverDecorator from '../utils/resolverDecorator';
 import composeThingResolvers from '../types/composeThingResolvers';
 import createCustomResolver from '../createCustomResolver';
+import createNodeQueryResolver from '../queries/createNodeQueryResolver';
 import queries from '../queries';
 import mutations from '../mutations';
 
@@ -43,8 +44,17 @@ const composeGqlResolvers = (
   const resolvers = {};
 
   resolvers.DateTime = DateTimeResolver;
+
   resolvers.Upload = GraphQLUpload;
-  if (allowQueries) resolvers.Query = {};
+
+  resolvers.Node = {
+    __resolveType: (obj) => obj.__typename, // eslint-disable-line no-underscore-dangle
+  };
+
+  if (allowQueries)
+    resolvers.Query = {
+      node: createNodeQueryResolver(generalConfig, serversideConfig),
+    };
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 

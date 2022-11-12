@@ -25,7 +25,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createThingQueryResolver', () => {
+describe('createThingFilesQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {
     composeFileFieldsData: {
@@ -43,7 +43,7 @@ describe('createThingQueryResolver', () => {
   };
   test('should create query thing resolver', async () => {
     const imageConfig: ThingConfig = {
-      name: 'Image',
+      name: 'RootImage',
       file: true,
       textFields: [
         { name: 'fileId' },
@@ -56,7 +56,7 @@ describe('createThingQueryResolver', () => {
       ],
     };
     const fileSchema = createFileSchema(imageConfig);
-    const FileModel = mongooseConn.model(`${imageConfig.name}_File`, fileSchema);
+    const FileModel = mongooseConn.model('Image_File', fileSchema);
 
     const files = [
       {

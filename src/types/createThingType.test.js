@@ -33,7 +33,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -79,7 +79,7 @@ describe('createThingType', () => {
         },
       ],
     });
-    const expectedResult = `type Person {
+    const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -143,7 +143,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Person {
+    const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -243,7 +243,7 @@ describe('createThingType', () => {
         },
       ],
     });
-    const expectedResult = `type Person {
+    const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -305,7 +305,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -349,7 +349,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -390,7 +390,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -432,7 +432,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -474,7 +474,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -535,7 +535,7 @@ describe('createThingType', () => {
       ],
     });
 
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -585,7 +585,7 @@ describe('createThingType', () => {
         },
       ],
     };
-    const expectedResult = `type Example {
+    const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!

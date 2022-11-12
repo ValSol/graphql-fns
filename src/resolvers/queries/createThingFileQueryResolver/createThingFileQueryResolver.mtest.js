@@ -25,7 +25,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createThingQueryResolver', () => {
+describe('createThingFileQueryResolver', () => {
   const generalConfig: GeneralConfig = { thingConfigs: {} };
   const serversideConfig = {
     composeFileFieldsData: {
@@ -43,7 +43,7 @@ describe('createThingQueryResolver', () => {
   };
   test('should create query thing resolver', async () => {
     const imageConfig: ThingConfig = {
-      name: 'Image',
+      name: 'RootImage',
       file: true,
       textFields: [
         { name: 'fileId' },
@@ -56,7 +56,7 @@ describe('createThingQueryResolver', () => {
       ],
     };
     const fileSchema = createFileSchema(imageConfig);
-    const FileModel = mongooseConn.model(`${imageConfig.name}_File`, fileSchema);
+    const FileModel = mongooseConn.model('Image_File', fileSchema);
 
     await FileModel.create({
       filename: 'photo.jpg',
@@ -67,7 +67,7 @@ describe('createThingQueryResolver', () => {
     });
 
     const hash = '037bca6dff986131efdf996ed46c30ad';
-    await FileModel.create({
+    const { _id: id } = await FileModel.create({
       filename: 'photo2.jpg',
       mimetype: 'image/jpeg',
       encoding: '7bit',
@@ -87,11 +87,21 @@ describe('createThingQueryResolver', () => {
 
     const whereOne = { hash };
     if (!ImageFile) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
     const imageFile = await ImageFile(null, { whereOne }, { mongooseConn, pubsub });
 
+    expect(imageFile.id.toString()).toBe(id.toString());
     expect(imageFile.hash).toBe(hash);
     expect(imageFile.desktop).toBe(`/images/${hash}_desktop`);
     expect(imageFile.tablet).toBe(`/images/${hash}_tablet`);
     expect(imageFile.mobile).toBe(`/images/${hash}_mobile`);
+
+    const imageFile2 = await ImageFile(null, { whereOne: { id } }, { mongooseConn, pubsub });
+
+    expect(imageFile2.id.toString()).toBe(id.toString());
+    expect(imageFile2.hash).toBe(hash);
+    expect(imageFile2.desktop).toBe(`/images/${hash}_desktop`);
+    expect(imageFile2.tablet).toBe(`/images/${hash}_tablet`);
+    expect(imageFile2.mobile).toBe(`/images/${hash}_mobile`);
   });
 });

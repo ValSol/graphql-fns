@@ -31,7 +31,7 @@ const createThingType = (
   const thingTypeArray = [
     // use not required ID in embedded things...
     // ... to not provoke error for null embedded objects
-    `type ${name} {
+    `type ${name} ${embedded || (file && !name.startsWith('Root')) ? '' : 'implements Node '}{
   id: ID!`,
   ];
 

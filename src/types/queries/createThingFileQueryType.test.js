@@ -9,10 +9,10 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createThingFileQueryType', () => {
   test('should create query', () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'RootExample',
       file: true,
     };
-    const expectedResult = '  ExampleFile(whereOne: FileWhereOneInput!): Example!';
+    const expectedResult = '  RootExampleFile(whereOne: FileWhereOneInput!): RootExample!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingFileQueryAttributes, dic);
@@ -21,7 +21,7 @@ describe('createThingFileQueryType', () => {
 
   test('should create empty query', () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'RootExample',
     };
     const expectedResult = '';
     const dic = {};

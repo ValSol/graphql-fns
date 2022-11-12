@@ -12,18 +12,31 @@ const getProjectionFromSelectionSet = (selectionSet, path: Path): { [fieldName: 
     return obj ? getProjectionFromSelectionSet(obj.selectionSet, rest) : {};
   }
 
-  return selections
+  const result = selections
     .filter(({ kind }) => kind === 'Field')
     .map(({ name: { value } }) => value)
     .filter((field) => field !== '__typename')
-    .reduce((prev, value, i, array) => {
+    .reduce((prev, value) => {
       if (value !== 'id') {
         prev[value] = 1; // eslint-disable-line no-param-reassign
-      } else if (array.length === 1) {
-        prev._id = 1; // eslint-disable-line no-param-reassign, no-underscore-dangle
       }
+
       return prev;
     }, {});
+
+  selections
+    .filter(({ kind }) => kind === 'InlineFragment')
+    .forEach(({ selectionSet: selectionSet2 }) => {
+      const inlineResult = getProjectionFromSelectionSet(selectionSet2, []);
+
+      Object.assign(result, inlineResult);
+    });
+
+  if (!Object.keys(result).length) {
+    result._id = 1; // eslint-disable-line no-underscore-dangle
+  }
+
+  return result;
 };
 
 const getProjectionFromInfo = (info: Object, path?: Path): { [fieldName: string]: 1 } => {

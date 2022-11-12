@@ -1,8 +1,8 @@
 // @flow
 /* eslint-env jest */
-import type { SimplifiedThingConfig, ThingConfig } from '../flowTypes';
+import type { SimplifiedThingConfig, ThingConfig } from '../../flowTypes';
 
-import composeThingConfigs from './composeThingConfigs';
+import composeThingConfigs from './index';
 
 describe('composeThingConfigs', () => {
   test('compose simple thingConfigs', () => {
@@ -286,9 +286,14 @@ describe('composeThingConfigs', () => {
       textFields: [
         {
           name: 'fileId',
+          freeze: true,
         },
         {
           name: 'address',
+          freeze: true,
+        },
+        {
+          name: 'title',
         },
       ],
     };
@@ -301,9 +306,29 @@ describe('composeThingConfigs', () => {
       textFields: [
         {
           name: 'fileId',
+          freeze: true,
         },
         {
           name: 'address',
+          freeze: true,
+        },
+        {
+          name: 'title',
+        },
+      ],
+    };
+
+    const rootImageConfig = {
+      name: 'RootImage',
+      file: true,
+      textFields: [
+        {
+          name: 'fileId',
+          freeze: true,
+        },
+        {
+          name: 'address',
+          freeze: true,
         },
       ],
     };
@@ -331,6 +356,7 @@ describe('composeThingConfigs', () => {
     const expectedResult = {
       Example: thingConfig,
       Image: imageConfig,
+      RootImage: rootImageConfig,
     };
 
     const result = composeThingConfigs(simplifiedThingConfigs);

@@ -39,7 +39,10 @@ const createThingFileCountQueryResolver = (
     const { mongooseConn } = context;
 
     const fileSchema = createFileSchema(thingConfig);
-    const FileModel = mongooseConn.model(`${name}_File`, fileSchema);
+
+    const nakedName = name.slice('Root'.length);
+
+    const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 
     const { where: conditions } = mergeWhereAndFilter(filter, where, thingConfig);
 

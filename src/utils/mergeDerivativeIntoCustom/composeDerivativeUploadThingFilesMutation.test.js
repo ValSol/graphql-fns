@@ -9,7 +9,7 @@ import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeUploadThingFilesMutation', () => {
   const imageConfig: ThingConfig = {
-    name: 'Image',
+    name: 'RootImage',
     file: true,
     textFields: [
       {
@@ -22,7 +22,7 @@ describe('composeDerivativeUploadThingFilesMutation', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    allow: { Image: ['uploadThingFiles'] },
+    allow: { RootImage: ['uploadThingFiles'] },
     suffix: 'ForCatalog',
     Example: {
       floatFields: [{ name: 'floatField' }],

@@ -1,8 +1,10 @@
 // @flow
 /* eslint-env jest */
+
 import getProjectionFromInfo from './index';
 import info from '../info.auxiliary';
 import info2 from './info2.auxiliary';
+import info3 from './info3.auxiliary';
 
 describe('getProjectionFromInfo', () => {
   test('should return object with fields from query info', () => {
@@ -57,6 +59,19 @@ describe('getProjectionFromInfo', () => {
     ];
     const result = getProjectionFromInfo(info2, path);
     const expectedResult = {};
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return object with fields query info from root - path = [] for node info', () => {
+    const path = [];
+    const result = getProjectionFromInfo(info3, path);
+    const expectedResult = {
+      banquetHall: 1,
+      commentList: 1,
+      conferenceHall: 1,
+      menu: 1,
+      ukTitle: 1,
+    };
     expect(result).toEqual(expectedResult);
   });
 });

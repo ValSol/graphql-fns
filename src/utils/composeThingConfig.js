@@ -24,7 +24,7 @@ const composeThingConfig = (
   thingConfig: ThingConfig,
   thingConfigs: { [thingName: string]: ThingConfig },
 ) => {
-  const { name, embedded, file } = simplifiedThingConfig;
+  const { name, embedded } = simplifiedThingConfig;
   const {
     embeddedFields: simplifiedEmbeddedFields,
     duplexFields: simplifiedDuplexFields,
@@ -46,7 +46,7 @@ const composeThingConfig = (
         if (forbiddenFieldNames.includes(fieldName)) {
           throw new TypeError(`Forbidden field name: "${fieldName}" in thing: "${name}"!`);
         }
-        if (freeze && (embedded || file)) {
+        if (freeze && embedded) {
           throw new TypeError(
             `Forbidden freeze field: "${fieldName}" in ${
               embedded ? 'embedded' : 'file'

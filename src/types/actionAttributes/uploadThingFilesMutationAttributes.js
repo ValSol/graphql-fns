@@ -31,7 +31,8 @@ const argTypes = [
 
 const actionReturnConfig = true;
 
-const actionAllowed = (derivativeConfig: ThingConfig): boolean => Boolean(derivativeConfig.file);
+const actionAllowed = (thingConfig: ThingConfig): boolean =>
+  Boolean(thingConfig.file && thingConfig.name.startsWith('Root'));
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

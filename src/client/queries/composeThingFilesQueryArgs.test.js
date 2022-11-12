@@ -10,14 +10,14 @@ describe('composeThingFileQueryArgs', () => {
   test('should compose thing query args ', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
-      name: 'Image',
+      name: 'RootImage',
       file: true,
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 
     const expectedResult = [
-      'query Home_ImageFiles($where: FileWhereInput) {',
-      '  ImageFiles(where: $where) {',
+      'query Home_RootImageFiles($where: FileWhereInput) {',
+      '  RootImageFiles(where: $where) {',
     ];
 
     const result = composeActionArgs(prefixName, thingConfig, thingFilesQueryAttributes, {});

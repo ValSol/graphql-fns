@@ -9,10 +9,10 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createThingFileCountQueryType', () => {
   test('should create query', () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'RootExample',
       file: true,
     };
-    const expectedResult = '  ExampleFileCount(where: FileWhereInput): Int!';
+    const expectedResult = '  RootExampleFileCount(where: FileWhereInput): Int!';
     const dic = {};
 
     const result = composeStandardActionSignature(thingConfig, thingFileCountQueryAttributes, dic);
@@ -21,7 +21,7 @@ describe('createThingFileCountQueryType', () => {
 
   test('should create empty query', () => {
     const thingConfig: ThingConfig = {
-      name: 'Example',
+      name: 'RootExample',
     };
     const expectedResult = '';
     const dic = {};

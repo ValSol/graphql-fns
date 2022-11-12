@@ -127,6 +127,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const thingQueryTypes2 = thingQueryTypes.length
     ? `type Query {
+  node(id: ID!): Node
 ${thingQueryTypes.join('\n')}
 }`
     : '';

@@ -11,7 +11,7 @@ const { default: createThingSchema } = require('../../../mongooseModels/createTh
 const {
   default: createCreateThingMutationResolver,
 } = require('../../mutations/createCreateThingMutationResolver');
-const { default: info } = require('../../utils/info.auxiliary.js');
+const { default: info } = require('../../utils/info.auxiliary');
 const { default: createThingQueryResolver } = require('./index');
 
 let mongooseConn;
