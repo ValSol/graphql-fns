@@ -77,29 +77,60 @@ describe('createUploadThingFilesMutationResolver', () => {
       {
         name: 'fileId',
         required: true,
+        freeze: true,
       },
       {
         name: 'desktop',
         required: true,
+        freeze: true,
       },
       {
         name: 'tablet',
         required: true,
+        freeze: true,
       },
       {
         name: 'mobile',
         required: true,
+        freeze: true,
+      },
+    ],
+  };
+
+  const rootImageConfig: ThingConfig = {
+    name: 'RootImage',
+    file: true,
+    textFields: [
+      {
+        name: 'fileId',
+        required: true,
+        freeze: true,
+      },
+      {
+        name: 'desktop',
+        required: true,
+        freeze: true,
+      },
+      {
+        name: 'tablet',
+        required: true,
+        freeze: true,
+      },
+      {
+        name: 'mobile',
+        required: true,
+        freeze: true,
       },
     ],
   };
 
   const generalConfig: GeneralConfig = {
-    thingConfigs: { Image: imageConfig },
+    thingConfigs: { Image: imageConfig, RootImage: rootImageConfig },
   };
 
   test('should create mutation to upload file fields', async () => {
     const uploadThingFiles = createUploadThingFilesMutationResolver(
-      imageConfig,
+      rootImageConfig,
       generalConfig,
       serversideConfig,
       true,

@@ -35,7 +35,10 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { mongooseConn } = context;
 
   const fileSchema = createFileSchema(thingConfig);
-  const FileModel = mongooseConn.model(`${name}_File`, fileSchema);
+
+  const nakedName = name.slice('Root'.length);
+
+  const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 
   if (files.length !== hashes.length) return null;
 
@@ -55,7 +58,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   for (let i = 0; i < filesUploaded.length; i += 1) {
     const hash = hashes[i];
     if (!filesDic[hash] && !usedHashes.includes(hash)) {
-      promises.push(saveFiles[name](filesUploaded[i], hash, uploadDate));
+      promises.push(saveFiles[nakedName](filesUploaded[i], hash, uploadDate));
       usedHashes.push(hash);
     }
   }
@@ -78,7 +81,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   newlyUploadedFiles.reduce((prev, item) => ((prev[item.hash] = item), prev), filesDic);
 
   return hashes.map((hash) => ({
-    ...composeFileFieldsData[name](filesDic[hash]),
+    ...composeFileFieldsData[nakedName](filesDic[hash]),
     ...filesDic[hash],
     id: filesDic[hash]._id, // eslint-disable-line no-underscore-dangle
   }));
