@@ -174,6 +174,17 @@ const createThingType = (
 
   thingTypeArray.push('}');
 
+  if (!(embedded || file)) {
+    thingTypeArray.push(`type ${name}Edge {
+  node: ${name}
+  cursor: String!
+}
+type ${name}Connection {
+  pageInfo: PageInfo!
+  edges: [${name}Edge!]
+}`);
+  }
+
   const result = thingTypeArray.join('\n');
 
   return result;

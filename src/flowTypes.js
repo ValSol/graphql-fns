@@ -771,7 +771,8 @@ export type Periphery = Map<
 export type NearInput = {|
   +geospatialField: string,
   +coordinates: GeospatialPoint,
-  +maxDistance: number,
+  +maxDistance?: number,
+  +minDistance?: number,
 |};
 
 export type NearMongodb = {
@@ -779,14 +780,16 @@ export type NearMongodb = {
   [key: string]: {
     $nearSphere: {
       $geometry: MongodbGeospatialPoint,
-      $maxDistance: number,
+      $maxDistance?: number,
+      $minDistance?: number,
     },
   },
 };
 
 export type NearForAggregateMongodb = {
   near: MongodbGeospatialPoint,
-  maxDistance: number,
+  maxDistance?: number,
+  minDistance?: number,
   distanceField: string,
   key: string,
   spherical: true,

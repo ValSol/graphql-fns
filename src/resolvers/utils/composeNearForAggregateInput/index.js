@@ -6,14 +6,31 @@ const composeNearForAggregateInput = (near: NearInput): NearForAggregateMongodb 
     geospatialField,
     coordinates: { lng, lat },
     maxDistance,
+    minDistance,
   } = near;
-  return {
+
+  const result: NearForAggregateMongodb = {
     near: { type: 'Point', coordinates: [lng, lat] },
-    maxDistance,
     distanceField: `${geospatialField}_distance`,
     key: `${geospatialField}.coordinates`,
     spherical: true,
   };
+
+  if (typeof maxDistance === 'number') {
+    result.maxDistance = maxDistance;
+  }
+
+  if (typeof minDistance === 'number') {
+    result.minDistance = minDistance;
+  }
+
+  if (typeof maxDistance === 'undefined' && typeof minDistance === 'undefined') {
+    throw new TypeError(
+      `Got undefined maxDistance & minDistance in nearInput of "${geospatialField}" field!`,
+    );
+  }
+
+  return result;
 };
 
 export default composeNearForAggregateInput;

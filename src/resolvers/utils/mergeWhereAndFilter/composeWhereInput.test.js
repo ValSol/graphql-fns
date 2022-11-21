@@ -156,6 +156,7 @@ describe('composeWhereInput', () => {
           AND: [
             { name: 'Вася' },
             { code2_nin: ['Misha-1', 'Misha-2', 'Misha-3'] },
+            { code2_gt: 'Misha' },
             { floatField_gt: 77.3 },
           ],
         },
@@ -186,6 +187,7 @@ describe('composeWhereInput', () => {
             $and: [
               { name: { $eq: 'Вася' } },
               { code2: { $nin: ['Misha-1', 'Misha-2', 'Misha-3'] } },
+              { code2: { $gt: 'Misha' } },
               { floatField: { $gt: 77.3 } },
             ],
           },
@@ -416,6 +418,22 @@ describe('composeWhereInput', () => {
           },
         ],
       },
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for flat data', () => {
+    const where = {
+      _id_gt: '123456780',
+    };
+
+    const result = composeWhereInput(where, thingConfig);
+    const expectedResult = {
+      where: {
+        _id: { $gt: '123456780' },
+      },
+      lookups: [],
     };
 
     expect(result).toEqual(expectedResult);

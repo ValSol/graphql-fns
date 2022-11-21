@@ -19,6 +19,12 @@ describe('composeCommonUseTypes', () => {
   begin: Int
   end: Int
 }`,
+      `type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}`,
     ];
 
     const result = composeCommonUseTypes();

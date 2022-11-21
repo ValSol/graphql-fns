@@ -19,9 +19,10 @@ const createThingNearInputType: InputCreator = (thingConfig) => {
 ${fieldLines.join('\n')}
 }
 input ${name}NearInput {
-  geospatialField: ${name}GeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
+  geospatialField: ${name}GeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
   maxDistance: Float
+  minDistance: Float
 }`
     : '';
 

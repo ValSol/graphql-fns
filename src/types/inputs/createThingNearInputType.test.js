@@ -48,9 +48,10 @@ describe('createThingNearInputType', () => {
   position
 }
 input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
+  geospatialField: ExampleGeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
   maxDistance: Float
+  minDistance: Float
 }`,
       {},
     ];

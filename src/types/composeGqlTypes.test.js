@@ -132,6 +132,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Menu implements Node {
   id: ID!
   createdAt: DateTime!
@@ -139,6 +145,14 @@ type Menu implements Node {
   name: String!
   clone: MenuClone
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+}
+type MenuEdge {
+  node: Menu
+  cursor: String!
+}
+type MenuConnection {
+  pageInfo: PageInfo!
+  edges: [MenuEdge!]
 }
 type MenuClone implements Node {
   id: ID!
@@ -148,6 +162,14 @@ type MenuClone implements Node {
   original: Menu
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
 }
+type MenuCloneEdge {
+  node: MenuClone
+  cursor: String!
+}
+type MenuCloneConnection {
+  pageInfo: PageInfo!
+  edges: [MenuCloneEdge!]
+}
 type MenuSection implements Node {
   id: ID!
   createdAt: DateTime!
@@ -155,12 +177,28 @@ type MenuSection implements Node {
   name: String!
   menu: Menu
 }
+type MenuSectionEdge {
+  node: MenuSection
+  cursor: String!
+}
+type MenuSectionConnection {
+  pageInfo: PageInfo!
+  edges: [MenuSectionEdge!]
+}
 type MenuCloneSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
   menu: MenuClone
+}
+type MenuCloneSectionEdge {
+  node: MenuCloneSection
+  cursor: String!
+}
+type MenuCloneSectionConnection {
+  pageInfo: PageInfo!
+  edges: [MenuCloneSectionEdge!]
 }
 input MenuSectionWhereInput {
   id_in: [ID!]
@@ -650,6 +688,10 @@ type Query {
   MenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
   MenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   MenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  MenusThroughConnection(where: MenuWhereInput, sort: MenuSortInput, after: String, before: String, first: Int, last: Int): MenuConnection
+  MenuClonesThroughConnection(where: MenuCloneWhereInput, sort: MenuCloneSortInput, after: String, before: String, first: Int, last: Int): MenuCloneConnection
+  MenuSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
+  MenuCloneSectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
   MenusByUnique(where: MenuWhereByUniqueInput!, sort: MenuSortInput): [Menu!]!
   MenuClonesByUnique(where: MenuCloneWhereByUniqueInput!, sort: MenuCloneSortInput): [MenuClone!]!
   MenuSectionsByUnique(where: MenuSectionWhereByUniqueInput!, sort: MenuSectionSortInput): [MenuSection!]!
@@ -874,6 +916,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 enum WeekdaysEnumeration {
   a0
   a1
@@ -915,6 +963,14 @@ type Example implements Node {
   photos(slice: SliceInput): [Image!]!
   position: GeospatialPoint
 }
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
+}
 type Image {
   id: ID!
   fileId: String!
@@ -950,17 +1006,29 @@ input ExampleWhereInput {
   textField1_in: [String!]
   textField1_nin: [String!]
   textField1_ne: String
+  textField1_gt: String
+  textField1_gte: String
+  textField1_lt: String
+  textField1_lte: String
   textField1_re: [RegExp!]
   textField2: String
   textField2_in: [String!]
   textField2_nin: [String!]
   textField2_ne: String
+  textField2_gt: String
+  textField2_gte: String
+  textField2_lt: String
+  textField2_lte: String
   textField2_re: [RegExp!]
   textField2_exists: Boolean
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
   textField3_ne: String
+  textField3_gt: String
+  textField3_gte: String
+  textField3_lt: String
+  textField3_lte: String
   textField3_re: [RegExp!]
   textField3_exists: Boolean
   day: WeekdaysEnumeration
@@ -1000,17 +1068,29 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField1_in: [String!]
   textField1_nin: [String!]
   textField1_ne: String
+  textField1_gt: String
+  textField1_gte: String
+  textField1_lt: String
+  textField1_lte: String
   textField1_re: [RegExp!]
   textField2: String
   textField2_in: [String!]
   textField2_nin: [String!]
   textField2_ne: String
+  textField2_gt: String
+  textField2_gte: String
+  textField2_lt: String
+  textField2_lte: String
   textField2_re: [RegExp!]
   textField2_exists: Boolean
   textField3: String
   textField3_in: [String!]
   textField3_nin: [String!]
   textField3_ne: String
+  textField3_gt: String
+  textField3_gte: String
+  textField3_lt: String
+  textField3_lte: String
   textField3_re: [RegExp!]
   textField3_exists: Boolean
   day: WeekdaysEnumeration
@@ -1050,9 +1130,10 @@ enum ExampleGeospatialFieldNamesEnum {
   position
 }
 input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
+  geospatialField: ExampleGeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
   maxDistance: Float
+  minDistance: Float
 }
 enum ExampleTextNamesEnum {
   textField1
@@ -1233,6 +1314,7 @@ type Query {
   RootImageFiles(where: FileWhereInput): [RootImage!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String): [Example!]!
 }
 type Mutation {
@@ -1321,6 +1403,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type GeospatialPoint {
   lng: Float!
   lat: Float!
@@ -1352,6 +1440,14 @@ type Example1 implements Node {
   textField3: String!
   position: GeospatialPoint
 }
+type Example1Edge {
+  node: Example1
+  cursor: String!
+}
+type Example1Connection {
+  pageInfo: PageInfo!
+  edges: [Example1Edge!]
+}
 type Example2 implements Node {
   id: ID!
   createdAt: DateTime!
@@ -1359,6 +1455,14 @@ type Example2 implements Node {
   textField1(slice: SliceInput): [String!]!
   textField2(slice: SliceInput): [String!]!
   area: GeospatialPolygon
+}
+type Example2Edge {
+  node: Example2
+  cursor: String!
+}
+type Example2Connection {
+  pageInfo: PageInfo!
+  edges: [Example2Edge!]
 }
 input Example1WhereOneInput {
   id: ID!
@@ -1422,9 +1526,10 @@ enum Example1GeospatialFieldNamesEnum {
   position
 }
 input Example1NearInput {
-  geospatialField: Example1GeospatialFieldNamesEnum
-  coordinates: GeospatialPointInput
+  geospatialField: Example1GeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
   maxDistance: Float
+  minDistance: Float
 }
 input Example2WhereInput {
   id_in: [ID!]
@@ -1587,6 +1692,8 @@ type Query {
   Example2(whereOne: Example2WhereOneInput!): Example2!
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
   Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
+  Example1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int): Example1Connection
+  Example2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int): Example2Connection
   Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
   Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput): [Example2!]!
 }
@@ -1689,6 +1796,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -1700,11 +1813,27 @@ type Person implements Node {
   location: Place!
   favoritePlace: Place
 }
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
+}
 type Place implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   title: String!
+}
+type PlaceEdge {
+  node: Place
+  cursor: String!
+}
+type PlaceConnection {
+  pageInfo: PageInfo!
+  edges: [PlaceEdge!]
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1923,6 +2052,8 @@ type Query {
   Place(whereOne: PlaceWhereOneInput!): Place!
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
@@ -2030,6 +2161,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2040,6 +2177,14 @@ type Person implements Node {
   locations(slice: SliceInput): [Address!]!
   place: Address
   places(slice: SliceInput): [Address!]!
+}
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
 }
 type Address {
   id: ID!
@@ -2181,6 +2326,7 @@ type Query {
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
 }
 type Mutation {
@@ -2282,6 +2428,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2293,6 +2445,14 @@ type Person implements Node {
   location: Place!
   favoritePlace: Place
 }
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
+}
 type Place implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2300,6 +2460,14 @@ type Place implements Node {
   name: String
   citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+}
+type PlaceEdge {
+  node: Place
+  cursor: String!
+}
+type PlaceConnection {
+  pageInfo: PageInfo!
+  edges: [PlaceEdge!]
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2604,6 +2772,8 @@ type Query {
   Place(whereOne: PlaceWhereOneInput!): Place!
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
 }
@@ -2677,11 +2847,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleWhereOneInput {
   id: ID!
@@ -2755,6 +2939,7 @@ type Query {
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
 }`;
 
@@ -2789,11 +2974,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleCreateInput {
   id: ID
@@ -2829,6 +3028,10 @@ input ExampleWhereInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
   AND: [ExampleWhereInput!]
@@ -2856,6 +3059,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
 }
@@ -2916,11 +3123,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3008,11 +3229,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3101,11 +3336,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleCreateInput {
   id: ID
@@ -3157,11 +3406,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 input ExampleCreateInput {
   id: ID
@@ -3221,11 +3484,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 type Mutation {
   loadExample(path: String!): Example
@@ -3272,11 +3549,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 type Query {
   node(id: ID!): Node
@@ -3352,11 +3643,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }
 type ExampleForCatalog implements Node {
   id: ID!
@@ -3365,6 +3670,14 @@ type ExampleForCatalog implements Node {
   textField: String
   start: DateTime!
   end: DateTime
+}
+type ExampleForCatalogEdge {
+  node: ExampleForCatalog
+  cursor: String!
+}
+type ExampleForCatalogConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleForCatalogEdge!]
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3387,6 +3700,10 @@ input ExampleWhereInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
   AND: [ExampleWhereInput!]
@@ -3414,6 +3731,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
 }
@@ -3453,6 +3774,10 @@ input ExampleForCatalogWhereInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
   AND: [ExampleForCatalogWhereInput!]
@@ -3480,6 +3805,10 @@ input ExampleForCatalogWhereWithoutBooleanOperationsInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_exists: Boolean
 }
@@ -3602,6 +3931,12 @@ input SliceInput {
   begin: Int
   end: Int
 }
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
 type Menu implements Node {
   id: ID!
   createdAt: DateTime!
@@ -3609,12 +3944,28 @@ type Menu implements Node {
   menuName: String
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
 }
+type MenuEdge {
+  node: Menu
+  cursor: String!
+}
+type MenuConnection {
+  pageInfo: PageInfo!
+  edges: [MenuEdge!]
+}
 type MenuSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   menuSectionName: String
   root: Menu
+}
+type MenuSectionEdge {
+  node: MenuSection
+  cursor: String!
+}
+type MenuSectionConnection {
+  pageInfo: PageInfo!
+  edges: [MenuSectionEdge!]
 }
 input MenuSectionWhereInput {
   id_in: [ID!]
@@ -3637,6 +3988,10 @@ input MenuSectionWhereInput {
   menuSectionName_in: [String!]
   menuSectionName_nin: [String!]
   menuSectionName_ne: String
+  menuSectionName_gt: String
+  menuSectionName_gte: String
+  menuSectionName_lt: String
+  menuSectionName_lte: String
   menuSectionName_re: [RegExp!]
   menuSectionName_exists: Boolean
   AND: [MenuSectionWhereInput!]
@@ -3664,6 +4019,10 @@ input MenuSectionWhereWithoutBooleanOperationsInput {
   menuSectionName_in: [String!]
   menuSectionName_nin: [String!]
   menuSectionName_ne: String
+  menuSectionName_gt: String
+  menuSectionName_gte: String
+  menuSectionName_lt: String
+  menuSectionName_lte: String
   menuSectionName_re: [RegExp!]
   menuSectionName_exists: Boolean
 }
@@ -3688,6 +4047,10 @@ input MenuWhereInput {
   menuName_in: [String!]
   menuName_nin: [String!]
   menuName_ne: String
+  menuName_gt: String
+  menuName_gte: String
+  menuName_lt: String
+  menuName_lte: String
   menuName_re: [RegExp!]
   menuName_exists: Boolean
   AND: [MenuWhereInput!]
@@ -3715,6 +4078,10 @@ input MenuWhereWithoutBooleanOperationsInput {
   menuName_in: [String!]
   menuName_nin: [String!]
   menuName_ne: String
+  menuName_gt: String
+  menuName_gte: String
+  menuName_lt: String
+  menuName_lte: String
   menuName_re: [RegExp!]
   menuName_exists: Boolean
 }

@@ -15,4 +15,13 @@ describe('composeSortForAggregateInput', () => {
 
     expect(result).toEqual(expectedResult);
   });
+
+  test('should return $natural sorting field', () => {
+    const sortBy = ['$natural_ASC'];
+
+    const expectedResult = [{ $sort: { $natural: 1 } }];
+    const result = composeSortForAggregateInput(sortBy);
+
+    expect(result).toEqual(expectedResult);
+  });
 });

@@ -118,11 +118,11 @@ const composeWhereInputRecursively = (
         );
       }
 
-      const { relationalKey, thingConfig: thingConfig2, value } = composeRelationalKey(
-        { [key]: where[key] },
-        lookupArray,
-        thingConfig,
-      );
+      const {
+        relationalKey,
+        thingConfig: thingConfig2,
+        value,
+      } = composeRelationalKey({ [key]: where[key] }, lookupArray, thingConfig);
 
       const result2 = composeWhereInputRecursively(
         value,

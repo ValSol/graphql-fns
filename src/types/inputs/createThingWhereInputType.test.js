@@ -43,6 +43,10 @@ describe('createThingWhereInputType', () => {
   code_in: [String!]
   code_nin: [String!]
   code_ne: String
+  code_gt: String
+  code_gte: String
+  code_lt: String
+  code_lte: String
   code_re: [RegExp!]
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
@@ -68,6 +72,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   code_in: [String!]
   code_nin: [String!]
   code_ne: String
+  code_gt: String
+  code_gte: String
+  code_lt: String
+  code_lte: String
   code_re: [RegExp!]
 }`,
       {},
@@ -114,12 +122,20 @@ input ExampleWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
   AND: [ExampleWhereInput!]
@@ -147,12 +163,20 @@ input ExampleWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
 }`,
@@ -215,12 +239,20 @@ input ExampleWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
   spouse: ID
@@ -261,12 +293,20 @@ input PersonWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
   spouse: ID
@@ -344,12 +384,20 @@ input PersonWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
   spouse: ID
@@ -390,12 +438,20 @@ input PersonWhereWithoutBooleanOperationsInput {
   firstName_in: [String!]
   firstName_nin: [String!]
   firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
   firstName_re: [RegExp!]
   firstName_exists: Boolean
   lastName: String
   lastName_in: [String!]
   lastName_nin: [String!]
   lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
   lastName_re: [RegExp!]
   lastName_exists: Boolean
   spouse: ID

@@ -16,6 +16,7 @@ import thingFile from './thingFileQueryAttributes';
 import thingFiles from './thingFilesQueryAttributes';
 import thing from './thingQueryAttributes';
 import things from './thingsQueryAttributes';
+import thingsThroughConnection from './thingsThroughConnectionQueryAttributes';
 import thingsByUnique from './thingsByUniqueQueryAttributes';
 import createThing from './createThingMutationAttributes';
 import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
@@ -61,6 +62,7 @@ const actionAttributes = {
   thingFiles,
   thing,
   things,
+  thingsThroughConnection,
   thingsByUnique,
   updateFilteredThings,
   updateFilteredThingsReturnScalar,

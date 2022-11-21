@@ -49,6 +49,10 @@ describe('composeChildActionSignature util', () => {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_size: Int
   textField_notsize: Int
@@ -77,6 +81,10 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField_in: [String!]
   textField_nin: [String!]
   textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
   textField_re: [RegExp!]
   textField_size: Int
   textField_notsize: Int

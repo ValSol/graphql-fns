@@ -42,6 +42,14 @@ describe('createThingType', () => {
   textField3: String!
   textField4(slice: SliceInput): [String!]!
   textField5(slice: SliceInput): [String!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -87,6 +95,14 @@ describe('createThingType', () => {
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
+}
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
 }`;
 
     const result = createThingType(personConfig, {});
@@ -153,6 +169,14 @@ describe('createThingType', () => {
   locations(slice: SliceInput): [Address!]!
   place: Address
   places(slice: SliceInput): [Address!]!
+}
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
 }`;
 
     const result = createThingType(personConfig, {});
@@ -253,6 +277,14 @@ describe('createThingType', () => {
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
+}
+type PersonEdge {
+  node: Person
+  cursor: String!
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]
 }`;
 
     const result = createThingType(personConfig, {});
@@ -317,6 +349,14 @@ describe('createThingType', () => {
   precedingArea: GeospatialPolygon
   favoriteAreas(slice: SliceInput): [GeospatialPolygon!]!
   worstAreas(slice: SliceInput): [GeospatialPolygon!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -357,6 +397,14 @@ describe('createThingType', () => {
   field2(slice: SliceInput): [CuisinesEnumeration!]!
   field3: WeekdaysEnumeration!
   field4(slice: SliceInput): [CuisinesEnumeration!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -399,6 +447,14 @@ describe('createThingType', () => {
   intField3: Int!
   intField4(slice: SliceInput): [Int!]!
   intField5(slice: SliceInput): [Int!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -441,6 +497,14 @@ describe('createThingType', () => {
   floatField3: Float!
   floatField4(slice: SliceInput): [Float!]!
   floatField5(slice: SliceInput): [Float!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -483,6 +547,14 @@ describe('createThingType', () => {
   booleanField3: Boolean!
   booleanField4(slice: SliceInput): [Boolean!]!
   booleanField5(slice: SliceInput): [Boolean!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -544,6 +616,14 @@ describe('createThingType', () => {
   hero: Image
   pictures(slice: SliceInput): [Image!]!
   photos(slice: SliceInput): [Image!]!
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});
@@ -591,6 +671,14 @@ describe('createThingType', () => {
   updatedAt: DateTime!
   counter: Int!
   textField1: String
+}
+type ExampleEdge {
+  node: Example
+  cursor: String!
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]
 }`;
 
     const result = createThingType(thingConfig, {});

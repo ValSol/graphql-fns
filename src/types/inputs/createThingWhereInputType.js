@@ -53,6 +53,10 @@ const composeInputFields = (
         fields.push(`  ${fieldName}_in: [String!]
   ${fieldName}_nin: [String!]
   ${fieldName}_ne: String
+  ${fieldName}_gt: String
+  ${fieldName}_gte: String
+  ${fieldName}_lt: String
+  ${fieldName}_lte: String
   ${fieldName}_re: [RegExp!]`);
       }
       if (index && !array) {

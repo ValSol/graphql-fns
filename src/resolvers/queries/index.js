@@ -9,6 +9,7 @@ import thingFile from './createThingFileQueryResolver';
 import thingFiles from './createThingFilesQueryResolver';
 import thing from './createThingQueryResolver';
 import things from './createThingsQueryResolver';
+import thingsThroughConnection from './createThingsThroughConnectionQueryResolver';
 import thingsByUnique from './createThingsByUniqueQueryResolver';
 
 const queries = {
@@ -21,6 +22,7 @@ const queries = {
   thingFiles,
   thing,
   things,
+  thingsThroughConnection,
   thingsByUnique,
 };
 

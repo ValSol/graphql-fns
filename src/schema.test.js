@@ -318,6 +318,7 @@ describe('graphql schema', () => {
 
     let typeDefs = composeGqlTypes(generalConfig);
     let resolvers = composeGqlResolvers(generalConfig);
+
     let schema = makeExecutableSchema({
       typeDefs,
       resolvers,
