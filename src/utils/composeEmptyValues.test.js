@@ -9,6 +9,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -26,6 +27,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -44,6 +46,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -62,6 +65,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -80,7 +84,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with file field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'desktop',
@@ -93,6 +97,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',
@@ -110,7 +115,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with file array field', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'desktop',
@@ -123,6 +128,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'photos',
@@ -141,7 +147,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with embedded field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -151,6 +157,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       embeddedFields: [
         {
           name: 'embeddedField',
@@ -168,7 +175,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with embedded array field', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -178,6 +185,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       embeddedFields: [
         {
           name: 'embeddedFields',
@@ -196,7 +204,7 @@ describe('composeEmptyValues', () => {
   test('should create the empty fields with embedded array field with composeEmptyValues', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -206,6 +214,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       embeddedFields: [
         {
           name: 'embeddedFields',
@@ -224,7 +233,7 @@ describe('composeEmptyValues', () => {
   test('should create the emebeded initial values with default composeEmptyValues', () => {
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField3',
@@ -236,7 +245,7 @@ describe('composeEmptyValues', () => {
 
     const embedded2Config: ThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField2',
@@ -254,7 +263,7 @@ describe('composeEmptyValues', () => {
 
     const embedded1Config: ThingConfig = {
       name: 'Embedded1',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField1',
@@ -272,6 +281,7 @@ describe('composeEmptyValues', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -306,6 +316,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField',
@@ -328,6 +339,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField',
@@ -345,6 +357,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'enumField',
@@ -363,6 +376,7 @@ describe('composeEmptyValues', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'geospatialFieldPoint',

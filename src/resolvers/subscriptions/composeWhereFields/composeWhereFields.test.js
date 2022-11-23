@@ -10,6 +10,7 @@ describe('composeWhereFields', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanFieldIndexed',

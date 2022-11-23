@@ -18,8 +18,7 @@ const argTypes = [(name: string): string => `${name}CreateInput!`];
 
 const actionReturnConfig = true;
 
-const actionAllowed = (thingConfig: ThingConfig): boolean =>
-  !(thingConfig.embedded || thingConfig.file);
+const actionAllowed = (thingConfig: ThingConfig): boolean => thingConfig.type === 'tangible';
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

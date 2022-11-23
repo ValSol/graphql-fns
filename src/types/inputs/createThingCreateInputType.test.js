@@ -9,6 +9,7 @@ describe('createThingCreateInputType', () => {
   test('should create thing input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -62,11 +63,13 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing input type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
@@ -121,7 +124,7 @@ input PersonCreateOrPushChildrenInput {
   test('should create embedded thing input type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -149,7 +152,7 @@ input PersonCreateOrPushChildrenInput {
   test('should create thing input type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -163,6 +166,7 @@ input PersonCreateOrPushChildrenInput {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -227,6 +231,7 @@ input PersonCreateOrPushChildrenInput {
     const menuSectionConfig: ThingConfig = {};
     const menuConfig: ThingConfig = {
       name: 'Menu',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'sections',
@@ -238,6 +243,7 @@ input PersonCreateOrPushChildrenInput {
     };
     Object.assign(menuSectionConfig, {
       name: 'MenuSection',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'menu',
@@ -311,6 +317,7 @@ input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -330,6 +337,7 @@ input MenuSectionCreateOrPushThru_menu_FieldChildrenInput {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -434,6 +442,7 @@ input PersonCreateOrPushThru_location_FieldChildrenInput {
   test('should create thing input type with geospatial fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -509,6 +518,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing input type with enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -560,6 +570,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing type with int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField1',
@@ -613,6 +624,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing type with float fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField1',
@@ -666,6 +678,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing type with boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField1',
@@ -719,7 +732,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create file thing input type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -746,7 +759,7 @@ input ExampleCreateOrPushChildrenInput {
   test('should create thing input type with embedded fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -760,6 +773,7 @@ input ExampleCreateOrPushChildrenInput {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

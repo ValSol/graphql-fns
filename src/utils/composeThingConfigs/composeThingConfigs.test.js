@@ -8,6 +8,7 @@ describe('composeThingConfigs', () => {
   test('compose simple thingConfigs', () => {
     const simplifiedThingConfig: SimplifiedThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField',
@@ -38,7 +39,7 @@ describe('composeThingConfigs', () => {
   test('compose relatianal & embedded fields thingConfigs', () => {
     const simplifiedEmbedded3Config: SimplifiedThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       enumFields: [
         {
           name: 'enumField',
@@ -55,7 +56,7 @@ describe('composeThingConfigs', () => {
 
     const simplifiedEmbedded2Config: SimplifiedThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -76,7 +77,7 @@ describe('composeThingConfigs', () => {
 
     const simplifiedEmbeddedConfig: SimplifiedThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -97,6 +98,7 @@ describe('composeThingConfigs', () => {
 
     const simplifiedThingConfig: SimplifiedThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -125,7 +127,7 @@ describe('composeThingConfigs', () => {
     const thingConfig: ThingConfig = {};
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       enumFields: [
         {
           name: 'enumField',
@@ -142,7 +144,7 @@ describe('composeThingConfigs', () => {
 
     const embedded2Config: ThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -163,7 +165,7 @@ describe('composeThingConfigs', () => {
 
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -184,6 +186,7 @@ describe('composeThingConfigs', () => {
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -216,6 +219,7 @@ describe('composeThingConfigs', () => {
   test('compose duplex fields thingConfigs', () => {
     const simplifiedThingConfig: SimplifiedThingConfig = {
       name: 'Example',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'duplexField',
@@ -236,6 +240,7 @@ describe('composeThingConfigs', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'duplexField',
@@ -262,6 +267,7 @@ describe('composeThingConfigs', () => {
   test('compose file fields thingConfigs', () => {
     const simplifiedThingConfig: SimplifiedThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -282,7 +288,7 @@ describe('composeThingConfigs', () => {
 
     const simplifiedImageConfig: SimplifiedThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -302,7 +308,7 @@ describe('composeThingConfigs', () => {
 
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -320,7 +326,7 @@ describe('composeThingConfigs', () => {
 
     const rootImageConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -335,6 +341,7 @@ describe('composeThingConfigs', () => {
 
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

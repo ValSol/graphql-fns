@@ -36,6 +36,7 @@ describe('createThingCountQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -130,6 +131,7 @@ describe('createThingCountQueryResolver', () => {
   test('should create query countThing resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -144,6 +146,7 @@ describe('createThingCountQueryResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',

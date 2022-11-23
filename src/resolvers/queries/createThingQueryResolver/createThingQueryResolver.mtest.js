@@ -35,6 +35,7 @@ describe('createThingQueryResolver', () => {
   test('should create query thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -114,6 +115,7 @@ describe('createThingQueryResolver', () => {
   test('should create query things resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -128,6 +130,7 @@ describe('createThingQueryResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',

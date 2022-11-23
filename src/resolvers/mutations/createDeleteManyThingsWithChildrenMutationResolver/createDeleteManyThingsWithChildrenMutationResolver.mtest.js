@@ -44,6 +44,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   const restaurantConfig: ThingConfig = {
     name: 'Restaurant',
+    type: 'tangible',
     textFields: [{ name: 'title', unique: true }],
     duplexFields: [
       {
@@ -69,6 +70,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(restaurantCloneConfig, {
     name: 'RestaurantClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -86,6 +88,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(menuConfig, {
     name: 'Menu',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -116,6 +119,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(menuCloneConfig, {
     name: 'MenuClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -140,6 +144,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(menuSectionConfig, {
     name: 'MenuSection',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -157,6 +162,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(menuSectionCloneConfig, {
     name: 'MenuSectionClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -174,6 +180,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(postConfig, {
     name: 'Post',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -198,6 +205,7 @@ describe('createDeleteManyThingsWithChildrenMutationResolver', () => {
 
   Object.assign(postCloneConfig, {
     name: 'PostClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',

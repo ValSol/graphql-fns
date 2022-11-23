@@ -9,6 +9,7 @@ describe('composeWhereInput', () => {
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'name',
@@ -255,6 +256,7 @@ describe('composeWhereInput', () => {
 
     const accessConfig = {
       name: 'Access',
+      type: 'tangible',
 
       textFields: [
         {
@@ -267,6 +269,7 @@ describe('composeWhereInput', () => {
 
     Object.assign(menusectionConfig, {
       name: 'Menusection',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'menu',
@@ -280,6 +283,7 @@ describe('composeWhereInput', () => {
 
     Object.assign(menuConfig, {
       name: 'Menu',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'sections',
@@ -301,6 +305,7 @@ describe('composeWhereInput', () => {
 
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'menu',
@@ -368,6 +373,7 @@ describe('composeWhereInput', () => {
   test('should return result for tree for relational where', () => {
     const restaurantLevelConfig: ThingConfig = {
       name: 'RestaurantLevel',
+      type: 'tangible',
 
       textFields: [
         {

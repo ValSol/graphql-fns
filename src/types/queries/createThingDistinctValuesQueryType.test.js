@@ -9,6 +9,7 @@ describe('createThingDistinctValuesQueryType', () => {
   test('should return empty string if there is not textFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'firstName',
@@ -32,6 +33,7 @@ describe('createThingDistinctValuesQueryType', () => {
   test('should create query', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

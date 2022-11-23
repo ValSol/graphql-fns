@@ -9,6 +9,7 @@ describe('composeChildActionSignature util', () => {
   test('should return right result', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -110,6 +111,7 @@ input ExampleSortInput {
   test('should return right result without dic', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

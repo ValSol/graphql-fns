@@ -7,6 +7,7 @@ import composeProjectionFromOptions from './composeProjectionFromOptions';
 describe('composeProjectionFromOptions', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     counter: true,
     textFields: [
       {

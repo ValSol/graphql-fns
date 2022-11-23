@@ -15,6 +15,7 @@ describe('composeObjectSignature', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -47,6 +48,7 @@ describe('composeObjectSignature', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -79,6 +81,7 @@ describe('composeObjectSignature', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

@@ -38,9 +38,8 @@ const argTypes = [
 
 const actionReturnConfig = true;
 
-const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
-  !(derivativeConfig.embedded || derivativeConfig.file) &&
-  Boolean(createFilesOfThingOptionsInputType(derivativeConfig)[1]); // eslint-disable-line no-unused-vars
+const actionAllowed = (thingConfig: ThingConfig): boolean =>
+  thingConfig.type === 'tangible' && Boolean(createFilesOfThingOptionsInputType(thingConfig)[1]); // eslint-disable-line no-unused-vars
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

@@ -37,6 +37,7 @@ describe('createThingQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

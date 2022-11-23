@@ -11,6 +11,7 @@ describe('createCopyManyThingsMutationResolver', () => {
     const menuCloneSectionConfig: ThingConfig = {};
     const menuConfig: ThingConfig = {
       name: 'Menu',
+      type: 'tangible',
 
       textFields: [
         {
@@ -39,6 +40,7 @@ describe('createCopyManyThingsMutationResolver', () => {
 
     Object.assign(menuCloneConfig, {
       name: 'MenuClone',
+      type: 'tangible',
 
       textFields: [
         {
@@ -66,6 +68,7 @@ describe('createCopyManyThingsMutationResolver', () => {
 
     Object.assign(menuSectionConfig, {
       name: 'MenuSection',
+      type: 'tangible',
 
       textFields: [
         {
@@ -85,6 +88,7 @@ describe('createCopyManyThingsMutationResolver', () => {
 
     Object.assign(menuCloneSectionConfig, {
       name: 'MenuCloneSection',
+      type: 'tangible',
 
       textFields: [
         {

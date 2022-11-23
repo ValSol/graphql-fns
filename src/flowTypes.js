@@ -200,9 +200,7 @@ type SimplifiedRelationalField = {
 
 export type SimplifiedThingConfig = {
   name: string,
-  embedded?: boolean, // true if related to embeddedFields
-  file?: boolean, // true if related to fileFields
-  custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
+  type?: string, // 'embedded', 'file', 'tangible', 'virtual',
   counter?: boolean, // if true thing has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<SimplifiedDuplexField>,
@@ -225,9 +223,7 @@ export type SimplifiedThingConfig = {
 
 export type ThingConfig = {
   name: string,
-  embedded?: boolean, // true if related to embeddedFields
-  file?: boolean, // true if related to fileFields
-  custom?: boolean, // may be used in custom queries & mutations to suppress id, createdAt & updatedAt auto-generation
+  type: string, // embedded, file, tangible (default), virtual,
   counter?: boolean, // if true thing has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<{

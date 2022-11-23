@@ -7,7 +7,7 @@ import createFileWhereOneInputType from './createFileWhereOneInputType';
 describe('createFileWhereOneInputType', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -20,7 +20,7 @@ describe('createFileWhereOneInputType', () => {
 
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    embedded: true,
+    type: 'embedded',
     textFields: [
       {
         name: 'fileId',
@@ -33,6 +33,7 @@ describe('createFileWhereOneInputType', () => {
 
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

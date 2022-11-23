@@ -8,6 +8,7 @@ describe('createThingWhereByUniqueInputType', () => {
   test('should create empty string if there are not any index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -37,6 +38,7 @@ describe('createThingWhereByUniqueInputType', () => {
   test('should create thing input type if there are text index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

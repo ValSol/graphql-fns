@@ -58,9 +58,6 @@ const composeFieldsWithChildArgs = (
     counter,
     dateTimeFields,
     duplexFields,
-    embedded,
-    file,
-    custom,
     embeddedFields,
     enumFields,
     fileFields,
@@ -69,15 +66,16 @@ const composeFieldsWithChildArgs = (
     geospatialFields,
     relationalFields,
     textFields,
+    type: configType,
   } = thingConfig;
   const { childArgs, currentChild, depth, include, exclude, shift } = options;
 
   const result = [];
 
-  if (!custom) {
+  if (configType !== 'virtual') {
     if (includeField('id', include, exclude)) result.push(`${'  '.repeat(shift)}id`);
 
-    if (!(embedded || file)) {
+    if (configType === 'tangible') {
       if (includeField('createdAt', include, exclude)) {
         result.push(`${'  '.repeat(shift)}createdAt`);
       }
@@ -94,7 +92,7 @@ const composeFieldsWithChildArgs = (
     textFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -114,7 +112,7 @@ const composeFieldsWithChildArgs = (
     dateTimeFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -134,7 +132,7 @@ const composeFieldsWithChildArgs = (
     intFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -154,7 +152,7 @@ const composeFieldsWithChildArgs = (
     floatFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -174,7 +172,7 @@ const composeFieldsWithChildArgs = (
     booleanFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -194,7 +192,7 @@ const composeFieldsWithChildArgs = (
     enumFields.reduce((prev, { name, array }) => {
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -215,7 +213,7 @@ const composeFieldsWithChildArgs = (
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
 
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -249,7 +247,7 @@ const composeFieldsWithChildArgs = (
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
 
-        if (array && !embedded) {
+        if (array && configType !== 'embedded') {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
           const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -394,7 +392,7 @@ const composeFieldsWithChildArgs = (
       if (includeField(name, include, exclude)) {
         const nameWithAlias = findNameWithAlias(name, include);
         if (geospatialType === 'Point') {
-          if (array && !embedded) {
+          if (array && configType !== 'embedded') {
             const nameOrAlias = getNameOrAlias(nameWithAlias);
             const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
             const currentChildArgs = composeArrArgs(newCurrentChild);
@@ -417,7 +415,7 @@ const composeFieldsWithChildArgs = (
           prev.push(`${'  '.repeat(shift)}}`);
         }
         if (geospatialType === 'Polygon') {
-          if (array && !embedded) {
+          if (array && configType !== 'embedded') {
             const nameOrAlias = getNameOrAlias(nameWithAlias);
             const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
             const currentChildArgs = composeArrArgs(newCurrentChild);

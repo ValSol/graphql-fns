@@ -10,7 +10,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeUploadThingFilesMutation', () => {
   const imageConfig: ThingConfig = {
     name: 'RootImage',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',

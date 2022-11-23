@@ -39,6 +39,7 @@ describe('createThingQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -135,6 +136,7 @@ describe('createThingQueryResolver', () => {
     const restaurantConfig: ThingConfig = {};
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
       booleanFields: [{ name: 'recommended', index: true }],
       // unique: true causes geospatial fetch error
       // textFields: [{ name: 'name' }, { name: 'num', unique: true }],
@@ -285,6 +287,7 @@ describe('createThingQueryResolver', () => {
     const restaurantConfig: ThingConfig = {};
     Object.assign(restaurantConfig, {
       name: 'Restaurant2',
+      type: 'tangible',
       booleanFields: [{ name: 'recommended', index: true }],
       textFields: [{ name: 'name' }, { name: 'num', unique: true }],
       relationalFields: [
@@ -372,6 +375,7 @@ describe('createThingQueryResolver', () => {
   test('should create query things resolver for thing sorted by several fields', async () => {
     const tableItemConfig: ThingConfig = {
       name: 'TableItem',
+      type: 'tangible',
       textFields: [
         {
           name: 'first',
@@ -387,6 +391,7 @@ describe('createThingQueryResolver', () => {
     };
     const tableConfig: ThingConfig = {
       name: 'Table',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'items',
@@ -494,6 +499,7 @@ describe('createThingQueryResolver', () => {
   test('should create query things resolver for fullText index', async () => {
     const tableItemConfig: ThingConfig = {
       name: 'TableItem',
+      type: 'tangible',
       textFields: [
         {
           name: 'first',
@@ -509,6 +515,7 @@ describe('createThingQueryResolver', () => {
     };
     const tableConfig: ThingConfig = {
       name: 'Table',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'items',
@@ -585,6 +592,7 @@ describe('createThingQueryResolver', () => {
   test('should create query things resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -599,6 +607,7 @@ describe('createThingQueryResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',

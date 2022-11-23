@@ -19,6 +19,7 @@ describe('composeGqlTypes', () => {
     const menuCloneSectionConfig: ThingConfig = {};
     const menuConfig: ThingConfig = {
       name: 'Menu',
+      type: 'tangible',
 
       textFields: [
         {
@@ -47,6 +48,7 @@ describe('composeGqlTypes', () => {
 
     Object.assign(menuCloneConfig, {
       name: 'MenuClone',
+      type: 'tangible',
 
       textFields: [
         {
@@ -74,6 +76,7 @@ describe('composeGqlTypes', () => {
 
     Object.assign(menuSectionConfig, {
       name: 'MenuSection',
+      type: 'tangible',
 
       textFields: [
         {
@@ -93,6 +96,7 @@ describe('composeGqlTypes', () => {
 
     Object.assign(menuCloneSectionConfig, {
       name: 'MenuCloneSection',
+      type: 'tangible',
 
       textFields: [
         {
@@ -787,7 +791,7 @@ type Subscription {
   test('should create things types for one thing', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -806,7 +810,7 @@ type Subscription {
 
     const rootImageConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -822,6 +826,7 @@ type Subscription {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
 
       textFields: [
         {
@@ -1346,6 +1351,7 @@ type Subscription {
   test('should create things types for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -1368,6 +1374,7 @@ type Subscription {
     };
     const thingConfig2: ThingConfig = {
       name: 'Example2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -1737,6 +1744,7 @@ type Subscription {
   test('should create things types for two related fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [
         {
           name: 'title',
@@ -1747,6 +1755,7 @@ type Subscription {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -2098,7 +2107,7 @@ type Subscription {
   test('should create things types for regular and embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -2112,6 +2121,7 @@ type Subscription {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -2357,6 +2367,7 @@ type Subscription {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -2375,6 +2386,7 @@ type Subscription {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -2825,6 +2837,7 @@ type Subscription {
   test('should create things types with inventory for only queries', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -2950,6 +2963,7 @@ type Query {
   test('should create things types with inventory for only mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3100,6 +3114,7 @@ type Mutation {
   test('should create things types with inventory for only things query', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3207,6 +3222,7 @@ type Query {
   test('should create things types with inventory for only things query for Example config', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3313,6 +3329,7 @@ type Query {
   test('should create things types with inventory for only create mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3380,6 +3397,7 @@ type Mutation {
   test('should create things types with inventory for only mutation cretateThing', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3459,6 +3477,7 @@ type Mutation {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3524,6 +3543,7 @@ type Mutation {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3607,6 +3627,7 @@ type Query {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -3869,6 +3890,7 @@ type Mutation {
     const menuSectionConfig: ThingConfig = {};
     const menuConfig: ThingConfig = {
       name: 'Menu',
+      type: 'tangible',
       textFields: [
         {
           name: 'menuName',
@@ -3887,6 +3909,7 @@ type Mutation {
 
     Object.assign(menuSectionConfig, {
       name: 'MenuSection',
+      type: 'tangible',
       textFields: [
         {
           name: 'menuSectionName',

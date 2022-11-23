@@ -8,6 +8,7 @@ describe('composeGeospatialTypes', () => {
   test('should return empty string if there are not any geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const thingConfigs = { Example: thingConfig };
     const generalConfig: GeneralConfig = { thingConfigs };
@@ -19,6 +20,7 @@ describe('composeGeospatialTypes', () => {
   test('should return GeospatialPoint type if there are geospatial fields with type "Point"', () => {
     const thingConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -44,6 +46,7 @@ input GeospatialPointInput {
   test('should return GeospatialPoint, GeospatialPolygonRing and GeospatialPolygon types if there are geospatial fields with type "Polygon"', () => {
     const thingConfig: ThingConfig = {
       name: 'District',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'area',

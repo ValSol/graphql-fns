@@ -10,7 +10,7 @@ describe('getNewFilesInArraysPositions util', () => {
   test('should return new files index list', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -28,6 +28,7 @@ describe('getNewFilesInArraysPositions util', () => {
     };
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',
@@ -112,7 +113,7 @@ describe('getNewFilesInArraysPositions util', () => {
   test('should return new files index list with duplicateFiles', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -130,6 +131,7 @@ describe('getNewFilesInArraysPositions util', () => {
     };
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',

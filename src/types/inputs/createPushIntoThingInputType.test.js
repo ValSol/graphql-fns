@@ -10,6 +10,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -57,6 +58,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with only scalar text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -85,6 +87,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with only freeze array text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -108,11 +111,13 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
@@ -164,7 +169,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create embedded thing input type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -189,7 +194,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -203,6 +208,7 @@ describe('createPushIntoThingInputType', () => {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -260,6 +266,7 @@ describe('createPushIntoThingInputType', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -284,6 +291,7 @@ describe('createPushIntoThingInputType', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -346,6 +354,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with geospatial fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -414,6 +423,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -460,6 +470,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing type with int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField1',
@@ -506,6 +517,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing type with float fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField1',
@@ -552,6 +564,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing type with boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField1',
@@ -598,7 +611,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create file thing input type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -618,7 +631,7 @@ describe('createPushIntoThingInputType', () => {
   test('should create thing input type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -632,6 +645,7 @@ describe('createPushIntoThingInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

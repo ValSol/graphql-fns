@@ -11,6 +11,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeDeleteThingMutation', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

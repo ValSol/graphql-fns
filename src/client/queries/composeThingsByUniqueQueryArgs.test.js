@@ -11,6 +11,7 @@ describe('composeThingsQueryArgs', () => {
   test('should compose things query with default args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -30,6 +31,7 @@ describe('composeThingsQueryArgs', () => {
   test('should compose things query with ExampleWhereByUniqueInput and ExampleSortInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -50,6 +52,7 @@ describe('composeThingsQueryArgs', () => {
   test('should compose things query with PaginationInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -69,6 +72,7 @@ describe('composeThingsQueryArgs', () => {
   test('should compose things query with ExampleNearInput args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',

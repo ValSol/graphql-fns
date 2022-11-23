@@ -47,6 +47,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   const restaurantConfig: ThingConfig = {
     name: 'Restaurant',
+    type: 'tangible',
     textFields: [{ name: 'title', unique: true }],
     duplexFields: [
       {
@@ -72,6 +73,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(restaurantCloneConfig, {
     name: 'RestaurantClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -89,6 +91,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(menuConfig, {
     name: 'Menu',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -119,6 +122,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(menuCloneConfig, {
     name: 'MenuClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -143,6 +147,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(menuSectionConfig, {
     name: 'MenuSection',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -160,6 +165,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(menuSectionCloneConfig, {
     name: 'MenuSectionClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -177,6 +183,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(postConfig, {
     name: 'Post',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -201,6 +208,7 @@ describe('createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver', (
 
   Object.assign(postCloneConfig, {
     name: 'PostClone',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',

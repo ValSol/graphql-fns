@@ -30,6 +30,7 @@ describe('createCreateManyThingsMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'num',

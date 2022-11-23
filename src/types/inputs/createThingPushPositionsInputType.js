@@ -7,22 +7,21 @@ const createThingPushPositionsInputType: InputCreator = (thingConfig) => {
     booleanFields,
     dateTimeFields,
     duplexFields,
-    embedded,
     embeddedFields,
     enumFields,
-    file,
     fileFields,
     floatFields,
     intFields,
     geospatialFields,
     relationalFields,
     textFields,
+    type: configType,
     name,
   } = thingConfig;
 
   const inputName = `${name}PushPositionsInput`;
 
-  if (embedded || file) return [inputName, '', {}];
+  if (configType !== 'tangible') return [inputName, '', {}];
 
   const thingTypeArray = [];
 

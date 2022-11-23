@@ -10,6 +10,7 @@ describe('createPushIntoThingMutationType', () => {
   test('should push mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -49,6 +50,7 @@ describe('createPushIntoThingMutationType', () => {
   test('should push mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

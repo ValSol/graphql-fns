@@ -7,6 +7,7 @@ import parseChildQueries from './parseChildQueries';
 describe('parseChildQueries', () => {
   const countryConfig: ThingConfig = {
     name: 'Country',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -15,6 +16,7 @@ describe('parseChildQueries', () => {
   };
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -30,6 +32,7 @@ describe('parseChildQueries', () => {
   const personConfig: ThingConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',

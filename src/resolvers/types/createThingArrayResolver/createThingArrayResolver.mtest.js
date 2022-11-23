@@ -36,6 +36,7 @@ describe('createThingArrayResolver', () => {
     const placeConfig: ThingConfig = {};
     Object.assign(placeConfig, {
       name: 'Place',
+      type: 'tangible',
       textFields: [
         {
           name: 'title',

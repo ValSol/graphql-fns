@@ -9,7 +9,7 @@ describe('createThingFilesQueryResolver', () => {
   test('should create mutation add thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',

@@ -9,6 +9,7 @@ describe('processDeleteDataPrepareArgs', () => {
   const personConfig: ThingConfig = {};
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [{ name: 'name', unique: true }],
     duplexFields: [
       {
@@ -32,6 +33,7 @@ describe('processDeleteDataPrepareArgs', () => {
   };
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',

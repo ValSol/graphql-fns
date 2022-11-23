@@ -8,6 +8,7 @@ describe('composeDerivativeConfig', () => {
   describe('composeDerivativeConfig', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -22,6 +23,7 @@ describe('composeDerivativeConfig', () => {
 
     const additionalThingConfig: ThingConfig = {
       name: 'AdditionalExample',
+      type: 'tangible',
       textFields: [
         {
           name: 'additionalTextField',
@@ -51,6 +53,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'anotherField',
@@ -83,6 +86,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -116,6 +120,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -154,6 +159,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -191,6 +197,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -228,6 +235,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         enumFields: [
           {
             name: 'textField',
@@ -267,6 +275,7 @@ describe('composeDerivativeConfig', () => {
 
       const expectedResult = {
         name: 'ExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -288,6 +297,7 @@ describe('composeDerivativeConfig', () => {
   test('should return correct derivative config', () => {
     const thingConfig2: ThingConfig = {
       name: 'Example2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -320,6 +330,7 @@ describe('composeDerivativeConfig', () => {
   describe('composeDerivativeConfig with relational third field', () => {
     const thingConfig = {
       name: 'TextExample',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -328,6 +339,7 @@ describe('composeDerivativeConfig', () => {
     };
     const thingConfig2: ThingConfig = {
       name: 'RelationalExample',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -355,6 +367,7 @@ describe('composeDerivativeConfig', () => {
       const result = composeDerivativeConfig(ForCatalog, thingConfig2, generalConfig);
       const thingConfigForCatalog = {
         name: 'TextExampleForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',
@@ -363,6 +376,7 @@ describe('composeDerivativeConfig', () => {
       };
       const expectedResult = {
         name: 'RelationalExampleForCatalog',
+        type: 'tangible',
         relationalFields: [
           {
             name: 'relationalField',
@@ -379,6 +393,7 @@ describe('composeDerivativeConfig', () => {
   describe('composeDerivativeConfig with added relational third field', () => {
     const thingConfig = {
       name: 'TextExample2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField2',
@@ -387,6 +402,7 @@ describe('composeDerivativeConfig', () => {
     };
     const thingConfig2: ThingConfig = {
       name: 'RelationalExample2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -423,6 +439,7 @@ describe('composeDerivativeConfig', () => {
       const result = composeDerivativeConfig(ForCatalog, thingConfig2, generalConfig);
       const thingConfigForCatalog = {
         name: 'TextExample2ForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField2',
@@ -431,6 +448,7 @@ describe('composeDerivativeConfig', () => {
       };
       const expectedResult = {
         name: 'RelationalExample2ForCatalog',
+        type: 'tangible',
         textFields: [
           {
             name: 'textField',

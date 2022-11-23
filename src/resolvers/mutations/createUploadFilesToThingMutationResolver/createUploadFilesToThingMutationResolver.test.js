@@ -9,7 +9,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -22,6 +22,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',

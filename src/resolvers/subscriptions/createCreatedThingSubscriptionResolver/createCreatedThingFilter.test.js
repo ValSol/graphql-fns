@@ -11,6 +11,7 @@ describe('createCreatedThingFilter', () => {
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

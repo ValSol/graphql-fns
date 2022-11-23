@@ -9,6 +9,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type without index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
@@ -21,6 +22,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type with where arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -43,6 +45,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type with where arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -65,6 +68,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type with pagination arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
@@ -77,6 +81,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type with near arg', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -99,6 +104,7 @@ describe('createThingsQueryType', () => {
   test('should create query things type with were, pagination and near args', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

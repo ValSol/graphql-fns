@@ -10,7 +10,7 @@ describe('createThingFileQueryType', () => {
   test('should create query', () => {
     const thingConfig: ThingConfig = {
       name: 'RootExample',
-      file: true,
+      type: 'file',
     };
     const expectedResult = '  RootExampleFile(whereOne: FileWhereOneInput!): RootExample!';
     const dic = {};
@@ -22,6 +22,7 @@ describe('createThingFileQueryType', () => {
   test('should create empty query', () => {
     const thingConfig: ThingConfig = {
       name: 'RootExample',
+      type: 'tangible',
     };
     const expectedResult = '';
     const dic = {};

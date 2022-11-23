@@ -8,6 +8,7 @@ import patchExternalReferences from './patchExternalReferences';
 describe('patchExternalReferences util', () => {
   const accessConfig: ThingConfig = {
     name: 'Access',
+    type: 'tangible',
 
     textFields: [
       { name: 'postCreators', array: true, index: true },
@@ -26,6 +27,7 @@ describe('patchExternalReferences util', () => {
 
   Object.assign(postConfig, {
     name: 'Post',
+    type: 'tangible',
 
     textFields: [
       {
@@ -86,6 +88,7 @@ describe('patchExternalReferences util', () => {
 
   Object.assign(restaurantConfig, {
     name: 'Restaurant',
+    type: 'tangible',
 
     textFields: [{ name: 'slug' }],
 

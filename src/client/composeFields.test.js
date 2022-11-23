@@ -8,6 +8,7 @@ describe('composeFields', () => {
   describe('not nested fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -394,13 +395,13 @@ describe('composeFields', () => {
   describe('Embedded fields', () => {
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       textFields: [{ name: 'textField3' }, { name: 'textFieldArr3', array: true }],
     };
 
     const embedded2Config: ThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [{ name: 'textField2' }, { name: 'textFieldArr2', array: true }],
       embeddedFields: [
         {
@@ -412,7 +413,7 @@ describe('composeFields', () => {
 
     const embedded1Config: ThingConfig = {
       name: 'Embedded1',
-      embedded: true,
+      type: 'embedded',
       textFields: [{ name: 'textField1' }, { name: 'textFieldArr1', array: true }],
       embeddedFields: [
         {
@@ -425,6 +426,7 @@ describe('composeFields', () => {
 
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -643,6 +645,7 @@ describe('composeFields', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

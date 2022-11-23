@@ -84,9 +84,9 @@ const generateThingsExcel = async (
 
   allThingNames.forEach((name) => {
     if (!flatThingNames.includes(name)) {
-      if (thingConfigs[name].file) {
+      if (thingConfigs[name].type === 'file') {
         restOfThingNames.file.push(name);
-      } else if (thingConfigs[name].embedded) {
+      } else if (thingConfigs[name].type === 'embedded') {
         restOfThingNames.embedded.push(name);
       } else {
         restOfThingNames.ordinary.push(name);

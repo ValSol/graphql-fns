@@ -10,6 +10,7 @@ describe('createUpdateThingMutationType', () => {
   test('should create mutation update thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -27,17 +28,19 @@ describe('createUpdateThingMutationType', () => {
   test('should create mutation update thing type with ReorderCreatedInputType', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [{ name: 'city' }],
     };
 
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
 
       embeddedFields: [{ name: 'address', config: addressConfig }],
 

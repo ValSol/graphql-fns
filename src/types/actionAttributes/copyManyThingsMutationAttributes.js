@@ -32,8 +32,7 @@ const argTypes = [
 const actionReturnConfig = true;
 
 const actionAllowed = (thingConfig: ThingConfig): boolean =>
-  !(thingConfig.embedded || thingConfig.file) &&
-  Boolean(createThingCopyWhereOnesInputType(thingConfig)[1]);
+  thingConfig.type === 'tangible' && Boolean(createThingCopyWhereOnesInputType(thingConfig)[1]);
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

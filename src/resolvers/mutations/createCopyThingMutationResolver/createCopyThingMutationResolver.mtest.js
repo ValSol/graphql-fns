@@ -40,6 +40,7 @@ describe('createCopyThingMutationResolver', () => {
 
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -79,6 +80,7 @@ describe('createCopyThingMutationResolver', () => {
 
     Object.assign(personCloneConfig, {
       name: 'PersonClone',
+      type: 'tangible',
 
       textFields: [
         {
@@ -103,6 +105,7 @@ describe('createCopyThingMutationResolver', () => {
 
     Object.assign(personBackupConfig, {
       name: 'PersonBackup',
+      type: 'tangible',
 
       textFields: [
         {

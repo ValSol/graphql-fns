@@ -76,7 +76,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
 
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -98,7 +98,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -121,6 +121,7 @@ describe('createUploadFilesToThingMutationResolver', () => {
   const exampleConfig: ThingConfig = {};
   Object.assign(exampleConfig, {
     name: 'Example',
+    type: 'tangible',
 
     fileFields: [
       {

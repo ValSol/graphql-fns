@@ -13,6 +13,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeThingsQuery', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',
@@ -22,6 +23,7 @@ describe('composeDerivativeThingsQuery', () => {
 
   const sortThingConfig: ThingConfig = {
     name: 'SortExample',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',
@@ -32,6 +34,7 @@ describe('composeDerivativeThingsQuery', () => {
 
   const paginationThingConfig: ThingConfig = {
     name: 'PaginationExample',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',
@@ -41,6 +44,7 @@ describe('composeDerivativeThingsQuery', () => {
 
   const nearThingConfig: ThingConfig = {
     name: 'NearExample',
+    type: 'tangible',
     geospatialFields: [
       {
         name: 'position',

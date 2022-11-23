@@ -13,6 +13,7 @@ describe('createThingCopyWhereOnesInputType', () => {
 
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
 
     textFields: [{ name: 'name' }],
 
@@ -36,6 +37,7 @@ describe('createThingCopyWhereOnesInputType', () => {
 
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
 
     textFields: [
       {
@@ -88,6 +90,7 @@ describe('createThingCopyWhereOnesInputType', () => {
 
   Object.assign(personCloneConfig, {
     name: 'PersonClone',
+    type: 'tangible',
 
     textFields: [
       {
@@ -114,6 +117,7 @@ describe('createThingCopyWhereOnesInputType', () => {
   test('should create thing input type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult = ['ExampleCopyWhereOnesInput', '', {}];
 
@@ -125,6 +129,7 @@ describe('createThingCopyWhereOnesInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
 
       textFields: [{ name: 'title' }],
 

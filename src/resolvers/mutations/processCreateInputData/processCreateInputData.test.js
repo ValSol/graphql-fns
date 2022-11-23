@@ -17,6 +17,7 @@ describe('processCreateInputData', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
     const thingConfig: ThingConfig = {
       name: 'Thing',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -109,6 +110,7 @@ describe('processCreateInputData', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Thing',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -187,18 +189,21 @@ describe('processCreateInputData', () => {
 
     Object.assign(embedded1Config, {
       name: 'Embedded1',
+      type: 'embedded',
       textFields: [{ name: 'textField_e1' }],
       embeddedFields: [{ name: 'embeddedField2', config: embedded2Config }],
     });
 
     Object.assign(embedded2Config, {
       name: 'Embedded2',
+      type: 'embedded',
       textFields: [{ name: 'textField_e2' }],
       relationalFields: [{ name: 'relationalField', config: thingConfig }],
     });
 
     Object.assign(thingConfig, {
       name: 'Thing',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -282,10 +287,12 @@ describe('processCreateInputData', () => {
 
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'city' }],
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -370,6 +377,7 @@ describe('processCreateInputData', () => {
     const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -388,6 +396,7 @@ describe('processCreateInputData', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -521,6 +530,7 @@ describe('processCreateInputData', () => {
     const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -544,6 +554,7 @@ describe('processCreateInputData', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -739,6 +750,7 @@ describe('processCreateInputData', () => {
 
     Object.assign(embedded1Config, {
       name: 'Embedded1',
+      type: 'embedded',
       textFields: [{ name: 'textField_e1' }],
       embeddedFields: [
         {
@@ -751,11 +763,13 @@ describe('processCreateInputData', () => {
 
     Object.assign(embedded2Config, {
       name: 'Embedded2',
+      type: 'embedded',
       textFields: [{ name: 'textField_e2' }],
     });
 
     Object.assign(thingConfig, {
       name: 'Thing',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -854,6 +868,7 @@ describe('processCreateInputData', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
     const thingConfig: ThingConfig = {
       name: 'Thing',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -1019,6 +1034,7 @@ describe('processCreateInputData', () => {
     const menuSectionConfig: ThingConfig = {};
     const restaurantConfig: ThingConfig = {
       name: 'Restaurant',
+      type: 'tangible',
 
       textFields: [{ name: 'title' }],
 
@@ -1033,6 +1049,7 @@ describe('processCreateInputData', () => {
 
     Object.assign(menuConfig, {
       name: 'Menu',
+      type: 'tangible',
       textFields: [
         {
           name: 'title',

@@ -36,6 +36,7 @@ describe('createPushIntoThingMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
@@ -59,6 +60,7 @@ describe('createPushIntoThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -344,6 +346,7 @@ describe('createPushIntoThingMutationResolver', () => {
   test('should create mutation updateThing resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -358,6 +361,7 @@ describe('createPushIntoThingMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -467,6 +471,7 @@ describe('createPushIntoThingMutationResolver', () => {
   test('should create mutation updateThing resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -481,6 +486,7 @@ describe('createPushIntoThingMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent2',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -557,6 +563,7 @@ describe('createPushIntoThingMutationResolver', () => {
   test('return simple int array', async () => {
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'numbers',

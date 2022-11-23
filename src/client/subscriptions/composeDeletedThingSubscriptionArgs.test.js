@@ -10,6 +10,7 @@ describe('composeDeletedThingSubscriptionArgs', () => {
   test('should compose things query without args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -29,6 +30,7 @@ describe('composeDeletedThingSubscriptionArgs', () => {
   test('should compose things query with ExampleWhereInput arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

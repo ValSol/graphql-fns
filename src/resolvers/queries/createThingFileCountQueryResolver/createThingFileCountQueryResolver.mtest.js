@@ -44,7 +44,7 @@ describe('createThingQueryResolver', () => {
   test('should create query thing resolver', async () => {
     const imageConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         { name: 'fileId' },
         { name: 'desktop' },

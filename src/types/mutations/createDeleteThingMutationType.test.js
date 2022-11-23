@@ -10,6 +10,7 @@ describe('createDeleteThingMutationType', () => {
   test('should create mutation delete thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult = '  deleteExample(whereOne: ExampleWhereOneInput!): Example!';
     const dic = {};

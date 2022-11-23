@@ -9,6 +9,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -72,7 +73,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       relationalFields: [
         {
           name: 'relationalField',
@@ -89,6 +90,7 @@ describe('coerceDataFromGql', () => {
     };
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [{ name: 'textField' }],
       embeddedFields: [
         {
@@ -152,7 +154,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -219,7 +221,7 @@ describe('coerceDataFromGql', () => {
   test('should coerce file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -233,6 +235,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -299,7 +302,7 @@ describe('coerceDataFromGql', () => {
   test('should coerce file null fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -313,6 +316,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -356,6 +360,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -398,6 +403,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -440,6 +446,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'dateTimeField',
@@ -465,6 +472,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'dateTimeField',
@@ -490,6 +498,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'geospatialField1',
@@ -616,6 +625,7 @@ describe('coerceDataFromGql', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'dateTimeField',

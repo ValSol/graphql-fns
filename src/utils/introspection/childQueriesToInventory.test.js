@@ -27,7 +27,7 @@ describe('childQueriesToInventory', () => {
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: { name: 'Person' },
+      thingConfig: { name: 'Person', type: 'tangible' },
       baseAction: 'thingsByUnique',
       suffix: 'ForView',
     };
@@ -74,7 +74,7 @@ describe('childQueriesToInventory', () => {
 
     const parsedAction = {
       creationType: 'standard',
-      thingConfig: { name: 'Person' },
+      thingConfig: { name: 'Person', type: 'tangible' },
       baseAction: '',
       suffix: 'ForView',
     };

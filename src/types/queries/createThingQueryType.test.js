@@ -10,6 +10,7 @@ describe('createThingQueryType', () => {
   test('should create query only thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult = '  Example(whereOne: ExampleWhereOneInput!): Example!';
     const dic = {};

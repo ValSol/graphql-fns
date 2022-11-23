@@ -17,6 +17,7 @@ let pubsub;
 
 const exampleConfig: ThingConfig = {
   name: 'Example',
+  type: 'tangible',
 
   textFields: [{ name: 'name', required: true }, { name: 'label' }],
   intFields: [{ name: 'counts', array: true }],
@@ -24,6 +25,7 @@ const exampleConfig: ThingConfig = {
 
 const exampleCloneConfig: ThingConfig = {
   name: 'ExampleClone',
+  type: 'tangible',
 
   textFields: [{ name: 'name' }, { name: 'label' }],
   intFields: [{ name: 'counts', array: true }],
@@ -38,6 +40,7 @@ const menuSectionConfig: ThingConfig = {};
 const menuSectionCloneConfig: ThingConfig = {};
 const parentConfig: ThingConfig = {
   name: 'Parent',
+  type: 'tangible',
   textFields: [{ name: 'name' }],
   duplexFields: [
     {
@@ -51,6 +54,7 @@ const parentConfig: ThingConfig = {
 
 Object.assign(childConfig, {
   name: 'Child',
+  type: 'tangible',
   textFields: [{ name: 'name' }],
   duplexFields: [
     {
@@ -63,6 +67,7 @@ Object.assign(childConfig, {
 
 Object.assign(personConfig, {
   name: 'Person',
+  type: 'tangible',
   textFields: [
     {
       name: 'firstName',
@@ -83,6 +88,7 @@ Object.assign(personConfig, {
 
 Object.assign(personCloneConfig, {
   name: 'PersonClone',
+  type: 'tangible',
 
   textFields: [
     {
@@ -107,6 +113,7 @@ Object.assign(personCloneConfig, {
 
 Object.assign(menuConfig, {
   name: 'Menu',
+  type: 'tangible',
 
   textFields: [
     {
@@ -134,6 +141,7 @@ Object.assign(menuConfig, {
 
 Object.assign(menuCloneConfig, {
   name: 'MenuClone',
+  type: 'tangible',
 
   textFields: [
     {
@@ -162,6 +170,7 @@ Object.assign(menuCloneConfig, {
 
 Object.assign(menuSectionConfig, {
   name: 'MenuSection',
+  type: 'tangible',
 
   textFields: [
     {
@@ -181,6 +190,7 @@ Object.assign(menuSectionConfig, {
 
 Object.assign(menuSectionCloneConfig, {
   name: 'MenuCloneSection',
+  type: 'tangible',
 
   textFields: [
     {

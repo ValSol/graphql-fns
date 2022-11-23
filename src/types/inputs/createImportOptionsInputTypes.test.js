@@ -9,6 +9,7 @@ describe('createImportOptionsInputTypes', () => {
   test('should return ImportOptionsInput type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

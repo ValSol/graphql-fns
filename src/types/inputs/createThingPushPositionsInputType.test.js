@@ -9,6 +9,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -49,11 +50,13 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
@@ -94,6 +97,7 @@ describe('createThingPushPositionsInputType', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -112,6 +116,7 @@ describe('createThingPushPositionsInputType', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'friends',
@@ -155,7 +160,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -169,6 +174,7 @@ describe('createThingPushPositionsInputType', () => {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -218,6 +224,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -278,6 +285,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -318,6 +326,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField1',
@@ -358,6 +367,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with float fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField1',
@@ -398,6 +408,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing reorder input type with boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField1',
@@ -438,7 +449,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create file thing input type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -458,7 +469,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create thing input type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -472,6 +483,7 @@ describe('createThingPushPositionsInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -524,7 +536,7 @@ describe('createThingPushPositionsInputType', () => {
   test('should create empty input type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -538,6 +550,7 @@ describe('createThingPushPositionsInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -579,6 +592,7 @@ describe('createThingPushPositionsInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

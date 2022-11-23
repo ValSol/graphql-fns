@@ -10,6 +10,7 @@ describe('createUploadFilesToThingMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'first name',
@@ -30,7 +31,7 @@ describe('createUploadFilesToThingMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -44,6 +45,7 @@ describe('createUploadFilesToThingMutationType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -76,7 +78,7 @@ describe('createUploadFilesToThingMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -90,6 +92,7 @@ describe('createUploadFilesToThingMutationType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

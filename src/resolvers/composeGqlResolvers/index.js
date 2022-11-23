@@ -132,7 +132,7 @@ const composeGqlResolvers = (
 
   Object.keys(thingConfigs)
     .map((thingName) => thingConfigs[thingName])
-    .filter(({ embedded, file }) => !(embedded || file))
+    .filter(({ type: configType }) => configType === 'tangible')
     .reduce((prev, thingConfig) => {
       const { name } = thingConfig;
 

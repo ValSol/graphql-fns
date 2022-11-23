@@ -35,8 +35,7 @@ const argTypes = [
 
 const actionReturnConfig = false;
 
-const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
-  !(derivativeConfig.embedded || derivativeConfig.file);
+const actionAllowed = (thingConfig: ThingConfig): boolean => thingConfig.type === 'tangible';
 
 const actionReturnString =
   (

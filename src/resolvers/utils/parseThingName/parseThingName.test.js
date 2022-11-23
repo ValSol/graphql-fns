@@ -13,6 +13,7 @@ import parseThingName from './index';
 describe('parseThingName', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

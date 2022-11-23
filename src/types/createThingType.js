@@ -11,9 +11,7 @@ const createThingType = (
   dic: { [inputName: string]: string },
 ): string => {
   const {
-    embedded,
     counter,
-    file,
     booleanFields,
     dateTimeFields,
     duplexFields,
@@ -25,17 +23,22 @@ const createThingType = (
     geospatialFields,
     relationalFields,
     textFields,
+    type: configType,
     name,
   } = thingConfig;
 
   const thingTypeArray = [
     // use not required ID in embedded things...
     // ... to not provoke error for null embedded objects
-    `type ${name} ${embedded || (file && !name.startsWith('Root')) ? '' : 'implements Node '}{
+    `type ${name} ${
+      configType === 'tangible' || (configType === 'file' && name.startsWith('Root'))
+        ? 'implements Node '
+        : ''
+    }{
   id: ID!`,
   ];
 
-  if (!(embedded || file)) {
+  if (configType === 'tangible') {
     thingTypeArray.push(`  createdAt: DateTime!
   updatedAt: DateTime!`);
   }
@@ -174,7 +177,7 @@ const createThingType = (
 
   thingTypeArray.push('}');
 
-  if (!(embedded || file)) {
+  if (configType === 'tangible') {
     thingTypeArray.push(`type ${name}Edge {
   node: ${name}
   cursor: String!

@@ -7,7 +7,7 @@ import separateFileFieldsData from './separateFileFieldsData';
 describe('separateFileFieldsData', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -20,6 +20,7 @@ describe('separateFileFieldsData', () => {
   const exampleConfig: ThingConfig = {};
   Object.assign(exampleConfig, {
     name: 'Example',
+    type: 'tangible',
     fileFields: [
       {
         name: 'logo',

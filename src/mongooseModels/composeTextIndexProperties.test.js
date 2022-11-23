@@ -9,6 +9,7 @@ describe('composeTextIndexProperties', () => {
   test('should compose schema properties with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

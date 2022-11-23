@@ -10,6 +10,7 @@ describe('createImportThingsMutationType', () => {
   test('should create mutation import things type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult =
       '  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!';

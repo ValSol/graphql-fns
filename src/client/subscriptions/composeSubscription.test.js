@@ -9,6 +9,7 @@ describe('composeSubscription', () => {
   const prefixName = 'Home';
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

@@ -13,13 +13,13 @@ const composeThingConfigs = (
   simplifiedThingConfigs: Array<SimplifiedThingConfig>,
 ): { [thingName: string]: ThingConfig } => {
   const result = simplifiedThingConfigs.reduce((prev, config) => {
-    const { name, file } = config;
+    const { name, type: configType } = config;
 
     if (name.search('_') !== -1) {
       throw new TypeError(`Forbidden to use "_" (underscore) in thing name: "${name}"!`);
     }
 
-    if (file && name.startsWith('Root')) {
+    if (configType === 'file' && name.startsWith('Root')) {
       throw new TypeError(`Forbidden to use "Root" in file name: "${name}"!`);
     }
 
@@ -37,7 +37,7 @@ const composeThingConfigs = (
 
     prev[name] = { ...config }; // eslint-disable-line no-param-reassign
 
-    if (file) {
+    if (configType === 'file') {
       const [rootName, rootConfig] = composeRootFileThingConfig(config);
 
       prev[rootName] = rootConfig; // eslint-disable-line no-param-reassign

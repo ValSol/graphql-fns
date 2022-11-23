@@ -9,6 +9,7 @@ describe('createThingType', () => {
   test('should create thing type with Text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -59,11 +60,13 @@ type ExampleConnection {
   test('should create thing type with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
@@ -112,7 +115,7 @@ type PersonConnection {
   test('should create thing type with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -126,6 +129,7 @@ type PersonConnection {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -186,7 +190,7 @@ type PersonConnection {
   test('should create embeded thing type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -212,6 +216,7 @@ type PersonConnection {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -230,6 +235,7 @@ type PersonConnection {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -294,6 +300,7 @@ type PersonConnection {
   test('should create thing type with geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -366,6 +373,7 @@ type ExampleConnection {
   test('should create thing type with enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -414,6 +422,7 @@ type ExampleConnection {
   test('should create thing type with int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField1',
@@ -464,6 +473,7 @@ type ExampleConnection {
   test('should create thing type with float fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField1',
@@ -514,6 +524,7 @@ type ExampleConnection {
   test('should create thing type with boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField1',
@@ -564,7 +575,7 @@ type ExampleConnection {
   test('should create thing type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -578,6 +589,7 @@ type ExampleConnection {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -633,7 +645,7 @@ type ExampleConnection {
   test('should create file thing type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -658,6 +670,7 @@ type ExampleConnection {
   test('should create thing type with Text fields and counter field', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {

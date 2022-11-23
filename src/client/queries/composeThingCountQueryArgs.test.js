@@ -11,6 +11,7 @@ describe('composeThingCountQueryArgs', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -32,6 +33,7 @@ describe('composeThingCountQueryArgs', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

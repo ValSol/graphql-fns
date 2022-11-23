@@ -19,6 +19,7 @@ describe('composeCustomThingQueryArgs', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -57,6 +58,7 @@ describe('composeCustomThingQueryArgs', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

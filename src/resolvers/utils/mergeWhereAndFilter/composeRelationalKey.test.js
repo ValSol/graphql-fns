@@ -19,6 +19,7 @@ describe('composeRelationalKey', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -58,6 +59,7 @@ describe('composeRelationalKey', () => {
 
     const accessConfig = {
       name: 'Access',
+      type: 'tangible',
 
       textFields: [
         {
@@ -70,6 +72,7 @@ describe('composeRelationalKey', () => {
 
     Object.assign(menusectionConfig, {
       name: 'Menusection',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'menu',
@@ -83,6 +86,7 @@ describe('composeRelationalKey', () => {
 
     Object.assign(menuConfig, {
       name: 'Menu',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'sections',
@@ -104,6 +108,7 @@ describe('composeRelationalKey', () => {
 
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'menu',

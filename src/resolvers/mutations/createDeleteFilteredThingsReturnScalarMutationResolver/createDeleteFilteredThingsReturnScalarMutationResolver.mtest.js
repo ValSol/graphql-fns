@@ -33,6 +33,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
@@ -56,6 +57,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -266,6 +268,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
 
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -280,6 +283,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -368,6 +372,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
 
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -382,6 +387,7 @@ describe('createDeleteFilteredThingsReturnScalarMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',

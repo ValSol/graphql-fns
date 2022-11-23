@@ -9,7 +9,7 @@ describe('updateFileFieldsAfterUpload util', () => {
   test('should return rearranged uploaded fileFields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -27,6 +27,7 @@ describe('updateFileFieldsAfterUpload util', () => {
     };
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',

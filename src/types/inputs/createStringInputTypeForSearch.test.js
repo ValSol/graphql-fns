@@ -8,6 +8,7 @@ describe('createStringInputTypeForSearch', () => {
   test('should create empty string if there are not pagination', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
 
     const expectedResult = ['', '', {}];
@@ -19,6 +20,7 @@ describe('createStringInputTypeForSearch', () => {
   test('should create pageInputType string if there are pagination', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [{ name: 'textField', weight: 1 }],
     };
 

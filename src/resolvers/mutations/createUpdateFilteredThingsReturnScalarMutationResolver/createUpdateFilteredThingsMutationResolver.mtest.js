@@ -35,6 +35,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
@@ -58,6 +59,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -473,7 +475,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
   test('should create mutation update thing resolver to remove embedded fields on null', async () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -483,6 +485,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
 
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -580,7 +583,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
   test('should create mutation update thing resolver to update embedded array field', async () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -590,6 +593,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
 
     const mainConfig: ThingConfig = {
       name: 'Main',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -655,7 +659,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
   test('should create mutation update thing resolver to update file array field', async () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -668,6 +672,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
 
     const mainConfig: ThingConfig = {
       name: 'Main2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -744,6 +749,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
   test('should create mutation updateThing resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -758,6 +764,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -849,6 +856,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
   test('should create mutation updateThing resolver to update document using checkData', async () => {
     const accessConfig: ThingConfig = {
       name: 'Access',
+      type: 'tangible',
 
       textFields: [
         { name: 'postCreators', array: true, index: true },
@@ -867,6 +875,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
 
     Object.assign(postConfig, {
       name: 'Post',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }, { name: 'type' }],
 
@@ -887,6 +896,7 @@ describe('createUpdateFilteredThingsReturnScalarMutationResolver', () => {
 
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }],
 

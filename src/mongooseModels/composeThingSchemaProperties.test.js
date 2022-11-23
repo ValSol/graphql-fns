@@ -12,6 +12,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -78,11 +79,13 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text and relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -161,6 +164,7 @@ describe('composeThingSchemaProperties', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -179,6 +183,7 @@ describe('composeThingSchemaProperties', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -262,7 +267,8 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text and embeded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'tangible',
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -276,6 +282,7 @@ describe('composeThingSchemaProperties', () => {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -383,7 +390,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text and file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'desktop',
@@ -405,6 +412,7 @@ describe('composeThingSchemaProperties', () => {
 
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -488,6 +496,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'pointField1',
@@ -635,6 +644,7 @@ describe('composeThingSchemaProperties', () => {
     ];
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'enumField1',
@@ -693,6 +703,7 @@ describe('composeThingSchemaProperties', () => {
     const enums: Enums = [];
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'birthday',
@@ -762,6 +773,7 @@ describe('composeThingSchemaProperties', () => {
     const enums: Enums = [];
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField_1',
@@ -825,6 +837,7 @@ describe('composeThingSchemaProperties', () => {
     const enums: Enums = [];
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField_1',
@@ -888,6 +901,7 @@ describe('composeThingSchemaProperties', () => {
     const enums: Enums = [];
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField_1',
@@ -939,6 +953,7 @@ describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {

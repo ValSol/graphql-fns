@@ -33,7 +33,7 @@ const createNodeQueryResolver = (
 
     const inAnyCase = true;
 
-    if (thingConfig.file) {
+    if (thingConfig.type === 'file') {
       const inventoryChain = ['Query', `thingFile${suffix}`, thingName];
 
       const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);

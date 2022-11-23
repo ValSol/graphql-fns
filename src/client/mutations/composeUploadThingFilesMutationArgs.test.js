@@ -11,7 +11,7 @@ describe('composeUploadFilesToThingMutationResolver', () => {
     const prefixName = 'Home';
     const imageConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',

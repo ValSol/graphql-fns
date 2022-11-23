@@ -11,6 +11,7 @@ describe('composeUpdateThingMutationArgs', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -31,11 +32,13 @@ describe('composeUpdateThingMutationArgs', () => {
     const prefixName = 'Home';
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',

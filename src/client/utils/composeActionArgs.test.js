@@ -12,6 +12,7 @@ describe('composeActionArgs util', () => {
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

@@ -12,6 +12,7 @@ describe('transformWhereOne', () => {
 
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',
@@ -52,6 +53,7 @@ describe('transformWhereOne', () => {
 
   Object.assign(personCloneConfig, {
     name: 'PersonClone',
+    type: 'tangible',
 
     textFields: [
       {

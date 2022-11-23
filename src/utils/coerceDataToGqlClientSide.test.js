@@ -10,6 +10,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -113,6 +114,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const dupleConfig11: ThingConfig = {
       name: 'Duple11',
+      type: 'tangible',
       textFields: [{ name: 'duplexTextField11' }],
       duplexFields: [
         {
@@ -125,6 +127,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const dupleConfig12: ThingConfig = {
       name: 'Duple12',
+      type: 'tangible',
       textFields: [{ name: 'duplexTextField12' }],
       duplexFields: [
         {
@@ -137,6 +140,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const dupleConfig21: ThingConfig = {
       name: 'Duple21',
+      type: 'tangible',
       textFields: [{ name: 'duplexTextField21' }],
       duplexFields: [
         {
@@ -150,6 +154,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const dupleConfig22: ThingConfig = {
       name: 'Duple22',
+      type: 'tangible',
       textFields: [{ name: 'duplexTextField22' }],
       duplexFields: [
         {
@@ -163,6 +168,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'duplexField11',
@@ -221,16 +227,19 @@ describe('coerceDataToGqlClientSide', () => {
 
     const relationalConfig1: ThingConfig = {
       name: 'Relational1',
+      type: 'tangible',
       textFields: [{ name: 'relationalTextField1' }],
     };
 
     const relationalConfig2: ThingConfig = {
       name: 'Relational2',
+      type: 'tangible',
       textFields: [{ name: 'relationalTextField2' }],
     };
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField1',
@@ -271,7 +280,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       relationalFields: [
         {
           name: 'relationalField',
@@ -281,6 +290,7 @@ describe('coerceDataToGqlClientSide', () => {
     };
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [{ name: 'textField' }],
       duplexFields: [
         {
@@ -351,7 +361,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       enumFields: [
         {
           name: 'enumField',
@@ -368,7 +378,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const embedded2Config: ThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -389,7 +399,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -410,6 +420,7 @@ describe('coerceDataToGqlClientSide', () => {
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -917,7 +928,7 @@ describe('coerceDataToGqlClientSide', () => {
   describe('should coerce file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -931,6 +942,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -1067,6 +1079,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'geospatialFieldPoint',
@@ -1309,6 +1322,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'geospatialField',
@@ -1358,6 +1372,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'dateTimeField',
@@ -1412,6 +1427,7 @@ describe('coerceDataToGqlClientSide', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField',

@@ -19,7 +19,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
     relationalFields,
     textFields,
     name,
-    file, // in file configs not take into account freeze fields
+    type: configType, // in file configs not take into account freeze fields
   } = thingConfig;
 
   const inputName = `${name}UpdateInput`;
@@ -29,7 +29,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (textFields) {
     textFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);
         return prev;
@@ -38,7 +38,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (intFields) {
     intFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}`);
         return prev;
@@ -47,7 +47,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (floatFields) {
     floatFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}Float${array ? '!]' : ''}`);
         return prev;
@@ -56,7 +56,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (dateTimeFields) {
     dateTimeFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]' : ''}`);
         return prev;
@@ -65,7 +65,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (booleanFields) {
     booleanFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}`);
         return prev;
@@ -74,7 +74,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (enumFields) {
     enumFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, enumName, name: name2 }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]' : ''}`);
         return prev;
@@ -83,7 +83,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (relationalFields) {
     relationalFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2, config, config: { name: relationalThingName } }) => {
         prev.push(
           `  ${name2}: ${relationalThingName}${
@@ -100,7 +100,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
   // the same code as for relationalFields
   if (duplexFields) {
     duplexFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce(
         (
           prev,
@@ -133,7 +133,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (embeddedFields) {
     embeddedFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
 
@@ -146,7 +146,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
   // the same code as for embeddedFields
   if (fileFields) {
     fileFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
         prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}UpdateInput${array ? '!]' : ''}`);
 
@@ -158,7 +158,7 @@ const createThingUpdateInputType: InputCreator = (thingConfig) => {
 
   if (geospatialFields) {
     geospatialFields
-      .filter(({ freeze }) => file || !freeze)
+      .filter(({ freeze }) => configType === 'file' || !freeze)
       .reduce((prev, { array, name: name2, geospatialType }) => {
         prev.push(
           `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}`,

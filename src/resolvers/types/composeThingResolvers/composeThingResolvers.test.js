@@ -9,6 +9,7 @@ describe('composeThingResolvers', () => {
   test('should create resolver for type', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [
         {
           name: 'title',
@@ -20,6 +21,7 @@ describe('composeThingResolvers', () => {
 
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -71,6 +73,7 @@ describe('composeThingResolvers', () => {
     const personConfig: ThingConfig = {};
     const placeConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -89,6 +92,7 @@ describe('composeThingResolvers', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -143,6 +147,7 @@ describe('composeThingResolvers', () => {
   test('should create resolver for type', () => {
     const thingConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',

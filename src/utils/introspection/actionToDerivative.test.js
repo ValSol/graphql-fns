@@ -8,6 +8,7 @@ import actionToDerivative from './actionToDerivative';
 describe('actionToDerivative', () => {
   const countryConfig: ThingConfig = {
     name: 'Country',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -16,6 +17,7 @@ describe('actionToDerivative', () => {
   };
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [
       {
         name: 'title',
@@ -31,6 +33,7 @@ describe('actionToDerivative', () => {
   const personConfig: ThingConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',

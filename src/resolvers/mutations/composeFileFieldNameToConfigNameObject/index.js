@@ -9,7 +9,7 @@ const composeFileFieldNameToConfigNameObject = (
   if (!fileFields) return {};
 
   return fileFields.reduce((prev, { name, array, config: { name: configName } }) => {
-    // eslint-disable-next-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign, react/forbid-prop-types
     prev[name] = { configName, array };
     return prev;
   }, {});

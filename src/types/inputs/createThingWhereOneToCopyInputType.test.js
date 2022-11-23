@@ -10,6 +10,7 @@ describe('createThingWhereOneToCopyInputType', () => {
   const personCloneConfig: ThingConfig = {};
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [{ name: 'name' }],
     duplexFields: [
       {
@@ -29,6 +30,7 @@ describe('createThingWhereOneToCopyInputType', () => {
 
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',
@@ -75,6 +77,7 @@ describe('createThingWhereOneToCopyInputType', () => {
 
   Object.assign(personCloneConfig, {
     name: 'PersonClone',
+    type: 'tangible',
 
     textFields: [
       {

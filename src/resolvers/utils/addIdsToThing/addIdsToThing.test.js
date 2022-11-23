@@ -9,7 +9,7 @@ describe('addIdsToThing', () => {
   test('shoud replace _ids by ids', () => {
     const embedded3Config: ThingConfig = {
       name: 'Embedded3',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField3',
@@ -19,7 +19,7 @@ describe('addIdsToThing', () => {
 
     const embedded2Config: ThingConfig = {
       name: 'Embedded2',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField2',
@@ -36,7 +36,7 @@ describe('addIdsToThing', () => {
 
     const embedded1Config: ThingConfig = {
       name: 'Embedded1',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField1',
@@ -52,6 +52,7 @@ describe('addIdsToThing', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -119,7 +120,7 @@ describe('addIdsToThing', () => {
   test('shoud replace _ids by ids in fileFields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -137,6 +138,7 @@ describe('addIdsToThing', () => {
     };
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',

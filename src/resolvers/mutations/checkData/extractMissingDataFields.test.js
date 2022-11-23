@@ -8,6 +8,7 @@ import extractMissingDataFields from './extractMissingDataFields';
 describe('extractMissingDataFields util', () => {
   const accessConfig: ThingConfig = {
     name: 'Access',
+    type: 'tangible',
 
     textFields: [
       { name: 'postCreators', array: true, index: true },
@@ -26,6 +27,7 @@ describe('extractMissingDataFields util', () => {
 
   Object.assign(postConfig, {
     name: 'Post',
+    type: 'tangible',
 
     textFields: [{ name: 'slug' }],
 
@@ -74,6 +76,7 @@ describe('extractMissingDataFields util', () => {
 
   Object.assign(restaurantConfig, {
     name: 'Restaurant',
+    type: 'tangible',
 
     textFields: [{ name: 'slug' }],
 

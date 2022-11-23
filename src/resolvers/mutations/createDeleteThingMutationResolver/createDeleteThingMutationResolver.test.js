@@ -9,6 +9,7 @@ describe('createDeleteThingMutationResolver', () => {
   test('should create mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

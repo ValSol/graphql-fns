@@ -9,7 +9,7 @@ describe('fromMongoToGqlDataArg', () => {
   test('shoud process data', () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -20,6 +20,7 @@ describe('fromMongoToGqlDataArg', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

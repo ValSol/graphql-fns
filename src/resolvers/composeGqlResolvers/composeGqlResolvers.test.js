@@ -15,6 +15,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for one thing', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -60,6 +61,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for two things', () => {
     const thingConfig1: ThingConfig = {
       name: 'Example1',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -76,6 +78,7 @@ describe('composeGqlResolvers', () => {
     };
     const thingConfig2: ThingConfig = {
       name: 'Example2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -124,6 +127,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for two things with relational things', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [
         {
           name: 'title',
@@ -134,6 +138,7 @@ describe('composeGqlResolvers', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -206,7 +211,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for two things with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -220,6 +225,7 @@ describe('composeGqlResolvers', () => {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -278,6 +284,7 @@ describe('composeGqlResolvers', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -296,6 +303,7 @@ describe('composeGqlResolvers', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -374,6 +382,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for two things with geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'pointField1',
@@ -450,6 +459,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for one thing with inventory for only queries', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -472,6 +482,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for one thing with inventory for only mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -495,6 +506,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for one thing with inventory for only thing queries', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -517,6 +529,7 @@ describe('composeGqlResolvers', () => {
   test('should create resolvers for one thing with inventory for only mutations', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -549,6 +562,7 @@ describe('composeGqlResolvers', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -589,6 +603,7 @@ describe('composeGqlResolvers', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

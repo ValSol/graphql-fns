@@ -24,7 +24,7 @@ const argTypes = [
 const actionReturnConfig = false;
 
 const actionAllowed = (thingConfig: ThingConfig): boolean =>
-  !(thingConfig.embedded || thingConfig.file) &&
+  thingConfig.type === 'tangible' &&
   Boolean(createThingDistinctValuesOptionsInputType(thingConfig)[1]);
 
 const actionReturnString =

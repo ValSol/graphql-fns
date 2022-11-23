@@ -9,6 +9,7 @@ describe('composeThingFragmentArgs', () => {
   test('should compose thing query args ', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

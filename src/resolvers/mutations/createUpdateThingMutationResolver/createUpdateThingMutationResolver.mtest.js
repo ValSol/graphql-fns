@@ -35,6 +35,7 @@ describe('createUpdateThingMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name', unique: true }],
       duplexFields: [
         {
@@ -58,6 +59,7 @@ describe('createUpdateThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -656,7 +658,7 @@ describe('createUpdateThingMutationResolver', () => {
   test('should create mutation update thing resolver to remove embedded fields on null', async () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -666,6 +668,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -779,7 +782,7 @@ describe('createUpdateThingMutationResolver', () => {
   test('should create mutation update thing resolver to update embedded array field', async () => {
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'embeddedTextField',
@@ -789,6 +792,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     const mainConfig: ThingConfig = {
       name: 'Main',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -862,7 +866,7 @@ describe('createUpdateThingMutationResolver', () => {
   test('should create mutation update thing resolver to update file array field', async () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -875,6 +879,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     const mainConfig: ThingConfig = {
       name: 'Main2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -957,6 +962,7 @@ describe('createUpdateThingMutationResolver', () => {
   test('should create mutation updateThing resolver to aggregate result', async () => {
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -971,6 +977,7 @@ describe('createUpdateThingMutationResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',
@@ -1063,6 +1070,7 @@ describe('createUpdateThingMutationResolver', () => {
   test('should create mutation updateThing resolver to update document using checkData', async () => {
     const accessConfig: ThingConfig = {
       name: 'Access',
+      type: 'tangible',
 
       textFields: [
         { name: 'postCreators', array: true, index: true },
@@ -1081,6 +1089,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     Object.assign(postConfig, {
       name: 'Post',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }, { name: 'type' }],
 
@@ -1101,6 +1110,7 @@ describe('createUpdateThingMutationResolver', () => {
 
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }],
 

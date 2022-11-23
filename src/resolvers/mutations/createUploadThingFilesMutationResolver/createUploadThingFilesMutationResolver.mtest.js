@@ -72,7 +72,7 @@ describe('createUploadThingFilesMutationResolver', () => {
 
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -99,7 +99,7 @@ describe('createUploadThingFilesMutationResolver', () => {
 
   const rootImageConfig: ThingConfig = {
     name: 'RootImage',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',

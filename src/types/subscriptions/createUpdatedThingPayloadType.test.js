@@ -8,6 +8,7 @@ describe('createUpdatedThingPayloadType', () => {
   test('should create subscription payload type with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -36,7 +37,7 @@ type UpdatedExamplePayload {
     const exampleConfig: ThingConfig = {};
     const embeddedConfig: ThingConfig = {
       name: 'Embedded',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'name',
@@ -46,7 +47,7 @@ type UpdatedExamplePayload {
 
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -59,6 +60,7 @@ type UpdatedExamplePayload {
 
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

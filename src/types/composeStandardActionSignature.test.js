@@ -10,6 +10,7 @@ describe('composeStandardActionSignature util', () => {
   test('should return right result', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

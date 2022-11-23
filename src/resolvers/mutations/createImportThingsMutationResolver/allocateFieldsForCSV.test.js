@@ -8,6 +8,7 @@ describe('allocateFieldsForCSV', () => {
   test('should return right allacation fields for text fields', () => {
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -34,6 +35,7 @@ describe('allocateFieldsForCSV', () => {
   test('should return right allacation fields for datetime fields', () => {
     const exampleConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'dateTimeField',
@@ -61,6 +63,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
@@ -90,6 +93,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'duplexField',
@@ -121,6 +125,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField',
@@ -148,6 +153,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField',
@@ -175,6 +181,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField',
@@ -202,6 +209,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'enumField',
@@ -231,6 +239,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'geospatialField',
@@ -259,7 +268,7 @@ describe('allocateFieldsForCSV', () => {
   test('should return right allacation fields for embedded fields', () => {
     const embeddedConfig: ThingConfig = {
       name: 'EmbeddedExample',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'textField',
@@ -269,6 +278,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       embeddedFields: [
         {
           name: 'embeddedField',
@@ -297,7 +307,7 @@ describe('allocateFieldsForCSV', () => {
   test('should return right allacation fields for file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -310,6 +320,7 @@ describe('allocateFieldsForCSV', () => {
     const exampleConfig: ThingConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
+      type: 'tangible',
       fileFields: [
         {
           name: 'logo',

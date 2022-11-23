@@ -8,6 +8,7 @@ describe('createUpdatedThingSubscriptionType', () => {
   test('should create subscription type without index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -26,6 +27,7 @@ describe('createUpdatedThingSubscriptionType', () => {
   test('should create subscription type with where arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

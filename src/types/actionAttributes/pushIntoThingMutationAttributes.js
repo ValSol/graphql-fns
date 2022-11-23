@@ -29,9 +29,8 @@ const argTypes = [
 
 const actionReturnConfig = true;
 
-const actionAllowed = (derivativeConfig: ThingConfig): boolean =>
-  !(derivativeConfig.embedded || derivativeConfig.file) &&
-  Boolean(createPushIntoThingInputType(derivativeConfig)[1]);
+const actionAllowed = (thingConfig: ThingConfig): boolean =>
+  thingConfig.type === 'tangible' && Boolean(createPushIntoThingInputType(thingConfig)[1]);
 
 const actionReturnString =
   (suffix: string): ((thingConfig: ThingConfig) => string) =>

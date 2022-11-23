@@ -9,16 +9,15 @@ const createThingCreateInputType: InputCreator = (thingConfig) => {
     booleanFields,
     dateTimeFields,
     duplexFields,
-    embedded,
     embeddedFields,
     enumFields,
-    file,
     fileFields,
     floatFields,
     intFields,
     geospatialFields,
     relationalFields,
     textFields,
+    type: configType,
     name,
   } = thingConfig;
 
@@ -27,7 +26,7 @@ const createThingCreateInputType: InputCreator = (thingConfig) => {
 
   const thingTypeArray: Array<Array<string>> = [[`input ${name}CreateInput {`]];
 
-  if (!(embedded || file)) {
+  if (configType === 'tangible') {
     thingTypeArray[0].push('  id: ID');
   }
 
@@ -222,7 +221,7 @@ const createThingCreateInputType: InputCreator = (thingConfig) => {
 
   const thingTypeArray2 = thingTypeArray.map((arr) => arr.join('\n'));
 
-  if (!(embedded || file)) {
+  if (configType === 'tangible') {
     thingTypeArray2.push(`input ${name}CreateChildInput {
   connect: ID
   create: ${name}CreateInput

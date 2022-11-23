@@ -8,6 +8,7 @@ import composeFragment from './composeFragment';
 describe('composeFragment', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

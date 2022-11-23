@@ -8,6 +8,7 @@ describe('createThingNearInputType', () => {
   test('should create empty string if there are not any geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -26,6 +27,7 @@ describe('createThingNearInputType', () => {
   test('should create thing input type if there are geospatial fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',

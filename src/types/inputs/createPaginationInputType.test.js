@@ -8,6 +8,7 @@ describe('createPaginationInputType', () => {
   test('should create pageInputType string if there are pagination', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
 
     const expectedResult = [

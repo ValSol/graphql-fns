@@ -8,6 +8,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
   test('should create empty string if there are not any file fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -26,7 +27,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
   test('should create string with indexed text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -40,6 +41,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -78,7 +80,7 @@ input FilesOfExampleOptionsInput {
   test('should create empty string where freeze fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -92,6 +94,7 @@ input FilesOfExampleOptionsInput {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -120,7 +123,7 @@ input FilesOfExampleOptionsInput {
   test('should create string without freeze fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -134,6 +137,7 @@ input FilesOfExampleOptionsInput {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

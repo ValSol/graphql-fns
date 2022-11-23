@@ -3,13 +3,13 @@
 import type { ThingConfig } from '../flowTypes';
 
 const composeTextIndexProperties = (thingConfig: ThingConfig): { [key: string]: number } => {
-  const { embedded, file, textFields } = thingConfig;
+  const { textFields, type: configType } = thingConfig;
 
   const result = {};
 
   if (textFields) {
     textFields.reduce((prev, { name, weight }) => {
-      if (weight && (embedded || file)) {
+      if (weight && configType !== 'tangible') {
         throw new TypeError(
           'Must not have an "weight" for text field in an embedded or file document!',
         );

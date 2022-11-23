@@ -35,6 +35,7 @@ describe('createThingDistinctValuesQueryResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -132,6 +133,7 @@ describe('createThingDistinctValuesQueryResolver', () => {
 
     const childConfig: ThingConfig = {
       name: 'Child',
+      type: 'tangible',
       textFields: [
         {
           name: 'textFields',
@@ -146,6 +148,7 @@ describe('createThingDistinctValuesQueryResolver', () => {
     };
     const parentConfig: ThingConfig = {
       name: 'Parent',
+      type: 'tangible',
       textFields: [
         {
           name: 'name',

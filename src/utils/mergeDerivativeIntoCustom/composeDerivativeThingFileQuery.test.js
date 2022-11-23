@@ -10,7 +10,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeThingFileQuery', () => {
   const thingConfig: ThingConfig = {
     name: 'RootPhoto',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'textField',

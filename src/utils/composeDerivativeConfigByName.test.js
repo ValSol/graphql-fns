@@ -8,6 +8,7 @@ describe('composeDerivativeConfigByName', () => {
   test('should return correct derivative config', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -36,6 +37,7 @@ describe('composeDerivativeConfigByName', () => {
 
     const expectedResult = {
       name: 'ExampleForCatalog',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

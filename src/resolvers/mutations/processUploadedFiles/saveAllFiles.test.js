@@ -7,7 +7,7 @@ import saveAllFiles from './saveAllFiles';
 describe('saveAllFiles', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -19,7 +19,7 @@ describe('saveAllFiles', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -31,6 +31,7 @@ describe('saveAllFiles', () => {
   };
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     fileFields: [
       {
         name: 'logo',

@@ -10,7 +10,7 @@ describe('createUploadThingFilesMutationType', () => {
   test('should create mutation upload file thing type', () => {
     const imageConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -37,6 +37,7 @@ describe('createUploadThingFilesMutationType', () => {
   test('should create empty string if theris not file thing', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'first name',

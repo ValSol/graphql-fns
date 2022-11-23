@@ -38,6 +38,7 @@ describe('createNodeQueryResolver', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -125,7 +126,7 @@ describe('createNodeQueryResolver', () => {
 
     const imageConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [
         { name: 'fileId' },
         { name: 'desktop' },

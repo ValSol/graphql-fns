@@ -5,8 +5,9 @@ import type { InputCreator } from '../../flowTypes';
 const createFileWhereInputType: InputCreator = (thingConfig) => {
   const inputName = 'FileWhereInput';
 
-  const inputDefinition = thingConfig.file
-    ? `input FileWhereInput {
+  const inputDefinition =
+    thingConfig.type === 'file'
+      ? `input FileWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
   createdAt_in: [DateTime!]
@@ -47,7 +48,7 @@ const createFileWhereInputType: InputCreator = (thingConfig) => {
   NOR: [FileWhereInput!]
   OR: [FileWhereInput!]
 }`
-    : '';
+      : '';
 
   return [inputName, inputDefinition, {}];
 };

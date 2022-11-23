@@ -42,7 +42,7 @@ const generateExcel = async (
   };
 
   const thingNames = Object.keys(thingConfigs).filter(
-    (key) => !thingConfigs[key].file && !thingConfigs[key].embedded,
+    (key) => thingConfigs[key].type === 'tangible',
   );
 
   const wb = new ExcelJS.Workbook();
@@ -110,11 +110,8 @@ const generateExcel = async (
 
     let validDerivativeActionsMatrix = thingNames.map(() => []);
     if (derivative) {
-      const {
-        derivativeActionNames,
-        derivativeActionTypes,
-        thingNamesByDerivativeActions,
-      } = dataFromDerivative;
+      const { derivativeActionNames, derivativeActionTypes, thingNamesByDerivativeActions } =
+        dataFromDerivative;
 
       validDerivativeActionsMatrix = createValidDerivativeOrCustomActionsMatrix({
         actionNames: derivativeActionNames,

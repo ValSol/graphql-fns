@@ -19,12 +19,21 @@ const forbiddenFieldNames = [
   'create',
 ];
 
+const allowedConfigTypes = ['embedded', 'file', 'tangible', 'virtual'];
+
 const composeThingConfig = (
   simplifiedThingConfig: SimplifiedThingConfig,
   thingConfig: ThingConfig,
   thingConfigs: { [thingName: string]: ThingConfig },
 ) => {
-  const { name, embedded } = simplifiedThingConfig;
+  const { name, type: configType = 'tangible' } = simplifiedThingConfig;
+
+  if (!allowedConfigTypes.includes(configType)) {
+    throw new TypeError(`Not allowed config name: "${configType}"`);
+  }
+
+  thingConfig.type = configType; // eslint-disable-line no-param-reassign
+
   const {
     embeddedFields: simplifiedEmbeddedFields,
     duplexFields: simplifiedDuplexFields,
@@ -46,10 +55,10 @@ const composeThingConfig = (
         if (forbiddenFieldNames.includes(fieldName)) {
           throw new TypeError(`Forbidden field name: "${fieldName}" in thing: "${name}"!`);
         }
-        if (freeze && embedded) {
+        if (freeze && (configType === 'embedded' || configType === 'virtual')) {
           throw new TypeError(
             `Forbidden freeze field: "${fieldName}" in ${
-              embedded ? 'embedded' : 'file'
+              configType === 'embedded' ? 'embedded' : 'virtual'
             } thing: "${name}"!`,
           );
         }
@@ -69,7 +78,7 @@ const composeThingConfig = (
       }
 
       // check "&& name" to only
-      if (!config.embedded && !config.file && name) {
+      if (config.type !== 'embedded' && config.type !== 'file' && name) {
         if (name) {
           throw new TypeError(
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified thingConfig: "${name}"!`,
@@ -101,7 +110,7 @@ const composeThingConfig = (
         );
       }
 
-      if (!config.file) {
+      if (config.type !== 'file') {
         throw new TypeError(
           `Not file config: "${configName}" in file field: "${field.name}" of simplified thingConfig: "${name}"!`,
         );

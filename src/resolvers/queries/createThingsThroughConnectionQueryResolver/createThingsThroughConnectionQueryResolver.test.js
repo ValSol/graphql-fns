@@ -9,6 +9,7 @@ describe('createThingsThroughConnectionQueryResolver', () => {
   test('should create query resolver', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

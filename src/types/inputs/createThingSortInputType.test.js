@@ -8,6 +8,7 @@ describe('createThingSortInputType', () => {
   test('should create empty string if there are not any indexed fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -38,6 +39,7 @@ input ExampleSortInput {
   test('should create string with indexed text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -74,6 +76,7 @@ input ExampleSortInput {
   test('should create string with indexed enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'firstCuisine',
@@ -118,6 +121,7 @@ input ExampleSortInput {
   test('should create string with indexed int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'firstName',
@@ -154,6 +158,7 @@ input ExampleSortInput {
   test('should create string with indexed text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'firstName',
@@ -190,6 +195,7 @@ input ExampleSortInput {
   test('should create string with indexed text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'firstName',
@@ -226,6 +232,7 @@ input ExampleSortInput {
   test('should create string with indexed datetime fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'firstName',

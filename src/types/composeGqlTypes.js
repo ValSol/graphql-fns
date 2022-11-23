@@ -175,7 +175,7 @@ ${thingMutationTypes.join('\n')}
   const updatedThingPayloadTypes = allowSubscriptions
     ? Object.keys(thingConfigs)
         .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded, file }) => !(embedded || file))
+        .filter(({ type: configType }) => configType === 'tangible')
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (
@@ -192,7 +192,7 @@ ${thingMutationTypes.join('\n')}
   const thingSubscriptionTypes = allowSubscriptions
     ? Object.keys(thingConfigs)
         .map((thingName) => thingConfigs[thingName])
-        .filter(({ embedded, file }) => !(embedded || file))
+        .filter(({ type: configType }) => configType === 'tangible')
         .reduce((prev, thingConfig) => {
           const { name } = thingConfig;
           if (

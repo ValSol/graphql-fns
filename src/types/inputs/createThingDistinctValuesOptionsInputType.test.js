@@ -8,6 +8,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
   test('should create empty string if there are not any text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'firstName',
@@ -26,6 +27,7 @@ describe('createUploadFilesToThingOptionsInputType', () => {
   test('should create string with indexed text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

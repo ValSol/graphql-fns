@@ -26,6 +26,7 @@ describe('createCreateManyThingsMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -106,6 +107,7 @@ describe('createCreateManyThingsMutationResolver', () => {
   test('should create mutation create many thing resolver with id', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example2',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

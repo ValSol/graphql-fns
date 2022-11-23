@@ -10,7 +10,7 @@ describe('createThingFileCountQueryType', () => {
   test('should create query', () => {
     const thingConfig: ThingConfig = {
       name: 'RootExample',
-      file: true,
+      type: 'file',
     };
     const expectedResult = '  RootExampleFileCount(where: FileWhereInput): Int!';
     const dic = {};
@@ -22,6 +22,7 @@ describe('createThingFileCountQueryType', () => {
   test('should create empty query', () => {
     const thingConfig: ThingConfig = {
       name: 'RootExample',
+      type: 'tangible',
     };
     const expectedResult = '';
     const dic = {};

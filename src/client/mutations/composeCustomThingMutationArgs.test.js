@@ -21,6 +21,7 @@ describe('composeCustomThingMutationArgs', () => {
 
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',
@@ -71,6 +72,7 @@ describe('composeCustomThingMutationArgs', () => {
 
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

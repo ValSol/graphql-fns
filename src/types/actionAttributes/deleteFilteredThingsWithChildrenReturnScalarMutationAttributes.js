@@ -37,7 +37,7 @@ const argTypes = [
 const actionReturnConfig = false;
 
 const actionAllowed = (thingConfig: ThingConfig): boolean =>
-  !(thingConfig.embedded || thingConfig.file) &&
+  thingConfig.type === 'tangible' &&
   Boolean(
     getOppositeFields(thingConfig).filter(([, { array, parent }]) => !(array || parent)).length,
   );

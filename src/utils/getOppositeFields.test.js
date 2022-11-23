@@ -9,6 +9,7 @@ describe('getOppositeFields util', () => {
   const personConfig: ThingConfig = {};
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [{ name: 'name' }],
     duplexFields: [
       {
@@ -27,6 +28,7 @@ describe('getOppositeFields util', () => {
   };
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',

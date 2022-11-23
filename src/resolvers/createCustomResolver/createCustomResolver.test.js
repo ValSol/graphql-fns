@@ -35,6 +35,7 @@ describe('createCustomResolver', () => {
 
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

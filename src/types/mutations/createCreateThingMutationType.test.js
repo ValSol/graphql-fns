@@ -10,6 +10,7 @@ describe('createCreateThingMutationType', () => {
   test('should create mutation add thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult = '  createExample(data: ExampleCreateInput!): Example!';
     const dic = {};
@@ -22,11 +23,13 @@ describe('createCreateThingMutationType', () => {
   test('should create mutation add thing type', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',

@@ -8,6 +8,7 @@ describe('createThingWhereInputType', () => {
   test('should create empty string if there are not any index fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -88,6 +89,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are text index fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -191,6 +193,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -334,6 +337,7 @@ input PersonWhereWithoutBooleanOperationsInput {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -478,6 +482,7 @@ input PersonWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are enum index fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -580,6 +585,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are int index fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'firstName',
@@ -678,6 +684,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are int float fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'firstName',
@@ -776,6 +783,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are int dateTime fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       dateTimeFields: [
         {
           name: 'firstName',
@@ -874,6 +882,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should create thing input type if there are boolean float fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'firstName',
@@ -948,6 +957,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   test('should return inputType with counter field', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {

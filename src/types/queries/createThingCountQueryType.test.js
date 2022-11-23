@@ -9,6 +9,7 @@ describe('createThingCountQueryType', () => {
   test('should create query things type without index fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -28,6 +29,7 @@ describe('createThingCountQueryType', () => {
   test('should create query things type with where arg', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',

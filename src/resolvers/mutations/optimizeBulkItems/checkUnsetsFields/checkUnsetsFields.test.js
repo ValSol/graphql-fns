@@ -7,6 +7,7 @@ describe('checkUnsetsFields', () => {
   test('should return correct result', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'menu',

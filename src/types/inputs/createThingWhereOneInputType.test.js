@@ -9,6 +9,7 @@ describe('createThingWhereOneInputType', () => {
   test('should create thing input type', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
     };
     const expectedResult = [
       'ExampleWhereOneInput',
@@ -25,6 +26,7 @@ describe('createThingWhereOneInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       duplexFields: [
         {
           name: 'original',
@@ -58,6 +60,7 @@ describe('createThingWhereOneInputType', () => {
   test('should create thing input type with several args', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'email',

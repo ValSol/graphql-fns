@@ -23,8 +23,13 @@ const transformAfter = (
     return item;
   }
 
-  const { duplexFields, embedded, embeddedFields, file, fileFields, relationalFields } =
-    thingConfig;
+  const {
+    duplexFields,
+    embeddedFields,
+    fileFields,
+    relationalFields,
+    type: configType,
+  } = thingConfig;
 
   const transformedFields = [...(duplexFields || []), ...(relationalFields || [])].reduce(
     (prev, { array, config, name }) => {
@@ -73,7 +78,7 @@ const transformAfter = (
 
   let globalId;
 
-  if (isChild && (embedded || file)) {
+  if (isChild && configType !== 'tangible') {
     globalId = id;
   } else if (generalConfig) {
     const { root: rootName, suffix } = parseThingName(thingConfig.name, generalConfig);

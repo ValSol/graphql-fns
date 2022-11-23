@@ -9,22 +9,21 @@ const createPushIntoThingInputType: InputCreator = (thingConfig) => {
     booleanFields,
     dateTimeFields,
     duplexFields,
-    embedded,
     embeddedFields,
     enumFields,
-    file,
     fileFields,
     floatFields,
     intFields,
     geospatialFields,
     relationalFields,
     textFields,
+    type: configType,
     name,
   } = thingConfig;
 
   const inputName = `PushInto${name}Input`;
 
-  if (embedded || file) return [inputName, '', {}];
+  if (configType !== 'tangible') return [inputName, '', {}];
 
   const thingTypeArray = [];
   const childChain = {};

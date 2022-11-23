@@ -13,6 +13,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeImportThingsMutation', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

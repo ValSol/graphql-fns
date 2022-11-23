@@ -5,11 +5,11 @@ import type { InputCreator } from '../../flowTypes';
 import createThingUpdateInputType from './createThingUpdateInputType';
 
 const createUploadFilesToThingInputType: InputCreator = (thingConfig) => {
-  const { embedded, file, fileFields, name } = thingConfig;
+  const { fileFields, name, type: configType } = thingConfig;
 
   const inputName = `UploadFilesTo${name}Input`;
 
-  if (embedded || file) return [inputName, '', {}];
+  if (configType !== 'tangible') return [inputName, '', {}];
 
   const thingTypeArray = [];
   const childChain = {};

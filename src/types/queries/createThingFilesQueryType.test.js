@@ -10,7 +10,7 @@ describe('createThingFilesQueryType', () => {
   test('should create query only thing type', () => {
     const thingConfig: ThingConfig = {
       name: 'RootExample',
-      file: true,
+      type: 'file',
     };
     const expectedResult = '  RootExampleFiles(where: FileWhereInput): [RootExample!]!';
     const dic = {};

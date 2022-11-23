@@ -7,6 +7,7 @@ import composeGqlClientActionTree from './composeGqlClientActionTree';
 describe('composeGqlClientActionTree', () => {
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     counter: true,
     textFields: [
       {

@@ -8,6 +8,7 @@ describe('createDeleteThingWithChildrenOptionsInputType', () => {
   const personConfig: ThingConfig = {};
   const placeConfig: ThingConfig = {
     name: 'Place',
+    type: 'tangible',
     textFields: [{ name: 'name' }],
     duplexFields: [
       {
@@ -26,6 +27,7 @@ describe('createDeleteThingWithChildrenOptionsInputType', () => {
   };
   Object.assign(personConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'firstName',

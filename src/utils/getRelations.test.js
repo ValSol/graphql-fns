@@ -9,6 +9,7 @@ describe('getRelations', () => {
     const thingConfig: ThingConfig = {};
     const thingConfig2: ThingConfig = {
       name: 'Thing2',
+      type: 'tangible',
       relationalFields: [
         { config: thingConfig, name: 'relationalField_2' },
         { array: true, config: thingConfig, name: 'relationalField_2a' },
@@ -16,6 +17,7 @@ describe('getRelations', () => {
     };
     const thingConfig3 = {
       name: 'Thing3',
+      type: 'tangible',
       relationalFields: [
         { config: thingConfig, name: 'relationalField_3' },
         { array: true, config: thingConfig, name: 'relationalField_3a' },
@@ -23,6 +25,7 @@ describe('getRelations', () => {
     };
     Object.assign(thingConfig, {
       name: 'Thing',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField_1',

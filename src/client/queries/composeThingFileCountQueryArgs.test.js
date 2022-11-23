@@ -11,7 +11,7 @@ describe('composeThingFileCountQuery', () => {
     const prefixName = 'Home';
     const thingConfig: ThingConfig = {
       name: 'RootImage',
-      file: true,
+      type: 'file',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 

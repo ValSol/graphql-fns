@@ -29,6 +29,7 @@ describe('createCreateThingMutationResolver', () => {
   test('should create mutation add thing resolver', async () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -95,6 +96,7 @@ describe('createCreateThingMutationResolver', () => {
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -160,15 +162,17 @@ describe('createCreateThingMutationResolver', () => {
   });
 
   test('should create mutation add thing resolver that create related things', async () => {
-    const cityConfig = { name: 'City', textFields: [{ name: 'name' }] };
+    const cityConfig = { name: 'City', type: 'tangible', textFields: [{ name: 'name' }] };
     const placeConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       relationalFields: [{ name: 'capital', config: cityConfig }],
     };
     const personConfig = {};
     Object.assign(personConfig, {
       name: 'Person2',
+      type: 'tangible',
       counter: true,
       textFields: [
         {
@@ -308,6 +312,7 @@ describe('createCreateThingMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place2',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -332,6 +337,7 @@ describe('createCreateThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person3',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -527,6 +533,7 @@ describe('createCreateThingMutationResolver', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place3',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -544,6 +551,7 @@ describe('createCreateThingMutationResolver', () => {
     };
     Object.assign(personConfig, {
       name: 'Person4',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -701,6 +709,7 @@ describe('createCreateThingMutationResolver', () => {
   test('should create mongodb documents using checkData', async () => {
     const accessConfig: ThingConfig = {
       name: 'Access',
+      type: 'tangible',
 
       textFields: [
         { name: 'postCreators', array: true, index: true },
@@ -719,6 +728,7 @@ describe('createCreateThingMutationResolver', () => {
 
     Object.assign(postConfig, {
       name: 'Post',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }, { name: 'type' }],
 
@@ -739,6 +749,7 @@ describe('createCreateThingMutationResolver', () => {
 
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
+      type: 'tangible',
 
       textFields: [{ name: 'slug' }],
 

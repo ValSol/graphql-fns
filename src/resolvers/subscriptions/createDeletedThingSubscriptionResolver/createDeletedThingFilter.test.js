@@ -11,6 +11,7 @@ describe('createDeletedThingFilter', () => {
   const thingConfig: ThingConfig = {};
   Object.assign(thingConfig, {
     name: 'Person',
+    type: 'tangible',
     textFields: [
       {
         name: 'textField',

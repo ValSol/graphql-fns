@@ -10,6 +10,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create empty string with text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -43,6 +44,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create empty string with only scalar text fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -66,11 +68,13 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create  empty string with relational fields', () => {
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
     };
     const personConfig: ThingConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
@@ -103,7 +107,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create embedded thing input type with text fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -128,7 +132,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create  empty string with embedded fields', () => {
     const addressConfig: ThingConfig = {
       name: 'Address',
-      embedded: true,
+      type: 'embedded',
       textFields: [
         {
           name: 'country',
@@ -142,6 +146,7 @@ describe('createUploadFilesToThingInputType', () => {
     };
     const personConfig: ThingConfig = {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -184,6 +189,7 @@ describe('createUploadFilesToThingInputType', () => {
     const personConfig: ThingConfig = {};
     const placeConfig: ThingConfig = {
       name: 'Place',
+      type: 'tangible',
       textFields: [{ name: 'name' }],
       duplexFields: [
         {
@@ -202,6 +208,7 @@ describe('createUploadFilesToThingInputType', () => {
     };
     Object.assign(personConfig, {
       name: 'Person',
+      type: 'tangible',
       textFields: [
         {
           name: 'firstName',
@@ -248,6 +255,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing input type with geospatial fields', () => {
     const thingConfig = {
       name: 'Example',
+      type: 'tangible',
       geospatialFields: [
         {
           name: 'position',
@@ -300,6 +308,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing input type with enum fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       enumFields: [
         {
           name: 'field1',
@@ -332,6 +341,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing type with int fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       intFields: [
         {
           name: 'intField1',
@@ -365,6 +375,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing type with float fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       floatFields: [
         {
           name: 'floatField1',
@@ -398,6 +409,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing type with boolean fields', () => {
     const thingConfig: ThingConfig = {
       name: 'Example',
+      type: 'tangible',
       booleanFields: [
         {
           name: 'booleanField1',
@@ -431,7 +443,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create file thing input type with text fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -451,7 +463,7 @@ describe('createUploadFilesToThingInputType', () => {
   test('should create thing input type with file fields', () => {
     const imageConfig: ThingConfig = {
       name: 'Image',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -464,7 +476,7 @@ describe('createUploadFilesToThingInputType', () => {
 
     const photoConfig: ThingConfig = {
       name: 'Photo',
-      file: true,
+      type: 'file',
       textFields: [
         {
           name: 'fileId',
@@ -478,6 +490,7 @@ describe('createUploadFilesToThingInputType', () => {
     const thingConfig: ThingConfig = {};
     Object.assign(thingConfig, {
       name: 'Example',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField',

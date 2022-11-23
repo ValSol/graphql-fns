@@ -7,7 +7,7 @@ import composeMockFilesData from './composeMockFilesData';
 describe('composeMockFilesData', () => {
   const imageConfig: ThingConfig = {
     name: 'Image',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -28,7 +28,7 @@ describe('composeMockFilesData', () => {
   };
   const photoConfig: ThingConfig = {
     name: 'Photo',
-    file: true,
+    type: 'file',
     textFields: [
       {
         name: 'fileId',
@@ -49,6 +49,7 @@ describe('composeMockFilesData', () => {
   };
   const thingConfig: ThingConfig = {
     name: 'Example',
+    type: 'tangible',
     fileFields: [
       {
         name: 'logo',
