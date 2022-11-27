@@ -5,45 +5,45 @@ import type { ActionSignatureMethods, ObjectSignatureMethods } from '../flowType
 import composeCustom from './composeCustom';
 
 describe('composeCustom', () => {
-  test('compose simple thingConfigs', () => {
-    const thingTimeRange: ObjectSignatureMethods = {
-      name: 'thingTimeRange',
+  test('compose simple entityConfigs', () => {
+    const entityTimeRange: ObjectSignatureMethods = {
+      name: 'entityTimeRange',
       specificName: ({ name }) => `${name}TimeRange`,
       fieldNames: () => ['start', 'end'],
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const getThing: ActionSignatureMethods = {
-      name: 'getThing',
+    const getEntity: ActionSignatureMethods = {
+      name: 'getEntity',
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput!`],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const cloneThing: ActionSignatureMethods = {
-      name: 'cloneThing',
+    const cloneEntity: ActionSignatureMethods = {
+      name: 'cloneEntity',
       specificName: ({ name }) => (name === 'Restaurant' || name === 'Post' ? `clone${name}` : ''),
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput!`],
       type: ({ name }) => `${name}Clone!`,
-      config: (thingConfig, { thingConfigs: thingConfigs2 }) => {
-        const { name } = thingConfig;
-        return thingConfigs2[`${name}Clone`];
+      config: (entityConfig, { entityConfigs: entityConfigs2 }) => {
+        const { name } = entityConfig;
+        return entityConfigs2[`${name}Clone`];
       },
     };
 
     const result = composeCustom({
-      Input: [thingTimeRange],
-      Query: [getThing],
-      Mutation: [cloneThing],
+      Input: [entityTimeRange],
+      Query: [getEntity],
+      Mutation: [cloneEntity],
     });
 
     const expectedResult = {
-      Input: { thingTimeRange },
-      Query: { getThing },
-      Mutation: { cloneThing },
+      Input: { entityTimeRange },
+      Query: { getEntity },
+      Mutation: { cloneEntity },
     };
     expect(result).toEqual(expectedResult);
   });

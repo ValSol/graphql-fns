@@ -8,14 +8,14 @@ import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import collectDerivativeInputs from './collectDerivativeInputs';
 import composeActionSignature from './composeActionSignature';
 import composeObjectSignature from './composeObjectSignature';
-import createThingType from './createThingType';
+import createEntityType from './createEntityType';
 
 import { mutationAttributes, queryAttributes } from './actionAttributes';
 
-import createCreatedThingSubscriptionType from './subscriptions/createCreatedThingSubscriptionType';
-import createDeletedThingSubscriptionType from './subscriptions/createDeletedThingSubscriptionType';
-import createUpdatedThingSubscriptionType from './subscriptions/createUpdatedThingSubscriptionType';
-import createUpdatedThingPayloadType from './subscriptions/createUpdatedThingPayloadType';
+import createCreatedEntitySubscriptionType from './subscriptions/createCreatedEntitySubscriptionType';
+import createDeletedEntitySubscriptionType from './subscriptions/createDeletedEntitySubscriptionType';
+import createUpdatedEntitySubscriptionType from './subscriptions/createUpdatedEntitySubscriptionType';
+import createUpdatedEntityPayloadType from './subscriptions/createUpdatedEntityPayloadType';
 
 import composeEnumTypes from './specialized/composeEnumTypes';
 import composeCommonUseTypes from './specialized/composeCommonUseTypes';
@@ -23,7 +23,7 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeStandardActionSignature from './composeStandardActionSignature';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs, derivative: preDerivative, inventory } = generalConfig;
+  const { entityConfigs, derivative: preDerivative, inventory } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
@@ -38,41 +38,41 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
-  const thingNames = Object.keys(thingConfigs);
+  const entityNames = Object.keys(entityConfigs);
 
   const inputDic = {};
 
   // 1. generate standard objects' signatures
 
-  const thingTypesArray = Object.keys(thingConfigs).map((thingName) =>
-    createThingType(thingConfigs[thingName], inputDic),
+  const entityTypesArray = Object.keys(entityConfigs).map((entityName) =>
+    createEntityType(entityConfigs[entityName], inputDic),
   );
 
   // 2. generate derivative objects' signatures
 
   Object.keys(derivative || {}).reduce((prev, suffix) => {
     const { allow } = derivative[suffix];
-    Object.keys(allow).forEach((thingName) => {
+    Object.keys(allow).forEach((entityName) => {
       const derivativeConfig = composeDerivativeConfig(
         derivative[suffix],
-        thingConfigs[thingName],
+        entityConfigs[entityName],
         generalConfig,
       );
-      if (derivativeConfig) prev.push(createThingType(derivativeConfig, inputDic));
+      if (derivativeConfig) prev.push(createEntityType(derivativeConfig, inputDic));
     });
 
     return prev;
-  }, thingTypesArray);
+  }, entityTypesArray);
 
-  const thingTypes = thingTypesArray.join('\n');
+  const entityTypes = entityTypesArray.join('\n');
 
   // 3. generate standard actions' signatures ...
   // ... AND add to "input dic" standard inputs
 
-  const thingQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
-    thingNames.forEach((thingName) => {
+  const entityQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
+    entityNames.forEach((entityName) => {
       const action = composeStandardActionSignature(
-        thingConfigs[thingName],
+        entityConfigs[entityName],
         queryAttributes[actionName],
         inputDic,
         inventory,
@@ -82,10 +82,10 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     return prev;
   }, []);
 
-  const thingMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
-    thingNames.forEach((thingName) => {
+  const entityMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
+    entityNames.forEach((entityName) => {
       const action = composeStandardActionSignature(
-        thingConfigs[thingName],
+        entityConfigs[entityName],
         mutationAttributes[actionName],
         inputDic,
         inventory,
@@ -97,44 +97,44 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   // 4. generate custom actions' signatures
 
-  thingNames.forEach((thingName) => {
+  entityNames.forEach((entityName) => {
     Object.keys(customQuery).forEach((customName) => {
-      if (checkInventory(['Query', customName, thingName], inventory)) {
+      if (checkInventory(['Query', customName, entityName], inventory)) {
         const action = composeActionSignature(
           customQuery[customName],
-          thingConfigs[thingName],
+          entityConfigs[entityName],
           generalConfig,
         );
         if (action) {
-          thingQueryTypes.push(`  ${action}`);
+          entityQueryTypes.push(`  ${action}`);
         }
       }
     });
 
     Object.keys(customMutation).forEach((customName) => {
-      if (checkInventory(['Mutation', customName, thingName], inventory)) {
+      if (checkInventory(['Mutation', customName, entityName], inventory)) {
         const action = composeActionSignature(
           customMutation[customName],
-          thingConfigs[thingName],
+          entityConfigs[entityName],
           generalConfig,
         );
         if (action) {
-          thingMutationTypes.push(`  ${action}`);
+          entityMutationTypes.push(`  ${action}`);
         }
       }
     });
   });
 
-  const thingQueryTypes2 = thingQueryTypes.length
+  const entityQueryTypes2 = entityQueryTypes.length
     ? `type Query {
   node(id: ID!): Node
-${thingQueryTypes.join('\n')}
+${entityQueryTypes.join('\n')}
 }`
     : '';
 
-  const thingMutationTypes2 = thingMutationTypes.length
+  const entityMutationTypes2 = entityMutationTypes.length
     ? `type Mutation {
-${thingMutationTypes.join('\n')}
+${entityMutationTypes.join('\n')}
 }`
     : '';
 
@@ -146,17 +146,17 @@ ${thingMutationTypes.join('\n')}
 
   const customInputObjectNames = Object.keys(customInputObject);
   const input = true;
-  thingNames.reduce((prev, thingName) => {
+  entityNames.reduce((prev, entityName) => {
     customInputObjectNames.forEach((customName) => {
       const customInputType = composeObjectSignature(
         customInputObject[customName],
-        thingConfigs[thingName],
+        entityConfigs[entityName],
         generalConfig,
         input,
       );
       if (customInputType) {
         const key = customInputObject[customName].specificName(
-          thingConfigs[thingName],
+          entityConfigs[entityName],
           generalConfig,
         );
         prev[key] = customInputType; // eslint-disable-line no-param-reassign
@@ -172,54 +172,54 @@ ${thingMutationTypes.join('\n')}
 
   // prepare subscriptions
 
-  const updatedThingPayloadTypes = allowSubscriptions
-    ? Object.keys(thingConfigs)
-        .map((thingName) => thingConfigs[thingName])
+  const updatedEntityPayloadTypes = allowSubscriptions
+    ? Object.keys(entityConfigs)
+        .map((entityName) => entityConfigs[entityName])
         .filter(({ type: configType }) => configType === 'tangible')
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
+        .reduce((prev, entityConfig) => {
+          const { name } = entityConfig;
           if (
-            checkInventory(['Subscription', 'updatedThing', name], inventory) &&
-            checkInventory(['Mutation', 'updateThing', name], inventory)
+            checkInventory(['Subscription', 'updatedEntity', name], inventory) &&
+            checkInventory(['Mutation', 'updateEntity', name], inventory)
           ) {
-            prev.push(createUpdatedThingPayloadType(thingConfig));
+            prev.push(createUpdatedEntityPayloadType(entityConfig));
           }
           return prev;
         }, [])
         .join('\n')
     : '';
 
-  const thingSubscriptionTypes = allowSubscriptions
-    ? Object.keys(thingConfigs)
-        .map((thingName) => thingConfigs[thingName])
+  const entitySubscriptionTypes = allowSubscriptions
+    ? Object.keys(entityConfigs)
+        .map((entityName) => entityConfigs[entityName])
         .filter(({ type: configType }) => configType === 'tangible')
-        .reduce((prev, thingConfig) => {
-          const { name } = thingConfig;
+        .reduce((prev, entityConfig) => {
+          const { name } = entityConfig;
           if (
-            checkInventory(['Subscription', 'createdThing', name], inventory) &&
-            checkInventory(['Mutation', 'createThing', name], inventory)
+            checkInventory(['Subscription', 'createdEntity', name], inventory) &&
+            checkInventory(['Mutation', 'createEntity', name], inventory)
           ) {
-            prev.push(createCreatedThingSubscriptionType(thingConfig));
+            prev.push(createCreatedEntitySubscriptionType(entityConfig));
           }
           if (
-            checkInventory(['Subscription', 'updatedThing', name], inventory) &&
-            checkInventory(['Mutation', 'updateThing', name], inventory)
+            checkInventory(['Subscription', 'updatedEntity', name], inventory) &&
+            checkInventory(['Mutation', 'updateEntity', name], inventory)
           ) {
-            prev.push(createUpdatedThingSubscriptionType(thingConfig));
+            prev.push(createUpdatedEntitySubscriptionType(entityConfig));
           }
           if (
-            checkInventory(['Subscription', 'deletedThing', name], inventory) &&
-            checkInventory(['Mutation', 'deleteThing', name], inventory)
+            checkInventory(['Subscription', 'deletedEntity', name], inventory) &&
+            checkInventory(['Mutation', 'deleteEntity', name], inventory)
           ) {
-            prev.push(createDeletedThingSubscriptionType(thingConfig));
+            prev.push(createDeletedEntitySubscriptionType(entityConfig));
           }
           return prev;
         }, [])
         .join('\n')
     : '';
-  const thingSubscriptionTypes2 = allowSubscriptions
+  const entitySubscriptionTypes2 = allowSubscriptions
     ? `type Subscription {
-${thingSubscriptionTypes}
+${entitySubscriptionTypes}
 }`
     : '';
 
@@ -231,13 +231,13 @@ ${thingSubscriptionTypes}
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);
 
-  resultArray.push(thingTypes);
+  resultArray.push(entityTypes);
 
   if (inputs) resultArray.push(inputs);
-  if (updatedThingPayloadTypes) resultArray.push(updatedThingPayloadTypes);
-  if (thingQueryTypes2) resultArray.push(thingQueryTypes2);
-  if (thingMutationTypes2) resultArray.push(thingMutationTypes2);
-  if (thingSubscriptionTypes2) resultArray.push(thingSubscriptionTypes2);
+  if (updatedEntityPayloadTypes) resultArray.push(updatedEntityPayloadTypes);
+  if (entityQueryTypes2) resultArray.push(entityQueryTypes2);
+  if (entityMutationTypes2) resultArray.push(entityMutationTypes2);
+  if (entitySubscriptionTypes2) resultArray.push(entitySubscriptionTypes2);
 
   return resultArray.join('\n');
 };

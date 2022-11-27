@@ -1,11 +1,11 @@
 // @flow
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import fromGlobalId from '../../fromGlobalId';
 
-const processWhereOne = (whereOne: Object, thingConfig: ThingConfig | null) => {
-  const { duplexFields, relationalFields } = thingConfig || {};
+const processWhereOne = (whereOne: Object, entityConfig: EntityConfig | null) => {
+  const { duplexFields, relationalFields } = entityConfig || {};
 
   const transformedFieldsObject = whereOne.id ? { id: true } : {};
 
@@ -31,12 +31,12 @@ const processWhereOne = (whereOne: Object, thingConfig: ThingConfig | null) => {
   return result;
 };
 
-const transformWhereOne = (whereOne: Object, thingConfig: ThingConfig): Object => {
+const transformWhereOne = (whereOne: Object, entityConfig: EntityConfig): Object => {
   if (Array.isArray(whereOne)) {
-    return whereOne.map((whereOne2) => processWhereOne(whereOne2, thingConfig));
+    return whereOne.map((whereOne2) => processWhereOne(whereOne2, entityConfig));
   }
 
-  return processWhereOne(whereOne, thingConfig);
+  return processWhereOne(whereOne, entityConfig);
 };
 
 export default transformWhereOne;

@@ -1,19 +1,19 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
-type Result = { [ThingConfig]: Array<Object> };
+type Result = { [EntityConfig]: Array<Object> };
 
-const getRelations = (thingConfig: ThingConfig, thingConfigs: Array<ThingConfig>): Result => {
+const getRelations = (entityConfig: EntityConfig, entityConfigs: Array<EntityConfig>): Result => {
   const result = new Map();
 
-  thingConfigs.forEach((currentThingConfig) => {
-    const { relationalFields, type: configType } = currentThingConfig;
+  entityConfigs.forEach((currentEntityConfig) => {
+    const { relationalFields, type: configType } = currentEntityConfig;
     if (relationalFields && configType === 'tangible') {
       const fields = relationalFields
-        .filter(({ config }) => config === thingConfig)
+        .filter(({ config }) => config === entityConfig)
         .map(({ name, array }) => ({ name, array }));
       if (fields.length) {
-        result.set(currentThingConfig, fields);
+        result.set(currentEntityConfig, fields);
       }
     }
   });

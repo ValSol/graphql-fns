@@ -1,11 +1,11 @@
 // @flow
-import type { GeneralConfig, ObjectSignatureMethods, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ObjectSignatureMethods, EntityConfig } from '../flowTypes';
 
 import composeSpecificActionName from '../utils/composeSpecificActionName';
 
 const composeObjectSignature = (
   signatureMethods: ObjectSignatureMethods,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   input?: boolean,
 ): string => {
@@ -16,22 +16,22 @@ const composeObjectSignature = (
     fieldTypes: composeFieldTypes,
   } = signatureMethods;
 
-  const specificName = composeName(thingConfig, generalConfig);
+  const specificName = composeName(entityConfig, generalConfig);
 
   // by making specificName = '' filter unnecessary objects
   if (!specificName) return '';
 
   // *** test correctness of the specificName name
-  const { name: thingName } = thingConfig;
-  if (specificName !== composeSpecificActionName({ actionName, thingName })) {
+  const { name: entityName } = entityConfig;
+  if (specificName !== composeSpecificActionName({ actionName, entityName })) {
     throw new TypeError(
       `Specific action name: "${specificName}" is not corresponding with generic action specificName "${actionName}"!`,
     );
   }
   // ***
 
-  const fieldNames = composeFieldNames(thingConfig, generalConfig);
-  const fieldTypes = composeFieldTypes(thingConfig, generalConfig);
+  const fieldNames = composeFieldNames(entityConfig, generalConfig);
+  const fieldTypes = composeFieldTypes(entityConfig, generalConfig);
 
   if (fieldNames.length !== fieldTypes.length) {
     throw new TypeError('fieldNames & fieldTypes arrays have to have equal length!');

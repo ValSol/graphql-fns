@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes, EntityConfig } from '../../flowTypes';
 
 import parseChildQueries from './parseChildQueries';
 
 describe('parseChildQueries', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -14,7 +14,7 @@ describe('parseChildQueries', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -29,7 +29,7 @@ describe('parseChildQueries', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -68,20 +68,20 @@ describe('parseChildQueries', () => {
   });
 
   const signatureMethods: ActionSignatureMethods = {
-    name: 'getThing',
+    name: 'getEntity',
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig) => thingConfig,
+    config: (entityConfig) => entityConfig,
   };
 
   const ForCatalog: DerivativeAttributes = {
     suffix: 'ForCatalog',
     allow: {
-      Person: ['thingsByUnique', 'childThings', 'childThing'],
-      Place: ['childThing'],
-      Country: ['childThing'],
+      Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+      Place: ['childEntity'],
+      Country: ['childEntity'],
     },
 
     derivativeFields: {
@@ -97,28 +97,28 @@ describe('parseChildQueries', () => {
     },
   };
 
-  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
-  const queryName = 'getThing';
+  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const queryName = 'getEntity';
   const custom = { Query: { [queryName]: signatureMethods } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { thingConfigs, custom, derivative };
+  const generalConfig = { entityConfigs, custom, derivative };
 
-  test('have to return inventoryByPermissions with  thingsByUnique: [Person]', () => {
-    const childQueries = ['childThings:PersonForCatalog', 'childThing:PlaceForCatalog'];
+  test('have to return inventoryByPermissions with  entitiesByUnique: [Person]', () => {
+    const childQueries = ['childEntities:PersonForCatalog', 'childEntity:PlaceForCatalog'];
 
     const expectedResult = [
       {
-        actionName: 'childThingsForCatalog',
-        baseAction: 'childThings',
+        actionName: 'childEntitiesForCatalog',
+        baseAction: 'childEntities',
         suffix: 'ForCatalog',
-        thingName: 'Person',
+        entityName: 'Person',
       },
       {
-        actionName: 'childThingForCatalog',
-        baseAction: 'childThing',
+        actionName: 'childEntityForCatalog',
+        baseAction: 'childEntity',
         suffix: 'ForCatalog',
-        thingName: 'Place',
+        entityName: 'Place',
       },
     ];
 

@@ -1,11 +1,11 @@
 // @flow
-import type { ThingConfig, ThingConfigObject } from '../flowTypes';
+import type { EntityConfig, EntityConfigObject } from '../flowTypes';
 
 const store = Object.create(null);
 
-const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
+const composeFieldsObject = (entityConfig: EntityConfig): EntityConfigObject => {
   const {
-    name: thingName,
+    name: entityName,
     booleanFields,
     dateTimeFields,
     duplexFields,
@@ -17,10 +17,10 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
     relationalFields,
     textFields,
     fileFields,
-  } = thingConfig;
+  } = entityConfig;
 
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store[thingName]) return store[thingName];
+  if (!process.env.JEST_WORKER_ID && store[entityName]) return store[entityName];
 
   const result = {};
 
@@ -123,7 +123,7 @@ const composeFieldsObject = (thingConfig: ThingConfig): ThingConfigObject => {
     }, result);
   }
 
-  store[thingName] = result;
+  store[entityName] = result;
 
   return result;
 };

@@ -1,26 +1,26 @@
 // @flow
-import type { Periphery, ThingConfig } from '../../flowTypes';
+import type { Periphery, EntityConfig } from '../../flowTypes';
 
 import createThingSchema from '../../mongooseModels/createThingSchema';
 
-type Result = Map<ThingConfig, Array<Object>>;
+type Result = Map<EntityConfig, Array<Object>>;
 
 const updatePeriphery = async (
   periphery: Periphery,
-  core: Map<ThingConfig, Array<Object>>,
+  core: Map<EntityConfig, Array<Object>>,
   mongooseConn: Object,
 ): Promise<Result> => {
   const promises = [];
   periphery.forEach((obj, config) => {
     const { name: configName } = config;
     const thingSchema = createThingSchema(config);
-    const Thing = mongooseConn.model(`${configName}_Thing`, thingSchema);
+    const Entity = mongooseConn.model(`${configName}_Thing`, thingSchema);
 
     Object.keys(obj).forEach((oppositeName) => {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];
 
       promises.push(
-        Thing.find(
+        Entity.find(
           {
             _id: { $in: oppositeIds },
             [oppositeName]: { $exists: true, $ne: null },

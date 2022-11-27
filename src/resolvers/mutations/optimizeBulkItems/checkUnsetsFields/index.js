@@ -1,13 +1,13 @@
 // @flow
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import composeFieldsObject from '../../../../utils/composeFieldsObject';
 
 const composeToken = (fieldName, id) => `${id}:${fieldName}`;
 
-const checkUnsetsFields = (bulkItems: Array<Object>, thingConfig: ThingConfig): void => {
-  const fieldsObject = composeFieldsObject(thingConfig);
+const checkUnsetsFields = (bulkItems: Array<Object>, entityConfig: EntityConfig): void => {
+  const fieldsObject = composeFieldsObject(entityConfig);
   const unsets = new Set();
 
   bulkItems.forEach((item) => {
@@ -55,7 +55,7 @@ const checkUnsetsFields = (bulkItems: Array<Object>, thingConfig: ThingConfig): 
   unsets.forEach((token) => {
     const [, fieldName] = token.split(':');
     throw new TypeError(
-      `Try unset required field: "${fieldName}" for thing: "${thingConfig.name}"!`,
+      `Try unset required field: "${fieldName}" for entity: "${entityConfig.name}"!`,
     );
   });
 };

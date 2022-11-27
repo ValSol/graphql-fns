@@ -1,9 +1,9 @@
 // @flow
 
-import type { GeneralConfig, ThingConfig } from '../../../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../../../flowTypes';
 
 import composeDerivativeConfig from '../../../../utils/composeDerivativeConfig';
-import parseThingName from '../../parseThingName';
+import parseEntityName from '../../parseEntityName';
 import transformData from './transformData';
 import transformFileWhere from './transformFileWhere';
 import transformFileWhereOne from './transformFileWhereOne';
@@ -26,7 +26,7 @@ const argTypesInParts = [
   ['', 'CopyWhereOnesInput', transformWhereOnes, false],
 ];
 
-const getPossibleThingName = (prefix: string, suffix: string, argType: string) =>
+const getPossibleEntityName = (prefix: string, suffix: string, argType: string) =>
   argType.slice(prefix.length, -suffix.length);
 
 const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
@@ -34,37 +34,37 @@ const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
 const getTransformerAndConfig = (
   rawArgType: string,
   generalConfig: GeneralConfig,
-): null | [Function, null | ThingConfig] => {
+): null | [Function, null | EntityConfig] => {
   const argType = rawArgType.replace(regExp, ''); // eslint-disable-line no-useless-escape
 
   const results = argTypesInParts.reduce((prev, [prefix, suffix, transformer, notUseConfig]) => {
     if (!argType.startsWith(prefix) || !argType.endsWith(suffix)) return prev;
 
-    const possibleThingName = getPossibleThingName(prefix, suffix, argType);
+    const possibleEntityName = getPossibleEntityName(prefix, suffix, argType);
 
     if (notUseConfig) {
       prev.push([transformer, null]);
-    } else if (!possibleThingName) {
+    } else if (!possibleEntityName) {
       if (prefix === suffix && prefix === argType) {
         prev.push([transformer, null]);
       }
     } else {
       try {
-        const { root: thingName, suffix: derivativeKey } = parseThingName(
-          possibleThingName,
+        const { root: entityName, suffix: derivativeKey } = parseEntityName(
+          possibleEntityName,
           generalConfig,
         );
 
-        const { thingConfigs, derivative } = generalConfig;
+        const { entityConfigs, derivative } = generalConfig;
 
-        const thingConfig = thingConfigs[thingName];
+        const entityConfig = entityConfigs[entityName];
 
         if (!derivativeKey) {
-          prev.push([transformer, thingConfig]);
+          prev.push([transformer, entityConfig]);
         } else {
           const derivativeConfig = composeDerivativeConfig(
             (derivative || {})[derivativeKey],
-            thingConfig,
+            entityConfig,
             generalConfig,
           );
 

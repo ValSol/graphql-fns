@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { EntityConfig, UploadOptions } from '../../../flowTypes';
 
 import getHashDoubles from './getHashDoubles';
 
 describe('getHashDoubles', () => {
-  const imageConfig: ThingConfig = {
+  const imageConfig: EntityConfig = {
     name: 'Image',
     type: 'file',
     textFields: [
@@ -17,7 +17,7 @@ describe('getHashDoubles', () => {
       },
     ],
   };
-  const photoConfig: ThingConfig = {
+  const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'file',
     textFields: [
@@ -29,7 +29,7 @@ describe('getHashDoubles', () => {
       },
     ],
   };
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     fileFields: [
@@ -61,7 +61,7 @@ describe('getHashDoubles', () => {
       hashes: ['pic1', 'pic2', 'photo1', 'photo2', 'photo3', 'pic3', 'pic4'],
     };
 
-    const result = getHashDoubles(options, thingConfig);
+    const result = getHashDoubles(options, entityConfig);
 
     const expectedResult = [null, null, null, null, null, null, null];
 
@@ -75,7 +75,7 @@ describe('getHashDoubles', () => {
       hashes: ['pic1', 'pic1', 'pic1', 'photo2', 'pic1', 'pic3', 'pic1'],
     };
 
-    const result = getHashDoubles(options, thingConfig);
+    const result = getHashDoubles(options, entityConfig);
 
     const expectedResult = [null, 0, null, null, 2, null, 0];
 

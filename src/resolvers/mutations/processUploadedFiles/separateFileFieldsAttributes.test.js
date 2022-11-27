@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import separateFileFieldsAttributes from './separateFileFieldsAttributes';
 
 describe('separateFileFieldsAttributes', () => {
-  const imageConfig: ThingConfig = {
+  const imageConfig: EntityConfig = {
     name: 'Image',
     type: 'file',
     textFields: [
@@ -17,7 +17,7 @@ describe('separateFileFieldsAttributes', () => {
       },
     ],
   };
-  const photoConfig: ThingConfig = {
+  const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'file',
     textFields: [
@@ -29,7 +29,7 @@ describe('separateFileFieldsAttributes', () => {
       },
     ],
   };
-  const exampleConfig: ThingConfig = {};
+  const exampleConfig: EntityConfig = {};
   Object.assign(exampleConfig, {
     name: 'Example',
     type: 'tangible',

@@ -16,8 +16,8 @@ describe('mergeInventories', () => {
             signinThingForView: ['User'],
           },
           Query: {
-            thingsForView: ['Restaurant', 'Post', 'MenuSection'],
-            thingForView: ['Restaurant', 'Post', 'Menu'],
+            entitiesForView: ['Restaurant', 'Post', 'MenuSection'],
+            entityForView: ['Restaurant', 'Post', 'Menu'],
             childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
             childThingsForView: ['Post', 'MenuSection'],
           },
@@ -28,13 +28,13 @@ describe('mergeInventories', () => {
         include: {
           Query: {
             thingForApprove: ['Restaurant', 'Post'],
-            childThings: ['MenuSectionClone'],
+            childEntities: ['MenuSectionClone'],
             thingsForApprove: ['Post', 'Restaurant'],
             childThingForApprove: ['User'],
           },
           Mutation: {
-            cloneThing: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
-            copyThing: [
+            cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
+            copyEntity: [
               'BanquetHallClone',
               'BanquetHall',
               'ConferenceHallClone',
@@ -46,13 +46,13 @@ describe('mergeInventories', () => {
               'RestaurantClone',
               'Restaurant',
             ],
-            deleteThing: [
+            deleteEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'PostClone',
               'RestaurantClone',
             ],
-            createThing: ['Menu'],
+            createEntity: ['Menu'],
             deleteWithChildrenThing: ['MenuClone'],
             removeStaticThing: ['Restaurant', 'Post'],
             cloneLevelOfThing: ['Restaurant'],
@@ -72,8 +72,8 @@ describe('mergeInventories', () => {
             signinThingForView: ['User'],
           },
           Query: {
-            thingsForView: ['MenuSection', 'ConferenceHall'],
-            thingForView: ['Restaurant', 'Post', 'Menu'],
+            entitiesForView: ['MenuSection', 'ConferenceHall'],
+            entityForView: ['Restaurant', 'Post', 'Menu'],
             childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
             childThingsForView: ['Post', 'MenuSection'],
           },
@@ -83,20 +83,20 @@ describe('mergeInventories', () => {
         name: 'publisher',
         include: {
           Query: {
-            thing: ['Post'],
+            entity: ['Post'],
             thingForApprove: ['Restaurant', 'Post'],
-            childThings: ['MenuSectionClone'],
+            childEntities: ['MenuSectionClone'],
             thingsForApprove: ['Post', 'Restaurant'],
             childThingForApprove: ['User'],
           },
           Mutation: {
-            deleteThing: [
+            deleteEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'PostClone',
               'RestaurantClone',
             ],
-            createThing: ['Menu'],
+            createEntity: ['Menu'],
           },
         },
       },
@@ -114,8 +114,8 @@ describe('mergeInventories', () => {
             signinThingForView: ['User'],
           },
           Query: {
-            thingsForView: ['Restaurant', 'Post', 'MenuSection', 'ConferenceHall'],
-            thingForView: ['Restaurant', 'Post', 'Menu'],
+            entitiesForView: ['Restaurant', 'Post', 'MenuSection', 'ConferenceHall'],
+            entityForView: ['Restaurant', 'Post', 'Menu'],
             childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
             childThingsForView: ['Post', 'MenuSection'],
           },
@@ -125,15 +125,15 @@ describe('mergeInventories', () => {
         name: 'publisher',
         include: {
           Query: {
-            thing: ['Post'],
+            entity: ['Post'],
             thingForApprove: ['Restaurant', 'Post'],
-            childThings: ['MenuSectionClone'],
+            childEntities: ['MenuSectionClone'],
             thingsForApprove: ['Post', 'Restaurant'],
             childThingForApprove: ['User'],
           },
           Mutation: {
-            cloneThing: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
-            copyThing: [
+            cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
+            copyEntity: [
               'BanquetHallClone',
               'BanquetHall',
               'ConferenceHallClone',
@@ -145,13 +145,13 @@ describe('mergeInventories', () => {
               'RestaurantClone',
               'Restaurant',
             ],
-            deleteThing: [
+            deleteEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'PostClone',
               'RestaurantClone',
             ],
-            createThing: ['Menu'],
+            createEntity: ['Menu'],
             deleteWithChildrenThing: ['MenuClone'],
             removeStaticThing: ['Restaurant', 'Post'],
             cloneLevelOfThing: ['Restaurant'],

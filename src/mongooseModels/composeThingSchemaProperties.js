@@ -2,7 +2,7 @@
 
 import mongoose from 'mongoose';
 
-import type { Enums, ThingConfig } from '../flowTypes';
+import type { Enums, EntityConfig } from '../flowTypes';
 
 type ThingSchemaProperty = {
   type: Function | [Function],
@@ -14,7 +14,7 @@ type ThingSchemaProperties = { [key: string]: ThingSchemaProperty };
 const { Schema } = mongoose;
 
 const composeThingSchemaProperties = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   enums: Enums,
 ): ThingSchemaProperties => {
   const {
@@ -31,7 +31,7 @@ const composeThingSchemaProperties = (
     relationalFields,
     textFields,
     type: configType,
-  } = thingConfig;
+  } = entityConfig;
 
   const result = {};
 
@@ -188,7 +188,7 @@ const composeThingSchemaProperties = (
 
   if (relationalFields) {
     relationalFields.reduce(
-      (prev, { array, config: { name: relationalThingName }, index, name, required, unique }) => {
+      (prev, { array, config: { name: relationalEntityName }, index, name, required, unique }) => {
         if (index && configType !== 'tangible') {
           throw new TypeError(`Must not have an "index" field in an "${configType}" document!`);
         }
@@ -200,7 +200,7 @@ const composeThingSchemaProperties = (
           index?: boolean,
           unique?: boolean,
         } = {
-          ref: relationalThingName,
+          ref: relationalEntityName,
           type: Schema.Types.ObjectId,
         };
         if (!required) obj.required = false; // by default required = true

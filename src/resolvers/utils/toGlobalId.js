@@ -1,6 +1,6 @@
 // @flow
 
-const toGlobalId = (id: string, thingName: string, suffix?: string = ''): string =>
-  btoa(`${id}:${thingName}:${suffix}`);
+const toGlobalId = (id: string, entityName: string, suffix?: string = ''): string =>
+  btoa(`${id}:${entityName}:${suffix}`);
 
 export default toGlobalId;

@@ -13,21 +13,21 @@ import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
 import resolverDecorator from '../utils/resolverDecorator';
-import composeThingResolvers from '../types/composeThingResolvers';
+import composeEntityResolvers from '../types/composeEntityResolvers';
 import createCustomResolver from '../createCustomResolver';
 import createNodeQueryResolver from '../queries/createNodeQueryResolver';
 import queries from '../queries';
 import mutations from '../mutations';
 
-import createCreatedThingSubscriptionResolver from '../subscriptions/createCreatedThingSubscriptionResolver';
-import createUpdatedThingSubscriptionResolver from '../subscriptions/createUpdatedThingSubscriptionResolver';
-import createDeletedThingSubscriptionResolver from '../subscriptions/createDeletedThingSubscriptionResolver';
+import createCreatedEntitySubscriptionResolver from '../subscriptions/createCreatedEntitySubscriptionResolver';
+import createUpdatedEntitySubscriptionResolver from '../subscriptions/createUpdatedEntitySubscriptionResolver';
+import createDeletedEntitySubscriptionResolver from '../subscriptions/createDeletedEntitySubscriptionResolver';
 
 const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
-  const { thingConfigs, inventory, derivative } = generalConfig;
+  const { entityConfigs, inventory, derivative } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
@@ -58,18 +58,18 @@ const composeGqlResolvers = (
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
-  Object.keys(thingConfigs).reduce((prev, thingName) => {
-    const thingConfig = thingConfigs[thingName];
+  Object.keys(entityConfigs).reduce((prev, entityName) => {
+    const entityConfig = entityConfigs[entityName];
     if (allowQueries) {
       Object.keys(queryAttributes).forEach((actionName) => {
-        if (queryAttributes[actionName].actionAllowed(thingConfig)) {
-          const resolver = queries[actionName](thingConfig, generalConfig, serversideConfig);
+        if (queryAttributes[actionName].actionAllowed(entityConfig)) {
+          const resolver = queries[actionName](entityConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Query[queryAttributes[actionName].actionName(thingName)] = resolverDecorator(
+            prev.Query[queryAttributes[actionName].actionName(entityName)] = resolverDecorator(
               resolver,
               queryAttributes[actionName],
-              thingConfig,
+              entityConfig,
             );
           }
         }
@@ -81,14 +81,14 @@ const composeGqlResolvers = (
         const customQueryResolver = createCustomResolver(
           'Query',
           customName,
-          thingConfig,
+          entityConfig,
           generalConfig,
           serversideConfig,
         );
 
         if (customQueryResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Query[customQuery[customName].specificName(thingConfig, generalConfig)] =
+          prev.Query[customQuery[customName].specificName(entityConfig, generalConfig)] =
             customQueryResolver;
         }
       });
@@ -96,15 +96,12 @@ const composeGqlResolvers = (
 
     if (allowMutations) {
       Object.keys(mutationAttributes).forEach((actionName) => {
-        if (mutationAttributes[actionName].actionAllowed(thingConfig)) {
-          const resolver = mutations[actionName](thingConfig, generalConfig, serversideConfig);
+        if (mutationAttributes[actionName].actionAllowed(entityConfig)) {
+          const resolver = mutations[actionName](entityConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
-            prev.Mutation[mutationAttributes[actionName].actionName(thingName)] = resolverDecorator(
-              resolver,
-              mutationAttributes[actionName],
-              thingConfig,
-            );
+            prev.Mutation[mutationAttributes[actionName].actionName(entityName)] =
+              resolverDecorator(resolver, mutationAttributes[actionName], entityConfig);
           }
         }
       });
@@ -115,13 +112,13 @@ const composeGqlResolvers = (
         const customMutationResolver = createCustomResolver(
           'Mutation',
           customName,
-          thingConfig,
+          entityConfig,
           generalConfig,
           serversideConfig,
         );
         if (customMutationResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Mutation[customMutation[customName].specificName(thingConfig, generalConfig)] =
+          prev.Mutation[customMutation[customName].specificName(entityConfig, generalConfig)] =
             customMutationResolver;
         }
       });
@@ -130,64 +127,64 @@ const composeGqlResolvers = (
     return prev;
   }, resolvers);
 
-  Object.keys(thingConfigs)
-    .map((thingName) => thingConfigs[thingName])
+  Object.keys(entityConfigs)
+    .map((entityName) => entityConfigs[entityName])
     .filter(({ type: configType }) => configType === 'tangible')
-    .reduce((prev, thingConfig) => {
-      const { name } = thingConfig;
+    .reduce((prev, entityConfig) => {
+      const { name } = entityConfig;
 
       if (allowSubscriptions) {
-        const createdThingSubscriptionResolver = createCreatedThingSubscriptionResolver(
-          thingConfig,
+        const createdEntitySubscriptionResolver = createCreatedEntitySubscriptionResolver(
+          entityConfig,
           generalConfig,
         );
-        if (createdThingSubscriptionResolver) {
+        if (createdEntitySubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Subscription[`created${name}`] = createdThingSubscriptionResolver;
+          prev.Subscription[`created${name}`] = createdEntitySubscriptionResolver;
         }
 
-        const deletedThingSubscriptionResolver = createDeletedThingSubscriptionResolver(
-          thingConfig,
+        const deletedEntitySubscriptionResolver = createDeletedEntitySubscriptionResolver(
+          entityConfig,
           generalConfig,
         );
-        if (deletedThingSubscriptionResolver) {
+        if (deletedEntitySubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Subscription[`deleted${name}`] = deletedThingSubscriptionResolver;
+          prev.Subscription[`deleted${name}`] = deletedEntitySubscriptionResolver;
         }
 
-        const updatedThingSubscriptionResolver = createUpdatedThingSubscriptionResolver(
-          thingConfig,
+        const updatedEntitySubscriptionResolver = createUpdatedEntitySubscriptionResolver(
+          entityConfig,
           generalConfig,
         );
-        if (updatedThingSubscriptionResolver) {
+        if (updatedEntitySubscriptionResolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Subscription[`updated${name}`] = updatedThingSubscriptionResolver;
+          prev.Subscription[`updated${name}`] = updatedEntitySubscriptionResolver;
         }
       }
 
       return prev;
     }, resolvers);
 
-  Object.keys(thingConfigs)
-    .map((thingName) => thingConfigs[thingName])
-    .reduce((prev, thingConfig) => {
-      const { name, duplexFields, geospatialFields, relationalFields } = thingConfig;
+  Object.keys(entityConfigs)
+    .map((entityName) => entityConfigs[entityName])
+    .reduce((prev, entityConfig) => {
+      const { name, duplexFields, geospatialFields, relationalFields } = entityConfig;
       if (duplexFields || geospatialFields || relationalFields) {
         // eslint-disable-next-line no-param-reassign
-        prev[name] = composeThingResolvers(thingConfig, generalConfig, serversideConfig);
+        prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
       }
 
       // process derivative objects fields
       Object.keys(derivativeConfigs).forEach((derivativeKey) => {
         const derivativeConfig = composeDerivativeConfig(
           derivativeConfigs[derivativeKey],
-          thingConfig,
+          entityConfig,
           generalConfig,
         );
 
         if (derivativeConfig) {
           // eslint-disable-next-line no-param-reassign
-          prev[`${name}${derivativeKey}`] = composeThingResolvers(
+          prev[`${name}${derivativeKey}`] = composeEntityResolvers(
             derivativeConfig,
             generalConfig,
             serversideConfig,

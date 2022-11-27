@@ -2,11 +2,11 @@
 
 import type { InputCreator } from '../../flowTypes';
 
-const createFileWhereInputType: InputCreator = (thingConfig) => {
+const createFileWhereInputType: InputCreator = (entityConfig) => {
   const inputName = 'FileWhereInput';
 
   const inputDefinition =
-    thingConfig.type === 'file'
+    entityConfig.type === 'file'
       ? `input FileWhereInput {
   id_in: [ID!]
   id_nin: [ID!]

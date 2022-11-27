@@ -21,12 +21,12 @@ const extractDataFromDerivative = (arg: Arg): Result => {
 
   for (let i = 0; i < thingNames.length; i += 1) {
     result.push([]);
-    const thingName = thingNames[i];
+    const entityName = thingNames[i];
     for (let j = 0; j < actionNames.length; j += 1) {
       const actionName = actionNames[j];
       const actionType = actionTypes[actionName];
       // $FlowFixMe
-      const inventoryСhain: ThreeSegmentInventoryChain = [actionType, actionName, thingName];
+      const inventoryСhain: ThreeSegmentInventoryChain = [actionType, actionName, entityName];
 
       if (checkInventory(inventoryСhain, inventory) && checkInventory(inventoryСhain, inventory2)) {
         result[i][j] = [i, j];

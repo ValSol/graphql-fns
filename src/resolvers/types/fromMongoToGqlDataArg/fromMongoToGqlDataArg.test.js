@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import fromMongoToGqlDataArg from './index';
 
 describe('fromMongoToGqlDataArg', () => {
   test('shoud process data', () => {
-    const embeddedConfig: ThingConfig = {
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -17,8 +17,8 @@ describe('fromMongoToGqlDataArg', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -40,23 +40,23 @@ describe('fromMongoToGqlDataArg', () => {
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalArrayField',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexArrayField',
         },
         {
           name: 'duplexArrayField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
           array: true,
         },
@@ -110,7 +110,7 @@ describe('fromMongoToGqlDataArg', () => {
       },
     };
 
-    const result = fromMongoToGqlDataArg(data, thingConfig);
+    const result = fromMongoToGqlDataArg(data, entityConfig);
     const expectedResult = {
       textField: 'textField text',
       embedded: {

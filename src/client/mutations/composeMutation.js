@@ -1,32 +1,32 @@
 // @flow
-import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import { mutationAttributes } from '../../types/actionAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
-import composeCustomThingMutationArgs from './composeCustomThingMutationArgs';
+import composeCustomEntityMutationArgs from './composeCustomEntityMutationArgs';
 
 const composeMutation = (
   prefixName: string,
   mutationName: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
-  if (!thingConfig) {
-    throw new TypeError('thingConfig must be defined!');
+  if (!entityConfig) {
+    throw new TypeError('entityConfig must be defined!');
   }
 
   if (mutationAttributes[mutationName]) {
-    const { childArgs, fields } = composeFields(thingConfig, generalConfig, {
+    const { childArgs, fields } = composeFields(entityConfig, generalConfig, {
       ...clientOptions,
       shift: 2,
     });
 
     const head = composeActionArgs(
       prefixName,
-      thingConfig,
+      entityConfig,
       mutationAttributes[mutationName],
       mutationAttributes[mutationName].actionReturnConfig ? childArgs : {},
     );
@@ -57,13 +57,13 @@ const composeMutation = (
     throw new TypeError(`Method "config" have to be defined for "${mutationName}" custom query`);
   }
 
-  const returnObjectConfig = Mutation[mutationName].config(thingConfig, generalConfig);
+  const returnObjectConfig = Mutation[mutationName].config(entityConfig, generalConfig);
 
   if (returnObjectConfig === null) {
-    const head = composeCustomThingMutationArgs(
+    const head = composeCustomEntityMutationArgs(
       prefixName,
       mutationName,
-      thingConfig,
+      entityConfig,
       generalConfig,
       {},
     );
@@ -75,10 +75,10 @@ const composeMutation = (
     shift: 2,
   });
 
-  const head = composeCustomThingMutationArgs(
+  const head = composeCustomEntityMutationArgs(
     prefixName,
     mutationName,
-    thingConfig,
+    entityConfig,
     generalConfig,
     childArgs,
   );

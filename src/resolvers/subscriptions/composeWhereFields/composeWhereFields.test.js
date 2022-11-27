@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeWhereFields from './index';
 
 describe('composeWhereFields', () => {
   test('should return true if args correspond to payload', () => {
-    const exampleConfig: ThingConfig = {};
+    const exampleConfig: EntityConfig = {};
     Object.assign(exampleConfig, {
       name: 'Example',
       type: 'tangible',

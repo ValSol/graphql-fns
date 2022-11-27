@@ -1,7 +1,7 @@
 // @flow
 import mongoose from 'mongoose';
 
-import type { Enums, ThingConfig } from '../flowTypes';
+import type { Enums, EntityConfig } from '../flowTypes';
 
 import composeTextIndexProperties from './composeTextIndexProperties';
 import composeThingSchemaProperties from './composeThingSchemaProperties';
@@ -10,17 +10,17 @@ const { Schema } = mongoose;
 
 const thingSchemas = {};
 
-const createThingSchema = (thingConfig: ThingConfig, enums?: Enums = []): Object => {
-  const { name } = thingConfig;
+const createThingSchema = (entityConfig: EntityConfig, enums?: Enums = []): Object => {
+  const { name } = entityConfig;
 
   if (thingSchemas[name]) return thingSchemas[name];
 
-  const thingSchemaProperties = composeThingSchemaProperties(thingConfig, enums);
+  const thingSchemaProperties = composeThingSchemaProperties(entityConfig, enums);
   const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
   ThingSchema.index({ createdAt: 1 });
   ThingSchema.index({ updatedAt: 1 });
 
-  const weights = composeTextIndexProperties(thingConfig);
+  const weights = composeTextIndexProperties(entityConfig);
   const weightsKeys = Object.keys(weights);
   if (weightsKeys.length) {
     ThingSchema.index(

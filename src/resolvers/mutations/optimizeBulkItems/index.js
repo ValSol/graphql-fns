@@ -1,12 +1,12 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import checkUnsetsFields from './checkUnsetsFields';
 import mainOptimizeBulk from './mainOptimizeBulk';
 
 const optimizeBulkItems = (
-  core: Map<ThingConfig, Array<Object>>,
-): Map<ThingConfig, Array<Object>> => {
+  core: Map<EntityConfig, Array<Object>>,
+): Map<EntityConfig, Array<Object>> => {
   const result = new Map();
 
   core.forEach((bulkItems, config) => {

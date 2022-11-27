@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import rearrangeFilesArray from './rearrangeFilesArray';
 
@@ -8,12 +8,12 @@ const updateFileFieldsAfterUpload = (
   newFilesInArraysPositions: { [arrayFileFieldName: string]: Array<number> },
   values: Object,
   uploadedValues: Object,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): {
   arrayFileFields?: { [arrayFileFieldName: string]: Array<Object> },
   scalarFileFields?: { [scalarFileFieldName: string]: Object },
 } => {
-  const { fileFields } = thingConfig;
+  const { fileFields } = entityConfig;
   const result = {};
   if (!fileFields) return result;
 

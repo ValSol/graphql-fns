@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeAllFilesFieldsData from './composeAllFilesFieldsData';
 
 describe('composeAllFilesFieldsData', () => {
-  const imageConfig: ThingConfig = {
+  const imageConfig: EntityConfig = {
     name: 'Image',
     type: 'file',
     textFields: [
@@ -26,7 +26,7 @@ describe('composeAllFilesFieldsData', () => {
       },
     ],
   };
-  const photoConfig: ThingConfig = {
+  const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'file',
     textFields: [
@@ -47,7 +47,7 @@ describe('composeAllFilesFieldsData', () => {
       },
     ],
   };
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     fileFields: [
@@ -168,7 +168,7 @@ describe('composeAllFilesFieldsData', () => {
       filesAttributes,
       data,
       options,
-      thingConfig,
+      entityConfig,
       composeFileFieldsData,
     );
 
@@ -232,7 +232,7 @@ describe('composeAllFilesFieldsData', () => {
       filesAttributes,
       data,
       options,
-      thingConfig,
+      entityConfig,
       composeFileFieldsData,
     );
 

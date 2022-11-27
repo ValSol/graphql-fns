@@ -1,5 +1,5 @@
 // @flow
-import type { FileAttributes, ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { FileAttributes, EntityConfig, UploadOptions } from '../../../flowTypes';
 
 import composeFileFieldNameToConfigNameObject from '../composeFileFieldNameToConfigNameObject';
 
@@ -8,7 +8,7 @@ const saveAllFiles = async (
   alreadyCreatedFiles: Array<Object>,
   uploadDate: Date,
   options: UploadOptions,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   saveFiles: {
     [fileFieldConfigName: string]: (
       file: Object,
@@ -18,7 +18,7 @@ const saveAllFiles = async (
   },
 ): Promise<Array<FileAttributes | null>> => {
   const { counts, hashes, targets } = options;
-  const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(thingConfig);
+  const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(entityConfig);
 
   const promises = [];
   let index = 0;

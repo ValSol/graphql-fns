@@ -12,23 +12,23 @@ describe('childQueriesToInventory', () => {
   test('have to return inventoryByPermissions for childQueries with ForCabinet', () => {
     const childQueries = [
       {
-        actionName: 'childThingsForCatalog',
-        baseAction: 'childThings',
+        actionName: 'childentitiesForCatalog',
+        baseAction: 'childEntities',
         suffix: 'ForCatalog',
-        thingName: 'Person',
+        entityName: 'Person',
       },
       {
         actionName: 'childThingForCatalog',
-        baseAction: 'childThing',
+        baseAction: 'childEntity',
         suffix: 'ForCatalog',
-        thingName: 'Place',
+        entityName: 'Place',
       },
     ];
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: { name: 'Person', type: 'tangible' },
-      baseAction: 'thingsByUnique',
+      entityConfig: { name: 'Person', type: 'tangible' },
+      baseAction: 'entitiesByUnique',
       suffix: 'ForView',
     };
 
@@ -39,7 +39,7 @@ describe('childQueriesToInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            childThingsForCatalog: ['Person'],
+            childentitiesForCatalog: ['Person'],
             childThingForCatalog: ['Place'],
           },
         },
@@ -59,22 +59,22 @@ describe('childQueriesToInventory', () => {
   test('have to return inventoryByPermissions for childQueries without suffix', () => {
     const childQueries = [
       {
-        actionName: 'childThings',
-        baseAction: 'childThings',
+        actionName: 'childEntities',
+        baseAction: 'childEntities',
         suffix: '',
-        thingName: 'Person',
+        entityName: 'Person',
       },
       {
-        actionName: 'childThing',
-        baseAction: 'childThing',
+        actionName: 'childEntity',
+        baseAction: 'childEntity',
         suffix: '',
-        thingName: 'Place',
+        entityName: 'Place',
       },
     ];
 
     const parsedAction = {
       creationType: 'standard',
-      thingConfig: { name: 'Person', type: 'tangible' },
+      entityConfig: { name: 'Person', type: 'tangible' },
       baseAction: '',
       suffix: 'ForView',
     };
@@ -86,8 +86,8 @@ describe('childQueriesToInventory', () => {
         name: '',
         include: {
           Query: {
-            childThings: ['Person'],
-            childThing: ['Place'],
+            childEntities: ['Person'],
+            childEntity: ['Place'],
           },
         },
       },

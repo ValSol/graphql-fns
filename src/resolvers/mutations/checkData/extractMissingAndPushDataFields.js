@@ -1,8 +1,8 @@
 // @flow
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
-import createPushIntoThingInputType from '../../../types/inputs/createPushIntoThingInputType';
+import createPushIntoEntityInputType from '../../../types/inputs/createPushIntoEntityInputType';
 import getInputFieldNames from '../../../utils/getInputFieldNames';
 
 const extract = (data, filterObj, pushFields, result) => {
@@ -21,9 +21,9 @@ type Result = { [missingFieldName: string]: 1 };
 const extractMissingAndPushDataFields = (
   data: { [key: string]: any },
   filter: Array<Object>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): Result => {
-  const pushFields = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+  const pushFields = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
 
   const result = {};
 

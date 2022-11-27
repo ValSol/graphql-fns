@@ -1,51 +1,51 @@
 // @flow
 
-import copyManyThings from './createCopyManyThingsMutationResolver';
-import copyManyThingsWithChildren from './createCopyManyThingsWithChildrenMutationResolver';
-import copyThing from './createCopyThingMutationResolver';
-import copyThingWithChildren from './createCopyThingWithChildrenMutationResolver';
-import createManyThings from './createCreateManyThingsMutationResolver';
-import createThing from './createCreateThingMutationResolver';
-import deleteThing from './createDeleteThingMutationResolver';
-import deleteThingWithChildren from './createDeleteThingWithChildrenMutationResolver';
-import deleteFilteredThings from './createDeleteFilteredThingsMutationResolver';
-import deleteFilteredThingsReturnScalar from './createDeleteFilteredThingsReturnScalarMutationResolver';
-import deleteFilteredThingsWithChildren from './createDeleteFilteredThingsWithChildrenMutationResolver';
-import deleteFilteredThingsWithChildrenReturnScalar from './createDeleteFilteredThingsWithChildrenReturnScalarMutationResolver';
-import deleteManyThings from './createDeleteManyThingsMutationResolver';
-import deleteManyThingsWithChildren from './createDeleteManyThingsWithChildrenMutationResolver';
-import importThings from './createImportThingsMutationResolver';
-import pushIntoThing from './createPushIntoThingMutationResolver';
-import updateThing from './createUpdateThingMutationResolver';
-import updateFilteredThings from './createUpdateFilteredThingsMutationResolver';
-import updateFilteredThingsReturnScalar from './createUpdateFilteredThingsReturnScalarMutationResolver';
-import updateManyThings from './createUpdateManyThingsMutationResolver';
-import uploadFilesToThing from './createUploadFilesToThingMutationResolver';
-import uploadThingFiles from './createUploadThingFilesMutationResolver';
+import copyManyEntities from './createCopyManyEntitiesMutationResolver';
+import copyManyEntitiesWithChildren from './createCopyManyEntitiesWithChildrenMutationResolver';
+import copyEntity from './createCopyEntityMutationResolver';
+import copyEntityWithChildren from './createCopyEntityWithChildrenMutationResolver';
+import createManyEntities from './createCreateManyEntitiesMutationResolver';
+import createEntity from './createCreateEntityMutationResolver';
+import deleteEntity from './createDeleteEntityMutationResolver';
+import deleteEntityWithChildren from './createDeleteEntityWithChildrenMutationResolver';
+import deleteFilteredEntities from './createDeleteFilteredEntitiesMutationResolver';
+import deleteFilteredEntitiesReturnScalar from './createDeleteFilteredEntitiesReturnScalarMutationResolver';
+import deleteFilteredEntitiesWithChildren from './createDeleteFilteredEntitiesWithChildrenMutationResolver';
+import deleteFilteredEntitiesWithChildrenReturnScalar from './createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver';
+import deleteManyEntities from './createDeleteManyEntitiesMutationResolver';
+import deleteManyEntitiesWithChildren from './createDeleteManyEntitiesWithChildrenMutationResolver';
+import importEntities from './createImportEntitiesMutationResolver';
+import pushIntoEntity from './createPushIntoEntityMutationResolver';
+import updateEntity from './createUpdateEntityMutationResolver';
+import updateFilteredEntities from './createUpdateFilteredEntitiesMutationResolver';
+import updateFilteredEntitiesReturnScalar from './createUpdateFilteredEntitiesReturnScalarMutationResolver';
+import updateManyEntities from './createUpdateManyEntitiesMutationResolver';
+import uploadFilesToEntity from './createUploadFilesToEntityMutationResolver';
+import uploadEntityFiles from './createUploadEntityFilesMutationResolver';
 
 const mutations = {
-  copyManyThings,
-  copyManyThingsWithChildren,
-  copyThing,
-  copyThingWithChildren,
-  createManyThings,
-  createThing,
-  deleteThing,
-  deleteThingWithChildren,
-  deleteFilteredThings,
-  deleteFilteredThingsWithChildren,
-  deleteFilteredThingsWithChildrenReturnScalar,
-  deleteFilteredThingsReturnScalar,
-  deleteManyThings,
-  deleteManyThingsWithChildren,
-  importThings,
-  pushIntoThing,
-  updateFilteredThings,
-  updateFilteredThingsReturnScalar,
-  updateManyThings,
-  updateThing,
-  uploadFilesToThing,
-  uploadThingFiles,
+  copyManyEntities,
+  copyManyEntitiesWithChildren,
+  copyEntity,
+  copyEntityWithChildren,
+  createManyEntities,
+  createEntity,
+  deleteEntity,
+  deleteEntityWithChildren,
+  deleteFilteredEntities,
+  deleteFilteredEntitiesWithChildren,
+  deleteFilteredEntitiesWithChildrenReturnScalar,
+  deleteFilteredEntitiesReturnScalar,
+  deleteManyEntities,
+  deleteManyEntitiesWithChildren,
+  importEntities,
+  pushIntoEntity,
+  updateFilteredEntities,
+  updateFilteredEntitiesReturnScalar,
+  updateManyEntities,
+  updateEntity,
+  uploadFilesToEntity,
+  uploadEntityFiles,
 };
 
 export default mutations;

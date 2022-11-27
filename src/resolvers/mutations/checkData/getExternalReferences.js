@@ -1,6 +1,6 @@
 // @flow
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
-import createThingQueryResolver from '../../queries/createThingQueryResolver';
+import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
 
 type ExternalReferencesArgs = Array<[string, string, Object]>;
 
@@ -10,18 +10,18 @@ const getExternalReferences = async (
   serversideConfig: ServersideConfig,
   context: Object,
 ): Promise<Array<string | null>> => {
-  const { thingConfigs } = generalConfig;
+  const { entityConfigs } = generalConfig;
   const inAnyCase = true;
-  const thingQueryResolvers = {};
+  const entityQueryResolvers = {};
 
   const results = [];
 
   for (let i = 0; i < externalReferencesArgs.length; i += 1) {
-    const [thingName, id, filter] = externalReferencesArgs[i];
+    const [entityName, id, filter] = externalReferencesArgs[i];
 
-    if (!thingQueryResolvers[thingName]) {
-      thingQueryResolvers[thingName] = createThingQueryResolver(
-        thingConfigs[thingName],
+    if (!entityQueryResolvers[entityName]) {
+      entityQueryResolvers[entityName] = createEntityQueryResolver(
+        entityConfigs[entityName],
         generalConfig,
         serversideConfig,
         inAnyCase,
@@ -29,7 +29,7 @@ const getExternalReferences = async (
     }
 
     // eslint-disable-next-line no-await-in-loop
-    const thing = await thingQueryResolvers[thingName](
+    const entity = await entityQueryResolvers[entityName](
       null,
       { whereOne: { id } },
       context,
@@ -37,7 +37,7 @@ const getExternalReferences = async (
       filter,
     );
 
-    if (thing) {
+    if (entity) {
       results.push(id);
     } else {
       results.push(null);

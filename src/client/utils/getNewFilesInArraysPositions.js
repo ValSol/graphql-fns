@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig, UploadOptions } from '../../flowTypes';
+import type { EntityConfig, UploadOptions } from '../../flowTypes';
 
 import createNewFilesIndexListFromUploadArgs from './createNewFilesIndexListFromUploadArgs';
 
@@ -8,9 +8,9 @@ const getNewFilesInArraysPositions = (
   values: Object,
   uploadArgs: { files: Array<Object>, options: UploadOptions },
   getHashFromValue: (Object) => string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): { [arrayFiledFieldName: string]: Array<number> } => {
-  const { fileFields } = thingConfig;
+  const { fileFields } = entityConfig;
   if (!fileFields || !uploadArgs.files.length) return {};
 
   return fileFields.reduce((prev, { name, array }) => {

@@ -7,15 +7,15 @@ describe('extractDataFromCustom util', () => {
   test('should return valid actions matrix', () => {
     const custom = {
       Mutation: {
-        cloneThing: {
-          name: 'cloneThing',
+        cloneEntity: {
+          name: 'cloneEntity',
           specificName: ({ name }) =>
             name === 'Restaurant' || name === 'Post' ? `clone${name}` : '',
         },
       },
       Query: {
-        currentThingForView: {
-          name: 'currentThingForView',
+        currentEntityForView: {
+          name: 'currentEntityForView',
           specificName: ({ name }) => (name === 'User' ? `current${name}ForView` : ''),
         },
       },
@@ -23,16 +23,16 @@ describe('extractDataFromCustom util', () => {
 
     const thingNames = ['Restaurant', 'Post', 'Access', 'User'];
 
-    const customActionNames = ['currentThingForView', 'cloneThing'];
+    const customActionNames = ['currentEntityForView', 'cloneEntity'];
 
     const customActionTypes = {
-      currentThingForView: 'CustomQuery',
-      cloneThing: 'CustomMutation',
+      currentEntityForView: 'CustomQuery',
+      cloneEntity: 'CustomMutation',
     };
 
     const thingNamesByCustomActions = {
-      currentThingForView: ['User'],
-      cloneThing: ['Restaurant', 'Post'],
+      currentEntityForView: ['User'],
+      cloneEntity: ['Restaurant', 'Post'],
     };
 
     // $FlowFixMe

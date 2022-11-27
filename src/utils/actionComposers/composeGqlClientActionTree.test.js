@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, GqlActionData } from '../../flowTypes';
+import type { EntityConfig, GqlActionData } from '../../flowTypes';
 
 import composeGqlClientActionTree from './composeGqlClientActionTree';
 
 describe('composeGqlClientActionTree', () => {
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     counter: true,
@@ -52,14 +52,14 @@ describe('composeGqlClientActionTree', () => {
     ],
   };
 
-  const generalConfig = { thingConfigs: { Example: thingConfig } };
+  const generalConfig = { entityConfigs: { Example: entityConfig } };
 
   test('should compose not nested fields with shift = 0', () => {
     const actionType = 'Query';
-    const actionName = 'thing';
-    const thingName = 'Example';
+    const actionName = 'entity';
+    const entityName = 'Example';
     const composeOptions = () => ({});
-    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, thingName };
+    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, entityName };
     const namePrefix = 'Cabinet_Main';
 
     const expectedResult = {

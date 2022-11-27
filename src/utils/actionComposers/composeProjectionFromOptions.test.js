@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, GqlActionData } from '../../flowTypes';
+import type { EntityConfig, GqlActionData } from '../../flowTypes';
 
 import composeProjectionFromOptions from './composeProjectionFromOptions';
 
 describe('composeProjectionFromOptions', () => {
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     counter: true,
@@ -58,14 +58,14 @@ describe('composeProjectionFromOptions', () => {
     ],
   };
 
-  const generalConfig = { thingConfigs: { Example: thingConfig } };
+  const generalConfig = { entityConfigs: { Example: entityConfig } };
 
-  test('should compose all fields of thing', () => {
+  test('should compose all fields of entity', () => {
     const actionType = 'Query';
-    const actionName = 'thing';
-    const thingName = 'Example';
+    const actionName = 'entity';
+    const entityName = 'Example';
     const composeOptions = () => ({});
-    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, thingName };
+    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, entityName };
 
     const expectedResult = {
       _id: 1,
@@ -88,10 +88,10 @@ describe('composeProjectionFromOptions', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should compose fields from include of thing', () => {
+  test('should compose fields from include of entity', () => {
     const actionType = 'Query';
-    const actionName = 'thing';
-    const thingName = 'Example';
+    const actionName = 'entity';
+    const entityName = 'Example';
     const composeOptions = ({ lang }) => ({
       include: {
         [`${lang}TextField`]: true,
@@ -99,7 +99,7 @@ describe('composeProjectionFromOptions', () => {
       },
     });
     const optionsArg = { lang: 'uk' };
-    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, thingName };
+    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, entityName };
 
     const expectedResult = {
       _id: 1,
@@ -111,10 +111,10 @@ describe('composeProjectionFromOptions', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should compose all fields of thing', () => {
+  test('should compose all fields of entity', () => {
     const actionType = 'Query';
-    const actionName = 'thing';
-    const thingName = 'Example';
+    const actionName = 'entity';
+    const entityName = 'Example';
     const composeOptions = () => ({
       exclude: {
         enumField: true,
@@ -122,7 +122,7 @@ describe('composeProjectionFromOptions', () => {
         geospatialPolygon: true,
       },
     });
-    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, thingName };
+    const gqlActionData: GqlActionData = { actionType, actionName, composeOptions, entityName };
 
     const expectedResult = {
       _id: 1,

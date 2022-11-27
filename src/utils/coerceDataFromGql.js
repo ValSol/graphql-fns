@@ -1,17 +1,17 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 import composeEmptyValues from './composeEmptyValues';
 
 const coerceDataFromGql = (
   data: Object,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   allFields?: boolean,
   // set ON if use for creation JSON export file
   forExport?: boolean,
 ): Object => {
-  const fieldsObject = composeFieldsObject(thingConfig);
+  const fieldsObject = composeFieldsObject(entityConfig);
 
   const result = Object.keys(data).reduce((prev, key) => {
     if (fieldsObject[key] === undefined || (forExport && data[key] === null)) return prev;

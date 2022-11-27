@@ -23,7 +23,7 @@ afterAll(async () => {
 });
 
 describe('createFieldArrayResolver', () => {
-  test('should create type thing resolver', async () => {
+  test('should create type entity resolver', async () => {
     const parent = {
       title: 'Paris',
       features: ['Capital', 'Сultural', 'Historical', 'Gastronomic'],

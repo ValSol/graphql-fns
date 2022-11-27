@@ -8,40 +8,40 @@ export { default as composeGqlResolvers } from './resolvers/composeGqlResolvers'
 export { default as composeGqlTypes } from './types/composeGqlTypes';
 
 // mutation resolvers
-export { default as createCopyManyThingsMutationResolver } from './resolvers/mutations/createCopyManyThingsMutationResolver';
-export { default as createCopyManyThingsWithChildrenMutationResolver } from './resolvers/mutations/createCopyManyThingsWithChildrenMutationResolver';
-export { default as createCopyThingMutationResolver } from './resolvers/mutations/createCopyThingMutationResolver';
-export { default as createCopyThingWithChildrenMutationResolver } from './resolvers/mutations/createCopyThingWithChildrenMutationResolver';
-export { default as createCreateManyThingsMutationResolver } from './resolvers/mutations/createCreateManyThingsMutationResolver';
-export { default as createCreateThingMutationResolver } from './resolvers/mutations/createCreateThingMutationResolver';
-export { default as createDeleteThingMutationResolver } from './resolvers/mutations/createDeleteThingMutationResolver';
-export { default as createDeleteThingWithChildrenMutationResolver } from './resolvers/mutations/createDeleteThingWithChildrenMutationResolver';
-export { default as createDeleteFilteredThingsMutationResolver } from './resolvers/mutations/createDeleteFilteredThingsMutationResolver';
-export { default as createDeleteFilteredThingsWithChildrenMutationResolver } from './resolvers/mutations/createDeleteFilteredThingsWithChildrenMutationResolver';
-export { default as createDeleteManyThingsMutationResolver } from './resolvers/mutations/createDeleteManyThingsMutationResolver';
-export { default as createDeleteManyThingsWithChildrenMutationResolver } from './resolvers/mutations/createDeleteManyThingsWithChildrenMutationResolver';
-export { default as createImportThingsMutationResolver } from './resolvers/mutations/createImportThingsMutationResolver';
-export { default as createPushIntoThingMutationResolver } from './resolvers/mutations/createPushIntoThingMutationResolver';
-export { default as createUpdateFilteredThingsMutationResolver } from './resolvers/mutations/createUpdateFilteredThingsMutationResolver';
-export { default as createUpdateManyThingsMutationResolver } from './resolvers/mutations/createUpdateManyThingsMutationResolver';
-export { default as createUpdateThingMutationResolver } from './resolvers/mutations/createUpdateThingMutationResolver';
-export { default as createUploadFilesToThingMutationResolver } from './resolvers/mutations/createUploadFilesToThingMutationResolver';
-export { default as createUploadThingFilesMutationResolver } from './resolvers/mutations/createUploadThingFilesMutationResolver';
+export { default as createCopyManyEntitiesMutationResolver } from './resolvers/mutations/createCopyManyEntitiesMutationResolver';
+export { default as createCopyManyEntitiesWithChildrenMutationResolver } from './resolvers/mutations/createCopyManyEntitiesWithChildrenMutationResolver';
+export { default as createCopyEntityMutationResolver } from './resolvers/mutations/createCopyEntityMutationResolver';
+export { default as createCopyEntityWithChildrenMutationResolver } from './resolvers/mutations/createCopyEntityWithChildrenMutationResolver';
+export { default as createCreateManyEntitiesMutationResolver } from './resolvers/mutations/createCreateManyEntitiesMutationResolver';
+export { default as createCreateEntityMutationResolver } from './resolvers/mutations/createCreateEntityMutationResolver';
+export { default as createDeleteEntityMutationResolver } from './resolvers/mutations/createDeleteEntityMutationResolver';
+export { default as createDeleteEntityWithChildrenMutationResolver } from './resolvers/mutations/createDeleteEntityWithChildrenMutationResolver';
+export { default as createDeleteFilteredEntitiesMutationResolver } from './resolvers/mutations/createDeleteFilteredEntitiesMutationResolver';
+export { default as createDeleteFilteredEntitiesWithChildrenMutationResolver } from './resolvers/mutations/createDeleteFilteredEntitiesWithChildrenMutationResolver';
+export { default as createDeleteManyEntitiesMutationResolver } from './resolvers/mutations/createDeleteManyEntitiesMutationResolver';
+export { default as createDeleteManyEntitiesWithChildrenMutationResolver } from './resolvers/mutations/createDeleteManyEntitiesWithChildrenMutationResolver';
+export { default as createImportEntitiesMutationResolver } from './resolvers/mutations/createImportEntitiesMutationResolver';
+export { default as createPushIntoEntityMutationResolver } from './resolvers/mutations/createPushIntoEntityMutationResolver';
+export { default as createUpdateFilteredEntitiesMutationResolver } from './resolvers/mutations/createUpdateFilteredEntitiesMutationResolver';
+export { default as createUpdateManyEntitiesMutationResolver } from './resolvers/mutations/createUpdateManyEntitiesMutationResolver';
+export { default as createUpdateEntityMutationResolver } from './resolvers/mutations/createUpdateEntityMutationResolver';
+export { default as createUploadFilesToEntityMutationResolver } from './resolvers/mutations/createUploadFilesToEntityMutationResolver';
+export { default as createUploadEntityFilesMutationResolver } from './resolvers/mutations/createUploadEntityFilesMutationResolver';
 
 // query resolvers
-export { default as createThingDistinctValuesQueryResolver } from './resolvers/queries/createThingDistinctValuesQueryResolver';
-export { default as createThingCountQueryResolver } from './resolvers/queries/createThingCountQueryResolver';
-export { default as createThingFileCountQueryResolver } from './resolvers/queries/createThingFileCountQueryResolver';
-export { default as createThingFileQueryResolver } from './resolvers/queries/createThingFileQueryResolver';
-export { default as createThingFilesQueryResolver } from './resolvers/queries/createThingFilesQueryResolver';
-export { default as createThingQueryResolver } from './resolvers/queries/createThingQueryResolver';
-export { default as createThingsQueryResolver } from './resolvers/queries/createThingsQueryResolver';
-export { default as createThingsByUniqueQueryResolver } from './resolvers/queries/createThingsByUniqueQueryResolver';
+export { default as createEntityDistinctValuesQueryResolver } from './resolvers/queries/createEntityDistinctValuesQueryResolver';
+export { default as createEntityCountQueryResolver } from './resolvers/queries/createEntityCountQueryResolver';
+export { default as createEntityFileCountQueryResolver } from './resolvers/queries/createEntityFileCountQueryResolver';
+export { default as createEntityFileQueryResolver } from './resolvers/queries/createEntityFileQueryResolver';
+export { default as createEntityFilesQueryResolver } from './resolvers/queries/createEntityFilesQueryResolver';
+export { default as createEntityQueryResolver } from './resolvers/queries/createEntityQueryResolver';
+export { default as createEntitiesQueryResolver } from './resolvers/queries/createEntitiesQueryResolver';
+export { default as createEntitiesByUniqueQueryResolver } from './resolvers/queries/createEntitiesByUniqueQueryResolver';
 
 // subscription resolvers
-export { default as createCreatedThingSubscriptionResolver } from './resolvers/subscriptions/createCreatedThingSubscriptionResolver';
-export { default as createUpdatedThingSubscriptionResolver } from './resolvers/subscriptions/createUpdatedThingSubscriptionResolver';
-export { default as createDeletedThingSubscriptionResolver } from './resolvers/subscriptions/createDeletedThingSubscriptionResolver';
+export { default as createCreatedEntitySubscriptionResolver } from './resolvers/subscriptions/createCreatedEntitySubscriptionResolver';
+export { default as createUpdatedEntitySubscriptionResolver } from './resolvers/subscriptions/createUpdatedEntitySubscriptionResolver';
+export { default as createDeletedEntitySubscriptionResolver } from './resolvers/subscriptions/createDeletedEntitySubscriptionResolver';
 
 // -----------
 // client side

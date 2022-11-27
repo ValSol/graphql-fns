@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import saveAllFiles from './saveAllFiles';
 
 describe('saveAllFiles', () => {
-  const imageConfig: ThingConfig = {
+  const imageConfig: EntityConfig = {
     name: 'Image',
     type: 'file',
     textFields: [
@@ -17,7 +17,7 @@ describe('saveAllFiles', () => {
       },
     ],
   };
-  const photoConfig: ThingConfig = {
+  const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'file',
     textFields: [
@@ -29,7 +29,7 @@ describe('saveAllFiles', () => {
       },
     ],
   };
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     fileFields: [
@@ -174,7 +174,7 @@ describe('saveAllFiles', () => {
       alreadyCreatedFiles,
       uploadedAt,
       options,
-      thingConfig,
+      entityConfig,
       saveFiles,
     );
 
@@ -251,7 +251,7 @@ describe('saveAllFiles', () => {
       alreadyCreatedFiles,
       uploadedAt,
       options,
-      thingConfig,
+      entityConfig,
       saveFiles,
     );
 

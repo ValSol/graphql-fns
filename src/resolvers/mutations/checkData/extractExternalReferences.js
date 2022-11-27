@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const extract = (data, filterObj, fieldsObj, result) => {
@@ -42,9 +42,9 @@ const extract = (data, filterObj, fieldsObj, result) => {
 const extractExternalReferences = (
   data: { [key: string]: any },
   filter: Array<Object>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): Array<[string, string, [Object]]> => {
-  const fieldsObj = composeFieldsObject(thingConfig);
+  const fieldsObj = composeFieldsObject(entityConfig);
 
   const result = [];
 

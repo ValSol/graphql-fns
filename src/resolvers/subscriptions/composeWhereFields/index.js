@@ -1,8 +1,8 @@
 //  @flow
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
-const composeWhereFields = (thingConfig: ThingConfig): Object => {
+const composeWhereFields = (entityConfig: EntityConfig): Object => {
   const {
     booleanFields,
     dateTimeFields,
@@ -12,7 +12,7 @@ const composeWhereFields = (thingConfig: ThingConfig): Object => {
     intFields,
     relationalFields,
     textFields,
-  } = thingConfig;
+  } = entityConfig;
 
   const result = { id: 'idArray' };
 

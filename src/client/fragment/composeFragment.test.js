@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import composeFragment from './composeFragment';
 
 describe('composeFragment', () => {
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -17,11 +17,11 @@ describe('composeFragment', () => {
     ],
   };
 
-  const generalConfig = { thingConfigs: { Example: thingConfig } };
+  const generalConfig = { entityConfigs: { Example: entityConfig } };
 
   test('should compose fragment', () => {
     const fragmentName = 'firstExample';
-    const result = composeFragment(fragmentName, thingConfig, generalConfig);
+    const result = composeFragment(fragmentName, entityConfig, generalConfig);
     const expectedResult = `fragment firstExample on Example {
   id
   createdAt

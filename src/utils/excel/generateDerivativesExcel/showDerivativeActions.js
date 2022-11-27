@@ -52,7 +52,7 @@ const showDerivativeActions = (args: Args) => {
     ws.getCell(2 + i, col).value = actionNameWithSuffix;
     ws.getCell(2 + i, col2).value = composeSpecificActionName({
       actionName: actionNameWithSuffix,
-      thingName: firstThingName,
+      entityName: firstThingName,
     });
     const argb = ordinaryActionTypes[actionName] === 'Query' ? 'FFFFB266' : 'FF9999FF';
     ws.getCell(2 + i, col).fill = {

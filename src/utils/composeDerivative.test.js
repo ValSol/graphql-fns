@@ -5,7 +5,7 @@ import type { DerivativeAttributes } from '../flowTypes';
 import composeDerivative from './composeDerivative';
 
 describe('composeDerivative', () => {
-  test('compose simple thingConfigs', () => {
+  test('compose simple entityConfigs', () => {
     const filteredRestaurantFieldNames = [
       'clone',
       'backup',
@@ -29,17 +29,17 @@ describe('composeDerivative', () => {
     const ForView: DerivativeAttributes = {
       suffix: 'ForView',
       allow: {
-        Restaurant: ['thing', 'things'],
-        Post: ['thing', 'things'],
+        Restaurant: ['entity', 'entities'],
+        Post: ['entity', 'entities'],
       },
     };
 
     const ForApprove: DerivativeAttributes = {
       suffix: 'ForApprove',
       allow: {
-        Restaurant: ['thing', 'things'],
-        Post: ['thing', 'things'],
-        User: ['thing'],
+        Restaurant: ['entity', 'entities'],
+        Post: ['entity', 'entities'],
+        User: ['entity'],
       },
 
       includeFields: {

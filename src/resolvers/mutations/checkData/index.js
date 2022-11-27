@@ -1,7 +1,7 @@
 // @flow
 import mingo from 'mingo';
 
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import extractExternalReferences from './extractExternalReferences';
 import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
@@ -13,7 +13,7 @@ import patchExternalReferences from './patchExternalReferences';
 const checkData = async (
   args: Object,
   preFilter: Array<Object>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   processingKind: 'create' | 'update' | 'push',
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -33,7 +33,7 @@ const checkData = async (
         args: { ...args, data: preData },
         processingKind,
         projection,
-        thingConfig,
+        entityConfig,
         generalConfig,
         serversideConfig,
         context,
@@ -42,13 +42,13 @@ const checkData = async (
       if (!preData2) return false;
     }
   } else if (processingKind === 'push') {
-    const projection = extractMissingAndPushDataFields(preData, preFilter, thingConfig);
+    const projection = extractMissingAndPushDataFields(preData, preFilter, entityConfig);
     if (Object.keys(projection).length) {
       preData2 = await getMissingData({
         args: { ...args, data: preData },
         processingKind,
         projection,
-        thingConfig,
+        entityConfig,
         generalConfig,
         serversideConfig,
         context,
@@ -58,7 +58,7 @@ const checkData = async (
     }
   }
 
-  const externalReferencesArgs = extractExternalReferences(preData2, preFilter, thingConfig);
+  const externalReferencesArgs = extractExternalReferences(preData2, preFilter, entityConfig);
 
   const externalReferences = await getExternalReferences(
     externalReferencesArgs,
@@ -71,11 +71,11 @@ const checkData = async (
     externalReferences,
     preData2,
     preFilter,
-    thingConfig,
+    entityConfig,
   );
 
   const notCreateObjectId = true;
-  const { where } = mergeWhereAndFilter(filter, {}, thingConfig, notCreateObjectId);
+  const { where } = mergeWhereAndFilter(filter, {}, entityConfig, notCreateObjectId);
 
   const query = new mingo.Query(where);
   return query.test(data);

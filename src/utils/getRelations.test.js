@@ -1,48 +1,48 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import getRelations from './getRelations';
 
 describe('getRelations', () => {
   test('should return map with relations', () => {
-    const thingConfig: ThingConfig = {};
-    const thingConfig2: ThingConfig = {
-      name: 'Thing2',
+    const entityConfig: EntityConfig = {};
+    const entityConfig2: EntityConfig = {
+      name: 'entity2',
       type: 'tangible',
       relationalFields: [
-        { config: thingConfig, name: 'relationalField_2' },
-        { array: true, config: thingConfig, name: 'relationalField_2a' },
+        { config: entityConfig, name: 'relationalField_2' },
+        { array: true, config: entityConfig, name: 'relationalField_2a' },
       ],
     };
-    const thingConfig3 = {
-      name: 'Thing3',
+    const entityConfig3 = {
+      name: 'Entity3',
       type: 'tangible',
       relationalFields: [
-        { config: thingConfig, name: 'relationalField_3' },
-        { array: true, config: thingConfig, name: 'relationalField_3a' },
+        { config: entityConfig, name: 'relationalField_3' },
+        { array: true, config: entityConfig, name: 'relationalField_3a' },
       ],
     };
-    Object.assign(thingConfig, {
-      name: 'Thing',
+    Object.assign(entityConfig, {
+      name: 'Entity',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField_1',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalField_1a',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
     });
 
-    const thingConfigs = [thingConfig, thingConfig2, thingConfig3];
+    const entityConfigs = [entityConfig, entityConfig2, entityConfig3];
 
     const expectedResult = new Map();
-    expectedResult.set(thingConfig, [
+    expectedResult.set(entityConfig, [
       {
         name: 'relationalField_1',
       },
@@ -51,7 +51,7 @@ describe('getRelations', () => {
         array: true,
       },
     ]);
-    expectedResult.set(thingConfig2, [
+    expectedResult.set(entityConfig2, [
       {
         name: 'relationalField_2',
       },
@@ -60,7 +60,7 @@ describe('getRelations', () => {
         array: true,
       },
     ]);
-    expectedResult.set(thingConfig3, [
+    expectedResult.set(entityConfig3, [
       {
         name: 'relationalField_3',
       },
@@ -69,7 +69,7 @@ describe('getRelations', () => {
         array: true,
       },
     ]);
-    const result = getRelations(thingConfig, thingConfigs);
+    const result = getRelations(entityConfig, entityConfigs);
     expect(result).toEqual(expectedResult);
   });
 });

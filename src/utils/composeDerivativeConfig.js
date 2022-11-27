@@ -1,17 +1,17 @@
 // @flow
-import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
-import composeThingConfig from './composeThingConfig';
+import composeEntityConfig from './composeEntityConfig';
 
 const store = Object.create(null);
 
 const composeDerivativeConfig = (
   signatureMethods: DerivativeAttributes,
-  rootThingConfig: ThingConfig,
+  rootEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-): null | ThingConfig => {
-  const { name: rootThingName } = rootThingConfig;
+): null | EntityConfig => {
+  const { name: rootEntityName } = rootEntityConfig;
 
   const {
     suffix,
@@ -24,37 +24,37 @@ const composeDerivativeConfig = (
     unfreezedFields,
   } = signatureMethods;
 
-  const { derivative, thingConfigs } = generalConfig;
+  const { derivative, entityConfigs } = generalConfig;
 
   if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 
-  if (!allow[rootThingName]) return null; // not error but negative result of function!
+  if (!allow[rootEntityName]) return null; // not error but negative result of function!
 
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store[`${rootThingName}${suffix}`]) {
-    return store[`${rootThingName}${suffix}`];
+  if (!process.env.JEST_WORKER_ID && store[`${rootEntityName}${suffix}`]) {
+    return store[`${rootEntityName}${suffix}`];
   }
 
-  const fieldsObject = composeFieldsObject(rootThingConfig);
+  const fieldsObject = composeFieldsObject(rootEntityConfig);
 
-  const allowThingNames = Object.keys(allow);
+  const allowEntityNames = Object.keys(allow);
 
   // *** check args correctness
 
   if (excludeFields) {
-    Object.keys(excludeFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(excludeFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in excludeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in excludeFields of "${suffix}" derivative!`,
         );
       }
     });
 
-    if (excludeFields[rootThingName]) {
-      excludeFields[rootThingName].forEach((fieldName) => {
+    if (excludeFields[rootEntityName]) {
+      excludeFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect excludeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+            `Incorrect excludeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -62,19 +62,19 @@ const composeDerivativeConfig = (
   }
 
   if (includeFields) {
-    Object.keys(includeFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(includeFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in includeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in includeFields of "${suffix}" derivative!`,
         );
       }
     });
 
-    if (includeFields[rootThingName]) {
-      includeFields[rootThingName].forEach((fieldName) => {
+    if (includeFields[rootEntityName]) {
+      includeFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect includeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+            `Incorrect includeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -82,19 +82,19 @@ const composeDerivativeConfig = (
   }
 
   if (freezedFields) {
-    Object.keys(freezedFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(freezedFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in freezedFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in freezedFields of "${suffix}" derivative!`,
         );
       }
     });
 
-    if (freezedFields[rootThingName]) {
-      freezedFields[rootThingName].forEach((fieldName) => {
+    if (freezedFields[rootEntityName]) {
+      freezedFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect freezedFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+            `Incorrect freezedFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -102,19 +102,19 @@ const composeDerivativeConfig = (
   }
 
   if (unfreezedFields) {
-    Object.keys(unfreezedFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(unfreezedFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in unfreezedFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in unfreezedFields of "${suffix}" derivative!`,
         );
       }
     });
 
-    if (unfreezedFields[rootThingName]) {
-      unfreezedFields[rootThingName].forEach((fieldName) => {
+    if (unfreezedFields[rootEntityName]) {
+      unfreezedFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect unfreezedFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+            `Incorrect unfreezedFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -122,36 +122,36 @@ const composeDerivativeConfig = (
   }
 
   if (addFields) {
-    Object.keys(addFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(addFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in addFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in addFields of "${suffix}" derivative!`,
         );
       }
     });
   }
 
   if (derivativeFields) {
-    Object.keys(derivativeFields).forEach((thingName) => {
-      if (!allowThingNames.includes(thingName)) {
+    Object.keys(derivativeFields).forEach((entityName) => {
+      if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect thingName key: "${thingName}" in derivativeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in derivativeFields of "${suffix}" derivative!`,
         );
       }
     });
 
     const addedDuplexFields =
-      addFields && addFields[rootThingName] && addFields[rootThingName].duplexFields
-        ? addFields[rootThingName].duplexFields.map(({ name }) => name)
+      addFields && addFields[rootEntityName] && addFields[rootEntityName].duplexFields
+        ? addFields[rootEntityName].duplexFields.map(({ name }) => name)
         : [];
 
     const addedRelationalFields =
-      addFields && addFields[rootThingName] && addFields[rootThingName].relationalFields
-        ? addFields[rootThingName].relationalFields.map(({ name }) => name)
+      addFields && addFields[rootEntityName] && addFields[rootEntityName].relationalFields
+        ? addFields[rootEntityName].relationalFields.map(({ name }) => name)
         : [];
 
-    if (derivativeFields[rootThingName]) {
-      Object.keys(derivativeFields[rootThingName]).forEach((fieldName) => {
+    if (derivativeFields[rootEntityName]) {
+      Object.keys(derivativeFields[rootEntityName]).forEach((fieldName) => {
         if (
           !(
             fieldsObject[fieldName] &&
@@ -162,7 +162,7 @@ const composeDerivativeConfig = (
           !addedRelationalFields.includes(fieldName)
         ) {
           throw new TypeError(
-            `Incorrect derivativeFields field name "${fieldName}" for "${rootThingName}" in: "${suffix}" derivative!`,
+            `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
           );
         }
       });
@@ -171,42 +171,42 @@ const composeDerivativeConfig = (
 
   // ***
 
-  const thingConfig = { ...rootThingConfig, name: `${rootThingName}${suffix}` };
+  const entityConfig = { ...rootEntityConfig, name: `${rootEntityName}${suffix}` };
 
-  store[`${rootThingName}${suffix}`] = thingConfig;
+  store[`${rootEntityName}${suffix}`] = entityConfig;
 
-  if (includeFields && includeFields[rootThingName]) {
-    Object.keys(thingConfig).forEach((key) => {
+  if (includeFields && includeFields[rootEntityName]) {
+    Object.keys(entityConfig).forEach((key) => {
       if (key.slice(-6) === 'Fields') {
         // $FlowFixMe
-        thingConfig[key] = thingConfig[key].filter(({ name }) =>
-          includeFields[rootThingName].includes(name),
+        entityConfig[key] = entityConfig[key].filter(({ name }) =>
+          includeFields[rootEntityName].includes(name),
         );
       }
     });
   }
 
-  if (excludeFields && excludeFields[rootThingName]) {
-    Object.keys(thingConfig).forEach((key) => {
+  if (excludeFields && excludeFields[rootEntityName]) {
+    Object.keys(entityConfig).forEach((key) => {
       if (key.slice(-6) === 'Fields') {
         // $FlowFixMe
-        thingConfig[key] = thingConfig[key].filter(
+        entityConfig[key] = entityConfig[key].filter(
           // $FlowFixMe
-          ({ name }) => !excludeFields[rootThingName].includes(name),
+          ({ name }) => !excludeFields[rootEntityName].includes(name),
         );
       }
     });
   }
 
-  if (addFields && addFields[rootThingName]) {
+  if (addFields && addFields[rootEntityName]) {
     const addFields2 = {
-      ...addFields[rootThingName],
+      ...addFields[rootEntityName],
       // name used also for cache results in composeFieldsObject util
-      name: `fieldsToAdd ${rootThingName}${suffix}`,
+      name: `fieldsToAdd ${rootEntityName}${suffix}`,
     };
 
     // $FlowFixMe
-    composeThingConfig(addFields[rootThingName], addFields2, thingConfigs);
+    composeEntityConfig(addFields[rootEntityName], addFields2, entityConfigs);
 
     // $FlowFixMe
     const fieldsToAddObject = composeFieldsObject(addFields2);
@@ -215,37 +215,37 @@ const composeDerivativeConfig = (
       if (fieldsObject[fieldName]) {
         const { kind } = fieldsObject[fieldName];
         // $FlowFixMe
-        thingConfig[kind] = thingConfig[kind].filter(({ name }) => name !== fieldName);
+        entityConfig[kind] = entityConfig[kind].filter(({ name }) => name !== fieldName);
       }
       const { kind, attributes: fieldToAdd } = fieldsToAddObject[fieldName];
-      if (thingConfig[kind]) {
+      if (entityConfig[kind]) {
         // $FlowFixMe
-        thingConfig[kind].push(fieldToAdd);
+        entityConfig[kind].push(fieldToAdd);
       } else {
         // $FlowFixMe
-        thingConfig[kind] = [fieldToAdd];
+        entityConfig[kind] = [fieldToAdd];
       }
     });
   }
 
-  if (derivativeFields && derivativeFields[rootThingName]) {
-    Object.keys(thingConfig).forEach((key) => {
+  if (derivativeFields && derivativeFields[rootEntityName]) {
+    Object.keys(entityConfig).forEach((key) => {
       if (key === 'relationalFields' || key === 'duplexFields') {
         // $FlowFixMe
-        thingConfig[key] = thingConfig[key].map((item) => {
+        entityConfig[key] = entityConfig[key].map((item) => {
           const { name, array, config: currentConfig } = item;
 
-          if (!derivativeFields[rootThingName][name]) {
+          if (!derivativeFields[rootEntityName][name]) {
             // $FlowFixMe
             return item;
           }
 
-          const suffix2 = derivativeFields[rootThingName][name];
+          const suffix2 = derivativeFields[rootEntityName][name];
 
-          const childQuery = array ? 'childThings' : 'childThing';
+          const childQuery = array ? 'childEntities' : 'childEntity';
           if (!derivative[suffix2].allow[currentConfig.name].includes(childQuery)) {
             throw new TypeError(
-              `Have to set "${childQuery}" as "allow" for suffix: "${suffix2}" & thing: "${currentConfig.name}"!`,
+              `Have to set "${childQuery}" as "allow" for suffix: "${suffix2}" & entity: "${currentConfig.name}"!`,
             );
           }
 
@@ -254,7 +254,7 @@ const composeDerivativeConfig = (
             composeDerivativeConfig(derivative[suffix2], currentConfig, generalConfig);
           if (!config) {
             throw new TypeError(
-              `Can not set derivative config for thingName: "${currentConfig.name}" & derivative suffix:"${suffix2}"!`,
+              `Can not set derivative config for entityName: "${currentConfig.name}" & derivative suffix:"${suffix2}"!`,
             );
           }
 
@@ -265,13 +265,13 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (freezedFields && freezedFields[rootThingName]) {
-    Object.keys(thingConfig).forEach((key) => {
+  if (freezedFields && freezedFields[rootEntityName]) {
+    Object.keys(entityConfig).forEach((key) => {
       if (key.slice(-6) === 'Fields') {
         // $FlowFixMe
-        thingConfig[key] = thingConfig[key].map((field) =>
+        entityConfig[key] = entityConfig[key].map((field) =>
           // $FlowFixMe
-          freezedFields[rootThingName].includes(field.name)
+          freezedFields[rootEntityName].includes(field.name)
             ? // $FlowFixMe
               { ...field, freeze: true }
             : // $FlowFixMe
@@ -281,13 +281,13 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (unfreezedFields && unfreezedFields[rootThingName]) {
-    Object.keys(thingConfig).forEach((key) => {
+  if (unfreezedFields && unfreezedFields[rootEntityName]) {
+    Object.keys(entityConfig).forEach((key) => {
       if (key.slice(-6) === 'Fields') {
         // $FlowFixMe
-        thingConfig[key] = thingConfig[key].map((field) =>
+        entityConfig[key] = entityConfig[key].map((field) =>
           // $FlowFixMe
-          unfreezedFields[rootThingName].includes(field.name)
+          unfreezedFields[rootEntityName].includes(field.name)
             ? // $FlowFixMe
               { ...field, freeze: false }
             : // $FlowFixMe
@@ -297,7 +297,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  return store[`${rootThingName}${suffix}`];
+  return store[`${rootEntityName}${suffix}`];
 };
 
 export default composeDerivativeConfig;

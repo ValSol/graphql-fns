@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import mongoose from 'mongoose';
 
-import type { Enums, ThingConfig } from '../flowTypes';
+import type { Enums, EntityConfig } from '../flowTypes';
 
 import composeThingSchemaProperties from './composeThingSchemaProperties';
 
@@ -10,7 +10,7 @@ const { Schema } = mongoose;
 
 describe('composeThingSchemaProperties', () => {
   test('should compose schema properties with text fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -72,17 +72,17 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, []);
+    const result = composeThingSchemaProperties(entityConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with text and relational fields', () => {
-    const placeConfig: ThingConfig = {
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
     };
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -161,8 +161,8 @@ describe('composeThingSchemaProperties', () => {
   });
 
   test('should compose schema properties with text and duplex fields', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -265,9 +265,8 @@ describe('composeThingSchemaProperties', () => {
   });
 
   test('should compose schema properties with text and embeded fields', () => {
-    const addressConfig: ThingConfig = {
+    const addressConfig: EntityConfig = {
       name: 'Address',
-      type: 'tangible',
       type: 'embedded',
       textFields: [
         {
@@ -280,7 +279,7 @@ describe('composeThingSchemaProperties', () => {
         },
       ],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -388,7 +387,7 @@ describe('composeThingSchemaProperties', () => {
   });
 
   test('should compose schema properties with text and file fields', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -410,7 +409,7 @@ describe('composeThingSchemaProperties', () => {
       ],
     };
 
-    const exampleConfig: ThingConfig = {
+    const exampleConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -494,7 +493,7 @@ describe('composeThingSchemaProperties', () => {
   });
 
   test('should compose schema properties with geospatial fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -631,7 +630,7 @@ describe('composeThingSchemaProperties', () => {
       ],
     };
 
-    const result = composeThingSchemaProperties(thingConfig, []);
+    const result = composeThingSchemaProperties(entityConfig, []);
     expect(result).toEqual(expectedResult);
   });
 
@@ -642,7 +641,7 @@ describe('composeThingSchemaProperties', () => {
       { name: 'enumeration1', enum: enumeration1 },
       { name: 'enumeration2', enum: enumeration2 },
     ];
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       enumFields: [
@@ -695,13 +694,13 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, enums);
+    const result = composeThingSchemaProperties(entityConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with dateTime fields', () => {
     const enums: Enums = [];
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       dateTimeFields: [
@@ -765,13 +764,13 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, enums);
+    const result = composeThingSchemaProperties(entityConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with int fields', () => {
     const enums: Enums = [];
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       intFields: [
@@ -829,13 +828,13 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, enums);
+    const result = composeThingSchemaProperties(entityConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with float fields', () => {
     const enums: Enums = [];
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       floatFields: [
@@ -893,13 +892,13 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, enums);
+    const result = composeThingSchemaProperties(entityConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with boolean fields', () => {
     const enums: Enums = [];
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       booleanFields: [
@@ -946,12 +945,12 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, enums);
+    const result = composeThingSchemaProperties(entityConfig, enums);
     expect(result).toEqual(expectedResult);
   });
 
   test('should compose schema properties with text fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       counter: true,
@@ -972,7 +971,7 @@ describe('composeThingSchemaProperties', () => {
       },
     };
 
-    const result = composeThingSchemaProperties(thingConfig, []);
+    const result = composeThingSchemaProperties(entityConfig, []);
     expect(result).toEqual(expectedResult);
   });
 });

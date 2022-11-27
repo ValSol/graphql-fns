@@ -5,20 +5,20 @@ import type { DerivativeInputs } from '../flowTypes';
 import composeDerivativeInputs from './composeDerivativeInputs';
 
 describe('composeDerivativeInputs', () => {
-  test('compose simple thingConfigs', () => {
+  test('compose simple entityConfigs', () => {
     const empty: DerivativeInputs = {
       suffix: '',
       allow: {
-        Menu: ['thingWhereOneInput', 'thingUpdateInput'],
-        MenuSection: ['thingWhereOneInput', 'thingUpdateInput'],
+        Menu: ['entityWhereOneInput', 'entityUpdateInput'],
+        MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
       },
     };
 
     const ForView: DerivativeInputs = {
       suffix: 'ForView',
       allow: {
-        Restaurant: ['thingUpdateInput'],
-        Post: ['thingCreateInput'],
+        Restaurant: ['entityUpdateInput'],
+        Post: ['entityCreateInput'],
       },
     };
 

@@ -2,7 +2,7 @@
 import type {
   GeneralConfig,
   ServersideConfig,
-  ThingConfig,
+  EntityConfig,
   ThreeSegmentInventoryChain,
 } from '../../flowTypes';
 
@@ -16,11 +16,11 @@ import generateDerivativeResolvers from './generateDerivativeResolvers';
 const createCustomResolver = (
   methodKind: 'Query' | 'Mutation',
   methodName: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): null | Function => {
-  const { name } = thingConfig;
+  const { name } = entityConfig;
 
   const { inventory } = generalConfig;
 
@@ -39,7 +39,7 @@ const createCustomResolver = (
     throw new TypeError(`Got undefiend signatureMethods for "${methodName}" methodName!`);
   }
 
-  if (!composeActionSignature(signatureMethods, thingConfig, generalConfig)) return null;
+  if (!composeActionSignature(signatureMethods, entityConfig, generalConfig)) return null;
 
   // $FlowFixMe - cannot understand what the conflict between 'Query' & 'Mutation'
   const inventoryChain: ThreeSegmentInventoryChain = [methodKind, methodName, name];
@@ -60,10 +60,10 @@ const createCustomResolver = (
 
     return customResolverDecorator(
       authDecorator(
-        serversideConfig[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+        serversideConfig[methodKind][methodName](entityConfig, generalConfig, serversideConfig),
       ),
       signatureMethods,
-      thingConfig,
+      entityConfig,
       generalConfig,
     );
   }
@@ -90,10 +90,10 @@ const createCustomResolver = (
 
     return customResolverDecorator(
       authDecorator(
-        derivativeResolvers[methodKind][methodName](thingConfig, generalConfig, serversideConfig),
+        derivativeResolvers[methodKind][methodName](entityConfig, generalConfig, serversideConfig),
       ),
       signatureMethods,
-      thingConfig,
+      entityConfig,
       generalConfig,
     );
   }

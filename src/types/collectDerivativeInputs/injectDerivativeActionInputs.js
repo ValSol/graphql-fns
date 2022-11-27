@@ -1,6 +1,6 @@
 // @flow
 
-import type { ActionAttributes, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { ActionAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
@@ -8,23 +8,18 @@ import fillDic from '../inputs/fillDic';
 
 const injectDerivativeActionInputs = (
   suffix: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   actionAttributes: ActionAttributes,
   dic: { [inputName: string]: string },
 ): void => {
-  const {
-    actionAllowed,
-    actionGeneralName,
-    actionName,
-    actionType,
-    inputCreators,
-  } = actionAttributes;
+  const { actionAllowed, actionGeneralName, actionName, actionType, inputCreators } =
+    actionAttributes;
   const { inventory } = generalConfig;
 
-  const { name: configName } = thingConfig;
+  const { name: configName } = entityConfig;
 
-  if (!actionAllowed(thingConfig)) return;
+  if (!actionAllowed(entityConfig)) return;
 
   if (
     inventory &&
@@ -37,7 +32,7 @@ const injectDerivativeActionInputs = (
 
   if (!specificName) return;
 
-  const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
+  const derivativeConfig = composeDerivativeConfigByName(suffix, entityConfig, generalConfig);
 
   inputCreators.forEach((inputCreator) => {
     const [inputName, inputDefinition, childChain] = inputCreator(derivativeConfig);

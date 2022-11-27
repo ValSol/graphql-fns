@@ -1,8 +1,8 @@
 // @flow
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
 import type { PreparedData } from '../../flowTypes';
 
-import addIdsToThing from '../../utils/addIdsToThing';
+import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
@@ -14,7 +14,7 @@ import mutationsResolverAttributes from './mutationsResolverAttributes';
 
 type StandardMutationsArgs = Array<{
   actionGeneralName: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   inAnyCase?: boolean,
   parent?: Object,
   args: Object,
@@ -60,7 +60,7 @@ const workOutMutations = async (
 
         const {
           actionGeneralName,
-          thingConfig,
+          entityConfig,
           inAnyCase,
           parent: parentInArgs,
           args,
@@ -74,17 +74,17 @@ const workOutMutations = async (
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
-        const { name } = thingConfig;
+        const { name } = entityConfig;
 
         const inventoryChain = ['Mutation', actionGeneralName, name];
         if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
           throw new TypeError(
-            `Not authorized "${actionGeneralName}" mutation for "${name}" thing!`,
+            `Not authorized "${actionGeneralName}" mutation for "${name}" entity!`,
           );
         }
 
         const resolverCreatorArg = {
-          thingConfig,
+          entityConfig,
           generalConfig,
           serversideConfig,
           inAnyCase,
@@ -103,7 +103,7 @@ const workOutMutations = async (
 
         if (!previous) {
           throw new TypeError(
-            `Not got preivous for "${actionGeneralName}" mutation for "${name}" thing!`,
+            `Not got preivous for "${actionGeneralName}" mutation for "${name}" entity!`,
           );
         }
 
@@ -113,7 +113,7 @@ const workOutMutations = async (
         preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, preparedData2);
         if (!preparedData) {
           throw new TypeError(
-            `Not got preparedData for "${actionGeneralName}" mutation for "${name}" thing!`,
+            `Not got preparedData for "${actionGeneralName}" mutation for "${name}" entity!`,
           );
         }
 
@@ -165,7 +165,7 @@ const workOutMutations = async (
 
     const {
       actionGeneralName,
-      thingConfig,
+      entityConfig,
       inAnyCase,
       parent: parentInArgs,
       args,
@@ -179,12 +179,11 @@ const workOutMutations = async (
     const info = infoInArgs || { projection: {} };
     const parentFilter = parentFilterInArgs || [];
 
-    const { array, produceCurrent, report, finalResult } = mutationsResolverAttributes[
-      actionGeneralName
-    ];
+    const { array, produceCurrent, report, finalResult } =
+      mutationsResolverAttributes[actionGeneralName];
 
     const resolverCreatorArg = {
-      thingConfig,
+      entityConfig,
       generalConfig,
       serversideConfig,
       inAnyCase,
@@ -202,7 +201,7 @@ const workOutMutations = async (
     const result = returnResult ? {} : null;
 
     if (result) {
-      result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
+      result.previous = previous.map((item) => addIdsToEntity(item, entityConfig));
     }
 
     if (result && produceCurrent) {
@@ -210,7 +209,7 @@ const workOutMutations = async (
       // eslint-disable-next-line no-await-in-loop
       result.current = await produceResult(
         fakePreparedData,
-        thingConfig,
+        entityConfig,
         generalConfig,
         context,
         array,

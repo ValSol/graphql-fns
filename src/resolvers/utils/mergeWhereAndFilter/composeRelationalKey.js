@@ -1,20 +1,20 @@
 // @flow
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const composeRelationalKey = (
   value: Object,
   lookupArray: Array<string>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): {
   relationalKey: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   value: Object,
 } => {
   let currentValue = value;
-  let currentConfig = thingConfig;
+  let currentConfig = entityConfig;
   let relationalKey = '';
   let goToNext = true;
 
@@ -52,7 +52,7 @@ const composeRelationalKey = (
 
   return {
     relationalKey,
-    thingConfig: currentConfig,
+    entityConfig: currentConfig,
     value: currentValue,
   };
 };

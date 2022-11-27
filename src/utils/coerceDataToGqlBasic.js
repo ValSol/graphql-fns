@@ -1,7 +1,7 @@
 // @flow
 import deepEqual from 'fast-deep-equal';
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
@@ -12,18 +12,18 @@ const coerceDataToGqlBasic = (
   ObjectId: Object,
   data: Object,
   prevData: null | Object,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   allFields?: boolean,
   skipUnusedFields?: boolean, // use when import data from sourse with extra fields
   setNullForEmptyText?: boolean, // when create data to prevent creation text fields with "" value
 ): Object => {
-  const fieldsObject = composeFieldsObject(thingConfig);
+  const fieldsObject = composeFieldsObject(entityConfig);
 
   const { id, createdAt, updatedAt, ...rest } = data;
 
   const result = Object.keys(rest).reduce((prev, key) => {
     if (!skipUnusedFields && !fieldsObject[key]) {
-      throw new TypeError(`Found undeclared in thing "${thingConfig.name}" field "${key}"!`);
+      throw new TypeError(`Found undeclared in entity "${entityConfig.name}" field "${key}"!`);
     }
     if (skipUnusedFields && !fieldsObject[key]) return prev;
 

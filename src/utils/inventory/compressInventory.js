@@ -25,8 +25,8 @@ const compressInventory = (
         const correspondingValues = umbrellaInventory[permission].map((umbrellaPermission) =>
           lodashGet(inventoryByPermissions, `${umbrellaPermission}.include.Query.${action}`, []),
         );
-        Query[action].forEach((thingName) => {
-          const skip = correspondingValues.some((thingNames) => thingNames.includes(thingName));
+        Query[action].forEach((entityName) => {
+          const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));
           if (skip) return;
 
           if (!result[permission]) {
@@ -41,7 +41,7 @@ const compressInventory = (
             result[permission].include.Query[action] = [];
           }
 
-          result[permission].include.Query[action].push(thingName);
+          result[permission].include.Query[action].push(entityName);
         });
       });
     }
@@ -51,8 +51,8 @@ const compressInventory = (
         const correspondingValues = umbrellaInventory[permission].map((umbrellaPermission) =>
           lodashGet(inventoryByPermissions, `${umbrellaPermission}.include.Mutation.${action}`, []),
         );
-        Mutation[action].forEach((thingName) => {
-          const skip = correspondingValues.some((thingNames) => thingNames.includes(thingName));
+        Mutation[action].forEach((entityName) => {
+          const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));
           if (skip) return;
 
           if (!result[permission]) {
@@ -67,7 +67,7 @@ const compressInventory = (
             result[permission].include.Mutation[action] = [];
           }
 
-          result[permission].include.Mutation[action].push(thingName);
+          result[permission].include.Mutation[action].push(entityName);
         });
       });
     }

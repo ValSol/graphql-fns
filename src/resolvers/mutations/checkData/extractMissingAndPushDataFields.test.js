@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
 
 describe('extractMissingAndPushDataFields util', () => {
-  const accessConfig: ThingConfig = {
+  const accessConfig: EntityConfig = {
     name: 'Access',
     type: 'tangible',
 
@@ -22,8 +22,8 @@ describe('extractMissingAndPushDataFields util', () => {
     ],
   };
 
-  const postConfig: ThingConfig = {};
-  const restaurantConfig: ThingConfig = {};
+  const postConfig: EntityConfig = {};
+  const restaurantConfig: EntityConfig = {};
 
   Object.assign(postConfig, {
     name: 'Post',

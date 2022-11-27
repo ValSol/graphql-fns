@@ -6,10 +6,10 @@ import transformData from './transformData';
 
 describe('transformData', () => {
   const id = '9876543210';
-  const globalId = toGlobalId(id, 'thingName');
+  const globalId = toGlobalId(id, 'entityName');
 
   const id0 = '1234567890';
-  const connect = toGlobalId(id0, 'thingName');
+  const connect = toGlobalId(id0, 'entityName');
 
   const id1 = '1';
   const id2 = '2';
@@ -27,7 +27,7 @@ describe('transformData', () => {
     const data = {
       id: globalId,
       child: { connect },
-      children: { connect: [toGlobalId(id1, 'thingName'), toGlobalId(id2, 'thingName')] },
+      children: { connect: [toGlobalId(id1, 'entityName'), toGlobalId(id2, 'entityName')] },
     };
 
     const result = await transformData(data);
@@ -42,7 +42,7 @@ describe('transformData', () => {
       {
         id: globalId,
         child: { connect },
-        children: { connect: [toGlobalId(id1, 'thingName'), toGlobalId(id2, 'thingName')] },
+        children: { connect: [toGlobalId(id1, 'entityName'), toGlobalId(id2, 'entityName')] },
       },
     ];
 
@@ -59,7 +59,7 @@ describe('transformData', () => {
         create: {
           id: globalId,
           child: { connect },
-          children: { connect: [toGlobalId(id1, 'thingName'), toGlobalId(id2, 'thingName')] },
+          children: { connect: [toGlobalId(id1, 'entityName'), toGlobalId(id2, 'entityName')] },
         },
       },
     };

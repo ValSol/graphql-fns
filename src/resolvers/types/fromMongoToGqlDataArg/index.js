@@ -2,7 +2,7 @@
 
 import { Types } from 'mongoose';
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 const { default: pointFromMongoToGql } = require('../pointFromMongoToGql');
 const { default: polygonFromMongoToGql } = require('../polygonFromMongoToGql');
@@ -23,9 +23,9 @@ const geospatialFromMongToGql = (item) => {
   }
 };
 
-const fromMongoToGqlDataArg = (data: Object, thingConfig: ThingConfig): Object => {
+const fromMongoToGqlDataArg = (data: Object, entityConfig: EntityConfig): Object => {
   const { embeddedFields, fileFields, relationalFields, duplexFields, geospatialFields } =
-    thingConfig;
+    entityConfig;
 
   const { id, ...result } = data;
 

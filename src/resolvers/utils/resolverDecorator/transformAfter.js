@@ -1,17 +1,17 @@
 // @flow
 
-import type { ThingConfig, GeneralConfig } from '../../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../../flowTypes';
 
-import parseThingName from '../parseThingName';
+import parseEntityName from '../parseEntityName';
 import toGlobalId from '../toGlobalId';
 
 const transformAfter = (
   item: Object,
-  thingConfig: null | ThingConfig,
+  entityConfig: null | EntityConfig,
   generalConfig: null | GeneralConfig,
   isChild: boolean = false,
 ): Object => {
-  if (!thingConfig) {
+  if (!entityConfig) {
     return item;
   }
 
@@ -29,7 +29,7 @@ const transformAfter = (
     fileFields,
     relationalFields,
     type: configType,
-  } = thingConfig;
+  } = entityConfig;
 
   const transformedFields = [...(duplexFields || []), ...(relationalFields || [])].reduce(
     (prev, { array, config, name }) => {
@@ -42,7 +42,7 @@ const transformAfter = (
           prev[name] = toGlobalId(item[name], config.name); // eslint-disable-line no-param-reassign
         }
       } else {
-        const { root: rootName, suffix } = parseThingName(config.name, generalConfig);
+        const { root: rootName, suffix } = parseEntityName(config.name, generalConfig);
 
         if (array) {
           prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, suffix)); // eslint-disable-line no-param-reassign
@@ -81,11 +81,11 @@ const transformAfter = (
   if (isChild && configType !== 'tangible') {
     globalId = id;
   } else if (generalConfig) {
-    const { root: rootName, suffix } = parseThingName(thingConfig.name, generalConfig);
+    const { root: rootName, suffix } = parseEntityName(entityConfig.name, generalConfig);
 
     globalId = toGlobalId(id, rootName, suffix); // eslint-disable-line no-param-reassign
   } else {
-    globalId = toGlobalId(id, thingConfig.name); // eslint-disable-line no-param-reassign
+    globalId = toGlobalId(id, entityConfig.name); // eslint-disable-line no-param-reassign
   }
 
   return {

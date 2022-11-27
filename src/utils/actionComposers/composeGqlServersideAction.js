@@ -21,9 +21,9 @@ const composeGqlServersideAction = (
   serversideConfig: ServersideConfig,
   optionsArg?: Object = {},
 ): Function => {
-  const { actionType, actionName, thingName } = gqlActionData;
+  const { actionType, actionName, entityName } = gqlActionData;
 
-  const { thingConfigs } = generalConfig;
+  const { entityConfigs } = generalConfig;
 
   let {
     [actionType]: { [actionName]: resolver },
@@ -44,14 +44,14 @@ const composeGqlServersideAction = (
     resolver = baseResolvers[actionType][baseAction || actionName];
 
     if (!resolver) {
-      throw new TypeError(`Not found ${actionType}: "${actionName}" for thing: "${thingName}"!`);
+      throw new TypeError(`Not found ${actionType}: "${actionName}" for entity: "${entityName}"!`);
     }
   }
 
   const inAnyCase = true; // not check permissions if serverside execution
 
   return {
-    resolver: resolver(thingConfigs[thingName], generalConfig, serversideConfig, inAnyCase),
+    resolver: resolver(entityConfigs[entityName], generalConfig, serversideConfig, inAnyCase),
     projection: composeProjectionFromOptions(gqlActionData, generalConfig, optionsArg),
   };
 };

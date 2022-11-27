@@ -1,10 +1,10 @@
 // @flow
-import type { ThingConfig, GeneralConfig, ServersideConfig } from '../../../flowTypes';
+import type { EntityConfig, GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
 const store = Object.create(null);
 
 type ResoverCreator = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ) => null | Function;
@@ -19,13 +19,13 @@ const createResolverCreator = (
   }
 
   const resolverCreator = (
-    thingConfig: ThingConfig,
+    entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
     serversideConfig: ServersideConfig,
   ): null | Function => {
     const inAnyCase = true;
     const regularResolver = regularResolverCreator(
-      thingConfig,
+      entityConfig,
       generalConfig,
       serversideConfig,
       inAnyCase,

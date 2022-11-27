@@ -4,19 +4,19 @@ import type {
   ClientOptions,
   DerivativeAttributes,
   InventoryByPermissions,
-  ThingConfig,
+  EntityConfig,
 } from '../../flowTypes';
 
 export type ActionToParse = {
   actionType: string, //  'Query' | 'Mutation',
   actionName: string,
-  thingName: string,
+  entityName: string,
   suffix?: string,
 };
 
 export type ParsedAction = {
   creationType: 'standard' | 'custom' | 'derivative',
-  thingConfig: ThingConfig | null,
+  entityConfig: EntityConfig | null,
   baseAction: string,
   suffix: string,
 };
@@ -25,7 +25,7 @@ export type ChildQueries = Array<{
   actionName: string,
   baseAction: string,
   suffix: string,
-  thingName: string,
+  entityName: string,
 }>;
 
 export type ParseActionArgs = {
@@ -33,7 +33,7 @@ export type ParseActionArgs = {
   actionName: string,
   options: ClientOptions,
   suffix?: string,
-  thingName: string,
+  entityName: string,
 };
 
 export type ParseActionResult = {

@@ -1,10 +1,10 @@
 // @flow
 
-import type { ActionAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionAttributes, EntityConfig } from '../../flowTypes';
 
 const composeActionArgs = (
   prefix: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   actionAttributes: ActionAttributes,
   childArgs: { [argName: string]: string },
 ): Array<string> | string => {
@@ -18,17 +18,17 @@ const composeActionArgs = (
     actionReturnConfig,
     inputCreators,
   } = actionAttributes;
-  const { name: configName } = thingConfig;
+  const { name: configName } = entityConfig;
 
   const specificName = actionName(configName);
 
-  if (!actionAllowed(thingConfig)) {
+  if (!actionAllowed(entityConfig)) {
     throw new TypeError(
-      `Action "${actionGeneralName('')}" is not allowed for "${configName}" thing!`,
+      `Action "${actionGeneralName('')}" is not allowed for "${configName}" entity!`,
     );
   }
 
-  const toShow = inputCreators.map((imputCreator) => Boolean(imputCreator(thingConfig)[1]));
+  const toShow = inputCreators.map((imputCreator) => Boolean(imputCreator(entityConfig)[1]));
 
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);

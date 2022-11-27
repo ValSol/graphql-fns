@@ -1,36 +1,36 @@
 // @flow
-import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
-import composeDeletedThingSubscriptionArgs from './composeDeletedThingSubscriptionArgs';
-import composeCreatedThingSubscriptionArgs from './composeCreatedThingSubscriptionArgs';
-import composeUpdatedThingSubscriptionArgs from './composeUpdatedThingSubscriptionArgs';
+import composeDeletedEntitySubscriptionArgs from './composeDeletedEntitySubscriptionArgs';
+import composeCreatedEntitySubscriptionArgs from './composeCreatedEntitySubscriptionArgs';
+import composeUpdatedEntitySubscriptionArgs from './composeUpdatedEntitySubscriptionArgs';
 
 const composeSubscription = (
   prefixName: string,
-  subscriptionName: 'createdThing' | 'deletedThing' | 'updatedThing',
-  thingConfig: ThingConfig,
+  subscriptionName: 'createdEntity' | 'deletedEntity' | 'updatedEntity',
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
   let head;
 
-  const { childArgs, fields } = composeFields(thingConfig, generalConfig, {
+  const { childArgs, fields } = composeFields(entityConfig, generalConfig, {
     ...clientOptions,
     shift: 2,
   });
 
   switch (subscriptionName) {
-    case 'createdThing':
-      head = composeCreatedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
+    case 'createdEntity':
+      head = composeCreatedEntitySubscriptionArgs(prefixName, entityConfig, childArgs);
       break;
 
-    case 'deletedThing':
-      head = composeDeletedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
+    case 'deletedEntity':
+      head = composeDeletedEntitySubscriptionArgs(prefixName, entityConfig, childArgs);
       break;
 
-    case 'updatedThing':
-      head = composeUpdatedThingSubscriptionArgs(prefixName, thingConfig, childArgs);
+    case 'updatedEntity':
+      head = composeUpdatedEntitySubscriptionArgs(prefixName, entityConfig, childArgs);
       break;
 
     default:

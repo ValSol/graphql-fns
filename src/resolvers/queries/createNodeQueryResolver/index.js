@@ -6,8 +6,8 @@ import executeAuthorisation from '../../utils/executeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
 
-import createThingFileQueryResolver from '../createThingFileQueryResolver';
-import createThingQueryResolver from '../createThingQueryResolver';
+import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
+import createEntityQueryResolver from '../createEntityQueryResolver';
 
 type Context = { mongooseConn: Object };
 
@@ -15,7 +15,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
-  const { thingConfigs } = generalConfig;
+  const { entityConfigs } = generalConfig;
 
   const resolver = async (
     parent: Object,
@@ -25,29 +25,29 @@ const createNodeQueryResolver = (
   ): Object => {
     const { id: globalId } = args;
 
-    const { _id: id, thingName, suffix } = fromGlobalId(globalId);
+    const { _id: id, entityName, suffix } = fromGlobalId(globalId);
 
     if (!id) return null;
 
-    const thingConfig = thingConfigs[thingName];
+    const entityConfig = entityConfigs[entityName];
 
     const inAnyCase = true;
 
-    if (thingConfig.type === 'file') {
-      const inventoryChain = ['Query', `thingFile${suffix}`, thingName];
+    if (entityConfig.type === 'file') {
+      const inventoryChain = ['Query', `entityFile${suffix}`, entityName];
 
       const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
 
-      const thingFileQueryResolver = createThingFileQueryResolver(
-        thingConfig,
+      const entityFileQueryResolver = createEntityFileQueryResolver(
+        entityConfig,
         generalConfig,
         serversideConfig,
         inAnyCase,
       );
 
-      if (!thingFileQueryResolver) return null;
+      if (!entityFileQueryResolver) return null;
 
-      const thingFile = await thingFileQueryResolver(
+      const entityFile = await entityFileQueryResolver(
         null,
         { whereOne: { id } },
         context,
@@ -56,27 +56,27 @@ const createNodeQueryResolver = (
       );
 
       return {
-        ...transformAfter(thingFile, thingConfig, null),
-        __typename: `${thingName}${suffix}`,
+        ...transformAfter(entityFile, entityConfig, null),
+        __typename: `${entityName}${suffix}`,
       };
     }
 
-    const inventoryChain = ['Query', `thing${suffix}`, thingName];
+    const inventoryChain = ['Query', `entity${suffix}`, entityName];
 
     const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
 
-    const thingQueryResolver = createThingQueryResolver(
-      thingConfig,
+    const entityQueryResolver = createEntityQueryResolver(
+      entityConfig,
       generalConfig,
       serversideConfig,
       inAnyCase,
     );
 
-    if (!thingQueryResolver) return null;
+    if (!entityQueryResolver) return null;
 
-    const thing = await thingQueryResolver(null, { whereOne: { id } }, context, info, filter);
+    const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, filter);
 
-    return { ...transformAfter(thing, thingConfig, null), __typename: `${thingName}${suffix}` };
+    return { ...transformAfter(entity, entityConfig, null), __typename: `${entityName}${suffix}` };
   };
 
   return resolver;

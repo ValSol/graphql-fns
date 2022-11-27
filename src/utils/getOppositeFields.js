@@ -1,9 +1,9 @@
 // @flow
 
-import type { DuplexField, ThingConfig } from '../flowTypes';
+import type { DuplexField, EntityConfig } from '../flowTypes';
 
-const getOppositeFields = (thingConfig: ThingConfig): Array<[DuplexField, DuplexField]> =>
-  (thingConfig.duplexFields || []).map((field) => {
+const getOppositeFields = (entityConfig: EntityConfig): Array<[DuplexField, DuplexField]> =>
+  (entityConfig.duplexFields || []).map((field) => {
     const { config, oppositeName } = field;
 
     const oppositeField = (config.duplexFields || []).find(({ name }) => name === oppositeName);

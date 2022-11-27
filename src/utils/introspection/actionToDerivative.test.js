@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes, EntityConfig } from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import actionToDerivative from './actionToDerivative';
 
 describe('actionToDerivative', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -15,7 +15,7 @@ describe('actionToDerivative', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -30,7 +30,7 @@ describe('actionToDerivative', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -69,20 +69,20 @@ describe('actionToDerivative', () => {
   });
 
   const signatureMethods: ActionSignatureMethods = {
-    name: 'getThing',
+    name: 'getEntity',
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig) => thingConfig,
+    config: (entityConfig) => entityConfig,
   };
 
   const ForCatalog: DerivativeAttributes = {
     suffix: 'ForCatalog',
     allow: {
-      Person: ['thingsByUnique', 'childThings', 'childThing'],
-      Place: ['childThing'],
-      Country: ['childThing'],
+      Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+      Place: ['childEntity'],
+      Country: ['childEntity'],
     },
 
     derivativeFields: {
@@ -98,24 +98,24 @@ describe('actionToDerivative', () => {
     },
   };
 
-  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
-  const queryName = 'getThing';
+  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const queryName = 'getEntity';
   const custom = { Query: { [queryName]: signatureMethods } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { thingConfigs, custom, derivative };
+  const generalConfig = { entityConfigs, custom, derivative };
 
-  test('have to return derivativeAttributes with Person: [thingsByUnique]', () => {
+  test('have to return derivativeAttributes with Person: [entitiesByUnique]', () => {
     const actionToParse = {
       actionType: 'Query',
       actionName: 'thingsByUniqueForCatalog',
-      thingName: 'Person',
+      entityName: 'Person',
     };
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
-      baseAction: 'thingsByUnique',
+      entityConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
+      baseAction: 'entitiesByUnique',
       suffix: 'ForCatalog',
     };
 
@@ -125,7 +125,7 @@ describe('actionToDerivative', () => {
       ForCatalog: {
         suffix: 'ForCatalog',
         allow: {
-          Person: ['thingsByUnique'],
+          Person: ['entitiesByUnique'],
         },
       },
     };
@@ -140,17 +140,17 @@ describe('actionToDerivative', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return derivativeAttributes with Person: [things]', () => {
+  test('have to return derivativeAttributes with Person: [entities]', () => {
     const actionToParse = {
       actionType: 'Query',
-      actionName: 'thingsForCatalog',
-      thingName: 'Person',
+      actionName: 'entitiesForCatalog',
+      entityName: 'Person',
     };
 
     const parsedAction = {
       creationType: 'derivative',
-      thingConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
-      baseAction: 'things',
+      entityConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
+      baseAction: 'entities',
       suffix: 'ForCatalog',
     };
 
@@ -158,7 +158,7 @@ describe('actionToDerivative', () => {
       ForCatalog: {
         suffix: 'ForCatalog',
         allow: {
-          Person: ['thingsByUnique'],
+          Person: ['entitiesByUnique'],
         },
       },
     };
@@ -167,7 +167,7 @@ describe('actionToDerivative', () => {
       ForCatalog: {
         suffix: 'ForCatalog',
         allow: {
-          Person: ['thingsByUnique', 'things'],
+          Person: ['entitiesByUnique', 'entities'],
         },
       },
     };

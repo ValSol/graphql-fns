@@ -16,8 +16,8 @@ describe('moveThingsToArray', () => {
             signinThingForView: { User: true },
           },
           Query: {
-            thingsForView: { Restaurant: true, Post: true, MenuSection: true },
-            thingForView: { Restaurant: true, Post: true, Menu: true },
+            entitiesForView: { Restaurant: true, Post: true, MenuSection: true },
+            entityForView: { Restaurant: true, Post: true, Menu: true },
             childThingForView: {
               BanquetHall: true,
               ConferenceHall: true,
@@ -33,19 +33,19 @@ describe('moveThingsToArray', () => {
         include: {
           Query: {
             thingForApprove: { Restaurant: true, Post: true },
-            childThings: { MenuSectionClone: true },
+            childEntities: { MenuSectionClone: true },
             thingsForApprove: { Post: true, Restaurant: true },
             childThingForApprove: { User: true },
           },
           Mutation: {
-            cloneThing: {
+            cloneEntity: {
               BanquetHall: true,
               ConferenceHall: true,
               Menu: true,
               Post: true,
               Restaurant: true,
             },
-            copyThing: {
+            copyEntity: {
               BanquetHallClone: true,
               BanquetHall: true,
               ConferenceHallClone: true,
@@ -57,13 +57,13 @@ describe('moveThingsToArray', () => {
               RestaurantClone: true,
               Restaurant: true,
             },
-            deleteThing: {
+            deleteEntity: {
               BanquetHallClone: true,
               ConferenceHallClone: true,
               PostClone: true,
               RestaurantClone: true,
             },
-            createThing: { Menu: true },
+            createEntity: { Menu: true },
             deleteWithChildrenThing: { MenuClone: true },
             removeStaticThing: { Restaurant: true, Post: true },
             cloneLevelOfThing: { Restaurant: true },
@@ -84,8 +84,8 @@ describe('moveThingsToArray', () => {
             signinThingForView: ['User'],
           },
           Query: {
-            thingsForView: ['Restaurant', 'Post', 'MenuSection'],
-            thingForView: ['Restaurant', 'Post', 'Menu'],
+            entitiesForView: ['Restaurant', 'Post', 'MenuSection'],
+            entityForView: ['Restaurant', 'Post', 'Menu'],
             childThingForView: ['BanquetHall', 'ConferenceHall', 'Restaurant', 'Menu'],
             childThingsForView: ['Post', 'MenuSection'],
           },
@@ -96,13 +96,13 @@ describe('moveThingsToArray', () => {
         include: {
           Query: {
             thingForApprove: ['Restaurant', 'Post'],
-            childThings: ['MenuSectionClone'],
+            childEntities: ['MenuSectionClone'],
             thingsForApprove: ['Post', 'Restaurant'],
             childThingForApprove: ['User'],
           },
           Mutation: {
-            cloneThing: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
-            copyThing: [
+            cloneEntity: ['BanquetHall', 'ConferenceHall', 'Menu', 'Post', 'Restaurant'],
+            copyEntity: [
               'BanquetHallClone',
               'BanquetHall',
               'ConferenceHallClone',
@@ -114,13 +114,13 @@ describe('moveThingsToArray', () => {
               'RestaurantClone',
               'Restaurant',
             ],
-            deleteThing: [
+            deleteEntity: [
               'BanquetHallClone',
               'ConferenceHallClone',
               'PostClone',
               'RestaurantClone',
             ],
-            createThing: ['Menu'],
+            createEntity: ['Menu'],
             deleteWithChildrenThing: ['MenuClone'],
             removeStaticThing: ['Restaurant', 'Post'],
             cloneLevelOfThing: ['Restaurant'],

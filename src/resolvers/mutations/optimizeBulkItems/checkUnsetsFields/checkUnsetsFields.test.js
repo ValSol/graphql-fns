@@ -5,7 +5,7 @@ import checkUnsetsFields from './index';
 
 describe('checkUnsetsFields', () => {
   test('should return correct result', () => {
-    const thingConfig = {
+    const entityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -154,7 +154,7 @@ describe('checkUnsetsFields', () => {
       },
     ];
 
-    const result = checkUnsetsFields(preparedBulk, thingConfig);
+    const result = checkUnsetsFields(preparedBulk, entityConfig);
 
     expect(result).toEqual(undefined);
   });

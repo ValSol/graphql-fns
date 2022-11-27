@@ -1,14 +1,14 @@
 // @flow
-import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import { queryAttributes } from '../../types/actionAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
-import composeCustomThingQueryArgs from './composeCustomThingQueryArgs';
+import composeCustomEntityQueryArgs from './composeCustomEntityQueryArgs';
 
 const attributesWithoutChildren = Object.keys(queryAttributes).reduce((prev, queyrName) => {
-  if (queyrName !== 'childThings' && queyrName !== 'childThing') {
+  if (queyrName !== 'childEntities' && queyrName !== 'childEntity') {
     prev[queyrName] = queryAttributes[queyrName]; // eslint-disable-line no-param-reassign
   }
 
@@ -18,23 +18,23 @@ const attributesWithoutChildren = Object.keys(queryAttributes).reduce((prev, que
 const composeQuery = (
   prefixName: string,
   queryName: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
-  if (!thingConfig) {
-    throw new TypeError('thingConfig must be defined!');
+  if (!entityConfig) {
+    throw new TypeError('entityConfig must be defined!');
   }
 
   if (attributesWithoutChildren[queryName]) {
-    const { childArgs, fields } = composeFields(thingConfig, generalConfig, {
+    const { childArgs, fields } = composeFields(entityConfig, generalConfig, {
       ...clientOptions,
       shift: 2,
     });
 
     const head = composeActionArgs(
       prefixName,
-      thingConfig,
+      entityConfig,
       attributesWithoutChildren[queryName],
       attributesWithoutChildren[queryName].actionReturnConfig ? childArgs : {},
     );
@@ -65,10 +65,16 @@ const composeQuery = (
     throw new TypeError(`Method "config" have to be defined for "${queryName}" custom query`);
   }
 
-  const returnObjectConfig = Query[queryName].config(thingConfig, generalConfig);
+  const returnObjectConfig = Query[queryName].config(entityConfig, generalConfig);
 
   if (returnObjectConfig === null) {
-    const head = composeCustomThingQueryArgs(prefixName, queryName, thingConfig, generalConfig, {});
+    const head = composeCustomEntityQueryArgs(
+      prefixName,
+      queryName,
+      entityConfig,
+      generalConfig,
+      {},
+    );
     return [...head, '}'].join('\n');
   }
 
@@ -77,10 +83,10 @@ const composeQuery = (
     shift: 2,
   });
 
-  const head = composeCustomThingQueryArgs(
+  const head = composeCustomEntityQueryArgs(
     prefixName,
     queryName,
-    thingConfig,
+    entityConfig,
     generalConfig,
     childArgs,
   );

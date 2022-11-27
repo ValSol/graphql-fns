@@ -2,8 +2,8 @@
 
 import type { InputCreator } from '../../flowTypes';
 
-const createStringInputTypeForSearch: InputCreator = (thingConfig) => {
-  const { textFields } = thingConfig;
+const createStringInputTypeForSearch: InputCreator = (entityConfig) => {
+  const { textFields } = entityConfig;
 
   const inputName = '';
 

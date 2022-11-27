@@ -1,20 +1,20 @@
 // @flow
-import type { GeneralConfig, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../flowTypes';
 
 import composeDerivativeConfig from './composeDerivativeConfig';
 
 const composeDerivativeConfigByName = (
   suffix: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-): ThingConfig => {
+): EntityConfig => {
   const { derivative } = generalConfig;
 
   if (typeof derivative === 'undefined') {
     throw new TypeError('"derivative" property of GeneralConfig must be setted!');
   }
 
-  const result = composeDerivativeConfig(derivative[suffix], thingConfig, generalConfig);
+  const result = composeDerivativeConfig(derivative[suffix], entityConfig, generalConfig);
 
   if (!result) {
     throw new TypeError('Can not compose derivative config!');

@@ -1,12 +1,12 @@
 // @flow
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import createCounter from '../../mongooseModels/createCounter';
 
 const incCounters = async (
-  core: Map<ThingConfig, Array<Object>>,
+  core: Map<EntityConfig, Array<Object>>,
   mongooseConn: Object,
-): Promise<Map<ThingConfig, Array<Object>>> => {
+): Promise<Map<EntityConfig, Array<Object>>> => {
   const itemsToInc = {};
   core.forEach((bulkItems, config) => {
     const { name, counter } = config;

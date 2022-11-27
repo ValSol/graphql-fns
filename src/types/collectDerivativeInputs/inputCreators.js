@@ -1,39 +1,39 @@
 // @flow
 
-import FilesOfThingOptionsInput from '../inputs/createFilesOfThingOptionsInputType';
+import FilesOfEntityOptionsInput from '../inputs/createFilesOfEntityOptionsInputType';
 import FileWhereInput from '../inputs/createFileWhereInputType';
 import FileWhereOneInput from '../inputs/createFileWhereOneInputType';
 import ImportOptionsInput from '../inputs/createImportOptionsInputTypes';
 import PaginationInput from '../inputs/createPaginationInputType';
-import PushIntoThingInput from '../inputs/createPushIntoThingInputType';
-import thingCreateInput from '../inputs/createThingCreateInputType';
-import thingDistinctValuesOptionsInput from '../inputs/createThingDistinctValuesOptionsInputType';
-import thingNearInput from '../inputs/createThingNearInputType';
-import thingPushPositionsInput from '../inputs/createThingPushPositionsInputType';
-import thingReorderUploadedInput from '../inputs/createThingReorderUploadedInputType';
-import thingSortInput from '../inputs/createThingSortInputType';
-import thingUpdateInput from '../inputs/createThingUpdateInputType';
-import thingWhereInput from '../inputs/createThingWhereInputType';
-import thingWhereOneInput from '../inputs/createThingWhereOneInputType';
-import UploadFilesToThingInput from '../inputs/createUploadFilesToThingInputType';
+import PushIntoEntityInput from '../inputs/createPushIntoEntityInputType';
+import entityCreateInput from '../inputs/createEntityCreateInputType';
+import entityDistinctValuesOptionsInput from '../inputs/createEntityDistinctValuesOptionsInputType';
+import entityNearInput from '../inputs/createEntityNearInputType';
+import entityPushPositionsInput from '../inputs/createEntityPushPositionsInputType';
+import entityReorderUploadedInput from '../inputs/createEntityReorderUploadedInputType';
+import entitySortInput from '../inputs/createEntitySortInputType';
+import entityUpdateInput from '../inputs/createEntityUpdateInputType';
+import entityWhereInput from '../inputs/createEntityWhereInputType';
+import entityWhereOneInput from '../inputs/createEntityWhereOneInputType';
+import UploadFilesToEntityInput from '../inputs/createUploadFilesToEntityInputType';
 
 const inputCreators = {
-  FilesOfThingOptionsInput,
+  FilesOfEntityOptionsInput,
   FileWhereInput,
   FileWhereOneInput,
   ImportOptionsInput,
   PaginationInput,
-  PushIntoThingInput,
-  thingCreateInput,
-  thingDistinctValuesOptionsInput,
-  thingNearInput,
-  thingPushPositionsInput,
-  thingReorderUploadedInput,
-  thingSortInput,
-  thingUpdateInput,
-  thingWhereInput,
-  thingWhereOneInput,
-  UploadFilesToThingInput,
+  PushIntoEntityInput,
+  entityCreateInput,
+  entityDistinctValuesOptionsInput,
+  entityNearInput,
+  entityPushPositionsInput,
+  entityReorderUploadedInput,
+  entitySortInput,
+  entityUpdateInput,
+  entityWhereInput,
+  entityWhereOneInput,
+  UploadFilesToEntityInput,
 };
 
 export default inputCreators;

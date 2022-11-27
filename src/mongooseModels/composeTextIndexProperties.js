@@ -1,9 +1,9 @@
 // @flow
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
-const composeTextIndexProperties = (thingConfig: ThingConfig): { [key: string]: number } => {
-  const { textFields, type: configType } = thingConfig;
+const composeTextIndexProperties = (entityConfig: EntityConfig): { [key: string]: number } => {
+  const { textFields, type: configType } = entityConfig;
 
   const result = {};
 

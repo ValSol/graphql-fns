@@ -1,37 +1,37 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import coerceDataToGqlClientSide from './coerceDataToGqlClientSide';
 
 describe('coerceDataToGqlClientSide', () => {
   describe('should coerce realational & duplex & enum fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalFields',
           array: true,
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexFields',
         },
         {
           name: 'duplexFields',
           array: true,
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
@@ -60,7 +60,7 @@ describe('coerceDataToGqlClientSide', () => {
         duplexFields: { connect: ['5cefb33f05d6be4b7b59842d', '5cefb33f05d6be4b7b59842e'] },
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -75,7 +75,7 @@ describe('coerceDataToGqlClientSide', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -104,69 +104,69 @@ describe('coerceDataToGqlClientSide', () => {
         enumField: null,
       };
 
-      const result = coerceDataToGqlClientSide(data2, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data2, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
-  describe('should coerce duplex fields to create new connected things', () => {
-    const thingConfig: ThingConfig = {};
+  describe('should coerce duplex fields to create new connected entities', () => {
+    const entityConfig: EntityConfig = {};
 
-    const dupleConfig11: ThingConfig = {
+    const dupleConfig11: EntityConfig = {
       name: 'Duple11',
       type: 'tangible',
       textFields: [{ name: 'duplexTextField11' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField11',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField11',
         },
       ],
     };
 
-    const dupleConfig12: ThingConfig = {
+    const dupleConfig12: EntityConfig = {
       name: 'Duple12',
       type: 'tangible',
       textFields: [{ name: 'duplexTextField12' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField12',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexFields12',
         },
       ],
     };
 
-    const dupleConfig21: ThingConfig = {
+    const dupleConfig21: EntityConfig = {
       name: 'Duple21',
       type: 'tangible',
       textFields: [{ name: 'duplexTextField21' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields21',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField21',
           array: true,
         },
       ],
     };
 
-    const dupleConfig22: ThingConfig = {
+    const dupleConfig22: EntityConfig = {
       name: 'Duple22',
       type: 'tangible',
       textFields: [{ name: 'duplexTextField22' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields22',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexFields22',
           array: true,
         },
       ],
     };
 
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       duplexFields: [
@@ -217,27 +217,27 @@ describe('coerceDataToGqlClientSide', () => {
         },
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
-  describe('should coerce relational fields to create new connected things', () => {
-    const thingConfig: ThingConfig = {};
+  describe('should coerce relational fields to create new connected entities', () => {
+    const entityConfig: EntityConfig = {};
 
-    const relationalConfig1: ThingConfig = {
+    const relationalConfig1: EntityConfig = {
       name: 'Relational1',
       type: 'tangible',
       textFields: [{ name: 'relationalTextField1' }],
     };
 
-    const relationalConfig2: ThingConfig = {
+    const relationalConfig2: EntityConfig = {
       name: 'Relational2',
       type: 'tangible',
       textFields: [{ name: 'relationalTextField2' }],
     };
 
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       relationalFields: [
@@ -271,31 +271,31 @@ describe('coerceDataToGqlClientSide', () => {
         },
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   test('should coerce realational & duplex fields in embedded fields', () => {
-    const thingConfig: ThingConfig = {};
-    const embeddedConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {};
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
     };
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [{ name: 'textField' }],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
@@ -353,13 +353,13 @@ describe('coerceDataToGqlClientSide', () => {
     };
 
     const allFields = true;
-    const result = coerceDataToGqlClientSide(data, prevData, thingConfig, allFields);
+    const result = coerceDataToGqlClientSide(data, prevData, entityConfig, allFields);
     expect(result).toEqual(expectedResult);
   });
 
   describe('should coerce embedded fields', () => {
-    const thingConfig: ThingConfig = {};
-    const embedded3Config: ThingConfig = {
+    const entityConfig: EntityConfig = {};
+    const embedded3Config: EntityConfig = {
       name: 'Embedded3',
       type: 'embedded',
       enumFields: [
@@ -371,12 +371,12 @@ describe('coerceDataToGqlClientSide', () => {
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
     };
 
-    const embedded2Config: ThingConfig = {
+    const embedded2Config: EntityConfig = {
       name: 'Embedded2',
       type: 'embedded',
       textFields: [
@@ -397,7 +397,7 @@ describe('coerceDataToGqlClientSide', () => {
       ],
     };
 
-    const embeddedConfig: ThingConfig = {
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -418,7 +418,7 @@ describe('coerceDataToGqlClientSide', () => {
       ],
     };
 
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -610,7 +610,7 @@ describe('coerceDataToGqlClientSide', () => {
         ],
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -705,7 +705,7 @@ describe('coerceDataToGqlClientSide', () => {
         ],
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -920,13 +920,13 @@ describe('coerceDataToGqlClientSide', () => {
         },
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('should coerce file fields', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -939,8 +939,8 @@ describe('coerceDataToGqlClientSide', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -1000,7 +1000,7 @@ describe('coerceDataToGqlClientSide', () => {
         ],
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1025,7 +1025,7 @@ describe('coerceDataToGqlClientSide', () => {
         pictures: [],
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1070,14 +1070,14 @@ describe('coerceDataToGqlClientSide', () => {
         textField: 'text field',
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('should coerce geospatial fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -1179,7 +1179,7 @@ describe('coerceDataToGqlClientSide', () => {
       const result = coerceDataToGqlClientSide(
         data2,
         prevData,
-        thingConfig,
+        entityConfig,
         false, // allFields,
         true, // skipUnusedFields
       );
@@ -1216,7 +1216,7 @@ describe('coerceDataToGqlClientSide', () => {
         },
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1250,7 +1250,7 @@ describe('coerceDataToGqlClientSide', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1313,14 +1313,14 @@ describe('coerceDataToGqlClientSide', () => {
         geospatialFieldPolygon: null,
       };
 
-      const result = coerceDataToGqlClientSide(data2, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data2, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('should coerce geospatial fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -1348,7 +1348,7 @@ describe('coerceDataToGqlClientSide', () => {
         geospatialField: null,
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1363,14 +1363,14 @@ describe('coerceDataToGqlClientSide', () => {
         geospatialField: null,
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('should coerce dateTime fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       dateTimeFields: [
@@ -1390,7 +1390,7 @@ describe('coerceDataToGqlClientSide', () => {
         dateTimeField: '2019-06-01T01:00',
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1401,7 +1401,7 @@ describe('coerceDataToGqlClientSide', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1418,14 +1418,14 @@ describe('coerceDataToGqlClientSide', () => {
         dateTimeField: null,
       };
 
-      const result = coerceDataToGqlClientSide(data2, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data2, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('should coerce int & float fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       intFields: [
@@ -1464,7 +1464,7 @@ describe('coerceDataToGqlClientSide', () => {
         floatFields: [0.4],
       };
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1478,7 +1478,7 @@ describe('coerceDataToGqlClientSide', () => {
 
       const expectedResult = {};
 
-      const result = coerceDataToGqlClientSide(data, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1504,7 +1504,7 @@ describe('coerceDataToGqlClientSide', () => {
         floatFields: [],
       };
 
-      const result = coerceDataToGqlClientSide(data2, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data2, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1530,7 +1530,7 @@ describe('coerceDataToGqlClientSide', () => {
         floatFields: [0],
       };
 
-      const result = coerceDataToGqlClientSide(data2, prevData, thingConfig);
+      const result = coerceDataToGqlClientSide(data2, prevData, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });

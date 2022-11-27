@@ -1,6 +1,6 @@
 // @flow
 
-import type { ActionAttributes, ThingConfig } from '../../../flowTypes';
+import type { ActionAttributes, EntityConfig } from '../../../flowTypes';
 
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
@@ -34,7 +34,7 @@ const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
 const resolverDecorator = (
   func: Function,
   actionAttributes: ActionAttributes,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): Function => {
   if (!store.get(actionAttributes)) {
     store.set(actionAttributes, {});
@@ -47,20 +47,20 @@ const resolverDecorator = (
     throw new TypeError('Must be object!');
   }
 
-  const { name } = thingConfig;
+  const { name } = entityConfig;
 
   if (!process.env.JEST_WORKER_ID && obj[name]) {
     return obj[name];
   }
 
   obj[name] = async (...resolverArgs) => {
-    const returnConfig = actionAttributes.actionReturnConfig ? thingConfig : null;
+    const returnConfig = actionAttributes.actionReturnConfig ? entityConfig : null;
     const { argNames } = actionAttributes;
-    const argTypesWithoutThingNames = actionAttributes.argTypes.map((composer) =>
+    const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
       composer('').replace(regExp, ''),
     );
 
-    const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypesWithoutThingNames.join(
+    const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypesWithoutEntityNames.join(
       '.',
     )}`;
 
@@ -70,17 +70,17 @@ const resolverDecorator = (
     ) {
       argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce(
         (prev, argName, i) => {
-          const argTypeWithoutThingName = argTypesWithoutThingNames[i];
+          const argTypeWithoutEntityName = argTypesWithoutEntityNames[i];
 
           const argTypePrefixPlusSuffix = argTypesPrefixPlusSuffixes.find(
-            ([prefixPlusSuffix]) => prefixPlusSuffix === argTypeWithoutThingName,
+            ([prefixPlusSuffix]) => prefixPlusSuffix === argTypeWithoutEntityName,
           );
 
           if (!argTypePrefixPlusSuffix) return prev;
 
           const [, transformer, notUseConfig] = argTypePrefixPlusSuffix;
 
-          prev[argName] = [transformer, notUseConfig ? null : thingConfig]; // eslint-disable-line no-param-reassign
+          prev[argName] = [transformer, notUseConfig ? null : entityConfig]; // eslint-disable-line no-param-reassign
 
           return prev;
         },

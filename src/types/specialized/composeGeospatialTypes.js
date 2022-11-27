@@ -3,15 +3,17 @@
 import type { GeneralConfig } from '../../flowTypes';
 
 const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
-  const { thingConfigs } = generalConfig;
+  const { entityConfigs } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialPolygon = false;
 
-  const thingConfigsArray = Object.keys(thingConfigs).map((thingName) => thingConfigs[thingName]);
+  const entityConfigsArray = Object.keys(entityConfigs).map(
+    (entityName) => entityConfigs[entityName],
+  );
 
-  for (let i = 0; i < thingConfigsArray.length; i += 1) {
-    const thingConfig = thingConfigsArray[i];
-    const { geospatialFields } = thingConfig;
+  for (let i = 0; i < entityConfigsArray.length; i += 1) {
+    const entityConfig = entityConfigsArray[i];
+    const { geospatialFields } = entityConfig;
     if (
       geospatialFields &&
       geospatialFields.some(({ geospatialType }) => geospatialType === 'Point')

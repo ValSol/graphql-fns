@@ -7,17 +7,17 @@ import type {
   ActionSignatureMethods,
   DerivativeAttributes,
   ObjectSignatureMethods,
-  ThingConfig,
+  EntityConfig,
 } from '../flowTypes';
 
 import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
-  test('should create things types to copy with children', () => {
-    const menuCloneConfig: ThingConfig = {};
-    const menuSectionConfig: ThingConfig = {};
-    const menuCloneSectionConfig: ThingConfig = {};
-    const menuConfig: ThingConfig = {
+  test('should create entities types to copy with children', () => {
+    const menuCloneConfig: EntityConfig = {};
+    const menuSectionConfig: EntityConfig = {};
+    const menuCloneSectionConfig: EntityConfig = {};
+    const menuConfig: EntityConfig = {
       name: 'Menu',
       type: 'tangible',
 
@@ -114,14 +114,14 @@ describe('composeGqlTypes', () => {
       ],
     });
 
-    const thingConfigs = {
+    const entityConfigs = {
       Menu: menuConfig,
       MenuClone: menuCloneConfig,
       MenuSection: menuSectionConfig,
       MenuCloneSection: menuCloneSectionConfig,
     };
 
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const generalConfig: GeneralConfig = { entityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -788,8 +788,8 @@ type Subscription {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types for one thing', () => {
-    const imageConfig: ThingConfig = {
+  test('should create entities types for one entity', () => {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -808,7 +808,7 @@ type Subscription {
       ],
     };
 
-    const rootImageConfig: ThingConfig = {
+    const rootImageConfig: EntityConfig = {
       name: 'RootImage',
       type: 'file',
       textFields: [
@@ -824,7 +824,7 @@ type Subscription {
       ],
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
 
@@ -901,12 +901,12 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig, Image: imageConfig, RootImage: rootImageConfig };
+    const entityConfigs = { Example: entityConfig, Image: imageConfig, RootImage: rootImageConfig };
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { entityConfigs, enums };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -1348,8 +1348,8 @@ type Subscription {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types for two things', () => {
-    const thingConfig1: ThingConfig = {
+  test('should create entities types for two entities', () => {
+    const entityConfig1: EntityConfig = {
       name: 'Example1',
       type: 'tangible',
       textFields: [
@@ -1372,7 +1372,7 @@ type Subscription {
         },
       ],
     };
-    const thingConfig2: ThingConfig = {
+    const entityConfig2: EntityConfig = {
       name: 'Example2',
       type: 'tangible',
       textFields: [
@@ -1394,8 +1394,8 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example1: entityConfig1, Example2: entityConfig2 };
+    const generalConfig: GeneralConfig = { entityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -1741,8 +1741,8 @@ type Subscription {
     const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
-  test('should create things types for two related fields', () => {
-    const placeConfig: ThingConfig = {
+  test('should create entities types for two related fields', () => {
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [
@@ -1752,7 +1752,7 @@ type Subscription {
         },
       ],
     };
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -1789,8 +1789,8 @@ type Subscription {
         },
       ],
     });
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2104,8 +2104,8 @@ type Subscription {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types for regular and embedded fields', () => {
-    const addressConfig: ThingConfig = {
+  test('should create entities types for regular and embedded fields', () => {
+    const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -2119,7 +2119,7 @@ type Subscription {
         },
       ],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -2155,8 +2155,8 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = { Person: personConfig, Address: addressConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Address: addressConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2363,9 +2363,9 @@ type Subscription {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types for two duplex fields', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+  test('should create entities types for two duplex fields', () => {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -2424,8 +2424,8 @@ type Subscription {
         },
       ],
     });
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2834,8 +2834,8 @@ type Subscription {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only queries', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only queries', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -2844,9 +2844,9 @@ type Subscription {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: true } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -2960,8 +2960,8 @@ type Query {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only mutations', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only mutations', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -2971,9 +2971,9 @@ type Query {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -3111,8 +3111,8 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only things query', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only entities query', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3121,9 +3121,9 @@ type Mutation {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Query: { things: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Query: { entities: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -3219,8 +3219,8 @@ type Query {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only things query for Example config', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only entities query for Example config', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3229,9 +3229,9 @@ type Query {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Query: { things: ['Example'] } } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Query: { entities: ['Example'] } } };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3326,8 +3326,8 @@ type Query {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only create mutations', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only create mutations', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3337,9 +3337,9 @@ type Query {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3394,8 +3394,8 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only mutation cretateThing', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entities types with inventory for only mutation cretateEntity', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3405,12 +3405,12 @@ type Mutation {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = {
       name: 'test',
-      include: { Mutation: { createThing: ['Example'] } },
+      include: { Mutation: { createEntity: ['Example'] } },
     };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3465,17 +3465,17 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only one custom mutation loadThing', () => {
+  test('should create entities types with inventory for only one custom mutation loadEntity', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: 'loadThing',
+      name: 'loadEntity',
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3486,10 +3486,10 @@ type Mutation {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
-    const custom = { Mutation: { loadThing: signatureMethods } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
+    const custom = { Mutation: { loadEntity: signatureMethods } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3531,17 +3531,17 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with inventory for only one custom query getThing', () => {
-    const getThing: ActionSignatureMethods = {
-      name: 'getThing',
+  test('should create entities types with inventory for only one custom query getEntity', () => {
+    const getEntity: ActionSignatureMethods = {
+      name: 'getEntity',
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3552,10 +3552,10 @@ type Mutation {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Query: { getThing: true } } };
-    const custom = { Query: { getThing } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Query: { getEntity: true } } };
+    const custom = { Query: { getEntity } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3598,16 +3598,16 @@ type Query {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create things types with custom input and return objects', () => {
-    const thingInTimeRangeInput: ObjectSignatureMethods = {
-      name: 'thingTimeRangeInput',
+  test('should create entities types with custom input and return objects', () => {
+    const entityInTimeRangeInput: ObjectSignatureMethods = {
+      name: 'entityTimeRangeInput',
       specificName: ({ name }) => `${name}TimeRangeInput`,
       fieldNames: () => ['start', 'end'],
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
     const ForCatalogDerivative: DerivativeAttributes = {
-      allow: { Example: ['things', 'updateThing'] },
+      allow: { Example: ['entities', 'updateEntity'] },
       suffix: 'ForCatalog',
       addFields: {
         Example: {
@@ -3616,16 +3616,16 @@ type Query {
       },
     };
 
-    const thingInTimeRangeQuery: ActionSignatureMethods = {
-      name: 'thingInTimeRangeQuery',
+    const entityInTimeRangeQuery: ActionSignatureMethods = {
+      name: 'entityInTimeRangeQuery',
       specificName: ({ name }) => `${name}InTimeRangeQuery`,
       argNames: () => ['range'],
       argTypes: ({ name }) => [`${name}TimeRangeInput!`],
       type: ({ name }) => `${name}InTimeRange`,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -3636,21 +3636,21 @@ type Query {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = {
       name: 'test',
       include: {
-        Query: { thingsForCatalog: true, things: true },
-        Mutation: { updateThingForCatalog: true },
+        Query: { entitiesForCatalog: true, entities: true },
+        Mutation: { updateEntityForCatalog: true },
       },
       // include: { Query: true, Mutation: true },
     };
     const custom = {
-      Input: { thingInTimeRangeInput },
-      Query: { thingInTimeRangeQuery },
+      Input: { entityInTimeRangeInput },
+      Query: { entityInTimeRangeQuery },
     };
     const derivative = { ForCatalog: ForCatalogDerivative };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, derivative, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3869,11 +3869,11 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create derivative inputs for custom types with inventory for only one custom query getThing', () => {
+  test('should create derivative inputs for custom types with inventory for only one custom query getEntity', () => {
     const childNameFromParenName = { Menu: 'MenuSection' };
 
-    const updateThingWithChildren: ActionSignatureMethods = {
-      name: 'updateThingWithChildren',
+    const updateEntityWithChildren: ActionSignatureMethods = {
+      name: 'updateEntityWithChildren',
       specificName: ({ name }) => (name === 'Menu' ? `update${name}WithChildren` : ''),
       argNames: () => ['whereOne', 'data', 'childWhereOne', 'childData', 'deleteWhereOne'],
       argTypes: ({ name }) => [
@@ -3884,11 +3884,11 @@ type Mutation {
         `[${childNameFromParenName[name]}WhereOneInput!]!`,
       ],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const menuSectionConfig: ThingConfig = {};
-    const menuConfig: ThingConfig = {
+    const menuSectionConfig: EntityConfig = {};
+    const menuConfig: EntityConfig = {
       name: 'Menu',
       type: 'tangible',
       textFields: [
@@ -3925,22 +3925,22 @@ type Mutation {
       ],
     });
 
-    const thingConfigs = { Menu: menuConfig, MenuSection: menuSectionConfig };
+    const entityConfigs = { Menu: menuConfig, MenuSection: menuSectionConfig };
     const inventory: Inventory = {
       name: 'test',
-      include: { Mutation: { updateThingWithChildren: ['Menu'] } },
+      include: { Mutation: { updateEntityWithChildren: ['Menu'] } },
     };
-    const custom = { Mutation: { updateThingWithChildren } };
+    const custom = { Mutation: { updateEntityWithChildren } };
     const derivativeInputs = {
       '': {
         suffix: '',
         allow: {
-          Menu: ['thingWhereOneInput', 'thingUpdateInput'],
-          MenuSection: ['thingWhereOneInput', 'thingUpdateInput'],
+          Menu: ['entityWhereOneInput', 'entityUpdateInput'],
+          MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
         },
       },
     };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, derivativeInputs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, derivativeInputs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {

@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { FileAttributes, GeneralConfig, ThingConfig } from '../../../flowTypes';
+import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../flowTypes';
 
 const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
@@ -10,8 +10,8 @@ const { default: sleep } = require('../../../utils/sleep');
 const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
-  default: createCreateThingMutationResolver,
-} = require('../../mutations/createCreateThingMutationResolver');
+  default: createCreateEntityMutationResolver,
+} = require('../../mutations/createCreateEntityMutationResolver');
 const { default: info } = require('../../utils/info.auxiliary');
 const { default: toGlobalId } = require('../../utils/toGlobalId');
 
@@ -21,7 +21,7 @@ let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-create-thing-query';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-create-entity-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
@@ -33,10 +33,10 @@ afterAll(async () => {
 });
 
 describe('createNodeQueryResolver', () => {
-  test('should use query thing resolver', async () => {
+  test('should use query entity resolver', async () => {
     const serversideConfig = {};
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -65,16 +65,16 @@ describe('createNodeQueryResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
+    const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
 
-    const exampleSchema = createThingSchema(thingConfig);
-    const ExampleThing = mongooseConn.model('Example_Thing', exampleSchema);
-    await ExampleThing.createCollection();
+    const exampleSchema = createThingSchema(entityConfig);
+    const ExampleEntity = mongooseConn.model('Example_Thing', exampleSchema);
+    await ExampleEntity.createCollection();
 
     await sleep(250);
 
-    const createExample = createCreateThingMutationResolver(
-      thingConfig,
+    const createExample = createCreateEntityMutationResolver(
+      entityConfig,
       generalConfig,
       serversideConfig,
     );
@@ -108,7 +108,7 @@ describe('createNodeQueryResolver', () => {
     expect(example.__typename).toBe('Example'); // eslint-disable-line no-underscore-dangle
   });
 
-  test('should use query thing file resolver', async () => {
+  test('should use query entity file resolver', async () => {
     const serversideConfig = {
       composeFileFieldsData: {
         Image: ({ hash, _id }: FileAttributes) => {
@@ -124,7 +124,7 @@ describe('createNodeQueryResolver', () => {
       },
     };
 
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'RootImage',
       type: 'file',
       textFields: [
@@ -138,7 +138,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { thingConfigs: { RootImage: imageConfig } };
+    const generalConfig: GeneralConfig = { entityConfigs: { RootImage: imageConfig } };
 
     const fileSchema = createFileSchema(imageConfig);
     const FileModel = mongooseConn.model('Image_File', fileSchema);

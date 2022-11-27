@@ -11,7 +11,7 @@ const childQueriesToInventory = (
 ): InventoryByPermissions => {
   const { suffix: defaultSuffix } = parsedAction;
 
-  childQueries.forEach(({ actionName, suffix, thingName }) => {
+  childQueries.forEach(({ actionName, suffix, entityName }) => {
     const permission = suffix ? suffixToPermission[suffix] : suffixToPermission[defaultSuffix];
 
     const inventory1 = inventoryByPermissions[permission];
@@ -31,8 +31,8 @@ const childQueriesToInventory = (
       inventoryByPermissions[permission].include.Query[actionName] = []; // eslint-disable-line no-param-reassign
     }
 
-    if (!inventoryByPermissions[permission].include.Query[actionName].includes(thingName)) {
-      inventoryByPermissions[permission].include.Query[actionName].push(thingName); // eslint-disable-line no-param-reassign
+    if (!inventoryByPermissions[permission].include.Query[actionName].includes(entityName)) {
+      inventoryByPermissions[permission].include.Query[actionName].push(entityName); // eslint-disable-line no-param-reassign
     }
   });
 

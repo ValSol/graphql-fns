@@ -1,7 +1,7 @@
 // @flow
 
 import type {
-  ThingConfig,
+  EntityConfig,
   ClientFieldsOptions,
   ClientOptions,
   GeneralConfig,
@@ -26,19 +26,19 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
     : name;
 
 const getChildQueries = (
-  thingConfig2: ThingConfig,
+  entityConfig2: EntityConfig,
   generalConfig2: GeneralConfig,
   options2: ClientOptions,
 ): { childQueries: ChildQueries, maxShift: number } => {
   let maxShift = 0;
 
   const getChilds = (
-    thingConfig: ThingConfig,
+    entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
     options: ClientFieldsOptions,
     result?: Array<string> = [],
   ): Array<string> => {
-    const { duplexFields, relationalFields } = thingConfig;
+    const { duplexFields, relationalFields } = entityConfig;
     const { shift, depth, include, exclude } = options;
 
     if (shift > maxShift) maxShift = shift;
@@ -56,7 +56,7 @@ const getChildQueries = (
             exclude: nextExclude,
           };
           getChilds(config, generalConfig, nextOptions, result);
-          const item = `${array ? 'childThings' : 'childThing'}:${config.name}`;
+          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
           if (!result.includes(item)) {
             result.push(item);
           }
@@ -67,7 +67,7 @@ const getChildQueries = (
     if (relationalFields && !depth) {
       relationalFields.forEach(({ name, array, config }) => {
         if (includeField(name, include, exclude)) {
-          const item = `${array ? 'childThings' : 'childThing'}:${config.name}`;
+          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
           if (!result.includes(item)) {
             result.push(item);
           }
@@ -88,7 +88,7 @@ const getChildQueries = (
             exclude: nextExclude,
           };
           getChilds(config, generalConfig, nextOptions, result);
-          const item = `${array ? 'childThings' : 'childThing'}:${config.name}`;
+          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
           if (!result.includes(item)) {
             result.push(item);
           }
@@ -99,7 +99,7 @@ const getChildQueries = (
     if (duplexFields && !depth) {
       duplexFields.forEach(({ name, array, config }) => {
         if (includeField(name, include, exclude)) {
-          const item = `${array ? 'childThings' : 'childThing'}:${config.name}`;
+          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
           if (!result.includes(item)) {
             result.push(item);
           }
@@ -111,7 +111,7 @@ const getChildQueries = (
   };
 
   const childQueries = parseChildQueries(
-    getChilds(thingConfig2, generalConfig2, { ...options2, shift: 0 }),
+    getChilds(entityConfig2, generalConfig2, { ...options2, shift: 0 }),
     generalConfig2,
   );
 

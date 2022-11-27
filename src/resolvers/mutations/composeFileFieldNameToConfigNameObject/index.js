@@ -1,10 +1,10 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 const composeFileFieldNameToConfigNameObject = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): { [fileFieldName: string]: { configName: string, array?: boolean } } => {
-  const { fileFields } = thingConfig;
+  const { fileFields } = entityConfig;
 
   if (!fileFields) return {};
 

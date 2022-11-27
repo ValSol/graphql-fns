@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeFileFieldNameToConfigNameObject from './index';
 
 describe('composeFileFieldNameToConfigNameObject', () => {
   test('should return wrapped object', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -18,7 +18,7 @@ describe('composeFileFieldNameToConfigNameObject', () => {
         },
       ],
     };
-    const photoConfig: ThingConfig = {
+    const photoConfig: EntityConfig = {
       name: 'Photo',
       type: 'file',
       textFields: [
@@ -30,7 +30,7 @@ describe('composeFileFieldNameToConfigNameObject', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       fileFields: [
@@ -55,7 +55,7 @@ describe('composeFileFieldNameToConfigNameObject', () => {
       ],
     };
 
-    const result = composeFileFieldNameToConfigNameObject(thingConfig);
+    const result = composeFileFieldNameToConfigNameObject(entityConfig);
 
     const expectedResult = {
       logo: { configName: 'Image' },

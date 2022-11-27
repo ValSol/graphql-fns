@@ -1,14 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
-import createManyThingsMutationAttributes from './actionAttributes/createManyThingsMutationAttributes';
+import createManyEntitiesMutationAttributes from './actionAttributes/createManyEntitiesMutationAttributes';
 import composeStandardActionSignature from './composeStandardActionSignature';
 
 describe('composeStandardActionSignature util', () => {
   test('should return right result', async () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -24,8 +24,8 @@ describe('composeStandardActionSignature util', () => {
     const dic = {};
 
     const result = await composeStandardActionSignature(
-      thingConfig,
-      createManyThingsMutationAttributes,
+      entityConfig,
+      createManyEntitiesMutationAttributes,
       dic,
     );
     const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';

@@ -3,7 +3,7 @@ import deepEqual from 'fast-deep-equal';
 
 import { Types } from 'mongoose';
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 import type { PreparedData } from '../../flowTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
@@ -32,7 +32,7 @@ const getUpdateMany = (rest, arr) => {
 const processCreateInputData = (
   data: Object,
   preparedData: PreparedData,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   processingKind: 'create' | 'update' | 'push' | 'updateMany',
   rootFieldsPositions?: Object = {},
   // use mongoose Types in args to let mocking the ObjectId() in tests
@@ -41,10 +41,10 @@ const processCreateInputData = (
   const { mains, core, periphery } = preparedData;
   const { id } = data;
   const prepared = [
-    { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: thingConfig },
+    { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: entityConfig },
   ];
 
-  const transform = (data2: Object, thingConfig2: ThingConfig): Object => {
+  const transform = (data2: Object, entityConfig2: EntityConfig): Object => {
     const {
       booleanFields,
       dateTimeFields,
@@ -57,9 +57,9 @@ const processCreateInputData = (
       geospatialFields,
       relationalFields,
       textFields,
-    } = thingConfig2;
+    } = entityConfig2;
 
-    const fieldsObject = composeFieldsObject(thingConfig2);
+    const fieldsObject = composeFieldsObject(entityConfig2);
 
     const relationalFieldsObject = {};
     if (relationalFields) {
@@ -168,7 +168,9 @@ const processCreateInputData = (
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
         if (fieldsObject[key].attributes.array) {
-          throw new TypeError(`Try unset array field: "${key}" of thing: "${thingConfig2.name}"!`);
+          throw new TypeError(
+            `Try unset array field: "${key}" of entity: "${entityConfig2.name}"!`,
+          );
         }
 
         if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
@@ -231,9 +233,8 @@ const processCreateInputData = (
           }
         }
       } else if (duplexFieldsObject[key]) {
-        const { array, config, oppositeArray, oppositeConfig, oppositeName } = duplexFieldsObject[
-          key
-        ];
+        const { array, config, oppositeArray, oppositeConfig, oppositeName } =
+          duplexFieldsObject[key];
         if (!array && data2[key].create && data2[key].connect) {
           throw new TypeError(
             `Simultaneous use "create" and "connect" keys with a duplexField "${key}" that not an array!`,
@@ -389,7 +390,7 @@ const processCreateInputData = (
           }
         }
         if (data2[key].connect === undefined && data2[key].create === undefined && data2[key]) {
-          // set id of created thing
+          // set id of created entity
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key];
         }

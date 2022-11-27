@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { Periphery, ThingConfig } from '../../../flowTypes';
+import type { Periphery, EntityConfig } from '../../../flowTypes';
 
 import processCreateInputData from './index';
 
@@ -15,8 +15,8 @@ const mongooseTypes = {
 describe('processCreateInputData', () => {
   test('should create object with scalar fields', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
-    const thingConfig: ThingConfig = {
-      name: 'Thing',
+    const entityConfig: EntityConfig = {
+      name: 'Entity',
       type: 'tangible',
       textFields: [
         {
@@ -74,7 +74,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    core.set(thingConfig, [item]);
+    core.set(entityConfig, [item]);
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
@@ -96,7 +96,7 @@ describe('processCreateInputData', () => {
     const result = processCreateInputData(
       data,
       preparedData,
-      thingConfig,
+      entityConfig,
       'create',
       undefined,
       mongooseTypes,
@@ -107,9 +107,9 @@ describe('processCreateInputData', () => {
 
   test('should create object with self relation fields', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
-      name: 'Thing',
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
+      name: 'Entity',
       type: 'tangible',
       textFields: [
         {
@@ -122,11 +122,11 @@ describe('processCreateInputData', () => {
       relationalFields: [
         {
           name: 'relationalField1',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalField2',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
@@ -150,7 +150,7 @@ describe('processCreateInputData', () => {
         },
       },
     };
-    core.set(thingConfig, [item]);
+    core.set(entityConfig, [item]);
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
@@ -170,7 +170,7 @@ describe('processCreateInputData', () => {
     const result = processCreateInputData(
       data,
       preparedData,
-      thingConfig,
+      entityConfig,
       'create',
       undefined,
       mongooseTypes,
@@ -181,11 +181,11 @@ describe('processCreateInputData', () => {
 
   test('should create object with embedded fields with relation fields', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
-    const embedded1Config: ThingConfig = {};
+    const embedded1Config: EntityConfig = {};
 
-    const embedded2Config: ThingConfig = {};
+    const embedded2Config: EntityConfig = {};
 
-    const thingConfig = {};
+    const entityConfig = {};
 
     Object.assign(embedded1Config, {
       name: 'Embedded1',
@@ -198,11 +198,11 @@ describe('processCreateInputData', () => {
       name: 'Embedded2',
       type: 'embedded',
       textFields: [{ name: 'textField_e2' }],
-      relationalFields: [{ name: 'relationalField', config: thingConfig }],
+      relationalFields: [{ name: 'relationalField', config: entityConfig }],
     });
 
-    Object.assign(thingConfig, {
-      name: 'Thing',
+    Object.assign(entityConfig, {
+      name: 'Entity',
       type: 'tangible',
       textFields: [
         {
@@ -248,7 +248,7 @@ describe('processCreateInputData', () => {
         },
       },
     };
-    core.set(thingConfig, [item]);
+    core.set(entityConfig, [item]);
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
@@ -273,7 +273,7 @@ describe('processCreateInputData', () => {
     const result = processCreateInputData(
       data,
       preparedData,
-      thingConfig,
+      entityConfig,
       'create',
       undefined,
       mongooseTypes,
@@ -285,12 +285,12 @@ describe('processCreateInputData', () => {
   test('should create object and children objectcs', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
 
-    const placeConfig: ThingConfig = {
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'city' }],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -374,7 +374,7 @@ describe('processCreateInputData', () => {
   test('should create object and children objectcs with duplex fields along with create', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
 
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     const placeConfig = {
       name: 'Place',
       type: 'tangible',
@@ -527,7 +527,7 @@ describe('processCreateInputData', () => {
   test('should create object and children objectcs with duplex fields along with connect', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
 
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     const placeConfig = {
       name: 'Place',
       type: 'tangible',
@@ -742,11 +742,11 @@ describe('processCreateInputData', () => {
   test('should create object with array of embedded fields', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
 
-    const embedded1Config: ThingConfig = {};
+    const embedded1Config: EntityConfig = {};
 
-    const embedded2Config: ThingConfig = {};
+    const embedded2Config: EntityConfig = {};
 
-    const thingConfig = {};
+    const entityConfig = {};
 
     Object.assign(embedded1Config, {
       name: 'Embedded1',
@@ -767,8 +767,8 @@ describe('processCreateInputData', () => {
       textFields: [{ name: 'textField_e2' }],
     });
 
-    Object.assign(thingConfig, {
-      name: 'Thing',
+    Object.assign(entityConfig, {
+      name: 'Entity',
       type: 'tangible',
       textFields: [
         {
@@ -826,7 +826,7 @@ describe('processCreateInputData', () => {
         },
       },
     };
-    core.set(thingConfig, [item]);
+    core.set(entityConfig, [item]);
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
@@ -855,7 +855,7 @@ describe('processCreateInputData', () => {
     const result = processCreateInputData(
       data,
       preparedData,
-      thingConfig,
+      entityConfig,
       'update',
       undefined,
       mongooseTypes,
@@ -866,8 +866,8 @@ describe('processCreateInputData', () => {
 
   test('should return result with updateMany items', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
-    const thingConfig: ThingConfig = {
-      name: 'Thing',
+    const entityConfig: EntityConfig = {
+      name: 'Entity',
       type: 'tangible',
       textFields: [
         {
@@ -928,7 +928,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    core.set(thingConfig, [item]);
+    core.set(entityConfig, [item]);
     const periphery: Periphery = new Map();
     const expectedResult = {
       core,
@@ -950,7 +950,7 @@ describe('processCreateInputData', () => {
     const preparedData2 = processCreateInputData(
       data,
       preparedData,
-      thingConfig,
+      entityConfig,
       'updateMany',
       undefined,
       mongooseTypes,
@@ -986,7 +986,7 @@ describe('processCreateInputData', () => {
       },
     };
 
-    core.set(thingConfig, [item2]);
+    core.set(entityConfig, [item2]);
     const expectedResult2 = {
       core,
       periphery,
@@ -1018,7 +1018,7 @@ describe('processCreateInputData', () => {
     const result = processCreateInputData(
       data2,
       preparedData2,
-      thingConfig,
+      entityConfig,
       'updateMany',
       undefined,
       mongooseTypes,
@@ -1030,9 +1030,9 @@ describe('processCreateInputData', () => {
   test('should create object and children objectcs with duplex fields along with connect', () => {
     const preparedData = { mains: [], core: new Map(), periphery: new Map() };
 
-    const menuConfig: ThingConfig = {};
-    const menuSectionConfig: ThingConfig = {};
-    const restaurantConfig: ThingConfig = {
+    const menuConfig: EntityConfig = {};
+    const menuSectionConfig: EntityConfig = {};
+    const restaurantConfig: EntityConfig = {
       name: 'Restaurant',
       type: 'tangible',
 

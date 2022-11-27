@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
 
 import composeDerivativeConfig from './composeDerivativeConfig';
 
 describe('composeDerivativeConfig', () => {
   describe('composeDerivativeConfig', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -21,7 +21,7 @@ describe('composeDerivativeConfig', () => {
       ],
     };
 
-    const additionalThingConfig: ThingConfig = {
+    const additionalEntityConfig: EntityConfig = {
       name: 'AdditionalExample',
       type: 'tangible',
       textFields: [
@@ -34,7 +34,7 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with included field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         includeFields: { Example: ['anotherField'] },
         addFields: {
@@ -45,11 +45,11 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -72,17 +72,17 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with freezed field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         freezedFields: { Example: ['textField'] },
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -106,17 +106,17 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with unfreezed field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         unfreezedFields: { Example: ['textField'] },
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -140,7 +140,7 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with excluded field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
@@ -151,11 +151,11 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -178,7 +178,7 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with added field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
@@ -189,11 +189,11 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -216,7 +216,7 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with added field with the same name', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
@@ -227,11 +227,11 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig },
+        entityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -251,7 +251,7 @@ describe('composeDerivativeConfig', () => {
 
     test('should return correct derivative config with added relational field', () => {
       const ForCatalog: DerivativeAttributes = {
-        allow: { Example: ['thing', 'things'] },
+        allow: { Example: ['entity', 'entities'] },
         suffix: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
@@ -267,11 +267,11 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { Example: thingConfig, AdditionalExample: additionalThingConfig },
+        entityConfigs: { Example: entityConfig, AdditionalExample: additionalEntityConfig },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig, generalConfig);
+      const result = composeDerivativeConfig(ForCatalog, entityConfig, generalConfig);
 
       const expectedResult = {
         name: 'ExampleForCatalog',
@@ -285,7 +285,7 @@ describe('composeDerivativeConfig', () => {
         relationalFields: [
           {
             name: 'additionalRelationalField',
-            config: additionalThingConfig,
+            config: additionalEntityConfig,
           },
         ],
       };
@@ -295,7 +295,7 @@ describe('composeDerivativeConfig', () => {
   });
 
   test('should return correct derivative config', () => {
-    const thingConfig2: ThingConfig = {
+    const entityConfig2: EntityConfig = {
       name: 'Example2',
       type: 'tangible',
       textFields: [
@@ -306,7 +306,7 @@ describe('composeDerivativeConfig', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['thing', 'things'] },
+      allow: { Example: ['entity', 'entities'] },
       suffix: 'ForCatalog',
       addFields: {
         Example: {
@@ -316,11 +316,11 @@ describe('composeDerivativeConfig', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example2: thingConfig2 },
+      entityConfigs: { Example2: entityConfig2 },
       derivative: { ForCatalog },
     };
 
-    const result = composeDerivativeConfig(ForCatalog, thingConfig2, generalConfig);
+    const result = composeDerivativeConfig(ForCatalog, entityConfig2, generalConfig);
 
     const expectedResult = null;
 
@@ -328,7 +328,7 @@ describe('composeDerivativeConfig', () => {
   });
 
   describe('composeDerivativeConfig with relational third field', () => {
-    const thingConfig = {
+    const entityConfig = {
       name: 'TextExample',
       type: 'tangible',
       textFields: [
@@ -337,14 +337,14 @@ describe('composeDerivativeConfig', () => {
         },
       ],
     };
-    const thingConfig2: ThingConfig = {
+    const entityConfig2: EntityConfig = {
       name: 'RelationalExample',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
           array: true,
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
     };
@@ -352,20 +352,20 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with derivate field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: {
-          TextExample: ['thing', 'childThings'],
-          RelationalExample: ['thing', 'childThings'],
+          TextExample: ['entity', 'childEntities'],
+          RelationalExample: ['entity', 'childEntities'],
         },
         suffix: 'ForCatalog',
         derivativeFields: { RelationalExample: { relationalField: 'ForCatalog' } },
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { TextExample: thingConfig, RelationalExample: thingConfig2 },
+        entityConfigs: { TextExample: entityConfig, RelationalExample: entityConfig2 },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig2, generalConfig);
-      const thingConfigForCatalog = {
+      const result = composeDerivativeConfig(ForCatalog, entityConfig2, generalConfig);
+      const entityConfigForCatalog = {
         name: 'TextExampleForCatalog',
         type: 'tangible',
         textFields: [
@@ -381,7 +381,7 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'relationalField',
             array: true,
-            config: thingConfigForCatalog,
+            config: entityConfigForCatalog,
           },
         ],
       };
@@ -391,7 +391,7 @@ describe('composeDerivativeConfig', () => {
   });
 
   describe('composeDerivativeConfig with added relational third field', () => {
-    const thingConfig = {
+    const entityConfig = {
       name: 'TextExample2',
       type: 'tangible',
       textFields: [
@@ -400,7 +400,7 @@ describe('composeDerivativeConfig', () => {
         },
       ],
     };
-    const thingConfig2: ThingConfig = {
+    const entityConfig2: EntityConfig = {
       name: 'RelationalExample2',
       type: 'tangible',
       textFields: [
@@ -413,8 +413,8 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with added derivate field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: {
-          TextExample2: ['thing', 'childThings'],
-          RelationalExample2: ['thing', 'childThings'],
+          TextExample2: ['entity', 'childEntities'],
+          RelationalExample2: ['entity', 'childEntities'],
         },
         suffix: 'ForCatalog',
         addFields: {
@@ -432,12 +432,12 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        thingConfigs: { TextExample2: thingConfig, RelationalExample2: thingConfig2 },
+        entityConfigs: { TextExample2: entityConfig, RelationalExample2: entityConfig2 },
         derivative: { ForCatalog },
       };
 
-      const result = composeDerivativeConfig(ForCatalog, thingConfig2, generalConfig);
-      const thingConfigForCatalog = {
+      const result = composeDerivativeConfig(ForCatalog, entityConfig2, generalConfig);
+      const entityConfigForCatalog = {
         name: 'TextExample2ForCatalog',
         type: 'tangible',
         textFields: [
@@ -458,7 +458,7 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'relationalField',
             array: true,
-            config: thingConfigForCatalog,
+            config: entityConfigForCatalog,
           },
         ],
       };

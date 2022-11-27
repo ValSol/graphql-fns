@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes, EntityConfig } from '../../flowTypes';
 
 import parseAction from './parseAction';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
 describe('parseAction', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -15,7 +15,7 @@ describe('parseAction', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -30,7 +30,7 @@ describe('parseAction', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -68,13 +68,13 @@ describe('parseAction', () => {
     ],
   });
 
-  const getThing: ActionSignatureMethods = {
-    name: 'getThing',
+  const getEntity: ActionSignatureMethods = {
+    name: 'getEntity',
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig) => thingConfig,
+    config: (entityConfig) => entityConfig,
   };
 
   const putThing: ActionSignatureMethods = {
@@ -83,16 +83,16 @@ describe('parseAction', () => {
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig, generalConfig) =>
-      composeDerivativeConfigByName('ForCatalog', thingConfig, generalConfig),
+    config: (entityConfig, generalConfig) =>
+      composeDerivativeConfigByName('ForCatalog', entityConfig, generalConfig),
   };
 
   const ForCatalog: DerivativeAttributes = {
     suffix: 'ForCatalog',
     allow: {
-      Person: ['thingsByUnique', 'childThings', 'childThing', 'thingCount'],
-      Place: ['childThing'],
-      Country: ['childThing'],
+      Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
+      Place: ['childEntity'],
+      Country: ['childEntity'],
     },
 
     derivativeFields: {
@@ -108,27 +108,27 @@ describe('parseAction', () => {
     },
   };
 
-  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
-  const custom = { Query: { getThing, putThing } };
+  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const custom = { Query: { getEntity, putThing } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { thingConfigs, custom, derivative };
+  const generalConfig = { entityConfigs, custom, derivative };
 
   const suffixToPermission = { ForCatalog: 'insider', ForView: '' };
 
   test('should return result', () => {
     const actionType = 'Query';
-    const actionName = 'thingsByUniqueForCatalog';
-    const thingName = 'Person';
+    const actionName = 'entitiesByUniqueForCatalog';
+    const entityName = 'Person';
     const options = { shift: 0, depth: 1 };
 
     const expectedResult = {
       derivativeAttributes: {
         ForCatalog: {
           allow: {
-            Country: ['childThing'],
-            Person: ['thingsByUnique', 'childThings', 'childThing'],
-            Place: ['childThing'],
+            Country: ['childEntity'],
+            Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+            Place: ['childEntity'],
           },
           suffix: 'ForCatalog',
         },
@@ -137,9 +137,9 @@ describe('parseAction', () => {
         insider: {
           include: {
             Query: {
-              childThingForCatalog: ['Place', 'Person', 'Country'],
-              childThingsForCatalog: ['Person'],
-              thingsByUniqueForCatalog: ['Person'],
+              childEntityForCatalog: ['Place', 'Person', 'Country'],
+              childEntitiesForCatalog: ['Person'],
+              entitiesByUniqueForCatalog: ['Person'],
             },
           },
           name: 'insider',
@@ -155,7 +155,7 @@ describe('parseAction', () => {
         generalConfig,
         options,
         suffixToPermission,
-        thingName,
+        entityName,
       },
       { derivativeAttributes: {}, inventoryByPermissions: {}, maxShift: 0 },
     );
@@ -164,8 +164,8 @@ describe('parseAction', () => {
 
   test('should return result', () => {
     const actionType = 'Query';
-    const actionName = 'thingsByUnique';
-    const thingName = 'Person';
+    const actionName = 'entitiesByUnique';
+    const entityName = 'Person';
     const options = { shift: 0, depth: 1 };
     const suffix = 'ForView';
 
@@ -173,9 +173,9 @@ describe('parseAction', () => {
       derivativeAttributes: {
         ForCatalog: {
           allow: {
-            Country: ['childThing'],
-            Person: ['thingsByUnique', 'childThings', 'childThing'],
-            Place: ['childThing'],
+            Country: ['childEntity'],
+            Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+            Place: ['childEntity'],
           },
           suffix: 'ForCatalog',
         },
@@ -184,9 +184,9 @@ describe('parseAction', () => {
         insider: {
           include: {
             Query: {
-              childThingForCatalog: ['Place', 'Person', 'Country'],
-              childThingsForCatalog: ['Person'],
-              thingsByUniqueForCatalog: ['Person'],
+              childEntityForCatalog: ['Place', 'Person', 'Country'],
+              childEntitiesForCatalog: ['Person'],
+              entitiesByUniqueForCatalog: ['Person'],
             },
           },
           name: 'insider',
@@ -199,9 +199,9 @@ describe('parseAction', () => {
       derivativeAttributes: {
         ForCatalog: {
           allow: {
-            Country: ['childThing'],
-            Person: ['thingsByUnique', 'childThings', 'childThing'],
-            Place: ['childThing'],
+            Country: ['childEntity'],
+            Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+            Place: ['childEntity'],
           },
           suffix: 'ForCatalog',
         },
@@ -210,9 +210,9 @@ describe('parseAction', () => {
         '': {
           include: {
             Query: {
-              childThing: ['Place', 'Person', 'Country'],
-              childThings: ['Person'],
-              thingsByUnique: ['Person'],
+              childEntity: ['Place', 'Person', 'Country'],
+              childEntities: ['Person'],
+              entitiesByUnique: ['Person'],
             },
           },
           name: '',
@@ -220,9 +220,9 @@ describe('parseAction', () => {
         insider: {
           include: {
             Query: {
-              childThingForCatalog: ['Place', 'Person', 'Country'],
-              childThingsForCatalog: ['Person'],
-              thingsByUniqueForCatalog: ['Person'],
+              childEntityForCatalog: ['Place', 'Person', 'Country'],
+              childEntitiesForCatalog: ['Person'],
+              entitiesByUniqueForCatalog: ['Person'],
             },
           },
           name: 'insider',
@@ -239,7 +239,7 @@ describe('parseAction', () => {
         options,
         suffix,
         suffixToPermission,
-        thingName,
+        entityName,
       },
       parseActionResult,
     );

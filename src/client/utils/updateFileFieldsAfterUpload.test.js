@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import updateFileFieldsAfterUpload from './updateFileFieldsAfterUpload';
 
 describe('updateFileFieldsAfterUpload util', () => {
   test('should return rearranged uploaded fileFields', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -25,7 +25,7 @@ describe('updateFileFieldsAfterUpload util', () => {
         },
       ],
     };
-    const exampleConfig: ThingConfig = {
+    const exampleConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       fileFields: [

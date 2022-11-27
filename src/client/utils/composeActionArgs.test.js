@@ -1,16 +1,16 @@
 // @flow
 /* eslint-env jest */
 
-import createManyThingsMutationAttributes from '../../types/actionAttributes/createManyThingsMutationAttributes';
+import createManyEntitiesMutationAttributes from '../../types/actionAttributes/createManyEntitiesMutationAttributes';
 import composeActionArgs from './composeActionArgs';
 
 describe('composeActionArgs util', () => {
   test('should return right result', async () => {
     const prefixName = 'Home';
 
-    const thingConfig = {};
+    const entityConfig = {};
 
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -25,7 +25,7 @@ describe('composeActionArgs util', () => {
         {
           name: 'examples',
           array: true,
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
     });
@@ -34,8 +34,8 @@ describe('composeActionArgs util', () => {
 
     const result = await composeActionArgs(
       prefixName,
-      thingConfig,
-      createManyThingsMutationAttributes,
+      entityConfig,
+      createManyEntitiesMutationAttributes,
       childArgs,
     );
     const expectedResult = [

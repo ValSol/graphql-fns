@@ -6,49 +6,49 @@ import extractDataFromDerivative from './extractDataFromDerivative';
 describe('extractDataFromDerivative util', () => {
   test('should return valid actions matrix', () => {
     const actionTypes = {
-      thing: 'Query',
-      things: 'Query',
-      thingCount: 'Query',
-      createThing: 'Mutation',
+      entity: 'Query',
+      entities: 'Query',
+      entityCount: 'Query',
+      createEntity: 'Mutation',
     };
 
     const derivative = {
       ForEdit: {
         allow: {
-          Restaurant: ['thing'],
-          Post: ['thing', 'createThing'],
+          Restaurant: ['entity'],
+          Post: ['entity', 'createEntity'],
         },
         suffix: 'ForEdit',
       },
       ForView: {
         allow: {
-          Restaurant: ['thing', 'things'],
-          Post: ['thing', 'things'],
-          User: ['thing'],
+          Restaurant: ['entity', 'entities'],
+          Post: ['entity', 'entities'],
+          User: ['entity'],
         },
         suffix: 'ForView',
       },
     };
 
     const derivativeActionNames = [
-      'thingForEdit',
-      'thingForView',
-      'thingsForView',
-      'createThingForEdit',
+      'entityForEdit',
+      'entityForView',
+      'entitiesForView',
+      'createEntityForEdit',
     ];
 
     const derivativeActionTypes = {
-      thingForEdit: 'DerivativeQuery',
-      createThingForEdit: 'DerivativeMutation',
-      thingForView: 'DerivativeQuery',
-      thingsForView: 'DerivativeQuery',
+      entityForEdit: 'DerivativeQuery',
+      createEntityForEdit: 'DerivativeMutation',
+      entityForView: 'DerivativeQuery',
+      entitiesForView: 'DerivativeQuery',
     };
 
     const thingNamesByDerivativeActions = {
-      thingForEdit: ['Restaurant', 'Post'],
-      createThingForEdit: ['Post'],
-      thingForView: ['Restaurant', 'Post', 'User'],
-      thingsForView: ['Restaurant', 'Post'],
+      entityForEdit: ['Restaurant', 'Post'],
+      createEntityForEdit: ['Post'],
+      entityForView: ['Restaurant', 'Post', 'User'],
+      entitiesForView: ['Restaurant', 'Post'],
     };
 
     const result = extractDataFromDerivative({ actionTypes, derivative });

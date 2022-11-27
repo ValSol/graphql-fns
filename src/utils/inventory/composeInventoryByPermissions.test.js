@@ -5,13 +5,13 @@ import type { Inventory } from '../../flowTypes';
 import composeInventoryByPermissions from './composeInventoryByPermissions';
 
 describe('composeInventoryByPermissions', () => {
-  test('compose simple thingConfigs', () => {
+  test('compose simple entityConfigs', () => {
     const empty: Inventory = {
       name: '',
       include: {
         Query: {
-          thingForView: true,
-          thingsForView: true,
+          entityForView: true,
+          entitiesForView: true,
         },
         Mutation: { renewThingForView: true, signinThingForView: true },
       },
@@ -32,13 +32,13 @@ describe('composeInventoryByPermissions', () => {
       include: {
         Query: {
           thingForEdit: true,
-          thingsForEdit: true,
-          thing: ['RestaurantClone', 'PostClone'],
+          entitiesForEdit: true,
+          entity: ['RestaurantClone', 'PostClone'],
         },
         Mutation: {
-          cloneThing: ['Post', 'Restaurant'],
-          updateThing: ['RestaurantClone', 'PostClone'],
-          uploadFilesToThing: ['RestaurantClone', 'PostClone'],
+          cloneEntity: ['Post', 'Restaurant'],
+          updateEntity: ['RestaurantClone', 'PostClone'],
+          uploadFilesToEntity: ['RestaurantClone', 'PostClone'],
         },
       },
     };
@@ -48,14 +48,14 @@ describe('composeInventoryByPermissions', () => {
       include: {
         Query: {
           thingForEdit: true,
-          thingsForEdit: true,
-          thing: ['RestaurantClone', 'PostClone'],
+          entitiesForEdit: true,
+          entity: ['RestaurantClone', 'PostClone'],
         },
         Mutation: {
-          cloneThing: true,
+          cloneEntity: true,
           toggleCommentsOfThing: ['Restaurant'],
-          updateThing: ['RestaurantClone', 'PostClone'],
-          uploadFilesToThing: ['RestaurantClone', 'PostClone'],
+          updateEntity: ['RestaurantClone', 'PostClone'],
+          uploadFilesToEntity: ['RestaurantClone', 'PostClone'],
         },
       },
     };
@@ -66,12 +66,12 @@ describe('composeInventoryByPermissions', () => {
         Query: {
           thingForApprove: true,
           thingsForApprove: true,
-          thing: ['RestaurantClone', 'PostClone'],
+          entity: ['RestaurantClone', 'PostClone'],
         },
         Mutation: {
-          copyThing: true,
-          updateThing: ['RestaurantClone', 'PostClone'],
-          deleteThing: ['RestaurantClone', 'PostClone'],
+          copyEntity: true,
+          updateEntity: ['RestaurantClone', 'PostClone'],
+          deleteEntity: ['RestaurantClone', 'PostClone'],
         },
       },
     };

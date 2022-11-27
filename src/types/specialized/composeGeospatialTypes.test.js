@@ -1,24 +1,24 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import composeGeospatialTypes from './composeGeospatialTypes';
 
 describe('composeGeospatialTypes', () => {
   test('should return empty string if there are not any geospatial fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
     };
-    const thingConfigs = { Example: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const expectedResult = '';
 
     const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
   test('should return GeospatialPoint type if there are geospatial fields with type "Point"', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       geospatialFields: [
@@ -28,8 +28,8 @@ describe('composeGeospatialTypes', () => {
         },
       ],
     };
-    const thingConfigs = { Place: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Place: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!
   lat: Float!
@@ -44,7 +44,7 @@ input GeospatialPointInput {
   });
 
   test('should return GeospatialPoint, GeospatialPolygonRing and GeospatialPolygon types if there are geospatial fields with type "Polygon"', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'District',
       type: 'tangible',
       geospatialFields: [
@@ -54,8 +54,8 @@ input GeospatialPointInput {
         },
       ],
     };
-    const thingConfigs = { District: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { District: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!
   lat: Float!

@@ -1,5 +1,5 @@
 // @flow
-import type { ServersideConfig, ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { ServersideConfig, EntityConfig, UploadOptions } from '../../../flowTypes';
 
 import createFileSchema from '../../../mongooseModels/createFileSchema';
 import composeAllFilesFieldsData from './composeAllFilesFieldsData';
@@ -21,7 +21,7 @@ type Args = {
   mongooseConn: Object,
   options: UploadOptions,
   serversideConfig: ServersideConfig,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 };
 
 type Result = Promise<{
@@ -35,7 +35,7 @@ const processUploadedFiles = async ({
   mongooseConn,
   options,
   serversideConfig,
-  thingConfig,
+  entityConfig,
 }: Args): Result => {
   const { hashes } = options;
   const { saveFiles, composeFileFieldsData } = serversideConfig;
@@ -48,9 +48,9 @@ const processUploadedFiles = async ({
     );
   }
 
-  const indexesByConfig = separateFileFieldsAttributes(options, thingConfig);
+  const indexesByConfig = separateFileFieldsAttributes(options, entityConfig);
 
-  const hashDoubles = getHashDoubles(options, thingConfig);
+  const hashDoubles = getHashDoubles(options, entityConfig);
 
   const promises = [];
   indexesByConfig.forEach((indexes, config) => {
@@ -76,7 +76,7 @@ const processUploadedFiles = async ({
     alreadyUploadedFiles,
     uploadDate,
     options,
-    thingConfig,
+    entityConfig,
     saveFiles,
   );
 
@@ -117,11 +117,11 @@ const processUploadedFiles = async ({
     filesAttributes2,
     data,
     options,
-    thingConfig,
+    entityConfig,
     composeFileFieldsData,
   );
 
-  return separateFileFieldsData(fileFieldsData, options, thingConfig);
+  return separateFileFieldsData(fileFieldsData, options, entityConfig);
 };
 
 export default processUploadedFiles;

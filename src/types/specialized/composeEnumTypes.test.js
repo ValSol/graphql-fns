@@ -7,7 +7,7 @@ import composeEnumTypes from './composeEnumTypes';
 describe('composeEnumTypes', () => {
   test('should return empty string if enums undefined', () => {
     const generalConfig: GeneralConfig = {
-      thingConfigs: {},
+      entityConfigs: {},
     };
     const expectedResult = '';
 
@@ -17,7 +17,7 @@ describe('composeEnumTypes', () => {
 
   test('should return empty string if there are not any enumerations', () => {
     const generalConfig: GeneralConfig = {
-      thingConfigs: {},
+      entityConfigs: {},
     };
     const expectedResult = '';
 
@@ -33,7 +33,7 @@ describe('composeEnumTypes', () => {
       { name: 'Enumeration2', enum: enumeration2 },
     ];
     const generalConfig: GeneralConfig = {
-      thingConfigs: {},
+      entityConfigs: {},
       enums,
     };
     const expectedResult = `enum Enumeration1Enumeration {

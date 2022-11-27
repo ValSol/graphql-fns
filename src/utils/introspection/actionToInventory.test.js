@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import actionToInventory from './actionToInventory';
 
 describe('actionToInventory', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -14,7 +14,7 @@ describe('actionToInventory', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -29,7 +29,7 @@ describe('actionToInventory', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -68,20 +68,20 @@ describe('actionToInventory', () => {
   });
 
   // const signatureMethods: ActionSignatureMethods = {
-  //   name: 'getThing',
+  //   name: 'getEntity',
   //   specificName: ({ name }) => `get${name}`,
   //   argNames: () => [],
   //   argTypes: () => [],
   //   type: ({ name }) => `${name}!`,
-  //   config: (thingConfig) => thingConfig,
+  //   config: (entityConfig) => entityConfig,
   // };
 
   // const ForCatalog: DerivativeAttributes = {
   //   suffix: 'ForCatalog',
   //   allow: {
-  //     Person: ['thingsByUnique', 'childThings', 'childThing'],
-  //     Place: ['childThing'],
-  //     Country: ['childThing'],
+  //     Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
+  //     Place: ['childEntity'],
+  //     Country: ['childEntity'],
   //   },
 
   //   derivativeFields: {
@@ -97,27 +97,27 @@ describe('actionToInventory', () => {
   //   },
   // };
 
-  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
-  // const queryName = 'getThing';
+  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  // const queryName = 'getEntity';
   // const custom = { Query: { [queryName]: signatureMethods } };
   // const derivative = { ForCatalog };
 
-  // const generalConfig = { thingConfigs, custom, derivative };
+  // const generalConfig = { entityConfigs, custom, derivative };
 
   const prefixToPermission = {
     ForCabinet: 'insider',
   };
 
-  test('have to return inventoryByPermissions with  thingsByUnique: [Person]', () => {
+  test('have to return inventoryByPermissions with  entitiesByUnique: [Person]', () => {
     const actionToParse = {
       actionType: 'Query',
-      actionName: 'thingsByUnique',
-      thingName: 'Person',
+      actionName: 'entitiesByUnique',
+      entityName: 'Person',
     };
 
     const parsedAction = {
       creationType: 'standard',
-      thingConfig: thingConfigs.Person,
+      entityConfig: entityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
@@ -129,7 +129,7 @@ describe('actionToInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            thingsByUnique: ['Person'],
+            entitiesByUnique: ['Person'],
           },
         },
       },
@@ -145,16 +145,16 @@ describe('actionToInventory', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return inventoryByPermissions with  thingsByUnique: [Place]', () => {
+  test('have to return inventoryByPermissions with  entitiesByUnique: [Place]', () => {
     const actionToParse = {
       actionType: 'Query',
-      actionName: 'thingsByUnique',
-      thingName: 'Place',
+      actionName: 'entitiesByUnique',
+      entityName: 'Place',
     };
 
     const parsedAction = {
       creationType: 'standard',
-      thingConfig: thingConfigs.Place,
+      entityConfig: entityConfigs.Place,
       baseAction: '',
       suffix: 'ForCabinet',
     };
@@ -164,7 +164,7 @@ describe('actionToInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            thingsByUnique: ['Person'],
+            entitiesByUnique: ['Person'],
           },
         },
       },
@@ -175,7 +175,7 @@ describe('actionToInventory', () => {
         name: 'insider',
         include: {
           Query: {
-            thingsByUnique: ['Person', 'Place'],
+            entitiesByUnique: ['Person', 'Place'],
           },
         },
       },

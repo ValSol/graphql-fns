@@ -9,7 +9,7 @@ const actionToInventory = (
   inventoryByPermissions: Object, // InventoryByPermissions,
   suffixToPermission: { [suffix: string]: string },
 ): InventoryByPermissions => {
-  const { actionType, actionName, thingName } = actionToParse;
+  const { actionType, actionName, entityName } = actionToParse;
   const { suffix } = parsedAction;
 
   const permission = suffixToPermission[suffix];
@@ -30,8 +30,8 @@ const actionToInventory = (
     inventoryByPermissions[permission].include[actionType][actionName] = []; // eslint-disable-line no-param-reassign
   }
 
-  if (!inventoryByPermissions[permission].include[actionType][actionName].includes(thingName)) {
-    inventoryByPermissions[permission].include[actionType][actionName].push(thingName); // eslint-disable-line no-param-reassign
+  if (!inventoryByPermissions[permission].include[actionType][actionName].includes(entityName)) {
+    inventoryByPermissions[permission].include[actionType][actionName].push(entityName); // eslint-disable-line no-param-reassign
   }
 
   return inventoryByPermissions;

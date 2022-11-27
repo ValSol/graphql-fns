@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import createImportOptionsInputTypes from './createImportOptionsInputTypes';
 
 describe('createImportOptionsInputTypes', () => {
   test('should return ImportOptionsInput type', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -29,7 +29,7 @@ input ImportOptionsInput {
       {},
     ];
 
-    const result = createImportOptionsInputTypes(thingConfig);
+    const result = createImportOptionsInputTypes(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 });

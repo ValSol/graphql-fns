@@ -1,14 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import getHashFromValue from './getHashFromValue';
 import getNewFilesInArraysPositions from './getNewFilesInArraysPositions';
 
 describe('getNewFilesInArraysPositions util', () => {
   test('should return new files index list', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -26,7 +26,7 @@ describe('getNewFilesInArraysPositions util', () => {
         },
       ],
     };
-    const exampleConfig: ThingConfig = {
+    const exampleConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       fileFields: [
@@ -111,7 +111,7 @@ describe('getNewFilesInArraysPositions util', () => {
   });
 
   test('should return new files index list with duplicateFiles', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -129,7 +129,7 @@ describe('getNewFilesInArraysPositions util', () => {
         },
       ],
     };
-    const exampleConfig: ThingConfig = {
+    const exampleConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       fileFields: [

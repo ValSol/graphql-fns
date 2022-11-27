@@ -1,8 +1,8 @@
 // @flow
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
-type ArgNamesToTransformers = { [argName: string]: [Function, ThingConfig | null] };
+type ArgNamesToTransformers = { [argName: string]: [Function, EntityConfig | null] };
 
 const transformBefore = (
   args: Object,
@@ -10,9 +10,9 @@ const transformBefore = (
 ): { [argName: string]: Object } =>
   Object.keys(args).reduce((prev, key) => {
     if (argNamesToTransformers[key]) {
-      const [transformer, thingConfig] = argNamesToTransformers[key];
+      const [transformer, entityConfig] = argNamesToTransformers[key];
 
-      prev[key] = transformer(args[key], thingConfig); // eslint-disable-line no-param-reassign
+      prev[key] = transformer(args[key], entityConfig); // eslint-disable-line no-param-reassign
     } else {
       prev[key] = args[key]; // eslint-disable-line no-param-reassign
     }

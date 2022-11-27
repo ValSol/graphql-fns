@@ -1,13 +1,13 @@
 // @flow
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 const removeBlobUrls = (
   values: Object,
   getBlobUrlFromValue: (any) => string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): void => {
-  const { fileFields } = thingConfig;
+  const { fileFields } = entityConfig;
 
   if (!fileFields) return;
 

@@ -24,19 +24,19 @@ const createValidDerivativeOrCustomActionsMatrix = (arg: Arg): Result => {
 
   for (let i = 0; i < thingNames.length; i += 1) {
     result.push([]);
-    const thingName = thingNames[i];
+    const entityName = thingNames[i];
     for (let j = 0; j < actionNames.length; j += 1) {
       const actionName = actionNames[j];
       const actionType = actionTypes[actionName].startsWith('Custom')
         ? actionTypes[actionName].slice(6)
         : actionTypes[actionName].slice(10);
       // $FlowFixMe
-      const inventoryСhain: ThreeSegmentInventoryChain = [actionType, actionName, thingName];
+      const inventoryСhain: ThreeSegmentInventoryChain = [actionType, actionName, entityName];
 
       if (
         checkInventory(inventoryСhain, inventory) &&
         checkInventory(inventoryСhain, inventory2) &&
-        thingNamesByActions[actionName].includes(thingName)
+        thingNamesByActions[actionName].includes(entityName)
       ) {
         result[i][j] = [i, j];
       } else {

@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { EntityConfig, UploadOptions } from '../../../flowTypes';
 
 type Result = {
   forUpdate: { [fileFieldName: string]: Object },
@@ -9,9 +9,9 @@ type Result = {
 const separateFileFieldsData = (
   data: Array<Object>,
   options: UploadOptions,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): Result => {
-  const { fileFields } = thingConfig;
+  const { fileFields } = entityConfig;
 
   if (!fileFields) throw new TypeError('There are no fileFields for upload!');
   const isArray = fileFields.reduce((prev, { array, name }) => {

@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import processDeleteData from './index';
 
 describe('processDeleteData', () => {
   test('should create object with simple fields', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -165,8 +165,8 @@ describe('processDeleteData', () => {
   });
 
   test('should return result for toDelete', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],

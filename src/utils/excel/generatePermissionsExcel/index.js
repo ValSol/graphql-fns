@@ -35,14 +35,14 @@ const generateExcel = async (
   serversideConfig: ServersideConfig,
   filePath: string = 'permissions.xlsx',
 ) => {
-  const { custom, derivative, inventory, thingConfigs } = generalConfig;
+  const { custom, derivative, inventory, entityConfigs } = generalConfig;
 
   const inventoryByPermissions = serversideConfig.inventoryByPermissions || {
     'General Action List': undefined,
   };
 
-  const thingNames = Object.keys(thingConfigs).filter(
-    (key) => thingConfigs[key].type === 'tangible',
+  const thingNames = Object.keys(entityConfigs).filter(
+    (key) => entityConfigs[key].type === 'tangible',
   );
 
   const wb = new ExcelJS.Workbook();
@@ -171,7 +171,7 @@ const generateExcel = async (
         if (matrix[i][j]) {
           wsRow.getCell(j + 2).value = composeSpecificActionName({
             actionName,
-            thingName: thingNames[row[j]],
+            entityName: thingNames[row[j]],
           });
           wsRow.getCell(j + 2).fill = {
             type: 'pattern',

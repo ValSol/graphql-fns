@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeChildActionSignature from './composeChildActionSignature';
 
 describe('composeChildActionSignature util', () => {
   test('should return right result', async () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -22,7 +22,7 @@ describe('composeChildActionSignature util', () => {
 
     const dic = {};
 
-    const result = await composeChildActionSignature(thingConfig, dic);
+    const result = await composeChildActionSignature(entityConfig, dic);
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
@@ -109,7 +109,7 @@ input ExampleSortInput {
   });
 
   test('should return right result without dic', async () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -122,7 +122,7 @@ input ExampleSortInput {
       ],
     };
 
-    const result = await composeChildActionSignature(thingConfig);
+    const result = await composeChildActionSignature(entityConfig);
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 

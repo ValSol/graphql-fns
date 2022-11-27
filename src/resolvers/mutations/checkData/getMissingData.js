@@ -1,6 +1,6 @@
 // @flow
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
-import createThingQueryResolver from '../../queries/createThingQueryResolver';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import transformDataForPush from './transformDataForPush';
 
@@ -12,7 +12,7 @@ type Arg = {
     data: { [fieldName: string]: any },
     positions?: { [fieldName: string]: Array<number> },
   },
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   context: Object,
@@ -22,31 +22,32 @@ const getMissingData = async ({
   processingKind,
   projection,
   args,
-  thingConfig,
+  entityConfig,
   generalConfig,
   serversideConfig,
   context,
 }: Arg): Promise<Object | null> => {
   const inAnyCase = true;
 
-  const thingQueryResolver = createThingQueryResolver(
-    thingConfig,
+  const entityQueryResolver = createEntityQueryResolver(
+    entityConfig,
     generalConfig,
     serversideConfig,
     inAnyCase,
   );
 
-  if (!thingQueryResolver) return null;
+  if (!entityQueryResolver) return null;
 
   const { whereOne, data } = args;
 
-  const thing = await thingQueryResolver(null, { whereOne }, context, { projection }, []);
+  const entity = await entityQueryResolver(null, { whereOne }, context, { projection }, []);
 
-  if (!thing) return null;
+  if (!entity) return null;
 
-  const thing2 = processingKind === 'push' ? transformDataForPush(thing, args, thingConfig) : thing;
+  const entity2 =
+    processingKind === 'push' ? transformDataForPush(entity, args, entityConfig) : entity;
 
-  const fieldsObj = composeFieldsObject(thingConfig);
+  const fieldsObj = composeFieldsObject(entityConfig);
 
   const result = {};
 
@@ -56,9 +57,9 @@ const getMissingData = async ({
     } else {
       const { kind } = fieldsObj[key];
       if (kind === 'duplexFields' || kind === 'relationalFields') {
-        result[key] = { connect: thing2[key] || null };
+        result[key] = { connect: entity2[key] || null };
       } else {
-        result[key] = thing2[key];
+        result[key] = entity2[key];
       }
     }
   });

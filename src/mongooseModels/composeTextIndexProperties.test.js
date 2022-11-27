@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeTextIndexProperties from './composeTextIndexProperties';
 
 describe('composeTextIndexProperties', () => {
   test('should compose schema properties with text fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -51,7 +51,7 @@ describe('composeTextIndexProperties', () => {
       textField4: 40,
     };
 
-    const result = composeTextIndexProperties(thingConfig);
+    const result = composeTextIndexProperties(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 });

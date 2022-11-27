@@ -8,16 +8,16 @@ import type {
 
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
-const composeArgNames = (argNames, inputCreators, suffix) => (thingConfig, generalConfig) => {
-  const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
+const composeArgNames = (argNames, inputCreators, suffix) => (entityConfig, generalConfig) => {
+  const derivativeConfig = composeDerivativeConfigByName(suffix, entityConfig, generalConfig);
 
   return argNames
     .map((argName) => argName)
     .filter((foo, i) => inputCreators[i](derivativeConfig)[1]);
 };
 
-const composeArgTypes = (argTypes, inputCreators, suffix) => (thingConfig, generalConfig) => {
-  const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
+const composeArgTypes = (argTypes, inputCreators, suffix) => (entityConfig, generalConfig) => {
+  const derivativeConfig = composeDerivativeConfigByName(suffix, entityConfig, generalConfig);
   const { name } = derivativeConfig;
 
   return argTypes
@@ -42,19 +42,22 @@ const composeCustomAction = (
   const name = actionGeneralName(suffix);
   return {
     name,
-    specificName: (thingConfig, generalConfig) => {
-      const { name: baseThingName } = thingConfig;
-      if (!(allow[baseThingName] && allow[baseThingName].includes(actionGeneralName()))) return '';
+    specificName: (entityConfig, generalConfig) => {
+      const { name: baseEntityName } = entityConfig;
+      if (!(allow[baseEntityName] && allow[baseEntityName].includes(actionGeneralName())))
+        return '';
 
-      const derivativeConfig = composeDerivativeConfigByName(suffix, thingConfig, generalConfig);
+      const derivativeConfig = composeDerivativeConfigByName(suffix, entityConfig, generalConfig);
 
-      return actionAllowed(derivativeConfig) ? actionName(baseThingName, suffix) : '';
+      return actionAllowed(derivativeConfig) ? actionName(baseEntityName, suffix) : '';
     },
     argNames: composeArgNames(argNames, inputCreators, suffix),
     argTypes: composeArgTypes(argTypes, inputCreators, suffix),
     type: actionReturnString(suffix),
-    config: (thingConfig, generalConfig) =>
-      actionReturnConfig ? composeDerivativeConfigByName(suffix, thingConfig, generalConfig) : null,
+    config: (entityConfig, generalConfig) =>
+      actionReturnConfig
+        ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig)
+        : null,
   };
 };
 

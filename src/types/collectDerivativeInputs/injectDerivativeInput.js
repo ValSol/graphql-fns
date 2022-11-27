@@ -1,6 +1,6 @@
 // @flow
 
-import type { GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import fillDic from '../inputs/fillDic';
@@ -9,13 +9,13 @@ import inputCreators from './inputCreators';
 const injectDerivativeInput = (
   inputGeneralName: string,
   suffix: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   dic: { [inputName: string]: string },
 ): void => {
   const derivativeConfig = suffix
-    ? composeDerivativeConfigByName(suffix, thingConfig, generalConfig)
-    : thingConfig;
+    ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig)
+    : entityConfig;
 
   const inputCreator = inputCreators[inputGeneralName];
 

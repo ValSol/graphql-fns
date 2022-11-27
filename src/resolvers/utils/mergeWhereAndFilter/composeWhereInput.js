@@ -2,7 +2,7 @@
 
 import { Types } from 'mongoose';
 
-import type { LookupMongodb, ThingConfig } from '../../../flowTypes';
+import type { LookupMongodb, EntityConfig } from '../../../flowTypes';
 
 import composeRelationalKey from './composeRelationalKey';
 
@@ -10,12 +10,12 @@ const composeWhereInputRecursively = (
   where: Object,
   parentFieldName: string,
   lookupArray: Array<string>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   notCreateObjectId?: boolean,
 ): Object => {
   if (!where || !Object.keys(where).length) return {};
 
-  const { duplexFields, relationalFields } = thingConfig;
+  const { duplexFields, relationalFields } = entityConfig;
 
   const idFields = ['id'];
   if (duplexFields) {
@@ -104,7 +104,7 @@ const composeWhereInputRecursively = (
           where2,
           parentFieldName,
           lookupArray,
-          thingConfig,
+          entityConfig,
           notCreateObjectId,
         ),
       );
@@ -120,15 +120,15 @@ const composeWhereInputRecursively = (
 
       const {
         relationalKey,
-        thingConfig: thingConfig2,
+        entityConfig: entityConfig2,
         value,
-      } = composeRelationalKey({ [key]: where[key] }, lookupArray, thingConfig);
+      } = composeRelationalKey({ [key]: where[key] }, lookupArray, entityConfig);
 
       const result2 = composeWhereInputRecursively(
         value,
         relationalKey,
         lookupArray,
-        thingConfig2,
+        entityConfig2,
         notCreateObjectId,
       );
 
@@ -148,7 +148,7 @@ const composeWhereInputRecursively = (
 
 const composeWhereInput = (
   where: Object,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   notCreateObjectId?: boolean,
 ): { where: Object, lookups: Array<LookupMongodb> } => {
   const lookupArray = [];
@@ -156,16 +156,16 @@ const composeWhereInput = (
     where,
     '',
     lookupArray,
-    thingConfig,
+    entityConfig,
     notCreateObjectId,
   );
 
-  const lookups = lookupArray.reduce((prev, fieldThingPair) => {
-    const [parentFieldName, fieldName, thingName] = fieldThingPair.split(':');
+  const lookups = lookupArray.reduce((prev, fieldEntityPair) => {
+    const [parentFieldName, fieldName, entityName] = fieldEntityPair.split(':');
 
     prev.push({
       $lookup: {
-        from: `${thingName.toLowerCase()}_things`,
+        from: `${entityName.toLowerCase()}_things`,
         localField: `${parentFieldName}${parentFieldName ? '.' : ''}${fieldName.slice(0, -1)}`,
         foreignField: '_id',
         as: `${parentFieldName}${fieldName}`,

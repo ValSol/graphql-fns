@@ -2,74 +2,74 @@
 
 import type { ActionAttributes } from '../../flowTypes';
 
-import childThing from './childThingQueryAttributes';
-import childThings from './childThingsQueryAttributes';
-import copyManyThings from './copyManyThingsMutationAttributes';
-import copyManyThingsWithChildren from './copyManyThingsWithChildrenMutationAttributes';
-import copyThing from './copyThingMutationAttributes';
-import copyThingWithChildren from './copyThingWithChildrenMutationAttributes';
-import createManyThings from './createManyThingsMutationAttributes';
-import thingDistinctValues from './thingDistinctValuesQueryAttributes';
-import thingCount from './thingCountQueryAttributes';
-import thingFileCount from './thingFileCountQueryAttributes';
-import thingFile from './thingFileQueryAttributes';
-import thingFiles from './thingFilesQueryAttributes';
-import thing from './thingQueryAttributes';
-import things from './thingsQueryAttributes';
-import thingsThroughConnection from './thingsThroughConnectionQueryAttributes';
-import thingsByUnique from './thingsByUniqueQueryAttributes';
-import createThing from './createThingMutationAttributes';
-import deleteFilteredThings from './deleteFilteredThingsMutationAttributes';
-import deleteFilteredThingsReturnScalar from './deleteFilteredThingsReturnScalarMutationAttributes';
-import deleteFilteredThingsWithChildren from './deleteFilteredThingsWithChildrenMutationAttributes';
-import deleteFilteredThingsWithChildrenReturnScalar from './deleteFilteredThingsWithChildrenReturnScalarMutationAttributes';
-import deleteManyThings from './deleteManyThingsMutationAttributes';
-import deleteManyThingsWithChildren from './deleteManyThingsWithChildrenMutationAttributes';
-import deleteThing from './deleteThingMutationAttributes';
-import deleteThingWithChildren from './deleteThingWithChildrenMutationAttributes';
-import importThings from './importThingsMutationAttributes';
-import pushIntoThing from './pushIntoThingMutationAttributes';
-import updateFilteredThings from './updateFilteredThingsMutationAttributes';
-import updateFilteredThingsReturnScalar from './updateFilteredThingsReturnScalarMutationAttributes';
-import updateManyThings from './updateManyThingsMutationAttributes';
-import updateThing from './updateThingMutationAttributes';
-import uploadFilesToThing from './uploadFilesToThingMutationAttributes';
-import uploadThingFiles from './uploadThingFilesMutationAttributes';
+import childEntity from './childEntityQueryAttributes';
+import childEntities from './childEntitiesQueryAttributes';
+import copyManyEntities from './copyManyEntitiesMutationAttributes';
+import copyManyEntitiesWithChildren from './copyManyEntitiesWithChildrenMutationAttributes';
+import copyEntity from './copyEntityMutationAttributes';
+import copyEntityWithChildren from './copyEntityWithChildrenMutationAttributes';
+import createManyEntities from './createManyEntitiesMutationAttributes';
+import entityDistinctValues from './entityDistinctValuesQueryAttributes';
+import entityCount from './entityCountQueryAttributes';
+import entityFileCount from './entityFileCountQueryAttributes';
+import entityFile from './entityFileQueryAttributes';
+import entityFiles from './entityFilesQueryAttributes';
+import entity from './entityQueryAttributes';
+import entities from './entitiesQueryAttributes';
+import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
+import entitiesByUnique from './entitiesByUniqueQueryAttributes';
+import createEntity from './createEntityMutationAttributes';
+import deleteFilteredEntities from './deleteFilteredEntitiesMutationAttributes';
+import deleteFilteredEntitiesReturnScalar from './deleteFilteredEntitiesReturnScalarMutationAttributes';
+import deleteFilteredEntitiesWithChildren from './deleteFilteredEntitiesWithChildrenMutationAttributes';
+import deleteFilteredEntitiesWithChildrenReturnScalar from './deleteFilteredEntitiesWithChildrenReturnScalarMutationAttributes';
+import deleteManyEntities from './deleteManyEntitiesMutationAttributes';
+import deleteManyEntitiesWithChildren from './deleteManyEntitiesWithChildrenMutationAttributes';
+import deleteEntity from './deleteEntityMutationAttributes';
+import deleteEntityWithChildren from './deleteEntityWithChildrenMutationAttributes';
+import importEntities from './importEntitiesMutationAttributes';
+import pushIntoEntity from './pushIntoEntityMutationAttributes';
+import updateFilteredEntities from './updateFilteredEntitiesMutationAttributes';
+import updateFilteredEntitiesReturnScalar from './updateFilteredEntitiesReturnScalarMutationAttributes';
+import updateManyEntities from './updateManyEntitiesMutationAttributes';
+import updateEntity from './updateEntityMutationAttributes';
+import uploadFilesToEntity from './uploadFilesToEntityMutationAttributes';
+import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 
 const actionAttributes = {
-  childThing,
-  childThings,
-  copyManyThings,
-  copyManyThingsWithChildren,
-  copyThing,
-  copyThingWithChildren,
-  createManyThings,
-  createThing,
-  deleteFilteredThings,
-  deleteFilteredThingsReturnScalar,
-  deleteFilteredThingsWithChildren,
-  deleteFilteredThingsWithChildrenReturnScalar,
-  deleteManyThings,
-  deleteManyThingsWithChildren,
-  deleteThing,
-  deleteThingWithChildren,
-  importThings,
-  pushIntoThing,
-  thingCount,
-  thingDistinctValues,
-  thingFileCount,
-  thingFile,
-  thingFiles,
-  thing,
-  things,
-  thingsThroughConnection,
-  thingsByUnique,
-  updateFilteredThings,
-  updateFilteredThingsReturnScalar,
-  updateManyThings,
-  updateThing,
-  uploadFilesToThing,
-  uploadThingFiles,
+  childEntity,
+  childEntities,
+  copyManyEntities,
+  copyManyEntitiesWithChildren,
+  copyEntity,
+  copyEntityWithChildren,
+  createManyEntities,
+  createEntity,
+  deleteFilteredEntities,
+  deleteFilteredEntitiesReturnScalar,
+  deleteFilteredEntitiesWithChildren,
+  deleteFilteredEntitiesWithChildrenReturnScalar,
+  deleteManyEntities,
+  deleteManyEntitiesWithChildren,
+  deleteEntity,
+  deleteEntityWithChildren,
+  importEntities,
+  pushIntoEntity,
+  entityCount,
+  entityDistinctValues,
+  entityFileCount,
+  entityFile,
+  entityFiles,
+  entity,
+  entities,
+  entitiesThroughConnection,
+  entitiesByUnique,
+  updateFilteredEntities,
+  updateFilteredEntitiesReturnScalar,
+  updateManyEntities,
+  updateEntity,
+  uploadFilesToEntity,
+  uploadEntityFiles,
 };
 
 const mutationAttributes: { [actionName: string]: ActionAttributes } = Object.keys(

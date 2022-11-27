@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig, GeneralConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import composeSubscription from './composeSubscription';
 
 describe('composeSubscription', () => {
   const prefixName = 'Home';
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -18,10 +18,10 @@ describe('composeSubscription', () => {
     ],
   };
 
-  const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
+  const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
 
-  test('should compose createdThing subscription', () => {
-    const subscriptionName = 'createdThing';
+  test('should compose createdEntity subscription', () => {
+    const subscriptionName = 'createdEntity';
     const expectedResult = `subscription Home_createdExample($where: ExampleWhereInput) {
   createdExample(where: $where) {
     id
@@ -31,12 +31,12 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(prefixName, subscriptionName, thingConfig, generalConfig);
+    const result = composeSubscription(prefixName, subscriptionName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose deletedThing subscription', () => {
-    const subscriptionName = 'deletedThing';
+  test('should compose deletedEntity subscription', () => {
+    const subscriptionName = 'deletedEntity';
     const expectedResult = `subscription Home_deletedExample($where: ExampleWhereInput) {
   deletedExample(where: $where) {
     id
@@ -46,12 +46,12 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(prefixName, subscriptionName, thingConfig, generalConfig);
+    const result = composeSubscription(prefixName, subscriptionName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose updatedThing subscription', () => {
-    const subscriptionName = 'updatedThing';
+  test('should compose updatedEntity subscription', () => {
+    const subscriptionName = 'updatedEntity';
     const expectedResult = `subscription Home_updatedExample($where: ExampleWhereInput) {
   updatedExample(where: $where) {
     id
@@ -61,7 +61,7 @@ describe('composeSubscription', () => {
   }
 }`;
 
-    const result = composeSubscription(prefixName, subscriptionName, thingConfig, generalConfig);
+    const result = composeSubscription(prefixName, subscriptionName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

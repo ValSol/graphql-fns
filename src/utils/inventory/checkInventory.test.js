@@ -20,31 +20,31 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFile'];
+    inventoryСhain = ['Query', 'entityFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
@@ -64,31 +64,31 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFile'];
+    inventoryСhain = ['Query', 'entityFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -96,7 +96,7 @@ describe('checkInventory', () => {
   test('should return correct results for inventory include object with 2 levels', () => {
     const inventory: Inventory = {
       name: 'test',
-      include: { Query: { thing: true, thingFiles: true } },
+      include: { Query: { entity: true, entityFiles: true } },
     };
 
     let inventoryСhain = ['Query'];
@@ -111,43 +111,43 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFiles'];
+    inventoryСhain = ['Query', 'entityFiles'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'things'];
+    inventoryСhain = ['Query', 'entities'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thingFile'];
+    inventoryСhain = ['Query', 'entityFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'things', 'User'];
+    inventoryСhain = ['Query', 'entities', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -155,7 +155,7 @@ describe('checkInventory', () => {
   test('should return correct results for inventory include object with 3 levels', () => {
     const inventory: Inventory = {
       name: 'test',
-      include: { Query: { thing: ['User'], thingFile: ['Image'] } },
+      include: { Query: { entity: ['User'], entityFile: ['Image'] } },
     };
 
     let inventoryСhain = ['Query'];
@@ -170,51 +170,51 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFile'];
+    inventoryСhain = ['Query', 'entityFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFile', 'Image'];
+    inventoryСhain = ['Query', 'entityFile', 'Image'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thingFile', 'Logo'];
+    inventoryСhain = ['Query', 'entityFile', 'Logo'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'things'];
+    inventoryСhain = ['Query', 'entities'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing', 'Place'];
+    inventoryСhain = ['Query', 'entity', 'Place'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'things', 'User'];
+    inventoryСhain = ['Query', 'entities', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -234,37 +234,37 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thingFile'];
+    inventoryСhain = ['Query', 'entityFile'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
 
   test('should return correct results for inventory exclude object with 2 levels', () => {
-    const inventory: Inventory = { name: 'test', exclude: { Query: { thing: true } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { entity: true } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -278,41 +278,41 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'things'];
+    inventoryСhain = ['Query', 'entities'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'things', 'User'];
+    inventoryСhain = ['Query', 'entities', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
 
   test('should return correct results for inventory exclude object with 3 levels', () => {
-    const inventory: Inventory = { name: 'test', exclude: { Query: { thing: ['User'] } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { entity: ['User'] } } };
 
     let inventoryСhain = ['Query'];
     let result = checkInventory(inventoryСhain, inventory);
@@ -326,47 +326,47 @@ describe('checkInventory', () => {
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing'];
+    inventoryСhain = ['Query', 'entity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'things'];
+    inventoryСhain = ['Query', 'entities'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing'];
+    inventoryСhain = ['Mutation', 'createEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing'];
+    inventoryСhain = ['Subscription', 'createdEntity'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'thing', 'User'];
+    inventoryСhain = ['Query', 'entity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
 
-    inventoryСhain = ['Query', 'thing', 'Place'];
+    inventoryСhain = ['Query', 'entity', 'Place'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Query', 'things', 'User'];
+    inventoryСhain = ['Query', 'entities', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Mutation', 'createThing', 'User'];
+    inventoryСhain = ['Mutation', 'createEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
 
-    inventoryСhain = ['Subscription', 'createdThing', 'User'];
+    inventoryСhain = ['Subscription', 'createdEntity', 'User'];
     result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(true);
   });
 
   test('should return correct results for inventory exclude object with 3 levels', () => {
-    const inventory: Inventory = { name: 'test', exclude: { Query: { thingCount: true } } };
+    const inventory: Inventory = { name: 'test', exclude: { Query: { entityCount: true } } };
 
-    const inventoryСhain = ['Query', 'thingCount', 'Invoice'];
+    const inventoryСhain = ['Query', 'entityCount', 'Invoice'];
     const result = checkInventory(inventoryСhain, inventory);
     expect(result).toBe(false);
   });
@@ -377,16 +377,16 @@ describe('checkInventory', () => {
         name: '',
         include: {
           Query: {
-            thingForCatalog: true,
-            thingsForCatalog: true,
+            entityForCatalog: true,
+            entitiesForCatalog: true,
           },
-          Mutation: { renewThing: true, signinThing: true },
+          Mutation: { renewEntity: true, signinEntity: true },
         },
       },
       guest: {
         name: 'guest',
         include: {
-          Mutation: { renewThing: true, signinThing: true },
+          Mutation: { renewEntity: true, signinEntity: true },
         },
       },
       // editor: {},
@@ -395,7 +395,7 @@ describe('checkInventory', () => {
     };
     test('should return correct results for InventoryByPermissions guest', () => {
       const permissions = [''];
-      const inventoryСhain = ['Mutation', 'renewThing', 'User'];
+      const inventoryСhain = ['Mutation', 'renewEntity', 'User'];
       const result = permissions.some((permission) =>
         checkInventory(inventoryСhain, inventoryByPermissions[permission]),
       );
@@ -403,7 +403,7 @@ describe('checkInventory', () => {
     });
     test('should return correct results for InventoryByPermissions guest', () => {
       const permissions = ['guest'];
-      const inventoryСhain = ['Mutation', 'signoutThing', 'User'];
+      const inventoryСhain = ['Mutation', 'signoutEntity', 'User'];
       const result = permissions.some((permission) =>
         checkInventory(inventoryСhain, inventoryByPermissions[permission]),
       );

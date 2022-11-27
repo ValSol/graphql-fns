@@ -1,12 +1,15 @@
 // @flow
-import type { ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { EntityConfig, UploadOptions } from '../../../flowTypes';
 
 import composeFileFieldNameToConfigNameObject from '../composeFileFieldNameToConfigNameObject';
 
-const getHashDoubles = (options: UploadOptions, thingConfig: ThingConfig): Array<number | null> => {
+const getHashDoubles = (
+  options: UploadOptions,
+  entityConfig: EntityConfig,
+): Array<number | null> => {
   const { counts, hashes, targets } = options;
 
-  const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(thingConfig);
+  const nameToConfigNameObject = composeFileFieldNameToConfigNameObject(entityConfig);
 
   const indexes = {};
   let index = 0;

@@ -1,12 +1,12 @@
 // @flow
-import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 const executeBulkItems = async (
-  core: Map<ThingConfig, Array<Object>>,
+  core: Map<EntityConfig, Array<Object>>,
   generalConfig: GeneralConfig,
   context: Context,
   session: Object,
@@ -18,9 +18,9 @@ const executeBulkItems = async (
   core.forEach((bulkItems, config) => {
     const { name } = config;
     const thingSchema = createThingSchema(config, enums);
-    const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
+    const Entity = mongooseConn.model(`${name}_Thing`, thingSchema);
 
-    promises.push(Thing.bulkWrite(bulkItems, { session, strict: true }));
+    promises.push(Entity.bulkWrite(bulkItems, { session, strict: true }));
   });
 
   return Promise.all(promises);

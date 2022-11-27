@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import fromGlobalId from '../../fromGlobalId';
 
@@ -29,8 +29,8 @@ const processWhere = (whereOnes, duplexFieldsObject) =>
     return prev;
   }, {});
 
-const transformWhereOnes = (whereOnes: Object, thingConfig: ThingConfig): Object => {
-  const { duplexFields } = thingConfig;
+const transformWhereOnes = (whereOnes: Object, entityConfig: EntityConfig): Object => {
+  const { duplexFields } = entityConfig;
 
   const duplexFieldsObject = (duplexFields || []).reduce((prev, duplexField) => {
     prev[duplexField.name] = duplexField; // eslint-disable-line no-param-reassign

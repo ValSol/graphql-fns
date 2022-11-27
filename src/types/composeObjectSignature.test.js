@@ -1,19 +1,19 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ObjectSignatureMethods, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ObjectSignatureMethods, EntityConfig } from '../flowTypes';
 
 import composeObjectSignature from './composeObjectSignature';
 
 describe('composeObjectSignature', () => {
   test('should return correct custom input object type', () => {
-    const thingTimeRangeInput: ObjectSignatureMethods = {
-      name: 'thingTimeRangeInput',
+    const entityTimeRangeInput: ObjectSignatureMethods = {
+      name: 'entityTimeRangeInput',
       specificName: ({ name }) => `${name}TimeRangeInput`,
       fieldNames: () => ['start', 'end'],
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -25,7 +25,7 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = `input ExampleTimeRangeInput {
@@ -33,20 +33,20 @@ describe('composeObjectSignature', () => {
   end: DateTime!
 }`;
     const input = true;
-    const result = composeObjectSignature(thingTimeRangeInput, thingConfig, generalConfig, input);
+    const result = composeObjectSignature(entityTimeRangeInput, entityConfig, generalConfig, input);
     expect(result).toBe(expectedResult);
   });
 
   test('should return correct custom return object type', () => {
-    const thingWithRating: ObjectSignatureMethods = {
-      name: 'thingWithRating',
+    const entityWithRating: ObjectSignatureMethods = {
+      name: 'entityWithRating',
       specificName: ({ name }) => `${name}WithRating`,
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -58,7 +58,7 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = `type ExampleWithRating {
@@ -66,20 +66,20 @@ describe('composeObjectSignature', () => {
   rating: Float!
 }`;
 
-    const result = composeObjectSignature(thingWithRating, thingConfig, generalConfig);
+    const result = composeObjectSignature(entityWithRating, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should return empty string for custom return object type', () => {
-    const thingWithRating: ObjectSignatureMethods = {
-      name: 'thingWithRating',
+    const entityWithRating: ObjectSignatureMethods = {
+      name: 'entityWithRating',
       specificName: ({ name }) => (name === 'Example' ? '' : `${name}WithRating`),
       fieldNames: () => ['payload', 'rating'],
       fieldTypes: ({ name }) => [`${name}!`, 'Float!'],
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -91,12 +91,12 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = '';
 
-    const result = composeObjectSignature(thingWithRating, thingConfig, generalConfig);
+    const result = composeObjectSignature(entityWithRating, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

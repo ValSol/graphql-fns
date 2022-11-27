@@ -7,20 +7,20 @@ const childQueriesToDerivative = (
   childQueries: ChildQueries,
   derivativeAttributes: { [suffix: string]: DerivativeAttributes },
 ): { [suffix: string]: DerivativeAttributes } => {
-  childQueries.forEach(({ actionName, baseAction, suffix, thingName }) => {
+  childQueries.forEach(({ actionName, baseAction, suffix, entityName }) => {
     if (actionName === baseAction) return;
 
     if (!derivativeAttributes[suffix]) {
       derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign
     }
 
-    if (!derivativeAttributes[suffix].allow[thingName]) {
-      derivativeAttributes[suffix].allow[thingName] = []; // eslint-disable-line no-param-reassign
+    if (!derivativeAttributes[suffix].allow[entityName]) {
+      derivativeAttributes[suffix].allow[entityName] = []; // eslint-disable-line no-param-reassign
     }
 
-    if (!derivativeAttributes[suffix].allow[thingName].includes(baseAction)) {
+    if (!derivativeAttributes[suffix].allow[entityName].includes(baseAction)) {
       // $FlowFixMe
-      derivativeAttributes[suffix].allow[thingName].push(baseAction);
+      derivativeAttributes[suffix].allow[entityName].push(baseAction);
     }
   });
 

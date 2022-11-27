@@ -27,9 +27,9 @@ const executeAuthorisation = async (
 
   if (checkInventory(inventoryChain, inventoryByPermissions[''])) return [];
 
-  const [, , thingName] = inventoryChain;
+  const [, , entityName] = inventoryChain;
 
-  const filterObject = await getActionFilter(thingName, context);
+  const filterObject = await getActionFilter(entityName, context);
 
   const allPermissions = Object.keys(inventoryByPermissions);
   const permissions = Object.keys(filterObject);

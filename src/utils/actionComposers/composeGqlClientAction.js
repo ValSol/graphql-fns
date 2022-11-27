@@ -13,14 +13,14 @@ const composeGqlClientAction = (
   generalConfig: GeneralConfig,
   optionsArg?: Object = {},
 ): Object => {
-  const { actionType, actionName, thingName, composeOptions } = gqlActionData;
-  const { thingConfigs } = generalConfig;
+  const { actionType, actionName, entityName, composeOptions } = gqlActionData;
+  const { entityConfigs } = generalConfig;
 
-  const thingConfig = thingConfigs[thingName];
+  const entityConfig = entityConfigs[entityName];
 
   const options = composeOptions(optionsArg);
 
-  const args = [namePrefix, actionName, thingConfig, generalConfig, options];
+  const args = [namePrefix, actionName, entityConfig, generalConfig, options];
 
   switch (actionType) {
     case 'Query': {

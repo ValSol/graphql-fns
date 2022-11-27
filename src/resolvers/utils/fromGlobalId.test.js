@@ -10,10 +10,10 @@ describe('fromGlobalId', () => {
     const result = fromGlobalId(globalId);
 
     const _id = '61af380a5c2825441ca07902'; // eslint-disable-line no-underscore-dangle
-    const thingName = 'Restaurant';
+    const entityName = 'Restaurant';
     const suffix = 'ForView';
 
-    const expectedResult = { _id, thingName, suffix };
+    const expectedResult = { _id, entityName, suffix };
 
     expect(result).toEqual(expectedResult);
   });
@@ -23,7 +23,7 @@ describe('fromGlobalId', () => {
 
     const result = fromGlobalId(globalId);
 
-    const expectedResult = { _id: null, thingName: '', suffix: '' };
+    const expectedResult = { _id: null, entityName: '', suffix: '' };
 
     expect(result).toEqual(expectedResult);
   });

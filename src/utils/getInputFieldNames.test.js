@@ -1,14 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import getInputFieldNames from './getInputFieldNames';
-import createPushIntoThingInputType from '../types/inputs/createPushIntoThingInputType';
+import createPushIntoEntityInputType from '../types/inputs/createPushIntoEntityInputType';
 
 describe('getInputFieldNames', () => {
-  test('should create thing input type with text fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity input type with text fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -44,12 +44,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['textField4', 'textField5'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with only scalar text fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity input type with only scalar text fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -73,12 +73,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = [];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with only freeze array text fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity input type with only freeze array text fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -97,17 +97,17 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = [];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with relational fields', () => {
-    const placeConfig: ThingConfig = {
+  test('should create entity input type with relational fields', () => {
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
     };
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -143,12 +143,12 @@ describe('getInputFieldNames', () => {
     });
     const expectedResult = ['friends', 'location'];
 
-    const result = getInputFieldNames(personConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(personConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create embedded thing input type with text fields', () => {
-    const addressConfig: ThingConfig = {
+  test('should create embedded entity input type with text fields', () => {
+    const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -168,12 +168,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = [];
 
-    const result = getInputFieldNames(addressConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(addressConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with embedded fields', () => {
-    const addressConfig: ThingConfig = {
+  test('should create entity input type with embedded fields', () => {
+    const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -187,7 +187,7 @@ describe('getInputFieldNames', () => {
         },
       ],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -231,14 +231,14 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['locations', 'places'];
 
-    const result = getInputFieldNames(personConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(personConfig, createPushIntoEntityInputType);
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with duplex fields', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+  test('should create entity input type with duplex fields', () => {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -311,13 +311,13 @@ describe('getInputFieldNames', () => {
     });
     const expectedResult = ['friends', 'enemies'];
 
-    const result = getInputFieldNames(personConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(personConfig, createPushIntoEntityInputType);
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with geospatial fields', () => {
-    const thingConfig = {
+  test('should create entity input type with geospatial fields', () => {
+    const entityConfig = {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -372,12 +372,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['favoritePositions', 'worstPositions', 'favoriteAreas', 'worstAreas'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with enum fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity input type with enum fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       enumFields: [
@@ -412,12 +412,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['field2', 'field4'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing type with int fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity type with int fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       intFields: [
@@ -452,12 +452,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['intField4', 'intField5'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing type with float fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity type with float fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       floatFields: [
@@ -492,12 +492,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['floatField4', 'floatField5'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing type with boolean fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create entity type with boolean fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       booleanFields: [
@@ -532,12 +532,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = ['booleanField4', 'booleanField5'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create file thing input type with text fields', () => {
-    const imageConfig: ThingConfig = {
+  test('should create file entity input type with text fields', () => {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -552,12 +552,12 @@ describe('getInputFieldNames', () => {
     };
     const expectedResult = [];
 
-    const result = getInputFieldNames(imageConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(imageConfig, createPushIntoEntityInputType);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create thing input type with file fields', () => {
-    const imageConfig: ThingConfig = {
+  test('should create entity input type with file fields', () => {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -570,8 +570,8 @@ describe('getInputFieldNames', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -611,7 +611,7 @@ describe('getInputFieldNames', () => {
 
     const expectedResult = ['pictures', 'photos'];
 
-    const result = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
 
     expect(result).toEqual(expectedResult);
   });

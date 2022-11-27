@@ -1,28 +1,28 @@
 // @flow
 
-import type { Enums, ThingConfig } from '../flowTypes';
+import type { Enums, EntityConfig } from '../flowTypes';
 
 import createThingSchema from './createThingSchema';
 
 const syncedIndexes = {};
 
-const createThing = async (
+const createEntity = async (
   mongooseConn: Object,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   enums?: Enums = [],
 ): Object => {
-  const { name } = thingConfig;
+  const { name } = entityConfig;
 
-  const thingSchema = createThingSchema(thingConfig, enums);
+  const thingSchema = createThingSchema(entityConfig, enums);
 
-  const Thing = mongooseConn.model(`${name}_Thing`, thingSchema);
+  const Entity = mongooseConn.model(`${name}_Thing`, thingSchema);
 
   if (!syncedIndexes[name]) {
     syncedIndexes[name] = true;
-    await Thing.syncIndexes();
+    await Entity.syncIndexes();
   }
 
-  return Thing;
+  return Entity;
 };
 
-export default createThing;
+export default createEntity;

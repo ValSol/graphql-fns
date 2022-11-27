@@ -22,15 +22,15 @@ const extractDataFromDerivative = (arg: Arg): Result => {
 
   Object.keys(derivative).forEach((key) => {
     const { allow, suffix } = derivative[key];
-    Object.keys(allow).forEach((thingName) => {
-      allow[thingName].forEach((actionName) => {
+    Object.keys(allow).forEach((entityName) => {
+      allow[entityName].forEach((actionName) => {
         const derivativeActionName = `${actionName}${suffix}`;
         if (!actionNames.includes(derivativeActionName)) {
           actionNames.push(derivativeActionName);
           derivativeActionTypes[derivativeActionName] = `Derivative${actionTypes[actionName]}`;
           thingNamesByDerivativeActions[derivativeActionName] = [];
         }
-        thingNamesByDerivativeActions[derivativeActionName].push(thingName);
+        thingNamesByDerivativeActions[derivativeActionName].push(entityName);
       });
     });
   });

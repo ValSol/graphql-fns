@@ -3,12 +3,12 @@
 
 import mingo from 'mingo';
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 describe('patchExternalReferences util', () => {
-  const accessConfig: ThingConfig = {
+  const accessConfig: EntityConfig = {
     name: 'Access',
     type: 'tangible',
 
@@ -24,8 +24,8 @@ describe('patchExternalReferences util', () => {
     ],
   };
 
-  const postConfig: ThingConfig = {};
-  const restaurantConfig: ThingConfig = {};
+  const postConfig: EntityConfig = {};
+  const restaurantConfig: EntityConfig = {};
 
   Object.assign(postConfig, {
     name: 'Post',

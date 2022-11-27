@@ -11,22 +11,22 @@ const composeProjectionFromOptions = (
   generalConfig: GeneralConfig,
   optionsArg?: Object = {},
 ): Result => {
-  const { thingName, composeOptions } = gqlActionData;
-  const { thingConfigs } = generalConfig;
+  const { entityName, composeOptions } = gqlActionData;
+  const { entityConfigs } = generalConfig;
 
-  const thingConfig = thingConfigs[thingName];
+  const entityConfig = entityConfigs[entityName];
 
-  const { counter } = thingConfig;
+  const { counter } = entityConfig;
 
   const { include, exclude } = composeOptions(optionsArg);
 
-  const thingObject = composeFieldsObject(thingConfigs[thingName]);
+  const entityObject = composeFieldsObject(entityConfigs[entityName]);
 
   const defaultFields = counter
     ? ['counter', 'createdAt', 'updatedAt']
     : ['createdAt', 'updatedAt'];
 
-  const result = [...defaultFields, ...Object.keys(thingObject)].reduce((prev, fieldName) => {
+  const result = [...defaultFields, ...Object.keys(entityObject)].reduce((prev, fieldName) => {
     if (!include && !exclude) {
       prev[fieldName] = 1; // eslint-disable-line no-param-reassign
     }

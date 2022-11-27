@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import createFileWhereInputType from './createFileWhereInputType';
 
 describe('createFileWhereInputType', () => {
-  const imageConfig: ThingConfig = {
+  const imageConfig: EntityConfig = {
     name: 'Image',
     type: 'file',
     textFields: [
@@ -18,7 +18,7 @@ describe('createFileWhereInputType', () => {
     ],
   };
 
-  const photoConfig: ThingConfig = {
+  const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'file',
     textFields: [
@@ -31,7 +31,7 @@ describe('createFileWhereInputType', () => {
     ],
   };
 
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -56,7 +56,7 @@ describe('createFileWhereInputType', () => {
   test('should return empty string if enums undefined', () => {
     const expectedResult = ['FileWhereInput', '', {}];
 
-    const result = createFileWhereInputType(thingConfig);
+    const result = createFileWhereInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 

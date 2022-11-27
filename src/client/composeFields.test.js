@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, ClientFieldsOptions } from '../flowTypes';
+import type { EntityConfig, ClientFieldsOptions } from '../flowTypes';
 
 import composeFields from './composeFields';
 
 describe('composeFields', () => {
   describe('not nested fields', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       counter: true,
@@ -53,7 +53,7 @@ describe('composeFields', () => {
       ],
     };
 
-    const generalConfig = { thingConfigs: { Example: thingConfig } };
+    const generalConfig = { entityConfigs: { Example: entityConfig } };
 
     test('should compose not nested fields with shift = 0', () => {
       const options: ClientFieldsOptions = { shift: 0 };
@@ -88,7 +88,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -125,7 +125,7 @@ describe('composeFields', () => {
         '  }',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -168,7 +168,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -197,7 +197,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -236,7 +236,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -270,7 +270,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -304,7 +304,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -331,7 +331,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -359,7 +359,7 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
 
@@ -387,19 +387,19 @@ describe('composeFields', () => {
         '}',
       ];
 
-      const { fields: result } = composeFields(thingConfig, generalConfig, options);
+      const { fields: result } = composeFields(entityConfig, generalConfig, options);
       expect(result).toEqual(expectedResult);
     });
   });
 
   describe('Embedded fields', () => {
-    const embedded3Config: ThingConfig = {
+    const embedded3Config: EntityConfig = {
       name: 'Embedded3',
       type: 'embedded',
       textFields: [{ name: 'textField3' }, { name: 'textFieldArr3', array: true }],
     };
 
-    const embedded2Config: ThingConfig = {
+    const embedded2Config: EntityConfig = {
       name: 'Embedded2',
       type: 'embedded',
       textFields: [{ name: 'textField2' }, { name: 'textFieldArr2', array: true }],
@@ -411,7 +411,7 @@ describe('composeFields', () => {
       ],
     };
 
-    const embedded1Config: ThingConfig = {
+    const embedded1Config: EntityConfig = {
       name: 'Embedded1',
       type: 'embedded',
       textFields: [{ name: 'textField1' }, { name: 'textFieldArr1', array: true }],
@@ -424,7 +424,7 @@ describe('composeFields', () => {
       ],
     };
 
-    const exampleConfig: ThingConfig = {
+    const exampleConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -441,7 +441,7 @@ describe('composeFields', () => {
     };
 
     const generalConfig = {
-      thingConfigs: {
+      entityConfigs: {
         Embedded1: embedded1Config,
         Embedded2: embedded2Config,
         Embedded3: embedded3Config,
@@ -642,7 +642,7 @@ describe('composeFields', () => {
   });
 
   describe('Relatioanl and duplex fields', () => {
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -680,7 +680,7 @@ describe('composeFields', () => {
       ],
     });
 
-    const generalConfig = { thingConfigs: { Person: personConfig } };
+    const generalConfig = { entityConfigs: { Person: personConfig } };
 
     test('should compose relatioanl and duplex fields without depth', () => {
       const options: ClientFieldsOptions = { shift: 0 };

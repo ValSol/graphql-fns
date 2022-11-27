@@ -11,16 +11,16 @@ const toOtherType = {
   Mutation: 'Query',
 };
 
-const prohibitedForRootActions = ['childThing', 'childThings'];
+const prohibitedForRootActions = ['childEntity', 'childEntities'];
 
 const parseAction = (
-  { actionType, actionName, thingName, suffix }: ActionToParse,
+  { actionType, actionName, entityName, suffix }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
-  const { thingConfigs, custom, derivative } = generalConfig;
+  const { entityConfigs, custom, derivative } = generalConfig;
 
-  if (!thingConfigs[thingName]) {
-    throw new TypeError(`Not found thing with name: "${thingName}"!`);
+  if (!entityConfigs[entityName]) {
+    throw new TypeError(`Not found entity with name: "${entityName}"!`);
   }
 
   if (prohibitedForRootActions.includes(actionName)) {
@@ -37,14 +37,16 @@ const parseAction = (
     }
 
     if (!suffix) {
-      throw new TypeError(`Not setted suffix for action "${actionName}" & thing: "${thingName}"!`);
+      throw new TypeError(
+        `Not setted suffix for action "${actionName}" & entity: "${entityName}"!`,
+      );
     }
 
-    const thingConfig = attributes.actionReturnConfig ? thingConfigs[thingName] : null;
+    const entityConfig = attributes.actionReturnConfig ? entityConfigs[entityName] : null;
 
     return {
       creationType: 'standard',
-      thingConfig,
+      entityConfig,
       baseAction: '',
       suffix,
     };
@@ -54,19 +56,19 @@ const parseAction = (
     if (custom[actionType] && custom[actionType][actionName]) {
       const signatureMethods = custom[actionType][actionName];
 
-      const thingConfig = signatureMethods.config(thingConfigs[thingName], generalConfig);
+      const entityConfig = signatureMethods.config(entityConfigs[entityName], generalConfig);
 
       let calculatedSuffix = '';
 
-      if (thingConfig && derivative && !thingConfigs[thingConfig.name]) {
-        const { name } = thingConfig;
+      if (entityConfig && derivative && !entityConfigs[entityConfig.name]) {
+        const { name } = entityConfig;
         const suffixes = Object.keys(derivative);
 
         for (let i = 0; i < suffixes.length; i += 1) {
           const currentSuffix = suffixes[i];
           if (name.endsWith(currentSuffix)) {
             const baseName = name.slice(0, -currentSuffix.length);
-            if (thingConfigs[baseName]) {
+            if (entityConfigs[baseName]) {
               calculatedSuffix = currentSuffix;
               break;
             }
@@ -76,19 +78,19 @@ const parseAction = (
 
       if (calculatedSuffix && suffix && calculatedSuffix !== suffix) {
         throw new TypeError(
-          `Setted suffix: "${suffix}" not equal to calculated suffix "${calculatedSuffix}" for action "${actionName}" & thing: "${thingName}"!`,
+          `Setted suffix: "${suffix}" not equal to calculated suffix "${calculatedSuffix}" for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
       if (!calculatedSuffix && !suffix) {
         throw new TypeError(
-          `Not setted suffix for action "${actionName}" & thing: "${thingName}"!`,
+          `Not setted suffix for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
       return {
         creationType: 'custom',
-        thingConfig,
+        entityConfig,
         baseAction: '',
         suffix: calculatedSuffix || suffix || '', // last || '' added to prevent flowjs error
       };
@@ -116,34 +118,34 @@ const parseAction = (
           }
 
           const {
-            allow: { [thingName]: actions },
+            allow: { [entityName]: actions },
           } = derivative[currentSuffix];
 
           if (!actions) {
             throw new TypeError(
-              `For action "${actionName}" not allowed thing: "${thingName}" with derfivative suffix: "${currentSuffix}"!`,
+              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative suffix: "${currentSuffix}"!`,
             );
           }
 
           if (!actions.includes(baseAction)) {
             throw new TypeError(
-              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative suffix: "${currentSuffix}" & thing: ${thingName}!`,
+              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative suffix: "${currentSuffix}" & entity: ${entityName}!`,
             );
           }
 
-          const thingConfig = actionAttributes[baseAction].actionReturnConfig
-            ? composeDerivativeConfigByName(currentSuffix, thingConfigs[thingName], generalConfig)
+          const entityConfig = actionAttributes[baseAction].actionReturnConfig
+            ? composeDerivativeConfigByName(currentSuffix, entityConfigs[entityName], generalConfig)
             : null;
 
           if (suffix) {
             throw new TypeError(
-              `Need not set suffix: "${suffix}" for action "${actionName}" & thing: "${thingName}"!`,
+              `Need not set suffix: "${suffix}" for action "${actionName}" & entity: "${entityName}"!`,
             );
           }
 
           return {
             creationType: 'derivative',
-            thingConfig,
+            entityConfig,
             baseAction,
             suffix: currentSuffix,
           };

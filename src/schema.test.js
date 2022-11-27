@@ -3,14 +3,14 @@
 
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import type { Enums, GeneralConfig, ThingConfig } from './flowTypes';
+import type { Enums, GeneralConfig, EntityConfig } from './flowTypes';
 
 import composeGqlTypes from './types/composeGqlTypes';
 import composeGqlResolvers from './resolvers/composeGqlResolvers';
 
 describe('graphql schema', () => {
   test('test simle schema', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -37,8 +37,8 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -49,7 +49,7 @@ describe('graphql schema', () => {
   });
 
   test('test schema with enumerations', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -100,12 +100,12 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const enums: Enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
-    const generalConfig: GeneralConfig = { thingConfigs, enums };
+    const generalConfig: GeneralConfig = { entityConfigs, enums };
     const typeDefs = composeGqlTypes(generalConfig);
 
     const resolvers = composeGqlResolvers(generalConfig);
@@ -117,7 +117,7 @@ describe('graphql schema', () => {
   });
 
   test('test schema with embedded fields', () => {
-    const addressConfig: ThingConfig = {
+    const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -131,7 +131,7 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -167,8 +167,8 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const thingConfigs = { Person: personConfig, Address: addressConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Address: addressConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
 
@@ -181,8 +181,8 @@ describe('graphql schema', () => {
   });
 
   test('test schema with duplex fields', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -241,8 +241,8 @@ describe('graphql schema', () => {
         },
       ],
     });
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -253,8 +253,8 @@ describe('graphql schema', () => {
   });
 
   describe('test schemas with differnet variants of inventory', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -313,13 +313,13 @@ describe('graphql schema', () => {
         },
       ],
     });
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     generalConfig.inventory = {
       name: 'test',
       include: {
         Mutation: true,
-        Query: { thing: true, things: true, childThing: true, childThings: true },
+        Query: { entity: true, entities: true, childEntity: true, childEntities: true },
       },
     };
 
@@ -335,12 +335,12 @@ describe('graphql schema', () => {
       expect(schema).not.toBeUndefined();
     });
 
-    test('test schema with only createThing mutations in inventory', () => {
+    test('test schema with only createEntity mutations in inventory', () => {
       generalConfig.inventory = {
         name: 'test',
         include: {
-          Mutation: { createThing: true },
-          Query: { childThing: true, childThings: true },
+          Mutation: { createEntity: true },
+          Query: { childEntity: true, childEntities: true },
         },
       };
 
@@ -357,8 +357,8 @@ describe('graphql schema', () => {
       generalConfig.inventory = {
         name: 'test',
         include: {
-          Mutation: { createThing: ['Person'] },
-          Query: { childThing: true, childThings: true },
+          Mutation: { createEntity: ['Person'] },
+          Query: { childEntity: true, childEntities: true },
         },
       };
 
@@ -383,10 +383,10 @@ describe('graphql schema', () => {
       expect(schema).not.toBeUndefined();
     });
 
-    test('test schema with only thing query in inventory', () => {
+    test('test schema with only entity query in inventory', () => {
       generalConfig.inventory = {
         name: 'test',
-        include: { Query: { childThing: true, childThings: true } },
+        include: { Query: { childEntity: true, childEntities: true } },
       };
 
       typeDefs = composeGqlTypes(generalConfig);

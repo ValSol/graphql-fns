@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 
 import createNodeQueryResolver from './index';
 
 describe('createNodeQueryResolver', () => {
-  test('should create mutation add thing type', () => {
-    const thingConfig: ThingConfig = {
+  test('should create mutation add entity type', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -34,7 +34,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
     const serversideConfig = {};
-    const generalConfig: GeneralConfig = { thingConfigs: { Example: thingConfig } };
+    const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
     const result = createNodeQueryResolver(generalConfig, serversideConfig);
 
     expect(typeof result).toBe('function');

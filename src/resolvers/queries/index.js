@@ -1,29 +1,29 @@
 // @flow
 
-import childThing from './createChildThingQueryResolver';
-import childThings from './createChildThingsQueryResolver';
-import thingDistinctValues from './createThingDistinctValuesQueryResolver';
-import thingCount from './createThingCountQueryResolver';
-import thingFileCount from './createThingFileCountQueryResolver';
-import thingFile from './createThingFileQueryResolver';
-import thingFiles from './createThingFilesQueryResolver';
-import thing from './createThingQueryResolver';
-import things from './createThingsQueryResolver';
-import thingsThroughConnection from './createThingsThroughConnectionQueryResolver';
-import thingsByUnique from './createThingsByUniqueQueryResolver';
+import childEntity from './createChildEntityQueryResolver';
+import childEntities from './createChildEntitiesQueryResolver';
+import entityDistinctValues from './createEntityDistinctValuesQueryResolver';
+import entityCount from './createEntityCountQueryResolver';
+import entityFileCount from './createEntityFileCountQueryResolver';
+import entityFile from './createEntityFileQueryResolver';
+import entityFiles from './createEntityFilesQueryResolver';
+import entity from './createEntityQueryResolver';
+import entities from './createEntitiesQueryResolver';
+import entitiesThroughConnection from './createEntitiesThroughConnectionQueryResolver';
+import entitiesByUnique from './createEntitiesByUniqueQueryResolver';
 
 const queries = {
-  childThing,
-  childThings,
-  thingCount,
-  thingDistinctValues,
-  thingFileCount,
-  thingFile,
-  thingFiles,
-  thing,
-  things,
-  thingsThroughConnection,
-  thingsByUnique,
+  childEntity,
+  childEntities,
+  entityCount,
+  entityDistinctValues,
+  entityFileCount,
+  entityFile,
+  entityFiles,
+  entity,
+  entities,
+  entitiesThroughConnection,
+  entitiesByUnique,
 };
 
 export default queries;

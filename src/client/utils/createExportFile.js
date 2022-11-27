@@ -3,7 +3,7 @@
 import pluralize from 'pluralize';
 import csvStringify from 'csv-stringify';
 
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import coerceDataFromGql from '../../utils/coerceDataFromGql';
 
@@ -17,23 +17,23 @@ const csvStringify2 = (data) =>
 
 const createExportFile = async (
   items: Array<Object>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   //  if returnBlob="true" return blob with items data, if returnBlob="false" create "downloaded" file and return null
   options?: { format: 'csv' | 'json', fileName?: string, returnBlob?: boolean },
 ): Promise<Blob | null> => {
-  const { name } = thingConfig;
+  const { name } = entityConfig;
 
   let content;
   let type;
   let fileExtension;
 
   if (options && options.format === 'csv') {
-    const data = items.map((item) => coerceDataFromGql(item, thingConfig, true));
+    const data = items.map((item) => coerceDataFromGql(item, entityConfig, true));
     content = await csvStringify2(data);
     type = 'text/csv';
     fileExtension = 'csv';
   } else {
-    const data = items.map((item) => coerceDataFromGql(item, thingConfig, true, true));
+    const data = items.map((item) => coerceDataFromGql(item, entityConfig, true, true));
     content = JSON.stringify(data, null, ' ');
     type = 'application/json';
     fileExtension = 'json';

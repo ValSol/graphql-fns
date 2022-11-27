@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import processDeleteDataPrepareArgs from './index';
 
 describe('processDeleteDataPrepareArgs', () => {
-  const personConfig: ThingConfig = {};
-  const placeConfig: ThingConfig = {
+  const personConfig: EntityConfig = {};
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [{ name: 'name', unique: true }],
@@ -79,7 +79,7 @@ describe('processDeleteDataPrepareArgs', () => {
     ],
   });
 
-  const previousThing = {
+  const previousEntity = {
     _id: '5f78230b9f0ecbeb5135b532',
     locations: [
       '5f78230b9f0ecbeb5135b537',
@@ -108,7 +108,7 @@ describe('processDeleteDataPrepareArgs', () => {
       firstName: 'Mark 3',
     };
 
-    const result = processDeleteDataPrepareArgs(data, previousThing, personConfig);
+    const result = processDeleteDataPrepareArgs(data, previousEntity, personConfig);
 
     const expectedResult = {
       _id: '5f78230b9f0ecbeb5135b532',
@@ -125,7 +125,7 @@ describe('processDeleteDataPrepareArgs', () => {
       friend: { connect: null },
     };
 
-    const result = processDeleteDataPrepareArgs(data, previousThing, personConfig);
+    const result = processDeleteDataPrepareArgs(data, previousEntity, personConfig);
 
     const expectedResult = {
       _id: '5f78230b9f0ecbeb5135b532',
@@ -143,7 +143,7 @@ describe('processDeleteDataPrepareArgs', () => {
       friend: { connect: null },
     };
 
-    const result = processDeleteDataPrepareArgs(data, previousThing, personConfig);
+    const result = processDeleteDataPrepareArgs(data, previousEntity, personConfig);
 
     const expectedResult = {
       _id: '5f78230b9f0ecbeb5135b532',

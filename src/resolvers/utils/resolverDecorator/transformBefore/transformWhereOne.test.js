@@ -1,14 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import toGlobalId from '../../toGlobalId';
 import transformWhereOne from './transformWhereOne';
 
 describe('transformWhereOne', () => {
-  const personConfig: ThingConfig = {};
-  const personCloneConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
+  const personCloneConfig: EntityConfig = {};
 
   Object.assign(personConfig, {
     name: 'Person',
@@ -83,7 +83,7 @@ describe('transformWhereOne', () => {
   });
   test('check single id transform', async () => {
     const id = '1234567890';
-    const whereOne = { id: toGlobalId(id, 'thingName') };
+    const whereOne = { id: toGlobalId(id, 'entityName') };
 
     const result = await transformWhereOne(whereOne, personConfig);
 
@@ -105,7 +105,7 @@ describe('transformWhereOne', () => {
 
   test('check single duplex field transform', async () => {
     const clone = '1234567890';
-    const whereOne = { clone: toGlobalId(clone, 'thingName') };
+    const whereOne = { clone: toGlobalId(clone, 'entityName') };
 
     const result = await transformWhereOne(whereOne, personConfig);
 
@@ -126,7 +126,7 @@ describe('transformWhereOne', () => {
 
   test('check array id transform', async () => {
     const id = '1234567890';
-    const whereOne = [{ id: toGlobalId(id, 'thingName') }];
+    const whereOne = [{ id: toGlobalId(id, 'entityName') }];
 
     const result = await transformWhereOne(whereOne, personConfig);
 
@@ -137,7 +137,7 @@ describe('transformWhereOne', () => {
 
   test('check array duplex field transform', async () => {
     const clone = '1234567890';
-    const whereOne = [{ clone: toGlobalId(clone, 'thingName') }];
+    const whereOne = [{ clone: toGlobalId(clone, 'entityName') }];
 
     const result = await transformWhereOne(whereOne, personConfig);
 

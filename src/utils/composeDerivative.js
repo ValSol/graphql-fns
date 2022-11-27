@@ -37,13 +37,13 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
       });
     });
     if (derivativeFields) {
-      Object.keys(derivativeFields).forEach((thingName) => {
-        const thingDerivativeFields = derivativeFields[thingName];
+      Object.keys(derivativeFields).forEach((entityName) => {
+        const entityDerivativeFields = derivativeFields[entityName];
 
-        Object.keys(thingDerivativeFields).forEach((fieldName) => {
-          if (!derivativeKeys.includes(thingDerivativeFields[fieldName])) {
+        Object.keys(entityDerivativeFields).forEach((fieldName) => {
+          if (!derivativeKeys.includes(entityDerivativeFields[fieldName])) {
             throw new TypeError(
-              `Incorrect derivative suffix: "${thingDerivativeFields[fieldName]}" for derivativeField: "${fieldName}" for thingName: "${thingName}" in derivative: "${suffix}"`,
+              `Incorrect derivative suffix: "${entityDerivativeFields[fieldName]}" for derivativeField: "${fieldName}" for entityName: "${entityName}" in derivative: "${suffix}"`,
             );
           }
         });

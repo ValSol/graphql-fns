@@ -1,18 +1,18 @@
 // @flow
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
-import createPushIntoThingInputType from '../../../types/inputs/createPushIntoThingInputType';
+import createPushIntoEntityInputType from '../../../types/inputs/createPushIntoEntityInputType';
 import getInputFieldNames from '../../../utils/getInputFieldNames';
 
 const transformDataForPush = (
   currentData: { [fieldName: string]: any },
   args: { data: { [fieldName: string]: any }, positions?: { [fieldName: string]: Array<number> } },
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): Object => {
   const { data, positions } = args;
 
-  const pushFields = getInputFieldNames(thingConfig, createPushIntoThingInputType);
+  const pushFields = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
 
   const result = {};
 

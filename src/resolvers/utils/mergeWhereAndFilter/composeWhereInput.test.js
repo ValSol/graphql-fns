@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeWhereInput from './composeWhereInput';
 
 describe('composeWhereInput', () => {
-  const thingConfig: ThingConfig = {};
-  Object.assign(thingConfig, {
+  const entityConfig: EntityConfig = {};
+  Object.assign(entityConfig, {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -62,12 +62,12 @@ describe('composeWhereInput', () => {
       {
         name: 'relationalField',
         index: true,
-        config: thingConfig,
+        config: entityConfig,
       },
       {
         name: 'relationalFields',
         index: true,
-        config: thingConfig,
+        config: entityConfig,
         array: true,
       },
     ],
@@ -77,7 +77,7 @@ describe('composeWhereInput', () => {
     const where = undefined;
 
     const expectedResult = { where: {}, lookups: [] };
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
 
     expect(result).toEqual(expectedResult);
   });
@@ -86,7 +86,7 @@ describe('composeWhereInput', () => {
     const where = {};
 
     const expectedResult = { where: {}, lookups: [] };
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
 
     expect(result).toEqual(expectedResult);
   });
@@ -96,7 +96,7 @@ describe('composeWhereInput', () => {
 
     const expectedResult = { where: { _id: '6096802438f0d5bb46164881' }, lookups: [] };
     const notCreateObjectId = true;
-    const result = composeWhereInput(where, thingConfig, notCreateObjectId);
+    const result = composeWhereInput(where, entityConfig, notCreateObjectId);
 
     expect(result).toEqual(expectedResult);
   });
@@ -106,7 +106,7 @@ describe('composeWhereInput', () => {
 
     const expectedResult = { where: { $or: [{ _id: '6096802438f0d5bb46164881' }] }, lookups: [] };
     const notCreateObjectId = true;
-    const result = composeWhereInput(where, thingConfig, notCreateObjectId);
+    const result = composeWhereInput(where, entityConfig, notCreateObjectId);
 
     expect(result).toEqual(expectedResult);
   });
@@ -128,7 +128,7 @@ describe('composeWhereInput', () => {
       relationalFields_size: 1,
     };
 
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
         name: { $eq: 'Вася' },
@@ -180,7 +180,7 @@ describe('composeWhereInput', () => {
       ],
     };
 
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
         $or: [
@@ -222,7 +222,7 @@ describe('composeWhereInput', () => {
       },
     };
 
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
         'relationalField_.name': { $eq: 'Вася' },
@@ -250,9 +250,9 @@ describe('composeWhereInput', () => {
   });
 
   test('should return result for tree for relational where', () => {
-    const menusectionConfig: ThingConfig = {};
-    const menuConfig: ThingConfig = {};
-    const restaurantConfig: ThingConfig = {};
+    const menusectionConfig: EntityConfig = {};
+    const menuConfig: EntityConfig = {};
+    const restaurantConfig: EntityConfig = {};
 
     const accessConfig = {
       name: 'Access',
@@ -371,7 +371,7 @@ describe('composeWhereInput', () => {
   });
 
   test('should return result for tree for relational where', () => {
-    const restaurantLevelConfig: ThingConfig = {
+    const restaurantLevelConfig: EntityConfig = {
       name: 'RestaurantLevel',
       type: 'tangible',
 
@@ -434,7 +434,7 @@ describe('composeWhereInput', () => {
       _id_gt: '123456780',
     };
 
-    const result = composeWhereInput(where, thingConfig);
+    const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
         _id: { $gt: '123456780' },

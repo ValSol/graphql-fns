@@ -2,13 +2,13 @@
 
 const fromGlobalId = (
   globalId: string | null,
-): { _id: null | string, thingName: string, suffix: string } => {
-  if (!globalId) return { _id: null, thingName: '', suffix: '' }; // eslint-disable-line no-underscore-dangle
+): { _id: null | string, entityName: string, suffix: string } => {
+  if (!globalId) return { _id: null, entityName: '', suffix: '' }; // eslint-disable-line no-underscore-dangle
 
-  const [_id, thingName, suffix] = atob(globalId).split(':');
+  const [_id, entityName, suffix] = atob(globalId).split(':');
 
   // $FlowFixMe
-  return _id ? { _id, thingName, suffix } : { id: null, thingName: '', suffix: '' };
+  return _id ? { _id, entityName, suffix } : { id: null, entityName: '', suffix: '' };
 };
 
 export default fromGlobalId;

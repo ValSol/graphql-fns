@@ -1,10 +1,13 @@
 // @flow
-import type { ThingConfig, UploadOptions } from '../../../flowTypes';
+import type { EntityConfig, UploadOptions } from '../../../flowTypes';
 
-type Result = Map<ThingConfig, Array<number>>;
+type Result = Map<EntityConfig, Array<number>>;
 
-const separateFileFieldsAttributes = (options: UploadOptions, thingConfig: ThingConfig): Result => {
-  const { fileFields } = thingConfig;
+const separateFileFieldsAttributes = (
+  options: UploadOptions,
+  entityConfig: EntityConfig,
+): Result => {
+  const { fileFields } = entityConfig;
 
   if (!fileFields) throw new TypeError('There are no fileFields for upload!');
   const fieldsObject = fileFields.reduce((prev, attributes) => {

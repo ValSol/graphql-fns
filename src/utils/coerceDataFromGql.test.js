@@ -1,30 +1,30 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import coerceDataFromGql from './coerceDataFromGql';
 
 describe('coerceDataFromGql', () => {
   describe('should coerce realational & duplex fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalField2',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
@@ -45,7 +45,7 @@ describe('coerceDataFromGql', () => {
         duplexField: '5cefb33f05d6be4b7b59842c',
       };
 
-      const result = coerceDataFromGql(data, thingConfig);
+      const result = coerceDataFromGql(data, entityConfig);
       expect(result).toEqual(expectedResult);
     });
 
@@ -64,31 +64,31 @@ describe('coerceDataFromGql', () => {
         duplexField: '',
       };
 
-      const result = coerceDataFromGql(data, thingConfig);
+      const result = coerceDataFromGql(data, entityConfig);
       expect(result).toEqual(expectedResult);
     });
   });
 
   test('should coerce realational & duplex fields in embedded fields', () => {
-    const thingConfig: ThingConfig = {};
-    const embeddedConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {};
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
     };
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [{ name: 'textField' }],
@@ -146,13 +146,13 @@ describe('coerceDataFromGql', () => {
       ],
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce embedded null fields', () => {
-    const thingConfig: ThingConfig = {};
-    const embeddedConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {};
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -161,7 +161,7 @@ describe('coerceDataFromGql', () => {
         },
       ],
     };
-    Object.assign(thingConfig, {
+    Object.assign(entityConfig, {
       name: 'Example',
       textFields: [{ name: 'textField' }],
       embeddedFields: [
@@ -214,12 +214,12 @@ describe('coerceDataFromGql', () => {
       ],
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce file fields', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -232,8 +232,8 @@ describe('coerceDataFromGql', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -295,12 +295,12 @@ describe('coerceDataFromGql', () => {
       ],
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce file null fields', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -313,8 +313,8 @@ describe('coerceDataFromGql', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -352,30 +352,30 @@ describe('coerceDataFromGql', () => {
       pictures: [],
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce file null fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalField2',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
@@ -395,30 +395,30 @@ describe('coerceDataFromGql', () => {
       duplexField: '',
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce realational & duplex null fields 2', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
-          config: thingConfig,
+          config: entityConfig,
         },
         {
           name: 'relationalField2',
-          config: thingConfig,
+          config: entityConfig,
           array: true,
         },
       ],
       duplexFields: [
         {
           name: 'duplexField',
-          config: thingConfig,
+          config: entityConfig,
           oppositeName: 'duplexField',
         },
       ],
@@ -438,13 +438,13 @@ describe('coerceDataFromGql', () => {
       duplexField: '',
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce dateTime fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       dateTimeFields: [
@@ -464,13 +464,13 @@ describe('coerceDataFromGql', () => {
       dateTimeField: '2019-06-09T22:00:00.000Z',
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce empty dateTime fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       dateTimeFields: [
@@ -490,13 +490,13 @@ describe('coerceDataFromGql', () => {
       dateTimeField: null,
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce geospatial fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -617,13 +617,13 @@ describe('coerceDataFromGql', () => {
       },
     };
 
-    const result = coerceDataFromGql(data, thingConfig);
+    const result = coerceDataFromGql(data, entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should coerce dateTime fields and save id, createdAt, updatedAt fields', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       dateTimeFields: [
@@ -648,7 +648,7 @@ describe('coerceDataFromGql', () => {
       dateTimeField: '2019-06-09T22:00:00.000Z',
     };
 
-    const result = coerceDataFromGql(data, thingConfig, true);
+    const result = coerceDataFromGql(data, entityConfig, true);
     expect(result).toEqual(expectedResult);
   });
 });

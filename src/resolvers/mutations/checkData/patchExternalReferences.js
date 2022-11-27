@@ -1,5 +1,5 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 
 const patch = (externalReferences, data, filterObj, fieldsObj) => {
@@ -83,9 +83,9 @@ const patchExternalReferences = (
   externalReferences: Array<string | null>,
   prevData: { [key: string]: any },
   prevFilter: Array<Object>,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): { data: { [key: string]: any }, filter: Array<Object> } => {
-  const fieldsObj = composeFieldsObject(thingConfig);
+  const fieldsObj = composeFieldsObject(entityConfig);
 
   const filter = prevFilter.map((filterObj) =>
     patch(externalReferences, prevData, filterObj, fieldsObj),

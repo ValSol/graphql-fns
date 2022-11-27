@@ -25,8 +25,8 @@ const mergeInventories = (
           result[permission].include.Query = {};
         }
 
-        result[permission].include.Query[action] = Query[action].reduce((prev, thingName) => {
-          prev[thingName] = true; // eslint-disable-line no-param-reassign
+        result[permission].include.Query[action] = Query[action].reduce((prev, entityName) => {
+          prev[entityName] = true; // eslint-disable-line no-param-reassign
           return prev;
         }, {});
       });
@@ -42,10 +42,13 @@ const mergeInventories = (
           result[permission].include.Mutation = {};
         }
 
-        result[permission].include.Mutation[action] = Mutation[action].reduce((prev, thingName) => {
-          prev[thingName] = true; // eslint-disable-line no-param-reassign
-          return prev;
-        }, {});
+        result[permission].include.Mutation[action] = Mutation[action].reduce(
+          (prev, entityName) => {
+            prev[entityName] = true; // eslint-disable-line no-param-reassign
+            return prev;
+          },
+          {},
+        );
       });
     }
   });

@@ -1,0 +1,113 @@
+// @flow
+
+import deepEqual from 'fast-deep-equal';
+
+import type { EntityConfig } from '../../../../../flowTypes';
+
+import composeFieldsObject from '../../../../../utils/composeFieldsObject';
+import processDeleteData from '../../../processDeleteData';
+import deleteTree from './deleteTree';
+
+const mixTrees = (
+  tree: Object,
+  tree2: Object,
+  idsAndEntityConfigs: null | [Object, Object, EntityConfig],
+  core: Map<EntityConfig, Array<Object>>,
+): Object => {
+  if (!idsAndEntityConfigs) return tree;
+
+  const [currentBranch, , parentEntityConfig] = idsAndEntityConfigs;
+
+  const fieldNames = Object.keys(currentBranch);
+
+  const fieldsObject = composeFieldsObject(parentEntityConfig);
+
+  const result = fieldNames.reduce((prev, fieldName) => {
+    const {
+      attributes: { array },
+    } = fieldsObject[fieldName];
+
+    if (array) {
+      if (tree[fieldName] === undefined) {
+        currentBranch.forEach((currentBranchItem) => deleteTree(currentBranchItem, core));
+
+        return prev;
+      }
+
+      const unusedTreeIndexes = [];
+      const usedTree2Indexes = [];
+      prev[fieldName] = []; // eslint-disable-line no-param-reassign
+      tree[fieldName].forEach((treeItem, i) => {
+        const index = tree2[fieldName].findIndex((tree2Item) => deepEqual(treeItem, tree2Item));
+
+        if (index !== -1 && !usedTree2Indexes.includes(index)) {
+          usedTree2Indexes.push(index);
+          const [, { _id: id }] = currentBranch[fieldName][index];
+          prev[fieldName].push(id);
+        } else {
+          unusedTreeIndexes.push(i);
+          prev[fieldName].push(null); // insert dummy value to replace in next loop
+        }
+      });
+
+      unusedTreeIndexes.forEach((i) => {
+        const firstUnusedTree2Index = tree2[fieldName].findIndex(
+          (item, j) => !usedTree2Indexes.includes(j),
+        );
+
+        if (firstUnusedTree2Index !== -1) {
+          usedTree2Indexes.push(firstUnusedTree2Index);
+
+          const [, entity, entityConfig] = currentBranch[fieldName][firstUnusedTree2Index];
+
+          processDeleteData(
+            entity,
+            core,
+            entityConfig,
+            true, // forDelete
+          );
+
+          // eslint-disable-next-line no-param-reassign
+          prev[fieldName][i] = mixTrees(
+            tree[fieldName][i],
+            tree2[fieldName][firstUnusedTree2Index],
+            currentBranch[fieldName][firstUnusedTree2Index],
+            core,
+          );
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[fieldName][i] = mixTrees(tree[fieldName][i], {}, null, core);
+        }
+      });
+
+      tree2[fieldName].forEach((tree2Item, i) => {
+        if (!usedTree2Indexes.includes(i)) {
+          deleteTree(currentBranch[fieldName][i], core);
+        }
+      });
+    } else if (tree[fieldName] === undefined) {
+      deleteTree(currentBranch[fieldName], core);
+    } else if (deepEqual(tree[fieldName], tree2[fieldName])) {
+      const [, { _id: id }] = currentBranch[fieldName];
+
+      prev[fieldName] = id; // eslint-disable-line no-param-reassign, no-underscore-dangle
+    } else {
+      const [, entity, entityConfig] = currentBranch[fieldName];
+
+      processDeleteData(
+        entity,
+        core,
+        entityConfig,
+        true, // forDelete
+      );
+
+      prev[fieldName] = mixTrees(tree[fieldName], tree2[fieldName], currentBranch[fieldName], core); // eslint-disable-line no-param-reassign
+    }
+
+    return prev;
+  }, {});
+
+  return Object.assign(tree, result);
+};
+
+export default mixTrees;

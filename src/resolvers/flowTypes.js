@@ -1,11 +1,11 @@
 // @flow
 
-import type { GeneralConfig, Periphery, ServersideConfig, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, Periphery, ServersideConfig, EntityConfig } from '../flowTypes';
 
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 export type ResolverCreatorArg = {
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
@@ -21,7 +21,7 @@ export type ResolverArg = {
 
 export type PreparedData = {
   mains: Array<Object>,
-  core: Map<ThingConfig, Array<Object>>,
+  core: Map<EntityConfig, Array<Object>>,
   periphery: Periphery,
 };
 
@@ -34,7 +34,7 @@ export type PrepareBulkData = (
 export type Report = (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-) => Promise<null | (({ previous: Array<ThingConfig>, current: Array<ThingConfig> }) => void)>;
+) => Promise<null | (({ previous: Array<EntityConfig>, current: Array<EntityConfig> }) => void)>;
 
 export type GetPrevious = (
   actionGeneralName: string,

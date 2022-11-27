@@ -198,10 +198,10 @@ type SimplifiedRelationalField = {
   +freeze?: boolean,
 };
 
-export type SimplifiedThingConfig = {
+export type SimplifiedEntityConfig = {
   name: string,
   type?: string, // 'embedded', 'file', 'tangible', 'virtual',
-  counter?: boolean, // if true thing has the 'counter' field
+  counter?: boolean, // if true entity has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<SimplifiedDuplexField>,
   embeddedFields?: $ReadOnlyArray<SimplifiedEmbeddedField>,
@@ -221,15 +221,15 @@ export type SimplifiedThingConfig = {
   list?: $ReadOnlyArray<ListColumn>,
 };
 
-export type ThingConfig = {
+export type EntityConfig = {
   name: string,
   type: string, // embedded, file, tangible (default), virtual,
-  counter?: boolean, // if true thing has the 'counter' field
+  counter?: boolean, // if true entity has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<{
     +name: string,
     +array?: boolean,
-    +config: ThingConfig,
+    +config: EntityConfig,
     +index?: boolean,
     +oppositeName: string,
     +required?: boolean,
@@ -241,20 +241,20 @@ export type ThingConfig = {
     +name: string,
     +required?: boolean,
     +array?: boolean,
-    +config: ThingConfig,
+    +config: EntityConfig,
     +freeze?: boolean,
   }>,
   fileFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
     +array?: boolean,
-    +config: ThingConfig,
+    +config: EntityConfig,
     +freeze?: boolean,
   }>,
   relationalFields?: $ReadOnlyArray<{
     +name: string,
     +array?: boolean,
-    +config: ThingConfig,
+    +config: EntityConfig,
     +index?: boolean,
     +unique?: boolean,
     +required?: boolean,
@@ -277,7 +277,7 @@ export type ThingConfig = {
 export type DuplexField = {|
   +name: string,
   +array?: boolean,
-  +config: ThingConfig,
+  +config: EntityConfig,
   +index?: boolean,
   +oppositeName: string,
   +required?: boolean,
@@ -290,7 +290,7 @@ export type EmbeddedField = {|
   +name: string,
   +required?: boolean,
   +array?: boolean,
-  +config: ThingConfig,
+  +config: EntityConfig,
   +freeze?: boolean,
 |};
 
@@ -298,14 +298,14 @@ export type FileField = {|
   +name: string,
   +required?: boolean,
   +array?: boolean,
-  +config: ThingConfig,
+  +config: EntityConfig,
   +freeze?: boolean,
 |};
 
 type RelationalField = {|
   +name: string,
   +array?: boolean,
-  +config: ThingConfig,
+  +config: EntityConfig,
   +index?: boolean,
   +required?: boolean,
   +unique?: boolean,
@@ -361,7 +361,7 @@ export type OrdinaryFieldObject =
       +attributes: TextField,
     |};
 
-export type ThingConfigObject = {
+export type EntityConfigObject = {
   +[fieldName: string]:  // eslint-disable-line flowtype/space-after-type-colon
     | OrdinaryFieldObject
     | {|
@@ -394,32 +394,32 @@ export type Enums = $ReadOnlyArray<{|
   +enum: $ReadOnlyArray<string>,
 |}>;
 
-type thingNamesList = true | $ReadOnlyArray<string>;
+type entityNamesList = true | $ReadOnlyArray<string>;
 
 type InverntoryOptions = {
   // eslint-disable-next-line flowtype/space-after-type-colon
   Query?:
     | true
     | {
-        // 'queryName' may be: thing, things, , 'thingDistinctValues' or any custom query names
-        +[queryName: string]: thingNamesList,
+        // 'queryName' may be: entity, entities, , 'entityDistinctValues' or any custom query names
+        +[queryName: string]: entityNamesList,
       },
   // eslint-disable-next-line flowtype/space-after-type-colon
   Mutation?:
     | true
     | {
-        // 'mutationName' may be: 'copyThing', 'createThing', 'createManyThings', 'updateManyThings', 'updateThing', 'deleteThing', ...
-        // ... 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+        // 'mutationName' may be: 'copyEntity', 'createEntity', 'createManyEntities', 'updateManyEntities', 'updateEntity', 'deleteEntity', ...
+        // ... 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
 
-        +[mutationName: string]: thingNamesList,
+        +[mutationName: string]: entityNamesList,
       },
   // eslint-disable-next-line flowtype/space-after-type-colon
   Subscription?:
     | true
     | {
-        +createdThing?: thingNamesList,
-        +updatedThing?: thingNamesList,
-        +deletedThing?: thingNamesList,
+        +createdEntity?: entityNamesList,
+        +updatedEntity?: entityNamesList,
+        +deletedEntity?: entityNamesList,
       },
 };
 
@@ -429,7 +429,7 @@ export type Inventory = {
   exclude?: true | InverntoryOptions,
 };
 
-type NotFieldyThingConfigFields = {
+type NotFieldyEntityConfigFields = {
   name: string,
   embedded?: boolean,
   custom?: boolean,
@@ -443,40 +443,40 @@ export type DerivativeInputs = {
   suffix: string,
   +allow: {
     // eslint-disable-next-line flowtype/generic-spacing
-    [thingName: string]: Array<
-      | 'FilesOfThingOptionsInput'
+    [entityName: string]: Array<
+      | 'FilesOfEntityOptionsInput'
       | 'FileWhereInput'
       | 'FileWhereOneInput'
       | 'ImportOptionsInput'
       | 'PaginationInput'
-      | 'PushIntoThingInput'
-      | 'thingCreateInput'
-      | 'thingDistinctValuesOptionsInput'
-      | 'thingNearInput'
-      | 'thingPushPositionsInput'
-      | 'thingReorderUploadedInput'
-      | 'thingSortInput'
-      | 'thingUpdateInput'
-      | 'thingWhereInput'
-      | 'thingWhereOneInput'
-      | 'UploadFilesToThingInput',
+      | 'PushIntoEntityInput'
+      | 'entityCreateInput'
+      | 'entityDistinctValuesOptionsInput'
+      | 'entityNearInput'
+      | 'entityPushPositionsInput'
+      | 'entityReorderUploadedInput'
+      | 'entitySortInput'
+      | 'entityUpdateInput'
+      | 'entityWhereInput'
+      | 'entityWhereOneInput'
+      | 'UploadFilesToEntityInput',
     >,
   },
 };
 
 export type GeneralConfig = {
-  +thingConfigs: { [thingConfigName: string]: ThingConfig },
+  +entityConfigs: { [entityConfigName: string]: EntityConfig },
   +custom?: {
     +Input?: {
       +[customInputName: string]: {
         +name: string,
-        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
         +fieldNames: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +fieldTypes: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
       },
@@ -484,85 +484,85 @@ export type GeneralConfig = {
     +Query?: {
       +[customQueryName: string]: {
         +name: string,
-        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
         +argNames: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +argTypes: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
-        +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
+        +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
+        +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
       },
     },
     +Mutation?: {
       +[customMutationName: string]: {
         +name: string,
-        +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
+        +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
         +argNames: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
         +argTypes: (
-          thingConfig: ThingConfig,
+          entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
-        +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-        +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
+        +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
+        +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
       },
     },
   },
   +derivative?: {
-    // whole derivative name = thingName (baseName) + suffix
+    // whole derivative name = entityName (baseName) + suffix
     +[suffix: string]: {
       +suffix: string,
       +allow: {
         // eslint-disable-next-line flowtype/generic-spacing
-        [thingName: string]: Array<
-          | 'thing'
-          | 'childThing'
-          | 'thingCount'
-          | 'thingDistinctValues'
-          | 'things'
-          | 'childThings'
-          | 'thingsByUnique'
-          | 'thingFileCount'
-          | 'thingFile'
-          | 'thingFiles'
-          | 'copyThing'
-          | 'copyManyThings'
-          | 'copyThingWithChildren'
-          | 'copyManyThingsWithChildren'
-          | 'createThing'
-          | 'createManyThings'
-          | 'deleteFilteredThings'
-          | 'deleteFilteredThingsReturnScalar'
-          | 'deleteFilteredThingsWithChildren'
-          | 'deleteFilteredThingsWithChildrenReturnScalar'
-          | 'deleteManyThings'
-          | 'deleteManyThingsWithChildren'
-          | 'deleteThing'
-          | 'deleteThingWithChildren'
-          | 'importThings'
-          | 'pushIntoThing'
-          | 'updateFilteredThings'
-          | 'updateFilteredThingsReturnScalar'
-          | 'updateManyThings'
-          | 'updateThing'
-          | 'uploadFilesToThing'
-          | 'uploadThingFiles',
+        [entityName: string]: Array<
+          | 'entity'
+          | 'childEntity'
+          | 'entityCount'
+          | 'entityDistinctValues'
+          | 'entities'
+          | 'childEntities'
+          | 'entitiesByUnique'
+          | 'entityFileCount'
+          | 'entityFile'
+          | 'entityFiles'
+          | 'copyEntity'
+          | 'copyManyEntities'
+          | 'copyEntityWithChildren'
+          | 'copyManyEntitiesWithChildren'
+          | 'createEntity'
+          | 'createManyEntities'
+          | 'deleteFilteredEntities'
+          | 'deleteFilteredEntitiesReturnScalar'
+          | 'deleteFilteredEntitiesWithChildren'
+          | 'deleteFilteredEntitiesWithChildrenReturnScalar'
+          | 'deleteManyEntities'
+          | 'deleteManyEntitiesWithChildren'
+          | 'deleteEntity'
+          | 'deleteEntityWithChildren'
+          | 'importEntities'
+          | 'pushIntoEntity'
+          | 'updateFilteredEntities'
+          | 'updateFilteredEntitiesReturnScalar'
+          | 'updateManyEntities'
+          | 'updateEntity'
+          | 'uploadFilesToEntity'
+          | 'uploadEntityFiles',
         >,
       },
-      +includeFields?: { [thingName: string]: Array<string> },
-      +excludeFields?: { [thingName: string]: Array<string> },
-      +freezedFields?: { [thingName: string]: Array<string> },
-      +unfreezedFields?: { [thingName: string]: Array<string> },
+      +includeFields?: { [entityName: string]: Array<string> },
+      +excludeFields?: { [entityName: string]: Array<string> },
+      +freezedFields?: { [entityName: string]: Array<string> },
+      +unfreezedFields?: { [entityName: string]: Array<string> },
       +addFields?: {
-        [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
+        [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
       },
-      +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
+      +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
     },
   },
   +derivativeInputs?: { +[suffix: string]: DerivativeInputs },
@@ -574,20 +574,20 @@ export type ObjectSignatureMethods = {
   // the same code as used above in GeneralConfig for Input
   // when the name method return "" (empty string) => object will be rejected
   +name: string,
-  +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  +fieldNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-  +fieldTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
+  +fieldNames: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +fieldTypes: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
 };
 
 export type ActionSignatureMethods = {
   // the same code as used above in GeneralConfig for Query & Mutation
   // when the name method return "" (empty string) => action will be rejected
   +name: string,
-  +specificName: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  +argNames: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-  +argTypes: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
-  +type: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => string,
-  +config: (thingConfig: ThingConfig, generalConfig: GeneralConfig) => null | ThingConfig,
+  +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
+  +argNames: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +argTypes: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
+  +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
 };
 
 // equal to previous code of 'custom' property
@@ -607,82 +607,82 @@ export type DerivativeAttributes = {
   +suffix: string,
   +allow: {
     // eslint-disable-next-line flowtype/generic-spacing
-    [thingName: string]: Array<
-      | 'thing'
-      | 'childThing'
-      | 'thingCount'
-      | 'thingDistinctValues'
-      | 'things'
-      | 'childThings'
-      | 'thingsByUnique'
-      | 'thingFileCount'
-      | 'thingFile'
-      | 'thingFiles'
-      | 'copyThing'
-      | 'copyManyThings'
-      | 'copyThingWithChildren'
-      | 'copyManyThingsWithChildren'
-      | 'createThing'
-      | 'createManyThings'
-      | 'deleteFilteredThings'
-      | 'deleteFilteredThingsReturnScalar'
-      | 'deleteFilteredThingsWithChildren'
-      | 'deleteFilteredThingsWithChildrenReturnScalar'
-      | 'deleteManyThings'
-      | 'deleteManyThingsWithChildren'
-      | 'deleteThing'
-      | 'deleteThingWithChildren'
-      | 'importThings'
-      | 'pushIntoThing'
-      | 'updateFilteredThings'
-      | 'updateFilteredThingsReturnScalar'
-      | 'updateManyThings'
-      | 'updateThing'
-      | 'uploadFilesToThing'
-      | 'uploadThingFiles',
+    [entityName: string]: Array<
+      | 'entity'
+      | 'childEntity'
+      | 'entityCount'
+      | 'entityDistinctValues'
+      | 'entities'
+      | 'childEntities'
+      | 'entitiesByUnique'
+      | 'entityFileCount'
+      | 'entityFile'
+      | 'entityFiles'
+      | 'copyEntity'
+      | 'copyManyEntities'
+      | 'copyEntityWithChildren'
+      | 'copyManyEntitiesWithChildren'
+      | 'createEntity'
+      | 'createManyEntities'
+      | 'deleteFilteredEntities'
+      | 'deleteFilteredEntitiesReturnScalar'
+      | 'deleteFilteredEntitiesWithChildren'
+      | 'deleteFilteredEntitiesWithChildrenReturnScalar'
+      | 'deleteManyEntities'
+      | 'deleteManyEntitiesWithChildren'
+      | 'deleteEntity'
+      | 'deleteEntityWithChildren'
+      | 'importEntities'
+      | 'pushIntoEntity'
+      | 'updateFilteredEntities'
+      | 'updateFilteredEntitiesReturnScalar'
+      | 'updateManyEntities'
+      | 'updateEntity'
+      | 'uploadFilesToEntity'
+      | 'uploadEntityFiles',
     >,
   },
-  +includeFields?: { [thingName: string]: Array<string> },
-  +excludeFields?: { [thingName: string]: Array<string> },
-  +freezedFields?: { [thingName: string]: Array<string> },
-  +unfreezedFields?: { [thingName: string]: Array<string> },
+  +includeFields?: { [entityName: string]: Array<string> },
+  +excludeFields?: { [entityName: string]: Array<string> },
+  +freezedFields?: { [entityName: string]: Array<string> },
+  +unfreezedFields?: { [entityName: string]: Array<string> },
   +addFields?: {
-    [thingName: string]: $Diff<SimplifiedThingConfig, NotFieldyThingConfigFields>,
+    [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
   },
-  +derivativeFields?: { [thingName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
+  +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
       'Query',
-      // "string" for 'thing', 'childThing', 'things', 'childThings', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query
+      // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', '', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
       string,
     ]
   | [
       'Mutation',
-      // "string" for 'copyThing', 'copyManyThings', 'copyThingWithChildren', 'copyManyThingsWithChildren', 'createThing', 'createManyThings',
-      // ... 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
-      // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+      // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
+      // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
+      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
       string,
     ]
-  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing'];
+  | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity'];
 export type ThreeSegmentInventoryChain =
   | [
       'Query',
-      // first "string" for 'thing', 'childThing', 'things', 'childThings', 'thingsByUnique', '', 'thingDistinctValues', 'thingFile', 'thingFiles', 'thingFileCount' or custom query, second for thing name
+      // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', '', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
       string,
       string,
     ]
   | [
       'Mutation',
-      // "string" for 'copyThing', 'copyManyThings', 'copyThingWithChildren', 'copyManyThingsWithChildren', 'createThing', 'createManyThings',
-      // ... 'updateFilteredThings', 'updateManyThings', 'updateThing', 'deleteFilteredThings', 'deleteManyThings', ...
-      // ... 'deleteThing', 'deleteThingWithChildren', 'pushIntoThing', 'uploadFilesToThing' or custom mutation
+      // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
+      // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
+      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
       string,
-      string, //  second "string" for thing name
+      string, //  second "string" for entity name
     ]
-  | ['Subscription', 'createdThing' | 'updatedThing' | 'deletedThing', string]; //  "string" for thing name
+  | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity', string]; //  "string" for entity name
 
 export type InventoryСhain =
   | OneSegmentInventoryChain
@@ -707,14 +707,14 @@ export type ServersideConfig = {
   +transactions?: boolean,
   +Query?: {
     +[customQueryName: string]: (
-      thingConfig: ThingConfig,
+      entityConfig: EntityConfig,
       generalConfig: GeneralConfig,
       serversideConfig: ServersideConfig,
     ) => Function,
   },
   +Mutation?: {
     +[customMutationName: string]: (
-      thingConfig: ThingConfig,
+      entityConfig: EntityConfig,
       generalConfig: GeneralConfig,
       serversideConfig: ServersideConfig,
     ) => Function,
@@ -730,7 +730,7 @@ export type ServersideConfig = {
 
   +inventoryByPermissions?: InventoryByPermissions, // "inventoryByPermissions" & "getActionFilter" are mutualy used
   +getActionFilter?: (
-    thingName: string,
+    entityName: string,
     context: Object,
   ) => Promise<{ [reight: string]: Array<Object> }>,
   +saveFiles?: {
@@ -753,13 +753,13 @@ export type UploadOptions = {|
 
 // eslint-disable-next-line flowtype/generic-spacing
 export type Periphery = Map<
-  ThingConfig,
+  EntityConfig,
   {
     [oppositeName: string]: {|
       +oppositeIds: Array<string>,
       +array: boolean,
       +name: string,
-      +oppositeConfig: ThingConfig,
+      +oppositeConfig: EntityConfig,
     |},
   },
 >;
@@ -816,8 +816,6 @@ export type ClientFieldsOptions = {
   shift: number,
 };
 
-export type RouterQuery = { create?: '', delete?: '', id?: string, thing: string };
-
 export type BoleanVariant = { fieldVariant: 'booleanField', value: 'all' | boolean };
 export type EnumVariant = {
   fieldVariant: 'enumField',
@@ -841,23 +839,23 @@ export type AdminListContextState = {
   masks: { [fieldName: string]: BitwiseArray },
   loading: boolean,
   filters: AdminFilters,
-  config: ThingConfig | null,
+  config: EntityConfig | null,
   outdated: boolean,
 };
 
 export type InputCreator = (
-  thingConfig: ThingConfig,
-) => [string, string, { [inputSpecificName: string]: [InputCreator, ThingConfig] }];
+  entityConfig: EntityConfig,
+) => [string, string, { [inputSpecificName: string]: [InputCreator, EntityConfig] }];
 
 export type ActionAttributes = {
   actionGeneralName: (suffix?: string) => string,
   actionType: 'Mutation' | 'Query',
-  actionAllowed: (thingConfig: ThingConfig) => boolean,
+  actionAllowed: (entityConfig: EntityConfig) => boolean,
   actionName: (baseName: string, suffix?: string) => string,
   inputCreators: Array<InputCreator>,
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
-  actionReturnString: (suffix: string) => (thingConfig: ThingConfig) => string,
+  actionReturnString: (suffix: string) => (entityConfig: EntityConfig) => string,
   actionReturnConfig: boolean,
 };
 
@@ -865,6 +863,6 @@ export type GqlActionData = {
   actionType: string,
   actionName: string,
   suffix?: string,
-  thingName: string,
+  entityName: string,
   composeOptions: Function,
 };

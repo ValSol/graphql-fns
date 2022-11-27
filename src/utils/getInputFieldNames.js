@@ -1,12 +1,12 @@
 // @flow
 
-import type { InputCreator, ThingConfig } from '../flowTypes';
+import type { InputCreator, EntityConfig } from '../flowTypes';
 
-const createPushIntoThingInputType = (
-  thingConfig: ThingConfig,
+const createPushIntoEntityInputType = (
+  entityConfig: EntityConfig,
   inputCreator: InputCreator,
 ): Array<string> => {
-  const [, inputDefinition] = inputCreator(thingConfig);
+  const [, inputDefinition] = inputCreator(entityConfig);
 
   if (!inputDefinition) return [];
 
@@ -21,4 +21,4 @@ const createPushIntoThingInputType = (
   return result;
 };
 
-export default createPushIntoThingInputType;
+export default createPushIntoEntityInputType;

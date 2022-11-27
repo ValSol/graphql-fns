@@ -1,15 +1,15 @@
 // @flow
 /* eslint-env jest */
 
-import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../../flowTypes';
 
 import composeMutation from './composeMutation';
 
 describe('composeMutation', () => {
-  const loadThing: ActionSignatureMethods = {
-    name: 'loadThing',
-    specificName(thingConfig) {
-      const { name } = thingConfig;
+  const loadEntity: ActionSignatureMethods = {
+    name: 'loadEntity',
+    specificName(entityConfig) {
+      const { name } = entityConfig;
       return `load${name}`;
     },
     argNames() {
@@ -18,19 +18,19 @@ describe('composeMutation', () => {
     argTypes() {
       return ['String!'];
     },
-    type(thingConfig) {
-      const { name } = thingConfig;
+    type(entityConfig) {
+      const { name } = entityConfig;
       return `[${name}!]!`;
     },
-    config(thingConfig) {
-      return thingConfig;
+    config(entityConfig) {
+      return entityConfig;
     },
   };
 
-  const tokenForThing: ActionSignatureMethods = {
-    name: 'tokenForThing',
-    specificName(thingConfig) {
-      const { name } = thingConfig;
+  const tokenForEntity: ActionSignatureMethods = {
+    name: 'tokenForEntity',
+    specificName(entityConfig) {
+      const { name } = entityConfig;
       return `tokenFor${name}`;
     },
     argNames() {
@@ -45,7 +45,7 @@ describe('composeMutation', () => {
 
   const prefixName = 'Home';
 
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -54,12 +54,12 @@ describe('composeMutation', () => {
       },
     ],
   };
-  const thingConfigs = { Example: thingConfig };
-  const custom = { Mutation: { loadThing, tokenForThing } };
-  const generalConfig: GeneralConfig = { thingConfigs, custom };
+  const entityConfigs = { Example: entityConfig };
+  const custom = { Mutation: { loadEntity, tokenForEntity } };
+  const generalConfig: GeneralConfig = { entityConfigs, custom };
 
-  test('should compose createThing mutation', () => {
-    const mutationName = 'createThing';
+  test('should compose createEntity mutation', () => {
+    const mutationName = 'createEntity';
     const expectedResult = `mutation Home_createExample($data: ExampleCreateInput!) {
   createExample(data: $data) {
     id
@@ -69,12 +69,12 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose createManyThings mutation', () => {
-    const mutationName = 'createManyThings';
+  test('should compose createManyEntities mutation', () => {
+    const mutationName = 'createManyEntities';
     const expectedResult = `mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {
   createManyExamples(data: $data) {
     id
@@ -84,12 +84,12 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose deleteThing mutation', () => {
-    const mutationName = 'deleteThing';
+  test('should compose deleteEntity mutation', () => {
+    const mutationName = 'deleteEntity';
     const expectedResult = `mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {
   deleteExample(whereOne: $whereOne) {
     id
@@ -99,12 +99,12 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose updateThing mutation', () => {
-    const mutationName = 'updateThing';
+  test('should compose updateEntity mutation', () => {
+    const mutationName = 'updateEntity';
     const expectedResult = `mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {
   updateExample(whereOne: $whereOne, data: $data) {
     id
@@ -114,12 +114,12 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose custom loadThing mutation', () => {
-    const mutationName = 'loadThing';
+  test('should compose custom loadEntity mutation', () => {
+    const mutationName = 'loadEntity';
     const expectedResult = `mutation Home_loadExample($path: String!) {
   loadExample(path: $path) {
     id
@@ -129,17 +129,17 @@ describe('composeMutation', () => {
   }
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
-  test('should compose custom tokenForThing mutation', () => {
-    const mutationName = 'tokenForThing';
+  test('should compose custom tokenForEntity mutation', () => {
+    const mutationName = 'tokenForEntity';
     const expectedResult = `mutation Home_tokenForExample($path: String!) {
   tokenForExample(path: $path)
 }`;
 
-    const result = composeMutation(prefixName, mutationName, thingConfig, generalConfig);
+    const result = composeMutation(prefixName, mutationName, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

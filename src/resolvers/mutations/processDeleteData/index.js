@@ -1,17 +1,17 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
-type ProcessDeleteDataResult = Map<ThingConfig, Array<Object>>;
+type ProcessDeleteDataResult = Map<EntityConfig, Array<Object>>;
 
 const processDeleteData = (
   data: Object,
-  initialCore: null | Map<ThingConfig, Array<Object>>,
-  thingConfig: ThingConfig,
+  initialCore: null | Map<EntityConfig, Array<Object>>,
+  entityConfig: EntityConfig,
   forDelete?: boolean,
 ): ProcessDeleteDataResult => {
   // eslint-disable-next-line no-unused-vars
   const { _id } = data;
-  const { duplexFields } = thingConfig;
+  const { duplexFields } = entityConfig;
 
   const duplexFieldsArray = (duplexFields || []).reduce(
     (prev, { name, oppositeName, array, config }) => {
@@ -35,11 +35,11 @@ const processDeleteData = (
   if (forDelete) {
     const item = { deleteOne: { filter: { _id } } };
 
-    const resultItem = core.get(thingConfig);
+    const resultItem = core.get(entityConfig);
     if (resultItem) {
       resultItem.push(item);
     } else {
-      core.set(thingConfig, [item]);
+      core.set(entityConfig, [item]);
     }
   }
 

@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
 import createPaginationInputType from './createPaginationInputType';
 
 describe('createPaginationInputType', () => {
   test('should create pageInputType string if there are pagination', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
     };
@@ -20,7 +20,7 @@ describe('createPaginationInputType', () => {
       {},
     ];
 
-    const result = createPaginationInputType(thingConfig);
+    const result = createPaginationInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 });

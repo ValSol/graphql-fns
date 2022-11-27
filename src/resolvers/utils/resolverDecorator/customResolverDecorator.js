@@ -1,6 +1,6 @@
 // @flow
 
-import type { ActionSignatureMethods, GeneralConfig, ThingConfig } from '../../../flowTypes';
+import type { ActionSignatureMethods, GeneralConfig, EntityConfig } from '../../../flowTypes';
 
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
@@ -12,7 +12,7 @@ const argNamesToTransformersStore = {};
 const customResolverDecorator = (
   func: Function,
   signatureMethods: ActionSignatureMethods,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
 ): Function => {
   if (!store.get(signatureMethods)) {
@@ -26,16 +26,16 @@ const customResolverDecorator = (
     throw new TypeError('Must be object!');
   }
 
-  const { name } = thingConfig;
+  const { name } = entityConfig;
 
   if (!process.env.JEST_WORKER_ID && obj[name]) {
     return obj[name];
   }
 
   obj[name] = async (...resolverArgs) => {
-    const returnConfig = signatureMethods.config(thingConfig, generalConfig);
-    const argNames = signatureMethods.argNames(thingConfig, generalConfig);
-    const argTypes = signatureMethods.argTypes(thingConfig, generalConfig);
+    const returnConfig = signatureMethods.config(entityConfig, generalConfig);
+    const argNames = signatureMethods.argNames(entityConfig, generalConfig);
+    const argTypes = signatureMethods.argTypes(entityConfig, generalConfig);
 
     const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypes.join('.')}`;
 

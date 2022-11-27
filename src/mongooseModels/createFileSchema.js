@@ -1,14 +1,14 @@
 // @flow
 import mongoose from 'mongoose';
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 const { Schema } = mongoose;
 
 const fileSchemas = {};
 
-const createFileSchema = (thingConfig: ThingConfig): Object => {
-  const { name } = thingConfig;
+const createFileSchema = (entityConfig: EntityConfig): Object => {
+  const { name } = entityConfig;
 
   if (fileSchemas[name]) return fileSchemas[name];
 

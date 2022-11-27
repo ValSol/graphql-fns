@@ -1,14 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import toGlobalId from '../../toGlobalId';
 import transformWhereOnes from './transformWhereOnes';
 
 describe('transformWhereOnes', () => {
-  const personConfig: ThingConfig = {};
-  const personCloneConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
+  const personCloneConfig: EntityConfig = {};
 
   Object.assign(personConfig, {
     name: 'Person',

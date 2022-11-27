@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { ActionSignatureMethods, DerivativeAttributes, ThingConfig } from '../../flowTypes';
+import type { ActionSignatureMethods, DerivativeAttributes, EntityConfig } from '../../flowTypes';
 
 import parseActionName from './parseActionName';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
 describe('parseActionName', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -15,7 +15,7 @@ describe('parseActionName', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -30,7 +30,7 @@ describe('parseActionName', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -68,13 +68,13 @@ describe('parseActionName', () => {
     ],
   });
 
-  const getThing: ActionSignatureMethods = {
-    name: 'getThing',
+  const getEntity: ActionSignatureMethods = {
+    name: 'getEntity',
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig) => thingConfig,
+    config: (entityConfig) => entityConfig,
   };
 
   const putThing: ActionSignatureMethods = {
@@ -83,16 +83,16 @@ describe('parseActionName', () => {
     argNames: () => [],
     argTypes: () => [],
     type: ({ name }) => `${name}!`,
-    config: (thingConfig, generalConfig) =>
-      composeDerivativeConfigByName('ForCatalog', thingConfig, generalConfig),
+    config: (entityConfig, generalConfig) =>
+      composeDerivativeConfigByName('ForCatalog', entityConfig, generalConfig),
   };
 
   const ForCatalog: DerivativeAttributes = {
     suffix: 'ForCatalog',
     allow: {
-      Person: ['thingsByUnique', 'childThings', 'childThing', 'thingCount'],
-      Place: ['childThing'],
-      Country: ['childThing'],
+      Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
+      Place: ['childEntity'],
+      Country: ['childEntity'],
     },
 
     derivativeFields: {
@@ -108,102 +108,110 @@ describe('parseActionName', () => {
     },
   };
 
-  const thingConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
-  const custom = { Query: { getThing, putThing } };
+  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const custom = { Query: { getEntity, putThing } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { thingConfigs, custom, derivative };
+  const generalConfig = { entityConfigs, custom, derivative };
 
-  test('should return result for thingsByUnique action', () => {
+  test('should return result for entitiesByUnique action', () => {
     const actionType = 'Query';
-    const actionName = 'thingsByUnique';
-    const thingName = 'Person';
+    const actionName = 'entitiesByUnique';
+    const entityName = 'Person';
     const suffix = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
-      thingConfig: thingConfigs.Person,
+      entityConfig: entityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName, suffix }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for thingCount action', () => {
+  test('should return result for entityCount action', () => {
     const actionType = 'Query';
-    const actionName = 'thingCount';
-    const thingName = 'Person';
+    const actionName = 'entityCount';
+    const entityName = 'Person';
     const suffix = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
-      thingConfig: null,
+      entityConfig: null,
       baseAction: '',
       suffix: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName, suffix }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for getThing action', () => {
+  test('should return result for getEntity action', () => {
     const actionType = 'Query';
-    const actionName = 'getThing';
-    const thingName = 'Person';
+    const actionName = 'getEntity';
+    const entityName = 'Person';
     const suffix = 'ForCabinet';
     const expectedResult = {
       creationType: 'custom',
-      thingConfig: thingConfigs.Person,
+      entityConfig: entityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName, suffix }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should return result for putThing action', () => {
     const actionType = 'Query';
     const actionName = 'putThing';
-    const thingName = 'Person';
+    const entityName = 'Person';
     const expectedResult = {
       creationType: 'custom',
-      thingConfig: composeDerivativeConfigByName('ForCatalog', thingConfigs.Person, generalConfig),
+      entityConfig: composeDerivativeConfigByName(
+        'ForCatalog',
+        entityConfigs.Person,
+        generalConfig,
+      ),
       baseAction: '',
       suffix: 'ForCatalog',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for thingsByUniqueForCatalog action', () => {
+  test('should return result for entitiesByUniqueForCatalog action', () => {
     const actionType = 'Query';
-    const actionName = 'thingsByUniqueForCatalog';
-    const thingName = 'Person';
+    const actionName = 'entitiesByUniqueForCatalog';
+    const entityName = 'Person';
     const expectedResult = {
       creationType: 'derivative',
-      thingConfig: composeDerivativeConfigByName('ForCatalog', thingConfigs.Person, generalConfig),
-      baseAction: 'thingsByUnique',
+      entityConfig: composeDerivativeConfigByName(
+        'ForCatalog',
+        entityConfigs.Person,
+        generalConfig,
+      ),
+      baseAction: 'entitiesByUnique',
       suffix: 'ForCatalog',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should return result for thingCountForCatalog action', () => {
     const actionType = 'Query';
-    const actionName = 'thingCountForCatalog';
-    const thingName = 'Person';
+    const actionName = 'entityCountForCatalog';
+    const entityName = 'Person';
     const expectedResult = {
       creationType: 'derivative',
-      thingConfig: null,
-      baseAction: 'thingCount',
+      entityConfig: null,
+      baseAction: 'entityCount',
       suffix: 'ForCatalog',
     };
 
-    const result = parseActionName({ actionType, actionName, thingName }, generalConfig);
+    const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -5,7 +5,7 @@ import composeCustomAction from './composeCustomAction';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
-const forClientActions = ['childThing', 'childThings'];
+const forClientActions = ['childEntity', 'childEntities'];
 
 const store = Object.create(null);
 
@@ -21,8 +21,8 @@ const mergeDerivativeIntoCustom = (
   if (!derivative) return custom || null;
 
   const getAllowedMethods = (allow) =>
-    Object.keys(allow).reduce((prev, thingName) => {
-      allow[thingName].forEach((methodName) => {
+    Object.keys(allow).reduce((prev, entityName) => {
+      allow[entityName].forEach((methodName) => {
         prev[methodName] = true; // eslint-disable-line no-param-reassign
       });
       return prev;

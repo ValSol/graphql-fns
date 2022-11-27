@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 
 const mongoose = require('mongoose');
 const { PubSub } = require('graphql-subscriptions');
@@ -8,14 +8,14 @@ const { PubSub } = require('graphql-subscriptions');
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
-  default: createCreateThingMutationResolver,
-} = require('../createCreateThingMutationResolver');
+  default: createCreateEntityMutationResolver,
+} = require('../createCreateEntityMutationResolver');
 const { default: workOutMutations } = require('./index');
 
 let mongooseConn;
 let pubsub;
 
-const exampleConfig: ThingConfig = {
+const exampleConfig: EntityConfig = {
   name: 'Example',
   type: 'tangible',
 
@@ -23,7 +23,7 @@ const exampleConfig: ThingConfig = {
   intFields: [{ name: 'counts', array: true }],
 };
 
-const exampleCloneConfig: ThingConfig = {
+const exampleCloneConfig: EntityConfig = {
   name: 'ExampleClone',
   type: 'tangible',
 
@@ -31,14 +31,14 @@ const exampleCloneConfig: ThingConfig = {
   intFields: [{ name: 'counts', array: true }],
 };
 
-const childConfig: ThingConfig = {};
-const personConfig: ThingConfig = {};
-const personCloneConfig: ThingConfig = {};
-const menuConfig: ThingConfig = {};
-const menuCloneConfig: ThingConfig = {};
-const menuSectionConfig: ThingConfig = {};
-const menuSectionCloneConfig: ThingConfig = {};
-const parentConfig: ThingConfig = {
+const childConfig: EntityConfig = {};
+const personConfig: EntityConfig = {};
+const personCloneConfig: EntityConfig = {};
+const menuConfig: EntityConfig = {};
+const menuCloneConfig: EntityConfig = {};
+const menuSectionConfig: EntityConfig = {};
+const menuSectionCloneConfig: EntityConfig = {};
+const parentConfig: EntityConfig = {
   name: 'Parent',
   type: 'tangible',
   textFields: [{ name: 'name' }],
@@ -209,7 +209,7 @@ Object.assign(menuSectionCloneConfig, {
 });
 
 const generalConfig: GeneralConfig = {
-  thingConfigs: {
+  entityConfigs: {
     Parent: parentConfig,
     Child: childConfig,
     Example: exampleConfig,
@@ -254,8 +254,8 @@ afterAll(async () => {
 });
 
 describe('workOutMutations', () => {
-  test('should create mutation delete thing resolver with wipe out duplex fields values', async () => {
-    const createPerson = createCreateThingMutationResolver(
+  test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
+    const createPerson = createCreateEntityMutationResolver(
       parentConfig,
       generalConfig,
       serversideConfig,
@@ -276,14 +276,14 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgs = [
       {
-        actionGeneralName: 'deleteThing',
-        thingConfig: parentConfig,
+        actionGeneralName: 'deleteEntity',
+        entityConfig: parentConfig,
         args: { whereOne: { id: createdParent.id } },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteManyThings',
-        thingConfig: childConfig,
+        actionGeneralName: 'deleteManyEntities',
+        entityConfig: childConfig,
         args: { whereOne: createdParent.children.map(({ id }) => ({ id })) },
         returnResult: true,
       },
@@ -314,23 +314,23 @@ describe('workOutMutations', () => {
     expect(findedChild3).toBe(null);
   });
 
-  test('should create resolver for chain of 2 createThing & 2 updateThing', async () => {
+  test('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const standardMutationsArgsToCreateThing = [
+    const standardMutationsArgsToCreateEntity = [
       {
-        actionGeneralName: 'createThing',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createEntity',
+        entityConfig: exampleCloneConfig,
         args: {
           data: { name: 'Name Clone' },
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createEntity',
+        entityConfig: exampleConfig,
         args: {
           data: { name: 'Name' },
         },
@@ -339,7 +339,7 @@ describe('workOutMutations', () => {
     ];
 
     const [createdExampleClone, createdExample] = await workOutMutations(
-      standardMutationsArgsToCreateThing,
+      standardMutationsArgsToCreateEntity,
       commonResolverCreatorArg,
     );
 
@@ -348,26 +348,26 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgs = [
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: exampleCloneConfig,
         args: { whereOne: { id: createdExampleClone.id }, data: { name: 'Name2' } },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: exampleConfig,
         args: { whereOne: { id: createdExample.id }, data: { name: null } },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: exampleConfig,
         args: { whereOne: { id: createdExample.id }, data: { label: 'test' } },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: exampleConfig,
         args: { whereOne: { id: createdExample.id }, data: { name: 'Name' } },
         returnResult: true,
       },
@@ -382,23 +382,23 @@ describe('workOutMutations', () => {
     expect(result.name).toBe('Name2');
   });
 
-  test('should create resolver for chain of 2 createThing & 2 pushIntoThing', async () => {
+  test('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
-    const standardMutationsArgsToCreateThing = [
+    const standardMutationsArgsToCreateEntity = [
       {
-        actionGeneralName: 'createThing',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createEntity',
+        entityConfig: exampleCloneConfig,
         args: {
           data: { name: 'Name Clone', counts: [10, 30, 50] },
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createEntity',
+        entityConfig: exampleConfig,
         args: {
           data: { name: 'Name' },
         },
@@ -407,7 +407,7 @@ describe('workOutMutations', () => {
     ];
 
     const [createdExampleClone, createdExample] = await workOutMutations(
-      standardMutationsArgsToCreateThing,
+      standardMutationsArgsToCreateEntity,
       commonResolverCreatorArg,
     );
 
@@ -418,8 +418,8 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgs = [
       {
-        actionGeneralName: 'pushIntoThing',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'pushIntoEntity',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: { id: createdExampleClone.id },
           data: { counts: [0, 20, 40, 60] },
@@ -428,8 +428,8 @@ describe('workOutMutations', () => {
         returnResult: true,
       },
       {
-        actionGeneralName: 'pushIntoThing',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'pushIntoEntity',
+        entityConfig: exampleConfig,
         args: {
           whereOne: { id: createdExample.id },
           data: { counts: [99, 55] },
@@ -475,16 +475,16 @@ describe('workOutMutations', () => {
     ];
     const standardMutationsArgsToCreateManyThings = [
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: dataToCreateExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
         },
@@ -523,32 +523,32 @@ describe('workOutMutations', () => {
     ];
     const standardMutationsArgsToCreateManyThings = [
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: dataToCreateExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'deleteManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: [],
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'deleteManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: [],
         },
@@ -580,16 +580,16 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToDeleteManyThings = [
       {
-        actionGeneralName: 'deleteManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'deleteManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: whereOneToDeleteManyExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'deleteManyEntities',
+        entityConfig: exampleConfig,
         args: {
           whereOne: whereOneToDeleteManyExamples,
         },
@@ -643,48 +643,48 @@ describe('workOutMutations', () => {
     ];
     const standardMutationsArgsToCreateManyThings = [
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: dataToCreateExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: [],
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteFilteredThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'deleteFilteredEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           where: { name: 'Name-is-absent' },
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: [],
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteFilteredThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'deleteFilteredEntities',
+        entityConfig: exampleConfig,
         args: {
           where: { name: 'Name-is-absent' },
         },
@@ -721,16 +721,16 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToDeleteFilteredThings = [
       {
-        actionGeneralName: 'deleteFilteredThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'deleteFilteredEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           where: whereToDeleteExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'deleteFilteredThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'deleteFilteredEntities',
+        entityConfig: exampleConfig,
         args: {
           where: whereToDeleteExamples,
         },
@@ -786,16 +786,16 @@ describe('workOutMutations', () => {
     ];
     const standardMutationsArgsToCreateManyThings = [
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: dataToCreateExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'updateManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: [],
           data: [],
@@ -803,16 +803,16 @@ describe('workOutMutations', () => {
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateManyEntities',
+        entityConfig: exampleConfig,
         args: {
           whereOne: [],
           data: [],
@@ -859,8 +859,8 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToUpdateManyThings = [
       {
-        actionGeneralName: 'updateManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'updateManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           whereOne: whereOneToUpdateManyExampleClones,
           data: dataToUpdateExampleClones,
@@ -868,8 +868,8 @@ describe('workOutMutations', () => {
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateManyEntities',
+        entityConfig: exampleConfig,
         args: {
           whereOne: whereOneToUpdateManyExamples,
           data: dataToUpdateExamples,
@@ -921,16 +921,16 @@ describe('workOutMutations', () => {
     ];
     const standardMutationsArgsToCreateManyThings = [
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           data: dataToCreateExampleClones,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateFilteredThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'updateFilteredEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           where: { name: 'Name-is-absent' },
           data: { label: 'not-to-change' },
@@ -938,16 +938,16 @@ describe('workOutMutations', () => {
         returnResult: true,
       },
       {
-        actionGeneralName: 'createManyThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'createManyEntities',
+        entityConfig: exampleConfig,
         args: {
           data: dataToCreateExamples,
         },
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateFilteredThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateFilteredEntities',
+        entityConfig: exampleConfig,
         args: {
           where: { name: 'Name-is-absent' },
           data: { label: 'not-to-change' },
@@ -981,8 +981,8 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToUpdateFilteredThings = [
       {
-        actionGeneralName: 'updateFilteredThings',
-        thingConfig: exampleCloneConfig,
+        actionGeneralName: 'updateFilteredEntities',
+        entityConfig: exampleCloneConfig,
         args: {
           where: { label: 'updateFiltered' },
           data: dataToUpdateExampleClones,
@@ -990,8 +990,8 @@ describe('workOutMutations', () => {
         returnResult: true,
       },
       {
-        actionGeneralName: 'updateFilteredThings',
-        thingConfig: exampleConfig,
+        actionGeneralName: 'updateFilteredEntities',
+        entityConfig: exampleConfig,
         args: {
           where: { label: 'updateFiltered2' },
           data: dataToUpdateExamples,
@@ -1036,7 +1036,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test('should create resolvers for chain of 1 copyThing', async () => {
+  test('should create resolvers for chain of 1 copyEntity', async () => {
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
@@ -1045,7 +1045,7 @@ describe('workOutMutations', () => {
     const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
     await PersonClone.createCollection();
 
-    const createPerson = createCreateThingMutationResolver(
+    const createPerson = createCreateEntityMutationResolver(
       personConfig,
       generalConfig,
       serversideConfig,
@@ -1061,8 +1061,8 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToCopyThing = [
       {
-        actionGeneralName: 'copyThing',
-        thingConfig: personCloneConfig,
+        actionGeneralName: 'copyEntity',
+        entityConfig: personCloneConfig,
         args: {
           whereOnes: { original: { id: createdPerson.id } },
         },
@@ -1085,10 +1085,10 @@ describe('workOutMutations', () => {
 
     const dataToUpdate = { firstName: 'Hugo2', lastName: 'Boss2' };
 
-    const standardMutationsArgsToUpdateThing = [
+    const standardMutationsArgsToUpdateEntity = [
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: personConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: personConfig,
         args: {
           whereOne: { id: createdPerson.id },
           data: dataToUpdate,
@@ -1097,7 +1097,7 @@ describe('workOutMutations', () => {
       },
     ];
 
-    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
     const [personClone2] = await workOutMutations(
       standardMutationsArgsToCopyThing,
@@ -1109,7 +1109,7 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyThingWithChildren', async () => {
+  test('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
     const menuSchema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.createCollection();
@@ -1126,7 +1126,7 @@ describe('workOutMutations', () => {
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
     await MenuCloneSection.createCollection();
 
-    const createMenu = createCreateThingMutationResolver(
+    const createMenu = createCreateEntityMutationResolver(
       menuConfig,
       generalConfig,
       serversideConfig,
@@ -1154,10 +1154,10 @@ describe('workOutMutations', () => {
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
 
-    const standardMutationsArgsToCopyThingWithChildren = [
+    const standardMutationsArgsToCopyEntityWithChildren = [
       {
-        actionGeneralName: 'copyThingWithChildren',
-        thingConfig: menuCloneConfig,
+        actionGeneralName: 'copyEntityWithChildren',
+        entityConfig: menuCloneConfig,
         args: {
           whereOnes: { original: { id: createdMenu.id } },
         },
@@ -1170,7 +1170,7 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const [menuClone] = await workOutMutations(
-      standardMutationsArgsToCopyThingWithChildren,
+      standardMutationsArgsToCopyEntityWithChildren,
       commonResolverCreatorArg,
     );
 
@@ -1180,10 +1180,10 @@ describe('workOutMutations', () => {
 
     const dataToUpdate = { name: 'Menu Updated Name' };
 
-    const standardMutationsArgsToUpdateThing = [
+    const standardMutationsArgsToUpdateEntity = [
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: menuConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: menuConfig,
         args: {
           whereOne: { id: createdMenu.id },
           data: dataToUpdate,
@@ -1192,10 +1192,10 @@ describe('workOutMutations', () => {
       },
     ];
 
-    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
     const [menuClone2] = await workOutMutations(
-      standardMutationsArgsToCopyThingWithChildren,
+      standardMutationsArgsToCopyEntityWithChildren,
       commonResolverCreatorArg,
     );
 
@@ -1204,8 +1204,8 @@ describe('workOutMutations', () => {
     expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyManyThings', async () => {
-    const createPerson = createCreateThingMutationResolver(
+  test('should create resolvers for chain of 1 copyManyEntities', async () => {
+    const createPerson = createCreateEntityMutationResolver(
       personConfig,
       generalConfig,
       serversideConfig,
@@ -1219,10 +1219,10 @@ describe('workOutMutations', () => {
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 
-    const standardMutationsArgsToCopyManyThings = [
+    const standardMutationsArgsToCopyManyEntities = [
       {
-        actionGeneralName: 'copyManyThings',
-        thingConfig: personCloneConfig,
+        actionGeneralName: 'copyManyEntities',
+        entityConfig: personCloneConfig,
         args: {
           whereOnes: [{ original: { id: createdPerson.id } }],
         },
@@ -1235,7 +1235,7 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const [personClones] = await workOutMutations(
-      standardMutationsArgsToCopyManyThings,
+      standardMutationsArgsToCopyManyEntities,
       commonResolverCreatorArg,
     );
 
@@ -1247,10 +1247,10 @@ describe('workOutMutations', () => {
 
     const dataToUpdate = { firstName: 'Hugo2', lastName: 'Boss2' };
 
-    const standardMutationsArgsToUpdateThing = [
+    const standardMutationsArgsToUpdateEntity = [
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: personConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: personConfig,
         args: {
           whereOne: { id: createdPerson.id },
           data: dataToUpdate,
@@ -1259,10 +1259,10 @@ describe('workOutMutations', () => {
       },
     ];
 
-    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
     const [personClones2] = await workOutMutations(
-      standardMutationsArgsToCopyManyThings,
+      standardMutationsArgsToCopyManyEntities,
       commonResolverCreatorArg,
     );
 
@@ -1273,8 +1273,8 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyManyThingsWithChildren', async () => {
-    const createMenu = createCreateThingMutationResolver(
+  test('should create resolvers for chain of 1 copyManyEntitiesWithChildren', async () => {
+    const createMenu = createCreateEntityMutationResolver(
       menuConfig,
       generalConfig,
       serversideConfig,
@@ -1304,8 +1304,8 @@ describe('workOutMutations', () => {
 
     const standardMutationsArgsToCopyManyThingsWithChildren = [
       {
-        actionGeneralName: 'copyManyThingsWithChildren',
-        thingConfig: menuCloneConfig,
+        actionGeneralName: 'copyManyEntitiesWithChildren',
+        entityConfig: menuCloneConfig,
         args: {
           whereOnes: [{ original: { id: createdMenu.id } }],
         },
@@ -1330,10 +1330,10 @@ describe('workOutMutations', () => {
 
     const dataToUpdate = { name: 'Menu Updated Name2' };
 
-    const standardMutationsArgsToUpdateThing = [
+    const standardMutationsArgsToUpdateEntity = [
       {
-        actionGeneralName: 'updateThing',
-        thingConfig: menuConfig,
+        actionGeneralName: 'updateEntity',
+        entityConfig: menuConfig,
         args: {
           whereOne: { id: createdMenu.id },
           data: dataToUpdate,
@@ -1342,7 +1342,7 @@ describe('workOutMutations', () => {
       },
     ];
 
-    await workOutMutations(standardMutationsArgsToUpdateThing, commonResolverCreatorArg);
+    await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
     const [menuClones2] = await workOutMutations(
       standardMutationsArgsToCopyManyThingsWithChildren,

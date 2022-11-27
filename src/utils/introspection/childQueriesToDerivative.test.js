@@ -7,22 +7,22 @@ describe('childQueriesToDerivative', () => {
   test('have to return inventoryByPermissions for childQueries with ForCabinet', () => {
     const childQueries = [
       {
-        actionName: 'childThingsForCatalog',
-        baseAction: 'childThings',
+        actionName: 'childentitiesForCatalog',
+        baseAction: 'childEntities',
         suffix: 'ForCatalog',
-        thingName: 'Person',
+        entityName: 'Person',
       },
       {
-        actionName: 'childThing',
-        baseAction: 'childThing',
+        actionName: 'childEntity',
+        baseAction: 'childEntity',
         suffix: '',
-        thingName: 'Country',
+        entityName: 'Country',
       },
       {
         actionName: 'childThingForCatalog',
-        baseAction: 'childThing',
+        baseAction: 'childEntity',
         suffix: 'ForCatalog',
-        thingName: 'Place',
+        entityName: 'Place',
       },
     ];
 
@@ -32,8 +32,8 @@ describe('childQueriesToDerivative', () => {
       ForCatalog: {
         suffix: 'ForCatalog',
         allow: {
-          Person: ['childThings'],
-          Place: ['childThing'],
+          Person: ['childEntities'],
+          Place: ['childEntity'],
         },
       },
     };

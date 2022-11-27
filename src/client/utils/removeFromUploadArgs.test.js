@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-// import type { ThingConfig } from '../../../flowTypes';
+// import type { EntityConfig } from '../../../flowTypes';
 
 import removeFromUploadArgs from './removeFromUploadArgs';
 

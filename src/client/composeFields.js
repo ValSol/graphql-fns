@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
+import type { EntityConfig, ClientFieldsOptions, GeneralConfig } from '../flowTypes';
 
 import composeChildActionSignature from '../types/composeChildActionSignature';
 
@@ -27,8 +27,8 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
 
 const getNameOrAlias = (nameWithAlias) => nameWithAlias.split(': ')[0];
 
-const composeChildArgs = (currentChild, thingConfig) =>
-  composeChildActionSignature(thingConfig)
+const composeChildArgs = (currentChild, entityConfig) =>
+  composeChildActionSignature(entityConfig)
     .split(', ')
     .filter(Boolean)
     .reduce((prev, item) => {
@@ -49,7 +49,7 @@ const composeChildArgsStr = (childArgs) =>
     .join(', ');
 
 const composeFieldsWithChildArgs = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   options: ClientFieldsOptionsWithChildArgs,
 ): Array<string> => {
@@ -67,7 +67,7 @@ const composeFieldsWithChildArgs = (
     relationalFields,
     textFields,
     type: configType,
-  } = thingConfig;
+  } = entityConfig;
   const { childArgs, currentChild, depth, include, exclude, shift } = options;
 
   const result = [];
@@ -532,12 +532,12 @@ const composeFieldsWithChildArgs = (
 };
 
 const composeFields = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   options: ClientFieldsOptions,
 ): { fields: Array<string>, childArgs: { [argName: string]: string } } => {
   const childArgs = {};
-  const fields = composeFieldsWithChildArgs(thingConfig, generalConfig, {
+  const fields = composeFieldsWithChildArgs(entityConfig, generalConfig, {
     ...options,
     currentChild: '',
     childArgs,

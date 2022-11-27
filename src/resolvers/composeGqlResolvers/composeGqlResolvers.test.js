@@ -6,14 +6,14 @@ import type {
   Inventory,
   ServersideConfig,
   ActionSignatureMethods,
-  ThingConfig,
+  EntityConfig,
 } from '../../flowTypes';
 
 import composeGqlResolvers from './index';
 
 describe('composeGqlResolvers', () => {
-  test('should create resolvers for one thing', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for one entity', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -40,8 +40,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
     expect(typeof result.Query.ExampleDistinctValues).toBe('function');
@@ -58,8 +58,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
-  test('should create resolvers for two things', () => {
-    const thingConfig1: ThingConfig = {
+  test('should create resolvers for two entities', () => {
+    const entityConfig1: EntityConfig = {
       name: 'Example1',
       type: 'tangible',
       textFields: [
@@ -76,7 +76,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfig2: ThingConfig = {
+    const entityConfig2: EntityConfig = {
       name: 'Example2',
       type: 'tangible',
       textFields: [
@@ -92,8 +92,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example1: thingConfig1, Example2: thingConfig2 };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example1: entityConfig1, Example2: entityConfig2 };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -124,8 +124,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample2.subscribe).toBe('function');
   });
 
-  test('should create resolvers for two things with relational things', () => {
-    const placeConfig: ThingConfig = {
+  test('should create resolvers for two entities with relational entities', () => {
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [
@@ -135,7 +135,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const personConfig: ThingConfig = {};
+    const personConfig: EntityConfig = {};
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -172,8 +172,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     });
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -208,8 +208,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
-  test('should create resolvers for two things with embedded fields', () => {
-    const addressConfig: ThingConfig = {
+  test('should create resolvers for two entities with embedded fields', () => {
+    const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -223,7 +223,7 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const personConfig: ThingConfig = {
+    const personConfig: EntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -259,8 +259,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Person: personConfig, Address: addressConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Address: addressConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -280,9 +280,9 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPerson.subscribe).toBe('function');
   });
 
-  test('should create resolvers for two things with duplex things', () => {
-    const personConfig: ThingConfig = {};
-    const placeConfig: ThingConfig = {
+  test('should create resolvers for two entities with duplex entities', () => {
+    const personConfig: EntityConfig = {};
+    const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -342,8 +342,8 @@ describe('composeGqlResolvers', () => {
       ],
     });
 
-    const thingConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -379,8 +379,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedPlace.subscribe).toBe('function');
   });
 
-  test('should create resolvers for two things with geospatial fields', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for two entities with geospatial fields', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -427,8 +427,8 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
-    const generalConfig: GeneralConfig = { thingConfigs };
+    const entityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { entityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -456,8 +456,8 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Subscription.updatedExample.subscribe).toBe('function');
   });
 
-  test('should create resolvers for one thing with inventory for only queries', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for one entity with inventory for only queries', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -466,9 +466,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: true } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Query.ExampleCount).toBe('function');
@@ -479,8 +479,8 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create resolvers for one thing with inventory for only mutations', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for one entity with inventory for only mutations', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -489,9 +489,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
+    const entityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(typeof result.Mutation.createManyExamples).toBe('function');
@@ -503,8 +503,8 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create resolvers for one thing with inventory for only thing queries', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for one entity with inventory for only entity queries', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -513,9 +513,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Query: { thing: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Query: { entity: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query.ExampleCount).toBeUndefined();
     expect(result.Query.ExampleDistinctValues).toBeUndefined();
@@ -526,8 +526,8 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create resolvers for one thing with inventory for only mutations', () => {
-    const thingConfig: ThingConfig = {
+  test('should create resolvers for one entity with inventory for only mutations', () => {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -536,9 +536,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(result.Mutation.createManyExamples).toBeUndefined();
@@ -549,18 +549,18 @@ describe('composeGqlResolvers', () => {
     expect(result.Subscription).toBeUndefined();
   });
 
-  test('should create resolvers for one thing with inventory for only one custom mutation', async () => {
-    const createCustomLoadThingMutationResolver = () => () => 'test passed!';
+  test('should create resolvers for one entity with inventory for only one custom mutation', async () => {
+    const createCustomLoadEntityMutationResolver = () => () => 'test passed!';
     const signatureMethods: ActionSignatureMethods = {
-      name: 'loadThing',
+      name: 'loadEntity',
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -570,12 +570,12 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
-    const custom = { Mutation: { loadThing: signatureMethods } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
+    const custom = { Mutation: { loadEntity: signatureMethods } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {
-      Mutation: { loadThing: createCustomLoadThingMutationResolver },
+      Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
     };
     const result = composeGqlResolvers(generalConfig, serversideConfig);
     expect(result.Query).toBeUndefined();
@@ -590,18 +590,18 @@ describe('composeGqlResolvers', () => {
     expect(customMutationResult).toBe('test passed!');
   });
 
-  test('should create resolvers for one thing with inventory for only one custom Query', async () => {
-    const createCustomLoadThingMutationResolver = () => () => 'test passed!';
+  test('should create resolvers for one entity with inventory for only one custom Query', async () => {
+    const createCustomLoadEntityMutationResolver = () => () => 'test passed!';
     const signatureMethods: ActionSignatureMethods = {
-      name: 'getThing',
+      name: 'getEntity',
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       type: ({ name }) => name,
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -611,12 +611,12 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const thingConfigs = { Example: thingConfig };
-    const inventory: Inventory = { name: 'test', include: { Query: { getThing: true } } };
-    const custom = { Query: { getThing: signatureMethods } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const entityConfigs = { Example: entityConfig };
+    const inventory: Inventory = { name: 'test', include: { Query: { getEntity: true } } };
+    const custom = { Query: { getEntity: signatureMethods } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {
-      Query: { getThing: createCustomLoadThingMutationResolver },
+      Query: { getEntity: createCustomLoadEntityMutationResolver },
     };
     const result = composeGqlResolvers(generalConfig, serversideConfig);
     expect(result.Mutation).toBeUndefined();

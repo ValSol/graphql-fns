@@ -1,22 +1,22 @@
 // @flow
-import type { ClientOptions, GeneralConfig, ThingConfig } from '../../flowTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import composeFields from '../composeFields';
-import composeThingFragmentArgs from './composeThingFragmentArgs';
+import composeEntityFragmentArgs from './composeEntityFragmentArgs';
 
 const composeFragment = (
   fragmentName: string,
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   clientOptions: ClientOptions = {},
 ): string => {
-  if (!thingConfig) {
-    throw new TypeError('thingConfig must be defined!');
+  if (!entityConfig) {
+    throw new TypeError('entityConfig must be defined!');
   }
 
-  const head = composeThingFragmentArgs(fragmentName, thingConfig);
+  const head = composeEntityFragmentArgs(fragmentName, entityConfig);
 
-  const { fields } = composeFields(thingConfig, generalConfig, { ...clientOptions, shift: 1 });
+  const { fields } = composeFields(entityConfig, generalConfig, { ...clientOptions, shift: 1 });
 
   const resultArray = [...head, ...fields, '}'];
 

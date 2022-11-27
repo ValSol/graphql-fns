@@ -1,11 +1,11 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig, ClientOptions } from '../../flowTypes';
+import type { EntityConfig, ClientOptions } from '../../flowTypes';
 
 import getChildQueries from './getChildQueries';
 
 describe('getChildQueries', () => {
-  const countryConfig: ThingConfig = {
+  const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
     textFields: [
@@ -14,7 +14,7 @@ describe('getChildQueries', () => {
       },
     ],
   };
-  const placeConfig: ThingConfig = {
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -29,7 +29,7 @@ describe('getChildQueries', () => {
       },
     ],
   };
-  const personConfig: ThingConfig = {};
+  const personConfig: EntityConfig = {};
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -68,7 +68,7 @@ describe('getChildQueries', () => {
   });
 
   const generalConfig = {
-    thingConfigs: { Person: personConfig, Place: placeConfig, Country: countryConfig },
+    entityConfigs: { Person: personConfig, Place: placeConfig, Country: countryConfig },
   };
 
   test('should compose relatioanl and duplex fields with depth: 0 & include option 1', () => {
@@ -81,16 +81,16 @@ describe('getChildQueries', () => {
     const expectedResult = {
       childQueries: [
         {
-          actionName: 'childThings',
-          baseAction: 'childThings',
+          actionName: 'childEntities',
+          baseAction: 'childEntities',
           suffix: '',
-          thingName: 'Person',
+          entityName: 'Person',
         },
         {
-          actionName: 'childThing',
-          baseAction: 'childThing',
+          actionName: 'childEntity',
+          baseAction: 'childEntity',
           suffix: '',
-          thingName: 'Person',
+          entityName: 'Person',
         },
       ],
       maxShift: 0,
@@ -105,28 +105,28 @@ describe('getChildQueries', () => {
     const expectedResult = {
       childQueries: [
         {
-          actionName: 'childThings',
-          baseAction: 'childThings',
+          actionName: 'childEntities',
+          baseAction: 'childEntities',
           suffix: '',
-          thingName: 'Person',
+          entityName: 'Person',
         },
         {
-          actionName: 'childThing',
-          baseAction: 'childThing',
+          actionName: 'childEntity',
+          baseAction: 'childEntity',
           suffix: '',
-          thingName: 'Place',
+          entityName: 'Place',
         },
         {
-          actionName: 'childThing',
-          baseAction: 'childThing',
+          actionName: 'childEntity',
+          baseAction: 'childEntity',
           suffix: '',
-          thingName: 'Person',
+          entityName: 'Person',
         },
         {
-          actionName: 'childThing',
-          baseAction: 'childThing',
+          actionName: 'childEntity',
+          baseAction: 'childEntity',
           suffix: '',
-          thingName: 'Country',
+          entityName: 'Country',
         },
       ],
       maxShift: 1,

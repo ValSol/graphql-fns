@@ -5,19 +5,19 @@ import type {
   Inventory,
   ServersideConfig,
   ActionSignatureMethods,
-  ThingConfig,
+  EntityConfig,
 } from '../../flowTypes';
 
 import createCustomResolver from './index';
 
 describe('createCustomResolver', () => {
   const resultResolver = () => 'test passed!';
-  const createCustomLoadThingMutationResolver = () => resultResolver;
+  const createCustomLoadEntityMutationResolver = () => resultResolver;
 
   const signatureMethods: ActionSignatureMethods = {
-    name: 'loadThing',
-    specificName(thingConfig) {
-      const { name } = thingConfig;
+    name: 'loadEntity',
+    specificName(entityConfig) {
+      const { name } = entityConfig;
       return `load${name}`;
     },
     argNames() {
@@ -26,14 +26,14 @@ describe('createCustomResolver', () => {
     argTypes() {
       return [];
     },
-    type(thingConfig) {
-      const { name } = thingConfig;
+    type(entityConfig) {
+      const { name } = entityConfig;
       return `[${name}!]!`;
     },
-    config: (thingConfig) => thingConfig,
+    config: (entityConfig) => entityConfig,
   };
 
-  const thingConfig: ThingConfig = {
+  const entityConfig: EntityConfig = {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -43,20 +43,20 @@ describe('createCustomResolver', () => {
     ],
   };
 
-  const thingConfigs = { Example: thingConfig };
-  const custom = { Mutation: { loadThing: signatureMethods } };
+  const entityConfigs = { Example: entityConfig };
+  const custom = { Mutation: { loadEntity: signatureMethods } };
   const serversideConfig: ServersideConfig = {
-    Mutation: { loadThing: createCustomLoadThingMutationResolver },
+    Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
   };
 
   test('should return correct results for allowed custom mutation', async () => {
-    const inventory: Inventory = { name: 'test', include: { Mutation: { loadThing: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
 
     const result = createCustomResolver(
       'Mutation',
-      'loadThing',
-      thingConfig,
+      'loadEntity',
+      entityConfig,
       generalConfig,
       serversideConfig,
     );
@@ -67,13 +67,13 @@ describe('createCustomResolver', () => {
   });
 
   test('should return correct results for allowed custom mutation 2', () => {
-    const inventory: Inventory = { name: 'test', include: { Mutation: { createThing: true } } };
-    const generalConfig: GeneralConfig = { thingConfigs, custom, inventory };
+    const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
+    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
 
     const result = createCustomResolver(
       'Mutation',
-      'loadThing',
-      thingConfig,
+      'loadEntity',
+      entityConfig,
       generalConfig,
       serversideConfig,
     );

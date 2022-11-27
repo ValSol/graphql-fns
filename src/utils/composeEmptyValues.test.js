@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeEmptyValues from './composeEmptyValues';
 
 describe('composeEmptyValues', () => {
   test('should create the simplest initial values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -19,13 +19,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the simplest initial default values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -38,13 +38,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with array field', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -57,13 +57,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with default array field', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -77,12 +77,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { textFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with file field', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
       textFields: [
@@ -94,8 +94,8 @@ describe('composeEmptyValues', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       fileFields: [
@@ -108,12 +108,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { logo: { desktop: '', mobile: '' } };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with file array field', () => {
-    const imageConfig: ThingConfig = {
+    const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'embedded',
       textFields: [
@@ -125,8 +125,8 @@ describe('composeEmptyValues', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       fileFields: [
@@ -140,12 +140,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { photos: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with embedded field', () => {
-    const embeddedConfig: ThingConfig = {
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -154,8 +154,8 @@ describe('composeEmptyValues', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       embeddedFields: [
@@ -168,12 +168,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { embeddedField: { textField: '' } };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with embedded array field', () => {
-    const embeddedConfig: ThingConfig = {
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -182,8 +182,8 @@ describe('composeEmptyValues', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       embeddedFields: [
@@ -197,12 +197,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { embeddedFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the empty fields with embedded array field with composeEmptyValues', () => {
-    const embeddedConfig: ThingConfig = {
+    const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
       textFields: [
@@ -211,8 +211,8 @@ describe('composeEmptyValues', () => {
         },
       ],
     };
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       embeddedFields: [
@@ -226,12 +226,12 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { embeddedFields: [] };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the emebeded initial values with default composeEmptyValues', () => {
-    const embedded3Config: ThingConfig = {
+    const embedded3Config: EntityConfig = {
       name: 'Embedded3',
       type: 'embedded',
       textFields: [
@@ -243,7 +243,7 @@ describe('composeEmptyValues', () => {
       ],
     };
 
-    const embedded2Config: ThingConfig = {
+    const embedded2Config: EntityConfig = {
       name: 'Embedded2',
       type: 'embedded',
       textFields: [
@@ -261,7 +261,7 @@ describe('composeEmptyValues', () => {
       ],
     };
 
-    const embedded1Config: ThingConfig = {
+    const embedded1Config: EntityConfig = {
       name: 'Embedded1',
       type: 'embedded',
       textFields: [
@@ -279,7 +279,7 @@ describe('composeEmptyValues', () => {
       ],
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -308,13 +308,13 @@ describe('composeEmptyValues', () => {
       },
     };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the simplest initial int & float values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       intFields: [
@@ -331,13 +331,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { intField: '', floatField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the simplest initial boolean values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       booleanFields: [
@@ -349,13 +349,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { booleanField: false };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the simplest initial enum values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       enumFields: [
@@ -368,13 +368,13 @@ describe('composeEmptyValues', () => {
 
     const expectedResult = { enumField: '' };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create the simplest initial geospatial values object', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       geospatialFields: [
@@ -402,7 +402,7 @@ describe('composeEmptyValues', () => {
       },
     };
 
-    const result = composeEmptyValues(thingConfig);
+    const result = composeEmptyValues(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 });

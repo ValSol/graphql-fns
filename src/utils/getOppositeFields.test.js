@@ -1,13 +1,13 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import getOppositeFields from './getOppositeFields';
 
 describe('getOppositeFields util', () => {
-  const personConfig: ThingConfig = {};
-  const placeConfig: ThingConfig = {
+  const personConfig: EntityConfig = {};
+  const placeConfig: EntityConfig = {
     name: 'Place',
     type: 'tangible',
     textFields: [{ name: 'name' }],
@@ -68,7 +68,7 @@ describe('getOppositeFields util', () => {
   });
 
   test('should return opposite fields for placeConfig', () => {
-    const thingConfig = placeConfig;
+    const entityConfig = placeConfig;
 
     const expectedResult = [
       [
@@ -100,13 +100,13 @@ describe('getOppositeFields util', () => {
       ],
     ];
 
-    const result = getOppositeFields(thingConfig);
+    const result = getOppositeFields(entityConfig);
 
     expect(result).toEqual(expectedResult);
   });
 
   test('should return opposite fields for personConfig', () => {
-    const thingConfig = personConfig;
+    const entityConfig = personConfig;
 
     const expectedResult = [
       [
@@ -168,7 +168,7 @@ describe('getOppositeFields util', () => {
       ],
     ];
 
-    const result = getOppositeFields(thingConfig);
+    const result = getOppositeFields(entityConfig);
 
     expect(result).toEqual(expectedResult);
   });

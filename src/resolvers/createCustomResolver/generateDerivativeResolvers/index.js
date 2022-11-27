@@ -8,8 +8,8 @@ import createResolverCreator from './createResolverCreator';
 const store = Object.create(null);
 
 const getAllowedActions = (allow) =>
-  Object.keys(allow).reduce((prev, thingName) => {
-    allow[thingName].forEach((methodName) => {
+  Object.keys(allow).reduce((prev, entityName) => {
+    allow[entityName].forEach((methodName) => {
       prev[methodName] = true; // eslint-disable-line no-param-reassign
     });
     return prev;

@@ -2,22 +2,23 @@
 
 import pluralize from 'pluralize';
 
-type Arg = { actionName: string, thingName: string };
+type Arg = { actionName: string, entityName: string };
 
 const composeSpecificActionName = (arg: Arg): string => {
-  const { actionName, thingName } = arg;
-  if (actionName.search('things') !== -1) {
-    return actionName.replace('things', pluralize(thingName));
+  const { actionName, entityName } = arg;
+  if (actionName.search('entities') !== -1) {
+    return actionName.replace('entities', pluralize(entityName));
   }
-  if (actionName.search('Things') !== -1) {
-    return actionName.replace('Things', pluralize(thingName));
+  if (actionName.search('Entities') !== -1) {
+    return actionName.replace('Entities', pluralize(entityName));
   }
-  if (actionName.search('thing') !== -1) {
-    return actionName.replace('thing', thingName);
+  if (actionName.search('entity') !== -1) {
+    return actionName.replace('entity', entityName);
   }
-  if (actionName.search('Thing') !== -1) {
-    return actionName.replace('Thing', thingName);
+  if (actionName.search('Entity') !== -1) {
+    return actionName.replace('Entity', entityName);
   }
+
   throw new TypeError(`Incorrect actionName: ${actionName}!`);
 };
 

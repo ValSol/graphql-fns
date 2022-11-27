@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import extractExternalReferences from './extractExternalReferences';
 
 describe('extractExternalReferences util', () => {
-  const accessConfig: ThingConfig = {
+  const accessConfig: EntityConfig = {
     name: 'Access',
     type: 'tangible',
 
@@ -22,8 +22,8 @@ describe('extractExternalReferences util', () => {
     ],
   };
 
-  const postConfig: ThingConfig = {};
-  const restaurantConfig: ThingConfig = {};
+  const postConfig: EntityConfig = {};
+  const restaurantConfig: EntityConfig = {};
 
   Object.assign(postConfig, {
     name: 'Post',

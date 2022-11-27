@@ -1,23 +1,23 @@
 // @flow
 /* eslint-env jest */
 
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 import composeRelationalKey from './composeRelationalKey';
 
 const transformForJest = (obj: {
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   relationalKey: string,
   value: Object,
 }) => {
-  const { thingConfig, ...rest } = obj;
-  return { ...rest, thingConfig: thingConfig.name };
+  const { entityConfig, ...rest } = obj;
+  return { ...rest, entityConfig: entityConfig.name };
 };
 
 describe('composeRelationalKey', () => {
   test('return one chain result', () => {
-    const thingConfig: ThingConfig = {};
-    Object.assign(thingConfig, {
+    const entityConfig: EntityConfig = {};
+    Object.assign(entityConfig, {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -30,7 +30,7 @@ describe('composeRelationalKey', () => {
         {
           name: 'relationalField',
           index: true,
-          config: thingConfig,
+          config: entityConfig,
         },
       ],
     });
@@ -38,11 +38,11 @@ describe('composeRelationalKey', () => {
     const value = { relationalField_: { name: 'test' } };
     const lookupArray = [];
 
-    const result = composeRelationalKey(value, lookupArray, thingConfig);
+    const result = composeRelationalKey(value, lookupArray, entityConfig);
 
     const expectedResult = {
       relationalKey: 'relationalField_',
-      thingConfig,
+      entityConfig,
       value: { name: 'test' },
     };
 
@@ -53,9 +53,9 @@ describe('composeRelationalKey', () => {
   });
 
   test('return one chain result', () => {
-    const menusectionConfig: ThingConfig = {};
-    const menuConfig: ThingConfig = {};
-    const restaurantConfig: ThingConfig = {};
+    const menusectionConfig: EntityConfig = {};
+    const menuConfig: EntityConfig = {};
+    const restaurantConfig: EntityConfig = {};
 
     const accessConfig = {
       name: 'Access',
@@ -143,7 +143,7 @@ describe('composeRelationalKey', () => {
 
     const expectedResult = {
       relationalKey: 'menu_restaurant_access_',
-      thingConfig: accessConfig,
+      entityConfig: accessConfig,
       value: {
         restaurantEditors: '5f85ad539905d61fb73346a2',
       },

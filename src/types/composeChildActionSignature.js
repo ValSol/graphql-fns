@@ -1,13 +1,13 @@
 // @flow
 
-import type { Inventory, ThingConfig } from '../flowTypes';
+import type { Inventory, EntityConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import fillDic from './inputs/fillDic';
-import childThings from './actionAttributes/childThingsQueryAttributes';
+import childEntities from './actionAttributes/childEntitiesQueryAttributes';
 
 const composeChildActionSignature = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   dic?: { [inputName: string]: string },
   inventory?: Inventory,
 ): string => {
@@ -20,10 +20,10 @@ const composeChildActionSignature = (
     argNames,
     argTypes,
     actionReturnString,
-  } = childThings;
-  const { name: configName } = thingConfig;
+  } = childEntities;
+  const { name: configName } = entityConfig;
 
-  if (!actionAllowed(thingConfig)) return '';
+  if (!actionAllowed(entityConfig)) return '';
 
   if (
     inventory &&
@@ -37,7 +37,7 @@ const composeChildActionSignature = (
   const toShow = [];
 
   inputCreators.forEach((inputCreator) => {
-    const [inputName, inputDefinition, childChain] = inputCreator(thingConfig);
+    const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
     toShow.push(Boolean(inputDefinition));
     if (dic && inputName && !dic[inputName] && inputDefinition) {
       dic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
@@ -48,7 +48,7 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString('')(thingConfig);
+  const returnString = actionReturnString('')(entityConfig);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;

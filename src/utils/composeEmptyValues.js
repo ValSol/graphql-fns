@@ -1,10 +1,10 @@
 // @flow
-import type { ThingConfig } from '../flowTypes';
+import type { EntityConfig } from '../flowTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
-const composeEmptyValues = (thingConfig: ThingConfig): Object => {
-  const fieldsObject = composeFieldsObject(thingConfig);
+const composeEmptyValues = (entityConfig: EntityConfig): Object => {
+  const fieldsObject = composeFieldsObject(entityConfig);
 
   const result = Object.keys(fieldsObject).reduce((prev, name) => {
     const {

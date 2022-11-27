@@ -1,12 +1,12 @@
 // @flow
-import type { ThingConfig } from '../../../flowTypes';
+import type { EntityConfig } from '../../../flowTypes';
 
 const processDeleteDataPrepareArgs = (
   data: { [key: string]: any },
   prevData: { [key: string]: any },
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
 ): { [key: string]: any } => {
-  const { duplexFields } = thingConfig;
+  const { duplexFields } = entityConfig;
 
   const result = { _id: prevData._id }; // eslint-disable-line no-underscore-dangle
 

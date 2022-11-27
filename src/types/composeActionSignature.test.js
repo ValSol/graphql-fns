@@ -1,15 +1,15 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ActionSignatureMethods, ThingConfig } from '../flowTypes';
+import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../flowTypes';
 
 import composeActionSignature from './composeActionSignature';
 
 describe('composeActionSignature', () => {
   test('should return correct results for empty args arrays', () => {
     const signatureMethods: ActionSignatureMethods = {
-      name: 'getThing',
-      specificName(thingConfig) {
-        const { name } = thingConfig;
+      name: 'getEntity',
+      specificName(entityConfig) {
+        const { name } = entityConfig;
         return `get${name}`;
       },
       argNames() {
@@ -18,14 +18,14 @@ describe('composeActionSignature', () => {
       argTypes() {
         return [];
       },
-      type(thingConfig) {
-        const { name } = thingConfig;
+      type(entityConfig) {
+        const { name } = entityConfig;
         return `[${name}!]!`;
       },
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -36,19 +36,19 @@ describe('composeActionSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
     const expectedResult = 'getExample: [Example!]!';
 
-    const result = composeActionSignature(signatureMethods, thingConfig, generalConfig);
+    const result = composeActionSignature(signatureMethods, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should return correct results for fulfilled args arrays', () => {
     const queryParts = {
-      name: 'getThing',
-      specificName(thingConfig) {
-        const { name } = thingConfig;
+      name: 'getEntity',
+      specificName(entityConfig) {
+        const { name } = entityConfig;
         return `get${name}`;
       },
       argNames() {
@@ -57,14 +57,14 @@ describe('composeActionSignature', () => {
       argTypes() {
         return ['String!', 'Int'];
       },
-      type(thingConfig) {
-        const { name } = thingConfig;
+      type(entityConfig) {
+        const { name } = entityConfig;
         return `${name}!`;
       },
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -74,20 +74,20 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = 'getExample(path: String!, index: Int): Example!';
 
-    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
+    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should return empty results', () => {
     const queryParts = {
-      name: 'getThing',
-      specificName(thingConfig) {
-        const { name } = thingConfig;
+      name: 'getEntity',
+      specificName(entityConfig) {
+        const { name } = entityConfig;
         return name === 'Example' ? '' : `get${name}`;
       },
       argNames() {
@@ -96,14 +96,14 @@ describe('composeActionSignature', () => {
       argTypes() {
         return ['String!', 'Int'];
       },
-      type(thingConfig) {
-        const { name } = thingConfig;
+      type(entityConfig) {
+        const { name } = entityConfig;
         return `${name}!`;
       },
-      config: (thingConfig) => thingConfig,
+      config: (entityConfig) => entityConfig,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -113,20 +113,20 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = '';
 
-    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
+    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 
   test('should return action that return scalar', () => {
     const queryParts = {
-      name: 'tokenOfThing',
-      specificName(thingConfig) {
-        const { name } = thingConfig;
+      name: 'tokenOfEntity',
+      specificName(entityConfig) {
+        const { name } = entityConfig;
         return `tokenOf${name}`;
       },
       argNames() {
@@ -139,7 +139,7 @@ describe('composeActionSignature', () => {
       config: () => null,
     };
 
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -149,12 +149,12 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = 'tokenOfExample(path: String!, index: Int): String!';
 
-    const result = composeActionSignature(queryParts, thingConfig, generalConfig);
+    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
     expect(result).toBe(expectedResult);
   });
 });

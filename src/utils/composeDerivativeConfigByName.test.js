@@ -1,12 +1,12 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeAttributes, GeneralConfig, ThingConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
 
 import composeDerivativeConfigByName from './composeDerivativeConfigByName';
 
 describe('composeDerivativeConfigByName', () => {
   test('should return correct derivative config', () => {
-    const thingConfig: ThingConfig = {
+    const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -17,7 +17,7 @@ describe('composeDerivativeConfigByName', () => {
       ],
     };
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['thing', 'things'] },
+      allow: { Example: ['entity', 'entities'] },
       suffix: 'ForCatalog',
       addFields: {
         Example: {
@@ -29,11 +29,11 @@ describe('composeDerivativeConfigByName', () => {
     const derivative = { ForCatalog };
 
     const generalConfig: GeneralConfig = {
-      thingConfigs: { Example: thingConfig },
+      entityConfigs: { Example: entityConfig },
       derivative,
     };
 
-    const result = composeDerivativeConfigByName('ForCatalog', thingConfig, generalConfig);
+    const result = composeDerivativeConfigByName('ForCatalog', entityConfig, generalConfig);
 
     const expectedResult = {
       name: 'ExampleForCatalog',

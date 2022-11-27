@@ -17,10 +17,10 @@ type Arg1 = {
 };
 
 const parseAction = (
-  { actionType, actionName, generalConfig, options, suffix, suffixToPermission, thingName }: Arg1,
+  { actionType, actionName, generalConfig, options, suffix, suffixToPermission, entityName }: Arg1,
   { derivativeAttributes, inventoryByPermissions, maxShift }: ParseActionResult,
 ): ParseActionResult => {
-  const actionToParse = { actionType, actionName, thingName, suffix };
+  const actionToParse = { actionType, actionName, entityName, suffix };
 
   const parsedAction = parseActionName(actionToParse, generalConfig);
 
@@ -28,12 +28,12 @@ const parseAction = (
 
   actionToInventory(actionToParse, parsedAction, inventoryByPermissions, suffixToPermission);
 
-  if (!parsedAction.thingConfig) {
+  if (!parsedAction.entityConfig) {
     return { inventoryByPermissions, derivativeAttributes, maxShift };
   }
 
   const { childQueries, maxShift: newMaxShift } = getChildQueries(
-    parsedAction.thingConfig,
+    parsedAction.entityConfig,
     generalConfig,
     options,
   );

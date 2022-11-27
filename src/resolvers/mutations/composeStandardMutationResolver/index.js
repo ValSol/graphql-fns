@@ -1,8 +1,8 @@
 // @flow
-import type { GeneralConfig, ServersideConfig, ThingConfig } from '../../../flowTypes';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
 import type { ResolverAttributes } from '../../flowTypes';
 
-import addIdsToThing from '../../utils/addIdsToThing';
+import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
@@ -15,7 +15,7 @@ type Args = { data: Object, positions: { [key: string]: Array<number> } };
 type Context = { mongooseConn: Object, pubsub?: Object };
 
 type Result = (
-  thingConfig: ThingConfig,
+  entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
@@ -34,14 +34,14 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
   } = resolverAttributes;
 
   const createMutationResolver = (
-    thingConfig: ThingConfig,
+    entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
     serversideConfig: ServersideConfig,
     inAnyCase?: boolean,
   ): Function | null => {
     const { inventory } = generalConfig;
     const { transactions } = serversideConfig;
-    const { name } = thingConfig;
+    const { name } = entityConfig;
 
     const inventoryChain = ['Mutation', actionGeneralName, name];
     if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
@@ -56,7 +56,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       parentFilter: Array<Object>,
     ): Object => {
       const resolverCreatorArg = {
-        thingConfig,
+        entityConfig,
         generalConfig,
         serversideConfig,
         inAnyCase,
@@ -103,7 +103,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             return null;
           }
 
-          result.previous = previous.map((item) => addIdsToThing(item, thingConfig));
+          result.previous = previous.map((item) => addIdsToEntity(item, entityConfig));
 
           if (!prepareBulkData) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
@@ -164,7 +164,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         // eslint-disable-next-line no-await-in-loop
         result.current = await produceResult(
           preparedData,
-          thingConfig,
+          entityConfig,
           generalConfig,
           context,
           array,

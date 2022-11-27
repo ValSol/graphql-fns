@@ -9,18 +9,18 @@ const actionToDerivative = (
   derivativeAttributes: { [suffix: string]: DerivativeAttributes },
   generalConfig: GeneralConfig,
 ): { [suffix: string]: DerivativeAttributes } => {
-  const { actionName, thingName } = actionToParse;
-  const { baseAction, creationType, suffix, thingConfig } = parsedAction;
+  const { actionName, entityName } = actionToParse;
+  const { baseAction, creationType, suffix, entityConfig } = parsedAction;
 
-  const { thingConfigs } = generalConfig;
+  const { entityConfigs } = generalConfig;
 
-  if (creationType !== 'derivative' && (!thingConfig || thingConfigs[thingConfig.name])) {
+  if (creationType !== 'derivative' && (!entityConfig || entityConfigs[entityConfig.name])) {
     return derivativeAttributes;
   }
 
-  const returningThingName = thingConfig ? thingConfig.name.slice(0, -suffix.length) : thingName;
+  const returningThingName = entityConfig ? entityConfig.name.slice(0, -suffix.length) : entityName;
 
-  if (!thingConfigs[returningThingName]) return derivativeAttributes;
+  if (!entityConfigs[returningThingName]) return derivativeAttributes;
 
   if (!derivativeAttributes[suffix]) {
     derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign

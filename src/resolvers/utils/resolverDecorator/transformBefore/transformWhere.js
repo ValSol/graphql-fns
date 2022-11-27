@@ -1,6 +1,6 @@
 // @flow
 
-import type { ThingConfig } from '../../../../flowTypes';
+import type { EntityConfig } from '../../../../flowTypes';
 
 import fromGlobalId from '../../fromGlobalId';
 
@@ -12,8 +12,8 @@ const processField = (globalId) => {
   return id;
 };
 
-const transformWhere = (where: Object, thingConfig: ThingConfig | null): Object => {
-  const { duplexFields, relationalFields } = thingConfig || {};
+const transformWhere = (where: Object, entityConfig: EntityConfig | null): Object => {
+  const { duplexFields, relationalFields } = entityConfig || {};
 
   const fieldsObject = [...(duplexFields || []), ...(relationalFields || [])].reduce(
     (prev, field) => {
@@ -42,7 +42,7 @@ const transformWhere = (where: Object, thingConfig: ThingConfig | null): Object 
         throw new TypeError(`Incorrect key: "${key}"!`);
       }
     } else if (key === 'AND' || key === 'NOR' || key === 'OR') {
-      prev[key] = where[key].map((item) => transformWhere(item, thingConfig)); // eslint-disable-line no-param-reassign
+      prev[key] = where[key].map((item) => transformWhere(item, entityConfig)); // eslint-disable-line no-param-reassign
     } else {
       prev[key] = where[key]; // eslint-disable-line no-param-reassign
     }
