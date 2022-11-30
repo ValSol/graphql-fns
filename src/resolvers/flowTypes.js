@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, Periphery, ServersideConfig, EntityConfig } from '../flowTypes';
 
-type Context = { mongooseConn: Object, pubsub?: Object };
+export type Context = { mongooseConn: Object, pubsub?: Object };
 
 export type ResolverCreatorArg = {
   entityConfig: EntityConfig,

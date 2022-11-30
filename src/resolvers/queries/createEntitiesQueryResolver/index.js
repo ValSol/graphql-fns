@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createEntity from '../../../mongooseModels/createThing';
@@ -20,7 +21,6 @@ type Args = {
   pagination?: { skip: number, first: number },
   search?: string,
 };
-type Context = { mongooseConn: Object };
 
 const createEntitiesQueryResolver = (
   entityConfig: EntityConfig,

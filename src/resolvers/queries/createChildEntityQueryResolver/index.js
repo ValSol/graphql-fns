@@ -1,11 +1,11 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import createEntityQueryResolver from '../createEntityQueryResolver';
 
 type Args = { whereOne: { id: string } };
-type Context = { mongooseConn: Object };
 
 const createchildEntityQueryResolver = (
   entityConfig: EntityConfig,

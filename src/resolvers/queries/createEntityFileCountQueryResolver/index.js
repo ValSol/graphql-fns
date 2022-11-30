@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
@@ -8,7 +9,6 @@ import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = { where: { id: string } };
-type Context = { mongooseConn: Object };
 
 const createEntityFileCountQueryResolver = (
   entityConfig: EntityConfig,

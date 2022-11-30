@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import fromCursor from './fromCursor';
+import fromCursor from './index';
 
 describe('fromCursor', () => {
   test('normal globalId', () => {

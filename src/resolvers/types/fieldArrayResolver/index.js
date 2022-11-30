@@ -1,7 +1,7 @@
 // @flow
+import type { Context } from '../../flowTypes';
 
 type Args = { slice: { begin?: number, end?: number } };
-type Context = { mongooseConn: Object };
 
 const fieldArrayResolver = (parent: Object, args: Args, context: Context, info: Object): Object => {
   const { fieldName } = info;

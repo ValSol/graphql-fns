@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createEntity from '../../../mongooseModels/createThing';
@@ -11,7 +12,6 @@ type Args = {
   where?: Object,
   options: { target: string },
 };
-type Context = { mongooseConn: Object };
 
 const createEntityDistinctValuesQueryResolver = (
   entityConfig: EntityConfig,

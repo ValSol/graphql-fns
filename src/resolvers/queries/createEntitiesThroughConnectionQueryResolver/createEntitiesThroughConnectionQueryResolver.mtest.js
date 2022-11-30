@@ -14,10 +14,60 @@ const { default: toCursor } = require('./toCursor');
 
 let mongooseConn;
 
+let createdExamples;
+
+let examplesThroughConnection;
+
+const generalConfig: GeneralConfig = { entityConfigs: {} };
+const entityConfig: EntityConfig = {
+  name: 'Example',
+  type: 'tangible',
+  intFields: [
+    {
+      name: 'num',
+    },
+  ],
+};
+const serversideConfig = { transactions: true };
+
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-entities-through-connection-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
+
+  const exampleSchema = createThingSchema(entityConfig);
+  const Example = mongooseConn.model('Example_Thing', exampleSchema);
+  await Example.createCollection();
+
+  const createManyExamples = createCreateManyEntitiesMutationResolver(
+    entityConfig,
+    generalConfig,
+    serversideConfig,
+  );
+  expect(typeof createManyExamples).toBe('function');
+  if (!createManyExamples) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+  const data = [
+    { num: 0 },
+    { num: 1 },
+    { num: 2 },
+    { num: 3 },
+    { num: 4 },
+    { num: 5 },
+    { num: 6 },
+    { num: 7 },
+    { num: 8 },
+    { num: 9 },
+    { num: 10 },
+  ];
+
+  createdExamples = await createManyExamples(null, { data }, { mongooseConn }, null, []);
+
+  examplesThroughConnection = createEntitiesThroughConnectionQueryResolver(
+    entityConfig,
+    generalConfig,
+    serversideConfig,
+  );
 });
 
 afterAll(async () => {
@@ -25,57 +75,10 @@ afterAll(async () => {
 });
 
 describe('createCreateManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
-
-  test('should create mutation add entity resolver', async () => {
-    const entityConfig: EntityConfig = {
-      name: 'Example',
-      type: 'tangible',
-      intFields: [
-        {
-          name: 'num',
-        },
-      ],
-    };
-
-    const exampleSchema = createThingSchema(entityConfig);
-    const Example = mongooseConn.model('Example_Thing', exampleSchema);
-    await Example.createCollection();
-
-    const serversideConfig = { transactions: true };
-    const createManyExamples = createCreateManyEntitiesMutationResolver(
-      entityConfig,
-      generalConfig,
-      serversideConfig,
-    );
-    expect(typeof createManyExamples).toBe('function');
-    if (!createManyExamples) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
-
-    const data = [
-      { num: 0 },
-      { num: 1 },
-      { num: 2 },
-      { num: 3 },
-      { num: 4 },
-      { num: 5 },
-      { num: 6 },
-      { num: 7 },
-      { num: 8 },
-      { num: 9 },
-      { num: 10 },
-    ];
-
-    const createdExamples = await createManyExamples(null, { data }, { mongooseConn }, null, []);
-
-    for (let i = 0; i < createManyExamples.length; i += 1) {
+  test('should create resolver', async () => {
+    for (let i = 0; i < createdExamples.length; i += 1) {
       expect(createdExamples[i].num).toBe(i);
     }
-
-    const examplesThroughConnection = createEntitiesThroughConnectionQueryResolver(
-      entityConfig,
-      generalConfig,
-      serversideConfig,
-    );
 
     const examples = await examplesThroughConnection(
       null,
@@ -102,7 +105,6 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       expect(node).toEqual(createdExamples[i]);
       expect(cursor).toBe(toCursor(createdExamples[i].id, i));
     }
-
     const examples2 = await examplesThroughConnection(
       null,
       { first: 5, after: endCursor },
@@ -234,7 +236,9 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       expect(node).toEqual(createdExamples[i]);
       expect(cursor).toBe(toCursor(createdExamples[i].id, i));
     }
+  });
 
+  test('should create resolver 2', async () => {
     const examples6 = await examplesThroughConnection(
       null,
       { first: 11 },
@@ -266,5 +270,178 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       expect(node).toEqual(createdExamples[i]);
       expect(cursor).toBe(toCursor(createdExamples[i].id, i));
     }
+  });
+
+  test('should create resolver 3', async () => {
+    const examples7 = await examplesThroughConnection(
+      null,
+      { last: 4 },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
+      [],
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage7,
+        hasPreviousPage: hasPreviousPage7,
+        startCursor: startCursor7,
+        endCursor: endCursor7,
+      },
+      edges: edges7,
+    } = examples7;
+
+    expect(hasPreviousPage7).toBe(true);
+    expect(hasNextPage7).toBe(false);
+    expect(startCursor7).toBe(toCursor(createdExamples[7].id, 7));
+    expect(endCursor7).toBe(toCursor(createdExamples[10].id, 10));
+
+    expect(edges7.length).toBe(4);
+
+    for (let i = 0; i < edges7.length; i += 1) {
+      const { node, cursor } = edges7[i];
+
+      expect(node).toEqual(createdExamples[i + 7]);
+      expect(cursor).toBe(toCursor(createdExamples[i + 7].id, i + 7));
+    }
+  });
+
+  test('should create resolver 4', async () => {
+    const examples8 = await examplesThroughConnection(
+      null,
+      { last: 11 },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
+      [],
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage8,
+        hasPreviousPage: hasPreviousPage8,
+        startCursor: startCursor8,
+        endCursor: endCursor8,
+      },
+      edges: edges8,
+    } = examples8;
+
+    expect(hasPreviousPage8).toBe(false);
+    expect(hasNextPage8).toBe(false);
+    expect(startCursor8).toBe(toCursor(createdExamples[0].id, 0));
+    expect(endCursor8).toBe(toCursor(createdExamples[10].id, 10));
+
+    expect(edges8.length).toBe(11);
+
+    for (let i = 0; i < edges8.length; i += 1) {
+      const { node, cursor } = edges8[i];
+
+      expect(node).toEqual(createdExamples[i]);
+      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+    }
+  });
+
+  test('should create resolver 5', async () => {
+    const after = toCursor('61af380a5c2825441ca07902', 2);
+
+    const examples = await examplesThroughConnection(
+      null,
+      { first: 3, after },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
+      [],
+    );
+
+    const {
+      pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },
+      edges,
+    } = examples;
+
+    expect(hasPreviousPage).toBe(false);
+    expect(hasNextPage).toBe(true);
+    expect(startCursor).toBe(toCursor(createdExamples[0].id, 0));
+    expect(endCursor).toBe(toCursor(createdExamples[2].id, 2));
+
+    expect(edges.length).toBe(3);
+
+    for (let i = 0; i < edges.length; i += 1) {
+      const { node, cursor } = edges[i];
+
+      expect(node).toEqual(createdExamples[i]);
+      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+    }
+  });
+
+  test('should create resolver 6', async () => {
+    const before = toCursor('61af380a5c2825441ca07902', 2);
+
+    const examples = await examplesThroughConnection(
+      null,
+      { last: 3, before },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
+      [],
+    );
+
+    const {
+      pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },
+      edges,
+    } = examples;
+
+    expect(hasPreviousPage).toBe(true);
+    expect(hasNextPage).toBe(false);
+    expect(startCursor).toBe(toCursor(createdExamples[8].id, 8));
+    expect(endCursor).toBe(toCursor(createdExamples[10].id, 10));
+
+    expect(edges.length).toBe(3);
+
+    for (let i = 0; i < edges.length; i += 1) {
+      const { node, cursor } = edges[i];
+
+      expect(node).toEqual(createdExamples[i + 8]);
+      expect(cursor).toBe(toCursor(createdExamples[i + 8].id, i + 8));
+    }
+  });
+
+  test.skip('should create resolver 5', async () => {
+    const after = toCursor(createdExamples[1].id, 2);
+
+    const examples = await examplesThroughConnection(
+      null,
+      { last: 3, after },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
+      [],
+    );
+
+    const {
+      pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },
+      edges,
+    } = examples;
+
+    expect(hasPreviousPage).toBe(true);
+    expect(hasNextPage).toBe(true);
+    expect(startCursor).toBe(toCursor(createdExamples[2].id, 2));
+    expect(endCursor).toBe(toCursor(createdExamples[4].id, 4));
+
+    expect(edges.length).toBe(3);
+
+    for (let i = 0; i < edges.length; i += 1) {
+      const { node, cursor } = edges[i];
+
+      expect(node).toEqual(createdExamples[i + 2]);
+      expect(cursor).toBe(toCursor(createdExamples[i + 2].id, i + 2));
+    }
+
+    // const result = await Example.aggregate([
+    //   {
+    //     $setWindowFields: {
+    //       sortBy: { _id: 1 },
+    //       output: { rowNumber: { $documentNumber: {} } },
+    //     },
+    //   },
+    // ]);
+
+    // console.log('*******************');
+    // console.log(result);
   });
 });

@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import childEntityQueryAttributes from '../../../types/actionAttributes/childEntityQueryAttributes';
 import createChildEntityQueryResolver from '../../queries/createChildEntityQueryResolver';
@@ -10,7 +11,6 @@ import parseEntityName from '../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
 type Args = { where: { id: string } };
-type Context = { mongooseConn: Object };
 
 const createEntityScalarResolver = (
   entityConfig: EntityConfig,

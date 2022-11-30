@@ -1,10 +1,10 @@
 // @flow
 import type { GeneralConfig, Periphery, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import createEntity from '../../../mongooseModels/createThing';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 
-type Context = { mongooseConn: Object, pubsub?: Object };
 type PreparedData = {
   core: Map<EntityConfig, Array<Object>>,
   periphery: Periphery,

@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createEntity from '../../../mongooseModels/createThing';
@@ -10,7 +11,6 @@ import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = { whereOne: { id: string } };
-type Context = { mongooseConn: Object };
 
 const createEntityQueryResolver = (
   entityConfig: EntityConfig,

@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.713",
+  "version": "0.1.2-beta.714",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -80,7 +80,7 @@
     "jest-environment-jsdom": "^29.0.2",
     "jest-environment-node": "^29.0.2",
     "mongodb": "^4.9.1",
-    "mongoose": "^6.6.0",
+    "mongoose": "^6.7.3",
     "next": "^12.3.0",
     "prettier": "^2.7.1",
     "react": "^18.2.0",

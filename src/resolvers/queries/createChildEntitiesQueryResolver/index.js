@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
 
@@ -11,7 +12,6 @@ type Args = {
   pagination?: { skip: number, first: number },
   search?: string,
 };
-type Context = { mongooseConn: Object };
 
 const createchildEntitiesQueryResolver = (
   entityConfig: EntityConfig,

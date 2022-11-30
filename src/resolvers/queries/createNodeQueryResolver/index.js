@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
@@ -8,8 +9,6 @@ import transformAfter from '../../utils/resolverDecorator/transformAfter';
 
 import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
 import createEntityQueryResolver from '../createEntityQueryResolver';
-
-type Context = { mongooseConn: Object };
 
 const createNodeQueryResolver = (
   generalConfig: GeneralConfig,

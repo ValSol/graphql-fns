@@ -1,12 +1,18 @@
 // @flow
 
 import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../utils/executeAuthorisation';
+import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
 import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
-import composeFirstEdges from './composeFirstEdges';
-import composeLastEdges from './composeLastEdges';
+import createEntityQueryResolver from '../createEntityQueryResolver';
+import getFirst from './getFirst';
+import getShift from './getShift';
+import getVeryFirst from './getFirst/getVeryFirst';
+import getLast from './getLast';
+import getVeryLast from './getLast/getVeryLast';
 import fromCursor from './fromCursor';
 
 type Args = {
@@ -19,7 +25,6 @@ type Args = {
   first?: number,
   last?: number,
 };
-type Context = { mongooseConn: Object };
 
 const createEntitiesThroughConnectionQueryResolver = (
   entityConfig: EntityConfig,
@@ -41,6 +46,22 @@ const createEntitiesThroughConnectionQueryResolver = (
   );
   if (!entitiesQueryResolver) return null;
 
+  const entityQueryResolver = createEntityQueryResolver(
+    entityConfig,
+    generalConfig,
+    serversideConfig,
+    true, // inAnyCase,
+  );
+  if (!entityQueryResolver) return null;
+
+  const entityCountQueryResolver = createEntityCountQueryResolver(
+    entityConfig,
+    generalConfig,
+    serversideConfig,
+    true, // inAnyCase,
+  );
+  if (!entityQueryResolver) return null;
+
   const resolver = async (
     parent: Object,
     args: Args,
@@ -54,6 +75,8 @@ const createEntitiesThroughConnectionQueryResolver = (
 
     if (!filter) return null;
 
+    const resolverArg = { parent, args, context, info, parentFilter };
+
     const { after, before, first, last } = args;
 
     if (after) {
@@ -65,41 +88,25 @@ const createEntitiesThroughConnectionQueryResolver = (
 
       const { _id, shift } = fromCursor(after) || {}; // adding "|| {}" to prevent flowjs error
 
-      const pagination = { skip: shift, first: first + 2 };
+      let shift2 = shift;
 
-      const entities = await entitiesQueryResolver(
-        parent,
-        { ...args, pagination },
-        context,
-        info,
-        parentFilter,
-      );
+      for (let i = 0; i < 10; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await getFirst(_id, shift2, first, resolverArg, entitiesQueryResolver);
 
-      // eslint-disable-next-line no-underscore-dangle
-      if (entities?.[0]?.id?.toString() !== _id) {
-        // TODO processing dynamic list
-        throw new TypeError(
-          `Got dynamic list in "entitiesThroughConnection" query, entity: "${name}"!`,
-        );
+        if (result) return result;
+
+        // eslint-disable-next-line no-await-in-loop
+        shift2 = await getShift(_id, resolverArg, entityQueryResolver);
+
+        if (shift2 === null) {
+          return getVeryFirst(first, resolverArg, entitiesQueryResolver);
+        }
       }
-
-      return composeFirstEdges(shift, first, entities);
     }
 
     if (first) {
-      const pagination = { skip: 0, first: first + 1 };
-
-      const entities = await entitiesQueryResolver(
-        parent,
-        { ...args, pagination },
-        context,
-        info,
-        parentFilter,
-      );
-
-      const shift = -1;
-
-      return composeFirstEdges(shift, first, entities);
+      return getVeryFirst(first, resolverArg, entitiesQueryResolver);
     }
 
     if (before) {
@@ -111,30 +118,25 @@ const createEntitiesThroughConnectionQueryResolver = (
 
       const { _id, shift } = fromCursor(before) || {}; // adding "|| {}" to prevent flowjs error
 
-      const firstForBefore = last + 2 > shift ? shift + 1 : last + 2;
-      const skip = last + 2 > shift ? 0 : shift - last - 1;
+      let shift2 = shift;
 
-      const pagination = { skip, first: firstForBefore };
+      for (let i = 0; i < 10; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await getLast(_id, shift2, last, resolverArg, entitiesQueryResolver);
 
-      const entities = await entitiesQueryResolver(
-        parent,
-        { ...args, pagination },
-        context,
-        info,
-        parentFilter,
-      );
+        if (result) return result;
 
-      const { length } = entities;
+        // eslint-disable-next-line no-await-in-loop
+        shift2 = await getShift(_id, resolverArg, entitiesQueryResolver);
 
-      // eslint-disable-next-line no-underscore-dangle
-      if (entities?.[length - 1]?.id?.toString() !== _id) {
-        // TODO processing dynamic list
-        throw new TypeError(
-          `Got dynamic list in "entitiesThroughConnection" query, entity: "${name}"!`,
-        );
+        if (shift2 === null) {
+          getVeryLast(last, resolverArg, entitiesQueryResolver, entityCountQueryResolver);
+        }
       }
+    }
 
-      return composeLastEdges(shift, last, entities);
+    if (last) {
+      return getVeryLast(last, resolverArg, entitiesQueryResolver, entityCountQueryResolver);
     }
 
     throw new TypeError(

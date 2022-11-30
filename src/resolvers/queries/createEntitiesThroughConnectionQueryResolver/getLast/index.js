@@ -1,0 +1,42 @@
+// @flow
+
+import type { ResolverArg } from '../../../flowTypes';
+
+import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
+import composeLastEdges from './composeLastEdges';
+
+const getLast = async (
+  _id: string,
+  shift: number,
+  last: number,
+  resolverArg: ResolverArg,
+  entitiesQueryResolver: Function,
+): null | Promise<Object> => {
+  const { parent, args, context, info, parentFilter } = resolverArg;
+
+  const projection = getProjectionFromInfo(info, ['edges', 'node']);
+
+  const firstForBefore = last + 2 > shift ? shift + 1 : last + 2;
+  const skip = last + 2 > shift ? 0 : shift - last - 1;
+
+  const pagination = { skip, first: firstForBefore };
+
+  const entities = await entitiesQueryResolver(
+    parent,
+    { ...args, pagination },
+    context,
+    { projection },
+    parentFilter,
+  );
+
+  const { length } = entities;
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (entities?.[length - 1]?.id?.toString() === _id) {
+    return composeLastEdges(shift, last, entities);
+  }
+
+  return null;
+};
+
+export default getLast;

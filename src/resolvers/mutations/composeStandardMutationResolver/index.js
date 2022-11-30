@@ -1,6 +1,6 @@
 // @flow
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
-import type { ResolverAttributes } from '../../flowTypes';
+import type { ResolverAttributes, Context } from '../../flowTypes';
 
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
@@ -12,7 +12,6 @@ import optimizeBulkItems from '../optimizeBulkItems';
 import produceResult from './produceResult';
 
 type Args = { data: Object, positions: { [key: string]: Array<number> } };
-type Context = { mongooseConn: Object, pubsub?: Object };
 
 type Result = (
   entityConfig: EntityConfig,

@@ -1,6 +1,7 @@
 // @flow
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { Context } from '../../flowTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
@@ -12,7 +13,6 @@ import polygonFromMongoToGql from '../polygonFromMongoToGql';
 type EntityResolver = { [key: string]: Function };
 
 type Args = { slice: { begin?: number, end?: number } };
-type Context = { mongooseConn: Object };
 
 const composeEntityResolvers = (
   entityConfig: EntityConfig,

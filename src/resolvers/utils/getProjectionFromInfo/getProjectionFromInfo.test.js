@@ -5,6 +5,7 @@ import getProjectionFromInfo from './index';
 import info from '../info.auxiliary';
 import info2 from './info2.auxiliary';
 import info3 from './info3.auxiliary';
+import connectionInfo from './connectionInfo.auxiliary';
 
 describe('getProjectionFromInfo', () => {
   test('should return object with fields from query info', () => {
@@ -70,6 +71,17 @@ describe('getProjectionFromInfo', () => {
       commentList: 1,
       conferenceHall: 1,
       menu: 1,
+      ukTitle: 1,
+    };
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return object with fields query info from root - path = ["edges", "node"] for connection info', () => {
+    const path = ['edges', 'node'];
+    const result = getProjectionFromInfo(connectionInfo, path);
+    const expectedResult = {
+      fullWidthIllustrations: 1,
+      textBlocks: 1,
       ukTitle: 1,
     };
     expect(result).toEqual(expectedResult);
