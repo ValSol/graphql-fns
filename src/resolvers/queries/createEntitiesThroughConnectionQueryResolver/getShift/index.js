@@ -1,16 +1,27 @@
 // @flow
 
-import type { ResolverArg } from '../../../flowTypes';
+import mongoose from 'mongoose';
 
+import type { ResolverArg, ResolverCreatorArg } from '../../../flowTypes';
+
+import createEntity from '../../../../mongooseModels/createThing';
+import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
+import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeLimitingArgs from './composeLimitingArgs';
 import composeProjectionFromArgs from './composeProjectionFromArgs';
+import composeSetWindowFieldsInput from './composeSetWindowFieldsInput';
 
 const getShift = async (
   _id: string,
+  resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
+  filter: Object,
   entityQueryResolver: Function,
 ): Promise<null | number> => {
-  const { parent, args, context, parentFilter } = resolverArg;
+  const { entityConfig, generalConfig } = resolverCreatorArg;
+  const { parent, args, context } = resolverArg;
+
+  const { enums } = generalConfig;
 
   const projection = composeProjectionFromArgs(args);
 
@@ -20,16 +31,50 @@ const getShift = async (
     { whereOne: { id: _id } },
     context,
     { projection },
-    parentFilter,
+    filter,
   );
 
   if (!thing) return null;
 
   const limitingArgs = composeLimitingArgs(args, thing);
 
-  console.log('limitingArgs =', limitingArgs);
+  const { near, where, search } = limitingArgs;
 
-  return 0;
+  // very same code as ...
+  // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
+
+  const { mongooseConn } = context;
+
+  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+
+  const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
+
+  const pipeline = [...lookups];
+
+  if (near) {
+    const geoNear = composeNearForAggregateInput(near);
+
+    pipeline.unshift({ $geoNear: geoNear });
+  }
+
+  if (search) {
+    pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
+    pipeline.unshift({ $match: { $text: { $search: search } } });
+  }
+
+  if (Object.keys(where2).length) {
+    pipeline.push({ $match: where2 });
+  }
+
+  pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });
+
+  const $eq = mongoose.mongo.ObjectId(_id);
+
+  pipeline.push({ $match: { _id: { $eq } } });
+
+  const [{ calculated_number: calculatedNumber }] = await Entity.aggregate(pipeline).exec();
+
+  return calculatedNumber - 1;
 };
 
 export default getShift;

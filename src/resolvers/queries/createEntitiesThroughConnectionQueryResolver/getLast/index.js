@@ -10,9 +10,10 @@ const getLast = async (
   shift: number,
   last: number,
   resolverArg: ResolverArg,
+  filter: Object,
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
-  const { parent, args, context, info, parentFilter } = resolverArg;
+  const { parent, args, context, info } = resolverArg;
 
   const projection = getProjectionFromInfo(info, ['edges', 'node']);
 
@@ -26,7 +27,7 @@ const getLast = async (
     { ...args, pagination },
     context,
     { projection },
-    parentFilter,
+    filter,
   );
 
   const { length } = entities;

@@ -15,7 +15,7 @@ const { default: toCursor } = require('./toCursor');
 let mongooseConn;
 
 let createdExamples;
-
+let Example;
 let examplesThroughConnection;
 
 const generalConfig: GeneralConfig = { entityConfigs: {} };
@@ -36,7 +36,7 @@ beforeAll(async () => {
   await mongooseConn.connection.db.dropDatabase();
 
   const exampleSchema = createThingSchema(entityConfig);
-  const Example = mongooseConn.model('Example_Thing', exampleSchema);
+  Example = mongooseConn.model('Example_Thing', exampleSchema);
   await Example.createCollection();
 
   const createManyExamples = createCreateManyEntitiesMutationResolver(
@@ -402,12 +402,12 @@ describe('createCreateManyEntitiesMutationResolver', () => {
     }
   });
 
-  test.skip('should create resolver 5', async () => {
+  test('should create resolver 7', async () => {
     const after = toCursor(createdExamples[1].id, 2);
 
     const examples = await examplesThroughConnection(
       null,
-      { last: 3, after },
+      { first: 3, after },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1 } },
       [],
@@ -431,17 +431,5 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       expect(node).toEqual(createdExamples[i + 2]);
       expect(cursor).toBe(toCursor(createdExamples[i + 2].id, i + 2));
     }
-
-    // const result = await Example.aggregate([
-    //   {
-    //     $setWindowFields: {
-    //       sortBy: { _id: 1 },
-    //       output: { rowNumber: { $documentNumber: {} } },
-    //     },
-    //   },
-    // ]);
-
-    // console.log('*******************');
-    // console.log(result);
   });
 });

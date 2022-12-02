@@ -15,7 +15,7 @@ type Args = {
   last?: number,
 };
 
-const composeLimitingArgs = (args: Args, thing: Object): null | Args => {
+const composeLimitingArgs = (args: Args, thing: Object): Args => {
   const { near, sort, where } = args;
 
   const result: Args = { ...args }; // to define type and prevent type error

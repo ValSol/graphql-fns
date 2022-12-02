@@ -1,13 +1,20 @@
 // @flow
 
-const composeSortInput = (
+const composeSortForAggregateInput = (
   sortBy: Array<string>,
 ): Array<{ $sort: { [fieldName: string]: 1 | -1 } }> =>
   sortBy.map((sortKey) => {
-    if (sortKey.slice(-4) === '_ASC') {
-      return { $sort: { [sortKey.slice(0, -4)]: 1 } };
+    const [fieldName, distance] = sortKey.split('_');
+
+    if (distance === 'ASC') {
+      return { $sort: { [fieldName]: 1 } };
     }
-    return { $sort: { [sortKey.slice(0, -5)]: -1 } };
+
+    if (distance === 'DESC') {
+      return { $sort: { [fieldName]: -1 } };
+    }
+
+    throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
   });
 
-export default composeSortInput;
+export default composeSortForAggregateInput;

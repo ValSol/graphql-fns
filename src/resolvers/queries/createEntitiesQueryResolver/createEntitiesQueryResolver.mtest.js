@@ -575,7 +575,12 @@ describe('createEntityQueryResolver', () => {
 
     const search = 'arnold pupkin';
 
-    const items2 = await Items(null, { search }, { mongooseConn, pubsub }, infoForSort);
+    const items2 = await Items(
+      null,
+      { search },
+      { mongooseConn, pubsub },
+      { ...infoForSort, score: 1 },
+    );
 
     expect(items2.length).toBe(4);
 

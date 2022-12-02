@@ -49,6 +49,9 @@ const createEntitiesQueryResolver = (
 
     const { near, pagination, sort, where, search } = args;
 
+    // very same code as ...
+    // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
+
     const { mongooseConn } = context;
 
     const Entity = await createEntity(mongooseConn, entityConfig, enums);
