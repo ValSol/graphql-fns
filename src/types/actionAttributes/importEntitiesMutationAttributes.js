@@ -2,8 +2,9 @@
 
 import pluralize from 'pluralize';
 
-import type { InputCreator, EntityConfig } from '../../flowTypes';
+import type { InputCreator, EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createImportOptionsInputTypes from '../inputs/createImportOptionsInputTypes';
 
 const actionType = 'Mutation';
@@ -29,7 +30,12 @@ const argTypes = [
   (name: string): string => 'ImportOptionsInput', // eslint-disable-line no-unused-vars
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 

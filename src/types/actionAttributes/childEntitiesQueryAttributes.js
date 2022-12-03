@@ -2,8 +2,9 @@
 
 import pluralize from 'pluralize';
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createPaginationInputType from '../inputs/createPaginationInputType';
@@ -35,7 +36,12 @@ const argTypes = [
   (name: string): string => 'String', // eslint-disable-line no-unused-vars
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 

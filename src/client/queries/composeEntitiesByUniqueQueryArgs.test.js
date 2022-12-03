@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entitiesByUniqueQueryAttributes from '../../types/actionAttributes/entitiesByUniqueQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntitiesQueryArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   const prefixName = 'Home';
   test('should compose entities query with default args', () => {
     const entityConfig: EntityConfig = {
@@ -24,7 +26,13 @@ describe('composeEntitiesQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entitiesByUniqueQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entitiesByUniqueQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -45,7 +53,13 @@ describe('composeEntitiesQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entitiesByUniqueQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entitiesByUniqueQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -65,7 +79,13 @@ describe('composeEntitiesQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entitiesByUniqueQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entitiesByUniqueQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -86,7 +106,13 @@ describe('composeEntitiesQueryArgs', () => {
       '  ExamplesByUnique(where: $where, sort: $sort, near: $near) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entitiesByUniqueQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entitiesByUniqueQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

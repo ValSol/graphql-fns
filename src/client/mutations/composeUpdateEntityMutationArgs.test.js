@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import updateEntityMutationAttributes from '../../types/actionAttributes/updateEntityMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUpdateEntityMutationArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose updateEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -24,7 +26,13 @@ describe('composeUpdateEntityMutationArgs', () => {
       '  updateExample(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, updateEntityMutationAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      updateEntityMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -68,7 +76,13 @@ describe('composeUpdateEntityMutationArgs', () => {
       '  updatePerson(whereOne: $whereOne, data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, personConfig, updateEntityMutationAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      personConfig,
+      generalConfig,
+      updateEntityMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

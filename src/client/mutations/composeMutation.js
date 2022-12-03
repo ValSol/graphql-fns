@@ -27,8 +27,11 @@ const composeMutation = (
     const head = composeActionArgs(
       prefixName,
       entityConfig,
+      generalConfig,
       mutationAttributes[mutationName],
-      mutationAttributes[mutationName].actionReturnConfig ? childArgs : {},
+      mutationAttributes[mutationName].actionReturnConfig(entityConfig, generalConfig)
+        ? childArgs
+        : {},
     );
 
     if (head.length === 1) return head[0];

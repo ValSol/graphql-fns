@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import createEntityMutationAttributes from '../../types/actionAttributes/createEntityMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeCreateEntityMutationArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose createEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -24,7 +26,13 @@ describe('composeCreateEntityMutationArgs', () => {
       '  createExample(data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, createEntityMutationAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      createEntityMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -68,7 +76,13 @@ describe('composeCreateEntityMutationArgs', () => {
       '  createPerson(data: $data) {',
     ];
 
-    const result = composeActionArgs(prefixName, personConfig, createEntityMutationAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      personConfig,
+      generalConfig,
+      createEntityMutationAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

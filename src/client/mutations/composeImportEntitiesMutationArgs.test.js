@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import importEntitiesMutationAttributes from '../../types/actionAttributes/importEntitiesMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeImportEntitysMutationArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose createEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -27,6 +29,7 @@ describe('composeImportEntitysMutationArgs', () => {
     const result = composeActionArgs(
       prefixName,
       entityConfig,
+      generalConfig,
       importEntitiesMutationAttributes,
       {},
     );

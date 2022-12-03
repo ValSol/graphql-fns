@@ -1,6 +1,6 @@
 // @flow
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
@@ -26,7 +26,11 @@ const argTypes = [
   (): string => 'String',
 ];
 
-const actionReturnConfig = false;
+const actionReturnConfig = (
+  entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
+  generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
+  suffix?: string, // eslint-disable-line no-unused-vars
+): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 

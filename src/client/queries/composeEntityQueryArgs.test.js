@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityQueryAttributes from '../../types/actionAttributes/entityQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityQueryArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose entity query args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -24,7 +26,13 @@ describe('composeEntityQueryArgs', () => {
       '  Example(whereOne: $whereOne) {',
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entityQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entityQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

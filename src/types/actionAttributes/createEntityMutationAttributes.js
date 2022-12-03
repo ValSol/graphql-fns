@@ -1,7 +1,8 @@
 // @flow
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createEntityCreateInputType from '../inputs/createEntityCreateInputType';
 
 const actionType = 'Mutation';
@@ -16,7 +17,12 @@ const argNames = ['data'];
 
 const argTypes = [(name: string): string => `${name}CreateInput!`];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 

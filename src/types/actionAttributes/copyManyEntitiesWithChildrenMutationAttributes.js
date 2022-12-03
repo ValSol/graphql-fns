@@ -2,8 +2,9 @@
 
 import pluralize from 'pluralize';
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import getOppositeFields from '../../utils/getOppositeFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
@@ -30,7 +31,12 @@ const argTypes = [
   (name: string): string => `[${name}WhereOneToCopyInput!]!`,
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' &&

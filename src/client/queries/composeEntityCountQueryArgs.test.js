@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityCountQueryAttributes from '../../types/actionAttributes/entityCountQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityCountQueryArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose entities query without indexed fields', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -25,7 +27,13 @@ describe('composeEntityCountQueryArgs', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entityCountQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entityCountQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -48,7 +56,13 @@ describe('composeEntityCountQueryArgs', () => {
 }`,
     ];
 
-    const result = composeActionArgs(prefixName, entityConfig, entityCountQueryAttributes, {});
+    const result = composeActionArgs(
+      prefixName,
+      entityConfig,
+      generalConfig,
+      entityCountQueryAttributes,
+      {},
+    );
     expect(result).toEqual(expectedResult);
   });
 });

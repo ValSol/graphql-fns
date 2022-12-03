@@ -42,7 +42,7 @@ const parseAction = (
       );
     }
 
-    const entityConfig = attributes.actionReturnConfig ? entityConfigs[entityName] : null;
+    const entityConfig = attributes.actionReturnConfig(entityConfigs[entityName], generalConfig);
 
     return {
       creationType: 'standard',
@@ -133,9 +133,11 @@ const parseAction = (
             );
           }
 
-          const entityConfig = actionAttributes[baseAction].actionReturnConfig
-            ? composeDerivativeConfigByName(currentSuffix, entityConfigs[entityName], generalConfig)
-            : null;
+          const entityConfig = actionAttributes[baseAction].actionReturnConfig(
+            entityConfigs[entityName],
+            generalConfig,
+            currentSuffix,
+          );
 
           if (suffix) {
             throw new TypeError(

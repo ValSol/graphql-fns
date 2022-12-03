@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityDistinctValuesQueryAttributes from '../../types/actionAttributes/entityDistinctValuesQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityDistinctValuesQueryArgs', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose entity distinct values query with ExampleWhereInput and where args', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -28,6 +30,7 @@ describe('composeEntityDistinctValuesQueryArgs', () => {
     const result = composeActionArgs(
       prefixName,
       entityConfig,
+      generalConfig,
       entityDistinctValuesQueryAttributes,
       {},
     );

@@ -55,9 +55,7 @@ const composeCustomAction = (
     argTypes: composeArgTypes(argTypes, inputCreators, suffix),
     type: actionReturnString(suffix),
     config: (entityConfig, generalConfig) =>
-      actionReturnConfig
-        ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig)
-        : null,
+      actionReturnConfig(entityConfig, generalConfig, suffix),
   };
 };
 

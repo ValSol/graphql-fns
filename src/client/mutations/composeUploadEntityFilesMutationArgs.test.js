@@ -1,12 +1,14 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import uploadEntityFilesMutationAttributes from '../../types/actionAttributes/uploadEntityFilesMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUploadFilesToEntityMutationResolver', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should compose uploadFilesToEntity mutation args ', () => {
     const prefixName = 'Home';
     const imageConfig: EntityConfig = {
@@ -30,6 +32,7 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
     const result = composeActionArgs(
       prefixName,
       imageConfig,
+      generalConfig,
       uploadEntityFilesMutationAttributes,
       {},
     );

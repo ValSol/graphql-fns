@@ -35,8 +35,11 @@ const composeQuery = (
     const head = composeActionArgs(
       prefixName,
       entityConfig,
+      generalConfig,
       attributesWithoutChildren[queryName],
-      attributesWithoutChildren[queryName].actionReturnConfig ? childArgs : {},
+      attributesWithoutChildren[queryName].actionReturnConfig(entityConfig, generalConfig)
+        ? childArgs
+        : {},
     );
 
     if (head.length === 1) return head[0];

@@ -1,10 +1,11 @@
 // @flow
 
-import type { ActionAttributes, EntityConfig } from '../../flowTypes';
+import type { ActionAttributes, EntityConfig, GeneralConfig } from '../../flowTypes';
 
 const composeActionArgs = (
   prefix: string,
   entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
   actionAttributes: ActionAttributes,
   childArgs: { [argName: string]: string },
 ): Array<string> | string => {
@@ -43,7 +44,7 @@ const composeActionArgs = (
 
   const args2 = filteredArgNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
-  return actionReturnConfig
+  return actionReturnConfig(entityConfig, generalConfig)
     ? [
         `${actionType.toLowerCase()} ${prefix}_${specificName}(${args1}) {`,
         `  ${specificName}(${args2}) {`,

@@ -34,6 +34,7 @@ const createEntityScalarResolver = (
         createChildEntityQueryResolver(entityConfig, generalConfig, serversideConfig),
         childEntityQueryAttributes,
         entityConfig,
+        generalConfig,
       );
 
   if (!childEntityQueryResolver) {

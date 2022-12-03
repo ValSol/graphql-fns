@@ -1,6 +1,8 @@
 // @flow
 
-import type { InputCreator, EntityConfig } from '../../flowTypes';
+import type { InputCreator, EntityConfig, GeneralConfig } from '../../flowTypes';
+
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 
 const actionType = 'Mutation';
 
@@ -29,7 +31,12 @@ const argTypes = [
   (name: string): string => '[String!]!', // eslint-disable-line no-unused-vars
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'file' && entityConfig.name.startsWith('Root'));

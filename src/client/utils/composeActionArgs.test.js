@@ -1,10 +1,14 @@
 // @flow
 /* eslint-env jest */
 
+import type { GeneralConfig } from '../../flowTypes';
+
 import createManyEntitiesMutationAttributes from '../../types/actionAttributes/createManyEntitiesMutationAttributes';
 import composeActionArgs from './composeActionArgs';
 
 describe('composeActionArgs util', () => {
+  const generalConfig: GeneralConfig = {};
+
   test('should return right result', async () => {
     const prefixName = 'Home';
 
@@ -35,6 +39,7 @@ describe('composeActionArgs util', () => {
     const result = await composeActionArgs(
       prefixName,
       entityConfig,
+      generalConfig,
       createManyEntitiesMutationAttributes,
       childArgs,
     );

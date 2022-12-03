@@ -1,7 +1,8 @@
 // @flow
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createFileWhereInputType from '../inputs/createFileWhereInputType';
 
 const actionType = 'Query';
@@ -16,7 +17,12 @@ const argNames = ['where'];
 
 const argTypes = [(name: string): string => 'FileWhereInput']; // eslint-disable-line no-unused-vars
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'file' && entityConfig.name.startsWith('Root'));

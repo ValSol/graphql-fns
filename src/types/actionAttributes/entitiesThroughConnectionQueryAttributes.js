@@ -2,8 +2,9 @@
 
 import pluralize from 'pluralize';
 
-import type { InputCreator, EntityConfig } from '../../flowTypes';
+import type { InputCreator, EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
@@ -56,7 +57,23 @@ const argTypes = [
   (name: string): string => 'Int', // eslint-disable-line no-unused-vars
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig => {
+  const { name } = entityConfig;
+
+  const { entityConfigs } = generalConfig;
+
+  const connectionConfigName = `${name}Connection`;
+
+  const connectionConfig = entityConfigs[connectionConfigName];
+
+  return suffix
+    ? composeDerivativeConfigByName(suffix, connectionConfig, generalConfig)
+    : connectionConfig;
+};
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 

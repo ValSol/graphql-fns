@@ -34,6 +34,7 @@ const createEntityArrayResolver = (
         createChildEntitiesQueryResolver(entityConfig, generalConfig, serversideConfig),
         childEntitiesQueryAttributes,
         entityConfig,
+        generalConfig,
       );
 
   if (!childEntitiesQueryResolver) {

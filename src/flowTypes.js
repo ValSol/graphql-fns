@@ -856,7 +856,11 @@ export type ActionAttributes = {
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
   actionReturnString: (suffix: string) => (entityConfig: EntityConfig) => string,
-  actionReturnConfig: boolean,
+  actionReturnConfig: (
+    entityConfig: EntityConfig,
+    generalConfig: GeneralConfig,
+    suffix?: string,
+  ) => EntityConfig | null,
 };
 
 export type GqlActionData = {

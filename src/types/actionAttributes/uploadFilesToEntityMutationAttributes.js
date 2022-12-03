@@ -1,7 +1,8 @@
 // @flow
 
-import type { InputCreator, EntityConfig } from '../../flowTypes';
+import type { InputCreator, EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createUploadFilesToEntityInputType from '../inputs/createUploadFilesToEntityInputType';
 import createFilesOfEntityOptionsInputType from '../inputs/createFilesOfEntityOptionsInputType';
@@ -36,7 +37,12 @@ const argTypes = [
   (name: string): string => `${name}ReorderUploadedInput`,
 ];
 
-const actionReturnConfig = true;
+const actionReturnConfig = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+): null | EntityConfig =>
+  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createFilesOfEntityOptionsInputType(entityConfig)[1]); // eslint-disable-line no-unused-vars

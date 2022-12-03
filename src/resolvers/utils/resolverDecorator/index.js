@@ -1,6 +1,6 @@
 // @flow
 
-import type { ActionAttributes, EntityConfig } from '../../../flowTypes';
+import type { ActionAttributes, EntityConfig, GeneralConfig } from '../../../flowTypes';
 
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
@@ -35,6 +35,7 @@ const resolverDecorator = (
   func: Function,
   actionAttributes: ActionAttributes,
   entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
 ): Function => {
   if (!store.get(actionAttributes)) {
     store.set(actionAttributes, {});
@@ -54,7 +55,7 @@ const resolverDecorator = (
   }
 
   obj[name] = async (...resolverArgs) => {
-    const returnConfig = actionAttributes.actionReturnConfig ? entityConfig : null;
+    const returnConfig = actionAttributes.actionReturnConfig(entityConfig, generalConfig);
     const { argNames } = actionAttributes;
     const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
       composer('').replace(regExp, ''),

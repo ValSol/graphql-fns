@@ -70,6 +70,7 @@ const composeGqlResolvers = (
               resolver,
               queryAttributes[actionName],
               entityConfig,
+              generalConfig,
             );
           }
         }
@@ -101,7 +102,12 @@ const composeGqlResolvers = (
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
             prev.Mutation[mutationAttributes[actionName].actionName(entityName)] =
-              resolverDecorator(resolver, mutationAttributes[actionName], entityConfig);
+              resolverDecorator(
+                resolver,
+                mutationAttributes[actionName],
+                entityConfig,
+                generalConfig,
+              );
           }
         }
       });
