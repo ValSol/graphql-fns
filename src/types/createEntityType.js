@@ -31,9 +31,7 @@ const createEntityType = (
     // use not required ID in embedded entities...
     // ... to not provoke error for null embedded objects
     `type ${name} ${
-      configType === 'tangible' || (configType === 'file' && name.startsWith('Root'))
-        ? 'implements Node '
-        : ''
+      configType === 'tangible' || configType === 'tangibleFile' ? 'implements Node ' : ''
     }{
   id: ID!`,
   ];

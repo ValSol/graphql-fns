@@ -10,7 +10,7 @@ describe('createEntityFileQueryType', () => {
   test('should create query', () => {
     const entityConfig: EntityConfig = {
       name: 'RootExample',
-      type: 'file',
+      type: 'tangibleFile',
     };
     const expectedResult = '  RootExampleFile(whereOne: FileWhereOneInput!): RootExample!';
     const dic = {};

@@ -13,7 +13,7 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
     const prefixName = 'Home';
     const imageConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         {
           name: 'fileId',

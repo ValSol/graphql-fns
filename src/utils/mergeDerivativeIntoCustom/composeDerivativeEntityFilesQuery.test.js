@@ -10,7 +10,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeEntityFilesQuery', () => {
   const entityConfig: EntityConfig = {
     name: 'RootPhoto',
-    type: 'file',
+    type: 'tangibleFile',
     textFields: [
       {
         name: 'textField',

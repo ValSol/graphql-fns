@@ -18,6 +18,19 @@ describe('createFileWhereOneInputType', () => {
     ],
   };
 
+  const rootImageConfig: EntityConfig = {
+    name: 'RootImage',
+    type: 'tangibleFile',
+    textFields: [
+      {
+        name: 'fileId',
+      },
+      {
+        name: 'address',
+      },
+    ],
+  };
+
   const photoConfig: EntityConfig = {
     name: 'Photo',
     type: 'embedded',
@@ -70,7 +83,7 @@ describe('createFileWhereOneInputType', () => {
       {},
     ];
 
-    const result = createFileWhereOneInputType(imageConfig);
+    const result = createFileWhereOneInputType(rootImageConfig);
     expect(result).toEqual(expectedResult);
   });
 });

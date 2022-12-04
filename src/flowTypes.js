@@ -198,15 +198,23 @@ type SimplifiedRelationalField = {
   +freeze?: boolean,
 };
 
+// type SimplifiedVirtualField = {
+//   +name: string,
+//   +required?: boolean,
+//   +array?: boolean,
+//   +configName: string,
+// };
+
 export type SimplifiedEntityConfig = {
   name: string,
-  type?: string, // 'embedded', 'file', 'tangible', 'virtual',
+  type?: string, // 'embedded', 'file', 'tangible', 'tangibleFile', 'virtual',
   counter?: boolean, // if true entity has the 'counter' field
 
   duplexFields?: $ReadOnlyArray<SimplifiedDuplexField>,
   embeddedFields?: $ReadOnlyArray<SimplifiedEmbeddedField>,
   fileFields?: $ReadOnlyArray<SimplifiedFileField>,
   relationalFields?: $ReadOnlyArray<SimplifiedRelationalField>,
+  // virtualFields?: $ReadOnlyArray<SimplifiedVirtualField>,
 
   booleanFields?: $ReadOnlyArray<BooleanField>,
   dateTimeFields?: $ReadOnlyArray<DateTimeField>,
@@ -260,6 +268,13 @@ export type EntityConfig = {
     +required?: boolean,
     +freeze?: boolean,
   }>,
+  // virtualFields?: $ReadOnlyArray<{
+  //   +name: string,
+  //   +required?: boolean,
+  //   +array?: boolean,
+  //   +config: EntityConfig,
+  //   +freeze?: boolean,
+  // }>,
 
   booleanFields?: $ReadOnlyArray<BooleanField>,
   dateTimeFields?: $ReadOnlyArray<DateTimeField>,

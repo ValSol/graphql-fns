@@ -24,7 +24,7 @@ const actionReturnConfig = (
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  Boolean(entityConfig.type === 'file' && entityConfig.name.startsWith('Root'));
+  Boolean(entityConfig.type === 'tangibleFile');
 
 const actionReturnString =
   (

@@ -44,7 +44,7 @@ describe('createEntityFileQueryResolver', () => {
   test('should create query entity resolver', async () => {
     const imageConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         { name: 'fileId' },
         { name: 'desktop' },

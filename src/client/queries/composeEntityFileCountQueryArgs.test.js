@@ -13,7 +13,7 @@ describe('composeEntityFileCountQuery', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 

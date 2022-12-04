@@ -10,7 +10,7 @@ describe('createEntityFileCountQueryType', () => {
   test('should create query', () => {
     const entityConfig: EntityConfig = {
       name: 'RootExample',
-      type: 'file',
+      type: 'tangibleFile',
     };
     const expectedResult = '  RootExampleFileCount(where: FileWhereInput): Int!';
     const dic = {};

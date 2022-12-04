@@ -32,7 +32,7 @@ const createNodeQueryResolver = (
 
     const inAnyCase = true;
 
-    if (entityConfig.type === 'file') {
+    if (entityConfig.type === 'tangibleFile') {
       const inventoryChain = ['Query', `entityFile${suffix}`, entityName];
 
       const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);

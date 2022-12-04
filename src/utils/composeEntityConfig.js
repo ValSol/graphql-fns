@@ -19,7 +19,7 @@ const forbiddenFieldNames = [
   'create',
 ];
 
-const allowedConfigTypes = ['embedded', 'file', 'tangible', 'virtual'];
+const allowedConfigTypes = ['embedded', 'file', 'tangible', 'tangibleFile', 'virtual'];
 
 const composeEntityConfig = (
   simplifiedEntityConfig: SimplifiedEntityConfig,

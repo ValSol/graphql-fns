@@ -326,7 +326,7 @@ describe('composeEntityConfigs', () => {
 
     const rootImageConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         {
           name: 'fileId',

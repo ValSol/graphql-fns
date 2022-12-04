@@ -10,7 +10,7 @@ describe('createUploadEntityFilesMutationType', () => {
   test('should create mutation upload file entity type', () => {
     const imageConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         {
           name: 'fileId',

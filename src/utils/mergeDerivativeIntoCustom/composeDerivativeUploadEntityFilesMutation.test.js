@@ -10,7 +10,7 @@ import composeCustomAction from './composeCustomAction';
 describe('composeDerivativeUploadEntityFilesMutation', () => {
   const imageConfig: EntityConfig = {
     name: 'RootImage',
-    type: 'file',
+    type: 'tangibleFile',
     textFields: [
       {
         name: 'fileId',

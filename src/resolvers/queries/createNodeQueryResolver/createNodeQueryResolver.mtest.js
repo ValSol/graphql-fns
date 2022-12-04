@@ -126,7 +126,7 @@ describe('createNodeQueryResolver', () => {
 
     const imageConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         { name: 'fileId' },
         { name: 'desktop' },

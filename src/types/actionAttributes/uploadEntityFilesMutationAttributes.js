@@ -39,7 +39,7 @@ const actionReturnConfig = (
   suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  Boolean(entityConfig.type === 'file' && entityConfig.name.startsWith('Root'));
+  Boolean(entityConfig.type === 'tangibleFile');
 
 const actionReturnString =
   (suffix: string): ((entityConfig: EntityConfig) => string) =>

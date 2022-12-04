@@ -6,7 +6,7 @@ const createFileWhereOneInputType: InputCreator = (entityConfig) => {
   const inputName = 'FileWhereOneInput';
 
   const inputDefinition =
-    entityConfig.type === 'file'
+    entityConfig.type === 'tangibleFile'
       ? `input FileWhereOneInput {
   id: ID
   hash: String

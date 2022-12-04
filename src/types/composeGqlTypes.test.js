@@ -810,7 +810,7 @@ type Subscription {
 
     const rootImageConfig: EntityConfig = {
       name: 'RootImage',
-      type: 'file',
+      type: 'tangibleFile',
       textFields: [
         {
           name: 'fileId',
