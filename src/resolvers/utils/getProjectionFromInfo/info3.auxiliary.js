@@ -207,11 +207,11 @@ export default {
       TextBlock: 'TextBlock',
       WorkDay: 'WorkDay',
       Illustration: 'Illustration',
-      RootIllustration: 'RootIllustration',
+      TangibleIllustration: 'TangibleIllustration',
       Logo: 'Logo',
-      RootLogo: 'RootLogo',
+      TangibleLogo: 'TangibleLogo',
       Photo: 'Photo',
-      RootPhoto: 'RootPhoto',
+      TangiblePhoto: 'TangiblePhoto',
       Restaurant: 'Restaurant',
       RestaurantClone: 'RestaurantClone',
       RestaurantBackup: 'RestaurantBackup',
@@ -1343,9 +1343,9 @@ export default {
     },
     _subTypeMap: {
       Node: {
-        RootIllustration: true,
-        RootLogo: true,
-        RootPhoto: true,
+        TangibleIllustration: true,
+        TangibleLogo: true,
+        TangiblePhoto: true,
         Restaurant: true,
         RestaurantClone: true,
         RestaurantBackup: true,
@@ -1418,9 +1418,9 @@ export default {
     _implementationsMap: {
       Node: {
         objects: [
-          'RootIllustration',
-          'RootLogo',
-          'RootPhoto',
+          'TangibleIllustration',
+          'TangibleLogo',
+          'TangiblePhoto',
           'Restaurant',
           'RestaurantClone',
           'RestaurantBackup',

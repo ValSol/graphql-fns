@@ -808,8 +808,8 @@ type Subscription {
       ],
     };
 
-    const rootImageConfig: EntityConfig = {
-      name: 'RootImage',
+    const tangibleImageConfig: EntityConfig = {
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
         {
@@ -901,7 +901,11 @@ type Subscription {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig, Image: imageConfig, RootImage: rootImageConfig };
+    const entityConfigs = {
+      Example: entityConfig,
+      Image: imageConfig,
+      TangibleImage: tangibleImageConfig,
+    };
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -982,7 +986,7 @@ type Image {
   address: String
   text: String
 }
-type RootImage implements Node {
+type TangibleImage implements Node {
   id: ID!
   fileId: String!
   address: String
@@ -1314,9 +1318,9 @@ type Query {
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  RootImageFileCount(where: FileWhereInput): Int!
-  RootImageFile(whereOne: FileWhereOneInput!): RootImage!
-  RootImageFiles(where: FileWhereInput): [RootImage!]!
+  TangibleImageFileCount(where: FileWhereInput): Int!
+  TangibleImageFile(whereOne: FileWhereOneInput!): TangibleImage!
+  TangibleImageFiles(where: FileWhereInput): [TangibleImage!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection
@@ -1336,7 +1340,7 @@ type Mutation {
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
   uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
-  uploadRootImageFiles(files: [Upload!]!, hashes: [String!]!): [RootImage!]!
+  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -3901,7 +3905,7 @@ type Mutation {
         {
           name: 'sections',
           config: menuSectionConfig,
-          oppositeName: 'root',
+          oppositeName: 'menu',
           array: true,
         },
       ],
@@ -3918,7 +3922,7 @@ type Mutation {
       ],
       duplexFields: [
         {
-          name: 'root',
+          name: 'menu',
           config: menuConfig,
           oppositeName: 'sections',
         },
@@ -3980,7 +3984,7 @@ type MenuSection implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   menuSectionName: String
-  root: Menu
+  menu: Menu
 }
 type MenuSectionEdge {
   node: MenuSection
@@ -4132,7 +4136,7 @@ input MenuUpdateInput {
 }
 input MenuSectionCreateInput {
   id: ID
-  root: MenuCreateChildInput
+  menu: MenuCreateChildInput
   menuSectionName: String
 }
 input MenuSectionCreateChildInput {
@@ -4163,7 +4167,7 @@ input MenuSectionWhereOneInput {
 }
 input MenuSectionUpdateInput {
   menuSectionName: String
-  root: MenuCreateChildInput
+  menu: MenuCreateChildInput
 }
 type Mutation {
   updateMenuWithChildren(whereOne: MenuWhereOneInput!, data: MenuUpdateInput, childWhereOne: [MenuSectionWhereOneInput!]!, childData: [MenuSectionUpdateInput!]!, deleteWhereOne: [MenuSectionWhereOneInput!]!): Menu

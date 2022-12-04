@@ -12,7 +12,7 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
   test('should compose uploadFilesToEntity mutation args ', () => {
     const prefixName = 'Home';
     const imageConfig: EntityConfig = {
-      name: 'RootImage',
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
         {
@@ -25,8 +25,8 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
     };
 
     const expectedResult = [
-      'mutation Home_uploadRootImageFiles($files: [Upload!]!, $hashes: [String!]!) {',
-      '  uploadRootImageFiles(files: $files, hashes: $hashes) {',
+      'mutation Home_uploadTangibleImageFiles($files: [Upload!]!, $hashes: [String!]!) {',
+      '  uploadTangibleImageFiles(files: $files, hashes: $hashes) {',
     ];
 
     const result = composeActionArgs(

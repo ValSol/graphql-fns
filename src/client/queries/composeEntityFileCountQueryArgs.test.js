@@ -12,14 +12,14 @@ describe('composeEntityFileCountQuery', () => {
   test('should compose entities query', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
-      name: 'RootImage',
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 
     const expectedResult = [
-      `query Home_RootImageFileCount($where: FileWhereInput) {
-  RootImageFileCount(where: $where)
+      `query Home_TangibleImageFileCount($where: FileWhereInput) {
+  TangibleImageFileCount(where: $where)
 }`,
     ];
 

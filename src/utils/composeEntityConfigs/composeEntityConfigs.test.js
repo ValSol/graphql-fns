@@ -324,8 +324,8 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
-    const rootImageConfig = {
-      name: 'RootImage',
+    const tangibleImageConfig = {
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
         {
@@ -363,7 +363,7 @@ describe('composeEntityConfigs', () => {
     const expectedResult = {
       Example: entityConfig,
       Image: imageConfig,
-      RootImage: rootImageConfig,
+      TangibleImage: tangibleImageConfig,
     };
 
     const result = composeEntityConfigs(simplifiedEntityConfigs);

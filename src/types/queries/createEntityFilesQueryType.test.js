@@ -9,10 +9,10 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createEntityFilesQueryType', () => {
   test('should create query only entity type', () => {
     const entityConfig: EntityConfig = {
-      name: 'RootExample',
+      name: 'TangibleExample',
       type: 'tangibleFile',
     };
-    const expectedResult = '  RootExampleFiles(where: FileWhereInput): [RootExample!]!';
+    const expectedResult = '  TangibleExampleFiles(where: FileWhereInput): [TangibleExample!]!';
     const dic = {};
 
     const result = composeStandardActionSignature(entityConfig, entityFilesQueryAttributes, dic);

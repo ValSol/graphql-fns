@@ -420,11 +420,11 @@ const info = {
       TextBlock: 'TextBlock',
       WorkDay: 'WorkDay',
       Illustration: 'Illustration',
-      RootIllustration: 'RootIllustration',
+      TangibleIllustration: 'TangibleIllustration',
       Logo: 'Logo',
-      RootLogo: 'RootLogo',
+      TangibleLogo: 'TangibleLogo',
       Photo: 'Photo',
-      RootPhoto: 'RootPhoto',
+      TangiblePhoto: 'TangiblePhoto',
       Restaurant: 'Restaurant',
       RestaurantEdge: 'RestaurantEdge',
       RestaurantConnection: 'RestaurantConnection',
@@ -1692,9 +1692,9 @@ const info = {
     _implementationsMap: {
       Node: {
         objects: [
-          'RootIllustration',
-          'RootLogo',
-          'RootPhoto',
+          'TangibleIllustration',
+          'TangibleLogo',
+          'TangiblePhoto',
           'Restaurant',
           'RestaurantClone',
           'RestaurantBackup',

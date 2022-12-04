@@ -2,16 +2,16 @@
 
 import type { SimplifiedEntityConfig } from '../../flowTypes';
 
-const composeRootFileEntityConfig = (
+const composeTangibleFileEntityConfig = (
   config: SimplifiedEntityConfig,
 ): [string, SimplifiedEntityConfig] => {
   const { name } = config;
 
-  const rootName = `Root${name}`;
+  const rootName = `Tangible${name}`;
 
   const rootConfig: SimplifiedEntityConfig = Object.keys(config).reduce((prev, key) => {
     if (key === 'name') {
-      prev[key] = `Root${name}`; // eslint-disable-line no-param-reassign
+      prev[key] = `Tangible${name}`; // eslint-disable-line no-param-reassign
     } else if (key === 'type') {
       prev[key] = 'tangibleFile'; // eslint-disable-line no-param-reassign
     } else if (key.endsWith('Fields')) {
@@ -28,4 +28,4 @@ const composeRootFileEntityConfig = (
   return [rootName, rootConfig];
 };
 
-export default composeRootFileEntityConfig;
+export default composeTangibleFileEntityConfig;

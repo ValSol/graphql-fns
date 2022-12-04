@@ -4,7 +4,6 @@ import type { GeneralConfig } from '../../flowTypes';
 import type { ActionToParse, ParsedAction } from './flowTypes';
 
 import actionAttributes from '../../types/actionAttributes';
-import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 
 const toOtherType = {
   Query: 'Mutation',

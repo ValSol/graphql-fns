@@ -12,14 +12,14 @@ describe('composeEntityFileQueryArgs', () => {
   test('should compose entity query args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
-      name: 'RootImage',
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
 
     const expectedResult = [
-      'query Home_RootImageFile($whereOne: FileWhereOneInput!) {',
-      '  RootImageFile(whereOne: $whereOne) {',
+      'query Home_TangibleImageFile($whereOne: FileWhereOneInput!) {',
+      '  TangibleImageFile(whereOne: $whereOne) {',
     ];
 
     const result = composeActionArgs(

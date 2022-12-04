@@ -9,7 +9,7 @@ import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeEntityFileQuery', () => {
   const entityConfig: EntityConfig = {
-    name: 'RootPhoto',
+    name: 'TangiblePhoto',
     type: 'tangibleFile',
     textFields: [
       {
@@ -19,9 +19,9 @@ describe('composeDerivativeEntityFileQuery', () => {
     ],
   };
   const ForCatalog: DerivativeAttributes = {
-    allow: { RootPhoto: ['entityFile'] },
+    allow: { TangiblePhoto: ['entityFile'] },
     suffix: 'ForCatalog',
-    RootPhoto: {
+    TangiblePhoto: {
       floatFields: [{ name: 'floatField' }],
     },
   };
@@ -29,7 +29,7 @@ describe('composeDerivativeEntityFileQuery', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { RootPhoto: entityConfig },
+    entityConfigs: { TangiblePhoto: entityConfig },
     derivative,
   };
 

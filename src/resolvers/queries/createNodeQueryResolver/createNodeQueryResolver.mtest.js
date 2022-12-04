@@ -125,7 +125,7 @@ describe('createNodeQueryResolver', () => {
     };
 
     const imageConfig: EntityConfig = {
-      name: 'RootImage',
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
         { name: 'fileId' },
@@ -138,7 +138,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { entityConfigs: { RootImage: imageConfig } };
+    const generalConfig: GeneralConfig = { entityConfigs: { TangibleImage: imageConfig } };
 
     const fileSchema = createFileSchema(imageConfig);
     const FileModel = mongooseConn.model('Image_File', fileSchema);
@@ -171,7 +171,7 @@ describe('createNodeQueryResolver', () => {
     const node = createNodeQueryResolver(generalConfig, serversideConfig);
     if (!node) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const globalId = toGlobalId(id, 'RootImage');
+    const globalId = toGlobalId(id, 'TangibleImage');
     const imageFile = await node(null, { id: globalId }, { mongooseConn, pubsub }, info);
 
     expect(imageFile.id).toBe(globalId);
@@ -179,6 +179,6 @@ describe('createNodeQueryResolver', () => {
     expect(imageFile.desktop).toBe(`/images/${hash}_desktop`);
     expect(imageFile.tablet).toBe(`/images/${hash}_tablet`);
     expect(imageFile.mobile).toBe(`/images/${hash}_mobile`);
-    expect(imageFile.__typename).toBe('RootImage'); // eslint-disable-line no-underscore-dangle
+    expect(imageFile.__typename).toBe('TangibleImage'); // eslint-disable-line no-underscore-dangle
   });
 });

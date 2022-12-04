@@ -18,8 +18,8 @@ describe('createFileWhereInputType', () => {
     ],
   };
 
-  const rootImageConfig: EntityConfig = {
-    name: 'RootImage',
+  const tangibleImageConfig: EntityConfig = {
+    name: 'TangibleImage',
     type: 'tangibleFile',
     textFields: [
       {
@@ -120,7 +120,7 @@ describe('createFileWhereInputType', () => {
       {},
     ];
 
-    const result = createFileWhereInputType(rootImageConfig);
+    const result = createFileWhereInputType(tangibleImageConfig);
     expect(result).toEqual(expectedResult);
   });
 });

@@ -9,7 +9,7 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createUploadEntityFilesMutationType', () => {
   test('should create mutation upload file entity type', () => {
     const imageConfig: EntityConfig = {
-      name: 'RootImage',
+      name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
         {
@@ -22,7 +22,7 @@ describe('createUploadEntityFilesMutationType', () => {
     };
 
     const expectedResult =
-      '  uploadRootImageFiles(files: [Upload!]!, hashes: [String!]!): [RootImage!]!';
+      '  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!';
 
     const dic = {};
 

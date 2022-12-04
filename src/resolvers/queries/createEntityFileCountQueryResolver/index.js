@@ -40,7 +40,7 @@ const createEntityFileCountQueryResolver = (
 
     const fileSchema = createFileSchema(entityConfig);
 
-    const nakedName = name.slice('Root'.length);
+    const nakedName = name.slice('Tangible'.length);
 
     const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 

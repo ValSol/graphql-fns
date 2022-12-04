@@ -9,10 +9,10 @@ import composeStandardActionSignature from '../composeStandardActionSignature';
 describe('createEntityFileCountQueryType', () => {
   test('should create query', () => {
     const entityConfig: EntityConfig = {
-      name: 'RootExample',
+      name: 'TangibleExample',
       type: 'tangibleFile',
     };
-    const expectedResult = '  RootExampleFileCount(where: FileWhereInput): Int!';
+    const expectedResult = '  TangibleExampleFileCount(where: FileWhereInput): Int!';
     const dic = {};
 
     const result = composeStandardActionSignature(
@@ -25,7 +25,7 @@ describe('createEntityFileCountQueryType', () => {
 
   test('should create empty query', () => {
     const entityConfig: EntityConfig = {
-      name: 'RootExample',
+      name: 'TangibleExample',
       type: 'tangible',
     };
     const expectedResult = '';

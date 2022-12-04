@@ -5,7 +5,7 @@ import pluralize from 'pluralize';
 import type { EntityConfig, SimplifiedEntityConfig } from '../../flowTypes';
 
 import composeEntityConfig from '../composeEntityConfig';
-import composeRootFileEntityConfig from './composeRootFileEntityConfig';
+import composeTangibleFileEntityConfig from './composeTangibleFileEntityConfig';
 // import PageInfo from './pageInfoConfig';
 
 const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
@@ -21,8 +21,8 @@ const composeEntityConfigs = (
         throw new TypeError(`Forbidden to use "_" (underscore) in entity name: "${name}"!`);
       }
 
-      if (configType === 'file' && name.startsWith('Root')) {
-        throw new TypeError(`Forbidden to use "Root" in file name: "${name}"!`);
+      if (configType === 'file' && name.startsWith('Tangible')) {
+        throw new TypeError(`Forbidden to use "Tangible" in file name: "${name}"!`);
       }
 
       if (configType === 'tangible' && name.endsWith('Edge')) {
@@ -48,7 +48,7 @@ const composeEntityConfigs = (
       prev[name] = { ...config }; // eslint-disable-line no-param-reassign
 
       if (configType === 'file') {
-        const [rootName, rootConfig] = composeRootFileEntityConfig(config);
+        const [rootName, rootConfig] = composeTangibleFileEntityConfig(config);
 
         prev[rootName] = rootConfig; // eslint-disable-line no-param-reassign
       }
