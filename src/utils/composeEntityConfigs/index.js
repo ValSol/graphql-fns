@@ -6,7 +6,7 @@ import type { EntityConfig, SimplifiedEntityConfig } from '../../flowTypes';
 
 import composeEntityConfig from '../composeEntityConfig';
 import composeTangibleFileEntityConfig from './composeTangibleFileEntityConfig';
-// import PageInfo from './pageInfoConfig';
+import PageInfo from './pageInfoConfig';
 
 const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
 
@@ -48,15 +48,14 @@ const composeEntityConfigs = (
       prev[name] = { ...config }; // eslint-disable-line no-param-reassign
 
       if (configType === 'file') {
-        const [rootName, rootConfig] = composeTangibleFileEntityConfig(config);
+        const tangibleFileConfig = composeTangibleFileEntityConfig(config);
 
-        prev[rootName] = rootConfig; // eslint-disable-line no-param-reassign
+        prev[tangibleFileConfig.name] = tangibleFileConfig; // eslint-disable-line no-param-reassign
       }
 
       return prev;
     },
-    // { PageInfo },
-    {},
+    { PageInfo },
   );
 
   simplifiedThingConfigs.forEach((simplifiedThingConfig) => {

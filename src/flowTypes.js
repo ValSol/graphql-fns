@@ -198,12 +198,13 @@ type SimplifiedRelationalField = {
   +freeze?: boolean,
 };
 
-// type SimplifiedVirtualField = {
-//   +name: string,
-//   +required?: boolean,
-//   +array?: boolean,
-//   +configName: string,
-// };
+type SimplifiedChildField = {
+  +name: string,
+  +required?: boolean,
+  +array?: boolean,
+  +configName: string,
+  +required?: boolean,
+};
 
 export type SimplifiedEntityConfig = {
   name: string,
@@ -214,7 +215,7 @@ export type SimplifiedEntityConfig = {
   embeddedFields?: $ReadOnlyArray<SimplifiedEmbeddedField>,
   fileFields?: $ReadOnlyArray<SimplifiedFileField>,
   relationalFields?: $ReadOnlyArray<SimplifiedRelationalField>,
-  // virtualFields?: $ReadOnlyArray<SimplifiedVirtualField>,
+  childFields?: $ReadOnlyArray<SimplifiedChildField>,
 
   booleanFields?: $ReadOnlyArray<BooleanField>,
   dateTimeFields?: $ReadOnlyArray<DateTimeField>,
@@ -245,6 +246,7 @@ export type EntityConfig = {
     +freeze?: boolean,
     +parent?: boolean,
   }>,
+
   embeddedFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
@@ -252,6 +254,7 @@ export type EntityConfig = {
     +config: EntityConfig,
     +freeze?: boolean,
   }>,
+
   fileFields?: $ReadOnlyArray<{
     +name: string,
     +required?: boolean,
@@ -259,6 +262,7 @@ export type EntityConfig = {
     +config: EntityConfig,
     +freeze?: boolean,
   }>,
+
   relationalFields?: $ReadOnlyArray<{
     +name: string,
     +array?: boolean,
@@ -268,13 +272,13 @@ export type EntityConfig = {
     +required?: boolean,
     +freeze?: boolean,
   }>,
-  // virtualFields?: $ReadOnlyArray<{
-  //   +name: string,
-  //   +required?: boolean,
-  //   +array?: boolean,
-  //   +config: EntityConfig,
-  //   +freeze?: boolean,
-  // }>,
+
+  childFields?: $ReadOnlyArray<{
+    +name: string,
+    +required?: boolean,
+    +array?: boolean,
+    +config: EntityConfig,
+  }>,
 
   booleanFields?: $ReadOnlyArray<BooleanField>,
   dateTimeFields?: $ReadOnlyArray<DateTimeField>,
@@ -327,9 +331,17 @@ type RelationalField = {|
   +freeze?: boolean,
 |};
 
+type ChildField = {|
+  +name: string,
+  +array?: boolean,
+  +config: EntityConfig,
+  +required?: boolean,
+|};
+
 export type FlatField =
   | RelationalField
   | DuplexField
+  | ChildField
   | TextField
   | FloatField
   | IntField
@@ -370,6 +382,10 @@ export type OrdinaryFieldObject =
   | {|
       +kind: 'relationalFields',
       +attributes: RelationalField,
+    |}
+  | {|
+      +kind: 'childFields',
+      +attributes: ChildField,
     |}
   | {|
       +kind: 'textFields',

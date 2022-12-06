@@ -3,6 +3,7 @@
 import type { SimplifiedEntityConfig, EntityConfig } from '../../flowTypes';
 
 import composeEntityConfigs from './index';
+import PageInfo from './pageInfoConfig';
 
 describe('composeEntityConfigs', () => {
   test('compose simple entityConfigs', () => {
@@ -32,7 +33,7 @@ describe('composeEntityConfigs', () => {
     const simplifiedEntityConfigs = [simplifiedEntityConfig];
 
     const result = composeEntityConfigs(simplifiedEntityConfigs);
-    const expectedResult = { Example: simplifiedEntityConfig };
+    const expectedResult = { PageInfo, Example: simplifiedEntityConfig };
     expect(result).toEqual(expectedResult);
   });
 
@@ -206,6 +207,7 @@ describe('composeEntityConfigs', () => {
     });
 
     const expectedResult = {
+      PageInfo,
       Example: entityConfig,
       Embedded: embeddedConfig,
       Embedded2: embedded2Config,
@@ -256,9 +258,7 @@ describe('composeEntityConfigs', () => {
       ],
     });
 
-    const expectedResult = {
-      Example: entityConfig,
-    };
+    const expectedResult = { PageInfo, Example: entityConfig };
 
     const result = composeEntityConfigs(simplifiedEntityConfigs);
     expect(result).toEqual(expectedResult);
@@ -361,6 +361,7 @@ describe('composeEntityConfigs', () => {
     };
 
     const expectedResult = {
+      PageInfo,
       Example: entityConfig,
       Image: imageConfig,
       TangibleImage: tangibleImageConfig,

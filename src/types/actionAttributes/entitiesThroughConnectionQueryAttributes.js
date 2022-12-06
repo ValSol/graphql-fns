@@ -9,6 +9,8 @@ import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import composeConnectionVirtualConfig from '../virtualConfigComposers/composeConnectionVirtualConfig';
+import composeEdgeVirtualConfig from '../virtualConfigComposers/composeEdgeVirtualConfig';
 
 const actionType = 'Query';
 
@@ -73,6 +75,19 @@ const actionReturnConfig = (
   return suffix
     ? composeDerivativeConfigByName(suffix, connectionConfig, generalConfig)
     : connectionConfig;
+};
+
+const actionReturnVirtualConfigs = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string, // eslint-disable-line no-unused-vars
+): Array<EntityConfig> => {
+  const result = [];
+
+  result.push(composeEdgeVirtualConfig(entityConfig, generalConfig));
+  result.push(composeConnectionVirtualConfig(entityConfig, generalConfig));
+
+  return result;
 };
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';

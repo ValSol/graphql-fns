@@ -36,6 +36,7 @@ const composeEntityConfig = (
 
   const {
     embeddedFields: simplifiedEmbeddedFields,
+    childFields: simplifiedChildFields,
     duplexFields: simplifiedDuplexFields,
     fileFields: simplifiedFileFields,
     relationalFields: simplifiedRelationalFields,
@@ -78,7 +79,7 @@ const composeEntityConfig = (
       }
 
       // check "&& name" to only
-      if (config.type !== 'embedded' && config.type !== 'file' && name) {
+      if (config.type !== 'embedded' && config.type !== 'file') {
         if (name) {
           throw new TypeError(
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
@@ -92,6 +93,38 @@ const composeEntityConfig = (
             '\x1b[0m',
           );
         }
+      }
+
+      return { ...restField, config };
+    });
+  }
+
+  if (simplifiedChildFields) {
+    if (configType !== 'virtual') {
+      throw new TypeError(
+        `Entity config "${name}" type is "${configType}" but have to be only "virtual" to have childFields!`,
+      );
+    }
+
+    // eslint-disable-next-line no-param-reassign
+    entityConfig.childFields = simplifiedChildFields.map((field) => {
+      const { configName, ...restField } = field;
+      const config = entityConfigs[configName];
+
+      if (!config) {
+        throw new TypeError(
+          `Incorrect configName: "${configName}" in child field: "${field.name}" of simplified entityConfig: "${name}"!`,
+        );
+      }
+
+      if (
+        config.type !== 'tangible' &&
+        config.type !== 'tangibleFile' &&
+        config.type !== 'virtual'
+      ) {
+        throw new TypeError(
+          `Forbidden config type: "${config.type}" in child field: "${field.name}" of simplified entityConfig: "${name}"!`,
+        );
       }
 
       return { ...restField, config };
