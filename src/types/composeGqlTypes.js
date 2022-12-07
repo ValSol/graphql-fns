@@ -98,6 +98,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   // 4. generate custom actions' signatures
 
   entityNames.forEach((entityName) => {
+    const { type: entityType } = entityConfigs[entityName];
+    if (entityType !== 'tangible' && entityType !== 'tangibleFile') return;
+
     Object.keys(customQuery).forEach((customName) => {
       if (checkInventory(['Query', customName, entityName], inventory)) {
         const action = composeActionSignature(

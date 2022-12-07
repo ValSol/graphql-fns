@@ -3,6 +3,7 @@
 
 import type { EntityConfig } from '../flowTypes';
 
+import pageInfoConfig from '../utils/composeEntityConfigs/pageInfoConfig';
 import createEntityType from './createEntityType';
 
 describe('createEntityType', () => {
@@ -43,14 +44,6 @@ describe('createEntityType', () => {
   textField3: String!
   textField4(slice: SliceInput): [String!]!
   textField5(slice: SliceInput): [String!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -98,14 +91,6 @@ type ExampleConnection {
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
-}
-type PersonEdge {
-  node: Person
-  cursor: String!
-}
-type PersonConnection {
-  pageInfo: PageInfo!
-  edges: [PersonEdge!]
 }`;
 
     const result = createEntityType(personConfig, {});
@@ -173,14 +158,6 @@ type PersonConnection {
   locations(slice: SliceInput): [Address!]!
   place: Address
   places(slice: SliceInput): [Address!]!
-}
-type PersonEdge {
-  node: Person
-  cursor: String!
-}
-type PersonConnection {
-  pageInfo: PageInfo!
-  edges: [PersonEdge!]
 }`;
 
     const result = createEntityType(personConfig, {});
@@ -283,14 +260,6 @@ type PersonConnection {
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   location: Place!
   favoritePlace: Place
-}
-type PersonEdge {
-  node: Person
-  cursor: String!
-}
-type PersonConnection {
-  pageInfo: PageInfo!
-  edges: [PersonEdge!]
 }`;
 
     const result = createEntityType(personConfig, {});
@@ -356,14 +325,6 @@ type PersonConnection {
   precedingArea: GeospatialPolygon
   favoriteAreas(slice: SliceInput): [GeospatialPolygon!]!
   worstAreas(slice: SliceInput): [GeospatialPolygon!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -405,14 +366,6 @@ type ExampleConnection {
   field2(slice: SliceInput): [CuisinesEnumeration!]!
   field3: WeekdaysEnumeration!
   field4(slice: SliceInput): [CuisinesEnumeration!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -456,14 +409,6 @@ type ExampleConnection {
   intField3: Int!
   intField4(slice: SliceInput): [Int!]!
   intField5(slice: SliceInput): [Int!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -507,14 +452,6 @@ type ExampleConnection {
   floatField3: Float!
   floatField4(slice: SliceInput): [Float!]!
   floatField5(slice: SliceInput): [Float!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -558,14 +495,6 @@ type ExampleConnection {
   booleanField3: Boolean!
   booleanField4(slice: SliceInput): [Boolean!]!
   booleanField5(slice: SliceInput): [Boolean!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -628,14 +557,6 @@ type ExampleConnection {
   hero: Image
   pictures(slice: SliceInput): [Image!]!
   photos(slice: SliceInput): [Image!]!
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
@@ -684,17 +605,100 @@ type ExampleConnection {
   updatedAt: DateTime!
   counter: Int!
   textField1: String
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }`;
 
     const result = createEntityType(entityConfig, {});
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity type with Text fields and counter field', () => {
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      counter: true,
+      textFields: [
+        {
+          name: 'textField1',
+        },
+      ],
+    };
+    const expectedResult = `type Example implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  counter: Int!
+  textField1: String
+}`;
+
+    const result = createEntityType(entityConfig, {});
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity type for ExampleEdge', () => {
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'virtual',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+      ],
+    };
+
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const expectedResult = `type ExampleEdge {
+  cursor: String!
+  node: Example
+}`;
+
+    const result = createEntityType(exampleEdgeConfig, {});
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity type for ExampleConnection', () => {
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'virtual',
+      textFields: [
+        {
+          name: 'textField1',
+        },
+      ],
+    };
+
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'ExampleConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: pageInfoConfig, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
+    const expectedResult = `type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]!
+}`;
+
+    const result = createEntityType(exampleConnectionConfig, {});
     expect(result).toEqual(expectedResult);
   });
 });

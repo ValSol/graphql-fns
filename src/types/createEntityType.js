@@ -11,6 +11,7 @@ const createEntityType = (
   dic: { [inputName: string]: string },
 ): string => {
   const {
+    childFields,
     counter,
     booleanFields,
     dateTimeFields,
@@ -32,9 +33,12 @@ const createEntityType = (
     // ... to not provoke error for null embedded objects
     `type ${name} ${
       configType === 'tangible' || configType === 'tangibleFile' ? 'implements Node ' : ''
-    }{
-  id: ID!`,
+    }{`,
   ];
+
+  if (configType !== 'virtual') {
+    entityTypeArray.push('  id: ID!');
+  }
 
   if (configType === 'tangible') {
     entityTypeArray.push(`  createdAt: DateTime!
@@ -173,18 +177,18 @@ const createEntityType = (
     }, entityTypeArray);
   }
 
-  entityTypeArray.push('}');
-
-  if (configType === 'tangible') {
-    entityTypeArray.push(`type ${name}Edge {
-  node: ${name}
-  cursor: String!
-}
-type ${name}Connection {
-  pageInfo: PageInfo!
-  edges: [${name}Edge!]
-}`);
+  if (childFields) {
+    childFields.reduce((prev, { array, name: name2, required, config: { name: childName } }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}${childName}${array ? '!]!' : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, entityTypeArray);
   }
+
+  entityTypeArray.push('}');
 
   const result = entityTypeArray.join('\n');
 

@@ -14,12 +14,6 @@ const composeCommonUseTypes = (): Array<string> => [
   begin: Int
   end: Int
 }`,
-  `type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}`,
 ];
 
 export default composeCommonUseTypes;

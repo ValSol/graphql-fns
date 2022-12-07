@@ -3,14 +3,15 @@
 
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import type { Enums, GeneralConfig, EntityConfig } from './flowTypes';
+import type { Enums, GeneralConfig, SimplifiedEntityConfig } from './flowTypes';
 
+import composeEntityConfigs from './utils/composeEntityConfigs';
 import composeGqlTypes from './types/composeGqlTypes';
 import composeGqlResolvers from './resolvers/composeGqlResolvers';
 
 describe('graphql schema', () => {
-  test('test simle schema', () => {
-    const entityConfig: EntityConfig = {
+  test('test simple schema', () => {
+    const entityConfig: SimplifiedEntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -37,7 +38,9 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+
+    const simplifiedEntityConfigs = [entityConfig];
+    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
     const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
@@ -49,7 +52,7 @@ describe('graphql schema', () => {
   });
 
   test('test schema with enumerations', () => {
-    const entityConfig: EntityConfig = {
+    const entityConfig: SimplifiedEntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
@@ -100,7 +103,9 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+
+    const simplifiedEntityConfigs = [entityConfig];
+    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
     const enums: Enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
@@ -117,7 +122,7 @@ describe('graphql schema', () => {
   });
 
   test('test schema with embedded fields', () => {
-    const addressConfig: EntityConfig = {
+    const addressConfig: SimplifiedEntityConfig = {
       name: 'Address',
       type: 'embedded',
       textFields: [
@@ -131,7 +136,7 @@ describe('graphql schema', () => {
         },
       ],
     };
-    const personConfig: EntityConfig = {
+    const personConfig: SimplifiedEntityConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -147,27 +152,29 @@ describe('graphql schema', () => {
       embeddedFields: [
         {
           name: 'location',
-          config: addressConfig,
+          configName: 'Address',
           required: true,
         },
         {
           name: 'locations',
           array: true,
-          config: addressConfig,
+          configName: 'Address',
           required: true,
         },
         {
           name: 'place',
-          config: addressConfig,
+          configName: 'Address',
         },
         {
           name: 'places',
           array: true,
-          config: addressConfig,
+          configName: 'Address',
         },
       ],
     };
-    const entityConfigs = { Person: personConfig, Address: addressConfig };
+
+    const simplifiedEntityConfigs = [personConfig, addressConfig];
+    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
     const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
@@ -181,8 +188,7 @@ describe('graphql schema', () => {
   });
 
   test('test schema with duplex fields', () => {
-    const personConfig: EntityConfig = {};
-    const placeConfig: EntityConfig = {
+    const placeConfig: SimplifiedEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -191,17 +197,17 @@ describe('graphql schema', () => {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
       ],
     };
-    Object.assign(personConfig, {
+    const personConfig = {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -218,7 +224,7 @@ describe('graphql schema', () => {
         {
           name: 'friends',
           oppositeName: 'friends',
-          config: personConfig,
+          configName: 'Person',
           array: true,
           required: true,
         },
@@ -226,22 +232,24 @@ describe('graphql schema', () => {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
-          config: placeConfig,
+          configName: 'Place',
           required: true,
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
-          config: placeConfig,
+          configName: 'Place',
         },
       ],
-    });
-    const entityConfigs = { Person: personConfig, Place: placeConfig };
+    };
+
+    const simplifiedEntityConfigs = [personConfig, placeConfig];
+    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
     const generalConfig: GeneralConfig = { entityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
@@ -253,8 +261,8 @@ describe('graphql schema', () => {
   });
 
   describe('test schemas with differnet variants of inventory', () => {
-    const personConfig: EntityConfig = {};
-    const placeConfig: EntityConfig = {
+    const personConfig: SimplifiedEntityConfig = {};
+    const placeConfig: SimplifiedEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name' }],
@@ -263,13 +271,13 @@ describe('graphql schema', () => {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
       ],
     };
@@ -290,7 +298,7 @@ describe('graphql schema', () => {
         {
           name: 'friends',
           oppositeName: 'friends',
-          config: personConfig,
+          configName: 'Person',
           array: true,
           required: true,
         },
@@ -298,22 +306,24 @@ describe('graphql schema', () => {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
-          config: personConfig,
+          configName: 'Person',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
-          config: placeConfig,
+          configName: 'Place',
           required: true,
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
-          config: placeConfig,
+          configName: 'Place',
         },
       ],
     });
-    const entityConfigs = { Person: personConfig, Place: placeConfig };
+
+    const simplifiedEntityConfigs = [personConfig, placeConfig];
+    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
     const generalConfig: GeneralConfig = { entityConfigs };
     generalConfig.inventory = {
       name: 'test',
