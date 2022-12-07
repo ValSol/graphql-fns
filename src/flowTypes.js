@@ -878,6 +878,12 @@ export type InputCreator = (
   entityConfig: EntityConfig,
 ) => [string, string, { [inputSpecificName: string]: [InputCreator, EntityConfig] }];
 
+export type VirtualConfigComposer = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  suffix?: string,
+) => EntityConfig;
+
 export type ActionAttributes = {
   actionGeneralName: (suffix?: string) => string,
   actionType: 'Mutation' | 'Query',
@@ -892,6 +898,7 @@ export type ActionAttributes = {
     generalConfig: GeneralConfig,
     suffix?: string,
   ) => EntityConfig | null,
+  actionReturnVirtualConfigs?: Array<string>,
 };
 
 export type GqlActionData = {

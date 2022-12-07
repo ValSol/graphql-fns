@@ -1,15 +1,15 @@
 // @flow
 
-import type { SimplifiedEntityConfig } from '../../flowTypes';
+import type { EntityConfig } from '../../flowTypes';
 
-const composeTangibleFileEntityConfig = (
-  config: SimplifiedEntityConfig,
-): SimplifiedEntityConfig => {
+import composeTangibleFileConfigName from './composeTangibleFileConfigName';
+
+const composeTangibleFileEntityConfig = (config: EntityConfig): EntityConfig => {
   const { name } = config;
 
-  const tangibleConfig: SimplifiedEntityConfig = Object.keys(config).reduce((prev, key) => {
+  const tangibleConfig: EntityConfig = Object.keys(config).reduce((prev, key) => {
     if (key === 'name') {
-      prev[key] = `Tangible${name}`; // eslint-disable-line no-param-reassign
+      prev[key] = composeTangibleFileConfigName(name); // eslint-disable-line no-param-reassign
     } else if (key === 'type') {
       prev[key] = 'tangibleFile'; // eslint-disable-line no-param-reassign
     } else if (key.endsWith('Fields')) {

@@ -1,12 +1,14 @@
 // @flow
 
-import type { EntityConfig, GeneralConfig } from '../../flowTypes';
+import type { VirtualConfigComposer } from '../../flowTypes';
 
-const composeEdgeVirtualConfig = (
-  config: EntityConfig,
-  generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
-  prefix?: string, // eslint-disable-line no-unused-vars
-): EntityConfig => {
+import composeEdgeVirtualConfigName from './composeEdgeVirtualConfigName';
+
+const composeEdgeVirtualConfig: VirtualConfigComposer = (
+  config,
+  generalConfig, // eslint-disable-line no-unused-vars
+  suffix?, // eslint-disable-line no-unused-vars
+) => {
   const { name, type: configType = 'tangible' } = config;
 
   if (configType !== 'tangible' && configType !== 'tangibleFile') {
@@ -16,7 +18,7 @@ const composeEdgeVirtualConfig = (
   }
 
   return {
-    name: `${name}Edge`,
+    name: composeEdgeVirtualConfigName(name),
     type: 'virtual',
 
     childFields: [{ name: 'node', config }],

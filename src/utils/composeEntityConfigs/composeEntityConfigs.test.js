@@ -30,10 +30,34 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: simplifiedEntityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'ExampleConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
     const simplifiedEntityConfigs = [simplifiedEntityConfig];
 
     const result = composeEntityConfigs(simplifiedEntityConfigs);
-    const expectedResult = { PageInfo, Example: simplifiedEntityConfig };
+    const expectedResult = {
+      PageInfo,
+      Example: simplifiedEntityConfig,
+      ExampleEdge: exampleEdgeConfig,
+      ExampleConnection: exampleConnectionConfig,
+    };
     expect(result).toEqual(expectedResult);
   });
 
@@ -206,9 +230,30 @@ describe('composeEntityConfigs', () => {
       ],
     });
 
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'ExampleConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
     const expectedResult = {
       PageInfo,
       Example: entityConfig,
+      ExampleEdge: exampleEdgeConfig,
+      ExampleConnection: exampleConnectionConfig,
       Embedded: embeddedConfig,
       Embedded2: embedded2Config,
       Embedded3: embedded3Config,
@@ -258,7 +303,31 @@ describe('composeEntityConfigs', () => {
       ],
     });
 
-    const expectedResult = { PageInfo, Example: entityConfig };
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'ExampleConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
+    const expectedResult = {
+      PageInfo,
+      Example: entityConfig,
+      ExampleEdge: exampleEdgeConfig,
+      ExampleConnection: exampleConnectionConfig,
+    };
 
     const result = composeEntityConfigs(simplifiedEntityConfigs);
     expect(result).toEqual(expectedResult);
@@ -360,9 +429,30 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
+    const exampleEdgeConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'ExampleConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
     const expectedResult = {
       PageInfo,
       Example: entityConfig,
+      ExampleEdge: exampleEdgeConfig,
+      ExampleConnection: exampleConnectionConfig,
       Image: imageConfig,
       TangibleImage: tangibleImageConfig,
     };

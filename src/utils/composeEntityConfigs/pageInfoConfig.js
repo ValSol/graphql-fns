@@ -1,5 +1,4 @@
 // @flow
-/* eslint-env jest */
 import type { EntityConfig } from '../../flowTypes';
 
 const pageInfoConfig: EntityConfig = {

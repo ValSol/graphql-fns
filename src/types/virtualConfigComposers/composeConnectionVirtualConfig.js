@@ -1,12 +1,14 @@
 // @flow
 
-import type { EntityConfig, GeneralConfig } from '../../flowTypes';
+import type { VirtualConfigComposer } from '../../flowTypes';
 
-const composeConnectionVirtualConfig = (
-  config: EntityConfig,
-  generalConfig: GeneralConfig,
-  prefix?: string, // eslint-disable-line no-unused-vars
-): EntityConfig => {
+import composeConnectionVirtualConfigName from './composeConnectionVirtualConfigName';
+
+const composeConnectionVirtualConfig: VirtualConfigComposer = (
+  config,
+  generalConfig,
+  suffix?, // eslint-disable-line no-unused-vars
+) => {
   const { name, type: configType = 'tangible' } = config;
 
   if (configType !== 'tangible' && configType !== 'tangibleFile') {
@@ -20,7 +22,7 @@ const composeConnectionVirtualConfig = (
   } = generalConfig;
 
   return {
-    name: `${name}Connection`,
+    name: composeConnectionVirtualConfigName(name),
     type: 'virtual',
 
     childFields: [

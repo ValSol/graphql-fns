@@ -72,23 +72,48 @@ const actionAttributes = {
   uploadEntityFiles,
 };
 
-const mutationAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
-  actionAttributes,
-).reduce((prev, actionName) => {
-  if (actionAttributes[actionName].actionType === 'Mutation') {
-    prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
-  }
-  return prev;
-}, {});
+const {
+  mutationAttributes,
+  queryAttributes,
+  virtualConfigComposers,
+}: {
+  mutationAttributes: { [actionName: string]: ActionAttributes },
+  queryAttributes: { [actionName: string]: ActionAttributes },
+  virtualConfigComposers: Array<[string, Array<string>]>,
+} = Object.keys(actionAttributes).reduce(
+  (prev, actionName) => {
+    if (actionAttributes[actionName].actionType === 'Mutation') {
+      prev.mutationAttributes[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+    } else if (actionAttributes[actionName].actionType === 'Query') {
+      prev.queryAttributes[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+    }
 
-const queryAttributes: { [actionName: string]: ActionAttributes } = Object.keys(
-  actionAttributes,
-).reduce((prev, actionName) => {
-  if (actionAttributes[actionName].actionType === 'Query') {
-    prev[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
-  }
-  return prev;
-}, {});
+    if (actionAttributes[actionName].actionReturnVirtualConfigs) {
+      const { actionReturnVirtualConfigs } = actionAttributes[actionName];
 
-export { mutationAttributes, queryAttributes };
+      const composers = prev.virtualConfigComposers;
+
+      actionReturnVirtualConfigs.forEach((composer) => {
+        let corteg = composers.find(([savedComposer]) => savedComposer === composer);
+
+        if (!corteg) {
+          corteg = [composer, []];
+          composers.push(corteg);
+        }
+
+        const [, actionNames] = corteg;
+        actionNames.push(actionName);
+      });
+    }
+
+    return prev;
+  },
+  {
+    mutationAttributes: {},
+    queryAttributes: {},
+    virtualConfigComposers: [],
+  },
+);
+
+export { mutationAttributes, queryAttributes, virtualConfigComposers };
 export default actionAttributes;
