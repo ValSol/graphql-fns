@@ -7,6 +7,7 @@ const composeFieldsObject = (entityConfig: EntityConfig): EntityConfigObject => 
   const {
     name: entityName,
     booleanFields,
+    childFields,
     dateTimeFields,
     duplexFields,
     embeddedFields,
@@ -119,6 +120,15 @@ const composeFieldsObject = (entityConfig: EntityConfig): EntityConfigObject => 
       const { name } = attributes;
       // eslint-disable-next-line no-param-reassign
       prev[name] = { attributes, kind: 'relationalFields' };
+      return prev;
+    }, result);
+  }
+
+  if (childFields) {
+    childFields.reduce((prev, attributes) => {
+      const { name } = attributes;
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = { attributes, kind: 'childFields' };
       return prev;
     }, result);
   }

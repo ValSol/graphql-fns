@@ -8,7 +8,7 @@ import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
-import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
+import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
@@ -182,8 +182,8 @@ const composeGqlResolvers = (
 
       // process derivative objects fields
       Object.keys(derivativeConfigs).forEach((derivativeKey) => {
-        const derivativeConfig = composeDerivativeConfig(
-          derivativeConfigs[derivativeKey],
+        const derivativeConfig = composeDerivativeConfigByName(
+          derivativeKey,
           entityConfig,
           generalConfig,
         );

@@ -3,7 +3,7 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import composeDerivativeConfig from '../utils/composeDerivativeConfig';
+import composeDerivativeConfigByName from '../utils/composeDerivativeConfigByName';
 import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import collectDerivativeInputs from './collectDerivativeInputs';
 import composeActionSignature from './composeActionSignature';
@@ -53,8 +53,8 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   Object.keys(derivative || {}).reduce((prev, suffix) => {
     const { allow } = derivative[suffix];
     Object.keys(allow).forEach((entityName) => {
-      const derivativeConfig = composeDerivativeConfig(
-        derivative[suffix],
+      const derivativeConfig = composeDerivativeConfigByName(
+        suffix,
         entityConfigs[entityName],
         generalConfig,
       );

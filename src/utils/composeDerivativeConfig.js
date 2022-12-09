@@ -140,15 +140,17 @@ const composeDerivativeConfig = (
       }
     });
 
-    const addedDuplexFields =
-      addFields && addFields[rootEntityName] && addFields[rootEntityName].duplexFields
-        ? addFields[rootEntityName].duplexFields.map(({ name }) => name)
-        : [];
+    const addedDuplexFields = addFields?.[rootEntityName]?.duplexFields
+      ? addFields[rootEntityName].duplexFields.map(({ name }) => name)
+      : [];
 
-    const addedRelationalFields =
-      addFields && addFields[rootEntityName] && addFields[rootEntityName].relationalFields
-        ? addFields[rootEntityName].relationalFields.map(({ name }) => name)
-        : [];
+    const addedRelationalFields = addFields?.[rootEntityName]?.relationalFields
+      ? addFields[rootEntityName].relationalFields.map(({ name }) => name)
+      : [];
+
+    const addedChildFields = addFields?.[rootEntityName]?.childFields
+      ? addFields[rootEntityName].childFields.map(({ name }) => name)
+      : [];
 
     if (derivativeFields[rootEntityName]) {
       Object.keys(derivativeFields[rootEntityName]).forEach((fieldName) => {
@@ -156,10 +158,12 @@ const composeDerivativeConfig = (
           !(
             fieldsObject[fieldName] &&
             (fieldsObject[fieldName].kind === 'relationalFields' ||
-              fieldsObject[fieldName].kind === 'duplexFields')
+              fieldsObject[fieldName].kind === 'duplexFields' ||
+              fieldsObject[fieldName].kind === 'childFields')
           ) &&
           !addedDuplexFields.includes(fieldName) &&
-          !addedRelationalFields.includes(fieldName)
+          !addedRelationalFields.includes(fieldName) &&
+          !addedChildFields.includes(fieldName)
         ) {
           throw new TypeError(
             `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
@@ -177,7 +181,7 @@ const composeDerivativeConfig = (
 
   if (includeFields && includeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
-      if (key.slice(-6) === 'Fields') {
+      if (key.endsWith('Fields')) {
         // $FlowFixMe
         entityConfig[key] = entityConfig[key].filter(({ name }) =>
           includeFields[rootEntityName].includes(name),
@@ -188,7 +192,7 @@ const composeDerivativeConfig = (
 
   if (excludeFields && excludeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
-      if (key.slice(-6) === 'Fields') {
+      if (key.endsWith('Fields')) {
         // $FlowFixMe
         entityConfig[key] = entityConfig[key].filter(
           // $FlowFixMe
@@ -230,7 +234,7 @@ const composeDerivativeConfig = (
 
   if (derivativeFields && derivativeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
-      if (key === 'relationalFields' || key === 'duplexFields') {
+      if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
         // $FlowFixMe
         entityConfig[key] = entityConfig[key].map((item) => {
           const { name, array, config: currentConfig } = item;
@@ -243,7 +247,10 @@ const composeDerivativeConfig = (
           const suffix2 = derivativeFields[rootEntityName][name];
 
           const childQuery = array ? 'childEntities' : 'childEntity';
-          if (!derivative[suffix2].allow[currentConfig.name].includes(childQuery)) {
+          if (
+            !derivative[suffix2].allow[currentConfig.name].includes(childQuery) &&
+            fieldsObject[name].kind !== 'childFields'
+          ) {
             throw new TypeError(
               `Have to set "${childQuery}" as "allow" for suffix: "${suffix2}" & entity: "${currentConfig.name}"!`,
             );
@@ -267,7 +274,7 @@ const composeDerivativeConfig = (
 
   if (freezedFields && freezedFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
-      if (key.slice(-6) === 'Fields') {
+      if (key.endsWith('Fields')) {
         // $FlowFixMe
         entityConfig[key] = entityConfig[key].map((field) =>
           // $FlowFixMe
@@ -283,7 +290,7 @@ const composeDerivativeConfig = (
 
   if (unfreezedFields && unfreezedFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
-      if (key.slice(-6) === 'Fields') {
+      if (key.endsWith('Fields')) {
         // $FlowFixMe
         entityConfig[key] = entityConfig[key].map((field) =>
           // $FlowFixMe

@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, EntityConfig } from '../../../../flowTypes';
 
-import composeDerivativeConfig from '../../../../utils/composeDerivativeConfig';
+import composeDerivativeConfigByName from '../../../../utils/composeDerivativeConfigByName';
 import parseEntityName from '../../parseEntityName';
 import transformData from './transformData';
 import transformFileWhere from './transformFileWhere';
@@ -55,15 +55,15 @@ const getTransformerAndConfig = (
           generalConfig,
         );
 
-        const { entityConfigs, derivative } = generalConfig;
+        const { entityConfigs } = generalConfig;
 
         const entityConfig = entityConfigs[entityName];
 
         if (!derivativeKey) {
           prev.push([transformer, entityConfig]);
         } else {
-          const derivativeConfig = composeDerivativeConfig(
-            (derivative || {})[derivativeKey],
+          const derivativeConfig = composeDerivativeConfigByName(
+            derivativeKey,
             entityConfig,
             generalConfig,
           );

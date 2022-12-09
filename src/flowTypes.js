@@ -557,6 +557,7 @@ export type GeneralConfig = {
           | 'entityCount'
           | 'entityDistinctValues'
           | 'entities'
+          | 'entitiesThroughConnection'
           | 'childEntities'
           | 'entitiesByUnique'
           | 'entityFileCount'
@@ -644,6 +645,7 @@ export type DerivativeAttributes = {
       | 'entityCount'
       | 'entityDistinctValues'
       | 'entities'
+      | 'entitiesThroughConnection'
       | 'childEntities'
       | 'entitiesByUnique'
       | 'entityFileCount'
@@ -687,7 +689,7 @@ type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
       'Query',
-      // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', '', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
+      // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
       string,
     ]
   | [
@@ -701,7 +703,7 @@ export type TwoSegmentInventoryChain =
 export type ThreeSegmentInventoryChain =
   | [
       'Query',
-      // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', '', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
+      // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
       string,
       string,
     ]
@@ -899,6 +901,7 @@ export type ActionAttributes = {
     suffix?: string,
   ) => EntityConfig | null,
   actionReturnVirtualConfigs?: Array<string>,
+  actionDerivativeUpdater?: Function, // (entityName: string, item: { ...DerivativeAttributes }) => void,
 };
 
 export type GqlActionData = {

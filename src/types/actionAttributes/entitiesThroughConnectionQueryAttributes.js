@@ -2,7 +2,12 @@
 
 import pluralize from 'pluralize';
 
-import type { InputCreator, EntityConfig, GeneralConfig } from '../../flowTypes';
+import type {
+  DerivativeAttributes,
+  EntityConfig,
+  GeneralConfig,
+  InputCreator,
+} from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
@@ -76,6 +81,39 @@ const actionReturnConfig = (
 };
 
 const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnectionVirtualConfig'];
+
+const actionDerivativeUpdater = (entityName: string, item: { ...DerivativeAttributes }) => {
+  const { suffix } = item;
+
+  const edgeName = `${entityName}Edge`;
+
+  const connectionName = `${entityName}Connection`;
+
+  if (!item.allow[edgeName]) {
+    item.allow = { ...item.allow, [edgeName]: [] }; // eslint-disable-line no-param-reassign
+  }
+
+  if (!item.allow[connectionName]) {
+    item.allow = { ...item.allow, [connectionName]: [] }; // eslint-disable-line no-param-reassign
+  }
+
+  if (!item.derivativeFields) {
+    item.derivativeFields = {}; // eslint-disable-line no-param-reassign
+  }
+
+  if (!item.derivativeFields[edgeName]) {
+    item.derivativeFields = { ...item.derivativeFields, [edgeName]: { node: suffix } }; // eslint-disable-line no-param-reassign
+  }
+
+  if (!item.derivativeFields[connectionName]) {
+    // eslint-disable-next-line no-param-reassign
+    item.derivativeFields = {
+      ...item.derivativeFields,
+      [connectionName]: { edges: suffix },
+    };
+  }
+};
+
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
 const actionReturnString =
@@ -93,6 +131,7 @@ const entitiesThroughConnectionQueryAttributes = {
   actionReturnString,
   actionReturnConfig,
   actionReturnVirtualConfigs,
+  actionDerivativeUpdater,
   actionAllowed,
 };
 

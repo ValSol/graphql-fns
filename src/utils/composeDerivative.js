@@ -10,23 +10,21 @@ type Result = { [derivativeName: string]: DerivativeAttributes };
 const actionGenericNames = Object.keys(actionAttributes);
 
 const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes>): Result => {
-  const result = derivativeAttributesArray.reduce((prev, item) => {
+  const derivativeKeys = derivativeAttributesArray.reduce((prev, item) => {
     const { suffix } = item;
     if (!suffix) {
       throw new TypeError('Derivative attributes must have suffix!');
     }
-    if (prev[suffix]) {
+    if (prev.includes(suffix)) {
       throw new TypeError(`Unique derivative attributes suffix: "${suffix}" is used twice!`);
     }
 
-    prev[suffix] = item; // eslint-disable-line no-param-reassign
+    prev.push(suffix);
 
     return prev;
-  }, {});
+  }, []);
 
   // *** check derivativeFields correctness
-
-  const derivativeKeys = Object.keys(result);
 
   derivativeAttributesArray.forEach(({ allow, derivativeFields, suffix }) => {
     Object.keys(allow).forEach((key) => {
@@ -52,6 +50,23 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
   });
 
   // ***
+
+  const result = derivativeAttributesArray.reduce((prev, rawItem) => {
+    const { allow, suffix } = rawItem;
+
+    const item = { ...rawItem };
+
+    Object.keys(allow).forEach((entityName) => {
+      allow[entityName].forEach((actionGenericName) => {
+        // $FlowFixMe
+        actionAttributes[actionGenericName].actionDerivativeUpdater?.(entityName, item);
+      });
+    });
+
+    prev[suffix] = item; // eslint-disable-line no-param-reassign
+
+    return prev;
+  }, {});
 
   return result;
 };

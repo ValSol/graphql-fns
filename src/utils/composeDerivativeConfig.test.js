@@ -2,6 +2,7 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
 
+import pageInfoConfig from './composeEntityConfigs/pageInfoConfig';
 import composeDerivativeConfig from './composeDerivativeConfig';
 
 describe('composeDerivativeConfig', () => {
@@ -464,6 +465,106 @@ describe('composeDerivativeConfig', () => {
       };
 
       expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('compose connection DerivativeConfigs', () => {
+    const exampleConfig: EntityConfig = {
+      name: 'Example2',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+        {
+          name: 'anotherField',
+          index: true,
+        },
+      ],
+    };
+
+    const exampleEdgeConfig = {
+      name: 'Example2Edge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: exampleConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const exampleConnectionConfig = {
+      name: 'Example2Connection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: pageInfoConfig, required: true },
+        { name: 'edges', config: exampleEdgeConfig, array: true },
+      ],
+    };
+
+    const ForCatalog: DerivativeAttributes = {
+      allow: {
+        Example2: ['entity', 'entities', 'entitiesThroughConnection'],
+        Example2Connection: [],
+        Example2Edge: [],
+      },
+      suffix: 'ForCatalog',
+      excludeFields: { Example2: ['anotherField'] },
+      derivativeFields: {
+        Example2Edge: { node: 'ForCatalog' },
+        Example2Connection: { edges: 'ForCatalog' },
+      },
+    };
+
+    const generalConfig: GeneralConfig = {
+      entityConfigs: {
+        Example2: exampleConfig,
+        Example2Edge: exampleEdgeConfig,
+        Example2Connection: exampleConnectionConfig,
+      },
+      derivative: { ForCatalog },
+    };
+
+    const entityForCatalogConfig: EntityConfig = {
+      name: 'Example2ForCatalog',
+      type: 'tangible',
+
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    test('should return correct derivative config Example2EdgeForCatalog & Example2ConnectionForCatalog', () => {
+      const result = composeDerivativeConfig(ForCatalog, exampleEdgeConfig, generalConfig);
+
+      const expectedExample2EdgeForCatalog = {
+        name: 'Example2EdgeForCatalog',
+        type: 'virtual',
+
+        childFields: [{ name: 'node', config: entityForCatalogConfig }],
+
+        textFields: [{ name: 'cursor', required: true }],
+      };
+
+      expect(result).toEqual(expectedExample2EdgeForCatalog);
+
+      const result2 = composeDerivativeConfig(ForCatalog, exampleConnectionConfig, generalConfig);
+
+      const expectedExample2ConnectionForCatalog = {
+        name: 'Example2ConnectionForCatalog',
+        type: 'virtual',
+
+        childFields: [
+          { name: 'pageInfo', config: pageInfoConfig, required: true },
+          { name: 'edges', config: expectedExample2EdgeForCatalog, array: true },
+        ],
+      };
+
+      expect(result2).toEqual(expectedExample2ConnectionForCatalog);
     });
   });
 });
