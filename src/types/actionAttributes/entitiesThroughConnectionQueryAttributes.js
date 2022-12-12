@@ -119,7 +119,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 const actionReturnString =
   (suffix: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}Connection`;
+    `${name}Connection${suffix}`;
 
 const entitiesThroughConnectionQueryAttributes = {
   actionGeneralName,

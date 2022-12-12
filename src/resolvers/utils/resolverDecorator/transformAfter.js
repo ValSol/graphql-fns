@@ -24,6 +24,7 @@ const transformAfter = (
   }
 
   const {
+    childFields,
     duplexFields,
     embeddedFields,
     fileFields,
@@ -56,23 +57,24 @@ const transformAfter = (
     {},
   );
 
-  const recursiveFields = [...(embeddedFields || []), ...(fileFields || [])].reduce(
-    (prev, { array, config, name }) => {
-      if (!item[name]) return prev;
+  const recursiveFields = [
+    ...(childFields || []),
+    ...(embeddedFields || []),
+    ...(fileFields || []),
+  ].reduce((prev, { array, config, name }) => {
+    if (!item[name]) return prev;
 
-      if (array) {
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = item[name].map(
-          (item2) => item2 && transformAfter(item2, config, generalConfig, true),
-        );
-      } else {
-        prev[name] = transformAfter(item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
-      }
+    if (array) {
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = item[name].map(
+        (item2) => item2 && transformAfter(item2, config, generalConfig, true),
+      );
+    } else {
+      prev[name] = transformAfter(item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
+    }
 
-      return prev;
-    },
-    {},
-  );
+    return prev;
+  }, {});
 
   const { id, ...rest } = item;
 

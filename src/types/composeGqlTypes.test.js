@@ -4139,4 +4139,205 @@ type Mutation {
     const result = composeGqlTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create entities types with derivative & inventory for only queries', () => {
+    const entityConfig: SimplifiedEntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+
+    const ForCatalog: DerivativeAttributes = {
+      allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
+      suffix: 'ForCatalog',
+      derivativeFields: {
+        ExampleEdge: { node: 'ForCatalog' },
+        ExampleConnection: { edges: 'ForCatalog' },
+      },
+    };
+
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const inventory: Inventory = { name: 'test', include: { Query: true } };
+    const derivative = { ForCatalog };
+    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const expectedResult = `scalar DateTime
+scalar Upload
+interface Node {
+  id: ID!
+}
+input RegExp {
+  pattern: String!
+  flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
+}
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type Example implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type ExampleEdge {
+  cursor: String!
+  node: Example
+}
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]!
+}
+type ExampleForCatalog implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+type ExampleEdgeForCatalog {
+  cursor: String!
+  node: ExampleForCatalog
+}
+type ExampleConnectionForCatalog {
+  pageInfo: PageInfo!
+  edges: [ExampleEdgeForCatalog!]!
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
+input ExampleWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [ExampleWhereInput!]
+  NOR: [ExampleWhereInput!]
+  OR: [ExampleWhereInput!]
+}
+input ExampleWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
+}
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
+input ExampleWhereByUniqueInput {
+  id_in: [ID!]
+}
+input ExampleForCatalogWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [ExampleForCatalogWhereInput!]
+  NOR: [ExampleForCatalogWhereInput!]
+  OR: [ExampleForCatalogWhereInput!]
+}
+input ExampleForCatalogWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum ExampleForCatalogSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleForCatalogSortInput {
+  sortBy: [ExampleForCatalogSortEnum]
+}
+type Query {
+  node(id: ID!): Node
+  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  ExampleCount(where: ExampleWhereInput): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
+  Example(whereOne: ExampleWhereOneInput!): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
+  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleConnectionForCatalog
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
