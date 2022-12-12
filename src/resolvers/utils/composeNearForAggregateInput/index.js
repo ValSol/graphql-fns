@@ -24,12 +24,6 @@ const composeNearForAggregateInput = (near: NearInput): NearForAggregateMongodb 
     result.minDistance = minDistance;
   }
 
-  if (typeof maxDistance === 'undefined' && typeof minDistance === 'undefined') {
-    throw new TypeError(
-      `Got undefined maxDistance & minDistance in nearInput of "${geospatialField}" field!`,
-    );
-  }
-
   return result;
 };
 

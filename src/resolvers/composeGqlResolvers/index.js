@@ -8,7 +8,7 @@ import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
@@ -27,7 +27,7 @@ const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
-  const { entityConfigs, inventory, derivative } = generalConfig;
+  const { entityConfigs, inventory, derivative = {} } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
@@ -35,7 +35,6 @@ const composeGqlResolvers = (
   const customQuery = custom?.Query || {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom?.Mutation || {};
-  const derivativeConfigs = derivative || {};
 
   const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -181,9 +180,9 @@ const composeGqlResolvers = (
       }
 
       // process derivative objects fields
-      Object.keys(derivativeConfigs).forEach((derivativeKey) => {
-        const derivativeConfig = composeDerivativeConfigByName(
-          derivativeKey,
+      Object.keys(derivative).forEach((derivativeKey) => {
+        const derivativeConfig = composeDerivativeConfig(
+          derivative[derivativeKey],
           entityConfig,
           generalConfig,
         );
