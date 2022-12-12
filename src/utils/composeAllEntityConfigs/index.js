@@ -13,7 +13,7 @@ import PageInfo from './pageInfoConfig';
 
 const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
 
-const composeEntityConfigs = (
+const composeAllEntityConfigs = (
   simplifiedThingConfigs: Array<SimplifiedEntityConfig>,
 ): { [entityName: string]: EntityConfig } => {
   const result = simplifiedThingConfigs.reduce(
@@ -83,7 +83,7 @@ const composeEntityConfigs = (
           );
         }
 
-        const virtualConfig = composeVirtualConfig(config, { entityConfigs: result }); // imitate generalConfig
+        const virtualConfig = composeVirtualConfig(config, { allEntityConfigs: result }); // imitate generalConfig
 
         result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
       });
@@ -93,4 +93,4 @@ const composeEntityConfigs = (
   return result;
 };
 
-export default composeEntityConfigs;
+export default composeAllEntityConfigs;

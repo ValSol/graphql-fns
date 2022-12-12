@@ -5,7 +5,7 @@ import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 import createCreateManyEntitiesMutationResolver from './index';
 
 describe('createCreateManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation add entity type', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',

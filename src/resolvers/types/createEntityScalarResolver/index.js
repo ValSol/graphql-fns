@@ -18,7 +18,7 @@ const createEntityScalarResolver = (
   serversideConfig: ServersideConfig,
 ): Function => {
   const { name } = entityConfig;
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
 
@@ -26,7 +26,7 @@ const createEntityScalarResolver = (
     ? createCustomResolver(
         'Query',
         `childEntity${nameSuffix}`,
-        entityConfigs[nameRoot],
+        allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
       )
@@ -41,7 +41,7 @@ const createEntityScalarResolver = (
     throw new TypeError(
       `Not defined childEntityQueryResolver "${
         nameSuffix ? `childEntity${nameSuffix}` : 'childEntity'
-      }" for entity: "${entityConfigs[nameRoot].name}"!`,
+      }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
@@ -56,7 +56,7 @@ const createEntityScalarResolver = (
       throw new TypeError(
         `Not authorized resolver: "${
           nameSuffix ? `childEntity${nameSuffix}` : 'childEntity'
-        }" for entity: "${entityConfigs[nameRoot].name}"!`,
+        }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
       );
     }
 

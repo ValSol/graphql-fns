@@ -5,7 +5,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import type { Enums, GeneralConfig, SimplifiedEntityConfig } from './flowTypes';
 
-import composeEntityConfigs from './utils/composeEntityConfigs';
+import composeAllEntityConfigs from './utils/composeAllEntityConfigs';
 import composeGqlTypes from './types/composeGqlTypes';
 import composeGqlResolvers from './resolvers/composeGqlResolvers';
 
@@ -38,9 +38,9 @@ describe('graphql schema', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -103,13 +103,13 @@ describe('graphql schema', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const enums: Enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
-    const generalConfig: GeneralConfig = { entityConfigs, enums };
+    const generalConfig: GeneralConfig = { allEntityConfigs, enums };
     const typeDefs = composeGqlTypes(generalConfig);
 
     const resolvers = composeGqlResolvers(generalConfig);
@@ -172,9 +172,9 @@ describe('graphql schema', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [personConfig, addressConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, addressConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
 
@@ -247,9 +247,9 @@ describe('graphql schema', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [personConfig, placeConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const typeDefs = composeGqlTypes(generalConfig);
     const resolvers = composeGqlResolvers(generalConfig);
     const schema = makeExecutableSchema({
@@ -321,9 +321,9 @@ describe('graphql schema', () => {
       ],
     });
 
-    const simplifiedEntityConfigs = [personConfig, placeConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     generalConfig.inventory = {
       name: 'test',
       include: {

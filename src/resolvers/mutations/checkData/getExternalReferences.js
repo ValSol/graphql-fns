@@ -10,7 +10,7 @@ const getExternalReferences = async (
   serversideConfig: ServersideConfig,
   context: Object,
 ): Promise<Array<string | null>> => {
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
   const inAnyCase = true;
   const entityQueryResolvers = {};
 
@@ -21,7 +21,7 @@ const getExternalReferences = async (
 
     if (!entityQueryResolvers[entityName]) {
       entityQueryResolvers[entityName] = createEntityQueryResolver(
-        entityConfigs[entityName],
+        allEntityConfigs[entityName],
         generalConfig,
         serversideConfig,
         inAnyCase,

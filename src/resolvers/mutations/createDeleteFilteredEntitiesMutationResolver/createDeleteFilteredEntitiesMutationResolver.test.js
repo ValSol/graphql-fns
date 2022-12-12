@@ -5,7 +5,7 @@ import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 import createDeleteFilteredEntitiesMutationResolver from './index';
 
 describe('createDeleteFilteredEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation add entity type', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',

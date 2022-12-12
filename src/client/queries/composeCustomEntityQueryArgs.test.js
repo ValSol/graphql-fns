@@ -27,11 +27,11 @@ describe('composeCustomEntityQueryArgs', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const queryName = 'getEntity';
     const custom = { Query: { [queryName]: signatureMethods } };
 
-    const generalConfig: GeneralConfig = { entityConfigs, custom };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom };
 
     const expectedResult = ['query Home_getExample {', '  getExample {'];
 
@@ -66,11 +66,11 @@ describe('composeCustomEntityQueryArgs', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const queryName = 'loadEntity';
     const custom = { Query: { [queryName]: signatureMethods } };
 
-    const generalConfig: GeneralConfig = { entityConfigs, custom };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom };
 
     const expectedResult = [
       'query Home_loadExample($path: String!, $index: Int) {',

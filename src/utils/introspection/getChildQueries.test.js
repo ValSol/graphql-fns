@@ -68,7 +68,7 @@ describe('getChildQueries', () => {
   });
 
   const generalConfig = {
-    entityConfigs: { Person: personConfig, Place: placeConfig, Country: countryConfig },
+    allEntityConfigs: { Person: personConfig, Place: placeConfig, Country: countryConfig },
   };
 
   test('should compose relatioanl and duplex fields with depth: 0 & include option 1', () => {

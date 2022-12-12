@@ -29,7 +29,7 @@ afterAll(async () => {
 });
 
 describe('createPushIntoEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
 
   test('should create mutation pushInto entity resolver with wipe out duplex fields values', async () => {

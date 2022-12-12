@@ -40,8 +40,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.ExampleCount).toBe('function');
     expect(typeof result.Query.ExampleDistinctValues).toBe('function');
@@ -92,8 +92,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example1: entityConfig1, Example2: entityConfig2 };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Example1: entityConfig1, Example2: entityConfig2 };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -172,8 +172,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     });
-    const entityConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -259,8 +259,8 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Person: personConfig, Address: addressConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Person: personConfig, Address: addressConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -342,8 +342,8 @@ describe('composeGqlResolvers', () => {
       ],
     });
 
-    const entityConfigs = { Person: personConfig, Place: placeConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Person: personConfig, Place: placeConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -427,8 +427,8 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const result = composeGqlResolvers(generalConfig);
 
     expect(typeof result.DateTime).toBe('object');
@@ -466,9 +466,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: true } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Query.ExampleCount).toBe('function');
@@ -489,9 +489,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(typeof result.Mutation.createManyExamples).toBe('function');
@@ -513,9 +513,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: { entity: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query.ExampleCount).toBeUndefined();
     expect(result.Query.ExampleDistinctValues).toBeUndefined();
@@ -536,9 +536,9 @@ describe('composeGqlResolvers', () => {
         },
       ],
     };
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
     expect(result.Query).toBeUndefined();
     expect(result.Mutation.createManyExamples).toBeUndefined();
@@ -570,10 +570,10 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
     const custom = { Mutation: { loadEntity: signatureMethods } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {
       Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
     };
@@ -611,10 +611,10 @@ describe('composeGqlResolvers', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: { getEntity: true } } };
     const custom = { Query: { getEntity: signatureMethods } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const serversideConfig: ServersideConfig = {
       Query: { getEntity: createCustomLoadEntityMutationResolver },
     };

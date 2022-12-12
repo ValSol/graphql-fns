@@ -3,7 +3,7 @@
 
 import type { EntityConfig } from '../flowTypes';
 
-import pageInfoConfig from '../utils/composeEntityConfigs/pageInfoConfig';
+import pageInfoConfig from '../utils/composeAllEntityConfigs/pageInfoConfig';
 import createEntityType from './createEntityType';
 
 describe('createEntityType', () => {

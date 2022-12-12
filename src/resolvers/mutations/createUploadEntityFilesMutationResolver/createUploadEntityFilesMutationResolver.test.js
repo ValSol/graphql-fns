@@ -18,7 +18,7 @@ describe('createUploadEntityFilesMutationResolver', () => {
         },
       ],
     };
-    const generalConfig: GeneralConfig = { entityConfigs: { Image: imageConfig } };
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Image: imageConfig } };
 
     const serversideConfig = {
       saveFiles: {

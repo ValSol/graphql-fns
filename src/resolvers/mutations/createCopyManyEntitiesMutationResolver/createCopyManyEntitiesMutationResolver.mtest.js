@@ -30,7 +30,7 @@ afterAll(async () => {
 });
 
 describe('createCopyManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
 
   test('should create mutation add entity resolver', async () => {

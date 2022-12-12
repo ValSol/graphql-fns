@@ -24,7 +24,7 @@ afterAll(async () => {
 });
 
 describe('createCreateEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
   test('should create mutation add entity resolver', async () => {
     const entityConfig: EntityConfig = {
@@ -763,7 +763,7 @@ describe('createCreateEntityMutationResolver', () => {
     });
 
     const generalConfig2: GeneralConfig = {
-      entityConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
+      allEntityConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
     };
 
     const accessSchema = createThingSchema(accessConfig);

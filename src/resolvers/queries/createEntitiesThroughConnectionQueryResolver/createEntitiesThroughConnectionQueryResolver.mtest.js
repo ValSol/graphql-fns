@@ -18,7 +18,7 @@ let createdExamples;
 let Example;
 let examplesThroughConnection;
 
-const generalConfig: GeneralConfig = { entityConfigs: {} };
+const generalConfig: GeneralConfig = { allEntityConfigs: {} };
 const entityConfig: EntityConfig = {
   name: 'Example',
   type: 'tangible',

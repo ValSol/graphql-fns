@@ -16,9 +16,9 @@ const parseAction = (
   { actionType, actionName, entityName, suffix }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
-  const { entityConfigs, custom, derivative } = generalConfig;
+  const { allEntityConfigs, custom, derivative } = generalConfig;
 
-  if (!entityConfigs[entityName]) {
+  if (!allEntityConfigs[entityName]) {
     throw new TypeError(`Not found entity with name: "${entityName}"!`);
   }
 
@@ -41,7 +41,7 @@ const parseAction = (
       );
     }
 
-    const entityConfig = attributes.actionReturnConfig(entityConfigs[entityName], generalConfig);
+    const entityConfig = attributes.actionReturnConfig(allEntityConfigs[entityName], generalConfig);
 
     return {
       creationType: 'standard',
@@ -55,11 +55,11 @@ const parseAction = (
     if (custom[actionType] && custom[actionType][actionName]) {
       const signatureMethods = custom[actionType][actionName];
 
-      const entityConfig = signatureMethods.config(entityConfigs[entityName], generalConfig);
+      const entityConfig = signatureMethods.config(allEntityConfigs[entityName], generalConfig);
 
       let calculatedSuffix = '';
 
-      if (entityConfig && derivative && !entityConfigs[entityConfig.name]) {
+      if (entityConfig && derivative && !allEntityConfigs[entityConfig.name]) {
         const { name } = entityConfig;
         const suffixes = Object.keys(derivative);
 
@@ -67,7 +67,7 @@ const parseAction = (
           const currentSuffix = suffixes[i];
           if (name.endsWith(currentSuffix)) {
             const baseName = name.slice(0, -currentSuffix.length);
-            if (entityConfigs[baseName]) {
+            if (allEntityConfigs[baseName]) {
               calculatedSuffix = currentSuffix;
               break;
             }
@@ -133,7 +133,7 @@ const parseAction = (
           }
 
           const entityConfig = actionAttributes[baseAction].actionReturnConfig(
-            entityConfigs[entityName],
+            allEntityConfigs[entityName],
             generalConfig,
             currentSuffix,
           );

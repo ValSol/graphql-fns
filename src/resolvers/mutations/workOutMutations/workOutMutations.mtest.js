@@ -209,7 +209,7 @@ Object.assign(menuSectionCloneConfig, {
 });
 
 const generalConfig: GeneralConfig = {
-  entityConfigs: {
+  allEntityConfigs: {
     Parent: parentConfig,
     Child: childConfig,
     Example: exampleConfig,

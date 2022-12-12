@@ -34,7 +34,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
     const serversideConfig = {};
-    const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
     const result = createNodeQueryResolver(generalConfig, serversideConfig);
 
     expect(typeof result).toBe('function');

@@ -38,11 +38,11 @@ describe('composeCustomEntityMutationArgs', () => {
 
     const childArgs = { examples_where: 'ExampleWhereInput' };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const mutationName = 'loadEntity';
     const custom = { Mutation: { [mutationName]: signatureMethods } };
 
-    const generalConfig: GeneralConfig = { entityConfigs, custom };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom };
 
     const expectedResult = [
       'mutation Home_loadExample($examples_where: ExampleWhereInput) {',
@@ -80,11 +80,11 @@ describe('composeCustomEntityMutationArgs', () => {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const mutationName = 'loadEntity';
     const custom = { Mutation: { [mutationName]: signatureMethods } };
 
-    const generalConfig: GeneralConfig = { entityConfigs, custom };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom };
 
     const expectedResult = [
       'mutation Home_loadExample($path: String!, $index: Int) {',

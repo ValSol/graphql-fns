@@ -52,7 +52,7 @@ describe('composeGqlClientActionTree', () => {
     ],
   };
 
-  const generalConfig = { entityConfigs: { Example: entityConfig } };
+  const generalConfig = { allEntityConfigs: { Example: entityConfig } };
 
   test('should compose not nested fields with shift = 0', () => {
     const actionType = 'Query';

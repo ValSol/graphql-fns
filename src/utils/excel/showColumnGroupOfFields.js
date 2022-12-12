@@ -20,7 +20,7 @@ type Args = {
 const showColumnGroupOfFields = (args: Args) => {
   const { columnGroupShift, columns, combinedThingNames, firstThingName, generalConfig, ws } = args;
 
-  const { entityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, derivative } = generalConfig;
 
   const lastRow = { current: 1 };
 
@@ -56,7 +56,7 @@ const showColumnGroupOfFields = (args: Args) => {
         };
       }
 
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.booleanFields || [];
 
       const booleanFields = composeDerivativeFields({
@@ -83,7 +83,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.dateTimeFields || [];
 
       const dateTimeFields = composeDerivativeFields({
@@ -110,7 +110,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.textFields || [];
 
       const textFields = composeDerivativeFields({
@@ -137,7 +137,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.intFields || [];
 
       const intFields = composeDerivativeFields({
@@ -164,7 +164,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.floatFields || [];
 
       const floatFields = composeDerivativeFields({
@@ -191,7 +191,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.enumFields || [];
 
       const enumFields = composeDerivativeFields({
@@ -218,7 +218,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.geospatialFields || [];
 
       const geospatialFields = composeDerivativeFields({
@@ -245,7 +245,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.fileFields || [];
 
       const fileFields = composeDerivativeFields({
@@ -273,7 +273,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.embeddedFields || [];
 
       const embeddedFields = composeDerivativeFields({
@@ -301,7 +301,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.relationalFields || [];
 
       const relationalFields = composeDerivativeFields({
@@ -329,7 +329,7 @@ const showColumnGroupOfFields = (args: Args) => {
   {
     const usedNames = {};
     combinedThingNames.forEach(([entityName, suffix], i) => {
-      const entityConfig = suffix ? entityConfigs[firstThingName] : entityConfigs[entityName];
+      const entityConfig = suffix ? allEntityConfigs[firstThingName] : allEntityConfigs[entityName];
       const fields = entityConfig.duplexFields || [];
 
       const duplexFields = composeDerivativeFields({

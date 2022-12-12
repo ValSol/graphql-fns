@@ -18,7 +18,7 @@ describe('composeSubscription', () => {
     ],
   };
 
-  const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
+  const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
   test('should compose createdEntity subscription', () => {
     const subscriptionName = 'createdEntity';

@@ -65,7 +65,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { entityConfigs: { Example: entityConfig } };
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const exampleSchema = createThingSchema(entityConfig);
     const ExampleEntity = mongooseConn.model('Example_Thing', exampleSchema);
@@ -138,7 +138,7 @@ describe('createNodeQueryResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { entityConfigs: { TangibleImage: imageConfig } };
+    const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: imageConfig } };
 
     const fileSchema = createFileSchema(imageConfig);
     const FileModel = mongooseConn.model('Image_File', fileSchema);

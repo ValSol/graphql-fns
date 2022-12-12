@@ -21,7 +21,7 @@ afterAll(async () => {
 });
 
 describe('createCreateManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
 
   test('should create mutation add entity resolver', async () => {
     const entityConfig: EntityConfig = {

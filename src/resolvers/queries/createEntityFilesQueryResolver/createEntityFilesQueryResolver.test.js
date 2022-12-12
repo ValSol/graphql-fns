@@ -5,7 +5,7 @@ import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 import createEntityFilesQueryResolver from './index';
 
 describe('createEntityFilesQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation add entity type', () => {
     const imageConfig: EntityConfig = {
       name: 'Image',

@@ -28,7 +28,7 @@ afterAll(async () => {
 });
 
 describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
     const personConfig: EntityConfig = {};
     const placeConfig: EntityConfig = {

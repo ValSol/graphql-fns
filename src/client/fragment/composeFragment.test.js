@@ -17,7 +17,7 @@ describe('composeFragment', () => {
     ],
   };
 
-  const generalConfig = { entityConfigs: { Example: entityConfig } };
+  const generalConfig = { allEntityConfigs: { Example: entityConfig } };
 
   test('should compose fragment', () => {
     const fragmentName = 'firstExample';

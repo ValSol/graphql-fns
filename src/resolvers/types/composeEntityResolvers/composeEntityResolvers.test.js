@@ -56,7 +56,7 @@ describe('composeEntityResolvers', () => {
       ],
     });
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Place: placeConfig, Person: personConfig },
+      allEntityConfigs: { Place: placeConfig, Person: personConfig },
     };
 
     const serversideConfig = {};
@@ -134,7 +134,7 @@ describe('composeEntityResolvers', () => {
     const serversideConfig = {};
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Place: placeConfig, Person: personConfig },
+      allEntityConfigs: { Place: placeConfig, Person: personConfig },
     };
 
     const result = composeEntityResolvers(personConfig, generalConfig, serversideConfig);
@@ -171,7 +171,7 @@ describe('composeEntityResolvers', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Place: entityConfig },
+      allEntityConfigs: { Place: entityConfig },
     };
 
     const serversideConfig = {};

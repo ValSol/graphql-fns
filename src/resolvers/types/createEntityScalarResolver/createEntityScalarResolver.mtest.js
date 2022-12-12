@@ -62,7 +62,7 @@ describe('createEntityScalarResolver', () => {
 
     await sleep(250);
 
-    const generalConfig: GeneralConfig = { entityConfigs: { Place: placeConfig } };
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Place: placeConfig } };
 
     const createPlace = createCreateEntityMutationResolver(
       placeConfig,

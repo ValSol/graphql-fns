@@ -36,7 +36,7 @@ describe('composeActionSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
     const expectedResult = 'getExample: [Example!]!';
 
@@ -74,7 +74,7 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = 'getExample(path: String!, index: Int): Example!';
@@ -113,7 +113,7 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = '';
@@ -149,7 +149,7 @@ describe('composeActionSignature', () => {
       ],
     };
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = 'tokenOfExample(path: String!, index: Int): String!';

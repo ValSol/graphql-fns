@@ -10,8 +10,8 @@ describe('composeGeospatialTypes', () => {
       name: 'Example',
       type: 'tangible',
     };
-    const entityConfigs = { Example: entityConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Example: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const expectedResult = '';
 
     const result = composeGeospatialTypes(generalConfig);
@@ -28,8 +28,8 @@ describe('composeGeospatialTypes', () => {
         },
       ],
     };
-    const entityConfigs = { Place: entityConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { Place: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!
   lat: Float!
@@ -54,8 +54,8 @@ input GeospatialPointInput {
         },
       ],
     };
-    const entityConfigs = { District: entityConfig };
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = { District: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
     const expectedResult = `type GeospatialPoint {
   lng: Float!
   lat: Float!

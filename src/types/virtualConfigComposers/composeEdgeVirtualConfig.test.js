@@ -30,7 +30,7 @@ describe('composeEdgeVirtualConfig', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: {},
+      allEntityConfigs: {},
     };
 
     const result = composeEdgeVirtualConfig(exampleConfig, generalConfig);

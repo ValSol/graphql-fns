@@ -26,7 +26,7 @@ afterAll(async () => {
 });
 
 describe('createEntityFileQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = {
     composeFileFieldsData: {
       Image: ({ hash, _id }: FileAttributes) => {

@@ -5,15 +5,15 @@ const parseEntityName = (
   entityConfigName: string,
   generalConfig: GeneralConfig,
 ): { root: string, suffix: string } => {
-  const { entityConfigs, derivative } = generalConfig;
-  if (entityConfigs[entityConfigName]) return { root: entityConfigName, suffix: '' };
+  const { allEntityConfigs, derivative } = generalConfig;
+  if (allEntityConfigs[entityConfigName]) return { root: entityConfigName, suffix: '' };
 
   if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 
   const suffix = Object.keys(derivative).find(
     (key) =>
       key === entityConfigName.slice(-key.length) &&
-      entityConfigs[entityConfigName.slice(0, -key.length)],
+      allEntityConfigs[entityConfigName.slice(0, -key.length)],
   );
 
   if (!suffix) {

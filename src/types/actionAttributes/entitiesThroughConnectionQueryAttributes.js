@@ -69,11 +69,11 @@ const actionReturnConfig = (
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
-  const connectionConfig = entityConfigs[connectionConfigName];
+  const connectionConfig = allEntityConfigs[connectionConfigName];
 
   return suffix
     ? composeDerivativeConfigByName(suffix, connectionConfig, generalConfig)

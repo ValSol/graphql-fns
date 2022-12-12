@@ -7,12 +7,12 @@ const parseChildQueries = (
   childQueries: Array<string>,
   generalConfig: GeneralConfig,
 ): ChildQueries => {
-  const { entityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, derivative } = generalConfig;
 
   return childQueries.map((item) => {
     const [baseAction, derivativeThingName] = item.split(':');
 
-    if (entityConfigs[derivativeThingName]) {
+    if (allEntityConfigs[derivativeThingName]) {
       return { actionName: baseAction, baseAction, suffix: '', entityName: derivativeThingName };
     }
 
@@ -25,7 +25,7 @@ const parseChildQueries = (
         if (derivativeThingName.endsWith(suffix)) {
           const entityName = derivativeThingName.slice(0, -suffix.length);
 
-          if (entityConfigs[entityName]) {
+          if (allEntityConfigs[entityName]) {
             return {
               actionName: `${baseAction}${suffix}`,
               baseAction,

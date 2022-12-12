@@ -5,7 +5,7 @@ import type { GeneralConfig, EntityConfig } from '../../../flowTypes';
 import createEntitiesThroughConnectionQueryResolver from './index';
 
 describe('createEntitiesThroughConnectionQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create query resolver', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',

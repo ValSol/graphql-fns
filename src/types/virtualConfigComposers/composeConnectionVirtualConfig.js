@@ -18,7 +18,7 @@ const composeConnectionVirtualConfig: VirtualConfigComposer = (
   }
 
   const {
-    entityConfigs: { PageInfo, [`${name}Edge`]: edgeConfig },
+    allEntityConfigs: { PageInfo, [`${name}Edge`]: edgeConfig },
   } = generalConfig;
 
   return {

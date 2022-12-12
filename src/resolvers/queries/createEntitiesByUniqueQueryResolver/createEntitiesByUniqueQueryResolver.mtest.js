@@ -31,7 +31,7 @@ afterAll(async () => {
 });
 
 describe('createEntityQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = {};
   test('should create query entities resolver', async () => {
     const personConfig: EntityConfig = {};

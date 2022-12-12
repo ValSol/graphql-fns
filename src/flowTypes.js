@@ -496,7 +496,7 @@ export type DerivativeInputs = {
 };
 
 export type GeneralConfig = {
-  +entityConfigs: { [entityConfigName: string]: EntityConfig },
+  +allEntityConfigs: { [entityConfigName: string]: EntityConfig },
   +custom?: {
     +Input?: {
       +[customInputName: string]: {

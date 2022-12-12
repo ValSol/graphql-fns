@@ -222,7 +222,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   });
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: {
+    allEntityConfigs: {
       Restaurant: restaurantConfig,
       RestaurantClone: restaurantCloneConfig,
       Menu: menuConfig,

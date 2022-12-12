@@ -12,15 +12,15 @@ const composeProjectionFromOptions = (
   optionsArg?: Object = {},
 ): Result => {
   const { entityName, composeOptions } = gqlActionData;
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
-  const entityConfig = entityConfigs[entityName];
+  const entityConfig = allEntityConfigs[entityName];
 
   const { counter } = entityConfig;
 
   const { include, exclude } = composeOptions(optionsArg);
 
-  const entityObject = composeFieldsObject(entityConfigs[entityName]);
+  const entityObject = composeFieldsObject(allEntityConfigs[entityName]);
 
   const defaultFields = counter
     ? ['counter', 'createdAt', 'updatedAt']

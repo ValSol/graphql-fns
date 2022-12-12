@@ -108,11 +108,11 @@ describe('parseActions', () => {
     },
   };
 
-  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const allEntityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
   const custom = { Query: { getEntity, putThing } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { entityConfigs, custom, derivative };
+  const generalConfig = { allEntityConfigs, custom, derivative };
 
   const suffixToPermission = { ForCatalog: 'insider', ForView: '' };
 

@@ -55,9 +55,9 @@ const getTransformerAndConfig = (
           generalConfig,
         );
 
-        const { entityConfigs } = generalConfig;
+        const { allEntityConfigs } = generalConfig;
 
-        const entityConfig = entityConfigs[entityName];
+        const entityConfig = allEntityConfigs[entityName];
 
         if (!derivativeKey) {
           prev.push([transformer, entityConfig]);

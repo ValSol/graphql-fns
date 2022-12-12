@@ -43,7 +43,7 @@ describe('createCustomResolver', () => {
     ],
   };
 
-  const entityConfigs = { Example: entityConfig };
+  const allEntityConfigs = { Example: entityConfig };
   const custom = { Mutation: { loadEntity: signatureMethods } };
   const serversideConfig: ServersideConfig = {
     Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
@@ -51,7 +51,7 @@ describe('createCustomResolver', () => {
 
   test('should return correct results for allowed custom mutation', async () => {
     const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
 
     const result = createCustomResolver(
       'Mutation',
@@ -68,7 +68,7 @@ describe('createCustomResolver', () => {
 
   test('should return correct results for allowed custom mutation 2', () => {
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
 
     const result = createCustomResolver(
       'Mutation',

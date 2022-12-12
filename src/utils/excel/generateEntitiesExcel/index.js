@@ -23,12 +23,12 @@ const generateEntitiesExcel = async (
   wb.created = new Date();
   wb.modified = new Date();
 
-  const { entityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, derivative } = generalConfig;
 
   thingNames.forEach((thingNamesCohort) =>
     // test correctness of thingNames
     thingNamesCohort.forEach((entityName) => {
-      const entity = entityConfigs[entityName];
+      const entity = allEntityConfigs[entityName];
       if (!entity) {
         throw new TypeError(`Found unused "${entityName}" entity name!`);
       }
@@ -76,7 +76,7 @@ const generateEntitiesExcel = async (
 
   await wb.xlsx.writeFile(filePath);
 
-  const allThingNames = Object.keys(entityConfigs);
+  const allThingNames = Object.keys(allEntityConfigs);
 
   const flatThingNames = thingNames.flatMap((name) => name);
 
@@ -84,9 +84,9 @@ const generateEntitiesExcel = async (
 
   allThingNames.forEach((name) => {
     if (!flatThingNames.includes(name)) {
-      if (entityConfigs[name].type === 'file') {
+      if (allEntityConfigs[name].type === 'file') {
         restOfThingNames.file.push(name);
-      } else if (entityConfigs[name].type === 'embedded') {
+      } else if (allEntityConfigs[name].type === 'embedded') {
         restOfThingNames.embedded.push(name);
       } else {
         restOfThingNames.ordinary.push(name);

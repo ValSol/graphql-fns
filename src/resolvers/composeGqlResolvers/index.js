@@ -27,7 +27,7 @@ const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
-  const { entityConfigs, inventory, derivative = {} } = generalConfig;
+  const { allEntityConfigs, inventory, derivative = {} } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
@@ -57,8 +57,8 @@ const composeGqlResolvers = (
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
-  Object.keys(entityConfigs).reduce((prev, entityName) => {
-    const entityConfig = entityConfigs[entityName];
+  Object.keys(allEntityConfigs).reduce((prev, entityName) => {
+    const entityConfig = allEntityConfigs[entityName];
     if (allowQueries) {
       Object.keys(queryAttributes).forEach((actionName) => {
         if (queryAttributes[actionName].actionAllowed(entityConfig)) {
@@ -132,8 +132,8 @@ const composeGqlResolvers = (
     return prev;
   }, resolvers);
 
-  Object.keys(entityConfigs)
-    .map((entityName) => entityConfigs[entityName])
+  Object.keys(allEntityConfigs)
+    .map((entityName) => allEntityConfigs[entityName])
     .filter(({ type: configType }) => configType === 'tangible')
     .reduce((prev, entityConfig) => {
       const { name } = entityConfig;
@@ -170,8 +170,8 @@ const composeGqlResolvers = (
       return prev;
     }, resolvers);
 
-  Object.keys(entityConfigs)
-    .map((entityName) => entityConfigs[entityName])
+  Object.keys(allEntityConfigs)
+    .map((entityName) => allEntityConfigs[entityName])
     .reduce((prev, entityConfig) => {
       const { name, duplexFields, geospatialFields, relationalFields } = entityConfig;
       if (duplexFields || geospatialFields || relationalFields) {

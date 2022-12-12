@@ -2,11 +2,11 @@
 /* eslint-env jest */
 import type { SimplifiedEntityConfig, EntityConfig } from '../../flowTypes';
 
-import composeEntityConfigs from './index';
+import composeAllEntityConfigs from './index';
 import PageInfo from './pageInfoConfig';
 
-describe('composeEntityConfigs', () => {
-  test('compose simple entityConfigs', () => {
+describe('composeAllEntityConfigs', () => {
+  test('compose simple allEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedEntityConfig = {
       name: 'Example',
       intFields: [
@@ -50,9 +50,9 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [simplifiedEntityConfig];
+    const simplifiedAllEntityConfigs = [simplifiedEntityConfig];
 
-    const result = composeEntityConfigs(simplifiedEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const expectedResult = {
       PageInfo,
       Example: exampleConfig,
@@ -62,7 +62,7 @@ describe('composeEntityConfigs', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('compose relatianal & embedded fields entityConfigs', () => {
+  test('compose relatianal & embedded fields allEntityConfigs', () => {
     const simplifiedEmbedded3Config: SimplifiedEntityConfig = {
       name: 'Embedded3',
       type: 'embedded',
@@ -143,7 +143,7 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [
+    const simplifiedAllEntityConfigs = [
       simplifiedEmbeddedConfig,
       simplifiedEmbedded2Config,
       simplifiedEmbedded3Config,
@@ -260,11 +260,11 @@ describe('composeEntityConfigs', () => {
       Embedded3: embedded3Config,
     };
 
-    const result = composeEntityConfigs(simplifiedEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     expect(result).toEqual(expectedResult);
   });
 
-  test('compose duplex fields entityConfigs', () => {
+  test('compose duplex fields allEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -283,7 +283,7 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [simplifiedEntityConfig];
+    const simplifiedAllEntityConfigs = [simplifiedEntityConfig];
 
     const entityConfig: EntityConfig = {};
     Object.assign(entityConfig, {
@@ -330,11 +330,11 @@ describe('composeEntityConfigs', () => {
       ExampleConnection: exampleConnectionConfig,
     };
 
-    const result = composeEntityConfigs(simplifiedEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     expect(result).toEqual(expectedResult);
   });
 
-  test('compose file fields entityConfigs', () => {
+  test('compose file fields allEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -374,7 +374,7 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [simplifiedEntityConfig, simplifiedImageConfig];
+    const simplifiedAllEntityConfigs = [simplifiedEntityConfig, simplifiedImageConfig];
 
     const imageConfig: EntityConfig = {
       name: 'Image',
@@ -458,7 +458,7 @@ describe('composeEntityConfigs', () => {
       TangibleImage: tangibleImageConfig,
     };
 
-    const result = composeEntityConfigs(simplifiedEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     expect(result).toEqual(expectedResult);
   });
 });

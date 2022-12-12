@@ -12,7 +12,7 @@ type CollectDerivativeInputs = (
 ) => void;
 
 const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) => {
-  const { entityConfigs, derivative, derivativeInputs } = generalConfig;
+  const { allEntityConfigs, derivative, derivativeInputs } = generalConfig;
 
   if (derivative) {
     Object.keys(derivative).forEach((suffix) => {
@@ -21,7 +21,7 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
         allow[entityName].forEach((actionName) => {
           injectDerivativeActionInputs(
             suffix,
-            entityConfigs[entityName],
+            allEntityConfigs[entityName],
             generalConfig,
             actionAttributes[actionName],
             dic,
@@ -45,7 +45,13 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
       const { allow } = derivativeInputs[suffix];
       Object.keys(allow).forEach((entityName) => {
         allow[entityName].forEach((inputName) => {
-          injectDerivativeInput(inputName, suffix, entityConfigs[entityName], generalConfig, dic);
+          injectDerivativeInput(
+            inputName,
+            suffix,
+            allEntityConfigs[entityName],
+            generalConfig,
+            dic,
+          );
         });
       });
     });

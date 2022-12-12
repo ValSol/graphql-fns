@@ -5,7 +5,7 @@ import type { DerivativeInputs } from '../flowTypes';
 import composeDerivativeInputs from './composeDerivativeInputs';
 
 describe('composeDerivativeInputs', () => {
-  test('compose simple entityConfigs', () => {
+  test('compose simple allEntityConfigs', () => {
     const empty: DerivativeInputs = {
       suffix: '',
       allow: {

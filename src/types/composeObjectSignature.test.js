@@ -25,7 +25,7 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = `input ExampleTimeRangeInput {
@@ -58,7 +58,7 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = `type ExampleWithRating {
@@ -91,7 +91,7 @@ describe('composeObjectSignature', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example: entityConfig },
+      allEntityConfigs: { Example: entityConfig },
     };
 
     const expectedResult = '';

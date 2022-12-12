@@ -54,9 +54,9 @@ describe('composeMutation', () => {
       },
     ],
   };
-  const entityConfigs = { Example: entityConfig };
+  const allEntityConfigs = { Example: entityConfig };
   const custom = { Mutation: { loadEntity, tokenForEntity } };
-  const generalConfig: GeneralConfig = { entityConfigs, custom };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom };
 
   test('should compose createEntity mutation', () => {
     const mutationName = 'createEntity';

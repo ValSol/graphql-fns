@@ -53,7 +53,7 @@ describe('composeFields', () => {
       ],
     };
 
-    const generalConfig = { entityConfigs: { Example: entityConfig } };
+    const generalConfig = { allEntityConfigs: { Example: entityConfig } };
 
     test('should compose not nested fields with shift = 0', () => {
       const options: ClientFieldsOptions = { shift: 0 };
@@ -441,7 +441,7 @@ describe('composeFields', () => {
     };
 
     const generalConfig = {
-      entityConfigs: {
+      allEntityConfigs: {
         Embedded1: embedded1Config,
         Embedded2: embedded2Config,
         Embedded3: embedded3Config,
@@ -680,7 +680,7 @@ describe('composeFields', () => {
       ],
     });
 
-    const generalConfig = { entityConfigs: { Person: personConfig } };
+    const generalConfig = { allEntityConfigs: { Person: personConfig } };
 
     test('should compose relatioanl and duplex fields without depth', () => {
       const options: ClientFieldsOptions = { shift: 0 };

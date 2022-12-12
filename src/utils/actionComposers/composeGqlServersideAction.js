@@ -23,7 +23,7 @@ const composeGqlServersideAction = (
 ): Function => {
   const { actionType, actionName, entityName } = gqlActionData;
 
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   let {
     [actionType]: { [actionName]: resolver },
@@ -51,7 +51,7 @@ const composeGqlServersideAction = (
   const inAnyCase = true; // not check permissions if serverside execution
 
   return {
-    resolver: resolver(entityConfigs[entityName], generalConfig, serversideConfig, inAnyCase),
+    resolver: resolver(allEntityConfigs[entityName], generalConfig, serversideConfig, inAnyCase),
     projection: composeProjectionFromOptions(gqlActionData, generalConfig, optionsArg),
   };
 };

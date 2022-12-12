@@ -97,12 +97,12 @@ describe('actionToInventory', () => {
   //   },
   // };
 
-  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const allEntityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
   // const queryName = 'getEntity';
   // const custom = { Query: { [queryName]: signatureMethods } };
   // const derivative = { ForCatalog };
 
-  // const generalConfig = { entityConfigs, custom, derivative };
+  // const generalConfig = { allEntityConfigs, custom, derivative };
 
   const prefixToPermission = {
     ForCabinet: 'insider',
@@ -117,7 +117,7 @@ describe('actionToInventory', () => {
 
     const parsedAction = {
       creationType: 'standard',
-      entityConfig: entityConfigs.Person,
+      entityConfig: allEntityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
@@ -154,7 +154,7 @@ describe('actionToInventory', () => {
 
     const parsedAction = {
       creationType: 'standard',
-      entityConfig: entityConfigs.Place,
+      entityConfig: allEntityConfigs.Place,
       baseAction: '',
       suffix: 'ForCabinet',
     };

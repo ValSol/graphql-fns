@@ -125,7 +125,7 @@ describe('createUploadEntityFilesMutationResolver', () => {
   };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { Image: imageConfig, TangibleImage: tangibleImageConfig },
+    allEntityConfigs: { Image: imageConfig, TangibleImage: tangibleImageConfig },
   };
 
   test('should create mutation to upload file fields', async () => {

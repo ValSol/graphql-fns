@@ -35,14 +35,14 @@ const generateExcel = async (
   serversideConfig: ServersideConfig,
   filePath: string = 'permissions.xlsx',
 ) => {
-  const { custom, derivative, inventory, entityConfigs } = generalConfig;
+  const { custom, derivative, inventory, allEntityConfigs } = generalConfig;
 
   const inventoryByPermissions = serversideConfig.inventoryByPermissions || {
     'General Action List': undefined,
   };
 
-  const thingNames = Object.keys(entityConfigs).filter(
-    (key) => entityConfigs[key].type === 'tangible',
+  const thingNames = Object.keys(allEntityConfigs).filter(
+    (key) => allEntityConfigs[key].type === 'tangible',
   );
 
   const wb = new ExcelJS.Workbook();

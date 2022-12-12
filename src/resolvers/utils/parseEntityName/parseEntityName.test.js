@@ -39,11 +39,11 @@ describe('parseEntityName', () => {
     },
   };
 
-  const entityConfigs = { Example: entityConfig };
+  const allEntityConfigs = { Example: entityConfig };
   const custom = { Mutation: { entitiesForCatalog } };
   const derivative = { ForCatalog };
 
-  const generalConfig: GeneralConfig = { entityConfigs, custom, derivative };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivative };
 
   test('should return only root', () => {
     const result = parseEntityName('Example', generalConfig);

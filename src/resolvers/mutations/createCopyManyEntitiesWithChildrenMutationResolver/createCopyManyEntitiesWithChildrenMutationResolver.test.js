@@ -106,14 +106,14 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       ],
     });
 
-    const entityConfigs = {
+    const allEntityConfigs = {
       Menu: menuConfig,
       MenuClone: menuCloneConfig,
       MenuSection: menuSectionConfig,
       MenuCloneSection: menuCloneSectionConfig,
     };
 
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const serversideConfig = {};
     const result = createCopyManyEntitiesWithChildrenMutationResolver(

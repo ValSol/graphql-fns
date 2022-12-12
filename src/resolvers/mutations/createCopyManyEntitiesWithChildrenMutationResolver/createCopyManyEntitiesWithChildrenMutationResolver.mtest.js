@@ -208,7 +208,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
     ],
   });
 
-  const entityConfigs = {
+  const allEntityConfigs = {
     Restaurant: restaurantConfig,
     RestaurantClone: restaurantCloneConfig,
     Menu: menuConfig,
@@ -217,7 +217,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
     MenuCloneSection: menuCloneSectionConfig,
   };
 
-  const generalConfig: GeneralConfig = { entityConfigs };
+  const generalConfig: GeneralConfig = { allEntityConfigs };
   const serversideConfig = { transactions: true };
 
   test('should create mutation add entity resolver', async () => {

@@ -97,12 +97,12 @@ describe('parseChildQueries', () => {
     },
   };
 
-  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const allEntityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
   const queryName = 'getEntity';
   const custom = { Query: { [queryName]: signatureMethods } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { entityConfigs, custom, derivative };
+  const generalConfig = { allEntityConfigs, custom, derivative };
 
   test('have to return inventoryByPermissions with  entitiesByUnique: [Person]', () => {
     const childQueries = ['childEntities:PersonForCatalog', 'childEntity:PlaceForCatalog'];

@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
-import pageInfoConfig from '../../utils/composeEntityConfigs/pageInfoConfig';
+import pageInfoConfig from '../../utils/composeAllEntityConfigs/pageInfoConfig';
 import composeConnectionVirtualConfig from './composeConnectionVirtualConfig';
 
 describe('composeConnectionVirtualConfig', () => {
@@ -40,7 +40,7 @@ describe('composeConnectionVirtualConfig', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { PageInfo: pageInfoConfig, ExampleEdge: edgeConfig },
+      allEntityConfigs: { PageInfo: pageInfoConfig, ExampleEdge: edgeConfig },
     };
 
     const result = composeConnectionVirtualConfig(exampleConfig, generalConfig);

@@ -5,7 +5,7 @@ import type { ActionSignatureMethods, ObjectSignatureMethods } from '../flowType
 import composeCustom from './composeCustom';
 
 describe('composeCustom', () => {
-  test('compose simple entityConfigs', () => {
+  test('compose simple allEntityConfigs', () => {
     const entityTimeRange: ObjectSignatureMethods = {
       name: 'entityTimeRange',
       specificName: ({ name }) => `${name}TimeRange`,
@@ -28,9 +28,9 @@ describe('composeCustom', () => {
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput!`],
       type: ({ name }) => `${name}Clone!`,
-      config: (entityConfig, { entityConfigs: entityConfigs2 }) => {
+      config: (entityConfig, { allEntityConfigs: allEntityConfigs2 }) => {
         const { name } = entityConfig;
-        return entityConfigs2[`${name}Clone`];
+        return allEntityConfigs2[`${name}Clone`];
       },
     };
 

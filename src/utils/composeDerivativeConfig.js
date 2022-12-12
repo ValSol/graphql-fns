@@ -24,7 +24,7 @@ const composeDerivativeConfig = (
     unfreezedFields,
   } = signatureMethods;
 
-  const { derivative, entityConfigs } = generalConfig;
+  const { derivative, allEntityConfigs } = generalConfig;
 
   if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 
@@ -210,7 +210,7 @@ const composeDerivativeConfig = (
     };
 
     // $FlowFixMe
-    composeEntityConfig(addFields[rootEntityName], addFields2, entityConfigs);
+    composeEntityConfig(addFields[rootEntityName], addFields2, allEntityConfigs);
 
     // $FlowFixMe
     const fieldsToAddObject = composeFieldsObject(addFields2);

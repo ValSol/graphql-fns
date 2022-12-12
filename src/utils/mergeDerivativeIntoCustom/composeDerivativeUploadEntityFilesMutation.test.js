@@ -32,7 +32,7 @@ describe('composeDerivativeUploadEntityFilesMutation', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { Example: imageConfig },
+    allEntityConfigs: { Example: imageConfig },
     derivative,
   };
 

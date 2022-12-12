@@ -39,7 +39,7 @@ describe('getRelations', () => {
       ],
     });
 
-    const entityConfigs = [entityConfig, entityConfig2, entityConfig3];
+    const allEntityConfigs = [entityConfig, entityConfig2, entityConfig3];
 
     const expectedResult = new Map();
     expectedResult.set(entityConfig, [
@@ -69,7 +69,7 @@ describe('getRelations', () => {
         array: true,
       },
     ]);
-    const result = getRelations(entityConfig, entityConfigs);
+    const result = getRelations(entityConfig, allEntityConfigs);
     expect(result).toEqual(expectedResult);
   });
 });

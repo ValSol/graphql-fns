@@ -29,7 +29,7 @@ afterAll(async () => {
 });
 
 describe('createEntityDistinctValuesQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create query entities resolver', async () => {
     const serversideConfig = {};
     const personConfig: EntityConfig = {};

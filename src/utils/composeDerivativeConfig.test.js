@@ -2,7 +2,7 @@
 /* eslint-env jest */
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
 
-import pageInfoConfig from './composeEntityConfigs/pageInfoConfig';
+import pageInfoConfig from './composeAllEntityConfigs/pageInfoConfig';
 import composeDerivativeConfig from './composeDerivativeConfig';
 
 describe('composeDerivativeConfig', () => {
@@ -46,7 +46,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -79,7 +79,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -113,7 +113,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -152,7 +152,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -190,7 +190,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -228,7 +228,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig },
+        allEntityConfigs: { Example: entityConfig },
         derivative: { ForCatalog },
       };
 
@@ -268,7 +268,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { Example: entityConfig, AdditionalExample: additionalEntityConfig },
+        allEntityConfigs: { Example: entityConfig, AdditionalExample: additionalEntityConfig },
         derivative: { ForCatalog },
       };
 
@@ -317,7 +317,7 @@ describe('composeDerivativeConfig', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: { Example2: entityConfig2 },
+      allEntityConfigs: { Example2: entityConfig2 },
       derivative: { ForCatalog },
     };
 
@@ -361,7 +361,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { TextExample: entityConfig, RelationalExample: entityConfig2 },
+        allEntityConfigs: { TextExample: entityConfig, RelationalExample: entityConfig2 },
         derivative: { ForCatalog },
       };
 
@@ -433,7 +433,7 @@ describe('composeDerivativeConfig', () => {
       };
 
       const generalConfig: GeneralConfig = {
-        entityConfigs: { TextExample2: entityConfig, RelationalExample2: entityConfig2 },
+        allEntityConfigs: { TextExample2: entityConfig, RelationalExample2: entityConfig2 },
         derivative: { ForCatalog },
       };
 
@@ -518,7 +518,7 @@ describe('composeDerivativeConfig', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      entityConfigs: {
+      allEntityConfigs: {
         Example2: exampleConfig,
         Example2Edge: exampleEdgeConfig,
         Example2Connection: exampleConnectionConfig,

@@ -108,11 +108,11 @@ describe('parseActionName', () => {
     },
   };
 
-  const entityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
+  const allEntityConfigs = { Person: personConfig, Place: placeConfig, Country: countryConfig };
   const custom = { Query: { getEntity, putThing } };
   const derivative = { ForCatalog };
 
-  const generalConfig = { entityConfigs, custom, derivative };
+  const generalConfig = { allEntityConfigs, custom, derivative };
 
   test('should return result for entitiesByUnique action', () => {
     const actionType = 'Query';
@@ -121,7 +121,7 @@ describe('parseActionName', () => {
     const suffix = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
-      entityConfig: entityConfigs.Person,
+      entityConfig: allEntityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
@@ -153,7 +153,7 @@ describe('parseActionName', () => {
     const suffix = 'ForCabinet';
     const expectedResult = {
       creationType: 'custom',
-      entityConfig: entityConfigs.Person,
+      entityConfig: allEntityConfigs.Person,
       baseAction: '',
       suffix: 'ForCabinet',
     };
@@ -170,7 +170,7 @@ describe('parseActionName', () => {
       creationType: 'custom',
       entityConfig: composeDerivativeConfigByName(
         'ForCatalog',
-        entityConfigs.Person,
+        allEntityConfigs.Person,
         generalConfig,
       ),
       baseAction: '',
@@ -189,7 +189,7 @@ describe('parseActionName', () => {
       creationType: 'derivative',
       entityConfig: composeDerivativeConfigByName(
         'ForCatalog',
-        entityConfigs.Person,
+        allEntityConfigs.Person,
         generalConfig,
       ),
       baseAction: 'entitiesByUnique',

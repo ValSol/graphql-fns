@@ -30,7 +30,7 @@ describe('composeDerivativePushIntoEntityMutation', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { Example: entityConfig },
+    allEntityConfigs: { Example: entityConfig },
     derivative,
   };
 

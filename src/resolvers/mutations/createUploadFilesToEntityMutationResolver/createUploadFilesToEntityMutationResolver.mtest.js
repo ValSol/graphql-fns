@@ -154,7 +154,7 @@ describe('createUploadFilesToEntityMutationResolver', () => {
   });
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { Image: imageConfig, Photo: photoConfig, Example: exampleConfig },
+    allEntityConfigs: { Image: imageConfig, Photo: photoConfig, Example: exampleConfig },
   };
 
   test('should create mutation update entity resolver to update file field', async () => {

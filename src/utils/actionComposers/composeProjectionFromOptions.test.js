@@ -58,7 +58,7 @@ describe('composeProjectionFromOptions', () => {
     ],
   };
 
-  const generalConfig = { entityConfigs: { Example: entityConfig } };
+  const generalConfig = { allEntityConfigs: { Example: entityConfig } };
 
   test('should compose all fields of entity', () => {
     const actionType = 'Query';

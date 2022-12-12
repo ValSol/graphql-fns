@@ -30,7 +30,7 @@ describe('composeDerivativeEntityFileCountQuery', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: { TangiblePhoto: entityConfig },
+    allEntityConfigs: { TangiblePhoto: entityConfig },
     derivative,
   };
 

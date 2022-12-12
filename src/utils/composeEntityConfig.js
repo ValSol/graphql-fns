@@ -24,7 +24,7 @@ const allowedConfigTypes = ['embedded', 'file', 'tangible', 'tangibleFile', 'vir
 const composeEntityConfig = (
   simplifiedEntityConfig: SimplifiedEntityConfig,
   entityConfig: EntityConfig,
-  entityConfigs: { [entityName: string]: EntityConfig },
+  allEntityConfigs: { [entityName: string]: EntityConfig },
 ) => {
   const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
 
@@ -70,7 +70,7 @@ const composeEntityConfig = (
     // eslint-disable-next-line no-param-reassign
     entityConfig.embeddedFields = simplifiedEmbeddedFields.map((field) => {
       const { configName, ...restField } = field;
-      const config = entityConfigs[configName];
+      const config = allEntityConfigs[configName];
 
       if (!config) {
         throw new TypeError(
@@ -109,7 +109,7 @@ const composeEntityConfig = (
     // eslint-disable-next-line no-param-reassign
     entityConfig.childFields = simplifiedChildFields.map((field) => {
       const { configName, ...restField } = field;
-      const config = entityConfigs[configName];
+      const config = allEntityConfigs[configName];
 
       if (!config) {
         throw new TypeError(
@@ -135,7 +135,7 @@ const composeEntityConfig = (
     // eslint-disable-next-line no-param-reassign
     entityConfig.fileFields = simplifiedFileFields.map((field) => {
       const { configName, ...restField } = field;
-      const config = entityConfigs[configName];
+      const config = allEntityConfigs[configName];
 
       if (!config) {
         throw new TypeError(
@@ -157,7 +157,7 @@ const composeEntityConfig = (
     // eslint-disable-next-line no-param-reassign
     entityConfig.relationalFields = simplifiedRelationalFields.map((field) => {
       const { configName, ...restField } = field;
-      const config = entityConfigs[configName];
+      const config = allEntityConfigs[configName];
       if (!config) {
         throw new TypeError(
           `Incorrect configName: "${configName}" in relational field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
@@ -171,7 +171,7 @@ const composeEntityConfig = (
     // eslint-disable-next-line no-param-reassign
     entityConfig.duplexFields = simplifiedDuplexFields.map((field) => {
       const { configName, ...restField } = field;
-      const config = entityConfigs[configName];
+      const config = allEntityConfigs[configName];
       if (!config) {
         throw new TypeError(
           `Incorrect configName: "${configName}" in duplex field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,

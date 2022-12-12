@@ -12,15 +12,15 @@ const actionToDerivative = (
   const { actionName, entityName } = actionToParse;
   const { baseAction, creationType, suffix, entityConfig } = parsedAction;
 
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
-  if (creationType !== 'derivative' && (!entityConfig || entityConfigs[entityConfig.name])) {
+  if (creationType !== 'derivative' && (!entityConfig || allEntityConfigs[entityConfig.name])) {
     return derivativeAttributes;
   }
 
   const returningThingName = entityConfig ? entityConfig.name.slice(0, -suffix.length) : entityName;
 
-  if (!entityConfigs[returningThingName]) return derivativeAttributes;
+  if (!allEntityConfigs[returningThingName]) return derivativeAttributes;
 
   if (!derivativeAttributes[suffix]) {
     derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign

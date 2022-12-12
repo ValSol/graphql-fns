@@ -23,7 +23,7 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeStandardActionSignature from './composeStandardActionSignature';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { entityConfigs, derivative: preDerivative, inventory } = generalConfig;
+  const { allEntityConfigs, derivative: preDerivative, inventory } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
@@ -38,14 +38,14 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
 
-  const entityNames = Object.keys(entityConfigs);
+  const entityNames = Object.keys(allEntityConfigs);
 
   const inputDic = {};
 
   // 1. generate standard objects' signatures
 
-  const entityTypesArray = Object.keys(entityConfigs).map((entityName) =>
-    createEntityType(entityConfigs[entityName], inputDic),
+  const entityTypesArray = Object.keys(allEntityConfigs).map((entityName) =>
+    createEntityType(allEntityConfigs[entityName], inputDic),
   );
 
   // 2. generate derivative objects' signatures
@@ -55,7 +55,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     Object.keys(allow).forEach((entityName) => {
       const derivativeConfig = composeDerivativeConfigByName(
         suffix,
-        entityConfigs[entityName],
+        allEntityConfigs[entityName],
         generalConfig,
       );
       if (derivativeConfig) prev.push(createEntityType(derivativeConfig, inputDic));
@@ -72,7 +72,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const entityQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
       const action = composeStandardActionSignature(
-        entityConfigs[entityName],
+        allEntityConfigs[entityName],
         queryAttributes[actionName],
         inputDic,
         inventory,
@@ -85,7 +85,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const entityMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
       const action = composeStandardActionSignature(
-        entityConfigs[entityName],
+        allEntityConfigs[entityName],
         mutationAttributes[actionName],
         inputDic,
         inventory,
@@ -98,14 +98,14 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   // 4. generate custom actions' signatures
 
   entityNames.forEach((entityName) => {
-    const { type: entityType } = entityConfigs[entityName];
+    const { type: entityType } = allEntityConfigs[entityName];
     if (entityType !== 'tangible' && entityType !== 'tangibleFile') return;
 
     Object.keys(customQuery).forEach((customName) => {
       if (checkInventory(['Query', customName, entityName], inventory)) {
         const action = composeActionSignature(
           customQuery[customName],
-          entityConfigs[entityName],
+          allEntityConfigs[entityName],
           generalConfig,
         );
         if (action) {
@@ -118,7 +118,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
       if (checkInventory(['Mutation', customName, entityName], inventory)) {
         const action = composeActionSignature(
           customMutation[customName],
-          entityConfigs[entityName],
+          allEntityConfigs[entityName],
           generalConfig,
         );
         if (action) {
@@ -153,13 +153,13 @@ ${entityMutationTypes.join('\n')}
     customInputObjectNames.forEach((customName) => {
       const customInputType = composeObjectSignature(
         customInputObject[customName],
-        entityConfigs[entityName],
+        allEntityConfigs[entityName],
         generalConfig,
         input,
       );
       if (customInputType) {
         const key = customInputObject[customName].specificName(
-          entityConfigs[entityName],
+          allEntityConfigs[entityName],
           generalConfig,
         );
         prev[key] = customInputType; // eslint-disable-line no-param-reassign
@@ -176,8 +176,8 @@ ${entityMutationTypes.join('\n')}
   // prepare subscriptions
 
   const updatedEntityPayloadTypes = allowSubscriptions
-    ? Object.keys(entityConfigs)
-        .map((entityName) => entityConfigs[entityName])
+    ? Object.keys(allEntityConfigs)
+        .map((entityName) => allEntityConfigs[entityName])
         .filter(({ type: configType }) => configType === 'tangible')
         .reduce((prev, entityConfig) => {
           const { name } = entityConfig;
@@ -193,8 +193,8 @@ ${entityMutationTypes.join('\n')}
     : '';
 
   const entitySubscriptionTypes = allowSubscriptions
-    ? Object.keys(entityConfigs)
-        .map((entityName) => entityConfigs[entityName])
+    ? Object.keys(allEntityConfigs)
+        .map((entityName) => allEntityConfigs[entityName])
         .filter(({ type: configType }) => configType === 'tangible')
         .reduce((prev, entityConfig) => {
           const { name } = entityConfig;

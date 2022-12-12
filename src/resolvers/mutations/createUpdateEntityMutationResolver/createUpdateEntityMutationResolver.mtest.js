@@ -29,7 +29,7 @@ afterAll(async () => {
 });
 
 describe('createUpdateEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
   describe('for entities that have duplex fields', () => {
     const personConfig: EntityConfig = {};
@@ -1136,7 +1136,7 @@ describe('createUpdateEntityMutationResolver', () => {
     await Restaurant.createCollection();
 
     const generalConfig2: GeneralConfig = {
-      entityConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
+      allEntityConfigs: { Access: accessConfig, Post: postConfig, Restaurant: restaurantConfig },
     };
 
     const createRestaurant = createCreateEntityMutationResolver(

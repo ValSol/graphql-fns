@@ -30,7 +30,7 @@ afterAll(async () => {
 });
 
 describe('createEntityQueryResolver', () => {
-  const generalConfig: GeneralConfig = { entityConfigs: {} };
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = {};
   test('should create query entity resolver', async () => {
     const entityConfig: EntityConfig = {

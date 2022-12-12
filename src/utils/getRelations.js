@@ -3,10 +3,13 @@ import type { EntityConfig } from '../flowTypes';
 
 type Result = { [EntityConfig]: Array<Object> };
 
-const getRelations = (entityConfig: EntityConfig, entityConfigs: Array<EntityConfig>): Result => {
+const getRelations = (
+  entityConfig: EntityConfig,
+  allEntityConfigs: Array<EntityConfig>,
+): Result => {
   const result = new Map();
 
-  entityConfigs.forEach((currentEntityConfig) => {
+  allEntityConfigs.forEach((currentEntityConfig) => {
     const { relationalFields, type: configType } = currentEntityConfig;
     if (relationalFields && configType === 'tangible') {
       const fields = relationalFields

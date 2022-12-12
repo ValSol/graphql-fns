@@ -18,7 +18,7 @@ const createEntityArrayResolver = (
   serversideConfig: ServersideConfig,
 ): Function => {
   const { name } = entityConfig;
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
 
@@ -26,7 +26,7 @@ const createEntityArrayResolver = (
     ? createCustomResolver(
         'Query',
         `childEntities${nameSuffix}`,
-        entityConfigs[nameRoot],
+        allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
       )
@@ -41,7 +41,7 @@ const createEntityArrayResolver = (
     throw new TypeError(
       `Not defined childEntitiesQueryResolver "${
         nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
-      }" for entity: "${entityConfigs[nameRoot].name}"!`,
+      }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
@@ -56,7 +56,7 @@ const createEntityArrayResolver = (
       throw new TypeError(
         `Not authorized resolver: "${
           nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
-        }" for entity: "${entityConfigs[nameRoot].name}"!`,
+        }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
       );
     }
 

@@ -14,7 +14,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const resolver = async (
     parent: Object,
@@ -28,7 +28,7 @@ const createNodeQueryResolver = (
 
     if (!id) return null;
 
-    const entityConfig = entityConfigs[entityName];
+    const entityConfig = allEntityConfigs[entityName];
 
     const inAnyCase = true;
 

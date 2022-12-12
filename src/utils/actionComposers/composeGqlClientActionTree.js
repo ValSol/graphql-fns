@@ -12,9 +12,9 @@ const composeGqlClientActionTree = (
   optionsArg?: Object = {},
 ): Object => {
   const { actionType, actionName, entityName, composeOptions } = gqlActionData;
-  const { entityConfigs } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
-  const entityConfig = entityConfigs[entityName];
+  const entityConfig = allEntityConfigs[entityName];
 
   const options = composeOptions(optionsArg);
 

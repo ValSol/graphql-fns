@@ -5,7 +5,7 @@ import type { Inventory } from '../../flowTypes';
 import composeInventoryByPermissions from './composeInventoryByPermissions';
 
 describe('composeInventoryByPermissions', () => {
-  test('compose simple entityConfigs', () => {
+  test('compose simple allEntityConfigs', () => {
     const empty: Inventory = {
       name: '',
       include: {

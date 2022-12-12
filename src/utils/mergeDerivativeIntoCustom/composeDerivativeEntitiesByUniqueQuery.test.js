@@ -76,7 +76,7 @@ describe('composeDerivativeEntitiesQuery', () => {
   const derivative = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
-    entityConfigs: {
+    allEntityConfigs: {
       Example: entityConfig,
       SortExample: sortEntityConfig,
       PaginationExample: paginationEntityConfig,

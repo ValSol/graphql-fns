@@ -11,7 +11,7 @@ import type {
   SimplifiedEntityConfig,
 } from '../flowTypes';
 
-import composeEntityConfigs from '../utils/composeEntityConfigs';
+import composeAllEntityConfigs from '../utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
@@ -113,16 +113,16 @@ describe('composeGqlTypes', () => {
       ],
     };
 
-    const simplifiedEntityConfigs = [
+    const simplifiedAllEntityConfigs = [
       menuConfig,
       menuCloneConfig,
       menuSectionConfig,
       menuCloneSectionConfig,
     ];
 
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
 
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -887,14 +887,14 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig, imageConfig];
+    const simplifiedAllEntityConfigs = [entityConfig, imageConfig];
 
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const enums = [
       { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
       { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
     ];
-    const generalConfig: GeneralConfig = { entityConfigs, enums };
+    const generalConfig: GeneralConfig = { allEntityConfigs, enums };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -1383,10 +1383,10 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig1, entityConfig2];
+    const simplifiedAllEntityConfigs = [entityConfig1, entityConfig2];
 
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -1781,9 +1781,9 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [personConfig, placeConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2149,9 +2149,9 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [personConfig, addressConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, addressConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2420,9 +2420,9 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [personConfig, placeConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
-    const generalConfig: GeneralConfig = { entityConfigs };
+    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2842,10 +2842,10 @@ type Subscription {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Query: true } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -2971,10 +2971,10 @@ type Query {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -3123,10 +3123,10 @@ type Mutation {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Query: { entities: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -3233,10 +3233,10 @@ type Query {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Query: { entities: ['Example'] } } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3343,10 +3343,10 @@ type Query {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3413,13 +3413,13 @@ type Mutation {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = {
       name: 'test',
       include: { Mutation: { createEntity: ['Example'] } },
     };
-    const generalConfig: GeneralConfig = { entityConfigs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3495,11 +3495,11 @@ type Mutation {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
     const custom = { Mutation: { loadEntity: signatureMethods } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3562,11 +3562,11 @@ type Mutation {
       ],
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
-    const entityConfigs = composeEntityConfigs(simplifiedEntityConfigs);
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Query: { getEntity: true } } };
     const custom = { Query: { getEntity } };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3647,7 +3647,7 @@ type Query {
       ],
     };
 
-    const entityConfigs = { Example: entityConfig };
+    const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = {
       name: 'test',
       include: {
@@ -3661,7 +3661,7 @@ type Query {
       Query: { entityInTimeRangeQuery },
     };
     const derivative = { ForCatalog: ForCatalogDerivative };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, derivative, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivative, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3914,7 +3914,7 @@ type Mutation {
       ],
     });
 
-    const entityConfigs = { Menu: menuConfig, MenuSection: menuSectionConfig };
+    const allEntityConfigs = { Menu: menuConfig, MenuSection: menuSectionConfig };
     const inventory: Inventory = {
       name: 'test',
       include: { Mutation: { updateEntityWithChildren: ['Menu'] } },
@@ -3929,7 +3929,7 @@ type Mutation {
         },
       },
     };
-    const generalConfig: GeneralConfig = { entityConfigs, custom, derivativeInputs, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivativeInputs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
