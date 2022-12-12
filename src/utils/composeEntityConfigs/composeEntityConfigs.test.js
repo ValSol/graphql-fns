@@ -9,7 +9,6 @@ describe('composeEntityConfigs', () => {
   test('compose simple entityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedEntityConfig = {
       name: 'Example',
-      type: 'tangible',
       intFields: [
         {
           name: 'intField',
@@ -30,11 +29,13 @@ describe('composeEntityConfigs', () => {
       ],
     };
 
+    const exampleConfig = { ...simplifiedEntityConfig, type: 'tangible' };
+
     const exampleEdgeConfig = {
       name: 'ExampleEdge',
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: simplifiedEntityConfig }],
+      childFields: [{ name: 'node', config: exampleConfig }],
 
       textFields: [{ name: 'cursor', required: true }],
     };
@@ -54,7 +55,7 @@ describe('composeEntityConfigs', () => {
     const result = composeEntityConfigs(simplifiedEntityConfigs);
     const expectedResult = {
       PageInfo,
-      Example: simplifiedEntityConfig,
+      Example: exampleConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
     };

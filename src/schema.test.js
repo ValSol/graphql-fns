@@ -13,7 +13,6 @@ describe('graphql schema', () => {
   test('test simple schema', () => {
     const entityConfig: SimplifiedEntityConfig = {
       name: 'Example',
-      type: 'tangible',
       textFields: [
         {
           name: 'textField1',

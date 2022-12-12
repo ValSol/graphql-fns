@@ -18,7 +18,7 @@ const composeEntityConfigs = (
 ): { [entityName: string]: EntityConfig } => {
   const result = simplifiedThingConfigs.reduce(
     (prev, config) => {
-      const { name, type: configType } = config;
+      const { name, type: configType = 'tangible' } = config;
 
       if (name.search('_') !== -1) {
         throw new TypeError(`Forbidden to use "_" (underscore) in entity name: "${name}"!`);
@@ -52,7 +52,7 @@ const composeEntityConfigs = (
   );
 
   simplifiedThingConfigs.forEach((simplifiedThingConfig) => {
-    const { name, type: configType } = simplifiedThingConfig;
+    const { name, type: configType = 'tangible' } = simplifiedThingConfig;
     composeEntityConfig(simplifiedThingConfig, result[name], result);
 
     const config = result[name];

@@ -3609,7 +3609,7 @@ type Query {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entities types with custom input and return objects', () => {
+  test('should create entities types with custom input and return objects', () => {
     const entityInTimeRangeInput: ObjectSignatureMethods = {
       name: 'entityTimeRangeInput',
       specificName: ({ name }) => `${name}TimeRangeInput`,
@@ -3675,25 +3675,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  node: Example
-  cursor: String!
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]
 }
 type ExampleForCatalog implements Node {
   id: ID!
@@ -3702,14 +3688,6 @@ type ExampleForCatalog implements Node {
   textField: String
   start: DateTime!
   end: DateTime
-}
-type ExampleForCatalogEdge {
-  node: ExampleForCatalog
-  cursor: String!
-}
-type ExampleForCatalogConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleForCatalogEdge!]
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3880,7 +3858,7 @@ type Mutation {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create derivative inputs for custom types with inventory for only one custom query getEntity', () => {
+  test('should create derivative inputs for custom types with inventory for only one custom query getEntity', () => {
     const childNameFromParenName = { Menu: 'MenuSection' };
 
     const updateEntityWithChildren: ActionSignatureMethods = {
@@ -3965,12 +3943,6 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-  endCursor: String
-}
 type Menu implements Node {
   id: ID!
   createdAt: DateTime!
@@ -3978,28 +3950,12 @@ type Menu implements Node {
   menuName: String
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
 }
-type MenuEdge {
-  node: Menu
-  cursor: String!
-}
-type MenuConnection {
-  pageInfo: PageInfo!
-  edges: [MenuEdge!]
-}
 type MenuSection implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   menuSectionName: String
   menu: Menu
-}
-type MenuSectionEdge {
-  node: MenuSection
-  cursor: String!
-}
-type MenuSectionConnection {
-  pageInfo: PageInfo!
-  edges: [MenuSectionEdge!]
 }
 input MenuSectionWhereInput {
   id_in: [ID!]
