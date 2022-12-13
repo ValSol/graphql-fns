@@ -14,6 +14,7 @@ import entityCount from './entityCountQueryAttributes';
 import entityFileCount from './entityFileCountQueryAttributes';
 import entityFile from './entityFileQueryAttributes';
 import entityFiles from './entityFilesQueryAttributes';
+import entityFilesThroughConnection from './entityFilesThroughConnectionQueryAttributes';
 import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
@@ -60,6 +61,7 @@ const actionAttributes = {
   entityFileCount,
   entityFile,
   entityFiles,
+  entityFilesThroughConnection,
   entity,
   entities,
   entitiesThroughConnection,

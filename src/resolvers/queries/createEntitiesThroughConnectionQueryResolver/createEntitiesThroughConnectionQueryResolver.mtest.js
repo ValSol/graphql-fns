@@ -9,8 +9,8 @@ const { default: createThingSchema } = require('../../../mongooseModels/createTh
 const {
   default: createCreateManyEntitiesMutationResolver,
 } = require('../../mutations/createCreateManyEntitiesMutationResolver');
+const { default: toCursor } = require('../utils/toCursor');
 const { default: createEntitiesThroughConnectionQueryResolver } = require('./index');
-const { default: toCursor } = require('./toCursor');
 
 let mongooseConn;
 

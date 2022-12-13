@@ -1,7 +1,7 @@
 // @flow
 import type { GetPrevious } from '../../../flowTypes';
 
-import createFileSchema from '../../../../mongooseModels/createFileSchema';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
@@ -34,11 +34,9 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { files, hashes } = args;
   const { mongooseConn } = context;
 
-  const fileSchema = createFileSchema(entityConfig);
+  const FileModel = await createMongooseModel(mongooseConn, entityConfig);
 
   const nakedName = name.slice('Tangible'.length);
-
-  const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 
   if (files.length !== hashes.length) return null;
 

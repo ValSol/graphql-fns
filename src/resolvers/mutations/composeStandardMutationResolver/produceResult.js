@@ -2,7 +2,7 @@
 import type { GeneralConfig, Periphery, EntityConfig } from '../../../flowTypes';
 import type { Context } from '../../flowTypes';
 
-import createEntity from '../../../mongooseModels/createThing';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 
 type PreparedData = {
@@ -25,7 +25,7 @@ const produceResult = async (
     mains: [first],
   } = preparedData;
 
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   if (array) {
     const ids = mains.map(({ _id }) => _id);

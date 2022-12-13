@@ -24,8 +24,7 @@ const actionReturnConfig = (
 ): null | EntityConfig =>
   suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
 
-const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  Boolean(entityConfig.type === 'tangibleFile');
+const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
 const actionReturnString =
   (suffix: string): ((entityConfig: EntityConfig) => string) =>

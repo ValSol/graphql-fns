@@ -5,7 +5,7 @@ import type { GetPrevious } from '../../../flowTypes';
 import checkInventory from '../../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
-import createEntity from '../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 import composeMockFilesData from '../composeMockFilesData';
@@ -70,7 +70,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const { where } = mergeWhereAndFilter([], whereOne, entityConfig);
 
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const previousEntity = await Entity.findOne(where, projection, { lean: true });
 

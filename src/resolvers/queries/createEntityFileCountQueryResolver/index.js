@@ -4,7 +4,7 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
@@ -38,11 +38,7 @@ const createEntityFileCountQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const fileSchema = createFileSchema(entityConfig);
-
-    const nakedName = name.slice('Tangible'.length);
-
-    const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
+    const FileModel = await createMongooseModel(mongooseConn, entityConfig);
 
     const { where: conditions } = mergeWhereAndFilter(filter, where, entityConfig);
 

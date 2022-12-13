@@ -4,11 +4,11 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
-type Args = { where: { id: string } };
+type Args = { where: { id: string }, pagination?: { skip: number, first: number } };
 
 const createEntityFilesQueryResolver = (
   entityConfig: EntityConfig,
@@ -41,21 +41,28 @@ const createEntityFilesQueryResolver = (
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 
-    const { where } = args;
+    const { where, pagination } = args;
 
     const { mongooseConn } = context;
 
-    const fileSchema = createFileSchema(entityConfig);
+    const FileModel = await createMongooseModel(mongooseConn, entityConfig);
 
     const nakedName = name.slice('Tangible'.length);
-
-    const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
 
     const { where: conditions } = mergeWhereAndFilter(filter, where, entityConfig);
 
     const projection = {};
 
-    const filesData = await FileModel.find(conditions, projection, { lean: true });
+    // const filesData = await FileModel.find(conditions, projection, { lean: true });
+
+    let query = FileModel.find(conditions, projection, { lean: true });
+
+    if (pagination) {
+      const { skip, first: limit } = pagination;
+      query = query.skip(skip).limit(limit);
+    }
+
+    const filesData = await query.exec();
 
     return filesData.map((fileData) => ({
       ...composeFileFieldsData[nakedName](fileData),

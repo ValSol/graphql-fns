@@ -2,7 +2,7 @@
 import type { DuplexField, Enums, EntityConfig } from '../../flowTypes';
 
 import getOppositeFields from '../../utils/getOppositeFields';
-import createEntity from '../../mongooseModels/createThing';
+import createMongooseModel from '../../mongooseModels/createMongooseModel';
 import processDeleteData from './processDeleteData';
 
 type Core = Map<EntityConfig, Array<Object>>;
@@ -75,7 +75,7 @@ const processChildrenField: ProcessChildrenField = async (
   mongooseConn,
   enums,
 ) => {
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const projection = (entityConfig.duplexFields || []).reduce(
     (prev, { name }) => {

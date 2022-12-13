@@ -2,7 +2,7 @@
 
 import type { ResolverCreatorArg, ResolverArg } from '../../../flowTypes';
 
-import createEntity from '../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import getMatchingFields from '../../../../utils/getMatchingFields';
 import getOppositeFields from '../../../../utils/getOppositeFields';
 import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
@@ -85,8 +85,8 @@ const getCommonData = async (
     { _id: 1, [oppositeName]: 1 },
   );
 
-  const CopiedEntity = await createEntity(mongooseConn, config, enums);
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const CopiedEntity = await createMongooseModel(mongooseConn, config, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const { where } = composeWhereInput(whereOnes[fieldName], config);
   const entity = await CopiedEntity.findOne(where, matchingFieldsProjection, { lean: true });

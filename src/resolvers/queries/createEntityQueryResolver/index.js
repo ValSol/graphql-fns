@@ -4,7 +4,7 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntity from '../../../mongooseModels/createThing';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
@@ -40,7 +40,7 @@ const createEntityQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const Entity = await createEntity(mongooseConn, entityConfig, enums);
+    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     const whereOneKeys = Object.keys(whereOne);
     if (whereOneKeys.length !== 1) {

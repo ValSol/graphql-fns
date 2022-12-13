@@ -975,6 +975,14 @@ type TangibleImage implements Node {
   fileId: String!
   address: String
 }
+type TangibleImageEdge {
+  cursor: String!
+  node: TangibleImage
+}
+type TangibleImageConnection {
+  pageInfo: PageInfo!
+  edges: [TangibleImageEdge!]!
+}
 input ExampleWhereOneInput {
   id: ID
   textField1: ID
@@ -1305,6 +1313,7 @@ type Query {
   TangibleImageFileCount(where: FileWhereInput): Int!
   TangibleImageFile(whereOne: FileWhereOneInput!): TangibleImage!
   TangibleImageFiles(where: FileWhereInput): [TangibleImage!]!
+  TangibleImageFilesThroughConnection(where: FileWhereInput, after: String, before: String, first: Int, last: Int): TangibleImageConnection
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection

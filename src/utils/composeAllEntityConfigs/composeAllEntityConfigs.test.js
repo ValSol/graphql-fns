@@ -449,6 +449,25 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const tangibleImageEdgeConfig = {
+      name: 'TangibleImageEdge',
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: tangibleImageConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const tangibleImageConnectionConfig = {
+      name: 'TangibleImageConnection',
+      type: 'virtual',
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: tangibleImageEdgeConfig, array: true },
+      ],
+    };
+
     const expectedResult = {
       PageInfo,
       Example: entityConfig,
@@ -456,6 +475,8 @@ describe('composeAllEntityConfigs', () => {
       ExampleConnection: exampleConnectionConfig,
       Image: imageConfig,
       TangibleImage: tangibleImageConfig,
+      TangibleImageEdge: tangibleImageEdgeConfig,
+      TangibleImageConnection: tangibleImageConnectionConfig,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);

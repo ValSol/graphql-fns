@@ -2,7 +2,7 @@
 import type { Enums, EntityConfig } from '../../../../../flowTypes';
 
 import getMatchingFields from '../../../../../utils/getMatchingFields';
-import createEntity from '../../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../../mongooseModels/createMongooseModel';
 
 import { getNotArrayOppositeDuplexFields } from '../../../processFieldToDelete';
 
@@ -69,7 +69,7 @@ const composeCreateTree = async (
       const [{ config: entityConfig2, array, oppositeName }, { config: secondEntityConfig2 }] =
         duplexFieldsToCopy[fieldName];
 
-      const Entity = await createEntity(mongooseConn, entityConfig2, enums); // eslint-disable-line no-await-in-loop
+      const Entity = await createMongooseModel(mongooseConn, entityConfig2, enums); // eslint-disable-line no-await-in-loop
 
       if (array) {
         // eslint-disable-next-line no-await-in-loop

@@ -4,7 +4,7 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntity from '../../../mongooseModels/createThing';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
@@ -43,7 +43,7 @@ const createEntityDistinctValuesQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const Entity = await createEntity(mongooseConn, entityConfig, enums);
+    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 

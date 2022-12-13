@@ -1,7 +1,7 @@
 // @flow
 import type { GetPrevious } from '../../../flowTypes';
 
-import createEntity from '../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
@@ -29,7 +29,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const { mongooseConn } = context;
 
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const { lookups, where: preConditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 

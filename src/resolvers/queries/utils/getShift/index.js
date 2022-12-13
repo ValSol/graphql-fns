@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 import type { ResolverArg, ResolverCreatorArg } from '../../../flowTypes';
 
-import createEntity from '../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeLimitingArgs from './composeLimitingArgs';
@@ -45,7 +45,7 @@ const getShift = async (
 
   const { mongooseConn } = context;
 
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 

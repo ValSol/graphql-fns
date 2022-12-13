@@ -4,7 +4,7 @@ import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '.
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntity from '../../../mongooseModels/createThing';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
@@ -42,7 +42,7 @@ const createEntityCountQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const Entity = await createEntity(mongooseConn, entityConfig, enums);
+    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 

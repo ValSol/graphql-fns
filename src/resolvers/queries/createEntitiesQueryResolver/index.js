@@ -4,7 +4,7 @@ import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '.
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntity from '../../../mongooseModels/createThing';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
@@ -54,7 +54,7 @@ const createEntitiesQueryResolver = (
 
     const { mongooseConn } = context;
 
-    const Entity = await createEntity(mongooseConn, entityConfig, enums);
+    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
 

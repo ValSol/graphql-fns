@@ -1,13 +1,13 @@
 // @flow
 
-import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '../../../flowTypes';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flowTypes';
 import type { Context, ResolverCreatorArg } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import executeAuthorisation from '../../utils/executeAuthorisation';
-import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
-import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
-import createEntityQueryResolver from '../createEntityQueryResolver';
+import createEntityFileCountQueryResolver from '../createEntityFileCountQueryResolver';
+import createEntityFilesQueryResolver from '../createEntityFilesQueryResolver';
+import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
 import getFirst from '../utils/getFirst';
 import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
@@ -17,16 +17,13 @@ import fromCursor from '../utils/fromCursor';
 
 type Args = {
   where?: Object,
-  near?: NearInput,
-  sort?: { sortBy: Array<string> },
-  search?: string,
   after?: string,
   before?: string,
   first?: number,
   last?: number,
 };
 
-const createEntitiesThroughConnectionQueryResolver = (
+const createEntityFilesThroughConnectionQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -35,32 +32,32 @@ const createEntitiesThroughConnectionQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain = ['Query', 'entitiesThroughConnection', name];
+  const inventoryChain = ['Query', 'entityFilesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entitiesQueryResolver = createEntitiesQueryResolver(
+  const entityFilesQueryResolver = createEntityFilesQueryResolver(
     entityConfig,
     generalConfig,
     serversideConfig,
     true, // inAnyCase,
   );
-  if (!entitiesQueryResolver) return null;
+  if (!entityFilesQueryResolver) return null;
 
-  const entityQueryResolver = createEntityQueryResolver(
+  const entityFileQueryResolver = createEntityFileQueryResolver(
     entityConfig,
     generalConfig,
     serversideConfig,
     true, // inAnyCase,
   );
-  if (!entityQueryResolver) return null;
+  if (!entityFileQueryResolver) return null;
 
-  const entityCountQueryResolver = createEntityCountQueryResolver(
+  const entityFileCountQueryResolver = createEntityFileCountQueryResolver(
     entityConfig,
     generalConfig,
     serversideConfig,
     true, // inAnyCase,
   );
-  if (!entityCountQueryResolver) return null;
+  if (!entityFileCountQueryResolver) return null;
 
   const resolverCreatorArg: ResolverCreatorArg = {
     entityConfig,
@@ -105,22 +102,28 @@ const createEntitiesThroughConnectionQueryResolver = (
           first,
           resolverArg,
           filter,
-          entitiesQueryResolver,
+          entityFilesQueryResolver,
         );
 
         if (result) return result;
 
         // eslint-disable-next-line no-await-in-loop
-        shift2 = await getShift(_id, resolverCreatorArg, resolverArg, filter, entityQueryResolver);
+        shift2 = await getShift(
+          _id,
+          resolverCreatorArg,
+          resolverArg,
+          filter,
+          entityFileQueryResolver,
+        );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, filter, entitiesQueryResolver);
+          return getVeryFirst(first, resolverArg, filter, entityFilesQueryResolver);
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, filter, entitiesQueryResolver);
+      return getVeryFirst(first, resolverArg, filter, entityFilesQueryResolver);
     }
 
     if (before) {
@@ -136,15 +139,34 @@ const createEntitiesThroughConnectionQueryResolver = (
 
       for (let i = 0; i < 10; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const result = await getLast(_id, shift2, last, resolverArg, filter, entitiesQueryResolver);
+        const result = await getLast(
+          _id,
+          shift2,
+          last,
+          resolverArg,
+          filter,
+          entityFilesQueryResolver,
+        );
 
         if (result) return result;
 
         // eslint-disable-next-line no-await-in-loop
-        shift2 = await getShift(_id, resolverCreatorArg, resolverArg, filter, entityQueryResolver);
+        shift2 = await getShift(
+          _id,
+          resolverCreatorArg,
+          resolverArg,
+          filter,
+          entityFileQueryResolver,
+        );
 
         if (shift2 === null) {
-          getVeryLast(last, resolverArg, filter, entitiesQueryResolver, entityCountQueryResolver);
+          getVeryLast(
+            last,
+            resolverArg,
+            filter,
+            entityFilesQueryResolver,
+            entityFileCountQueryResolver,
+          );
         }
       }
     }
@@ -154,16 +176,16 @@ const createEntitiesThroughConnectionQueryResolver = (
         last,
         resolverArg,
         filter,
-        entitiesQueryResolver,
-        entityCountQueryResolver,
+        entityFilesQueryResolver,
+        entityFileCountQueryResolver,
       );
     }
 
     throw new TypeError(
-      `Incorrect set of args in "entitiesThroughConnection" query, entity: "${name}"!`,
+      `Incorrect set of args in "entityFilesThroughConnection" query, entity: "${name}"!`,
     );
   };
   return resolver;
 };
 
-export default createEntitiesThroughConnectionQueryResolver;
+export default createEntityFilesThroughConnectionQueryResolver;

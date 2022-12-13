@@ -1,28 +1,20 @@
 // @flow
 
-import pluralize from 'pluralize';
-
 import type { EntityConfig, GeneralConfig, InputCreator } from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import createFileWhereInputType from '../inputs/createFileWhereInputType';
 import connectionDerivativeUpdater from '../actionDerivativeUpdaters/connectionDerivativeUpdater';
-import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
-import createEntitySortInputType from '../inputs/createEntitySortInputType';
-import createEntityNearInputType from '../inputs/createEntityNearInputType';
-import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `entitiesThroughConnection${suffix}`;
+const actionGeneralName = (suffix?: string = ''): string => `entityFilesThroughConnection${suffix}`;
 
 const actionName = (baseName: string, suffix?: string = ''): string =>
-  `${pluralize(baseName)}ThroughConnection${suffix}`;
+  `${baseName}FilesThroughConnection${suffix}`;
 
 const inputCreators = [
-  createEntityWhereInputType,
-  createEntitySortInputType,
-  createEntityNearInputType,
-  createStringInputTypeForSearch,
+  createFileWhereInputType,
   (): [string, string, { [inputSpecificName: string]: [InputCreator, EntityConfig] }] => [
     '',
     'String',
@@ -45,13 +37,10 @@ const inputCreators = [
   ],
 ];
 
-const argNames = ['where', 'sort', 'near', 'search', 'after', 'before', 'first', 'last'];
+const argNames = ['where', 'after', 'before', 'first', 'last'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput`,
-  (name: string): string => `${name}SortInput`,
-  (name: string): string => `${name}NearInput`,
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
+  (name: string): string => 'FileWhereInput', // eslint-disable-line no-unused-vars
   (name: string): string => 'String', // eslint-disable-line no-unused-vars
   (name: string): string => 'String', // eslint-disable-line no-unused-vars
   (name: string): string => 'Int', // eslint-disable-line no-unused-vars
@@ -78,14 +67,14 @@ const actionReturnConfig = (
 
 const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnectionVirtualConfig'];
 
-const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
+const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
 const actionReturnString =
   (suffix: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
     `${name}Connection${suffix}`;
 
-const entitiesThroughConnectionQueryAttributes = {
+const entityFilesThroughConnectionQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -99,4 +88,4 @@ const entitiesThroughConnectionQueryAttributes = {
   actionAllowed,
 };
 
-export default entitiesThroughConnectionQueryAttributes;
+export default entityFilesThroughConnectionQueryAttributes;

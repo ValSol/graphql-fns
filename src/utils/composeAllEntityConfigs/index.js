@@ -69,6 +69,24 @@ const composeAllEntityConfigs = (
       const tangibleFileConfig = composeTangibleFileEntityConfig(config);
 
       result[tangibleFileConfig.name] = tangibleFileConfig; // eslint-disable-line no-param-reassign
+
+      virtualConfigComposers.forEach(([key]) => {
+        const [composeVirtualConfig, composeVirtualConfigName] = virtualConfigComposersObject[key];
+
+        const virtualConfigName = composeVirtualConfigName(tangibleFileConfig.name);
+
+        if (result[virtualConfigName]) {
+          throw new TypeError(
+            `Forbidden to use "${virtualConfigName}" becouse there is tangibleFile config with name: "${tangibleFileConfig.name}"!`,
+          );
+        }
+
+        const virtualConfig = composeVirtualConfig(tangibleFileConfig, {
+          allEntityConfigs: result,
+        }); // imitate generalConfig
+
+        result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
+      });
     }
 
     if (configType === 'tangible') {

@@ -1,16 +1,17 @@
 // @flow
 
-import childEntity from './createChildEntityQueryResolver';
 import childEntities from './createChildEntitiesQueryResolver';
+import childEntity from './createChildEntityQueryResolver';
+import entities from './createEntitiesQueryResolver';
+import entitiesByUnique from './createEntitiesByUniqueQueryResolver';
+import entitiesThroughConnection from './createEntitiesThroughConnectionQueryResolver';
+import entity from './createEntityQueryResolver';
 import entityDistinctValues from './createEntityDistinctValuesQueryResolver';
 import entityCount from './createEntityCountQueryResolver';
-import entityFileCount from './createEntityFileCountQueryResolver';
 import entityFile from './createEntityFileQueryResolver';
+import entityFileCount from './createEntityFileCountQueryResolver';
 import entityFiles from './createEntityFilesQueryResolver';
-import entity from './createEntityQueryResolver';
-import entities from './createEntitiesQueryResolver';
-import entitiesThroughConnection from './createEntitiesThroughConnectionQueryResolver';
-import entitiesByUnique from './createEntitiesByUniqueQueryResolver';
+import entityFilesThroughConnection from './createEntityFilesThroughConnectionQueryResolver';
 
 const queries = {
   childEntity,
@@ -20,6 +21,7 @@ const queries = {
   entityFileCount,
   entityFile,
   entityFiles,
+  entityFilesThroughConnection,
   entity,
   entities,
   entitiesThroughConnection,

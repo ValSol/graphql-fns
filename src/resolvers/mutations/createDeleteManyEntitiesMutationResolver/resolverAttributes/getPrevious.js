@@ -1,7 +1,7 @@
 // @flow
 import type { GetPrevious } from '../../../flowTypes';
 
-import createEntity from '../../../../mongooseModels/createThing';
+import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import executeAuthorisation from '../../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
@@ -28,7 +28,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const { mongooseConn } = context;
 
-  const Entity = await createEntity(mongooseConn, entityConfig, enums);
+  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   whereOne.forEach((item) => {
     const whereOneKeys = Object.keys(item);
