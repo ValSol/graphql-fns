@@ -18,18 +18,10 @@ const composeAllEntityConfigs = (
 ): { [entityName: string]: EntityConfig } => {
   const result = simplifiedThingConfigs.reduce(
     (prev, config) => {
-      const { name, type: configType = 'tangible' } = config;
+      const { name } = config;
 
       if (name.search('_') !== -1) {
         throw new TypeError(`Forbidden to use "_" (underscore) in entity name: "${name}"!`);
-      }
-
-      if (configType === 'tangible' && name.endsWith('Edge')) {
-        throw new TypeError(`Forbidden to use "Edge" in file name: "${name}"!`);
-      }
-
-      if (configType === 'tangible' && name.endsWith('Connection')) {
-        throw new TypeError(`Forbidden to use "Connection" in file name: "${name}"!`);
       }
 
       if (pluralize(name) === name) {

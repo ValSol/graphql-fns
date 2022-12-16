@@ -1,8 +1,9 @@
 // @flow
-import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
-import composeFieldsObject from './composeFieldsObject';
-import composeEntityConfig from './composeEntityConfig';
+import composeFieldsObject from '../composeFieldsObject';
+import composeEntityConfig from '../composeEntityConfig';
+import composeDerivativeConfigName from './composeDerivativeConfigName';
 
 const store = Object.create(null);
 
@@ -11,7 +12,7 @@ const composeDerivativeConfig = (
   rootEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
 ): null | EntityConfig => {
-  const { name: rootEntityName } = rootEntityConfig;
+  const { name: rootEntityName, derivativeNameSlicePosition } = rootEntityConfig;
 
   const {
     suffix,
@@ -30,9 +31,15 @@ const composeDerivativeConfig = (
 
   if (!allow[rootEntityName]) return null; // not error but negative result of function!
 
+  const derivativeEntityName = composeDerivativeConfigName(
+    rootEntityName,
+    suffix,
+    derivativeNameSlicePosition,
+  );
+
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store[`${rootEntityName}${suffix}`]) {
-    return store[`${rootEntityName}${suffix}`];
+  if (!process.env.JEST_WORKER_ID && store[derivativeEntityName]) {
+    return store[derivativeEntityName];
   }
 
   const fieldsObject = composeFieldsObject(rootEntityConfig);
@@ -175,9 +182,9 @@ const composeDerivativeConfig = (
 
   // ***
 
-  const entityConfig = { ...rootEntityConfig, name: `${rootEntityName}${suffix}` };
+  const entityConfig = { ...rootEntityConfig, name: derivativeEntityName };
 
-  store[`${rootEntityName}${suffix}`] = entityConfig;
+  store[derivativeEntityName] = entityConfig;
 
   if (includeFields && includeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
@@ -206,7 +213,7 @@ const composeDerivativeConfig = (
     const addFields2 = {
       ...addFields[rootEntityName],
       // name used also for cache results in composeFieldsObject util
-      name: `fieldsToAdd ${rootEntityName}${suffix}`,
+      name: `fieldsToAdd ${derivativeEntityName}`,
     };
 
     // $FlowFixMe
@@ -304,7 +311,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  return store[`${rootEntityName}${suffix}`];
+  return store[derivativeEntityName];
 };
 
 export default composeDerivativeConfig;

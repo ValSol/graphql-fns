@@ -1,4 +1,5 @@
 // @flow
+
 import type { GeneralConfig, EntityConfig } from '../flowTypes';
 
 import composeDerivativeConfig from './composeDerivativeConfig';

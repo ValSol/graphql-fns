@@ -4235,13 +4235,13 @@ type ExampleForCatalog implements Node {
   updatedAt: DateTime!
   textField: String
 }
-type ExampleEdgeForCatalog {
+type ExampleForCatalogEdge {
   cursor: String!
   node: ExampleForCatalog
 }
-type ExampleConnectionForCatalog {
+type ExampleForCatalogConnection {
   pageInfo: PageInfo!
-  edges: [ExampleEdgeForCatalog!]!
+  edges: [ExampleForCatalogEdge!]!
 }
 input ExampleWhereOneInput {
   id: ID!

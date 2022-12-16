@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../flowTypes';
+import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
-import pageInfoConfig from './composeAllEntityConfigs/pageInfoConfig';
-import composeDerivativeConfig from './composeDerivativeConfig';
+import pageInfoConfig from '../composeAllEntityConfigs/pageInfoConfig';
+import composeDerivativeConfig from './index';
 
 describe('composeDerivativeConfig', () => {
   describe('composeDerivativeConfig', () => {

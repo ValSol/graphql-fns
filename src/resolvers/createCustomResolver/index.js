@@ -46,7 +46,7 @@ const createCustomResolver = (
 
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  if (serversideConfig[methodKind] && serversideConfig[methodKind][methodName]) {
+  if (serversideConfig[methodKind]?.[methodName]) {
     const authDecorator =
       (func) =>
       async (...argarray) => {
@@ -76,7 +76,7 @@ const createCustomResolver = (
     throw new TypeError(`Have to set the "${methodName}" ${methodKind}!`);
   }
 
-  if (derivativeResolvers[methodKind] && derivativeResolvers[methodKind][methodName]) {
+  if (derivativeResolvers[methodKind]?.[methodName]) {
     const authDecorator =
       (func) =>
       async (...argarray) => {

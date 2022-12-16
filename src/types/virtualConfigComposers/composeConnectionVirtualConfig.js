@@ -20,6 +20,7 @@ const composeConnectionVirtualConfig: VirtualConfigComposer = (config, generalCo
   return {
     name: composeConnectionVirtualConfigName(name),
     type: 'virtual',
+    derivativeNameSlicePosition: -'Connection'.length,
 
     childFields: [
       { name: 'pageInfo', config: PageInfo, required: true },

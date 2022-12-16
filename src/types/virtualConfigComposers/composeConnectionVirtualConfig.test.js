@@ -33,6 +33,7 @@ describe('composeConnectionVirtualConfig', () => {
     const edgeConfig: EntityConfig = {
       name: 'ExampleEdge',
       type: 'virutal',
+      derivativeNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: exampleConfig }],
 
@@ -48,6 +49,7 @@ describe('composeConnectionVirtualConfig', () => {
     const expectedResult = {
       name: 'ExampleConnection',
       type: 'virtual',
+      derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: pageInfoConfig, required: true },

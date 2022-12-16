@@ -7,7 +7,6 @@ import composeEdgeVirtualConfigName from './composeEdgeVirtualConfigName';
 const composeEdgeVirtualConfig: VirtualConfigComposer = (
   config,
   generalConfig, // eslint-disable-line no-unused-vars
-  suffix?, // eslint-disable-line no-unused-vars
 ) => {
   const { name, type: configType = 'tangible' } = config;
 
@@ -20,6 +19,7 @@ const composeEdgeVirtualConfig: VirtualConfigComposer = (
   return {
     name: composeEdgeVirtualConfigName(name),
     type: 'virtual',
+    derivativeNameSlicePosition: -'Edge'.length,
 
     childFields: [{ name: 'node', config }],
 

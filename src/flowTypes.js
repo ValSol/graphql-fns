@@ -208,6 +208,7 @@ type SimplifiedChildField = {
 
 export type SimplifiedEntityConfig = {
   name: string,
+  derivativeNameSlicePosition?: number,
   type?: string, // 'embedded', 'file', 'tangible', 'tangibleFile', 'virtual',
   counter?: boolean, // if true entity has the 'counter' field
 
@@ -232,6 +233,7 @@ export type SimplifiedEntityConfig = {
 
 export type EntityConfig = {
   name: string,
+  derivativeNameSlicePosition?: number,
   type: string, // embedded, file, tangible (default), virtual,
   counter?: boolean, // if true entity has the 'counter' field
 
