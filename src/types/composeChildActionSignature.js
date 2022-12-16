@@ -13,7 +13,6 @@ const composeChildActionSignature = (
   inventory?: Inventory,
 ): string => {
   const {
-    actionAllowed,
     actionGeneralName,
     actionName,
     actionType,
@@ -23,8 +22,6 @@ const composeChildActionSignature = (
     actionReturnString,
   } = queryAttributes[childQueryGeneralName];
   const { name: configName } = entityConfig;
-
-  if (!actionAllowed(entityConfig)) return '';
 
   if (
     inventory &&

@@ -385,6 +385,30 @@ enum MenuCloneSectionSortEnum {
 input MenuCloneSectionSortInput {
   sortBy: [MenuCloneSectionSortEnum]
 }
+enum MenuTextNamesEnum {
+  name
+}
+input MenuDistinctValuesOptionsInput {
+  target: MenuTextNamesEnum!
+}
+enum MenuCloneTextNamesEnum {
+  name
+}
+input MenuCloneDistinctValuesOptionsInput {
+  target: MenuCloneTextNamesEnum!
+}
+enum MenuSectionTextNamesEnum {
+  name
+}
+input MenuSectionDistinctValuesOptionsInput {
+  target: MenuSectionTextNamesEnum!
+}
+enum MenuCloneSectionTextNamesEnum {
+  name
+}
+input MenuCloneSectionDistinctValuesOptionsInput {
+  target: MenuCloneSectionTextNamesEnum!
+}
 input MenuWhereOneInput {
   id: ID!
 }
@@ -414,30 +438,6 @@ enum MenuCloneSortEnum {
 }
 input MenuCloneSortInput {
   sortBy: [MenuCloneSortEnum]
-}
-enum MenuTextNamesEnum {
-  name
-}
-input MenuDistinctValuesOptionsInput {
-  target: MenuTextNamesEnum!
-}
-enum MenuCloneTextNamesEnum {
-  name
-}
-input MenuCloneDistinctValuesOptionsInput {
-  target: MenuCloneTextNamesEnum!
-}
-enum MenuSectionTextNamesEnum {
-  name
-}
-input MenuSectionDistinctValuesOptionsInput {
-  target: MenuSectionTextNamesEnum!
-}
-enum MenuCloneSectionTextNamesEnum {
-  name
-}
-input MenuCloneSectionDistinctValuesOptionsInput {
-  target: MenuCloneSectionTextNamesEnum!
 }
 input MenuWhereByUniqueInput {
   id_in: [ID!]
@@ -671,18 +671,6 @@ type UpdatedMenuCloneSectionPayload {
 }
 type Query {
   node(id: ID!): Node
-  childMenu(whereOne: MenuWhereOneInput!): Menu
-  childMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone
-  childMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection
-  childMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection
-  childMenus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput): [Menu!]!
-  childMenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
-  childMenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
-  childMenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
-  childMenusThroughConnection(where: MenuWhereInput, sort: MenuSortInput, after: String, before: String, first: Int, last: Int): MenuConnection
-  childMenuClonesThroughConnection(where: MenuCloneWhereInput, sort: MenuCloneSortInput, after: String, before: String, first: Int, last: Int): MenuCloneConnection
-  childMenuSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
-  childMenuCloneSectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
   MenuCount(where: MenuWhereInput): Int!
   MenuCloneCount(where: MenuCloneWhereInput): Int!
   MenuSectionCount(where: MenuSectionWhereInput): Int!
@@ -989,10 +977,6 @@ type TangibleImageConnection {
   pageInfo: PageInfo!
   edges: [TangibleImageEdge!]!
 }
-input ExampleWhereOneInput {
-  id: ID
-  textField1: ID
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1114,25 +1098,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   cuisines_size: Int
   cuisines_notsize: Int
 }
-enum ExampleSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  day_ASC
-  day_DESC
-  textField2_ASC
-  textField2_DESC
-  textField3_ASC
-  textField3_DESC
-}
-input ExampleSortInput {
-  sortBy: [ExampleSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
-}
 enum ExampleGeospatialFieldNamesEnum {
   position
 }
@@ -1196,6 +1161,29 @@ input FileWhereInput {
 input FileWhereOneInput {
   id: ID
   hash: String
+}
+input ExampleWhereOneInput {
+  id: ID
+  textField1: ID
+}
+enum ExampleSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  day_ASC
+  day_DESC
+  textField2_ASC
+  textField2_DESC
+  textField3_ASC
+  textField3_DESC
+}
+input ExampleSortInput {
+  sortBy: [ExampleSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
@@ -1312,9 +1300,6 @@ type UpdatedExamplePayload {
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example
-  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
-  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   TangibleImageFileCount(where: FileWhereInput): Int!
@@ -1478,12 +1463,6 @@ type Example2Connection {
   pageInfo: PageInfo!
   edges: [Example2Edge!]!
 }
-input Example1WhereOneInput {
-  id: ID!
-}
-input Example2WhereOneInput {
-  id: ID!
-}
 input Example1WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1522,19 +1501,6 @@ input Example1WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-}
-enum Example1SortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input Example1SortInput {
-  sortBy: [Example1SortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
 }
 enum Example1GeospatialFieldNamesEnum {
   position
@@ -1584,15 +1550,6 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum Example2SortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input Example2SortInput {
-  sortBy: [Example2SortEnum]
-}
 enum Example1TextNamesEnum {
   textField1
   textField2
@@ -1607,6 +1564,34 @@ enum Example2TextNamesEnum {
 }
 input Example2DistinctValuesOptionsInput {
   target: Example2TextNamesEnum!
+}
+input Example1WhereOneInput {
+  id: ID!
+}
+input Example2WhereOneInput {
+  id: ID!
+}
+enum Example1SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example1SortInput {
+  sortBy: [Example1SortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
+}
+enum Example2SortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input Example2SortInput {
+  sortBy: [Example2SortEnum]
 }
 input Example1WhereByUniqueInput {
   id_in: [ID!]
@@ -1694,12 +1679,6 @@ type UpdatedExample2Payload {
 }
 type Query {
   node(id: ID!): Node
-  childExample1(whereOne: Example1WhereOneInput!): Example1
-  childExample2(whereOne: Example2WhereOneInput!): Example2
-  childExample1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
-  childExample2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
-  childExample1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int): Example1Connection
-  childExample2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int): Example2Connection
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example2Count(where: Example2WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
@@ -1948,6 +1927,19 @@ input PaginationInput {
   skip: Int
   first: Int
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  title
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -1962,19 +1954,6 @@ enum PlaceSortEnum {
 }
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  title
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -2062,12 +2041,6 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person
-  childPlace(whereOne: PlaceWhereOneInput!): Place
-  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
-  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
-  childPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -2218,9 +2191,6 @@ type PersonConnection {
   pageInfo: PageInfo!
   edges: [PersonEdge!]!
 }
-input PersonWhereOneInput {
-  id: ID!
-}
 input PersonWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2260,6 +2230,16 @@ input PersonWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+input PersonWhereOneInput {
+  id: ID!
+}
 enum PersonSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -2272,13 +2252,6 @@ input PersonSortInput {
 input PaginationInput {
   skip: Int
   first: Int
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -2347,9 +2320,6 @@ type UpdatedPersonPayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person
-  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
@@ -2596,6 +2566,19 @@ input PaginationInput {
   skip: Int
   first: Int
 }
+enum PersonTextNamesEnum {
+  firstName
+  lastName
+}
+input PersonDistinctValuesOptionsInput {
+  target: PersonTextNamesEnum!
+}
+enum PlaceTextNamesEnum {
+  name
+}
+input PlaceDistinctValuesOptionsInput {
+  target: PlaceTextNamesEnum!
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -2610,19 +2593,6 @@ enum PlaceSortEnum {
 }
 input PlaceSortInput {
   sortBy: [PlaceSortEnum]
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  name
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
 }
 input PersonWhereByUniqueInput {
   id_in: [ID!]
@@ -2796,12 +2766,6 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person
-  childPlace(whereOne: PlaceWhereOneInput!): Place
-  childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
-  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
-  childPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -2908,9 +2872,6 @@ type ExampleConnection {
   pageInfo: PageInfo!
   edges: [ExampleEdge!]!
 }
-input ExampleWhereOneInput {
-  id: ID!
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2950,6 +2911,15 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
 enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -2963,20 +2933,11 @@ input PaginationInput {
   skip: Int
   first: Int
 }
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example
-  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
-  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
@@ -3123,6 +3084,9 @@ input ImportOptionsInput {
 }
 input ExampleUpdateInput {
   textField: String
+}
+type Query {
+  node(id: ID!): Node
 }
 type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
@@ -3423,6 +3387,9 @@ input ExampleCreateOrPushChildrenInput {
   create: [ExampleCreateInput!]
   createPositions: [Int!]
 }
+type Query {
+  node(id: ID!): Node
+}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -3496,6 +3463,9 @@ input ExampleCreateOrPushChildrenInput {
   create: [ExampleCreateInput!]
   createPositions: [Int!]
 }
+type Query {
+  node(id: ID!): Node
+}
 type Mutation {
   createExample(data: ExampleCreateInput!): Example!
 }`;
@@ -3562,6 +3532,9 @@ type ExampleEdge {
 type ExampleConnection {
   pageInfo: PageInfo!
   edges: [ExampleEdge!]!
+}
+type Query {
+  node(id: ID!): Node
 }
 type Mutation {
   loadExample(path: String!): Example
@@ -4163,6 +4136,9 @@ input MenuSectionUpdateInput {
   menuSectionName: String
   menu: MenuCreateChildInput
 }
+type Query {
+  node(id: ID!): Node
+}
 type Mutation {
   updateMenuWithChildren(whereOne: MenuWhereOneInput!, data: MenuUpdateInput, childWhereOne: [MenuSectionWhereOneInput!]!, childData: [MenuSectionUpdateInput!]!, deleteWhereOne: [MenuSectionWhereOneInput!]!): Menu
 }`;
@@ -4243,9 +4219,6 @@ type ExampleForCatalogConnection {
   pageInfo: PageInfo!
   edges: [ExampleForCatalogEdge!]!
 }
-input ExampleWhereOneInput {
-  id: ID!
-}
 input ExampleWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -4285,6 +4258,15 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+enum ExampleTextNamesEnum {
+  textField
+}
+input ExampleDistinctValuesOptionsInput {
+  target: ExampleTextNamesEnum!
+}
+input ExampleWhereOneInput {
+  id: ID!
+}
 enum ExampleSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -4297,12 +4279,6 @@ input ExampleSortInput {
 input PaginationInput {
   skip: Int
   first: Int
-}
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
 }
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
@@ -4357,9 +4333,6 @@ input ExampleForCatalogSortInput {
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example
-  childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
-  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!

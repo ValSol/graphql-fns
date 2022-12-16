@@ -128,12 +128,9 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     });
   });
 
-  const entityQueryTypes2 = entityQueryTypes.length
-    ? `type Query {
-  node(id: ID!): Node
-${entityQueryTypes.join('\n')}
-}`
-    : '';
+  const entityQueryTypes2 = `type Query {
+  node(id: ID!): Node${['', ...entityQueryTypes].join('\n')}
+}`;
 
   const entityMutationTypes2 = entityMutationTypes.length
     ? `type Mutation {
