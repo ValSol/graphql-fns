@@ -13,6 +13,8 @@ type Args = {
   before?: string,
   first?: number,
   last?: number,
+  // "objectIds_from_parent" used only to process the call from createEntityArrayResolver
+  objectIds_from_parent?: Array<Object>,
 };
 
 const composeLimitingArgs = (args: Args, thing: Object): Args => {

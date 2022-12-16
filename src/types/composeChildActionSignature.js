@@ -4,10 +4,11 @@ import type { Inventory, EntityConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import fillDic from './inputs/fillDic';
-import childEntities from './actionAttributes/childEntitiesQueryAttributes';
+import { queryAttributes } from './actionAttributes';
 
 const composeChildActionSignature = (
   entityConfig: EntityConfig,
+  childQueryGeneralName: string,
   dic?: { [inputName: string]: string },
   inventory?: Inventory,
 ): string => {
@@ -20,7 +21,7 @@ const composeChildActionSignature = (
     argNames,
     argTypes,
     actionReturnString,
-  } = childEntities;
+  } = queryAttributes[childQueryGeneralName];
   const { name: configName } = entityConfig;
 
   if (!actionAllowed(entityConfig)) return '';

@@ -4,11 +4,7 @@ import type { VirtualConfigComposer } from '../../flowTypes';
 
 import composeConnectionVirtualConfigName from './composeConnectionVirtualConfigName';
 
-const composeConnectionVirtualConfig: VirtualConfigComposer = (
-  config,
-  generalConfig,
-  suffix?, // eslint-disable-line no-unused-vars
-) => {
+const composeConnectionVirtualConfig: VirtualConfigComposer = (config, generalConfig) => {
   const { name, type: configType = 'tangible' } = config;
 
   if (configType !== 'tangible' && configType !== 'tangibleFile') {

@@ -559,6 +559,7 @@ export type GeneralConfig = {
           | 'entities'
           | 'entitiesThroughConnection'
           | 'childEntities'
+          | 'childEntitiesThroughConnection'
           | 'entitiesByUnique'
           | 'entityFileCount'
           | 'entityFile'
@@ -647,6 +648,7 @@ export type DerivativeAttributes = {
       | 'entities'
       | 'entitiesThroughConnection'
       | 'childEntities'
+      | 'childEntitiesThroughConnection'
       | 'entitiesByUnique'
       | 'entityFileCount'
       | 'entityFile'
@@ -689,7 +691,7 @@ type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
       'Query',
-      // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
+      // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
       string,
     ]
   | [
@@ -703,7 +705,7 @@ export type TwoSegmentInventoryChain =
 export type ThreeSegmentInventoryChain =
   | [
       'Query',
-      // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
+      // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
       string,
       string,
     ]

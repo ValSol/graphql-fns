@@ -6,7 +6,7 @@ import type { EntityConfig, GeneralConfig, NearInput, ServersideConfig } from '.
 import type { Context } from '../../flowTypes';
 
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
-import createChildEntitiesQueryResolver from '../../queries/createChildEntitiesQueryResolver';
+import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
 import fromGlobalId from '../../utils/fromGlobalId';
@@ -18,11 +18,11 @@ type Args = {
   search?: string,
   sort?: Object,
   where?: Object,
-  // "objectIds_from_parent" arg used only to call from createEntityArrayResolver
+  // "objectIds_from_parent" arg used only to call from createEntityConnectionResolver
   objectIds_from_parent?: Array<Object>,
 };
 
-const createEntityArrayResolver = (
+const createEntityConnectionResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -32,32 +32,38 @@ const createEntityArrayResolver = (
 
   const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
 
-  const childEntitiesQueryResolver = nameSuffix
+  const childEntitiesThroughConnectionQueryResolver = nameSuffix
     ? createCustomResolver(
         'Query',
-        `childEntities${nameSuffix}`,
+        `childEntitiesThroughConnection${nameSuffix}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
       )
     : resolverDecorator(
-        createChildEntitiesQueryResolver(entityConfig, generalConfig, serversideConfig),
+        createChildEntitiesThroughConnectionQueryResolver(
+          entityConfig,
+          generalConfig,
+          serversideConfig,
+        ),
         childEntitiesQueryAttributes,
         entityConfig,
         generalConfig,
       );
 
-  if (!childEntitiesQueryResolver) {
+  if (!childEntitiesThroughConnectionQueryResolver) {
     throw new TypeError(
-      `Not defined childEntitiesQueryResolver "${
-        nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
+      `Not defined childEntitiesThroughConnectionQueryResolver "${
+        nameSuffix
+          ? `childEntitiesThroughConnection${nameSuffix}`
+          : 'childEntitiesThroughConnection'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
   const inventoryChain = nameSuffix
-    ? ['Query', `childEntities${nameSuffix}`, nameRoot]
-    : ['Query', 'childEntities', name];
+    ? ['Query', `childEntitiesThroughConnection${nameSuffix}`, nameRoot]
+    : ['Query', 'childEntitiesThroughConnection', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
@@ -65,14 +71,16 @@ const createEntityArrayResolver = (
     if (!filter) {
       throw new TypeError(
         `Not authorized resolver: "${
-          nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
+          nameSuffix
+            ? `childEntitiesThroughConnection${nameSuffix}`
+            : 'childEntitiesThroughConnection'
         }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
       );
     }
 
     if (!parent) {
       throw new TypeError(
-        `Got undefined parent in resolver: "childEntities${
+        `Got undefined parent in resolver: "childEntitiesThroughConnection${
           nameSuffix || ''
         }" for entity: "${name}"!`,
       );
@@ -82,7 +90,7 @@ const createEntityArrayResolver = (
 
     const id_in = parent[fieldName]; // eslint-disable-line camelcase
 
-    if (!id_in?.length) return []; // eslint-disable-line camelcase
+    if (!id_in || !id_in.length) return []; // eslint-disable-line camelcase
 
     const objectIds_from_parent = id_in // eslint-disable-line no-underscore-dangle, camelcase
       .map((id) => fromGlobalId(id)._id) // eslint-disable-line no-underscore-dangle
@@ -92,9 +100,9 @@ const createEntityArrayResolver = (
 
     const where2 = where ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
 
-    const entities = await childEntitiesQueryResolver(
+    const entitiesConniection = await childEntitiesThroughConnectionQueryResolver(
       parent,
-      // objectIds_from_parent use only for call from this createEntityArrayResolver
+      // objectIds_from_parent use only for call from this createEntityConnectionResolver
       sort?.length || near || search
         ? { ...args, where: where2 }
         : { ...args, where: where2, objectIds_from_parent },
@@ -103,10 +111,10 @@ const createEntityArrayResolver = (
       filter,
     );
 
-    return entities;
+    return entitiesConniection;
   };
 
   return resolver;
 };
 
-export default createEntityArrayResolver;
+export default createEntityConnectionResolver;

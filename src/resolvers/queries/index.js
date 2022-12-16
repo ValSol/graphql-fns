@@ -1,6 +1,7 @@
 // @flow
 
 import childEntities from './createChildEntitiesQueryResolver';
+import childEntitiesThroughConnection from './createChildEntitiesThroughConnectionQueryResolver';
 import childEntity from './createChildEntityQueryResolver';
 import entities from './createEntitiesQueryResolver';
 import entitiesByUnique from './createEntitiesByUniqueQueryResolver';
@@ -16,6 +17,7 @@ import entityFilesThroughConnection from './createEntityFilesThroughConnectionQu
 const queries = {
   childEntity,
   childEntities,
+  childEntitiesThroughConnection,
   entityCount,
   entityDistinctValues,
   entityFileCount,

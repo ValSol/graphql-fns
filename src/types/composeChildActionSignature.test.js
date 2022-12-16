@@ -22,11 +22,21 @@ describe('composeChildActionSignature util', () => {
 
     const dic = {};
 
-    const result = await composeChildActionSignature(entityConfig, dic);
+    const result = composeChildActionSignature(entityConfig, 'childEntities', dic);
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
     expect(result).toEqual(expectedResult);
+
+    const result2 = composeChildActionSignature(
+      entityConfig,
+      'childEntitiesThroughConnection',
+      dic,
+    );
+    const expectedResult2 =
+      'where: ExampleWhereInput, sort: ExampleSortInput, search: String, after: String, before: String, first: Int, last: Int';
+
+    expect(result2).toEqual(expectedResult2);
 
     const expectedDic = {
       ExampleWhereInput: `input ExampleWhereInput {
@@ -122,10 +132,16 @@ input ExampleSortInput {
       ],
     };
 
-    const result = await composeChildActionSignature(entityConfig);
+    const result = composeChildActionSignature(entityConfig, 'childEntities');
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
     expect(result).toEqual(expectedResult);
+
+    const result2 = composeChildActionSignature(entityConfig, 'childEntitiesThroughConnection');
+    const expectedResult2 =
+      'where: ExampleWhereInput, sort: ExampleSortInput, search: String, after: String, before: String, first: Int, last: Int';
+
+    expect(result2).toEqual(expectedResult2);
   });
 });

@@ -21,7 +21,7 @@ let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-create-entities-query';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-entities-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 

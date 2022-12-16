@@ -8,7 +8,7 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
-const { default: toCursor } = require('../utils/toCursor');
+const { default: toCursor } = require('../../utils/toCursor');
 const { default: createEntityFilesQueryResolver } = require('../createEntityFilesQueryResolver');
 
 const { default: createEntityFilesThroughConnectionQueryResolver } = require('./index');

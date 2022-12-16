@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import toCursor from '../toCursor';
+import toCursor from '../../../utils/toCursor';
 
 import composeFirstEdges from './composeFirstEdges';
 

@@ -20,6 +20,8 @@ type Args = {
   sort?: { sortBy: Array<string> },
   pagination?: { skip: number, first: number },
   search?: string,
+  // "objectIds_from_parent" used only to process the call from createEntityArrayResolver
+  objectIds_from_parent?: Array<Object>,
 };
 
 const createEntitiesQueryResolver = (
@@ -47,7 +49,14 @@ const createEntitiesQueryResolver = (
 
     if (!filter) return null;
 
-    const { near, pagination, sort, where, search } = args;
+    const {
+      near,
+      pagination,
+      sort,
+      where,
+      search,
+      objectIds_from_parent: objectIdsFromParent,
+    } = args;
 
     // very same code as ...
     // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
@@ -60,48 +69,55 @@ const createEntitiesQueryResolver = (
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
-    if (lookups.length) {
-      const arg = [...lookups];
+    if (lookups.length || objectIdsFromParent) {
+      const pipeline = [...lookups];
 
       if (near) {
         const geoNear = composeNearForAggregateInput(near);
 
-        arg.unshift({ $geoNear: geoNear });
+        pipeline.unshift({ $geoNear: geoNear });
       }
 
       if (search) {
-        arg.unshift({ $sort: { score: { $meta: 'textScore' } } });
-        arg.unshift({ $match: { $text: { $search: search } } });
+        pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
+        pipeline.unshift({ $match: { $text: { $search: search } } });
       }
 
       if (Object.keys(where2).length) {
-        arg.push({ $match: where2 });
+        pipeline.push({ $match: where2 });
       }
 
       if (sort) {
         const { sortBy } = sort;
         const sortInputs = composeSortForAggregateInput(sortBy);
-        Array.prototype.push.apply(arg, sortInputs);
+        Array.prototype.push.apply(pipeline, sortInputs);
+      }
+
+      if (objectIdsFromParent) {
+        pipeline.push({
+          $set: { index_from_parent_ids: { $indexOfArray: [objectIdsFromParent, '$_id'] } },
+        });
+        pipeline.push({ $sort: { index_from_parent_ids: 1 } });
       }
 
       if (pagination) {
         const { skip, first: limit } = pagination;
 
         if (skip > 0) {
-          arg.push({ $skip: skip });
+          pipeline.push({ $skip: skip });
         }
 
         if (limit > 0) {
-          arg.push({ $limit: limit });
+          pipeline.push({ $limit: limit });
         }
       }
 
       if (!search) {
         // not use "$project" if used "search" to prevent error: field names may not start with '$'
-        arg.push({ $project: projection });
+        pipeline.push({ $project: projection });
       }
 
-      const entities = await Entity.aggregate(arg).exec();
+      const entities = await Entity.aggregate(pipeline).exec();
 
       if (!entities) return [];
 

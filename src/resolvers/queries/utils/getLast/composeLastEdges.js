@@ -1,6 +1,6 @@
 // @flow
 
-import toCursor from '../toCursor';
+import toCursor from '../../../utils/toCursor';
 
 type Result = {
   pageInfo: {

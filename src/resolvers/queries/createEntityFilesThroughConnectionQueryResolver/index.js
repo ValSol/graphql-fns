@@ -13,7 +13,7 @@ import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
 import getLast from '../utils/getLast';
 import getVeryLast from '../utils/getLast/getVeryLast';
-import fromCursor from '../utils/fromCursor';
+import fromCursor from '../../utils/fromCursor';
 
 type Args = {
   where?: Object,

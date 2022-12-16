@@ -5,6 +5,7 @@ import type { Context } from '../../flowTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
+import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
 import fieldArrayResolver from '../fieldArrayResolver';
 import pointFromMongoToGql from '../pointFromMongoToGql';
@@ -40,8 +41,12 @@ const composeEntityResolvers = (
     relationalFields.reduce((prev, { array, name, config }) => {
       if (array) {
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = resolver;
+
+        prev[name] = resolver; // eslint-disable-line no-param-reassign
+
+        const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
+
+        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign
@@ -55,8 +60,12 @@ const composeEntityResolvers = (
     duplexFields.reduce((prev, { array, name, config }) => {
       if (array) {
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = resolver;
+
+        prev[name] = resolver; // eslint-disable-line no-param-reassign
+
+        const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
+
+        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
         // eslint-disable-next-line no-param-reassign

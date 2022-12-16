@@ -8,19 +8,19 @@ const { PubSub } = require('graphql-subscriptions');
 
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: sleep } = require('../../../utils/sleep');
+const { default: toCursor } = require('../../utils/toCursor');
 const { default: toGlobalId } = require('../../utils/toGlobalId');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const {
   default: createCreateEntityMutationResolver,
 } = require('../../mutations/createCreateEntityMutationResolver');
-const { default: info } = require('./array-info.auxiliary');
-const { default: createEntityArrayResolver } = require('./index');
+const { default: createEntityConnectionResolver } = require('./index');
 
 let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-array-type';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-connection-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
@@ -31,7 +31,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createEntityArrayResolver', () => {
+describe('createEntityConnectionResolver', () => {
   const serversideConfig = {};
   test('should create type entity resolver', async () => {
     const placeConfig: EntityConfig = {};
@@ -86,15 +86,9 @@ describe('createEntityArrayResolver', () => {
     const createdPlace3 = await createPlace(null, { data: data3 }, { mongooseConn, pubsub });
     const { id: id3 } = createdPlace3;
 
-    const Place = createEntityArrayResolver(placeConfig, generalConfig, serversideConfig);
-    const parent = { friends: [toGlobalId(id1, 'Place')] };
-    const places = await Place(parent, null, { mongooseConn, pubsub }, info);
+    const Place = createEntityConnectionResolver(placeConfig, generalConfig, serversideConfig);
 
-    const [place] = places;
-
-    expect(place.title).toBe(data1.title);
-
-    const parent2 = {
+    const parent = {
       friends: [
         toGlobalId(id2, 'Place'),
         toGlobalId('5cd82d6075fb194334d8c1d7', 'Place'),
@@ -103,13 +97,48 @@ describe('createEntityArrayResolver', () => {
         toGlobalId(id1, 'Place'),
       ],
     };
-    const places2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
-    const [place1, place2, place3] = places2;
 
-    expect(places2.length).toBe(3);
+    const info = { fieldName: 'friends', projection: { title: 1 } };
 
-    expect(place1.title).toBe(data2.title);
-    expect(place2.title).toBe(data3.title);
-    expect(place3.title).toBe(data1.title);
+    const {
+      pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },
+      edges,
+    } = await Place(parent, { first: 1 }, { mongooseConn, pubsub }, info);
+
+    expect(hasNextPage).toBe(true);
+    expect(hasPreviousPage).toBe(false);
+    expect(startCursor).toBe(toCursor(id2, 0));
+    expect(endCursor).toBe(toCursor(id2, 0));
+
+    expect(edges.length).toBe(1);
+
+    expect(edges[0].cursor).toBe(toCursor(id2, 0));
+    expect(edges[0].node.id).toEqual(id2);
+    expect(edges[0].node.title).toBe(data2.title);
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage2,
+        hasPreviousPage: hasPreviousPage2,
+        startCursor: startCursor2,
+        endCursor: endCursor2,
+      },
+      edges: edges2,
+    } = await Place(parent, { after: endCursor, first: 3 }, { mongooseConn, pubsub }, info);
+
+    expect(hasNextPage2).toBe(false);
+    expect(hasPreviousPage2).toBe(true);
+    expect(startCursor2).toBe(toCursor(id3, 1));
+    expect(endCursor2).toBe(toCursor(id1, 2));
+
+    expect(edges2.length).toBe(2);
+
+    expect(edges2[0].cursor).toBe(toCursor(id3, 1));
+    expect(edges2[0].node.id).toEqual(id3);
+    expect(edges2[0].node.title).toBe(data3.title);
+
+    expect(edges2[1].cursor).toBe(toCursor(id1, 2));
+    expect(edges2[1].node.id).toEqual(id1);
+    expect(edges2[1].node.title).toBe(data1.title);
   });
 });

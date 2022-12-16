@@ -28,7 +28,7 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
 const getNameOrAlias = (nameWithAlias) => nameWithAlias.split(': ')[0];
 
 const composeChildArgs = (currentChild, entityConfig) =>
-  composeChildActionSignature(entityConfig)
+  composeChildActionSignature(entityConfig, 'childEntities')
     .split(', ')
     .filter(Boolean)
     .reduce((prev, item) => {

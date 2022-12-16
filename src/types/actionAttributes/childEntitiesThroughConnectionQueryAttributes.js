@@ -13,10 +13,11 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `entitiesThroughConnection${suffix}`;
+const actionGeneralName = (suffix?: string = ''): string =>
+  `childEntitiesThroughConnection${suffix}`;
 
 const actionName = (baseName: string, suffix?: string = ''): string =>
-  `${pluralize(baseName)}ThroughConnection${suffix}`;
+  `child${pluralize(baseName)}ThroughConnection${suffix}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -85,7 +86,7 @@ const actionReturnString =
   ({ name }) =>
     `${name}${suffix}Connection`;
 
-const entitiesThroughConnectionQueryAttributes = {
+const childEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -99,4 +100,4 @@ const entitiesThroughConnectionQueryAttributes = {
   actionAllowed,
 };
 
-export default entitiesThroughConnectionQueryAttributes;
+export default childEntitiesThroughConnectionQueryAttributes;

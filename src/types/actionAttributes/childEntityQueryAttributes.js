@@ -29,7 +29,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 const actionReturnString =
   (suffix: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}!`;
+    `${name}${suffix}`;
 
 const childEntityQueryAttributes = {
   actionGeneralName,

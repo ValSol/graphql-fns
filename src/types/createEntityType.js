@@ -2,7 +2,13 @@
 
 import type { EntityConfig } from '../flowTypes';
 
+import { queryAttributes } from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
+
+const { childEntities, childEntitiesThroughConnection, childEntity } = queryAttributes;
+
+const composeReturnString = (config, actionAttributes) =>
+  actionAttributes.actionReturnString('')(config);
 
 const arrayArgs = '(slice: SliceInput)';
 
@@ -117,12 +123,24 @@ const createEntityType = (
 
   if (relationalFields) {
     relationalFields.reduce((prev, { array, name: name2, required, config }) => {
-      const { name: relationalEntityName } = config;
       prev.push(
-        `  ${name2}${array ? `(${composeChildActionSignature(config, dic)})` : ''}: ${
-          array ? '[' : ''
-        }${relationalEntityName}${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}${
+          array ? `(${composeChildActionSignature(config, 'childEntities', dic)})` : ''
+        }: ${composeReturnString(config, array ? childEntities : childEntity)}${
+          !array && required ? '!' : ''
+        }`,
       );
+
+      if (array) {
+        prev.push(
+          `  ${name2}ThroughConnection${`(${composeChildActionSignature(
+            config,
+            'childEntitiesThroughConnection',
+            dic,
+          )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
+        );
+      }
+
       return prev;
     }, entityTypeArray);
   }
@@ -130,12 +148,24 @@ const createEntityType = (
   // the same code as for relationalFields
   if (duplexFields) {
     duplexFields.reduce((prev, { array, name: name2, required, config }) => {
-      const { name: relationalEntityName } = config;
       prev.push(
-        `  ${name2}${array ? `(${composeChildActionSignature(config, dic)})` : ''}: ${
-          array ? '[' : ''
-        }${relationalEntityName}${array ? '!]!' : ''}${!array && required ? '!' : ''}`,
+        `  ${name2}${
+          array ? `(${composeChildActionSignature(config, 'childEntities', dic)})` : ''
+        }: ${composeReturnString(config, array ? childEntities : childEntity)}${
+          !array && required ? '!' : ''
+        }`,
       );
+
+      if (array) {
+        prev.push(
+          `  ${name2}ThroughConnection${`(${composeChildActionSignature(
+            config,
+            'childEntitiesThroughConnection',
+            dic,
+          )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
+        );
+      }
+
       return prev;
     }, entityTypeArray);
   }

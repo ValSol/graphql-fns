@@ -4,6 +4,7 @@ import type { ActionAttributes } from '../../flowTypes';
 
 import childEntity from './childEntityQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
+import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
 import copyManyEntities from './copyManyEntitiesMutationAttributes';
 import copyManyEntitiesWithChildren from './copyManyEntitiesWithChildrenMutationAttributes';
 import copyEntity from './copyEntityMutationAttributes';
@@ -40,6 +41,7 @@ import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 const actionAttributes = {
   childEntity,
   childEntities,
+  childEntitiesThroughConnection,
   copyManyEntities,
   copyManyEntitiesWithChildren,
   copyEntity,

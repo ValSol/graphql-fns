@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.722",
+  "version": "0.1.2-beta.723",
   "description": "Useful functions to work with graphql",
   "main": "lib/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build:flow": "flow-copy-source src lib --ignore \"**/*.mtest.js\" --ignore \"**/*.test.js\"",
     "commit": "git-cz",
     "flow": "flow check",
-    "test:once": "jest --verbose false",
+    "test:once": "jest --runInBand --verbose false",
     "test:mongodb": "jest --config=jest.config.mongodb.js --runInBand --verbose false --detectOpenHandles",
     "test": "jest --watch",
     "semantic-release": "semantic-release"

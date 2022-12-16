@@ -4,17 +4,20 @@ import type { GeneralConfig, NearInput, ServersideConfig, EntityConfig } from '.
 import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
+import createEntitiesThroughConnectionQueryResolver from '../createEntitiesThroughConnectionQueryResolver';
 
 type Args = {
   where?: Object,
   near?: NearInput,
   sort?: { sortBy: Array<string> },
-  pagination?: { skip: number, first: number },
   search?: string,
+  after?: string,
+  before?: string,
+  first?: number,
+  last?: number,
 };
 
-const createchildEntitiesQueryResolver = (
+const createChildEntitiesThroughConnectionQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -23,16 +26,16 @@ const createchildEntitiesQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain = ['Query', 'childEntities', name];
+  const inventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entitiesQueryResolver = createEntitiesQueryResolver(
+  const entitiesThroughConnectionQueryResolver = createEntitiesThroughConnectionQueryResolver(
     entityConfig,
     generalConfig,
     serversideConfig,
     true, // inAnyCase,
   );
-  if (!entitiesQueryResolver) return null;
+  if (!entitiesThroughConnectionQueryResolver) return null;
 
   const resolver = async (
     parent: Object,
@@ -40,9 +43,9 @@ const createchildEntitiesQueryResolver = (
     context: Context,
     info: Object,
     parentFilter: Array<Object>,
-  ): Object => entitiesQueryResolver(parent, args, context, info, parentFilter);
+  ): Object => entitiesThroughConnectionQueryResolver(parent, args, context, info, parentFilter);
 
   return resolver;
 };
 
-export default createchildEntitiesQueryResolver;
+export default createChildEntitiesThroughConnectionQueryResolver;

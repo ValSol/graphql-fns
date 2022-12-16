@@ -38,7 +38,12 @@ const getShift = async (
 
   const limitingArgs = composeLimitingArgs(args, thing);
 
-  const { near, where, search } = limitingArgs;
+  const {
+    near,
+    where,
+    search,
+    objectIds_from_parent: objectIdsFromParent, // "objectIds_from_parent" used only to process the call from createChildEntitiesThroughConnectionQueryResolver
+  } = limitingArgs;
 
   // very same code as ...
   // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js
@@ -64,6 +69,13 @@ const getShift = async (
 
   if (Object.keys(where2).length) {
     pipeline.push({ $match: where2 });
+  }
+
+  if (objectIdsFromParent) {
+    pipeline.push({
+      $set: { index_from_parent_ids: { $indexOfArray: [objectIdsFromParent, '$_id'] } },
+    });
+    pipeline.push({ $sort: { index_from_parent_ids: 1 } });
   }
 
   pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });

@@ -11,7 +11,7 @@ let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-primitive-array-type';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-field-array-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 

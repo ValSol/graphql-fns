@@ -150,6 +150,7 @@ type Menu implements Node {
   name: String!
   clone: MenuClone
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+  sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
 }
 type MenuClone implements Node {
   id: ID!
@@ -158,6 +159,7 @@ type MenuClone implements Node {
   name: String!
   original: Menu
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
 }
 type MenuSection implements Node {
   id: ID!
@@ -669,14 +671,18 @@ type UpdatedMenuCloneSectionPayload {
 }
 type Query {
   node(id: ID!): Node
-  childMenu(whereOne: MenuWhereOneInput!): Menu!
-  childMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
-  childMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
-  childMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
+  childMenu(whereOne: MenuWhereOneInput!): Menu
+  childMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone
+  childMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection
+  childMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection
   childMenus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput): [Menu!]!
   childMenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
   childMenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   childMenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  childMenusThroughConnection(where: MenuWhereInput, sort: MenuSortInput, after: String, before: String, first: Int, last: Int): MenuConnection
+  childMenuClonesThroughConnection(where: MenuCloneWhereInput, sort: MenuCloneSortInput, after: String, before: String, first: Int, last: Int): MenuCloneConnection
+  childMenuSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
+  childMenuCloneSectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
   MenuCount(where: MenuWhereInput): Int!
   MenuCloneCount(where: MenuCloneWhereInput): Int!
   MenuSectionCount(where: MenuSectionWhereInput): Int!
@@ -1306,8 +1312,9 @@ type UpdatedExamplePayload {
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExample(whereOne: ExampleWhereOneInput!): Example
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
+  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   TangibleImageFileCount(where: FileWhereInput): Int!
@@ -1687,10 +1694,12 @@ type UpdatedExample2Payload {
 }
 type Query {
   node(id: ID!): Node
-  childExample1(whereOne: Example1WhereOneInput!): Example1!
-  childExample2(whereOne: Example2WhereOneInput!): Example2!
+  childExample1(whereOne: Example1WhereOneInput!): Example1
+  childExample2(whereOne: Example2WhereOneInput!): Example2
   childExample1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
   childExample2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
+  childExample1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int): Example1Connection
+  childExample2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int): Example2Connection
   Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
   Example2Count(where: Example2WhereInput): Int!
   Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
@@ -1820,7 +1829,9 @@ type Person implements Node {
   firstName: String!
   lastName: String!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   location: Place!
   favoritePlace: Place
 }
@@ -2051,10 +2062,12 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person!
-  childPlace(whereOne: PlaceWhereOneInput!): Place!
+  childPerson(whereOne: PersonWhereOneInput!): Person
+  childPlace(whereOne: PlaceWhereOneInput!): Place
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  childPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -2334,8 +2347,9 @@ type UpdatedPersonPayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person!
+  childPerson(whereOne: PersonWhereOneInput!): Person
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   PersonCount(where: PersonWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
   Person(whereOne: PersonWhereOneInput!): Person!
@@ -2459,7 +2473,9 @@ type Person implements Node {
   firstName: String!
   lastName: String!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   location: Place!
   favoritePlace: Place
 }
@@ -2469,7 +2485,9 @@ type Place implements Node {
   updatedAt: DateTime!
   name: String
   citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  citizensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
 }
 type PersonEdge {
   cursor: String!
@@ -2778,10 +2796,12 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  childPerson(whereOne: PersonWhereOneInput!): Person!
-  childPlace(whereOne: PlaceWhereOneInput!): Place!
+  childPerson(whereOne: PersonWhereOneInput!): Person
+  childPlace(whereOne: PlaceWhereOneInput!): Place
   childPeople(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   childPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  childPeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  childPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
   PersonCount(where: PersonWhereInput): Int!
   PlaceCount(where: PlaceWhereInput): Int!
   PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
@@ -2954,8 +2974,9 @@ input ExampleWhereByUniqueInput {
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExample(whereOne: ExampleWhereOneInput!): Example
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
@@ -3958,6 +3979,7 @@ type Menu implements Node {
   updatedAt: DateTime!
   menuName: String
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+  sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
 }
 type MenuSection implements Node {
   id: ID!
@@ -4335,15 +4357,16 @@ input ExampleForCatalogSortInput {
 }
 type Query {
   node(id: ID!): Node
-  childExample(whereOne: ExampleWhereOneInput!): Example!
+  childExample(whereOne: ExampleWhereOneInput!): Example
   childExamples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  childExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExampleCount(where: ExampleWhereInput): Int!
   ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
   Example(whereOne: ExampleWhereOneInput!): Example!
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
   ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
-  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleConnectionForCatalog
+  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleForCatalogConnection
 }`;
 
     const result = composeGqlTypes(generalConfig);
