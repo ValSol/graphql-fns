@@ -7,7 +7,7 @@ import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigBy
 import fillDic from '../inputs/fillDic';
 
 const injectDerivativeActionInputs = (
-  suffix: string,
+  derivativeKey: string,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   actionAttributes: ActionAttributes,
@@ -24,15 +24,19 @@ const injectDerivativeActionInputs = (
   if (
     inventory &&
     // $FlowFixMe
-    !checkInventory([actionType, actionGeneralName(suffix), configName], inventory)
+    !checkInventory([actionType, actionGeneralName(derivativeKey), configName], inventory)
   ) {
     return;
   }
-  const specificName = actionName(configName, suffix);
+  const specificName = actionName(configName, derivativeKey);
 
   if (!specificName) return;
 
-  const derivativeConfig = composeDerivativeConfigByName(suffix, entityConfig, generalConfig);
+  const derivativeConfig = composeDerivativeConfigByName(
+    derivativeKey,
+    entityConfig,
+    generalConfig,
+  );
 
   inputCreators.forEach((inputCreator) => {
     const [inputName, inputDefinition, childChain] = inputCreator(derivativeConfig);

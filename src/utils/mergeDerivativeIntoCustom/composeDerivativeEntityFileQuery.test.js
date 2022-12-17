@@ -20,7 +20,7 @@ describe('composeDerivativeEntityFileQuery', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { TangiblePhoto: ['entityFile'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     TangiblePhoto: {
       floatFields: [{ name: 'floatField' }],
     },

@@ -8,13 +8,13 @@ import inputCreators from './inputCreators';
 
 const injectDerivativeInput = (
   inputGeneralName: string,
-  suffix: string,
+  derivativeKey: string,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   dic: { [inputName: string]: string },
 ): void => {
-  const derivativeConfig = suffix
-    ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig)
+  const derivativeConfig = derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
     : entityConfig;
 
   const inputCreator = inputCreators[inputGeneralName];

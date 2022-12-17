@@ -4,13 +4,13 @@ import type { DerivativeInputs } from '../flowTypes';
 
 type Arg = Array<DerivativeInputs>;
 
-type Result = { [suffix: string]: DerivativeInputs };
+type Result = { [derivativeKey: string]: DerivativeInputs };
 
 const composeDerivativeInputs = (arg: Arg): Result =>
   arg.reduce((prev, item) => {
-    const { suffix } = item;
+    const { derivativeKey } = item;
 
-    prev[suffix] = item; // eslint-disable-line no-param-reassign
+    prev[derivativeKey] = item; // eslint-disable-line no-param-reassign
 
     return prev;
   }, {});

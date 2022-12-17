@@ -10,14 +10,14 @@ const { fieldAttrCount, ordinaryActionTypes } = constants;
 type Args = {
   columnGroupShift: number,
   columns: Array<{ width: number }>,
-  derivative: { +[suffix: string]: DerivativeAttributes },
+  derivative: { +[derivativeKey: string]: DerivativeAttributes },
   firstThingName: string,
-  suffix: string,
+  derivativeKey: string,
   ws: Object,
 };
 
 const showDerivativeActions = (args: Args) => {
-  const { columnGroupShift, columns, derivative, firstThingName, suffix, ws } = args;
+  const { columnGroupShift, columns, derivative, firstThingName, derivativeKey, ws } = args;
   const col = columnGroupShift + ((fieldAttrCount + 1) * 2 + 1);
   const col2 = col + 1;
   ws.mergeCells(1, col, 1, col2);
@@ -37,7 +37,7 @@ const showDerivativeActions = (args: Args) => {
 
   const queryNames = [];
   const mutationNames = [];
-  derivative[suffix].allow[firstThingName].forEach((actionName) => {
+  derivative[derivativeKey].allow[firstThingName].forEach((actionName) => {
     if (ordinaryActionTypes[actionName] === 'Query') {
       queryNames.push(actionName);
     } else {
@@ -48,10 +48,10 @@ const showDerivativeActions = (args: Args) => {
   const actions = [...queryNames, ...mutationNames];
 
   actions.forEach((actionName, i) => {
-    const actionNameWithSuffix = `${actionName}${suffix}`;
-    ws.getCell(2 + i, col).value = actionNameWithSuffix;
+    const actionNameWithDerivativeKey = `${actionName}${derivativeKey}`;
+    ws.getCell(2 + i, col).value = actionNameWithDerivativeKey;
     ws.getCell(2 + i, col2).value = composeSpecificActionName({
-      actionName: actionNameWithSuffix,
+      actionName: actionNameWithDerivativeKey,
       entityName: firstThingName,
     });
     const argb = ordinaryActionTypes[actionName] === 'Query' ? 'FFFFB266' : 'FF9999FF';

@@ -4,7 +4,7 @@ import type { DerivativeAttributes } from '../../../flowTypes';
 
 type Arg = {
   actionTypes: { [actionName: string]: 'Query' | 'Mutation' | 'Subscription' },
-  derivative: { [suffix: string]: DerivativeAttributes },
+  derivative: { [derivativeKey: string]: DerivativeAttributes },
 };
 
 type Result = {
@@ -21,10 +21,10 @@ const extractDataFromDerivative = (arg: Arg): Result => {
   const thingNamesByDerivativeActions = {};
 
   Object.keys(derivative).forEach((key) => {
-    const { allow, suffix } = derivative[key];
+    const { allow, derivativeKey } = derivative[key];
     Object.keys(allow).forEach((entityName) => {
       allow[entityName].forEach((actionName) => {
-        const derivativeActionName = `${actionName}${suffix}`;
+        const derivativeActionName = `${actionName}${derivativeKey}`;
         if (!actionNames.includes(derivativeActionName)) {
           actionNames.push(derivativeActionName);
           derivativeActionTypes[derivativeActionName] = `Derivative${actionTypes[actionName]}`;

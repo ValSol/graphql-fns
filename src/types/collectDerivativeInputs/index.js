@@ -15,12 +15,12 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
   const { allEntityConfigs, derivative, derivativeInputs } = generalConfig;
 
   if (derivative) {
-    Object.keys(derivative).forEach((suffix) => {
-      const { allow } = derivative[suffix];
+    Object.keys(derivative).forEach((derivativeKey) => {
+      const { allow } = derivative[derivativeKey];
       Object.keys(allow).forEach((entityName) => {
         allow[entityName].forEach((actionName) => {
           injectDerivativeActionInputs(
-            suffix,
+            derivativeKey,
             allEntityConfigs[entityName],
             generalConfig,
             actionAttributes[actionName],
@@ -32,22 +32,24 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
   }
 
   if (derivativeInputs) {
-    // --- check suffixes correctness
-    Object.keys(derivativeInputs).forEach((suffix) => {
-      if (suffix === '') return;
-      if (!derivative || !Object.keys(derivative).includes(suffix)) {
-        throw new TypeError(`Derivative input suffix: "${suffix}" not used in derivative actions!`);
+    // --- check derivativeKeys correctness
+    Object.keys(derivativeInputs).forEach((derivativeKey) => {
+      if (derivativeKey === '') return;
+      if (!derivative || !Object.keys(derivative).includes(derivativeKey)) {
+        throw new TypeError(
+          `Derivative input derivativeKey: "${derivativeKey}" not used in derivative actions!`,
+        );
       }
     });
     // ---
 
-    Object.keys(derivativeInputs).forEach((suffix) => {
-      const { allow } = derivativeInputs[suffix];
+    Object.keys(derivativeInputs).forEach((derivativeKey) => {
+      const { allow } = derivativeInputs[derivativeKey];
       Object.keys(allow).forEach((entityName) => {
         allow[entityName].forEach((inputName) => {
           injectDerivativeInput(
             inputName,
-            suffix,
+            derivativeKey,
             allEntityConfigs[entityName],
             generalConfig,
             dic,

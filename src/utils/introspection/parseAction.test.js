@@ -88,7 +88,7 @@ describe('parseAction', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
       Place: ['childEntity'],
@@ -114,7 +114,7 @@ describe('parseAction', () => {
 
   const generalConfig = { allEntityConfigs, custom, derivative };
 
-  const suffixToPermission = { ForCatalog: 'insider', ForView: '' };
+  const derivativeKeyToPermission = { ForCatalog: 'insider', ForView: '' };
 
   test('should return result', () => {
     const actionType = 'Query';
@@ -130,7 +130,7 @@ describe('parseAction', () => {
             Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
             Place: ['childEntity'],
           },
-          suffix: 'ForCatalog',
+          derivativeKey: 'ForCatalog',
         },
       },
       inventoryByPermissions: {
@@ -154,7 +154,7 @@ describe('parseAction', () => {
         actionName,
         generalConfig,
         options,
-        suffixToPermission,
+        derivativeKeyToPermission,
         entityName,
       },
       { derivativeAttributes: {}, inventoryByPermissions: {}, maxShift: 0 },
@@ -167,7 +167,7 @@ describe('parseAction', () => {
     const actionName = 'entitiesByUnique';
     const entityName = 'Person';
     const options = { shift: 0, depth: 1 };
-    const suffix = 'ForView';
+    const derivativeKey = 'ForView';
 
     const parseActionResult = {
       derivativeAttributes: {
@@ -177,7 +177,7 @@ describe('parseAction', () => {
             Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
             Place: ['childEntity'],
           },
-          suffix: 'ForCatalog',
+          derivativeKey: 'ForCatalog',
         },
       },
       inventoryByPermissions: {
@@ -203,7 +203,7 @@ describe('parseAction', () => {
             Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
             Place: ['childEntity'],
           },
-          suffix: 'ForCatalog',
+          derivativeKey: 'ForCatalog',
         },
       },
       inventoryByPermissions: {
@@ -237,8 +237,8 @@ describe('parseAction', () => {
         actionName,
         generalConfig,
         options,
-        suffix,
-        suffixToPermission,
+        derivativeKey,
+        derivativeKeyToPermission,
         entityName,
       },
       parseActionResult,

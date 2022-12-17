@@ -22,7 +22,7 @@ describe('composeDerivativeDeleteEntityMutation', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['deleteEntity'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => ({
         floatFields: [{ name: 'floatField' }],

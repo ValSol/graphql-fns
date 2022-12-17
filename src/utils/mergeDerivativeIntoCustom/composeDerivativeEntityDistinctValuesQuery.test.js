@@ -21,7 +21,7 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['entityDistinctValues'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => ({
         floatFields: [{ name: 'floatField' }],

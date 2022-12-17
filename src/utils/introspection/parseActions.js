@@ -7,7 +7,7 @@ import parseAction from './parseAction';
 
 const parseActions = (
   actions: Array<ParseActionArgs>,
-  suffixToPermission: { [suffix: string]: string },
+  derivativeKeyToPermission: { [derivativeKey: string]: string },
   generalConfig: GeneralConfig,
 ): ParseActionResult => {
   const derivativeAttributes = {};
@@ -16,7 +16,7 @@ const parseActions = (
 
   actions.forEach((action) => {
     maxShift = parseAction(
-      { ...action, generalConfig, suffixToPermission },
+      { ...action, generalConfig, derivativeKeyToPermission },
       { maxShift, derivativeAttributes, inventoryByPermissions },
     ).maxShift;
   });

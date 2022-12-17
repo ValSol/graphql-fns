@@ -7,9 +7,10 @@ import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputTy
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `childEntity${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string => `childEntity${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string => `child${baseName}${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `child${baseName}${derivativeKey}`;
 
 const inputCreators = [createEntityWhereOneInputType];
 
@@ -20,16 +21,18 @@ const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (): boolean => false;
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}`;
+    `${name}${derivativeKey}`;
 
 const childEntityQueryAttributes = {
   actionGeneralName,

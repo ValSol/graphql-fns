@@ -12,11 +12,11 @@ import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDele
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string =>
-  `deleteFilteredEntitiesWithChildrenReturnScalar${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `deleteFilteredEntitiesWithChildrenReturnScalar${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `deleteFiltered${pluralize(baseName)}WithChildrenReturnScalar${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `deleteFiltered${pluralize(baseName)}WithChildrenReturnScalar${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -37,7 +37,7 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
-  suffix?: string, // eslint-disable-line no-unused-vars
+  derivativeKey?: string, // eslint-disable-line no-unused-vars
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
@@ -49,7 +49,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
 const actionReturnString =
   (
     // eslint-disable-next-line no-unused-vars
-    suffix: string,
+    derivativeKey: string,
   ): ((entityConfig: EntityConfig) => string) =>
   // eslint-disable-next-line no-unused-vars
   ({ name }) =>

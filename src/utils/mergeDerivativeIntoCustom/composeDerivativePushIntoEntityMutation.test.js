@@ -21,7 +21,7 @@ describe('composeDerivativePushIntoEntityMutation', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['pushIntoEntity'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     Example: {
       floatFields: [{ name: 'floatField' }],
     },

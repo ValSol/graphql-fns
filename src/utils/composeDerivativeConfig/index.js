@@ -15,7 +15,7 @@ const composeDerivativeConfig = (
   const { name: rootEntityName, derivativeNameSlicePosition } = rootEntityConfig;
 
   const {
-    suffix,
+    derivativeKey,
     allow,
     addFields,
     derivativeFields,
@@ -33,7 +33,7 @@ const composeDerivativeConfig = (
 
   const derivativeEntityName = composeDerivativeConfigName(
     rootEntityName,
-    suffix,
+    derivativeKey,
     derivativeNameSlicePosition,
   );
 
@@ -52,7 +52,7 @@ const composeDerivativeConfig = (
     Object.keys(excludeFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in excludeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in excludeFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -61,7 +61,7 @@ const composeDerivativeConfig = (
       excludeFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect excludeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
+            `Incorrect excludeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
           );
         }
       });
@@ -72,7 +72,7 @@ const composeDerivativeConfig = (
     Object.keys(includeFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in includeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in includeFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -81,7 +81,7 @@ const composeDerivativeConfig = (
       includeFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect includeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
+            `Incorrect includeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
           );
         }
       });
@@ -92,7 +92,7 @@ const composeDerivativeConfig = (
     Object.keys(freezedFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in freezedFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in freezedFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -101,7 +101,7 @@ const composeDerivativeConfig = (
       freezedFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect freezedFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
+            `Incorrect freezedFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
           );
         }
       });
@@ -112,7 +112,7 @@ const composeDerivativeConfig = (
     Object.keys(unfreezedFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in unfreezedFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in unfreezedFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -121,7 +121,7 @@ const composeDerivativeConfig = (
       unfreezedFields[rootEntityName].forEach((fieldName) => {
         if (!fieldsObject[fieldName]) {
           throw new TypeError(
-            `Incorrect unfreezedFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
+            `Incorrect unfreezedFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
           );
         }
       });
@@ -132,7 +132,7 @@ const composeDerivativeConfig = (
     Object.keys(addFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in addFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in addFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -142,7 +142,7 @@ const composeDerivativeConfig = (
     Object.keys(derivativeFields).forEach((entityName) => {
       if (!allowEntityNames.includes(entityName)) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in derivativeFields of "${suffix}" derivative!`,
+          `Incorrect entityName key: "${entityName}" in derivativeFields of "${derivativeKey}" derivative!`,
         );
       }
     });
@@ -173,7 +173,7 @@ const composeDerivativeConfig = (
           !addedChildFields.includes(fieldName)
         ) {
           throw new TypeError(
-            `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${suffix}" derivative!`,
+            `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
           );
         }
       });
@@ -251,24 +251,24 @@ const composeDerivativeConfig = (
             return item;
           }
 
-          const suffix2 = derivativeFields[rootEntityName][name];
+          const derivativeKey2 = derivativeFields[rootEntityName][name];
 
           const childQuery = array ? 'childEntities' : 'childEntity';
           if (
-            !derivative[suffix2].allow[currentConfig.name].includes(childQuery) &&
+            !derivative[derivativeKey2].allow[currentConfig.name].includes(childQuery) &&
             fieldsObject[name].kind !== 'childFields'
           ) {
             throw new TypeError(
-              `Have to set "${childQuery}" as "allow" for suffix: "${suffix2}" & entity: "${currentConfig.name}"!`,
+              `Have to set "${childQuery}" as "allow" for derivativeKey: "${derivativeKey2}" & entity: "${currentConfig.name}"!`,
             );
           }
 
           const config =
-            store[`${currentConfig.name}${suffix2}`] ||
-            composeDerivativeConfig(derivative[suffix2], currentConfig, generalConfig);
+            store[`${currentConfig.name}${derivativeKey2}`] ||
+            composeDerivativeConfig(derivative[derivativeKey2], currentConfig, generalConfig);
           if (!config) {
             throw new TypeError(
-              `Can not set derivative config for entityName: "${currentConfig.name}" & derivative suffix:"${suffix2}"!`,
+              `Can not set derivative config for entityName: "${currentConfig.name}" & derivative derivativeKey:"${derivativeKey2}"!`,
             );
           }
 

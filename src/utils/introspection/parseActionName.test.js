@@ -88,7 +88,7 @@ describe('parseActionName', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
       Place: ['childEntity'],
@@ -118,15 +118,18 @@ describe('parseActionName', () => {
     const actionType = 'Query';
     const actionName = 'entitiesByUnique';
     const entityName = 'Person';
-    const suffix = 'ForCabinet';
+    const derivativeKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      suffix: 'ForCabinet',
+      derivativeKey: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
+    const result = parseActionName(
+      { actionType, actionName, entityName, derivativeKey },
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -134,15 +137,18 @@ describe('parseActionName', () => {
     const actionType = 'Query';
     const actionName = 'entityCount';
     const entityName = 'Person';
-    const suffix = 'ForCabinet';
+    const derivativeKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
       entityConfig: null,
       baseAction: '',
-      suffix: 'ForCabinet',
+      derivativeKey: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
+    const result = parseActionName(
+      { actionType, actionName, entityName, derivativeKey },
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -150,15 +156,18 @@ describe('parseActionName', () => {
     const actionType = 'Query';
     const actionName = 'getEntity';
     const entityName = 'Person';
-    const suffix = 'ForCabinet';
+    const derivativeKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'custom',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      suffix: 'ForCabinet',
+      derivativeKey: 'ForCabinet',
     };
 
-    const result = parseActionName({ actionType, actionName, entityName, suffix }, generalConfig);
+    const result = parseActionName(
+      { actionType, actionName, entityName, derivativeKey },
+      generalConfig,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -174,7 +183,7 @@ describe('parseActionName', () => {
         generalConfig,
       ),
       baseAction: '',
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
@@ -193,7 +202,7 @@ describe('parseActionName', () => {
         generalConfig,
       ),
       baseAction: 'entitiesByUnique',
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
@@ -208,7 +217,7 @@ describe('parseActionName', () => {
       creationType: 'derivative',
       entityConfig: null,
       baseAction: 'entityCount',
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);

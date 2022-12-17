@@ -473,7 +473,7 @@ type NotFieldyEntityConfigFields = {
 };
 
 export type DerivativeInputs = {
-  suffix: string,
+  derivativeKey: string,
   +allow: {
     // eslint-disable-next-line flowtype/generic-spacing
     [entityName: string]: Array<
@@ -548,9 +548,10 @@ export type GeneralConfig = {
     },
   },
   +derivative?: {
-    // whole derivative name = entityName (baseName) + suffix
-    +[suffix: string]: {
-      +suffix: string,
+    // whole fefault derivative name = entityName (baseName) + derivativeKey
+    // OR compose from derivativeNameSlicePosition entity config attribute (if it's setted)
+    +[derivativeKey: string]: {
+      +derivativeKey: string,
       +allow: {
         // eslint-disable-next-line flowtype/generic-spacing
         [entityName: string]: Array<
@@ -597,10 +598,10 @@ export type GeneralConfig = {
       +addFields?: {
         [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
       },
-      +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
+      +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
     },
   },
-  +derivativeInputs?: { +[suffix: string]: DerivativeInputs },
+  +derivativeInputs?: { +[derivativeKey: string]: DerivativeInputs },
   +enums?: Enums,
   inventory?: Inventory,
 };
@@ -639,7 +640,7 @@ export type Custom = {
 };
 
 export type DerivativeAttributes = {
-  +suffix: string,
+  +derivativeKey: string,
   +allow: {
     // eslint-disable-next-line flowtype/generic-spacing
     [entityName: string]: Array<
@@ -686,7 +687,7 @@ export type DerivativeAttributes = {
   +addFields?: {
     [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
   },
-  +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative suffixes
+  +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
@@ -887,22 +888,21 @@ export type InputCreator = (
 export type VirtualConfigComposer = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
 ) => EntityConfig;
 
 export type ActionAttributes = {
-  actionGeneralName: (suffix?: string) => string,
+  actionGeneralName: (derivativeKey?: string) => string,
   actionType: 'Mutation' | 'Query',
   actionAllowed: (entityConfig: EntityConfig) => boolean,
-  actionName: (baseName: string, suffix?: string) => string,
+  actionName: (baseName: string, derivativeKey?: string) => string,
   inputCreators: Array<InputCreator>,
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
-  actionReturnString: (suffix: string) => (entityConfig: EntityConfig) => string,
+  actionReturnString: (derivativeKey: string) => (entityConfig: EntityConfig) => string,
   actionReturnConfig: (
     entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
-    suffix?: string,
+    derivativeKey?: string,
   ) => EntityConfig | null,
   actionReturnVirtualConfigs?: Array<string>,
   actionDerivativeUpdater?: Function, // (entityName: string, item: { ...DerivativeAttributes }) => void,
@@ -911,7 +911,7 @@ export type ActionAttributes = {
 export type GqlActionData = {
   actionType: string,
   actionName: string,
-  suffix?: string,
+  derivativeKey?: string,
   entityName: string,
   composeOptions: Function,
 };

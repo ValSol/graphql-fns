@@ -5,22 +5,22 @@ import type { ChildQueries } from './flowTypes';
 
 const childQueriesToDerivative = (
   childQueries: ChildQueries,
-  derivativeAttributes: { [suffix: string]: DerivativeAttributes },
-): { [suffix: string]: DerivativeAttributes } => {
-  childQueries.forEach(({ actionName, baseAction, suffix, entityName }) => {
+  derivativeAttributes: { [derivativeKey: string]: DerivativeAttributes },
+): { [derivativeKey: string]: DerivativeAttributes } => {
+  childQueries.forEach(({ actionName, baseAction, derivativeKey, entityName }) => {
     if (actionName === baseAction) return;
 
-    if (!derivativeAttributes[suffix]) {
-      derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign
+    if (!derivativeAttributes[derivativeKey]) {
+      derivativeAttributes[derivativeKey] = { derivativeKey, allow: {} }; // eslint-disable-line no-param-reassign
     }
 
-    if (!derivativeAttributes[suffix].allow[entityName]) {
-      derivativeAttributes[suffix].allow[entityName] = []; // eslint-disable-line no-param-reassign
+    if (!derivativeAttributes[derivativeKey].allow[entityName]) {
+      derivativeAttributes[derivativeKey].allow[entityName] = []; // eslint-disable-line no-param-reassign
     }
 
-    if (!derivativeAttributes[suffix].allow[entityName].includes(baseAction)) {
+    if (!derivativeAttributes[derivativeKey].allow[entityName].includes(baseAction)) {
       // $FlowFixMe
-      derivativeAttributes[suffix].allow[entityName].push(baseAction);
+      derivativeAttributes[derivativeKey].allow[entityName].push(baseAction);
     }
   });
 

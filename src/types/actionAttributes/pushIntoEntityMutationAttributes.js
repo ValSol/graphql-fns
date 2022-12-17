@@ -9,10 +9,10 @@ import createEntityPushPositionsInputType from '../inputs/createEntityPushPositi
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string => `pushIntoEntity${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string => `pushIntoEntity${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `pushInto${baseName}${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `pushInto${baseName}${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
@@ -31,17 +31,19 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createPushIntoEntityInputType(entityConfig)[1]);
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}!`;
+    `${name}${derivativeKey}!`;
 
 const pushIntoEntityMutationAttributes = {
   actionGeneralName,

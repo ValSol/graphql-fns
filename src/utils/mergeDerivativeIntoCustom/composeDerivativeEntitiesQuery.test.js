@@ -64,7 +64,7 @@ describe('composeDerivativeEntitiesQuery', () => {
       NearExample: ['entity', 'entities'],
     },
 
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => addedFields,
       SortExample: () => addedFields,

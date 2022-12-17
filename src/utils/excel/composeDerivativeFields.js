@@ -5,36 +5,36 @@ import type { EmbeddedField, FileField, DerivativeAttributes, FlatField } from '
 type AllFields = $ReadOnlyArray<FlatField | EmbeddedField | FileField>;
 
 type Arg = {
-  suffix: string,
-  derivative?: { +[suffix: string]: DerivativeAttributes },
+  derivativeKey: string,
+  derivative?: { +[derivativeKey: string]: DerivativeAttributes },
   fields: AllFields,
   firstThingName: string,
   fieldType: string,
 };
 
 const composeDerivativeFields = ({
-  suffix,
+  derivativeKey,
   derivative,
   fields,
   firstThingName,
   fieldType,
 }: Arg): AllFields => {
-  if (!suffix) return fields;
+  if (!derivativeKey) return fields;
 
   const fieldNames = fields.map(({ name }) => name);
 
   const filteredFields = fields.filter(({ name }) => {
     // eslint-disable-next-line no-nested-ternary
     const excludeFields = derivative
-      ? derivative[suffix].excludeFields
-        ? derivative[suffix].excludeFields[firstThingName] || []
+      ? derivative[derivativeKey].excludeFields
+        ? derivative[derivativeKey].excludeFields[firstThingName] || []
         : []
       : [];
 
     // eslint-disable-next-line no-nested-ternary
     const includeFields = derivative
-      ? derivative[suffix].includeFields
-        ? derivative[suffix].includeFields[firstThingName] || fieldNames
+      ? derivative[derivativeKey].includeFields
+        ? derivative[derivativeKey].includeFields[firstThingName] || fieldNames
         : fieldNames
       : [];
 
@@ -44,9 +44,9 @@ const composeDerivativeFields = ({
   // eslint-disable-next-line no-nested-ternary
   const addFields = derivative
     ? // eslint-disable-next-line no-nested-ternary
-      derivative[suffix].addFields
-      ? derivative[suffix].addFields[firstThingName]
-        ? derivative[suffix].addFields[firstThingName][fieldType] || []
+      derivative[derivativeKey].addFields
+      ? derivative[derivativeKey].addFields[firstThingName]
+        ? derivative[derivativeKey].addFields[firstThingName][fieldType] || []
         : []
       : []
     : [];
@@ -56,8 +56,8 @@ const composeDerivativeFields = ({
   // eslint-disable-next-line no-nested-ternary
   const freezedFields = derivative
     ? // eslint-disable-next-line no-nested-ternary
-      derivative[suffix].freezedFields
-      ? derivative[suffix].freezedFields[firstThingName] || []
+      derivative[derivativeKey].freezedFields
+      ? derivative[derivativeKey].freezedFields[firstThingName] || []
       : []
     : [];
 
@@ -73,8 +73,8 @@ const composeDerivativeFields = ({
   // eslint-disable-next-line no-nested-ternary
   const unfreezedFields = derivative
     ? // eslint-disable-next-line no-nested-ternary
-      derivative[suffix].unfreezedFields
-      ? derivative[suffix].unfreezedFields[firstThingName] || []
+      derivative[derivativeKey].unfreezedFields
+      ? derivative[derivativeKey].unfreezedFields[firstThingName] || []
       : []
     : [];
 

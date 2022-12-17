@@ -28,15 +28,15 @@ const mergeDerivativeIntoCustom = (
       return prev;
     }, {});
 
-  const Query = Object.keys(derivative).reduce((prev, suffix) => {
-    const { allow } = derivative[suffix];
+  const Query = Object.keys(derivative).reduce((prev, derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
     const allowedMethods = getAllowedMethods(allow);
 
     Object.keys(queryAttributes).forEach((actionName) => {
       if ((!forClientActions.includes(actionName) || !forClient) && allowedMethods[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[queryAttributes[actionName].actionGeneralName(suffix)] = composeCustomAction(
-          derivative[suffix],
+        prev[queryAttributes[actionName].actionGeneralName(derivativeKey)] = composeCustomAction(
+          derivative[derivativeKey],
           queryAttributes[actionName],
         );
       }
@@ -45,15 +45,15 @@ const mergeDerivativeIntoCustom = (
     return prev;
   }, {});
 
-  const Mutation = Object.keys(derivative).reduce((prev, suffix) => {
-    const { allow } = derivative[suffix];
+  const Mutation = Object.keys(derivative).reduce((prev, derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
     const allowedMethods = getAllowedMethods(allow);
 
     Object.keys(mutationAttributes).forEach((actionName) => {
       if (allowedMethods[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[mutationAttributes[actionName].actionGeneralName(suffix)] = composeCustomAction(
-          derivative[suffix],
+        prev[mutationAttributes[actionName].actionGeneralName(derivativeKey)] = composeCustomAction(
+          derivative[derivativeKey],
           mutationAttributes[actionName],
         );
       }

@@ -61,7 +61,7 @@ describe('composeDerivativeEntityCountQuery', () => {
       NearExample: ['entityCount', 'entities'],
     },
 
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => addedFields,
       SortExample: () => addedFields,

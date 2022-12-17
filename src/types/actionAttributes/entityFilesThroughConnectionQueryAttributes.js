@@ -8,10 +8,11 @@ import connectionDerivativeUpdater from '../actionDerivativeUpdaters/connectionD
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `entityFilesThroughConnection${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `entityFilesThroughConnection${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `${baseName}FilesThroughConnection${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `${baseName}FilesThroughConnection${derivativeKey}`;
 
 const inputCreators = [
   createFileWhereInputType,
@@ -50,7 +51,7 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
@@ -60,8 +61,8 @@ const actionReturnConfig = (
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  return suffix
-    ? composeDerivativeConfigByName(suffix, connectionConfig, generalConfig)
+  return derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, connectionConfig, generalConfig)
     : connectionConfig;
 };
 
@@ -70,9 +71,9 @@ const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnecti
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}Connection${suffix}`;
+    `${name}Connection${derivativeKey}`;
 
 const entityFilesThroughConnectionQueryAttributes = {
   actionGeneralName,

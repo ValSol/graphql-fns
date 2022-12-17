@@ -13,23 +13,28 @@ const parseChildQueries = (
     const [baseAction, derivativeThingName] = item.split(':');
 
     if (allEntityConfigs[derivativeThingName]) {
-      return { actionName: baseAction, baseAction, suffix: '', entityName: derivativeThingName };
+      return {
+        actionName: baseAction,
+        baseAction,
+        derivativeKey: '',
+        entityName: derivativeThingName,
+      };
     }
 
     if (derivative) {
-      const suffixes = Object.keys(derivative);
+      const derivativeKeys = Object.keys(derivative);
 
-      for (let i = 0; i < suffixes.length; i += 1) {
-        const suffix = suffixes[i];
+      for (let i = 0; i < derivativeKeys.length; i += 1) {
+        const derivativeKey = derivativeKeys[i];
 
-        if (derivativeThingName.endsWith(suffix)) {
-          const entityName = derivativeThingName.slice(0, -suffix.length);
+        if (derivativeThingName.endsWith(derivativeKey)) {
+          const entityName = derivativeThingName.slice(0, -derivativeKey.length);
 
           if (allEntityConfigs[entityName]) {
             return {
-              actionName: `${baseAction}${suffix}`,
+              actionName: `${baseAction}${derivativeKey}`,
               baseAction,
-              suffix,
+              derivativeKey,
               entityName,
             };
           }

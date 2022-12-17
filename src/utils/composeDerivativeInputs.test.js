@@ -7,7 +7,7 @@ import composeDerivativeInputs from './composeDerivativeInputs';
 describe('composeDerivativeInputs', () => {
   test('compose simple allEntityConfigs', () => {
     const empty: DerivativeInputs = {
-      suffix: '',
+      derivativeKey: '',
       allow: {
         Menu: ['entityWhereOneInput', 'entityUpdateInput'],
         MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
@@ -15,7 +15,7 @@ describe('composeDerivativeInputs', () => {
     };
 
     const ForView: DerivativeInputs = {
-      suffix: 'ForView',
+      derivativeKey: 'ForView',
       allow: {
         Restaurant: ['entityUpdateInput'],
         Post: ['entityCreateInput'],

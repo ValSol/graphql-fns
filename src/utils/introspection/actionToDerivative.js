@@ -6,11 +6,11 @@ import type { ActionToParse, ParsedAction } from './flowTypes';
 const actionToDerivative = (
   actionToParse: ActionToParse,
   parsedAction: ParsedAction,
-  derivativeAttributes: { [suffix: string]: DerivativeAttributes },
+  derivativeAttributes: { [derivativeKey: string]: DerivativeAttributes },
   generalConfig: GeneralConfig,
-): { [suffix: string]: DerivativeAttributes } => {
+): { [derivativeKey: string]: DerivativeAttributes } => {
   const { actionName, entityName } = actionToParse;
-  const { baseAction, creationType, suffix, entityConfig } = parsedAction;
+  const { baseAction, creationType, derivativeKey, entityConfig } = parsedAction;
 
   const { allEntityConfigs } = generalConfig;
 
@@ -18,25 +18,27 @@ const actionToDerivative = (
     return derivativeAttributes;
   }
 
-  const returningThingName = entityConfig ? entityConfig.name.slice(0, -suffix.length) : entityName;
+  const returningThingName = entityConfig
+    ? entityConfig.name.slice(0, -derivativeKey.length)
+    : entityName;
 
   if (!allEntityConfigs[returningThingName]) return derivativeAttributes;
 
-  if (!derivativeAttributes[suffix]) {
-    derivativeAttributes[suffix] = { suffix, allow: {} }; // eslint-disable-line no-param-reassign
+  if (!derivativeAttributes[derivativeKey]) {
+    derivativeAttributes[derivativeKey] = { derivativeKey, allow: {} }; // eslint-disable-line no-param-reassign
   }
 
-  if (!derivativeAttributes[suffix].allow[returningThingName]) {
-    derivativeAttributes[suffix].allow[returningThingName] = []; // eslint-disable-line no-param-reassign
+  if (!derivativeAttributes[derivativeKey].allow[returningThingName]) {
+    derivativeAttributes[derivativeKey].allow[returningThingName] = []; // eslint-disable-line no-param-reassign
   }
 
   if (
     baseAction &&
     baseAction !== actionName &&
-    !derivativeAttributes[suffix].allow[returningThingName].includes(baseAction)
+    !derivativeAttributes[derivativeKey].allow[returningThingName].includes(baseAction)
   ) {
     // $FlowFixMe
-    derivativeAttributes[suffix].allow[returningThingName].push(baseAction);
+    derivativeAttributes[derivativeKey].allow[returningThingName].push(baseAction);
   }
 
   return derivativeAttributes;

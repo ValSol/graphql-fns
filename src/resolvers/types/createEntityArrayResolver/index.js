@@ -30,12 +30,12 @@ const createEntityArrayResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
 
-  const childEntitiesQueryResolver = nameSuffix
+  const childEntitiesQueryResolver = derivativeKey
     ? createCustomResolver(
         'Query',
-        `childEntities${nameSuffix}`,
+        `childEntities${derivativeKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -50,13 +50,13 @@ const createEntityArrayResolver = (
   if (!childEntitiesQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesQueryResolver "${
-        nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
+        derivativeKey ? `childEntities${derivativeKey}` : 'childEntities'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
-  const inventoryChain = nameSuffix
-    ? ['Query', `childEntities${nameSuffix}`, nameRoot]
+  const inventoryChain = derivativeKey
+    ? ['Query', `childEntities${derivativeKey}`, nameRoot]
     : ['Query', 'childEntities', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
@@ -65,7 +65,7 @@ const createEntityArrayResolver = (
     if (!filter) {
       throw new TypeError(
         `Not authorized resolver: "${
-          nameSuffix ? `childEntities${nameSuffix}` : 'childEntities'
+          derivativeKey ? `childEntities${derivativeKey}` : 'childEntities'
         }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
       );
     }
@@ -73,7 +73,7 @@ const createEntityArrayResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${
-          nameSuffix || ''
+          derivativeKey || ''
         }" for entity: "${name}"!`,
       );
     }

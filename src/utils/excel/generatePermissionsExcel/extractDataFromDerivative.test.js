@@ -18,7 +18,7 @@ describe('extractDataFromDerivative util', () => {
           Restaurant: ['entity'],
           Post: ['entity', 'createEntity'],
         },
-        suffix: 'ForEdit',
+        derivativeKey: 'ForEdit',
       },
       ForView: {
         allow: {
@@ -26,7 +26,7 @@ describe('extractDataFromDerivative util', () => {
           Post: ['entity', 'entities'],
           User: ['entity'],
         },
-        suffix: 'ForView',
+        derivativeKey: 'ForView',
       },
     };
 

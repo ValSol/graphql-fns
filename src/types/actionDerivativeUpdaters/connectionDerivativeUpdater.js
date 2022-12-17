@@ -3,7 +3,7 @@
 import type { DerivativeAttributes } from '../../flowTypes';
 
 const connectionDerivativeUpdater = (entityName: string, item: { ...DerivativeAttributes }) => {
-  const { suffix } = item;
+  const { derivativeKey } = item;
 
   const edgeName = `${entityName}Edge`;
 
@@ -22,14 +22,14 @@ const connectionDerivativeUpdater = (entityName: string, item: { ...DerivativeAt
   }
 
   if (!item.derivativeFields[edgeName]) {
-    item.derivativeFields = { ...item.derivativeFields, [edgeName]: { node: suffix } }; // eslint-disable-line no-param-reassign
+    item.derivativeFields = { ...item.derivativeFields, [edgeName]: { node: derivativeKey } }; // eslint-disable-line no-param-reassign
   }
 
   if (!item.derivativeFields[connectionName]) {
     // eslint-disable-next-line no-param-reassign
     item.derivativeFields = {
       ...item.derivativeFields,
-      [connectionName]: { edges: suffix },
+      [connectionName]: { edges: derivativeKey },
     };
   }
 };

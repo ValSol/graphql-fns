@@ -77,7 +77,7 @@ describe('actionToInventory', () => {
   // };
 
   // const ForCatalog: DerivativeAttributes = {
-  //   suffix: 'ForCatalog',
+  //   derivativeKey: 'ForCatalog',
   //   allow: {
   //     Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
   //     Place: ['childEntity'],
@@ -119,7 +119,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      suffix: 'ForCabinet',
+      derivativeKey: 'ForCabinet',
     };
 
     const inventoryByPermissions = {};
@@ -156,7 +156,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Place,
       baseAction: '',
-      suffix: 'ForCabinet',
+      derivativeKey: 'ForCabinet',
     };
 
     const inventoryByPermissions = {

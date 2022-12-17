@@ -6,7 +6,7 @@ import type { InventoryByPermissions } from '../../flowTypes';
 
 const compressInventory = (
   inventoryByPermissions: Object, // InventoryByPermissions,
-  umbrellaInventory: { [suffix: string]: Array<string> },
+  umbrellaInventory: { [permissionName: string]: Array<string> },
 ): InventoryByPermissions => {
   const result = {};
 

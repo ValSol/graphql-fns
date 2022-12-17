@@ -10,11 +10,11 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string =>
-  `deleteFilteredEntitiesReturnScalar${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `deleteFilteredEntitiesReturnScalar${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `deleteFiltered${pluralize(baseName)}ReturnScalar${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `deleteFiltered${pluralize(baseName)}ReturnScalar${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -33,7 +33,7 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
-  suffix?: string, // eslint-disable-line no-unused-vars
+  derivativeKey?: string, // eslint-disable-line no-unused-vars
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
@@ -41,7 +41,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 const actionReturnString =
   (
     // eslint-disable-next-line no-unused-vars
-    suffix: string,
+    derivativeKey: string,
   ): ((entityConfig: EntityConfig) => string) =>
   // eslint-disable-next-line no-unused-vars
   ({ name }) =>

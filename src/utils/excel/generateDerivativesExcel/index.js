@@ -29,8 +29,8 @@ const generateDerivativesExcel = async (
     throw new TypeError(`There is no derivative in generalConfig!`);
   }
 
-  Object.keys(derivative).forEach((suffix) => {
-    const worksheetName = composeWorksheetName(suffix, wb);
+  Object.keys(derivative).forEach((derivativeKey) => {
+    const worksheetName = composeWorksheetName(derivativeKey, wb);
 
     const ws = wb.addWorksheet(worksheetName, {
       views: [{ state: 'frozen', ySplit: 1 }],
@@ -38,10 +38,10 @@ const generateDerivativesExcel = async (
 
     const columns = [];
 
-    Object.keys(derivative[suffix].allow).forEach((firstThingName, i) => {
+    Object.keys(derivative[derivativeKey].allow).forEach((firstThingName, i) => {
       const combinedThingNames = [
         [firstThingName, ''],
-        [`${firstThingName}${suffix}`, suffix],
+        [`${firstThingName}${derivativeKey}`, derivativeKey],
       ];
 
       const columnGroupShift = i * (2 * (fieldAttrCount + 1) + 2);
@@ -56,7 +56,14 @@ const generateDerivativesExcel = async (
         ws,
       });
 
-      showDerivativeActions({ columnGroupShift, columns, derivative, firstThingName, suffix, ws });
+      showDerivativeActions({
+        columnGroupShift,
+        columns,
+        derivative,
+        firstThingName,
+        derivativeKey,
+        ws,
+      });
     });
 
     ws.columns = columns;

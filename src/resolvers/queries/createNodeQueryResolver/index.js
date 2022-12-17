@@ -24,7 +24,7 @@ const createNodeQueryResolver = (
   ): Object => {
     const { id: globalId } = args;
 
-    const { _id: id, entityName, suffix } = fromGlobalId(globalId);
+    const { _id: id, entityName, derivativeKey } = fromGlobalId(globalId);
 
     if (!id) return null;
 
@@ -33,7 +33,7 @@ const createNodeQueryResolver = (
     const inAnyCase = true;
 
     if (entityConfig.type === 'tangibleFile') {
-      const inventoryChain = ['Query', `entityFile${suffix}`, entityName];
+      const inventoryChain = ['Query', `entityFile${derivativeKey}`, entityName];
 
       const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
 
@@ -56,11 +56,11 @@ const createNodeQueryResolver = (
 
       return {
         ...transformAfter(entityFile, entityConfig, null),
-        __typename: `${entityName}${suffix}`,
+        __typename: `${entityName}${derivativeKey}`,
       };
     }
 
-    const inventoryChain = ['Query', `entity${suffix}`, entityName];
+    const inventoryChain = ['Query', `entity${derivativeKey}`, entityName];
 
     const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
 
@@ -75,7 +75,10 @@ const createNodeQueryResolver = (
 
     const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, filter);
 
-    return { ...transformAfter(entity, entityConfig, null), __typename: `${entityName}${suffix}` };
+    return {
+      ...transformAfter(entity, entityConfig, null),
+      __typename: `${entityName}${derivativeKey}`,
+    };
   };
 
   return resolver;

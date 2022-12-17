@@ -27,7 +27,7 @@ describe('composeDerivative', () => {
     ];
 
     const ForView: DerivativeAttributes = {
-      suffix: 'ForView',
+      derivativeKey: 'ForView',
       allow: {
         Restaurant: ['entity', 'entities'],
         Post: ['entity', 'entities'],
@@ -35,7 +35,7 @@ describe('composeDerivative', () => {
     };
 
     const ForApprove: DerivativeAttributes = {
-      suffix: 'ForApprove',
+      derivativeKey: 'ForApprove',
       allow: {
         Restaurant: ['entity', 'entities'],
         Post: ['entity', 'entities'],
@@ -80,7 +80,7 @@ describe('composeDerivative', () => {
 
   test('compose derivatives with additional virtual configs', () => {
     const ForView: DerivativeAttributes = {
-      suffix: 'ForView',
+      derivativeKey: 'ForView',
       allow: {
         Restaurant: ['entity', 'entities'],
         Post: ['entity', 'entities'],
@@ -91,7 +91,7 @@ describe('composeDerivative', () => {
       allow: {
         Example: ['entitiesThroughConnection'],
       },
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
       excludeFields: { Example: ['anotherField'] },
     };
 
@@ -104,7 +104,7 @@ describe('composeDerivative', () => {
         ExampleEdge: [],
       },
 
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
 
       excludeFields: { Example: ['anotherField'] },
 

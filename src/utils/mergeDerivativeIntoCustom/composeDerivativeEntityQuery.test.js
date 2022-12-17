@@ -20,7 +20,7 @@ describe('composeDerivativeEntityQuery', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['entity', 'entities'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     Example: {
       floatFields: [{ name: 'floatField' }],
     },

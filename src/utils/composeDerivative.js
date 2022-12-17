@@ -11,22 +11,24 @@ const actionGenericNames = Object.keys(actionAttributes);
 
 const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes>): Result => {
   const derivativeKeys = derivativeAttributesArray.reduce((prev, item) => {
-    const { suffix } = item;
-    if (!suffix) {
-      throw new TypeError('Derivative attributes must have suffix!');
+    const { derivativeKey } = item;
+    if (!derivativeKey) {
+      throw new TypeError('Derivative attributes must have derivativeKey!');
     }
-    if (prev.includes(suffix)) {
-      throw new TypeError(`Unique derivative attributes suffix: "${suffix}" is used twice!`);
+    if (prev.includes(derivativeKey)) {
+      throw new TypeError(
+        `Unique derivative attributes derivativeKey: "${derivativeKey}" is used twice!`,
+      );
     }
 
-    prev.push(suffix);
+    prev.push(derivativeKey);
 
     return prev;
   }, []);
 
   // *** check derivativeFields correctness
 
-  derivativeAttributesArray.forEach(({ allow, derivativeFields, suffix }) => {
+  derivativeAttributesArray.forEach(({ allow, derivativeFields, derivativeKey }) => {
     Object.keys(allow).forEach((key) => {
       allow[key].forEach((actionGenericName) => {
         if (!actionGenericNames.includes(actionGenericName)) {
@@ -41,7 +43,7 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
         Object.keys(entityDerivativeFields).forEach((fieldName) => {
           if (!derivativeKeys.includes(entityDerivativeFields[fieldName])) {
             throw new TypeError(
-              `Incorrect derivative suffix: "${entityDerivativeFields[fieldName]}" for derivativeField: "${fieldName}" for entityName: "${entityName}" in derivative: "${suffix}"`,
+              `Incorrect derivative derivativeKey: "${entityDerivativeFields[fieldName]}" for derivativeField: "${fieldName}" for entityName: "${entityName}" in derivative: "${derivativeKey}"`,
             );
           }
         });
@@ -52,7 +54,7 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
   // ***
 
   const result = derivativeAttributesArray.reduce((prev, rawItem) => {
-    const { allow, suffix } = rawItem;
+    const { allow, derivativeKey } = rawItem;
 
     const item = { ...rawItem };
 
@@ -63,7 +65,7 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
       });
     });
 
-    prev[suffix] = item; // eslint-disable-line no-param-reassign
+    prev[derivativeKey] = item; // eslint-disable-line no-param-reassign
 
     return prev;
   }, {});

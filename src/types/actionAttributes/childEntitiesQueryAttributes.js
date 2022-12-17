@@ -13,10 +13,10 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `childEntities${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string => `childEntities${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `child${pluralize(baseName)}${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `child${pluralize(baseName)}${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -39,16 +39,18 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (): boolean => false;
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `[${name}${suffix}!]!`;
+    `[${name}${derivativeKey}!]!`;
 
 const childEntitiesQueryAttributes = {
   actionGeneralName,

@@ -21,7 +21,7 @@ describe('composeDerivativeUpdateEntityMutation', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['updateEntity'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     Example: {
       floatFields: [{ name: 'floatField' }],
     },

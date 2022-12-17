@@ -3622,7 +3622,7 @@ type Query {
 
     const ForCatalogDerivative: DerivativeAttributes = {
       allow: { Example: ['entities', 'updateEntity'] },
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -3925,7 +3925,7 @@ type Mutation {
     const custom = { Mutation: { updateEntityWithChildren } };
     const derivativeInputs = {
       '': {
-        suffix: '',
+        derivativeKey: '',
         allow: {
           Menu: ['entityWhereOneInput', 'entityUpdateInput'],
           MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
@@ -4160,7 +4160,7 @@ type Mutation {
 
     const ForCatalog: DerivativeAttributes = {
       allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
       derivativeFields: {
         ExampleEdge: { node: 'ForCatalog' },
         ExampleConnection: { edges: 'ForCatalog' },

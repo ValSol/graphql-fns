@@ -6,10 +6,11 @@ import createFileWhereInputType from '../inputs/createFileWhereInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string => `entityFileCount${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `entityFileCount${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `${baseName}FileCount${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `${baseName}FileCount${derivativeKey}`;
 
 const inputCreators = [createFileWhereInputType];
 
@@ -20,7 +21,7 @@ const argTypes = [(name: string): string => 'FileWhereInput']; // eslint-disable
 const actionReturnConfig = (
   entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
-  suffix?: string, // eslint-disable-line no-unused-vars
+  derivativeKey?: string, // eslint-disable-line no-unused-vars
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
@@ -29,7 +30,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
 const actionReturnString =
   (
     // eslint-disable-next-line no-unused-vars
-    suffix: string,
+    derivativeKey: string,
   ): ((entityConfig: EntityConfig) => string) =>
   // eslint-disable-next-line no-unused-vars
   ({ name }) =>

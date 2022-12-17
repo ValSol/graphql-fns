@@ -30,12 +30,12 @@ const createEntityConnectionResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
 
-  const childEntitiesThroughConnectionQueryResolver = nameSuffix
+  const childEntitiesThroughConnectionQueryResolver = derivativeKey
     ? createCustomResolver(
         'Query',
-        `childEntitiesThroughConnection${nameSuffix}`,
+        `childEntitiesThroughConnection${derivativeKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -54,15 +54,15 @@ const createEntityConnectionResolver = (
   if (!childEntitiesThroughConnectionQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesThroughConnectionQueryResolver "${
-        nameSuffix
-          ? `childEntitiesThroughConnection${nameSuffix}`
+        derivativeKey
+          ? `childEntitiesThroughConnection${derivativeKey}`
           : 'childEntitiesThroughConnection'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
-  const inventoryChain = nameSuffix
-    ? ['Query', `childEntitiesThroughConnection${nameSuffix}`, nameRoot]
+  const inventoryChain = derivativeKey
+    ? ['Query', `childEntitiesThroughConnection${derivativeKey}`, nameRoot]
     : ['Query', 'childEntitiesThroughConnection', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
@@ -71,8 +71,8 @@ const createEntityConnectionResolver = (
     if (!filter) {
       throw new TypeError(
         `Not authorized resolver: "${
-          nameSuffix
-            ? `childEntitiesThroughConnection${nameSuffix}`
+          derivativeKey
+            ? `childEntitiesThroughConnection${derivativeKey}`
             : 'childEntitiesThroughConnection'
         }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
       );
@@ -81,7 +81,7 @@ const createEntityConnectionResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntitiesThroughConnection${
-          nameSuffix || ''
+          derivativeKey || ''
         }" for entity: "${name}"!`,
       );
     }

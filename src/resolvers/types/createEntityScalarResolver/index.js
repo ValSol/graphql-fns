@@ -20,12 +20,12 @@ const createEntityScalarResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, suffix: nameSuffix } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
 
-  const childEntityQueryResolver = nameSuffix
+  const childEntityQueryResolver = derivativeKey
     ? createCustomResolver(
         'Query',
-        `childEntity${nameSuffix}`,
+        `childEntity${derivativeKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -40,13 +40,13 @@ const createEntityScalarResolver = (
   if (!childEntityQueryResolver) {
     throw new TypeError(
       `Not defined childEntityQueryResolver "${
-        nameSuffix ? `childEntity${nameSuffix}` : 'childEntity'
-      }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
+        derivativeKey ? `childEntity${derivativeKey}` : 'childEntity'
+      }" for entity: "${name}"!`,
     );
   }
 
-  const inventoryChain = nameSuffix
-    ? ['Query', `childEntity${nameSuffix}`, nameRoot]
+  const inventoryChain = derivativeKey
+    ? ['Query', `childEntity${derivativeKey}`, nameRoot]
     : ['Query', 'childEntity', name];
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
@@ -55,14 +55,16 @@ const createEntityScalarResolver = (
     if (!filter) {
       throw new TypeError(
         `Not authorized resolver: "${
-          nameSuffix ? `childEntity${nameSuffix}` : 'childEntity'
-        }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
+          derivativeKey ? `childEntity${derivativeKey}` : 'childEntity'
+        }" for entity: "${name}"!`,
       );
     }
 
     if (!parent) {
       throw new TypeError(
-        `Got undefined parent in resolver: "childEntity${nameSuffix || ''}" for entity: "${name}"!`,
+        `Got undefined parent in resolver: "childEntity${
+          derivativeKey || ''
+        }" for entity: "${name}"!`,
       );
     }
     const { fieldName } = info;

@@ -77,7 +77,7 @@ describe('parseChildQueries', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
       Place: ['childEntity'],
@@ -111,13 +111,13 @@ describe('parseChildQueries', () => {
       {
         actionName: 'childEntitiesForCatalog',
         baseAction: 'childEntities',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Person',
       },
       {
         actionName: 'childEntityForCatalog',
         baseAction: 'childEntity',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Place',
       },
     ];

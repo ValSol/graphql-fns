@@ -7,12 +7,14 @@ const childQueriesToInventory = (
   childQueries: ChildQueries,
   parsedAction: ParsedAction,
   inventoryByPermissions: Object, // InventoryByPermissions,
-  suffixToPermission: { [suffix: string]: string },
+  derivativeKeyToPermission: { [derivativeKey: string]: string },
 ): InventoryByPermissions => {
-  const { suffix: defaultSuffix } = parsedAction;
+  const { derivativeKey: defaultDerivativeKey } = parsedAction;
 
-  childQueries.forEach(({ actionName, suffix, entityName }) => {
-    const permission = suffix ? suffixToPermission[suffix] : suffixToPermission[defaultSuffix];
+  childQueries.forEach(({ actionName, derivativeKey, entityName }) => {
+    const permission = derivativeKey
+      ? derivativeKeyToPermission[derivativeKey]
+      : derivativeKeyToPermission[defaultDerivativeKey];
 
     const inventory1 = inventoryByPermissions[permission];
     if (!inventory1) {

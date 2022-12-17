@@ -11,10 +11,11 @@ import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneT
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string => `copyManyEntities${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `copyManyEntities${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `copyMany${pluralize(baseName)}${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `copyMany${pluralize(baseName)}${derivativeKey}`;
 
 const inputCreators = [
   createEntityCopyWhereOnesInputType,
@@ -33,17 +34,19 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createEntityCopyWhereOnesInputType(entityConfig)[1]);
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `[${name}${suffix}!]!`;
+    `[${name}${derivativeKey}!]!`;
 
 const copyManyEntitiesMutationAttributes = {
   actionGeneralName,

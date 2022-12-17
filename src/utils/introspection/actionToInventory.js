@@ -7,12 +7,12 @@ const actionToInventory = (
   actionToParse: ActionToParse,
   parsedAction: ParsedAction,
   inventoryByPermissions: Object, // InventoryByPermissions,
-  suffixToPermission: { [suffix: string]: string },
+  derivativeKeyToPermission: { [derivativeKey: string]: string },
 ): InventoryByPermissions => {
   const { actionType, actionName, entityName } = actionToParse;
-  const { suffix } = parsedAction;
+  const { derivativeKey } = parsedAction;
 
-  const permission = suffixToPermission[suffix];
+  const permission = derivativeKeyToPermission[derivativeKey];
 
   if (!inventoryByPermissions[permission]) {
     inventoryByPermissions[permission] = { name: permission }; // eslint-disable-line no-param-reassign

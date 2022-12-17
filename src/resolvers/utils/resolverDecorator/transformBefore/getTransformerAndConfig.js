@@ -50,7 +50,7 @@ const getTransformerAndConfig = (
       }
     } else {
       try {
-        const { root: entityName, suffix: derivativeKey } = parseEntityName(
+        const { root: entityName, derivativeKey } = parseEntityName(
           possibleEntityName,
           generalConfig,
         );

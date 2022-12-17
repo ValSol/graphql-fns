@@ -50,11 +50,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   // 2. generate derivative objects' signatures
 
-  Object.keys(derivative || {}).reduce((prev, suffix) => {
-    const { allow } = derivative[suffix];
+  Object.keys(derivative || {}).reduce((prev, derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
     Object.keys(allow).forEach((entityName) => {
       const derivativeConfig = composeDerivativeConfigByName(
-        suffix,
+        derivativeKey,
         allEntityConfigs[entityName],
         generalConfig,
       );

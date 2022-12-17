@@ -13,20 +13,28 @@ import parseActionName from './parseActionName';
 type Arg1 = {
   ...ParseActionArgs,
   generalConfig: GeneralConfig,
-  suffixToPermission: { [suffix: string]: string },
+  derivativeKeyToPermission: { [derivativeKey: string]: string },
 };
 
 const parseAction = (
-  { actionType, actionName, generalConfig, options, suffix, suffixToPermission, entityName }: Arg1,
+  {
+    actionType,
+    actionName,
+    generalConfig,
+    options,
+    derivativeKey,
+    derivativeKeyToPermission,
+    entityName,
+  }: Arg1,
   { derivativeAttributes, inventoryByPermissions, maxShift }: ParseActionResult,
 ): ParseActionResult => {
-  const actionToParse = { actionType, actionName, entityName, suffix };
+  const actionToParse = { actionType, actionName, entityName, derivativeKey };
 
   const parsedAction = parseActionName(actionToParse, generalConfig);
 
   actionToDerivative(actionToParse, parsedAction, derivativeAttributes, generalConfig);
 
-  actionToInventory(actionToParse, parsedAction, inventoryByPermissions, suffixToPermission);
+  actionToInventory(actionToParse, parsedAction, inventoryByPermissions, derivativeKeyToPermission);
 
   if (!parsedAction.entityConfig) {
     return { inventoryByPermissions, derivativeAttributes, maxShift };
@@ -40,7 +48,12 @@ const parseAction = (
 
   childQueriesToDerivative(childQueries, derivativeAttributes);
 
-  childQueriesToInventory(childQueries, parsedAction, inventoryByPermissions, suffixToPermission);
+  childQueriesToInventory(
+    childQueries,
+    parsedAction,
+    inventoryByPermissions,
+    derivativeKeyToPermission,
+  );
 
   return {
     inventoryByPermissions,

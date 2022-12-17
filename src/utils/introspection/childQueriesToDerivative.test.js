@@ -9,19 +9,19 @@ describe('childQueriesToDerivative', () => {
       {
         actionName: 'childentitiesForCatalog',
         baseAction: 'childEntities',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Person',
       },
       {
         actionName: 'childEntity',
         baseAction: 'childEntity',
-        suffix: '',
+        derivativeKey: '',
         entityName: 'Country',
       },
       {
         actionName: 'childThingForCatalog',
         baseAction: 'childEntity',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Place',
       },
     ];
@@ -30,7 +30,7 @@ describe('childQueriesToDerivative', () => {
 
     const expectedResult = {
       ForCatalog: {
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         allow: {
           Person: ['childEntities'],
           Place: ['childEntity'],

@@ -10,10 +10,11 @@ import createEntityReorderUploadedInputType from '../inputs/createEntityReorderU
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string => `uploadFilesToEntity${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `uploadFilesToEntity${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `uploadFilesTo${baseName}${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `uploadFilesTo${baseName}${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
@@ -40,17 +41,19 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createFilesOfEntityOptionsInputType(entityConfig)[1]); // eslint-disable-line no-unused-vars
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}!`;
+    `${name}${derivativeKey}!`;
 
 const uploadFilesToEntityMutationAttributes = {
   actionGeneralName,

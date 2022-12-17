@@ -13,11 +13,11 @@ import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDele
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string =>
-  `deleteFilteredEntitiesWithChildren${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `deleteFilteredEntitiesWithChildren${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `deleteFiltered${pluralize(baseName)}WithChildren${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `deleteFiltered${pluralize(baseName)}WithChildren${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -38,9 +38,11 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' &&
@@ -49,9 +51,9 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
   );
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `[${name}${suffix}!]!`;
+    `[${name}${derivativeKey}!]!`;
 
 const deleteFilteredEntitiesWithChildrenMutationAttributes = {
   actionGeneralName,

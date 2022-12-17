@@ -6,10 +6,11 @@ import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigBy
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (suffix?: string = ''): string => `uploadEntityFiles${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `uploadEntityFiles${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `upload${baseName}Files${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `upload${baseName}Files${derivativeKey}`;
 
 const inputCreators = [
   (): [string, string, { [inputSpecificName: string]: [InputCreator, EntityConfig] }] => [
@@ -34,17 +35,19 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig =>
-  suffix ? composeDerivativeConfigByName(suffix, entityConfig, generalConfig) : entityConfig;
+  derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'tangibleFile');
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `[${name}${suffix}!]!`;
+    `[${name}${derivativeKey}!]!`;
 
 const uploadEntityFilesMutationAttributes = {
   actionGeneralName,

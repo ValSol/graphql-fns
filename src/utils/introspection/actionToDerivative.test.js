@@ -78,7 +78,7 @@ describe('actionToDerivative', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
       Place: ['childEntity'],
@@ -116,14 +116,14 @@ describe('actionToDerivative', () => {
       creationType: 'derivative',
       entityConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
       baseAction: 'entitiesByUnique',
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
     };
 
     const derivativeAttributes = {};
 
     const expectedResult = {
       ForCatalog: {
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         allow: {
           Person: ['entitiesByUnique'],
         },
@@ -151,12 +151,12 @@ describe('actionToDerivative', () => {
       creationType: 'derivative',
       entityConfig: composeDerivativeConfigByName('ForCatalog', personConfig, generalConfig),
       baseAction: 'entities',
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
     };
 
     const derivativeAttributes = {
       ForCatalog: {
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         allow: {
           Person: ['entitiesByUnique'],
         },
@@ -165,7 +165,7 @@ describe('actionToDerivative', () => {
 
     const expectedResult = {
       ForCatalog: {
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         allow: {
           Person: ['entitiesByUnique', 'entities'],
         },

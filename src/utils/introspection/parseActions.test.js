@@ -88,7 +88,7 @@ describe('parseActions', () => {
   };
 
   const ForCatalog: DerivativeAttributes = {
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
       Place: ['childEntity'],
@@ -114,7 +114,7 @@ describe('parseActions', () => {
 
   const generalConfig = { allEntityConfigs, custom, derivative };
 
-  const suffixToPermission = { ForCatalog: 'insider', ForView: '' };
+  const derivativeKeyToPermission = { ForCatalog: 'insider', ForView: '' };
 
   test('should return result', () => {
     const args = [
@@ -129,7 +129,7 @@ describe('parseActions', () => {
         actionName: 'entitiesByUnique',
         entityName: 'Person',
         options: { shift: 0, depth: 1 },
-        suffix: 'ForView',
+        derivativeKey: 'ForView',
       },
     ];
 
@@ -141,7 +141,7 @@ describe('parseActions', () => {
             Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
             Place: ['childEntity'],
           },
-          suffix: 'ForCatalog',
+          derivativeKey: 'ForCatalog',
         },
       },
       inventoryByPermissions: {
@@ -169,7 +169,7 @@ describe('parseActions', () => {
       maxShift: 1,
     };
 
-    const result = parseActions(args, suffixToPermission, generalConfig);
+    const result = parseActions(args, derivativeKeyToPermission, generalConfig);
     expect(result).toEqual(expectedResult);
   });
 });

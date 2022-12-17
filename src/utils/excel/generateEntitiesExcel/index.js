@@ -44,7 +44,7 @@ const generateEntitiesExcel = async (
       views: [{ state: 'frozen', xSplit: fieldAttrCount + 1, ySplit: 1 }],
     });
 
-    const thingNamesWithSuffixes = derivative
+    const thingNamesWithDerivativeKeys = derivative
       ? Object.keys(derivative)
           .filter((key) => derivative[key].allow[firstThingName])
           .map((key) => [`${firstThingName}${key}`, key])
@@ -52,7 +52,7 @@ const generateEntitiesExcel = async (
 
     const wrappedThingNames = thingNamesCohort.map((entityName) => [entityName, '']);
 
-    const combinedThingNames = [...wrappedThingNames, ...thingNamesWithSuffixes];
+    const combinedThingNames = [...wrappedThingNames, ...thingNamesWithDerivativeKeys];
 
     const columns = [];
     const columnGroupShift = 0;

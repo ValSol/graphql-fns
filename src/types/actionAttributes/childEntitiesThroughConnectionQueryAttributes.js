@@ -13,11 +13,11 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (suffix?: string = ''): string =>
-  `childEntitiesThroughConnection${suffix}`;
+const actionGeneralName = (derivativeKey?: string = ''): string =>
+  `childEntitiesThroughConnection${derivativeKey}`;
 
-const actionName = (baseName: string, suffix?: string = ''): string =>
-  `child${pluralize(baseName)}ThroughConnection${suffix}`;
+const actionName = (baseName: string, derivativeKey?: string = ''): string =>
+  `child${pluralize(baseName)}ThroughConnection${derivativeKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -62,7 +62,7 @@ const argTypes = [
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  suffix?: string,
+  derivativeKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
@@ -72,8 +72,8 @@ const actionReturnConfig = (
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  return suffix
-    ? composeDerivativeConfigByName(suffix, connectionConfig, generalConfig)
+  return derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, connectionConfig, generalConfig)
     : connectionConfig;
 };
 
@@ -82,9 +82,9 @@ const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnecti
 const actionAllowed = (): boolean => false;
 
 const actionReturnString =
-  (suffix: string): ((entityConfig: EntityConfig) => string) =>
+  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
   ({ name }) =>
-    `${name}${suffix}Connection`;
+    `${name}${derivativeKey}Connection`;
 
 const childEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,

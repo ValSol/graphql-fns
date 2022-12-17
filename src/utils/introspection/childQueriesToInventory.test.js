@@ -14,13 +14,13 @@ describe('childQueriesToInventory', () => {
       {
         actionName: 'childentitiesForCatalog',
         baseAction: 'childEntities',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Person',
       },
       {
         actionName: 'childThingForCatalog',
         baseAction: 'childEntity',
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         entityName: 'Place',
       },
     ];
@@ -29,7 +29,7 @@ describe('childQueriesToInventory', () => {
       creationType: 'derivative',
       entityConfig: { name: 'Person', type: 'tangible' },
       baseAction: 'entitiesByUnique',
-      suffix: 'ForView',
+      derivativeKey: 'ForView',
     };
 
     const inventoryByPermissions = {};
@@ -56,18 +56,18 @@ describe('childQueriesToInventory', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return inventoryByPermissions for childQueries without suffix', () => {
+  test('have to return inventoryByPermissions for childQueries without derivativeKey', () => {
     const childQueries = [
       {
         actionName: 'childEntities',
         baseAction: 'childEntities',
-        suffix: '',
+        derivativeKey: '',
         entityName: 'Person',
       },
       {
         actionName: 'childEntity',
         baseAction: 'childEntity',
-        suffix: '',
+        derivativeKey: '',
         entityName: 'Place',
       },
     ];
@@ -76,7 +76,7 @@ describe('childQueriesToInventory', () => {
       creationType: 'standard',
       entityConfig: { name: 'Person', type: 'tangible' },
       baseAction: '',
-      suffix: 'ForView',
+      derivativeKey: 'ForView',
     };
 
     const inventoryByPermissions = {};

@@ -11,20 +11,20 @@ export type ActionToParse = {
   actionType: string, //  'Query' | 'Mutation',
   actionName: string,
   entityName: string,
-  suffix?: string,
+  derivativeKey?: string,
 };
 
 export type ParsedAction = {
   creationType: 'standard' | 'custom' | 'derivative',
   entityConfig: EntityConfig | null,
   baseAction: string,
-  suffix: string,
+  derivativeKey: string,
 };
 
 export type ChildQueries = Array<{
   actionName: string,
   baseAction: string,
-  suffix: string,
+  derivativeKey: string,
   entityName: string,
 }>;
 
@@ -32,12 +32,12 @@ export type ParseActionArgs = {
   actionType: 'Query' | 'Mutation',
   actionName: string,
   options: ClientOptions,
-  suffix?: string,
+  derivativeKey?: string,
   entityName: string,
 };
 
 export type ParseActionResult = {
   inventoryByPermissions: InventoryByPermissions,
-  derivativeAttributes: { [suffix: string]: DerivativeAttributes },
+  derivativeAttributes: { [derivativeKey: string]: DerivativeAttributes },
   maxShift: number,
 };

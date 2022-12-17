@@ -24,7 +24,7 @@ describe('composeDerivativeCreateManyEntitysMutation', () => {
   };
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['createManyEntities'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => ({
         floatFields: [{ name: 'floatField' }],

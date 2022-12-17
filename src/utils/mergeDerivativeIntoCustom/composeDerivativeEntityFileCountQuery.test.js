@@ -21,7 +21,7 @@ describe('composeDerivativeEntityFileCountQuery', () => {
 
   const ForCatalog: DerivativeAttributes = {
     allow: { TangiblePhoto: ['entityFileCount'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     TangiblePhoto: {
       floatFields: [{ name: 'floatField' }],
     },

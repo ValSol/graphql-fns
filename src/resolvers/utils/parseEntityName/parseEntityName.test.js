@@ -31,7 +31,7 @@ describe('parseEntityName', () => {
 
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['entity', 'entities'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     addFields: {
       Example: () => ({
         floatFields: [{ name: 'floatField' }],
@@ -48,15 +48,15 @@ describe('parseEntityName', () => {
   test('should return only root', () => {
     const result = parseEntityName('Example', generalConfig);
 
-    const expectedResult = { root: 'Example', suffix: '' };
+    const expectedResult = { root: 'Example', derivativeKey: '' };
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return root & suffix', () => {
+  test('should return root & derivativeKey', () => {
     const result = parseEntityName('ExampleForCatalog', generalConfig);
 
-    const expectedResult = { root: 'Example', suffix: 'ForCatalog' };
+    const expectedResult = { root: 'Example', derivativeKey: 'ForCatalog' };
 
     expect(result).toEqual(expectedResult);
   });

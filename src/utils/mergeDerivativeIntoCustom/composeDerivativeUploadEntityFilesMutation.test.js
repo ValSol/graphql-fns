@@ -23,7 +23,7 @@ describe('composeDerivativeUploadEntityFilesMutation', () => {
 
   const ForCatalog: DerivativeAttributes = {
     allow: { TangibleImage: ['uploadEntityFiles'] },
-    suffix: 'ForCatalog',
+    derivativeKey: 'ForCatalog',
     Example: {
       floatFields: [{ name: 'floatField' }],
     },

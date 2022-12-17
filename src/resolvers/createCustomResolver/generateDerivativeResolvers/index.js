@@ -28,28 +28,34 @@ const generateDerivativeResolvers = (
 
   if (!derivative) return null;
 
-  const Query = Object.keys(derivative).reduce((prev, suffix) => {
-    const { allow } = derivative[suffix];
+  const Query = Object.keys(derivative).reduce((prev, derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
     const allowedActions = getAllowedActions(allow);
 
     Object.keys(queries).forEach((actionName) => {
       if (allowedActions[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[`${actionName}${suffix}`] = createResolverCreator(actionName, queries[actionName]);
+        prev[`${actionName}${derivativeKey}`] = createResolverCreator(
+          actionName,
+          queries[actionName],
+        );
       }
     });
 
     return prev;
   }, {});
 
-  const Mutation = Object.keys(derivative).reduce((prev, suffix) => {
-    const { allow } = derivative[suffix];
+  const Mutation = Object.keys(derivative).reduce((prev, derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
     const allowedActions = getAllowedActions(allow);
 
     Object.keys(mutations).forEach((actionName) => {
       if (allowedActions[actionName]) {
         // eslint-disable-next-line no-param-reassign
-        prev[`${actionName}${suffix}`] = createResolverCreator(actionName, mutations[actionName]);
+        prev[`${actionName}${derivativeKey}`] = createResolverCreator(
+          actionName,
+          mutations[actionName],
+        );
       }
     });
 

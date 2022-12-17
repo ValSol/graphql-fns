@@ -36,7 +36,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with included field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         includeFields: { Example: ['anotherField'] },
         addFields: {
           Example: {
@@ -74,7 +74,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with freezed field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         freezedFields: { Example: ['textField'] },
       };
 
@@ -108,7 +108,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with unfreezed field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         unfreezedFields: { Example: ['textField'] },
       };
 
@@ -142,7 +142,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with excluded field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
           Example: {
@@ -180,7 +180,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with added field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
           Example: {
@@ -218,7 +218,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with added field with the same name', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
           Example: {
@@ -253,7 +253,7 @@ describe('composeDerivativeConfig', () => {
     test('should return correct derivative config with added relational field', () => {
       const ForCatalog: DerivativeAttributes = {
         allow: { Example: ['entity', 'entities'] },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         excludeFields: { Example: ['anotherField'] },
         addFields: {
           Example: {
@@ -308,7 +308,7 @@ describe('composeDerivativeConfig', () => {
     };
     const ForCatalog: DerivativeAttributes = {
       allow: { Example: ['entity', 'entities'] },
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
       addFields: {
         Example: {
           floatFields: [{ name: 'anotherField' }],
@@ -356,7 +356,7 @@ describe('composeDerivativeConfig', () => {
           TextExample: ['entity', 'childEntities'],
           RelationalExample: ['entity', 'childEntities'],
         },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         derivativeFields: { RelationalExample: { relationalField: 'ForCatalog' } },
       };
 
@@ -417,7 +417,7 @@ describe('composeDerivativeConfig', () => {
           TextExample2: ['entity', 'childEntities'],
           RelationalExample2: ['entity', 'childEntities'],
         },
-        suffix: 'ForCatalog',
+        derivativeKey: 'ForCatalog',
         addFields: {
           RelationalExample2: {
             relationalFields: [
@@ -509,7 +509,7 @@ describe('composeDerivativeConfig', () => {
         Example2Connection: [],
         Example2Edge: [],
       },
-      suffix: 'ForCatalog',
+      derivativeKey: 'ForCatalog',
       excludeFields: { Example2: ['anotherField'] },
       derivativeFields: {
         Example2Edge: { node: 'ForCatalog' },

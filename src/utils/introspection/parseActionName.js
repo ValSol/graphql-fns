@@ -13,7 +13,7 @@ const toOtherType = {
 const prohibitedForRootActions = ['childEntity', 'childEntities'];
 
 const parseAction = (
-  { actionType, actionName, entityName, suffix }: ActionToParse,
+  { actionType, actionName, entityName, derivativeKey }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
   const { allEntityConfigs, custom, derivative } = generalConfig;
@@ -35,9 +35,9 @@ const parseAction = (
       );
     }
 
-    if (!suffix) {
+    if (!derivativeKey) {
       throw new TypeError(
-        `Not setted suffix for action "${actionName}" & entity: "${entityName}"!`,
+        `Not setted derivativeKey for action "${actionName}" & entity: "${entityName}"!`,
       );
     }
 
@@ -47,7 +47,7 @@ const parseAction = (
       creationType: 'standard',
       entityConfig,
       baseAction: '',
-      suffix,
+      derivativeKey,
     };
   }
 
@@ -57,33 +57,33 @@ const parseAction = (
 
       const entityConfig = signatureMethods.config(allEntityConfigs[entityName], generalConfig);
 
-      let calculatedSuffix = '';
+      let calculatedDerivativeKey = '';
 
       if (entityConfig && derivative && !allEntityConfigs[entityConfig.name]) {
         const { name } = entityConfig;
-        const suffixes = Object.keys(derivative);
+        const derivativeKeys = Object.keys(derivative);
 
-        for (let i = 0; i < suffixes.length; i += 1) {
-          const currentSuffix = suffixes[i];
-          if (name.endsWith(currentSuffix)) {
-            const baseName = name.slice(0, -currentSuffix.length);
+        for (let i = 0; i < derivativeKeys.length; i += 1) {
+          const currentDerivativeKey = derivativeKeys[i];
+          if (name.endsWith(currentDerivativeKey)) {
+            const baseName = name.slice(0, -currentDerivativeKey.length);
             if (allEntityConfigs[baseName]) {
-              calculatedSuffix = currentSuffix;
+              calculatedDerivativeKey = currentDerivativeKey;
               break;
             }
           }
         }
       }
 
-      if (calculatedSuffix && suffix && calculatedSuffix !== suffix) {
+      if (calculatedDerivativeKey && derivativeKey && calculatedDerivativeKey !== derivativeKey) {
         throw new TypeError(
-          `Setted suffix: "${suffix}" not equal to calculated suffix "${calculatedSuffix}" for action "${actionName}" & entity: "${entityName}"!`,
+          `Setted derivativeKey: "${derivativeKey}" not equal to calculated derivativeKey "${calculatedDerivativeKey}" for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
-      if (!calculatedSuffix && !suffix) {
+      if (!calculatedDerivativeKey && !derivativeKey) {
         throw new TypeError(
-          `Not setted suffix for action "${actionName}" & entity: "${entityName}"!`,
+          `Not setted derivativeKey for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
@@ -91,7 +91,7 @@ const parseAction = (
         creationType: 'custom',
         entityConfig,
         baseAction: '',
-        suffix: calculatedSuffix || suffix || '', // last || '' added to prevent flowjs error
+        derivativeKey: calculatedDerivativeKey || derivativeKey || '', // last || '' added to prevent flowjs error
       };
     }
 
@@ -103,13 +103,13 @@ const parseAction = (
   }
 
   if (derivative) {
-    const suffixes = Object.keys(derivative);
+    const derivativeKeys = Object.keys(derivative);
 
-    for (let i = 0; i < suffixes.length; i += 1) {
-      const currentSuffix = suffixes[i];
+    for (let i = 0; i < derivativeKeys.length; i += 1) {
+      const currentDerivativeKey = derivativeKeys[i];
 
-      if (actionName.endsWith(currentSuffix)) {
-        const baseAction = actionName.slice(0, -currentSuffix.length);
+      if (actionName.endsWith(currentDerivativeKey)) {
+        const baseAction = actionName.slice(0, -currentDerivativeKey.length);
 
         if (actionAttributes[baseAction]) {
           if (prohibitedForRootActions.includes(baseAction)) {
@@ -118,29 +118,29 @@ const parseAction = (
 
           const {
             allow: { [entityName]: actions },
-          } = derivative[currentSuffix];
+          } = derivative[currentDerivativeKey];
 
           if (!actions) {
             throw new TypeError(
-              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative suffix: "${currentSuffix}"!`,
+              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative derivativeKey: "${currentDerivativeKey}"!`,
             );
           }
 
           if (!actions.includes(baseAction)) {
             throw new TypeError(
-              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative suffix: "${currentSuffix}" & entity: ${entityName}!`,
+              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative derivativeKey: "${currentDerivativeKey}" & entity: ${entityName}!`,
             );
           }
 
           const entityConfig = actionAttributes[baseAction].actionReturnConfig(
             allEntityConfigs[entityName],
             generalConfig,
-            currentSuffix,
+            currentDerivativeKey,
           );
 
-          if (suffix) {
+          if (derivativeKey) {
             throw new TypeError(
-              `Need not set suffix: "${suffix}" for action "${actionName}" & entity: "${entityName}"!`,
+              `Need not set derivativeKey: "${derivativeKey}" for action "${actionName}" & entity: "${entityName}"!`,
             );
           }
 
@@ -148,7 +148,7 @@ const parseAction = (
             creationType: 'derivative',
             entityConfig,
             baseAction,
-            suffix: currentSuffix,
+            derivativeKey: currentDerivativeKey,
           };
         }
       }
