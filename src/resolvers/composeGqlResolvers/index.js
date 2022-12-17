@@ -7,6 +7,7 @@ import { GraphQLUpload } from 'graphql-upload';
 import type { GeneralConfig, ServersideConfig } from '../../flowTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
+import composeDerivativeConfigName from '../../utils/composeDerivativeConfig/composeDerivativeConfigName';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 
@@ -61,7 +62,10 @@ const composeGqlResolvers = (
     const entityConfig = allEntityConfigs[entityName];
     if (allowQueries) {
       Object.keys(queryAttributes).forEach((actionName) => {
-        if (queryAttributes[actionName].actionAllowed(entityConfig)) {
+        if (
+          queryAttributes[actionName].actionAllowed(entityConfig) &&
+          !queryAttributes[actionName].actionIsChild
+        ) {
           const resolver = queries[actionName](entityConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
@@ -96,7 +100,10 @@ const composeGqlResolvers = (
 
     if (allowMutations) {
       Object.keys(mutationAttributes).forEach((actionName) => {
-        if (mutationAttributes[actionName].actionAllowed(entityConfig)) {
+        if (
+          mutationAttributes[actionName].actionAllowed(entityConfig) &&
+          !mutationAttributes[actionName].actionIsChild
+        ) {
           const resolver = mutations[actionName](entityConfig, generalConfig, serversideConfig);
           if (resolver) {
             // eslint-disable-next-line no-param-reassign
@@ -173,7 +180,13 @@ const composeGqlResolvers = (
   Object.keys(allEntityConfigs)
     .map((entityName) => allEntityConfigs[entityName])
     .reduce((prev, entityConfig) => {
-      const { name, duplexFields, geospatialFields, relationalFields } = entityConfig;
+      const {
+        name,
+        derivativeNameSlicePosition,
+        duplexFields,
+        geospatialFields,
+        relationalFields,
+      } = entityConfig;
       if (duplexFields || geospatialFields || relationalFields) {
         // eslint-disable-next-line no-param-reassign
         prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
@@ -188,12 +201,9 @@ const composeGqlResolvers = (
         );
 
         if (derivativeConfig) {
+          const key = composeDerivativeConfigName(name, derivativeKey, derivativeNameSlicePosition);
           // eslint-disable-next-line no-param-reassign
-          prev[`${name}${derivativeKey}`] = composeEntityResolvers(
-            derivativeConfig,
-            generalConfig,
-            serversideConfig,
-          );
+          prev[key] = composeEntityResolvers(derivativeConfig, generalConfig, serversideConfig);
         }
       });
 

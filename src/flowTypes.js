@@ -894,6 +894,7 @@ export type ActionAttributes = {
   actionGeneralName: (derivativeKey?: string) => string,
   actionType: 'Mutation' | 'Query',
   actionAllowed: (entityConfig: EntityConfig) => boolean,
+  actionIsChild?: boolean,
   actionName: (baseName: string, derivativeKey?: string) => string,
   inputCreators: Array<InputCreator>,
   argNames: Array<string>,

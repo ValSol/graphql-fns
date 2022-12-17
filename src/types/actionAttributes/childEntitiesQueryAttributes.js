@@ -45,7 +45,9 @@ const actionReturnConfig = (
     ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
     : entityConfig;
 
-const actionAllowed = (): boolean => false;
+const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
+
+const actionIsChild = true;
 
 const actionReturnString =
   (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
@@ -62,6 +64,7 @@ const childEntitiesQueryAttributes = {
   actionReturnString,
   actionReturnConfig,
   actionAllowed,
+  actionIsChild,
 };
 
 export default childEntitiesQueryAttributes;

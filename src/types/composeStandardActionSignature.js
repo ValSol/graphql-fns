@@ -13,6 +13,7 @@ const composeStandardActionSignature = (
 ): string => {
   const {
     actionAllowed,
+    actionIsChild,
     actionGeneralName,
     actionName,
     actionType,
@@ -23,7 +24,7 @@ const composeStandardActionSignature = (
   } = actionAttributes;
   const { name: configName } = entityConfig;
 
-  if (!actionAllowed(entityConfig)) return '';
+  if (actionIsChild || !actionAllowed(entityConfig)) return '';
 
   if (
     inventory &&
