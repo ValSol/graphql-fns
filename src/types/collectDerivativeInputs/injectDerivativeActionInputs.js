@@ -4,14 +4,14 @@ import type { ActionAttributes, GeneralConfig, EntityConfig } from '../../flowTy
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
-import fillDic from '../inputs/fillDic';
+import fillInputDic from '../inputs/fillInputDic';
 
 const injectDerivativeActionInputs = (
   derivativeKey: string,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   actionAttributes: ActionAttributes,
-  dic: { [inputName: string]: string },
+  inputDic: { [inputName: string]: string },
 ): void => {
   const { actionAllowed, actionGeneralName, actionName, actionType, inputCreators } =
     actionAttributes;
@@ -28,9 +28,9 @@ const injectDerivativeActionInputs = (
   ) {
     return;
   }
-  const specificName = actionName(configName, derivativeKey);
+  // const specificName = actionName(configName, derivativeKey); ???? useles code
 
-  if (!specificName) return;
+  // if (!specificName) return; ?????
 
   const derivativeConfig = composeDerivativeConfigByName(
     derivativeKey,
@@ -40,9 +40,9 @@ const injectDerivativeActionInputs = (
 
   inputCreators.forEach((inputCreator) => {
     const [inputName, inputDefinition, childChain] = inputCreator(derivativeConfig);
-    if (inputName && !dic[inputName] && inputDefinition) {
-      dic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
-      fillDic(childChain, dic);
+    if (inputName && !inputDic[inputName] && inputDefinition) {
+      inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+      fillInputDic(childChain, inputDic);
     }
   });
 };

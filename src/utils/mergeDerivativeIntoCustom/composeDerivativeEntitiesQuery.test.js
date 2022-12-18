@@ -7,7 +7,7 @@ import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../fl
 
 import entitiesQueryAttributes from '../../types/actionAttributes/entitiesQueryAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeEntitiesQuery', () => {
@@ -105,9 +105,13 @@ describe('composeDerivativeEntitiesQuery', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, entityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, entityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      entityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });
@@ -130,9 +134,13 @@ describe('composeDerivativeEntitiesQuery', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, sortEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, sortEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, sortEntityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      sortEntityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });
@@ -155,9 +163,9 @@ describe('composeDerivativeEntitiesQuery', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, paginationEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, paginationEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(
+    const expectedResult2 = composeCustomActionSignature(
       expectedResult,
       paginationEntityConfig,
       generalConfig,
@@ -185,9 +193,13 @@ describe('composeDerivativeEntitiesQuery', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, nearEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, nearEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, nearEntityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      nearEntityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });

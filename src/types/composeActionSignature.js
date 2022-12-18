@@ -1,48 +1,82 @@
 // @flow
-import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../flowTypes';
 
-import composeSpecificActionName from '../utils/composeSpecificActionName';
+import type {
+  ActionAttributes,
+  EntityConfig,
+  GeneralConfig,
+  ThreeSegmentInventoryChain,
+} from '../flowTypes';
+
+import checkInventory from '../utils/inventory/checkInventory';
+import fillInputDic from './inputs/fillInputDic';
+import fillEntityTypeDic from './fillEntityTypeDic';
 
 const composeActionSignature = (
-  signatureMethods: ActionSignatureMethods,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
+  actionAttributes: ActionAttributes,
+  entityTypeDic: { [entityName: string]: string },
+  inputDic: { [inputName: string]: string },
 ): string => {
   const {
-    name: actionName,
-    specificName: composeName,
-    argNames: composeArgNames,
-    argTypes: composeArgTypes,
-    type: composeType,
-  } = signatureMethods;
+    actionAllowed,
+    actionIsChild,
+    actionGeneralName,
+    actionName,
+    actionType,
+    inputCreators,
+    actionReturnConfig,
+    argNames,
+    argTypes,
+    actionReturnString,
+  } = actionAttributes;
 
-  const specificName = composeName(entityConfig, generalConfig);
+  const { inventory } = generalConfig;
 
-  // by making specificName = '' filter unnecessary action
-  if (!specificName) return '';
+  const { name: configName } = entityConfig;
 
-  // *** test correctness of the specificName name
-  const { name: entityName } = entityConfig;
-  if (specificName !== composeSpecificActionName({ actionName, entityName })) {
-    throw new TypeError(
-      `Specific action name: "${specificName}" is not corresponding with generic action name "${actionName}"!`,
-    );
-  }
-  // ***
+  if (actionIsChild || !actionAllowed(entityConfig)) return '';
 
-  const argNames = composeArgNames(entityConfig, generalConfig);
-  const argTypes = composeArgTypes(entityConfig, generalConfig);
-  const returningType = composeType(entityConfig, generalConfig);
+  // $FlowFixMe
+  const inventoryChain: ThreeSegmentInventoryChain = [actionType, actionGeneralName(), configName];
 
-  if (argNames.length !== argTypes.length) {
-    throw new TypeError('argNames & argTypes arrays have to have equal length!');
+  if (inventory && !checkInventory(inventoryChain, inventory)) {
+    return '';
   }
 
-  const args = argNames.map((argName, i) => `${argName}: ${argTypes[i]}`).join(', ');
+  const specificName = actionName(configName);
 
-  return argNames.length
-    ? `${specificName}(${args}): ${returningType}`
-    : `${specificName}: ${returningType}`;
+  const toShow = [];
+
+  inputCreators.forEach((inputCreator) => {
+    const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
+    toShow.push(Boolean(inputDefinition));
+    if (inputName && !inputDic[inputName] && inputDefinition) {
+      inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+      fillInputDic(childChain, inputDic);
+    }
+  });
+
+  const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
+  const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
+
+  const returnString = actionReturnString('')(entityConfig);
+
+  if (!filteredArgNames.length) {
+    return `  ${specificName}: ${returnString}`;
+  }
+
+  const args = filteredArgNames
+    .map((argName, i) => `${argName}: ${filteredArgTypes[i](configName)}`)
+    .join(', ');
+
+  const returnConfig = actionReturnConfig(entityConfig, generalConfig);
+
+  if (returnConfig) {
+    fillEntityTypeDic(returnConfig, entityTypeDic, inputDic);
+  }
+
+  return `  ${specificName}(${args}): ${returnString}`;
 };
 
 export default composeActionSignature;

@@ -4,7 +4,7 @@ import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../fl
 
 import entityFileQueryAttributes from '../../types/actionAttributes/entityFileQueryAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeEntityFileQuery', () => {
@@ -49,9 +49,13 @@ describe('composeDerivativeEntityFileQuery', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, entityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, entityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      entityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });

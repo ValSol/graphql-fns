@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityFileCountQueryAttributes from '../actionAttributes/entityFileCountQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityFileCountQueryType', () => {
   test('should create query', () => {
@@ -12,13 +12,23 @@ describe('createEntityFileCountQueryType', () => {
       name: 'TangibleExample',
       type: 'tangibleFile',
     };
-    const expectedResult = '  TangibleExampleFileCount(where: FileWhereInput): Int!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '  TangibleExampleFileCount(where: FileWhereInput): Int!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       entityFileCountQueryAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -28,13 +38,23 @@ describe('createEntityFileCountQueryType', () => {
       name: 'TangibleExample',
       type: 'tangible',
     };
-    const expectedResult = '';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       entityFileCountQueryAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

@@ -4,7 +4,7 @@
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import entityDistinctValuesQueryAttributes from '../../types/actionAttributes/entityDistinctValuesQueryAttributes';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeEntityDistinctValuesQuery', () => {
@@ -54,9 +54,13 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
       config: () => null,
     };
 
-    const result2 = composeActionSignature(result, entityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, entityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      entityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });

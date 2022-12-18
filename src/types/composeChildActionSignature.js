@@ -3,13 +3,13 @@
 import type { Inventory, EntityConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import fillDic from './inputs/fillDic';
+import fillInputDic from './inputs/fillInputDic';
 import { queryAttributes } from './actionAttributes';
 
 const composeChildActionSignature = (
   entityConfig: EntityConfig,
   childQueryGeneralName: string,
-  dic?: { [inputName: string]: string },
+  inputDic?: { [inputName: string]: string },
   inventory?: Inventory,
 ): string => {
   const {
@@ -37,9 +37,9 @@ const composeChildActionSignature = (
   inputCreators.forEach((inputCreator) => {
     const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
     toShow.push(Boolean(inputDefinition));
-    if (dic && inputName && !dic[inputName] && inputDefinition) {
-      dic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
-      fillDic(childChain, dic);
+    if (inputDic && inputName && !inputDic[inputName] && inputDefinition) {
+      inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+      fillInputDic(childChain, inputDic);
     }
   });
 

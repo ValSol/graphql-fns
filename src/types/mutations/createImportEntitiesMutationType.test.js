@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import importEntitiesMutationAttributes from '../actionAttributes/importEntitiesMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createImportEntitiesMutationType', () => {
   test('should create mutation import entities type', () => {
@@ -12,14 +12,21 @@ describe('createImportEntitiesMutationType', () => {
       name: 'Example',
       type: 'tangible',
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const expectedResult =
       '  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       importEntitiesMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

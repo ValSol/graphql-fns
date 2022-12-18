@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityCountQueryAttributes from '../actionAttributes/entityCountQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityCountQueryType', () => {
   test('should create query entities type without index fields', () => {
@@ -19,10 +19,24 @@ describe('createEntityCountQueryType', () => {
         },
       ],
     };
-    const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityCountQueryAttributes, dic);
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityCountQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -41,11 +55,24 @@ describe('createEntityCountQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
 
-    const dic = {};
+    const entityTypeDic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityCountQueryAttributes, dic);
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityCountQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

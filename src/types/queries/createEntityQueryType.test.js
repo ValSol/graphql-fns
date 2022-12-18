@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityQueryAttributes from '../actionAttributes/entityQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityQueryType', () => {
   test('should create query only entity type', () => {
@@ -12,10 +12,24 @@ describe('createEntityQueryType', () => {
       name: 'Example',
       type: 'tangible',
     };
-    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityQueryAttributes, dic);
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!): Example!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

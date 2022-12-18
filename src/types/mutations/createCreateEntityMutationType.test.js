@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import createEntityMutationAttributes from '../actionAttributes/createEntityMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createCreateEntityMutationType', () => {
   test('should create mutation add entity type', () => {
@@ -12,13 +12,21 @@ describe('createCreateEntityMutationType', () => {
       name: 'Example',
       type: 'tangible',
     };
-    const expectedResult = '  createExample(data: ExampleCreateInput!): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const expectedResult = '  createExample(data: ExampleCreateInput!): Example!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       createEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
 
     expect(result).toEqual(expectedResult);
@@ -57,14 +65,23 @@ describe('createCreateEntityMutationType', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Place: placeConfig, Person: personConfig },
+    };
+
     const expectedResult = '  createPerson(data: PersonCreateInput!): Person!';
 
-    const dic = {};
+    const entityTypeDic = {};
 
-    const result = composeStandardActionSignature(
+    const inputDic = {};
+
+    const result = composeActionSignature(
       personConfig,
+      generalConfig,
       createEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

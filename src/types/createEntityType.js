@@ -14,7 +14,7 @@ const arrayArgs = '(slice: SliceInput)';
 
 const createEntityType = (
   entityConfig: EntityConfig,
-  dic: { [inputName: string]: string },
+  inputDic: { [inputName: string]: string },
 ): string => {
   const {
     childFields,
@@ -125,7 +125,7 @@ const createEntityType = (
     relationalFields.reduce((prev, { array, name: name2, required, config }) => {
       prev.push(
         `  ${name2}${
-          array ? `(${composeChildActionSignature(config, 'childEntities', dic)})` : ''
+          array ? `(${composeChildActionSignature(config, 'childEntities', inputDic)})` : ''
         }: ${composeReturnString(config, array ? childEntities : childEntity)}${
           !array && required ? '!' : ''
         }`,
@@ -136,7 +136,7 @@ const createEntityType = (
           `  ${name2}ThroughConnection${`(${composeChildActionSignature(
             config,
             'childEntitiesThroughConnection',
-            dic,
+            inputDic,
           )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
         );
       }
@@ -150,7 +150,7 @@ const createEntityType = (
     duplexFields.reduce((prev, { array, name: name2, required, config }) => {
       prev.push(
         `  ${name2}${
-          array ? `(${composeChildActionSignature(config, 'childEntities', dic)})` : ''
+          array ? `(${composeChildActionSignature(config, 'childEntities', inputDic)})` : ''
         }: ${composeReturnString(config, array ? childEntities : childEntity)}${
           !array && required ? '!' : ''
         }`,
@@ -161,7 +161,7 @@ const createEntityType = (
           `  ${name2}ThroughConnection${`(${composeChildActionSignature(
             config,
             'childEntitiesThroughConnection',
-            dic,
+            inputDic,
           )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
         );
       }

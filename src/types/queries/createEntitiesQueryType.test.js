@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entitiesQueryAttributes from '../actionAttributes/entitiesQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntitiesQueryType', () => {
   test('should create query entities type without index fields', () => {
@@ -11,11 +11,25 @@ describe('createEntitiesQueryType', () => {
       name: 'Example',
       type: 'tangible',
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -34,11 +48,25 @@ describe('createEntitiesQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -57,11 +85,25 @@ describe('createEntitiesQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -70,11 +112,25 @@ describe('createEntitiesQueryType', () => {
       name: 'Example',
       type: 'tangible',
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -93,11 +149,25 @@ describe('createEntitiesQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -126,11 +196,25 @@ describe('createEntitiesQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entitiesQueryAttributes, dic);
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entitiesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

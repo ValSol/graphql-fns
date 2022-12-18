@@ -20,9 +20,9 @@ describe('composeChildActionSignature util', () => {
       ],
     };
 
-    const dic = {};
+    const inputDic = {};
 
-    const result = composeChildActionSignature(entityConfig, 'childEntities', dic);
+    const result = composeChildActionSignature(entityConfig, 'childEntities', inputDic);
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
@@ -31,7 +31,7 @@ describe('composeChildActionSignature util', () => {
     const result2 = composeChildActionSignature(
       entityConfig,
       'childEntitiesThroughConnection',
-      dic,
+      inputDic,
     );
     const expectedResult2 =
       'where: ExampleWhereInput, sort: ExampleSortInput, search: String, after: String, before: String, first: Int, last: Int';
@@ -115,10 +115,10 @@ input ExampleSortInput {
 }`,
     };
 
-    expect(dic).toEqual(expectedDic);
+    expect(inputDic).toEqual(expectedDic);
   });
 
-  test('should return right result without dic', async () => {
+  test('should return right result without inputDic', async () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',

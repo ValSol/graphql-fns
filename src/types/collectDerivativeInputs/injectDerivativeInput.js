@@ -3,7 +3,7 @@
 import type { GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
-import fillDic from '../inputs/fillDic';
+import fillInputDic from '../inputs/fillInputDic';
 import inputCreators from './inputCreators';
 
 const injectDerivativeInput = (
@@ -11,7 +11,7 @@ const injectDerivativeInput = (
   derivativeKey: string,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  dic: { [inputName: string]: string },
+  inputDic: { [inputName: string]: string },
 ): void => {
   const derivativeConfig = derivativeKey
     ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
@@ -24,9 +24,9 @@ const injectDerivativeInput = (
   }
 
   const [inputName, inputDefinition, childChain] = inputCreator(derivativeConfig);
-  if (inputName && !dic[inputName] && inputDefinition) {
-    dic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
-    fillDic(childChain, dic);
+  if (inputName && !inputDic[inputName] && inputDefinition) {
+    inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+    fillInputDic(childChain, inputDic);
   }
 };
 

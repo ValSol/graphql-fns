@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import deleteEntityMutationAttributes from '../actionAttributes/deleteEntityMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createDeleteEntityMutationType', () => {
   test('should create mutation delete entity type', () => {
@@ -12,13 +12,21 @@ describe('createDeleteEntityMutationType', () => {
       name: 'Example',
       type: 'tangible',
     };
-    const expectedResult = '  deleteExample(whereOne: ExampleWhereOneInput!): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const expectedResult = '  deleteExample(whereOne: ExampleWhereOneInput!): Example!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       deleteEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

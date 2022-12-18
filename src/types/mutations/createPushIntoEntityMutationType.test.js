@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import pushIntoEntityMutationAttributes from '../actionAttributes/pushIntoEntityMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createPushIntoEntityMutationType', () => {
   test('should push mutation add entity type', () => {
@@ -35,14 +35,22 @@ describe('createPushIntoEntityMutationType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const expectedResult =
       '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       pushIntoEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -65,13 +73,20 @@ describe('createPushIntoEntityMutationType', () => {
         },
       ],
     };
-    const expectedResult = '';
-    const dic = {};
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const result = composeStandardActionSignature(
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       pushIntoEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

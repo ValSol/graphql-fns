@@ -8,10 +8,10 @@ import injectDerivativeInput from './injectDerivativeInput';
 
 type CollectDerivativeInputs = (
   generalConfig: GeneralConfig,
-  dic: { [inputName: string]: string },
+  inputDic: { [inputName: string]: string },
 ) => void;
 
-const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) => {
+const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, inputDic) => {
   const { allEntityConfigs, derivative, derivativeInputs } = generalConfig;
 
   if (derivative) {
@@ -24,7 +24,7 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
             allEntityConfigs[entityName],
             generalConfig,
             actionAttributes[actionName],
-            dic,
+            inputDic,
           );
         });
       });
@@ -52,7 +52,7 @@ const collectDerivativeInputs: CollectDerivativeInputs = (generalConfig, dic) =>
             derivativeKey,
             allEntityConfigs[entityName],
             generalConfig,
-            dic,
+            inputDic,
           );
         });
       });

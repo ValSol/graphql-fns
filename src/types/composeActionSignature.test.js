@@ -1,160 +1,59 @@
 // @flow
 /* eslint-env jest */
-import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../flowTypes';
 
+import type { EntityConfig, GeneralConfig } from '../flowTypes';
+
+import createManyEntitiesMutationAttributes from './actionAttributes/createManyEntitiesMutationAttributes';
 import composeActionSignature from './composeActionSignature';
 
-describe('composeActionSignature', () => {
-  test('should return correct results for empty args arrays', () => {
-    const signatureMethods: ActionSignatureMethods = {
-      name: 'getEntity',
-      specificName(entityConfig) {
-        const { name } = entityConfig;
-        return `get${name}`;
-      },
-      argNames() {
-        return [];
-      },
-      argTypes() {
-        return [];
-      },
-      type(entityConfig) {
-        const { name } = entityConfig;
-        return `[${name}!]!`;
-      },
-      config: (entityConfig) => entityConfig,
-    };
-
+describe('composeActionSignature util', () => {
+  test('should return right result', async () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
       textFields: [
         {
           name: 'textField',
+          array: true,
+          index: true,
+          weight: 1,
         },
       ],
     };
 
-    const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
-    };
-    const expectedResult = 'getExample: [Example!]!';
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const result = composeActionSignature(signatureMethods, entityConfig, generalConfig);
-    expect(result).toBe(expectedResult);
-  });
+    const entityTypeDic = {};
 
-  test('should return correct results for fulfilled args arrays', () => {
-    const queryParts = {
-      name: 'getEntity',
-      specificName(entityConfig) {
-        const { name } = entityConfig;
-        return `get${name}`;
-      },
-      argNames() {
-        return ['path', 'index'];
-      },
-      argTypes() {
-        return ['String!', 'Int'];
-      },
-      type(entityConfig) {
-        const { name } = entityConfig;
-        return `${name}!`;
-      },
-      config: (entityConfig) => entityConfig,
-    };
+    const inputDic = {};
 
-    const entityConfig: EntityConfig = {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
-    };
-    const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
+    const result = await composeActionSignature(
+      entityConfig,
+      generalConfig,
+      createManyEntitiesMutationAttributes,
+      entityTypeDic,
+      inputDic,
+    );
+    const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';
+
+    expect(result).toEqual(expectedResult);
+
+    const expectedDic = {
+      ExampleCreateInput: `input ExampleCreateInput {
+  id: ID
+  textField: [String!]
+}
+input ExampleCreateChildInput {
+  connect: ID
+  create: ExampleCreateInput
+}
+input ExampleCreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [ExampleCreateInput!]
+  createPositions: [Int!]
+}`,
     };
 
-    const expectedResult = 'getExample(path: String!, index: Int): Example!';
-
-    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
-    expect(result).toBe(expectedResult);
-  });
-
-  test('should return empty results', () => {
-    const queryParts = {
-      name: 'getEntity',
-      specificName(entityConfig) {
-        const { name } = entityConfig;
-        return name === 'Example' ? '' : `get${name}`;
-      },
-      argNames() {
-        return ['path', 'index'];
-      },
-      argTypes() {
-        return ['String!', 'Int'];
-      },
-      type(entityConfig) {
-        const { name } = entityConfig;
-        return `${name}!`;
-      },
-      config: (entityConfig) => entityConfig,
-    };
-
-    const entityConfig: EntityConfig = {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
-    };
-    const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
-    };
-
-    const expectedResult = '';
-
-    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
-    expect(result).toBe(expectedResult);
-  });
-
-  test('should return action that return scalar', () => {
-    const queryParts = {
-      name: 'tokenOfEntity',
-      specificName(entityConfig) {
-        const { name } = entityConfig;
-        return `tokenOf${name}`;
-      },
-      argNames() {
-        return ['path', 'index'];
-      },
-      argTypes() {
-        return ['String!', 'Int'];
-      },
-      type: () => 'String!',
-      config: () => null,
-    };
-
-    const entityConfig: EntityConfig = {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
-    };
-    const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
-    };
-
-    const expectedResult = 'tokenOfExample(path: String!, index: Int): String!';
-
-    const result = composeActionSignature(queryParts, entityConfig, generalConfig);
-    expect(result).toBe(expectedResult);
+    expect(inputDic).toEqual(expectedDic);
   });
 });

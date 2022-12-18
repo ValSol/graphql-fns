@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityFilesQueryAttributes from '../actionAttributes/entityFilesQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityFilesQueryType', () => {
   test('should create query only entity type', () => {
@@ -12,10 +12,24 @@ describe('createEntityFilesQueryType', () => {
       name: 'TangibleExample',
       type: 'tangibleFile',
     };
-    const expectedResult = '  TangibleExampleFiles(where: FileWhereInput): [TangibleExample!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityFilesQueryAttributes, dic);
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '  TangibleExampleFiles(where: FileWhereInput): [TangibleExample!]!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityFilesQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });

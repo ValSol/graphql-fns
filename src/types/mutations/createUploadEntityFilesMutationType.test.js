@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import uploadEntityFilesMutationAttributes from '../actionAttributes/uploadEntityFilesMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createUploadEntityFilesMutationType', () => {
   test('should create mutation upload file entity type', () => {
@@ -21,15 +21,21 @@ describe('createUploadEntityFilesMutationType', () => {
       ],
     };
 
+    const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: imageConfig } };
+
     const expectedResult =
       '  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!';
 
-    const dic = {};
+    const entityTypeDic = {};
 
-    const result = composeStandardActionSignature(
+    const inputDic = {};
+
+    const result = composeActionSignature(
       imageConfig,
+      generalConfig,
       uploadEntityFilesMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -44,13 +50,21 @@ describe('createUploadEntityFilesMutationType', () => {
         },
       ],
     };
-    const expectedResult = '';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       uploadEntityFilesMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

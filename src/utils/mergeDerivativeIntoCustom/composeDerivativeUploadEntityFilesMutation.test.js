@@ -4,7 +4,7 @@ import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../fl
 
 import uploadEntityFilesMutationAttributes from '../../types/actionAttributes/uploadEntityFilesMutationAttributes';
 import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeUploadEntityFilesMutation', () => {
@@ -52,9 +52,13 @@ describe('composeDerivativeUploadEntityFilesMutation', () => {
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
     };
 
-    const result2 = composeActionSignature(result, imageConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, imageConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, imageConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      imageConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });

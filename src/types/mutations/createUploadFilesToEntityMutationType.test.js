@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import uploadFilesToEntityMutationAttributes from '../actionAttributes/uploadFilesToEntityMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createUploadFilesToEntityMutationType', () => {
   test('should create empty string if there are no fileFields', () => {
@@ -17,13 +17,21 @@ describe('createUploadFilesToEntityMutationType', () => {
         },
       ],
     };
-    const expectedResult = '';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       uploadFilesToEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -63,14 +71,24 @@ describe('createUploadFilesToEntityMutationType', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig, Image: imageConfig },
+    };
+
     const expectedResult =
       '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       uploadFilesToEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -121,14 +139,24 @@ describe('createUploadFilesToEntityMutationType', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig, Image: imageConfig },
+    };
+
     const expectedResult =
       '  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       uploadFilesToEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

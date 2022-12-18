@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import createManyEntitiesMutationAttributes from '../actionAttributes/createManyEntitiesMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createCreateManyEntitiesMutationType', () => {
   test('should create mutation add entity type', () => {
@@ -13,13 +13,21 @@ describe('createCreateManyEntitiesMutationType', () => {
       type: 'tangible',
       textFields: [{ name: 'textField' }],
     };
-    const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       createManyEntitiesMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
 
     expect(result).toEqual(expectedResult);
@@ -39,6 +47,6 @@ input ExampleCreateOrPushChildrenInput {
 }`,
     };
 
-    expect(dic).toEqual(expectedDic);
+    expect(inputDic).toEqual(expectedDic);
   });
 });

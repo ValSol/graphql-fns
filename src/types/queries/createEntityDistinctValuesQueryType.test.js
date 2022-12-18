@@ -1,9 +1,9 @@
 // @flow
 /* eslint-env jest */
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityDistinctValuesQueryAttributes from '../actionAttributes/entityDistinctValuesQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityDistinctValuesQueryType', () => {
   test('should return empty string if there is not textFields', () => {
@@ -19,13 +19,23 @@ describe('createEntityDistinctValuesQueryType', () => {
         },
       ],
     };
-    const expectedResult = '';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       entityDistinctValuesQueryAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
@@ -44,14 +54,24 @@ describe('createEntityDistinctValuesQueryType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
     const expectedResult =
       '  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       entityDistinctValuesQueryAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });

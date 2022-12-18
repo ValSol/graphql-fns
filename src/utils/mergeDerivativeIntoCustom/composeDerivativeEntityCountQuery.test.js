@@ -4,7 +4,7 @@
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import entityCountQueryAttributes from '../../types/actionAttributes/entityCountQueryAttributes';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDerivativeEntityCountQuery', () => {
@@ -97,9 +97,13 @@ describe('composeDerivativeEntityCountQuery', () => {
       config: () => null,
     };
 
-    const result2 = composeActionSignature(result, entityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, entityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      entityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });
@@ -117,9 +121,13 @@ describe('composeDerivativeEntityCountQuery', () => {
       config: () => null,
     };
 
-    const result2 = composeActionSignature(result, sortEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, sortEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, sortEntityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      sortEntityConfig,
+      generalConfig,
+    );
 
     expect(result2).toEqual(expectedResult2);
   });
@@ -137,9 +145,9 @@ describe('composeDerivativeEntityCountQuery', () => {
       config: () => null,
     };
 
-    const result2 = composeActionSignature(result, paginationEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, paginationEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(
+    const expectedResult2 = composeCustomActionSignature(
       expectedResult,
       paginationEntityConfig,
       generalConfig,
@@ -161,9 +169,13 @@ describe('composeDerivativeEntityCountQuery', () => {
       config: () => null,
     };
 
-    const result2 = composeActionSignature(result, nearEntityConfig, generalConfig);
+    const result2 = composeCustomActionSignature(result, nearEntityConfig, generalConfig);
 
-    const expectedResult2 = composeActionSignature(expectedResult, nearEntityConfig, generalConfig);
+    const expectedResult2 = composeCustomActionSignature(
+      expectedResult,
+      nearEntityConfig,
+      generalConfig,
+    );
     expect(result2).toEqual(expectedResult2);
   });
 });

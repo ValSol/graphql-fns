@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import updateEntityMutationAttributes from '../actionAttributes/updateEntityMutationAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createUpdateEntityMutationType', () => {
   test('should create mutation update entity type', () => {
@@ -17,19 +17,27 @@ describe('createUpdateEntityMutationType', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const expectedResult =
       '  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       entityConfig,
+      generalConfig,
       updateEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create mutation update entity type with ReorderCreatedInputType', () => {
+  test.skip('should create mutation update entity type with ReorderCreatedInputType', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
@@ -71,14 +79,24 @@ describe('createUpdateEntityMutationType', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig, Address: addressConfig },
+    };
+
     const expectedResult =
       '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
       personConfig,
+      generalConfig,
       updateEntityMutationAttributes,
-      dic,
+      entityTypeDic,
+      inputDic,
     );
     expect(result).toEqual(expectedResult);
 
@@ -131,6 +149,6 @@ input PlaceCreateOrPushChildrenInput {
 }`,
     };
 
-    expect(dic).toEqual(expectedDic);
+    expect(inputDic).toEqual(expectedDic);
   });
 });

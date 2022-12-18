@@ -6,7 +6,7 @@ import checkInventory from '../utils/inventory/checkInventory';
 import composeDerivativeConfigByName from '../utils/composeDerivativeConfigByName';
 import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import collectDerivativeInputs from './collectDerivativeInputs';
-import composeActionSignature from './composeActionSignature';
+import composeCustomActionSignature from './composeCustomActionSignature';
 import composeObjectSignature from './composeObjectSignature';
 import createEntityType from './createEntityType';
 
@@ -20,7 +20,7 @@ import createUpdatedEntityPayloadType from './subscriptions/createUpdatedEntityP
 import composeEnumTypes from './specialized/composeEnumTypes';
 import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
-import composeStandardActionSignature from './composeStandardActionSignature';
+import composeActionSignature from './composeActionSignature';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const { allEntityConfigs, derivative: preDerivative, inventory } = generalConfig;
@@ -41,6 +41,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const entityNames = Object.keys(allEntityConfigs);
 
   const inputDic = {};
+  const entityTypeDic = {};
 
   // 1. generate standard objects' signatures
 
@@ -71,11 +72,12 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const entityQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
-      const action = composeStandardActionSignature(
+      const action = composeActionSignature(
         allEntityConfigs[entityName],
+        generalConfig,
         queryAttributes[actionName],
+        entityTypeDic,
         inputDic,
-        inventory,
       );
       if (action) prev.push(action);
     });
@@ -84,11 +86,12 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
   const entityMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
-      const action = composeStandardActionSignature(
+      const action = composeActionSignature(
         allEntityConfigs[entityName],
+        generalConfig,
         mutationAttributes[actionName],
+        entityTypeDic,
         inputDic,
-        inventory,
       );
       if (action) prev.push(action);
     });
@@ -103,7 +106,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
     Object.keys(customQuery).forEach((customName) => {
       if (checkInventory(['Query', customName, entityName], inventory)) {
-        const action = composeActionSignature(
+        const action = composeCustomActionSignature(
           customQuery[customName],
           allEntityConfigs[entityName],
           generalConfig,
@@ -116,7 +119,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
 
     Object.keys(customMutation).forEach((customName) => {
       if (checkInventory(['Mutation', customName, entityName], inventory)) {
-        const action = composeActionSignature(
+        const action = composeCustomActionSignature(
           customMutation[customName],
           allEntityConfigs[entityName],
           generalConfig,

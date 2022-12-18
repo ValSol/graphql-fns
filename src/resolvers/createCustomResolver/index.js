@@ -8,7 +8,7 @@ import type {
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
-import composeActionSignature from '../../types/composeActionSignature';
+import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import executeAuthorisation from '../utils/executeAuthorisation';
 import customResolverDecorator from '../utils/resolverDecorator/customResolverDecorator';
 import generateDerivativeResolvers from './generateDerivativeResolvers';
@@ -39,7 +39,7 @@ const createCustomResolver = (
     throw new TypeError(`Got undefiend signatureMethods for "${methodName}" methodName!`);
   }
 
-  if (!composeActionSignature(signatureMethods, entityConfig, generalConfig)) return null;
+  if (!composeCustomActionSignature(signatureMethods, entityConfig, generalConfig)) return null;
 
   // $FlowFixMe - cannot understand what the conflict between 'Query' & 'Mutation'
   const inventoryChain: ThreeSegmentInventoryChain = [methodKind, methodName, name];

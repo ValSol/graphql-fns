@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../flowTypes';
+import type { EntityConfig, GeneralConfig } from '../../flowTypes';
 
 import entityFileQueryAttributes from '../actionAttributes/entityFileQueryAttributes';
-import composeStandardActionSignature from '../composeStandardActionSignature';
+import composeActionSignature from '../composeActionSignature';
 
 describe('createEntityFileQueryType', () => {
   test('should create query', () => {
@@ -12,10 +12,24 @@ describe('createEntityFileQueryType', () => {
       name: 'TangibleExample',
       type: 'tangibleFile',
     };
-    const expectedResult = '  TangibleExampleFile(whereOne: FileWhereOneInput!): TangibleExample!';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityFileQueryAttributes, dic);
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '  TangibleExampleFile(whereOne: FileWhereOneInput!): TangibleExample!';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityFileQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 
@@ -24,10 +38,24 @@ describe('createEntityFileQueryType', () => {
       name: 'TangibleExample',
       type: 'tangible',
     };
-    const expectedResult = '';
-    const dic = {};
 
-    const result = composeStandardActionSignature(entityConfig, entityFileQueryAttributes, dic);
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig },
+    };
+
+    const expectedResult = '';
+
+    const entityTypeDic = {};
+
+    const inputDic = {};
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      entityFileQueryAttributes,
+      entityTypeDic,
+      inputDic,
+    );
     expect(result).toEqual(expectedResult);
   });
 });
