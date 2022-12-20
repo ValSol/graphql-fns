@@ -3,14 +3,9 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import composeDerivativeConfigByName from '../utils/composeDerivativeConfigByName';
-import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
-import collectDerivativeInputs from './collectDerivativeInputs';
 import composeCustomActionSignature from './composeCustomActionSignature';
-import composeObjectSignature from './composeObjectSignature';
-import createEntityType from './createEntityType';
 
-import { mutationAttributes, queryAttributes } from './actionAttributes';
+import actionAttributes, { mutationAttributes, queryAttributes } from './actionAttributes';
 
 import createCreatedEntitySubscriptionType from './subscriptions/createCreatedEntitySubscriptionType';
 import createDeletedEntitySubscriptionType from './subscriptions/createDeletedEntitySubscriptionType';
@@ -23,17 +18,12 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeActionSignature from './composeActionSignature';
 
 const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { allEntityConfigs, derivative: preDerivative, inventory } = generalConfig;
+  const { allEntityConfigs, derivative = {}, inventory, custom = {} } = generalConfig;
 
-  const custom = mergeDerivativeIntoCustom(generalConfig);
-
-  // eslint-disable-next-line no-nested-ternary
-  const customInputObject = custom ? (custom.Input ? custom.Input : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
-  const derivative = preDerivative || {};
 
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
@@ -43,34 +33,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
   const inputDic = {};
   const entityTypeDic = {};
 
-  // 1. generate standard objects' signatures
+  // 1. generate standard actions' signatures AND add ...
+  // ... to "entityTypeDic" standard entity types ...
+  // ... to "inputDic" standard inputs
 
-  const entityTypesArray = Object.keys(allEntityConfigs).map((entityName) =>
-    createEntityType(allEntityConfigs[entityName], inputDic),
-  );
-
-  // 2. generate derivative objects' signatures
-
-  Object.keys(derivative || {}).reduce((prev, derivativeKey) => {
-    const { allow } = derivative[derivativeKey];
-    Object.keys(allow).forEach((entityName) => {
-      const derivativeConfig = composeDerivativeConfigByName(
-        derivativeKey,
-        allEntityConfigs[entityName],
-        generalConfig,
-      );
-      if (derivativeConfig) prev.push(createEntityType(derivativeConfig, inputDic));
-    });
-
-    return prev;
-  }, entityTypesArray);
-
-  const entityTypes = entityTypesArray.join('\n');
-
-  // 3. generate standard actions' signatures ...
-  // ... AND add to "input dic" standard inputs
-
-  const entityQueryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
+  const queryTypes = Object.keys(queryAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
       const action = composeActionSignature(
         allEntityConfigs[entityName],
@@ -84,7 +51,7 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     return prev;
   }, []);
 
-  const entityMutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
+  const mutationTypes = Object.keys(mutationAttributes).reduce((prev, actionName) => {
     entityNames.forEach((entityName) => {
       const action = composeActionSignature(
         allEntityConfigs[entityName],
@@ -98,7 +65,42 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     return prev;
   }, []);
 
-  // 4. generate custom actions' signatures
+  // 2. generate derivative actions signatures AND add ...
+  // ... to "entityTypeDic" derivative entity types ...
+  // ... to "inputDic" derivative inputs
+
+  Object.keys(derivative).forEach((derivativeKey) => {
+    const { allow } = derivative[derivativeKey];
+
+    Object.keys(allow).forEach((entityName) => {
+      allow[entityName].forEach((actionName) => {
+        const actionSignature = composeActionSignature(
+          allEntityConfigs[entityName],
+          generalConfig,
+          actionAttributes[actionName],
+          entityTypeDic,
+          inputDic,
+          derivativeKey,
+        );
+
+        if (!actionSignature) return;
+
+        const { actionType } = actionAttributes[actionName];
+
+        if (actionType === 'Query') {
+          queryTypes.push(actionSignature);
+        } else if (actionType === 'Mutation') {
+          mutationTypes.push(actionSignature);
+        } else {
+          throw new TypeError(`Icorrect action name: "${actionName}"!`);
+        }
+      });
+    });
+  });
+
+  // 3. generate custom actions signatures AND add ...
+  // ... to "entityTypeDic" entity types ...
+  // ... to "inputDic" inputs
 
   entityNames.forEach((entityName) => {
     const { type: entityType } = allEntityConfigs[entityName];
@@ -110,9 +112,11 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           customQuery[customName],
           allEntityConfigs[entityName],
           generalConfig,
+          entityTypeDic,
+          inputDic,
         );
         if (action) {
-          entityQueryTypes.push(`  ${action}`);
+          queryTypes.push(`  ${action}`);
         }
       }
     });
@@ -123,57 +127,40 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
           customMutation[customName],
           allEntityConfigs[entityName],
           generalConfig,
+          entityTypeDic,
+          inputDic,
         );
         if (action) {
-          entityMutationTypes.push(`  ${action}`);
+          mutationTypes.push(`  ${action}`);
         }
       }
     });
   });
 
-  const entityQueryTypes2 = `type Query {
-  node(id: ID!): Node${['', ...entityQueryTypes].join('\n')}
+  const queryTypes2 = `type Query {
+  node(id: ID!): Node${['', ...queryTypes].join('\n')}
 }`;
 
-  const entityMutationTypes2 = entityMutationTypes.length
+  const mutationTypes2 = mutationTypes.length
     ? `type Mutation {
-${entityMutationTypes.join('\n')}
+${mutationTypes.join('\n')}
 }`
     : '';
 
-  // 5. add to "input dic" derivative inputs
+  // 4. generaqte entity types
 
-  collectDerivativeInputs(generalConfig, inputDic);
+  const entityTypes = Object.keys(entityTypeDic)
+    .map((key) => entityTypeDic[key])
+    .join('\n');
 
-  // 6. add to "input dic" custom inputs
-
-  const customInputObjectNames = Object.keys(customInputObject);
-  const input = true;
-  entityNames.reduce((prev, entityName) => {
-    customInputObjectNames.forEach((customName) => {
-      const customInputType = composeObjectSignature(
-        customInputObject[customName],
-        allEntityConfigs[entityName],
-        generalConfig,
-        input,
-      );
-      if (customInputType) {
-        const key = customInputObject[customName].specificName(
-          allEntityConfigs[entityName],
-          generalConfig,
-        );
-        prev[key] = customInputType; // eslint-disable-line no-param-reassign
-      }
-    });
-
-    return prev;
-  }, inputDic);
+  // 5. generate inputs
 
   const inputs = Object.keys(inputDic)
+    .filter((inputName) => !inputName.startsWith('!'))
     .map((inputName) => inputDic[inputName])
     .join('\n');
 
-  // prepare subscriptions
+  // 6. prepare subscriptions
 
   const updatedEntityPayloadTypes = allowSubscriptions
     ? Object.keys(allEntityConfigs)
@@ -238,8 +225,8 @@ ${entitySubscriptionTypes}
 
   if (inputs) resultArray.push(inputs);
   if (updatedEntityPayloadTypes) resultArray.push(updatedEntityPayloadTypes);
-  if (entityQueryTypes2) resultArray.push(entityQueryTypes2);
-  if (entityMutationTypes2) resultArray.push(entityMutationTypes2);
+  if (queryTypes2) resultArray.push(queryTypes2);
+  if (mutationTypes2) resultArray.push(mutationTypes2);
   if (entitySubscriptionTypes2) resultArray.push(entitySubscriptionTypes2);
 
   return resultArray.join('\n');

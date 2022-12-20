@@ -8,6 +8,7 @@ import type {
 } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
+import composeDerivativeConfigByName from '../utils/composeDerivativeConfigByName';
 import fillInputDic from './inputs/fillInputDic';
 import fillEntityTypeDic from './fillEntityTypeDic';
 
@@ -17,6 +18,7 @@ const composeActionSignature = (
   actionAttributes: ActionAttributes,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
+  derivativeKey: string = '',
 ): string => {
   const {
     actionAllowed,
@@ -38,18 +40,26 @@ const composeActionSignature = (
   if (actionIsChild || !actionAllowed(entityConfig)) return '';
 
   // $FlowFixMe
-  const inventoryChain: ThreeSegmentInventoryChain = [actionType, actionGeneralName(), configName];
+  const inventoryChain: ThreeSegmentInventoryChain = [
+    actionType,
+    actionGeneralName(derivativeKey),
+    configName,
+  ];
 
   if (inventory && !checkInventory(inventoryChain, inventory)) {
     return '';
   }
 
-  const specificName = actionName(configName);
+  const specificName = actionName(configName, derivativeKey);
 
   const toShow = [];
 
+  const entityConfigForInputCreator = derivativeKey
+    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+    : entityConfig;
+
   inputCreators.forEach((inputCreator) => {
-    const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
+    const [inputName, inputDefinition, childChain] = inputCreator(entityConfigForInputCreator);
     toShow.push(Boolean(inputDefinition));
     if (inputName && !inputDic[inputName] && inputDefinition) {
       inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
@@ -60,20 +70,20 @@ const composeActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString('')(entityConfig);
+  const returnString = actionReturnString(derivativeKey)(entityConfig);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;
   }
 
   const args = filteredArgNames
-    .map((argName, i) => `${argName}: ${filteredArgTypes[i](configName)}`)
+    .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator.name)}`)
     .join(', ');
 
-  const returnConfig = actionReturnConfig(entityConfig, generalConfig);
+  const returnConfig = actionReturnConfig(entityConfig, generalConfig, derivativeKey);
 
   if (returnConfig) {
-    fillEntityTypeDic(returnConfig, entityTypeDic, inputDic);
+    fillEntityTypeDic(returnConfig, entityTypeDic, inputDic, inventory);
   }
 
   return `  ${specificName}(${args}): ${returnString}`;

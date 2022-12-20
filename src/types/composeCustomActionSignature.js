@@ -2,11 +2,15 @@
 import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../flowTypes';
 
 import composeSpecificActionName from '../utils/composeSpecificActionName';
+import fillInputDicForCustom from './inputs/fillInputDicForCustom';
+import fillEntityTypeDic from './fillEntityTypeDic';
 
 const composeCustomActionSignature = (
   signatureMethods: ActionSignatureMethods,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
+  entityTypeDic?: { [entityName: string]: string },
+  inputDic?: { [inputName: string]: string },
 ): string => {
   const {
     name: actionName,
@@ -14,7 +18,10 @@ const composeCustomActionSignature = (
     argNames: composeArgNames,
     argTypes: composeArgTypes,
     type: composeType,
+    config: composeConfig,
   } = signatureMethods;
+
+  const { inventory } = generalConfig;
 
   const specificName = composeName(entityConfig, generalConfig);
 
@@ -39,6 +46,18 @@ const composeCustomActionSignature = (
   }
 
   const args = argNames.map((argName, i) => `${argName}: ${argTypes[i]}`).join(', ');
+
+  if (inputDic && entityTypeDic) {
+    argTypes.forEach((argType) => {
+      fillInputDicForCustom(argType, generalConfig, inputDic);
+    });
+
+    const returnConfig = composeConfig(entityConfig, generalConfig);
+
+    if (returnConfig) {
+      fillEntityTypeDic(returnConfig, entityTypeDic, inputDic, inventory);
+    }
+  }
 
   return argNames.length
     ? `${specificName}(${args}): ${returningType}`

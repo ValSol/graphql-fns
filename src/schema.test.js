@@ -3,9 +3,17 @@
 
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import type { Enums, GeneralConfig, SimplifiedEntityConfig } from './flowTypes';
+import type {
+  DerivativeAttributes,
+  Enums,
+  EntityConfig,
+  GeneralConfig,
+  Inventory,
+  SimplifiedEntityConfig,
+} from './flowTypes';
 
 import composeAllEntityConfigs from './utils/composeAllEntityConfigs';
+import pageInfoConfig from './utils/composeAllEntityConfigs/pageInfoConfig';
 import composeGqlTypes from './types/composeGqlTypes';
 import composeGqlResolvers from './resolvers/composeGqlResolvers';
 
@@ -324,23 +332,24 @@ describe('graphql schema', () => {
     const simplifiedAllEntityConfigs = [personConfig, placeConfig];
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    generalConfig.inventory = {
-      name: 'test',
-      include: {
-        Mutation: true,
-        Query: { entity: true, entities: true, childEntity: true, childEntities: true },
-      },
-    };
-
-    let typeDefs = composeGqlTypes(generalConfig);
-    let resolvers = composeGqlResolvers(generalConfig);
-
-    let schema = makeExecutableSchema({
-      typeDefs,
-      resolvers,
-    });
 
     test('test schema with only mutations in inventory', () => {
+      generalConfig.inventory = {
+        name: 'test',
+        include: {
+          Mutation: true,
+          Query: { entity: true, entities: true, childEntity: true, childEntities: true },
+        },
+      };
+
+      const typeDefs = composeGqlTypes(generalConfig);
+      const resolvers = composeGqlResolvers(generalConfig);
+
+      const schema = makeExecutableSchema({
+        typeDefs,
+        resolvers,
+      });
+
       expect(schema).not.toBeUndefined();
     });
 
@@ -353,9 +362,9 @@ describe('graphql schema', () => {
         },
       };
 
-      typeDefs = composeGqlTypes(generalConfig);
-      resolvers = composeGqlResolvers(generalConfig);
-      schema = makeExecutableSchema({
+      const typeDefs = composeGqlTypes(generalConfig);
+      const resolvers = composeGqlResolvers(generalConfig);
+      const schema = makeExecutableSchema({
         typeDefs,
         resolvers,
       });
@@ -371,9 +380,10 @@ describe('graphql schema', () => {
         },
       };
 
-      typeDefs = composeGqlTypes(generalConfig);
-      resolvers = composeGqlResolvers(generalConfig);
-      schema = makeExecutableSchema({
+      const typeDefs = composeGqlTypes(generalConfig);
+      const resolvers = composeGqlResolvers(generalConfig);
+
+      const schema = makeExecutableSchema({
         typeDefs,
         resolvers,
       });
@@ -383,9 +393,9 @@ describe('graphql schema', () => {
     test('test schema with only quries in inventory', () => {
       generalConfig.inventory = { name: 'test', include: { Query: true } };
 
-      typeDefs = composeGqlTypes(generalConfig);
-      resolvers = composeGqlResolvers(generalConfig);
-      schema = makeExecutableSchema({
+      const typeDefs = composeGqlTypes(generalConfig);
+      const resolvers = composeGqlResolvers(generalConfig);
+      const schema = makeExecutableSchema({
         typeDefs,
         resolvers,
       });
@@ -395,16 +405,81 @@ describe('graphql schema', () => {
     test('test schema with only entity query in inventory', () => {
       generalConfig.inventory = {
         name: 'test',
-        include: { Query: { childEntity: true, childEntities: true } },
+        include: { Query: { entity: true } },
       };
 
-      typeDefs = composeGqlTypes(generalConfig);
-      resolvers = composeGqlResolvers(generalConfig);
-      schema = makeExecutableSchema({
+      const typeDefs = composeGqlTypes(generalConfig);
+      const resolvers = composeGqlResolvers(generalConfig);
+
+      const schema = makeExecutableSchema({
         typeDefs,
         resolvers,
       });
       expect(schema).not.toBeUndefined();
     });
+  });
+
+  test('test schema with derivative queries', () => {
+    const ForCatalogDerivative: DerivativeAttributes = {
+      allow: { Example: ['entities', 'updateEntity'] },
+      derivativeKey: 'ForCatalog',
+      addFields: {
+        Example: {
+          dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
+        },
+      },
+    };
+
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+      ],
+    };
+
+    const edgeConfig: EntityConfig = {
+      name: 'ExampleEdge',
+      type: 'virtual',
+      textField: {
+        text: 'cursor',
+        required: true,
+      },
+      childFields: [
+        {
+          name: 'node',
+          config: entityConfig,
+        },
+      ],
+    };
+
+    const allEntityConfigs = {
+      Example: entityConfig,
+      PageInfo: pageInfoConfig,
+      ExampleEdge: edgeConfig,
+    };
+    const inventory: Inventory = {
+      name: 'test',
+      include: {
+        Query: { entitiesForCatalog: true },
+        Mutation: { updateEntityForCatalog: true },
+      },
+    };
+
+    const derivative = { ForCatalog: ForCatalogDerivative };
+    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+
+    const typeDefs = composeGqlTypes(generalConfig);
+    const resolvers = composeGqlResolvers(generalConfig);
+
+    const schema = makeExecutableSchema({
+      typeDefs,
+      resolvers,
+    });
+
+    expect(schema).not.toBeUndefined();
   });
 });

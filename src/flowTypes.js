@@ -464,12 +464,8 @@ export type Inventory = {
 
 type NotFieldyEntityConfigFields = {
   name: string,
-  embedded?: boolean,
-  custom?: boolean,
+  type?: string,
   counter?: boolean,
-  search?: $ReadOnlyArray<string>,
-  form?: $ReadOnlyArray<FormField>,
-  list?: $ReadOnlyArray<ListColumn>,
 };
 
 export type DerivativeInputs = {

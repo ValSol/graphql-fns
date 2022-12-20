@@ -37,7 +37,7 @@ describe('createUpdateEntityMutationType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create mutation update entity type with ReorderCreatedInputType', () => {
+  test('should create mutation update entity type with ReorderCreatedInputType', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
@@ -80,8 +80,14 @@ describe('createUpdateEntityMutationType', () => {
       ],
     });
 
+    const inventory = {
+      name: 'test',
+      exclude: { Query: { childEntities: true, childEntitiesThroughConnection: true } },
+    };
+
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Person: personConfig, Place: placeConfig, Address: addressConfig },
+      inventory,
     };
 
     const expectedResult =

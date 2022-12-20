@@ -42,15 +42,21 @@ const composeEntityResolvers = (
       if (array) {
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
 
-        prev[name] = resolver; // eslint-disable-line no-param-reassign
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
 
         const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
 
-        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        if (resolver2) {
+          prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        }
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = resolver;
+
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
       }
       return prev;
     }, resolvers);
@@ -61,15 +67,21 @@ const composeEntityResolvers = (
       if (array) {
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
 
-        prev[name] = resolver; // eslint-disable-line no-param-reassign
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
 
         const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
 
-        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        if (resolver2) {
+          prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        }
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = resolver;
+
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
       }
       return prev;
     }, resolvers);

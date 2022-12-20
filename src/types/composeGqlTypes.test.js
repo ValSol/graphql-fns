@@ -137,12 +137,6 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Menu implements Node {
   id: ID!
   createdAt: DateTime!
@@ -161,13 +155,6 @@ type MenuClone implements Node {
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
   sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
 }
-type MenuSection implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  menu: Menu
-}
 type MenuCloneSection implements Node {
   id: ID!
   createdAt: DateTime!
@@ -175,76 +162,50 @@ type MenuCloneSection implements Node {
   name: String!
   menu: MenuClone
 }
-type MenuEdge {
-  cursor: String!
-  node: Menu
+type MenuSection implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  menu: Menu
 }
 type MenuConnection {
   pageInfo: PageInfo!
   edges: [MenuEdge!]!
 }
-type MenuCloneEdge {
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type MenuEdge {
   cursor: String!
-  node: MenuClone
+  node: Menu
 }
 type MenuCloneConnection {
   pageInfo: PageInfo!
   edges: [MenuCloneEdge!]!
 }
-type MenuSectionEdge {
+type MenuCloneEdge {
   cursor: String!
-  node: MenuSection
+  node: MenuClone
 }
 type MenuSectionConnection {
   pageInfo: PageInfo!
   edges: [MenuSectionEdge!]!
 }
-type MenuCloneSectionEdge {
+type MenuSectionEdge {
   cursor: String!
-  node: MenuCloneSection
+  node: MenuSection
 }
 type MenuCloneSectionConnection {
   pageInfo: PageInfo!
   edges: [MenuCloneSectionEdge!]!
 }
-input MenuSectionWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  AND: [MenuSectionWhereInput!]
-  NOR: [MenuSectionWhereInput!]
-  OR: [MenuSectionWhereInput!]
-}
-input MenuSectionWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
+type MenuCloneSectionEdge {
+  cursor: String!
+  node: MenuCloneSection
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -363,27 +324,44 @@ input MenuCloneSectionWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum MenuSectionSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
+input MenuSectionWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuSectionWhereInput!]
+  NOR: [MenuSectionWhereInput!]
+  OR: [MenuSectionWhereInput!]
 }
-input MenuSectionSortInput {
-  sortBy: [MenuSectionSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
-}
-enum MenuCloneSectionSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input MenuCloneSectionSortInput {
-  sortBy: [MenuCloneSectionSortEnum]
+input MenuSectionWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
 }
 enum MenuTextNamesEnum {
   name
@@ -411,6 +389,28 @@ input MenuCloneSectionDistinctValuesOptionsInput {
 }
 input MenuWhereOneInput {
   id: ID!
+}
+enum MenuSectionSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuSectionSortInput {
+  sortBy: [MenuSectionSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
+}
+enum MenuCloneSectionSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input MenuCloneSectionSortInput {
+  sortBy: [MenuCloneSectionSortEnum]
 }
 input MenuCloneWhereOneInput {
   id: ID!
@@ -927,11 +927,24 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+type TangibleImage implements Node {
+  id: ID!
+  fileId: String!
+  address: String
+}
+type TangibleImageConnection {
+  pageInfo: PageInfo!
+  edges: [TangibleImageEdge!]!
+}
 type PageInfo {
   startCursor: String
   endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
+}
+type TangibleImageEdge {
+  cursor: String!
+  node: TangibleImage
 }
 type Example implements Node {
   id: ID!
@@ -956,26 +969,13 @@ type Image {
   address: String
   text: String
 }
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
 type ExampleConnection {
   pageInfo: PageInfo!
   edges: [ExampleEdge!]!
 }
-type TangibleImage implements Node {
-  id: ID!
-  fileId: String!
-  address: String
-}
-type TangibleImageEdge {
+type ExampleEdge {
   cursor: String!
-  node: TangibleImage
-}
-type TangibleImageConnection {
-  pageInfo: PageInfo!
-  edges: [TangibleImageEdge!]!
+  node: Example
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -1424,12 +1424,6 @@ input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example1 implements Node {
   id: ID!
   createdAt: DateTime!
@@ -1447,21 +1441,27 @@ type Example2 implements Node {
   textField2(slice: SliceInput): [String!]!
   area: GeospatialPolygon
 }
-type Example1Edge {
-  cursor: String!
-  node: Example1
-}
 type Example1Connection {
   pageInfo: PageInfo!
   edges: [Example1Edge!]!
 }
-type Example2Edge {
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type Example1Edge {
   cursor: String!
-  node: Example2
+  node: Example1
 }
 type Example2Connection {
   pageInfo: PageInfo!
   edges: [Example2Edge!]!
+}
+type Example2Edge {
+  cursor: String!
+  node: Example2
 }
 input Example1WhereInput {
   id_in: [ID!]
@@ -1795,12 +1795,6 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -1820,21 +1814,27 @@ type Place implements Node {
   updatedAt: DateTime!
   title: String!
 }
-type PersonEdge {
-  cursor: String!
-  node: Person
-}
 type PersonConnection {
   pageInfo: PageInfo!
   edges: [PersonEdge!]!
 }
-type PlaceEdge {
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type PersonEdge {
   cursor: String!
-  node: Place
+  node: Person
 }
 type PlaceConnection {
   pageInfo: PageInfo!
   edges: [PlaceEdge!]!
+}
+type PlaceEdge {
+  cursor: String!
+  node: Place
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1914,19 +1914,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum PersonSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input PersonSortInput {
-  sortBy: [PersonSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
-}
 enum PersonTextNamesEnum {
   firstName
   lastName
@@ -1942,6 +1929,19 @@ input PlaceDistinctValuesOptionsInput {
 }
 input PersonWhereOneInput {
   id: ID!
+}
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input PlaceWhereOneInput {
   id: ID!
@@ -2161,12 +2161,6 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2183,13 +2177,19 @@ type Address {
   country: String!
   province: String
 }
-type PersonEdge {
-  cursor: String!
-  node: Person
-}
 type PersonConnection {
   pageInfo: PageInfo!
   edges: [PersonEdge!]!
+}
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type PersonEdge {
+  cursor: String!
+  node: Person
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2430,12 +2430,6 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -2459,21 +2453,27 @@ type Place implements Node {
   visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
 }
-type PersonEdge {
-  cursor: String!
-  node: Person
-}
 type PersonConnection {
   pageInfo: PageInfo!
   edges: [PersonEdge!]!
 }
-type PlaceEdge {
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type PersonEdge {
   cursor: String!
-  node: Place
+  node: Person
 }
 type PlaceConnection {
   pageInfo: PageInfo!
   edges: [PlaceEdge!]!
+}
+type PlaceEdge {
+  cursor: String!
+  node: Place
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2553,19 +2553,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum PersonSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-input PersonSortInput {
-  sortBy: [PersonSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
-}
 enum PersonTextNamesEnum {
   firstName
   lastName
@@ -2581,6 +2568,19 @@ input PlaceDistinctValuesOptionsInput {
 }
 input PersonWhereOneInput {
   id: ID!
+}
+enum PersonSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input PersonSortInput {
+  sortBy: [PersonSortEnum]
+}
+input PaginationInput {
+  skip: Int
+  first: Int
 }
 input PlaceWhereOneInput {
   id: ID!
@@ -2852,25 +2852,25 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
 }
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
 type ExampleConnection {
   pageInfo: PageInfo!
   edges: [ExampleEdge!]!
+}
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type ExampleEdge {
+  cursor: String!
+  node: Example
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -2980,25 +2980,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 input ExampleCreateInput {
   id: ID
@@ -3135,25 +3121,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3244,25 +3216,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -3354,25 +3312,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 input ExampleCreateInput {
   id: ID
@@ -3430,25 +3374,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 input ExampleCreateInput {
   id: ID
@@ -3513,25 +3443,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 type Query {
   node(id: ID!): Node
@@ -3583,25 +3499,11 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
 }
 type Query {
   node(id: ID!): Node
@@ -3654,7 +3556,7 @@ type Query {
     const inventory: Inventory = {
       name: 'test',
       include: {
-        Query: { entitiesForCatalog: true, entities: true },
+        Query: { entitiesForCatalog: true, entities: true, entityInTimeRangeQuery: true },
         Mutation: { updateEntityForCatalog: true },
       },
       // include: { Query: true, Mutation: true },
@@ -3852,6 +3754,7 @@ type Query {
   node(id: ID!): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput): [ExampleForCatalog!]!
+  ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): ExampleInTimeRange
 }
 type Mutation {
   updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForCatalog!
@@ -3923,16 +3826,20 @@ type Mutation {
       include: { Mutation: { updateEntityWithChildren: ['Menu'] } },
     };
     const custom = { Mutation: { updateEntityWithChildren } };
-    const derivativeInputs = {
-      '': {
-        derivativeKey: '',
-        allow: {
-          Menu: ['entityWhereOneInput', 'entityUpdateInput'],
-          MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
-        },
-      },
+    // const derivativeInputs = {
+    //   '': {
+    //     derivativeKey: '',
+    //     allow: {
+    //       Menu: ['entityWhereOneInput', 'entityUpdateInput'],
+    //       MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
+    //     },
+    //   },
+    // };
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs,
+      custom,
+      /* derivativeInputs, */ inventory,
     };
-    const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivativeInputs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3951,8 +3858,6 @@ type Menu implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   menuName: String
-  sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
-  sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
 }
 type MenuSection implements Node {
   id: ID!
@@ -3960,139 +3865,6 @@ type MenuSection implements Node {
   updatedAt: DateTime!
   menuSectionName: String
   menu: Menu
-}
-input MenuSectionWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  menuSectionName: String
-  menuSectionName_in: [String!]
-  menuSectionName_nin: [String!]
-  menuSectionName_ne: String
-  menuSectionName_gt: String
-  menuSectionName_gte: String
-  menuSectionName_lt: String
-  menuSectionName_lte: String
-  menuSectionName_re: [RegExp!]
-  menuSectionName_exists: Boolean
-  AND: [MenuSectionWhereInput!]
-  NOR: [MenuSectionWhereInput!]
-  OR: [MenuSectionWhereInput!]
-}
-input MenuSectionWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  menuSectionName: String
-  menuSectionName_in: [String!]
-  menuSectionName_nin: [String!]
-  menuSectionName_ne: String
-  menuSectionName_gt: String
-  menuSectionName_gte: String
-  menuSectionName_lt: String
-  menuSectionName_lte: String
-  menuSectionName_re: [RegExp!]
-  menuSectionName_exists: Boolean
-}
-input MenuWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  menuName: String
-  menuName_in: [String!]
-  menuName_nin: [String!]
-  menuName_ne: String
-  menuName_gt: String
-  menuName_gte: String
-  menuName_lt: String
-  menuName_lte: String
-  menuName_re: [RegExp!]
-  menuName_exists: Boolean
-  AND: [MenuWhereInput!]
-  NOR: [MenuWhereInput!]
-  OR: [MenuWhereInput!]
-}
-input MenuWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  menuName: String
-  menuName_in: [String!]
-  menuName_nin: [String!]
-  menuName_ne: String
-  menuName_gt: String
-  menuName_gte: String
-  menuName_lt: String
-  menuName_lte: String
-  menuName_re: [RegExp!]
-  menuName_exists: Boolean
-}
-enum MenuSectionSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  menuSectionName_ASC
-  menuSectionName_DESC
-}
-input MenuSectionSortInput {
-  sortBy: [MenuSectionSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
 }
 input MenuWhereOneInput {
   id: ID!
@@ -4185,39 +3957,39 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
 type Example implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
 }
+type ExampleConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleEdge!]!
+}
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
 type ExampleEdge {
   cursor: String!
   node: Example
 }
-type ExampleConnection {
+type ExampleForCatalogConnection {
   pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
+  edges: [ExampleForCatalogEdge!]!
+}
+type ExampleForCatalogEdge {
+  cursor: String!
+  node: ExampleForCatalog
 }
 type ExampleForCatalog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
-}
-type ExampleForCatalogEdge {
-  cursor: String!
-  node: ExampleForCatalog
-}
-type ExampleForCatalogConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleForCatalogEdge!]!
 }
 input ExampleWhereInput {
   id_in: [ID!]

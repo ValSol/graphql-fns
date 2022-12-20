@@ -1,7 +1,8 @@
 // @flow
 
-import type { EntityConfig } from '../flowTypes';
+import type { EntityConfig, Inventory } from '../flowTypes';
 
+import checkInventory from '../utils/inventory/checkInventory';
 import { queryAttributes } from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
 
@@ -15,20 +16,21 @@ const arrayArgs = '(slice: SliceInput)';
 const createEntityType = (
   entityConfig: EntityConfig,
   inputDic: { [inputName: string]: string },
+  inventory?: Inventory,
 ): string => {
   const {
     childFields,
     counter,
     booleanFields,
     dateTimeFields,
-    duplexFields,
+    duplexFields = [],
     embeddedFields,
     enumFields,
     fileFields,
     floatFields,
     intFields,
     geospatialFields,
-    relationalFields,
+    relationalFields = [],
     textFields,
     type: configType,
     name,
@@ -121,54 +123,45 @@ const createEntityType = (
     }, entityTypeArray);
   }
 
-  if (relationalFields) {
-    relationalFields.reduce((prev, { array, name: name2, required, config }) => {
-      prev.push(
-        `  ${name2}${
-          array ? `(${composeChildActionSignature(config, 'childEntities', inputDic)})` : ''
-        }: ${composeReturnString(config, array ? childEntities : childEntity)}${
-          !array && required ? '!' : ''
-        }`,
-      );
-
+  [...relationalFields, ...duplexFields].reduce(
+    (prev, { array, name: name2, required, config }) => {
       if (array) {
-        prev.push(
-          `  ${name2}ThroughConnection${`(${composeChildActionSignature(
-            config,
-            'childEntitiesThroughConnection',
-            inputDic,
-          )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
+        const childEntitiesArgs = composeChildActionSignature(
+          config,
+          'childEntities',
+          inputDic,
+          inventory,
         );
+
+        if (childEntitiesArgs) {
+          prev.push(
+            `  ${name2}(${childEntitiesArgs}): ${composeReturnString(config, childEntities)}`,
+          );
+        }
+
+        const childEntitiesThroughConnectionArgs = composeChildActionSignature(
+          config,
+          'childEntitiesThroughConnection',
+          inputDic,
+          inventory,
+        );
+
+        if (childEntitiesThroughConnectionArgs) {
+          prev.push(
+            `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+              config,
+              childEntitiesThroughConnection,
+            )}`,
+          );
+        }
+      } else if (checkInventory(['Query', 'childEntity', config.name])) {
+        prev.push(`  ${name2}: ${composeReturnString(config, childEntity)}${required ? '!' : ''}`);
       }
 
       return prev;
-    }, entityTypeArray);
-  }
-
-  // the same code as for relationalFields
-  if (duplexFields) {
-    duplexFields.reduce((prev, { array, name: name2, required, config }) => {
-      prev.push(
-        `  ${name2}${
-          array ? `(${composeChildActionSignature(config, 'childEntities', inputDic)})` : ''
-        }: ${composeReturnString(config, array ? childEntities : childEntity)}${
-          !array && required ? '!' : ''
-        }`,
-      );
-
-      if (array) {
-        prev.push(
-          `  ${name2}ThroughConnection${`(${composeChildActionSignature(
-            config,
-            'childEntitiesThroughConnection',
-            inputDic,
-          )})`}: ${composeReturnString(config, childEntitiesThroughConnection)}`,
-        );
-      }
-
-      return prev;
-    }, entityTypeArray);
-  }
+    },
+    entityTypeArray,
+  );
 
   if (embeddedFields) {
     embeddedFields.reduce(

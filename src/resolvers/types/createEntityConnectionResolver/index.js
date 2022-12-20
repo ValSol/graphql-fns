@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import type { EntityConfig, GeneralConfig, NearInput, ServersideConfig } from '../../../flowTypes';
 import type { Context } from '../../flowTypes';
 
+import checkInventory from '../../../utils/inventory/checkInventory';
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
@@ -28,7 +29,7 @@ const createEntityConnectionResolver = (
   serversideConfig: ServersideConfig,
 ): Function => {
   const { name } = entityConfig;
-  const { allEntityConfigs } = generalConfig;
+  const { allEntityConfigs, inventory } = generalConfig;
 
   const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
 
@@ -64,6 +65,8 @@ const createEntityConnectionResolver = (
   const inventoryChain = derivativeKey
     ? ['Query', `childEntitiesThroughConnection${derivativeKey}`, nameRoot]
     : ['Query', 'childEntitiesThroughConnection', name];
+
+  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
     const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
