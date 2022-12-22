@@ -51,8 +51,7 @@ const composeQuery = (
     throw new TypeError('"generalConfig" have to be defined!');
   }
 
-  const forClient = true;
-  const custom = mergeDerivativeIntoCustom(generalConfig, forClient); // eslint-disable-line no-case-declarations
+  const custom = mergeDerivativeIntoCustom(generalConfig, 'forClient'); // eslint-disable-line no-case-declarations
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
   }

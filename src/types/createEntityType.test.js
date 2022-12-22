@@ -35,6 +35,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -46,7 +49,7 @@ describe('createEntityType', () => {
   textField5(slice: SliceInput): [String!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -83,6 +86,9 @@ describe('createEntityType', () => {
         },
       ],
     });
+
+    const generalConfig = { allEntityConfigs: { Person: personConfig, Place: placeConfig } };
+
     const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -95,7 +101,7 @@ describe('createEntityType', () => {
   favoritePlace: Place
 }`;
 
-    const result = createEntityType(personConfig, {});
+    const result = createEntityType(personConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -150,6 +156,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Person: personConfig, Address: addressConfig } };
+
     const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -162,7 +171,7 @@ describe('createEntityType', () => {
   places(slice: SliceInput): [Address!]!
 }`;
 
-    const result = createEntityType(personConfig, {});
+    const result = createEntityType(personConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -181,13 +190,16 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Address: addressConfig } };
+
     const expectedResult = `type Address {
   id: ID!
   country: String!
   province: String
 }`;
 
-    const result = createEntityType(addressConfig, {});
+    const result = createEntityType(addressConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -252,6 +264,9 @@ describe('createEntityType', () => {
         },
       ],
     });
+
+    const generalConfig = { allEntityConfigs: { Person: personConfig, Place: placeConfig } };
+
     const expectedResult = `type Person implements Node {
   id: ID!
   createdAt: DateTime!
@@ -266,7 +281,7 @@ describe('createEntityType', () => {
   favoritePlace: Place
 }`;
 
-    const result = createEntityType(personConfig, {});
+    const result = createEntityType(personConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -317,6 +332,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -331,7 +349,7 @@ describe('createEntityType', () => {
   worstAreas(slice: SliceInput): [GeospatialPolygon!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -362,6 +380,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -372,7 +393,7 @@ describe('createEntityType', () => {
   field4(slice: SliceInput): [CuisinesEnumeration!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -404,6 +425,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -415,7 +439,7 @@ describe('createEntityType', () => {
   intField5(slice: SliceInput): [Int!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -447,6 +471,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -458,7 +485,7 @@ describe('createEntityType', () => {
   floatField5(slice: SliceInput): [Float!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -490,6 +517,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -501,7 +531,7 @@ describe('createEntityType', () => {
   booleanField5(slice: SliceInput): [Boolean!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -552,6 +582,8 @@ describe('createEntityType', () => {
       ],
     });
 
+    const generalConfig = { allEntityConfigs: { Image: imageConfig, Example: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -563,7 +595,7 @@ describe('createEntityType', () => {
   photos(slice: SliceInput): [Image!]!
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -582,13 +614,14 @@ describe('createEntityType', () => {
       ],
     };
 
+    const generalConfig = { allEntityConfigs: { Image: imageConfig } };
+
     const expectedResult = `type Image {
   id: ID!
   fileId: String!
   address: String
 }`;
-
-    const result = createEntityType(imageConfig, {});
+    const result = createEntityType(imageConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -603,6 +636,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -610,8 +646,7 @@ describe('createEntityType', () => {
   counter: Int!
   textField1: String
 }`;
-
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -626,6 +661,9 @@ describe('createEntityType', () => {
         },
       ],
     };
+
+    const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
+
     const expectedResult = `type Example implements Node {
   id: ID!
   createdAt: DateTime!
@@ -634,7 +672,7 @@ describe('createEntityType', () => {
   textField1: String
 }`;
 
-    const result = createEntityType(entityConfig, {});
+    const result = createEntityType(entityConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
@@ -658,19 +696,26 @@ describe('createEntityType', () => {
       textFields: [{ name: 'cursor', required: true }],
     };
 
+    const generalConfig = {
+      allEntityConfigs: {
+        Exmaple: entityConfig,
+        ExampleEdge: exampleEdgeConfig,
+      },
+    };
+
     const expectedResult = `type ExampleEdge {
   cursor: String!
   node: Example
 }`;
 
-    const result = createEntityType(exampleEdgeConfig, {});
+    const result = createEntityType(exampleEdgeConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 
   test('should create entity type for ExampleConnection', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
-      type: 'virtual',
+      type: 'tangible',
       textFields: [
         {
           name: 'textField1',
@@ -697,12 +742,20 @@ describe('createEntityType', () => {
       ],
     };
 
+    const generalConfig = {
+      allEntityConfigs: {
+        Exmaple: entityConfig,
+        ExampleEdge: exampleEdgeConfig,
+        ExampleConnection: exampleConnectionConfig,
+      },
+    };
+
     const expectedResult = `type ExampleConnection {
   pageInfo: PageInfo!
   edges: [ExampleEdge!]!
 }`;
 
-    const result = createEntityType(exampleConnectionConfig, {});
+    const result = createEntityType(exampleConnectionConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 });

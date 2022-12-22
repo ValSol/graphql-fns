@@ -7,7 +7,7 @@ import composeConnectionVirtualConfigName from './composeConnectionVirtualConfig
 const composeConnectionVirtualConfig: VirtualConfigComposer = (config, generalConfig) => {
   const { name, type: configType = 'tangible' } = config;
 
-  if (configType !== 'tangible' && configType !== 'tangibleFile') {
+  if (configType === 'virtual') {
     throw new TypeError(
       `Forbidden to use entity config with type: "${configType}" to compose "Connection" virtual config!`,
     );

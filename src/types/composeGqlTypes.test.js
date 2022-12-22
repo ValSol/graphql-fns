@@ -162,16 +162,9 @@ type MenuCloneSection implements Node {
   name: String!
   menu: MenuClone
 }
-type MenuSection implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  menu: Menu
-}
-type MenuConnection {
+type MenuCloneConnection {
   pageInfo: PageInfo!
-  edges: [MenuEdge!]!
+  edges: [MenuCloneEdge!]!
 }
 type PageInfo {
   startCursor: String
@@ -179,25 +172,17 @@ type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
 }
-type MenuEdge {
-  cursor: String!
-  node: Menu
-}
-type MenuCloneConnection {
-  pageInfo: PageInfo!
-  edges: [MenuCloneEdge!]!
-}
 type MenuCloneEdge {
   cursor: String!
   node: MenuClone
 }
-type MenuSectionConnection {
+type MenuConnection {
   pageInfo: PageInfo!
-  edges: [MenuSectionEdge!]!
+  edges: [MenuEdge!]!
 }
-type MenuSectionEdge {
+type MenuEdge {
   cursor: String!
-  node: MenuSection
+  node: Menu
 }
 type MenuCloneSectionConnection {
   pageInfo: PageInfo!
@@ -206,6 +191,21 @@ type MenuCloneSectionConnection {
 type MenuCloneSectionEdge {
   cursor: String!
   node: MenuCloneSection
+}
+type MenuSection implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  menu: Menu
+}
+type MenuSectionConnection {
+  pageInfo: PageInfo!
+  edges: [MenuSectionEdge!]!
+}
+type MenuSectionEdge {
+  cursor: String!
+  node: MenuSection
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -3826,19 +3826,11 @@ type Mutation {
       include: { Mutation: { updateEntityWithChildren: ['Menu'] } },
     };
     const custom = { Mutation: { updateEntityWithChildren } };
-    // const derivativeInputs = {
-    //   '': {
-    //     derivativeKey: '',
-    //     allow: {
-    //       Menu: ['entityWhereOneInput', 'entityUpdateInput'],
-    //       MenuSection: ['entityWhereOneInput', 'entityUpdateInput'],
-    //     },
-    //   },
-    // };
+
     const generalConfig: GeneralConfig = {
       allEntityConfigs,
       custom,
-      /* derivativeInputs, */ inventory,
+      inventory,
     };
     const expectedResult = `scalar DateTime
 scalar Upload

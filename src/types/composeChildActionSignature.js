@@ -1,13 +1,15 @@
 // @flow
 
-import type { Inventory, EntityConfig } from '../flowTypes';
+import type { Inventory, EntityConfig, GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
+import parseEntityName from '../resolvers/utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
 import { queryAttributes } from './actionAttributes';
 
 const composeChildActionSignature = (
   entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
   childQueryGeneralName: string,
   inputDic?: { [inputName: string]: string },
   inventory?: Inventory,
@@ -22,6 +24,7 @@ const composeChildActionSignature = (
     actionReturnString,
   } = queryAttributes[childQueryGeneralName];
   const { name: configName } = entityConfig;
+  const { allEntityConfigs } = generalConfig;
 
   if (
     inventory &&
@@ -46,7 +49,9 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString('')(entityConfig);
+  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+
+  const returnString = actionReturnString(derivativeKey)(allEntityConfigs[rootName]);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;

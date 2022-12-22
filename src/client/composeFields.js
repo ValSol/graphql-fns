@@ -27,8 +27,8 @@ const findNameWithAlias = (name: string, include: void | Object): string =>
 
 const getNameOrAlias = (nameWithAlias) => nameWithAlias.split(': ')[0];
 
-const composeChildArgs = (currentChild, entityConfig) =>
-  composeChildActionSignature(entityConfig, 'childEntities')
+const composeChildArgs = (currentChild, entityConfig, generalConfig) =>
+  composeChildActionSignature(entityConfig, generalConfig, 'childEntities')
     .split(', ')
     .filter(Boolean)
     .reduce((prev, item) => {
@@ -293,7 +293,7 @@ const composeFieldsWithChildArgs = (
           exclude: nextExclude,
         };
         if (array) {
-          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          const currentChildArgs = composeChildArgs(newCurrentChild, config, generalConfig);
           Object.assign(childArgs, currentChildArgs);
           prev.push(
             `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
@@ -316,7 +316,7 @@ const composeFieldsWithChildArgs = (
         if (array) {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
-          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          const currentChildArgs = composeChildArgs(newCurrentChild, config, generalConfig);
           Object.assign(childArgs, currentChildArgs);
           prev.push(
             `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
@@ -348,7 +348,7 @@ const composeFieldsWithChildArgs = (
           exclude: nextExclude,
         };
         if (array) {
-          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          const currentChildArgs = composeChildArgs(newCurrentChild, config, generalConfig);
           Object.assign(childArgs, currentChildArgs);
           prev.push(
             `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,
@@ -371,7 +371,7 @@ const composeFieldsWithChildArgs = (
         if (array) {
           const nameOrAlias = getNameOrAlias(nameWithAlias);
           const newCurrentChild = currentChild ? `${currentChild}_${nameOrAlias}` : nameOrAlias;
-          const currentChildArgs = composeChildArgs(newCurrentChild, config);
+          const currentChildArgs = composeChildArgs(newCurrentChild, config, generalConfig);
           Object.assign(childArgs, currentChildArgs);
           prev.push(
             `${'  '.repeat(shift)}${nameWithAlias}(${composeChildArgsStr(currentChildArgs)}) {`,

@@ -468,31 +468,6 @@ type NotFieldyEntityConfigFields = {
   counter?: boolean,
 };
 
-export type DerivativeInputs = {
-  derivativeKey: string,
-  +allow: {
-    // eslint-disable-next-line flowtype/generic-spacing
-    [entityName: string]: Array<
-      | 'FilesOfEntityOptionsInput'
-      | 'FileWhereInput'
-      | 'FileWhereOneInput'
-      | 'ImportOptionsInput'
-      | 'PaginationInput'
-      | 'PushIntoEntityInput'
-      | 'entityCreateInput'
-      | 'entityDistinctValuesOptionsInput'
-      | 'entityNearInput'
-      | 'entityPushPositionsInput'
-      | 'entityReorderUploadedInput'
-      | 'entitySortInput'
-      | 'entityUpdateInput'
-      | 'entityWhereInput'
-      | 'entityWhereOneInput'
-      | 'UploadFilesToEntityInput',
-    >,
-  },
-};
-
 export type GeneralConfig = {
   +allEntityConfigs: { [entityConfigName: string]: EntityConfig },
   +custom?: {
@@ -597,7 +572,6 @@ export type GeneralConfig = {
       +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
     },
   },
-  +derivativeInputs?: { +[derivativeKey: string]: DerivativeInputs },
   +enums?: Enums,
   inventory?: Inventory,
 };

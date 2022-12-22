@@ -10,7 +10,7 @@ const composeEdgeVirtualConfig: VirtualConfigComposer = (
 ) => {
   const { name, type: configType = 'tangible' } = config;
 
-  if (configType !== 'tangible' && configType !== 'tangibleFile') {
+  if (configType === 'virtual') {
     throw new TypeError(
       `Forbidden to use entity config with type: "${configType}" to compose "Edge" virtual config!`,
     );

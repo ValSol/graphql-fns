@@ -11,7 +11,7 @@ const store = Object.create(null);
 
 const mergeDerivativeIntoCustom = (
   generalConfig: GeneralConfig,
-  forClient?: boolean,
+  variant?: 'forClient' | 'forCustomResolver',
 ): null | Custom => {
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
@@ -33,7 +33,11 @@ const mergeDerivativeIntoCustom = (
     const allowedMethods = getAllowedMethods(allow);
 
     Object.keys(queryAttributes).forEach((actionName) => {
-      if ((!forClientActions.includes(actionName) || !forClient) && allowedMethods[actionName]) {
+      if (
+        (!forClientActions.includes(actionName) || variant !== 'forClient') &&
+        allowedMethods[actionName] &&
+        (variant === 'forCustomResolver' || !queryAttributes[actionName].actionIsChild)
+      ) {
         // eslint-disable-next-line no-param-reassign
         prev[queryAttributes[actionName].actionGeneralName(derivativeKey)] = composeCustomAction(
           derivative[derivativeKey],

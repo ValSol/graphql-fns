@@ -81,7 +81,8 @@ const composeAllEntityConfigs = (
       });
     }
 
-    if (configType === 'tangible') {
+    // if (configType === 'virtual') {
+    if (configType === 'tangible' || configType === 'tangibleFile') {
       virtualConfigComposers.forEach(([key]) => {
         const [composeVirtualConfig, composeVirtualConfigName] = virtualConfigComposersObject[key];
 

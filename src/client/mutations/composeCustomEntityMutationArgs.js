@@ -14,8 +14,7 @@ const composeCustomEntityMutationArgs = (
     throw new TypeError('"generalConfig" property have to be defined!');
   }
 
-  const forClient = true;
-  const custom = mergeDerivativeIntoCustom(generalConfig, forClient);
+  const custom = mergeDerivativeIntoCustom(generalConfig, 'forClient');
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');

@@ -7,6 +7,29 @@ import composeDerivativeConfigName from './composeDerivativeConfigName';
 
 const store = Object.create(null);
 
+const checkAnyEntityNames = (allowEntityNames, derivativeKey) => (EntityNamesObject, fieldType) => {
+  Object.keys(EntityNamesObject).forEach((entityName) => {
+    if (!allowEntityNames.includes(entityName)) {
+      throw new TypeError(
+        `Incorrect entityName key: "${entityName}" in ${fieldType} of "${derivativeKey}" derivative!`,
+      );
+    }
+  });
+};
+
+const checkAnyFieldNames =
+  (rootEntityName, fieldsObject, derivativeKey) => (EntityNamesObject, fieldType) => {
+    if (EntityNamesObject[rootEntityName]) {
+      EntityNamesObject[rootEntityName].forEach((fieldName) => {
+        if (!fieldsObject[fieldName]) {
+          throw new TypeError(
+            `Incorrect ${fieldType} field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
+          );
+        }
+      });
+    }
+  };
+
 const composeDerivativeConfig = (
   signatureMethods: DerivativeAttributes,
   rootEntityConfig: EntityConfig,
@@ -17,12 +40,12 @@ const composeDerivativeConfig = (
   const {
     derivativeKey,
     allow,
-    addFields,
-    derivativeFields,
-    excludeFields,
-    includeFields,
-    freezedFields,
-    unfreezedFields,
+    addFields = {},
+    derivativeFields = {},
+    excludeFields = {},
+    includeFields = {},
+    freezedFields = {},
+    unfreezedFields = {},
   } = signatureMethods;
 
   const { derivative, allEntityConfigs } = generalConfig;
@@ -46,138 +69,69 @@ const composeDerivativeConfig = (
 
   const allowEntityNames = Object.keys(allow);
 
+  const checkEntityNames = checkAnyEntityNames(allowEntityNames, derivativeKey);
+  const checkFieldNames = checkAnyFieldNames(rootEntityName, fieldsObject, derivativeKey);
+
   // *** check args correctness
 
-  if (excludeFields) {
-    Object.keys(excludeFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
+  checkEntityNames(excludeFields, 'excludeFields');
+  checkFieldNames(excludeFields, 'excludeFields');
+
+  checkEntityNames(includeFields, 'includeFields');
+  checkFieldNames(includeFields, 'includeFields');
+
+  checkEntityNames(freezedFields, 'freezedFields');
+  checkFieldNames(freezedFields, 'freezedFields');
+
+  checkEntityNames(unfreezedFields, 'unfreezedFields');
+  checkFieldNames(unfreezedFields, 'unfreezedFields');
+
+  checkEntityNames(addFields, 'addFields');
+
+  checkEntityNames(derivativeFields, 'derivativeFields');
+
+  const addedDuplexFields = addFields[rootEntityName]?.duplexFields
+    ? addFields[rootEntityName].duplexFields.map(({ name }) => name)
+    : [];
+
+  const addedRelationalFields = addFields[rootEntityName]?.relationalFields
+    ? addFields[rootEntityName].relationalFields.map(({ name }) => name)
+    : [];
+
+  const addedChildFields = addFields[rootEntityName]?.childFields
+    ? addFields[rootEntityName].childFields.map(({ name }) => name)
+    : [];
+
+  if (derivativeFields[rootEntityName]) {
+    Object.keys(derivativeFields[rootEntityName]).forEach((fieldName) => {
+      if (
+        !(
+          fieldsObject[fieldName] &&
+          (fieldsObject[fieldName].kind === 'relationalFields' ||
+            fieldsObject[fieldName].kind === 'duplexFields' ||
+            fieldsObject[fieldName].kind === 'childFields')
+        ) &&
+        !addedDuplexFields.includes(fieldName) &&
+        !addedRelationalFields.includes(fieldName) &&
+        !addedChildFields.includes(fieldName)
+      ) {
         throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in excludeFields of "${derivativeKey}" derivative!`,
+          `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
+        );
+      }
+
+      if (includeFields[rootEntityName] && !includeFields[rootEntityName].includes(fieldName)) {
+        throw new TypeError(
+          `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" as not included in: "${derivativeKey}" derivative!`,
+        );
+      }
+
+      if (excludeFields[rootEntityName] && excludeFields[rootEntityName].includes(fieldName)) {
+        throw new TypeError(
+          `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" as excluded in: "${derivativeKey}" derivative!`,
         );
       }
     });
-
-    if (excludeFields[rootEntityName]) {
-      excludeFields[rootEntityName].forEach((fieldName) => {
-        if (!fieldsObject[fieldName]) {
-          throw new TypeError(
-            `Incorrect excludeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
-          );
-        }
-      });
-    }
-  }
-
-  if (includeFields) {
-    Object.keys(includeFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
-        throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in includeFields of "${derivativeKey}" derivative!`,
-        );
-      }
-    });
-
-    if (includeFields[rootEntityName]) {
-      includeFields[rootEntityName].forEach((fieldName) => {
-        if (!fieldsObject[fieldName]) {
-          throw new TypeError(
-            `Incorrect includeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
-          );
-        }
-      });
-    }
-  }
-
-  if (freezedFields) {
-    Object.keys(freezedFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
-        throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in freezedFields of "${derivativeKey}" derivative!`,
-        );
-      }
-    });
-
-    if (freezedFields[rootEntityName]) {
-      freezedFields[rootEntityName].forEach((fieldName) => {
-        if (!fieldsObject[fieldName]) {
-          throw new TypeError(
-            `Incorrect freezedFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
-          );
-        }
-      });
-    }
-  }
-
-  if (unfreezedFields) {
-    Object.keys(unfreezedFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
-        throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in unfreezedFields of "${derivativeKey}" derivative!`,
-        );
-      }
-    });
-
-    if (unfreezedFields[rootEntityName]) {
-      unfreezedFields[rootEntityName].forEach((fieldName) => {
-        if (!fieldsObject[fieldName]) {
-          throw new TypeError(
-            `Incorrect unfreezedFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
-          );
-        }
-      });
-    }
-  }
-
-  if (addFields) {
-    Object.keys(addFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
-        throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in addFields of "${derivativeKey}" derivative!`,
-        );
-      }
-    });
-  }
-
-  if (derivativeFields) {
-    Object.keys(derivativeFields).forEach((entityName) => {
-      if (!allowEntityNames.includes(entityName)) {
-        throw new TypeError(
-          `Incorrect entityName key: "${entityName}" in derivativeFields of "${derivativeKey}" derivative!`,
-        );
-      }
-    });
-
-    const addedDuplexFields = addFields?.[rootEntityName]?.duplexFields
-      ? addFields[rootEntityName].duplexFields.map(({ name }) => name)
-      : [];
-
-    const addedRelationalFields = addFields?.[rootEntityName]?.relationalFields
-      ? addFields[rootEntityName].relationalFields.map(({ name }) => name)
-      : [];
-
-    const addedChildFields = addFields?.[rootEntityName]?.childFields
-      ? addFields[rootEntityName].childFields.map(({ name }) => name)
-      : [];
-
-    if (derivativeFields[rootEntityName]) {
-      Object.keys(derivativeFields[rootEntityName]).forEach((fieldName) => {
-        if (
-          !(
-            fieldsObject[fieldName] &&
-            (fieldsObject[fieldName].kind === 'relationalFields' ||
-              fieldsObject[fieldName].kind === 'duplexFields' ||
-              fieldsObject[fieldName].kind === 'childFields')
-          ) &&
-          !addedDuplexFields.includes(fieldName) &&
-          !addedRelationalFields.includes(fieldName) &&
-          !addedChildFields.includes(fieldName)
-        ) {
-          throw new TypeError(
-            `Incorrect derivativeFields field name "${fieldName}" for "${rootEntityName}" in: "${derivativeKey}" derivative!`,
-          );
-        }
-      });
-    }
   }
 
   // ***
@@ -186,7 +140,7 @@ const composeDerivativeConfig = (
 
   store[derivativeEntityName] = entityConfig;
 
-  if (includeFields && includeFields[rootEntityName]) {
+  if (includeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         // $FlowFixMe
@@ -197,7 +151,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (excludeFields && excludeFields[rootEntityName]) {
+  if (excludeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         // $FlowFixMe
@@ -209,7 +163,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (addFields && addFields[rootEntityName]) {
+  if (addFields[rootEntityName]) {
     const addFields2 = {
       ...addFields[rootEntityName],
       // name used also for cache results in composeFieldsObject util
@@ -239,7 +193,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (derivativeFields && derivativeFields[rootEntityName]) {
+  if (derivativeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
       if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
         // $FlowFixMe
@@ -256,7 +210,7 @@ const composeDerivativeConfig = (
           const childQuery = array ? 'childEntities' : 'childEntity';
           if (
             !derivative[derivativeKey2].allow[currentConfig.name].includes(childQuery) &&
-            fieldsObject[name].kind !== 'childFields'
+            key !== 'childFields'
           ) {
             throw new TypeError(
               `Have to set "${childQuery}" as "allow" for derivativeKey: "${derivativeKey2}" & entity: "${currentConfig.name}"!`,
@@ -275,11 +229,30 @@ const composeDerivativeConfig = (
           // $FlowFixMe
           return { ...item, config };
         });
+
+        // *** check that the duplex fields have opposite duplex fields
+
+        if (key === 'duplexFields') {
+          // eslint-disable-next-line
+          entityConfig[key]?.forEach(({ config, oppositeName }) => {
+            const oppositeField = (config.duplexFields || []).find(
+              ({ name }) => name === oppositeName,
+            );
+
+            if (!oppositeField) {
+              throw new TypeError(
+                `Expected a duplexField with name "${oppositeName}" in derivative config "${config.name}"!`,
+              );
+            }
+          });
+        }
+
+        // ***
       }
     });
   }
 
-  if (freezedFields && freezedFields[rootEntityName]) {
+  if (freezedFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         // $FlowFixMe
@@ -295,7 +268,7 @@ const composeDerivativeConfig = (
     });
   }
 
-  if (unfreezedFields && unfreezedFields[rootEntityName]) {
+  if (unfreezedFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         // $FlowFixMe

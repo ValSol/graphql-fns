@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, GeneralConfig, InputCreator } from '../../flowTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 import connectionDerivativeUpdater from '../actionDerivativeUpdaters/connectionDerivativeUpdater';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
@@ -66,15 +66,19 @@ const actionReturnConfig = (
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { allEntityConfigs } = generalConfig;
+  const { allEntityConfigs, derivative } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  return derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, connectionConfig, generalConfig)
-    : connectionConfig;
+  if (derivativeKey) {
+    return derivative
+      ? composeDerivativeConfig(derivative[derivativeKey], connectionConfig, generalConfig)
+      : null;
+  }
+
+  return connectionConfig;
 };
 
 const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnectionVirtualConfig'];

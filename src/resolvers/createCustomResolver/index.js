@@ -24,7 +24,7 @@ const createCustomResolver = (
 
   const { inventory } = generalConfig;
 
-  const custom = mergeDerivativeIntoCustom(generalConfig);
+  const custom = mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver');
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');

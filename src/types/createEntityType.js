@@ -1,6 +1,6 @@
 // @flow
 
-import type { EntityConfig, Inventory } from '../flowTypes';
+import type { EntityConfig, GeneralConfig, Inventory } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import { queryAttributes } from './actionAttributes';
@@ -13,8 +13,22 @@ const composeReturnString = (config, actionAttributes) =>
 
 const arrayArgs = '(slice: SliceInput)';
 
+// const arrayThroughConnectionArgs = '(after: String, before: String, first: Int, last: Int)';
+
+const pushInPrev = ({ array, name, required }, itemType, prev) => {
+  if (array) {
+    prev.push(`  ${name}${arrayArgs}: [${itemType}!]!`);
+
+    // prev.push(`  ${name}${arrayArgs}ThroughConnection: [${itemType}!]!`);
+  } else {
+    prev.push(`  ${name}: ${itemType}${required ? '!' : ''}`);
+  }
+};
+
 const createEntityType = (
   entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+  entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
   inventory?: Inventory,
 ): string => {
@@ -58,67 +72,51 @@ const createEntityType = (
   }
 
   if (textFields) {
-    textFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}String${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+    textFields.reduce((prev, field) => {
+      pushInPrev(field, 'String', prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (intFields) {
-    intFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Int${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+    intFields.reduce((prev, field) => {
+      pushInPrev(field, 'Int', prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (floatFields) {
-    floatFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Float${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+    floatFields.reduce((prev, field) => {
+      pushInPrev(field, 'Float', prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}DateTime${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+    dateTimeFields.reduce((prev, field) => {
+      pushInPrev(field, 'DateTime', prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (booleanFields) {
-    booleanFields.reduce((prev, { array, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Boolean${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
+    booleanFields.reduce((prev, field) => {
+      pushInPrev(field, 'Boolean', prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (enumFields) {
-    enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${enumName}Enumeration${
-          array ? '!]!' : ''
-        }${!array && required ? '!' : ''}`,
-      );
+    enumFields.reduce((prev, field) => {
+      const { enumName } = field;
+
+      pushInPrev(field, `${enumName}Enumeration`, prev);
+
       return prev;
     }, entityTypeArray);
   }
@@ -128,6 +126,7 @@ const createEntityType = (
       if (array) {
         const childEntitiesArgs = composeChildActionSignature(
           config,
+          generalConfig,
           'childEntities',
           inputDic,
           inventory,
@@ -141,6 +140,7 @@ const createEntityType = (
 
         const childEntitiesThroughConnectionArgs = composeChildActionSignature(
           config,
+          generalConfig,
           'childEntitiesThroughConnection',
           inputDic,
           inventory,
@@ -164,38 +164,36 @@ const createEntityType = (
   );
 
   if (embeddedFields) {
-    embeddedFields.reduce(
-      (prev, { array, name: name2, required, config: { name: embeddedName } }) => {
-        prev.push(
-          `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${embeddedName}${
-            array ? '!]!' : ''
-          }${!array && required ? '!' : ''}`,
-        );
-        return prev;
-      },
-      entityTypeArray,
-    );
+    embeddedFields.reduce((prev, field) => {
+      const {
+        config: { name: embeddedName },
+      } = field;
+
+      pushInPrev(field, embeddedName, prev);
+
+      return prev;
+    }, entityTypeArray);
   }
 
   // the same code as for embeddedFields
   if (fileFields) {
-    fileFields.reduce((prev, { array, name: name2, required, config: { name: embeddedName } }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}${embeddedName}${
-          array ? '!]!' : ''
-        }${!array && required ? '!' : ''}`,
-      );
+    fileFields.reduce((prev, field) => {
+      const {
+        config: { name: embeddedName },
+      } = field;
+
+      pushInPrev(field, embeddedName, prev);
+
       return prev;
     }, entityTypeArray);
   }
 
   if (geospatialFields) {
-    geospatialFields.reduce((prev, { array, name: name2, geospatialType, required }) => {
-      prev.push(
-        `  ${name2}${array ? arrayArgs : ''}: ${array ? '[' : ''}Geospatial${geospatialType}${
-          array ? '!]!' : ''
-        }${!array && required ? '!' : ''}`,
-      );
+    geospatialFields.reduce((prev, field) => {
+      const { geospatialType } = field;
+
+      pushInPrev(field, `Geospatial${geospatialType}`, prev);
+
       return prev;
     }, entityTypeArray);
   }

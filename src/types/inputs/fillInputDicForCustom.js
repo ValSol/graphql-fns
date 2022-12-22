@@ -78,8 +78,8 @@ const fillInputDicForCustom = (
           const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
 
           const re = argType.endsWith('Input')
-            ? new RegExp(`input ${argType} {`, 'g')
-            : new RegExp(`enum ${argType} {`, 'g'); // !!!! з'ясувати чому не працює ^ $
+            ? new RegExp(`^input ${argType} {$`, 'm')
+            : new RegExp(`^enum ${argType} {$`, 'm');
 
           if (re.test(inputDefinition)) {
             inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign

@@ -55,7 +55,7 @@ const composeCustomActionSignature = (
     const returnConfig = composeConfig(entityConfig, generalConfig);
 
     if (returnConfig) {
-      fillEntityTypeDic(returnConfig, entityTypeDic, inputDic, inventory);
+      fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic, inventory);
     }
   }
 

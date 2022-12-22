@@ -9,7 +9,9 @@ const getOppositeFields = (entityConfig: EntityConfig): Array<[DuplexField, Dupl
     const oppositeField = (config.duplexFields || []).find(({ name }) => name === oppositeName);
 
     if (!oppositeField) {
-      throw new TypeError(`Expected a duplexField with name "${oppositeName}"!`);
+      throw new TypeError(
+        `Expected a duplexField with name "${oppositeName}" in entityConfig "${config.name}"!`,
+      );
     }
 
     // $FlowFixMe

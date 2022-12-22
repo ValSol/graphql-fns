@@ -20,9 +20,16 @@ describe('composeChildActionSignature util', () => {
       ],
     };
 
+    const generalConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const inputDic = {};
 
-    const result = composeChildActionSignature(entityConfig, 'childEntities', inputDic);
+    const result = composeChildActionSignature(
+      entityConfig,
+      generalConfig,
+      'childEntities',
+      inputDic,
+    );
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
@@ -30,6 +37,7 @@ describe('composeChildActionSignature util', () => {
 
     const result2 = composeChildActionSignature(
       entityConfig,
+      generalConfig,
       'childEntitiesThroughConnection',
       inputDic,
     );
@@ -132,13 +140,19 @@ input ExampleSortInput {
       ],
     };
 
-    const result = composeChildActionSignature(entityConfig, 'childEntities');
+    const generalConfig = { allEntityConfigs: { Example: entityConfig } };
+
+    const result = composeChildActionSignature(entityConfig, generalConfig, 'childEntities');
     const expectedResult =
       'where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String';
 
     expect(result).toEqual(expectedResult);
 
-    const result2 = composeChildActionSignature(entityConfig, 'childEntitiesThroughConnection');
+    const result2 = composeChildActionSignature(
+      entityConfig,
+      generalConfig,
+      'childEntitiesThroughConnection',
+    );
     const expectedResult2 =
       'where: ExampleWhereInput, sort: ExampleSortInput, search: String, after: String, before: String, first: Int, last: Int';
 
