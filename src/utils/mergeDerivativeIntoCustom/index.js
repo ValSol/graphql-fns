@@ -11,10 +11,10 @@ const store = Object.create(null);
 
 const mergeDerivativeIntoCustom = (
   generalConfig: GeneralConfig,
-  variant?: 'forClient' | 'forCustomResolver',
+  variant?: 'forClient' | 'forCustomResolver' | 'forGqlResolvers' = 'forGqlResolvers',
 ): null | Custom => {
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
+  if (!process.env.JEST_WORKER_ID && store[variant]) return store[variant];
 
   const { custom, derivative } = generalConfig;
 
@@ -67,17 +67,16 @@ const mergeDerivativeIntoCustom = (
   }, {});
 
   if (!custom) {
-    store.cache = { Query, Mutation /* Input */ };
+    store[variant] = { Query, Mutation };
   } else {
-    store.cache = {
+    store[variant] = {
       ...custom,
       Query: { ...Query, ...custom.Query },
       Mutation: { ...Mutation, ...custom.Mutation },
-      // Input: { ...Input, ...custom.Input },
     };
   }
 
-  return store.cache;
+  return store[variant];
 };
 
 export default mergeDerivativeIntoCustom;

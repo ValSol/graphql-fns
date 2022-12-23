@@ -77,8 +77,6 @@ const actionReturnConfig = (
     : connectionConfig;
 };
 
-const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnectionVirtualConfig'];
-
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
 const actionReturnString =
@@ -95,7 +93,6 @@ const entitiesThroughConnectionQueryAttributes = {
   argTypes,
   actionReturnString,
   actionReturnConfig,
-  actionReturnVirtualConfigs,
   actionDerivativeUpdater: connectionDerivativeUpdater,
   actionAllowed,
 };

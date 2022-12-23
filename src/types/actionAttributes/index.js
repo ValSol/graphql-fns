@@ -79,11 +79,9 @@ const actionAttributes = {
 const {
   mutationAttributes,
   queryAttributes,
-  virtualConfigComposers,
 }: {
   mutationAttributes: { [actionName: string]: ActionAttributes },
   queryAttributes: { [actionName: string]: ActionAttributes },
-  virtualConfigComposers: Array<[string, Array<string>]>,
 } = Object.keys(actionAttributes).reduce(
   (prev, actionName) => {
     if (actionAttributes[actionName].actionType === 'Mutation') {
@@ -92,32 +90,13 @@ const {
       prev.queryAttributes[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
     }
 
-    if (actionAttributes[actionName].actionReturnVirtualConfigs) {
-      const { actionReturnVirtualConfigs } = actionAttributes[actionName];
-
-      const composers = prev.virtualConfigComposers;
-
-      actionReturnVirtualConfigs.forEach((composer) => {
-        let corteg = composers.find(([savedComposer]) => savedComposer === composer);
-
-        if (!corteg) {
-          corteg = [composer, []];
-          composers.push(corteg);
-        }
-
-        const [, actionNames] = corteg;
-        actionNames.push(actionName);
-      });
-    }
-
     return prev;
   },
   {
     mutationAttributes: {},
     queryAttributes: {},
-    virtualConfigComposers: [],
   },
 );
 
-export { mutationAttributes, queryAttributes, virtualConfigComposers };
+export { mutationAttributes, queryAttributes };
 export default actionAttributes;

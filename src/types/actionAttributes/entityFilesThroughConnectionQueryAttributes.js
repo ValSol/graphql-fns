@@ -66,8 +66,6 @@ const actionReturnConfig = (
     : connectionConfig;
 };
 
-const actionReturnVirtualConfigs = ['composeEdgeVirtualConfig', 'composeConnectionVirtualConfig'];
-
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
 const actionReturnString =
@@ -84,7 +82,6 @@ const entityFilesThroughConnectionQueryAttributes = {
   argTypes,
   actionReturnString,
   actionReturnConfig,
-  actionReturnVirtualConfigs,
   actionDerivativeUpdater: connectionDerivativeUpdater,
   actionAllowed,
 };

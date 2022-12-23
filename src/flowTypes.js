@@ -875,7 +875,6 @@ export type ActionAttributes = {
     generalConfig: GeneralConfig,
     derivativeKey?: string,
   ) => EntityConfig | null,
-  actionReturnVirtualConfigs?: Array<string>,
   actionDerivativeUpdater?: Function, // (entityName: string, item: { ...DerivativeAttributes }) => void,
 };
 

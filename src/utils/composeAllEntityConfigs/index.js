@@ -4,8 +4,7 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, SimplifiedEntityConfig } from '../../flowTypes';
 
-import { virtualConfigComposers } from '../../types/actionAttributes';
-import virtualConfigComposersObject from '../../types/virtualConfigComposers';
+import virtualConfigComposers from '../../types/virtualConfigComposers';
 import composeEntityConfig from '../composeEntityConfig';
 import composeTangibleFileConfigName from './composeTangibleFileConfigName';
 import composeTangibleFileEntityConfig from './composeTangibleFileEntityConfig';
@@ -43,9 +42,9 @@ const composeAllEntityConfigs = (
     { PageInfo },
   );
 
-  simplifiedThingConfigs.forEach((simplifiedThingConfig) => {
-    const { name, type: configType = 'tangible' } = simplifiedThingConfig;
-    composeEntityConfig(simplifiedThingConfig, result[name], result);
+  simplifiedThingConfigs.forEach((simplifiedEntityConfig) => {
+    const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
+    composeEntityConfig(simplifiedEntityConfig, result[name], result);
 
     const config = result[name];
 
@@ -61,44 +60,30 @@ const composeAllEntityConfigs = (
       const tangibleFileConfig = composeTangibleFileEntityConfig(config);
 
       result[tangibleFileConfig.name] = tangibleFileConfig; // eslint-disable-line no-param-reassign
-
-      virtualConfigComposers.forEach(([key]) => {
-        const [composeVirtualConfig, composeVirtualConfigName] = virtualConfigComposersObject[key];
-
-        const virtualConfigName = composeVirtualConfigName(tangibleFileConfig.name);
-
-        if (result[virtualConfigName]) {
-          throw new TypeError(
-            `Forbidden to use "${virtualConfigName}" becouse there is tangibleFile config with name: "${tangibleFileConfig.name}"!`,
-          );
-        }
-
-        const virtualConfig = composeVirtualConfig(tangibleFileConfig, {
-          allEntityConfigs: result,
-        }); // imitate generalConfig
-
-        result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
-      });
     }
+  });
 
-    // if (configType === 'virtual') {
-    if (configType === 'tangible' || configType === 'tangibleFile') {
-      virtualConfigComposers.forEach(([key]) => {
-        const [composeVirtualConfig, composeVirtualConfigName] = virtualConfigComposersObject[key];
+  // copmpose virtual configs
 
-        const virtualConfigName = composeVirtualConfigName(name);
+  Object.keys(result).forEach((name) => {
+    const config = result[name];
+    const { type: configType } = config;
 
-        if (result[virtualConfigName]) {
-          throw new TypeError(
-            `Forbidden to use "${virtualConfigName}" becouse there is tangible config with name: "${name}"!`,
-          );
-        }
+    virtualConfigComposers.forEach(([composeVirtualConfig, composeVirtualConfigName, checker]) => {
+      if (!checker(configType)) return;
 
-        const virtualConfig = composeVirtualConfig(config, { allEntityConfigs: result }); // imitate generalConfig
+      const virtualConfigName = composeVirtualConfigName(name);
 
-        result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
-      });
-    }
+      if (result[virtualConfigName]) {
+        throw new TypeError(
+          `Forbidden to use "${virtualConfigName}" becouse there is tangible config with name: "${name}"!`,
+        );
+      }
+
+      const virtualConfig = composeVirtualConfig(config, { allEntityConfigs: result }); // imitate generalConfig
+
+      result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
+    });
   });
 
   return result;

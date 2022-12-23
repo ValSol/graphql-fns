@@ -171,6 +171,27 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const embedded3EdgeConfig = {
+      name: 'Embedded3Edge',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Edge'.length,
+
+      childFields: [{ name: 'node', config: embedded3Config }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const embedded3ConnectionConfig = {
+      name: 'Embedded3Connection',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Connection'.length,
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: embedded3EdgeConfig, array: true },
+      ],
+    };
+
     const embedded2Config: EntityConfig = {
       name: 'Embedded2',
       type: 'embedded',
@@ -192,6 +213,27 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const embedded2EdgeConfig = {
+      name: 'Embedded2Edge',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Edge'.length,
+
+      childFields: [{ name: 'node', config: embedded2Config }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const embedded2ConnectionConfig = {
+      name: 'Embedded2Connection',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Connection'.length,
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: embedded2EdgeConfig, array: true },
+      ],
+    };
+
     const embeddedConfig: EntityConfig = {
       name: 'Embedded',
       type: 'embedded',
@@ -210,6 +252,27 @@ describe('composeAllEntityConfigs', () => {
           array: true,
           config: embedded2Config,
         },
+      ],
+    };
+
+    const embeddedEdgeConfig = {
+      name: 'EmbeddedEdge',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Edge'.length,
+
+      childFields: [{ name: 'node', config: embeddedConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const embeddedConnectionConfig = {
+      name: 'EmbeddedConnection',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Connection'.length,
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: embeddedEdgeConfig, array: true },
       ],
     };
 
@@ -261,8 +324,14 @@ describe('composeAllEntityConfigs', () => {
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
       Embedded: embeddedConfig,
+      EmbeddedEdge: embeddedEdgeConfig,
+      EmbeddedConnection: embeddedConnectionConfig,
       Embedded2: embedded2Config,
+      Embedded2Edge: embedded2EdgeConfig,
+      Embedded2Connection: embedded2ConnectionConfig,
       Embedded3: embedded3Config,
+      Embedded3Edge: embedded3EdgeConfig,
+      Embedded3Connection: embedded3ConnectionConfig,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
@@ -401,6 +470,27 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const imageEdgeConfig = {
+      name: 'ImageEdge',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Edge'.length,
+
+      childFields: [{ name: 'node', config: imageConfig }],
+
+      textFields: [{ name: 'cursor', required: true }],
+    };
+
+    const imageConnectionConfig = {
+      name: 'ImageConnection',
+      type: 'virtual',
+      derivativeNameSlicePosition: -'Connection'.length,
+
+      childFields: [
+        { name: 'pageInfo', config: PageInfo, required: true },
+        { name: 'edges', config: imageEdgeConfig, array: true },
+      ],
+    };
+
     const tangibleImageConfig = {
       name: 'TangibleImage',
       type: 'tangibleFile',
@@ -485,6 +575,8 @@ describe('composeAllEntityConfigs', () => {
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
       Image: imageConfig,
+      ImageEdge: imageEdgeConfig,
+      ImageConnection: imageConnectionConfig,
       TangibleImage: tangibleImageConfig,
       TangibleImageEdge: tangibleImageEdgeConfig,
       TangibleImageConnection: tangibleImageConnectionConfig,
