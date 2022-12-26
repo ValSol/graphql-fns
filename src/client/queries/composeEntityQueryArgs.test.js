@@ -7,8 +7,6 @@ import entityQueryAttributes from '../../types/actionAttributes/entityQueryAttri
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityQueryArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose entity query args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeEntityQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'query Home_Example($whereOne: ExampleWhereOneInput!) {',

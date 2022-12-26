@@ -8,7 +8,7 @@ import childEntityQueryAttributes from '../../../types/actionAttributes/childEnt
 import createChildEntityQueryResolver from '../../queries/createChildEntityQueryResolver';
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
-import parseEntityName from '../../utils/parseEntityName';
+import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
 type Args = { where: { id: string } };

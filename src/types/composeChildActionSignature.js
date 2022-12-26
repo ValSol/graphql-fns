@@ -3,7 +3,7 @@
 import type { Inventory, EntityConfig, GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import parseEntityName from '../resolvers/utils/parseEntityName';
+import parseEntityName from '../utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
 import { queryAttributes } from './actionAttributes';
 
@@ -26,14 +26,16 @@ const composeChildActionSignature = (
   const { name: configName } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
+  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+
   if (
     inventory &&
     // $FlowFixMe
-    !checkInventory([actionType, actionGeneralName(), configName], inventory)
+    !checkInventory([actionType, actionGeneralName(derivativeKey), configName], inventory)
   ) {
     return '';
   }
-  const specificName = actionName(configName);
+  const specificName = actionName(rootName, derivativeKey);
 
   const toShow = [];
 
@@ -48,8 +50,6 @@ const composeChildActionSignature = (
 
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
-
-  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
 
   const returnString = actionReturnString(derivativeKey)(allEntityConfigs[rootName]);
 

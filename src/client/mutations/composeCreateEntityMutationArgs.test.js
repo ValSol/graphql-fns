@@ -7,8 +7,6 @@ import createEntityMutationAttributes from '../../types/actionAttributes/createE
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeCreateEntityMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose createEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeCreateEntityMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_createExample($data: ExampleCreateInput!) {',
@@ -70,6 +70,10 @@ describe('composeCreateEntityMutationArgs', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
 
     const expectedResult = [
       'mutation Home_createPerson($data: PersonCreateInput!) {',

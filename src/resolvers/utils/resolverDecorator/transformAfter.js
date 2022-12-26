@@ -2,7 +2,7 @@
 
 import type { EntityConfig, GeneralConfig } from '../../../flowTypes';
 
-import parseEntityName from '../parseEntityName';
+import parseEntityName from '../../../utils/parseEntityName';
 import toGlobalId from '../toGlobalId';
 
 const transformAfter = (

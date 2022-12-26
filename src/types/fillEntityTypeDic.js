@@ -3,7 +3,7 @@
 import type { EntityConfig, GeneralConfig, Inventory } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import parseEntityName from '../resolvers/utils/parseEntityName';
+import parseEntityName from '../utils/parseEntityName';
 import childEntitiesThroughConnectionQuery from './actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createEntityType from './createEntityType';
 

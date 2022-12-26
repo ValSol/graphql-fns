@@ -7,8 +7,6 @@ import pushIntoEntityMutationAttributes from '../../types/actionAttributes/pushI
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composePushIntoEntityMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose pushIntoEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -21,6 +19,8 @@ describe('composePushIntoEntityMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!, $positions: ExamplePushPositionsInput) {',

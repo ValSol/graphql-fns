@@ -7,8 +7,6 @@ import deleteEntityMutationAttributes from '../../types/actionAttributes/deleteE
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeDeleteEntityMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose deleteEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeDeleteEntityMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {',

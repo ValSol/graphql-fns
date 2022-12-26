@@ -7,8 +7,6 @@ import entityDistinctValuesQueryAttributes from '../../types/actionAttributes/en
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityDistinctValuesQueryArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose entity distinct values query with ExampleWhereInput and where args', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeEntityDistinctValuesQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       `query Home_ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput) {

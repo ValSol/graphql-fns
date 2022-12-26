@@ -3,7 +3,7 @@
 import type { GeneralConfig, EntityConfig } from '../../../../flowTypes';
 
 import composeDerivativeConfigByName from '../../../../utils/composeDerivativeConfigByName';
-import parseEntityName from '../../parseEntityName';
+import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
 import transformFileWhere from './transformFileWhere';
 import transformFileWhereOne from './transformFileWhereOne';

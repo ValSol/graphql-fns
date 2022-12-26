@@ -7,8 +7,6 @@ import entityCountQueryAttributes from '../../types/actionAttributes/entityCount
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityCountQueryArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose entities query without indexed fields', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeEntityCountQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       `query Home_ExampleCount($where: ExampleWhereInput) {
@@ -49,6 +49,8 @@ describe('composeEntityCountQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       `query Home_ExampleCount($where: ExampleWhereInput) {

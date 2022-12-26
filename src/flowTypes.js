@@ -875,7 +875,7 @@ export type ActionAttributes = {
     generalConfig: GeneralConfig,
     derivativeKey?: string,
   ) => EntityConfig | null,
-  actionDerivativeUpdater?: Function, // (entityName: string, item: { ...DerivativeAttributes }) => void,
+  actionDerivativeUpdater?: (entityName: string, item: { ...DerivativeAttributes }) => void,
 };
 
 export type GqlActionData = {

@@ -7,8 +7,6 @@ import entityFileCountQueryAttributes from '../../types/actionAttributes/entityF
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityFileCountQuery', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose entities query', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -16,6 +14,8 @@ describe('composeEntityFileCountQuery', () => {
       type: 'tangibleFile',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: entityConfig } };
 
     const expectedResult = [
       `query Home_TangibleImageFileCount($where: FileWhereInput) {

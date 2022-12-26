@@ -2,6 +2,8 @@
 
 import type { ActionAttributes, EntityConfig, GeneralConfig } from '../../flowTypes';
 
+import parseEntityName from '../../utils/parseEntityName';
+
 const composeActionArgs = (
   prefix: string,
   entityConfig: EntityConfig,
@@ -20,12 +22,15 @@ const composeActionArgs = (
     inputCreators,
   } = actionAttributes;
   const { name: configName } = entityConfig;
+  const { allEntityConfigs } = generalConfig;
 
-  const specificName = actionName(configName);
+  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+
+  const specificName = actionName(rootName, derivativeKey);
 
   if (!actionAllowed(entityConfig)) {
     throw new TypeError(
-      `Action "${actionGeneralName('')}" is not allowed for "${configName}" entity!`,
+      `Action "${actionGeneralName('derivativeKey')}" is not allowed for "${configName}" entity!`,
     );
   }
 
@@ -44,7 +49,7 @@ const composeActionArgs = (
 
   const args2 = filteredArgNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
-  return actionReturnConfig(entityConfig, generalConfig)
+  return actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey)
     ? [
         `${actionType.toLowerCase()} ${prefix}_${specificName}(${args1}) {`,
         `  ${specificName}(${args2}) {`,

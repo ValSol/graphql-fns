@@ -3,6 +3,7 @@
 import type { EntityConfig, GeneralConfig, Inventory } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
+import parseEntityName from '../utils/parseEntityName';
 import { queryAttributes } from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
 
@@ -13,16 +14,18 @@ const {
   childEntity,
 } = queryAttributes;
 
-const composeReturnString = (config, actionAttributes) =>
-  actionAttributes.actionReturnString('')(config);
+const composeReturnString = (config, generalConfig, actionAttributes) => {
+  const { allEntityConfigs } = generalConfig;
+  const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
+
+  return actionAttributes.actionReturnString(derivativeKey)(allEntityConfigs[rootName]);
+};
 
 const arrayArgs = '(slice: SliceInput)';
 
 const pushInPrev = ({ array, name, required }, itemType, prev) => {
   if (array) {
     prev.push(`  ${name}${arrayArgs}: [${itemType}!]!`);
-
-    // prev.push(`  ${name}${arrayArgs}ThroughConnection: [${itemType}!]!`);
   } else {
     prev.push(`  ${name}: ${itemType}${required ? '!' : ''}`);
   }
@@ -137,7 +140,11 @@ const createEntityType = (
 
         if (childEntitiesArgs) {
           prev.push(
-            `  ${name2}(${childEntitiesArgs}): ${composeReturnString(config, childEntities)}`,
+            `  ${name2}(${childEntitiesArgs}): ${composeReturnString(
+              config,
+              generalConfig,
+              childEntities,
+            )}`,
           );
         }
 
@@ -153,30 +160,23 @@ const createEntityType = (
           prev.push(
             `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
               config,
+              generalConfig,
               childEntitiesThroughConnection,
             )}`,
           );
         }
       } else if (checkInventory(['Query', 'childEntity', config.name])) {
-        prev.push(`  ${name2}: ${composeReturnString(config, childEntity)}${required ? '!' : ''}`);
+        prev.push(
+          `  ${name2}: ${composeReturnString(config, generalConfig, childEntity)}${
+            required ? '!' : ''
+          }`,
+        );
       }
 
       return prev;
     },
     entityTypeArray,
   );
-
-  // if (embeddedFields) {
-  //   embeddedFields.reduce((prev, field) => {
-  //     const {
-  //       config: { name: embeddedName },
-  //     } = field;
-
-  //     pushInPrev(field, embeddedName, prev);
-
-  //     return prev;
-  //   }, entityTypeArray);
-  // }
 
   [...embeddedFields, ...fileFields].reduce((prev, { array, name: name2, required, config }) => {
     if (array) {
@@ -194,6 +194,7 @@ const createEntityType = (
         prev.push(
           `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
             config,
+            generalConfig,
             arrayEntitiesThroughConnection,
           )}`,
         );

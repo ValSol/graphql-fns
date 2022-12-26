@@ -7,8 +7,6 @@ import importEntitiesMutationAttributes from '../../types/actionAttributes/impor
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeImportEntitysMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose createEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeImportEntitysMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_importExamples($file: Upload!, $options: ImportOptionsInput) {',

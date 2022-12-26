@@ -6,7 +6,7 @@ import type {
   DerivativeAttributes,
   GeneralConfig,
   EntityConfig,
-} from '../../../flowTypes';
+} from '../../flowTypes';
 
 import parseEntityName from './index';
 

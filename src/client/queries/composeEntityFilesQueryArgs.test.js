@@ -7,8 +7,6 @@ import entityFilesQueryAttributes from '../../types/actionAttributes/entityFiles
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntityFileQueryArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose entity query args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -16,6 +14,8 @@ describe('composeEntityFileQueryArgs', () => {
       type: 'tangibleFile',
       textFields: [{ name: 'fileId' }, { name: 'address' }],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: entityConfig } };
 
     const expectedResult = [
       'query Home_TangibleImageFiles($where: FileWhereInput) {',

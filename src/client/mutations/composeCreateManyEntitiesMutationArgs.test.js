@@ -7,8 +7,6 @@ import createManyEntitiesMutationAttributes from '../../types/actionAttributes/c
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeCreateManyEntitysMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose createEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeCreateManyEntitysMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {',

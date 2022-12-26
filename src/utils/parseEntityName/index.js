@@ -1,12 +1,19 @@
 // @flow
-import type { GeneralConfig } from '../../../flowTypes';
+import type { GeneralConfig } from '../../flowTypes';
 
-import composeDerivativeConfigName from '../../../utils/composeDerivativeConfig/composeDerivativeConfigName';
+import composeDerivativeConfigName from '../composeDerivativeConfig/composeDerivativeConfigName';
+
+const store = Object.create(null);
 
 const parseEntityName = (
   entityConfigName: string,
   generalConfig: GeneralConfig,
 ): { root: string, derivativeKey: string } => {
+  // use cache if no jest test environment
+  if (!process.env.JEST_WORKER_ID && store[entityConfigName]) {
+    return store[entityConfigName];
+  }
+
   const { allEntityConfigs, derivative } = generalConfig;
   if (allEntityConfigs[entityConfigName]) return { root: entityConfigName, derivativeKey: '' };
 
@@ -47,7 +54,9 @@ const parseEntityName = (
 
   const [result] = results;
 
-  return result;
+  store[entityConfigName] = result;
+
+  return store[entityConfigName];
 };
 
 export default parseEntityName;

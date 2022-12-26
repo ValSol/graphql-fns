@@ -7,8 +7,6 @@ import createManyEntitiesMutationAttributes from '../../types/actionAttributes/c
 import composeActionArgs from './composeActionArgs';
 
 describe('composeActionArgs util', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should return right result', async () => {
     const prefixName = 'Home';
 
@@ -33,6 +31,8 @@ describe('composeActionArgs util', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const childArgs = { examples_where: 'ExampleWhereInput', examples_sort: 'ExampleSortInput' };
 

@@ -11,7 +11,7 @@ import createChildEntitiesThroughConnectionQueryResolver from '../../queries/cre
 import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
 import fromGlobalId from '../../utils/fromGlobalId';
-import parseEntityName from '../../utils/parseEntityName';
+import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
 type Args = {

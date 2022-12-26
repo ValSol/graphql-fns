@@ -7,8 +7,6 @@ import uploadFilesToEntityMutationAttributes from '../../types/actionAttributes/
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUploadFilesToEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose uploadFilesToEntity mutation args ', () => {
     const prefixName = 'Home';
 
@@ -44,6 +42,10 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
           config: imageConfig,
         },
       ],
+    };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig, Image: imageConfig },
     };
 
     const expectedResult = [
@@ -108,6 +110,10 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig, Image: imageConfig },
+    };
 
     const expectedResult = [
       'mutation Home_uploadFilesToExample($whereOne: ExampleWhereOneInput!, $data: UploadFilesToExampleInput, $files: [Upload!]!, $options: FilesOfExampleOptionsInput!, $positions: ExampleReorderUploadedInput) {',

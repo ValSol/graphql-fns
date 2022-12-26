@@ -7,8 +7,6 @@ import updateEntityMutationAttributes from '../../types/actionAttributes/updateE
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUpdateEntityMutationArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   test('should compose updateEntity mutation args ', () => {
     const prefixName = 'Home';
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeUpdateEntityMutationArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {',
@@ -70,6 +70,10 @@ describe('composeUpdateEntityMutationArgs', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
 
     const expectedResult = [
       'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!) {',

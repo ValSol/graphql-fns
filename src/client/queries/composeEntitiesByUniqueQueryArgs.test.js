@@ -7,8 +7,6 @@ import entitiesByUniqueQueryAttributes from '../../types/actionAttributes/entiti
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeEntitiesQueryArgs', () => {
-  const generalConfig: GeneralConfig = {};
-
   const prefixName = 'Home';
   test('should compose entities query with default args', () => {
     const entityConfig: EntityConfig = {
@@ -20,6 +18,8 @@ describe('composeEntitiesQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
@@ -48,6 +48,8 @@ describe('composeEntitiesQueryArgs', () => {
       ],
     };
 
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const expectedResult = [
       'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
       '  ExamplesByUnique(where: $where, sort: $sort) {',
@@ -73,6 +75,8 @@ describe('composeEntitiesQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
@@ -100,6 +104,8 @@ describe('composeEntitiesQueryArgs', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
       'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $near: ExampleNearInput) {',

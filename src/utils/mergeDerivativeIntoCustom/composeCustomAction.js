@@ -54,7 +54,7 @@ const composeCustomAction = (
     name,
     specificName: (entityConfig, generalConfig) => {
       const { name: baseEntityName } = entityConfig;
-      if (!(allow[baseEntityName] && allow[baseEntityName].includes(actionGeneralName())))
+      if (!(allow[baseEntityName] && allow[baseEntityName].includes(actionGeneralName(''))))
         return '';
 
       const derivativeConfig = composeDerivativeConfigByName(
