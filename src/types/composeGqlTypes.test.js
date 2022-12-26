@@ -960,7 +960,9 @@ type Example implements Node {
   logo: Image!
   hero: Image
   pictures(slice: SliceInput): [Image!]!
+  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
   photos(slice: SliceInput): [Image!]!
+  photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
   position: GeospatialPoint
 }
 type Image {
@@ -968,6 +970,14 @@ type Image {
   fileId: String!
   address: String
   text: String
+}
+type ImageConnection {
+  pageInfo: PageInfo!
+  edges: [ImageEdge!]!
+}
+type ImageEdge {
+  cursor: String!
+  node: Image
 }
 type ExampleConnection {
   pageInfo: PageInfo!
@@ -2169,23 +2179,33 @@ type Person implements Node {
   lastName: String!
   location: Address!
   locations(slice: SliceInput): [Address!]!
+  locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
   place: Address
   places(slice: SliceInput): [Address!]!
+  placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
 }
 type Address {
   id: ID!
   country: String!
   province: String
 }
-type PersonConnection {
+type AddressConnection {
   pageInfo: PageInfo!
-  edges: [PersonEdge!]!
+  edges: [AddressEdge!]!
 }
 type PageInfo {
   startCursor: String
   endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
+}
+type AddressEdge {
+  cursor: String!
+  node: Address
+}
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge!]!
 }
 type PersonEdge {
   cursor: String!

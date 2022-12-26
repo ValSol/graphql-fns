@@ -46,12 +46,19 @@ const fillEntityTypeDic = (
   );
 
   [...duplexFields, ...relationalFields].forEach(({ config }) => {
-    if (
-      true &&
-      !checkInventory(['Query', 'childEntitiesThroughConnection', config.name], inventory)
-    )
+    if (!checkInventory(['Query', 'childEntitiesThroughConnection', config.name], inventory))
       return;
 
+    const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
+
+    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey);
+
+    if (config2 && !entityTypeDic[config2.name]) {
+      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic, inventory);
+    }
+  });
+
+  [...embeddedFields, ...fileFields].forEach(({ config }) => {
     const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
 
     const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey);

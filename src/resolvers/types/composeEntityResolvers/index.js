@@ -10,6 +10,7 @@ import createEntityScalarResolver from '../createEntityScalarResolver';
 import fieldArrayResolver from '../fieldArrayResolver';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
+import fieldArrayThroughConnectionResolver from '../fieldArrayThroughConnectionResolver';
 
 type EntityResolver = { [key: string]: Function };
 
@@ -20,7 +21,13 @@ const composeEntityResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): EntityResolver => {
-  const { duplexFields, geospatialFields, relationalFields } = entityConfig;
+  const {
+    duplexFields = [],
+    embeddedFields = [],
+    geospatialFields = [],
+    fileFields = [],
+    relationalFields = [],
+  } = entityConfig;
   const fieldsObject = composeFieldsObject(entityConfig);
 
   const resolvers = {};
@@ -37,55 +44,36 @@ const composeEntityResolvers = (
     if (array) resolvers[fieldName] = fieldArrayResolver;
   });
 
-  if (relationalFields) {
-    relationalFields.reduce((prev, { array, name, config }) => {
-      if (array) {
-        const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
+  [...embeddedFields, ...fileFields].forEach((field) => {
+    const { array, name } = field;
 
-        if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
-        }
+    if (array) {
+      resolvers[`${name}ThroughConnection`] = fieldArrayThroughConnectionResolver;
+    }
+  });
 
-        const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
+  [...relationalFields, ...duplexFields].reduce((prev, { array, name, config }) => {
+    if (array) {
+      const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
 
-        if (resolver2) {
-          prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
-        }
-      } else {
-        const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
-
-        if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
-        }
+      if (resolver) {
+        prev[name] = resolver; // eslint-disable-line no-param-reassign
       }
-      return prev;
-    }, resolvers);
-  }
 
-  if (duplexFields) {
-    duplexFields.reduce((prev, { array, name, config }) => {
-      if (array) {
-        const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
+      const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
 
-        if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
-        }
-
-        const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
-
-        if (resolver2) {
-          prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
-        }
-      } else {
-        const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
-
-        if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
-        }
+      if (resolver2) {
+        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
       }
-      return prev;
-    }, resolvers);
-  }
+    } else {
+      const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
+
+      if (resolver) {
+        prev[name] = resolver; // eslint-disable-line no-param-reassign
+      }
+    }
+    return prev;
+  }, resolvers);
 
   if (geospatialFields) {
     geospatialFields.reduce((prev, { name, array, geospatialType }) => {

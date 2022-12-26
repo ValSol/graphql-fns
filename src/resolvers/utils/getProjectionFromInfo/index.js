@@ -50,7 +50,18 @@ const getProjectionFromInfo = (info: Object, path?: Path): { [fieldName: string]
     return { _id: 1 };
   }
 
-  return getProjectionFromSelectionSet(selectionSet, path || []);
+  const preResult = getProjectionFromSelectionSet(selectionSet, path || []);
+
+  const result = Object.keys(preResult).reduce((prev, key) => {
+    if (key.endsWith('ThroughConnection')) {
+      prev[`${key.slice(0, -'ThroughConnection'.length)}`] = 1; // eslint-disable-line no-param-reassign
+    } else {
+      prev[key] = 1; // eslint-disable-line no-param-reassign
+    }
+    return prev;
+  }, {});
+
+  return result;
 };
 
 export default getProjectionFromInfo;

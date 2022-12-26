@@ -91,7 +91,7 @@ const createEntityConnectionResolver = (
 
     const { fieldName } = info;
 
-    const id_in = parent[fieldName]; // eslint-disable-line camelcase
+    const id_in = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
 
     if (!id_in || !id_in.length) return []; // eslint-disable-line camelcase
 

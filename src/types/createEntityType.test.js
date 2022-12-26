@@ -167,8 +167,10 @@ describe('createEntityType', () => {
   lastName: String!
   location: Address!
   locations(slice: SliceInput): [Address!]!
+  locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
   place: Address
   places(slice: SliceInput): [Address!]!
+  placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
 }`;
 
     const result = createEntityType(personConfig, generalConfig, {}, {});
@@ -592,7 +594,9 @@ describe('createEntityType', () => {
   logo: Image!
   hero: Image
   pictures(slice: SliceInput): [Image!]!
+  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
   photos(slice: SliceInput): [Image!]!
+  photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});

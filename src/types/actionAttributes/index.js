@@ -2,6 +2,7 @@
 
 import type { ActionAttributes } from '../../flowTypes';
 
+import arrayEntitiesThroughConnection from './arrayEntitiesThroughConnectionQueryAttributes';
 import childEntity from './childEntityQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
 import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
@@ -39,6 +40,7 @@ import uploadFilesToEntity from './uploadFilesToEntityMutationAttributes';
 import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 
 const actionAttributes = {
+  arrayEntitiesThroughConnection,
   childEntity,
   childEntities,
   childEntitiesThroughConnection,

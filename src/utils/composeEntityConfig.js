@@ -53,9 +53,17 @@ const composeEntityConfig = (
             `Forbidden to use "_" (underscore) in field name: "${fieldName}" in entity: "${name}"!`,
           );
         }
+
+        if (fieldName.endsWith('ThroughConnection')) {
+          throw new TypeError(
+            `Forbidden the field name: "${fieldName}" that ends with "ThroughConnection" in entity: "${name}"!`,
+          );
+        }
+
         if (forbiddenFieldNames.includes(fieldName)) {
           throw new TypeError(`Forbidden field name: "${fieldName}" in entity: "${name}"!`);
         }
+
         if (freeze && (configType === 'embedded' || configType === 'virtual')) {
           throw new TypeError(
             `Forbidden freeze field: "${fieldName}" in ${

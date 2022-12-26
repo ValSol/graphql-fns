@@ -6,14 +6,17 @@ import checkInventory from '../utils/inventory/checkInventory';
 import { queryAttributes } from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
 
-const { childEntities, childEntitiesThroughConnection, childEntity } = queryAttributes;
+const {
+  arrayEntitiesThroughConnection,
+  childEntities,
+  childEntitiesThroughConnection,
+  childEntity,
+} = queryAttributes;
 
 const composeReturnString = (config, actionAttributes) =>
   actionAttributes.actionReturnString('')(config);
 
 const arrayArgs = '(slice: SliceInput)';
-
-// const arrayThroughConnectionArgs = '(after: String, before: String, first: Int, last: Int)';
 
 const pushInPrev = ({ array, name, required }, itemType, prev) => {
   if (array) {
@@ -38,9 +41,9 @@ const createEntityType = (
     booleanFields,
     dateTimeFields,
     duplexFields = [],
-    embeddedFields,
+    embeddedFields = [],
     enumFields,
-    fileFields,
+    fileFields = [],
     floatFields,
     intFields,
     geospatialFields,
@@ -163,30 +166,44 @@ const createEntityType = (
     entityTypeArray,
   );
 
-  if (embeddedFields) {
-    embeddedFields.reduce((prev, field) => {
-      const {
-        config: { name: embeddedName },
-      } = field;
+  // if (embeddedFields) {
+  //   embeddedFields.reduce((prev, field) => {
+  //     const {
+  //       config: { name: embeddedName },
+  //     } = field;
 
-      pushInPrev(field, embeddedName, prev);
+  //     pushInPrev(field, embeddedName, prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+  //     return prev;
+  //   }, entityTypeArray);
+  // }
 
-  // the same code as for embeddedFields
-  if (fileFields) {
-    fileFields.reduce((prev, field) => {
-      const {
-        config: { name: embeddedName },
-      } = field;
+  [...embeddedFields, ...fileFields].reduce((prev, { array, name: name2, required, config }) => {
+    if (array) {
+      prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
 
-      pushInPrev(field, embeddedName, prev);
+      const childEntitiesThroughConnectionArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'arrayEntitiesThroughConnection',
+        inputDic,
+        // inventory,
+      );
 
-      return prev;
-    }, entityTypeArray);
-  }
+      if (childEntitiesThroughConnectionArgs) {
+        prev.push(
+          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+            config,
+            arrayEntitiesThroughConnection,
+          )}`,
+        );
+      }
+    } else {
+      prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
+    }
+
+    return prev;
+  }, entityTypeArray);
 
   if (geospatialFields) {
     geospatialFields.reduce((prev, field) => {

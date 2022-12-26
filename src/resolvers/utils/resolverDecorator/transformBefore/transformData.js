@@ -8,7 +8,7 @@ const processData = (data) =>
       const { _id: id } = fromGlobalId(data.id);
 
       prev.id = id; // eslint-disable-line no-param-reassign
-    } else if (data[key].connect) {
+    } else if (data[key]?.connect) {
       if (Array.isArray(data[key].connect)) {
         const connect = data[key].connect.map((globalId) => fromGlobalId(globalId)._id); // eslint-disable-line no-param-reassign, no-underscore-dangle
 
@@ -18,7 +18,7 @@ const processData = (data) =>
 
         prev[key] = { connect }; // eslint-disable-line no-param-reassign
       }
-    } else if (data[key].create) {
+    } else if (data[key]?.create) {
       prev[key] = { create: transformData(data[key].create) }; // eslint-disable-line no-param-reassign, no-use-before-define
     } else {
       prev[key] = data[key]; // eslint-disable-line no-param-reassign
