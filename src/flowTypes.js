@@ -702,6 +702,11 @@ export type InventoryByPermissions = {
   [permission: string]: Inventory,
 };
 
+export type InventoryByRoles = {
+  // must be setted for all roles
+  [role: string]: Inventory,
+};
+
 export type FileAttributes = {
   _id?: string,
   hash: string,
@@ -711,8 +716,11 @@ export type FileAttributes = {
   uploadedAt: Date,
 };
 
+type UserAttributes = { ...Object, roles: Array<string> };
+
 export type ServersideConfig = {
   +transactions?: boolean,
+
   +Query?: {
     +[customQueryName: string]: (
       entityConfig: EntityConfig,
@@ -720,6 +728,7 @@ export type ServersideConfig = {
       serversideConfig: ServersideConfig,
     ) => Function,
   },
+
   +Mutation?: {
     +[customMutationName: string]: (
       entityConfig: EntityConfig,
@@ -727,20 +736,26 @@ export type ServersideConfig = {
       serversideConfig: ServersideConfig,
     ) => Function,
   },
-  +returnScalar?: {
-    +Query?: {
-      +[customQueryName: string]: boolean,
-    },
-    +Mutation?: {
-      +[customMutationName: string]: boolean,
-    },
-  },
 
   +inventoryByPermissions?: InventoryByPermissions, // "inventoryByPermissions" & "getActionFilter" are mutualy used
+
   +getActionFilter?: (
     entityName: string,
     context: Object,
-  ) => Promise<{ [reight: string]: Array<Object> }>,
+  ) => Promise<{ [permission: string]: Array<Object> }>,
+
+  // *** fields that used in "executeAuthorisation" util
+
+  +getUserAttributes?: ({ context: Object }) => Promise<UserAttributes>,
+
+  +inventoryByRoles?: InventoryByRoles, // "inventoryByRoles" can used only with help of "getUserAttributes" & "containedRoles"
+
+  +containedRoles?: { [roleName: string]: Array<string> },
+
+  +filters?: { [tangibleEntityName: string]: (UserAttributes) => null | Array<Object> }, // "filters" can used only with help of "getUserAttributes"
+
+  // ***
+
   +saveFiles?: {
     [fileFieldConfigName: string]: (
       file: Object,
@@ -748,6 +763,7 @@ export type ServersideConfig = {
       date: Date,
     ) => Promise<FileAttributes>,
   },
+
   +composeFileFieldsData?: {
     [fileFieldConfigName: string]: (fileAttributes: FileAttributes) => Object,
   },

@@ -129,7 +129,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         favorities: { create: [] },
       };
 
-      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+        foo: [],
+      });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -209,6 +211,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
@@ -277,6 +281,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne, data: dataForUpdate2 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       const createdFriend2 = await Person.findById(friendId);
@@ -318,6 +324,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne, data: dataForUpdate3 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       const createdFriend3 = await Person.findById(friendId);
@@ -350,6 +358,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne, data: dataForUpdate4 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       const createdFriend4 = await Person.findById(friendId2);
@@ -426,7 +436,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
           ],
         },
       };
-      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+        foo: [],
+      });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -511,7 +523,13 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         },
       };
 
-      const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+      const createdPerson2 = await createPerson(
+        null,
+        { data: data2 },
+        { mongooseConn, pubsub },
+        null,
+        { foo: [] },
+      );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
       expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -577,6 +595,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
       expect(updatedPerson.firstName).toBe(dataForUpdate[0].firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate[0].lastName);
@@ -654,6 +674,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       expect(updatedPlace.name).toBe(dataForUpdate2[0].name);
@@ -662,6 +684,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         null,
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
       expect(updatedPlaces).toBeNull();
     });
@@ -717,7 +741,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       },
     };
 
-    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
     expect(createdExample.embeddedField.embeddedTextField).toBe(
@@ -748,6 +774,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       null,
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedExample.textField1).toBe(dataForUpdate[0].textField1);
     expect(updatedExample.textField2).toBe(dataForUpdate[0].textField2);
@@ -767,6 +795,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       null,
       { whereOne, data: dataForUpdate2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedExample2.textField1).toBe(dataForUpdate2[0].textField1);
@@ -786,6 +816,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       null,
       { whereOne, data: dataForUpdate3 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedExample3.textField1).toBe(dataForUpdate3[0].textField1);
     expect(updatedExample3.textField2).toBe(undefined);
@@ -840,7 +872,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       textField: 'text Field',
     };
 
-    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub });
+    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
 
@@ -870,6 +904,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       null,
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate[0].textField);
@@ -934,7 +970,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       textField: 'text Field',
     };
 
-    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub });
+    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
 
@@ -970,6 +1008,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       null,
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate[0].textField);
@@ -1043,7 +1083,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const updateManyPersons = createUpdateManyEntitiesMutationResolver(
@@ -1062,6 +1102,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(updatedParent.name).toBe('updatedName');
@@ -1073,7 +1114,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }],
+      { foo: [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }] },
     );
 
     expect(updatedParents[0].name).toBe(data[0].name);
@@ -1169,7 +1210,13 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       },
     };
 
-    const { id: restaurantId } = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const { id: restaurantId } = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     const createPost = createCreateEntityMutationResolver(
       postConfig,
@@ -1187,9 +1234,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       restaurant: { connect: restaurantId },
     };
 
-    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
-      { restaurant_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post.restaurant.toString()).toEqual(restaurantId.toString());
     expect(post.slug).toBe(postData.slug);
@@ -1217,7 +1264,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { whereOne, data: dataToUpdate },
       { mongooseConn, pubsub },
       null,
-      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPosts).toBe(null);
@@ -1234,7 +1281,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { whereOne, data: dataToUpdate2 },
       { mongooseConn, pubsub },
       null,
-      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPost2.slug).toBe(dataToUpdate2[0].slug);
@@ -1244,7 +1291,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { whereOne: [], data: [] },
       { mongooseConn, pubsub },
       null,
-      [],
+      { foo: [] },
     );
 
     expect(emptyUpdatedPosts).toEqual([]);
@@ -1260,12 +1307,14 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { whereOne, data: dataToUpdate3 },
       { mongooseConn, pubsub },
       null,
-      [
-        {
-          restaurant_: { access_: { postCreators: '1234567890' } },
-          type_in: ['newsFeed', 'events'],
-        },
-      ],
+      {
+        foo: [
+          {
+            restaurant_: { access_: { postCreators: '1234567890' } },
+            type_in: ['newsFeed', 'events'],
+          },
+        ],
+      },
     );
 
     expect(updatedPosts2).toBe(null);

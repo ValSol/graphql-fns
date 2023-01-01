@@ -99,7 +99,9 @@ describe('createEntityCountQueryResolver', () => {
         },
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     const PersonCount = createEntityCountQueryResolver(
       personConfig,
@@ -108,22 +110,26 @@ describe('createEntityCountQueryResolver', () => {
     );
     if (!PersonCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const count = await PersonCount(null, {}, { mongooseConn, pubsub });
+    const count = await PersonCount(null, {}, { mongooseConn, pubsub }, null, { foo: [] });
 
     expect(count).toBe(5);
 
     const where = { position: data.theBestFriend.create.position };
-    const count2 = await PersonCount(null, { where }, { mongooseConn, pubsub });
+    const count2 = await PersonCount(null, { where }, { mongooseConn, pubsub }, null, { foo: [] });
 
     expect(count2).toBe(4);
 
     const where2 = { friends: createdPerson.id };
-    const count3 = await PersonCount(null, { where: where2 }, { mongooseConn, pubsub });
+    const count3 = await PersonCount(null, { where: where2 }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(count3).toBe(3);
 
     const where3 = { position: 'bla-bla-bla' };
-    const count4 = await PersonCount(null, { where: where3 }, { mongooseConn, pubsub });
+    const count4 = await PersonCount(null, { where: where3 }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(count4).toBe(0);
   });
@@ -222,7 +228,7 @@ describe('createEntityCountQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const ParentCount = createEntityCountQueryResolver(
@@ -233,7 +239,9 @@ describe('createEntityCountQueryResolver', () => {
     if (!ParentCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where = { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } };
-    const parentCount = await ParentCount(null, { where }, { mongooseConn, pubsub });
+    const parentCount = await ParentCount(null, { where }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(parentCount).toBe(3);
 
@@ -243,7 +251,9 @@ describe('createEntityCountQueryResolver', () => {
       maxDistance: 1500,
     };
 
-    const parentCount2 = await ParentCount(null, { near, where }, { mongooseConn, pubsub });
+    const parentCount2 = await ParentCount(null, { near, where }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(parentCount2).toBe(2);
 
     const where2 = { child_: { textField: 'first' } };
@@ -252,6 +262,8 @@ describe('createEntityCountQueryResolver', () => {
       null,
       { search, where: where2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(parentCount3).toBe(3);
   });

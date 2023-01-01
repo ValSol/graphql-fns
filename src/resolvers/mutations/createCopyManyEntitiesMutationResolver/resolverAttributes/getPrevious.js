@@ -7,13 +7,13 @@ import getCommonData from './getCommonData';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { context, parentFilter } = resolverArg;
+  const { context, parentFilters } = resolverArg;
   const { name } = entityConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

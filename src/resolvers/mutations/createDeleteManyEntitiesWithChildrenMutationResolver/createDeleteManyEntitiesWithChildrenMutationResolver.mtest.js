@@ -308,7 +308,13 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
     expect(typeof createRestaurant).toBe('function');
     if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     expect(createdRestaurant.title).toBe(data.title);
 
@@ -371,6 +377,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }] },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(restaurantDeleted.title).toBe(data.title);
@@ -447,7 +454,13 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
     expect(typeof createRestaurant).toBe('function');
     if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     expect(createdRestaurant.title).toBe(data.title);
 
@@ -510,6 +523,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: menuCloneId }] },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(menuCloneDeleted.title).toBe(data.menu.create.clone.create.title);
@@ -562,6 +576,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }] },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
   });
 
@@ -600,7 +615,13 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
     expect(typeof createRestaurant).toBe('function');
     if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     expect(createdRestaurant.title).toBe(data.title);
 
@@ -663,6 +684,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }], options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(restaurantDeleted.title).toBe(restaurantDeleted.title);

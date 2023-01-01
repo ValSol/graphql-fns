@@ -102,33 +102,39 @@ describe('createEntityQueryResolver', () => {
         },
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     const People = createEntitiesQueryResolver(personConfig, generalConfig, serversideConfig);
     if (!People) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const people = await People(null, {}, { mongooseConn, pubsub }, info);
+    const people = await People(null, {}, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(people.length).toBe(5);
     expect(people[0].id).toEqual(createdPerson.id);
 
     const where = { position: data.theBestFriend.create.position };
-    const people2 = await People(null, { where }, { mongooseConn, pubsub }, info);
+    const people2 = await People(null, { where }, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(people2.length).toBe(4);
 
     const where2 = { friends: createdPerson.id };
-    const people3 = await People(null, { where: where2 }, { mongooseConn, pubsub }, info);
+    const people3 = await People(null, { where: where2 }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
 
     expect(people3.length).toBe(3);
 
     const pagination = { skip: 1, first: 3 };
-    const people4 = await People(null, { pagination }, { mongooseConn, pubsub }, info);
+    const people4 = await People(null, { pagination }, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(people4.length).toBe(3);
 
     const where3 = { friends_: { position: 'programmer' } };
-    const people5 = await People(null, { where: where3 }, { mongooseConn, pubsub }, info);
+    const people5 = await People(null, { where: where3 }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
     expect(people5.length).toBe(1);
   });
 
@@ -238,7 +244,13 @@ describe('createEntityQueryResolver', () => {
       point2: { lng: 50.438198, lat: 30.515858 },
       num: '1',
     };
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     const Restaurants = createEntitiesQueryResolver(
       restaurantConfig,
@@ -247,7 +259,7 @@ describe('createEntityQueryResolver', () => {
     );
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info);
+    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(restaurants.length).toBe(8);
     expect(restaurants[0].id).toEqual(createdRestaurant.id);
@@ -257,7 +269,9 @@ describe('createEntityQueryResolver', () => {
       coordinates: { lng: 50.435766, lat: 30.515742 },
       maxDistance: 150,
     };
-    const restaurants2 = await Restaurants(null, { near }, { mongooseConn, pubsub }, info2);
+    const restaurants2 = await Restaurants(null, { near }, { mongooseConn, pubsub }, info2, {
+      foo: [],
+    });
     expect(restaurants2.length).toBe(3);
     expect(restaurants2[0].name).toEqual('NAM');
     expect(restaurants2[1].name).toEqual('Mama Manana');
@@ -266,7 +280,9 @@ describe('createEntityQueryResolver', () => {
     const where = {
       recommended: true,
     };
-    const restaurants3 = await Restaurants(null, { near, where }, { mongooseConn, pubsub }, info2);
+    const restaurants3 = await Restaurants(null, { near, where }, { mongooseConn, pubsub }, info2, {
+      foo: [],
+    });
     expect(restaurants3.length).toBe(2);
     expect(restaurants3[0].name).toEqual('NAM');
     expect(restaurants3[1].name).toEqual('Satori Lounge');
@@ -279,6 +295,7 @@ describe('createEntityQueryResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
+      { foo: [] },
     );
     expect(restaurants4.length).toBe(2);
   });
@@ -351,7 +368,13 @@ describe('createEntityQueryResolver', () => {
       point2: { lng: 50.438198, lat: 30.515858 },
       num: '1',
     };
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     const Restaurants = createEntitiesQueryResolver(
       restaurantConfig,
@@ -360,7 +383,7 @@ describe('createEntityQueryResolver', () => {
     );
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info);
+    const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(restaurants.length).toBe(8);
     expect(restaurants[0].id).toEqual(createdRestaurant.id);
@@ -368,7 +391,9 @@ describe('createEntityQueryResolver', () => {
     const where = {
       num_in: ['4', '2', '8', '6'],
     };
-    const restaurants2 = await Restaurants(null, { where }, { mongooseConn, pubsub }, info2);
+    const restaurants2 = await Restaurants(null, { where }, { mongooseConn, pubsub }, info2, {
+      foo: [],
+    });
     expect(restaurants2.length).toBe(4);
   });
 
@@ -462,18 +487,18 @@ describe('createEntityQueryResolver', () => {
       },
     };
 
-    await createTable(null, { data }, { mongooseConn, pubsub });
+    await createTable(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
 
     const Items = createEntitiesQueryResolver(tableItemConfig, generalConfig, serversideConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort);
+    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort, { foo: [] });
 
     expect(items.length).toBe(9);
 
     const sort = { sortBy: ['first_ASC', 'second_DESC'] };
 
-    const items2 = await Items(null, { sort }, { mongooseConn, pubsub }, infoForSort);
+    const items2 = await Items(null, { sort }, { mongooseConn, pubsub }, infoForSort, { foo: [] });
 
     expect(items2.length).toBe(9);
     expect(items2[0].first).toBe('a');
@@ -564,12 +589,12 @@ describe('createEntityQueryResolver', () => {
       },
     };
 
-    await createTable(null, { data }, { mongooseConn, pubsub });
+    await createTable(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
 
     const Items = createEntitiesQueryResolver(tableItemConfig, generalConfig, serversideConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort);
+    const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort, { foo: [] });
 
     expect(items.length).toBe(15);
 
@@ -580,6 +605,7 @@ describe('createEntityQueryResolver', () => {
       { search },
       { mongooseConn, pubsub },
       { ...infoForSort, score: 1 },
+      { foo: [] },
     );
 
     expect(items2.length).toBe(4);
@@ -688,14 +714,16 @@ describe('createEntityQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const Parents = createEntitiesQueryResolver(parentConfig, generalConfig, serversideConfig);
     if (!Parents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where = { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } };
-    const parents = await Parents(null, { where }, { mongooseConn, pubsub }, infoForSort);
+    const parents = await Parents(null, { where }, { mongooseConn, pubsub }, infoForSort, {
+      foo: [],
+    });
 
     expect(parents.length).toBe(3);
 
@@ -707,6 +735,7 @@ describe('createEntityQueryResolver', () => {
       { pagination, sort, where: where2 },
       { mongooseConn, pubsub },
       infoForSort,
+      { foo: [] },
     );
 
     expect(parents2.length).toBe(7);
@@ -717,7 +746,9 @@ describe('createEntityQueryResolver', () => {
       maxDistance: 1500,
     };
 
-    const parents3 = await Parents(null, { near, where }, { mongooseConn, pubsub }, infoForSort);
+    const parents3 = await Parents(null, { near, where }, { mongooseConn, pubsub }, infoForSort, {
+      foo: [],
+    });
     expect(parents3.length).toBe(2);
 
     const search = 'name2';
@@ -726,6 +757,7 @@ describe('createEntityQueryResolver', () => {
       { search, where: where2 },
       { mongooseConn, pubsub },
       infoForSort,
+      { foo: [] },
     );
     expect(parents4.length).toBe(3);
   });

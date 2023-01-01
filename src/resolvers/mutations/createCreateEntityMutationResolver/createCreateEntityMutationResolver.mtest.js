@@ -76,9 +76,15 @@ describe('createCreateEntityMutationResolver', () => {
       textField5: ['textField5'],
     };
 
-    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
-    const createdExample2 = await createExample(null, { data }, { mongooseConn, pubsub });
-    const createdExample3 = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
+    const createdExample2 = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
+    const createdExample3 = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -137,7 +143,7 @@ describe('createCreateEntityMutationResolver', () => {
       lastName: 'Fedorov',
     };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, { foo: [] });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -152,7 +158,13 @@ describe('createCreateEntityMutationResolver', () => {
       friend: { connect: otherId },
       friends: { connect: [otherId] },
     };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+    const createdPerson2 = await createPerson(
+      null,
+      { data: data2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -231,7 +243,9 @@ describe('createCreateEntityMutationResolver', () => {
       lastName: 'Fedorov',
     };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -282,7 +296,13 @@ describe('createCreateEntityMutationResolver', () => {
         ],
       },
     };
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+    const createdPerson2 = await createPerson(
+      null,
+      { data: data2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -432,7 +452,9 @@ describe('createCreateEntityMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -493,7 +515,13 @@ describe('createCreateEntityMutationResolver', () => {
       },
     };
 
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+    const createdPerson2 = await createPerson(
+      null,
+      { data: data2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -628,7 +656,9 @@ describe('createCreateEntityMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.locations.length).toBe(2);
@@ -675,7 +705,13 @@ describe('createCreateEntityMutationResolver', () => {
       },
     };
 
-    const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+    const createdPerson2 = await createPerson(
+      null,
+      { data: data2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -796,7 +832,13 @@ describe('createCreateEntityMutationResolver', () => {
       },
     };
 
-    const { id: restaurantId } = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const { id: restaurantId } = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     const createPost = createCreateEntityMutationResolver(
       postConfig,
@@ -814,15 +856,15 @@ describe('createCreateEntityMutationResolver', () => {
       restaurant: { connect: restaurantId },
     };
 
-    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
-      { restaurant_: { access_: { postCreators: '9876543210' } } },
-    ]);
+    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurant_: { access_: { postCreators: '9876543210' } } }],
+    });
 
     expect(post).toBe(null);
 
-    const post2 = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
-      { restaurant_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post2 = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post2.restaurant.toString()).toBe(restaurantId.toString());
 
@@ -832,9 +874,9 @@ describe('createCreateEntityMutationResolver', () => {
       restaurant: { connect: null },
     };
 
-    const post3 = await createPost(null, { data: postData3 }, { mongooseConn, pubsub }, null, [
-      { restaurant_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post3 = await createPost(null, { data: postData3 }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post3).toBe(null);
 
@@ -844,9 +886,9 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId] },
     };
 
-    const post4 = await createPost(null, { data: postData4 }, { mongooseConn, pubsub }, null, [
-      { restaurants_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post4 = await createPost(null, { data: postData4 }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurants_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post4.restaurants[0].toString()).toBe(restaurantId.toString());
 
@@ -856,9 +898,9 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [] },
     };
 
-    const post5 = await createPost(null, { data: postData5 }, { mongooseConn, pubsub }, null, [
-      { restaurants_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post5 = await createPost(null, { data: postData5 }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurants_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post5).toBe(null);
 
@@ -868,9 +910,9 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId, `${restaurantId.toString().slice(0, -1)}a`] },
     };
 
-    const post6 = await createPost(null, { data: postData6 }, { mongooseConn, pubsub }, null, [
-      { restaurants_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post6 = await createPost(null, { data: postData6 }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurants_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post6.restaurants[0].toString()).toBe(restaurantId.toString());
 
@@ -880,9 +922,9 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: ['6073f383f1b1bcd591983c92'] },
     };
 
-    const post7 = await createPost(null, { data: postData7 }, { mongooseConn, pubsub }, null, [
-      { restaurants_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post7 = await createPost(null, { data: postData7 }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurants_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post7).toBe(null);
 
@@ -893,12 +935,14 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId] },
     };
 
-    const post8 = await createPost(null, { data: postData8 }, { mongooseConn, pubsub }, null, [
-      {
-        restaurants_: { access_: { postCreators: '1234567890' } },
-        restaurant_: { access_: { postCreators: '1234567890' } },
-      },
-    ]);
+    const post8 = await createPost(null, { data: postData8 }, { mongooseConn, pubsub }, null, {
+      foo: [
+        {
+          restaurants_: { access_: { postCreators: '1234567890' } },
+          restaurant_: { access_: { postCreators: '1234567890' } },
+        },
+      ],
+    });
 
     expect(post8.restaurants[0].toString()).toBe(restaurantId.toString());
 
@@ -909,12 +953,14 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId] },
     };
 
-    const post9 = await createPost(null, { data: postData9 }, { mongooseConn, pubsub }, null, [
-      {
-        restaurants_: { access_: { postCreators: '1234567890' } },
-        restaurant_: { access_: { postCreators: '1234567890' } },
-      },
-    ]);
+    const post9 = await createPost(null, { data: postData9 }, { mongooseConn, pubsub }, null, {
+      foo: [
+        {
+          restaurants_: { access_: { postCreators: '1234567890' } },
+          restaurant_: { access_: { postCreators: '1234567890' } },
+        },
+      ],
+    });
 
     expect(post9).toBe(null);
 
@@ -925,12 +971,14 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId] },
     };
 
-    const post10 = await createPost(null, { data: postData10 }, { mongooseConn, pubsub }, null, [
-      {
-        type: 'newsFeed',
-        restaurant_: { access_: { postCreators: '1234567890' } },
-      },
-    ]);
+    const post10 = await createPost(null, { data: postData10 }, { mongooseConn, pubsub }, null, {
+      foo: [
+        {
+          type: 'newsFeed',
+          restaurant_: { access_: { postCreators: '1234567890' } },
+        },
+      ],
+    });
 
     expect(post10.type).toBe(postData10.type);
 
@@ -941,12 +989,14 @@ describe('createCreateEntityMutationResolver', () => {
       restaurants: { connect: [restaurantId] },
     };
 
-    const post11 = await createPost(null, { data: postData11 }, { mongooseConn, pubsub }, null, [
-      {
-        type: 'newsFeed',
-        restaurant_: { access_: { postCreators: '1234567890' } },
-      },
-    ]);
+    const post11 = await createPost(null, { data: postData11 }, { mongooseConn, pubsub }, null, {
+      foo: [
+        {
+          type: 'newsFeed',
+          restaurant_: { access_: { postCreators: '1234567890' } },
+        },
+      ],
+    });
 
     expect(post11).toBe(null);
   });

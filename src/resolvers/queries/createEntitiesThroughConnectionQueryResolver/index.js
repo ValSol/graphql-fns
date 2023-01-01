@@ -76,15 +76,15 @@ const createEntitiesThroughConnectionQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilter: Array<Object>,
+    parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const filter = inAnyCase
-      ? parentFilter
+    const { foo: filter } = inAnyCase
+      ? parentFilters
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
 
     if (!filter) return null;
 
-    const resolverArg = { parent, args, context, info, parentFilter };
+    const resolverArg = { parent, args, context, info, parentFilters };
 
     const { after, before, first, last } = args;
 
@@ -106,23 +106,29 @@ const createEntitiesThroughConnectionQueryResolver = (
           shift2,
           first,
           resolverArg,
-          filter,
+          { foo: filter },
           entitiesQueryResolver,
         );
 
         if (result) return result;
 
         // eslint-disable-next-line no-await-in-loop
-        shift2 = await getShift(_id, resolverCreatorArg, resolverArg, filter, entityQueryResolver);
+        shift2 = await getShift(
+          _id,
+          resolverCreatorArg,
+          resolverArg,
+          { foo: filter },
+          entityQueryResolver,
+        );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, filter, entitiesQueryResolver);
+          return getVeryFirst(first, resolverArg, { foo: filter }, entitiesQueryResolver);
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, filter, entitiesQueryResolver);
+      return getVeryFirst(first, resolverArg, { foo: filter }, entitiesQueryResolver);
     }
 
     if (before) {
@@ -138,15 +144,34 @@ const createEntitiesThroughConnectionQueryResolver = (
 
       for (let i = 0; i < 10; i += 1) {
         // eslint-disable-next-line no-await-in-loop
-        const result = await getLast(_id, shift2, last, resolverArg, filter, entitiesQueryResolver);
+        const result = await getLast(
+          _id,
+          shift2,
+          last,
+          resolverArg,
+          { foo: filter },
+          entitiesQueryResolver,
+        );
 
         if (result) return result;
 
         // eslint-disable-next-line no-await-in-loop
-        shift2 = await getShift(_id, resolverCreatorArg, resolverArg, filter, entityQueryResolver);
+        shift2 = await getShift(
+          _id,
+          resolverCreatorArg,
+          resolverArg,
+          { foo: filter },
+          entityQueryResolver,
+        );
 
         if (shift2 === null) {
-          getVeryLast(last, resolverArg, filter, entitiesQueryResolver, entityCountQueryResolver);
+          getVeryLast(
+            last,
+            resolverArg,
+            { foo: filter },
+            entitiesQueryResolver,
+            entityCountQueryResolver,
+          );
         }
       }
     }
@@ -155,7 +180,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       return getVeryLast(
         last,
         resolverArg,
-        filter,
+        { foo: filter },
         entitiesQueryResolver,
         entityCountQueryResolver,
       );

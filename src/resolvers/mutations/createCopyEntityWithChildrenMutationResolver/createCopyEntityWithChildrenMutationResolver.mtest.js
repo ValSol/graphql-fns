@@ -355,7 +355,13 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       },
     };
 
-    const createdRestaurant = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(createdRestaurant.name).toBe(data.name);
 
     const copyRestaurantCloneWithChildren = createCopyEntityWithChildrenMutationResolver(
@@ -372,6 +378,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(restaurantClone.name).toBe(data.name);
     expect({
@@ -393,6 +401,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     expect(menuClone.name).toBe(data.menu.create.name);
@@ -411,6 +420,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1 } },
+      { foo: [] },
     );
 
     expect(sectionsClone.length).toBe(data.menu.create.sections.create.length);
@@ -435,6 +445,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: createdRestaurant.id }, data: restaurantDataToUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedRestaurant.name).toBe(restaurantDataToUpdate.name);
@@ -445,6 +457,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(restaurantClone2.name).toBe(restaurantDataToUpdate.name);
@@ -466,6 +480,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMenu.name).toBe(menuDataToUpdate.name);
@@ -476,6 +492,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(restaurantClone3.menu.toString()).not.toBe(menuClone.id.toString());
@@ -485,6 +503,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone3.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     expect(restaurantClone3.menu.toString()).toBe(menuClone2.id.toString());
@@ -495,6 +514,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
+      { foo: [] },
     );
 
     expect(sectionsClone2.length).toBe(data.menu.create.sections.create.length);
@@ -521,6 +541,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: updatedMenu.sections[1].toString() }, data: sectionDataToUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(menuSection.name).toBe(sectionDataToUpdate.name);
@@ -531,6 +553,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const menuClone3 = await menuCloneQuery(
@@ -538,6 +562,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone4.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     const sectionsClone3 = await sectionsCloneQuery(
@@ -545,6 +570,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { where: { id_in: menuClone3.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
+      { foo: [] },
     );
 
     const sectionsClonesObject = sectionsClone3.reduce((prev, item) => {
@@ -574,6 +600,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const restaurantClone5 = await copyRestaurantCloneWithChildren(
@@ -582,6 +610,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const menuClone4 = await menuCloneQuery(
@@ -589,6 +619,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone5.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     expect(menuClone4.sections[0].toString()).toBe(menuClone3.sections[1].toString());
@@ -619,6 +650,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate3 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const restaurantClone6 = await copyRestaurantCloneWithChildren(
@@ -627,6 +660,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const menuClone5 = await menuCloneQuery(
@@ -634,6 +669,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone6.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     expect(menuClone5.sections.length).toBe(6);
@@ -646,6 +682,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { where: { id_in: menuClone5.sections } },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
+      { foo: [] },
     );
 
     const sectionsClonesObject2 = sectionsClone4.reduce((prev, item) => {
@@ -676,6 +713,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: updatedMenu.sections.map((id) => ({ id: id.toString() })) },
       { mongooseConn, pubsub },
       { projection: { name: 1, menu: 1 } },
+      { foo: [] },
     );
 
     const restaurantClone7 = await copyRestaurantCloneWithChildren(
@@ -684,6 +722,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const menuClone6 = await menuCloneQuery(
@@ -691,6 +731,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantClone7.menu.toString() } },
       { mongooseConn, pubsub },
       { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { foo: [] },
     );
 
     expect(menuClone6.sections.length).toBe(3);
@@ -711,6 +752,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { whereOne: [{ id: createdRestaurant.menu }] },
       { mongooseConn, pubsub },
       { projection: { name: 1 } },
+      { foo: [] },
     );
 
     await copyRestaurantCloneWithChildren(
@@ -719,6 +761,8 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         whereOnes: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const sectionsClone5 = await sectionsCloneQuery(
@@ -726,6 +770,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       {},
       { mongooseConn, pubsub },
       { projection: { name: 1 } },
+      { foo: [] },
     );
 
     expect(sectionsClone5).toEqual([]);
@@ -743,6 +788,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       {},
       { mongooseConn, pubsub },
       { projection: { name: 1 } },
+      { foo: [] },
     );
 
     expect(subSectionsClone).toEqual([]);

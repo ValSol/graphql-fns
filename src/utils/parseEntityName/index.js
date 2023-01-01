@@ -15,7 +15,10 @@ const parseEntityName = (
   }
 
   const { allEntityConfigs, derivative } = generalConfig;
-  if (allEntityConfigs[entityConfigName]) return { root: entityConfigName, derivativeKey: '' };
+  if (allEntityConfigs[entityConfigName]) {
+    store[entityConfigName] = { root: entityConfigName, derivativeKey: '' };
+    return store[entityConfigName];
+  }
 
   if (!derivative) throw new TypeError('"derivative" attribute of generalConfig must be setted!');
 

@@ -12,15 +12,15 @@ import composeMockFilesData from '../composeMockFilesData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, info, parentFilter } = resolverArg;
+  const { args, context, info, parentFilters } = resolverArg;
   const { inventory, enums } = generalConfig;
   const { saveFiles, composeFileFieldsData } = serversideConfig;
   const { name } = entityConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

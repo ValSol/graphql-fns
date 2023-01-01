@@ -6,7 +6,7 @@ import executeAuthorisation from '../../../utils/executeAuthorisation';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, parentFilter } = resolverArg;
+  const { args, context, parentFilters } = resolverArg;
   const { name } = entityConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
@@ -14,8 +14,8 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     return null;
   }
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

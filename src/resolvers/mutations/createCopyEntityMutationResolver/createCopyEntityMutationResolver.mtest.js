@@ -145,7 +145,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, { foo: [] });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 
@@ -164,6 +164,8 @@ describe('createCopyEntityMutationResolver', () => {
         options: { original: { fieldsToCopy: ['firstName'] } },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(personClone.firstName).toBe(data.firstName);
     expect(personClone.lastName).toBe(undefined);
@@ -181,6 +183,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOnes: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(personBackup.firstName).toBe(data.firstName);
     expect(personBackup.lastName).toBe(data.lastName);
@@ -200,6 +204,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOne: { id: createdPerson.id }, data: data2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedPerson.firstName).toBe(data2.firstName);
     expect(updatedPerson.lastName).toBe(data2.lastName);
@@ -208,6 +214,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOnes: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(personClone2.firstName).toBe(data2.firstName);
     expect(personClone2.lastName).toBe(data2.lastName);
@@ -218,6 +226,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOnes: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(personBackup2.firstName).toBe(data2.firstName);
     expect(personBackup2.lastName).toBe(data2.lastName);
@@ -228,6 +238,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOne: { id: createdPerson.id }, data: data3 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedPerson2.firstName).toBe(data3.firstName);
     expect(updatedPerson2.lastName).toBe(undefined);
@@ -239,6 +251,8 @@ describe('createCopyEntityMutationResolver', () => {
         whereOne: { id: personBackup2.id.toString() },
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(personBackup3.firstName).toBe(data3.firstName);
     expect(personBackup3.lastName).toBe(undefined);
@@ -256,6 +270,8 @@ describe('createCopyEntityMutationResolver', () => {
       null,
       { whereOnes: { backups: { id: personBackup.id } } },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(person.firstName).toBe(data.firstName);
     expect(person.lastName).toBe(data.lastName);

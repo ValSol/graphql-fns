@@ -10,7 +10,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     serversideConfig,
     inAnyCase,
   } = resolverCreatorArg;
-  const { context, parentFilter } = resolverArg;
+  const { context, parentFilters } = resolverArg;
   // const { inventory } = generalConfig;
   const { name } = entityConfig;
 
@@ -19,8 +19,8 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     return null;
   }
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

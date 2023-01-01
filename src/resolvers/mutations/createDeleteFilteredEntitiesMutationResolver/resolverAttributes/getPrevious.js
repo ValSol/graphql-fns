@@ -9,7 +9,7 @@ import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, info, parentFilter } = resolverArg;
+  const { args, context, info, parentFilters } = resolverArg;
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
@@ -18,8 +18,8 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     return null;
   }
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

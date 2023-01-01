@@ -75,17 +75,19 @@ describe('createEntityScalarResolver', () => {
     const data = {
       title: 'Paris',
     };
-    const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub });
+    const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     const { id } = createdPlace;
 
     const Place = createEntityScalarResolver(placeConfig, generalConfig, serversideConfig);
     const parent = { friend: toGlobalId(id, 'Place') };
-    const place = await Place(parent, null, { mongooseConn, pubsub }, info);
+    const place = await Place(parent, null, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(place.title).toBe(data.title);
 
     const parent2 = { friend: toGlobalId('5cd82d6075fb194334d8c1d7', 'Place') };
-    const place2 = await Place(parent2, null, { mongooseConn, pubsub }, info);
+    const place2 = await Place(parent2, null, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(place2).toBeNull();
   });

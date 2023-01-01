@@ -14,8 +14,8 @@ import customResolverDecorator from '../utils/resolverDecorator/customResolverDe
 import generateDerivativeResolvers from './generateDerivativeResolvers';
 
 const createCustomResolver = (
-  methodKind: 'Query' | 'Mutation',
-  methodName: string,
+  actionKind: 'Query' | 'Mutation',
+  actionName: string,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -29,24 +29,24 @@ const createCustomResolver = (
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
   }
-  const { [methodKind]: methodFolder } = custom;
-  if (!methodFolder) {
-    throw new TypeError(`"${methodKind}" property have to be defined!`);
+  const { [actionKind]: customActionFolder } = custom;
+  if (!customActionFolder) {
+    throw new TypeError(`"${actionKind}" property have to be defined!`);
   }
-  const { [methodName]: signatureMethods } = methodFolder;
+  const { [actionName]: signatureMethods } = customActionFolder;
 
   if (!signatureMethods) {
-    throw new TypeError(`Got undefiend signatureMethods for "${methodName}" methodName!`);
+    throw new TypeError(`Got undefiend signatureMethods for "${actionName}" actionName!`);
   }
 
   if (!composeCustomActionSignature(signatureMethods, entityConfig, generalConfig)) return null;
 
   // $FlowFixMe - cannot understand what the conflict between 'Query' & 'Mutation'
-  const inventoryChain: ThreeSegmentInventoryChain = [methodKind, methodName, name];
+  const inventoryChain: ThreeSegmentInventoryChain = [actionKind, actionName, name];
 
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  if (serversideConfig[methodKind]?.[methodName]) {
+  if (serversideConfig[actionKind]?.[actionName]) {
     const authDecorator =
       (func) =>
       async (...argarray) => {
@@ -60,7 +60,7 @@ const createCustomResolver = (
 
     return customResolverDecorator(
       authDecorator(
-        serversideConfig[methodKind][methodName](entityConfig, generalConfig, serversideConfig),
+        serversideConfig[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
       ),
       signatureMethods,
       entityConfig,
@@ -73,10 +73,10 @@ const createCustomResolver = (
   const derivativeResolvers = generateDerivativeResolvers(generalConfig);
 
   if (!derivativeResolvers) {
-    throw new TypeError(`Have to set the "${methodName}" ${methodKind}!`);
+    throw new TypeError(`Have to set the "${actionName}" ${actionKind}!`);
   }
 
-  if (derivativeResolvers[methodKind]?.[methodName]) {
+  if (derivativeResolvers[actionKind]?.[actionName]) {
     const authDecorator =
       (func) =>
       async (...argarray) => {
@@ -90,7 +90,7 @@ const createCustomResolver = (
 
     return customResolverDecorator(
       authDecorator(
-        derivativeResolvers[methodKind][methodName](entityConfig, generalConfig, serversideConfig),
+        derivativeResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
       ),
       signatureMethods,
       entityConfig,
@@ -98,7 +98,7 @@ const createCustomResolver = (
     );
   }
 
-  throw new TypeError(`Have to set the "${methodName}" ${methodKind}!`);
+  throw new TypeError(`Have to set the "${actionName}" ${actionKind}!`);
 };
 
 export default createCustomResolver;

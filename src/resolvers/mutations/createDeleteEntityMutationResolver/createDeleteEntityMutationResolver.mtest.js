@@ -152,7 +152,9 @@ describe('createDeleteEntityMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -204,7 +206,9 @@ describe('createDeleteEntityMutationResolver', () => {
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
-    const deletedPerson = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
+    const deletedPerson = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
 
@@ -222,7 +226,9 @@ describe('createDeleteEntityMutationResolver', () => {
     expect(createdFavorities2[0].visitors.length).toEqual(0);
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
-    const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub });
+    const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(deletedPerson2).toBeNull();
 
     const deletePlace = createDeleteEntityMutationResolver(
@@ -233,10 +239,22 @@ describe('createDeleteEntityMutationResolver', () => {
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const where2 = { name: data.location.create.name };
-    const deletedPlace = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
+    const deletedPlace = await deletePlace(
+      null,
+      { whereOne: where2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(deletedPlace.name).toBe(data.location.create.name);
 
-    const deletedPlace2 = await deletePlace(null, { whereOne: where2 }, { mongooseConn, pubsub });
+    const deletedPlace2 = await deletePlace(
+      null,
+      { whereOne: where2 },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
     expect(deletedPlace2).toBeNull();
   });
 
@@ -305,7 +323,7 @@ describe('createDeleteEntityMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const deletePerson = createDeleteEntityMutationResolver(
@@ -323,7 +341,9 @@ describe('createDeleteEntityMutationResolver', () => {
     };
 
     const info = { projection: { _id: 1, name: 1 } };
-    const deletedParent = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info);
+    const deletedParent = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
 
     expect(deletedParent.name).toBe('name-2');
 
@@ -339,6 +359,7 @@ describe('createDeleteEntityMutationResolver', () => {
       { whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(deletedParent2).toBe(null);

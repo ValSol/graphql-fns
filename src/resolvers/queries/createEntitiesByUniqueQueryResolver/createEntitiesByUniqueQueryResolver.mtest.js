@@ -101,7 +101,7 @@ describe('createEntityQueryResolver', () => {
       },
     };
 
-    await createPerson(null, { data }, { mongooseConn, pubsub });
+    await createPerson(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
 
     const allPeople = await Example.find({});
     const id_in = allPeople.map(({ _id }) => _id); // eslint-disable-line camelcase
@@ -118,7 +118,7 @@ describe('createEntityQueryResolver', () => {
       { where: { id_in } },
       { mongooseConn, pubsub },
       info,
-      [],
+      { foo: [] },
     );
 
     expect(people.length).toBe(allPeople.length);

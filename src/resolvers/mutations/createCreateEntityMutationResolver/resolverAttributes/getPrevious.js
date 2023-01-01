@@ -7,13 +7,13 @@ import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, parentFilter } = resolverArg;
+  const { args, context, parentFilters } = resolverArg;
   const { name } = entityConfig;
 
   const inventoryChain = ['Mutation', actionGeneralName, name];
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

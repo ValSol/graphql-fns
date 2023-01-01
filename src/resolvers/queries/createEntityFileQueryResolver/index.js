@@ -34,10 +34,10 @@ const createEntityFilesQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilter: Array<Object>,
+    parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const filter = inAnyCase
-      ? parentFilter
+    const { foo: filter } = inAnyCase
+      ? parentFilters
       : await executeAuthorisation(inventoryChain, context, serversideConfig);
     if (!filter) return null;
 

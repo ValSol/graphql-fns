@@ -42,8 +42,8 @@ const createChildEntitiesThroughConnectionQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilter: Array<Object>,
-  ): Object => entitiesThroughConnectionQueryResolver(parent, args, context, info, parentFilter);
+    parentFilters: { [derivativeConfigName: string]: Array<Object> },
+  ): Object => entitiesThroughConnectionQueryResolver(parent, args, context, info, parentFilters);
 
   return resolver;
 };

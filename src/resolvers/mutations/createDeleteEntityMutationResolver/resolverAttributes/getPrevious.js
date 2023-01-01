@@ -7,7 +7,7 @@ import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { args, context, parentFilter } = resolverArg;
+  const { args, context, parentFilters } = resolverArg;
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
@@ -16,8 +16,8 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     return null;
   }
 
-  const filter = inAnyCase
-    ? parentFilter
+  const { foo: filter } = inAnyCase
+    ? parentFilters
     : // $FlowFixMe
       await executeAuthorisation(inventoryChain, context, serversideConfig);
 

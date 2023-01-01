@@ -95,12 +95,20 @@ describe('createEntityQueryResolver', () => {
     );
 
     if (!ImageFileCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
-    const imageFileCount = await ImageFileCount(null, { where: {} }, { mongooseConn, pubsub });
+    const imageFileCount = await ImageFileCount(
+      null,
+      { where: {} },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     expect(imageFileCount).toBe(files.length);
 
     const where = { hash_in: [files[0].hash, files[2].hash] };
-    const imageFilesCount2 = await ImageFileCount(null, { where }, { mongooseConn, pubsub });
+    const imageFilesCount2 = await ImageFileCount(null, { where }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(imageFilesCount2).toBe(2);
   });

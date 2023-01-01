@@ -269,7 +269,9 @@ describe('workOutMutations', () => {
         create: [{ name: 'Child Name 1' }, { name: 'Child Name 2' }, { name: 'Child Name 3' }],
       },
     };
-    const createdParent = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdParent = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
 
     expect(createdParent.name).toBe(data.name);
     expect(createdParent.children.length).toBe(data.children.create.length);
@@ -1055,7 +1057,9 @@ describe('workOutMutations', () => {
 
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 
@@ -1150,7 +1154,9 @@ describe('workOutMutations', () => {
         ],
       },
     };
-    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub });
+    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
 
@@ -1215,7 +1221,9 @@ describe('workOutMutations', () => {
 
     const data = { firstName: 'Vasy', lastName: 'Pupkin' };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 
@@ -1298,7 +1306,9 @@ describe('workOutMutations', () => {
         ],
       },
     };
-    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub });
+    const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
 

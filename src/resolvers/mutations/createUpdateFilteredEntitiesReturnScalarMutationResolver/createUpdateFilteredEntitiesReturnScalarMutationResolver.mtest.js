@@ -129,7 +129,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         favorities: { create: [] },
       };
 
-      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+        foo: [],
+      });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -206,6 +208,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         null,
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       expect(updatedPersonCount).toBe(1);
@@ -268,7 +272,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
           ],
         },
       };
-      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+      const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+        foo: [],
+      });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
       expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -353,7 +359,13 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
 
-      const createdPerson2 = await createPerson(null, { data: data2 }, { mongooseConn, pubsub });
+      const createdPerson2 = await createPerson(
+        null,
+        { data: data2 },
+        { mongooseConn, pubsub },
+        null,
+        { foo: [] },
+      );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
       expect(createdPerson2.createdAt instanceof Date).toBeTruthy();
@@ -417,6 +429,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         null,
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
       expect(updatedPersonCount).toBe(1);
 
@@ -459,6 +473,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         null,
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
 
       expect(updatedPlaceCount).toBe(1);
@@ -467,6 +483,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         null,
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
+        null,
+        { foo: [] },
       );
       expect(updatedPlacesCount).toEqual(0);
     });
@@ -522,7 +540,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       },
     };
 
-    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
     expect(createdExample.embeddedField.embeddedTextField).toBe(
@@ -552,6 +572,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       null,
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedExampleCount).toBe(1);
 
@@ -564,6 +586,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       null,
       { where, data: dataForUpdate2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedExampleCount2).toBe(1);
@@ -576,6 +600,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       null,
       { where, data: dataForUpdate3 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(updatedExampleCount3).toBe(1);
   });
@@ -624,7 +650,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       textField: 'text Field',
     };
 
-    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub });
+    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
 
@@ -651,6 +679,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       null,
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMainCount).toBe(1);
@@ -708,7 +738,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       textField: 'text Field',
     };
 
-    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub });
+    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
 
@@ -741,6 +773,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       null,
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMainCount).toBe(1);
@@ -809,7 +843,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const updateFilteredPersons = createUpdateFilteredEntitiesReturnScalarMutationResolver(
@@ -833,6 +867,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { data, where },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(updatedParentCount).toBe(1);
@@ -848,6 +883,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { data, where: where2 },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(updatedParentsCount).toEqual(0);
@@ -943,7 +979,13 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       },
     };
 
-    const { id: restaurantId } = await createRestaurant(null, { data }, { mongooseConn, pubsub });
+    const { id: restaurantId } = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      { foo: [] },
+    );
 
     const createPost = createCreateEntityMutationResolver(
       postConfig,
@@ -961,9 +1003,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       restaurant: { connect: restaurantId },
     };
 
-    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, [
-      { restaurant_: { access_: { postCreators: '1234567890' } } },
-    ]);
+    const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
+      foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+    });
 
     expect(post.restaurant.toString()).toEqual(restaurantId.toString());
     expect(post.slug).toBe(postData.slug);
@@ -988,7 +1030,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataToUpdate },
       { mongooseConn, pubsub },
       null,
-      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPostsCount).toEqual(0);
@@ -1003,7 +1045,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataToUpdate2 },
       { mongooseConn, pubsub },
       null,
-      [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPostCount2).toBe(1);
@@ -1016,12 +1058,14 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataToUpdate3 },
       { mongooseConn, pubsub },
       null,
-      [
-        {
-          restaurant_: { access_: { postCreators: '1234567890' } },
-          type_in: ['newsFeed', 'events'],
-        },
-      ],
+      {
+        foo: [
+          {
+            restaurant_: { access_: { postCreators: '1234567890' } },
+            type_in: ['newsFeed', 'events'],
+          },
+        ],
+      },
     );
 
     expect(updatedPostsCount2).toEqual(0);
@@ -1034,7 +1078,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: { slug: 'name is absent' }, data: dataToUpdate4 },
       { mongooseConn, pubsub },
       null,
-      [],
+      { foo: [] },
     );
 
     expect(updatedPostsCount3).toEqual(0);

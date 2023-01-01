@@ -152,7 +152,9 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
         ],
       },
     };
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();
@@ -215,7 +217,9 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const where = { id_in: [id] };
-    const deletedPersonCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info);
+    const deletedPersonCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
     expect(deletedPersonCount).toBe(1);
 
     const createdFriend2 = await Person.findById(friendId);
@@ -232,7 +236,13 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
     expect(createdFavorities2[0].visitors.length).toEqual(0);
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
-    const deletedPersonCount2 = await deletePerson(null, { where }, { mongooseConn, pubsub }, info);
+    const deletedPersonCount2 = await deletePerson(
+      null,
+      { where },
+      { mongooseConn, pubsub },
+      info,
+      { foo: [] },
+    );
     expect(deletedPersonCount2).toEqual(0);
 
     const deletePlace = createDeleteFilteredEntitiesReturnScalarMutationResolver(
@@ -250,6 +260,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
+      { foo: [] },
     );
 
     expect(deletedPlaceCount).toBe(1);
@@ -259,6 +270,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
+      { foo: [] },
     );
     expect(deletedPlaceCount2).toEqual(0);
   });
@@ -328,7 +340,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const deletePerson = createDeleteFilteredEntitiesReturnScalarMutationResolver(
@@ -346,7 +358,9 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const info = { projection: { _id: 1, name: 1 } };
-    const deletedParentCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info);
+    const deletedParentCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
 
     expect(deletedParentCount).toBe(1);
 
@@ -362,6 +376,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(deletedParentCount2).toEqual(0);
@@ -432,7 +447,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const deletePerson = createDeleteFilteredEntitiesReturnScalarMutationResolver(
@@ -450,6 +465,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where },
       { mongooseConn, pubsub },
       info,
+      { foo: [] },
     );
 
     expect(deletedParentsCounts).toEqual(0);

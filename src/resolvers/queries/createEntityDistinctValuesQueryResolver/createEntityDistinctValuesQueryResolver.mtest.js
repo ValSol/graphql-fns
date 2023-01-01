@@ -98,7 +98,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       },
     };
-    await createPerson(null, { data }, { mongooseConn, pubsub });
+    await createPerson(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
 
     const DistinctValues = createEntityDistinctValuesQueryResolver(
       personConfig,
@@ -108,7 +108,9 @@ describe('createEntityDistinctValuesQueryResolver', () => {
     if (!DistinctValues) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const options = { target: 'firstName' };
-    const distinctValues = await DistinctValues(null, { options }, { mongooseConn, pubsub });
+    const distinctValues = await DistinctValues(null, { options }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(distinctValues).toEqual(['Adam', 'Andy', 'Fred', 'Stanislav']);
 
     const options2 = { target: 'lastName' };
@@ -116,6 +118,8 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       null,
       { options: options2 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(distinctValues2).toEqual(['Boss', 'Bzhezinsky', 'Daskin', 'Mashkin', 'Prashkin']);
 
@@ -124,6 +128,8 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       null,
       { options: options3 },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(distinctValues3).toEqual(['boss', 'programmer']);
   });
@@ -194,7 +200,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const DistinctValues = createEntityDistinctValuesQueryResolver(
@@ -210,6 +216,8 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       null,
       { options, where },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
     expect(distinctValues3).toEqual(['name1', 'name4']);
   });

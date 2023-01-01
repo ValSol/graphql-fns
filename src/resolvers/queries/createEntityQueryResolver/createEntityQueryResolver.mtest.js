@@ -83,14 +83,19 @@ describe('createEntityQueryResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub });
+    const createdExample = await createExample(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      { foo: [] },
+    );
     const { id } = createdExample;
 
     const Example = createEntityQueryResolver(entityConfig, generalConfig, serversideConfig);
     if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
-    const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info);
+    const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info, { foo: [] });
 
     expect(example.textField1).toBe(data.textField1);
     expect(example.textField2).toBeUndefined();
@@ -101,7 +106,9 @@ describe('createEntityQueryResolver', () => {
     expect(example.updatedAt).toBeUndefined();
 
     const whereOne2 = { textField1: data.textField1 };
-    const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info);
+    const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info, {
+      foo: [],
+    });
 
     expect(example2.textField1).toBe(data.textField1);
     expect(example2.textField2).toBeUndefined();
@@ -176,7 +183,7 @@ describe('createEntityQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
@@ -189,7 +196,7 @@ describe('createEntityQueryResolver', () => {
         { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } },
       ],
     };
-    const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, []);
+    const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, { foo: [] });
 
     expect(parent.name).toBe('name-2');
 
@@ -199,13 +206,9 @@ describe('createEntityQueryResolver', () => {
         { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } },
       ],
     };
-    const parent2 = await Parent(
-      null,
-      { whereOne: whereOne2 },
-      { mongooseConn, pubsub },
-      info2,
-      [],
-    );
+    const parent2 = await Parent(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info2, {
+      foo: [],
+    });
 
     expect(parent2).toBe(null);
   });

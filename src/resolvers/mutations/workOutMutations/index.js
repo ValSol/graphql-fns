@@ -19,7 +19,7 @@ type StandardMutationsArgs = Array<{
   parent?: Object,
   args: Object,
   info?: Object,
-  parentFilter?: Array<Object>,
+  parentFilters?: { foo: Array<Object> },
   returnReport?: boolean,
   returnResult: boolean,
 }>;
@@ -65,12 +65,12 @@ const workOutMutations = async (
           parent: parentInArgs,
           args,
           info: infoInArgs,
-          parentFilter: parentFilterInArgs,
+          parentFilters: parentFiltersInArgs,
         } = mutationArgs;
 
         const parent = parentInArgs || null;
         const info = infoInArgs || { projection: {} };
-        const parentFilter = parentFilterInArgs || [];
+        const parentFilters = parentFiltersInArgs || { foo: [] };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
@@ -95,7 +95,7 @@ const workOutMutations = async (
           args,
           context,
           info,
-          parentFilter,
+          parentFilters,
         };
 
         // eslint-disable-next-line no-await-in-loop
@@ -170,14 +170,14 @@ const workOutMutations = async (
       parent: parentInArgs,
       args,
       info: infoInArgs,
-      parentFilter: parentFilterInArgs,
+      parentFilters: parentFiltersInArgs,
       returnReport,
       returnResult,
     } = mutationArgs;
 
     const parent = parentInArgs || null;
     const info = infoInArgs || { projection: {} };
-    const parentFilter = parentFilterInArgs || [];
+    const parentFilters = parentFiltersInArgs || { foo: [] };
 
     const { array, produceCurrent, report, finalResult } =
       mutationsResolverAttributes[actionGeneralName];
@@ -194,7 +194,7 @@ const workOutMutations = async (
       args,
       context,
       info,
-      parentFilter,
+      parentFilters,
     };
 
     const previous = previouses[i];
