@@ -18,6 +18,7 @@ describe('composeCustomActionSignature', () => {
       argTypes() {
         return [];
       },
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type(entityConfig) {
         const { name } = entityConfig;
         return `[${name}!]!`;
@@ -57,6 +58,7 @@ describe('composeCustomActionSignature', () => {
       argTypes() {
         return ['String!', 'Int'];
       },
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type(entityConfig) {
         const { name } = entityConfig;
         return `${name}!`;
@@ -96,6 +98,7 @@ describe('composeCustomActionSignature', () => {
       argTypes() {
         return ['String!', 'Int'];
       },
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type(entityConfig) {
         const { name } = entityConfig;
         return `${name}!`;
@@ -135,6 +138,7 @@ describe('composeCustomActionSignature', () => {
       argTypes() {
         return ['String!', 'Int'];
       },
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: () => 'String!',
       config: () => null,
     };

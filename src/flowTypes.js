@@ -497,6 +497,10 @@ export type GeneralConfig = {
           entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
+        +involvedEntityNames: (
+          entityConfig: EntityConfig,
+          generalConfig: GeneralConfig,
+        ) => { [key: string]: string },
         +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
         +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
       },
@@ -513,6 +517,10 @@ export type GeneralConfig = {
           entityConfig: EntityConfig,
           generalConfig: GeneralConfig,
         ) => $ReadOnlyArray<string>,
+        +involvedEntityNames: (
+          entityConfig: EntityConfig,
+          generalConfig: GeneralConfig,
+        ) => { [key: string]: string },
         +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
         +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
       },
@@ -592,6 +600,10 @@ export type ActionSignatureMethods = {
   +specificName: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
   +argNames: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
   +argTypes: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => $ReadOnlyArray<string>,
+  +involvedEntityNames: (
+    entityConfig: EntityConfig,
+    generalConfig: GeneralConfig,
+  ) => { [key: string]: string },
   +type: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => string,
   +config: (entityConfig: EntityConfig, generalConfig: GeneralConfig) => null | EntityConfig,
 };
@@ -885,6 +897,7 @@ export type ActionAttributes = {
   inputCreators: Array<InputCreator>,
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
+  actionInvolvedEntityNames: (name: string, derivativeKey?: string) => { [key: string]: string },
   actionReturnString: (derivativeKey: string) => (entityConfig: EntityConfig) => string,
   actionReturnConfig: (
     entityConfig: EntityConfig,

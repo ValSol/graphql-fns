@@ -25,6 +25,7 @@ describe('parseEntityName', () => {
     specificName: ({ name }) => `load${name}`,
     argNames: () => [],
     argTypes: () => [],
+    involvedEntityNames: ({ name }) => ({ mainEntity: name }),
     type: ({ name }) => `${name}!`,
     config: (thinConfig) => thinConfig,
   };

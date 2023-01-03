@@ -50,6 +50,7 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogDistinctValuesOptionsInput`,
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => '[String!]!',
       config: () => null,
     };
@@ -63,5 +64,9 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });

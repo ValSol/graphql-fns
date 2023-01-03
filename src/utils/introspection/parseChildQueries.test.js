@@ -72,6 +72,7 @@ describe('parseChildQueries', () => {
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
+    involvedEntityNames: ({ name }) => ({ mainEntity: name }),
     type: ({ name }) => `${name}!`,
     config: (entityConfig) => entityConfig,
   };

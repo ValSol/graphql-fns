@@ -33,6 +33,13 @@ const argTypes = [
   (name: string): string => `${name}UpdateInput!`,
 ];
 
+const actionInvolvedEntityNames = (
+  name: string,
+  derivativeKey?: string = '',
+): { [key: string]: string } => ({
+  mainEntity: `${name}${derivativeKey}`,
+});
+
 const actionReturnConfig = (
   entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
@@ -57,6 +64,7 @@ const updateFilteredEntitiesReturnScalarMutationAttributes = {
   inputCreators,
   argNames,
   argTypes,
+  actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
   actionAllowed,

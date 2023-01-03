@@ -4,14 +4,23 @@ import type { ServersideConfig, ThreeSegmentInventoryChain } from '../../../flow
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 
+const composeEmptyFilters = (involvedEntityNames) =>
+  Object.keys(involvedEntityNames).reduce((prev, key) => {
+    prev[key] = []; // eslint-disable-line no-param-reassign
+    return prev;
+  }, {});
+
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
+  involvedEntityNames: { [key: string]: string },
   context: Object,
   serversideConfig: ServersideConfig,
-  derivativeEntityName?: string,
-): Promise<null | Array<Object>> => {
+): Promise<null | { [key: string]: Array<Object> }> => {
   const { containedRoles, filters, getUserAttributes, inventoryByRoles } = serversideConfig;
-  if (!inventoryByRoles && !filters) return [];
+
+  if (!inventoryByRoles && !filters) {
+    return composeEmptyFilters(involvedEntityNames);
+  }
 
   if (!getUserAttributes) {
     throw new TypeError('Not found "getUserAttributes" callback!');
@@ -40,8 +49,8 @@ const executeAuthorisation = async (
       return prev;
     }, []);
 
-    for (let i = 0; i < allRoles.length; i += 1) {
-      const inventory = inventoryByRoles[allRoles[i]];
+    for (let j = 0; j < allRoles.length; j += 1) {
+      const inventory = inventoryByRoles[allRoles[j]];
 
       if (checkInventory(inventoryChain, inventory)) {
         notAuthorised = false;
@@ -55,34 +64,40 @@ const executeAuthorisation = async (
   }
 
   if (!filters) {
-    return [];
+    return composeEmptyFilters(involvedEntityNames);
   }
 
-  const entityName = derivativeEntityName || inventoryChain[2];
+  const result = {};
 
-  let result = null;
+  const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
 
-  console.log('entityName =', entityName);
+  for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
+    const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-  for (let i = 0; i < roles.length; i += 1) {
-    const role = roles[i];
-    console.log(`roles[${i}] =`, roles[i]);
+    const entityName = involvedEntityNames[involvedEntityNamesKey];
 
-    const filter = filters[entityName]({ ...userAttributes, role });
+    for (let j = 0; j < roles.length; j += 1) {
+      const role = roles[j];
 
-    console.log('filter =', filter);
+      const filter = filters[entityName]({ ...userAttributes, role });
 
-    if (filter) {
-      if (!filter.length) {
-        return [];
+      if (filter) {
+        if (!filter.length) {
+          result[involvedEntityNamesKey] = [];
+          break;
+        }
+
+        if (!result[involvedEntityNamesKey]) {
+          result[involvedEntityNamesKey] = [];
+        }
+
+        result[involvedEntityNamesKey].push(...filter);
       }
-
-      if (!result) {
-        result = [];
-      }
-
-      result.push(...filter);
     }
+  }
+
+  if (!Object.keys(result).length) {
+    return null;
   }
 
   return result;

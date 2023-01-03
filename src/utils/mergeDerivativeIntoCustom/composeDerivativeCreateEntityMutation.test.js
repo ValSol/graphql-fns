@@ -45,6 +45,7 @@ describe('composeDerivativeCreateEntityMutation', () => {
           : '',
       argNames: () => ['data'],
       argTypes: ({ name }) => [`${name}ForCatalogCreateInput!`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `${name}ForCatalog!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -59,5 +60,9 @@ describe('composeDerivativeCreateEntityMutation', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });

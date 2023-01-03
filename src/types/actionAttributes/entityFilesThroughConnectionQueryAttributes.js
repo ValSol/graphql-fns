@@ -48,6 +48,13 @@ const argTypes = [
   (name: string): string => 'Int', // eslint-disable-line no-unused-vars
 ];
 
+const actionInvolvedEntityNames = (
+  name: string,
+  derivativeKey?: string = '',
+): { [key: string]: string } => ({
+  mainEntity: `${name}${derivativeKey}`,
+});
+
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
@@ -80,6 +87,7 @@ const entityFilesThroughConnectionQueryAttributes = {
   inputCreators,
   argNames,
   argTypes,
+  actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
   actionDerivativeUpdater: connectionDerivativeUpdater,

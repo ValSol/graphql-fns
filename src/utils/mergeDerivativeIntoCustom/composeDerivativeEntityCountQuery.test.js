@@ -93,6 +93,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -106,6 +107,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "sortEntityConfig"', () => {
@@ -117,6 +122,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -130,6 +136,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "paginationEntityConfig"', () => {
@@ -141,6 +151,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -154,6 +165,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "nearEntityConfig"', () => {
@@ -165,6 +180,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where', 'near'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogNearInput`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -177,5 +193,9 @@ describe('composeDerivativeEntityCountQuery', () => {
       generalConfig,
     );
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });

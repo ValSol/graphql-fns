@@ -30,6 +30,13 @@ const argTypes = [
   (): string => 'String',
 ];
 
+const actionInvolvedEntityNames = (
+  name: string,
+  derivativeKey?: string = '',
+): { [key: string]: string } => ({
+  mainEntity: `${name}${derivativeKey}`,
+});
+
 const actionReturnConfig = (
   entityConfig: EntityConfig, // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig, // eslint-disable-line no-unused-vars
@@ -54,6 +61,7 @@ const deleteFilteredEntitiesReturnScalarMutationAttributes = {
   inputCreators,
   argNames,
   argTypes,
+  actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
   actionAllowed,

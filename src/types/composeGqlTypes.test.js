@@ -3430,6 +3430,7 @@ type Mutation {
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };
@@ -3486,6 +3487,7 @@ type Mutation {
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };
@@ -3557,6 +3559,7 @@ type Query {
       specificName: ({ name }) => `${name}InTimeRangeQuery`,
       argNames: () => ['range'],
       argTypes: ({ name }) => [`${name}TimeRangeInput!`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => `${name}InTimeRange`,
       config: (entityConfig) => entityConfig,
     };
@@ -3798,6 +3801,7 @@ type Mutation {
         `[${childNameFromParenName[name]}UpdateInput!]!`,
         `[${childNameFromParenName[name]}WhereOneInput!]!`,
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };

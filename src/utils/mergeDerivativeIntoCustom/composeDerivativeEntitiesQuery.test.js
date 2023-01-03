@@ -100,6 +100,7 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogSortInput`,
         'PaginationInput',
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -114,6 +115,10 @@ describe('composeDerivativeEntitiesQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "sortEntityConfig"', () => {
@@ -129,6 +134,7 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogSortInput`,
         'PaginationInput',
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -143,6 +149,10 @@ describe('composeDerivativeEntitiesQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "paginationEntityConfig"', () => {
@@ -158,6 +168,7 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogSortInput`,
         'PaginationInput',
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -172,6 +183,10 @@ describe('composeDerivativeEntitiesQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 
   test('should return inputs for "nearEntityConfig"', () => {
@@ -188,6 +203,7 @@ describe('composeDerivativeEntitiesQuery', () => {
         'PaginationInput',
         `${name}ForCatalogNearInput`,
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -202,5 +218,9 @@ describe('composeDerivativeEntitiesQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });

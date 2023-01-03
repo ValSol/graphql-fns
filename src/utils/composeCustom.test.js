@@ -18,6 +18,7 @@ describe('composeCustom', () => {
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput!`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };
@@ -27,6 +28,7 @@ describe('composeCustom', () => {
       specificName: ({ name }) => (name === 'Restaurant' || name === 'Post' ? `clone${name}` : ''),
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}WhereOneInput!`],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => `${name}Clone!`,
       config: (entityConfig, { allEntityConfigs: allEntityConfigs2 }) => {
         const { name } = entityConfig;

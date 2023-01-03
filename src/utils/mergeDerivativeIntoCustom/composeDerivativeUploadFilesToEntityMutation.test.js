@@ -69,6 +69,7 @@ describe('composeDerivativeUploadFilesToEntityMutation', () => {
         '[Upload!]!',
         `FilesOf${name}ForCatalogOptionsInput!`,
       ],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: ({ name }) => `${name}ForCatalog!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -83,5 +84,9 @@ describe('composeDerivativeUploadFilesToEntityMutation', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });

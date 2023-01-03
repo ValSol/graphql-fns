@@ -27,6 +27,13 @@ const argTypes = [
   (name: string): string => `delete${name}WithChildrenOptionsInput`,
 ];
 
+const actionInvolvedEntityNames = (
+  name: string,
+  derivativeKey?: string = '',
+): { [key: string]: string } => ({
+  mainEntity: `${name}${derivativeKey}`,
+});
+
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
@@ -54,6 +61,7 @@ const deleteEntityWithChildrenMutationAttributes = {
   inputCreators,
   argNames,
   argTypes,
+  actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
   actionAllowed,

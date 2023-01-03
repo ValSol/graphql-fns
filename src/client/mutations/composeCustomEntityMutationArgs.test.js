@@ -13,6 +13,7 @@ describe('composeCustomEntityMutationArgs', () => {
       specificName: ({ name }) => `load${name}`,
       argNames: () => [],
       argTypes: () => [],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => `${name}!`,
       config: (thinConfig) => thinConfig,
     };
@@ -66,6 +67,7 @@ describe('composeCustomEntityMutationArgs', () => {
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
+      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
       type: ({ name }) => `${name}!`,
       config: (thinConfig) => thinConfig,
     };

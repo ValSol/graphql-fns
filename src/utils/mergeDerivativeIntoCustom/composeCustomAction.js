@@ -46,6 +46,7 @@ const composeCustomAction = (
     argNames,
     argTypes,
     inputCreators,
+    actionInvolvedEntityNames,
     actionReturnString,
     actionReturnConfig,
   } = actionAttributes;
@@ -67,6 +68,10 @@ const composeCustomAction = (
     },
     argNames: composeArgNames(argNames, inputCreators, derivativeKey),
     argTypes: composeArgTypes(argTypes, inputCreators, derivativeKey),
+
+    involvedEntityNames: (entityConfig) =>
+      actionInvolvedEntityNames(entityConfig.name, derivativeKey),
+
     type: actionReturnString(derivativeKey),
     config: (entityConfig, generalConfig) =>
       actionReturnConfig(entityConfig, generalConfig, derivativeKey),

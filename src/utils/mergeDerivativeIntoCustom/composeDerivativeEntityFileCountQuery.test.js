@@ -45,6 +45,7 @@ describe('composeDerivativeEntityFileCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: () => ['FileWhereInput'],
+      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -59,5 +60,9 @@ describe('composeDerivativeEntityFileCountQuery', () => {
     );
 
     expect(result2).toEqual(expectedResult2);
+
+    expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
+      expectedResult.involvedEntityNames(entityConfig),
+    );
   });
 });
