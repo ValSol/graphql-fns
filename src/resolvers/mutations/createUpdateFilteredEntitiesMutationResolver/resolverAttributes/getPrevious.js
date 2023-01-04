@@ -2,24 +2,17 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
-import executeAuthorisation from '../../../utils/executeAuthorisation';
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
+  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, parentFilters } = resolverArg;
   const { enums } = generalConfig;
-  const { name } = entityConfig;
 
-  const inventoryChain = ['Mutation', actionGeneralName, name];
-
-  const { foo: filter } = inAnyCase
-    ? parentFilters
-    : // $FlowFixMe
-      await executeAuthorisation(inventoryChain, context, serversideConfig);
+  const { foo: filter } = parentFilters;
 
   if (!filter) return null;
 

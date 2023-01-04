@@ -1,7 +1,14 @@
 // @flow
 
-import type { ActionSignatureMethods, GeneralConfig, EntityConfig } from '../../../flowTypes';
+import type {
+  ActionSignatureMethods,
+  EntityConfig,
+  GeneralConfig,
+  ServersideConfig,
+  ThreeSegmentInventoryChain,
+} from '../../../flowTypes';
 
+import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import getTransformerAndConfig from './transformBefore/getTransformerAndConfig';
@@ -11,9 +18,11 @@ const argNamesToTransformersStore = {};
 
 const customResolverDecorator = (
   func: Function,
+  inventoryChain: ThreeSegmentInventoryChain,
   signatureMethods: ActionSignatureMethods,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function => {
   if (!store.get(signatureMethods)) {
     store.set(signatureMethods, {});
@@ -61,7 +70,7 @@ const customResolverDecorator = (
 
     const [parent, args, ...rest] = resolverArgs;
 
-    const rawResult = await func(
+    const rawResult = await authDecorator(func, inventoryChain, serversideConfig)(
       parent,
       transformBefore(args, argNamesToTransformersStore[argNamesToTransformersStoreKey]),
       ...rest,

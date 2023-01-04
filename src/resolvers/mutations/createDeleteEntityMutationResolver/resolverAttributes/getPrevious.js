@@ -2,24 +2,14 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import executeAuthorisation from '../../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
+  const { entityConfig, generalConfig } = resolverCreatorArg;
   const { args, context, parentFilters } = resolverArg;
   const { enums } = generalConfig;
-  const { name } = entityConfig;
 
-  const inventoryChain = ['Mutation', actionGeneralName, name];
-  if (!inAnyCase && !(await executeAuthorisation(inventoryChain, context, serversideConfig))) {
-    return null;
-  }
-
-  const { foo: filter } = inAnyCase
-    ? parentFilters
-    : // $FlowFixMe
-      await executeAuthorisation(inventoryChain, context, serversideConfig);
+  const { foo: filter } = parentFilters;
 
   if (!filter) return null;
 

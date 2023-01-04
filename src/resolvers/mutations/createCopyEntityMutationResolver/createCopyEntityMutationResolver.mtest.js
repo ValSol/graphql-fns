@@ -145,7 +145,9 @@ describe('createCopyEntityMutationResolver', () => {
 
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, { foo: [] });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 

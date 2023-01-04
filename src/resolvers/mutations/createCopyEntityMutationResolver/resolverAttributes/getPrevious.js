@@ -2,20 +2,12 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
-import executeAuthorisation from '../../../utils/executeAuthorisation';
 import getCommonData from './getCommonData';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
-  const { context, parentFilters } = resolverArg;
-  const { name } = entityConfig;
+  const { parentFilters } = resolverArg;
 
-  const inventoryChain = ['Mutation', actionGeneralName, name];
-
-  const { foo: filter } = inAnyCase
-    ? parentFilters
-    : // $FlowFixMe
-      await executeAuthorisation(inventoryChain, context, serversideConfig);
+  const { foo: filter } = parentFilters;
 
   if (!filter) return null;
 

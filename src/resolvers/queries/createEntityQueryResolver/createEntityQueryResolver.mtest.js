@@ -83,12 +83,9 @@ describe('createEntityQueryResolver', () => {
       textField4: ['textField4'],
       textField5: ['textField5'],
     };
-    const createdExample = await createExample(
-      null,
-      { data },
-      { mongooseConn, pubsub },
-      { foo: [] },
-    );
+    const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     const { id } = createdExample;
 
     const Example = createEntityQueryResolver(entityConfig, generalConfig, serversideConfig);

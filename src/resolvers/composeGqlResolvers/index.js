@@ -71,9 +71,11 @@ const composeGqlResolvers = (
             // eslint-disable-next-line no-param-reassign
             prev.Query[queryAttributes[actionName].actionName(entityName)] = resolverDecorator(
               resolver,
+              ['Query', actionName, entityConfig.name],
               queryAttributes[actionName],
               entityConfig,
               generalConfig,
+              serversideConfig,
             );
           }
         }
@@ -110,9 +112,11 @@ const composeGqlResolvers = (
             prev.Mutation[mutationAttributes[actionName].actionName(entityName)] =
               resolverDecorator(
                 resolver,
+                ['Mutation', actionName, entityConfig.name],
                 mutationAttributes[actionName],
                 entityConfig,
                 generalConfig,
+                serversideConfig,
               );
           }
         }

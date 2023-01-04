@@ -1,7 +1,14 @@
 // @flow
 
-import type { ActionAttributes, EntityConfig, GeneralConfig } from '../../../flowTypes';
+import type {
+  ActionAttributes,
+  EntityConfig,
+  GeneralConfig,
+  ServersideConfig,
+  ThreeSegmentInventoryChain,
+} from '../../../flowTypes';
 
+import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
@@ -33,9 +40,11 @@ const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
 
 const resolverDecorator = (
   func: Function,
+  inventoryChain: ThreeSegmentInventoryChain,
   actionAttributes: ActionAttributes,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ): Function => {
   if (!store.get(actionAttributes)) {
     store.set(actionAttributes, {});
@@ -91,7 +100,7 @@ const resolverDecorator = (
 
     const [parent, args, ...rest] = resolverArgs;
 
-    const rawResult = await func(
+    const rawResult = await authDecorator(func, inventoryChain, serversideConfig)(
       parent,
       transformBefore(args, argNamesToTransformersStore[argNamesToTransformersStoreKey]),
       ...rest,

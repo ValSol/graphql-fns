@@ -4,7 +4,6 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context, ResolverCreatorArg } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import executeAuthorisation from '../../utils/executeAuthorisation';
 import createEntityFileCountQueryResolver from '../createEntityFileCountQueryResolver';
 import createEntityFilesQueryResolver from '../createEntityFilesQueryResolver';
 import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
@@ -73,9 +72,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = inAnyCase
-      ? parentFilters
-      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    const { foo: filter } = parentFilters;
 
     if (!filter) return null;
 

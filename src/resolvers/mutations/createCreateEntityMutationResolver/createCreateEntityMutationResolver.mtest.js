@@ -143,7 +143,9 @@ describe('createCreateEntityMutationResolver', () => {
       lastName: 'Fedorov',
     };
 
-    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, { foo: [] });
+    const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
+      foo: [],
+    });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
     expect(createdPerson.createdAt instanceof Date).toBeTruthy();

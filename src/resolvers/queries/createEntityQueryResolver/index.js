@@ -6,13 +6,12 @@ import type { Context } from '../../flowTypes';
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addIdsToEntity from '../../utils/addIdsToEntity';
-import executeAuthorisation from '../../utils/executeAuthorisation';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = { whereOne: { id: string } };
 
-const createEntityQueryResolver = (
+const createNodeQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -31,9 +30,8 @@ const createEntityQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = inAnyCase
-      ? parentFilters
-      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    const { foo: filter } = parentFilters;
+
     if (!filter) return null;
 
     const { whereOne } = args;
@@ -79,4 +77,4 @@ const createEntityQueryResolver = (
   return resolver;
 };
 
-export default createEntityQueryResolver;
+export default createNodeQueryResolver;

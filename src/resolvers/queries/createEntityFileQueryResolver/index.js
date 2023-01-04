@@ -5,7 +5,6 @@ import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import executeAuthorisation from '../../utils/executeAuthorisation';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = { whereOne: { id: string } };
@@ -36,9 +35,8 @@ const createEntityFilesQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = inAnyCase
-      ? parentFilters
-      : await executeAuthorisation(inventoryChain, context, serversideConfig);
+    const { foo: filter } = parentFilters;
+
     if (!filter) return null;
 
     const { whereOne } = args;

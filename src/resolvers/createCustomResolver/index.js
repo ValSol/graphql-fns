@@ -9,7 +9,6 @@ import type {
 import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
-import executeAuthorisation from '../utils/executeAuthorisation';
 import customResolverDecorator from '../utils/resolverDecorator/customResolverDecorator';
 import generateDerivativeResolvers from './generateDerivativeResolvers';
 
@@ -47,24 +46,13 @@ const createCustomResolver = (
   if (!checkInventory(inventoryChain, inventory)) return null;
 
   if (serversideConfig[actionKind]?.[actionName]) {
-    const authDecorator =
-      (func) =>
-      async (...argarray) => {
-        const [parent, args, context, info] = argarray;
-        const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
-        if (!filter) return null;
-
-        const result = await func(parent, args, context, info, filter);
-        return result;
-      };
-
     return customResolverDecorator(
-      authDecorator(
-        serversideConfig[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
-      ),
+      serversideConfig[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
+      inventoryChain,
       signatureMethods,
       entityConfig,
       generalConfig,
+      serversideConfig,
     );
   }
 
@@ -77,24 +65,13 @@ const createCustomResolver = (
   }
 
   if (derivativeResolvers[actionKind]?.[actionName]) {
-    const authDecorator =
-      (func) =>
-      async (...argarray) => {
-        const [parent, args, context, info] = argarray;
-        const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
-        if (!filter) return null;
-
-        const result = await func(parent, args, context, info, filter);
-        return result;
-      };
-
     return customResolverDecorator(
-      authDecorator(
-        derivativeResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
-      ),
+      derivativeResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
+      inventoryChain,
       signatureMethods,
       entityConfig,
       generalConfig,
+      serversideConfig,
     );
   }
 

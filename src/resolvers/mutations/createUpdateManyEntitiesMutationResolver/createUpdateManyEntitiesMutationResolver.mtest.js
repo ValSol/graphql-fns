@@ -1086,18 +1086,18 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
     }
 
-    const updateManyPersons = createUpdateManyEntitiesMutationResolver(
+    const updateManyParents = createUpdateManyEntitiesMutationResolver(
       parentConfig,
       generalConfig,
       serversideConfig,
     );
-    if (!updateManyPersons) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    if (!updateManyParents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = [{ name: 'name-2' }];
 
     const info = { projection: { _id: 1, name: 1 } };
     const data = [{ name: 'updatedName' }];
-    const [updatedParent] = await updateManyPersons(
+    const [updatedParent] = await updateManyParents(
       null,
       { data, whereOne },
       { mongooseConn, pubsub },
@@ -1109,12 +1109,15 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     const whereOne2 = [{ name: 'name-1' }];
 
-    const updatedParents = await updateManyPersons(
+    const updatedParents = await updateManyParents(
       null,
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      { foo: [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }] },
+      // { foo: [] },
+      { foo: [{ child_: { textFields_in: ['text-1'] } }] },
+
+      // { foo: [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }] },
     );
 
     expect(updatedParents[0].name).toBe(data[0].name);
@@ -1264,7 +1267,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       { whereOne, data: dataToUpdate },
       { mongooseConn, pubsub },
       null,
-      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
+      { foo: [{ restaurant_: { access_: { postCreators: '1234567890abc' } } }] },
     );
 
     expect(updatedPosts).toBe(null);
@@ -1311,7 +1314,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         foo: [
           {
             restaurant_: { access_: { postCreators: '1234567890' } },
-            type_in: ['newsFeed', 'events'],
+            type_in: ['events'],
           },
         ],
       },

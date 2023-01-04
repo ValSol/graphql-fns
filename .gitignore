@@ -3,5 +3,5 @@ lib
 node_modules
 .vscode
 *.log
-src/xyz
+xyz
 .DS_Store

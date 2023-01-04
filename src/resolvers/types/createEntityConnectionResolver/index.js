@@ -8,7 +8,6 @@ import type { Context } from '../../flowTypes';
 import checkInventory from '../../../utils/inventory/checkInventory';
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
-import executeAuthorisation from '../../utils/executeAuthorisation';
 import createCustomResolver from '../../createCustomResolver';
 import fromGlobalId from '../../utils/fromGlobalId';
 import parseEntityName from '../../../utils/parseEntityName';
@@ -47,9 +46,11 @@ const createEntityConnectionResolver = (
           generalConfig,
           serversideConfig,
         ),
+        ['Query', 'childEntitiesThroughConnection', nameRoot],
         childEntitiesQueryAttributes,
         entityConfig,
         generalConfig,
+        serversideConfig,
       );
 
   if (!childEntitiesThroughConnectionQueryResolver) {
@@ -69,18 +70,6 @@ const createEntityConnectionResolver = (
   if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: Object, args: Args, context: Context, info: Object): Object => {
-    const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
-
-    if (!filter) {
-      throw new TypeError(
-        `Not authorized resolver: "${
-          derivativeKey
-            ? `childEntitiesThroughConnection${derivativeKey}`
-            : 'childEntitiesThroughConnection'
-        }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
-      );
-    }
-
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntitiesThroughConnection${
@@ -111,7 +100,6 @@ const createEntityConnectionResolver = (
         : { ...args, where: where2, objectIds_from_parent },
       context,
       info,
-      filter,
     );
 
     return entitiesConniection;

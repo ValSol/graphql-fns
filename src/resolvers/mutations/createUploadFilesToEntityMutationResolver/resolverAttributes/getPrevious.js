@@ -3,7 +3,6 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import checkInventory from '../../../../utils/inventory/checkInventory';
-import executeAuthorisation from '../../../utils/executeAuthorisation';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
@@ -11,18 +10,13 @@ import checkData from '../../checkData';
 import composeMockFilesData from '../composeMockFilesData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig, serversideConfig, inAnyCase } = resolverCreatorArg;
+  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, info, parentFilters } = resolverArg;
   const { inventory, enums } = generalConfig;
   const { saveFiles, composeFileFieldsData } = serversideConfig;
   const { name } = entityConfig;
 
-  const inventoryChain = ['Mutation', actionGeneralName, name];
-
-  const { foo: filter } = inAnyCase
-    ? parentFilters
-    : // $FlowFixMe
-      await executeAuthorisation(inventoryChain, context, serversideConfig);
+  const { foo: filter } = parentFilters;
 
   if (!filter) return null;
 

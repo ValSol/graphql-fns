@@ -396,6 +396,8 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: createdRestaurant.menu }, data: menuDataToUpdate },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     expect(updatedMenu.name).toBe(menuDataToUpdate.name);
@@ -406,6 +408,8 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         whereOnes: [{ original: { id: createdRestaurant.id } }],
       },
       { mongooseConn, pubsub },
+      null,
+      { foo: [] },
     );
 
     const [restaurantClone3] = restaurantClones3;
