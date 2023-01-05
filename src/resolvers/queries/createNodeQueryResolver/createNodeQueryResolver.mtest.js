@@ -89,7 +89,7 @@ describe('createNodeQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      foo: [],
+      mainEntity: [],
     });
     const { id } = createdExample;
 
@@ -97,7 +97,9 @@ describe('createNodeQueryResolver', () => {
     if (!node) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const globalId = toGlobalId(id, 'Example');
-    const example = await node(null, { id: globalId }, { mongooseConn, pubsub }, info, { foo: [] });
+    const example = await node(null, { id: globalId }, { mongooseConn, pubsub }, info, {
+      mainEntity: [],
+    });
 
     expect(example.id).toBe(globalId);
     expect(example.textField1).toBe(data.textField1);
@@ -175,7 +177,7 @@ describe('createNodeQueryResolver', () => {
 
     const globalId = toGlobalId(id, 'TangibleImage');
     const imageFile = await node(null, { id: globalId }, { mongooseConn, pubsub }, info, {
-      foo: [],
+      mainEntity: [],
     });
 
     expect(imageFile.id).toBe(globalId);

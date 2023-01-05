@@ -13,7 +13,7 @@ const executeAuthorisation = async (
   serversideConfig: ServersideConfig,
 ): Promise<{ [derivativeConfigName: string]: null | Array<Object> }> => {
   const { inventoryByPermissions, getActionFilter } = serversideConfig;
-  if (!inventoryByPermissions && !getActionFilter) return { foo: [] };
+  if (!inventoryByPermissions && !getActionFilter) return { mainEntity: [] };
 
   if (!inventoryByPermissions) {
     throw new TypeError(errMsg('inventoryByPermissions'));
@@ -25,7 +25,7 @@ const executeAuthorisation = async (
     throw new TypeError(errMsg('Check for no permissions have to be!'));
   }
 
-  if (checkInventory(inventoryChain, inventoryByPermissions[''])) return { foo: [] };
+  if (checkInventory(inventoryChain, inventoryByPermissions[''])) return { mainEntity: [] };
 
   const [, , entityName] = inventoryChain;
 
@@ -34,7 +34,7 @@ const executeAuthorisation = async (
   const allPermissions = Object.keys(inventoryByPermissions);
   const permissions = Object.keys(filterObject);
 
-  if (!permissions.length) return { foo: null };
+  if (!permissions.length) return { mainEntity: null };
 
   permissions.forEach((permission) => {
     if (!allPermissions.includes(permission)) {
@@ -49,7 +49,7 @@ const executeAuthorisation = async (
 
     if (checkInventory(inventoryChain, inventoryByPermissions[permission])) {
       if (!filterObject[permission].length) {
-        return { foo: [] };
+        return { mainEntity: [] };
       }
 
       if (!authResult) authResult = [];
@@ -66,7 +66,7 @@ const executeAuthorisation = async (
     throw new TypeError(`Tried to execute prohibited mutation "${methodName}" on "${configName}"!`);
   }
 
-  return { foo: authResult };
+  return { mainEntity: authResult };
 };
 
 export default executeAuthorisation;

@@ -19,7 +19,7 @@ type StandardMutationsArgs = Array<{
   parent?: Object,
   args: Object,
   info?: Object,
-  parentFilters?: { foo: Array<Object> },
+  parentFilters?: { mainEntity: Array<Object> },
   returnReport?: boolean,
   returnResult: boolean,
 }>;
@@ -70,7 +70,7 @@ const workOutMutations = async (
 
         const parent = parentInArgs || null;
         const info = infoInArgs || { projection: {} };
-        const parentFilters = parentFiltersInArgs || { foo: [] };
+        const parentFilters = parentFiltersInArgs || { mainEntity: [] };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
@@ -177,7 +177,7 @@ const workOutMutations = async (
 
     const parent = parentInArgs || null;
     const info = infoInArgs || { projection: {} };
-    const parentFilters = parentFiltersInArgs || { foo: [] };
+    const parentFilters = parentFiltersInArgs || { mainEntity: [] };
 
     const { array, produceCurrent, report, finalResult } =
       mutationsResolverAttributes[actionGeneralName];

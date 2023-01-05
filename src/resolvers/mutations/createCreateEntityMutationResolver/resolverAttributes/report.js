@@ -2,21 +2,14 @@
 
 import type { Report } from '../../../flowTypes';
 
-import checkInventory from '../../../../utils/inventory/checkInventory';
-import executeAuthorisation from '../../../utils/executeAuthorisation';
-
 const report: Report = async (resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
-  const { context } = resolverArg;
-  const { inventory } = generalConfig;
+  const { entityConfig } = resolverCreatorArg;
+  const { context, parentFilters } = resolverArg;
   const { name } = entityConfig;
 
-  const subscriptionInventoryChain = ['Subscription', 'createdEntity', name];
-  const allowSubscription =
-    checkInventory(subscriptionInventoryChain, inventory) ||
-    (await executeAuthorisation(subscriptionInventoryChain, context, serversideConfig));
+  const { subscribeCreatedEntity: filter } = parentFilters;
 
-  const result = allowSubscription
+  const result = filter
     ? ({ current: [current] }) => {
         const { pubsub } = context;
         if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error

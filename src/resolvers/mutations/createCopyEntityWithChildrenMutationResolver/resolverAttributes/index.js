@@ -4,7 +4,6 @@ import type { ResolverAttributes } from '../../../flowTypes';
 
 import getPrevious from '../../createCopyEntityMutationResolver/resolverAttributes/getPrevious';
 import prepareBulkData from './prepareBulkData';
-import report from './report';
 
 const createEntityResolverAttributes: ResolverAttributes = {
   actionGeneralName: 'copyEntityWithChildren',
@@ -12,7 +11,7 @@ const createEntityResolverAttributes: ResolverAttributes = {
   getPrevious,
   produceCurrent: true,
   prepareBulkData,
-  report,
+  report: async () => null,
   finalResult: ({ current: [current] }) => current,
 };
 

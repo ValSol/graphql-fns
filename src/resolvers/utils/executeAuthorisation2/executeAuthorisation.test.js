@@ -201,7 +201,7 @@ describe('executeAuthorisation', () => {
       context,
       serversideConfig,
     );
-    const expectedResult = null;
+    const expectedResult = { mainEntity: null };
     expect(result).toEqual(expectedResult);
   });
 

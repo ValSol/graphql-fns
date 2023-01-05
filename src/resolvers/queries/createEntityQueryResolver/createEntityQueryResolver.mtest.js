@@ -84,7 +84,7 @@ describe('createEntityQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      foo: [],
+      mainEntity: [],
     });
     const { id } = createdExample;
 
@@ -92,7 +92,9 @@ describe('createEntityQueryResolver', () => {
     if (!Example) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = { id };
-    const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info, { foo: [] });
+    const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info, {
+      mainEntity: [],
+    });
 
     expect(example.textField1).toBe(data.textField1);
     expect(example.textField2).toBeUndefined();
@@ -104,7 +106,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereOne2 = { textField1: data.textField1 };
     const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info, {
-      foo: [],
+      mainEntity: [],
     });
 
     expect(example2.textField1).toBe(data.textField1);
@@ -180,7 +182,7 @@ describe('createEntityQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { mainEntity: [] });
     }
 
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
@@ -193,7 +195,9 @@ describe('createEntityQueryResolver', () => {
         { child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } },
       ],
     };
-    const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, { foo: [] });
+    const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, {
+      mainEntity: [],
+    });
 
     expect(parent.name).toBe('name-2');
 
@@ -204,7 +208,7 @@ describe('createEntityQueryResolver', () => {
       ],
     };
     const parent2 = await Parent(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info2, {
-      foo: [],
+      mainEntity: [],
     });
 
     expect(parent2).toBe(null);

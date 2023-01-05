@@ -7,7 +7,7 @@ import getCommonData from './getCommonData';
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { parentFilters } = resolverArg;
 
-  const { foo: filter } = parentFilters;
+  const { mainEntity: filter } = parentFilters;
 
   if (!filter) return null;
 

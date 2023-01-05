@@ -20,7 +20,6 @@ import updateEntity from './createUpdateEntityMutationResolver';
 import updateFilteredEntities from './createUpdateFilteredEntitiesMutationResolver';
 import updateFilteredEntitiesReturnScalar from './createUpdateFilteredEntitiesReturnScalarMutationResolver';
 import updateManyEntities from './createUpdateManyEntitiesMutationResolver';
-import uploadFilesToEntity from './createUploadFilesToEntityMutationResolver';
 import uploadEntityFiles from './createUploadEntityFilesMutationResolver';
 
 const mutations = {
@@ -44,7 +43,6 @@ const mutations = {
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
   updateEntity,
-  uploadFilesToEntity,
   uploadEntityFiles,
 };
 

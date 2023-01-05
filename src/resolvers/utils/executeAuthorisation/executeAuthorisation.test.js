@@ -13,7 +13,7 @@ describe('executeAuthorisation', () => {
     const serversideConfig: ServersideConfig = {};
 
     const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-    const expectedResult = { foo: [] };
+    const expectedResult = { mainEntity: [] };
     expect(result).toEqual(expectedResult);
   });
 
@@ -29,7 +29,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [] };
+      const expectedResult = { mainEntity: [] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -40,7 +40,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: null };
+      const expectedResult = { mainEntity: null };
       expect(result).toEqual(expectedResult);
     });
   });
@@ -58,7 +58,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [] };
+      const expectedResult = { mainEntity: [] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -69,7 +69,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [] };
+      const expectedResult = { mainEntity: [] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -80,7 +80,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: null };
+      const expectedResult = { mainEntity: null };
       expect(result).toEqual(expectedResult);
     });
   });
@@ -100,7 +100,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [] };
+      const expectedResult = { mainEntity: [] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -111,7 +111,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: null };
+      const expectedResult = { mainEntity: null };
       expect(result).toEqual(expectedResult);
     });
 
@@ -122,7 +122,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [] };
+      const expectedResult = { mainEntity: [] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -136,7 +136,7 @@ describe('executeAuthorisation', () => {
       const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { foo: [{ editors: '12345' }, { cuisines: 'Albanian' }] };
+      const expectedResult = { mainEntity: [{ editors: '12345' }, { cuisines: 'Albanian' }] };
       expect(result).toEqual(expectedResult);
     });
 
@@ -152,7 +152,7 @@ describe('executeAuthorisation', () => {
 
       const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
       const expectedResult = {
-        foo: [
+        mainEntity: [
           { editors: '12345' },
           { cuisines: 'Albanian' },
           { editors: '54321' },

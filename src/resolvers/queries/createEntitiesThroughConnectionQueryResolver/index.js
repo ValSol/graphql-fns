@@ -77,7 +77,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = parentFilters;
+    const { mainEntity: filter } = parentFilters;
 
     if (!filter) return null;
 
@@ -103,7 +103,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           shift2,
           first,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entitiesQueryResolver,
         );
 
@@ -114,18 +114,18 @@ const createEntitiesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityQueryResolver,
         );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, { foo: filter }, entitiesQueryResolver);
+          return getVeryFirst(first, resolverArg, { mainEntity: filter }, entitiesQueryResolver);
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, { foo: filter }, entitiesQueryResolver);
+      return getVeryFirst(first, resolverArg, { mainEntity: filter }, entitiesQueryResolver);
     }
 
     if (before) {
@@ -146,7 +146,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           shift2,
           last,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entitiesQueryResolver,
         );
 
@@ -157,7 +157,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityQueryResolver,
         );
 
@@ -165,7 +165,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           getVeryLast(
             last,
             resolverArg,
-            { foo: filter },
+            { mainEntity: filter },
             entitiesQueryResolver,
             entityCountQueryResolver,
           );
@@ -177,7 +177,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       return getVeryLast(
         last,
         resolverArg,
-        { foo: filter },
+        { mainEntity: filter },
         entitiesQueryResolver,
         entityCountQueryResolver,
       );

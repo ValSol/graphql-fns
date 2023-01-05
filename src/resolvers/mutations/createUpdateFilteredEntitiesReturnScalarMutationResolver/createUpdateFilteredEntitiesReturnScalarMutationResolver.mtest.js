@@ -130,7 +130,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       };
 
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        foo: [],
+        mainEntity: [],
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -209,7 +209,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { foo: [] },
+        { mainEntity: [] },
       );
 
       expect(updatedPersonCount).toBe(1);
@@ -273,7 +273,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        foo: [],
+        mainEntity: [],
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -364,7 +364,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { data: data2 },
         { mongooseConn, pubsub },
         null,
-        { foo: [] },
+        { mainEntity: [] },
       );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -430,7 +430,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { foo: [] },
+        { mainEntity: [] },
       );
       expect(updatedPersonCount).toBe(1);
 
@@ -474,7 +474,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { foo: [] },
+        { mainEntity: [] },
       );
 
       expect(updatedPlaceCount).toBe(1);
@@ -484,7 +484,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { foo: [] },
+        { mainEntity: [] },
       );
       expect(updatedPlacesCount).toEqual(0);
     });
@@ -541,7 +541,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      foo: [],
+      mainEntity: [],
     });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -573,7 +573,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
     expect(updatedExampleCount).toBe(1);
 
@@ -587,7 +587,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataForUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedExampleCount2).toBe(1);
@@ -601,7 +601,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataForUpdate3 },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
     expect(updatedExampleCount3).toBe(1);
   });
@@ -651,7 +651,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      foo: [],
+      mainEntity: [],
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -680,7 +680,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedMainCount).toBe(1);
@@ -739,7 +739,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      foo: [],
+      mainEntity: [],
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -774,7 +774,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedMainCount).toBe(1);
@@ -843,7 +843,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { foo: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { mainEntity: [] });
     }
 
     const updateFilteredPersons = createUpdateFilteredEntitiesReturnScalarMutationResolver(
@@ -867,7 +867,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { data, where },
       { mongooseConn, pubsub },
       info,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedParentCount).toBe(1);
@@ -883,7 +883,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { data, where: where2 },
       { mongooseConn, pubsub },
       info,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedParentsCount).toEqual(0);
@@ -984,7 +984,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     const createPost = createCreateEntityMutationResolver(
@@ -1004,7 +1004,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
     };
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
-      foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      mainEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
     });
 
     expect(post.restaurant.toString()).toEqual(restaurantId.toString());
@@ -1030,7 +1030,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataToUpdate },
       { mongooseConn, pubsub },
       null,
-      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
+      { mainEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPostsCount).toEqual(0);
@@ -1045,7 +1045,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where, data: dataToUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { foo: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
+      { mainEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
     );
 
     expect(updatedPostCount2).toBe(1);
@@ -1059,7 +1059,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { mongooseConn, pubsub },
       null,
       {
-        foo: [
+        mainEntity: [
           {
             restaurant_: { access_: { postCreators: '1234567890' } },
             type_in: ['newsFeed', 'events'],
@@ -1078,7 +1078,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: { slug: 'name is absent' }, data: dataToUpdate4 },
       { mongooseConn, pubsub },
       null,
-      { foo: [] },
+      { mainEntity: [] },
     );
 
     expect(updatedPostsCount3).toEqual(0);

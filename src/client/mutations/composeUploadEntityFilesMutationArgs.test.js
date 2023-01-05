@@ -7,7 +7,7 @@ import uploadEntityFilesMutationAttributes from '../../types/actionAttributes/up
 import composeActionArgs from '../utils/composeActionArgs';
 
 describe('composeUploadFilesToEntityMutationResolver', () => {
-  test('should compose uploadFilesToEntity mutation args ', () => {
+  test('should compose uploadEntityFiles mutation args ', () => {
     const prefixName = 'Home';
     const imageConfig: EntityConfig = {
       name: 'TangibleImage',

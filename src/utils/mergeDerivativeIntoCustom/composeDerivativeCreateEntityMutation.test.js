@@ -45,7 +45,10 @@ describe('composeDerivativeCreateEntityMutation', () => {
           : '',
       argNames: () => ['data'],
       argTypes: ({ name }) => [`${name}ForCatalogCreateInput!`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        mainEntity: `${name}ForCatalog`,
+        subscribeCreatedEntity: 'Example',
+      }),
       type: ({ name }) => `${name}ForCatalog!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),

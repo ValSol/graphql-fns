@@ -20,7 +20,6 @@ import updateFilteredEntities from '../createUpdateFilteredEntitiesMutationResol
 import updateFilteredEntitiesReturnScalar from '../createUpdateFilteredEntitiesReturnScalarMutationResolver/resolverAttributes';
 import updateManyEntities from '../createUpdateManyEntitiesMutationResolver/resolverAttributes';
 import updateEntity from '../createUpdateEntityMutationResolver/resolverAttributes';
-import uploadFilesToEntity from '../createUploadFilesToEntityMutationResolver/resolverAttributes';
 
 const mutationsResolverAttributes = {
   copyManyEntities,
@@ -43,7 +42,6 @@ const mutationsResolverAttributes = {
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
   updateEntity,
-  uploadFilesToEntity,
 };
 
 export default mutationsResolverAttributes;

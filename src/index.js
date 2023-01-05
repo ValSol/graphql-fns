@@ -25,7 +25,6 @@ export { default as createPushIntoEntityMutationResolver } from './resolvers/mut
 export { default as createUpdateFilteredEntitiesMutationResolver } from './resolvers/mutations/createUpdateFilteredEntitiesMutationResolver';
 export { default as createUpdateManyEntitiesMutationResolver } from './resolvers/mutations/createUpdateManyEntitiesMutationResolver';
 export { default as createUpdateEntityMutationResolver } from './resolvers/mutations/createUpdateEntityMutationResolver';
-export { default as createUploadFilesToEntityMutationResolver } from './resolvers/mutations/createUploadFilesToEntityMutationResolver';
 export { default as createUploadEntityFilesMutationResolver } from './resolvers/mutations/createUploadEntityFilesMutationResolver';
 
 // query resolvers

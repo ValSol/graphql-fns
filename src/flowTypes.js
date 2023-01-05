@@ -442,7 +442,7 @@ type InverntoryOptions = {
     | true
     | {
         // 'mutationName' may be: 'copyEntity', 'createEntity', 'createManyEntities', 'updateManyEntities', 'updateEntity', 'deleteEntity', ...
-        // ... 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
+        // ... 'pushIntoEntity', or custom mutation
 
         +[mutationName: string]: entityNamesList,
       },
@@ -566,7 +566,6 @@ export type GeneralConfig = {
           | 'updateFilteredEntitiesReturnScalar'
           | 'updateManyEntities'
           | 'updateEntity'
-          | 'uploadFilesToEntity'
           | 'uploadEntityFiles',
         >,
       },
@@ -658,7 +657,6 @@ export type DerivativeAttributes = {
       | 'updateFilteredEntitiesReturnScalar'
       | 'updateManyEntities'
       | 'updateEntity'
-      | 'uploadFilesToEntity'
       | 'uploadEntityFiles',
     >,
   },
@@ -683,7 +681,7 @@ export type TwoSegmentInventoryChain =
       'Mutation',
       // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
       // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
-      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
+      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity' or custom mutation
       string,
     ]
   | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity'];
@@ -698,7 +696,7 @@ export type ThreeSegmentInventoryChain =
       'Mutation',
       // "string" for 'copyEntity', 'copyManyEntities', 'copyEntityWithChildren', 'copyManyEntitiesWithChildren', 'createEntity', 'createManyEntities',
       // ... 'updateFilteredEntities', 'updateManyEntities', 'updateEntity', 'deleteFilteredEntities', 'deleteManyEntities', ...
-      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity', 'uploadFilesToEntity' or custom mutation
+      // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity' or custom mutation
       string,
       string, //  second "string" for entity name
     ]
@@ -905,6 +903,7 @@ export type ActionAttributes = {
     derivativeKey?: string,
   ) => EntityConfig | null,
   actionDerivativeUpdater?: (entityName: string, item: { ...DerivativeAttributes }) => void,
+  actionUseSubscription?: string,
 };
 
 export type GqlActionData = {

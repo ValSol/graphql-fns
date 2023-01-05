@@ -72,7 +72,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = parentFilters;
+    const { mainEntity: filter } = parentFilters;
 
     if (!filter) return null;
 
@@ -98,7 +98,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           shift2,
           first,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityFilesQueryResolver,
         );
 
@@ -109,18 +109,18 @@ const createEntityFilesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityFileQueryResolver,
         );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, { foo: filter }, entityFilesQueryResolver);
+          return getVeryFirst(first, resolverArg, { mainEntity: filter }, entityFilesQueryResolver);
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, { foo: filter }, entityFilesQueryResolver);
+      return getVeryFirst(first, resolverArg, { mainEntity: filter }, entityFilesQueryResolver);
     }
 
     if (before) {
@@ -141,7 +141,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           shift2,
           last,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityFilesQueryResolver,
         );
 
@@ -152,7 +152,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { foo: filter },
+          { mainEntity: filter },
           entityFileQueryResolver,
         );
 
@@ -160,7 +160,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           getVeryLast(
             last,
             resolverArg,
-            { foo: filter },
+            { mainEntity: filter },
             entityFilesQueryResolver,
             entityFileCountQueryResolver,
           );
@@ -172,7 +172,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
       return getVeryLast(
         last,
         resolverArg,
-        { foo: filter },
+        { mainEntity: filter },
         entityFilesQueryResolver,
         entityFileCountQueryResolver,
       );

@@ -38,7 +38,6 @@ describe('composeInventoryByPermissions', () => {
         Mutation: {
           cloneEntity: ['Post', 'Restaurant'],
           updateEntity: ['RestaurantClone', 'PostClone'],
-          uploadFilesToEntity: ['RestaurantClone', 'PostClone'],
         },
       },
     };
@@ -55,7 +54,6 @@ describe('composeInventoryByPermissions', () => {
           cloneEntity: true,
           toggleCommentsOfThing: ['Restaurant'],
           updateEntity: ['RestaurantClone', 'PostClone'],
-          uploadFilesToEntity: ['RestaurantClone', 'PostClone'],
         },
       },
     };

@@ -84,7 +84,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
     ];
 
     const createdExamples = await createManyExamples(null, { data }, { mongooseConn }, null, {
-      foo: [],
+      mainEntity: [],
     });
 
     expect(createdExamples[0].textField1).toBe(data[0].textField1);
@@ -170,7 +170,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
     ];
 
     const createdExamples = await createManyExamples(null, { data }, { mongooseConn }, null, {
-      foo: [],
+      mainEntity: [],
     });
 
     expect(createdExamples[0].id.toString()).toBe(data[1].id);
@@ -192,7 +192,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
     expect(createdExamples[1].updatedAt.toISOString()).toEqual(data[0].updatedAt);
 
     const createdExamples2 = await createManyExamples(null, { data: [] }, { mongooseConn }, null, {
-      foo: [],
+      mainEntity: [],
     });
     expect(createdExamples2).toEqual([]);
   });

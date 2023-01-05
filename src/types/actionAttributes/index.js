@@ -36,7 +36,6 @@ import updateFilteredEntities from './updateFilteredEntitiesMutationAttributes';
 import updateFilteredEntitiesReturnScalar from './updateFilteredEntitiesReturnScalarMutationAttributes';
 import updateManyEntities from './updateManyEntitiesMutationAttributes';
 import updateEntity from './updateEntityMutationAttributes';
-import uploadFilesToEntity from './uploadFilesToEntityMutationAttributes';
 import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 
 const actionAttributes = {
@@ -74,7 +73,6 @@ const actionAttributes = {
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
   updateEntity,
-  uploadFilesToEntity,
   uploadEntityFiles,
 };
 

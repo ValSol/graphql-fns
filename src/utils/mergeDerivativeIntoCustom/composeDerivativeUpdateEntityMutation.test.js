@@ -45,7 +45,10 @@ describe('composeDerivativeUpdateEntityMutation', () => {
           : '',
       argNames: () => ['whereOne', 'data'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`, `${name}ForCatalogUpdateInput!`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        mainEntity: `${name}ForCatalog`,
+        subscribeUpdatedEntity: 'Example',
+      }),
       type: ({ name }) => `${name}ForCatalog!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),

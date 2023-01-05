@@ -10,12 +10,18 @@ const composeEmptyFilters = (involvedEntityNames) =>
     return prev;
   }, {});
 
+const composeNullFilters = (involvedEntityNames) =>
+  Object.keys(involvedEntityNames).reduce((prev, key) => {
+    prev[key] = null; // eslint-disable-line no-param-reassign
+    return prev;
+  }, {});
+
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
   involvedEntityNames: { [key: string]: string },
   context: Object,
   serversideConfig: ServersideConfig,
-): Promise<null | { [key: string]: Array<Object> }> => {
+): Promise<{ [key: string]: null | Array<Object> }> => {
   const { containedRoles, filters, getUserAttributes, inventoryByRoles } = serversideConfig;
 
   if (!inventoryByRoles && !filters) {
@@ -59,7 +65,7 @@ const executeAuthorisation = async (
     }
 
     if (notAuthorised) {
-      return null;
+      return composeNullFilters(involvedEntityNames);
     }
   }
 
@@ -92,12 +98,10 @@ const executeAuthorisation = async (
         }
 
         result[involvedEntityNamesKey].push(...filter);
+      } else {
+        result[involvedEntityNamesKey] = null;
       }
     }
-  }
-
-  if (!Object.keys(result).length) {
-    return null;
   }
 
   return result;

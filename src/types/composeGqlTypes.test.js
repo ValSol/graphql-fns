@@ -1268,27 +1268,6 @@ input ImageUpdateInput {
   address: String
   text: String
 }
-input UploadFilesToExampleInput {
-  logo: ImageUpdateInput
-  hero: ImageUpdateInput
-  pictures: [ImageUpdateInput!]
-  photos: [ImageUpdateInput!]
-}
-enum ExampleFileNamesEnum {
-  logo
-  hero
-  pictures
-  photos
-}
-input FilesOfExampleOptionsInput {
-  targets: [ExampleFileNamesEnum!]!
-  counts: [Int!]!
-  hashes: [String!]!
-}
-input ExampleReorderUploadedInput {
-  pictures: [Int!]
-  photos: [Int!]
-}
 enum ExampleFieldNamesEnum {
   textField1
   textField2
@@ -1334,7 +1313,6 @@ type Mutation {
   updateFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!): Int!
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
-  uploadFilesToExample(whereOne: ExampleWhereOneInput!, data: UploadFilesToExampleInput, files: [Upload!]!, options: FilesOfExampleOptionsInput!, positions: ExampleReorderUploadedInput): Example!
   uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!
 }
 type Subscription {

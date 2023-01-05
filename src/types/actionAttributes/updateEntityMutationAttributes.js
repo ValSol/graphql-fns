@@ -27,6 +27,7 @@ const actionInvolvedEntityNames = (
   derivativeKey?: string = '',
 ): { [key: string]: string } => ({
   mainEntity: `${name}${derivativeKey}`,
+  subscribeUpdatedEntity: name,
 });
 
 const actionReturnConfig = (

@@ -12,7 +12,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, parentFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { foo: filter } = parentFilters;
+  const { mainEntity: filter } = parentFilters;
 
   if (!filter) return null;
 

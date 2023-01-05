@@ -35,7 +35,7 @@ const createEntityFilesQueryResolver = (
     info: Object,
     parentFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { foo: filter } = parentFilters;
+    const { mainEntity: filter } = parentFilters;
 
     if (!filter) return null;
 

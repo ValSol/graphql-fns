@@ -34,7 +34,7 @@ const getExternalReferences = async (
       { whereOne: { id } },
       context,
       { projection: { _id: 1 } },
-      { foo: filter },
+      { mainEntity: filter },
     );
 
     if (entity) {
