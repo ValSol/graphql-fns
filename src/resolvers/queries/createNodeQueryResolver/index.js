@@ -3,7 +3,8 @@
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 import type { Context } from '../../flowTypes';
 
-import executeAuthorisation from '../../utils/executeAuthorisation';
+import composeDerivativeConfig from '../../../utils/composeDerivativeConfig';
+import executeNodeAuthorisation from '../../utils/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
 
@@ -14,7 +15,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Function | null => {
-  const { allEntityConfigs } = generalConfig;
+  const { allEntityConfigs, derivative } = generalConfig;
 
   const resolver = async (
     parent: Object,
@@ -28,21 +29,28 @@ const createNodeQueryResolver = (
 
     if (!id) return null;
 
+    const filter = executeNodeAuthorisation(
+      `${entityName}${derivativeKey}`,
+      context,
+      serversideConfig,
+    );
+
+    if (!filter) return null;
+
     const entityConfig = allEntityConfigs[entityName];
+
+    if (derivativeKey && !derivative?.[derivativeKey]) {
+      throw new TypeError(`Not found derivativeKey: "${derivativeKey}"!`);
+    }
+
+    const resultEntityConfig = derivativeKey
+      ? // $FlowFixMe
+        composeDerivativeConfig(derivative?.[derivativeKey], entityConfig, generalConfig)
+      : entityConfig;
 
     const inAnyCase = true;
 
     if (entityConfig.type === 'tangibleFile') {
-      const inventoryChain = ['Query', `entityFile${derivativeKey}`, entityName];
-
-      const filter = await executeAuthorisation(
-        inventoryChain,
-        { mainEntity: '' },
-        context,
-        generalConfig,
-        serversideConfig,
-      );
-
       const entityFileQueryResolver = createEntityFileQueryResolver(
         entityConfig,
         generalConfig,
@@ -52,29 +60,15 @@ const createNodeQueryResolver = (
 
       if (!entityFileQueryResolver) return null;
 
-      const entityFile = await entityFileQueryResolver(
-        null,
-        { whereOne: { id } },
-        context,
-        info,
-        filter,
-      );
+      const entityFile = await entityFileQueryResolver(null, { whereOne: { id } }, context, info, {
+        mainEntity: filter,
+      });
 
       return {
         ...transformAfter(entityFile, entityConfig, null),
         __typename: `${entityName}${derivativeKey}`,
       };
     }
-
-    const inventoryChain = ['Query', `entity${derivativeKey}`, entityName];
-
-    const filter = await executeAuthorisation(
-      inventoryChain,
-      { mainEntity: '' },
-      context,
-      generalConfig,
-      serversideConfig,
-    );
 
     const entityQueryResolver = createEntityQueryResolver(
       entityConfig,
@@ -85,10 +79,12 @@ const createNodeQueryResolver = (
 
     if (!entityQueryResolver) return null;
 
-    const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, filter);
+    const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, {
+      mainEntity: filter,
+    });
 
     return {
-      ...transformAfter(entity, entityConfig, null),
+      ...transformAfter(entity, resultEntityConfig, generalConfig),
       __typename: `${entityName}${derivativeKey}`,
     };
   };

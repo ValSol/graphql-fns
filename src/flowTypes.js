@@ -468,6 +468,56 @@ type NotFieldyEntityConfigFields = {
   counter?: boolean,
 };
 
+export type DerivativeAttributes = {
+  +derivativeKey: string,
+  +allow: {
+    // eslint-disable-next-line flowtype/generic-spacing
+    [entityName: string]: Array<
+      | 'entity'
+      | 'childEntity'
+      | 'entityCount'
+      | 'entityDistinctValues'
+      | 'entities'
+      | 'entitiesThroughConnection'
+      | 'childEntities'
+      | 'childEntitiesThroughConnection'
+      | 'entitiesByUnique'
+      | 'entityFileCount'
+      | 'entityFile'
+      | 'entityFiles'
+      | 'copyEntity'
+      | 'copyManyEntities'
+      | 'copyEntityWithChildren'
+      | 'copyManyEntitiesWithChildren'
+      | 'createEntity'
+      | 'createManyEntities'
+      | 'deleteFilteredEntities'
+      | 'deleteFilteredEntitiesReturnScalar'
+      | 'deleteFilteredEntitiesWithChildren'
+      | 'deleteFilteredEntitiesWithChildrenReturnScalar'
+      | 'deleteManyEntities'
+      | 'deleteManyEntitiesWithChildren'
+      | 'deleteEntity'
+      | 'deleteEntityWithChildren'
+      | 'importEntities'
+      | 'pushIntoEntity'
+      | 'updateFilteredEntities'
+      | 'updateFilteredEntitiesReturnScalar'
+      | 'updateManyEntities'
+      | 'updateEntity'
+      | 'uploadEntityFiles',
+    >,
+  },
+  +includeFields?: { [entityName: string]: Array<string> },
+  +excludeFields?: { [entityName: string]: Array<string> },
+  +freezedFields?: { [entityName: string]: Array<string> },
+  +unfreezedFields?: { [entityName: string]: Array<string> },
+  +addFields?: {
+    [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
+  },
+  +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
+};
+
 export type GeneralConfig = {
   +allEntityConfigs: { [entityConfigName: string]: EntityConfig },
   +custom?: {
@@ -529,55 +579,7 @@ export type GeneralConfig = {
   +derivative?: {
     // whole fefault derivative name = entityName (baseName) + derivativeKey
     // OR compose from derivativeNameSlicePosition entity config attribute (if it's setted)
-    +[derivativeKey: string]: {
-      +derivativeKey: string,
-      +allow: {
-        // eslint-disable-next-line flowtype/generic-spacing
-        [entityName: string]: Array<
-          | 'entity'
-          | 'childEntity'
-          | 'entityCount'
-          | 'entityDistinctValues'
-          | 'entities'
-          | 'entitiesThroughConnection'
-          | 'childEntities'
-          | 'childEntitiesThroughConnection'
-          | 'entitiesByUnique'
-          | 'entityFileCount'
-          | 'entityFile'
-          | 'entityFiles'
-          | 'copyEntity'
-          | 'copyManyEntities'
-          | 'copyEntityWithChildren'
-          | 'copyManyEntitiesWithChildren'
-          | 'createEntity'
-          | 'createManyEntities'
-          | 'deleteFilteredEntities'
-          | 'deleteFilteredEntitiesReturnScalar'
-          | 'deleteFilteredEntitiesWithChildren'
-          | 'deleteFilteredEntitiesWithChildrenReturnScalar'
-          | 'deleteManyEntities'
-          | 'deleteManyEntitiesWithChildren'
-          | 'deleteEntity'
-          | 'deleteEntityWithChildren'
-          | 'importEntities'
-          | 'pushIntoEntity'
-          | 'updateFilteredEntities'
-          | 'updateFilteredEntitiesReturnScalar'
-          | 'updateManyEntities'
-          | 'updateEntity'
-          | 'uploadEntityFiles',
-        >,
-      },
-      +includeFields?: { [entityName: string]: Array<string> },
-      +excludeFields?: { [entityName: string]: Array<string> },
-      +freezedFields?: { [entityName: string]: Array<string> },
-      +unfreezedFields?: { [entityName: string]: Array<string> },
-      +addFields?: {
-        [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
-      },
-      +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
-    },
+    +[derivativeKey: string]: DerivativeAttributes,
   },
   +enums?: Enums,
   inventory?: Inventory,
@@ -618,56 +620,6 @@ export type Custom = {
   +Mutation?: {
     +[customMutationName: string]: ActionSignatureMethods,
   },
-};
-
-export type DerivativeAttributes = {
-  +derivativeKey: string,
-  +allow: {
-    // eslint-disable-next-line flowtype/generic-spacing
-    [entityName: string]: Array<
-      | 'entity'
-      | 'childEntity'
-      | 'entityCount'
-      | 'entityDistinctValues'
-      | 'entities'
-      | 'entitiesThroughConnection'
-      | 'childEntities'
-      | 'childEntitiesThroughConnection'
-      | 'entitiesByUnique'
-      | 'entityFileCount'
-      | 'entityFile'
-      | 'entityFiles'
-      | 'copyEntity'
-      | 'copyManyEntities'
-      | 'copyEntityWithChildren'
-      | 'copyManyEntitiesWithChildren'
-      | 'createEntity'
-      | 'createManyEntities'
-      | 'deleteFilteredEntities'
-      | 'deleteFilteredEntitiesReturnScalar'
-      | 'deleteFilteredEntitiesWithChildren'
-      | 'deleteFilteredEntitiesWithChildrenReturnScalar'
-      | 'deleteManyEntities'
-      | 'deleteManyEntitiesWithChildren'
-      | 'deleteEntity'
-      | 'deleteEntityWithChildren'
-      | 'importEntities'
-      | 'pushIntoEntity'
-      | 'updateFilteredEntities'
-      | 'updateFilteredEntitiesReturnScalar'
-      | 'updateManyEntities'
-      | 'updateEntity'
-      | 'uploadEntityFiles',
-    >,
-  },
-  +includeFields?: { [entityName: string]: Array<string> },
-  +excludeFields?: { [entityName: string]: Array<string> },
-  +freezedFields?: { [entityName: string]: Array<string> },
-  +unfreezedFields?: { [entityName: string]: Array<string> },
-  +addFields?: {
-    [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
-  },
-  +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
