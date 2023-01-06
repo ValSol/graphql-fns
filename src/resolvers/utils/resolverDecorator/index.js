@@ -100,7 +100,15 @@ const resolverDecorator = (
 
     const [parent, args, ...rest] = resolverArgs;
 
-    const rawResult = await authDecorator(func, inventoryChain, serversideConfig)(
+    const involvedEntityNames = actionAttributes.actionInvolvedEntityNames(name);
+
+    const rawResult = await authDecorator(
+      func,
+      inventoryChain,
+      involvedEntityNames,
+      generalConfig,
+      serversideConfig,
+    )(
       parent,
       transformBefore(args, argNamesToTransformersStore[argNamesToTransformersStoreKey]),
       ...rest,

@@ -37,7 +37,7 @@ const generateExcel = async (
 ) => {
   const { custom, derivative, inventory, allEntityConfigs } = generalConfig;
 
-  const inventoryByPermissions = serversideConfig.inventoryByPermissions || {
+  const inventoryByRoles = serversideConfig.inventoryByRoles || {
     'General Action List': undefined,
   };
 
@@ -52,7 +52,7 @@ const generateExcel = async (
   wb.created = new Date();
   wb.modified = new Date();
 
-  const permissionNames = Object.keys(inventoryByPermissions);
+  const permissionNames = Object.keys(inventoryByRoles);
 
   let dataFromDerivative = {
     derivativeActionNames: [],
@@ -104,7 +104,7 @@ const generateExcel = async (
       actionNames: ordinaryActionNames,
       actionTypes: ordinaryActionTypes,
       inventory,
-      inventory2: inventoryByPermissions[permissionName],
+      inventory2: inventoryByRoles[permissionName],
       thingNames,
     });
 
@@ -117,7 +117,7 @@ const generateExcel = async (
         actionNames: derivativeActionNames,
         actionTypes: derivativeActionTypes,
         inventory,
-        inventory2: inventoryByPermissions[permissionName],
+        inventory2: inventoryByRoles[permissionName],
         thingNames,
         thingNamesByActions: thingNamesByDerivativeActions,
       });
@@ -131,7 +131,7 @@ const generateExcel = async (
         actionNames: customActionNames,
         actionTypes: customActionTypes,
         inventory,
-        inventory2: inventoryByPermissions[permissionName],
+        inventory2: inventoryByRoles[permissionName],
         thingNames,
         thingNamesByActions: thingNamesByCustomActions,
       });

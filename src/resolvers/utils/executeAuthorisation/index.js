@@ -1,72 +1,120 @@
 // @flow
 
-import type { ServersideConfig, ThreeSegmentInventoryChain } from '../../../flowTypes';
+import type {
+  GeneralConfig,
+  ServersideConfig,
+  ThreeSegmentInventoryChain,
+} from '../../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 
-const errMsg = (attr) =>
-  `"inventoryByPermissions" & "getActionFilter" must be mutually setted, but "${attr}" is undefined!`;
+const amendInventoryChain = (inventoryChain, key) => {
+  const [, , entityName] = inventoryChain;
+
+  switch (key) {
+    case 'subscribeCreatedEntity':
+      return ['Subscription', 'createdEntity', entityName];
+
+    case 'subscribeDeletedEntity':
+      return ['Subscription', 'deletedEntity', entityName];
+
+    case 'subscribeUpdatedEntity':
+      return ['Subscription', 'updatedEntity', entityName];
+
+    default:
+      return inventoryChain;
+  }
+};
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
+  involvedEntityNames: { [key: string]: string },
   context: Object,
+  generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-): Promise<{ [derivativeConfigName: string]: null | Array<Object> }> => {
-  const { inventoryByPermissions, getActionFilter } = serversideConfig;
-  if (!inventoryByPermissions && !getActionFilter) return { mainEntity: [] };
+): Promise<{ [key: string]: null | Array<Object> }> => {
+  const { inventory } = generalConfig;
+  const { containedRoles, filters, getUserAttributes, inventoryByRoles } = serversideConfig;
 
-  if (!inventoryByPermissions) {
-    throw new TypeError(errMsg('inventoryByPermissions'));
+  const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
+
+  if (!inventoryByRoles && !filters) {
+    return involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
+      const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
+
+      prev[involvedEntityNamesKey] = checkInventory(amendedInventoryChain, inventory) ? [] : null; // eslint-disable-line no-param-reassign
+
+      return prev;
+    }, {});
   }
-  if (!getActionFilter) {
-    throw new TypeError(errMsg('getActionFilter'));
-  }
-  if (!inventoryByPermissions['']) {
-    throw new TypeError(errMsg('Check for no permissions have to be!'));
+
+  if (!getUserAttributes) {
+    throw new TypeError('Not found "getUserAttributes" callback!');
   }
 
-  if (checkInventory(inventoryChain, inventoryByPermissions[''])) return { mainEntity: [] };
+  const userAttributes = await getUserAttributes(context);
 
-  const [, , entityName] = inventoryChain;
+  const { roles } = userAttributes;
 
-  const filterObject = await getActionFilter(entityName, context);
+  const result = {};
 
-  const allPermissions = Object.keys(inventoryByPermissions);
-  const permissions = Object.keys(filterObject);
+  for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
+    const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-  if (!permissions.length) return { mainEntity: null };
+    const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
 
-  permissions.forEach((permission) => {
-    if (!allPermissions.includes(permission)) {
-      throw new Error(`Got unused in "inventoryByPermissions" permission: "${permission}"!`);
-    }
-  });
+    result[involvedEntityNamesKey] = null;
 
-  let authResult = null;
-
-  for (let i = 0; i < permissions.length; i += 1) {
-    const permission = permissions[i];
-
-    if (checkInventory(inventoryChain, inventoryByPermissions[permission])) {
-      if (!filterObject[permission].length) {
-        return { mainEntity: [] };
+    if (inventoryByRoles) {
+      if (!containedRoles) {
+        throw new TypeError(
+          'Not found "containedRoles" dictionary, to use it with "inventoryByRoles"!',
+        );
       }
 
-      if (!authResult) authResult = [];
+      const allRoles = roles.reduce((prev, role) => {
+        [...containedRoles[role], role].forEach((role2) => {
+          if (!prev.includes(role2)) {
+            prev.push(role2);
+          }
+        });
 
-      if (filterObject[permission].length) {
-        authResult.push(...filterObject[permission]);
+        return prev;
+      }, []);
+
+      for (let j = 0; j < allRoles.length; j += 1) {
+        const inventoryByRole = inventoryByRoles[allRoles[j]];
+
+        if (checkInventory(amendedInventoryChain, inventoryByRole)) {
+          result[involvedEntityNamesKey] = [];
+          break;
+        }
+      }
+    }
+
+    if (!filters || !result[involvedEntityNamesKey]) continue; // eslint-disable-line no-continue
+
+    const entityName = involvedEntityNames[involvedEntityNamesKey];
+
+    for (let j = 0; j < roles.length; j += 1) {
+      const role = roles[j];
+
+      const filter = filters[entityName]({ ...userAttributes, role });
+
+      if (filter) {
+        if (!filter.length) {
+          result[involvedEntityNamesKey] = [];
+          break;
+        }
+
+        result[involvedEntityNamesKey].push(...filter);
+      } else {
+        result[involvedEntityNamesKey] = null;
       }
     }
   }
 
-  const [methodType, methodName, configName] = inventoryChain;
-
-  if (!authResult && methodType === 'Mutation') {
-    throw new TypeError(`Tried to execute prohibited mutation "${methodName}" on "${configName}"!`);
-  }
-
-  return { mainEntity: authResult };
+  return result;
 };
 
 export default executeAuthorisation;

@@ -1,165 +1,355 @@
 // @flow
 /* eslint-env jest */
 
-import type { ServersideConfig } from '../../../flowTypes';
+import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
 import executeAuthorisation from './index';
 
+const viewer = 'Viewer';
+const guest = 'Guest';
+const restaurantOwner = 'RestaurantOwner';
+const admin = 'Admin';
+
 describe('executeAuthorisation', () => {
+  const containedRoles = {
+    [viewer]: [],
+    [guest]: [viewer],
+    [restaurantOwner]: [viewer, guest],
+    [admin]: [viewer, guest, restaurantOwner],
+  };
+
+  const inventoryByRoles = {
+    Viewer: {
+      name: 'Viewer',
+      include: {
+        Query: {
+          entitiesForView: ['Restaurant'],
+          entityForView: ['Restaurant'],
+          childEntityForView: ['CommentListForRestaurant'],
+        },
+        Mutation: {
+          signinEntityForView: ['User'],
+        },
+      },
+    },
+
+    Guest: {
+      name: 'Guest',
+      include: {
+        Mutation: {
+          pushIntoEntityForGuest: ['CommentListForRestaurant'],
+        },
+      },
+    },
+
+    RestaurantOwner: {
+      name: 'RestaurantOwner',
+      include: {
+        Query: {
+          entityClone: ['RestaurantClone'],
+          entitiesForCabinet: ['Restaurant'],
+          entityForCabinet: ['Restaurant'],
+          childEntityForCabinet: ['CommentListForRestaurant'],
+        },
+        Mutation: {
+          cloneEntity: ['Restaurant'],
+        },
+      },
+    },
+
+    Admin: {
+      name: 'Admin',
+      include: {
+        Query: {
+          entityForSetting: ['Restaurant', 'User'],
+          entitiesForSetting: ['User'],
+        },
+        Mutation: {
+          updateEntityForSetting: ['Restaurant', 'User'],
+        },
+      },
+    },
+  };
+
+  const filters = {
+    RestaurantForCabinet: ({ id, role }: { id: string, role: string }): null | Array<Object> => {
+      switch (role) {
+        case viewer:
+        case guest:
+          return null;
+        case admin:
+          return [];
+        case restaurantOwner:
+          return [{ access_: { restaurantEditors: id } }];
+
+        default:
+          throw new TypeError(`Role "${role}" not in use!`);
+      }
+    },
+
+    Restaurant: ({ id, role }: { role: string, id: string }): null | Array<Object> => {
+      switch (role) {
+        case viewer:
+        case guest:
+          return null;
+        case admin:
+          return [{ show_exists: true }];
+        case restaurantOwner:
+          return [
+            { access_: { restaurantEditors: id } },
+            { access_: { restaurantPublishers: id } },
+          ];
+
+        default:
+          throw new TypeError(`Role "${role}" not in use!`);
+      }
+    },
+
+    RestaurantForSetting: (): null | Array<Object> => [],
+  };
+
   const context = {};
 
-  test('should return true for empty serversideConfig', async () => {
-    const inventoryChain = ['Mutation', 'deleteEntity', 'Post'];
+  const generalConfig: GeneralConfig = {};
+
+  const id = '1234567890';
+
+  test('should returnv [] for "Viewer" role when empty serversideConfig', async () => {
+    const inventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+
     const serversideConfig: ServersideConfig = {};
 
-    const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForView' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult = { mainEntity: [] };
     expect(result).toEqual(expectedResult);
   });
 
-  describe('unauthentificated user', () => {
-    const inventoryByPermissions = {
-      '': { name: '', include: { Query: { entity: ['Post'] } } },
+  test('should returnv [] for "Viewer" role', async () => {
+    const inventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [viewer] });
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
     };
 
-    test('should return true', async () => {
-      const inventoryChain = ['Query', 'entity', 'Post'];
-      const getActionFilter = () => Promise.resolve({ '': [] });
-
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
-
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [] };
-      expect(result).toEqual(expectedResult);
-    });
-
-    test('should return false', async () => {
-      const inventoryChain = ['Query', 'entity', 'User'];
-      const getActionFilter = () => Promise.resolve({ '': [] });
-
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
-
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: null };
-      expect(result).toEqual(expectedResult);
-    });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForView' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: [] };
+    expect(result).toEqual(expectedResult);
   });
 
-  describe('guest user', () => {
-    const inventoryByPermissions = {
-      '': { name: '', include: { Query: { entity: ['Post'] } } },
-      guest: { name: 'guest', include: { Query: { entities: ['Post'] } } },
+  test('should returnv [] for "Guest" role', async () => {
+    const inventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [guest] });
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
     };
 
-    test('should true as unauthorized', async () => {
-      const inventoryChain = ['Query', 'entity', 'Post'];
-      const getActionFilter = () => Promise.resolve({ guest: [] });
-
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
-
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [] };
-      expect(result).toEqual(expectedResult);
-    });
-
-    test('should return true', async () => {
-      const inventoryChain = ['Query', 'entities', 'Post'];
-      const getActionFilter = () => Promise.resolve({ guest: [] });
-
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
-
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [] };
-      expect(result).toEqual(expectedResult);
-    });
-
-    test('should return false', async () => {
-      const inventoryChain = ['Query', 'entities', 'User'];
-      const getActionFilter = () => Promise.resolve({ guest: [] });
-
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
-
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: null };
-      expect(result).toEqual(expectedResult);
-    });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForView' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: [] };
+    expect(result).toEqual(expectedResult);
   });
 
-  describe('editor user', () => {
-    const inventoryByPermissions = {
-      '': { name: '', include: { Query: { entityForView: ['Post'] } } },
-      guest: { name: 'guest', include: { Query: { entitiesForView: ['Post'] } } },
-      editor: { name: 'editor', include: { Query: { entitiesForEdit: true } } },
-      toggler: { name: 'editor', include: { Query: { entitiesForEdit: true } } },
+  test('should returnv [] for "RestaurantOwner" role', async () => {
+    const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [restaurantOwner] });
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
     };
 
-    test('should return true', async () => {
-      const inventoryChain = ['Query', 'entitiesForEdit', 'Restaurant'];
-      const getActionFilter = () => Promise.resolve({ editor: [] });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForView' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: [] };
+    expect(result).toEqual(expectedResult);
+  });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
+  test('should returnv "null" for "Guest" role', async () => {
+    const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [guest] });
 
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [] };
-      expect(result).toEqual(expectedResult);
-    });
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+    };
 
-    test('should return false', async () => {
-      const inventoryChain = ['Query', 'entitiesForEdit', 'Restaurant'];
-      const getActionFilter = () => Promise.resolve({});
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForView' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: null };
+    expect(result).toEqual(expectedResult);
+  });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
+  test('should returnv [Object] for "RestaurantOwner" role', async () => {
+    const inventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [restaurantOwner], id });
 
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: null };
-      expect(result).toEqual(expectedResult);
-    });
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+    };
 
-    test('should return true 2', async () => {
-      const inventoryChain = ['Query', 'entitiesForEdit', 'Restaurant'];
-      const getActionFilter = () => Promise.resolve({ editor: [] });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForCabinet' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: [{ access_: { restaurantEditors: '1234567890' } }] };
+    expect(result).toEqual(expectedResult);
+  });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
+  test('should returnv [Object] for "Admin" role', async () => {
+    const inventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
 
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [] };
-      expect(result).toEqual(expectedResult);
-    });
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+    };
 
-    test('should return true with filter', async () => {
-      const inventoryChain = ['Query', 'entitiesForEdit', 'Restaurant'];
-      const getActionFilter = () =>
-        Promise.resolve({
-          editor: [{ editors: '12345' }, { cuisines: 'Albanian' }],
-        });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForCabinet' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = { mainEntity: [] };
+    expect(result).toEqual(expectedResult);
+  });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
+  test('should return [Object, Object] for "Admin" role', async () => {
+    const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
 
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = { mainEntity: [{ editors: '12345' }, { cuisines: 'Albanian' }] };
-      expect(result).toEqual(expectedResult);
-    });
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+    };
 
-    test('should return true with filter', async () => {
-      const inventoryChain = ['Query', 'entitiesForEdit', 'Restaurant'];
-      const getActionFilter = () =>
-        Promise.resolve({
-          editor: [{ editors: '12345' }, { cuisines: 'Albanian' }],
-          toggler: [{ editors: '54321' }, { cuisines_ne: 'Albanian' }],
-        });
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'Restaurant' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = {
+      mainEntity: [
+        { access_: { restaurantEditors: id } },
+        { access_: { restaurantPublishers: id } },
+        { show_exists: true },
+      ],
+    };
+    expect(result).toEqual(expectedResult);
+  });
 
-      const serversideConfig: ServersideConfig = { getActionFilter, inventoryByPermissions };
+  test('should returnv [] & null for "Admin" role', async () => {
+    const inventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
 
-      const result = await executeAuthorisation(inventoryChain, context, serversideConfig);
-      const expectedResult = {
-        mainEntity: [
-          { editors: '12345' },
-          { cuisines: 'Albanian' },
-          { editors: '54321' },
-          { cuisines_ne: 'Albanian' },
-        ],
-      };
-      expect(result).toEqual(expectedResult);
-    });
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+    };
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = {
+      mainEntity: [],
+      subscribeUpdatedEntity: null,
+    };
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should returnv [] & [] without any inventories', async () => {
+    const inventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+
+    const serversideConfig: ServersideConfig = {};
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = {
+      mainEntity: [],
+      subscribeUpdatedEntity: [],
+    };
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should returnv [] & noll without any inventories', async () => {
+    const inventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+
+    const serversideConfig: ServersideConfig = {};
+
+    const inventory = { name: 'test', exclude: { Subscription: true } };
+
+    const generalConfig2: GeneralConfig = { allEntityConfigs: {}, inventory };
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      context,
+      generalConfig2,
+      serversideConfig,
+    );
+    const expectedResult = {
+      mainEntity: [],
+      subscribeUpdatedEntity: null,
+    };
+    expect(result).toEqual(expectedResult);
   });
 });

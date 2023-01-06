@@ -747,13 +747,6 @@ export type ServersideConfig = {
     ) => Function,
   },
 
-  +inventoryByPermissions?: InventoryByPermissions, // "inventoryByPermissions" & "getActionFilter" are mutualy used
-
-  +getActionFilter?: (
-    entityName: string,
-    context: Object,
-  ) => Promise<{ [permission: string]: Array<Object> }>,
-
   // *** fields that used in "executeAuthorisation" util
 
   +getUserAttributes?: ({ context: Object }) => Promise<UserAttributes>,

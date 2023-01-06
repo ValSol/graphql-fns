@@ -35,7 +35,13 @@ const createNodeQueryResolver = (
     if (entityConfig.type === 'tangibleFile') {
       const inventoryChain = ['Query', `entityFile${derivativeKey}`, entityName];
 
-      const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+      const filter = await executeAuthorisation(
+        inventoryChain,
+        { mainEntity: '' },
+        context,
+        generalConfig,
+        serversideConfig,
+      );
 
       const entityFileQueryResolver = createEntityFileQueryResolver(
         entityConfig,
@@ -62,7 +68,13 @@ const createNodeQueryResolver = (
 
     const inventoryChain = ['Query', `entity${derivativeKey}`, entityName];
 
-    const filter = await executeAuthorisation(inventoryChain, context, serversideConfig);
+    const filter = await executeAuthorisation(
+      inventoryChain,
+      { mainEntity: '' },
+      context,
+      generalConfig,
+      serversideConfig,
+    );
 
     const entityQueryResolver = createEntityQueryResolver(
       entityConfig,
