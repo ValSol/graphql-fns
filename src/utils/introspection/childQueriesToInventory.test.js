@@ -9,7 +9,7 @@ describe('childQueriesToInventory', () => {
     ForView: '',
   };
 
-  test('have to return inventoryByPermissions for childQueries with ForCabinet', () => {
+  test('have to return inventoryByRoles for childQueries with ForCabinet', () => {
     const childQueries = [
       {
         actionName: 'childentitiesForCatalog',
@@ -32,7 +32,7 @@ describe('childQueriesToInventory', () => {
       derivativeKey: 'ForView',
     };
 
-    const inventoryByPermissions = {};
+    const inventoryByRoles = {};
 
     const expectedResult = {
       insider: {
@@ -49,14 +49,14 @@ describe('childQueriesToInventory', () => {
     const result = childQueriesToInventory(
       childQueries,
       parsedAction,
-      inventoryByPermissions,
+      inventoryByRoles,
       prefixToPermission,
     );
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return inventoryByPermissions for childQueries without derivativeKey', () => {
+  test('have to return inventoryByRoles for childQueries without derivativeKey', () => {
     const childQueries = [
       {
         actionName: 'childEntities',
@@ -79,7 +79,7 @@ describe('childQueriesToInventory', () => {
       derivativeKey: 'ForView',
     };
 
-    const inventoryByPermissions = {};
+    const inventoryByRoles = {};
 
     const expectedResult = {
       '': {
@@ -96,7 +96,7 @@ describe('childQueriesToInventory', () => {
     const result = childQueriesToInventory(
       childQueries,
       parsedAction,
-      inventoryByPermissions,
+      inventoryByRoles,
       prefixToPermission,
     );
 

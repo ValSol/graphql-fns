@@ -1,19 +1,19 @@
 // @flow
 
-import type { InventoryByPermissions } from '../../flowTypes';
+import type { InventoryByRoles } from '../../flowTypes';
 
 const mergeInventories = (
-  inventoryByPermissions: Object, // InventoryByPermissions,
-): InventoryByPermissions => {
+  inventoryByRoles: Object, // InventoryByRoles,
+): InventoryByRoles => {
   const result = {};
 
-  Object.keys(inventoryByPermissions).forEach((permission) => {
-    if (!inventoryByPermissions[permission].include) {
+  Object.keys(inventoryByRoles).forEach((permission) => {
+    if (!inventoryByRoles[permission].include) {
       result[permission] = { name: permission };
       return;
     }
 
-    const { Query, Mutation } = inventoryByPermissions[permission].include;
+    const { Query, Mutation } = inventoryByRoles[permission].include;
 
     if (Query) {
       Object.keys(Query).forEach((action) => {

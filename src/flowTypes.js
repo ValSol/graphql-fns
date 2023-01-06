@@ -707,11 +707,6 @@ export type InventoryСhain =
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;
 
-export type InventoryByPermissions = {
-  // must be setted for all permissions and plus for empty string ""
-  [permission: string]: Inventory,
-};
-
 export type InventoryByRoles = {
   // must be setted for all roles
   [role: string]: Inventory,

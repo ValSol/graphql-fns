@@ -1,6 +1,6 @@
 // @flow
 /* eslint-env jest */
-import type { InventoryByPermissions, Inventory } from '../../flowTypes';
+import type { InventoryByRoles, Inventory } from '../../flowTypes';
 
 import checkInventory from './checkInventory';
 
@@ -371,8 +371,8 @@ describe('checkInventory', () => {
     expect(result).toBe(false);
   });
 
-  describe('checkInventory in inventoryByPermissions', () => {
-    const inventoryByPermissions: InventoryByPermissions = {
+  describe('checkInventory in inventoryByRoles', () => {
+    const inventoryByRoles: InventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -393,20 +393,16 @@ describe('checkInventory', () => {
       // admin: { include: { Query: true, Mutation: true } },
       // master: {},
     };
-    test('should return correct results for InventoryByPermissions guest', () => {
-      const permissions = [''];
+    test('should return correct results for InventoryByRoles guest', () => {
+      const roles = [''];
       const inventoryСhain = ['Mutation', 'renewEntity', 'User'];
-      const result = permissions.some((permission) =>
-        checkInventory(inventoryСhain, inventoryByPermissions[permission]),
-      );
+      const result = roles.some((role) => checkInventory(inventoryСhain, inventoryByRoles[role]));
       expect(result).toBe(true);
     });
-    test('should return correct results for InventoryByPermissions guest', () => {
-      const permissions = ['guest'];
+    test('should return correct results for InventoryByRoles guest', () => {
+      const roles = ['guest'];
       const inventoryСhain = ['Mutation', 'signoutEntity', 'User'];
-      const result = permissions.some((permission) =>
-        checkInventory(inventoryСhain, inventoryByPermissions[permission]),
-      );
+      const result = roles.some((role) => checkInventory(inventoryСhain, inventoryByRoles[role]));
       expect(result).toBe(false);
     });
   });

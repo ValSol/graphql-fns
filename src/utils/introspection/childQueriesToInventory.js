@@ -1,14 +1,14 @@
 // @flow
 
-import type { InventoryByPermissions } from '../../flowTypes';
+import type { InventoryByRoles } from '../../flowTypes';
 import type { ChildQueries, ParsedAction } from './flowTypes';
 
 const childQueriesToInventory = (
   childQueries: ChildQueries,
   parsedAction: ParsedAction,
-  inventoryByPermissions: Object, // InventoryByPermissions,
+  inventoryByRoles: Object, // InventoryByRoles,
   derivativeKeyToPermission: { [derivativeKey: string]: string },
-): InventoryByPermissions => {
+): InventoryByRoles => {
   const { derivativeKey: defaultDerivativeKey } = parsedAction;
 
   childQueries.forEach(({ actionName, derivativeKey, entityName }) => {
@@ -16,29 +16,29 @@ const childQueriesToInventory = (
       ? derivativeKeyToPermission[derivativeKey]
       : derivativeKeyToPermission[defaultDerivativeKey];
 
-    const inventory1 = inventoryByPermissions[permission];
+    const inventory1 = inventoryByRoles[permission];
     if (!inventory1) {
-      inventoryByPermissions[permission] = { name: permission }; // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission] = { name: permission }; // eslint-disable-line no-param-reassign
     }
 
-    if (!inventoryByPermissions[permission].include) {
-      inventoryByPermissions[permission].include = {}; // eslint-disable-line no-param-reassign
+    if (!inventoryByRoles[permission].include) {
+      inventoryByRoles[permission].include = {}; // eslint-disable-line no-param-reassign
     }
 
-    if (!inventoryByPermissions[permission].include.Query) {
-      inventoryByPermissions[permission].include.Query = {}; // eslint-disable-line no-param-reassign
+    if (!inventoryByRoles[permission].include.Query) {
+      inventoryByRoles[permission].include.Query = {}; // eslint-disable-line no-param-reassign
     }
 
-    if (!inventoryByPermissions[permission].include.Query[actionName]) {
-      inventoryByPermissions[permission].include.Query[actionName] = []; // eslint-disable-line no-param-reassign
+    if (!inventoryByRoles[permission].include.Query[actionName]) {
+      inventoryByRoles[permission].include.Query[actionName] = []; // eslint-disable-line no-param-reassign
     }
 
-    if (!inventoryByPermissions[permission].include.Query[actionName].includes(entityName)) {
-      inventoryByPermissions[permission].include.Query[actionName].push(entityName); // eslint-disable-line no-param-reassign
+    if (!inventoryByRoles[permission].include.Query[actionName].includes(entityName)) {
+      inventoryByRoles[permission].include.Query[actionName].push(entityName); // eslint-disable-line no-param-reassign
     }
   });
 
-  return inventoryByPermissions;
+  return inventoryByRoles;
 };
 
 export default childQueriesToInventory;

@@ -4,8 +4,8 @@
 import compressInventory from './compressInventory';
 
 describe('compressInventory', () => {
-  test('have to return compressed inventoryByPermissions', () => {
-    const inventoryByPermissions = {
+  test('have to return compressed inventoryByRoles', () => {
+    const inventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -377,7 +377,7 @@ describe('compressInventory', () => {
       root: { name: 'root' },
     };
 
-    const result = compressInventory(inventoryByPermissions, umbrellaInventory);
+    const result = compressInventory(inventoryByRoles, umbrellaInventory);
 
     expect(result).toEqual(expectedResult);
   });

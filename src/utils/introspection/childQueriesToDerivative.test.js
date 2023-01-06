@@ -4,7 +4,7 @@
 import childQueriesToDerivative from './childQueriesToDerivative';
 
 describe('childQueriesToDerivative', () => {
-  test('have to return inventoryByPermissions for childQueries with ForCabinet', () => {
+  test('have to return inventoryByRoles for childQueries with ForCabinet', () => {
     const childQueries = [
       {
         actionName: 'childentitiesForCatalog',

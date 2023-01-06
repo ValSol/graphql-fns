@@ -4,8 +4,8 @@
 import mergeInventories from './mergeInventories';
 
 describe('mergeInventories', () => {
-  test('have to return compressed inventoryByPermissions', () => {
-    const inventoryByPermissions = {
+  test('have to return compressed inventoryByRoles', () => {
+    const inventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -61,7 +61,7 @@ describe('mergeInventories', () => {
       },
     };
 
-    const additionalInventoryByPermissions = {
+    const additionalInventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -161,7 +161,7 @@ describe('mergeInventories', () => {
       root: { name: 'root' },
     };
 
-    const result = mergeInventories(inventoryByPermissions, additionalInventoryByPermissions);
+    const result = mergeInventories(inventoryByRoles, additionalInventoryByRoles);
 
     expect(result).toEqual(expectedResult);
   });

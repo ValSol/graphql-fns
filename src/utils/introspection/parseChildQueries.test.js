@@ -105,7 +105,7 @@ describe('parseChildQueries', () => {
 
   const generalConfig = { allEntityConfigs, custom, derivative };
 
-  test('have to return inventoryByPermissions with  entitiesByUnique: [Person]', () => {
+  test('have to return inventoryByRoles with  entitiesByUnique: [Person]', () => {
     const childQueries = ['childEntities:PersonForCatalog', 'childEntity:PlaceForCatalog'];
 
     const expectedResult = [

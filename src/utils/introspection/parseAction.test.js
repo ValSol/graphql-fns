@@ -135,7 +135,7 @@ describe('parseAction', () => {
           derivativeKey: 'ForCatalog',
         },
       },
-      inventoryByPermissions: {
+      inventoryByRoles: {
         insider: {
           include: {
             Query: {
@@ -159,7 +159,7 @@ describe('parseAction', () => {
         derivativeKeyToPermission,
         entityName,
       },
-      { derivativeAttributes: {}, inventoryByPermissions: {}, maxShift: 0 },
+      { derivativeAttributes: {}, inventoryByRoles: {}, maxShift: 0 },
     );
     expect(result).toEqual(expectedResult);
   });
@@ -182,7 +182,7 @@ describe('parseAction', () => {
           derivativeKey: 'ForCatalog',
         },
       },
-      inventoryByPermissions: {
+      inventoryByRoles: {
         insider: {
           include: {
             Query: {
@@ -208,7 +208,7 @@ describe('parseAction', () => {
           derivativeKey: 'ForCatalog',
         },
       },
-      inventoryByPermissions: {
+      inventoryByRoles: {
         '': {
           include: {
             Query: {

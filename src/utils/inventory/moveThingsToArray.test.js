@@ -4,8 +4,8 @@
 import moveThingsToArray from './moveThingsToArray';
 
 describe('moveThingsToArray', () => {
-  test('have to return compressed inventoryByPermissions', () => {
-    const inventoryByPermissions = {
+  test('have to return compressed inventoryByRoles', () => {
+    const inventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -130,7 +130,7 @@ describe('moveThingsToArray', () => {
       root: { name: 'root' },
     };
 
-    const result = moveThingsToArray(inventoryByPermissions);
+    const result = moveThingsToArray(inventoryByRoles);
 
     expect(result).toEqual(expectedResult);
   });

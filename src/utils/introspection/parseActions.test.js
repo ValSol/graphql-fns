@@ -146,7 +146,7 @@ describe('parseActions', () => {
           derivativeKey: 'ForCatalog',
         },
       },
-      inventoryByPermissions: {
+      inventoryByRoles: {
         '': {
           include: {
             Query: {

@@ -26,7 +26,7 @@ const parseAction = (
     derivativeKeyToPermission,
     entityName,
   }: Arg1,
-  { derivativeAttributes, inventoryByPermissions, maxShift }: ParseActionResult,
+  { derivativeAttributes, inventoryByRoles, maxShift }: ParseActionResult,
 ): ParseActionResult => {
   const actionToParse = { actionType, actionName, entityName, derivativeKey };
 
@@ -34,10 +34,10 @@ const parseAction = (
 
   actionToDerivative(actionToParse, parsedAction, derivativeAttributes, generalConfig);
 
-  actionToInventory(actionToParse, parsedAction, inventoryByPermissions, derivativeKeyToPermission);
+  actionToInventory(actionToParse, parsedAction, inventoryByRoles, derivativeKeyToPermission);
 
   if (!parsedAction.entityConfig) {
-    return { inventoryByPermissions, derivativeAttributes, maxShift };
+    return { inventoryByRoles, derivativeAttributes, maxShift };
   }
 
   const { childQueries, maxShift: newMaxShift } = getChildQueries(
@@ -48,15 +48,10 @@ const parseAction = (
 
   childQueriesToDerivative(childQueries, derivativeAttributes);
 
-  childQueriesToInventory(
-    childQueries,
-    parsedAction,
-    inventoryByPermissions,
-    derivativeKeyToPermission,
-  );
+  childQueriesToInventory(childQueries, parsedAction, inventoryByRoles, derivativeKeyToPermission);
 
   return {
-    inventoryByPermissions,
+    inventoryByRoles,
     derivativeAttributes,
     maxShift: newMaxShift > maxShift ? newMaxShift : maxShift,
   };

@@ -3,7 +3,7 @@
 import type {
   ClientOptions,
   DerivativeAttributes,
-  InventoryByPermissions,
+  InventoryByRoles,
   EntityConfig,
 } from '../../flowTypes';
 
@@ -37,7 +37,7 @@ export type ParseActionArgs = {
 };
 
 export type ParseActionResult = {
-  inventoryByPermissions: InventoryByPermissions,
+  inventoryByRoles: InventoryByRoles,
   derivativeAttributes: { [derivativeKey: string]: DerivativeAttributes },
   maxShift: number,
 };

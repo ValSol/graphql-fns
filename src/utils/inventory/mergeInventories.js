@@ -5,16 +5,16 @@ import lodashMerge from 'lodash.merge';
 import moveThingsToArray from './moveThingsToArray';
 import moveThingsToObject from './moveThingsToObject';
 
-import type { InventoryByPermissions } from '../../flowTypes';
+import type { InventoryByRoles } from '../../flowTypes';
 
 const mergeInventories = (
-  inventoryByPermissions: Object, // InventoryByPermissions,
-  additionalInventoryByPermissions: Object, // InventoryByPermissions,
-): InventoryByPermissions =>
+  inventoryByRoles: Object, // InventoryByRoles,
+  additionalInventoryByRoles: Object, // InventoryByRoles,
+): InventoryByRoles =>
   moveThingsToArray(
     lodashMerge(
-      moveThingsToObject(inventoryByPermissions),
-      moveThingsToObject(additionalInventoryByPermissions),
+      moveThingsToObject(inventoryByRoles),
+      moveThingsToObject(additionalInventoryByRoles),
     ),
   );
 

@@ -4,7 +4,7 @@ import type { Inventory } from '../../flowTypes';
 
 type Result = { [permissionName: string]: Inventory };
 
-const composeInventoryByPermissions = (inventories: Array<Inventory>): Result => {
+const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
   const result = inventories.reduce((prev, inventory) => {
     const { name } = inventory;
     if (typeof name === 'undefined') {
@@ -22,4 +22,4 @@ const composeInventoryByPermissions = (inventories: Array<Inventory>): Result =>
   return result;
 };
 
-export default composeInventoryByPermissions;
+export default composeInventoryByRoles;

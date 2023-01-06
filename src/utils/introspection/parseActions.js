@@ -11,18 +11,18 @@ const parseActions = (
   generalConfig: GeneralConfig,
 ): ParseActionResult => {
   const derivativeAttributes = {};
-  const inventoryByPermissions = {};
+  const inventoryByRoles = {};
   let maxShift = 0;
 
   actions.forEach((action) => {
     maxShift = parseAction(
       { ...action, generalConfig, derivativeKeyToPermission },
-      { maxShift, derivativeAttributes, inventoryByPermissions },
+      { maxShift, derivativeAttributes, inventoryByRoles },
     ).maxShift;
   });
 
   return {
-    inventoryByPermissions,
+    inventoryByRoles,
     derivativeAttributes,
     maxShift,
   };

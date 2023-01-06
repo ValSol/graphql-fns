@@ -108,7 +108,7 @@ describe('actionToInventory', () => {
     ForCabinet: 'insider',
   };
 
-  test('have to return inventoryByPermissions with  entitiesByUnique: [Person]', () => {
+  test('have to return inventoryByRoles with  entitiesByUnique: [Person]', () => {
     const actionToParse = {
       actionType: 'Query',
       actionName: 'entitiesByUnique',
@@ -122,7 +122,7 @@ describe('actionToInventory', () => {
       derivativeKey: 'ForCabinet',
     };
 
-    const inventoryByPermissions = {};
+    const inventoryByRoles = {};
 
     const expectedResult = {
       insider: {
@@ -138,14 +138,14 @@ describe('actionToInventory', () => {
     const result = actionToInventory(
       actionToParse,
       parsedAction,
-      inventoryByPermissions,
+      inventoryByRoles,
       prefixToPermission,
     );
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return inventoryByPermissions with  entitiesByUnique: [Place]', () => {
+  test('have to return inventoryByRoles with  entitiesByUnique: [Place]', () => {
     const actionToParse = {
       actionType: 'Query',
       actionName: 'entitiesByUnique',
@@ -159,7 +159,7 @@ describe('actionToInventory', () => {
       derivativeKey: 'ForCabinet',
     };
 
-    const inventoryByPermissions = {
+    const inventoryByRoles = {
       insider: {
         name: 'insider',
         include: {
@@ -184,7 +184,7 @@ describe('actionToInventory', () => {
     const result = actionToInventory(
       actionToParse,
       parsedAction,
-      inventoryByPermissions,
+      inventoryByRoles,
       prefixToPermission,
     );
 

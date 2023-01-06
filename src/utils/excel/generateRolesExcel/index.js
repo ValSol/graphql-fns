@@ -33,7 +33,7 @@ const actionTypeToArgb = {
 const generateExcel = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  filePath: string = 'permissions.xlsx',
+  filePath: string = 'roles.xlsx',
 ) => {
   const { custom, derivative, inventory, allEntityConfigs } = generalConfig;
 

@@ -4,8 +4,8 @@
 import moveThingsToObject from './moveThingsToObject';
 
 describe('moveThingsToObject', () => {
-  test('have to return compressed inventoryByPermissions', () => {
-    const inventoryByPermissions = {
+  test('have to return compressed inventoryByRoles', () => {
+    const inventoryByRoles = {
       '': {
         name: '',
         include: {
@@ -130,7 +130,7 @@ describe('moveThingsToObject', () => {
       root: { name: 'root' },
     };
 
-    const result = moveThingsToObject(inventoryByPermissions);
+    const result = moveThingsToObject(inventoryByRoles);
 
     expect(result).toEqual(expectedResult);
   });
