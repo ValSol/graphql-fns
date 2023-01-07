@@ -704,6 +704,8 @@ export type ServersideConfig = {
 
   +filters?: { [tangibleEntityName: string]: (UserAttributes) => null | Array<Object> }, // "filters" can used only with help of "getUserAttributes"
 
+  +staticFilters?: { [tangibleEntityName: string]: { [key: string]: any } },
+
   // ***
 
   +saveFiles?: {

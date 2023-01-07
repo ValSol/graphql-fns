@@ -2,15 +2,17 @@
 
 import type { ServersideConfig } from '../../../flowTypes';
 
+import injectStaticFilter from './injectStaticFilter';
+
 const executeNodeAuthorisation = async (
   entityName: string,
   context: Object,
   serversideConfig: ServersideConfig,
 ): Promise<null | Array<Object>> => {
-  const { filters, getUserAttributes } = serversideConfig;
+  const { filters, getUserAttributes, staticFilters = {} } = serversideConfig;
 
   if (!filters) {
-    return [];
+    return [staticFilters[entityName]] || [];
   }
 
   if (!getUserAttributes) {
@@ -34,7 +36,7 @@ const executeNodeAuthorisation = async (
 
     if (filter) {
       if (!filter.length) {
-        return [];
+        return staticFilters[entityName] ? [staticFilters[entityName]] : [];
       }
 
       if (!result) {
@@ -42,12 +44,12 @@ const executeNodeAuthorisation = async (
       }
 
       result.push(...filter);
-    } else {
-      result = null;
     }
   }
 
-  return result;
+  return result && staticFilters[entityName]
+    ? injectStaticFilter(staticFilters[entityName], result)
+    : result;
 };
 
 export default executeNodeAuthorisation;

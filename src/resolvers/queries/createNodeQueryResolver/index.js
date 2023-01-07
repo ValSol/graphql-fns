@@ -4,7 +4,7 @@ import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 import type { Context } from '../../flowTypes';
 
 import composeDerivativeConfig from '../../../utils/composeDerivativeConfig';
-import executeNodeAuthorisation from '../../utils/executeNodeAuthorisation';
+import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
 
@@ -29,7 +29,7 @@ const createNodeQueryResolver = (
 
     if (!id) return null;
 
-    const filter = executeNodeAuthorisation(
+    const filter = await executeNodeAuthorisation(
       `${entityName}${derivativeKey}`,
       context,
       serversideConfig,
@@ -64,6 +64,8 @@ const createNodeQueryResolver = (
         mainEntity: filter,
       });
 
+      if (!entityFile) return null;
+
       return {
         ...transformAfter(entityFile, entityConfig, null),
         __typename: `${entityName}${derivativeKey}`,
@@ -82,6 +84,8 @@ const createNodeQueryResolver = (
     const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, {
       mainEntity: filter,
     });
+
+    if (!entity) return null;
 
     return {
       ...transformAfter(entity, resultEntityConfig, generalConfig),

@@ -7,6 +7,7 @@ import type {
 } from '../../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
+import injectStaticFilter from './injectStaticFilter';
 
 const amendInventoryChain = (inventoryChain, key) => {
   const [, , entityName] = inventoryChain;
@@ -34,7 +35,13 @@ const executeAuthorisation = async (
   serversideConfig: ServersideConfig,
 ): Promise<{ [key: string]: null | Array<Object> }> => {
   const { inventory } = generalConfig;
-  const { containedRoles, filters, getUserAttributes, inventoryByRoles } = serversideConfig;
+  const {
+    containedRoles,
+    filters,
+    getUserAttributes,
+    inventoryByRoles,
+    staticFilters = {},
+  } = serversideConfig;
 
   const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
 
@@ -42,7 +49,10 @@ const executeAuthorisation = async (
     return involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
       const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
 
-      prev[involvedEntityNamesKey] = checkInventory(amendedInventoryChain, inventory) ? [] : null; // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      prev[involvedEntityNamesKey] = checkInventory(amendedInventoryChain, inventory)
+        ? [staticFilters[involvedEntityNames[involvedEntityNamesKey]]] || []
+        : null;
 
       return prev;
     }, {});
@@ -114,7 +124,15 @@ const executeAuthorisation = async (
     }
   }
 
-  return result;
+  return Object.keys(result).reduce((prev, key) => {
+    // eslint-disable-next-line no-param-reassign
+    prev[key] =
+      staticFilters[involvedEntityNames[key]] && result[key]
+        ? injectStaticFilter(staticFilters[involvedEntityNames[key]], result[key])
+        : result[key];
+
+    return prev;
+  }, {});
 };
 
 export default executeAuthorisation;

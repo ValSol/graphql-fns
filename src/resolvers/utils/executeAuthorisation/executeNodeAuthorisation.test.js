@@ -3,7 +3,7 @@
 
 import type { ServersideConfig } from '../../../flowTypes';
 
-import executeNodeAuthorisation from './index';
+import executeNodeAuthorisation from './executeNodeAuthorisation';
 
 const viewer = 'Viewer';
 const guest = 'Guest';
@@ -48,6 +48,16 @@ describe('executeNodeAuthorisation', () => {
     RestaurantForSetting: (): null | Array<Object> => [],
   };
 
+  const staticFilters = {
+    RestaurantForCabinet: { deleted: false },
+
+    RestaurantForView: { show: true },
+
+    Restaurant: { test: true },
+
+    RestaurantForSetting: { level_gt: 0 },
+  };
+
   const context = {};
 
   const id = '1234567890';
@@ -60,6 +70,12 @@ describe('executeNodeAuthorisation', () => {
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
     const expectedResult = [];
     expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = { staticFilters };
+
+    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const expectedResult2 = [{ deleted: false }];
+    expect(result2).toEqual(expectedResult2);
   });
 
   test('should returnv null for "Viewer" role', async () => {
@@ -73,6 +89,16 @@ describe('executeNodeAuthorisation', () => {
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
     const expectedResult = null;
     expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = {
+      filters,
+      getUserAttributes,
+      staticFilters,
+    };
+
+    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const expectedResult2 = null;
+    expect(result2).toEqual(expectedResult2);
   });
 
   test('should returnv [] for "admin" role', async () => {
@@ -86,6 +112,16 @@ describe('executeNodeAuthorisation', () => {
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
     const expectedResult = [];
     expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = {
+      filters,
+      getUserAttributes,
+      staticFilters,
+    };
+
+    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const expectedResult2 = [{ deleted: false }];
+    expect(result2).toEqual(expectedResult2);
   });
 
   test('should returnv [] for "restaurantOwner" role', async () => {
@@ -99,6 +135,20 @@ describe('executeNodeAuthorisation', () => {
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
     const expectedResult = [{ access_: { restaurantEditors: '1234567890' } }];
     expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = {
+      filters,
+      getUserAttributes,
+      staticFilters,
+    };
+
+    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const expectedResult2 = [
+      {
+        AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }],
+      },
+    ];
+    expect(result2).toEqual(expectedResult2);
   });
 
   test('should returnv [] for "restaurantOwner" role', async () => {
@@ -117,6 +167,30 @@ describe('executeNodeAuthorisation', () => {
       { access_: { restaurantPublishers: id } },
       { show_exists: true },
     ];
+
     expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = {
+      filters,
+      getUserAttributes,
+      staticFilters,
+    };
+
+    const result2 = await executeNodeAuthorisation(entityName2, context, serversideConfig2);
+    const expectedResult2 = [
+      {
+        AND: [
+          { test: true },
+          {
+            OR: [
+              { access_: { restaurantEditors: id } },
+              { access_: { restaurantPublishers: id } },
+              { show_exists: true },
+            ],
+          },
+        ],
+      },
+    ];
+    expect(result2).toEqual(expectedResult2);
   });
 });
