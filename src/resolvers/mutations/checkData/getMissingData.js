@@ -40,7 +40,13 @@ const getMissingData = async ({
 
   const { whereOne, data } = args;
 
-  const entity = await entityQueryResolver(null, { whereOne }, context, { projection }, []);
+  const entity = await entityQueryResolver(
+    null,
+    { whereOne },
+    context,
+    { projection },
+    { mainEntity: [] },
+  );
 
   if (!entity) return null;
 

@@ -183,21 +183,18 @@ describe('transformDataForPush util', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should return updated data', () => {
+  test('should return updated data', () => {
     const data = {
       restaurant: { connect: 'restaurantId' },
-      restaurants: { connect: ['restaurantId0', 'restaurantId1'] },
+      restaurants: { connect: ['restaurantId2', 'restaurantId3'] },
     };
 
     const args = { data, positions: undefined };
 
-    const currentData = { restaurants: ['restaurantId2', 'restaurantId3'] };
+    const currentData = { restaurants: ['restaurantId0', 'restaurantId1'] };
 
     const expectedResult = {
-      restaurant: { connect: 'restaurantId' },
-      restaurants: {
-        connect: ['restaurantId0', 'restaurantId1', 'restaurantId2', 'restaurantId3'],
-      },
+      restaurants: ['restaurantId0', 'restaurantId1', 'restaurantId2', 'restaurantId3'],
     };
 
     const result = transformDataForPush(currentData, args, postConfig);

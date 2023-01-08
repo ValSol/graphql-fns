@@ -34,7 +34,14 @@ afterAll(async () => {
 
 describe('createNodeQueryResolver', () => {
   test('should use query entity resolver', async () => {
-    const serversideConfig = {};
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: ['Admin'], textField1: 'textField1' };
+    };
+
+    const filters = { Example: ({ textField1 }) => [{ textField1 }] };
+
+    const serversideConfig = { getUserAttributes, filters };
 
     const entityConfig: EntityConfig = {
       name: 'Example',
@@ -97,9 +104,7 @@ describe('createNodeQueryResolver', () => {
     if (!node) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const globalId = toGlobalId(id, 'Example');
-    const example = await node(null, { id: globalId }, { mongooseConn, pubsub }, info, {
-      mainEntity: [],
-    });
+    const example = await node(null, { id: globalId }, { mongooseConn, pubsub }, info);
 
     expect(example.id).toBe(globalId);
     expect(example.textField1).toBe(data.textField1);
@@ -110,6 +115,30 @@ describe('createNodeQueryResolver', () => {
     expect(example.createdAt instanceof Date).toBeTruthy();
     expect(example.updatedAt).toBeUndefined();
     expect(example.__typename).toBe('Example'); // eslint-disable-line no-underscore-dangle
+
+    const data2 = {
+      textField1: 'textField1-2',
+      textField2: 'textField2',
+      textField3: 'textField3',
+      textField4: ['textField4'],
+      textField5: ['textField5'],
+    };
+
+    const createdExample2 = await createExample(
+      null,
+      { data: data2 },
+      { mongooseConn, pubsub },
+      null,
+      {
+        mainEntity: [],
+      },
+    );
+    const { id: id2 } = createdExample2;
+
+    const globalId2 = toGlobalId(id2, 'Example');
+    const example2 = await node(null, { id: globalId2 }, { mongooseConn, pubsub }, info);
+
+    expect(example2).toBe(null);
   });
 
   test('should use query entity file resolver', async () => {
@@ -176,9 +205,7 @@ describe('createNodeQueryResolver', () => {
     if (!node) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const globalId = toGlobalId(id, 'TangibleImage');
-    const imageFile = await node(null, { id: globalId }, { mongooseConn, pubsub }, info, {
-      mainEntity: [],
-    });
+    const imageFile = await node(null, { id: globalId }, { mongooseConn, pubsub }, info);
 
     expect(imageFile.id).toBe(globalId);
     expect(imageFile.hash).toBe(hash);

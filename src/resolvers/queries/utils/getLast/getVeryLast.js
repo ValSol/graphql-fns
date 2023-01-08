@@ -8,7 +8,7 @@ import composeLastEdges from './composeLastEdges';
 const getVeryLast = async (
   last: number,
   resolverArg: ResolverArg,
-  filter: Object,
+  parentFilters: Object,
   entitiesQueryResolver: Function,
   entityCountQueryResolver: Function,
 ): null | Promise<Object> => {
@@ -19,7 +19,7 @@ const getVeryLast = async (
     args,
     context,
     { projection: { _id: 1 } },
-    filter,
+    parentFilters,
   );
 
   const projection = getProjectionFromInfo(info, ['edges', 'node']);
@@ -31,7 +31,7 @@ const getVeryLast = async (
     last < count ? { ...args, pagination } : args,
     context,
     { projection },
-    filter,
+    parentFilters,
   );
 
   return composeLastEdges(-count, last, entities);

@@ -10,7 +10,7 @@ const getFirst = async (
   shift: number,
   first: number,
   resolverArg: ResolverArg,
-  filter: Object,
+  parentFilters: Object,
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;
@@ -24,7 +24,7 @@ const getFirst = async (
     { ...args, pagination },
     context,
     { projection },
-    filter,
+    parentFilters,
   );
 
   // eslint-disable-next-line no-underscore-dangle

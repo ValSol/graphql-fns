@@ -3,6 +3,7 @@
 
 import type { GeneralConfig, ServersideConfig } from '../../../flowTypes';
 
+import sleep from '../../../utils/sleep';
 import executeAuthorisation from './index';
 
 const viewer = 'Viewer';
@@ -154,7 +155,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [] for "Viewer" role', async () => {
     const inventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [viewer] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [viewer] };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -192,7 +196,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [] for "Guest" role', async () => {
     const inventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [guest] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [guest] };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -230,7 +237,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [] for "RestaurantOwner" role', async () => {
     const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [restaurantOwner] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner] };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -268,7 +278,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv "null" for "Guest" role', async () => {
     const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [guest] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [guest] };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -306,7 +319,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [Object] for "RestaurantOwner" role', async () => {
     const inventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [restaurantOwner], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -348,7 +364,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [Object] for "Admin" role', async () => {
     const inventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner, admin], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -388,7 +407,10 @@ describe('executeAuthorisation', () => {
 
   test('should return [Object, Object] for "Admin" role', async () => {
     const inventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner, admin], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -449,7 +471,10 @@ describe('executeAuthorisation', () => {
 
   test('should returnv [] & null for "Admin" role', async () => {
     const inventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
-    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner, admin], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       containedRoles,

@@ -51,6 +51,7 @@ const extractExternalReferences = (
   filter.forEach((filterObj) => {
     extract(data, filterObj, fieldsObj, result);
   });
+
   return result;
 };
 

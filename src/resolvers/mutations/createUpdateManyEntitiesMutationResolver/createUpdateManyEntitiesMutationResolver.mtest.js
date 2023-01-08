@@ -1034,6 +1034,10 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
           name: 'textField',
           index: true,
         },
+        {
+          name: 'additionalText',
+          index: true,
+        },
       ],
     };
     const parentConfig: EntityConfig = {
@@ -1064,9 +1068,11 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
+    const generalConfig2 = { allEntityConfigs: { Parent: parentConfig, Child: childConfig } };
+
     const createParent = createCreateEntityMutationResolver(
       parentConfig,
-      generalConfig,
+      generalConfig2,
       serversideConfig,
     );
     expect(typeof createParent).toBe('function');
@@ -1079,6 +1085,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
           create: {
             textFields: [`text-${i}`],
             textField: i < 15 ? 'first' : 'second',
+            additionalText: `${i}`,
           },
         },
       };
@@ -1088,7 +1095,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     const updateManyParents = createUpdateManyEntitiesMutationResolver(
       parentConfig,
-      generalConfig,
+      generalConfig2,
       serversideConfig,
     );
     if (!updateManyParents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
@@ -1096,31 +1103,28 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     const whereOne = [{ name: 'name-2' }];
 
     const info = { projection: { _id: 1, name: 1 } };
-    const data = [{ name: 'updatedName' }];
+    const data = [{ name: 'name-99' }];
     const [updatedParent] = await updateManyParents(
       null,
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
-      { mainEntity: [] },
+      { mainEntity: [{ child_: { textFields_in: ['text-2'] } }] },
     );
 
-    expect(updatedParent.name).toBe('updatedName');
+    expect(updatedParent.name).toBe('name-99');
 
-    const whereOne2 = [{ name: 'name-1' }];
+    const whereOne2 = [{ name: 'name-99' }];
 
-    const updatedParents = await updateManyParents(
+    const [updatedParent2] = await updateManyParents(
       null,
-      { data, whereOne: whereOne2 },
+      { data: [{ name: 'updatedName2' }], whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      // { mainEntity: [] },
-      { mainEntity: [{ child_: { textFields_in: ['text-1'] } }] },
-
-      // { mainEntity: [{ child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] } }] },
+      { mainEntity: [{ child_: { textFields_in: ['text-2'] } }] },
     );
 
-    expect(updatedParents[0].name).toBe(data[0].name);
+    expect(updatedParent2.name).toBe('updatedName2');
   });
 
   test('should create mutation updateEntity resolver to update document using checkData', async () => {

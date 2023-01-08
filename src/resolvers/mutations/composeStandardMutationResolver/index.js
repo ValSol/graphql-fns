@@ -86,7 +86,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             session.startTransaction();
           }
-
           if (!getPrevious) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }

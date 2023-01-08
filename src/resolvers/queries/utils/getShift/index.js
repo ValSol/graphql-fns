@@ -15,7 +15,7 @@ const getShift = async (
   _id: string,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  filter: Object,
+  parentFilters: Object,
   entityQueryResolver: Function,
 ): Promise<null | number> => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
@@ -25,13 +25,15 @@ const getShift = async (
 
   const projection = composeProjectionFromArgs(args);
 
+  const { mainEntity: filter } = parentFilters;
+
   // eslint-disable-next-line no-await-in-loop
   const thing = await entityQueryResolver(
     parent,
     { whereOne: { id: _id } },
     context,
     { projection },
-    filter,
+    parentFilters,
   );
 
   if (!thing) return null;

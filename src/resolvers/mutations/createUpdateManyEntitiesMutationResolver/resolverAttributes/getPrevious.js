@@ -4,10 +4,10 @@ import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-// import checkData from '../../checkData';
+import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig } = resolverCreatorArg;
+  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, parentFilters } = resolverArg;
   const { enums } = generalConfig;
 
@@ -36,21 +36,21 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     );
   }
 
-  // const processingKind = 'update';
-  // for (let i = 0; i < data.length; i += 1) {
-  //   // eslint-disable-next-line no-await-in-loop
-  //   const allowUpdate = await checkData(
-  //     { data: data[i], whereOne: whereOne[i] },
-  //     filter,
-  //     entityConfig,
-  //     processingKind,
-  //     generalConfig,
-  //     serversideConfig,
-  //     context,
-  //   );
+  const processingKind = 'update';
+  for (let i = 0; i < data.length; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    const allowUpdate = await checkData(
+      { data: data[i], whereOne: whereOne[i] },
+      filter,
+      entityConfig,
+      processingKind,
+      generalConfig,
+      serversideConfig,
+      context,
+    );
 
-  //   if (!allowUpdate) return null;
-  // }
+    if (!allowUpdate) return null;
+  }
 
   const { mongooseConn } = context;
 

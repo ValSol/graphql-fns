@@ -3,6 +3,7 @@
 
 import type { ServersideConfig } from '../../../flowTypes';
 
+import sleep from '../../../utils/sleep';
 import executeNodeAuthorisation from './executeNodeAuthorisation';
 
 const viewer = 'Viewer';
@@ -79,7 +80,10 @@ describe('executeNodeAuthorisation', () => {
   });
 
   test('should returnv null for "Viewer" role', async () => {
-    const getUserAttributes = async () => ({ roles: [viewer] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [viewer] };
+    };
 
     const serversideConfig: ServersideConfig = {
       filters,
@@ -102,7 +106,10 @@ describe('executeNodeAuthorisation', () => {
   });
 
   test('should returnv [] for "admin" role', async () => {
-    const getUserAttributes = async () => ({ roles: [admin] });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [admin] };
+    };
 
     const serversideConfig: ServersideConfig = {
       filters,
@@ -125,7 +132,10 @@ describe('executeNodeAuthorisation', () => {
   });
 
   test('should returnv [] for "restaurantOwner" role', async () => {
-    const getUserAttributes = async () => ({ roles: [restaurantOwner], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       filters,
@@ -154,7 +164,10 @@ describe('executeNodeAuthorisation', () => {
   test('should returnv [] for "restaurantOwner" role', async () => {
     const entityName2 = 'Restaurant';
 
-    const getUserAttributes = async () => ({ roles: [restaurantOwner, admin], id });
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner, admin], id };
+    };
 
     const serversideConfig: ServersideConfig = {
       filters,

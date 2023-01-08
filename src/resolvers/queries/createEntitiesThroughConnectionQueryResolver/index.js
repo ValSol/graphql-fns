@@ -103,7 +103,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           shift2,
           first,
           resolverArg,
-          { mainEntity: filter },
+          parentFilters,
           entitiesQueryResolver,
         );
 
@@ -114,18 +114,18 @@ const createEntitiesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { mainEntity: filter },
+          parentFilters,
           entityQueryResolver,
         );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, { mainEntity: filter }, entitiesQueryResolver);
+          return getVeryFirst(first, resolverArg, parentFilters, entitiesQueryResolver);
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, { mainEntity: filter }, entitiesQueryResolver);
+      return getVeryFirst(first, resolverArg, parentFilters, entitiesQueryResolver);
     }
 
     if (before) {
@@ -146,7 +146,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           shift2,
           last,
           resolverArg,
-          { mainEntity: filter },
+          parentFilters,
           entitiesQueryResolver,
         );
 
@@ -157,7 +157,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           _id,
           resolverCreatorArg,
           resolverArg,
-          { mainEntity: filter },
+          parentFilters,
           entityQueryResolver,
         );
 
@@ -165,7 +165,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           getVeryLast(
             last,
             resolverArg,
-            { mainEntity: filter },
+            parentFilters,
             entitiesQueryResolver,
             entityCountQueryResolver,
           );
@@ -177,7 +177,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       return getVeryLast(
         last,
         resolverArg,
-        { mainEntity: filter },
+        parentFilters,
         entitiesQueryResolver,
         entityCountQueryResolver,
       );
