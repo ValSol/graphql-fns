@@ -431,13 +431,13 @@ describe('composeWhereInput', () => {
 
   test('should return result for flat data', () => {
     const where = {
-      _id_gt: '123456780',
+      name_gt: '123456780',
     };
 
     const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
-        _id: { $gt: '123456780' },
+        name: { $gt: '123456780' },
       },
       lookups: [],
     };

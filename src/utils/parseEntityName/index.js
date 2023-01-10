@@ -57,6 +57,14 @@ const parseEntityName = (
 
   const [result] = results;
 
+  const { root: rootEntityName, derivativeKey } = result;
+
+  if (!derivative[derivativeKey].allow[rootEntityName]) {
+    throw new TypeError(
+      `Not allow derivativeKey: ${derivativeKey} for "${rootEntityName}" entity name!`,
+    );
+  }
+
   store[entityConfigName] = result;
 
   return store[entityConfigName];

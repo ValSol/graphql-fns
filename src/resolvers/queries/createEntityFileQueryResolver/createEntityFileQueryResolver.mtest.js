@@ -45,7 +45,9 @@ describe('createEntityFileQueryResolver', () => {
     const imageConfig: EntityConfig = {
       name: 'TangibleImage',
       type: 'tangibleFile',
+
       textFields: [
+        { name: 'hash' },
         { name: 'fileId' },
         { name: 'desktop' },
         { name: 'tablet' },

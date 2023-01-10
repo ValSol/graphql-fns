@@ -10,10 +10,9 @@ import checkInventory from '../../utils/inventory/checkInventory';
 import composeDerivativeConfigName from '../../utils/composeDerivativeConfig/composeDerivativeConfigName';
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
-
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
-
 import resolverDecorator from '../utils/resolverDecorator';
+import checkFilters from '../utils/checkFilters';
 import composeEntityResolvers from '../types/composeEntityResolvers';
 import createCustomResolver from '../createCustomResolver';
 import createNodeQueryResolver from '../queries/createNodeQueryResolver';
@@ -27,7 +26,10 @@ import createDeletedEntitySubscriptionResolver from '../subscriptions/createDele
 const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
+  filterArgs?: Array<{ [key: string]: any }> = [],
 ): Object => {
+  checkFilters(generalConfig, serversideConfig, filterArgs);
+
   const { allEntityConfigs, inventory, derivative = {} } = generalConfig;
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
