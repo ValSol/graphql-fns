@@ -429,7 +429,12 @@ export type Enums = $ReadOnlyArray<{|
 
 type entityNamesList = true | $ReadOnlyArray<string>;
 
-type InverntoryOptions = {
+export type SimplifiedInventoryOptions = {
+  Query: { [queryName: string]: Array<string> },
+  Mutation: { [queryName: string]: Array<string> },
+};
+
+export type InventoryOptions = {
   // eslint-disable-next-line flowtype/space-after-type-colon
   Query?:
     | true
@@ -458,8 +463,8 @@ type InverntoryOptions = {
 
 export type Inventory = {
   name: string,
-  include?: true | InverntoryOptions,
-  exclude?: true | InverntoryOptions,
+  include?: true | InventoryOptions,
+  exclude?: true | InventoryOptions,
 };
 
 type NotFieldyEntityConfigFields = {
@@ -832,7 +837,7 @@ export type ActionAttributes = {
   actionGeneralName: (derivativeKey?: string) => string,
   actionType: 'Mutation' | 'Query',
   actionAllowed: (entityConfig: EntityConfig) => boolean,
-  actionIsChild?: boolean,
+  actionIsChild?: 'Array' | 'Scalar',
   actionName: (baseName: string, derivativeKey?: string) => string,
   inputCreators: Array<InputCreator>,
   argNames: Array<string>,

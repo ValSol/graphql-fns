@@ -60,7 +60,7 @@ const checkFilters = (
     return true;
   }
 
-  const allEntityNames = getAllEntityNames(generalConfig);
+  const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
 
   allEntityNames.forEach((entityName) => {
     if (!filters[entityName]) {

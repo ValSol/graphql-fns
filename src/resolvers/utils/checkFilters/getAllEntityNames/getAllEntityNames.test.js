@@ -1,8 +1,13 @@
 // @flow
 /* eslint-env jest */
-import type { DerivativeAttributes, EntityConfig, GeneralConfig } from '../../../flowTypes';
+import type {
+  DerivativeAttributes,
+  EntityConfig,
+  GeneralConfig,
+  ServersideConfig,
+} from '../../../../flowTypes';
 
-import getAllEntityNames from './getAllEntityNames';
+import getAllEntityNames from './index';
 
 describe('getAllEntityNames', () => {
   const personConfig: EntityConfig = {};
@@ -84,9 +89,11 @@ describe('getAllEntityNames', () => {
   };
 
   test('should check the simplest correct filter', () => {
-    const result = getAllEntityNames(generalConfig);
+    const serversideConfig: ServersideConfig = {};
 
-    const expectedResult = ['Person', 'Place', 'PersonForView'];
+    const result = getAllEntityNames(generalConfig, serversideConfig);
+
+    const expectedResult = ['Place', 'Person', 'PersonForView'];
     expect(result).toEqual(expectedResult);
   });
 });

@@ -36,7 +36,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionIsChild = true;
+const actionIsChild = 'Scalar';
 
 const actionReturnString =
   (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
