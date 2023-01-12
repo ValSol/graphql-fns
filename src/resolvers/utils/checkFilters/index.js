@@ -62,9 +62,13 @@ const checkFilters = (
 
   const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
 
-  allEntityNames.forEach((entityName) => {
+  Object.keys(allEntityNames).forEach((entityName) => {
     if (!filters[entityName]) {
-      throw new TypeError(`Entity name "${entityName}" not found in "filters"!`);
+      throw new TypeError(
+        `Entity name "${entityName}" not found in "filters" but used in: ${allEntityNames[
+          entityName
+        ].join('; ')}!`,
+      );
     }
   });
 
@@ -75,6 +79,9 @@ const checkFilters = (
   const handler = {
     get(target, key) {
       if (key === 'role') return target.role;
+
+      if (key === 'id') return '000000000000000000000000';
+
       return `${key}ForTest`;
     },
   };

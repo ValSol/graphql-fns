@@ -106,4 +106,14 @@ describe('checkFilters', () => {
     const expectedResult = true;
     expect(result).toBe(expectedResult);
   });
+
+  test('should check filters when inventory with exclude "Subscription"', () => {
+    const staticFilters = { Place: { title_gt: 'Ivan' } };
+    const serversideConfig: ServersideConfig = { staticFilters };
+
+    const result = checkFilters(generalConfig, serversideConfig, []);
+
+    const expectedResult = true;
+    expect(result).toBe(expectedResult);
+  });
 });

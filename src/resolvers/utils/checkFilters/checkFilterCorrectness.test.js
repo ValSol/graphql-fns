@@ -98,7 +98,9 @@ describe('checkFilterCorrectness', () => {
     const entityName = 'Place';
     const t = () => checkFilterCorrectness(entityName, filter, generalConfig);
 
-    expect(t).toThrow('Field "address" not found in "Place" entity!');
+    expect(t).toThrow(
+      'Field "address" not found in "Place" entity in filter: ""Place": "{"address_":{"abc":8}}"!',
+    );
   });
 
   test('should check the incorrect filter', () => {
@@ -106,6 +108,8 @@ describe('checkFilterCorrectness', () => {
     const entityName = 'Place';
     const t = () => checkFilterCorrectness(entityName, filter, generalConfig);
 
-    expect(t).toThrow('Field "abc" not found in "Person" entity!');
+    expect(t).toThrow(
+      'Field "abc" not found in "Person" entity in filter: ""Place": "{"visitors_":{"abc":5}}"!',
+    );
   });
 });

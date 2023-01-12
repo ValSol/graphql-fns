@@ -12,10 +12,12 @@ import { mutationAttributes, queryAttributes } from '../../../../types/actionAtt
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 import subtructInventoryOptions from './subtructInventoryOptions';
 
+const inventoryKeys = ['Query', 'Mutation', 'Subscription'];
+
 const addEntityNames = (
   inventory: Inventory,
   generalConfig: GeneralConfig,
-  result: Array<string>,
+  result: { [entityName: string]: Array<string> }, // { entityName: 'inventory name, action, rootEntityName' }
   baseInventory?: SimplifiedInventoryOptions,
 ) => {
   const { allEntityConfigs } = generalConfig;
@@ -23,19 +25,30 @@ const addEntityNames = (
   const { Query: customQueries = {}, Mutation: customMutations = {} } =
     mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver') || {};
 
-  const { include, exclude } = inventory || {
+  const { name, include, exclude } = inventory || {
     include: { Query: true, Mutation: true },
     exclude: undefined,
+    name: '',
   };
 
   const amendedInclude = typeof include === 'object' ? include : { Query: true, Mutation: true };
 
   const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig);
 
-  const unwindedExclude =
-    exclude && exclude !== true
-      ? unwindInverntoryOptions(exclude, generalConfig)
-      : { Query: {}, Mutation: {} };
+  const amendedExclude =
+    typeof exclude === 'object'
+      ? inventoryKeys.reduce((prev, key) => {
+          if (exclude[key]) {
+            prev[key] = exclude[key]; // eslint-disable-line no-param-reassign
+          } else {
+            prev[key] = {}; // eslint-disable-line no-param-reassign
+          }
+
+          return prev;
+        }, {})
+      : { Query: true, Mutation: true };
+
+  const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig);
 
   const includeMinusExclude = subtructInventoryOptions(unwindedInclude, unwindedExclude);
 
@@ -56,9 +69,11 @@ const addEntityNames = (
 
         const { mainEntity } = queryAttributes[actionName].actionInvolvedEntityNames(entityName);
 
-        if (!prev.includes(mainEntity)) {
-          prev.push(mainEntity);
+        if (!prev[mainEntity]) {
+          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
         }
+
+        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
       });
     } else {
       includeMinusExclude.Query[actionName].forEach((entityName) => {
@@ -73,9 +88,11 @@ const addEntityNames = (
           generalConfig,
         );
 
-        if (!prev.includes(mainEntity)) {
-          prev.push(mainEntity);
+        if (!prev[mainEntity]) {
+          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
         }
+
+        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
       });
     }
 
@@ -100,9 +117,12 @@ const addEntityNames = (
         }
 
         const { mainEntity } = mutationAttributes[actionName].actionInvolvedEntityNames(entityName);
-        if (!prev.includes(mainEntity)) {
-          prev.push(mainEntity);
+
+        if (!prev[mainEntity]) {
+          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
         }
+
+        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
       });
     } else {
       includeMinusExclude.Mutation[actionName].forEach((entityName) => {
@@ -116,9 +136,11 @@ const addEntityNames = (
           allEntityConfigs[entityName],
           generalConfig,
         );
-        if (!prev.includes(mainEntity)) {
-          prev.push(mainEntity);
+        if (!prev[mainEntity]) {
+          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
         }
+
+        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
       });
     }
 
@@ -133,12 +155,10 @@ const addEntityNames = (
 const getAllEntityNames = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-): Array<string> => {
+): { [entityName: string]: Array<string> } => {
   const { inventory } = generalConfig;
 
   const { inventoryByRoles } = serversideConfig;
-
-  const result = [];
 
   const amendedInventory = inventory || {
     name: '',
@@ -146,16 +166,25 @@ const getAllEntityNames = (
     exclude: undefined,
   };
 
-  const baseInventory = addEntityNames(amendedInventory, generalConfig, result);
+  const resultWithouInventoryByRoles = {};
+  const baseInventory = addEntityNames(
+    amendedInventory,
+    generalConfig,
+    resultWithouInventoryByRoles,
+  );
 
   if (inventoryByRoles) {
+    const result = {};
+
     Object.keys(inventoryByRoles).forEach((role) => {
       const roleInventory = inventoryByRoles[role];
 
       addEntityNames(roleInventory, generalConfig, result, baseInventory);
     });
+
+    return result;
   }
 
-  return result;
+  return resultWithouInventoryByRoles;
 };
 export default getAllEntityNames;
