@@ -6,7 +6,16 @@ import checkFilterCorrectness from './checkFilterCorrectness';
 import getAllEntityNames from './getAllEntityNames';
 
 const checkFilter = (arg, entityName, filters, generalConfig) => {
-  const filterArr = filters[entityName](arg);
+  let filterArr;
+
+  try {
+    filterArr = filters[entityName](arg);
+  } catch (err) {
+    console.log('*************');
+    console.log('entityName =', entityName);
+    console.log('filters[entityName] =', filters[entityName]);
+    throw new TypeError(err);
+  }
 
   if (!filterArr) return;
 
@@ -35,7 +44,15 @@ const checkFilters = (
     throw new TypeError(`Not found "getUserAttributes" to use with "filters"!`);
   }
 
+  const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
+
   if (staticFilters) {
+    Object.keys(staticFilters).forEach((entityName) => {
+      if (!allEntityNames[entityName]) {
+        throw new TypeError(`Found redundant entity "${entityName}" in "staticFilters"`);
+      }
+    });
+
     Object.keys(staticFilters).forEach((entityName) =>
       checkFilterCorrectness(entityName, staticFilters[entityName], generalConfig),
     );
@@ -60,8 +77,6 @@ const checkFilters = (
     return true;
   }
 
-  const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
-
   Object.keys(allEntityNames).forEach((entityName) => {
     if (!filters[entityName]) {
       throw new TypeError(
@@ -69,6 +84,12 @@ const checkFilters = (
           entityName
         ].join('; ')}!`,
       );
+    }
+  });
+
+  Object.keys(filters).forEach((entityName) => {
+    if (!allEntityNames[entityName]) {
+      throw new TypeError(`Found redundant entity "${entityName}" in "filters"`);
     }
   });
 

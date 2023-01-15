@@ -46,7 +46,11 @@ const addEntityNames = (
 
           return prev;
         }, {})
-      : { Query: true, Mutation: true };
+      : {
+          // "exclude" may be "true" or 'undefined"
+          Query: exclude || {},
+          Mutation: exclude || {},
+        };
 
   const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig);
 
@@ -166,12 +170,8 @@ const getAllEntityNames = (
     exclude: undefined,
   };
 
-  const resultWithouInventoryByRoles = {};
-  const baseInventory = addEntityNames(
-    amendedInventory,
-    generalConfig,
-    resultWithouInventoryByRoles,
-  );
+  const generalInventoryResult = {};
+  const baseInventory = addEntityNames(amendedInventory, generalConfig, generalInventoryResult);
 
   if (inventoryByRoles) {
     const result = {};
@@ -185,6 +185,6 @@ const getAllEntityNames = (
     return result;
   }
 
-  return resultWithouInventoryByRoles;
+  return generalInventoryResult;
 };
 export default getAllEntityNames;
