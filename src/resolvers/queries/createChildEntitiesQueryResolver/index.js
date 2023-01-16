@@ -14,7 +14,7 @@ type Args = {
   search?: string,
 };
 
-const createchildEntitiesQueryResolver = (
+const createChildEntitiesQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -45,4 +45,4 @@ const createchildEntitiesQueryResolver = (
   return resolver;
 };
 
-export default createchildEntitiesQueryResolver;
+export default createChildEntitiesQueryResolver;

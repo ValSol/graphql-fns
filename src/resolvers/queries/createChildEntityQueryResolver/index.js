@@ -8,7 +8,7 @@ import createEntityQueryResolver from '../createEntityQueryResolver';
 
 type Args = { whereOne: { id: string } };
 
-const createchildEntityQueryResolver = (
+const createChildEntityQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -39,4 +39,4 @@ const createchildEntityQueryResolver = (
   return resolver;
 };
 
-export default createchildEntityQueryResolver;
+export default createChildEntityQueryResolver;

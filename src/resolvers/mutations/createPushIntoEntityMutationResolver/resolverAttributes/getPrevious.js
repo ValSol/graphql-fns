@@ -2,7 +2,6 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
-import checkInventory from '../../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
@@ -10,10 +9,9 @@ import checkData from '../../checkData';
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, parentFilters } = resolverArg;
-  const { inventory, enums } = generalConfig;
-  const { name } = entityConfig;
+  const { enums } = generalConfig;
 
-  const { mainEntity: filter } = parentFilters;
+  const { mainEntity: filter, subscribeUpdatedEntity } = parentFilters;
 
   if (!filter) return null;
 
@@ -62,10 +60,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   }
 
   let previousEntity = {};
-  const subscriptionInventoryChain = ['Subscription', 'updatedEntity', name];
-  const allowSubscription = checkInventory(subscriptionInventoryChain, inventory);
-  if (whereOne === whereOne2 || allowSubscription) {
-    const projection = allowSubscription
+
+  if (whereOne === whereOne2 || subscribeUpdatedEntity) {
+    const projection = subscribeUpdatedEntity
       ? {} // if subsciption ON - return empty projection - to get all fields of entity
       : { _id: 1 };
 
