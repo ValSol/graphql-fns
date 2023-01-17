@@ -38,13 +38,13 @@ const createEntitiesByUniqueQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilters: { [derivativeConfigName: string]: Array<Object> },
+    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { mainEntity: filter } = parentFilters;
+    const { inputEntity: filter } = involvedFilters;
 
     if (!filter) return null;
 
-    return entitiesQueryResolver(parent, args, context, info, parentFilters);
+    return entitiesQueryResolver(parent, args, context, info, involvedFilters);
   };
 
   return resolver;

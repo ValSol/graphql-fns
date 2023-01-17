@@ -157,7 +157,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { where: {} },
       { mongooseConn, pubsub },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const entityFilesThroughConnection = createEntityFilesThroughConnectionQueryResolver(
@@ -173,7 +173,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { first: 3 },
       { mongooseConn },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const {
@@ -199,7 +199,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor },
       { mongooseConn },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const {
@@ -232,7 +232,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor2 },
       { mongooseConn },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const {
@@ -265,7 +265,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor3 },
       { mongooseConn },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const {
@@ -298,7 +298,7 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor4 },
       { mongooseConn },
       { projection: { desktop: 1, tablet: 1, mobile: 1 } },
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     const {

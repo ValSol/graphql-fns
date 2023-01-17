@@ -4,10 +4,10 @@ import type { Report } from '../../../flowTypes';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { context, parentFilters } = resolverArg;
+  const { context, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
-  const { subscribeDelatedEntity: filter } = parentFilters;
+  const { subscribeDelatedEntity: filter } = involvedFilters;
 
   const result = filter
     ? ({ previous: [previous] }) => {

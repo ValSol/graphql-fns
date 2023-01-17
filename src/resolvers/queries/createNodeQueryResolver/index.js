@@ -61,7 +61,7 @@ const createNodeQueryResolver = (
       if (!entityFileQueryResolver) return null;
 
       const entityFile = await entityFileQueryResolver(null, { whereOne: { id } }, context, info, {
-        mainEntity: filter,
+        inputEntity: filter,
       });
 
       if (!entityFile) return null;
@@ -82,7 +82,7 @@ const createNodeQueryResolver = (
     if (!entityQueryResolver) return null;
 
     const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, {
-      mainEntity: filter,
+      inputEntity: filter,
     });
 
     if (!entity) return null;

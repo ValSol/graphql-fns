@@ -1,6 +1,7 @@
 // @flow
 
 import type { BitwiseArray } from 'bitwise-array/lib/flowTypes';
+import { boolean } from 'yup';
 
 export type MongodbGeospatialPoint = {|
   +type: 'Point',
@@ -680,6 +681,14 @@ export type FileAttributes = {
 
 type UserAttributes = { ...Object, roles: Array<string> };
 
+export type SimplifiedEntityFilters = {
+  [tangibleEntityName: string]: (UserAttributes) => null | Array<Object>,
+};
+
+export type EntityFilters = {
+  [tangibleEntityName: string]: [/* isOutput */ boolean, (UserAttributes) => null | Array<Object>],
+};
+
 export type ServersideConfig = {
   +transactions?: boolean,
 
@@ -707,7 +716,7 @@ export type ServersideConfig = {
 
   +containedRoles?: { [roleName: string]: Array<string> },
 
-  +filters?: { [tangibleEntityName: string]: (UserAttributes) => null | Array<Object> }, // "filters" can used only with help of "getUserAttributes"
+  +filters?: EntityFilters, // "filters" can used only with help of "getUserAttributes"
 
   +staticFilters?: { [tangibleEntityName: string]: { [key: string]: any } },
 

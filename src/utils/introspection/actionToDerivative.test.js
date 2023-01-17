@@ -73,7 +73,7 @@ describe('actionToDerivative', () => {
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
-    involvedEntityNames: ({ name }) => ({ mainEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
     type: ({ name }) => `${name}!`,
     config: (entityConfig) => entityConfig,
   };

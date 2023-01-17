@@ -8,10 +8,10 @@ import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
-  const { args, context, info, parentFilters } = resolverArg;
+  const { args, context, info, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

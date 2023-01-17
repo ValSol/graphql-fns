@@ -316,7 +316,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { data },
       { mongooseConn, pubsub },
       null,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -380,7 +380,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { where: { id_in: [restaurantId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(restaurantsDeletedCount).toBe(1);
@@ -462,7 +462,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { data },
       { mongooseConn, pubsub },
       null,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -526,7 +526,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { where: { id_in: [menuCloneId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(menusCloneDeletedCount).toBe(1);
@@ -579,7 +579,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { where: { id_in: [restaurantId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
   });
 
@@ -623,7 +623,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { data },
       { mongooseConn, pubsub },
       null,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -687,7 +687,7 @@ describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver',
       { where: { id_in: [restaurantId.toString()] }, options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       info,
-      { mainEntity: [] },
+      { inputEntity: [] },
     );
 
     expect(restaurantsDeletedCount).toBe(1);

@@ -49,7 +49,8 @@ describe('composeDerivativeDeleteEntityMutation', () => {
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`],
       involvedEntityNames: ({ name }) => ({
-        mainEntity: `${name}ForCatalog`,
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForCatalog`,
         subscribeDeletedEntity: 'Example',
       }),
       type: ({ name }) => `${name}ForCatalog!`,

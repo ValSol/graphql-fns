@@ -13,7 +13,7 @@ describe('composeCustomEntityQueryArgs', () => {
       specificName: ({ name }) => `get${name}`,
       argNames: () => [],
       argTypes: () => [],
-      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: name }),
       type: ({ name }) => `${name}!`,
       config: (entityConfig) => entityConfig,
     };
@@ -53,7 +53,7 @@ describe('composeCustomEntityQueryArgs', () => {
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path', 'index'],
       argTypes: () => ['String!', 'Int'],
-      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: name }),
       type: ({ name }) => `${name}!`,
       config: (entityConfig) => entityConfig,
     };

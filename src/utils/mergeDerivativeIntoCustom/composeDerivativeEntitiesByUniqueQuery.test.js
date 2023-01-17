@@ -99,7 +99,10 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
       ],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForCatalog`,
+      }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -132,7 +135,10 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
       ],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForCatalog`,
+      }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -165,7 +171,10 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
       ],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForCatalog`,
+      }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
@@ -199,7 +208,10 @@ describe('composeDerivativeEntitiesQuery', () => {
         `${name}ForCatalogSortInput`,
         `${name}ForCatalogNearInput`,
       ],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForCatalog`,
+      }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),

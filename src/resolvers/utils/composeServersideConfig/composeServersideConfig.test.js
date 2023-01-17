@@ -1,15 +1,10 @@
 // @flow
 /* eslint-env jest */
-import type {
-  DerivativeAttributes,
-  EntityConfig,
-  GeneralConfig,
-  ServersideConfig,
-} from '../../../flowTypes';
+import type { DerivativeAttributes, EntityConfig, GeneralConfig } from '../../../flowTypes';
 
-import checkFilters from './index';
+import composeServersideConfig from './index';
 
-describe('checkFilters', () => {
+describe('composeFilters', () => {
   const personConfig: EntityConfig = {};
 
   const placeConfig: EntityConfig = {
@@ -91,29 +86,29 @@ describe('checkFilters', () => {
   test('should check the simplest correct filter', () => {
     const serversideConfig = {};
 
-    const result = checkFilters(generalConfig, serversideConfig, []);
+    const result = composeServersideConfig(generalConfig, serversideConfig);
 
-    const expectedResult = true;
-    expect(result).toBe(expectedResult);
+    const expectedResult = serversideConfig;
+    expect(result).toEqual(expectedResult);
   });
 
   test('should check the simplest correct filter', () => {
     const staticFilters = { Place: { title_gt: 'Ivan' } };
-    const serversideConfig: ServersideConfig = { staticFilters };
+    const serversideConfig = { staticFilters };
 
-    const result = checkFilters(generalConfig, serversideConfig, []);
+    const result = composeServersideConfig(generalConfig, serversideConfig);
 
-    const expectedResult = true;
-    expect(result).toBe(expectedResult);
+    const expectedResult = serversideConfig;
+    expect(result).toEqual(expectedResult);
   });
 
   test('should check filters when inventory with exclude "Subscription"', () => {
     const staticFilters = { Place: { title_gt: 'Ivan' } };
-    const serversideConfig: ServersideConfig = { staticFilters };
+    const serversideConfig = { staticFilters };
 
-    const result = checkFilters(generalConfig, serversideConfig, []);
+    const result = composeServersideConfig(generalConfig, serversideConfig);
 
-    const expectedResult = true;
-    expect(result).toBe(expectedResult);
+    const expectedResult = serversideConfig;
+    expect(result).toEqual(expectedResult);
   });
 });

@@ -5,10 +5,10 @@ import createMongooseModel from '../../../../mongooseModels/createMongooseModel'
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, serversideConfig } = resolverCreatorArg;
-  const { args, context, parentFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

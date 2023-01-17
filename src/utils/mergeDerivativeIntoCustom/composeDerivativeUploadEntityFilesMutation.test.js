@@ -47,7 +47,7 @@ describe('composeDerivativeUploadEntityFilesMutation', () => {
           : '',
       argNames: () => ['files', 'hashes'],
       argTypes: () => ['[Upload!]!', '[String!]!'],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),

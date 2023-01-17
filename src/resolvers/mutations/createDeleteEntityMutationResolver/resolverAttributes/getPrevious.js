@@ -6,10 +6,10 @@ import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
-  const { args, context, parentFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

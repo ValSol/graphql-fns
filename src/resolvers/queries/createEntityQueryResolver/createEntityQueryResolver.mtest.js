@@ -84,7 +84,7 @@ describe('createEntityQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      mainEntity: [],
+      inputEntity: [],
     });
     const { id } = createdExample;
 
@@ -93,7 +93,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereOne = { id };
     const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(example.textField1).toBe(data.textField1);
@@ -106,7 +106,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereOne2 = { textField1: data.textField1 };
     const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(example2.textField1).toBe(data.textField1);
@@ -182,7 +182,7 @@ describe('createEntityQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { mainEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputEntity: [] });
     }
 
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
@@ -196,7 +196,7 @@ describe('createEntityQueryResolver', () => {
       ],
     };
     const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(parent.name).toBe('name-2');
@@ -208,7 +208,7 @@ describe('createEntityQueryResolver', () => {
       ],
     };
     const parent2 = await Parent(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info2, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(parent2).toBe(null);

@@ -556,7 +556,7 @@ describe('composeGqlResolvers', () => {
       specificName: ({ name }) => `load${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
-      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };
@@ -598,7 +598,7 @@ describe('composeGqlResolvers', () => {
       specificName: ({ name }) => `get${name}`,
       argNames: () => ['path'],
       argTypes: () => ['String!'],
-      involvedEntityNames: ({ name }) => ({ mainEntity: name }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: name }),
       type: ({ name }) => name,
       config: (entityConfig) => entityConfig,
     };

@@ -8,7 +8,7 @@ import composeFirstEdges from './composeFirstEdges';
 const getVeryFirst = async (
   first: number,
   resolverArg: ResolverArg,
-  parentFilters: Object,
+  involvedFilters: Object,
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;
@@ -22,7 +22,7 @@ const getVeryFirst = async (
     { ...args, pagination },
     context,
     { projection },
-    parentFilters,
+    involvedFilters,
   );
 
   const shift = -1;

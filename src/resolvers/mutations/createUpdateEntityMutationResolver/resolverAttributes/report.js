@@ -6,12 +6,12 @@ import addIdsToEntity from '../../../utils/addIdsToEntity';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { args, context, parentFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
   const { data } = args;
 
-  const { subscribeUpdatedEntity: filter } = parentFilters;
+  const { subscribeUpdatedEntity: filter } = involvedFilters;
 
   const result = filter
     ? ({ previous: [previous], current: [current] }) => {

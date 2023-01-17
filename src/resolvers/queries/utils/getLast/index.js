@@ -10,7 +10,7 @@ const getLast = async (
   shift: number,
   last: number,
   resolverArg: ResolverArg,
-  parentFilters: Object,
+  involvedFilters: Object,
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;
@@ -27,7 +27,7 @@ const getLast = async (
     { ...args, pagination },
     context,
     { projection },
-    parentFilters,
+    involvedFilters,
   );
 
   const { length } = entities;

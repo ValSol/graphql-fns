@@ -40,9 +40,9 @@ const createEntitiesQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilters: { [derivativeConfigName: string]: Array<Object> },
+    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { mainEntity: filter } = parentFilters;
+    const { inputEntity: filter } = involvedFilters;
 
     if (!filter) return null;
 

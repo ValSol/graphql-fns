@@ -50,7 +50,7 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogDistinctValuesOptionsInput`,
       ],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: () => '[String!]!',
       config: () => null,
     };

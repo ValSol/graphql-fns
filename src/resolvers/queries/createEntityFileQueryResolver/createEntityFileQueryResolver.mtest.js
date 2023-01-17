@@ -91,7 +91,7 @@ describe('createEntityFileQueryResolver', () => {
     if (!ImageFile) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const imageFile = await ImageFile(null, { whereOne }, { mongooseConn, pubsub }, null, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(imageFile.id.toString()).toBe(id.toString());
@@ -101,7 +101,7 @@ describe('createEntityFileQueryResolver', () => {
     expect(imageFile.mobile).toBe(`/images/${hash}_mobile`);
 
     const imageFile2 = await ImageFile(null, { whereOne: { id } }, { mongooseConn, pubsub }, null, {
-      mainEntity: [],
+      inputEntity: [],
     });
 
     expect(imageFile2.id.toString()).toBe(id.toString());

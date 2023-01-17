@@ -52,7 +52,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       args: Args,
       context: Context,
       info: Object,
-      parentFilters: { [derivativeConfigName: string]: Array<Object> },
+      involvedFilters: { [derivativeConfigName: string]: Array<Object> },
     ): Object => {
       const resolverCreatorArg = {
         entityConfig,
@@ -61,7 +61,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         inAnyCase,
       };
 
-      const resolverArg = { parent, args, context, info, parentFilters };
+      const resolverArg = { parent, args, context, info, involvedFilters };
       const { mongooseConn } = context;
 
       if (loophole) {

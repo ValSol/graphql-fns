@@ -4,6 +4,7 @@ import type {
   GeneralConfig,
   Inventory,
   ServersideConfig,
+  SimplifiedEntityFilters,
   SimplifiedInventoryOptions,
 } from '../../../../flowTypes';
 
@@ -14,10 +15,17 @@ import subtructInventoryOptions from './subtructInventoryOptions';
 
 const inventoryKeys = ['Query', 'Mutation', 'Subscription'];
 
+const unusedInvolvedEntityKeys = [
+  'subscribeCreatedEntity',
+  'subscribeDeletedEntity',
+  'subscribeUpdatedEntity',
+];
+
 const addEntityNames = (
   inventory: Inventory,
   generalConfig: GeneralConfig,
-  result: { [entityName: string]: Array<string> }, // { entityName: 'inventory name, action, rootEntityName' }
+  // { entityName: { descriptions: 'inventory name, action, rootEntityName, involvedEntityKey', isOutput: boolean } }
+  result: { [entityName: string]: { descriptions: Array<string>, isOutput: boolean } },
   baseInventory?: SimplifiedInventoryOptions,
 ) => {
   const { allEntityConfigs } = generalConfig;
@@ -71,13 +79,28 @@ const addEntityNames = (
           );
         }
 
-        const { mainEntity } = queryAttributes[actionName].actionInvolvedEntityNames(entityName);
+        const involvedEntityNames =
+          queryAttributes[actionName].actionInvolvedEntityNames(entityName);
 
-        if (!prev[mainEntity]) {
-          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
-        }
+        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
+          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
+            return;
+          }
 
-        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
+          const involvedEntityName = involvedEntityNames[involvedEntityKey];
+
+          if (!prev[involvedEntityName]) {
+            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+          }
+
+          prev[involvedEntityName].descriptions.push(
+            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
+          );
+
+          // eslint-disable-next-line no-param-reassign
+          prev[involvedEntityName].isOutput =
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+        });
       });
     } else {
       includeMinusExclude.Query[actionName].forEach((entityName) => {
@@ -87,16 +110,30 @@ const addEntityNames = (
           );
         }
 
-        const { mainEntity } = customQueries[actionName].involvedEntityNames(
+        const involvedEntityNames = customQueries[actionName].involvedEntityNames(
           allEntityConfigs[entityName],
           generalConfig,
         );
 
-        if (!prev[mainEntity]) {
-          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
-        }
+        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
+          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
+            return;
+          }
 
-        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
+          const involvedEntityName = involvedEntityNames[involvedEntityKey];
+
+          if (!prev[involvedEntityName]) {
+            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+          }
+
+          prev[involvedEntityName].descriptions.push(
+            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
+          );
+
+          // eslint-disable-next-line no-param-reassign
+          prev[involvedEntityName].isOutput =
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+        });
       });
     }
 
@@ -120,13 +157,28 @@ const addEntityNames = (
           );
         }
 
-        const { mainEntity } = mutationAttributes[actionName].actionInvolvedEntityNames(entityName);
+        const involvedEntityNames =
+          mutationAttributes[actionName].actionInvolvedEntityNames(entityName);
 
-        if (!prev[mainEntity]) {
-          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
-        }
+        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
+          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
+            return;
+          }
 
-        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
+          const involvedEntityName = involvedEntityNames[involvedEntityKey];
+
+          if (!prev[involvedEntityName]) {
+            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+          }
+
+          prev[involvedEntityName].descriptions.push(
+            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
+          );
+
+          // eslint-disable-next-line no-param-reassign
+          prev[involvedEntityName].isOutput =
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+        });
       });
     } else {
       includeMinusExclude.Mutation[actionName].forEach((entityName) => {
@@ -136,15 +188,30 @@ const addEntityNames = (
           );
         }
 
-        const { mainEntity } = customMutations[actionName].involvedEntityNames(
+        const involvedEntityNames = customMutations[actionName].involvedEntityNames(
           allEntityConfigs[entityName],
           generalConfig,
         );
-        if (!prev[mainEntity]) {
-          prev[mainEntity] = []; // eslint-disable-line no-param-reassign
-        }
 
-        prev[mainEntity].push(`inventory "${name}", option item: "${actionName}": "${entityName}"`);
+        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
+          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
+            return;
+          }
+
+          const involvedEntityName = involvedEntityNames[involvedEntityKey];
+
+          if (!prev[involvedEntityName]) {
+            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+          }
+
+          prev[involvedEntityName].descriptions.push(
+            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
+          );
+
+          // eslint-disable-next-line no-param-reassign
+          prev[involvedEntityName].isOutput =
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+        });
       });
     }
 
@@ -158,8 +225,8 @@ const addEntityNames = (
 
 const getAllEntityNames = (
   generalConfig: GeneralConfig,
-  serversideConfig: ServersideConfig,
-): { [entityName: string]: Array<string> } => {
+  serversideConfig: { ...ServersideConfig, filters?: SimplifiedEntityFilters },
+): { [entityName: string]: { descriptions: Array<string>, isOutput: boolean } } => {
   const { inventory } = generalConfig;
 
   const { inventoryByRoles } = serversideConfig;

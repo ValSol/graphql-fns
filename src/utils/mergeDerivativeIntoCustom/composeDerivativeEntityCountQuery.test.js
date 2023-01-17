@@ -93,7 +93,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -122,7 +122,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -151,7 +151,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };
@@ -180,7 +180,7 @@ describe('composeDerivativeEntityCountQuery', () => {
           : '',
       argNames: () => ['where', 'near'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogNearInput`],
-      involvedEntityNames: ({ name }) => ({ mainEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: () => null,
     };

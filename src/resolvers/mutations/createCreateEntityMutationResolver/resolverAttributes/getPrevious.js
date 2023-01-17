@@ -6,9 +6,9 @@ import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
-  const { args, context, parentFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

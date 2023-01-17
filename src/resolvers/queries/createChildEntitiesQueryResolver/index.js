@@ -39,8 +39,8 @@ const createChildEntitiesQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    parentFilters: { [derivativeConfigName: string]: Array<Object> },
-  ): Object => entitiesQueryResolver(parent, args, context, info, parentFilters);
+    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+  ): Object => entitiesQueryResolver(parent, args, context, info, involvedFilters);
 
   return resolver;
 };

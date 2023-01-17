@@ -5,9 +5,9 @@ import type { GetPrevious } from '../../../flowTypes';
 import getCommonData from './getCommonData';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { parentFilters } = resolverArg;
+  const { involvedFilters } = resolverArg;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

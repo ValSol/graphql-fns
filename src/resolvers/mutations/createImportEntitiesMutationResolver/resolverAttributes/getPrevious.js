@@ -2,10 +2,10 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { parentFilters } = resolverArg;
+  const { involvedFilters } = resolverArg;
   // const { inventory } = generalConfig;
 
-  const { mainEntity: filter } = parentFilters;
+  const { inputEntity: filter } = involvedFilters;
 
   return filter && [];
 };

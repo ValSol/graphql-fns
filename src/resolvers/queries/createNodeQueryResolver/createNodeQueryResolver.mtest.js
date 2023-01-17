@@ -39,7 +39,7 @@ describe('createNodeQueryResolver', () => {
       return { roles: ['Admin'], textField1: 'textField1' };
     };
 
-    const filters = { Example: ({ textField1 }) => [{ textField1 }] };
+    const filters = { Example: [true, ({ textField1 }) => [{ textField1 }]] };
 
     const serversideConfig = { getUserAttributes, filters };
 
@@ -96,7 +96,7 @@ describe('createNodeQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      mainEntity: [],
+      inputEntity: [],
     });
     const { id } = createdExample;
 
@@ -130,7 +130,7 @@ describe('createNodeQueryResolver', () => {
       { mongooseConn, pubsub },
       null,
       {
-        mainEntity: [],
+        inputEntity: [],
       },
     );
     const { id: id2 } = createdExample2;

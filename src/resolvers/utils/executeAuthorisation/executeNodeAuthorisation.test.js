@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 
-import type { ServersideConfig } from '../../../flowTypes';
+import type { EntityFilters, ServersideConfig } from '../../../flowTypes';
 
 import sleep from '../../../utils/sleep';
 import executeNodeAuthorisation from './executeNodeAuthorisation';
@@ -12,41 +12,47 @@ const restaurantOwner = 'RestaurantOwner';
 const admin = 'Admin';
 
 describe('executeNodeAuthorisation', () => {
-  const filters = {
-    RestaurantForCabinet: ({ id, role }: { id: string, role: string }): null | Array<Object> => {
-      switch (role) {
-        case viewer:
-        case guest:
-          return null;
-        case admin:
-          return [];
-        case restaurantOwner:
-          return [{ access_: { restaurantEditors: id } }];
+  const filters: EntityFilters = {
+    RestaurantForCabinet: [
+      true,
+      ({ id, role }: { id: string, role: string }): null | Array<Object> => {
+        switch (role) {
+          case viewer:
+          case guest:
+            return null;
+          case admin:
+            return [];
+          case restaurantOwner:
+            return [{ access_: { restaurantEditors: id } }];
 
-        default:
-          throw new TypeError(`Role "${role}" not in use!`);
-      }
-    },
+          default:
+            throw new TypeError(`Role "${role}" not in use!`);
+        }
+      },
+    ],
 
-    Restaurant: ({ id, role }: { role: string, id: string }): null | Array<Object> => {
-      switch (role) {
-        case viewer:
-        case guest:
-          return null;
-        case admin:
-          return [{ show_exists: true }];
-        case restaurantOwner:
-          return [
-            { access_: { restaurantEditors: id } },
-            { access_: { restaurantPublishers: id } },
-          ];
+    Restaurant: [
+      true,
+      ({ id, role }: { role: string, id: string }): null | Array<Object> => {
+        switch (role) {
+          case viewer:
+          case guest:
+            return null;
+          case admin:
+            return [{ show_exists: true }];
+          case restaurantOwner:
+            return [
+              { access_: { restaurantEditors: id } },
+              { access_: { restaurantPublishers: id } },
+            ];
 
-        default:
-          throw new TypeError(`Role "${role}" not in use!`);
-      }
-    },
+          default:
+            throw new TypeError(`Role "${role}" not in use!`);
+        }
+      },
+    ],
 
-    RestaurantForSetting: (): null | Array<Object> => [],
+    RestaurantForSetting: [true, () => []],
   };
 
   const staticFilters = {

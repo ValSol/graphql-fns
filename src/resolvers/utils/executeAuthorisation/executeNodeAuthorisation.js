@@ -32,7 +32,8 @@ const executeNodeAuthorisation = async (
   for (let j = 0; j < roles.length; j += 1) {
     const role = roles[j];
 
-    const filter = filters[entityName]({ ...userAttributes, role });
+    // only if entity also used as "output" entity use corresponding filter
+    const filter = filters[entityName][0] && filters[entityName][1]({ ...userAttributes, role });
 
     if (filter) {
       if (!filter.length) {

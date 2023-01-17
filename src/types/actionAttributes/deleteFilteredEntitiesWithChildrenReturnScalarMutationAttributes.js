@@ -38,7 +38,7 @@ const actionInvolvedEntityNames = (
   name: string,
   derivativeKey?: string = '',
 ): { [key: string]: string } => ({
-  mainEntity: `${name}${derivativeKey}`,
+  inputEntity: `${name}${derivativeKey}`,
 });
 
 const actionReturnConfig = (

@@ -45,7 +45,7 @@ const getMissingData = async ({
     { whereOne },
     context,
     { projection },
-    { mainEntity: [] },
+    { inputEntity: [] },
   );
 
   if (!entity) return null;

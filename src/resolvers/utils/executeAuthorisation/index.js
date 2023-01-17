@@ -109,7 +109,7 @@ const executeAuthorisation = async (
     for (let j = 0; j < roles.length; j += 1) {
       const role = roles[j];
 
-      const filter = filters[entityName]({ ...userAttributes, role });
+      const filter = filters[entityName][1]({ ...userAttributes, role });
 
       if (filter) {
         if (!filter.length) {
