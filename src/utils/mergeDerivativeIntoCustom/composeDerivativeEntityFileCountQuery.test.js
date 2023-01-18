@@ -45,7 +45,7 @@ describe('composeDerivativeEntityFileCountQuery', () => {
           : '',
       argNames: () => ['where'],
       argTypes: () => ['FileWhereInput'],
-      involvedEntityNames: ({ name }) => ({ inputEntity: `${name}ForCatalog` }),
+      involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       config: (entityConfig2, generalConfig2) =>
         composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),

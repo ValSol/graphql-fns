@@ -313,7 +313,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -377,7 +377,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { where: { id_in: [restaurantId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(restaurantDeleted.title).toBe(data.title);
@@ -459,7 +459,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -523,7 +523,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { where: { id_in: [menuCloneId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(menuCloneDeleted.title).toBe(data.menu.create.clone.create.title);
@@ -576,7 +576,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { where: { id_in: [restaurantId.toString()] } },
       { mongooseConn, pubsub },
       info,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
   });
 
@@ -620,7 +620,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -684,7 +684,7 @@ describe('createDeleteFilteredEntitiesWithChildrenMutationResolver', () => {
       { where: { id_in: [restaurantId.toString()] }, options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       info,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(restaurantDeleted.title).toBe(restaurantDeleted.title);

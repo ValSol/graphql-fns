@@ -101,14 +101,14 @@ describe('createEntityQueryResolver', () => {
       { where: {} },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     expect(imageFileCount).toBe(files.length);
 
     const where = { hash_in: [files[0].hash, files[2].hash] };
     const imageFilesCount2 = await ImageFileCount(null, { where }, { mongooseConn, pubsub }, null, {
-      inputEntity: [],
+      inputOutputEntity: [],
     });
 
     expect(imageFilesCount2).toBe(2);

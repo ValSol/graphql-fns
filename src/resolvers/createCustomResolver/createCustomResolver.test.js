@@ -26,7 +26,7 @@ describe('createCustomResolver', () => {
     argTypes() {
       return [];
     },
-    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
     type(entityConfig) {
       const { name } = entityConfig;
       return `[${name}!]!`;

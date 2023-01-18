@@ -21,10 +21,7 @@ const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 const actionInvolvedEntityNames = (
   name: string,
   derivativeKey?: string = '',
-): { [key: string]: string } => ({
-  inputEntity: `${name}${derivativeKey}`,
-  outputEntity: `${name}${derivativeKey}`,
-});
+): { [key: string]: string } => ({ inputOutputEntity: `${name}${derivativeKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,

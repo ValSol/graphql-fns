@@ -138,24 +138,24 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: [] };
+    const expectedResult = { inputOutputEntity: [] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: [{ show: true }] };
+    const expectedResult2 = { inputOutputEntity: [{ show: true }] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -174,12 +174,12 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: [] };
+    const expectedResult = { inputOutputEntity: [] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -191,12 +191,12 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: [{ show: true }] };
+    const expectedResult2 = { inputOutputEntity: [{ show: true }] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -215,12 +215,12 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: [] };
+    const expectedResult = { inputOutputEntity: [] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -232,12 +232,12 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: [{ show: true }] };
+    const expectedResult2 = { inputOutputEntity: [{ show: true }] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -256,12 +256,12 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: [] };
+    const expectedResult = { inputOutputEntity: [] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -273,12 +273,12 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: [{ show: true }] };
+    const expectedResult2 = { inputOutputEntity: [{ show: true }] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -297,12 +297,12 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: null };
+    const expectedResult = { inputOutputEntity: null };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -314,12 +314,12 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForView' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: null };
+    const expectedResult2 = { inputOutputEntity: null };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -339,13 +339,13 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCabinet' },
       context,
       generalConfig,
       serversideConfig,
     );
     const expectedResult = {
-      inputEntity: [{ access_: { restaurantEditors: '1234567890' } }],
+      inputOutputEntity: [{ access_: { restaurantEditors: '1234567890' } }],
     };
     expect(result).toEqual(expectedResult);
 
@@ -359,13 +359,13 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCabinet' },
       context,
       generalConfig,
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputEntity: [
+      inputOutputEntity: [
         { AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] },
       ],
     };
@@ -388,12 +388,12 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCabinet' },
       context,
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputEntity: [] };
+    const expectedResult = { inputOutputEntity: [] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -406,12 +406,12 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCabinet' },
       context,
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputEntity: [{ deleted: false }] };
+    const expectedResult2 = { inputOutputEntity: [{ deleted: false }] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -431,13 +431,13 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'Restaurant' },
+      { inputOutputEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig,
     );
     const expectedResult = {
-      inputEntity: [
+      inputOutputEntity: [
         { access_: { restaurantEditors: id } },
         { access_: { restaurantPublishers: id } },
         { show_exists: true },
@@ -455,13 +455,13 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'Restaurant' },
+      { inputOutputEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputEntity: [
+      inputOutputEntity: [
         {
           AND: [
             { test: true },
@@ -495,13 +495,13 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig,
     );
     const expectedResult = {
-      inputEntity: [],
+      inputOutputEntity: [],
       subscribeUpdatedEntity: null,
     };
     expect(result).toEqual(expectedResult);
@@ -516,13 +516,13 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputEntity: [{ level_gt: 0 }],
+      inputOutputEntity: [{ level_gt: 0 }],
       subscribeUpdatedEntity: null,
     };
     expect(result2).toEqual(expectedResult2);
@@ -535,13 +535,13 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig,
     );
     const expectedResult = {
-      inputEntity: [],
+      inputOutputEntity: [],
       subscribeUpdatedEntity: [],
     };
     expect(result).toEqual(expectedResult);
@@ -550,13 +550,13 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig,
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputEntity: [{ level_gt: 0 }],
+      inputOutputEntity: [{ level_gt: 0 }],
       subscribeUpdatedEntity: [{ test: true }],
     };
     expect(result2).toEqual(expectedResult2);
@@ -573,13 +573,13 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig2,
       serversideConfig,
     );
     const expectedResult = {
-      inputEntity: [],
+      inputOutputEntity: [],
       subscribeUpdatedEntity: null,
     };
     expect(result).toEqual(expectedResult);
@@ -588,13 +588,13 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
       context,
       generalConfig2,
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputEntity: [{ level_gt: 0 }],
+      inputOutputEntity: [{ level_gt: 0 }],
       subscribeUpdatedEntity: null,
     };
     expect(result2).toEqual(expectedResult2);

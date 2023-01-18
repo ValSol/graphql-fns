@@ -73,7 +73,7 @@ describe('parseActionName', () => {
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
-    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
     type: ({ name }) => `${name}!`,
     config: (entityConfig) => entityConfig,
   };
@@ -83,7 +83,7 @@ describe('parseActionName', () => {
     specificName: ({ name }) => `get${name}`,
     argNames: () => [],
     argTypes: () => [],
-    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
     type: ({ name }) => `${name}!`,
     config: (entityConfig, generalConfig) =>
       composeDerivativeConfigByName('ForCatalog', entityConfig, generalConfig),

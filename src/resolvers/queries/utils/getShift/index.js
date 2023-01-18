@@ -25,7 +25,7 @@ const getShift = async (
 
   const projection = composeProjectionFromArgs(args);
 
-  const { inputEntity: filter } = involvedFilters;
+  const { inputOutputEntity: filter } = involvedFilters;
 
   // eslint-disable-next-line no-await-in-loop
   const thing = await entityQueryResolver(

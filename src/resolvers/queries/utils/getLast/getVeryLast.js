@@ -14,12 +14,14 @@ const getVeryLast = async (
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;
 
+  const { inputOutputEntity } = involvedFilters;
+
   const count = await entityCountQueryResolver(
     parent,
     args,
     context,
     { projection: { _id: 1 } },
-    involvedFilters,
+    { inputOutputEntity },
   );
 
   const projection = getProjectionFromInfo(info, ['edges', 'node']);

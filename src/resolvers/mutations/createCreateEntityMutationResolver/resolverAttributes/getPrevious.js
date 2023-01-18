@@ -8,7 +8,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
 
-  const { inputEntity: filter } = involvedFilters;
+  const { inputOutputEntity: filter } = involvedFilters;
 
   if (!filter) return null;
 

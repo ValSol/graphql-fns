@@ -5,7 +5,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { involvedFilters } = resolverArg;
   // const { inventory } = generalConfig;
 
-  const { inputEntity: filter } = involvedFilters;
+  const { inputOutputEntity: filter } = involvedFilters;
 
   return filter && [];
 };

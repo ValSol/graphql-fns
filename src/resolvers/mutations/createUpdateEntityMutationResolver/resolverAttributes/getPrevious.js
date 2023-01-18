@@ -11,7 +11,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { inputEntity: filter, subscribeUpdatedEntity } = involvedFilters;
+  const { inputOutputEntity: filter, subscribeUpdatedEntity } = involvedFilters;
 
   if (!filter) return null;
 

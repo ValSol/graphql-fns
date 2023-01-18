@@ -18,7 +18,7 @@ describe('composeMutation', () => {
     argTypes() {
       return ['String!'];
     },
-    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
     type(entityConfig) {
       const { name } = entityConfig;
       return `[${name}!]!`;
@@ -40,7 +40,7 @@ describe('composeMutation', () => {
     argTypes() {
       return ['String!'];
     },
-    involvedEntityNames: ({ name }) => ({ inputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
     type: () => 'String',
     config: () => null,
   };

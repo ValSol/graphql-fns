@@ -99,7 +99,7 @@ const addEntityNames = (
 
           // eslint-disable-next-line no-param-reassign
           prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
         });
       });
     } else {
@@ -132,7 +132,7 @@ const addEntityNames = (
 
           // eslint-disable-next-line no-param-reassign
           prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
         });
       });
     }
@@ -177,7 +177,7 @@ const addEntityNames = (
 
           // eslint-disable-next-line no-param-reassign
           prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
         });
       });
     } else {
@@ -210,7 +210,7 @@ const addEntityNames = (
 
           // eslint-disable-next-line no-param-reassign
           prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'outputEntity';
+            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
         });
       });
     }

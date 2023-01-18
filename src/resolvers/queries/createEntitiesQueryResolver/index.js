@@ -42,7 +42,7 @@ const createEntitiesQueryResolver = (
     info: Object,
     involvedFilters: { [derivativeConfigName: string]: Array<Object> },
   ): Object => {
-    const { inputEntity: filter } = involvedFilters;
+    const { inputOutputEntity: filter } = involvedFilters;
 
     if (!filter) return null;
 

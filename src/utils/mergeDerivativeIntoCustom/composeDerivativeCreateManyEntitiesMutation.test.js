@@ -51,8 +51,7 @@ describe('composeDerivativeCreateManyEntitysMutation', () => {
       argNames: () => ['data'],
       argTypes: ({ name }) => [`[${name}ForCatalogCreateInput!]!`],
       involvedEntityNames: ({ name }) => ({
-        inputEntity: `${name}ForCatalog`,
-        outputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
       }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>

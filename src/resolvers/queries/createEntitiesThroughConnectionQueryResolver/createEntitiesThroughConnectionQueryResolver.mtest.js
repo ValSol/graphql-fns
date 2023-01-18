@@ -73,7 +73,7 @@ beforeAll(async () => {
   ];
 
   createdExamples = await createManyExamples(null, { data }, { mongooseConn }, null, {
-    inputEntity: [],
+    inputOutputEntity: [],
   });
 
   examplesThroughConnection = createEntitiesThroughConnectionQueryResolver(
@@ -98,7 +98,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -123,7 +123,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -156,7 +156,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor2 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -189,7 +189,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor3 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -222,7 +222,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor4 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -257,7 +257,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 11 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -291,7 +291,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 4 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -325,7 +325,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 11 },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -361,7 +361,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, after },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -392,7 +392,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 3, before },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -423,7 +423,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, after },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -456,7 +456,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -483,7 +483,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -516,7 +516,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor2, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -549,7 +549,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -582,7 +582,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -619,7 +619,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, after, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -652,7 +652,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 1, where: { oddEven: 'even' } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -678,7 +678,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 2, after: endCursor, where: { oddEven: 'even' } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -715,7 +715,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, after, where: { oddEven: 'even' } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -753,7 +753,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, near },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -780,7 +780,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor, near },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -813,7 +813,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 5, after: endCursor2, near },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -846,7 +846,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor3, near },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -879,7 +879,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {
@@ -921,7 +921,7 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       { first: 3, after, near },
       { mongooseConn },
       { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
 
     const {

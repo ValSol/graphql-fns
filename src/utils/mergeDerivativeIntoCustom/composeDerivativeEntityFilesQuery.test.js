@@ -45,8 +45,7 @@ describe('composeDerivativeEntityFilesQuery', () => {
       argNames: () => ['where'],
       argTypes: () => ['FileWhereInput'],
       involvedEntityNames: ({ name }) => ({
-        inputEntity: `${name}ForCatalog`,
-        outputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
       }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>

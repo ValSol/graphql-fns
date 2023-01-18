@@ -49,8 +49,7 @@ describe('composeDerivativeImportEntitiesMutation', () => {
       argNames: () => ['file', 'options'],
       argTypes: () => ['Upload!', 'ImportOptionsInput'],
       involvedEntityNames: ({ name }) => ({
-        inputEntity: `${name}ForCatalog`,
-        outputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
       }),
       type: ({ name }) => `[${name}ForCatalog!]!`,
       config: (entityConfig2, generalConfig2) =>

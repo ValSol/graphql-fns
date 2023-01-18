@@ -98,7 +98,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       },
     };
-    await createPerson(null, { data }, { mongooseConn, pubsub }, null, { inputEntity: [] });
+    await createPerson(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
 
     const DistinctValues = createEntityDistinctValuesQueryResolver(
       personConfig,
@@ -109,7 +109,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
 
     const options = { target: 'firstName' };
     const distinctValues = await DistinctValues(null, { options }, { mongooseConn, pubsub }, null, {
-      inputEntity: [],
+      inputOutputEntity: [],
     });
     expect(distinctValues).toEqual(['Adam', 'Andy', 'Fred', 'Stanislav']);
 
@@ -119,7 +119,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       { options: options2 },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
     expect(distinctValues2).toEqual(['Boss', 'Bzhezinsky', 'Daskin', 'Mashkin', 'Prashkin']);
 
@@ -129,7 +129,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       { options: options3 },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
     expect(distinctValues3).toEqual(['boss', 'programmer']);
   });
@@ -200,7 +200,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
     }
 
     const DistinctValues = createEntityDistinctValuesQueryResolver(
@@ -217,7 +217,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       { options, where },
       { mongooseConn, pubsub },
       null,
-      { inputEntity: [] },
+      { inputOutputEntity: [] },
     );
     expect(distinctValues3).toEqual(['name1', 'name4']);
   });

@@ -46,8 +46,8 @@ describe('composeDerivativeUpdateEntityMutation', () => {
       argNames: () => ['whereOne', 'data'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`, `${name}ForCatalogUpdateInput!`],
       involvedEntityNames: ({ name }) => ({
-        inputEntity: `${name}ForCatalog`,
-        outputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
         subscribeUpdatedEntity: 'Example',
       }),
       type: ({ name }) => `${name}ForCatalog!`,

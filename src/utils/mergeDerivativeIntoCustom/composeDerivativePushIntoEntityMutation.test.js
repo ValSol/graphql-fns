@@ -50,8 +50,8 @@ describe('composeDerivativePushIntoEntityMutation', () => {
         `${name}ForCatalogPushPositionsInput`,
       ],
       involvedEntityNames: ({ name }) => ({
-        inputEntity: `${name}ForCatalog`,
-        outputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
+        inputOutputEntity: `${name}ForCatalog`,
         subscribeUpdatedEntity: 'Example',
       }),
       type: ({ name }) => `${name}ForCatalog!`,
