@@ -57,10 +57,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     getOppositeFields(entityConfig).filter(([, { array, parent }]) => !(array || parent)).length,
   );
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `[${name}${derivativeKey}!]!`;
 
 const deleteFilteredEntitiesWithChildrenMutationAttributes = {
   actionGeneralName,

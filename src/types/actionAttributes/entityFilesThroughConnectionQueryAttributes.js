@@ -73,10 +73,8 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `${name}Connection${derivativeKey}`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `${name}Connection${derivativeKey}`;
 
 const entityFilesThroughConnectionQueryAttributes = {
   actionGeneralName,

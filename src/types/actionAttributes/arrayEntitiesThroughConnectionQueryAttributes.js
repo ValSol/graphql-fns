@@ -79,10 +79,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
 
 const actionIsChild = 'Array';
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `${name}${derivativeKey}Connection`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `${name}${derivativeKey}Connection`;
 
 const arrayEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,

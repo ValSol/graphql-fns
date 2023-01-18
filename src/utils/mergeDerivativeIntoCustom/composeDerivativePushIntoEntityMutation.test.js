@@ -22,8 +22,10 @@ describe('composeDerivativePushIntoEntityMutation', () => {
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['pushIntoEntity'] },
     derivativeKey: 'ForCatalog',
-    Example: {
-      floatFields: [{ name: 'floatField' }],
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
     },
   };
 
@@ -51,7 +53,6 @@ describe('composeDerivativePushIntoEntityMutation', () => {
       ],
       involvedEntityNames: ({ name }) => ({
         inputOutputEntity: `${name}ForCatalog`,
-        inputOutputEntity: `${name}ForCatalog`,
         subscribeUpdatedEntity: 'Example',
       }),
       type: ({ name }) => `${name}ForCatalog!`,
@@ -71,6 +72,10 @@ describe('composeDerivativePushIntoEntityMutation', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

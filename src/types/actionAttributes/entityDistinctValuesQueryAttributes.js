@@ -37,14 +37,12 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' &&
   Boolean(createEntityDistinctValuesOptionsInputType(entityConfig)[1]);
 
-const actionReturnString =
-  (
-    // eslint-disable-next-line no-unused-vars
-    derivativeKey: string,
-  ): ((entityConfig: EntityConfig) => string) =>
+const actionReturnString = (
   // eslint-disable-next-line no-unused-vars
-  ({ name }) =>
-    '[String!]!';
+  entityConfig: EntityConfig,
+  // eslint-disable-next-line no-unused-vars
+  derivativeKey: string,
+): string => '[String!]!';
 
 const entityDistinctValuesQueryAttributes = {
   actionGeneralName,

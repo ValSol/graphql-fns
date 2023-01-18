@@ -48,10 +48,8 @@ const actionReturnConfig = (
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createPushIntoEntityInputType(entityConfig)[1]);
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `${name}${derivativeKey}!`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `${name}${derivativeKey}!`;
 
 const pushIntoEntityMutationAttributes = {
   actionGeneralName,

@@ -70,7 +70,7 @@ const composeActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(derivativeKey)(entityConfig);
+  const returnString = actionReturnString(entityConfig, derivativeKey);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;

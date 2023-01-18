@@ -40,14 +40,12 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString =
-  (
-    // eslint-disable-next-line no-unused-vars
-    derivativeKey: string,
-  ): ((entityConfig: EntityConfig) => string) =>
+const actionReturnString = (
   // eslint-disable-next-line no-unused-vars
-  ({ name }) =>
-    'Int!';
+  entityConfig: EntityConfig,
+  // eslint-disable-next-line no-unused-vars
+  derivativeKey: string,
+): string => 'Int!';
 
 const entityCountQueryAttributes = {
   actionGeneralName,

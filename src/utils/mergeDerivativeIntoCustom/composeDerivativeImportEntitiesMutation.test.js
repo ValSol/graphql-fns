@@ -25,8 +25,10 @@ describe('composeDerivativeImportEntitiesMutation', () => {
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['importEntities'] },
     derivativeKey: 'ForCatalog',
-    Example: {
-      floatFields: [{ name: 'floatField' }],
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
     },
   };
 
@@ -68,6 +70,10 @@ describe('composeDerivativeImportEntitiesMutation', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

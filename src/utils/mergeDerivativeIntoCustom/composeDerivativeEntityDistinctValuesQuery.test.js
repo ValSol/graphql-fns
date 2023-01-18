@@ -52,7 +52,8 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
       ],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => '[String!]!',
-      config: () => null,
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
@@ -67,6 +68,10 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

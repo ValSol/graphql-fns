@@ -53,14 +53,12 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     getOppositeFields(entityConfig).filter(([, { array, parent }]) => !(array || parent)).length,
   );
 
-const actionReturnString =
-  (
-    // eslint-disable-next-line no-unused-vars
-    derivativeKey: string,
-  ): ((entityConfig: EntityConfig) => string) =>
+const actionReturnString = (
   // eslint-disable-next-line no-unused-vars
-  ({ name }) =>
-    'Int!';
+  entityConfig: EntityConfig,
+  // eslint-disable-next-line no-unused-vars
+  derivativeKey: string,
+): string => 'Int!';
 
 const deleteFilteredEntitiesWithChildrenReturnScalarMutationAttributes = {
   actionGeneralName,

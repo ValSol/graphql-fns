@@ -1,7 +1,6 @@
 // @flow
 
 import type { BitwiseArray } from 'bitwise-array/lib/flowTypes';
-import { boolean } from 'yup';
 
 export type MongodbGeospatialPoint = {|
   +type: 'Point',
@@ -522,6 +521,7 @@ export type DerivativeAttributes = {
     [entityName: string]: $Diff<SimplifiedEntityConfig, NotFieldyEntityConfigFields>,
   },
   +derivativeFields?: { [entityName: string]: { [fieldName: string]: string } }, // set appropriate derivative keys
+  +involvedOutputDerivativeKeys?: { [entityName: string]: { outputEntity: string } },
 };
 
 export type GeneralConfig = {
@@ -852,7 +852,7 @@ export type ActionAttributes = {
   argNames: Array<string>,
   argTypes: Array<(name: string) => string>,
   actionInvolvedEntityNames: (name: string, derivativeKey?: string) => { [key: string]: string },
-  actionReturnString: (derivativeKey: string) => (entityConfig: EntityConfig) => string,
+  actionReturnString: (entityConfig: EntityConfig, derivativeKey: string) => string,
   actionReturnConfig: (
     entityConfig: EntityConfig,
     generalConfig: GeneralConfig,

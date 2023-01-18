@@ -95,7 +95,8 @@ describe('composeDerivativeEntityCountQuery', () => {
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      config: () => null,
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
@@ -111,6 +112,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 
   test('should return inputs for "sortEntityConfig"', () => {
@@ -124,7 +129,8 @@ describe('composeDerivativeEntityCountQuery', () => {
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      config: () => null,
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, sortEntityConfig, generalConfig);
@@ -140,6 +146,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 
   test('should return inputs for "paginationEntityConfig"', () => {
@@ -153,7 +163,8 @@ describe('composeDerivativeEntityCountQuery', () => {
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      config: () => null,
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, paginationEntityConfig, generalConfig);
@@ -169,6 +180,10 @@ describe('composeDerivativeEntityCountQuery', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 
   test('should return inputs for "nearEntityConfig"', () => {
@@ -182,7 +197,8 @@ describe('composeDerivativeEntityCountQuery', () => {
       argTypes: ({ name }) => [`${name}ForCatalogWhereInput`, `${name}ForCatalogNearInput`],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      config: () => null,
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, nearEntityConfig, generalConfig);
@@ -196,6 +212,10 @@ describe('composeDerivativeEntityCountQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

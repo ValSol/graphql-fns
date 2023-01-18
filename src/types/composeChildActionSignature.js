@@ -51,7 +51,7 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(derivativeKey)(allEntityConfigs[rootName]);
+  const returnString = actionReturnString(allEntityConfigs[rootName], derivativeKey);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;

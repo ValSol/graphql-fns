@@ -118,6 +118,10 @@ describe('composeDerivativeEntitiesQuery', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 
   test('should return inputs for "sortEntityConfig"', () => {
@@ -150,6 +154,10 @@ describe('composeDerivativeEntitiesQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 
@@ -184,6 +192,10 @@ describe('composeDerivativeEntitiesQuery', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 
   test('should return inputs for "nearEntityConfig"', () => {
@@ -217,6 +229,10 @@ describe('composeDerivativeEntitiesQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

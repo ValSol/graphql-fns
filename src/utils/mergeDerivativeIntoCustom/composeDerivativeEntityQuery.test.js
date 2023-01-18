@@ -21,12 +21,27 @@ describe('composeDerivativeEntityQuery', () => {
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['entity', 'entities'] },
     derivativeKey: 'ForCatalog',
-    Example: {
-      floatFields: [{ name: 'floatField' }],
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
+    },
+    involvedOutputDerivativeKeys: {
+      Example: { outputEntity: 'ForView' },
     },
   };
 
-  const derivative = { ForCatalog };
+  const ForView: DerivativeAttributes = {
+    allow: { Example: [] },
+    derivativeKey: 'ForView',
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
+    },
+  };
+
+  const derivative = { ForCatalog, ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Example: entityConfig },
@@ -45,11 +60,12 @@ describe('composeDerivativeEntityQuery', () => {
       argNames: () => ['whereOne'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`],
       involvedEntityNames: ({ name }) => ({
-        inputOutputEntity: `${name}ForCatalog`,
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: `${name}ForView`,
       }),
-      type: ({ name }) => `${name}ForCatalog!`,
+      type: ({ name }) => `${name}ForView!`,
       config: (entityConfig2, generalConfig2) =>
-        composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
+        composeDerivativeConfigByName('ForView', entityConfig2, generalConfig2),
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
@@ -64,6 +80,14 @@ describe('composeDerivativeEntityQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

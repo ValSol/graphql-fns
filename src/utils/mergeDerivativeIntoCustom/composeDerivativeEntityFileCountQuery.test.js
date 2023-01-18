@@ -3,7 +3,6 @@
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import entityFileCountQueryAttributes from '../../types/actionAttributes/entityFileCountQueryAttributes';
-import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
@@ -47,8 +46,8 @@ describe('composeDerivativeEntityFileCountQuery', () => {
       argTypes: () => ['FileWhereInput'],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      config: (entityConfig2, generalConfig2) =>
-        composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
+      // eslint-disable-next-line no-unused-vars, no-shadow
+      config: (entityConfig, generalConfig) => null,
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
@@ -63,6 +62,10 @@ describe('composeDerivativeEntityFileCountQuery', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

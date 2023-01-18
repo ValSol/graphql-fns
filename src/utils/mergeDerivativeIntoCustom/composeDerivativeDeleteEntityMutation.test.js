@@ -70,5 +70,9 @@ describe('composeDerivativeDeleteEntityMutation', () => {
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
     );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
+    );
   });
 });

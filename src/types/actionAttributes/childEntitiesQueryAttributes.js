@@ -54,10 +54,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Array';
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `[${name}${derivativeKey}!]!`;
 
 const childEntitiesQueryAttributes = {
   actionGeneralName,

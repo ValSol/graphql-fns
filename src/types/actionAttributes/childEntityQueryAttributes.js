@@ -36,10 +36,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Scalar';
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `${name}${derivativeKey}`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `${name}${derivativeKey}`;
 
 const childEntityQueryAttributes = {
   actionGeneralName,

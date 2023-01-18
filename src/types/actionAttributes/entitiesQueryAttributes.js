@@ -52,10 +52,8 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString =
-  (derivativeKey: string): ((entityConfig: EntityConfig) => string) =>
-  ({ name }) =>
-    `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, derivativeKey?: string = ''): string =>
+  `[${name}${derivativeKey}!]!`;
 
 const entitiesQueryAttributes = {
   actionGeneralName,

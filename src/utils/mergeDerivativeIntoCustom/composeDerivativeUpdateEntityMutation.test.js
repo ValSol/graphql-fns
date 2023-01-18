@@ -3,7 +3,6 @@
 import type { DerivativeAttributes, GeneralConfig, EntityConfig } from '../../flowTypes';
 
 import updateEntityMutationAttributes from '../../types/actionAttributes/updateEntityMutationAttributes';
-import composeDerivativeConfigByName from '../composeDerivativeConfigByName';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
@@ -22,8 +21,13 @@ describe('composeDerivativeUpdateEntityMutation', () => {
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['updateEntity'] },
     derivativeKey: 'ForCatalog',
-    Example: {
-      floatFields: [{ name: 'floatField' }],
+    addFields: {
+      Example: {
+        floatFields: [{ name: 'floatField' }],
+      },
+    },
+    involvedOutputDerivativeKeys: {
+      Example: { outputEntity: '' },
     },
   };
 
@@ -46,13 +50,12 @@ describe('composeDerivativeUpdateEntityMutation', () => {
       argNames: () => ['whereOne', 'data'],
       argTypes: ({ name }) => [`${name}ForCatalogWhereOneInput!`, `${name}ForCatalogUpdateInput!`],
       involvedEntityNames: ({ name }) => ({
-        inputOutputEntity: `${name}ForCatalog`,
-        inputOutputEntity: `${name}ForCatalog`,
+        inputEntity: `${name}ForCatalog`,
+        outputEntity: name,
         subscribeUpdatedEntity: 'Example',
       }),
-      type: ({ name }) => `${name}ForCatalog!`,
-      config: (entityConfig2, generalConfig2) =>
-        composeDerivativeConfigByName('ForCatalog', entityConfig2, generalConfig2),
+      type: ({ name }) => `${name}!`,
+      config: (entityConfig2, generalConfig) => entityConfig2, // eslint-disable-line no-unused-vars, no-shadow
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);
@@ -67,6 +70,10 @@ describe('composeDerivativeUpdateEntityMutation', () => {
 
     expect(result.involvedEntityNames(entityConfig, generalConfig)).toEqual(
       expectedResult.involvedEntityNames(entityConfig),
+    );
+
+    expect(result.config(entityConfig, generalConfig)).toEqual(
+      expectedResult.config(entityConfig, generalConfig),
     );
   });
 });

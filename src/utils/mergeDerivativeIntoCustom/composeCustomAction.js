@@ -35,8 +35,52 @@ const composeArgTypes =
       .filter((foo, i) => inputCreators[i](derivativeConfig)[1]);
   };
 
+const composeInvolvedEntityNames =
+  (actionInvolvedEntityNames, involvedOutputDerivativeKeys, derivativeKey) => (entityConfig) => {
+    const defaultInvolvedEntityNames = actionInvolvedEntityNames(entityConfig.name, derivativeKey);
+
+    if (!involvedOutputDerivativeKeys?.[entityConfig.name]) {
+      return defaultInvolvedEntityNames;
+    }
+
+    const { inputOutputEntity: inputEntity, ...rest } = defaultInvolvedEntityNames;
+
+    const outputDerivativeKeys = involvedOutputDerivativeKeys[entityConfig.name];
+
+    const outputEntityNames = Object.keys(outputDerivativeKeys).reduce((prev, outputEntityKey) => {
+      prev[outputEntityKey] = `${entityConfig.name}${outputDerivativeKeys[outputEntityKey]}`; // eslint-disable-line no-param-reassign
+
+      return prev;
+    }, {});
+
+    return { ...rest, ...outputEntityNames, inputEntity };
+  };
+
+const amendOutputDerivativeKey = (derivativeKey, entityConfig, involvedOutputDerivativeKeys) => {
+  if (!involvedOutputDerivativeKeys?.[entityConfig.name]) {
+    return derivativeKey;
+  }
+
+  const {
+    [entityConfig.name]: { outputEntity: amendedDerivativeKey },
+  } = involvedOutputDerivativeKeys;
+
+  return amendedDerivativeKey;
+};
+
+const composeType =
+  (actionReturnString, derivativeKey, involvedOutputDerivativeKeys) => (entityConfig) => {
+    const amendedOutputDerivativeKey = amendOutputDerivativeKey(
+      derivativeKey,
+      entityConfig,
+      involvedOutputDerivativeKeys,
+    );
+
+    return actionReturnString(entityConfig, amendedOutputDerivativeKey);
+  };
+
 const composeCustomAction = (
-  { allow, derivativeKey }: DerivativeAttributes,
+  { allow, derivativeKey, involvedOutputDerivativeKeys }: DerivativeAttributes,
   actionAttributes: ActionAttributes,
 ): ActionSignatureMethods => {
   const {
@@ -51,6 +95,13 @@ const composeCustomAction = (
     actionReturnConfig,
   } = actionAttributes;
   const name = actionGeneralName(derivativeKey);
+
+  // const amendedDerivativeKey = amendOutputDerivativeKey(
+  //   derivativeKey,
+  //   entityConfig,
+  //   involvedOutputDerivativeKeys,
+  // );
+
   return {
     name,
     specificName: (entityConfig, generalConfig) => {
@@ -69,12 +120,20 @@ const composeCustomAction = (
     argNames: composeArgNames(argNames, inputCreators, derivativeKey),
     argTypes: composeArgTypes(argTypes, inputCreators, derivativeKey),
 
-    involvedEntityNames: (entityConfig) =>
-      actionInvolvedEntityNames(entityConfig.name, derivativeKey),
+    involvedEntityNames: composeInvolvedEntityNames(
+      actionInvolvedEntityNames,
+      involvedOutputDerivativeKeys,
+      derivativeKey,
+    ),
 
-    type: actionReturnString(derivativeKey),
+    type: composeType(actionReturnString, derivativeKey, involvedOutputDerivativeKeys),
+
     config: (entityConfig, generalConfig) =>
-      actionReturnConfig(entityConfig, generalConfig, derivativeKey),
+      actionReturnConfig(
+        entityConfig,
+        generalConfig,
+        amendOutputDerivativeKey(derivativeKey, entityConfig, involvedOutputDerivativeKeys),
+      ),
   };
 };
 
