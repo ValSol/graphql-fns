@@ -21,6 +21,43 @@ const unusedInvolvedEntityKeys = [
   'subscribeUpdatedEntity',
 ];
 
+const processActions =
+  (prev, actionName, actionType, baseInventory, inventoryName, getInvolvedEntityNames, getConfig) =>
+  (entityName) => {
+    if (baseInventory && !baseInventory[actionType][actionName].includes(entityName)) {
+      throw new TypeError(
+        `Entity name "${entityName}" of ${actionType.toLowerCase()} "${actionName}" not found in general inventory!`,
+      );
+    }
+
+    // const involvedEntityNames = queryAttributes[actionName].actionInvolvedEntityNames(entityName);
+    const involvedEntityNames = getInvolvedEntityNames(actionName, entityName);
+
+    Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
+      if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
+        return;
+      }
+
+      const involvedEntityName = involvedEntityNames[involvedEntityKey];
+
+      if (!prev[involvedEntityName]) {
+        prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+      }
+
+      prev[involvedEntityName].descriptions.push(
+        `inventory "${inventoryName}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
+      );
+
+      const config = getConfig(actionName, entityName);
+
+      // eslint-disable-next-line no-param-reassign
+      prev[involvedEntityName].isOutput =
+        prev[involvedEntityName].isOutput ||
+        (Boolean(config) &&
+          (involvedEntityKey === 'inputOutputEntity' || involvedEntityKey === 'outputEntity'));
+    });
+  };
+
 const addEntityNames = (
   inventory: Inventory,
   generalConfig: GeneralConfig,
@@ -72,69 +109,39 @@ const addEntityNames = (
     }
 
     if (queryAttributes[actionName]) {
-      includeMinusExclude.Query[actionName].forEach((entityName) => {
-        if (baseInventory && !baseInventory.Query[actionName].includes(entityName)) {
-          throw new TypeError(
-            `Entity name "${entityName}" of query "${actionName}" not found in general inventory!`,
-          );
-        }
-
-        const involvedEntityNames =
-          queryAttributes[actionName].actionInvolvedEntityNames(entityName);
-
-        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
-          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
-            return;
-          }
-
-          const involvedEntityName = involvedEntityNames[involvedEntityKey];
-
-          if (!prev[involvedEntityName]) {
-            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
-          }
-
-          prev[involvedEntityName].descriptions.push(
-            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
-          );
-
-          // eslint-disable-next-line no-param-reassign
-          prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
-        });
-      });
+      includeMinusExclude.Query[actionName].forEach(
+        processActions(
+          prev,
+          actionName,
+          'Query',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            queryAttributes[actionName2].actionInvolvedEntityNames(entityName2),
+          (actionName2, entityName2) =>
+            queryAttributes[actionName2].actionReturnConfig(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+        ),
+      );
     } else {
-      includeMinusExclude.Query[actionName].forEach((entityName) => {
-        if (baseInventory && !baseInventory.Query[actionName].includes(entityName)) {
-          throw new TypeError(
-            `Entity name "${entityName}" of query "${actionName}" not found in general inventory!`,
-          );
-        }
-
-        const involvedEntityNames = customQueries[actionName].involvedEntityNames(
-          allEntityConfigs[entityName],
-          generalConfig,
-        );
-
-        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
-          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
-            return;
-          }
-
-          const involvedEntityName = involvedEntityNames[involvedEntityKey];
-
-          if (!prev[involvedEntityName]) {
-            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
-          }
-
-          prev[involvedEntityName].descriptions.push(
-            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
-          );
-
-          // eslint-disable-next-line no-param-reassign
-          prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
-        });
-      });
+      includeMinusExclude.Query[actionName].forEach(
+        processActions(
+          prev,
+          actionName,
+          'Query',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            customQueries[actionName2].involvedEntityNames(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+          (actionName2, entityName2) =>
+            customQueries[actionName2].config(allEntityConfigs[entityName2], generalConfig),
+        ),
+      );
     }
 
     return prev;
@@ -150,69 +157,39 @@ const addEntityNames = (
     }
 
     if (mutationAttributes[actionName]) {
-      includeMinusExclude.Mutation[actionName].forEach((entityName) => {
-        if (baseInventory && !baseInventory.Mutation[actionName].includes(entityName)) {
-          throw new TypeError(
-            `Entity name "${entityName}" of mutation "${actionName}" not found in general inventory!`,
-          );
-        }
-
-        const involvedEntityNames =
-          mutationAttributes[actionName].actionInvolvedEntityNames(entityName);
-
-        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
-          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
-            return;
-          }
-
-          const involvedEntityName = involvedEntityNames[involvedEntityKey];
-
-          if (!prev[involvedEntityName]) {
-            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
-          }
-
-          prev[involvedEntityName].descriptions.push(
-            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
-          );
-
-          // eslint-disable-next-line no-param-reassign
-          prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
-        });
-      });
+      includeMinusExclude.Mutation[actionName].forEach(
+        processActions(
+          prev,
+          actionName,
+          'Mutation',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            mutationAttributes[actionName2].actionInvolvedEntityNames(entityName2),
+          (actionName2, entityName2) =>
+            mutationAttributes[actionName2].actionReturnConfig(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+        ),
+      );
     } else {
-      includeMinusExclude.Mutation[actionName].forEach((entityName) => {
-        if (baseInventory && !baseInventory.Mutation[actionName].includes(entityName)) {
-          throw new TypeError(
-            `Entity name "${entityName}" of mutation "${actionName}" not found in general inventory!`,
-          );
-        }
-
-        const involvedEntityNames = customMutations[actionName].involvedEntityNames(
-          allEntityConfigs[entityName],
-          generalConfig,
-        );
-
-        Object.keys(involvedEntityNames).forEach((involvedEntityKey) => {
-          if (unusedInvolvedEntityKeys.includes(involvedEntityKey)) {
-            return;
-          }
-
-          const involvedEntityName = involvedEntityNames[involvedEntityKey];
-
-          if (!prev[involvedEntityName]) {
-            prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
-          }
-
-          prev[involvedEntityName].descriptions.push(
-            `inventory "${name}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
-          );
-
-          // eslint-disable-next-line no-param-reassign
-          prev[involvedEntityName].isOutput =
-            prev[involvedEntityName].isOutput || involvedEntityKey === 'inputOutputEntity';
-        });
-      });
+      includeMinusExclude.Mutation[actionName].forEach(
+        processActions(
+          prev,
+          actionName,
+          'Mutation',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            customMutations[actionName2].involvedEntityNames(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+          (actionName2, entityName2) =>
+            customMutations[actionName2].config(allEntityConfigs[entityName2], generalConfig),
+        ),
+      );
     }
 
     return prev;
