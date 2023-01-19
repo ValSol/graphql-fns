@@ -2,13 +2,14 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
+import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 
 const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
-  const { inputOutputEntity: filter } = involvedFilters;
+  const filter = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

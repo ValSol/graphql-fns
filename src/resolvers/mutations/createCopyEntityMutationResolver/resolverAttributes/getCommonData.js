@@ -6,15 +6,21 @@ import createMongooseModel from '../../../../mongooseModels/createMongooseModel'
 import getMatchingFields from '../../../../utils/getMatchingFields';
 import getOppositeFields from '../../../../utils/getOppositeFields';
 import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
+import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
+import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereInput';
 import checkData from '../../checkData';
 
 const getCommonData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  preFilter?: Array<Object>,
+  involvedFilters?: { [derivativeConfigName: string]: null | Array<Object> },
 ): Promise<null | Array<Object>> => {
-  const filter = preFilter || [];
+  const { inputFilter, outputFilter } = involvedFilters
+    ? getInputAndOutputFilters(involvedFilters)
+    : { inputFilter: [], outputFilter: [] };
+
+  if (!inputFilter || !outputFilter) return null;
 
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context } = resolverArg;
@@ -110,7 +116,7 @@ const getCommonData = async (
       });
     }
   } else if (whereOne) {
-    const { where: where2 } = composeWhereInput(whereOne, entityConfig);
+    const { where: where2 } = mergeWhereAndFilter(inputFilter, whereOne, entityConfig);
     entity2 = await Entity.findOne(where2, matchingFieldsProjection, { lean: true });
 
     id = entity2._id.toString(); // eslint-disable-line no-underscore-dangle
@@ -142,10 +148,10 @@ const getCommonData = async (
 
   if (id) {
     const processingKind = 'update';
-    const allowCopy = preFilter
+    const allowCopy = involvedFilters
       ? await checkData(
           { whereOne: { id }, data },
-          filter,
+          outputFilter,
           entityConfig,
           processingKind,
           generalConfig,
@@ -158,10 +164,10 @@ const getCommonData = async (
   }
 
   const processingKind = 'create';
-  const allowCopy = preFilter
+  const allowCopy = involvedFilters
     ? await checkData(
         { data },
-        filter,
+        outputFilter,
         entityConfig,
         processingKind,
         generalConfig,

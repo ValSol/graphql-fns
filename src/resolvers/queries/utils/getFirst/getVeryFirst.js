@@ -8,7 +8,7 @@ import composeFirstEdges from './composeFirstEdges';
 const getVeryFirst = async (
   first: number,
   resolverArg: ResolverArg,
-  involvedFilters: Object,
+  involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;

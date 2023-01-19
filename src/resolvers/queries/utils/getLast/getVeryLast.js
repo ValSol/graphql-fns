@@ -8,7 +8,7 @@ import composeLastEdges from './composeLastEdges';
 const getVeryLast = async (
   last: number,
   resolverArg: ResolverArg,
-  involvedFilters: Object,
+  involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   entitiesQueryResolver: Function,
   entityCountQueryResolver: Function,
 ): null | Promise<Object> => {

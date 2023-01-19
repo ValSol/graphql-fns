@@ -4,6 +4,7 @@ import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../flo
 import type { Context, ResolverCreatorArg } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
+import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import createEntityFileCountQueryResolver from '../createEntityFileCountQueryResolver';
 import createEntityFilesQueryResolver from '../createEntityFilesQueryResolver';
 import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
@@ -70,9 +71,9 @@ const createEntityFilesThroughConnectionQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+    involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   ): Object => {
-    const { inputOutputEntity: filter } = involvedFilters;
+    const filter = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 

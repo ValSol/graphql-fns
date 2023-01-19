@@ -5,6 +5,7 @@ import type { Context } from '../../flowTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
+import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 type Args = {
@@ -28,9 +29,9 @@ const createEntityDistinctValuesQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+    involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   ): Object => {
-    const { inputOutputEntity: filter } = involvedFilters;
+    const filter = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 

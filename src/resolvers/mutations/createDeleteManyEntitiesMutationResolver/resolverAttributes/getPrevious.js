@@ -2,6 +2,7 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
+import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
@@ -10,7 +11,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, info, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { inputOutputEntity: filter } = involvedFilters;
+  const filter = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

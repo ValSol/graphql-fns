@@ -52,7 +52,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       args: Args,
       context: Context,
       info: Object,
-      involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+      involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
     ): Object => {
       const resolverCreatorArg = {
         entityConfig,

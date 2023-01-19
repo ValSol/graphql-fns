@@ -2,13 +2,14 @@
 
 import type { GetPrevious } from '../../../flowTypes';
 
+import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
 
-  const { inputOutputEntity: filter } = involvedFilters;
+  const filter = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

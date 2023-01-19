@@ -16,7 +16,7 @@ export type ResolverArg = {
   args: Object,
   context: Context,
   info: Object,
-  involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+  involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
 };
 
 export type PreparedData = {

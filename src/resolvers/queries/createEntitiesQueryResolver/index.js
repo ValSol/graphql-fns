@@ -7,6 +7,7 @@ import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
+import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import composeNearInput from './composeNearInput';
@@ -40,9 +41,9 @@ const createEntitiesQueryResolver = (
     args: Args,
     context: Context,
     info: Object,
-    involvedFilters: { [derivativeConfigName: string]: Array<Object> },
+    involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   ): Object => {
-    const { inputOutputEntity: filter } = involvedFilters;
+    const filter = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 

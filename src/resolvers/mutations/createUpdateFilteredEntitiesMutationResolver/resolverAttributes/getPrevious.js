@@ -4,6 +4,7 @@ import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
+import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
@@ -12,9 +13,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { inputOutputEntity: filter } = involvedFilters;
+  const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
 
-  if (!filter) return null;
+  if (!inputFilter || !outputFilter) return null;
 
   const { data, near, where, search } = args;
 
@@ -33,7 +34,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       )
     : {};
 
-  const { lookups, where: preConditions } = mergeWhereAndFilter(filter, where, entityConfig);
+  const { lookups, where: preConditions } = mergeWhereAndFilter(inputFilter, where, entityConfig);
 
   let conditions = preConditions;
 
@@ -76,7 +77,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     // eslint-disable-next-line no-await-in-loop
     const allowCreate = await checkData(
       { data, whereOne: { id } },
-      filter,
+      outputFilter,
       entityConfig,
       processingKind,
       generalConfig,

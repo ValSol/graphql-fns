@@ -6,15 +6,21 @@ import createMongooseModel from '../../../../mongooseModels/createMongooseModel'
 import getMatchingFields from '../../../../utils/getMatchingFields';
 import getOppositeFields from '../../../../utils/getOppositeFields';
 import fromMongoToGqlDataArg from '../../../types/fromMongoToGqlDataArg';
+import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
+import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereInput';
 import checkData from '../../checkData';
 
 const getCommonData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  preFilter?: Array<Object>,
+  involvedFilters?: { [derivativeConfigName: string]: null | Array<Object> },
 ): Promise<null | Array<Object>> => {
-  const filter = preFilter || [];
+  const { inputFilter, outputFilter } = involvedFilters
+    ? getInputAndOutputFilters(involvedFilters)
+    : { inputFilter: [], outputFilter: [] };
+
+  if (!inputFilter || !outputFilter) return null;
 
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context } = resolverArg;
@@ -133,7 +139,7 @@ const getCommonData = async (
       });
     }
   } else if (whereOne) {
-    const { where: where2 } = composeWhereInput({ OR: whereOne }, entityConfig);
+    const { where: where2 } = mergeWhereAndFilter(inputFilter, { OR: whereOne }, entityConfig);
     entities2 = await Entity.find(where2, matchingFieldsProjection, { lean: true });
 
     ids = entities2.map((entity2) => entity2._id.toString()); // eslint-disable-line no-underscore-dangle
@@ -193,11 +199,11 @@ const getCommonData = async (
 
       allowCopy =
         allowCopy &&
-        (preFilter
+        (involvedFilters
           ? // eslint-disable-next-line no-await-in-loop
             await checkData(
               { whereOne: { id }, data },
-              filter,
+              outputFilter,
               entityConfig,
               processingKind,
               generalConfig,
@@ -213,11 +219,11 @@ const getCommonData = async (
 
       allowCopy =
         allowCopy &&
-        (preFilter
+        (involvedFilters
           ? // eslint-disable-next-line no-await-in-loop
             await checkData(
               { data },
-              filter,
+              outputFilter,
               entityConfig,
               processingKind,
               generalConfig,

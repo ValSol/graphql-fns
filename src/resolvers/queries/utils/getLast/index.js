@@ -10,7 +10,7 @@ const getLast = async (
   shift: number,
   last: number,
   resolverArg: ResolverArg,
-  involvedFilters: Object,
+  involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   entitiesQueryResolver: Function,
 ): null | Promise<Object> => {
   const { parent, args, context, info } = resolverArg;

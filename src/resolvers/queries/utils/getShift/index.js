@@ -6,6 +6,7 @@ import type { ResolverArg, ResolverCreatorArg } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
+import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeLimitingArgs from './composeLimitingArgs';
 import composeProjectionFromArgs from './composeProjectionFromArgs';
@@ -15,7 +16,7 @@ const getShift = async (
   _id: string,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  involvedFilters: Object,
+  involvedFilters: { [derivativeConfigName: string]: null | Array<Object> },
   entityQueryResolver: Function,
 ): Promise<null | number> => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
@@ -25,7 +26,9 @@ const getShift = async (
 
   const projection = composeProjectionFromArgs(args);
 
-  const { inputOutputEntity: filter } = involvedFilters;
+  const filter = getFilterFromInvolvedFilters(involvedFilters);
+
+  if (!filter) return null;
 
   // eslint-disable-next-line no-await-in-loop
   const thing = await entityQueryResolver(

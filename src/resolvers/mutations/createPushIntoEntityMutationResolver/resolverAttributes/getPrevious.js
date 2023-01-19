@@ -3,6 +3,7 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
+import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
@@ -11,9 +12,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { inputOutputEntity: filter, subscribeUpdatedEntity } = involvedFilters;
+  const { subscribeUpdatedEntity } = involvedFilters;
 
-  if (!filter) return null;
+  const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
+
+  if (!inputFilter || !outputFilter) return null;
 
   const {
     whereOne,
@@ -23,7 +26,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const processingKind = 'push';
   const allowCreate = await checkData(
     args,
-    filter,
+    outputFilter,
     entityConfig,
     processingKind,
     generalConfig,
@@ -39,7 +42,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   let _id = id; // eslint-disable-line no-underscore-dangle
   const whereOne2 = id ? { _id } : whereOne;
-  const { lookups, where: whereOne3 } = mergeWhereAndFilter(filter, whereOne, entityConfig);
+  const { lookups, where: whereOne3 } = mergeWhereAndFilter(inputFilter, whereOne, entityConfig);
 
   let conditions = whereOne3;
 

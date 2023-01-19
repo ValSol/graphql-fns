@@ -3,6 +3,7 @@
 import type { GetPrevious } from '../../../flowTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
+import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
@@ -11,16 +12,18 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
-  const { inputOutputEntity: filter, subscribeUpdatedEntity } = involvedFilters;
+  const { subscribeUpdatedEntity } = involvedFilters;
 
-  if (!filter) return null;
+  const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
+
+  if (!inputFilter || !outputFilter) return null;
 
   const { whereOne } = args;
 
   const processingKind = 'update';
   const allowCreate = await checkData(
     args,
-    filter,
+    outputFilter,
     entityConfig,
     processingKind,
     generalConfig,
@@ -45,7 +48,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       )
     : {};
 
-  const { lookups, where: whereOne2 } = mergeWhereAndFilter(filter, whereOne, entityConfig);
+  const { lookups, where: whereOne2 } = mergeWhereAndFilter(inputFilter, whereOne, entityConfig);
 
   let whereOne3 = whereOne2;
 

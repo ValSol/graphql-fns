@@ -65,12 +65,12 @@ const workOutMutations = async (
           parent: parentInArgs,
           args,
           info: infoInArgs,
-          involvedFilters: parentFiltersInArgs,
+          involvedFilters: involvedFiltersInArgs,
         } = mutationArgs;
 
         const parent = parentInArgs || null;
         const info = infoInArgs || { projection: {} };
-        const involvedFilters = parentFiltersInArgs || { inputOutputEntity: [] };
+        const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [] };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
@@ -170,14 +170,14 @@ const workOutMutations = async (
       parent: parentInArgs,
       args,
       info: infoInArgs,
-      involvedFilters: parentFiltersInArgs,
+      involvedFilters: involvedFiltersInArgs,
       returnReport,
       returnResult,
     } = mutationArgs;
 
     const parent = parentInArgs || null;
     const info = infoInArgs || { projection: {} };
-    const involvedFilters = parentFiltersInArgs || { inputOutputEntity: [] };
+    const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [] };
 
     const { array, produceCurrent, report, finalResult } =
       mutationsResolverAttributes[actionGeneralName];
