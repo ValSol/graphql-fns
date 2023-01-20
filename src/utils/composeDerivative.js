@@ -54,20 +54,43 @@ const composeDerivative = (derivativeAttributesArray: Array<DerivativeAttributes
   // ***
 
   const result = derivativeAttributesArray.reduce((prev, rawItem) => {
-    const { allow, derivativeKey } = rawItem;
+    const { derivativeKey } = rawItem;
 
     const item = { ...rawItem };
 
+    prev[derivativeKey] = item; // eslint-disable-line no-param-reassign
+
+    return prev;
+  }, {});
+
+  Object.keys(result).forEach((derivativeKey) => {
+    const { allow, involvedOutputDerivativeKeys = {} } = result[derivativeKey];
+
     Object.keys(allow).forEach((entityName) => {
+      const derivativeKey2 =
+        involvedOutputDerivativeKeys?.[entityName]?.outputEntity || derivativeKey;
+
+      if (derivativeKey2 === derivativeKey && involvedOutputDerivativeKeys?.[entityName]) {
+        throw new TypeError(
+          `involvedOutputDerivativeKeys attribute of derivative "${derivativeKey}" has an incorrect keys: "${JSON.stringify(
+            involvedOutputDerivativeKeys?.[entityName],
+          )}"!`,
+        );
+      }
+
+      const item = result[derivativeKey2];
+
+      if (!item) {
+        throw new TypeError(
+          `Incorrect derivativeKey: "${derivativeKey2}" for involvedOutputDerivativeKeys in derivative "${derivativeKey}"!`,
+        );
+      }
+
       allow[entityName].forEach((actionGenericName) => {
         // $FlowFixMe
         actionAttributes[actionGenericName].actionDerivativeUpdater?.(entityName, item);
       });
     });
-
-    prev[derivativeKey] = item; // eslint-disable-line no-param-reassign
-
-    return prev;
   }, {});
 
   return result;

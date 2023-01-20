@@ -96,12 +96,6 @@ const composeCustomAction = (
   } = actionAttributes;
   const name = actionGeneralName(derivativeKey);
 
-  // const amendedDerivativeKey = amendOutputDerivativeKey(
-  //   derivativeKey,
-  //   entityConfig,
-  //   involvedOutputDerivativeKeys,
-  // );
-
   return {
     name,
     specificName: (entityConfig, generalConfig) => {

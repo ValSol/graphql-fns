@@ -54,7 +54,7 @@ const processActions =
       prev[involvedEntityName].isOutput =
         prev[involvedEntityName].isOutput ||
         (Boolean(config) &&
-          (involvedEntityKey === 'inputOutputEntity' || involvedEntityKey === 'outputEntity'));
+          (involvedEntityKey === 'inputOutputEntity' || involvedEntityKey.startsWith('output')));
     });
   };
 
@@ -78,7 +78,7 @@ const addEntityNames = (
 
   const amendedInclude = typeof include === 'object' ? include : { Query: true, Mutation: true };
 
-  const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig);
+  const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig, name);
 
   const amendedExclude =
     typeof exclude === 'object'
@@ -97,7 +97,7 @@ const addEntityNames = (
           Mutation: exclude || {},
         };
 
-  const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig);
+  const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig, name);
 
   const includeMinusExclude = subtructInventoryOptions(unwindedInclude, unwindedExclude);
 

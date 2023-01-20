@@ -21,6 +21,7 @@ const tangibleTypes = ['tangible', 'tangibleFile'];
 const unwindInverntoryOptions = (
   inventoryOptions: InventoryOptions,
   generalConfig: GeneralConfig,
+  inventoryName?: string = '',
 ): SimplifiedInventoryOptions => {
   const { allEntityConfigs } = generalConfig;
 
@@ -114,9 +115,7 @@ const unwindInverntoryOptions = (
       : Object.keys(queryInventoryOptions).reduce((prev, actionName) => {
           if (!allQueries[actionName]) {
             throw new TypeError(
-              `Incorrect inventory query name: ${actionName} of inventoryOptions: "${JSON.stringify(
-                inventoryOptions,
-              )}"!`,
+              `Incorrect inventory query name: ${actionName} of inventoryOptions: "${inventoryName}"!`,
             );
           }
 
@@ -128,9 +127,7 @@ const unwindInverntoryOptions = (
             queryInventoryOptions[actionName].forEach((entityName) => {
               if (!allActionEntities.includes(entityName)) {
                 throw new TypeError(
-                  `Incorrect entity name: "${entityName}" in inventory Query: "${actionName}" of inventoryOptions: "${JSON.stringify(
-                    inventoryOptions,
-                  )}"!`,
+                  `Incorrect entity name: "${entityName}" in inventory Query: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
                 );
               }
             });
@@ -185,9 +182,7 @@ const unwindInverntoryOptions = (
       : Object.keys(mutationInventoryOptions).reduce((prev, actionName) => {
           if (!allMutations[actionName]) {
             throw new TypeError(
-              `Incorrect inventory mutation name: ${actionName} of inventoryOptions: "${JSON.stringify(
-                inventoryOptions,
-              )}"!`,
+              `Incorrect inventory mutation name: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
             );
           }
 
@@ -199,9 +194,7 @@ const unwindInverntoryOptions = (
             mutationInventoryOptions[actionName].forEach((entityName) => {
               if (!allActionEntities.includes(entityName)) {
                 throw new TypeError(
-                  `Incorrect entity name: "${entityName}" in inventory Mutation: "${actionName}" of inventoryOptions: "${JSON.stringify(
-                    inventoryOptions,
-                  )}"!`,
+                  `Incorrect entity name: "${entityName}" in inventory Mutation: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
                 );
               }
             });

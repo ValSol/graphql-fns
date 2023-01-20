@@ -493,7 +493,7 @@ describe('composeGqlResolvers', () => {
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
-    expect(result.Query).toBeUndefined();
+    expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
@@ -540,7 +540,7 @@ describe('composeGqlResolvers', () => {
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const result = composeGqlResolvers(generalConfig);
-    expect(result.Query).toBeUndefined();
+    expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
     expect(result.Mutation.importExamples).toBeUndefined();
     expect(typeof result.Mutation.createExample).toBe('function');
@@ -579,7 +579,7 @@ describe('composeGqlResolvers', () => {
       Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
     };
     const result = composeGqlResolvers(generalConfig, serversideConfig);
-    expect(result.Query).toBeUndefined();
+    expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
     expect(result.Mutation.importExamples).toBeUndefined();
     expect(result.Mutation.createExample).toBeUndefined();

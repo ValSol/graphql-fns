@@ -11,6 +11,7 @@ import composeDerivativeConfigName from '../../utils/composeDerivativeConfig/com
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
+import composeGqlTypes from '../../types/composeGqlTypes';
 import resolverDecorator from '../utils/resolverDecorator';
 import composeEntityResolvers from '../types/composeEntityResolvers';
 import createCustomResolver from '../createCustomResolver';
@@ -28,6 +29,8 @@ const composeGqlResolvers = (
 ): Object => {
   const { allEntityConfigs, inventory, derivative = {} } = generalConfig;
 
+  const { entityTypeDic } = composeGqlTypes(generalConfig);
+
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
@@ -35,7 +38,6 @@ const composeGqlResolvers = (
   // eslint-disable-next-line no-nested-ternary
   const customMutation = custom?.Mutation || {};
 
-  const allowQueries = checkInventory(['Query'], inventory);
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
@@ -49,54 +51,52 @@ const composeGqlResolvers = (
     __resolveType: (obj) => obj.__typename, // eslint-disable-line no-underscore-dangle
   };
 
-  if (allowQueries)
-    resolvers.Query = {
-      node: createNodeQueryResolver(generalConfig, serversideConfig),
-    };
+  resolvers.Query = {
+    node: createNodeQueryResolver(generalConfig, serversideConfig),
+  };
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
   Object.keys(allEntityConfigs).reduce((prev, entityName) => {
     const entityConfig = allEntityConfigs[entityName];
-    if (allowQueries) {
-      Object.keys(queryAttributes).forEach((actionName) => {
-        if (
-          queryAttributes[actionName].actionAllowed(entityConfig) &&
-          !queryAttributes[actionName].actionIsChild
-        ) {
-          const resolver = queries[actionName](entityConfig, generalConfig, serversideConfig);
-          if (resolver) {
-            // eslint-disable-next-line no-param-reassign
-            prev.Query[queryAttributes[actionName].actionName(entityName)] = resolverDecorator(
-              resolver,
-              ['Query', actionName, entityConfig.name],
-              queryAttributes[actionName],
-              entityConfig,
-              generalConfig,
-              serversideConfig,
-            );
-          }
-        }
-      });
 
-      const customQueryNames = Object.keys(customQuery);
-
-      customQueryNames.forEach((customName) => {
-        const customQueryResolver = createCustomResolver(
-          'Query',
-          customName,
-          entityConfig,
-          generalConfig,
-          serversideConfig,
-        );
-
-        if (customQueryResolver) {
+    Object.keys(queryAttributes).forEach((actionName) => {
+      if (
+        queryAttributes[actionName].actionAllowed(entityConfig) &&
+        !queryAttributes[actionName].actionIsChild
+      ) {
+        const resolver = queries[actionName](entityConfig, generalConfig, serversideConfig);
+        if (resolver) {
           // eslint-disable-next-line no-param-reassign
-          prev.Query[customQuery[customName].specificName(entityConfig, generalConfig)] =
-            customQueryResolver;
+          prev.Query[queryAttributes[actionName].actionName(entityName)] = resolverDecorator(
+            resolver,
+            ['Query', actionName, entityConfig.name],
+            queryAttributes[actionName],
+            entityConfig,
+            generalConfig,
+            serversideConfig,
+          );
         }
-      });
-    }
+      }
+    });
+
+    const customQueryNames = Object.keys(customQuery);
+
+    customQueryNames.forEach((customName) => {
+      const customQueryResolver = createCustomResolver(
+        'Query',
+        customName,
+        entityConfig,
+        generalConfig,
+        serversideConfig,
+      );
+
+      if (customQueryResolver) {
+        // eslint-disable-next-line no-param-reassign
+        prev.Query[customQuery[customName].specificName(entityConfig, generalConfig)] =
+          customQueryResolver;
+      }
+    });
 
     if (allowMutations) {
       Object.keys(mutationAttributes).forEach((actionName) => {
@@ -189,7 +189,7 @@ const composeGqlResolvers = (
         geospatialFields,
         relationalFields,
       } = entityConfig;
-      if (duplexFields || geospatialFields || relationalFields) {
+      if (entityTypeDic[name] && (duplexFields || geospatialFields || relationalFields)) {
         // eslint-disable-next-line no-param-reassign
         prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
       }
@@ -202,7 +202,7 @@ const composeGqlResolvers = (
           generalConfig,
         );
 
-        if (derivativeConfig) {
+        if (derivativeConfig && entityTypeDic[derivativeConfig.name]) {
           const key = composeDerivativeConfigName(name, derivativeKey, derivativeNameSlicePosition);
           // eslint-disable-next-line no-param-reassign
           prev[key] = composeEntityResolvers(derivativeConfig, generalConfig, serversideConfig);

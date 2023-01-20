@@ -3,9 +3,10 @@
 import type { GeneralConfig } from '../flowTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
+import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
 import composeCustomActionSignature from './composeCustomActionSignature';
 
-import actionAttributes, { mutationAttributes, queryAttributes } from './actionAttributes';
+import { mutationAttributes, queryAttributes } from './actionAttributes';
 
 import createCreatedEntitySubscriptionType from './subscriptions/createCreatedEntitySubscriptionType';
 import createDeletedEntitySubscriptionType from './subscriptions/createDeletedEntitySubscriptionType';
@@ -17,13 +18,10 @@ import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeActionSignature from './composeActionSignature';
 
-const composeGqlTypes = (generalConfig: GeneralConfig): string => {
-  const { allEntityConfigs, derivative = {}, inventory, custom = {} } = generalConfig;
-
-  // eslint-disable-next-line no-nested-ternary
-  const customQuery = custom ? (custom.Query ? custom.Query : {}) : {};
-  // eslint-disable-next-line no-nested-ternary
-  const customMutation = custom ? (custom.Mutation ? custom.Mutation : {}) : {};
+const composeGqlTypes = (
+  generalConfig: GeneralConfig,
+): { typeDefs: string, entityTypeDic: { [entityName: string]: string } } => {
+  const { allEntityConfigs, inventory } = generalConfig;
 
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
@@ -65,76 +63,52 @@ const composeGqlTypes = (generalConfig: GeneralConfig): string => {
     return prev;
   }, []);
 
-  // 2. generate derivative actions signatures AND add ...
-  // ... to "entityTypeDic" derivative entity types ...
-  // ... to "inputDic" derivative inputs
-
-  Object.keys(derivative).forEach((derivativeKey) => {
-    const { allow } = derivative[derivativeKey];
-
-    Object.keys(allow).forEach((entityName) => {
-      allow[entityName].forEach((actionName) => {
-        const actionSignature = composeActionSignature(
-          allEntityConfigs[entityName],
-          generalConfig,
-          actionAttributes[actionName],
-          entityTypeDic,
-          inputDic,
-          derivativeKey,
-        );
-
-        if (!actionSignature) return;
-
-        const { actionType } = actionAttributes[actionName];
-
-        if (actionType === 'Query') {
-          queryTypes.push(actionSignature);
-        } else if (actionType === 'Mutation') {
-          mutationTypes.push(actionSignature);
-        } else {
-          throw new TypeError(`Icorrect action name: "${actionName}"!`);
-        }
-      });
-    });
-  });
-
-  // 3. generate custom actions signatures AND add ...
+  // 2. generate custom actions signatures AND add ...
   // ... to "entityTypeDic" entity types ...
   // ... to "inputDic" inputs
+
+  const { Query, Mutation } = mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver') || {
+    Query: {},
+    Mutation: {},
+  };
 
   entityNames.forEach((entityName) => {
     const { type: entityType } = allEntityConfigs[entityName];
     if (entityType !== 'tangible' && entityType !== 'tangibleFile') return;
 
-    Object.keys(customQuery).forEach((customName) => {
-      if (checkInventory(['Query', customName, entityName], inventory)) {
-        const action = composeCustomActionSignature(
-          customQuery[customName],
-          allEntityConfigs[entityName],
-          generalConfig,
-          entityTypeDic,
-          inputDic,
-        );
-        if (action) {
-          queryTypes.push(`  ${action}`);
+    if (Query) {
+      Object.keys(Query).forEach((customName) => {
+        if (checkInventory(['Query', customName, entityName], inventory)) {
+          const action = composeCustomActionSignature(
+            Query[customName],
+            allEntityConfigs[entityName],
+            generalConfig,
+            entityTypeDic,
+            inputDic,
+          );
+          if (action) {
+            queryTypes.push(`  ${action}`);
+          }
         }
-      }
-    });
+      });
+    }
 
-    Object.keys(customMutation).forEach((customName) => {
-      if (checkInventory(['Mutation', customName, entityName], inventory)) {
-        const action = composeCustomActionSignature(
-          customMutation[customName],
-          allEntityConfigs[entityName],
-          generalConfig,
-          entityTypeDic,
-          inputDic,
-        );
-        if (action) {
-          mutationTypes.push(`  ${action}`);
+    if (Mutation) {
+      Object.keys(Mutation).forEach((customName) => {
+        if (checkInventory(['Mutation', customName, entityName], inventory)) {
+          const action = composeCustomActionSignature(
+            Mutation[customName],
+            allEntityConfigs[entityName],
+            generalConfig,
+            entityTypeDic,
+            inputDic,
+          );
+          if (action) {
+            mutationTypes.push(`  ${action}`);
+          }
         }
-      }
-    });
+      });
+    }
   });
 
   const queryTypes2 = `type Query {
@@ -147,20 +121,20 @@ ${mutationTypes.join('\n')}
 }`
     : '';
 
-  // 4. generaqte entity types
+  // 3. generaqte entity types
 
   const entityTypes = Object.keys(entityTypeDic)
     .map((key) => entityTypeDic[key])
     .join('\n');
 
-  // 5. generate inputs
+  // 4. generate inputs
 
   const inputs = Object.keys(inputDic)
     .filter((inputName) => !inputName.startsWith('!'))
     .map((inputName) => inputDic[inputName])
     .join('\n');
 
-  // 6. prepare subscriptions
+  // 5. prepare subscriptions
 
   const updatedEntityPayloadTypes = allowSubscriptions
     ? Object.keys(allEntityConfigs)
@@ -229,7 +203,7 @@ ${entitySubscriptionTypes}
   if (mutationTypes2) resultArray.push(mutationTypes2);
   if (entitySubscriptionTypes2) resultArray.push(entitySubscriptionTypes2);
 
-  return resultArray.join('\n');
+  return { typeDefs: resultArray.join('\n'), entityTypeDic };
 };
 
 export default composeGqlTypes;

@@ -780,7 +780,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types for one entity', () => {
@@ -1322,7 +1322,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types for two entities', () => {
@@ -1715,7 +1715,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types for two related fields', () => {
@@ -2077,7 +2077,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types for regular and embedded fields', () => {
@@ -2346,7 +2346,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types for two duplex fields', () => {
@@ -2819,7 +2819,7 @@ type Subscription {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only queries', () => {
@@ -2945,7 +2945,7 @@ type Query {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only mutations', () => {
@@ -3087,7 +3087,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only entities query', () => {
@@ -3183,7 +3183,7 @@ type Query {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only entities query for Example config', () => {
@@ -3278,7 +3278,7 @@ type Query {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only create mutations', () => {
@@ -3337,7 +3337,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only mutation cretateEntity', () => {
@@ -3399,7 +3399,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only one custom mutation loadEntity', () => {
@@ -3456,7 +3456,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with inventory for only one custom query getEntity', () => {
@@ -3511,7 +3511,7 @@ type Query {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with custom input and return objects', () => {
@@ -3739,6 +3739,10 @@ enum ExampleForCatalogSortEnum {
 input ExampleForCatalogSortInput {
   sortBy: [ExampleForCatalogSortEnum]
 }
+input ExampleTimeRangeInput {
+  start: DateTime!
+  end: DateTime!
+}
 input ExampleForCatalogWhereOneInput {
   id: ID!
 }
@@ -3746,10 +3750,6 @@ input ExampleForCatalogUpdateInput {
   textField: String
   start: DateTime
   end: DateTime
-}
-input ExampleTimeRangeInput {
-  start: DateTime!
-  end: DateTime!
 }
 type Query {
   node(id: ID!): Node
@@ -3762,7 +3762,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create derivative inputs for custom types with inventory for only one custom query getEntity', () => {
@@ -3910,7 +3910,7 @@ type Mutation {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 
   test('should create entities types with derivative & inventory for only queries', () => {
@@ -4109,6 +4109,196 @@ type Query {
 }`;
 
     const result = composeGqlTypes(generalConfig);
-    expect(result).toEqual(expectedResult);
+    expect(result.typeDefs).toBe(expectedResult);
+  });
+
+  test('should create entities types with derivative & inventory for only mutation where involed entities was split', () => {
+    const entityConfig: SimplifiedEntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+
+    const ForCatalog: DerivativeAttributes = {
+      allow: { Example: ['updateEntity'] },
+      derivativeKey: 'ForCatalog',
+      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
+    };
+
+    const ForView: DerivativeAttributes = {
+      allow: { Example: [] },
+      derivativeKey: 'ForView',
+    };
+
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Mutation: { updateEntityForCatalog: true } },
+    };
+    const derivative = { ForCatalog, ForView };
+    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const expectedResult = `scalar DateTime
+scalar Upload
+interface Node {
+  id: ID!
+}
+input RegExp {
+  pattern: String!
+  flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
+}
+type ExampleForView implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleForCatalogWhereOneInput {
+  id: ID!
+}
+input ExampleForCatalogUpdateInput {
+  textField: String
+}
+type Query {
+  node(id: ID!): Node
+}
+type Mutation {
+  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForView!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result.typeDefs).toBe(expectedResult);
+  });
+
+  test('should create entities types with derivative & inventory for only queries', () => {
+    const entityConfig: SimplifiedEntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+        },
+      ],
+    };
+
+    const ForCatalog: DerivativeAttributes = {
+      allow: { Example: ['entitiesThroughConnection'] },
+      derivativeKey: 'ForCatalog',
+      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
+    };
+
+    const ForView: DerivativeAttributes = {
+      allow: { Example: [], ExampleEdge: [], ExampleConnection: [] },
+      derivativeFields: {
+        ExampleEdge: { node: 'ForView' },
+        ExampleConnection: { edges: 'ForView' },
+      },
+      derivativeKey: 'ForView',
+    };
+
+    const simplifiedAllEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const inventory: Inventory = {
+      name: 'test',
+      include: { Query: { entitiesThroughConnectionForCatalog: true } },
+    };
+    const derivative = { ForCatalog, ForView };
+    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const expectedResult = `scalar DateTime
+scalar Upload
+interface Node {
+  id: ID!
+}
+input RegExp {
+  pattern: String!
+  flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
+}
+type ExampleForViewConnection {
+  pageInfo: PageInfo!
+  edges: [ExampleForViewEdge!]!
+}
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+type ExampleForViewEdge {
+  cursor: String!
+  node: ExampleForView
+}
+type ExampleForView implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+}
+input ExampleForCatalogWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [ExampleForCatalogWhereInput!]
+  NOR: [ExampleForCatalogWhereInput!]
+  OR: [ExampleForCatalogWhereInput!]
+}
+input ExampleForCatalogWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+}
+enum ExampleForCatalogSortEnum {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+input ExampleForCatalogSortInput {
+  sortBy: [ExampleForCatalogSortEnum]
+}
+type Query {
+  node(id: ID!): Node
+  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleForViewConnection
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result.typeDefs).toBe(expectedResult);
   });
 });

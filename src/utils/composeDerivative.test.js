@@ -117,4 +117,43 @@ describe('composeDerivative', () => {
     const expectedResult = { ForView, ForCatalog: expectedForCatalog };
     expect(result).toEqual(expectedResult);
   });
+
+  test('compose derivatives with additional virtual configs and change output entity', () => {
+    const ForView: DerivativeAttributes = {
+      derivativeKey: 'ForView',
+      allow: {
+        Restaurant: ['entity', 'entities'],
+        Post: ['entity', 'entities'],
+      },
+    };
+
+    const ForCatalog: DerivativeAttributes = {
+      allow: {
+        Example: ['entitiesThroughConnection'],
+      },
+      derivativeKey: 'ForCatalog',
+      excludeFields: { Example: ['anotherField'] },
+      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
+    };
+
+    const result = composeDerivative([ForView, ForCatalog]);
+
+    const expectedForView: DerivativeAttributes = {
+      derivativeKey: 'ForView',
+      allow: {
+        Restaurant: ['entity', 'entities'],
+        Post: ['entity', 'entities'],
+        ExampleConnection: [],
+        ExampleEdge: [],
+      },
+
+      derivativeFields: {
+        ExampleEdge: { node: 'ForView' },
+        ExampleConnection: { edges: 'ForView' },
+      },
+    };
+
+    const expectedResult = { ForView: expectedForView, ForCatalog };
+    expect(result).toEqual(expectedResult);
+  });
 });

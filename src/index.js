@@ -5,8 +5,7 @@
 // -----------
 
 export { default as composeServersideConfig } from './resolvers/utils/composeServersideConfig';
-export { default as composeGqlResolvers } from './resolvers/composeGqlResolvers';
-export { default as composeGqlTypes } from './types/composeGqlTypes';
+export { default as composeTypeDefsAndResolvers } from './composeTypeDefsAndResolvers';
 
 // mutation resolvers
 export { default as createCopyManyEntitiesMutationResolver } from './resolvers/mutations/createCopyManyEntitiesMutationResolver';
