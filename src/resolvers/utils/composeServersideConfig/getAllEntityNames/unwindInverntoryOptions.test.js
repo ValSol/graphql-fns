@@ -23,7 +23,7 @@ describe('unwindInverntoryOptions', () => {
     specificName: ({ name }) => (name === 'Example' ? `specialUpdate${name}` : ''),
     argNames: () => ['whereOne'],
     argTypes: ({ name }) => [`${name}WhereOneInput!`],
-    involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
+    involvedEntityNames: ({ name }) => ({ inputOutputEntity: `${name}ForCatalog` }),
     type: ({ name }) => `${name}ForCatalog`,
     config: (exampleConfig, generalConfig) =>
       composeDerivativeConfigByName('ForCatalog', exampleConfig, generalConfig),

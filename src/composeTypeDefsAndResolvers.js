@@ -8,9 +8,9 @@ const composeTypeDefsAndResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig?: ServersideConfig,
 ): { typeDefs: string, resolvers: Object } => {
-  const { typeDefs } = composeGqlTypes(generalConfig);
+  const { typeDefs, entityTypeDic } = composeGqlTypes(generalConfig);
 
-  const resolvers = composeGqlResolvers(generalConfig, serversideConfig);
+  const resolvers = composeGqlResolvers(generalConfig, entityTypeDic, serversideConfig);
 
   return { typeDefs, resolvers };
 };

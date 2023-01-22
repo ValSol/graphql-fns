@@ -3405,7 +3405,7 @@ type Mutation {
   test('should create entities types with inventory for only one custom mutation loadEntity', () => {
     const signatureMethods: ActionSignatureMethods = {
       name: 'loadEntity',
-      specificName: ({ name }) => `load${name}`,
+      specificName: ({ name }) => (name === 'Example' ? `load${name}` : ''),
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
@@ -3462,7 +3462,7 @@ type Mutation {
   test('should create entities types with inventory for only one custom query getEntity', () => {
     const getEntity: ActionSignatureMethods = {
       name: 'getEntity',
-      specificName: ({ name }) => `get${name}`,
+      specificName: ({ name }) => (name === 'Example' ? `get${name}` : ''),
       argNames: () => ['path'],
       argTypes: () => ['String!'],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
@@ -3538,7 +3538,7 @@ type Query {
       argNames: () => ['range'],
       argTypes: ({ name }) => [`${name}TimeRangeInput!`],
       involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
-      type: ({ name }) => `${name}InTimeRange`,
+      type: ({ name }) => `${name}!`,
       config: (entityConfig) => entityConfig,
     };
 
@@ -3755,7 +3755,7 @@ type Query {
   node(id: ID!): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
   ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput): [ExampleForCatalog!]!
-  ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): ExampleInTimeRange
+  ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): Example!
 }
 type Mutation {
   updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForCatalog!

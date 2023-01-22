@@ -9,6 +9,7 @@ import type {
   EntityConfig,
 } from '../../flowTypes';
 
+import composeGqlTypes from '../../types/composeGqlTypes';
 import composeGqlResolvers from './index';
 
 describe('composeGqlResolvers', () => {
@@ -42,7 +43,10 @@ describe('composeGqlResolvers', () => {
     };
     const allEntityConfigs = { Example: entityConfig };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
+
     expect(typeof result.Query.ExampleCount).toBe('function');
     expect(typeof result.Query.ExampleDistinctValues).toBe('function');
     expect(typeof result.Query.Example).toBe('function');
@@ -94,7 +98,9 @@ describe('composeGqlResolvers', () => {
     };
     const allEntityConfigs = { Example1: entityConfig1, Example2: entityConfig2 };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.node).toBe('function');
@@ -174,7 +180,9 @@ describe('composeGqlResolvers', () => {
     });
     const allEntityConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.node).toBe('function');
@@ -261,7 +269,9 @@ describe('composeGqlResolvers', () => {
     };
     const allEntityConfigs = { Person: personConfig, Address: addressConfig };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.node).toBe('function');
@@ -344,7 +354,9 @@ describe('composeGqlResolvers', () => {
 
     const allEntityConfigs = { Person: personConfig, Place: placeConfig };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.node).toBe('function');
@@ -429,7 +441,9 @@ describe('composeGqlResolvers', () => {
 
     const allEntityConfigs = { Example: entityConfig };
     const generalConfig: GeneralConfig = { allEntityConfigs };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
 
     expect(typeof result.DateTime).toBe('object');
     expect(typeof result.Query.node).toBe('function');
@@ -469,7 +483,10 @@ describe('composeGqlResolvers', () => {
     const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: true } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
+
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Query.ExampleCount).toBe('function');
     expect(typeof result.Query.ExampleDistinctValues).toBe('function');
@@ -492,7 +509,10 @@ describe('composeGqlResolvers', () => {
     const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
+
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
     expect(typeof result.Mutation.importExamples).toBe('function');
@@ -516,7 +536,10 @@ describe('composeGqlResolvers', () => {
     const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Query: { entity: true } } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
+
     expect(result.Query.ExampleCount).toBeUndefined();
     expect(result.Query.ExampleDistinctValues).toBeUndefined();
     expect(typeof result.Query.node).toBe('function');
@@ -539,7 +562,10 @@ describe('composeGqlResolvers', () => {
     const allEntityConfigs = { Example: entityConfig };
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
-    const result = composeGqlResolvers(generalConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic);
+
     expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
     expect(result.Mutation.importExamples).toBeUndefined();
@@ -578,7 +604,10 @@ describe('composeGqlResolvers', () => {
     const serversideConfig: ServersideConfig = {
       Mutation: { loadEntity: createCustomLoadEntityMutationResolver },
     };
-    const result = composeGqlResolvers(generalConfig, serversideConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic, serversideConfig);
+
     expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
     expect(result.Mutation.importExamples).toBeUndefined();
@@ -620,7 +649,10 @@ describe('composeGqlResolvers', () => {
     const serversideConfig: ServersideConfig = {
       Query: { getEntity: createCustomLoadEntityMutationResolver },
     };
-    const result = composeGqlResolvers(generalConfig, serversideConfig);
+
+    const { entityTypeDic } = composeGqlTypes(generalConfig);
+    const result = composeGqlResolvers(generalConfig, entityTypeDic, serversideConfig);
+
     expect(result.Mutation).toBeUndefined();
     expect(result.Query.ExampleCount).toBeUndefined();
     expect(result.Query.ExampleDistinctValues).toBeUndefined();

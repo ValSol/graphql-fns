@@ -11,7 +11,6 @@ import composeDerivativeConfigName from '../../utils/composeDerivativeConfig/com
 import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
 import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
-import composeGqlTypes from '../../types/composeGqlTypes';
 import resolverDecorator from '../utils/resolverDecorator';
 import composeEntityResolvers from '../types/composeEntityResolvers';
 import createCustomResolver from '../createCustomResolver';
@@ -25,11 +24,10 @@ import createDeletedEntitySubscriptionResolver from '../subscriptions/createDele
 
 const composeGqlResolvers = (
   generalConfig: GeneralConfig,
+  entityTypeDic: { [entityName: string]: string },
   serversideConfig?: ServersideConfig = {}, // default "{}" to eliminate flowjs error
 ): Object => {
   const { allEntityConfigs, inventory, derivative = {} } = generalConfig;
-
-  const { entityTypeDic } = composeGqlTypes(generalConfig);
 
   const custom = mergeDerivativeIntoCustom(generalConfig);
 
