@@ -6,6 +6,58 @@ import type { EntityConfig } from '../../../flowTypes';
 import composeWhereInput from './composeWhereInput';
 
 describe('composeWhereInput', () => {
+  const child3Config: EntityConfig = {
+    name: 'Child3',
+    type: 'embedded',
+
+    textFields: [
+      {
+        name: 'name3',
+        index: true,
+      },
+    ],
+  };
+
+  const child2Config: EntityConfig = {
+    name: 'Child2',
+    type: 'embedded',
+
+    textFields: [
+      {
+        name: 'name2',
+        index: true,
+      },
+    ],
+
+    embeddedFields: [
+      {
+        name: 'embedded3',
+        config: child3Config,
+        index: true,
+      },
+    ],
+  };
+
+  const childConfig: EntityConfig = {
+    name: 'Child',
+    type: 'embedded',
+
+    textFields: [
+      {
+        name: 'name',
+        index: true,
+      },
+    ],
+
+    embeddedFields: [
+      {
+        name: 'embedded2',
+        config: child2Config,
+        index: true,
+      },
+    ],
+  };
+
   const entityConfig: EntityConfig = {};
   Object.assign(entityConfig, {
     name: 'Example',
@@ -69,6 +121,14 @@ describe('composeWhereInput', () => {
         index: true,
         config: entityConfig,
         array: true,
+      },
+    ],
+
+    embeddedFields: [
+      {
+        name: 'embedded',
+        config: childConfig,
+        index: true,
       },
     ],
   });
@@ -440,6 +500,83 @@ describe('composeWhereInput', () => {
         name: { $gt: '123456780' },
       },
       lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for "embedded" field exists', () => {
+    const where = {
+      embedded_exists: true,
+    };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        embedded: { $exists: true },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for "embedded" field', () => {
+    const where = {
+      embedded: { name: 'embedded' },
+    };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'embedded.name': { $eq: 'embedded' },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for "embedded.embedded2.embedded3" field', () => {
+    const where = {
+      embedded: { embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ' } },
+    };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'embedded.embedded2.embedded3.name3': { $gt: 'ABC' },
+        'embedded.embedded2.name2': { $lt: 'XYZ' },
+      },
+      lookups: [],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should return result for relational & embedded where', () => {
+    const where = {
+      relationalField_: {
+        embedded: { embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ' } },
+      },
+    };
+
+    const result = composeWhereInput(where, entityConfig);
+    const expectedResult = {
+      where: {
+        'relationalField_.embedded.embedded2.embedded3.name3': { $gt: 'ABC' },
+        'relationalField_.embedded.embedded2.name2': { $lt: 'XYZ' },
+      },
+      lookups: [
+        {
+          $lookup: {
+            from: 'example_things',
+            localField: 'relationalField',
+            foreignField: '_id',
+            as: 'relationalField_',
+          },
+        },
+      ],
     };
 
     expect(result).toEqual(expectedResult);

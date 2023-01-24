@@ -2,24 +2,39 @@
 
 import type { EntityConfig } from '../flowTypes';
 
-const composeTextIndexProperties = (entityConfig: EntityConfig): { [key: string]: number } => {
-  const { textFields, type: configType } = entityConfig;
+const composeTextIndexProperties = (
+  entityConfig: EntityConfig,
+  parent: string = '',
+): { [key: string]: number } => {
+  const { embeddedFields = [], fileFields = [], textFields = [] } = entityConfig;
 
-  const result = {};
+  const result = textFields.reduce((prev, { name, weight }) => {
+    if (weight) {
+      prev[`${parent}${name}`] = weight; // eslint-disable-line no-param-reassign
+    }
 
-  if (textFields) {
-    textFields.reduce((prev, { name, weight }) => {
-      if (weight && configType !== 'tangible') {
-        throw new TypeError(
-          'Must not have an "weight" for text field in an embedded or file document!',
-        );
-      }
-      if (weight) {
-        prev[name] = weight; // eslint-disable-line no-param-reassign
-      }
-      return prev;
-    }, result);
-  }
+    return prev;
+  }, {});
+
+  embeddedFields.reduce((prev, { name, config }) => {
+    const result2 = composeTextIndexProperties(config, `${parent}${name}.`);
+
+    Object.keys(result2).forEach((key) => {
+      prev[key] = result2[key]; // eslint-disable-line no-param-reassign
+    });
+
+    return prev;
+  }, result);
+
+  fileFields.reduce((prev, { name, config }) => {
+    const result2 = composeTextIndexProperties(config, `${parent}${name}.`);
+
+    Object.keys(result2).forEach((key) => {
+      prev[key] = result2[key]; // eslint-disable-line no-param-reassign
+    });
+
+    return prev;
+  }, result);
 
   return result;
 };

@@ -21,6 +21,7 @@ const createThingSchema = (entityConfig: EntityConfig, enums?: Enums = []): Obje
   ThingSchema.index({ updatedAt: 1 });
 
   const weights = composeTextIndexProperties(entityConfig);
+
   const weightsKeys = Object.keys(weights);
   if (weightsKeys.length) {
     ThingSchema.index(

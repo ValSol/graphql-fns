@@ -19,6 +19,9 @@ const defaultFields = `  id_in: [ID!]
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime`;
 
+const embeddedOrFileEntityDefaultFields = `  id_in: [ID!]
+  id_nin: [ID!]`;
+
 const counterFields = `
   counter_in: [Int!]
   counter_nin: [Int!]
@@ -33,24 +36,29 @@ const composeInputFields = (
   childChain: { [inputSpecificName: string]: EntityConfig },
 ): string => {
   const {
-    booleanFields,
-    enumFields,
-    dateTimeFields,
-    duplexFields,
-    intFields,
-    floatFields,
-    relationalFields,
-    textFields,
+    booleanFields = [],
+    embeddedFields = [],
+    enumFields = [],
+    dateTimeFields = [],
+    duplexFields = [],
+    intFields = [],
+    fileFields = [],
+    floatFields = [],
+    relationalFields = [],
+    textFields = [],
+    type: entityType,
     counter,
   } = entityConfig;
 
-  const fields = [`${defaultFields}${counter ? counterFields : ''}`];
+  const fields =
+    entityType === 'tangible'
+      ? [`${defaultFields}${counter ? counterFields : ''}`]
+      : [embeddedOrFileEntityDefaultFields];
 
-  if (textFields) {
-    textFields.forEach(({ name: fieldName, array, index, unique }) => {
-      if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: String`);
-        fields.push(`  ${fieldName}_in: [String!]
+  textFields.forEach(({ name: fieldName, array, index, unique }) => {
+    if (unique || index) {
+      if (index) fields.push(`  ${fieldName}: String`);
+      fields.push(`  ${fieldName}_in: [String!]
   ${fieldName}_nin: [String!]
   ${fieldName}_ne: String
   ${fieldName}_gt: String
@@ -58,183 +66,206 @@ const composeInputFields = (
   ${fieldName}_lt: String
   ${fieldName}_lte: String
   ${fieldName}_re: [RegExp!]`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (intFields) {
-    intFields.forEach(({ name: fieldName, array, index, unique }) => {
-      if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: Int`);
-        fields.push(`  ${fieldName}_in: [Int!]
+  intFields.forEach(({ name: fieldName, array, index, unique }) => {
+    if (unique || index) {
+      if (index) fields.push(`  ${fieldName}: Int`);
+      fields.push(`  ${fieldName}_in: [Int!]
   ${fieldName}_nin: [Int!]
   ${fieldName}_ne: Int
   ${fieldName}_gt: Int
   ${fieldName}_gte: Int
   ${fieldName}_lt: Int
   ${fieldName}_lte: Int`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (floatFields) {
-    floatFields.forEach(({ name: fieldName, array, index, unique }) => {
-      if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: Float`);
-        fields.push(`  ${fieldName}_in: [Float!]
+  floatFields.forEach(({ name: fieldName, array, index, unique }) => {
+    if (unique || index) {
+      if (index) fields.push(`  ${fieldName}: Float`);
+      fields.push(`  ${fieldName}_in: [Float!]
   ${fieldName}_nin: [Float!]
   ${fieldName}_ne: Float
   ${fieldName}_gt: Float
   ${fieldName}_gte: Float
   ${fieldName}_lt: Float
   ${fieldName}_lte: Float`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (dateTimeFields) {
-    dateTimeFields.forEach(({ name: fieldName, array, index, unique }) => {
-      if (unique || index) {
-        if (index) fields.push(`  ${fieldName}: DateTime`);
-        fields.push(`  ${fieldName}_in: [DateTime!]
+  dateTimeFields.forEach(({ name: fieldName, array, index, unique }) => {
+    if (unique || index) {
+      if (index) fields.push(`  ${fieldName}: DateTime`);
+      fields.push(`  ${fieldName}_in: [DateTime!]
   ${fieldName}_nin: [DateTime!]
   ${fieldName}_ne: DateTime
   ${fieldName}_gt: DateTime
   ${fieldName}_gte: DateTime
   ${fieldName}_lt: DateTime
   ${fieldName}_lte: DateTime`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (booleanFields) {
-    booleanFields.forEach(({ name: fieldName, array, index }) => {
-      if (index) {
-        fields.push(`  ${fieldName}: Boolean
+  booleanFields.forEach(({ name: fieldName, array, index }) => {
+    if (index) {
+      fields.push(`  ${fieldName}: Boolean
   ${fieldName}_ne: Boolean`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (enumFields) {
-    enumFields.forEach(({ name: fieldName, enumName, array, index }) => {
-      if (index) {
-        fields.push(`  ${fieldName}: ${enumName}Enumeration
+  enumFields.forEach(({ name: fieldName, enumName, array, index }) => {
+    if (index) {
+      fields.push(`  ${fieldName}: ${enumName}Enumeration
   ${fieldName}_in: [${enumName}Enumeration!]
   ${fieldName}_nin: [${enumName}Enumeration!]
   ${fieldName}_ne: ${enumName}Enumeration
   ${fieldName}_re: [RegExp!]`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
-    });
-  }
+    }
+  });
 
-  if (relationalFields) {
-    relationalFields.forEach(({ name: fieldName, array, index, unique, config }) => {
-      if (unique || index) {
-        fields.push(`  ${fieldName}: ID
+  relationalFields.forEach(({ name: fieldName, array, index, unique, config }) => {
+    if (unique || index) {
+      fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
+    }
 
-      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
-    });
-  }
+    childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+  });
 
   // the same code as for relationalFields
-  if (duplexFields) {
-    duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
-      if (unique || index) {
-        fields.push(`  ${fieldName}: ID
+
+  duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
+    if (unique || index) {
+      fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
   ${fieldName}_nin: [ID!]
   ${fieldName}_ne: ID
   ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
-      }
-      if (index && !array) {
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
-      if (index && array) {
-        fields.push(`  ${fieldName}_size: Int
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
-      }
+    }
+
+    childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+  });
+
+  // the same code as for fileFields
+
+  embeddedFields.forEach(({ name: fieldName, array, config, index }) => {
+    if (index) {
+      fields.push(`  ${fieldName}: ${config.name}WhereInput`);
 
       childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
-    });
-  }
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+    }
+  });
 
-  return fields.join('\n');
+  // the same code as for embeddedFields
+
+  fileFields.forEach(({ name: fieldName, array, config, index }) => {
+    if (index) {
+      fields.push(`  ${fieldName}: ${config.name}WhereInput`);
+
+      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+    }
+    if (index && !array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
+    }
+    if (index && array) {
+      fields.push(`  ${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+    }
+  });
+
+  return fields.join('\n'); // embeddedFields
 };
 
 const createEntityWhereInputType: InputCreator = (entityConfig) => {
-  const { name } = entityConfig;
+  const { name, type: entityType } = entityConfig;
 
   const inputName = `${name}WhereInput`;
   const preChildChain = {};
 
   const fields = composeInputFields(entityConfig, preChildChain);
 
-  const result = [
-    `input ${name}WhereInput {`,
-    fields,
-    `  AND: [${name}WhereInput!]
+  const result =
+    entityType === 'tangible'
+      ? [
+          `input ${name}WhereInput {`,
+          fields,
+          `  AND: [${name}WhereInput!]
   NOR: [${name}WhereInput!]
   OR: [${name}WhereInput!]
 }`,
-    `input ${name}WhereWithoutBooleanOperationsInput {`,
-    fields,
-    '}',
-  ];
+          `input ${name}WhereWithoutBooleanOperationsInput {`,
+          fields,
+          '}',
+        ]
+      : [`input ${name}WhereInput {`, fields, '}'];
 
   const inputDefinition = result.join('\n');
 

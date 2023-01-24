@@ -177,6 +177,7 @@ type SimplifiedEmbeddedField = {
   +required?: boolean,
   +array?: boolean,
   +configName: string,
+  +index?: boolean,
   +freeze?: boolean,
 };
 
@@ -185,6 +186,7 @@ type SimplifiedFileField = {
   +required?: boolean,
   +array?: boolean,
   +configName: string,
+  +index?: boolean,
   +freeze?: boolean,
 };
 
@@ -254,6 +256,7 @@ export type EntityConfig = {
     +required?: boolean,
     +array?: boolean,
     +config: EntityConfig,
+    +index?: boolean,
     +freeze?: boolean,
   }>,
 
@@ -262,6 +265,7 @@ export type EntityConfig = {
     +required?: boolean,
     +array?: boolean,
     +config: EntityConfig,
+    +index?: boolean,
     +freeze?: boolean,
   }>,
 

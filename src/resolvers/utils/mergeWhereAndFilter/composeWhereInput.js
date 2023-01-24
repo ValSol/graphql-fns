@@ -15,36 +15,47 @@ const checkField = (keyWithoutSuffix, entityName, fieldsObj, entireWhere) => {
   }
 };
 
-const processIdKey = (key, suffix, prefix, where, result, notCreateObjectId) => {
+const processIdKey = (key, suffix, prefix, embeddedPrefix, where, result, notCreateObjectId) => {
   const keyWithoutSuffix = key.slice(0, -suffix.length);
 
   const key2 = keyWithoutSuffix === 'id' ? '_id' : keyWithoutSuffix;
 
-  if (!result[`${prefix}${key2}`]) {
-    result[`${prefix}${key2}`] = {}; // eslint-disable-line no-param-reassign
+  if (!result[`${prefix}${embeddedPrefix}${key2}`]) {
+    result[`${prefix}${embeddedPrefix}${key2}`] = {}; // eslint-disable-line no-param-reassign
   }
 
   // eslint-disable-next-line no-param-reassign
-  result[`${prefix}${key2}`][`$${suffix.slice(1)}`] = where[key].map(
+  result[`${prefix}${embeddedPrefix}${key2}`][`$${suffix.slice(1)}`] = where[key].map(
     (id) => id && (notCreateObjectId ? id : Types.ObjectId(id)),
   );
 };
 
-const processKey = (key, suffix, prefix, where, entityName, fieldsObj, entireWhere, result) => {
+const processKey = (
+  key,
+  suffix,
+  prefix,
+  embeddedPrefix,
+  where,
+  entityName,
+  fieldsObj,
+  entireWhere,
+  result,
+) => {
   const keyWithoutSuffix = key.slice(0, -suffix.length);
 
   checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
 
-  if (!result[`${prefix}${keyWithoutSuffix}`]) {
-    result[`${prefix}${keyWithoutSuffix}`] = {}; // eslint-disable-line no-param-reassign
+  if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+    result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {}; // eslint-disable-line no-param-reassign
   }
 
-  result[`${prefix}${keyWithoutSuffix}`][`$${suffix.slice(1)}`] = where[key]; // eslint-disable-line no-param-reassign
+  result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`][`$${suffix.slice(1)}`] = where[key]; // eslint-disable-line no-param-reassign
 };
 
 const composeWhereInputRecursively = (
   where: Object,
   parentFieldName: string,
+  embeddedPrefix: string,
   lookupArray: Array<string>,
   entityConfig: EntityConfig,
   entireWhere: string,
@@ -74,37 +85,127 @@ const composeWhereInputRecursively = (
 
   Object.keys(where).forEach((key) => {
     if (key.endsWith('_in') && idFields.includes(key.slice(0, -'_in'.length))) {
-      processIdKey(key, '_in', prefix, where, result, notCreateObjectId);
+      processIdKey(key, '_in', prefix, embeddedPrefix, where, result, notCreateObjectId);
     } else if (key.endsWith('_nin') && idFields.includes(key.slice(0, -'_nin'.length))) {
-      processIdKey(key, '_nin', prefix, where, result, notCreateObjectId);
+      processIdKey(key, '_nin', prefix, embeddedPrefix, where, result, notCreateObjectId);
     } else if (key.endsWith('_in')) {
-      processKey(key, '_in', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_in',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_lt')) {
-      processKey(key, '_lt', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_lt',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_gt')) {
-      processKey(key, '_gt', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_gt',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_ne')) {
-      processKey(key, '_ne', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_ne',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_nin')) {
-      processKey(key, '_nin', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_nin',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_lte')) {
-      processKey(key, '_lte', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_lte',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_gte')) {
-      processKey(key, '_gte', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_gte',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_exists')) {
-      processKey(key, '_exists', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_exists',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.endsWith('_size')) {
-      processKey(key, '_size', prefix, where, entityName, fieldsObj, entireWhere, result);
+      processKey(
+        key,
+        '_size',
+        prefix,
+        embeddedPrefix,
+        where,
+        entityName,
+        fieldsObj,
+        entireWhere,
+        result,
+      );
     } else if (key.slice(-3) === '_re') {
       const keyWithoutSuffix = key.slice(0, -'_re'.length);
 
       checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${keyWithoutSuffix}`] = {};
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
       }
 
-      result[`${prefix}${keyWithoutSuffix}`].$in = where[key].map(
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$in = where[key].map(
         (item) => new RegExp(item.pattern, item.flags),
       );
     } else if (key.endsWith('_notsize')) {
@@ -112,16 +213,17 @@ const composeWhereInputRecursively = (
 
       checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${keyWithoutSuffix}`]) {
-        result[`${prefix}${keyWithoutSuffix}`] = {};
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
       }
 
-      result[`${prefix}${keyWithoutSuffix}`].$not = { $size: where[key] };
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$not = { $size: where[key] };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = where[key].map((where2) =>
         composeWhereInputRecursively(
           where2,
           parentFieldName,
+          embeddedPrefix,
           lookupArray,
           entityConfig,
           entireWhere,
@@ -149,6 +251,7 @@ const composeWhereInputRecursively = (
       const result2 = composeWhereInputRecursively(
         value,
         relationalKey,
+        '', // embeddedPrefix begin from ""
         lookupArray,
         entityConfig2,
         entireWhere,
@@ -161,11 +264,31 @@ const composeWhereInputRecursively = (
     } else {
       checkField(key, entityName, fieldsObj, entireWhere);
 
-      if (!result[`${prefix}${key}`]) {
-        result[`${prefix}${key}`] = {};
-      }
+      if (fieldsObj[key].kind === 'embeddedFields' || fieldsObj[key].kind === 'fileFields') {
+        const {
+          attributes: { config },
+        } = fieldsObj[key];
 
-      result[`${prefix}${key}`].$eq = where[key];
+        const result2 = composeWhereInputRecursively(
+          where[key],
+          parentFieldName,
+          `${embeddedPrefix}${key}.`,
+          lookupArray,
+          config,
+          entireWhere,
+          notCreateObjectId,
+        );
+
+        Object.keys(result2).forEach((key2) => {
+          result[key2] = result2[key2];
+        });
+      } else {
+        if (!result[`${prefix}${embeddedPrefix}${key}`]) {
+          result[`${prefix}${embeddedPrefix}${key}`] = {};
+        }
+
+        result[`${prefix}${embeddedPrefix}${key}`].$eq = where[key];
+      }
     }
   });
   return result;
@@ -179,6 +302,7 @@ const composeWhereInput = (
   const lookupArray = [];
   const where2 = composeWhereInputRecursively(
     where,
+    '',
     '',
     lookupArray,
     entityConfig,

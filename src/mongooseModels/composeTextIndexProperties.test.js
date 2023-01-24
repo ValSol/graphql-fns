@@ -7,6 +7,56 @@ import composeTextIndexProperties from './composeTextIndexProperties';
 
 describe('composeTextIndexProperties', () => {
   test('should compose schema properties with text fields', () => {
+    const child3Config: EntityConfig = {
+      name: 'Child3',
+      type: 'embedded',
+
+      textFields: [
+        {
+          name: 'name3',
+          weight: 3,
+        },
+      ],
+    };
+
+    const child2Config: EntityConfig = {
+      name: 'Child2',
+      type: 'embedded',
+
+      textFields: [
+        {
+          name: 'name2',
+          weight: 2,
+        },
+      ],
+
+      embeddedFields: [
+        {
+          name: 'embedded3',
+          config: child3Config,
+        },
+      ],
+    };
+
+    const childConfig: EntityConfig = {
+      name: 'Child',
+      type: 'embedded',
+
+      textFields: [
+        {
+          name: 'name',
+          weight: 1,
+        },
+      ],
+
+      embeddedFields: [
+        {
+          name: 'embedded2',
+          config: child2Config,
+        },
+      ],
+    };
+
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -43,12 +93,24 @@ describe('composeTextIndexProperties', () => {
           unique: true,
         },
       ],
+
+      embeddedFields: [
+        {
+          name: 'embedded',
+          config: childConfig,
+          index: true,
+        },
+      ],
     };
+
     const expectedResult = {
       textField1: 10,
       textField2: 20,
       textField3: 30,
       textField4: 40,
+      'embedded.name': 1,
+      'embedded.embedded2.name2': 2,
+      'embedded.embedded2.embedded3.name3': 3,
     };
 
     const result = composeTextIndexProperties(entityConfig);

@@ -792,6 +792,7 @@ type Subscription {
           name: 'fileId',
           required: true,
           freeze: true,
+          index: true,
         },
         {
           name: 'address',
@@ -870,6 +871,7 @@ type Subscription {
           name: 'photos',
           configName: 'Image',
           array: true,
+          index: true,
         },
       ],
 
@@ -1045,6 +1047,9 @@ input ExampleWhereInput {
   cuisines_re: [RegExp!]
   cuisines_size: Int
   cuisines_notsize: Int
+  photos: ImageWhereInput
+  photos_size: Int
+  photos_notsize: Int
   AND: [ExampleWhereInput!]
   NOR: [ExampleWhereInput!]
   OR: [ExampleWhereInput!]
@@ -1107,6 +1112,23 @@ input ExampleWhereWithoutBooleanOperationsInput {
   cuisines_re: [RegExp!]
   cuisines_size: Int
   cuisines_notsize: Int
+  photos: ImageWhereInput
+  photos_size: Int
+  photos_notsize: Int
+}
+input ImageWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  fileId: String
+  fileId_in: [String!]
+  fileId_nin: [String!]
+  fileId_ne: String
+  fileId_gt: String
+  fileId_gte: String
+  fileId_lt: String
+  fileId_lte: String
+  fileId_re: [RegExp!]
+  fileId_exists: Boolean
 }
 enum ExampleGeospatialFieldNamesEnum {
   position
@@ -2089,6 +2111,7 @@ type Subscription {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          index: true,
         },
         {
           name: 'province',
@@ -2123,6 +2146,7 @@ type Subscription {
         {
           name: 'place',
           configName: 'Address',
+          index: true,
         },
         {
           name: 'places',
@@ -2206,6 +2230,8 @@ input PersonWhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  place: AddressWhereInput
+  place_exists: Boolean
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
@@ -2227,6 +2253,22 @@ input PersonWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  place: AddressWhereInput
+  place_exists: Boolean
+}
+input AddressWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  country: String
+  country_in: [String!]
+  country_nin: [String!]
+  country_ne: String
+  country_gt: String
+  country_gte: String
+  country_lt: String
+  country_lte: String
+  country_re: [RegExp!]
+  country_exists: Boolean
 }
 enum PersonTextNamesEnum {
   firstName
@@ -4190,18 +4232,25 @@ type Mutation {
     };
 
     const ForCatalog: DerivativeAttributes = {
-      allow: { Example: ['entitiesThroughConnection'] },
       derivativeKey: 'ForCatalog',
+      allow: { Example: ['entitiesThroughConnection'] },
       involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
     };
 
     const ForView: DerivativeAttributes = {
+      derivativeKey: 'ForView',
       allow: { Example: [], ExampleEdge: [], ExampleConnection: [] },
       derivativeFields: {
         ExampleEdge: { node: 'ForView' },
         ExampleConnection: { edges: 'ForView' },
       },
-      derivativeKey: 'ForView',
+      // "involvedOutputDerivativeKeys" not change types that are returned by "ForCatalog" derivative actions
+      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForGuest' } },
+    };
+
+    const ForGuest: DerivativeAttributes = {
+      derivativeKey: 'ForGuest',
+      allow: { Example: [] },
     };
 
     const simplifiedAllEntityConfigs = [entityConfig];
@@ -4210,7 +4259,7 @@ type Mutation {
       name: 'test',
       include: { Query: { entitiesThroughConnectionForCatalog: true } },
     };
-    const derivative = { ForCatalog, ForView };
+    const derivative = { ForCatalog, ForView, ForGuest };
     const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload

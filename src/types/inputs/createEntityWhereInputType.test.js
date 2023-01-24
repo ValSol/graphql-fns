@@ -1026,4 +1026,374 @@ input ExampleWhereWithoutBooleanOperationsInput {
     const result = createEntityWhereInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should create entity input type if there are embedded index fields', () => {
+    const addressConfig: EntityConfig = {
+      name: 'Address',
+      type: 'embedded',
+
+      textFields: [
+        {
+          name: 'city',
+          index: true,
+        },
+      ],
+
+      intFields: [
+        {
+          name: 'number',
+          index: true,
+        },
+      ],
+    };
+
+    const personConfig: EntityConfig = {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+
+      embeddedFields: [
+        {
+          name: 'address',
+          config: addressConfig,
+          index: true,
+        },
+      ],
+    };
+
+    const expectedResult = [
+      'PersonWhereInput',
+      `input PersonWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  address: AddressWhereInput
+  address_exists: Boolean
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+}
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  address: AddressWhereInput
+  address_exists: Boolean
+}`,
+      { AddressWhereInput: [createEntityWhereInputType, addressConfig] },
+    ];
+
+    const result = createEntityWhereInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type for embedded entity', () => {
+    const addressConfig: EntityConfig = {
+      name: 'Address',
+      type: 'embedded',
+
+      textFields: [
+        {
+          name: 'city',
+          index: true,
+        },
+      ],
+
+      intFields: [
+        {
+          name: 'number',
+          index: true,
+        },
+      ],
+    };
+
+    const expectedResult = [
+      'AddressWhereInput',
+      `input AddressWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  city: String
+  city_in: [String!]
+  city_nin: [String!]
+  city_ne: String
+  city_gt: String
+  city_gte: String
+  city_lt: String
+  city_lte: String
+  city_re: [RegExp!]
+  city_exists: Boolean
+  number: Int
+  number_in: [Int!]
+  number_nin: [Int!]
+  number_ne: Int
+  number_gt: Int
+  number_gte: Int
+  number_lt: Int
+  number_lte: Int
+  number_exists: Boolean
+}`,
+      {},
+    ];
+
+    const result = createEntityWhereInputType(addressConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type if there are file index fields', () => {
+    const imageConfig: EntityConfig = {
+      name: 'Image',
+      type: 'file',
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+          freeze: true,
+          index: true,
+        },
+        {
+          name: 'address',
+          freeze: true,
+        },
+        {
+          name: 'text',
+        },
+      ],
+    };
+
+    const personConfig: EntityConfig = {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          index: true,
+        },
+        {
+          name: 'lastName',
+          index: true,
+        },
+      ],
+
+      fileFields: [
+        {
+          name: 'photos',
+          config: imageConfig,
+          index: true,
+          array: true,
+        },
+      ],
+    };
+
+    const expectedResult = [
+      'PersonWhereInput',
+      `input PersonWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  photos: ImageWhereInput
+  photos_size: Int
+  photos_notsize: Int
+  AND: [PersonWhereInput!]
+  NOR: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+}
+input PersonWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  photos: ImageWhereInput
+  photos_size: Int
+  photos_notsize: Int
+}`,
+      { ImageWhereInput: [createEntityWhereInputType, imageConfig] },
+    ];
+
+    const result = createEntityWhereInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type if there are file index fields', () => {
+    const imageConfig: EntityConfig = {
+      name: 'Image',
+      type: 'file',
+      textFields: [
+        {
+          name: 'fileId',
+          required: true,
+          freeze: true,
+          index: true,
+        },
+        {
+          name: 'address',
+          freeze: true,
+        },
+        {
+          name: 'text',
+        },
+      ],
+    };
+
+    const expectedResult = [
+      'ImageWhereInput',
+      `input ImageWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  fileId: String
+  fileId_in: [String!]
+  fileId_nin: [String!]
+  fileId_ne: String
+  fileId_gt: String
+  fileId_gte: String
+  fileId_lt: String
+  fileId_lte: String
+  fileId_re: [RegExp!]
+  fileId_exists: Boolean
+}`,
+      {},
+    ];
+
+    const result = createEntityWhereInputType(imageConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });
