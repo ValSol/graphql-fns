@@ -4,8 +4,11 @@ import type { GeneralConfig } from '../../flowTypes';
 
 const composeEnumTypes = (generalConfig: GeneralConfig): string => {
   const { enums } = generalConfig;
+
   const linesArray = enums
-    ? enums.reduce((prev, { name, enum: enumValue }) => {
+    ? Object.keys(enums).reduce((prev, name) => {
+        const enumValue = enums[name];
+
         prev.push(`enum ${name}Enumeration {`);
         enumValue.forEach((item) => prev.push(`  ${item}`));
         prev.push('}');

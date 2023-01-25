@@ -56,7 +56,7 @@ describe('fillInputDicForCustom', () => {
   };
 
   const enumKeys = ['key1', 'key2', 'key3'];
-  const enums: Enums = [{ name: 'EnumKeys', enum: enumKeys }];
+  const enums: Enums = { EnumKeys: enumKeys };
 
   const ForCatalog: DerivativeAttributes = {
     allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },

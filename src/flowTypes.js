@@ -1,7 +1,5 @@
 // @flow
 
-import type { BitwiseArray } from 'bitwise-array/lib/flowTypes';
-
 export type MongodbGeospatialPoint = {|
   +type: 'Point',
   +coordinates: [number, number],
@@ -426,10 +424,9 @@ export type FlatFormikFields = $ReadOnlyArray<
     |},
 >;
 
-export type Enums = $ReadOnlyArray<{|
-  +name: string,
-  +enum: $ReadOnlyArray<string>,
-|}>;
+export type Enums = {|
+  [name: string]: $ReadOnlyArray<string>, // enums list
+|};
 
 type entityNamesList = true | $ReadOnlyArray<string>;
 
@@ -808,33 +805,6 @@ export type ClientOptions = {
 export type ClientFieldsOptions = {
   ...ClientOptions,
   shift: number,
-};
-
-export type BoleanVariant = { fieldVariant: 'booleanField', value: 'all' | boolean };
-export type EnumVariant = {
-  fieldVariant: 'enumField',
-  value: 'all' | BitwiseArray,
-  enumeration: Array<string>,
-};
-export type EnumArrayVariant = {
-  fieldVariant: 'enumArrayField',
-  value: 'all' | BitwiseArray,
-  enumeration: Array<string>,
-};
-type FieldVariant = BoleanVariant | EnumVariant | EnumArrayVariant;
-export type AdminFilters = { [fieldName: string]: FieldVariant };
-
-export type AdminListContextState = {
-  error: string,
-  decorated: Array<Object>,
-  items: Array<Object>,
-  listItems: Array<Object>,
-  filtered: Array<Object>,
-  masks: { [fieldName: string]: BitwiseArray },
-  loading: boolean,
-  filters: AdminFilters,
-  config: EntityConfig | null,
-  outdated: boolean,
 };
 
 export type InputCreator = (

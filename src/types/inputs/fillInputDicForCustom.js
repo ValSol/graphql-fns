@@ -39,7 +39,7 @@ const fillInputDicForCustom = (
     return;
   }
 
-  const { custom = {}, allEntityConfigs, derivative = {}, enums = [] } = generalConfig;
+  const { custom = {}, allEntityConfigs, derivative = {}, enums = {} } = generalConfig;
 
   const allEntityNames = Object.keys(allEntityConfigs).map((name) => name);
 
@@ -50,7 +50,7 @@ const fillInputDicForCustom = (
   const customInputNames = Object.keys(customInput);
 
   if (argType.endsWith('Enumeration')) {
-    const enumeration = enums.find(({ name }) => name === argType.slice(0, -'Enumeration'.length));
+    const enumeration = enums[argType.slice(0, -'Enumeration'.length)];
 
     if (enumeration) return;
   }

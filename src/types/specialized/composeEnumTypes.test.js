@@ -28,10 +28,8 @@ describe('composeEnumTypes', () => {
   test('should return empty string if there are not any enumerations', () => {
     const enumeration1 = ['key1_1', 'key1_2', 'key1_3'];
     const enumeration2 = ['key2_1', 'key2_2', 'key2_3'];
-    const enums: Enums = [
-      { name: 'Enumeration1', enum: enumeration1 },
-      { name: 'Enumeration2', enum: enumeration2 },
-    ];
+    const enums: Enums = { Enumeration1: enumeration1, Enumeration2: enumeration2 };
+
     const generalConfig: GeneralConfig = {
       allEntityConfigs: {},
       enums,

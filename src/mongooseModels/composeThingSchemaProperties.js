@@ -275,11 +275,6 @@ const composeThingSchemaProperties = (
     return prev;
   }, result);
 
-  const enumObject = enums.reduce((prev, { name, enum: enumeration }) => {
-    // eslint-disable-next-line no-param-reassign
-    prev[name] = enumeration;
-    return prev;
-  }, {});
   enumFields.reduce((prev, { array, default: defaultValue, index, name, required, enumName }) => {
     if (defaultValue) {
       if (!array && !(typeof defaultValue === 'string')) {
@@ -292,7 +287,7 @@ const composeThingSchemaProperties = (
 
     // eslint-disable-next-line no-param-reassign
     prev[name] = {
-      enum: enumObject[enumName],
+      enum: enums[enumName],
       type: array ? [String] : String,
     };
     // eslint-disable-next-line no-param-reassign

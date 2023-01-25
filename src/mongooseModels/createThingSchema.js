@@ -10,7 +10,7 @@ const { Schema } = mongoose;
 
 const thingSchemas = {};
 
-const createThingSchema = (entityConfig: EntityConfig, enums?: Enums = []): Object => {
+const createThingSchema = (entityConfig: EntityConfig, enums?: Enums = {}): Object => {
   const { name } = entityConfig;
 
   if (thingSchemas[name]) return thingSchemas[name];

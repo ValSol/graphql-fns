@@ -886,10 +886,11 @@ type Subscription {
     const simplifiedAllEntityConfigs = [entityConfig, imageConfig];
 
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
-    const enums = [
-      { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
-      { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
-    ];
+    const enums = {
+      Weekdays: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
+      Cuisines: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'],
+    };
+
     const generalConfig: GeneralConfig = { allEntityConfigs, enums };
 
     const expectedResult = `scalar DateTime

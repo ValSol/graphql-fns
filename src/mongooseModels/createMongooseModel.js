@@ -10,7 +10,7 @@ const syncedIndexes = {};
 const createMongooseModel = async (
   mongooseConn: Object,
   entityConfig: EntityConfig,
-  enums?: Enums = [],
+  enums?: Enums = {},
 ): Object => {
   const { name, type: configType } = entityConfig;
 

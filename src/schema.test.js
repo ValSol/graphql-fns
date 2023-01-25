@@ -111,10 +111,11 @@ describe('graphql schema', () => {
 
     const simplifiedAllEntityConfigs = [entityConfig];
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
-    const enums: Enums = [
-      { name: 'Weekdays', enum: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'] },
-      { name: 'Cuisines', enum: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'] },
-    ];
+    const enums: Enums = {
+      Weekdays: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
+      Cuisines: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'],
+    };
+
     const generalConfig: GeneralConfig = { allEntityConfigs, enums };
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
 
