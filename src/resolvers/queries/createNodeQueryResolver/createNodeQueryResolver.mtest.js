@@ -17,6 +17,8 @@ const { default: toGlobalId } = require('../../utils/toGlobalId');
 
 const { default: createNodeQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

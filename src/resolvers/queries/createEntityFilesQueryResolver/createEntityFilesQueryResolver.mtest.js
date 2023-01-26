@@ -10,6 +10,8 @@ const mongoOptions = require('../../../../test/mongo-options');
 const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
 const { default: createEntityFilesQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

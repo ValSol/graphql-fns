@@ -18,6 +18,8 @@ const info = {
   },
 };
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

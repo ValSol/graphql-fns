@@ -13,6 +13,8 @@ const { default: createEntityFilesQueryResolver } = require('../createEntityFile
 
 const { default: createEntityFilesThroughConnectionQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

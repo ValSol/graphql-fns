@@ -15,6 +15,8 @@ const {
 const { default: info } = require('./scalar-info.auxiliary');
 const { default: createEntityScalarResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

@@ -9,6 +9,8 @@ const { PubSub } = require('graphql-subscriptions');
 const mongoOptions = require('../../../../test/mongo-options');
 const { default: createUploadEntityFilesMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

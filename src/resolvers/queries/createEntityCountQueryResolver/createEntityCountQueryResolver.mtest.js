@@ -13,6 +13,8 @@ const {
 } = require('../../mutations/createCreateEntityMutationResolver');
 const { default: createEntityCountQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

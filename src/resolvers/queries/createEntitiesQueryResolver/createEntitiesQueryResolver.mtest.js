@@ -17,6 +17,8 @@ const { default: infoForSort } = require('./info-sort.auxiliary');
 
 const { default: createEntitiesQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

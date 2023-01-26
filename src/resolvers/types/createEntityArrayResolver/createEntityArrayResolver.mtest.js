@@ -16,6 +16,8 @@ const {
 const { default: info } = require('./array-info.auxiliary');
 const { default: createEntityArrayResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

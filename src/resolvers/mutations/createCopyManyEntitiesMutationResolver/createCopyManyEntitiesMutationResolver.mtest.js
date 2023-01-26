@@ -15,6 +15,8 @@ const {
 } = require('../createUpdateManyEntitiesMutationResolver');
 const { default: createCopyManyEntitiesMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

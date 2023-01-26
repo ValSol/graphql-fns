@@ -5,6 +5,7 @@
 .*/node_modules/.*/\(src\).*\.js$
 .*/node_modules/graphql/subscription/mapAsyncIterator.js
 lib/*.*
+xyz
 
 [include]
 
@@ -12,4 +13,3 @@ lib/*.*
 flow-typed
 
 [options]
-esproposal.optional_chaining=enable

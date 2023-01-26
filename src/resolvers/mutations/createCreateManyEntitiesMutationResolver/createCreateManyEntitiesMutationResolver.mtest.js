@@ -8,6 +8,8 @@ const mongoOptions = require('../../../../test/mongo-options');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const { default: createCreateManyEntitiesMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 
 beforeAll(async () => {

@@ -12,6 +12,8 @@ const {
 const { default: toCursor } = require('../../utils/toCursor');
 const { default: createEntitiesThroughConnectionQueryResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 
 let createdExamples;

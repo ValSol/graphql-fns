@@ -9,6 +9,8 @@ const mongoOptions = require('../../../../test/mongo-options');
 const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
 const { default: createCreateEntityMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

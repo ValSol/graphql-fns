@@ -23,6 +23,8 @@ const {
 
 const { default: createCopyEntityWithChildrenMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 

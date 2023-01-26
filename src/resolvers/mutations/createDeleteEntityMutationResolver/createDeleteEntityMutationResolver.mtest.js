@@ -12,6 +12,8 @@ const {
 } = require('../createCreateEntityMutationResolver');
 const { default: createDeleteEntityMutationResolver } = require('./index');
 
+mongoose.set('strictQuery', false);
+
 let mongooseConn;
 let pubsub;
 
