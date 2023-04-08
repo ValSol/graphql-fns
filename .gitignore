@@ -1,5 +1,4 @@
-flow-typed
-lib
+dist
 node_modules
 .vscode
 *.log

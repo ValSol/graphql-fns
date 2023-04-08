@@ -1,18 +1,17 @@
 {
-  "parser": "@babel/eslint-parser",
-  "env": {
-    "browser": true,
-    "jest": true,
-    "node": true
-  },
-  "extends": ["airbnb", "prettier", "plugin:flowtype/recommended"],
-  "plugins": ["prettier", "react-hooks"],
+  "root": true,
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": ["./tsconfig.json"] },
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "prettier/prettier": "error",
-    "react/button-has-type": 0,
-    "react/jsx-filename-extension": 0,
-    "react/jsx-one-expression-per-line": 0,
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
-  }
+    "@typescript-eslint/strict-boolean-expressions": [
+      2,
+      {
+        "allowString": false,
+        "allowNumber": false
+      }
+    ]
+  },
+  "ignorePatterns": ["src/**/*.test.ts", "src/**/*.mtest.ts"]
 }

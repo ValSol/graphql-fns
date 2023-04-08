@@ -1,0 +1,63 @@
+import type {
+  DuplexField,
+  GraphqlObject,
+  RelationalField,
+  TangibleEntityConfig,
+} from '../../../tsTypes';
+
+import composeFieldsObject from '../../../utils/composeFieldsObject';
+
+const composeRelationalKey = (
+  value: GraphqlObject,
+  lookupArray: Array<string>,
+  entityConfig: TangibleEntityConfig,
+): {
+  relationalKey: string;
+  entityConfig: TangibleEntityConfig;
+  value: GraphqlObject;
+} => {
+  let currentValue: GraphqlObject = value;
+  let currentConfig = entityConfig;
+  let relationalKey = '';
+  let goToNext = true;
+
+  while (goToNext) {
+    const keys = Object.keys(currentValue);
+    const [key] = keys;
+    if (key.endsWith('_')) {
+      if (keys.length > 1) {
+        throw new TypeError(`keys length must be "1" but "${keys.length}"!`);
+      }
+
+      const fieldName = key.slice(0, -1);
+      const fieldsObject = composeFieldsObject(currentConfig);
+
+      const { attributes } = fieldsObject[fieldName];
+
+      if (!(attributes as DuplexField | RelationalField).config) {
+        throw new TypeError(`Field "${fieldName}" must has attr "config"!`);
+      }
+
+      currentConfig = (attributes as DuplexField | RelationalField).config;
+
+      const lookupArrayItem = `${relationalKey}:${key}:${currentConfig.name}`;
+
+      if (!lookupArray.includes(lookupArrayItem)) {
+        lookupArray.push(lookupArrayItem);
+      }
+
+      currentValue = currentValue[key] as GraphqlObject;
+      relationalKey += key;
+    } else {
+      goToNext = false;
+    }
+  }
+
+  return {
+    relationalKey,
+    entityConfig: currentConfig,
+    value: currentValue,
+  };
+};
+
+export default composeRelationalKey;
