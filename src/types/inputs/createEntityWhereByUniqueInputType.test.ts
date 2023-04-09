@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
 
@@ -11,12 +11,15 @@ describe('createEntityWhereByUniqueInputType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
         {
           name: 'code',
+          type: 'textFields',
           unique: true,
         },
       ],
@@ -42,10 +45,12 @@ describe('createEntityWhereByUniqueInputType', () => {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
     };

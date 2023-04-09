@@ -21,29 +21,35 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'textField1',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
           unique: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField6',
           unique: true,
+          type: 'textFields',
         },
       ],
     };
@@ -84,7 +90,7 @@ describe('composeThingSchemaProperties', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as TangibleEntityConfig;
     Object.assign(personConfig, {
@@ -94,10 +100,12 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -107,21 +115,25 @@ describe('composeThingSchemaProperties', () => {
           config: personConfig,
           index: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           array: true,
           config: personConfig,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           index: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -169,19 +181,21 @@ describe('composeThingSchemaProperties', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -192,10 +206,12 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -204,6 +220,7 @@ describe('composeThingSchemaProperties', () => {
           oppositeName: 'friends',
           config: personConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
@@ -212,18 +229,21 @@ describe('composeThingSchemaProperties', () => {
           config: personConfig,
           index: true,
           required: false,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           index: true,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
           required: false,
+          type: 'duplexFields',
         },
       ],
     });
@@ -277,9 +297,11 @@ describe('composeThingSchemaProperties', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
       ],
     };
@@ -290,10 +312,12 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -301,21 +325,25 @@ describe('composeThingSchemaProperties', () => {
           name: 'location',
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'locations',
           array: true,
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'place',
           config: addressConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'places',
           array: true,
           config: addressConfig,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -396,17 +424,21 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'desktop',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'mobile',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'tablet',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'title',
+          type: 'textFields',
         },
       ],
     };
@@ -418,21 +450,25 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           array: true,
           config: imageConfig,
+          type: 'fileFields',
         },
       ],
     };
@@ -501,42 +537,50 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'pointField1',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField2',
           required: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField3',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField4',
           array: true,
           required: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField1',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField2',
           required: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField3',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField4',
           array: true,
           required: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -647,16 +691,19 @@ describe('composeThingSchemaProperties', () => {
           name: 'enumField1',
           index: true,
           enumName: 'enumeration1',
+          type: 'enumFields',
         },
         {
           name: 'enumField2',
           default: 'key2-2',
           enumName: 'enumeration2',
+          type: 'enumFields',
         },
         {
           name: 'enumField3',
           array: true,
           enumName: 'enumeration2',
+          type: 'enumFields',
         },
         {
           name: 'enumField4',
@@ -665,6 +712,7 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           index: true,
           enumName: 'enumeration1',
+          type: 'enumFields',
         },
       ],
     };
@@ -705,14 +753,17 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'birthday',
           index: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'startDate',
           default: new Date(1993, 6, 28, 14, 39, 7),
+          type: 'dateTimeFields',
         },
         {
           name: 'holidays',
           array: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'windays',
@@ -720,15 +771,18 @@ describe('composeThingSchemaProperties', () => {
           required: true,
           array: true,
           index: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'uniqueTime',
           unique: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'uniqueRequiredTime',
           unique: true,
           required: true,
+          type: 'dateTimeFields',
         },
       ],
     };
@@ -776,15 +830,18 @@ describe('composeThingSchemaProperties', () => {
           name: 'intField_1',
           unique: true,
           required: true,
+          type: 'intFields',
         },
         {
           name: 'intField_2',
           default: 0,
           index: true,
+          type: 'intFields',
         },
         {
           name: 'intField_3',
           array: true,
+          type: 'intFields',
         },
         {
           name: 'intField_4',
@@ -792,10 +849,12 @@ describe('composeThingSchemaProperties', () => {
           required: true,
           array: true,
           index: true,
+          type: 'intFields',
         },
         {
           name: 'intField_5',
           unique: true,
+          type: 'intFields',
         },
       ],
     };
@@ -840,15 +899,18 @@ describe('composeThingSchemaProperties', () => {
           name: 'floatField_1',
           unique: true,
           required: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField_2',
           default: 0.0,
           index: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField_3',
           array: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField_4',
@@ -856,10 +918,12 @@ describe('composeThingSchemaProperties', () => {
           required: true,
           array: true,
           index: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField_5',
           unique: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -903,15 +967,18 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'booleanField_1',
           required: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField_2',
           index: true,
           default: false,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField_3',
           array: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField_4',
@@ -919,6 +986,7 @@ describe('composeThingSchemaProperties', () => {
           required: true,
           array: true,
           index: true,
+          type: 'booleanFields',
         },
       ],
     };
@@ -955,6 +1023,7 @@ describe('composeThingSchemaProperties', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

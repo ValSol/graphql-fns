@@ -12,6 +12,7 @@ describe('parseActions', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
   };
@@ -21,12 +22,14 @@ describe('parseActions', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
     relationalFields: [
       {
         name: 'country',
         config: countryConfig,
+        type: 'relationalFields',
       },
     ],
   };
@@ -37,9 +40,11 @@ describe('parseActions', () => {
     textFields: [
       {
         name: 'firstName',
+        type: 'textFields',
       },
       {
         name: 'secondName',
+        type: 'textFields',
       },
     ],
     relationalFields: [
@@ -47,10 +52,12 @@ describe('parseActions', () => {
         name: 'friends',
         array: true,
         config: personConfig,
+        type: 'relationalFields',
       },
       {
         name: 'place',
         config: placeConfig,
+        type: 'relationalFields',
       },
     ],
     duplexFields: [
@@ -58,12 +65,14 @@ describe('parseActions', () => {
         name: 'parent',
         config: personConfig,
         oppositeName: 'children',
+        type: 'duplexFields',
       },
       {
         name: 'children',
         array: true,
         config: personConfig,
         oppositeName: 'parent',
+        type: 'duplexFields',
       },
     ],
   });

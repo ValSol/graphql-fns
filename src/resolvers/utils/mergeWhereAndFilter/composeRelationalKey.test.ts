@@ -23,6 +23,7 @@ describe('composeRelationalKey', () => {
         {
           name: 'name',
           index: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -30,6 +31,7 @@ describe('composeRelationalKey', () => {
           name: 'relationalField',
           index: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -65,6 +67,7 @@ describe('composeRelationalKey', () => {
           name: 'restaurantEditors',
           index: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -79,6 +82,7 @@ describe('composeRelationalKey', () => {
           config: menuConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -94,6 +98,7 @@ describe('composeRelationalKey', () => {
           config: menusectionConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
         {
           name: 'restaurant',
@@ -101,6 +106,7 @@ describe('composeRelationalKey', () => {
           config: restaurantConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -114,6 +120,7 @@ describe('composeRelationalKey', () => {
           oppositeName: 'restaurant',
           config: menuConfig,
           index: true,
+          type: 'duplexFields',
         },
       ],
 
@@ -122,6 +129,7 @@ describe('composeRelationalKey', () => {
           name: 'access',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });

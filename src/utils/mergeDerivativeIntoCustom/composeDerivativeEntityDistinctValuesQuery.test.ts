@@ -15,6 +15,7 @@ describe('composeDerivativeEntityDistinctValuesQuery', () => {
         name: 'textField',
         array: true,
         index: true,
+        type: 'textFields',
       },
     ],
   };

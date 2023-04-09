@@ -46,25 +46,28 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   const restaurantConfig: TangibleEntityConfig = {
     name: 'Restaurant',
     type: 'tangible',
-    textFields: [{ name: 'title', unique: true }],
+    textFields: [{ name: 'title', unique: true, type: 'textFields' }],
     duplexFields: [
       {
         name: 'menu',
         oppositeName: 'restaurant',
         config: menuConfig,
         parent: true,
+        type: 'duplexFields',
       },
       {
         name: 'posts',
         oppositeName: 'restaurants',
         array: true,
         config: postConfig,
+        type: 'duplexFields',
       },
       {
         name: 'clone',
         oppositeName: 'original',
         config: restaurantCloneConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   };
@@ -76,6 +79,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -83,6 +87,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'original',
         oppositeName: 'clone',
         config: restaurantConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -94,6 +99,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -101,6 +107,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'restaurant',
         oppositeName: 'menu',
         config: restaurantConfig,
+        type: 'duplexFields',
       },
       {
         name: 'sections',
@@ -108,12 +115,14 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         config: menuSectionConfig,
         array: true,
         parent: true,
+        type: 'duplexFields',
       },
       {
         name: 'clone',
         oppositeName: 'original',
         config: menuCloneConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -125,6 +134,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -132,6 +142,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'original',
         oppositeName: 'clone',
         config: menuConfig,
+        type: 'duplexFields',
       },
       {
         name: 'sections',
@@ -139,6 +150,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         config: menuSectionCloneConfig,
         array: true,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -150,6 +162,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -157,6 +170,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'menu',
         oppositeName: 'sections',
         config: menuConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -168,6 +182,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -175,6 +190,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'menu',
         oppositeName: 'sections',
         config: menuCloneConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -186,6 +202,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -194,12 +211,14 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         oppositeName: 'posts',
         config: restaurantConfig,
         array: true,
+        type: 'duplexFields',
       },
       {
         name: 'clone',
         oppositeName: 'original',
         config: postCloneConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -211,6 +230,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -218,6 +238,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
         name: 'original',
         oppositeName: 'clone',
         config: postConfig,
+        type: 'duplexFields',
       },
     ],
   });

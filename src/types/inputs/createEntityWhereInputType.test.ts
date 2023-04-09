@@ -11,13 +11,16 @@ describe('createEntityWhereInputType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
         {
           name: 'code',
           unique: true,
+          type: 'textFields',
         },
       ],
     };
@@ -93,10 +96,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -197,10 +202,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -209,12 +216,14 @@ input ExampleWhereWithoutBooleanOperationsInput {
           name: 'spouse',
           config: personConfig,
           index: true,
+          type: 'relationalFields',
         },
         {
           name: 'friends',
           config: personConfig,
           index: true,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -341,10 +350,12 @@ input PersonWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -354,6 +365,7 @@ input PersonWhereWithoutBooleanOperationsInput {
           config: personConfig,
           index: true,
           oppositeName: 'spouse',
+          type: 'duplexFields',
         },
         {
           name: 'friends',
@@ -361,6 +373,7 @@ input PersonWhereWithoutBooleanOperationsInput {
           index: true,
           array: true,
           oppositeName: 'friends',
+          type: 'duplexFields',
         },
       ],
     });
@@ -487,16 +500,19 @@ input PersonWhereWithoutBooleanOperationsInput {
           name: 'field1',
           enumName: 'Weekdays',
           index: true,
+          type: 'enumFields',
         },
         {
           name: 'field2',
           array: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
         {
           name: 'field3',
           enumName: 'Weekdays',
           required: true,
+          type: 'enumFields',
         },
         {
           name: 'field4',
@@ -504,6 +520,7 @@ input PersonWhereWithoutBooleanOperationsInput {
           enumName: 'Cuisines',
           required: true,
           index: true,
+          type: 'enumFields',
         },
       ],
     };
@@ -589,10 +606,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'intFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'intFields',
         },
       ],
     };
@@ -688,10 +707,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'floatFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -787,10 +808,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'dateTimeFields',
         },
       ],
     };
@@ -886,10 +909,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'booleanFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'booleanFields',
         },
       ],
     };
@@ -961,6 +986,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
       ],
     };
@@ -1035,6 +1061,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'city',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -1042,6 +1069,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'number',
           index: true,
+          type: 'intFields',
         },
       ],
     };
@@ -1053,10 +1081,12 @@ input ExampleWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -1065,6 +1095,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
           name: 'address',
           config: addressConfig,
           index: true,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -1170,6 +1201,7 @@ input PersonWhereWithoutBooleanOperationsInput {
         {
           name: 'city',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -1177,6 +1209,7 @@ input PersonWhereWithoutBooleanOperationsInput {
         {
           name: 'number',
           index: true,
+          type: 'intFields',
         },
       ],
     };
@@ -1223,13 +1256,16 @@ input PersonWhereWithoutBooleanOperationsInput {
           required: true,
           freeze: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'address',
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'text',
+          type: 'textFields',
         },
       ],
     };
@@ -1241,10 +1277,12 @@ input PersonWhereWithoutBooleanOperationsInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
 
@@ -1254,6 +1292,7 @@ input PersonWhereWithoutBooleanOperationsInput {
           config: imageConfig,
           index: true,
           array: true,
+          type: 'fileFields',
         },
       ],
     };
@@ -1362,13 +1401,16 @@ input PersonWhereWithoutBooleanOperationsInput {
           required: true,
           freeze: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'address',
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'text',
+          type: 'textFields',
         },
       ],
     };

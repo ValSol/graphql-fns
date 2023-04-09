@@ -5,11 +5,14 @@ const pageInfoConfig: VirtualEntityConfig = {
   type: 'virtual',
 
   booleanFields: [
-    { name: 'hasNextPage', required: true },
-    { name: 'hasPreviousPage', required: true },
+    { name: 'hasNextPage', required: true, type: 'booleanFields' },
+    { name: 'hasPreviousPage', required: true, type: 'booleanFields' },
   ],
 
-  textFields: [{ name: 'startCursor' }, { name: 'endCursor' }],
+  textFields: [
+    { name: 'startCursor', type: 'textFields' },
+    { name: 'endCursor', type: 'textFields' },
+  ],
 };
 
 export default pageInfoConfig;

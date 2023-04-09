@@ -15,6 +15,7 @@ describe('composeChildActionSignature util', () => {
           array: true,
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
     };
@@ -135,6 +136,7 @@ input ExampleSortInput {
           array: true,
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
     };

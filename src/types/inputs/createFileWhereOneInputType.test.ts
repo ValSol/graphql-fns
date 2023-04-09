@@ -15,9 +15,11 @@ describe('createFileWhereOneInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -28,9 +30,11 @@ describe('createFileWhereOneInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -41,9 +45,11 @@ describe('createFileWhereOneInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -54,6 +60,7 @@ describe('createFileWhereOneInputType', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
     fileFields: [
@@ -61,6 +68,7 @@ describe('createFileWhereOneInputType', () => {
         name: 'logo',
         config: imageConfig,
         required: true,
+        type: 'fileFields',
       },
     ],
     embeddedFields: [
@@ -68,6 +76,7 @@ describe('createFileWhereOneInputType', () => {
         name: 'photo',
         config: photoConfig,
         required: true,
+        type: 'embeddedFields',
       },
     ],
   };

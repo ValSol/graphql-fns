@@ -13,10 +13,12 @@ describe('coerceDataFromGql', () => {
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: entityConfig,
+          type: 'relationalFields',
           array: true,
         },
       ],
@@ -25,6 +27,7 @@ describe('coerceDataFromGql', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
     });
@@ -76,25 +79,29 @@ describe('coerceDataFromGql', () => {
       textFields: [
         {
           name: 'embeddedTextField',
+          type: 'textFields',
         },
       ],
     };
     Object.assign(entityConfig, {
       name: 'Example',
-      textFields: [{ name: 'textField' }],
+      textFields: [{ name: 'textField', type: 'textFields' }],
       embeddedFields: [
         {
           name: 'embedded1',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'embedded2',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'embedded3',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -143,9 +150,11 @@ describe('coerceDataFromGql', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -157,17 +166,20 @@ describe('coerceDataFromGql', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -224,9 +236,11 @@ describe('coerceDataFromGql', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -238,17 +252,20 @@ describe('coerceDataFromGql', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -283,11 +300,13 @@ describe('coerceDataFromGql', () => {
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: entityConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -295,6 +314,7 @@ describe('coerceDataFromGql', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
     });
@@ -326,11 +346,13 @@ describe('coerceDataFromGql', () => {
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: entityConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -338,6 +360,7 @@ describe('coerceDataFromGql', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
     });
@@ -368,6 +391,7 @@ describe('coerceDataFromGql', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
     });
@@ -394,6 +418,7 @@ describe('coerceDataFromGql', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
     });
@@ -421,28 +446,34 @@ describe('coerceDataFromGql', () => {
         {
           name: 'geospatialField1',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialField2',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialField3',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialField4',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialField5',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialField6',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -547,6 +578,7 @@ describe('coerceDataFromGql', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
     });

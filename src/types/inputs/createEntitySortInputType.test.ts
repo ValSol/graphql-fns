@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntitySortInputType from './createEntitySortInputType';
 
@@ -11,9 +11,11 @@ describe('createEntitySortInputType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
     };
@@ -43,10 +45,12 @@ input ExampleSortInput {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -81,17 +85,20 @@ input ExampleSortInput {
           name: 'firstCuisine',
           index: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
         {
           name: 'secondCuisine',
           index: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
         {
           name: 'otherCuisines',
           array: true,
           index: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
       ],
     };
@@ -125,10 +132,12 @@ input ExampleSortInput {
         {
           name: 'firstName',
           index: true,
+          type: 'intFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'intFields',
         },
       ],
     };
@@ -162,10 +171,12 @@ input ExampleSortInput {
         {
           name: 'firstName',
           index: true,
+          type: 'floatFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -199,10 +210,12 @@ input ExampleSortInput {
         {
           name: 'firstName',
           index: true,
+          type: 'booleanFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'booleanFields',
         },
       ],
     };
@@ -236,10 +249,12 @@ input ExampleSortInput {
         {
           name: 'firstName',
           index: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'dateTimeFields',
         },
       ],
     };

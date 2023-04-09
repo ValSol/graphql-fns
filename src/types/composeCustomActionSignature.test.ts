@@ -31,6 +31,7 @@ describe('composeCustomActionSignature', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -71,6 +72,7 @@ describe('composeCustomActionSignature', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -111,6 +113,7 @@ describe('composeCustomActionSignature', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -148,6 +151,7 @@ describe('composeCustomActionSignature', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

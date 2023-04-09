@@ -35,7 +35,7 @@ describe('createCreateEntityMutationType', () => {
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
@@ -47,20 +47,24 @@ describe('createCreateEntityMutationType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });

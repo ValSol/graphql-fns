@@ -10,9 +10,11 @@ describe('separateFileFieldsAttributes', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -22,9 +24,11 @@ describe('separateFileFieldsAttributes', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -36,20 +40,24 @@ describe('separateFileFieldsAttributes', () => {
       {
         name: 'logo',
         config: imageConfig,
+        type: 'fileFields',
       },
       {
         name: 'header',
         config: imageConfig,
+        type: 'fileFields',
       },
       {
         name: 'pictures',
         config: imageConfig,
         array: true,
+        type: 'fileFields',
       },
       {
         name: 'photos',
         config: photoConfig,
         array: true,
+        type: 'fileFields',
       },
     ],
   });

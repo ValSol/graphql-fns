@@ -427,6 +427,7 @@ describe('graphql schema', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -438,12 +439,14 @@ describe('graphql schema', () => {
         {
           name: 'cursor',
           required: true,
+          type: 'textFields',
         },
       ],
       childFields: [
         {
           name: 'node',
           config: entityConfig,
+          type: 'childFields',
         },
       ],
     };

@@ -19,9 +19,9 @@ const composeEdgeVirtualConfig: VirtualConfigComposer = (
     type: 'virtual',
     derivativeNameSlicePosition: -'Edge'.length,
 
-    childFields: [{ name: 'node', config }],
+    childFields: [{ name: 'node', config, type: 'childFields' }],
 
-    textFields: [{ name: 'cursor', required: true }],
+    textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
   } as VirtualEntityConfig;
 };
 

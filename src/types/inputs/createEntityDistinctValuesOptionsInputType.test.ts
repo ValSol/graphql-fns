@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
 
@@ -11,9 +11,11 @@ describe('createEntityDistinctValuesOptionsInputType', () => {
       floatFields: [
         {
           name: 'firstName',
+          type: 'floatFields',
         },
         {
           name: 'lastName',
+          type: 'floatFields',
         },
       ],
     };
@@ -30,10 +32,12 @@ describe('createEntityDistinctValuesOptionsInputType', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
         {
           name: 'textFieldArray',
           array: true,
+          type: 'textFields',
         },
       ],
     };

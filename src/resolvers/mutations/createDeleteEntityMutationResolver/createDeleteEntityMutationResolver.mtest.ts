@@ -35,24 +35,27 @@ describe('createDeleteEntityMutationResolver', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name', unique: true }],
+      textFields: [{ name: 'name', unique: true, type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorities',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -63,10 +66,12 @@ describe('createDeleteEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -74,24 +79,28 @@ describe('createDeleteEntityMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorities',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -270,10 +279,12 @@ describe('createDeleteEntityMutationResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -285,6 +296,7 @@ describe('createDeleteEntityMutationResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
 
@@ -293,6 +305,7 @@ describe('createDeleteEntityMutationResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };

@@ -10,7 +10,7 @@ describe('createCreateManyEntitiesMutationType', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
-      textFields: [{ name: 'textField' }],
+      textFields: [{ name: 'textField', type: 'textFields' }],
     };
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };

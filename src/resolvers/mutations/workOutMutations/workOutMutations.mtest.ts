@@ -20,16 +20,22 @@ const exampleConfig: TangibleEntityConfig = {
   name: 'Example',
   type: 'tangible',
 
-  textFields: [{ name: 'name', required: true }, { name: 'label' }],
-  intFields: [{ name: 'counts', array: true }],
+  textFields: [
+    { name: 'name', required: true, type: 'textFields' },
+    { name: 'label', type: 'textFields' },
+  ],
+  intFields: [{ name: 'counts', array: true, type: 'intFields' }],
 };
 
 const exampleCloneConfig: TangibleEntityConfig = {
   name: 'ExampleClone',
   type: 'tangible',
 
-  textFields: [{ name: 'name' }, { name: 'label' }],
-  intFields: [{ name: 'counts', array: true }],
+  textFields: [
+    { name: 'name', type: 'textFields' },
+    { name: 'label', type: 'textFields' },
+  ],
+  intFields: [{ name: 'counts', array: true, type: 'intFields' }],
 };
 
 const childConfig = {} as TangibleEntityConfig;
@@ -42,13 +48,14 @@ const menuSectionCloneConfig = {} as TangibleEntityConfig;
 const parentConfig: TangibleEntityConfig = {
   name: 'Parent',
   type: 'tangible',
-  textFields: [{ name: 'name' }],
+  textFields: [{ name: 'name', type: 'textFields' }],
   duplexFields: [
     {
       name: 'children',
       oppositeName: 'parent',
       array: true,
       config: childConfig,
+      type: 'duplexFields',
     },
   ],
 };
@@ -56,12 +63,13 @@ const parentConfig: TangibleEntityConfig = {
 Object.assign(childConfig, {
   name: 'Child',
   type: 'tangible',
-  textFields: [{ name: 'name' }],
+  textFields: [{ name: 'name', type: 'textFields' }],
   duplexFields: [
     {
       name: 'parent',
       oppositeName: 'children',
       config: parentConfig,
+      type: 'duplexFields',
     },
   ],
 });
@@ -73,9 +81,11 @@ Object.assign(personConfig, {
     {
       name: 'firstName',
       required: true,
+      type: 'textFields',
     },
     {
       name: 'lastName',
+      type: 'textFields',
     },
   ],
   duplexFields: [
@@ -83,6 +93,7 @@ Object.assign(personConfig, {
       name: 'clone',
       oppositeName: 'original',
       config: personCloneConfig,
+      type: 'duplexFields',
     },
   ],
 });
@@ -95,10 +106,12 @@ Object.assign(personCloneConfig, {
     {
       name: 'firstName',
       required: true,
+      type: 'textFields',
     },
 
     {
       name: 'lastName',
+      type: 'textFields',
     },
   ],
 
@@ -108,6 +121,7 @@ Object.assign(personCloneConfig, {
       oppositeName: 'clone',
       config: personConfig,
       required: true,
+      type: 'duplexFields',
     },
   ],
 });
@@ -120,6 +134,7 @@ Object.assign(menuConfig, {
     {
       name: 'name',
       required: true,
+      type: 'textFields',
     },
   ],
 
@@ -128,6 +143,7 @@ Object.assign(menuConfig, {
       name: 'clone',
       oppositeName: 'original',
       config: menuCloneConfig,
+      type: 'duplexFields',
     },
 
     {
@@ -148,6 +164,7 @@ Object.assign(menuCloneConfig, {
     {
       name: 'name',
       required: true,
+      type: 'textFields',
     },
   ],
 
@@ -157,6 +174,7 @@ Object.assign(menuCloneConfig, {
       oppositeName: 'clone',
       config: menuConfig,
       required: true,
+      type: 'duplexFields',
     },
 
     {
@@ -177,6 +195,7 @@ Object.assign(menuSectionConfig, {
     {
       name: 'name',
       required: true,
+      type: 'textFields',
     },
   ],
 
@@ -185,6 +204,7 @@ Object.assign(menuSectionConfig, {
       name: 'menu',
       oppositeName: 'sections',
       config: menuConfig,
+      type: 'duplexFields',
     },
   ],
 });
@@ -197,6 +217,7 @@ Object.assign(menuSectionCloneConfig, {
     {
       name: 'name',
       required: true,
+      type: 'textFields',
     },
   ],
 
@@ -205,6 +226,7 @@ Object.assign(menuSectionCloneConfig, {
       name: 'menu',
       oppositeName: 'sections',
       config: menuCloneConfig,
+      type: 'duplexFields',
     },
   ],
 });

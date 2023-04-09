@@ -11,9 +11,11 @@ describe('createUpdatedEntityPayloadType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
     };
@@ -40,6 +42,7 @@ type UpdatedExamplePayload {
       textFields: [
         {
           name: 'name',
+          type: 'textFields',
         },
       ],
     };
@@ -50,9 +53,11 @@ type UpdatedExamplePayload {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -63,26 +68,31 @@ type UpdatedExamplePayload {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
       ],
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
       booleanFields: [
         {
           name: 'booleanField',
+          type: 'booleanFields',
         },
       ],
       duplexFields: [
@@ -90,36 +100,42 @@ type UpdatedExamplePayload {
           name: 'duplexField',
           config: exampleConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embeddedField',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
       ],
       enumFields: [
         {
           name: 'enumField',
           enumName: 'Enums',
+          type: 'enumFields',
         },
       ],
       geospatialFields: [
         {
           name: 'geospatialField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
       relationalFields: [
         {
           name: 'relationalField',
           config: exampleConfig,
+          type: 'relationalFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
       ],
     });

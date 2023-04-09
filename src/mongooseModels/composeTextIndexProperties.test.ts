@@ -14,6 +14,7 @@ describe('composeTextIndexProperties', () => {
         {
           name: 'name3',
           weight: 3,
+          type: 'textFields',
         },
       ],
     };
@@ -26,6 +27,7 @@ describe('composeTextIndexProperties', () => {
         {
           name: 'name2',
           weight: 2,
+          type: 'textFields',
         },
       ],
 
@@ -33,6 +35,7 @@ describe('composeTextIndexProperties', () => {
         {
           name: 'embedded3',
           config: child3Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -45,6 +48,7 @@ describe('composeTextIndexProperties', () => {
         {
           name: 'name',
           weight: 1,
+          type: 'textFields',
         },
       ],
 
@@ -52,6 +56,7 @@ describe('composeTextIndexProperties', () => {
         {
           name: 'embedded2',
           config: child2Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -64,32 +69,38 @@ describe('composeTextIndexProperties', () => {
           name: 'textField1',
           index: true,
           weight: 10,
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
           weight: 20,
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
           unique: true,
           weight: 30,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
           weight: 40,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField6',
           unique: true,
+          type: 'textFields',
         },
       ],
 
@@ -98,6 +109,7 @@ describe('composeTextIndexProperties', () => {
           name: 'embedded',
           config: childConfig,
           index: true,
+          type: 'embeddedFields',
         },
       ],
     };

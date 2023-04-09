@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import entityDistinctValuesQueryAttributes from '../../types/actionAttributes/entityDistinctValuesQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -14,6 +14,7 @@ describe('composeEntityDistinctValuesQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

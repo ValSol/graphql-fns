@@ -12,15 +12,19 @@ describe('createEntityFilesQueryResolver', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'tablet',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };

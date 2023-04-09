@@ -13,24 +13,29 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -56,7 +61,7 @@ describe('createEntityType', () => {
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
@@ -68,20 +73,24 @@ describe('createEntityType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -115,9 +124,11 @@ describe('createEntityType', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
       ],
     };
@@ -128,10 +139,12 @@ describe('createEntityType', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -139,21 +152,25 @@ describe('createEntityType', () => {
           name: 'location',
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'locations',
           array: true,
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'place',
           config: addressConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'places',
           array: true,
           config: addressConfig,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -189,9 +206,11 @@ describe('createEntityType', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
       ],
     };
@@ -213,19 +232,21 @@ describe('createEntityType', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -236,10 +257,12 @@ describe('createEntityType', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -249,23 +272,27 @@ describe('createEntityType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -301,41 +328,49 @@ describe('createEntityType', () => {
           name: 'position',
           geospatialType: 'Point',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'precedingPosition',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'favoritePositions',
           array: true,
           geospatialType: 'Point',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'worstPositions',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'precedingArea',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'favoriteAreas',
           array: true,
           geospatialType: 'Polygon',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'worstAreas',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -368,22 +403,26 @@ describe('createEntityType', () => {
         {
           name: 'field1',
           enumName: 'Weekdays',
+          type: 'enumFields',
         },
         {
           name: 'field2',
           array: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
         {
           name: 'field3',
           enumName: 'Weekdays',
           required: true,
+          type: 'enumFields',
         },
         {
           name: 'field4',
           array: true,
           enumName: 'Cuisines',
           required: true,
+          type: 'enumFields',
         },
       ],
     };
@@ -411,24 +450,29 @@ describe('createEntityType', () => {
       intFields: [
         {
           name: 'intField1',
+          type: 'intFields',
         },
         {
           name: 'intField2',
           default: 0,
+          type: 'intFields',
         },
         {
           name: 'intField3',
           required: true,
+          type: 'intFields',
         },
         {
           name: 'intField4',
           array: true,
+          type: 'intFields',
         },
         {
           name: 'intField5',
           default: [55],
           required: true,
           array: true,
+          type: 'intFields',
         },
       ],
     };
@@ -457,24 +501,29 @@ describe('createEntityType', () => {
       floatFields: [
         {
           name: 'floatField1',
+          type: 'floatFields',
         },
         {
           name: 'floatField2',
           default: 0,
+          type: 'floatFields',
         },
         {
           name: 'floatField3',
           required: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField4',
           array: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField5',
           default: [5.5],
           required: true,
           array: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -503,24 +552,29 @@ describe('createEntityType', () => {
       booleanFields: [
         {
           name: 'booleanField1',
+          type: 'booleanFields',
         },
         {
           name: 'booleanField2',
           default: false,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField3',
           required: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField4',
           array: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField5',
           default: [true, true],
           required: true,
           array: true,
+          type: 'booleanFields',
         },
       ],
     };
@@ -549,9 +603,11 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -563,6 +619,7 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
@@ -570,21 +627,25 @@ describe('createEntityType', () => {
           name: 'logo',
           config: imageConfig,
           required: true,
+          type: 'fileFields',
         },
         {
           name: 'hero',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           required: true,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -618,9 +679,11 @@ describe('createEntityType', () => {
         {
           name: 'fileId',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -644,6 +707,7 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
       ],
     };
@@ -669,6 +733,7 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
       ],
     };
@@ -694,6 +759,7 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
       ],
     };
@@ -702,9 +768,9 @@ describe('createEntityType', () => {
       name: 'ExampleEdge',
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: entityConfig }],
+      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const generalConfig = {
@@ -730,6 +796,7 @@ describe('createEntityType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
       ],
     };
@@ -738,9 +805,9 @@ describe('createEntityType', () => {
       name: 'ExampleEdge',
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: entityConfig }],
+      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const exampleConnectionConfig: EntityConfig = {
@@ -748,8 +815,8 @@ describe('createEntityType', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'pageInfo', config: pageInfoConfig, required: true },
-        { name: 'edges', config: exampleEdgeConfig, array: true },
+        { name: 'pageInfo', config: pageInfoConfig, required: true, type: 'childFields' },
+        { name: 'edges', config: exampleEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 

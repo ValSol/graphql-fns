@@ -11,9 +11,11 @@ describe('createUploadEntityFilesMutationResolver', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };

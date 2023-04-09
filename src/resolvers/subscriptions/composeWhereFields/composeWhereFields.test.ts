@@ -14,9 +14,11 @@ describe('composeWhereFields', () => {
         {
           name: 'booleanFieldIndexed',
           index: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField',
+          type: 'booleanFields',
         },
       ],
       enumFields: [
@@ -24,68 +26,83 @@ describe('composeWhereFields', () => {
           name: 'enumFieldIndexed',
           index: true,
           enumName: 'EnumsName',
+          type: 'enumFields',
         },
         {
           name: 'enumField',
           enumName: 'EnumsName',
+          type: 'enumFields',
         },
       ],
       geospatialFields: [
         {
           name: 'geospatialField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
       textFields: [
         {
           name: 'textFieldIndexed',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
+          type: 'textFields',
         },
         {
           name: 'textFieldUnique',
           unique: true,
+          type: 'textFields',
         },
       ],
       dateTimeFields: [
         {
           name: 'dateTimeFieldIndexed',
           index: true,
+          type: 'dateTimeFields',
         },
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
         {
           name: 'dateTimeFieldUnique',
           unique: true,
+          type: 'dateTimeFields',
         },
       ],
       intFields: [
         {
           name: 'intFieldIndexed',
           index: true,
+          type: 'intFields',
         },
         {
           name: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intFieldUnique',
           unique: true,
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatIndexed',
           index: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatFieldUnique',
           unique: true,
+          type: 'floatFields',
         },
       ],
       relationalFields: [
@@ -93,10 +110,12 @@ describe('composeWhereFields', () => {
           name: 'relationalFieldIndexed',
           config: exampleConfig,
           index: true,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField',
           config: exampleConfig,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -105,11 +124,13 @@ describe('composeWhereFields', () => {
           config: exampleConfig,
           oppositeName: 'duplexField',
           index: true,
+          type: 'duplexFields',
         },
         {
           name: 'duplexField',
           config: exampleConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
     });

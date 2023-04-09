@@ -11,19 +11,23 @@ describe('composeEdgeVirtualConfig', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intFields',
           array: true,
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatFields',
           array: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -39,9 +43,9 @@ describe('composeEdgeVirtualConfig', () => {
       derivativeNameSlicePosition: -'Edge'.length,
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: exampleConfig }],
+      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     expect(result).toEqual(expectedResult);

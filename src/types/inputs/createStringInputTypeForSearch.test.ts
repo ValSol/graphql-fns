@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createStringInputTypeForSearch from './createStringInputTypeForSearch';
 
@@ -20,7 +20,7 @@ describe('createStringInputTypeForSearch', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
-      textFields: [{ name: 'textField', weight: 1 }],
+      textFields: [{ name: 'textField', weight: 1, type: 'textFields' }],
     };
 
     const expectedResult = ['', 'String', {}];

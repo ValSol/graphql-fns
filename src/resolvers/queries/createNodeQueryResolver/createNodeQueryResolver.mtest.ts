@@ -51,24 +51,29 @@ describe('createNodeQueryResolver', () => {
         {
           name: 'textField1',
           unique: true,
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -162,13 +167,13 @@ describe('createNodeQueryResolver', () => {
       name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
-        { name: 'fileId' },
-        { name: 'desktop' },
-        { name: 'tablet' },
-        { name: 'mobile' },
-        { name: 'ukAlt' },
-        { name: 'ruAlt' },
-        { name: 'enAlt' },
+        { name: 'fileId', type: 'textFields' },
+        { name: 'desktop', type: 'textFields' },
+        { name: 'tablet', type: 'textFields' },
+        { name: 'mobile', type: 'textFields' },
+        { name: 'ukAlt', type: 'textFields' },
+        { name: 'ruAlt', type: 'textFields' },
+        { name: 'enAlt', type: 'textFields' },
       ],
     };
 

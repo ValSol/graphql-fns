@@ -10,18 +10,23 @@ describe('composeAllFilesFieldsData', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'desktop',
+        type: 'textFields',
       },
       {
         name: 'tablet',
+        type: 'textFields',
       },
       {
         name: 'mobile',
+        type: 'textFields',
       },
       {
         name: 'alt',
+        type: 'textFields',
       },
     ],
   };
@@ -31,18 +36,23 @@ describe('composeAllFilesFieldsData', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'desktop',
+        type: 'textFields',
       },
       {
         name: 'tablet',
+        type: 'textFields',
       },
       {
         name: 'mobile',
+        type: 'textFields',
       },
       {
         name: 'alt',
+        type: 'textFields',
       },
     ],
   };
@@ -53,20 +63,24 @@ describe('composeAllFilesFieldsData', () => {
       {
         name: 'logo',
         config: imageConfig,
+        type: 'fileFields',
       },
       {
         name: 'header',
         config: imageConfig,
+        type: 'fileFields',
       },
       {
         name: 'pictures',
         config: imageConfig,
         array: true,
+        type: 'fileFields',
       },
       {
         name: 'photos',
         config: photoConfig,
         array: true,
+        type: 'fileFields',
       },
     ],
   };

@@ -12,9 +12,11 @@ describe('createEntityDistinctValuesQueryType', () => {
       floatFields: [
         {
           name: 'firstName',
+          type: 'floatFields',
         },
         {
           name: 'lastName',
+          type: 'floatFields',
         },
       ],
     };
@@ -46,10 +48,12 @@ describe('createEntityDistinctValuesQueryType', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
         {
           name: 'textFieldArray',
           array: true,
+          type: 'textFields',
         },
       ],
     };

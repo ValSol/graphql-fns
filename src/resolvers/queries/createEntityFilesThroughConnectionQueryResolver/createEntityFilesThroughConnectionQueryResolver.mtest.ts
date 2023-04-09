@@ -50,13 +50,13 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       name: 'TangibleImage',
       type: 'tangibleFile',
       textFields: [
-        { name: 'fileId' },
-        { name: 'desktop' },
-        { name: 'tablet' },
-        { name: 'mobile' },
-        { name: 'ukAlt' },
-        { name: 'ruAlt' },
-        { name: 'enAlt' },
+        { name: 'fileId', type: 'textFields' },
+        { name: 'desktop', type: 'textFields' },
+        { name: 'tablet', type: 'textFields' },
+        { name: 'mobile', type: 'textFields' },
+        { name: 'ukAlt', type: 'textFields' },
+        { name: 'ruAlt', type: 'textFields' },
+        { name: 'enAlt', type: 'textFields' },
       ],
     };
     const fileSchema = createFileSchema(imageConfig);

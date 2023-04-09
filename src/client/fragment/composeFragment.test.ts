@@ -12,6 +12,7 @@ describe('composeFragment', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };

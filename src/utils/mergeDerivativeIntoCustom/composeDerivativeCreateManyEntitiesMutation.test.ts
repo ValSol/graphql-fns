@@ -18,6 +18,7 @@ describe('composeDerivativeCreateManyEntitysMutation', () => {
         name: 'textField',
         array: true,
         index: true,
+        type: 'textFields',
       },
     ],
   };

@@ -20,24 +20,29 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -69,14 +74,17 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
       ],
     };
@@ -87,12 +95,14 @@ describe('composeGqlResolvers', () => {
         {
           name: 'textField1',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -138,6 +148,7 @@ describe('composeGqlResolvers', () => {
         {
           name: 'title',
           required: true,
+          type: 'textFields',
         },
       ],
     };
@@ -149,10 +160,12 @@ describe('composeGqlResolvers', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -161,20 +174,24 @@ describe('composeGqlResolvers', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
+          type: 'relationalFields',
           array: true,
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -225,9 +242,11 @@ describe('composeGqlResolvers', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
       ],
     };
@@ -238,10 +257,12 @@ describe('composeGqlResolvers', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -249,21 +270,25 @@ describe('composeGqlResolvers', () => {
           name: 'location',
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'locations',
           array: true,
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'place',
           config: addressConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'places',
           array: true,
           config: addressConfig,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -295,19 +320,21 @@ describe('composeGqlResolvers', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -318,10 +345,12 @@ describe('composeGqlResolvers', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -331,23 +360,27 @@ describe('composeGqlResolvers', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -399,42 +432,50 @@ describe('composeGqlResolvers', () => {
         {
           name: 'pointField1',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField2',
           required: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField3',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointField4',
           array: true,
           required: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField1',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField2',
           required: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField3',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField4',
           array: true,
           required: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -477,6 +518,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -503,6 +545,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -530,6 +573,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -556,6 +600,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -593,6 +638,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -638,6 +684,7 @@ describe('composeGqlResolvers', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

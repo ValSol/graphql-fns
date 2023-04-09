@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntityNearInputType from './createEntityNearInputType';
 
@@ -11,9 +11,11 @@ describe('createEntityNearInputType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
     };
@@ -31,15 +33,18 @@ describe('createEntityNearInputType', () => {
         {
           name: 'position',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'positions',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };

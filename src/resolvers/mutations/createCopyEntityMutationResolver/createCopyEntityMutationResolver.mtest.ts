@@ -46,9 +46,11 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -58,23 +60,27 @@ describe('createCopyEntityMutationResolver', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'clone',
           oppositeName: 'original',
           config: personCloneConfig,
+          type: 'duplexFields',
         },
         {
           name: 'backups',
           oppositeName: 'original',
           config: personBackupConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -87,10 +93,12 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
 
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
 
@@ -100,6 +108,7 @@ describe('createCopyEntityMutationResolver', () => {
           oppositeName: 'clone',
           config: personConfig,
           required: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -112,10 +121,12 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
 
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
 
@@ -125,6 +136,7 @@ describe('createCopyEntityMutationResolver', () => {
           oppositeName: 'backups',
           config: personConfig,
           required: true,
+          type: 'duplexFields',
         },
       ],
     });

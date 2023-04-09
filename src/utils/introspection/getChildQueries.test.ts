@@ -10,6 +10,7 @@ describe('getChildQueries', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
   };
@@ -19,12 +20,14 @@ describe('getChildQueries', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
     relationalFields: [
       {
         name: 'country',
         config: countryConfig,
+        type: 'relationalFields',
       },
     ],
   };
@@ -35,9 +38,11 @@ describe('getChildQueries', () => {
     textFields: [
       {
         name: 'firstName',
+        type: 'textFields',
       },
       {
         name: 'secondName',
+        type: 'textFields',
       },
     ],
     relationalFields: [
@@ -45,10 +50,12 @@ describe('getChildQueries', () => {
         name: 'friends',
         array: true,
         config: personConfig,
+        type: 'relationalFields',
       },
       {
         name: 'place',
         config: placeConfig,
+        type: 'relationalFields',
       },
     ],
     duplexFields: [
@@ -56,12 +63,14 @@ describe('getChildQueries', () => {
         name: 'parent',
         config: personConfig,
         oppositeName: 'children',
+        type: 'duplexFields',
       },
       {
         name: 'children',
         array: true,
         config: personConfig,
         oppositeName: 'parent',
+        type: 'duplexFields',
       },
     ],
   });

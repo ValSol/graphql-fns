@@ -10,14 +10,14 @@ describe('transformDataForPush util', () => {
     type: 'tangible',
 
     textFields: [
-      { name: 'postCreators', array: true, index: true },
-      { name: 'postEditors', array: true, index: true },
-      { name: 'postPublishers', array: true, index: true },
-      { name: 'postTogglers', array: true, index: true },
-      { name: 'restaurantCreators', array: true, index: true },
-      { name: 'restaurantEditors', array: true, index: true },
-      { name: 'restaurantPublishers', array: true, index: true },
-      { name: 'restaurantTogglers', array: true, index: true },
+      { name: 'postCreators', array: true, index: true, type: 'textFields' },
+      { name: 'postEditors', array: true, index: true, type: 'textFields' },
+      { name: 'postPublishers', array: true, index: true, type: 'textFields' },
+      { name: 'postTogglers', array: true, index: true, type: 'textFields' },
+      { name: 'restaurantCreators', array: true, index: true, type: 'textFields' },
+      { name: 'restaurantEditors', array: true, index: true, type: 'textFields' },
+      { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
+      { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
     ],
   };
 
@@ -28,33 +28,41 @@ describe('transformDataForPush util', () => {
     name: 'Post',
     type: 'tangible',
 
-    textFields: [{ name: 'slug' }, { name: 'arrField', array: true, index: true }],
+    textFields: [
+      { name: 'slug', type: 'textFields' },
+      { name: 'arrField', array: true, index: true, type: 'textFields' },
+    ],
 
     enumFields: [
       {
         name: 'publications',
         enumName: 'Publications',
         index: true,
+        type: 'enumFields',
       },
       {
         name: 'newsFeed',
         enumName: 'NewsFeed',
         index: true,
+        type: 'enumFields',
       },
       {
         name: 'events',
         enumName: 'Events',
         index: true,
+        type: 'enumFields',
       },
       {
         name: 'journal',
         enumName: 'Journal',
         index: true,
+        type: 'enumFields',
       },
       {
         name: 'toProfessionals',
         enumName: 'ToProfessionals',
         index: true,
+        type: 'enumFields',
       },
     ],
 
@@ -63,12 +71,14 @@ describe('transformDataForPush util', () => {
         name: 'restaurant',
         config: restaurantConfig,
         index: true,
+        type: 'relationalFields',
       },
       {
         name: 'restaurants',
         config: restaurantConfig,
         array: true,
         index: true,
+        type: 'relationalFields',
       },
     ],
   });
@@ -77,7 +87,7 @@ describe('transformDataForPush util', () => {
     name: 'Restaurant',
     type: 'tangible',
 
-    textFields: [{ name: 'slug' }],
+    textFields: [{ name: 'slug', type: 'textFields' }],
 
     enumFields: [
       {
@@ -85,6 +95,7 @@ describe('transformDataForPush util', () => {
         enumName: 'Cuisines',
         array: true,
         index: true,
+        type: 'enumFields',
       },
     ],
 
@@ -93,6 +104,7 @@ describe('transformDataForPush util', () => {
         name: 'access',
         config: accessConfig,
         index: true,
+        type: 'relationalFields',
       },
     ],
   });

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import entitiesByUniqueQueryAttributes from '../../types/actionAttributes/entitiesByUniqueQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -14,6 +14,7 @@ describe('composeEntitiesQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -43,6 +44,7 @@ describe('composeEntitiesQueryArgs', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -71,6 +73,7 @@ describe('composeEntitiesQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -100,6 +103,7 @@ describe('composeEntitiesQueryArgs', () => {
         {
           name: 'position',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
     };

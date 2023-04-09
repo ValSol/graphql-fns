@@ -13,6 +13,7 @@ describe('composeDerivativeEntityFileCountQuery', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };

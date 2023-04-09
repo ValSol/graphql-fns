@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createImportOptionsInputTypes from './createImportOptionsInputTypes';
 
@@ -12,6 +12,7 @@ describe('createImportOptionsInputTypes', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

@@ -33,6 +33,7 @@ describe('createEntityWhereOneInputType', () => {
           config: entityConfig,
           required: true,
           unique: true,
+          type: 'duplexFields',
         },
       ],
       relationalFields: [
@@ -40,6 +41,7 @@ describe('createEntityWhereOneInputType', () => {
           name: 'copy',
           config: entityConfig,
           unique: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -64,31 +66,37 @@ describe('createEntityWhereOneInputType', () => {
         {
           name: 'email',
           unique: true,
+          type: 'textFields',
         },
         {
           name: 'userId',
           unique: true,
+          type: 'textFields',
         },
         {
           name: 'firstName',
+          type: 'textFields',
         },
       ],
       intFields: [
         {
           name: 'perosonaNum',
           unique: true,
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'perosonaNumber',
           unique: true,
+          type: 'floatFields',
         },
       ],
       dateTimeFields: [
         {
           name: 'birthday',
           unique: true,
+          type: 'dateTimeFields',
         },
       ],
     };

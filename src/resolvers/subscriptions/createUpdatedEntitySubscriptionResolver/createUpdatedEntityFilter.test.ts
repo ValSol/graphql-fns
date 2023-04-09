@@ -15,19 +15,23 @@ describe('createUpdatedEntityFilter', () => {
       {
         name: 'textFieldIndexed',
         index: true,
+        type: 'textFields',
       },
       {
         name: 'textFieldUnique',
         unique: true,
+        type: 'textFields',
       },
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
     intFields: [
       {
         name: 'intFieldIndexed',
         index: true,
+        type: 'intFields',
       },
       {
         name: 'intFieldUnique',
@@ -41,26 +45,32 @@ describe('createUpdatedEntityFilter', () => {
       {
         name: 'floatFieldIndexed',
         index: true,
+        type: 'floatFields',
       },
       {
         name: 'floatFieldUnique',
         unique: true,
+        type: 'floatFields',
       },
       {
         name: 'floatField',
+        type: 'floatFields',
       },
     ],
     dateTimeFields: [
       {
         name: 'dateTimeFieldIndexed',
         index: true,
+        type: 'dateTimeFields',
       },
       {
         name: 'dateTimeFieldUnique',
         unique: true,
+        type: 'dateTimeFields',
       },
       {
         name: 'dateTimeField',
+        type: 'dateTimeFields',
       },
     ],
     relationalFields: [
@@ -68,10 +78,12 @@ describe('createUpdatedEntityFilter', () => {
         name: 'relationalFieldIndexed',
         config: entityConfig,
         index: true,
+        type: 'relationalFields',
       },
       {
         name: 'relationalField',
         config: entityConfig,
+        type: 'relationalFields',
       },
     ],
     duplexFields: [
@@ -80,11 +92,13 @@ describe('createUpdatedEntityFilter', () => {
         config: entityConfig,
         oppositeName: 'duplexFieldIndexed',
         index: true,
+        type: 'duplexFields',
       },
       {
         name: 'duplexField',
         config: entityConfig,
         oppositeName: 'duplexField',
+        type: 'duplexFields',
       },
     ],
   });

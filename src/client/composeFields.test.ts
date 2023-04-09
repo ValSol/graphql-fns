@@ -12,42 +12,50 @@ describe('composeFields', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
       ],
       booleanFields: [
         {
           name: 'booleanField',
+          type: 'booleanFields',
         },
       ],
       enumFields: [
         {
           name: 'enumField',
           enumName: 'enumeration',
+          type: 'enumFields',
         },
       ],
       geospatialFields: [
         {
           name: 'geospatialPoint',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialPolygon',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -395,17 +403,24 @@ describe('composeFields', () => {
     const embedded3Config: EntityConfig = {
       name: 'Embedded3',
       type: 'embedded',
-      textFields: [{ name: 'textField3' }, { name: 'textFieldArr3', array: true }],
+      textFields: [
+        { name: 'textField3', type: 'textFields' },
+        { name: 'textFieldArr3', array: true, type: 'textFields' },
+      ],
     };
 
     const embedded2Config: EntityConfig = {
       name: 'Embedded2',
       type: 'embedded',
-      textFields: [{ name: 'textField2' }, { name: 'textFieldArr2', array: true }],
+      textFields: [
+        { name: 'textField2', type: 'textFields' },
+        { name: 'textFieldArr2', array: true, type: 'textFields' },
+      ],
       embeddedFields: [
         {
           name: 'embeddedField3',
           config: embedded3Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -413,12 +428,16 @@ describe('composeFields', () => {
     const embedded1Config: EntityConfig = {
       name: 'Embedded1',
       type: 'embedded',
-      textFields: [{ name: 'textField1' }, { name: 'textFieldArr1', array: true }],
+      textFields: [
+        { name: 'textField1', type: 'textFields' },
+        { name: 'textFieldArr1', array: true, type: 'textFields' },
+      ],
       embeddedFields: [
         {
           name: 'embeddedField2',
           config: embedded2Config,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -429,12 +448,14 @@ describe('composeFields', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embeddedField1',
           config: embedded1Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -648,13 +669,16 @@ describe('composeFields', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'secondName',
+          type: 'textFields',
         },
         {
           name: 'features',
           array: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -662,6 +686,7 @@ describe('composeFields', () => {
           name: 'friends',
           array: true,
           config: personConfig,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -669,12 +694,14 @@ describe('composeFields', () => {
           name: 'parent',
           config: personConfig,
           oppositeName: 'children',
+          type: 'duplexFields',
         },
         {
           name: 'children',
           array: true,
           config: personConfig,
           oppositeName: 'parent',
+          type: 'duplexFields',
         },
       ],
     });

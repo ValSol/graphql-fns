@@ -16,6 +16,7 @@ describe('composeActionSignature util', () => {
           array: true,
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
     };

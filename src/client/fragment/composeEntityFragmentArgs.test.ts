@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import composeEntityFragmentArgs from './composeEntityFragmentArgs';
 
@@ -12,6 +12,7 @@ describe('composeEntityFragmentArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

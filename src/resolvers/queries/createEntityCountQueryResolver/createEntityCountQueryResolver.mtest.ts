@@ -42,14 +42,17 @@ describe('createEntityCountQueryResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'position',
           index: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -58,11 +61,13 @@ describe('createEntityCountQueryResolver', () => {
           array: true,
           oppositeName: 'friends',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'theBestFriend',
           oppositeName: 'theBestFriend',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -148,10 +153,12 @@ describe('createEntityCountQueryResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -163,12 +170,14 @@ describe('createEntityCountQueryResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
       geospatialFields: [
         {
           name: 'point',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
       relationalFields: [
@@ -176,6 +185,7 @@ describe('createEntityCountQueryResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };

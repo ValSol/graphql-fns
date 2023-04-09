@@ -18,10 +18,12 @@ describe('composeDerivativeConfig', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'anotherField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -33,6 +35,7 @@ describe('composeDerivativeConfig', () => {
         {
           name: 'additionalTextField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -63,11 +66,13 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'anotherField',
             index: true,
+            type: 'textFields',
           },
         ],
         floatFields: [
           {
             name: 'floatField',
+            type: 'floatFields',
           },
         ],
       };
@@ -97,11 +102,13 @@ describe('composeDerivativeConfig', () => {
             name: 'textField',
             index: true,
             freeze: true,
+            type: 'textFields',
           },
           {
             name: 'anotherField',
             index: true,
             freeze: false,
+            type: 'textFields',
           },
         ],
       };
@@ -131,11 +138,13 @@ describe('composeDerivativeConfig', () => {
             name: 'textField',
             index: true,
             freeze: false,
+            type: 'textFields',
           },
           {
             name: 'anotherField',
             index: true,
             freeze: true,
+            type: 'textFields',
           },
         ],
       };
@@ -169,11 +178,13 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'textField',
             index: true,
+            type: 'textFields',
           },
         ],
         floatFields: [
           {
             name: 'floatField',
+            type: 'floatFields',
           },
         ],
       };
@@ -207,11 +218,13 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'textField',
             index: true,
+            type: 'textFields',
           },
         ],
         floatFields: [
           {
             name: 'anotherField',
+            type: 'floatFields',
           },
         ],
       };
@@ -246,6 +259,7 @@ describe('composeDerivativeConfig', () => {
             name: 'textField',
             index: true,
             enumName: 'enumeration',
+            type: 'enumFields',
           },
         ],
         textFields: [],
@@ -285,12 +299,14 @@ describe('composeDerivativeConfig', () => {
           {
             name: 'textField',
             index: true,
+            type: 'textFields',
           },
         ],
         relationalFields: [
           {
             name: 'additionalRelationalField',
             config: additionalEntityConfig,
+            type: 'relationalFields',
           },
         ],
       };
@@ -307,6 +323,7 @@ describe('composeDerivativeConfig', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -339,6 +356,7 @@ describe('composeDerivativeConfig', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -350,6 +368,7 @@ describe('composeDerivativeConfig', () => {
           name: 'relationalField',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
     };
@@ -376,6 +395,7 @@ describe('composeDerivativeConfig', () => {
         textFields: [
           {
             name: 'textField',
+            type: 'textFields',
           },
         ],
       };
@@ -387,6 +407,7 @@ describe('composeDerivativeConfig', () => {
             name: 'relationalField',
             array: true,
             config: entityConfigForCatalog,
+            type: 'relationalFields',
           },
         ],
       };
@@ -402,6 +423,7 @@ describe('composeDerivativeConfig', () => {
       textFields: [
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
     };
@@ -411,6 +433,7 @@ describe('composeDerivativeConfig', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -448,6 +471,7 @@ describe('composeDerivativeConfig', () => {
         textFields: [
           {
             name: 'textField2',
+            type: 'textFields',
           },
         ],
       };
@@ -457,6 +481,7 @@ describe('composeDerivativeConfig', () => {
         textFields: [
           {
             name: 'textField',
+            type: 'textFields',
           },
         ],
         relationalFields: [
@@ -464,6 +489,7 @@ describe('composeDerivativeConfig', () => {
             name: 'relationalField',
             array: true,
             config: entityConfigForCatalog,
+            type: 'relationalFields',
           },
         ],
       };
@@ -480,10 +506,12 @@ describe('composeDerivativeConfig', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'anotherField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -492,9 +520,9 @@ describe('composeDerivativeConfig', () => {
       name: 'Example2Edge',
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: exampleConfig }],
+      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const exampleConnectionConfig: VirtualEntityConfig = {
@@ -502,8 +530,8 @@ describe('composeDerivativeConfig', () => {
       type: 'virtual',
 
       childFields: [
-        { name: 'pageInfo', config: pageInfoConfig, required: true },
-        { name: 'edges', config: exampleEdgeConfig, array: true },
+        { name: 'pageInfo', config: pageInfoConfig, required: true, type: 'childFields' },
+        { name: 'edges', config: exampleEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 
@@ -538,6 +566,7 @@ describe('composeDerivativeConfig', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -549,9 +578,9 @@ describe('composeDerivativeConfig', () => {
         name: 'Example2EdgeForCatalog',
         type: 'virtual',
 
-        childFields: [{ name: 'node', config: entityForCatalogConfig }],
+        childFields: [{ name: 'node', config: entityForCatalogConfig, type: 'childFields' }],
 
-        textFields: [{ name: 'cursor', required: true }],
+        textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
       };
 
       expect(result).toEqual(expectedExample2EdgeForCatalog);
@@ -563,8 +592,13 @@ describe('composeDerivativeConfig', () => {
         type: 'virtual',
 
         childFields: [
-          { name: 'pageInfo', config: pageInfoConfig, required: true },
-          { name: 'edges', config: expectedExample2EdgeForCatalog, array: true },
+          { name: 'pageInfo', config: pageInfoConfig, required: true, type: 'childFields' },
+          {
+            name: 'edges',
+            config: expectedExample2EdgeForCatalog,
+            array: true,
+            type: 'childFields',
+          },
         ],
       };
 

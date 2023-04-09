@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import pushIntoEntityMutationAttributes from '../../types/actionAttributes/pushIntoEntityMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -15,6 +15,7 @@ describe('composePushIntoEntityMutationArgs', () => {
         {
           name: 'textField',
           array: true,
+          type: 'textFields',
         },
       ],
     };

@@ -13,6 +13,7 @@ describe('composeWhereInput', () => {
       {
         name: 'name3',
         index: true,
+        type: 'textFields',
       },
     ],
   };
@@ -25,6 +26,7 @@ describe('composeWhereInput', () => {
       {
         name: 'name2',
         index: true,
+        type: 'textFields',
       },
     ],
 
@@ -33,6 +35,7 @@ describe('composeWhereInput', () => {
         name: 'embedded3',
         config: child3Config,
         index: true,
+        type: 'embeddedFields',
       },
     ],
   };
@@ -45,6 +48,7 @@ describe('composeWhereInput', () => {
       {
         name: 'name',
         index: true,
+        type: 'textFields',
       },
     ],
 
@@ -53,6 +57,7 @@ describe('composeWhereInput', () => {
         name: 'embedded2',
         config: child2Config,
         index: true,
+        type: 'embeddedFields',
       },
     ],
   };
@@ -65,48 +70,58 @@ describe('composeWhereInput', () => {
       {
         name: 'name',
         index: true,
+        type: 'textFields',
       },
       {
         name: 'code',
         index: true,
+        type: 'textFields',
       },
       {
         name: 'code2',
         index: true,
+        type: 'textFields',
       },
     ],
     floatFields: [
       {
         name: 'floatField',
         index: true,
+        type: 'floatFields',
       },
       {
         name: 'floatField2',
         index: true,
+        type: 'floatFields',
       },
     ],
     intFields: [
       {
         name: 'intField',
         index: true,
+        type: 'intFields',
       },
       {
         name: 'intField2',
         index: true,
+        type: 'intFields',
       },
       {
         name: 'intField3',
         index: true,
+        type: 'intFields',
       },
       {
         name: 'intFields',
         index: true,
         array: true,
+        type: 'intFields',
       },
       {
         name: 'intFields2',
         index: true,
         array: true,
+        type: 'intFields',
       },
     ],
     relationalFields: [
@@ -114,12 +129,14 @@ describe('composeWhereInput', () => {
         name: 'relationalField',
         index: true,
         config: entityConfig,
+        type: 'relationalFields',
       },
       {
         name: 'relationalFields',
         index: true,
         config: entityConfig,
         array: true,
+        type: 'relationalFields',
       },
     ],
 
@@ -128,6 +145,7 @@ describe('composeWhereInput', () => {
         name: 'embedded',
         config: childConfig,
         index: true,
+        type: 'embeddedFields',
       },
     ],
   });
@@ -325,6 +343,7 @@ describe('composeWhereInput', () => {
           name: 'restaurantEditors',
           index: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -339,6 +358,7 @@ describe('composeWhereInput', () => {
           config: menuConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -354,6 +374,7 @@ describe('composeWhereInput', () => {
           config: menusectionConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
         {
           name: 'restaurant',
@@ -361,6 +382,7 @@ describe('composeWhereInput', () => {
           config: restaurantConfig,
           required: true,
           index: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -374,6 +396,7 @@ describe('composeWhereInput', () => {
           oppositeName: 'restaurant',
           config: menuConfig,
           index: true,
+          type: 'duplexFields',
         },
       ],
 
@@ -382,6 +405,7 @@ describe('composeWhereInput', () => {
           name: 'access',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -442,6 +466,7 @@ describe('composeWhereInput', () => {
           name: 'submitter',
           index: true,
           freeze: true,
+          type: 'textFields',
         },
       ],
 
@@ -450,8 +475,9 @@ describe('composeWhereInput', () => {
           name: 'servicePackage',
           required: true,
           index: true,
+          type: 'intFields',
         },
-        { name: 'termIndex' },
+        { name: 'termIndex', type: 'intFields' },
       ],
     };
 

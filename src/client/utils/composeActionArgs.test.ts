@@ -20,6 +20,7 @@ describe('composeActionArgs util', () => {
           array: true,
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -27,6 +28,7 @@ describe('composeActionArgs util', () => {
           name: 'examples',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
     });

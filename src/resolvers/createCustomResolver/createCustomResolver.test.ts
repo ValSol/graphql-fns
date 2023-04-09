@@ -39,6 +39,7 @@ describe('createCustomResolver', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };

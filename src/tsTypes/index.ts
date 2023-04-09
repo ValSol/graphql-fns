@@ -46,10 +46,12 @@ type FieldCommonProperties = {
 type ArrayBooleanField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   default?: boolean[];
+  type: 'booleanFields';
 };
 type ScalarBooleanField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   default?: boolean;
+  type: 'booleanFields';
 };
 export type BooleanField = ScalarBooleanField | ArrayBooleanField;
 
@@ -57,38 +59,72 @@ type ScalarEnumField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   default?: string;
   enumName: string;
+  type: 'enumFields';
 };
 type ArrayEnumField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   default?: string[];
   enumName: string;
+  type: 'enumFields';
 };
 export type EnumField = ArrayEnumField | ScalarEnumField;
 
 type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array?: false;
   geospatialType: 'Point' | 'Polygon';
+  type: 'geospatialFields';
 };
 type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array: true;
   geospatialType: 'Point' | 'Polygon';
+  type: 'geospatialFields';
 };
 export type GeospatialField = ScalarGeospatialField | ArrayGeospatialField;
 
-type ScalarTextField = FieldCommonProperties & { array?: false; default?: string; weight?: number };
-type ArrayTextField = FieldCommonProperties & { array: true; default?: string[]; weight?: number };
+type ScalarTextField = FieldCommonProperties & {
+  array?: false;
+  default?: string;
+  weight?: number;
+  type: 'textFields';
+};
+type ArrayTextField = FieldCommonProperties & {
+  array: true;
+  default?: string[];
+  weight?: number;
+  type: 'textFields';
+};
 type TextField = ScalarTextField | ArrayTextField;
 
-type ScalarDateTimeField = FieldCommonProperties & { array?: false; default?: Date };
-type ArrayDateTimeField = FieldCommonProperties & { array: true; default?: Date[] };
+type ScalarDateTimeField = FieldCommonProperties & {
+  array?: false;
+  default?: Date;
+  type: 'dateTimeFields';
+};
+type ArrayDateTimeField = FieldCommonProperties & {
+  array: true;
+  default?: Date[];
+  type: 'dateTimeFields';
+};
 type DateTimeField = ScalarDateTimeField | ArrayDateTimeField;
 
-type ScalarIntField = FieldCommonProperties & { array?: false; default?: number };
-type ArrayIntField = FieldCommonProperties & { array: true; default?: number[] };
+type ScalarIntField = FieldCommonProperties & {
+  array?: false;
+  default?: number;
+  type: 'intFields';
+};
+type ArrayIntField = FieldCommonProperties & { array: true; default?: number[]; type: 'intFields' };
 type IntField = ScalarIntField | ArrayIntField;
 
-type ScalarFloatField = FieldCommonProperties & { array?: false; default?: number };
-type ArrayFloatField = FieldCommonProperties & { array: true; default?: number[] };
+type ScalarFloatField = FieldCommonProperties & {
+  array?: false;
+  default?: number;
+  type: 'floatFields';
+};
+type ArrayFloatField = FieldCommonProperties & {
+  array: true;
+  default?: number[];
+  type: 'floatFields';
+};
 type FloatField = ScalarFloatField | ArrayFloatField;
 
 type ScalarSimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
@@ -147,18 +183,18 @@ type SimplifiedChildField = ArraySimplifiedChildField | ScalarSimplifiedChildFie
 
 type SimplifiedEntityConfigCommonProperties = {
   name: string;
-  derivativeNameSlicePosition?: number;
+  dserivativeNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
   fileFields?: SimplifiedFileField[];
   relationalFields?: SimplifiedRelationalField[];
-  booleanFields?: BooleanField[];
-  dateTimeFields?: DateTimeField[];
-  enumFields?: EnumField[];
-  geospatialFields?: GeospatialField[];
-  intFields?: IntField[];
-  floatFields?: FloatField[];
-  textFields?: TextField[];
+  booleanFields?: Omit<BooleanField, 'type'>[];
+  dateTimeFields?: Omit<DateTimeField, 'type'>[];
+  enumFields?: Omit<EnumField, 'type'>[];
+  geospatialFields?: Omit<GeospatialField, 'type'>[];
+  intFields?: Omit<IntField, 'type'>[];
+  floatFields?: Omit<FloatField, 'type'>[];
+  textFields?: Omit<TextField, 'type'>[];
 };
 
 export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonProperties & {
@@ -198,30 +234,36 @@ export type SimplifiedEntityConfig =
 type ScalarEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   config: EmbeddedEntityConfig;
+  type: 'embeddedFields';
 };
 type ArrayEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   config: EmbeddedEntityConfig;
+  type: 'embeddedFields';
 };
 export type EmbeddedField = ArrayEmbeddedField | ScalarEmbeddedField;
 
 type ScalarFileField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   config: FileEntityConfig;
+  type: 'fileFields';
 };
 type ArrayFileField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   config: FileEntityConfig;
+  type: 'fileFields';
 };
 export type FileField = ArrayFileField | ScalarFileField;
 
 type ScalarRelationalField = FieldCommonProperties & {
   array?: false;
   config: TangibleEntityConfig;
+  type: 'relationalFields';
 };
 type ArrayRelationalField = FieldCommonProperties & {
   array: true;
   config: TangibleEntityConfig;
+  type: 'relationalFields';
 };
 export type RelationalField = ArrayRelationalField | ScalarRelationalField;
 
@@ -230,22 +272,26 @@ type ScalarDuplexField = FieldCommonProperties & {
   config: TangibleEntityConfig;
   oppositeName: string;
   parent?: boolean;
+  type: 'duplexFields';
 };
 type ArrayDuplexField = FieldCommonProperties & {
   array: true;
   config: TangibleEntityConfig;
   oppositeName: string;
   parent?: boolean;
+  type: 'duplexFields';
 };
 export type DuplexField = ArrayDuplexField | ScalarDuplexField;
 
 type ScalarChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   config: VirtualEntityConfig | TangibleEntityConfig;
+  type: 'childFields';
 };
 type ArrayChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   config: VirtualEntityConfig | TangibleEntityConfig;
+  type: 'childFields';
 };
 type ChildField = ArrayChildField | ScalarChildField;
 

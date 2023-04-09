@@ -9,19 +9,21 @@ describe('getOppositeFields util', () => {
   const placeConfig: TangibleEntityConfig = {
     name: 'Place',
     type: 'tangible',
-    textFields: [{ name: 'name' }],
+    textFields: [{ name: 'name', type: 'textFields' }],
     duplexFields: [
       {
         name: 'citizens',
         oppositeName: 'location',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
       {
         name: 'visitors',
         oppositeName: 'favoritePlace',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
     ],
   };
@@ -32,10 +34,12 @@ describe('getOppositeFields util', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -45,23 +49,27 @@ describe('getOppositeFields util', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'duplexFields',
       },
       {
         name: 'enemies',
         oppositeName: 'enemies',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
       {
         name: 'location',
         oppositeName: 'citizens',
         config: placeConfig,
         required: true,
+        type: 'duplexFields',
       },
       {
         name: 'favoritePlace',
         oppositeName: 'visitors',
         config: placeConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -76,12 +84,14 @@ describe('getOppositeFields util', () => {
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
       ],
       [
@@ -90,11 +100,13 @@ describe('getOppositeFields util', () => {
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
       ],
     ];
@@ -115,6 +127,7 @@ describe('getOppositeFields util', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'friends',
@@ -122,6 +135,7 @@ describe('getOppositeFields util', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
       ],
       [
@@ -130,12 +144,14 @@ describe('getOppositeFields util', () => {
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
       [
@@ -144,12 +160,14 @@ describe('getOppositeFields util', () => {
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
       [
@@ -157,12 +175,14 @@ describe('getOppositeFields util', () => {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     ];

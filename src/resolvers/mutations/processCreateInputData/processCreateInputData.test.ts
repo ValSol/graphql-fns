@@ -21,30 +21,37 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       intFields: [
         {
           name: 'intField1',
+          type: 'intFields',
         },
         {
           name: 'intField2',
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField1',
+          type: 'floatFields',
         },
         {
           name: 'floatField2',
+          type: 'floatFields',
         },
       ],
       booleanFields: [
         {
           name: 'booleanField1',
+          type: 'booleanFields',
         },
       ],
     };
@@ -105,7 +112,7 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object with self relation fields', () => {
+  test('should create object with self relation fields', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
     const entityConfig = {} as TangibleEntityConfig;
     Object.assign(entityConfig, {
@@ -114,20 +121,24 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'relationalField1',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: entityConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -179,7 +190,7 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object with embedded fields with relation fields', () => {
+  test('should create object with embedded fields with relation fields', () => {
     const preparedData: PreparedData = {
       mains: [],
       core: new Map(),
@@ -194,15 +205,17 @@ describe('processCreateInputData', () => {
     Object.assign(embedded1Config, {
       name: 'Embedded1',
       type: 'embedded',
-      textFields: [{ name: 'textField_e1' }],
-      embeddedFields: [{ name: 'embeddedField2', config: embedded2Config }],
+      textFields: [{ name: 'textField_e1', type: 'textFields' }],
+      embeddedFields: [{ name: 'embeddedField2', config: embedded2Config, type: 'embeddedFields' }],
     });
 
     Object.assign(embedded2Config, {
       name: 'Embedded2',
       type: 'embedded',
-      textFields: [{ name: 'textField_e2' }],
-      relationalFields: [{ name: 'relationalField', config: entityConfig }],
+      textFields: [{ name: 'textField_e2', type: 'textFields' }],
+      relationalFields: [
+        { name: 'relationalField', config: entityConfig, type: 'relationalFields' },
+      ],
     });
 
     Object.assign(entityConfig, {
@@ -211,15 +224,18 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embeddedField1',
           config: embedded1Config,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -286,13 +302,13 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object and children objectcs', () => {
+  test('should create object and children objectcs', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'city' }],
+      textFields: [{ name: 'city', type: 'textFields' }],
     };
     const personConfig: TangibleEntityConfig = {
       name: 'Person',
@@ -300,20 +316,24 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'location',
           config: placeConfig,
+          type: 'relationalFields',
         },
         {
           name: 'favorites',
           config: placeConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     };
@@ -375,26 +395,28 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object and children objectcs with duplex fields along with create', () => {
+  test('should create object and children objectcs with duplex fields along with create', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorites',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -405,10 +427,12 @@ describe('processCreateInputData', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -417,18 +441,21 @@ describe('processCreateInputData', () => {
           oppositeName: 'friend',
           config: personConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorites',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -528,31 +555,34 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object and children objectcs with duplex fields along with connect', () => {
+  test('should create object and children objectcs with duplex fields along with connect', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorites',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -563,10 +593,12 @@ describe('processCreateInputData', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -575,24 +607,28 @@ describe('processCreateInputData', () => {
           oppositeName: 'friend',
           config: personConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorites',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -743,7 +779,7 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create object with array of embedded fields', () => {
+  test('should create object with array of embedded fields', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
     const embedded1Config = {} as TangibleEntityConfig;
@@ -755,12 +791,13 @@ describe('processCreateInputData', () => {
     Object.assign(embedded1Config, {
       name: 'Embedded1',
       type: 'embedded',
-      textFields: [{ name: 'textField_e1' }],
+      textFields: [{ name: 'textField_e1', type: 'textFields' }],
       embeddedFields: [
         {
           array: true,
           name: 'embeddedField2S',
           config: embedded2Config,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -768,7 +805,7 @@ describe('processCreateInputData', () => {
     Object.assign(embedded2Config, {
       name: 'Embedded2',
       type: 'embedded',
-      textFields: [{ name: 'textField_e2' }],
+      textFields: [{ name: 'textField_e2', type: 'textFields' }],
     });
 
     Object.assign(entityConfig, {
@@ -777,15 +814,18 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embeddedField1',
           config: embedded1Config,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -868,7 +908,7 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should return result with updateMany items', () => {
+  test('should return result with updateMany items', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
     const entityConfig: TangibleEntityConfig = {
       name: 'Entity',
@@ -876,30 +916,37 @@ describe('processCreateInputData', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       intFields: [
         {
           name: 'intField1',
+          type: 'intFields',
         },
         {
           name: 'intField2',
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField1',
+          type: 'floatFields',
         },
         {
           name: 'floatField2',
+          type: 'floatFields',
         },
       ],
       booleanFields: [
         {
           name: 'booleanField1',
+          type: 'booleanFields',
         },
       ],
     };
@@ -1040,13 +1087,14 @@ describe('processCreateInputData', () => {
       name: 'Restaurant',
       type: 'tangible',
 
-      textFields: [{ name: 'title' }],
+      textFields: [{ name: 'title', type: 'textFields' }],
 
       duplexFields: [
         {
           name: 'menu',
           oppositeName: 'restaurant',
           config: menuConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -1058,6 +1106,7 @@ describe('processCreateInputData', () => {
         {
           name: 'title',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -1066,12 +1115,14 @@ describe('processCreateInputData', () => {
           oppositeName: 'menu',
           config: restaurantConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'sections',
           oppositeName: 'menu',
           config: menuSectionConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -1082,6 +1133,7 @@ describe('processCreateInputData', () => {
         {
           name: 'title',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -1090,6 +1142,7 @@ describe('processCreateInputData', () => {
           oppositeName: 'sections',
           config: menuConfig,
           required: true,
+          type: 'duplexFields',
         },
       ],
     });

@@ -3593,6 +3593,7 @@ type Query {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -3836,6 +3837,7 @@ type Mutation {
         {
           name: 'menuName',
           index: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -3844,6 +3846,7 @@ type Mutation {
           config: menuSectionConfig,
           oppositeName: 'menu',
           array: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -3862,6 +3865,7 @@ type Mutation {
           name: 'menu',
           config: menuConfig,
           oppositeName: 'sections',
+          type: 'duplexFields',
         },
       ],
     });

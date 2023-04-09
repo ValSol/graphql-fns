@@ -35,6 +35,7 @@ describe('unwindInverntoryOptions', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };
@@ -46,10 +47,11 @@ describe('unwindInverntoryOptions', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
 
-    relationalFields: [{ name: 'child', config: childExampleConfig }],
+    relationalFields: [{ name: 'child', config: childExampleConfig, type: 'relationalFields' }],
   };
 
   const exampleFileConfig: EntityConfig = {
@@ -59,6 +61,7 @@ describe('unwindInverntoryOptions', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };

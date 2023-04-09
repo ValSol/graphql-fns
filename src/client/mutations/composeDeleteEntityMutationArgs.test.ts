@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import deleteEntityMutationAttributes from '../../types/actionAttributes/deleteEntityMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -14,6 +14,7 @@ describe('composeDeleteEntityMutationArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

@@ -23,8 +23,18 @@ const composeConnectionVirtualConfig: VirtualConfigComposer = (config, generalCo
     derivativeNameSlicePosition: -'Connection'.length,
 
     childFields: [
-      { name: 'pageInfo', config: PageInfo as VirtualEntityConfig, required: true },
-      { name: 'edges', config: edgeConfig as VirtualEntityConfig, array: true },
+      {
+        name: 'pageInfo',
+        config: PageInfo as VirtualEntityConfig,
+        required: true,
+        type: 'childFields',
+      },
+      {
+        name: 'edges',
+        config: edgeConfig as VirtualEntityConfig,
+        array: true,
+        type: 'childFields',
+      },
     ],
   };
 

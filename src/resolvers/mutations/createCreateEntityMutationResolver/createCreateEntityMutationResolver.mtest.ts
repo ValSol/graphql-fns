@@ -35,24 +35,29 @@ describe('createCreateEntityMutationResolver', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -108,21 +113,25 @@ describe('createCreateEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'friend',
           config: personConfig,
+          type: 'relationalFields',
         },
         {
           name: 'friends',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -181,8 +190,8 @@ describe('createCreateEntityMutationResolver', () => {
     const placeConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
-      relationalFields: [{ name: 'capital', config: cityConfig }],
+      textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [{ name: 'capital', config: cityConfig, type: 'relationalFields' }],
     };
     const personConfig: Record<string, any> = {};
     Object.assign(personConfig, {
@@ -193,30 +202,36 @@ describe('createCreateEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'friend',
           config: personConfig,
+          type: 'relationalFields',
         },
         {
           name: 'friends',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
+          type: 'relationalFields',
         },
         {
           name: 'favorities',
           config: placeConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -336,25 +351,28 @@ describe('createCreateEntityMutationResolver', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place2',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorities',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
           required: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -365,10 +383,12 @@ describe('createCreateEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -376,6 +396,7 @@ describe('createCreateEntityMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
+          type: 'duplexFields',
           // required: true,
         },
         {
@@ -383,18 +404,21 @@ describe('createCreateEntityMutationResolver', () => {
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorities',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -565,18 +589,20 @@ describe('createCreateEntityMutationResolver', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place3',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -587,10 +613,12 @@ describe('createCreateEntityMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -598,17 +626,20 @@ describe('createCreateEntityMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -751,14 +782,14 @@ describe('createCreateEntityMutationResolver', () => {
       type: 'tangible',
 
       textFields: [
-        { name: 'postCreators', array: true, index: true },
-        { name: 'postEditors', array: true, index: true },
-        { name: 'postPublishers', array: true, index: true },
-        { name: 'postTogglers', array: true, index: true },
-        { name: 'restaurantCreators', array: true, index: true },
-        { name: 'restaurantEditors', array: true, index: true },
-        { name: 'restaurantPublishers', array: true, index: true },
-        { name: 'restaurantTogglers', array: true, index: true },
+        { name: 'postCreators', array: true, index: true, type: 'textFields' },
+        { name: 'postEditors', array: true, index: true, type: 'textFields' },
+        { name: 'postPublishers', array: true, index: true, type: 'textFields' },
+        { name: 'postTogglers', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantCreators', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantEditors', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
       ],
     };
 
@@ -769,19 +800,24 @@ describe('createCreateEntityMutationResolver', () => {
       name: 'Post',
       type: 'tangible',
 
-      textFields: [{ name: 'slug' }, { name: 'type' }],
+      textFields: [
+        { name: 'slug', type: 'textFields' },
+        { name: 'type', type: 'textFields' },
+      ],
 
       relationalFields: [
         {
           name: 'restaurant',
           config: restaurantConfig,
           index: true,
+          type: 'relationalFields',
         },
         {
           name: 'restaurants',
           config: restaurantConfig,
           array: true,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -790,13 +826,14 @@ describe('createCreateEntityMutationResolver', () => {
       name: 'Restaurant',
       type: 'tangible',
 
-      textFields: [{ name: 'slug' }],
+      textFields: [{ name: 'slug', type: 'textFields' }],
 
       relationalFields: [
         {
           name: 'access',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });

@@ -16,6 +16,7 @@ describe('actionToDerivative', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
   };
@@ -25,12 +26,14 @@ describe('actionToDerivative', () => {
     textFields: [
       {
         name: 'title',
+        type: 'textFields',
       },
     ],
     relationalFields: [
       {
         name: 'country',
         config: countryConfig,
+        type: 'relationalFields',
       },
     ],
   };
@@ -41,9 +44,11 @@ describe('actionToDerivative', () => {
     textFields: [
       {
         name: 'firstName',
+        type: 'textFields',
       },
       {
         name: 'secondName',
+        type: 'textFields',
       },
     ],
     relationalFields: [
@@ -51,10 +56,12 @@ describe('actionToDerivative', () => {
         name: 'friends',
         array: true,
         config: personConfig,
+        type: 'relationalFields',
       },
       {
         name: 'place',
         config: placeConfig,
+        type: 'relationalFields',
       },
     ],
     duplexFields: [
@@ -62,12 +69,14 @@ describe('actionToDerivative', () => {
         name: 'parent',
         config: personConfig,
         oppositeName: 'children',
+        type: 'duplexFields',
       },
       {
         name: 'children',
         array: true,
         config: personConfig,
         oppositeName: 'parent',
+        type: 'duplexFields',
       },
     ],
   });

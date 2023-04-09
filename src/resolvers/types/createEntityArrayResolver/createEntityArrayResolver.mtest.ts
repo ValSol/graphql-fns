@@ -43,17 +43,20 @@ describe('createEntityArrayResolver', () => {
         {
           name: 'title',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'friend',
           config: placeConfig,
+          type: 'relationalFields',
         },
         {
           name: 'friends',
           config: placeConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });

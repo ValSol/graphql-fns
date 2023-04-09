@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import entityCountQueryAttributes from '../../types/actionAttributes/entityCountQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -14,6 +14,7 @@ describe('composeEntityCountQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -45,6 +46,7 @@ describe('composeEntityCountQueryArgs', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };

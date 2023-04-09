@@ -12,9 +12,11 @@ describe('createEntityCountQueryType', () => {
       textFields: [
         {
           name: 'firstName',
+          type: 'textFields',
         },
         {
           name: 'lastName',
+          type: 'textFields',
         },
       ],
     };
@@ -47,10 +49,12 @@ describe('createEntityCountQueryType', () => {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
     };

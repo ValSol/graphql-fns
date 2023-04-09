@@ -13,6 +13,7 @@ describe('checkUnsetsFields', () => {
         {
           name: 'menu',
           required: true,
+          type: 'textFields',
         },
       ],
     };

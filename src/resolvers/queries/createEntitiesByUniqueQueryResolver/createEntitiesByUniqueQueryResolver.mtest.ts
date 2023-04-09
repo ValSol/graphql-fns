@@ -43,14 +43,17 @@ describe('createEntityQueryResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'position',
           index: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -59,11 +62,13 @@ describe('createEntityQueryResolver', () => {
           array: true,
           oppositeName: 'friends',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'theBestFriend',
           oppositeName: 'theBestFriend',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     });

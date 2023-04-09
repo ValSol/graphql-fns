@@ -52,6 +52,7 @@ describe('composeMutation', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };

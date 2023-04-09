@@ -9,24 +9,27 @@ describe('processDeleteData', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorites',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -37,10 +40,12 @@ describe('processDeleteData', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -48,24 +53,28 @@ describe('processDeleteData', () => {
           name: 'spouse',
           oppositeName: 'spouse',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorites',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -168,24 +177,27 @@ describe('processDeleteData', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorites',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -196,10 +208,12 @@ describe('processDeleteData', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -207,24 +221,28 @@ describe('processDeleteData', () => {
           name: 'spouse',
           oppositeName: 'spouse',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorites',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });

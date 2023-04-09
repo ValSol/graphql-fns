@@ -25,6 +25,7 @@ describe('composeCustomEntityMutationArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -32,6 +33,7 @@ describe('composeCustomEntityMutationArgs', () => {
           name: 'examples',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -77,6 +79,7 @@ describe('composeCustomEntityMutationArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

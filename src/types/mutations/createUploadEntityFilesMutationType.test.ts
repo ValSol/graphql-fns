@@ -13,9 +13,11 @@ describe('createUploadEntityFilesMutationType', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -46,6 +48,7 @@ describe('createUploadEntityFilesMutationType', () => {
       textFields: [
         {
           name: 'first name',
+          type: 'textFields',
         },
       ],
     };

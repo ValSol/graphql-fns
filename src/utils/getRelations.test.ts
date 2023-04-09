@@ -10,16 +10,16 @@ describe('getRelations', () => {
       name: 'entity2',
       type: 'tangible',
       relationalFields: [
-        { config: entityConfig, name: 'relationalField_2' },
-        { array: true, config: entityConfig, name: 'relationalField_2a' },
+        { config: entityConfig, name: 'relationalField_2', type: 'relationalFields' },
+        { array: true, config: entityConfig, name: 'relationalField_2a', type: 'relationalFields' },
       ],
     };
     const entityConfig3: TangibleEntityConfig = {
       name: 'Entity3',
       type: 'tangible',
       relationalFields: [
-        { config: entityConfig, name: 'relationalField_3' },
-        { array: true, config: entityConfig, name: 'relationalField_3a' },
+        { config: entityConfig, name: 'relationalField_3', type: 'relationalFields' },
+        { array: true, config: entityConfig, name: 'relationalField_3a', type: 'relationalFields' },
       ],
     };
     Object.assign(entityConfig, {
@@ -29,11 +29,13 @@ describe('getRelations', () => {
         {
           name: 'relationalField_1',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField_1a',
           config: entityConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });

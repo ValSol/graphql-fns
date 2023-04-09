@@ -13,11 +13,13 @@ describe('coerceDataToGqlServerSide', () => {
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalFields',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -25,18 +27,21 @@ describe('coerceDataToGqlServerSide', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexFields',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields',
           array: true,
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
       enumFields: [
         {
           name: 'enumField',
           enumName: 'EnumName',
+          type: 'enumFields',
         },
       ],
     });
@@ -113,12 +118,13 @@ describe('coerceDataToGqlServerSide', () => {
     const dupleConfig11: TangibleEntityConfig = {
       name: 'Duple11',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField11' }],
+      textFields: [{ name: 'duplexTextField11', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField11',
           config: entityConfig,
           oppositeName: 'duplexField11',
+          type: 'duplexFields',
         },
       ],
     };
@@ -126,12 +132,13 @@ describe('coerceDataToGqlServerSide', () => {
     const dupleConfig12: TangibleEntityConfig = {
       name: 'Duple12',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField12' }],
+      textFields: [{ name: 'duplexTextField12', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField12',
           config: entityConfig,
           oppositeName: 'duplexFields12',
+          type: 'duplexFields',
         },
       ],
     };
@@ -139,13 +146,14 @@ describe('coerceDataToGqlServerSide', () => {
     const dupleConfig21: TangibleEntityConfig = {
       name: 'Duple21',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField21' }],
+      textFields: [{ name: 'duplexTextField21', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields21',
           config: entityConfig,
           oppositeName: 'duplexField21',
           array: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -153,13 +161,14 @@ describe('coerceDataToGqlServerSide', () => {
     const dupleConfig22: TangibleEntityConfig = {
       name: 'Duple22',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField22' }],
+      textFields: [{ name: 'duplexTextField22', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields22',
           config: entityConfig,
           oppositeName: 'duplexFields22',
           array: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -172,23 +181,27 @@ describe('coerceDataToGqlServerSide', () => {
           name: 'duplexField11',
           config: dupleConfig11,
           oppositeName: 'oppositeDuplexField11',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields12',
           config: dupleConfig12,
           oppositeName: 'oppositeDuplexField12',
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'duplexField21',
           config: dupleConfig21,
           oppositeName: 'oppositeDuplexFields21',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields22',
           config: dupleConfig22,
           oppositeName: 'oppositeDuplexFields22',
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -226,13 +239,13 @@ describe('coerceDataToGqlServerSide', () => {
     const relationalConfig1: TangibleEntityConfig = {
       name: 'Relational1',
       type: 'tangible',
-      textFields: [{ name: 'relationalTextField1' }],
+      textFields: [{ name: 'relationalTextField1', type: 'textFields' }],
     };
 
     const relationalConfig2: TangibleEntityConfig = {
       name: 'Relational2',
       type: 'tangible',
-      textFields: [{ name: 'relationalTextField2' }],
+      textFields: [{ name: 'relationalTextField2', type: 'textFields' }],
     };
 
     Object.assign(entityConfig, {
@@ -242,11 +255,13 @@ describe('coerceDataToGqlServerSide', () => {
         {
           name: 'relationalField1',
           config: relationalConfig1,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: relationalConfig2,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -281,9 +296,11 @@ describe('coerceDataToGqlServerSide', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -295,17 +312,20 @@ describe('coerceDataToGqlServerSide', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -433,10 +453,12 @@ describe('coerceDataToGqlServerSide', () => {
         {
           name: 'geospatialFieldPoint',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialFieldPolygon',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -676,6 +698,7 @@ describe('coerceDataToGqlServerSide', () => {
         {
           name: 'geospatialField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -725,6 +748,7 @@ describe('coerceDataToGqlServerSide', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
     });
@@ -780,19 +804,23 @@ describe('coerceDataToGqlServerSide', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intField',
         },
         {
           name: 'intFields',
+          type: 'intField',
           array: true,
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatFields',
           array: true,
+          type: 'floatFields',
         },
       ],
     });

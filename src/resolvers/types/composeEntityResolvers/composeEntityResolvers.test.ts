@@ -13,6 +13,7 @@ describe('composeEntityResolvers', () => {
         {
           name: 'title',
           required: true,
+          type: 'textFields',
         },
       ],
     };
@@ -25,10 +26,12 @@ describe('composeEntityResolvers', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -37,20 +40,24 @@ describe('composeEntityResolvers', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: personConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -73,19 +80,21 @@ describe('composeEntityResolvers', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -96,10 +105,12 @@ describe('composeEntityResolvers', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -109,23 +120,27 @@ describe('composeEntityResolvers', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -151,20 +166,24 @@ describe('composeEntityResolvers', () => {
         {
           name: 'position',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'positions',
           geospatialType: 'Point',
           array: true,
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'areas',
           geospatialType: 'Polygon',
           array: true,
+          type: 'geospatialFields',
         },
       ],
     };

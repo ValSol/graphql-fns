@@ -45,14 +45,17 @@ describe('createEntityQueryResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'position',
           index: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -61,11 +64,13 @@ describe('createEntityQueryResolver', () => {
           array: true,
           oppositeName: 'friends',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'theBestFriend',
           oppositeName: 'theBestFriend',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -150,15 +155,19 @@ describe('createEntityQueryResolver', () => {
     Object.assign(restaurantConfig, {
       name: 'Restaurant',
       type: 'tangible',
-      booleanFields: [{ name: 'recommended', index: true }],
+      booleanFields: [{ name: 'recommended', index: true, type: 'booleanFields' }],
       // unique: true causes geospatial fetch error
       // textFields: [{ name: 'name' }, { name: 'num', unique: true }],
-      textFields: [{ name: 'name' }, { name: 'num' }],
+      textFields: [
+        { name: 'name', type: 'textFields' },
+        { name: 'num', type: 'textFields' },
+      ],
       relationalFields: [
         {
           name: 'restaurants',
           array: true,
           config: restaurantConfig,
+          type: 'relationalFields',
         },
       ],
 
@@ -166,19 +175,23 @@ describe('createEntityQueryResolver', () => {
         {
           name: 'point',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'point2',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'areas',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -314,13 +327,17 @@ describe('createEntityQueryResolver', () => {
     Object.assign(restaurantConfig, {
       name: 'Restaurant2',
       type: 'tangible',
-      booleanFields: [{ name: 'recommended', index: true }],
-      textFields: [{ name: 'name' }, { name: 'num', unique: true }],
+      booleanFields: [{ name: 'recommended', index: true, type: 'booleanFields' }],
+      textFields: [
+        { name: 'name', type: 'textFields' },
+        { name: 'num', unique: true, type: 'textFields' },
+      ],
       relationalFields: [
         {
           name: 'restaurants',
           array: true,
           config: restaurantConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -417,11 +434,13 @@ describe('createEntityQueryResolver', () => {
           name: 'first',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
         {
           name: 'second',
           index: true,
           weight: 5,
+          type: 'textFields',
         },
       ],
     };
@@ -433,6 +452,7 @@ describe('createEntityQueryResolver', () => {
           name: 'items',
           array: true,
           config: tableItemConfig,
+          type: 'relationalFields',
         },
       ],
     };
@@ -545,11 +565,13 @@ describe('createEntityQueryResolver', () => {
           name: 'first',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
         {
           name: 'second',
           index: true,
           weight: 5,
+          type: 'textFields',
         },
       ],
     };
@@ -561,6 +583,7 @@ describe('createEntityQueryResolver', () => {
           name: 'items',
           array: true,
           config: tableItemConfig,
+          type: 'relationalFields',
         },
       ],
     };
@@ -646,10 +669,12 @@ describe('createEntityQueryResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -661,12 +686,14 @@ describe('createEntityQueryResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
       geospatialFields: [
         {
           name: 'point',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
       relationalFields: [
@@ -674,6 +701,7 @@ describe('createEntityQueryResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };

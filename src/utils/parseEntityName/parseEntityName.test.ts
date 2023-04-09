@@ -16,6 +16,7 @@ describe('parseEntityName', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };

@@ -16,6 +16,7 @@ describe('composeDerivativeEntitiesQuery', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };
@@ -27,6 +28,7 @@ describe('composeDerivativeEntitiesQuery', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };
@@ -37,6 +39,7 @@ describe('composeDerivativeEntitiesQuery', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };
@@ -48,6 +51,7 @@ describe('composeDerivativeEntitiesQuery', () => {
       {
         name: 'position',
         geospatialType: 'Point',
+        type: 'geospatialFields',
       },
     ],
   };

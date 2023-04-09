@@ -13,24 +13,29 @@ describe('createPushIntoEntityInputType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField5',
           default: ['default text'],
           required: true,
           array: true,
+          type: 'textFields',
         },
         {
           name: 'textField6',
@@ -38,6 +43,7 @@ describe('createPushIntoEntityInputType', () => {
           required: true,
           array: true,
           freeze: true,
+          type: 'textFields',
         },
       ],
     };
@@ -61,19 +67,23 @@ describe('createPushIntoEntityInputType', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
           default: 'default text',
+          type: 'textFields',
         },
         {
           name: 'textField3',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'textField4',
           array: true,
           freeze: true,
+          type: 'textFields',
         },
       ],
     };
@@ -92,12 +102,14 @@ describe('createPushIntoEntityInputType', () => {
           name: 'textField1',
           array: true,
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'textField2',
           required: true,
           array: true,
           freeze: true,
+          type: 'textFields',
         },
       ],
     };
@@ -111,7 +123,7 @@ describe('createPushIntoEntityInputType', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as TangibleEntityConfig;
     Object.assign(personConfig, {
@@ -123,20 +135,24 @@ describe('createPushIntoEntityInputType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
         {
           name: 'location2',
@@ -144,6 +160,7 @@ describe('createPushIntoEntityInputType', () => {
           required: true,
           array: true,
           freeze: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -174,13 +191,16 @@ describe('createPushIntoEntityInputType', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
         {
           name: 'tags',
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -199,9 +219,11 @@ describe('createPushIntoEntityInputType', () => {
           name: 'country',
           required: true,
           default: 'Ukraine',
+          type: 'textFields',
         },
         {
           name: 'province',
+          type: 'textFields',
         },
       ],
     };
@@ -212,10 +234,12 @@ describe('createPushIntoEntityInputType', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -223,27 +247,32 @@ describe('createPushIntoEntityInputType', () => {
           name: 'location',
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'locations',
           array: true,
           config: addressConfig,
           required: true,
+          type: 'embeddedFields',
         },
         {
           name: 'place',
           config: addressConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'places',
           array: true,
           config: addressConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'places2',
           array: true,
           config: addressConfig,
           freeze: true,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -266,25 +295,28 @@ describe('createPushIntoEntityInputType', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors2',
           oppositeName: 'favoritePlace',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -295,10 +327,12 @@ describe('createPushIntoEntityInputType', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -308,29 +342,34 @@ describe('createPushIntoEntityInputType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'enemies',
           oppositeName: 'enemies',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace',
           oppositeName: 'visitors',
           config: placeConfig,
+          type: 'duplexFields',
         },
         {
           name: 'favoritePlace2',
           oppositeName: 'visitors2',
           config: placeConfig,
           freeze: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -359,16 +398,19 @@ describe('createPushIntoEntityInputType', () => {
           name: 'position',
           geospatialType: 'Point',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'precedingPosition',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'favoritePositions',
           array: true,
           geospatialType: 'Point',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'favoritePositions2',
@@ -376,31 +418,37 @@ describe('createPushIntoEntityInputType', () => {
           geospatialType: 'Point',
           required: true,
           freeze: true,
+          type: 'geospatialFields',
         },
         {
           name: 'worstPositions',
           array: true,
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'precedingArea',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
         {
           name: 'favoriteAreas',
           array: true,
           geospatialType: 'Polygon',
           required: true,
+          type: 'geospatialFields',
         },
         {
           name: 'worstAreas',
           array: true,
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -427,22 +475,26 @@ describe('createPushIntoEntityInputType', () => {
         {
           name: 'field1',
           enumName: 'Weekdays',
+          type: 'enumFields',
         },
         {
           name: 'field2',
           array: true,
           enumName: 'Cuisines',
+          type: 'enumFields',
         },
         {
           name: 'field3',
           enumName: 'Weekdays',
           required: true,
+          type: 'enumFields',
         },
         {
           name: 'field4',
           array: true,
           enumName: 'Cuisines',
           required: true,
+          type: 'enumFields',
         },
         {
           name: 'field5',
@@ -450,6 +502,7 @@ describe('createPushIntoEntityInputType', () => {
           enumName: 'Cuisines',
           required: true,
           freeze: true,
+          type: 'enumFields',
         },
       ],
     };
@@ -473,30 +526,36 @@ describe('createPushIntoEntityInputType', () => {
       intFields: [
         {
           name: 'intField1',
+          type: 'intFields',
         },
         {
           name: 'intField2',
           default: 0,
+          type: 'intFields',
         },
         {
           name: 'intField3',
           required: true,
+          type: 'intFields',
         },
         {
           name: 'intField4',
           array: true,
+          type: 'intFields',
         },
         {
           name: 'intField5',
           default: [55],
           required: true,
           array: true,
+          type: 'intFields',
         },
         {
           name: 'intField6',
           required: true,
           array: true,
           freeze: true,
+          type: 'intFields',
         },
       ],
     };
@@ -520,30 +579,36 @@ describe('createPushIntoEntityInputType', () => {
       floatFields: [
         {
           name: 'floatField1',
+          type: 'floatFields',
         },
         {
           name: 'floatField2',
           default: 0,
+          type: 'floatFields',
         },
         {
           name: 'floatField3',
           required: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField4',
           array: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField5',
           default: [5.5],
           required: true,
           array: true,
+          type: 'floatFields',
         },
         {
           name: 'floatField5',
           required: true,
           array: true,
           freeze: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -567,30 +632,36 @@ describe('createPushIntoEntityInputType', () => {
       booleanFields: [
         {
           name: 'booleanField1',
+          type: 'booleanFields',
         },
         {
           name: 'booleanField2',
           default: false,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField3',
           required: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField4',
           array: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField5',
           default: [true, true],
           required: true,
           array: true,
+          type: 'booleanFields',
         },
         {
           name: 'booleanField6',
           required: true,
           array: true,
           freeze: true,
+          type: 'booleanFields',
         },
       ],
     };
@@ -615,9 +686,11 @@ describe('createPushIntoEntityInputType', () => {
         {
           name: 'fileId',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'comment',
+          type: 'textFields',
         },
       ],
     };
@@ -634,9 +707,11 @@ describe('createPushIntoEntityInputType', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -648,6 +723,7 @@ describe('createPushIntoEntityInputType', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
@@ -655,27 +731,32 @@ describe('createPushIntoEntityInputType', () => {
           name: 'logo',
           config: imageConfig,
           required: true,
+          type: 'fileFields',
         },
         {
           name: 'hero',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           required: true,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
         {
           name: 'photos2',
           config: imageConfig,
           array: true,
           freeze: true,
+          type: 'fileFields',
         },
       ],
     });

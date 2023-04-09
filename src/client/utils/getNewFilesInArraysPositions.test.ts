@@ -13,15 +13,19 @@ describe('getNewFilesInArraysPositions util', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'tablet',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };
@@ -32,24 +36,29 @@ describe('getNewFilesInArraysPositions util', () => {
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'header',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'hero',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
         {
           name: 'avatars',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     };
@@ -116,15 +125,19 @@ describe('getNewFilesInArraysPositions util', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'tablet',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };
@@ -135,24 +148,29 @@ describe('getNewFilesInArraysPositions util', () => {
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'header',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'hero',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
         {
           name: 'avatars',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     };

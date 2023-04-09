@@ -33,7 +33,34 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
-    const exampleConfig = { ...simplifiedEntityConfig, type: 'tangible' };
+    // const exampleConfig = { ...simplifiedEntityConfig, type: 'tangible' };
+
+    const exampleConfig: TangibleEntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      intFields: [
+        {
+          name: 'intField',
+          type: 'intFields',
+        },
+        {
+          name: 'intFields',
+          type: 'intFields',
+          array: true,
+        },
+      ],
+      floatFields: [
+        {
+          name: 'floatField',
+          type: 'floatFields',
+        },
+        {
+          name: 'floatFields',
+          array: true,
+          type: 'floatFields',
+        },
+      ],
+    };
 
     const exampleEdgeConfig = {
       name: 'ExampleEdge',
@@ -41,9 +68,9 @@ describe('composeAllEntityConfigs', () => {
 
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: exampleConfig }],
+      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const exampleConnectionConfig = {
@@ -52,8 +79,8 @@ describe('composeAllEntityConfigs', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: PageInfo, required: true },
-        { name: 'edges', config: exampleEdgeConfig, array: true },
+        { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
+        { name: 'edges', config: exampleEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 
@@ -99,12 +126,14 @@ describe('composeAllEntityConfigs', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexFields',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields',
           array: true,
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
     });
@@ -114,9 +143,9 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       derivativeNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: entityConfig }],
+      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const exampleConnectionConfig = {
@@ -125,8 +154,8 @@ describe('composeAllEntityConfigs', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: PageInfo, required: true },
-        { name: 'edges', config: exampleEdgeConfig, array: true },
+        { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
+        { name: 'edges', config: exampleEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 
@@ -190,13 +219,16 @@ describe('composeAllEntityConfigs', () => {
         {
           name: 'fileId',
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'address',
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'title',
+          type: 'textFields',
         },
       ],
     };
@@ -206,9 +238,9 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       derivativeNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: imageConfig }],
+      childFields: [{ name: 'node', config: imageConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const imageConnectionConfig = {
@@ -217,8 +249,8 @@ describe('composeAllEntityConfigs', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: PageInfo, required: true },
-        { name: 'edges', config: imageEdgeConfig, array: true },
+        { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
+        { name: 'edges', config: imageEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 
@@ -229,10 +261,12 @@ describe('composeAllEntityConfigs', () => {
         {
           name: 'fileId',
           freeze: true,
+          type: 'textFields',
         },
         {
           name: 'address',
           freeze: true,
+          type: 'textFields',
         },
       ],
     };
@@ -243,17 +277,20 @@ describe('composeAllEntityConfigs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     };
@@ -263,9 +300,9 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       derivativeNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: entityConfig }],
+      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const exampleConnectionConfig = {
@@ -274,8 +311,8 @@ describe('composeAllEntityConfigs', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: PageInfo, required: true },
-        { name: 'edges', config: exampleEdgeConfig, array: true },
+        { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
+        { name: 'edges', config: exampleEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 
@@ -284,9 +321,9 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       derivativeNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: tangibleImageConfig }],
+      childFields: [{ name: 'node', config: tangibleImageConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const tangibleImageConnectionConfig = {
@@ -295,8 +332,8 @@ describe('composeAllEntityConfigs', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: PageInfo, required: true },
-        { name: 'edges', config: tangibleImageEdgeConfig, array: true },
+        { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
+        { name: 'edges', config: tangibleImageEdgeConfig, array: true, type: 'childFields' },
       ],
     };
 

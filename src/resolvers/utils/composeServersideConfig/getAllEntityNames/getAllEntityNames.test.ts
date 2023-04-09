@@ -18,6 +18,7 @@ describe('getAllEntityNames', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -26,6 +27,7 @@ describe('getAllEntityNames', () => {
         oppositeName: 'favoritePlace',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
     ],
   };
@@ -38,10 +40,12 @@ describe('getAllEntityNames', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -50,6 +54,7 @@ describe('getAllEntityNames', () => {
         name: 'favoritePlace',
         oppositeName: 'visitors',
         config: placeConfig,
+        type: 'duplexFields',
       },
     ],
 
@@ -59,16 +64,19 @@ describe('getAllEntityNames', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'relationalFields',
       },
       {
         name: 'enemies',
         config: personConfig,
         array: true,
+        type: 'relationalFields',
       },
       {
         name: 'location',
         config: placeConfig,
         required: true,
+        type: 'relationalFields',
       },
     ],
   });

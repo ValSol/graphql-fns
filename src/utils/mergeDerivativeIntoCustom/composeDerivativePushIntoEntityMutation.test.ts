@@ -15,6 +15,7 @@ describe('composeDerivativePushIntoEntityMutation', () => {
         name: 'textField',
         array: true,
         index: true,
+        type: 'textFields',
       },
     ],
   };

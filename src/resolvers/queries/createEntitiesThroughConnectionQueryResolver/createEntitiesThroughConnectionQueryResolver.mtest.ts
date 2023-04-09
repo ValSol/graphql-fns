@@ -26,17 +26,20 @@ const entityConfig: EntityConfig = {
   intFields: [
     {
       name: 'num',
+      type: 'intFields',
     },
   ],
   textFields: [
     {
       name: 'oddEven',
+      type: 'textFields',
     },
   ],
   geospatialFields: [
     {
       name: 'point',
       geospatialType: 'Point',
+      type: 'geospatialFields',
     },
   ],
 };

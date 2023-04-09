@@ -12,19 +12,23 @@ describe('composeConnectionVirtualConfig', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intFields',
           array: true,
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatFields',
           array: true,
+          type: 'floatFields',
         },
       ],
     };
@@ -34,9 +38,9 @@ describe('composeConnectionVirtualConfig', () => {
       type: 'virtual',
       derivativeNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: exampleConfig }],
+      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
 
-      textFields: [{ name: 'cursor', required: true }],
+      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
     const generalConfig: GeneralConfig = {
@@ -51,8 +55,8 @@ describe('composeConnectionVirtualConfig', () => {
       derivativeNameSlicePosition: -'Connection'.length,
 
       childFields: [
-        { name: 'pageInfo', config: pageInfoConfig, required: true },
-        { name: 'edges', config: edgeConfig, array: true },
+        { name: 'pageInfo', config: pageInfoConfig, required: true, type: 'childFields' },
+        { name: 'edges', config: edgeConfig, array: true, type: 'childFields' },
       ],
     };
 

@@ -16,6 +16,7 @@ describe('composeDerivativeDeleteEntityMutation', () => {
         name: 'textField',
         array: true,
         index: true,
+        type: 'textFields',
       },
     ],
   };

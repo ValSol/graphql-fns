@@ -52,6 +52,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -59,6 +60,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'coordinates',
         geospatialType: 'Point',
+        type: 'geospatialFields',
       },
     ],
 
@@ -68,6 +70,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         oppositeName: 'original',
         config: restaurantCloneConfig,
         parent: true,
+        type: 'duplexFields',
       },
 
       {
@@ -75,6 +78,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         oppositeName: 'restaurant',
         config: menuConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   };
@@ -87,6 +91,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -94,6 +99,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'coordinates',
         geospatialType: 'Point',
+        type: 'geospatialFields',
       },
     ],
 
@@ -102,6 +108,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         name: 'original',
         oppositeName: 'clone',
         config: restaurantConfig,
+        type: 'duplexFields',
       },
 
       {
@@ -109,6 +116,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         oppositeName: 'restaurant',
         config: menuCloneConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -121,6 +129,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -129,6 +138,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         name: 'restaurant',
         oppositeName: 'menu',
         config: restaurantConfig,
+        type: 'duplexFields',
       },
 
       {
@@ -137,6 +147,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         array: true,
         config: menuSectionConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -149,6 +160,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -157,6 +169,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         name: 'restaurant',
         oppositeName: 'menu',
         config: restaurantCloneConfig,
+        type: 'duplexFields',
       },
 
       {
@@ -165,6 +178,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         array: true,
         config: menuCloneSectionConfig,
         parent: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -177,6 +191,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -185,6 +200,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         name: 'menu',
         oppositeName: 'sections',
         config: menuConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -197,6 +213,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       {
         name: 'name',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -205,6 +222,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
         name: 'menu',
         oppositeName: 'sections',
         config: menuCloneConfig,
+        type: 'duplexFields',
       },
     ],
   });

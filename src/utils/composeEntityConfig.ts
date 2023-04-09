@@ -76,6 +76,12 @@ const composeEntityConfig = (
           );
         }
       });
+
+      // add field type
+      entityConfig[key] = (entityConfig[key] as Record<string, any>[]).map((item) => ({
+        ...item,
+        type: key,
+      }));
     });
 
   if (simplifiedEmbeddedFields) {
@@ -107,7 +113,7 @@ const composeEntityConfig = (
         }
       }
 
-      return { ...restField, config };
+      return { ...restField, config, type: 'embeddedFields' };
     });
   }
 
@@ -139,7 +145,7 @@ const composeEntityConfig = (
         );
       }
 
-      return { ...restField, config };
+      return { ...restField, config, type: 'childFields' };
     });
   }
 
@@ -161,7 +167,7 @@ const composeEntityConfig = (
         );
       }
 
-      return { ...restField, config };
+      return { ...restField, config, type: 'fileFields' };
     });
   }
 
@@ -176,7 +182,7 @@ const composeEntityConfig = (
             `Incorrect configName: "${configName}" in relational field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
           );
         }
-        return { ...restField, config };
+        return { ...restField, config, type: 'relationalFields' };
       },
     );
   }
@@ -192,7 +198,7 @@ const composeEntityConfig = (
         );
       }
 
-      return { ...restField, config };
+      return { ...restField, config, type: 'duplexFields' };
     });
   }
 };

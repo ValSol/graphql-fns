@@ -14,7 +14,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
     name: 'Place',
     type: 'tangible',
 
-    textFields: [{ name: 'name' }],
+    textFields: [{ name: 'name', type: 'textFields' }],
 
     duplexFields: [
       {
@@ -22,6 +22,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
         oppositeName: 'location',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
 
       {
@@ -30,6 +31,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
         array: true,
         config: personConfig,
         required: true,
+        type: 'duplexFields',
       },
     ],
   };
@@ -42,11 +44,13 @@ describe('createEntityCopyWhereOnesInputType', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
 
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -57,6 +61,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'duplexFields',
       },
 
       {
@@ -64,6 +69,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
         oppositeName: 'enemies',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
 
       {
@@ -71,18 +77,21 @@ describe('createEntityCopyWhereOnesInputType', () => {
         oppositeName: 'citizens',
         config: placeConfig,
         required: true,
+        type: 'duplexFields',
       },
 
       {
         name: 'favoritePlace',
         oppositeName: 'visitors',
         config: placeConfig,
+        type: 'duplexFields',
       },
 
       {
         name: 'clone',
         oppositeName: 'original',
         config: personCloneConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -95,11 +104,13 @@ describe('createEntityCopyWhereOnesInputType', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
 
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -109,6 +120,7 @@ describe('createEntityCopyWhereOnesInputType', () => {
         oppositeName: 'clone',
         config: personConfig,
         required: true,
+        type: 'duplexFields',
       },
     ],
   });
@@ -130,19 +142,21 @@ describe('createEntityCopyWhereOnesInputType', () => {
       name: 'Example',
       type: 'tangible',
 
-      textFields: [{ name: 'title' }],
+      textFields: [{ name: 'title', type: 'textFields' }],
 
       duplexFields: [
         {
           name: 'original',
           oppositeName: 'backup',
           config: entityConfig,
+          type: 'duplexFields',
         },
 
         {
           name: 'backup',
           oppositeName: 'original',
           config: entityConfig,
+          type: 'duplexFields',
         },
       ],
     });

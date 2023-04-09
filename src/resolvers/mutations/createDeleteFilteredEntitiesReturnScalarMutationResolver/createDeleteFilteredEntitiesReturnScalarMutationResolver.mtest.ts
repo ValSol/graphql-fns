@@ -35,24 +35,27 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name', unique: true }],
+      textFields: [{ name: 'name', unique: true, type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorities',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -63,10 +66,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       duplexFields: [
@@ -74,24 +79,28 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorities',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -287,10 +296,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -302,6 +313,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
 
@@ -310,6 +322,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };
@@ -394,10 +407,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -409,6 +424,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
 
@@ -417,6 +433,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };

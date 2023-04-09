@@ -12,6 +12,7 @@ describe('composeDerivativeConfigByName', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -41,11 +42,13 @@ describe('composeDerivativeConfigByName', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
       ],
     };

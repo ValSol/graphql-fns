@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import composeUpdatedEntitySubscriptionArgs from './composeUpdatedEntitySubscriptionArgs';
 
@@ -13,6 +13,7 @@ describe('composeUpdatedEntitySubscriptionArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -34,6 +35,7 @@ describe('composeUpdatedEntitySubscriptionArgs', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };

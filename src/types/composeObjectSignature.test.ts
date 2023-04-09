@@ -19,6 +19,7 @@ describe('composeObjectSignature', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -51,6 +52,7 @@ describe('composeObjectSignature', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -83,6 +85,7 @@ describe('composeObjectSignature', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };

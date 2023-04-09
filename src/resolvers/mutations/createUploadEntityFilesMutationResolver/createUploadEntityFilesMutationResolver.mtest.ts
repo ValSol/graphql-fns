@@ -79,21 +79,25 @@ describe('createUploadEntityFilesMutationResolver', () => {
         name: 'fileId',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'desktop',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'tablet',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'mobile',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
     ],
   };
@@ -106,21 +110,25 @@ describe('createUploadEntityFilesMutationResolver', () => {
         name: 'fileId',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'desktop',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'tablet',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
       {
         name: 'mobile',
         required: true,
         freeze: true,
+        type: 'textFields',
       },
     ],
   };

@@ -13,6 +13,7 @@ describe('composeDerivativeEntityCountQuery', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };
@@ -24,6 +25,7 @@ describe('composeDerivativeEntityCountQuery', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };
@@ -34,6 +36,7 @@ describe('composeDerivativeEntityCountQuery', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
   };
@@ -45,6 +48,7 @@ describe('composeDerivativeEntityCountQuery', () => {
       {
         name: 'position',
         geospatialType: 'Point',
+        type: 'geospatialFields',
       },
     ],
   };

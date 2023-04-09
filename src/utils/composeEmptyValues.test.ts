@@ -12,6 +12,7 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     });
@@ -31,6 +32,7 @@ describe('composeEmptyValues', () => {
         {
           name: 'textField',
           default: 'textFieldDefaultValue',
+          type: 'textFields',
         },
       ],
     });
@@ -50,6 +52,7 @@ describe('composeEmptyValues', () => {
         {
           name: 'textFields',
           array: true,
+          type: 'textFields',
         },
       ],
     });
@@ -70,6 +73,7 @@ describe('composeEmptyValues', () => {
           name: 'textFields',
           default: ['test'],
           array: true,
+          type: 'textFields',
         },
       ],
     });
@@ -87,9 +91,11 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };
@@ -101,6 +107,7 @@ describe('composeEmptyValues', () => {
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
       ],
     });
@@ -118,9 +125,11 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };
@@ -133,6 +142,7 @@ describe('composeEmptyValues', () => {
           name: 'photos',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -150,6 +160,7 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -161,6 +172,7 @@ describe('composeEmptyValues', () => {
         {
           name: 'embeddedField',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -178,6 +190,7 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -190,6 +203,7 @@ describe('composeEmptyValues', () => {
           name: 'embeddedFields',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -207,6 +221,7 @@ describe('composeEmptyValues', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -219,6 +234,7 @@ describe('composeEmptyValues', () => {
           name: 'embeddedFields',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -238,6 +254,7 @@ describe('composeEmptyValues', () => {
           name: 'textField3',
           required: true,
           default: 'default3',
+          type: 'textFields',
         },
       ],
     };
@@ -250,12 +267,14 @@ describe('composeEmptyValues', () => {
           name: 'textField2',
           required: true,
           default: 'default2',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded3',
           config: embedded3Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -268,12 +287,14 @@ describe('composeEmptyValues', () => {
           name: 'textField1',
           required: true,
           default: 'default1',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded2',
           config: embedded2Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -286,12 +307,14 @@ describe('composeEmptyValues', () => {
           name: 'textField',
           required: true,
           default: 'default',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded1',
           config: embedded1Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -319,11 +342,13 @@ describe('composeEmptyValues', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
       ],
     });
@@ -342,6 +367,7 @@ describe('composeEmptyValues', () => {
       booleanFields: [
         {
           name: 'booleanField',
+          type: 'booleanFields',
         },
       ],
     });
@@ -361,6 +387,7 @@ describe('composeEmptyValues', () => {
         {
           name: 'enumField',
           enumName: 'SomeEnum',
+          type: 'enumFields',
         },
       ],
     });
@@ -380,10 +407,12 @@ describe('composeEmptyValues', () => {
         {
           name: 'geospatialFieldPoint',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialFieldPolygon',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });

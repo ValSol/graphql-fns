@@ -14,6 +14,7 @@ describe('composeUpdateEntityMutationArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -40,7 +41,7 @@ describe('composeUpdateEntityMutationArgs', () => {
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
@@ -52,20 +53,24 @@ describe('composeUpdateEntityMutationArgs', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });

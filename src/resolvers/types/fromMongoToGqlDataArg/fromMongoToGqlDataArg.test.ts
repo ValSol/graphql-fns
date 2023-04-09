@@ -12,6 +12,7 @@ describe('fromMongoToGqlDataArg', () => {
       textFields: [
         {
           name: 'embeddedTextField',
+          type: 'textFields',
         },
       ],
     };
@@ -23,28 +24,33 @@ describe('fromMongoToGqlDataArg', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'embeddedArray',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
       relationalFields: [
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalArrayField',
           config: entityConfig,
           array: true,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -52,27 +58,32 @@ describe('fromMongoToGqlDataArg', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexArrayField',
+          type: 'duplexFields',
         },
         {
           name: 'duplexArrayField',
           config: entityConfig,
           oppositeName: 'duplexField',
           array: true,
+          type: 'duplexFields',
         },
       ],
       geospatialFields: [
         {
           name: 'pointField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'pointArrayFields',
           geospatialType: 'Point',
           array: true,
+          type: 'geospatialFields',
         },
         {
           name: 'polygonField',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });

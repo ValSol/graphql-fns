@@ -16,9 +16,11 @@ describe('transformWhere', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
       {
         name: 'lastName',
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -28,23 +30,27 @@ describe('transformWhere', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'duplexFields',
       },
       {
         name: 'enemies',
         oppositeName: 'enemies',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
       {
         name: 'clone',
         oppositeName: 'original',
         config: personCloneConfig,
+        type: 'duplexFields',
       },
       {
         name: 'clones',
         array: true,
         oppositeName: 'oneOforiginals',
         config: personCloneConfig,
+        type: 'duplexFields',
       },
     ],
   });
@@ -57,10 +63,12 @@ describe('transformWhere', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
 
       {
         name: 'lastName',
+        type: 'textFields',
       },
     ],
 
@@ -70,12 +78,14 @@ describe('transformWhere', () => {
         oppositeName: 'clone',
         config: personConfig,
         required: true,
+        type: 'duplexFields',
       },
 
       {
         name: 'oneOforiginals',
         oppositeName: 'clones',
         config: personConfig,
+        type: 'duplexFields',
       },
     ],
   });

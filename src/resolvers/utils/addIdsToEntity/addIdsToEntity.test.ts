@@ -12,6 +12,7 @@ describe('addIdsToEntity', () => {
       textFields: [
         {
           name: 'textField3',
+          type: 'textFields',
         },
       ],
     };
@@ -22,6 +23,7 @@ describe('addIdsToEntity', () => {
       textFields: [
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -29,6 +31,7 @@ describe('addIdsToEntity', () => {
           name: 'embedded3',
           config: embedded3Config,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -39,12 +42,14 @@ describe('addIdsToEntity', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded2',
           config: embedded2Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -55,12 +60,14 @@ describe('addIdsToEntity', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embedded1',
           config: embedded1Config,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -123,15 +130,19 @@ describe('addIdsToEntity', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'desktop',
+          type: 'textFields',
         },
         {
           name: 'tablet',
+          type: 'textFields',
         },
         {
           name: 'mobile',
+          type: 'textFields',
         },
       ],
     };
@@ -142,11 +153,13 @@ describe('addIdsToEntity', () => {
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'photos',
           array: true,
           config: imageConfig,
+          type: 'fileFields',
         },
       ],
     };

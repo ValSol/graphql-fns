@@ -40,10 +40,12 @@ describe('createEntitiesQueryType', () => {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -77,10 +79,12 @@ describe('createEntitiesQueryType', () => {
         {
           name: 'firstName',
           weight: 1,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           weight: 5,
+          type: 'textFields',
         },
       ],
     };
@@ -141,10 +145,12 @@ describe('createEntitiesQueryType', () => {
         {
           name: 'position',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };
@@ -178,20 +184,24 @@ describe('createEntitiesQueryType', () => {
         {
           name: 'firstName',
           index: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           index: true,
+          type: 'textFields',
         },
       ],
       geospatialFields: [
         {
           name: 'position',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     };

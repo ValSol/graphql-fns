@@ -42,24 +42,27 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name', unique: true }],
+      textFields: [{ name: 'name', unique: true, type: 'textFields' }],
       duplexFields: [
         {
           name: 'citizens',
           oppositeName: 'location',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'visitors',
           oppositeName: 'favorities',
           array: true,
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'curator',
           oppositeName: 'locations',
           config: personConfig,
+          type: 'duplexFields',
         },
       ],
     };
@@ -71,16 +74,19 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         {
           name: 'firstName',
           required: true,
+          type: 'textFields',
         },
         {
           name: 'lastName',
           required: true,
+          type: 'textFields',
         },
       ],
       relationalFields: [
         {
           name: 'sibling',
           config: personConfig,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -88,24 +94,28 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
           name: 'friend',
           oppositeName: 'friend',
           config: personConfig,
+          type: 'duplexFields',
         },
         {
           name: 'location',
           oppositeName: 'citizens',
           config: placeConfig,
           required: true,
+          type: 'duplexFields',
         },
         {
           name: 'locations',
           oppositeName: 'curator',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'favorities',
           oppositeName: 'visitors',
           config: placeConfig,
           array: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -691,6 +701,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'embeddedTextField',
+          type: 'textFields',
         },
       ],
     };
@@ -701,15 +712,18 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'textField1',
+          type: 'textFields',
         },
         {
           name: 'textField2',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
         {
           name: 'embeddedField',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -821,6 +835,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'embeddedTextField',
+          type: 'textFields',
         },
       ],
     };
@@ -831,6 +846,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       embeddedFields: [
@@ -838,6 +854,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
           name: 'embeddedFields',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     };
@@ -908,9 +925,11 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -921,17 +940,20 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     };
@@ -1009,10 +1031,12 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
           name: 'textFields',
           array: true,
           index: true,
+          type: 'textFields',
         },
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };
@@ -1024,6 +1048,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
           name: 'name',
           index: true,
           weight: 1,
+          type: 'textFields',
         },
       ],
 
@@ -1032,6 +1057,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
           name: 'child',
           index: true,
           config: childConfig,
+          type: 'relationalFields',
         },
       ],
     };
@@ -1115,14 +1141,14 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       type: 'tangible',
 
       textFields: [
-        { name: 'postCreators', array: true, index: true },
-        { name: 'postEditors', array: true, index: true },
-        { name: 'postPublishers', array: true, index: true },
-        { name: 'postTogglers', array: true, index: true },
-        { name: 'restaurantCreators', array: true, index: true },
-        { name: 'restaurantEditors', array: true, index: true },
-        { name: 'restaurantPublishers', array: true, index: true },
-        { name: 'restaurantTogglers', array: true, index: true },
+        { name: 'postCreators', array: true, index: true, type: 'textFields' },
+        { name: 'postEditors', array: true, index: true, type: 'textFields' },
+        { name: 'postPublishers', array: true, index: true, type: 'textFields' },
+        { name: 'postTogglers', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantCreators', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantEditors', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
+        { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
       ],
     };
 
@@ -1133,19 +1159,24 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       name: 'Post',
       type: 'tangible',
 
-      textFields: [{ name: 'slug' }, { name: 'type' }],
+      textFields: [
+        { name: 'slug', type: 'textFields' },
+        { name: 'type', type: 'textFields' },
+      ],
 
       relationalFields: [
         {
           name: 'restaurant',
           config: restaurantConfig,
           index: true,
+          type: 'relationalFields',
         },
         {
           name: 'restaurants',
           config: restaurantConfig,
           array: true,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -1154,13 +1185,14 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       name: 'Restaurant',
       type: 'tangible',
 
-      textFields: [{ name: 'slug' }],
+      textFields: [{ name: 'slug', type: 'textFields' }],
 
       relationalFields: [
         {
           name: 'access',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
         },
       ],
     });

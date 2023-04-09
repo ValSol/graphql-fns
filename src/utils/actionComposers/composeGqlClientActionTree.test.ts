@@ -11,42 +11,50 @@ describe('composeGqlClientActionTree', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
     dateTimeFields: [
       {
         name: 'dateTimeField',
+        type: 'dateTimeFields',
       },
     ],
     intFields: [
       {
         name: 'intField',
+        type: 'intFields',
       },
     ],
     floatFields: [
       {
         name: 'floatField',
+        type: 'floatFields',
       },
     ],
     booleanFields: [
       {
         name: 'booleanField',
+        type: 'booleanFields',
       },
     ],
     enumFields: [
       {
         name: 'enumField',
         enumName: 'enumeration',
+        type: 'enumFields',
       },
     ],
     geospatialFields: [
       {
         name: 'geospatialPoint',
         geospatialType: 'Point',
+        type: 'geospatialFields',
       },
       {
         name: 'geospatialPolygon',
         geospatialType: 'Polygon',
+        type: 'geospatialFields',
       },
     ],
   };

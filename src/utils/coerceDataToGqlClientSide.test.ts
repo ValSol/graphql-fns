@@ -14,11 +14,13 @@ describe('coerceDataToGqlClientSide', () => {
         {
           name: 'relationalField',
           config: entityConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalFields',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -26,18 +28,21 @@ describe('coerceDataToGqlClientSide', () => {
           name: 'duplexField',
           config: entityConfig,
           oppositeName: 'duplexFields',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields',
           array: true,
           config: entityConfig,
           oppositeName: 'duplexField',
+          type: 'duplexFields',
         },
       ],
       enumFields: [
         {
           name: 'enumField',
           enumName: 'EnumName',
+          type: 'enumFields',
         },
       ],
     });
@@ -114,12 +119,13 @@ describe('coerceDataToGqlClientSide', () => {
     const dupleConfig11: TangibleEntityConfig = {
       name: 'Duple11',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField11' }],
+      textFields: [{ name: 'duplexTextField11', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField11',
           config: entityConfig,
           oppositeName: 'duplexField11',
+          type: 'duplexFields',
         },
       ],
     };
@@ -127,12 +133,13 @@ describe('coerceDataToGqlClientSide', () => {
     const dupleConfig12: EntityConfig = {
       name: 'Duple12',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField12' }],
+      textFields: [{ name: 'duplexTextField12', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexField12',
           config: entityConfig,
           oppositeName: 'duplexFields12',
+          type: 'duplexFields',
         },
       ],
     };
@@ -140,13 +147,14 @@ describe('coerceDataToGqlClientSide', () => {
     const dupleConfig21: EntityConfig = {
       name: 'Duple21',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField21' }],
+      textFields: [{ name: 'duplexTextField21', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields21',
           config: entityConfig,
           oppositeName: 'duplexField21',
           array: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -154,13 +162,14 @@ describe('coerceDataToGqlClientSide', () => {
     const dupleConfig22: EntityConfig = {
       name: 'Duple22',
       type: 'tangible',
-      textFields: [{ name: 'duplexTextField22' }],
+      textFields: [{ name: 'duplexTextField22', type: 'textFields' }],
       duplexFields: [
         {
           name: 'oppositeDuplexFields22',
           config: entityConfig,
           oppositeName: 'duplexFields22',
           array: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -179,6 +188,7 @@ describe('coerceDataToGqlClientSide', () => {
           config: dupleConfig12,
           oppositeName: 'oppositeDuplexField12',
           array: true,
+          type: 'duplexFields',
         },
         {
           name: 'duplexField21',
@@ -227,13 +237,13 @@ describe('coerceDataToGqlClientSide', () => {
     const relationalConfig1: EntityConfig = {
       name: 'Relational1',
       type: 'tangible',
-      textFields: [{ name: 'relationalTextField1' }],
+      textFields: [{ name: 'relationalTextField1', type: 'textFields' }],
     };
 
     const relationalConfig2: EntityConfig = {
       name: 'Relational2',
       type: 'tangible',
-      textFields: [{ name: 'relationalTextField2' }],
+      textFields: [{ name: 'relationalTextField2', type: 'textFields' }],
     };
 
     Object.assign(entityConfig, {
@@ -243,11 +253,13 @@ describe('coerceDataToGqlClientSide', () => {
         {
           name: 'relationalField1',
           config: relationalConfig1,
+          type: 'relationalFields',
         },
         {
           name: 'relationalField2',
           config: relationalConfig2,
           array: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -282,9 +294,11 @@ describe('coerceDataToGqlClientSide', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -296,17 +310,20 @@ describe('coerceDataToGqlClientSide', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       fileFields: [
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });
@@ -434,10 +451,12 @@ describe('coerceDataToGqlClientSide', () => {
         {
           name: 'geospatialFieldPoint',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialFieldPolygon',
           geospatialType: 'Polygon',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -677,6 +696,7 @@ describe('coerceDataToGqlClientSide', () => {
         {
           name: 'geospatialField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
       ],
     });
@@ -726,6 +746,7 @@ describe('coerceDataToGqlClientSide', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
       ],
     });
@@ -781,19 +802,23 @@ describe('coerceDataToGqlClientSide', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intFields',
           array: true,
+          type: 'intFields',
         },
       ],
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatFields',
           array: true,
+          type: 'floatFields',
         },
       ],
     });

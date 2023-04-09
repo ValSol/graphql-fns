@@ -15,24 +15,28 @@ describe('createDeletedEntityFilter', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
     intFields: [
       {
         name: 'intField',
         index: true,
+        type: 'intFields',
       },
     ],
     floatFields: [
       {
         name: 'floatField',
         index: true,
+        type: 'floatFields',
       },
     ],
     dateTimeFields: [
       {
         name: 'dateTimeField',
         index: true,
+        type: 'dateTimeFields',
       },
     ],
     relationalFields: [
@@ -40,6 +44,7 @@ describe('createDeletedEntityFilter', () => {
         name: 'relationalField',
         config: entityConfig,
         index: true,
+        type: 'relationalFields',
       },
     ],
     duplexFields: [
@@ -48,6 +53,7 @@ describe('createDeletedEntityFilter', () => {
         config: entityConfig,
         oppositeName: 'duplexField',
         index: true,
+        type: 'duplexFields',
       },
     ],
   });

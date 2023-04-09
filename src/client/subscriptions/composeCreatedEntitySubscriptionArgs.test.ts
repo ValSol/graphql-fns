@@ -15,6 +15,7 @@ describe('composeCreatedEntitySubscriptionArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
       relationalFields: [
@@ -22,6 +23,7 @@ describe('composeCreatedEntitySubscriptionArgs', () => {
           name: 'examples',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -45,6 +47,7 @@ describe('composeCreatedEntitySubscriptionArgs', () => {
         {
           name: 'textField',
           index: true,
+          type: 'textFields',
         },
       ],
     };

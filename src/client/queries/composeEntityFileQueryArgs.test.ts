@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import entityFileQueryAttributes from '../../types/actionAttributes/entityFileQueryAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -11,7 +11,10 @@ describe('composeEntityFileQueryArgs', () => {
     const entityConfig: EntityConfig = {
       name: 'TangibleImage',
       type: 'tangibleFile',
-      textFields: [{ name: 'fileId' }, { name: 'address' }],
+      textFields: [
+        { name: 'fileId', type: 'textFields' },
+        { name: 'address', type: 'textFields' },
+      ],
     };
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: entityConfig } };

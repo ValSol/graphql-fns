@@ -11,10 +11,12 @@ describe('allocateFieldsForCSV', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
         {
           name: 'textArrayField',
           array: true,
+          type: 'textFields',
         },
       ],
     };
@@ -38,10 +40,12 @@ describe('allocateFieldsForCSV', () => {
       dateTimeFields: [
         {
           name: 'dateTimeField',
+          type: 'dateTimeFields',
         },
         {
           name: 'dateTimeArrayField',
           array: true,
+          type: 'dateTimeFields',
         },
       ],
     };
@@ -67,11 +71,13 @@ describe('allocateFieldsForCSV', () => {
         {
           name: 'relationalField',
           config: exampleConfig,
+          type: 'relationalFields',
         },
         {
           name: 'relationalArrayField',
           array: true,
           config: exampleConfig,
+          type: 'relationalFields',
         },
       ],
     });
@@ -98,12 +104,14 @@ describe('allocateFieldsForCSV', () => {
           name: 'duplexField',
           oppositeName: 'duplexArrayField',
           config: exampleConfig,
+          type: 'duplexFields',
         },
         {
           name: 'duplexArrayField',
           oppositeName: 'duplexField',
           array: true,
           config: exampleConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -128,10 +136,12 @@ describe('allocateFieldsForCSV', () => {
       intFields: [
         {
           name: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intArrayField',
           array: true,
+          type: 'intFields',
         },
       ],
     });
@@ -156,10 +166,12 @@ describe('allocateFieldsForCSV', () => {
       floatFields: [
         {
           name: 'floatField',
+          type: 'floatFields',
         },
         {
           name: 'floatArrayField',
           array: true,
+          type: 'floatFields',
         },
       ],
     });
@@ -184,10 +196,12 @@ describe('allocateFieldsForCSV', () => {
       booleanFields: [
         {
           name: 'booleanField',
+          type: 'booleanFields',
         },
         {
           name: 'booleanArrayField',
           array: true,
+          type: 'booleanFields',
         },
       ],
     });
@@ -213,11 +227,13 @@ describe('allocateFieldsForCSV', () => {
         {
           name: 'enumField',
           enumName: 'enumeration',
+          type: 'enumFields',
         },
         {
           name: 'enumArrayField',
           enumName: 'enumeration',
           array: true,
+          type: 'enumFields',
         },
       ],
     });
@@ -243,10 +259,12 @@ describe('allocateFieldsForCSV', () => {
         {
           name: 'geospatialField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
         },
         {
           name: 'geospatialArrayField',
           geospatialType: 'Point',
+          type: 'geospatialFields',
           array: true,
         },
       ],
@@ -271,6 +289,7 @@ describe('allocateFieldsForCSV', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -282,11 +301,13 @@ describe('allocateFieldsForCSV', () => {
         {
           name: 'embeddedField',
           config: embeddedConfig,
+          type: 'embeddedFields',
         },
         {
           name: 'embeddedArrayField',
           config: embeddedConfig,
           array: true,
+          type: 'embeddedFields',
         },
       ],
     });
@@ -310,9 +331,11 @@ describe('allocateFieldsForCSV', () => {
       textFields: [
         {
           name: 'fileId',
+          type: 'textFields',
         },
         {
           name: 'address',
+          type: 'textFields',
         },
       ],
     };
@@ -324,11 +347,13 @@ describe('allocateFieldsForCSV', () => {
         {
           name: 'logo',
           config: imageConfig,
+          type: 'fileFields',
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
+          type: 'fileFields',
         },
       ],
     });

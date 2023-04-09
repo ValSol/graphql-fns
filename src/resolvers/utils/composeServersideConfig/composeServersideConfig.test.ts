@@ -19,6 +19,7 @@ describe('composeFilters', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -27,6 +28,7 @@ describe('composeFilters', () => {
         oppositeName: 'favoritePlace',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
     ],
   };
@@ -39,10 +41,12 @@ describe('composeFilters', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -51,6 +55,7 @@ describe('composeFilters', () => {
         name: 'favoritePlace',
         oppositeName: 'visitors',
         config: placeConfig,
+        type: 'duplexFields',
       },
     ],
 
@@ -60,16 +65,19 @@ describe('composeFilters', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'relationalFields',
       },
       {
         name: 'enemies',
         config: personConfig,
         array: true,
+        type: 'relationalFields',
       },
       {
         name: 'location',
         config: placeConfig,
         required: true,
+        type: 'relationalFields',
       },
     ],
   });

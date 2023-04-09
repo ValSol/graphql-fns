@@ -16,6 +16,7 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -25,6 +26,7 @@ describe('createCopyEntityMutationResolver', () => {
           oppositeName: 'original',
           config: menuCloneConfig,
           parent: true,
+          type: 'duplexFields',
         },
 
         {
@@ -33,6 +35,7 @@ describe('createCopyEntityMutationResolver', () => {
           array: true,
           config: menuSectionConfig,
           parent: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -45,6 +48,7 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -53,6 +57,7 @@ describe('createCopyEntityMutationResolver', () => {
           name: 'original',
           oppositeName: 'clone',
           config: menuConfig,
+          type: 'duplexFields',
         },
 
         {
@@ -61,6 +66,7 @@ describe('createCopyEntityMutationResolver', () => {
           array: true,
           config: menuCloneSectionConfig,
           parent: true,
+          type: 'duplexFields',
         },
       ],
     });
@@ -73,6 +79,7 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -81,6 +88,7 @@ describe('createCopyEntityMutationResolver', () => {
           name: 'menu',
           oppositeName: 'sections',
           config: menuConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -93,6 +101,7 @@ describe('createCopyEntityMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -101,6 +110,7 @@ describe('createCopyEntityMutationResolver', () => {
           name: 'menu',
           oppositeName: 'sections',
           config: menuCloneConfig,
+          type: 'duplexFields',
         },
       ],
     });

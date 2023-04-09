@@ -16,6 +16,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -25,6 +26,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
           oppositeName: 'original',
           config: menuCloneConfig,
           parent: true,
+          type: 'duplexFields',
         },
 
         {
@@ -33,6 +35,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
           array: true,
           config: menuSectionConfig,
           parent: true,
+          type: 'duplexFields',
         },
       ],
     };
@@ -45,6 +48,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -53,6 +57,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
           name: 'original',
           oppositeName: 'clone',
           config: menuConfig,
+          type: 'duplexFields',
         },
 
         {
@@ -73,6 +78,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -81,6 +87,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
           name: 'menu',
           oppositeName: 'sections',
           config: menuConfig,
+          type: 'duplexFields',
         },
       ],
     });
@@ -93,6 +100,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
         {
           name: 'name',
           required: true,
+          type: 'textFields',
         },
       ],
 
@@ -101,6 +109,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
           name: 'menu',
           oppositeName: 'sections',
           config: menuCloneConfig,
+          type: 'duplexFields',
         },
       ],
     });

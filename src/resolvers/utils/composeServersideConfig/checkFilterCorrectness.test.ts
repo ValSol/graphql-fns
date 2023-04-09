@@ -13,6 +13,7 @@ describe('checkFilterCorrectness', () => {
       {
         name: 'title',
         required: true,
+        type: 'textFields',
       },
     ],
     duplexFields: [
@@ -21,6 +22,7 @@ describe('checkFilterCorrectness', () => {
         oppositeName: 'favoritePlace',
         array: true,
         config: personConfig,
+        type: 'duplexFields',
       },
     ],
   };
@@ -33,10 +35,12 @@ describe('checkFilterCorrectness', () => {
       {
         name: 'firstName',
         required: true,
+        type: 'textFields',
       },
       {
         name: 'lastName',
         required: true,
+        type: 'textFields',
       },
     ],
 
@@ -45,6 +49,7 @@ describe('checkFilterCorrectness', () => {
         name: 'favoritePlace',
         oppositeName: 'visitors',
         config: placeConfig,
+        type: 'duplexFields',
       },
     ],
 
@@ -54,16 +59,19 @@ describe('checkFilterCorrectness', () => {
         config: personConfig,
         array: true,
         required: true,
+        type: 'relationalFields',
       },
       {
         name: 'enemies',
         config: personConfig,
         array: true,
+        type: 'relationalFields',
       },
       {
         name: 'location',
         config: placeConfig,
         required: true,
+        type: 'relationalFields',
       },
     ],
   });

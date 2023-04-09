@@ -23,6 +23,7 @@ describe('composeCustomEntityQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -63,6 +64,7 @@ describe('composeCustomEntityQueryArgs', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createFileWhereInputType from './createFileWhereInputType';
 
@@ -10,9 +10,11 @@ describe('createFileWhereInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -23,9 +25,11 @@ describe('createFileWhereInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -36,9 +40,11 @@ describe('createFileWhereInputType', () => {
     textFields: [
       {
         name: 'fileId',
+        type: 'textFields',
       },
       {
         name: 'address',
+        type: 'textFields',
       },
     ],
   };
@@ -49,6 +55,7 @@ describe('createFileWhereInputType', () => {
     textFields: [
       {
         name: 'textField',
+        type: 'textFields',
       },
     ],
     fileFields: [
@@ -56,11 +63,13 @@ describe('createFileWhereInputType', () => {
         name: 'logo',
         config: imageConfig,
         required: true,
+        type: 'fileFields',
       },
       {
         name: 'photo',
         config: photoConfig,
         required: true,
+        type: 'fileFields',
       },
     ],
   };

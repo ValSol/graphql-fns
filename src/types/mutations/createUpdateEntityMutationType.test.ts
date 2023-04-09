@@ -13,6 +13,7 @@ describe('createUpdateEntityMutationType', () => {
       textFields: [
         {
           name: 'textField',
+          type: 'textFields',
         },
       ],
     };
@@ -40,20 +41,20 @@ describe('createUpdateEntityMutationType', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
-      textFields: [{ name: 'city' }],
+      textFields: [{ name: 'city', type: 'textFields' }],
     };
 
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
-      textFields: [{ name: 'name' }],
+      textFields: [{ name: 'name', type: 'textFields' }],
     };
     const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
 
-      embeddedFields: [{ name: 'address', config: addressConfig }],
+      embeddedFields: [{ name: 'address', config: addressConfig, type: 'embeddedFields' }],
 
       relationalFields: [
         {
@@ -61,20 +62,24 @@ describe('createUpdateEntityMutationType', () => {
           config: personConfig,
           array: true,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'enemies',
           config: personConfig,
           array: true,
+          type: 'relationalFields',
         },
         {
           name: 'location',
           config: placeConfig,
           required: true,
+          type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
           config: placeConfig,
+          type: 'relationalFields',
         },
       ],
     });

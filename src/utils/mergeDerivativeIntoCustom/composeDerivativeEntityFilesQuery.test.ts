@@ -14,6 +14,7 @@ describe('composeDerivativeEntityFilesQuery', () => {
       {
         name: 'textField',
         index: true,
+        type: 'textFields',
       },
     ],
   };
