@@ -73,8 +73,10 @@ const processCreateInputData = (
       };
     } = {};
 
-    if (entityType === 'tangible') {
-      const { duplexFields = [], relationalFields = [] } = entityConfig2;
+    // use "|| true" & "entityConfig2 as any" to let duplexFields & relationalFields inside embedded fields
+    // so if schema will allow this processCreateInputData will correctly process data
+    if (entityType === 'tangible' || true) {
+      const { duplexFields = [], relationalFields = [] } = entityConfig2 as any;
 
       relationalFields.reduce((prev, { name, array, config }) => {
         // eslint-disable-next-line
@@ -159,7 +161,7 @@ const processCreateInputData = (
     return Object.keys(data2).reduce<Record<string, any>>((prev, key) => {
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
-        if (fieldsObject[key].attributes.array) {
+        if (fieldsObject[key].array) {
           throw new TypeError(
             `Try unset array field: "${key}" of entity: "${entityConfig2.name}"!`,
           );

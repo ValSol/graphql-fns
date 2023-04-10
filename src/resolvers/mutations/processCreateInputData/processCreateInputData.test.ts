@@ -1078,7 +1078,7 @@ describe('processCreateInputData', () => {
     expect(result).toEqual(expectedResult2);
   });
 
-  test.skip('should create object and children objectcs with duplex fields along with connect', () => {
+  test('should create object and children objectcs with duplex fields along with connect', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
     const menuConfig = {} as TangibleEntityConfig;

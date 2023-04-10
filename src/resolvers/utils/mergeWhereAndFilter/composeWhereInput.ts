@@ -297,8 +297,8 @@ const composeWhereInputRecursively = (
     } else {
       checkField(key, entityName, fieldsObj, entireWhere);
 
-      if (fieldsObj[key].kind === 'embeddedFields' || fieldsObj[key].kind === 'fileFields') {
-        const { attributes } = fieldsObj[key];
+      if (fieldsObj[key].type === 'embeddedFields' || fieldsObj[key].type === 'fileFields') {
+        const attributes = fieldsObj[key];
 
         const { config } = attributes as EmbeddedField | FileField;
 

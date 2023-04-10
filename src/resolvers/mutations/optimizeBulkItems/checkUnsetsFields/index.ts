@@ -19,7 +19,7 @@ const checkUnsetsFields = (bulkItems: Array<any>, entityConfig: EntityConfig): v
         } = item;
 
         Object.keys($unset).forEach((fieldName) => {
-          if (fieldsObject[fieldName].attributes.required) {
+          if (fieldsObject[fieldName].required) {
             const token = composeToken(fieldName, id);
             unsets.add(token);
           }
@@ -35,14 +35,14 @@ const checkUnsetsFields = (bulkItems: Array<any>, entityConfig: EntityConfig): v
 
         if ($set) {
           Object.keys($set).forEach((fieldName) => {
-            if (fieldsObject[fieldName] && fieldsObject[fieldName].attributes.required) {
+            if (fieldsObject[fieldName] && fieldsObject[fieldName].required) {
               unsets.delete(composeToken(fieldName, id));
             }
           });
         }
 
         Object.keys(update).forEach((fieldName) => {
-          if (fieldsObject[fieldName] && fieldsObject[fieldName].attributes.required) {
+          if (fieldsObject[fieldName] && fieldsObject[fieldName].required) {
             unsets.delete(composeToken(fieldName, id));
           }
         });

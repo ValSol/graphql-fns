@@ -357,62 +357,25 @@ export type FlatField =
   | DateTimeField
   | BooleanField;
 
-export type OrdinaryFieldObject =
-  | {
-      kind: 'booleanFields';
-      attributes: BooleanField;
-    }
-  | {
-      kind: 'dateTimeFields';
-      attributes: DateTimeField;
-    }
-  | {
-      kind: 'duplexFields';
-      attributes: DuplexField;
-    }
-  | {
-      kind: 'enumFields';
-      attributes: EnumField;
-    }
-  | {
-      kind: 'floatFields';
-      attributes: FloatField;
-    }
-  | {
-      kind: 'geospatialFields';
-      attributes: GeospatialField;
-    }
-  | {
-      kind: 'intFields';
-      attributes: IntField;
-    }
-  | {
-      kind: 'relationalFields';
-      attributes: RelationalField;
-    }
-  | {
-      kind: 'childFields';
-      attributes: ChildField;
-    }
-  | {
-      kind: 'textFields';
-      attributes: TextField;
-    };
+export type AnyField =
+  | BooleanField
+  | DateTimeField
+  | DuplexField
+  | EmbeddedField
+  | EnumField
+  | FileField
+  | FloatField
+  | GeospatialField
+  | IntField
+  | RelationalField
+  | ChildField
+  | TextField;
 
 export type EntityConfigObject = {
   [
     fieldName: // eslint-disable-line flowtype/space-after-type-colon
     string
-  ]:
-    | OrdinaryFieldObject
-    | {
-        kind: 'embeddedFields';
-        attributes: EmbeddedField;
-      }
-    | {
-        kind: 'fileFields';
-        attributes: FileField;
-      };
+  ]: AnyField;
 };
 
 export type Enums = {

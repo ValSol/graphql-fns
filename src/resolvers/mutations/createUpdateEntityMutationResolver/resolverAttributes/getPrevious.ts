@@ -4,7 +4,7 @@ import createMongooseModel from '../../../../mongooseModels/createMongooseModel'
 import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
-import { EntityConfigObject, TangibleEntityConfig } from '../../../../tsTypes';
+import { TangibleEntityConfig } from '../../../../tsTypes';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;

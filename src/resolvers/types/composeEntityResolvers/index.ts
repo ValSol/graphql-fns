@@ -1,4 +1,10 @@
-import type { Context, GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
+import type {
+  Context,
+  GeneralConfig,
+  ServersideConfig,
+  EntityConfig,
+  TangibleEntityConfig,
+} from '../../../tsTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
@@ -36,11 +42,12 @@ const composeEntityResolvers = (
   const resolvers: Record<string, any> = {};
 
   Object.keys(fieldsObject).forEach((fieldName) => {
-    const {
-      attributes: { array },
-      kind,
-    } = fieldsObject[fieldName];
-    if (kind === 'relationalFields' || kind === 'duplexFields' || kind === 'geospatialFields') {
+    const { array, type: fieldType } = fieldsObject[fieldName];
+    if (
+      fieldType === 'relationalFields' ||
+      fieldType === 'duplexFields' ||
+      fieldType === 'geospatialFields'
+    ) {
       return;
     }
 
@@ -56,7 +63,7 @@ const composeEntityResolvers = (
   });
 
   if (entityType === 'tangible') {
-    const { duplexFields = [], relationalFields = [] } = entityConfig;
+    const { duplexFields = [], relationalFields = [] } = entityConfig as TangibleEntityConfig;
 
     [...relationalFields, ...duplexFields].reduce((prev, { array, name, config }) => {
       if (array) {

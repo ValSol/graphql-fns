@@ -19,7 +19,8 @@ const extract = (
   Object.keys(filterObj).forEach((key) => {
     if (key.endsWith('_')) {
       const key2 = key.slice(0, -1);
-      const { attributes } = fieldsObj[key2] as { attributes: RelationalField | DuplexField };
+
+      const attributes = fieldsObj[key2] as RelationalField | DuplexField;
 
       if (!attributes.config) {
         throw new TypeError(`Field "${key2}" does not have "config" attribute!`);

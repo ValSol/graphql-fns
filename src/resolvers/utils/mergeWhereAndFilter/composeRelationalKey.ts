@@ -32,7 +32,7 @@ const composeRelationalKey = (
       const fieldName = key.slice(0, -1);
       const fieldsObject = composeFieldsObject(currentConfig);
 
-      const { attributes } = fieldsObject[fieldName];
+      const attributes = fieldsObject[fieldName];
 
       if (!(attributes as DuplexField | RelationalField).config) {
         throw new TypeError(`Field "${fieldName}" must has attr "config"!`);

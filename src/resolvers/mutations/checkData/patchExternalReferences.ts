@@ -21,7 +21,7 @@ const patch = (
   Object.keys(filterObj).forEach((key) => {
     if (key.endsWith('_')) {
       const key2 = key.slice(0, -1);
-      const { attributes } = fieldsObj[key2];
+      const attributes = fieldsObj[key2];
 
       if (!(attributes as RelationalField | DuplexField).config) {
         throw new TypeError(`Field "${key2}" does not have "config" attribute!`);
@@ -76,9 +76,10 @@ const processData = (
   const result: Record<string, any> = {};
 
   Object.keys(data).forEach((key) => {
-    const { attributes, kind } = fieldsObj[key];
+    const attributes = fieldsObj[key];
+    const { type: fieldType } = attributes;
 
-    if (kind === 'relationalFields' || kind === 'duplexFields') {
+    if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
       const { connect, create } = data[key];
       const { array } = attributes;
       if (connect) {

@@ -1,4 +1,4 @@
-import type { DataObject, TangibleEntityConfig } from '../../../../../tsTypes';
+import type { TangibleEntityConfig } from '../../../../../tsTypes';
 import type { Core } from '../../../../tsTypes';
 
 import composeFieldsObject from '../../../../../utils/composeFieldsObject';
@@ -21,9 +21,7 @@ const deleteTree = (idsAndEntityConfigs: null | [any, any, TangibleEntityConfig]
   );
 
   fieldNames.forEach((fieldName) => {
-    const {
-      attributes: { array },
-    } = fieldsObject[fieldName];
+    const { array } = fieldsObject[fieldName];
 
     if (array) {
       currentBranch[fieldName].forEach((idsAndEntityConfigs2) => {

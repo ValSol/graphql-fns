@@ -128,9 +128,9 @@ const composeDerivativeConfig = (
       if (
         !(
           fieldsObject[fieldName] &&
-          (fieldsObject[fieldName].kind === 'relationalFields' ||
-            fieldsObject[fieldName].kind === 'duplexFields' ||
-            fieldsObject[fieldName].kind === 'childFields')
+          (fieldsObject[fieldName].type === 'relationalFields' ||
+            fieldsObject[fieldName].type === 'duplexFields' ||
+            fieldsObject[fieldName].type === 'childFields')
         ) &&
         !addedDuplexFields.includes(fieldName) &&
         !addedRelationalFields.includes(fieldName) &&
@@ -199,14 +199,17 @@ const composeDerivativeConfig = (
 
     Object.keys(fieldsToAddObject).forEach((fieldName) => {
       if (fieldsObject[fieldName]) {
-        const { kind } = fieldsObject[fieldName];
-        entityConfig[kind] = entityConfig[kind].filter(({ name }) => name !== fieldName);
+        const { type: fieldType } = fieldsObject[fieldName];
+        entityConfig[fieldType] = entityConfig[fieldType].filter(({ name }) => name !== fieldName);
       }
-      const { kind, attributes: fieldToAdd } = fieldsToAddObject[fieldName];
-      if (entityConfig[kind]) {
-        entityConfig[kind].push(fieldToAdd);
+      const fieldToAdd = fieldsToAddObject[fieldName];
+
+      const { type: fieldType } = fieldToAdd;
+
+      if (entityConfig[fieldType]) {
+        entityConfig[fieldType].push(fieldToAdd);
       } else {
-        entityConfig[kind] = [fieldToAdd];
+        entityConfig[fieldType] = [fieldToAdd];
       }
     });
   }

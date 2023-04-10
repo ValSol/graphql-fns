@@ -804,12 +804,12 @@ describe('coerceDataToGqlServerSide', () => {
       intFields: [
         {
           name: 'intField',
-          type: 'intField',
+          type: 'intFields',
         },
         {
           name: 'intFields',
-          type: 'intField',
           array: true,
+          type: 'intFields',
         },
       ],
       floatFields: [

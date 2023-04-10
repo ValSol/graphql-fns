@@ -14,11 +14,8 @@ const coerceDataFromGql = (
 
   const result = Object.keys(data).reduce<Record<string, any>>((prev, key) => {
     if (fieldsObject[key] === undefined || (forExport && data[key] === null)) return prev;
-    const {
-      attributes: { array },
-      kind,
-    } = fieldsObject[key];
-    if (kind === 'relationalFields' || kind === 'duplexFields') {
+    const { array, type: fieldType } = fieldsObject[key];
+    if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
       if (data[key] === null) {
         prev[key] = ''; // eslint-disable-line no-param-reassign
       } else if (array) {
@@ -32,7 +29,7 @@ const coerceDataFromGql = (
         const { id } = data[key];
         prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'dateTimeFields') {
+    } else if (fieldType === 'dateTimeFields') {
       prev[key] = data[key]; // eslint-disable-line no-param-reassign
       // if (array) {
       //   // eslint-disable-next-line no-param-reassign
@@ -41,8 +38,8 @@ const coerceDataFromGql = (
       //   // eslint-disable-next-line no-param-reassign
       //   prev[key] = data[key] === null ? '' : data[key];
       // }
-    } else if (fieldsObject[key].kind === 'geospatialFields') {
-      const { geospatialType } = fieldsObject[key].attributes as GeospatialField;
+    } else if (fieldsObject[key].type === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[key] as GeospatialField;
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign
@@ -89,10 +86,10 @@ const coerceDataFromGql = (
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
     } else if (
-      fieldsObject[key].kind === 'embeddedFields' ||
-      fieldsObject[key].kind === 'fileFields'
+      fieldsObject[key].type === 'embeddedFields' ||
+      fieldsObject[key].type === 'fileFields'
     ) {
-      const { config } = fieldsObject[key].attributes as EmbeddedField | FileField;
+      const { config } = fieldsObject[key] as EmbeddedField | FileField;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>

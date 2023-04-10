@@ -35,17 +35,14 @@ const coerceDataToGqlBasic = (
     }
     if (skipUnusedFields && !fieldsObject[key]) return prev;
 
-    const {
-      attributes: { array },
-      kind,
-    } = fieldsObject[key];
+    const { array, type: fieldType } = fieldsObject[key];
 
     if (prevData && deepEqual(data[key], prevData[key])) {
       return prev;
     }
 
-    if (fieldsObject[key].kind === 'embeddedFields' || fieldsObject[key].kind === 'fileFields') {
-      const { config } = fieldsObject[key].attributes as EmbeddedField | FileField;
+    if (fieldsObject[key].type === 'embeddedFields' || fieldsObject[key].type === 'fileFields') {
+      const { config } = fieldsObject[key] as EmbeddedField | FileField;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
@@ -73,8 +70,8 @@ const coerceDataToGqlBasic = (
             )
           : null;
       }
-    } else if (kind === 'relationalFields' || kind === 'duplexFields') {
-      const { config } = fieldsObject[key].attributes as RelationalField | DuplexField;
+    } else if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
+      const { config } = fieldsObject[key] as RelationalField | DuplexField;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] =
@@ -140,38 +137,38 @@ const coerceDataToGqlBasic = (
           };
         }
       }
-    } else if (kind === 'enumFields') {
+    } else if (fieldType === 'enumFields') {
       if (array) {
         prev[key] = data[key]; // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'textFields' && setNullForEmptyText) {
+    } else if (fieldType === 'textFields' && setNullForEmptyText) {
       if (array) {
         prev[key] = data[key].filter((item) => item); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'intFields' || kind === 'floatFields') {
+    } else if (fieldType === 'intFields' || fieldType === 'floatFields') {
       if (array) {
         prev[key] = data[key].filter((item) => item !== ''); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] === '' ? null : data[key]; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'dateTimeFields') {
+    } else if (fieldType === 'dateTimeFields') {
       if (array) {
         prev[key] = data[key].map((item) => (isNotDate(item) ? null : item)).filter(Boolean); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
       }
-    } else if (kind === 'booleanFields') {
+    } else if (fieldType === 'booleanFields') {
       if (array) {
         prev[key] = data[key].map((item) => !!item); // eslint-disable-line no-param-reassign
       } else {
         prev[key] = data[key] === null ? null : !!data[key]; // eslint-disable-line no-param-reassign
       }
-    } else if (fieldsObject[key].kind === 'geospatialFields') {
-      const { geospatialType } = fieldsObject[key].attributes as GeospatialField;
+    } else if (fieldsObject[key].type === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[key] as GeospatialField;
       if (geospatialType === 'Point') {
         if (array) {
           // eslint-disable-next-line no-param-reassign

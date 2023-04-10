@@ -182,6 +182,7 @@ describe('coerceDataToGqlClientSide', () => {
           name: 'duplexField11',
           config: dupleConfig11,
           oppositeName: 'oppositeDuplexField11',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields12',
@@ -194,12 +195,14 @@ describe('coerceDataToGqlClientSide', () => {
           name: 'duplexField21',
           config: dupleConfig21,
           oppositeName: 'oppositeDuplexFields21',
+          type: 'duplexFields',
         },
         {
           name: 'duplexFields22',
           config: dupleConfig22,
           oppositeName: 'oppositeDuplexFields22',
           array: true,
+          type: 'duplexFields',
         },
       ],
     });

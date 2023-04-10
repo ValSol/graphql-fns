@@ -22,9 +22,7 @@ const mixTrees = (
   const fieldsObject = composeFieldsObject(parentEntityConfig);
 
   const result = fieldNames.reduce<Record<string, any>>((prev, fieldName) => {
-    const {
-      attributes: { array },
-    } = fieldsObject[fieldName];
+    const { array } = fieldsObject[fieldName];
 
     if (array) {
       if (tree[fieldName] === undefined) {

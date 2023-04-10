@@ -6,23 +6,20 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
   const fieldsObject = composeFieldsObject(entityConfig);
 
   const result = Object.keys(fieldsObject).reduce<Record<string, any>>((prev, name) => {
-    const {
-      attributes: { array },
-      kind,
-    } = fieldsObject[name];
+    const { array, type: fieldType } = fieldsObject[name];
 
     if (array) {
       prev[name] = []; // eslint-disable-line no-param-reassign
     } else if (
-      fieldsObject[name].kind === 'embeddedFields' ||
-      fieldsObject[name].kind === 'fileFields'
+      fieldsObject[name].type === 'embeddedFields' ||
+      fieldsObject[name].type === 'fileFields'
     ) {
-      const { config } = fieldsObject[name].attributes as EmbeddedField | FileField;
+      const { config } = fieldsObject[name] as EmbeddedField | FileField;
       prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
-    } else if (kind === 'booleanFields') {
+    } else if (fieldType === 'booleanFields') {
       prev[name] = false; // eslint-disable-line no-param-reassign
-    } else if (fieldsObject[name].kind === 'geospatialFields') {
-      const { geospatialType } = fieldsObject[name].attributes as GeospatialField;
+    } else if (fieldsObject[name].type === 'geospatialFields') {
+      const { geospatialType } = fieldsObject[name] as GeospatialField;
       if (geospatialType === 'Point') {
         prev[name] = { lng: '', lat: '' }; // eslint-disable-line no-param-reassign
       } else if (geospatialType === 'Polygon') {
