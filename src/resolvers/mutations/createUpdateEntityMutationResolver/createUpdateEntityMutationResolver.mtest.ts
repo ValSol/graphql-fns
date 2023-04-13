@@ -146,7 +146,7 @@ describe('createUpdateEntityMutationResolver', () => {
       };
 
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        inputOutputEntity: [],
+        inputOutputEntity: [[]],
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -226,7 +226,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
@@ -294,7 +294,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       const createdFriend2 = await Person.findById(friendId);
@@ -335,7 +335,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate3 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       const createdFriend3 = await Person.findById(friendId);
@@ -367,7 +367,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate4 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       const createdFriend4 = await Person.findById(friendId2);
@@ -445,7 +445,7 @@ describe('createUpdateEntityMutationResolver', () => {
         },
       };
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        inputOutputEntity: [],
+        inputOutputEntity: [[]],
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -535,7 +535,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { data: data2 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -601,7 +601,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
       expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
@@ -679,7 +679,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       expect(updatedPlace.name).toBe(dataForUpdate2.name);
@@ -689,7 +689,7 @@ describe('createUpdateEntityMutationResolver', () => {
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
       expect(updatedPlace2).toBeNull();
     });
@@ -750,7 +750,7 @@ describe('createUpdateEntityMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -781,7 +781,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
     expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
@@ -800,7 +800,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
@@ -819,7 +819,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate3 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
@@ -879,7 +879,7 @@ describe('createUpdateEntityMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -909,7 +909,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate.textField);
@@ -980,7 +980,7 @@ describe('createUpdateEntityMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -1016,7 +1016,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate.textField);
@@ -1094,7 +1094,9 @@ describe('createUpdateEntityMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
     }
 
     const updatePerson = createUpdateEntityMutationResolver(
@@ -1118,7 +1120,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedParent.name).toBe('updatedName');
@@ -1135,7 +1137,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedParent2).toBe(null);
@@ -1242,7 +1244,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     const createPost = createCreateEntityMutationResolver(
@@ -1262,7 +1264,7 @@ describe('createUpdateEntityMutationResolver', () => {
     };
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+      inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
     });
 
     expect(post.restaurant.toString()).toEqual(restaurantId.toString());
@@ -1289,7 +1291,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataToUpdate },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
+      { inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]] },
     );
 
     expect(updatedPost).toBe(null);
@@ -1304,7 +1306,7 @@ describe('createUpdateEntityMutationResolver', () => {
       { whereOne, data: dataToUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [{ restaurant_: { access_: { postCreators: '1234567890' } } }] },
+      { inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]] },
     );
 
     expect(updatedPost2.slug).toBe(dataToUpdate2.slug);
@@ -1320,10 +1322,12 @@ describe('createUpdateEntityMutationResolver', () => {
       null,
       {
         inputOutputEntity: [
-          {
-            restaurant_: { access_: { postCreators: '1234567890' } },
-            type_in: ['newsFeed', 'events'],
-          },
+          [
+            {
+              restaurant_: { access_: { postCreators: '1234567890' } },
+              type_in: ['newsFeed', 'events'],
+            },
+          ],
         ],
       },
     );

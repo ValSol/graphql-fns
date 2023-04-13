@@ -1,4 +1,4 @@
-import type {GeneralConfig, ServersideConfig, EntityConfig} from '../../../tsTypes';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
 
 import composeStandardMutationResolver from '../composeStandardMutationResolver';
 import resolverAttributes from './resolverAttributes';

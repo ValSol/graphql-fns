@@ -4,6 +4,7 @@ import type {
   InventoryСhain,
   ServersideConfig,
   ThreeSegmentInventoryChain,
+  InvolvedFilter,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
@@ -36,7 +37,7 @@ const executeAuthorisation = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Promise<{
-  [key: string]: null | Array<any>;
+  [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 }> => {
   const { inventory } = generalConfig;
   const {
@@ -50,7 +51,7 @@ const executeAuthorisation = async (
   const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
 
   if (!inventoryByRoles && !filters) {
-    return involvedEntityNamesKeys.reduce<Record<string, any>>((prev, involvedEntityNamesKey) => {
+    const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
       const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
 
       // eslint-disable-next-line no-param-reassign
@@ -58,11 +59,15 @@ const executeAuthorisation = async (
         amendedInventoryChain as InventoryСhain,
         inventory,
       )
-        ? [staticFilters[involvedEntityNames[involvedEntityNamesKey]]] || []
+        ? staticFilters[involvedEntityNames[involvedEntityNamesKey]]
+          ? [[staticFilters[involvedEntityNames[involvedEntityNamesKey]]]]
+          : [[]]
         : null;
 
       return prev;
     }, {});
+
+    return involvedFilters;
   }
 
   if (!getUserAttributes) {
@@ -73,7 +78,7 @@ const executeAuthorisation = async (
 
   const { roles, ...userAttributesRest } = userAttributes;
 
-  const result: Record<string, any> = {};
+  const result: Record<string, InvolvedFilter[]> = {};
 
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
@@ -89,7 +94,7 @@ const executeAuthorisation = async (
         );
       }
 
-      const allRoles = roles.reduce<Array<any>>((prev, role) => {
+      const allRoles = roles.reduce<Array<string>>((prev, role) => {
         [...containedRoles[role], role].forEach((role2) => {
           if (!prev.includes(role2)) {
             prev.push(role2);
@@ -133,15 +138,17 @@ const executeAuthorisation = async (
     }
   }
 
-  return Object.keys(result).reduce<Record<string, any>>((prev, key) => {
+  const involvedFilters = Object.keys(result).reduce((prev, key) => {
     // eslint-disable-next-line no-param-reassign
     prev[key] =
       staticFilters[involvedEntityNames[key]] && result[key]
-        ? injectStaticFilter(staticFilters[involvedEntityNames[key]], result[key])
-        : result[key];
+        ? [injectStaticFilter(staticFilters[involvedEntityNames[key]], result[key])]
+        : result[key] && [result[key]];
 
     return prev;
   }, {});
+
+  return involvedFilters;
 };
 
 export default executeAuthorisation;

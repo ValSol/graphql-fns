@@ -3,9 +3,11 @@ import type {
   GeneralConfig,
   GraphqlObject,
   InventoryСhain,
-  Periphery,
   ServersideConfig,
   EntityConfig,
+  InvolvedFilter,
+  SintheticResolverInfo,
+  GraphqlScalar,
 } from '../../../tsTypes';
 import type { Core, PreparedData, ResolverAttributes } from '../../tsTypes';
 
@@ -60,14 +62,14 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
     }
 
     const resolver = async (
-      parent: any,
+      parent: null | GraphqlObject,
       args: Args,
       context: Context,
-      info: any,
+      info: SintheticResolverInfo,
       involvedFilters: {
-        [derivativeConfigName: string]: null | Array<any>;
+        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       },
-    ): Promise<any> => {
+    ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
       const resolverCreatorArg = {
         entityConfig,
         generalConfig,
@@ -160,7 +162,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           }
 
           break;
-        } catch (err: any) {
+        } catch (err) {
           if (session) {
             // eslint-disable-next-line no-await-in-loop
             await session.abortTransaction();

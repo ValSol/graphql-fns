@@ -1,4 +1,12 @@
-import type {EntityConfig, GeneralConfig, ServersideConfig} from '../../../tsTypes';
+import type {
+  EntityConfig,
+  GeneralConfig,
+  ServersideConfig,
+  InvolvedFilter,
+  GraphqlObject,
+  SintheticResolverInfo,
+} from '../../../tsTypes';
+import { Context } from '@apollo/client';
 
 const store = Object.create(null);
 
@@ -8,7 +16,10 @@ type ResoverCreator = (
   serversideConfig: ServersideConfig,
 ) => null | any;
 
-const createResolverCreator = (queryOrMutationName: string, regularResolverCreator: any): ResoverCreator => {
+const createResolverCreator = (
+  queryOrMutationName: string,
+  regularResolverCreator: any,
+): ResoverCreator => {
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[queryOrMutationName]) {
     return store[queryOrMutationName];
@@ -29,13 +40,15 @@ const createResolverCreator = (queryOrMutationName: string, regularResolverCreat
     if (!resolverCreator) return null;
 
     const resolver = async (
-      _: any,
-      args: any,
-      context: any,
-      info: any,
+      _: null | GraphqlObject,
+      args: GraphqlObject,
+      context: Context,
+      info: SintheticResolverInfo,
       // transfer 'filter' into reguqlar resolver to know how to select data if inAnyCase = true
-      filter: Array<any>,
-    ) => regularResolver(_, args, context, info, filter);
+      involvedFilters: {
+        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      },
+    ) => regularResolver(_, args, context, info, involvedFilters);
 
     return resolver;
   };

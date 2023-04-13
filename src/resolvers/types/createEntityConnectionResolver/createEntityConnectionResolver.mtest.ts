@@ -82,17 +82,17 @@ describe('createEntityConnectionResolver', () => {
     const data3 = { title: 'title-3' };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     const { id: id1 } = createdPlace1;
 
     const createdPlace2 = await createPlace(null, { data: data2 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     const { id: id2 } = createdPlace2;
 
     const createdPlace3 = await createPlace(null, { data: data3 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     const { id: id3 } = createdPlace3;
 
@@ -114,7 +114,7 @@ describe('createEntityConnectionResolver', () => {
       pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },
       edges,
     } = await Place(parent, { first: 1 }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(hasNextPage).toBe(true);
@@ -137,7 +137,7 @@ describe('createEntityConnectionResolver', () => {
       },
       edges: edges2,
     } = await Place(parent, { after: endCursor, first: 3 }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(hasNextPage2).toBe(false);

@@ -4,6 +4,8 @@ import type {
   InventoryСhain,
   ServersideConfig,
   EntityConfig,
+  InvolvedFilter,
+  SintheticResolverInfo,
 } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
@@ -21,11 +23,11 @@ type StandardMutationsArgs = Array<{
   actionGeneralName: string;
   entityConfig: EntityConfig;
   inAnyCase?: boolean;
-  parent?: any;
-  args: any;
-  info?: any;
+  parent?: null | GraphqlObject;
+  args: GraphqlObject;
+  info?: SintheticResolverInfo;
   involvedFilters?: {
-    inputOutputEntity: Array<any>;
+    inputOutputEntity: [InvolvedFilter[]] | [InvolvedFilter[], number];
   };
   returnReport?: boolean;
   returnResult: boolean;
@@ -77,7 +79,7 @@ const workOutMutations = async (
 
         const parent = parentInArgs || null;
         const info = infoInArgs || { projection: {} };
-        const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [] };
+        const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
@@ -154,7 +156,7 @@ const workOutMutations = async (
       }
 
       break;
-    } catch (err: any) {
+    } catch (err) {
       if (session) {
         // eslint-disable-next-line no-await-in-loop
         await session.abortTransaction();
@@ -188,7 +190,7 @@ const workOutMutations = async (
 
     const parent = parentInArgs || null;
     const info = infoInArgs || { projection: {} };
-    const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [] };
+    const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
 
     const { array, produceCurrent, report, finalResult } =
       mutationsResolverAttributes[actionGeneralName];

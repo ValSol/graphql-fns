@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import type { DataObject } from '../../../../tsTypes';
+import type { DataObject, InvolvedFilter } from '../../../../tsTypes';
 import type { ResolverArg, ResolverCreatorArg } from '../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
@@ -16,7 +16,7 @@ const getShift = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [derivativeConfigName: string]: null | Array<any>;
+    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entityQueryResolver: any,
 ): Promise<null | number> => {

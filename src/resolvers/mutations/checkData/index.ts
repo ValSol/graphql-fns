@@ -77,7 +77,9 @@ const checkData = async (
   const { where } = mergeWhereAndFilter(filter, {}, entityConfig, notCreateObjectId);
 
   const query = new mingo.Query(where);
-  return query.test(data);
+  const result = query.test(data);
+
+  return result;
 };
 
 export default checkData;

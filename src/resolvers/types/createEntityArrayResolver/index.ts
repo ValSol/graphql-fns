@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
-import type { EntityConfig, GeneralConfig, NearInput, ServersideConfig } from '../../../tsTypes';
+import type {
+  EntityConfig,
+  GeneralConfig,
+  NearInput,
+  ServersideConfig,
+  GraphqlObject,
+} from '../../../tsTypes';
 import type { Context, InventoryСhain } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
@@ -61,7 +67,12 @@ const createEntityArrayResolver = (
 
   if (!checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (parent: any, args: Args, context: Context, info: any): Promise<any> => {
+  const resolver = async (
+    parent: any,
+    args: Args,
+    context: Context,
+    info: any,
+  ): Promise<GraphqlObject[]> => {
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${

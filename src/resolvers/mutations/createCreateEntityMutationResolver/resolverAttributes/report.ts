@@ -1,4 +1,4 @@
-import type {Report} from '../../../tsTypes';
+import type { Report } from '../../../tsTypes';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;

@@ -1,4 +1,4 @@
-import type {GeneralConfig, ServersideConfig} from '../../../tsTypes';
+import type { GeneralConfig, ServersideConfig } from '../../../tsTypes';
 import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
 
 type ExternalReferencesArgs = Array<[string, string, any]>;
@@ -33,7 +33,7 @@ const getExternalReferences = async (
       { whereOne: { id } },
       context,
       { projection: { _id: 1 } },
-      { inputOutputEntity: filter },
+      { inputOutputEntity: [filter] },
     );
 
     if (entity) {

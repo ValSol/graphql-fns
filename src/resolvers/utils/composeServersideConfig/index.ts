@@ -1,4 +1,4 @@
-import type {GeneralConfig, ServersideConfig, SimplifiedEntityFilters} from '../../../tsTypes';
+import type { GeneralConfig, ServersideConfig, SimplifiedEntityFilters } from '../../../tsTypes';
 
 import checkFilterCorrectness from './checkFilterCorrectness';
 import getAllEntityNames from './getAllEntityNames';
@@ -13,7 +13,7 @@ const checkFilter = (
 
   try {
     filterArr = filters[entityName](arg);
-  } catch (err: any) {
+  } catch (err) {
     console.error(
       `Incorrect expression "${filters[entityName]?.toString()}" with args: "${JSON.stringify(
         arg,
@@ -31,11 +31,11 @@ const checkFilter = (
 
 const composeServersideConfig = (
   generalConfig: GeneralConfig,
-  serversideConfig: (ServersideConfig) & {
-    filters?: SimplifiedEntityFilters
+  serversideConfig: ServersideConfig & {
+    filters?: SimplifiedEntityFilters;
   },
   filterDummyArgs?: Array<{
-    [key: string]: any
+    [key: string]: any;
   }>,
 ): ServersideConfig => {
   const {
@@ -116,9 +116,12 @@ const composeServersideConfig = (
     });
   } else if (allRoles.length) {
     const handler = {
-      get(target: {
-        role: string
-      }, key: string) {
+      get(
+        target: {
+          role: string;
+        },
+        key: string,
+      ) {
         if (key === 'role') return target.role;
 
         if (key === 'id') return '000000000000000000000000';
@@ -136,13 +139,16 @@ const composeServersideConfig = (
     });
   }
 
-  const filters = Object.keys(simplifiedEntityFilters).reduce<Record<string, any>>((prev, entityName) => {
-    const { isOutput } = allEntityNames[entityName];
+  const filters = Object.keys(simplifiedEntityFilters).reduce<Record<string, any>>(
+    (prev, entityName) => {
+      const { isOutput } = allEntityNames[entityName];
 
-    prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]]; // eslint-disable-line no-param-reassign
+      prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]]; // eslint-disable-line no-param-reassign
 
-    return prev;
-  }, {});
+      return prev;
+    },
+    {},
+  );
 
   return { ...serversideConfig, filters };
 };

@@ -1,10 +1,16 @@
 /* eslint-env jest */
 
+import type { InvolvedFilter } from '../../../tsTypes';
+
 import getFilterFromInvolvedFilters from './index';
+
+type InvolvedFilters = {
+  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+};
 
 describe('getFilterFromInvolvedFilters', () => {
   test('inputOutputEntity = null', () => {
-    const involvedFilters = { inputOutputEntity: null };
+    const involvedFilters: InvolvedFilters = { inputOutputEntity: null };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -14,7 +20,7 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputOutputEntity = undefined, inputEntity = null', () => {
-    const involvedFilters = { inputEntity: null, outputEntity: [] };
+    const involvedFilters: InvolvedFilters = { inputEntity: null, outputEntity: [[]] };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -24,7 +30,7 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputOutputEntity = undefined, outputEntity = null', () => {
-    const involvedFilters = { inputEntity: [], outputEntity: null };
+    const involvedFilters: InvolvedFilters = { inputEntity: [[]], outputEntity: null };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -34,7 +40,7 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputOutputEntity = []', () => {
-    const involvedFilters = { inputOutputEntity: [] };
+    const involvedFilters: InvolvedFilters = { inputOutputEntity: [[]] };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -44,7 +50,7 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputEntity = [], outputEntity = [{ x: "abc" }]', () => {
-    const involvedFilters = { inputEntity: [], outputEntity: [{ x: 'abc' }] };
+    const involvedFilters: InvolvedFilters = { inputEntity: [[]], outputEntity: [[{ x: 'abc' }]] };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -54,7 +60,7 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputEntity = [{ x: "abc" }], outputEntity = []', () => {
-    const involvedFilters = { inputEntity: [{ x: 'abc' }], outputEntity: [] };
+    const involvedFilters: InvolvedFilters = { inputEntity: [[{ x: 'abc' }]], outputEntity: [[]] };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -64,7 +70,10 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputEntity = [{ x: "abc" }], outputEntity = [{ y: "xyz" }]', () => {
-    const involvedFilters = { inputEntity: [{ x: 'abc' }], outputEntity: [{ y: 'xyz' }] };
+    const involvedFilters: InvolvedFilters = {
+      inputEntity: [[{ x: 'abc' }]],
+      outputEntity: [[{ y: 'xyz' }]],
+    };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -74,9 +83,9 @@ describe('getFilterFromInvolvedFilters', () => {
   });
 
   test('inputEntity = [{ x: "abc" }, { t: 1 }], outputEntity = [{ y: "xyz" }, { k: 2 }]', () => {
-    const involvedFilters = {
-      inputEntity: [{ x: 'abc' }, { t: 1 }],
-      outputEntity: [{ y: 'xyz' }, { k: 2 }],
+    const involvedFilters: InvolvedFilters = {
+      inputEntity: [[{ x: 'abc' }, { t: 1 }]],
+      outputEntity: [[{ y: 'xyz' }, { k: 2 }]],
     };
 
     const result = getFilterFromInvolvedFilters(involvedFilters);

@@ -10,7 +10,9 @@ const executeNodeAuthorisation = async (
   const { filters, getUserAttributes, staticFilters = {} } = serversideConfig;
 
   if (!filters) {
-    return [staticFilters[entityName]] || [];
+    const involvedFilters = staticFilters[entityName] ? [[staticFilters[entityName]]] : [[]];
+
+    return involvedFilters;
   }
 
   if (!getUserAttributes) {
@@ -37,7 +39,9 @@ const executeNodeAuthorisation = async (
 
     if (filter) {
       if (!filter.length) {
-        return staticFilters[entityName] ? [staticFilters[entityName]] : [];
+        const involvedFilters = staticFilters[entityName] ? [[staticFilters[entityName]]] : [[]];
+
+        return involvedFilters;
       }
 
       if (!result) {
@@ -48,9 +52,12 @@ const executeNodeAuthorisation = async (
     }
   }
 
-  return result && staticFilters[entityName]
-    ? injectStaticFilter(staticFilters[entityName], result)
-    : result;
+  const involvedFilters =
+    result && staticFilters[entityName]
+      ? [injectStaticFilter(staticFilters[entityName], result)]
+      : result && [result];
+
+  return involvedFilters;
 };
 
 export default executeNodeAuthorisation;

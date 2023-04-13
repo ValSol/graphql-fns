@@ -659,7 +659,7 @@ export type ServersideConfig = {
       context: Context,
       info: SintheticResolverInfo,
       involvedFilters: {
-        [derivativeConfigName: string]: null | InvolvedFilter[];
+        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       },
     ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
   };
@@ -675,7 +675,7 @@ export type ServersideConfig = {
       context: Context,
       info: SintheticResolverInfo,
       involvedFilters: {
-        [derivativeConfigName: string]: null | InvolvedFilter[];
+        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       },
     ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
   };

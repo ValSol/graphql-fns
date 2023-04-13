@@ -1,4 +1,11 @@
-import type { Context, GeneralConfig, ServersideConfig } from '../../../tsTypes';
+import type {
+  Context,
+  GeneralConfig,
+  ServersideConfig,
+  GraphqlScalar,
+  GraphqlObject,
+  SintheticResolverInfo,
+} from '../../../tsTypes';
 
 import composeDerivativeConfig from '../../../utils/composeDerivativeConfig';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
@@ -15,13 +22,11 @@ const createNodeQueryResolver = (
   const { allEntityConfigs, derivative } = generalConfig;
 
   const resolver = async (
-    parent: any,
-    args: {
-      id: string;
-    },
+    parent: null | GraphqlObject,
+    args: { id: string },
     context: Context,
-    info: any,
-  ): Promise<any> => {
+    info: SintheticResolverInfo,
+  ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { id: globalId } = args;
 
     const { _id: id, entityName, derivativeKey } = fromGlobalId(globalId);

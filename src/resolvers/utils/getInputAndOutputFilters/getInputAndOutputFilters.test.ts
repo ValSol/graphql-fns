@@ -1,6 +1,11 @@
 /* eslint-env jest */
 
+import type { InvolvedFilter } from '../../../tsTypes';
 import getInputAndOutputFilters from './index';
+
+type InvolvedFilters = {
+  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+};
 
 describe('getInputAndOutputFilters', () => {
   test('inputOutputEntity = null', () => {
@@ -8,13 +13,13 @@ describe('getInputAndOutputFilters', () => {
 
     const result = getInputAndOutputFilters(involvedFilters);
 
-    const expectedResult = { inputFilter: null, outputFilter: null };
+    const expectedResult: InvolvedFilters = { inputFilter: null, outputFilter: null };
 
     expect(result).toEqual(expectedResult);
   });
 
   test('inputOutputEntity = undefined, inputEntity = null, outputEntity = []', () => {
-    const involvedFilters = { inputEntity: null, outputEntity: [] };
+    const involvedFilters: InvolvedFilters = { inputEntity: null, outputEntity: [[]] };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -24,7 +29,7 @@ describe('getInputAndOutputFilters', () => {
   });
 
   test('inputOutputEntity = undefined, inputEntity = [], outputEntity = null', () => {
-    const involvedFilters = { inputEntity: [], outputEntity: null };
+    const involvedFilters: InvolvedFilters = { inputEntity: [[]], outputEntity: null };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -34,7 +39,10 @@ describe('getInputAndOutputFilters', () => {
   });
 
   test('inputOutputEntity = undefined, inputEntity = [{ a: 1 }], outputEntity = [{ b: 2 }]', () => {
-    const involvedFilters = { inputEntity: [{ a: 1 }], outputEntity: [{ b: 2 }] };
+    const involvedFilters: InvolvedFilters = {
+      inputEntity: [[{ a: 1 }]],
+      outputEntity: [[{ b: 2 }]],
+    };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -44,7 +52,7 @@ describe('getInputAndOutputFilters', () => {
   });
 
   test('inputOutputEntity = []', () => {
-    const involvedFilters = { inputOutputEntity: [] };
+    const involvedFilters: InvolvedFilters = { inputOutputEntity: [[]] };
 
     const result = getInputAndOutputFilters(involvedFilters);
 

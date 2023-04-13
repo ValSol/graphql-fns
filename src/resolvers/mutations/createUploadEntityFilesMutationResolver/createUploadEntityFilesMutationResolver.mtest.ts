@@ -172,7 +172,7 @@ describe('createUploadEntityFilesMutationResolver', () => {
         { files, hashes },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       expect(uploadedFiles.length).toBe(hashes.length);
@@ -244,7 +244,7 @@ describe('createUploadEntityFilesMutationResolver', () => {
         { files, hashes },
         { mongooseConn, pubsub },
         null,
-        { inputOutputEntity: [] },
+        { inputOutputEntity: [[]] },
       );
 
       expect(uploadedFiles.length).toBe(hashes.length);

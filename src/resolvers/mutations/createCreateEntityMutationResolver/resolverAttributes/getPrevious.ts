@@ -1,9 +1,9 @@
-import type {GetPrevious} from '../../../tsTypes';
+import type { GetPrevious } from '../../../tsTypes';
 
 import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
 
@@ -25,4 +25,4 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   return allowCreate && [];
 };
 
-export default get;
+export default getPrevious;

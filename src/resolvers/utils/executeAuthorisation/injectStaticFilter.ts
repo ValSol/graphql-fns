@@ -1,6 +1,6 @@
 const injectStaticFilter = (
   staticFilter: {
-    [key: string]: any
+    [key: string]: any;
   },
   filter: Array<any>,
 ): Array<any> => {
@@ -8,9 +8,9 @@ const injectStaticFilter = (
 
   if (!Object.keys(staticFilter).length) return filter;
 
-  const amndedfilter = filter.length === 1 ? filter[0] : { OR: filter };
+  const amendedfilter = filter.length === 1 ? filter[0] : { OR: filter };
 
-  return [{ AND: [staticFilter, amndedfilter] }];
+  return [{ AND: [staticFilter, amendedfilter] }];
 };
 
 export default injectStaticFilter;

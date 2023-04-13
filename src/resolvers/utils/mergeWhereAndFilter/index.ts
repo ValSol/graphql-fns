@@ -1,10 +1,10 @@
-import type { PipelineMongoDB, EntityConfig } from '../../../tsTypes';
+import type { EntityConfig, GraphqlObject, PipelineMongoDB } from '../../../tsTypes';
 
 import addFilter from './addFilter';
 import composeWhereInput from './composeWhereInput';
 
 const mergeWhereAndFilter = (
-  filter: Array<any>,
+  filter: Array<GraphqlObject>,
   where: any,
   entityConfig: EntityConfig,
   notCreateObjectId?: boolean,

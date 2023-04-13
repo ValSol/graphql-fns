@@ -167,7 +167,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(createdPerson.firstName).toBe(data.firstName);
@@ -259,7 +259,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -348,7 +348,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     const { id: id3, locations: locations3, favorities: favorities3 } = updatedPerson;
@@ -444,7 +444,9 @@ describe('createPushIntoEntityMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
     }
 
     const pushIntoPerson = createPushIntoEntityMutationResolver(
@@ -473,7 +475,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedParent.places).toEqual(['place-2', 'newPlace-1', 'newPlace-2']);
@@ -490,7 +492,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedParent2).toBe(null);
@@ -560,7 +562,7 @@ describe('createPushIntoEntityMutationResolver', () => {
     if (!createParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     await createParent(null, { data: { name: 'ParentName' } }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     const pushIntoPerson = createPushIntoEntityMutationResolver(
@@ -586,7 +588,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(updatedParent.places).toEqual([]);
@@ -626,7 +628,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data: { numbers: [1, 2, 4, 5, 7] } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     const pushIntoExample = createPushIntoEntityMutationResolver(
@@ -645,7 +647,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       { data, positions, whereOne },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(pushedExample.numbers).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);

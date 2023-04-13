@@ -1,4 +1,5 @@
-import type {ResolverArg} from '../../../tsTypes';
+import type { InvolvedFilter } from '../../../../tsTypes';
+import type { ResolverArg } from '../../../tsTypes';
 
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import composeLastEdges from './composeLastEdges';
@@ -9,7 +10,7 @@ const getLast = async (
   last: number,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [derivativeConfigName: string]: null | Array<any>
+    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
 ): null | Promise<any> => {

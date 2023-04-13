@@ -5,6 +5,10 @@ import type {
   NearInput,
   ServersideConfig,
   EntityConfig,
+  GraphqlScalar,
+  GraphqlObject,
+  InvolvedFilter,
+  SintheticResolverInfo,
 } from '../../../tsTypes';
 import type { ResolverCreatorArg } from '../../tsTypes';
 
@@ -79,14 +83,14 @@ const createEntitiesThroughConnectionQueryResolver = (
   };
 
   const resolver = async (
-    parent: any,
+    parent: null | GraphqlObject,
     args: Args,
     context: Context,
-    info: any,
+    info: SintheticResolverInfo,
     involvedFilters: {
-      [derivativeConfigName: string]: null | Array<any>;
+      [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
-  ): Promise<any> => {
+  ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const filter = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;

@@ -1,22 +1,25 @@
-const getFilterFromInvolvedFilters = (
-  involvedFilters: {
-    [derivativeConfigName: string]: null | Array<any>
-  },
-): {
-  inputFilter: null | Array<any>,
-  outputFilter: null | Array<any>
+import { InvolvedFilter } from '../../../tsTypes';
+
+const getInputAndOutputFilters = (involvedFilters: {
+  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+}): {
+  inputFilter: null | InvolvedFilter[];
+  outputFilter: null | InvolvedFilter[];
 } => {
   const {
-    inputEntity: inputFilter = null,
-    inputOutputEntity,
-    outputEntity: outputFilter = null,
+    inputEntity = [null],
+    inputOutputEntity = [null],
+    outputEntity = [null],
   } = involvedFilters;
 
-  if (!inputOutputEntity) {
-    return { inputFilter, outputFilter };
+  if (!inputOutputEntity?.[0]) {
+    return {
+      inputFilter: inputEntity && inputEntity[0],
+      outputFilter: outputEntity && outputEntity[0],
+    };
   }
 
-  return { inputFilter: inputOutputEntity, outputFilter: inputOutputEntity };
+  return { inputFilter: inputOutputEntity[0], outputFilter: inputOutputEntity[0] };
 };
 
-export default getFilterFromInvolvedFilters;
+export default getInputAndOutputFilters;

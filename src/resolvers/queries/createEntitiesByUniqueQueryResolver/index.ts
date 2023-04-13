@@ -5,6 +5,10 @@ import type {
   NearInput,
   ServersideConfig,
   EntityConfig,
+  SintheticResolverInfo,
+  GraphqlObject,
+  GraphqlScalar,
+  InvolvedFilter,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
@@ -43,14 +47,15 @@ const createEntitiesByUniqueQueryResolver = (
   );
 
   const resolver = async (
-    parent: any,
+    parent: null | GraphqlObject,
     args: Args,
     context: Context,
-    info: any,
+    info: SintheticResolverInfo,
     involvedFilters: {
-      [derivativeConfigName: string]: null | Array<any>;
+      [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
-  ): Promise<any> => entitiesQueryResolver(parent, args, context, info, involvedFilters);
+  ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
+    entitiesQueryResolver(parent, args, context, info, involvedFilters);
 
   return resolver;
 };

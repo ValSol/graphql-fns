@@ -1,17 +1,18 @@
-import type {ResolverArg} from '../../../tsTypes';
+import type { ResolverArg } from '../../../tsTypes';
 
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import composeLastEdges from './composeLastEdges';
+import { InvolvedFilter, GraphqlScalar, GraphqlObject } from '../../../../tsTypes';
 
 const getVeryLast = async (
   last: number,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [derivativeConfigName: string]: null | Array<any>
+    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
   entityCountQueryResolver: any,
-): null | Promise<any> => {
+): null | Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
   const { parent, args, context, info } = resolverArg;
 
   const { inputOutputEntity } = involvedFilters;

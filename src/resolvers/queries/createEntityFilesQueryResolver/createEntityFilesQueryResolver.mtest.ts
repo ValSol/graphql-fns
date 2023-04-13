@@ -94,7 +94,7 @@ describe('createEntityFilesQueryResolver', () => {
 
     if (!ImageFile) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
     const imageFiles = await ImageFile(null, { where: {} }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(imageFiles.length).toBe(files.length);
@@ -107,7 +107,7 @@ describe('createEntityFilesQueryResolver', () => {
 
     const where = { hash_in: [files[0].hash, files[2].hash] };
     const imageFiles2 = await ImageFile(null, { where }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(imageFiles2.length).toBe(2);

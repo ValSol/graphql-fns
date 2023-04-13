@@ -74,13 +74,13 @@ describe('executeNodeAuthorisation', () => {
     const serversideConfig: ServersideConfig = {};
 
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
-    const expectedResult: Array<any> = [];
+    const expectedResult: Array<any> = [[]];
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
 
     const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
-    const expectedResult2 = [{ deleted: false }];
+    const expectedResult2 = [[{ deleted: false }]];
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -122,7 +122,7 @@ describe('executeNodeAuthorisation', () => {
     };
 
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
-    const expectedResult: Array<any> = [];
+    const expectedResult: Array<any> = [[]];
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -132,7 +132,7 @@ describe('executeNodeAuthorisation', () => {
     };
 
     const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
-    const expectedResult2 = [{ deleted: false }];
+    const expectedResult2 = [[{ deleted: false }]];
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -148,7 +148,7 @@ describe('executeNodeAuthorisation', () => {
     };
 
     const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
-    const expectedResult = [{ access_: { restaurantEditors: '1234567890' } }];
+    const expectedResult = [[{ access_: { restaurantEditors: '1234567890' } }]];
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -159,9 +159,11 @@ describe('executeNodeAuthorisation', () => {
 
     const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
     const expectedResult2 = [
-      {
-        AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }],
-      },
+      [
+        {
+          AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }],
+        },
+      ],
     ];
     expect(result2).toEqual(expectedResult2);
   });
@@ -181,9 +183,11 @@ describe('executeNodeAuthorisation', () => {
 
     const result = await executeNodeAuthorisation(entityName2, context, serversideConfig);
     const expectedResult = [
-      { access_: { restaurantEditors: id } },
-      { access_: { restaurantPublishers: id } },
-      { show_exists: true },
+      [
+        { access_: { restaurantEditors: id } },
+        { access_: { restaurantPublishers: id } },
+        { show_exists: true },
+      ],
     ];
 
     expect(result).toEqual(expectedResult);
@@ -196,18 +200,20 @@ describe('executeNodeAuthorisation', () => {
 
     const result2 = await executeNodeAuthorisation(entityName2, context, serversideConfig2);
     const expectedResult2 = [
-      {
-        AND: [
-          { test: true },
-          {
-            OR: [
-              { access_: { restaurantEditors: id } },
-              { access_: { restaurantPublishers: id } },
-              { show_exists: true },
-            ],
-          },
-        ],
-      },
+      [
+        {
+          AND: [
+            { test: true },
+            {
+              OR: [
+                { access_: { restaurantEditors: id } },
+                { access_: { restaurantPublishers: id } },
+                { show_exists: true },
+              ],
+            },
+          ],
+        },
+      ],
     ];
     expect(result2).toEqual(expectedResult2);
   });

@@ -162,7 +162,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     ];
 
     const createdPersons = await createManyPersons(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     const [createdPerson] = createdPersons;
     expect(createdPerson.firstName).toBe(data[0].firstName);
@@ -186,7 +186,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     const [personClone] = personClones;
@@ -210,7 +210,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       { whereOnes },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [personBackup] = personBackups;
     expect(personBackup.firstName).toBe(data[0].firstName);
@@ -241,7 +241,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [updatedPerson] = updatedPersons;
     expect(updatedPerson.firstName).toBe(data2[0].firstName);
@@ -252,7 +252,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       { whereOnes },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     const [personClone2] = personClones2;
@@ -270,7 +270,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       { whereOnes },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [personBackup2] = personBackups2;
     expect(personBackup2.firstName).toBe(data2[0].firstName);
@@ -288,7 +288,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       { whereOne: createdPersons.map((item) => ({ id: item.id })), data: data3 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [updatedPerson2] = updatedPersons2;
     expect(updatedPerson2.firstName).toBe(data3[0].firstName);
@@ -304,7 +304,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [personBackup3] = personBackups3;
     expect(personBackup3.firstName).toBe(data3[0].firstName);
@@ -327,7 +327,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       { whereOnes: personBackups.map((item) => ({ backups: { id: item.id } })) },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     const [person] = persons;
     expect(person.firstName).toBe(data[0].firstName);

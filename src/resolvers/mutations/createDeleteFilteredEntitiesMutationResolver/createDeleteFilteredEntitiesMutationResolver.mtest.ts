@@ -163,7 +163,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -228,7 +228,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
 
     const where = { id_in: [id] };
     const [deletedPerson] = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
@@ -248,7 +248,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
     const deletedPerson2 = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(deletedPerson2).toEqual([]);
 
@@ -267,7 +267,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(deletedPlace.id).not.toBe(undefined);
@@ -278,7 +278,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
     expect(deletedPlace2).toEqual([]);
   });
@@ -352,7 +352,9 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
     }
 
     const deletePerson = createDeleteFilteredEntitiesMutationResolver(
@@ -371,7 +373,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
 
     const info = { projection: { _id: 1, name: 1 } };
     const [deletedParent] = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(deletedParent.name).toBe('name-2');
@@ -388,7 +390,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [] },
+      { inputOutputEntity: [[]] },
     );
 
     expect(deletedParent2).toEqual([]);
@@ -463,7 +465,9 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
         },
       };
       // eslint-disable-next-line no-await-in-loop
-      await createParent(null, { data }, { mongooseConn, pubsub }, null, { inputOutputEntity: [] });
+      await createParent(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
     }
 
     const deletePerson = createDeleteFilteredEntitiesMutationResolver(
@@ -477,7 +481,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
 
     const info = { projection: { _id: 1, name: 1 } };
     const deletedParents = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(deletedParents).toEqual([]);

@@ -293,7 +293,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdParent = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
 
     expect(createdParent.name).toBe(data.name);
@@ -1081,7 +1081,7 @@ describe('workOutMutations', () => {
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -1178,7 +1178,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
@@ -1245,7 +1245,7 @@ describe('workOutMutations', () => {
     const data = { firstName: 'Vasy', lastName: 'Pupkin' };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -1330,7 +1330,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [],
+      inputOutputEntity: [[]],
     });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
