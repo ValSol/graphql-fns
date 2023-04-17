@@ -49,7 +49,7 @@ const createEntityFilesQueryResolver = (
       [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const filter = getFilterFromInvolvedFilters(involvedFilters);
+    const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 

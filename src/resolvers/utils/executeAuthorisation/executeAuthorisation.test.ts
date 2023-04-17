@@ -131,6 +131,16 @@ describe('executeAuthorisation', () => {
     RestaurantForSetting: { level_gt: 0 },
   };
 
+  const staticLimits = {
+    RestaurantForCabinet: 2,
+
+    RestaurantForView: 4,
+
+    Restaurant: 6,
+
+    RestaurantForSetting: 8,
+  };
+
   const context = {} as Context;
 
   const generalConfig = {} as GeneralConfig;
@@ -140,7 +150,7 @@ describe('executeAuthorisation', () => {
   test('should returnv [] for "Viewer" role when empty serversideConfig', async () => {
     const inventoryChain: InventoryСhain = ['Query', 'entitiesForView', 'Restaurant'];
 
-    const serversideConfig: ServersideConfig = {};
+    const serversideConfig: ServersideConfig = { staticLimits };
 
     const result = await executeAuthorisation(
       inventoryChain,
@@ -149,7 +159,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[]] };
+    const expectedResult = { inputOutputEntity: [[], 4] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
@@ -193,6 +203,7 @@ describe('executeAuthorisation', () => {
       getUserAttributes,
       inventoryByRoles,
       staticFilters,
+      staticLimits,
     };
 
     const result2 = await executeAuthorisation(
@@ -202,7 +213,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }]] };
+    const expectedResult2 = { inputOutputEntity: [[{ show: true }], 4] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -217,6 +228,7 @@ describe('executeAuthorisation', () => {
       containedRoles,
       getUserAttributes,
       inventoryByRoles,
+      staticLimits,
     };
 
     const result = await executeAuthorisation(
@@ -226,7 +238,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[]] };
+    const expectedResult = { inputOutputEntity: [[], 4] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -275,6 +287,7 @@ describe('executeAuthorisation', () => {
       getUserAttributes,
       inventoryByRoles,
       staticFilters,
+      staticLimits,
     };
 
     const result2 = await executeAuthorisation(
@@ -284,7 +297,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }]] };
+    const expectedResult2 = { inputOutputEntity: [[{ show: true }], 4] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -299,6 +312,7 @@ describe('executeAuthorisation', () => {
       containedRoles,
       getUserAttributes,
       inventoryByRoles,
+      staticLimits,
     };
 
     const result = await executeAuthorisation(
@@ -341,6 +355,7 @@ describe('executeAuthorisation', () => {
       getUserAttributes,
       inventoryByRoles,
       filters,
+      staticLimits,
     };
 
     const result = await executeAuthorisation(
@@ -351,7 +366,7 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[{ access_: { restaurantEditors: '1234567890' } }]],
+      inputOutputEntity: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
     };
     expect(result).toEqual(expectedResult);
 
@@ -408,6 +423,7 @@ describe('executeAuthorisation', () => {
       inventoryByRoles,
       filters,
       staticFilters,
+      staticLimits,
     };
 
     const result2 = await executeAuthorisation(
@@ -417,7 +433,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ deleted: false }]] };
+    const expectedResult2 = { inputOutputEntity: [[{ deleted: false }], 2] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -433,6 +449,7 @@ describe('executeAuthorisation', () => {
       getUserAttributes,
       inventoryByRoles,
       filters,
+      staticLimits,
     };
 
     const result = await executeAuthorisation(
@@ -449,6 +466,7 @@ describe('executeAuthorisation', () => {
           { access_: { restaurantPublishers: id } },
           { show_exists: true },
         ],
+        6,
       ],
     };
     expect(result).toEqual(expectedResult);
@@ -459,6 +477,7 @@ describe('executeAuthorisation', () => {
       inventoryByRoles,
       filters,
       staticFilters,
+      staticLimits,
     };
 
     const result2 = await executeAuthorisation(
@@ -484,6 +503,7 @@ describe('executeAuthorisation', () => {
             ],
           },
         ],
+        6,
       ],
     };
     expect(result2).toEqual(expectedResult2);
@@ -522,6 +542,7 @@ describe('executeAuthorisation', () => {
       inventoryByRoles,
       filters,
       staticFilters,
+      staticLimits,
     };
 
     const result2 = await executeAuthorisation(
@@ -532,7 +553,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }]],
+      inputOutputEntity: [[{ level_gt: 0 }], 8],
       subscribeUpdatedEntity: null,
     };
     expect(result2).toEqual(expectedResult2);
@@ -541,7 +562,7 @@ describe('executeAuthorisation', () => {
   test('should returnv [] & [] without any inventories', async () => {
     const inventoryChain: InventoryСhain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
 
-    const serversideConfig: ServersideConfig = {};
+    const serversideConfig: ServersideConfig = { staticLimits };
 
     const result = await executeAuthorisation(
       inventoryChain,
@@ -551,12 +572,12 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[]],
-      subscribeUpdatedEntity: [[]],
+      inputOutputEntity: [[], 8],
+      subscribeUpdatedEntity: [[], 6],
     };
     expect(result).toEqual(expectedResult);
 
-    const serversideConfig2: ServersideConfig = { staticFilters };
+    const serversideConfig2: ServersideConfig = { staticFilters, staticLimits };
 
     const result2 = await executeAuthorisation(
       inventoryChain,
@@ -566,8 +587,8 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }]],
-      subscribeUpdatedEntity: [[{ test: true }]],
+      inputOutputEntity: [[{ level_gt: 0 }], 8],
+      subscribeUpdatedEntity: [[{ test: true }], 6],
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -594,7 +615,7 @@ describe('executeAuthorisation', () => {
     };
     expect(result).toEqual(expectedResult);
 
-    const serversideConfig2: ServersideConfig = { staticFilters };
+    const serversideConfig2: ServersideConfig = { staticFilters, staticLimits };
 
     const result2 = await executeAuthorisation(
       inventoryChain,
@@ -604,7 +625,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }]],
+      inputOutputEntity: [[{ level_gt: 0 }], 8],
       subscribeUpdatedEntity: null,
     };
     expect(result2).toEqual(expectedResult2);

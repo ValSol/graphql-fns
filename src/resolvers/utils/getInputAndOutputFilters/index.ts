@@ -5,21 +5,59 @@ const getInputAndOutputFilters = (involvedFilters: {
 }): {
   inputFilter: null | InvolvedFilter[];
   outputFilter: null | InvolvedFilter[];
+  inputLimit?: number;
+  outputLimit?: number;
 } => {
-  const {
-    inputEntity = [null],
-    inputOutputEntity = [null],
-    outputEntity = [null],
-  } = involvedFilters;
+  const { inputEntity, inputOutputEntity, outputEntity } = involvedFilters;
 
-  if (!inputOutputEntity?.[0]) {
-    return {
-      inputFilter: inputEntity && inputEntity[0],
-      outputFilter: outputEntity && outputEntity[0],
-    };
+  if (inputOutputEntity) {
+    const [filter, limit] = inputOutputEntity;
+
+    if (limit) {
+      return { inputFilter: filter, inputLimit: limit, outputFilter: filter, outputLimit: limit };
+    } else {
+      return { inputFilter: filter, outputFilter: filter };
+    }
   }
 
-  return { inputFilter: inputOutputEntity[0], outputFilter: inputOutputEntity[0] };
+  if (inputEntity && outputEntity) {
+    const [inputFilter, inputLimit] = inputEntity;
+    const [outputFilter, outputLimit] = outputEntity;
+
+    if (!inputLimit && !outputLimit) {
+      return { inputFilter, outputFilter };
+    }
+
+    if (!inputLimit) {
+      return { inputFilter, outputFilter, outputLimit };
+    }
+
+    if (!outputLimit) {
+      return { inputFilter, outputFilter, inputLimit };
+    }
+
+    return { inputFilter, outputFilter, inputLimit, outputLimit };
+  }
+
+  if (!inputEntity && !outputEntity) {
+    return { inputFilter: null, outputFilter: null };
+  }
+
+  if (inputEntity) {
+    const [inputFilter, inputLimit] = inputEntity;
+
+    return inputLimit
+      ? { inputFilter, outputFilter: null, inputLimit }
+      : { inputFilter, outputFilter: null };
+  }
+
+  if (outputEntity) {
+    const [outputFilter, outputLimit] = outputEntity;
+
+    return outputLimit
+      ? { inputFilter: null, outputFilter, outputLimit }
+      : { inputFilter: null, outputFilter };
+  }
 };
 
 export default getInputAndOutputFilters;

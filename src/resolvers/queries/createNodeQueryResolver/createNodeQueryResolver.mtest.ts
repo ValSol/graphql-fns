@@ -1,20 +1,24 @@
 /* eslint-env jest */
-import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type {
+  EntityFilters,
+  FileAttributes,
+  GeneralConfig,
+  EntityConfig,
+  ServersideConfig,
+} from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
-const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../../mutations/createCreateEntityMutationResolver');
-const { default: info } = require('../../utils/info.auxiliary');
-const { default: toGlobalId } = require('../../utils/toGlobalId');
+import mongoOptions from '../../../../test/mongo-options';
+import sleep from '../../../utils/sleep';
+import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
+import info from '../../utils/info.auxiliary';
+import toGlobalId from '../../utils/toGlobalId';
 
-const { default: createNodeQueryResolver } = require('./index');
+import createNodeQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -40,9 +44,9 @@ describe('createNodeQueryResolver', () => {
       return { roles: ['Admin'], textField1: 'textField1' };
     };
 
-    const filters = { Example: [true, ({ textField1 }) => [{ textField1 }]] };
+    const filters: EntityFilters = { Example: [true, ({ textField1 }) => [{ textField1 }]] };
 
-    const serversideConfig = { getUserAttributes, filters };
+    const serversideConfig: ServersideConfig = { getUserAttributes, filters };
 
     const entityConfig: EntityConfig = {
       name: 'Example',

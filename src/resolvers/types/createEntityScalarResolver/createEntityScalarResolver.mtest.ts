@@ -1,18 +1,16 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: sleep } = require('../../../utils/sleep');
-const { default: toGlobalId } = require('../../utils/toGlobalId');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../../mutations/createCreateEntityMutationResolver');
-const { default: info } = require('./scalar-info.auxiliary');
-const { default: createEntityScalarResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import sleep from '../../../utils/sleep';
+import toGlobalId from '../../utils/toGlobalId';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
+import info from './scalar-info.auxiliary';
+import createEntityScalarResolver from './index';
 
 mongoose.set('strictQuery', false);
 

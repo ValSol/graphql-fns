@@ -27,7 +27,7 @@ const getShift = async (
 
   const projection = composeProjectionFromArgs(args);
 
-  const filter = getFilterFromInvolvedFilters(involvedFilters);
+  const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

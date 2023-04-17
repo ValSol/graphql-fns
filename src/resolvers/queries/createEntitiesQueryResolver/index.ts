@@ -18,6 +18,7 @@ import composeNearForAggregateInput from '../../utils/composeNearForAggregateInp
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import getLimit from '../utils/getLimit';
 import composeNearInput from './composeNearInput';
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
@@ -58,7 +59,7 @@ const createEntitiesQueryResolver = (
       [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const filter = getFilterFromInvolvedFilters(involvedFilters);
+    const { filter, limit = Infinity } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 
@@ -114,15 +115,19 @@ const createEntitiesQueryResolver = (
       }
 
       if (pagination) {
-        const { skip, first: limit } = pagination;
+        const { skip = 0, first } = pagination;
 
         if (skip > 0) {
           pipeline.push({ $skip: skip });
         }
 
-        if (limit > 0) {
-          pipeline.push({ $limit: limit });
+        const limit2 = getLimit(limit, first);
+
+        if (limit2 > 0) {
+          pipeline.push({ $limit: limit2 });
         }
+      } else if (limit !== Infinity) {
+        pipeline.push({ $limit: limit });
       }
 
       if (!search) {
@@ -154,8 +159,17 @@ const createEntitiesQueryResolver = (
     }
 
     if (pagination) {
-      const { skip, first: limit } = pagination;
-      query = query.skip(skip).limit(limit);
+      const { skip = 0, first } = pagination;
+
+      query = query.skip(skip);
+
+      const limit2 = getLimit(limit, first);
+
+      if (limit2) {
+        query = query.limit(limit2);
+      }
+    } else if (limit !== Infinity) {
+      query = query.limit(limit);
     }
 
     const entities = await query.exec();

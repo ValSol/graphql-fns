@@ -1,12 +1,12 @@
 /* eslint-env jest */
 /* eslint no-underscore-dangle: 0 */
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig, ServersideConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createUploadEntityFilesMutationResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createUploadEntityFilesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -26,7 +26,7 @@ afterAll(async () => {
 });
 
 describe('createUploadEntityFilesMutationResolver', () => {
-  const serversideConfig = {
+  const serversideConfig: ServersideConfig = {
     transactions: true,
     saveFiles: {
       Image: async ({ filename, mimetype, encoding }, hash, uploadedAt) => ({

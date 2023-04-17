@@ -1,6 +1,5 @@
 import type {
   Context,
-  DataObject,
   GeneralConfig,
   GraphqlObject,
   Periphery,

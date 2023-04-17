@@ -14,6 +14,7 @@ import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import getLimit from '../utils/getLimit';
 
 type Args = {
   where: {
@@ -53,7 +54,7 @@ const createEntityFilesQueryResolver = (
       [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const filter = getFilterFromInvolvedFilters(involvedFilters);
+    const { filter, limit = Infinity } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 
@@ -74,8 +75,17 @@ const createEntityFilesQueryResolver = (
     let query = FileModel.find(conditions, projection, { lean: true });
 
     if (pagination) {
-      const { skip, first: limit } = pagination;
-      query = query.skip(skip).limit(limit);
+      const { skip = 0, first } = pagination;
+
+      query = query.skip(skip);
+
+      const limit2 = getLimit(limit, first);
+
+      if (limit2) {
+        query = query.limit(limit2);
+      }
+    } else if (limit !== Infinity) {
+      query = query.limit(limit);
     }
 
     const filesData = await query.exec();

@@ -2,12 +2,12 @@
 
 import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
-const { default: createEntityFilesQueryResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createEntityFilesQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -111,5 +111,11 @@ describe('createEntityFilesQueryResolver', () => {
     });
 
     expect(imageFiles2.length).toBe(2);
+
+    const imageFilesLimited = await ImageFile(null, { where: {} }, { mongooseConn, pubsub }, null, {
+      inputOutputEntity: [[], 2],
+    });
+
+    expect(imageFilesLimited.length).toBe(2);
   });
 });

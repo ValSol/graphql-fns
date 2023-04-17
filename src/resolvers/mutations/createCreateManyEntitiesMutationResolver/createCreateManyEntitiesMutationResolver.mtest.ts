@@ -1,11 +1,11 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const { default: createCreateManyEntitiesMutationResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateManyEntitiesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 

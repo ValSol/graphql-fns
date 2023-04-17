@@ -44,6 +44,7 @@ const composeServersideConfig = (
     getUserAttributes,
     inventoryByRoles,
     staticFilters,
+    staticLimits,
   } = serversideConfig;
 
   if (inventoryByRoles && !containedRoles) {
@@ -63,13 +64,21 @@ const composeServersideConfig = (
   if (staticFilters) {
     Object.keys(staticFilters).forEach((entityName) => {
       if (!allEntityNames[entityName]) {
-        throw new TypeError(`Found redundant entity "${entityName}" in "staticFilters"`);
+        throw new TypeError(`Found redundant entity "${entityName}" in "staticFilters"!`);
       }
     });
 
     Object.keys(staticFilters).forEach((entityName) =>
       checkFilterCorrectness(entityName, staticFilters[entityName], generalConfig),
     );
+  }
+
+  if (staticLimits) {
+    Object.keys(staticLimits).forEach((entityName) => {
+      if (!allEntityNames[entityName]) {
+        throw new TypeError(`Found redundant entity "${entityName}" in "staticLimits"!`);
+      }
+    });
   }
 
   const allRoles = Object.keys(containedRoles || {});

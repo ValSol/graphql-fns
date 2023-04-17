@@ -46,6 +46,7 @@ const executeAuthorisation = async (
     getUserAttributes,
     inventoryByRoles,
     staticFilters = {},
+    staticLimits = {},
   } = serversideConfig;
 
   const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
@@ -54,15 +55,22 @@ const executeAuthorisation = async (
     const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
       const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
 
+      const staticFilter = staticFilters[involvedEntityNames[involvedEntityNamesKey]];
+      const staticLimit = staticLimits[involvedEntityNames[involvedEntityNamesKey]];
+
       // eslint-disable-next-line no-param-reassign
       prev[involvedEntityNamesKey] = checkInventory(
         amendedInventoryChain as InventoryСhain,
         inventory,
       )
-        ? staticFilters[involvedEntityNames[involvedEntityNamesKey]]
-          ? [[staticFilters[involvedEntityNames[involvedEntityNamesKey]]]]
+        ? staticFilter
+          ? [[staticFilter]]
           : [[]]
         : null;
+
+      if (staticLimit && prev[involvedEntityNamesKey]) {
+        prev[involvedEntityNamesKey].push(staticLimit);
+      }
 
       return prev;
     }, {});
@@ -139,11 +147,18 @@ const executeAuthorisation = async (
   }
 
   const involvedFilters = Object.keys(result).reduce((prev, key) => {
+    const staticFilter = staticFilters[involvedEntityNames[key]];
+    const staticLimit = staticLimits[involvedEntityNames[key]];
+
     // eslint-disable-next-line no-param-reassign
     prev[key] =
-      staticFilters[involvedEntityNames[key]] && result[key]
-        ? [injectStaticFilter(staticFilters[involvedEntityNames[key]], result[key])]
+      staticFilter && result[key]
+        ? [injectStaticFilter(staticFilter, result[key])]
         : result[key] && [result[key]];
+
+    if (staticLimit && prev[key]) {
+      prev[key].push(staticLimit);
+    }
 
     return prev;
   }, {});

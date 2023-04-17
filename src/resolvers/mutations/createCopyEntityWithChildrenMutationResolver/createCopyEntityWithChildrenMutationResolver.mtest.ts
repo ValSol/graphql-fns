@@ -1,26 +1,18 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig, GraphqlObject } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../createCreateEntityMutationResolver');
-const {
-  default: createUpdateEntityMutationResolver,
-} = require('../createUpdateEntityMutationResolver');
-const {
-  default: createDeleteManyEntitiesWithChildrenMutationResolver,
-} = require('../createDeleteManyEntitiesWithChildrenMutationResolver');
-const { default: createEntityQueryResolver } = require('../../queries/createEntityQueryResolver');
-const {
-  default: createEntitiesQueryResolver,
-} = require('../../queries/createEntitiesQueryResolver');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
+import createUpdateEntityMutationResolver from '../createUpdateEntityMutationResolver';
+import createDeleteManyEntitiesWithChildrenMutationResolver from '../createDeleteManyEntitiesWithChildrenMutationResolver';
+import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
+import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
 
-const { default: createCopyEntityWithChildrenMutationResolver } = require('./index');
+import createCopyEntityWithChildrenMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -39,14 +31,14 @@ afterAll(async () => {
 });
 
 describe('createCopyEntityWithChildrenMutationResolver', () => {
-  const restaurantCloneConfig = {} as EntityConfig;
-  const menuConfig = {} as EntityConfig;
-  const menuCloneConfig = {} as EntityConfig;
-  const menuSectionConfig = {} as EntityConfig;
-  const menuSectionCloneConfig = {} as EntityConfig;
-  const menuSubSectionConfig = {} as EntityConfig;
-  const menuSubSectionCloneConfig = {} as EntityConfig;
-  const restaurantConfig = {
+  const restaurantCloneConfig = {} as TangibleEntityConfig;
+  const menuConfig = {} as TangibleEntityConfig;
+  const menuCloneConfig = {} as TangibleEntityConfig;
+  const menuSectionConfig = {} as TangibleEntityConfig;
+  const menuSectionCloneConfig = {} as TangibleEntityConfig;
+  const menuSubSectionConfig = {} as TangibleEntityConfig;
+  const menuSubSectionCloneConfig = {} as TangibleEntityConfig;
+  const TangibleEntityConfig: TangibleEntityConfig = {
     name: 'Restaurant',
     type: 'tangible',
 
@@ -109,7 +101,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       {
         name: 'original',
         oppositeName: 'clone',
-        config: restaurantConfig,
+        config: TangibleEntityConfig,
         type: 'duplexFields',
       },
 
@@ -139,7 +131,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       {
         name: 'restaurant',
         oppositeName: 'menu',
-        config: restaurantConfig,
+        config: TangibleEntityConfig,
         type: 'duplexFields',
       },
 
@@ -292,7 +284,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
   });
 
   const allEntityConfigs = {
-    Restaurant: restaurantConfig,
+    Restaurant: TangibleEntityConfig,
     RestaurantClone: restaurantCloneConfig,
     Menu: menuConfig,
     MenuClone: menuCloneConfig,
@@ -306,7 +298,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
   const serversideConfig = { transactions: true };
 
   test('should create mutation add entity resolver', async () => {
-    const restaurantSchema = createThingSchema(restaurantConfig);
+    const restaurantSchema = createThingSchema(TangibleEntityConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
     await Restaurant.createCollection();
 
@@ -342,7 +334,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     await MenuCloneSubSection.createCollection();
 
     const createRestaurant = createCreateEntityMutationResolver(
-      restaurantConfig,
+      TangibleEntityConfig,
       generalConfig,
       serversideConfig,
     );
@@ -455,7 +447,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     });
 
     const updateRestaurant = createUpdateEntityMutationResolver(
-      restaurantConfig,
+      TangibleEntityConfig,
       generalConfig,
       serversideConfig,
     );

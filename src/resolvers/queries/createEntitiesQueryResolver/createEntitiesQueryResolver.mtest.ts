@@ -1,20 +1,18 @@
 /* eslint-env jest */
 import type { GeneralConfig, NearInput, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const { default: sleep } = require('../../../utils/sleep');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../../mutations/createCreateEntityMutationResolver');
-const { default: info } = require('../../utils/info.auxiliary');
-const { default: info2 } = require('./info-geospatial.auxiliary');
-const { default: infoForSort } = require('./info-sort.auxiliary');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import sleep from '../../../utils/sleep';
+import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
+import info from '../../utils/info.auxiliary';
+import info2 from './info-geospatial.auxiliary';
+import infoForSort from './info-sort.auxiliary';
 
-const { default: createEntitiesQueryResolver } = require('./index');
+import createEntitiesQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -121,6 +119,13 @@ describe('createEntityQueryResolver', () => {
 
     expect(people.length).toBe(5);
     expect(people[0].id).toEqual(createdPerson.id);
+
+    const peopleLimited = await People(null, {}, { mongooseConn, pubsub }, info, {
+      inputOutputEntity: [[], 3],
+    });
+
+    expect(peopleLimited.length).toBe(3);
+    expect(peopleLimited[0].id).toEqual(createdPerson.id);
 
     const where = { position: data.theBestFriend.create.position };
     const people2 = await People(null, { where }, { mongooseConn, pubsub }, info, {

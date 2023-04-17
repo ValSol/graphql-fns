@@ -1,10 +1,10 @@
 /* eslint-env jest */
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: fieldArrayResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import fieldArrayResolver from './index';
 
 mongoose.set('strictQuery', false);
 

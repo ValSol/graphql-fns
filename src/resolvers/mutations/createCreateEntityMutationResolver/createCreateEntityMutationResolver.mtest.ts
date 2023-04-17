@@ -1,12 +1,12 @@
 /* eslint-env jest */
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const { default: createCreateEntityMutationResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -186,14 +186,18 @@ describe('createCreateEntityMutationResolver', () => {
   });
 
   test('should create mutation add entity resolver that create related entities', async () => {
-    const cityConfig = { name: 'City', type: 'tangible', textFields: [{ name: 'name' }] };
-    const placeConfig = {
+    const cityConfig: TangibleEntityConfig = {
+      name: 'City',
+      type: 'tangible',
+      textFields: [{ name: 'name', type: 'textFields' }],
+    };
+    const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
       relationalFields: [{ name: 'capital', config: cityConfig, type: 'relationalFields' }],
     };
-    const personConfig: Record<string, any> = {};
+    const personConfig = {} as TangibleEntityConfig;
     Object.assign(personConfig, {
       name: 'Person2',
       type: 'tangible',

@@ -12,6 +12,7 @@ import type {
 import type { ResolverCreatorArg } from '../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
+import fromCursor from '../../utils/fromCursor';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import createEntityFileCountQueryResolver from '../createEntityFileCountQueryResolver';
 import createEntityFilesQueryResolver from '../createEntityFilesQueryResolver';
@@ -21,7 +22,7 @@ import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
 import getLast from '../utils/getLast';
 import getVeryLast from '../utils/getLast/getVeryLast';
-import fromCursor from '../../utils/fromCursor';
+import modifyConnectionArgsAndInvolvedFilters from '../utils/modifyConnectionArgsAndInvolvedFilters';
 
 type Args = {
   where?: any;
@@ -76,14 +77,20 @@ const createEntityFilesThroughConnectionQueryResolver = (
 
   const resolver = async (
     parent: null | GraphqlObject,
-    args: Args,
+    preArgs: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
+    preInvolvedFilters: {
       [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const filter = getFilterFromInvolvedFilters(involvedFilters);
+    const [args, involvedFilters] = modifyConnectionArgsAndInvolvedFilters(
+      preArgs,
+      preInvolvedFilters,
+      name,
+    );
+
+    const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
 

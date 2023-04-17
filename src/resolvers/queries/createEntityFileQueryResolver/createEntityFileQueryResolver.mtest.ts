@@ -2,12 +2,12 @@
 
 import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
-const { default: createEntityFileQueryResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createFileSchema from '../../../mongooseModels/createFileSchema';
+import createEntityFileQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 

@@ -9,7 +9,7 @@ const loophole: Loophole = async (actionGeneralName, resolverCreatorArg, resolve
   const { args, context, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
-  const filter = getFilterFromInvolvedFilters(involvedFilters);
+  const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

@@ -1,26 +1,18 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig, GraphqlObject } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../createCreateEntityMutationResolver');
-const {
-  default: createUpdateEntityMutationResolver,
-} = require('../createUpdateEntityMutationResolver');
-const {
-  default: createDeleteManyEntitiesMutationResolver,
-} = require('../createDeleteManyEntitiesMutationResolver');
-const { default: createEntityQueryResolver } = require('../../queries/createEntityQueryResolver');
-const {
-  default: createEntitiesQueryResolver,
-} = require('../../queries/createEntitiesQueryResolver');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
+import createUpdateEntityMutationResolver from '../createUpdateEntityMutationResolver';
+import createDeleteManyEntitiesMutationResolver from '../createDeleteManyEntitiesMutationResolver';
+import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
+import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
 
-const { default: createCopyManyEntitiesWithChildrenMutationResolver } = require('./index');
+import createCopyManyEntitiesWithChildrenMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -39,12 +31,12 @@ afterAll(async () => {
 });
 
 describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
-  const restaurantCloneConfig = {} as EntityConfig;
-  const menuConfig = {} as EntityConfig;
-  const menuCloneConfig = {} as EntityConfig;
-  const menuSectionConfig = {} as EntityConfig;
-  const menuCloneSectionConfig = {} as EntityConfig;
-  const restaurantConfig = {
+  const restaurantCloneConfig = {} as TangibleEntityConfig;
+  const menuConfig = {} as TangibleEntityConfig;
+  const menuCloneConfig = {} as TangibleEntityConfig;
+  const menuSectionConfig = {} as TangibleEntityConfig;
+  const menuCloneSectionConfig: TangibleEntityConfig = {} as TangibleEntityConfig;
+  const restaurantConfig: TangibleEntityConfig = {
     name: 'Restaurant',
     type: 'tangible',
 

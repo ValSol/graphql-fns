@@ -7,7 +7,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
 
-  const filter = getFilterFromInvolvedFilters(involvedFilters);
+  const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
   if (!filter) return null;
 

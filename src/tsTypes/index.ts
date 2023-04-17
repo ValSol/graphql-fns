@@ -690,6 +690,9 @@ export type ServersideConfig = {
   staticFilters?: {
     [tangibleEntityName: string]: InvolvedFilter;
   };
+  staticLimits?: {
+    [tangibleEntityName: string]: number;
+  };
   // ***
 
   saveFiles?: {

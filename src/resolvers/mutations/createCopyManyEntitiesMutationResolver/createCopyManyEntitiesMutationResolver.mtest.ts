@@ -1,18 +1,14 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateManyEntitiesMutationResolver,
-} = require('../createCreateManyEntitiesMutationResolver');
-const {
-  default: createUpdateManyEntitiesMutationResolver,
-} = require('../createUpdateManyEntitiesMutationResolver');
-const { default: createCopyManyEntitiesMutationResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateManyEntitiesMutationResolver from '../createCreateManyEntitiesMutationResolver';
+import createUpdateManyEntitiesMutationResolver from '../createUpdateManyEntitiesMutationResolver';
+import createCopyManyEntitiesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 

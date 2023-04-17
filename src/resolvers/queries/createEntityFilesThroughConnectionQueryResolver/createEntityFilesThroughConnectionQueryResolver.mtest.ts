@@ -2,15 +2,15 @@
 
 import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createFileSchema } = require('../../../mongooseModels/createFileSchema');
-const { default: toCursor } = require('../../utils/toCursor');
-const { default: createEntityFilesQueryResolver } = require('../createEntityFilesQueryResolver');
+import mongoOptions from '../../../../test/mongo-options';
+import createFileSchema from '../../../mongooseModels/createFileSchema';
+import toCursor from '../../utils/toCursor';
+import createEntityFilesQueryResolver from '../createEntityFilesQueryResolver';
 
-const { default: createEntityFilesThroughConnectionQueryResolver } = require('./index');
+import createEntityFilesThroughConnectionQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -195,6 +195,37 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
       expect(cursor).toBe(toCursor(allFiles[i].id, i));
     }
 
+    const examplesWithLimit = await entityFilesThroughConnection(
+      null,
+      { first: 5 },
+      { mongooseConn },
+      { projection: { desktop: 1, tablet: 1, mobile: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPageWithLimit,
+        hasPreviousPage: hasPreviousPageWithLimit,
+        startCursor: startCursorWithLimit,
+        endCursor: endCursorWithLimit,
+      },
+      edges: edgesWithLimit,
+    } = examplesWithLimit;
+
+    expect(hasPreviousPageWithLimit).toBe(false);
+    expect(hasNextPageWithLimit).toBe(true);
+    expect(startCursorWithLimit).toBe(toCursor(allFiles[0].id, 0));
+    const lastPosWithLimit = edgesWithLimit.length - 1;
+    expect(endCursorWithLimit).toBe(toCursor(allFiles[lastPosWithLimit].id, lastPosWithLimit));
+
+    for (let i = 0; i < edgesWithLimit.length; i += 1) {
+      const { node, cursor } = edgesWithLimit[i];
+
+      expect(node).toEqual(allFiles[i]);
+      expect(cursor).toBe(toCursor(allFiles[i].id, i));
+    }
+
     const examples2 = await entityFilesThroughConnection(
       null,
       { first: 5, after: endCursor },
@@ -223,6 +254,39 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
 
     for (let i = 0; i < edges2.length; i += 1) {
       const { node, cursor } = edges2[i];
+
+      expect(node).toEqual(allFiles[lastPos + i + 1]);
+      expect(cursor).toBe(toCursor(allFiles[lastPos + i + 1].id, lastPos + i + 1));
+    }
+
+    const examples2WithLimit = await entityFilesThroughConnection(
+      null,
+      { first: 5, after: endCursor },
+      { mongooseConn },
+      { projection: { desktop: 1, tablet: 1, mobile: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage2WithLimit,
+        hasPreviousPage: hasPreviousPage2WithLimit,
+        startCursor: startCursor2WithLimit,
+        endCursor: endCursor2WithLimit,
+      },
+      edges: edges2WithLimit,
+    } = examples2WithLimit;
+
+    expect(hasPreviousPage2WithLimit).toBe(true);
+    expect(hasNextPage2WithLimit).toBe(true);
+    expect(startCursor2WithLimit).toBe(toCursor(allFiles[lastPos + 1].id, lastPos + 1));
+    const lastPos2WithLimit = lastPos + edges2WithLimit.length;
+    expect(endCursor2WithLimit).toBe(toCursor(allFiles[lastPos2WithLimit].id, lastPos2WithLimit));
+
+    expect(edges2WithLimit.length).toBe(3);
+
+    for (let i = 0; i < edges2WithLimit.length; i += 1) {
+      const { node, cursor } = edges2WithLimit[i];
 
       expect(node).toEqual(allFiles[lastPos + i + 1]);
       expect(cursor).toBe(toCursor(allFiles[lastPos + i + 1].id, lastPos + i + 1));
@@ -319,6 +383,39 @@ describe('createEntityFilesThroughConnectionQueryResolver', () => {
     expect(endCursor5).toBe(toCursor(allFiles[2].id, 2));
 
     expect(edges5.length).toBe(3);
+
+    for (let i = 0; i < edges5.length; i += 1) {
+      const { node, cursor } = edges5[i];
+
+      expect(node).toEqual(allFiles[i]);
+      expect(cursor).toBe(toCursor(allFiles[i].id, i));
+    }
+
+    const examples5WithLimit = await entityFilesThroughConnection(
+      null,
+      { last: 5, before: startCursor4 },
+      { mongooseConn },
+      { projection: { desktop: 1, tablet: 1, mobile: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage5WithLimit,
+        hasPreviousPage: hasPreviousPage5WithLimit,
+        startCursor: startCursor5WithLimit,
+        endCursor: endCursor5WithLimit,
+      },
+      edges: edges5WithLimit,
+    } = examples5WithLimit;
+
+    expect(hasPreviousPage5WithLimit).toBe(false);
+    expect(hasNextPage5WithLimit).toBe(true);
+
+    expect(startCursor5WithLimit).toBe(toCursor(allFiles[0].id, 0));
+    expect(endCursor5WithLimit).toBe(toCursor(allFiles[2].id, 2));
+
+    expect(edges5WithLimit.length).toBe(3);
 
     for (let i = 0; i < edges5.length; i += 1) {
       const { node, cursor } = edges5[i];

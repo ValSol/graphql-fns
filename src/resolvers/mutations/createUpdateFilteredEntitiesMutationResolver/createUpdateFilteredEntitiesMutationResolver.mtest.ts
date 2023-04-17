@@ -7,15 +7,13 @@ import type {
   TangibleEntityConfig,
 } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
-const { PubSub } = require('graphql-subscriptions');
+import mongoose from 'mongoose';
+import { PubSub } from 'graphql-subscriptions';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateEntityMutationResolver,
-} = require('../createCreateEntityMutationResolver');
-const { default: createUpdateFilteredEntitiesMutationResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
+import createUpdateFilteredEntitiesMutationResolver from './index';
 
 mongoose.set('strictQuery', false);
 

@@ -1,4 +1,4 @@
-import type {GetPrevious} from '../../../tsTypes';
+import type { GetPrevious } from '../../../tsTypes';
 
 import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 
@@ -6,7 +6,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { involvedFilters } = resolverArg;
   // const { inventory } = generalConfig;
 
-  const filter = getFilterFromInvolvedFilters(involvedFilters);
+  const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
   return filter && [];
 };

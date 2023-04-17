@@ -1,15 +1,13 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig, NearInput } from '../../../tsTypes';
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const mongoOptions = require('../../../../test/mongo-options');
-const { default: createThingSchema } = require('../../../mongooseModels/createThingSchema');
-const {
-  default: createCreateManyEntitiesMutationResolver,
-} = require('../../mutations/createCreateManyEntitiesMutationResolver');
-const { default: toCursor } = require('../../utils/toCursor');
-const { default: createEntitiesThroughConnectionQueryResolver } = require('./index');
+import mongoOptions from '../../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createCreateManyEntitiesMutationResolver from '../../mutations/createCreateManyEntitiesMutationResolver';
+import toCursor from '../../utils/toCursor';
+import createEntitiesThroughConnectionQueryResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -122,6 +120,37 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       expect(node).toEqual(createdExamples[i]);
       expect(cursor).toBe(toCursor(createdExamples[i].id, i));
     }
+
+    const examplesWithLimit = await examplesThroughConnection(
+      null,
+      { first: 6 },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPageWithLimit,
+        hasPreviousPage: hasPreviousPageWithLimit,
+        startCursor: startCursorWithLimit,
+        endCursor: endCursorWithLimit,
+      },
+      edges: egesWithLimits,
+    } = examples;
+
+    expect(hasPreviousPageWithLimit).toBe(false);
+    expect(hasNextPageWithLimit).toBe(true);
+    expect(startCursorWithLimit).toBe(toCursor(createdExamples[0].id, 0));
+    expect(endCursorWithLimit).toBe(toCursor(createdExamples[lastPos].id, lastPos));
+
+    for (let i = 0; i < egesWithLimits.length; i += 1) {
+      const { node, cursor } = egesWithLimits[i];
+
+      expect(node).toEqual(createdExamples[i]);
+      expect(cursor).toBe(toCursor(createdExamples[i].id, i));
+    }
+
     const examples2 = await examplesThroughConnection(
       null,
       { first: 5, after: endCursor },
@@ -150,6 +179,41 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
     for (let i = 0; i < edges2.length; i += 1) {
       const { node, cursor } = edges2[i];
+
+      expect(node).toEqual(createdExamples[lastPos + i + 1]);
+      expect(cursor).toBe(toCursor(createdExamples[lastPos + i + 1].id, lastPos + i + 1));
+    }
+
+    const examples2WithLimit = await examplesThroughConnection(
+      null,
+      { first: 5, after: endCursor },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage2WithLimit,
+        hasPreviousPage: hasPreviousPage2WithLimit,
+        startCursor: startCursor2WithLimit,
+        endCursor: endCursor2WithLimit,
+      },
+      edges: edges2WithLimit,
+    } = examples2WithLimit;
+
+    expect(hasPreviousPage2WithLimit).toBe(true);
+    expect(hasNextPage2WithLimit).toBe(true);
+    expect(startCursor2).toBe(toCursor(createdExamples[lastPos + 1].id, lastPos + 1));
+    const lastPos2WithLimit = lastPos + edges2WithLimit.length;
+    expect(endCursor2WithLimit).toBe(
+      toCursor(createdExamples[lastPos2WithLimit].id, lastPos2WithLimit),
+    );
+
+    expect(edges2WithLimit.length).toBe(3);
+
+    for (let i = 0; i < edges2WithLimit.length; i += 1) {
+      const { node, cursor } = edges2WithLimit[i];
 
       expect(node).toEqual(createdExamples[lastPos + i + 1]);
       expect(cursor).toBe(toCursor(createdExamples[lastPos + i + 1].id, lastPos + i + 1));
@@ -219,6 +283,39 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
       expect(node).toEqual(createdExamples[i + 3]);
       expect(cursor).toBe(toCursor(createdExamples[i + 3].id, i + 3));
+    }
+
+    const examples4WithLimit = await examplesThroughConnection(
+      null,
+      { last: 5, before: startCursor3 },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage4WithLimit,
+        hasPreviousPage: hasPreviousPage4WithLimit,
+        startCursor: startCursor4WithLimit,
+        endCursor: endCursor4WithLimit,
+      },
+      edges: edges4WithLimit,
+    } = examples4WithLimit;
+
+    expect(hasPreviousPage4WithLimit).toBe(true);
+    expect(hasNextPage4WithLimit).toBe(true);
+
+    // expect(startCursor4WithLimit).toBe(toCursor(createdExamples[5].id, 5));
+    expect(endCursor4WithLimit).toBe(toCursor(createdExamples[7].id, 7));
+
+    expect(edges4WithLimit.length).toBe(3);
+
+    for (let i = 0; i < edges4WithLimit.length; i += 1) {
+      const { node, cursor } = edges4WithLimit[i];
+
+      expect(node).toEqual(createdExamples[i + 5]);
+      expect(cursor).toBe(toCursor(createdExamples[i + 5].id, i + 5));
     }
 
     const examples5 = await examplesThroughConnection(
@@ -320,6 +417,38 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
 
       expect(node).toEqual(createdExamples[i + 7]);
       expect(cursor).toBe(toCursor(createdExamples[i + 7].id, i + 7));
+    }
+
+    const examples7WithLimit = await examplesThroughConnection(
+      null,
+      { last: 4 },
+      { mongooseConn },
+      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      { inputOutputEntity: [[], 3] },
+    );
+
+    const {
+      pageInfo: {
+        hasNextPage: hasNextPage7WithLimit,
+        hasPreviousPage: hasPreviousPage7WithLimit,
+        startCursor: startCursor7WithLimit,
+        endCursor: endCursor7WithLimit,
+      },
+      edges: edges7WithLimit,
+    } = examples7WithLimit;
+
+    expect(hasPreviousPage7WithLimit).toBe(true);
+    expect(hasNextPage7WithLimit).toBe(false);
+    expect(startCursor7WithLimit).toBe(toCursor(createdExamples[8].id, 8));
+    expect(endCursor7WithLimit).toBe(toCursor(createdExamples[10].id, 10));
+
+    expect(edges7WithLimit.length).toBe(3);
+
+    for (let i = 0; i < edges7WithLimit.length; i += 1) {
+      const { node, cursor } = edges7WithLimit[i];
+
+      expect(node).toEqual(createdExamples[i + 8]);
+      expect(cursor).toBe(toCursor(createdExamples[i + 8].id, i + 8));
     }
   });
 
