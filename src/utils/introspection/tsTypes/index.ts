@@ -1,6 +1,6 @@
 import type {
   ClientOptions,
-  DerivativeAttributes,
+  DescendantAttributes,
   InventoryByRoles,
   EntityConfig,
 } from '../../../tsTypes';
@@ -9,20 +9,20 @@ export type ActionToParse = {
   actionType: 'Query' | 'Mutation';
   actionName: string;
   entityName: string;
-  derivativeKey?: string;
+  descendantKey?: string;
 };
 
 export type ParsedAction = {
-  creationType: 'standard' | 'custom' | 'derivative';
+  creationType: 'standard' | 'custom' | 'descendant';
   entityConfig: EntityConfig | null;
   baseAction: string;
-  derivativeKey: string;
+  descendantKey: string;
 };
 
 export type ChildQueries = Array<{
   actionName: string;
   baseAction: string;
-  derivativeKey: string;
+  descendantKey: string;
   entityName: string;
 }>;
 
@@ -30,14 +30,14 @@ export type ParseActionArgs = {
   actionType: 'Query' | 'Mutation';
   actionName: string;
   options: ClientOptions;
-  derivativeKey?: string;
+  descendantKey?: string;
   entityName: string;
 };
 
 export type ParseActionResult = {
   inventoryByRoles: InventoryByRoles;
-  derivativeAttributes: {
-    [derivativeKey: string]: DerivativeAttributes;
+  descendantAttributes: {
+    [descendantKey: string]: DescendantAttributes;
   };
   maxShift: number;
 };

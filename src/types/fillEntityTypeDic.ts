@@ -47,9 +47,9 @@ const fillEntityTypeDic = (
     if (!checkInventory(['Query', 'childEntitiesThroughConnection', config.name], inventory))
       return;
 
-    const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
+    const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
 
-    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey);
+    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
 
     if (config2 && !entityTypeDic[config2.name]) {
       fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic, inventory);
@@ -57,9 +57,9 @@ const fillEntityTypeDic = (
   });
 
   [...embeddedFields, ...fileFields].forEach(({ config }) => {
-    const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
+    const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
 
-    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey);
+    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
 
     if (config2 && !entityTypeDic[config2.name]) {
       fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic, inventory);

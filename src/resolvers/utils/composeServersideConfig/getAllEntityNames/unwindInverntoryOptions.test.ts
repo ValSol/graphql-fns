@@ -1,20 +1,20 @@
 /* eslint-env jest */
 import type {
   ActionSignatureMethods,
-  DerivativeAttributes,
+  DescendantAttributes,
   EntityConfig,
   GeneralConfig,
   Inventory,
   InventoryOptions,
 } from '../../../../tsTypes';
 
-import composeDerivativeConfigByName from '../../../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../../../utils/composeDescendantConfigByName';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 
 describe('unwindInverntoryOptions', () => {
-  const ForCatalogDerivative: DerivativeAttributes = {
+  const ForCatalogDescendant: DescendantAttributes = {
     allow: { Example: ['entities', 'updateEntity'] },
-    derivativeKey: 'ForCatalog',
+    descendantKey: 'ForCatalog',
   };
 
   const specialUpdateEntity: ActionSignatureMethods = {
@@ -25,7 +25,7 @@ describe('unwindInverntoryOptions', () => {
     involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
     type: ({ name }: any) => `${name}ForCatalog`,
     config: (exampleConfig: any, generalConfig: any) =>
-      composeDerivativeConfigByName('ForCatalog', exampleConfig, generalConfig),
+      composeDescendantConfigByName('ForCatalog', exampleConfig, generalConfig),
   };
 
   const childExampleConfig: EntityConfig = {
@@ -84,9 +84,9 @@ describe('unwindInverntoryOptions', () => {
     Query: { specialUpdateEntity },
   };
 
-  const derivative = { ForCatalog: ForCatalogDerivative };
+  const descendant = { ForCatalog: ForCatalogDescendant };
 
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivative, inventory };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, inventory };
 
   describe('actions full lists', () => {
     const allQueries = {

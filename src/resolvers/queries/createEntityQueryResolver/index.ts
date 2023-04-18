@@ -41,7 +41,7 @@ const createNodeQueryResolver = (
     context: Context,
     info: SintheticResolverInfo,
     involvedFilters: {
-      [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);

@@ -5,9 +5,9 @@ import { GraphQLUpload } from 'graphql-upload';
 import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
-import composeDerivativeConfigName from '../../utils/composeDerivativeConfig/composeDerivativeConfigName';
-import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
-import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
+import composeDescendantConfigName from '../../utils/composeDescendantConfig/composeDescendantConfigName';
+import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
+import composeDescendantConfig from '../../utils/composeDescendantConfig';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 import resolverDecorator from '../utils/resolverDecorator';
 import composeEntityResolvers from '../types/composeEntityResolvers';
@@ -26,9 +26,9 @@ const composeGqlResolvers = (
 
   serversideConfig: ServersideConfig = {},
 ): any => {
-  const { allEntityConfigs, inventory, derivative = {} } = generalConfig;
+  const { allEntityConfigs, inventory, descendant = {} } = generalConfig;
 
-  const custom = mergeDerivativeIntoCustom(generalConfig);
+  const custom = mergeDescendantIntoCustom(generalConfig);
 
   // eslint-disable-next-line no-nested-ternary
   const customQuery = custom?.Query || {};
@@ -182,7 +182,7 @@ const composeGqlResolvers = (
     .reduce((prev, entityConfig: TangibleEntityConfig) => {
       const {
         name,
-        derivativeNameSlicePosition,
+        descendantNameSlicePosition,
         duplexFields,
         geospatialFields,
         relationalFields,
@@ -192,18 +192,18 @@ const composeGqlResolvers = (
         prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
       }
 
-      // process derivative objects fields
-      Object.keys(derivative).forEach((derivativeKey) => {
-        const derivativeConfig = composeDerivativeConfig(
-          derivative[derivativeKey],
+      // process descendant objects fields
+      Object.keys(descendant).forEach((descendantKey) => {
+        const descendantConfig = composeDescendantConfig(
+          descendant[descendantKey],
           entityConfig,
           generalConfig,
         );
 
-        if (derivativeConfig && entityTypeDic[derivativeConfig.name]) {
-          const key = composeDerivativeConfigName(name, derivativeKey, derivativeNameSlicePosition);
+        if (descendantConfig && entityTypeDic[descendantConfig.name]) {
+          const key = composeDescendantConfigName(name, descendantKey, descendantNameSlicePosition);
           // eslint-disable-next-line no-param-reassign
-          prev[key] = composeEntityResolvers(derivativeConfig, generalConfig, serversideConfig);
+          prev[key] = composeEntityResolvers(descendantConfig, generalConfig, serversideConfig);
         }
       });
 

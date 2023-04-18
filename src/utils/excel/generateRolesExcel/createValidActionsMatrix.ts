@@ -14,7 +14,7 @@ type Arg = {
 
 type Result = Array<Array<null | [number, number]>>;
 
-const extractDataFromDerivative = (arg: Arg): Result => {
+const extractDataFromDescendant = (arg: Arg): Result => {
   const { actionNames, actionTypes, inventory, inventory2, thingNames } = arg;
 
   const result: Array<Array<null | [number, number]>> = [];
@@ -38,4 +38,4 @@ const extractDataFromDerivative = (arg: Arg): Result => {
   return result;
 };
 
-export default extractDataFromDerivative;
+export default extractDataFromDescendant;

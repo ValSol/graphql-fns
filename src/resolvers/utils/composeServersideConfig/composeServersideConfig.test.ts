@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import type {
-  DerivativeAttributes,
+  DescendantAttributes,
   TangibleEntityConfig,
   GeneralConfig,
   ServersideConfig,
@@ -82,18 +82,18 @@ describe('composeFilters', () => {
     ],
   });
 
-  const ForView: DerivativeAttributes = {
-    derivativeKey: 'ForView',
+  const ForView: DescendantAttributes = {
+    descendantKey: 'ForView',
     allow: {
       Person: ['entity', 'entities'],
     },
   };
 
-  const derivative = { ForView };
+  const descendant = { ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    derivative,
+    descendant,
   };
 
   test('should check the simplest correct filter', () => {

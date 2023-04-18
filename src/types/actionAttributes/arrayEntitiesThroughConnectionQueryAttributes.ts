@@ -2,16 +2,16 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
 
-import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
-import connectionDerivativeUpdater from '../actionDerivativeUpdaters/connectionDerivativeUpdater';
+import composeDescendantConfig from '../../utils/composeDescendantConfig';
+import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
 
 const actionType = 'Query';
 
-const actionGeneralName = (derivativeKey: string = ''): string =>
-  `childEntitiesThroughConnection${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `childEntitiesThroughConnection${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string =>
-  `child${pluralize(baseName)}ThroughConnection${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `child${pluralize(baseName)}ThroughConnection${descendantKey}`;
 
 const inputCreators = [
   (): [
@@ -56,7 +56,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   // eslint-disable-line no-unused-vars
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): {
   [key: string]: string;
 } => ({});
@@ -64,19 +64,19 @@ const actionInvolvedEntityNames = (
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { allEntityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, descendant } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  if (derivativeKey) {
-    return derivative
-      ? composeDerivativeConfig(derivative[derivativeKey], connectionConfig, generalConfig)
+  if (descendantKey) {
+    return descendant
+      ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
       : null;
   }
 
@@ -88,8 +88,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
 
 const actionIsChild = 'Array';
 
-const actionReturnString = ({ name }: EntityConfig, derivativeKey: string = ''): string =>
-  `${name}${derivativeKey}Connection`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `${name}${descendantKey}Connection`;
 
 const arrayEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,
@@ -101,7 +101,7 @@ const arrayEntitiesThroughConnectionQueryAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDerivativeUpdater: connectionDerivativeUpdater,
+  actionDescendantUpdater: connectionDescendantUpdater,
   actionAllowed,
   actionIsChild,
 } as const;

@@ -1,4 +1,4 @@
-import type {Inventory, EntityConfig, GeneralConfig} from '../tsTypes';
+import type { Inventory, EntityConfig, GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
@@ -10,7 +10,7 @@ const composeChildActionSignature = (
   generalConfig: GeneralConfig,
   childQueryGeneralName: string,
   inputDic?: {
-    [inputName: string]: string
+    [inputName: string]: string;
   },
   inventory?: Inventory,
 ): string => {
@@ -26,16 +26,16 @@ const composeChildActionSignature = (
   const { name: configName } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+  const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
   if (
     inventory &&
     // $FlowFixMe
-    !checkInventory([actionType, actionGeneralName(derivativeKey), configName], inventory)
+    !checkInventory([actionType, actionGeneralName(descendantKey), configName], inventory)
   ) {
     return '';
   }
-  const specificName = actionName(rootName, derivativeKey);
+  const specificName = actionName(rootName, descendantKey);
 
   const toShow: Array<boolean> = [];
 
@@ -51,7 +51,7 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(allEntityConfigs[rootName], derivativeKey);
+  const returnString = actionReturnString(allEntityConfigs[rootName], descendantKey);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;

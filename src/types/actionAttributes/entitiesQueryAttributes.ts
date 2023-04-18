@@ -2,7 +2,7 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createPaginationInputType from '../inputs/createPaginationInputType';
@@ -11,10 +11,10 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `entities${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string => `entities${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string =>
-  `${pluralize(baseName)}${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `${pluralize(baseName)}${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -36,24 +36,24 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): {
   [key: string]: string;
-} => ({ inputOutputEntity: `${name}${derivativeKey}` });
+} => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig =>
-  derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, derivativeKey: string = ''): string =>
-  `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `[${name}${descendantKey}!]!`;
 
 const entitiesQueryAttributes = {
   actionGeneralName,

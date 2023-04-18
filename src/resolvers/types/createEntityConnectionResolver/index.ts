@@ -34,12 +34,12 @@ const createEntityConnectionResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs, inventory } = generalConfig;
 
-  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
 
-  const childEntitiesThroughConnectionQueryResolver = derivativeKey
+  const childEntitiesThroughConnectionQueryResolver = descendantKey
     ? createCustomResolver(
         'Query',
-        `childEntitiesThroughConnection${derivativeKey}`,
+        `childEntitiesThroughConnection${descendantKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -60,15 +60,15 @@ const createEntityConnectionResolver = (
   if (!childEntitiesThroughConnectionQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesThroughConnectionQueryResolver "${
-        derivativeKey
-          ? `childEntitiesThroughConnection${derivativeKey}`
+        descendantKey
+          ? `childEntitiesThroughConnection${descendantKey}`
           : 'childEntitiesThroughConnection'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
-  const inventoryChain: InventoryСhain = derivativeKey
-    ? ['Query', `childEntitiesThroughConnection${derivativeKey}`, nameRoot]
+  const inventoryChain: InventoryСhain = descendantKey
+    ? ['Query', `childEntitiesThroughConnection${descendantKey}`, nameRoot]
     : ['Query', 'childEntitiesThroughConnection', name];
 
   if (!checkInventory(inventoryChain, inventory)) return null;
@@ -77,7 +77,7 @@ const createEntityConnectionResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntitiesThroughConnection${
-          derivativeKey || ''
+          descendantKey || ''
         }" for entity: "${name}"!`,
       );
     }

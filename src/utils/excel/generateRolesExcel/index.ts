@@ -10,9 +10,9 @@ import composeWorksheetName from '../composeWorksheetName';
 import constants from '../constants';
 import fitWidth from '../fitWidth';
 import createValidActionsMatrix from './createValidActionsMatrix';
-import createValidDerivativeOrCustomActionsMatrix from './createValidDerivativeOrCustomActionsMatrix';
+import createValidDescendantOrCustomActionsMatrix from './createValidDescendantOrCustomActionsMatrix';
 import extractDataFromCustom from './extractDataFromCustom';
-import extractDataFromDerivative from './extractDataFromDerivative';
+import extractDataFromDescendant from './extractDataFromDescendant';
 import squeezeMatrix from './squeezeMatrix';
 
 const { ordinaryActionTypes } = constants;
@@ -22,8 +22,8 @@ const actionTypeToArgb = {
   Query: 'FFFFFF00',
   Mutation: 'FF66FFFF',
   Subscription: 'FFFF00FF',
-  DerivativeQuery: 'FFFFB266',
-  DerivativeMutation: 'FF9999FF',
+  DescendantQuery: 'FFFFB266',
+  DescendantMutation: 'FF9999FF',
   CustomQuery: 'FFFFFFCC',
   CustomMutation: 'FFCCFFFF',
 } as const;
@@ -33,7 +33,7 @@ const generateExcel = async (
   serversideConfig: ServersideConfig,
   filePath: string = 'roles.xlsx',
 ) => {
-  const { custom, derivative, inventory, allEntityConfigs } = generalConfig;
+  const { custom, descendant, inventory, allEntityConfigs } = generalConfig;
 
   const inventoryByRoles = serversideConfig.inventoryByRoles || {
     'General Action List': undefined,
@@ -52,16 +52,16 @@ const generateExcel = async (
 
   const permissionNames = Object.keys(inventoryByRoles);
 
-  let dataFromDerivative = {
-    derivativeActionNames: [],
-    derivativeActionTypes: {},
-    thingNamesByDerivativeActions: {},
+  let dataFromDescendant = {
+    descendantActionNames: [],
+    descendantActionTypes: {},
+    thingNamesByDescendantActions: {},
   };
-  if (derivative) {
-    dataFromDerivative = extractDataFromDerivative({
+  if (descendant) {
+    dataFromDescendant = extractDataFromDescendant({
       actionTypes: ordinaryActionTypes,
       // $FlowFixMe
-      derivative,
+      descendant,
     });
   }
 
@@ -79,13 +79,13 @@ const generateExcel = async (
 
   const actionNames = [
     ...ordinaryActionNames,
-    ...dataFromDerivative.derivativeActionNames,
+    ...dataFromDescendant.descendantActionNames,
     ...dataFromCustom.customActionNames,
   ];
 
   const actionTypes = {
     ...ordinaryActionTypes,
-    ...dataFromDerivative.derivativeActionTypes,
+    ...dataFromDescendant.descendantActionTypes,
     ...dataFromCustom.customActionTypes,
   } as const;
 
@@ -104,18 +104,18 @@ const generateExcel = async (
       thingNames,
     });
 
-    let validDerivativeActionsMatrix = thingNames.map(() => []);
-    if (derivative) {
-      const { derivativeActionNames, derivativeActionTypes, thingNamesByDerivativeActions } =
-        dataFromDerivative;
+    let validDescendantActionsMatrix = thingNames.map(() => []);
+    if (descendant) {
+      const { descendantActionNames, descendantActionTypes, thingNamesByDescendantActions } =
+        dataFromDescendant;
 
-      validDerivativeActionsMatrix = createValidDerivativeOrCustomActionsMatrix({
-        actionNames: derivativeActionNames,
-        actionTypes: derivativeActionTypes,
+      validDescendantActionsMatrix = createValidDescendantOrCustomActionsMatrix({
+        actionNames: descendantActionNames,
+        actionTypes: descendantActionTypes,
         inventory,
         inventory2: inventoryByRoles[permissionName],
         thingNames,
-        thingNamesByActions: thingNamesByDerivativeActions,
+        thingNamesByActions: thingNamesByDescendantActions,
       });
     }
 
@@ -123,7 +123,7 @@ const generateExcel = async (
     if (custom) {
       const { customActionNames, customActionTypes, thingNamesByCustomActions } = dataFromCustom;
 
-      validCustomActionsMatrix = createValidDerivativeOrCustomActionsMatrix({
+      validCustomActionsMatrix = createValidDescendantOrCustomActionsMatrix({
         actionNames: customActionNames,
         actionTypes: customActionTypes,
         inventory,
@@ -135,9 +135,9 @@ const generateExcel = async (
 
     const combinedMatrix = validActionsMatrix.map((row, i) => [
       ...row,
-      ...validDerivativeActionsMatrix[i].map((item) => item && [item[0], item[1] + row.length]),
+      ...validDescendantActionsMatrix[i].map((item) => item && [item[0], item[1] + row.length]),
       ...validCustomActionsMatrix[i].map(
-        (item) => item && [item[0], item[1] + row.length + validDerivativeActionsMatrix[i].length],
+        (item) => item && [item[0], item[1] + row.length + validDescendantActionsMatrix[i].length],
       ),
     ]);
 

@@ -1,6 +1,6 @@
-import type {ClientOptions, GeneralConfig, EntityConfig} from '../../tsTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../tsTypes';
 
-import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
 import { mutationAttributes } from '../../types/actionAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
@@ -42,7 +42,7 @@ const composeMutation = (
     throw new TypeError('"generalConfig" have to be defined!');
   }
 
-  const custom = mergeDerivativeIntoCustom(generalConfig, 'forClient'); // eslint-disable-line no-case-declarations
+  const custom = mergeDescendantIntoCustom(generalConfig, 'forClient'); // eslint-disable-line no-case-declarations
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
   }

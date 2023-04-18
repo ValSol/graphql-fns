@@ -1,4 +1,4 @@
-import type {InventoryByRoles} from '../../tsTypes';
+import type { InventoryByRoles } from '../../tsTypes';
 import type { ChildQueries, ParsedAction } from './tsTypes';
 
 const childQueriesToInventory = (
@@ -6,16 +6,16 @@ const childQueriesToInventory = (
   parsedAction: ParsedAction,
   // InventoryByRoles,
   inventoryByRoles: any,
-  derivativeKeyToPermission: {
-    [derivativeKey: string]: string
+  descendantKeyToPermission: {
+    [descendantKey: string]: string;
   },
 ): InventoryByRoles => {
-  const { derivativeKey: defaultDerivativeKey } = parsedAction;
+  const { descendantKey: defaultDescendantKey } = parsedAction;
 
-  childQueries.forEach(({ actionName, derivativeKey, entityName }) => {
-    const permission = derivativeKey
-      ? derivativeKeyToPermission[derivativeKey]
-      : derivativeKeyToPermission[defaultDerivativeKey];
+  childQueries.forEach(({ actionName, descendantKey, entityName }) => {
+    const permission = descendantKey
+      ? descendantKeyToPermission[descendantKey]
+      : descendantKeyToPermission[defaultDescendantKey];
 
     const inventory1 = inventoryByRoles[permission];
     if (!inventory1) {

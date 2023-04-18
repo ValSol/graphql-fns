@@ -40,7 +40,7 @@ describe('composeEdgeVirtualConfig', () => {
 
     const expectedResult = {
       name: 'ExampleEdge',
-      derivativeNameSlicePosition: -'Edge'.length,
+      descendantNameSlicePosition: -'Edge'.length,
       type: 'virtual',
 
       childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],

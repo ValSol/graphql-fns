@@ -1,6 +1,6 @@
 import type { GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfig from '../../utils/composeDerivativeConfig';
+import composeDescendantConfig from '../../utils/composeDescendantConfig';
 import fillInputDic from './fillInputDic';
 import inputs from './index';
 
@@ -40,11 +40,11 @@ const fillInputDicForCustom = (
     return;
   }
 
-  const { custom = {}, allEntityConfigs, derivative = {}, enums = {} } = generalConfig;
+  const { custom = {}, allEntityConfigs, descendant = {}, enums = {} } = generalConfig;
 
   const allEntityNames = Object.keys(allEntityConfigs).map((name) => name);
 
-  const derivativeKeys = ['', ...Object.keys(derivative)];
+  const descendantKeys = ['', ...Object.keys(descendant)];
 
   const { Input: customInput = {} } = custom;
 
@@ -60,15 +60,15 @@ const fillInputDicForCustom = (
     const entityName = allEntityNames[i];
 
     if (argType.endsWith('Input') || argType.endsWith('Enum')) {
-      for (let j = 0; j < derivativeKeys.length; j += 1) {
-        const derivativeKey = derivativeKeys[j];
+      for (let j = 0; j < descendantKeys.length; j += 1) {
+        const descendantKey = descendantKeys[j];
 
         for (let k = 0; k < inputs.length; k += 1) {
           const inputCreator = inputs[k];
 
-          const entityConfig = derivativeKey
-            ? composeDerivativeConfig(
-                derivative[derivativeKey],
+          const entityConfig = descendantKey
+            ? composeDescendantConfig(
+                descendant[descendantKey],
                 allEntityConfigs[entityName],
                 generalConfig,
               )

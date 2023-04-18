@@ -54,7 +54,7 @@ const createChildEntitiesThroughConnectionQueryResolver = (
     context: Context,
     info: SintheticResolverInfo,
     involvedFilters: {
-      [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
     entitiesThroughConnectionQueryResolver(parent, args, context, info, involvedFilters);

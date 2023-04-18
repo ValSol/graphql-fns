@@ -4,7 +4,7 @@ import type {
   SimplifiedInventoryOptions,
 } from '../../../../tsTypes';
 
-import mergeDerivativeIntoCustom from '../../../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../../../utils/mergeDescendantIntoCustom';
 import { mutationAttributes, queryAttributes } from '../../../../types/actionAttributes';
 
 const mutationNames = Object.keys(mutationAttributes);
@@ -36,7 +36,7 @@ const unwindInverntoryOptions = (
   );
 
   const { Query: customQueries = {}, Mutation: customMutations = {} } =
-    mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver') || {};
+    mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
 
   // *** process child queries
 

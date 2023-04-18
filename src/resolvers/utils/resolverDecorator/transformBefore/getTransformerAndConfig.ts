@@ -1,6 +1,6 @@
-import type {GeneralConfig, EntityConfig} from '../../../../tsTypes';
+import type { GeneralConfig, EntityConfig } from '../../../../tsTypes';
 
-import composeDerivativeConfigByName from '../../../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../../../utils/composeDescendantConfigByName';
 import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
 import transformFileWhere from './transformFileWhere';
@@ -29,7 +29,10 @@ const getPossibleEntityName = (prefix: string, suffix: string, argType: string) 
 
 const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
 
-const getTransformerAndConfig = (rawArgType: string, generalConfig: GeneralConfig): null | [any, null | EntityConfig] => {
+const getTransformerAndConfig = (
+  rawArgType: string,
+  generalConfig: GeneralConfig,
+): null | [any, null | EntityConfig] => {
   const argType = rawArgType.replace(regExp, ''); // eslint-disable-line no-useless-escape
 
   const results = argTypesInParts.reduce<Array<any>>(
@@ -46,7 +49,7 @@ const getTransformerAndConfig = (rawArgType: string, generalConfig: GeneralConfi
         }
       } else {
         try {
-          const { root: entityName, derivativeKey } = parseEntityName(
+          const { root: entityName, descendantKey } = parseEntityName(
             possibleEntityName,
             generalConfig,
           );
@@ -55,16 +58,16 @@ const getTransformerAndConfig = (rawArgType: string, generalConfig: GeneralConfi
 
           const entityConfig = allEntityConfigs[entityName];
 
-          if (!derivativeKey) {
+          if (!descendantKey) {
             prev.push([transformer, entityConfig]);
           } else {
-            const derivativeConfig = composeDerivativeConfigByName(
-              derivativeKey,
+            const descendantConfig = composeDescendantConfigByName(
+              descendantKey,
               entityConfig,
               generalConfig,
             );
 
-            prev.push([transformer, derivativeConfig]);
+            prev.push([transformer, descendantConfig]);
           }
         } catch {
           // do nothing

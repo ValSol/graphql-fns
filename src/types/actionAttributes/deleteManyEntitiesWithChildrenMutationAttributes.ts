@@ -2,18 +2,18 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import getOppositeFields from '../../utils/getOppositeFields';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string =>
-  `deleteManyEntitiesWithChildren${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `deleteManyEntitiesWithChildren${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string =>
-  `deleteMany${pluralize(baseName)}WithChildren${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `deleteMany${pluralize(baseName)}WithChildren${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
@@ -29,20 +29,20 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): {
   [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig =>
-  derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
@@ -53,8 +53,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     ).length,
   );
 
-const actionReturnString = ({ name }: EntityConfig, derivativeKey: string = ''): string =>
-  `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `[${name}${descendantKey}!]!`;
 
 const deleteManyEntitiesWithChildrenMutationAttributes = {
   actionGeneralName,

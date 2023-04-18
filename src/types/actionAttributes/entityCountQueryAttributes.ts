@@ -1,4 +1,4 @@
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
@@ -6,9 +6,10 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `entityCount${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string => `entityCount${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `${baseName}Count${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `${baseName}Count${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -24,9 +25,12 @@ const argTypes = [
   (): string => 'String',
 ];
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
-} => ({ inputOutputEntity: `${name}${derivativeKey}` });
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
+} => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (
   // eslint-disable-line no-unused-vars
@@ -34,7 +38,7 @@ const actionReturnConfig = (
   // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig,
   // eslint-disable-line no-unused-vars
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
@@ -43,7 +47,7 @@ const actionReturnString = (
   // eslint-disable-next-line no-unused-vars
   entityConfig: EntityConfig,
   // eslint-disable-next-line no-unused-vars
-  derivativeKey: string,
+  descendantKey: string,
 ): string => 'Int!';
 
 const entityCountQueryAttributes = {

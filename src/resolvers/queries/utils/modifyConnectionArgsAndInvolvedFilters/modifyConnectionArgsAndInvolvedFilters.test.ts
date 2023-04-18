@@ -5,7 +5,7 @@ import type { InvolvedFilter } from '../../../../tsTypes';
 import modifyConnectionArgsAndInvolvedFilters from './index';
 
 type InvolvedFilters = {
-  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 };
 
 describe('modifyConnectionArgsAndInvolvedFilters util', () => {

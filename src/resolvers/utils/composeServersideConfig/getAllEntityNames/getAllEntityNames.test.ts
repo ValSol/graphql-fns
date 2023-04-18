@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import type {
-  DerivativeAttributes,
+  DescendantAttributes,
   TangibleEntityConfig,
   GeneralConfig,
   Inventory,
@@ -81,14 +81,14 @@ describe('getAllEntityNames', () => {
     ],
   });
 
-  const ForView: DerivativeAttributes = {
-    derivativeKey: 'ForView',
+  const ForView: DescendantAttributes = {
+    descendantKey: 'ForView',
     allow: {
       Person: ['entity', 'entities'],
     },
   };
 
-  const derivative = { ForView };
+  const descendant = { ForView };
 
   const inventory: Inventory = {
     name: 'test',
@@ -98,7 +98,7 @@ describe('getAllEntityNames', () => {
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    derivative,
+    descendant,
     inventory,
   };
 

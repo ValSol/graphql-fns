@@ -1,7 +1,7 @@
 import type { GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import mergeDerivativeIntoCustom from '../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../utils/mergeDescendantIntoCustom';
 import composeCustomActionSignature from './composeCustomActionSignature';
 
 import { mutationAttributes, queryAttributes } from './actionAttributes';
@@ -68,7 +68,7 @@ const composeGqlTypes = (
   // ... to "entityTypeDic" entity types ...
   // ... to "inputDic" inputs
 
-  const { Query, Mutation } = mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver') || {
+  const { Query, Mutation } = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {
     Query: {},
     Mutation: {},
   };

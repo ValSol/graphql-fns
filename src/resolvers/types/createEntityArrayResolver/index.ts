@@ -34,12 +34,12 @@ const createEntityArrayResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs, inventory } = generalConfig;
 
-  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
 
-  const childEntitiesQueryResolver = derivativeKey
+  const childEntitiesQueryResolver = descendantKey
     ? createCustomResolver(
         'Query',
-        `childEntities${derivativeKey}`,
+        `childEntities${descendantKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -56,13 +56,13 @@ const createEntityArrayResolver = (
   if (!childEntitiesQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesQueryResolver "${
-        derivativeKey ? `childEntities${derivativeKey}` : 'childEntities'
+        descendantKey ? `childEntities${descendantKey}` : 'childEntities'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
 
-  const inventoryChain: InventoryСhain = derivativeKey
-    ? ['Query', `childEntities${derivativeKey}`, nameRoot]
+  const inventoryChain: InventoryСhain = descendantKey
+    ? ['Query', `childEntities${descendantKey}`, nameRoot]
     : ['Query', 'childEntities', name];
 
   if (!checkInventory(inventoryChain, inventory)) return null;
@@ -76,7 +76,7 @@ const createEntityArrayResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${
-          derivativeKey || ''
+          descendantKey || ''
         }" for entity: "${name}"!`,
       );
     }

@@ -1,18 +1,18 @@
-import type {GeneralConfig} from '../../tsTypes';
+import type { GeneralConfig } from '../../tsTypes';
 import type { ParseActionArgs, ParseActionResult } from './tsTypes';
 
-import actionToDerivative from './actionToDerivative';
+import actionToDescendant from './actionToDescendant';
 import actionToInventory from './actionToInventory';
-import childQueriesToDerivative from './childQueriesToDerivative';
+import childQueriesToDescendant from './childQueriesToDescendant';
 import childQueriesToInventory from './childQueriesToInventory';
 import getChildQueries from './getChildQueries';
 import parseActionName from './parseActionName';
 
-type Arg1 = (ParseActionArgs) & {
-  generalConfig: GeneralConfig,
-  derivativeKeyToPermission: {
-    [derivativeKey: string]: string
-  }
+type Arg1 = ParseActionArgs & {
+  generalConfig: GeneralConfig;
+  descendantKeyToPermission: {
+    [descendantKey: string]: string;
+  };
 };
 
 const parseAction = (
@@ -21,26 +21,22 @@ const parseAction = (
     actionName,
     generalConfig,
     options,
-    derivativeKey,
-    derivativeKeyToPermission,
+    descendantKey,
+    descendantKeyToPermission,
     entityName,
   }: Arg1,
-  {
-    derivativeAttributes,
-    inventoryByRoles,
-    maxShift,
-  }: ParseActionResult,
+  { descendantAttributes, inventoryByRoles, maxShift }: ParseActionResult,
 ): ParseActionResult => {
-  const actionToParse = { actionType, actionName, entityName, derivativeKey } as const;
+  const actionToParse = { actionType, actionName, entityName, descendantKey } as const;
 
   const parsedAction = parseActionName(actionToParse, generalConfig);
 
-  actionToDerivative(actionToParse, parsedAction, derivativeAttributes, generalConfig);
+  actionToDescendant(actionToParse, parsedAction, descendantAttributes, generalConfig);
 
-  actionToInventory(actionToParse, parsedAction, inventoryByRoles, derivativeKeyToPermission);
+  actionToInventory(actionToParse, parsedAction, inventoryByRoles, descendantKeyToPermission);
 
   if (!parsedAction.entityConfig) {
-    return { inventoryByRoles, derivativeAttributes, maxShift };
+    return { inventoryByRoles, descendantAttributes, maxShift };
   }
 
   const { childQueries, maxShift: newMaxShift } = getChildQueries(
@@ -49,13 +45,13 @@ const parseAction = (
     options,
   );
 
-  childQueriesToDerivative(childQueries, derivativeAttributes);
+  childQueriesToDescendant(childQueries, descendantAttributes);
 
-  childQueriesToInventory(childQueries, parsedAction, inventoryByRoles, derivativeKeyToPermission);
+  childQueriesToInventory(childQueries, parsedAction, inventoryByRoles, descendantKeyToPermission);
 
   return {
     inventoryByRoles,
-    derivativeAttributes,
+    descendantAttributes,
     maxShift: newMaxShift > maxShift ? newMaxShift : maxShift,
   };
 };

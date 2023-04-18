@@ -297,7 +297,7 @@ type ChildField = ArrayChildField | ScalarChildField;
 
 type EntityConfigCommonProperties = {
   name: string;
-  derivativeNameSlicePosition?: number;
+  descendantNameSlicePosition?: number;
   duplexFields?: DuplexField[];
   embeddedFields?: EmbeddedField[];
   fileFields?: FileField[];
@@ -427,7 +427,7 @@ export type Inventory = {
   exclude?: true | InventoryOptions;
 };
 
-export type DerivativeAttributesActionName =
+export type DescendantAttributesActionName =
   | 'entity'
   | 'childEntity'
   | 'entityCount'
@@ -462,10 +462,10 @@ export type DerivativeAttributesActionName =
   | 'updateEntity'
   | 'uploadEntityFiles';
 
-export type DerivativeAttributes = {
-  derivativeKey: string;
+export type DescendantAttributes = {
+  descendantKey: string;
   allow: {
-    [entityName: string]: DerivativeAttributesActionName[];
+    [entityName: string]: DescendantAttributesActionName[];
   };
   includeFields?: {
     [entityName: string]: Array<string>;
@@ -482,15 +482,15 @@ export type DerivativeAttributes = {
   addFields?: {
     [entityName: string]: Omit<
       SimplifiedTangibleEntityConfig,
-      'name' | 'type' | 'counter' | 'derivativeNameSlicePosition'
+      'name' | 'type' | 'counter' | 'descendantNameSlicePosition'
     >;
   };
-  derivativeFields?: {
+  descendantFields?: {
     [entityName: string]: {
       [fieldName: string]: string;
     };
-  }; // set appropriate derivative keys,
-  involvedOutputDerivativeKeys?: {
+  }; // set appropriate descendant keys,
+  involvedOutputDescendantKeys?: {
     [entityName: string]: {
       outputEntity: string;
     };
@@ -534,10 +534,10 @@ export type GeneralConfig = {
       [customMutationName: string]: ActionSignatureMethods;
     };
   };
-  derivative?: {
-    // whole fefault derivative name = entityName (baseName) + derivativeKey
-    // OR compose from derivativeNameSlicePosition entity config attribute (if it's setted)
-    [derivativeKey: string]: DerivativeAttributes;
+  descendant?: {
+    // whole fefault descendant name = entityName (baseName) + descendantKey
+    // OR compose from descendantNameSlicePosition entity config attribute (if it's setted)
+    [descendantKey: string]: DescendantAttributes;
   };
   enums?: Enums;
   inventory?: Inventory;
@@ -659,7 +659,7 @@ export type ServersideConfig = {
       context: Context,
       info: SintheticResolverInfo,
       involvedFilters: {
-        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       },
     ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
   };
@@ -675,7 +675,7 @@ export type ServersideConfig = {
       context: Context,
       info: SintheticResolverInfo,
       involvedFilters: {
-        [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       },
     ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
   };
@@ -826,34 +826,34 @@ export type VirtualConfigComposer = (
 ) => VirtualEntityConfig;
 
 export type ActionAttributes = {
-  actionGeneralName: (derivativeKey?: string) => string;
+  actionGeneralName: (descendantKey?: string) => string;
   actionType: 'Mutation' | 'Query';
   actionAllowed: (entityConfig: EntityConfig) => boolean;
   actionIsChild?: 'Array' | 'Scalar';
-  actionName: (baseName: string, derivativeKey?: string) => string;
+  actionName: (baseName: string, descendantKey?: string) => string;
   inputCreators: Array<InputCreator>;
   argNames: Array<string>;
   argTypes: Array<(name: string) => string>;
   actionInvolvedEntityNames: (
     name: string,
-    derivativeKey?: string,
+    descendantKey?: string,
   ) => {
     [key: string]: string;
   };
-  actionReturnString: (entityConfig: EntityConfig, derivativeKey: string) => string;
+  actionReturnString: (entityConfig: EntityConfig, descendantKey: string) => string;
   actionReturnConfig: (
     entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
-    derivativeKey?: string,
+    descendantKey?: string,
   ) => EntityConfig | null;
-  actionDerivativeUpdater?: (entityName: string, item: DerivativeAttributes) => void;
+  actionDescendantUpdater?: (entityName: string, item: DescendantAttributes) => void;
   actionUseSubscription?: string;
 };
 
 export type GqlActionData = {
   actionType: 'Query' | 'Mutation';
   actionName: string;
-  derivativeKey?: string;
+  descendantKey?: string;
   entityName: string;
   composeOptions: (arg: GraphqlObject) => GraphqlObject;
 };

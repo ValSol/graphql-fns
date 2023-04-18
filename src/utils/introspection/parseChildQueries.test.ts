@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { ActionSignatureMethods, DerivativeAttributes, EntityConfig } from '../../tsTypes';
+import type { ActionSignatureMethods, DescendantAttributes, EntityConfig } from '../../tsTypes';
 
 import parseChildQueries from './parseChildQueries';
 
@@ -85,15 +85,15 @@ describe('parseChildQueries', () => {
     config: (entityConfig: any) => entityConfig,
   };
 
-  const ForCatalog: DerivativeAttributes = {
-    derivativeKey: 'ForCatalog',
+  const ForCatalog: DescendantAttributes = {
+    descendantKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
       Place: ['childEntity'],
       Country: ['childEntity'],
     },
 
-    derivativeFields: {
+    descendantFields: {
       Person: {
         friends: 'ForCatalog',
         place: 'ForCatalog',
@@ -113,9 +113,9 @@ describe('parseChildQueries', () => {
   };
   const queryName = 'getEntity';
   const custom = { Query: { [queryName]: signatureMethods } };
-  const derivative = { ForCatalog };
+  const descendant = { ForCatalog };
 
-  const generalConfig = { allEntityConfigs, custom, derivative };
+  const generalConfig = { allEntityConfigs, custom, descendant };
 
   test('have to return inventoryByRoles with  entitiesByUnique: [Person]', () => {
     const childQueries = ['childEntities:PersonForCatalog', 'childEntity:PlaceForCatalog'];
@@ -124,13 +124,13 @@ describe('parseChildQueries', () => {
       {
         actionName: 'childEntitiesForCatalog',
         baseAction: 'childEntities',
-        derivativeKey: 'ForCatalog',
+        descendantKey: 'ForCatalog',
         entityName: 'Person',
       },
       {
         actionName: 'childEntityForCatalog',
         baseAction: 'childEntity',
-        derivativeKey: 'ForCatalog',
+        descendantKey: 'ForCatalog',
         entityName: 'Place',
       },
     ];

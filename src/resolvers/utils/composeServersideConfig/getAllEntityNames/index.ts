@@ -6,7 +6,7 @@ import type {
   SimplifiedInventoryOptions,
 } from '../../../../tsTypes';
 
-import mergeDerivativeIntoCustom from '../../../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../../../utils/mergeDescendantIntoCustom';
 import { mutationAttributes, queryAttributes } from '../../../../types/actionAttributes';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 import subtructInventoryOptions from './subtructInventoryOptions';
@@ -84,7 +84,7 @@ const addEntityNames = (
   const { allEntityConfigs } = generalConfig;
 
   const { Query: customQueries = {}, Mutation: customMutations = {} } =
-    mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver') || {};
+    mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
 
   const { name, include, exclude } = inventory || {
     include: { Query: true, Mutation: true },

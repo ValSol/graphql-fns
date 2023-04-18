@@ -1,10 +1,15 @@
-import type {GeneralConfig, ServersideConfig, EntityConfig, ThreeSegmentInventoryChain} from '../../tsTypes';
+import type {
+  GeneralConfig,
+  ServersideConfig,
+  EntityConfig,
+  ThreeSegmentInventoryChain,
+} from '../../tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
-import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import customResolverDecorator from '../utils/resolverDecorator/customResolverDecorator';
-import generateDerivativeResolvers from './generateDerivativeResolvers';
+import generateDescendantResolvers from './generateDescendantResolvers';
 
 const createCustomResolver = (
   actionKind: 'Query' | 'Mutation',
@@ -17,7 +22,7 @@ const createCustomResolver = (
 
   const { inventory } = generalConfig;
 
-  const custom = mergeDerivativeIntoCustom(generalConfig, 'forCustomResolver');
+  const custom = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver');
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
@@ -49,17 +54,17 @@ const createCustomResolver = (
     );
   }
 
-  // use generated derivative resolvers
+  // use generated descendant resolvers
 
-  const derivativeResolvers = generateDerivativeResolvers(generalConfig);
+  const descendantResolvers = generateDescendantResolvers(generalConfig);
 
-  if (!derivativeResolvers) {
+  if (!descendantResolvers) {
     throw new TypeError(`Have to set the "${actionName}" ${actionKind}!`);
   }
 
-  if (derivativeResolvers[actionKind]?.[actionName]) {
+  if (descendantResolvers[actionKind]?.[actionName]) {
     return customResolverDecorator(
-      derivativeResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
+      descendantResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
       inventoryChain,
       signatureMethods,
       entityConfig,

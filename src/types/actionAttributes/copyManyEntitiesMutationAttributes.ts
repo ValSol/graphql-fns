@@ -2,18 +2,18 @@ import pluralize from 'pluralize';
 
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
 import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneToCopyInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string =>
-  `copyManyEntities${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `copyManyEntities${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string =>
-  `copyMany${pluralize(baseName)}${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `copyMany${pluralize(baseName)}${descendantKey}`;
 
 const inputCreators = [
   createEntityCopyWhereOnesInputType,
@@ -31,27 +31,27 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): {
   [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig =>
-  derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createEntityCopyWhereOnesInputType(entityConfig)[1]);
 
-const actionReturnString = ({ name }: EntityConfig, derivativeKey: string = ''): string =>
-  `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `[${name}${descendantKey}!]!`;
 
 const copyManyEntitiesMutationAttributes = {
   actionGeneralName,

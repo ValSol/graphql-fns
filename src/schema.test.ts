@@ -3,7 +3,7 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import type {
-  DerivativeAttributes,
+  DescendantAttributes,
   Enums,
   EntityConfig,
   GeneralConfig,
@@ -409,10 +409,10 @@ describe('graphql schema', () => {
     });
   });
 
-  test('test schema with derivative queries', () => {
-    const ForCatalogDerivative: DerivativeAttributes = {
+  test('test schema with descendant queries', () => {
+    const ForCatalogDescendant: DescendantAttributes = {
       allow: { Example: ['entities', 'updateEntity'] },
-      derivativeKey: 'ForCatalog',
+      descendantKey: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -464,8 +464,8 @@ describe('graphql schema', () => {
       },
     };
 
-    const derivative = { ForCatalog: ForCatalogDerivative };
-    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const descendant = { ForCatalog: ForCatalogDescendant };
+    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
 
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
 

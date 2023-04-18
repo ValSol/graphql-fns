@@ -1,4 +1,4 @@
-import type {ActionAttributes, EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { ActionAttributes, EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import parseEntityName from '../../utils/parseEntityName';
 
@@ -8,7 +8,7 @@ const composeActionArgs = (
   generalConfig: GeneralConfig,
   actionAttributes: ActionAttributes,
   childArgs: {
-    [argName: string]: string
+    [argName: string]: string;
   },
 ): Array<string> | string => {
   const {
@@ -24,13 +24,13 @@ const composeActionArgs = (
   const { name: configName } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+  const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
-  const specificName = actionName(rootName, derivativeKey);
+  const specificName = actionName(rootName, descendantKey);
 
   if (!actionAllowed(entityConfig)) {
     throw new TypeError(
-      `Action "${actionGeneralName('derivativeKey')}" is not allowed for "${configName}" entity!`,
+      `Action "${actionGeneralName('descendantKey')}" is not allowed for "${configName}" entity!`,
     );
   }
 
@@ -49,7 +49,7 @@ const composeActionArgs = (
 
   const args2 = filteredArgNames.map((argName) => `${argName}: $${argName}`).join(', ');
 
-  return actionReturnConfig(allEntityConfigs[rootName], generalConfig, derivativeKey)
+  return actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey)
     ? [
         `${actionType.toLowerCase()} ${prefix}_${specificName}(${args1}) {`,
         `  ${specificName}(${args2}) {`,

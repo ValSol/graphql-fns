@@ -22,7 +22,7 @@ const generateEntitiesExcel = async (
   wb.created = new Date();
   wb.modified = new Date();
 
-  const { allEntityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, descendant } = generalConfig;
 
   thingNames.forEach((thingNamesCohort) =>
     // test correctness of thingNames
@@ -43,15 +43,15 @@ const generateEntitiesExcel = async (
       views: [{ state: 'frozen', xSplit: fieldAttrCount + 1, ySplit: 1 }],
     });
 
-    const thingNamesWithDerivativeKeys = derivative
-      ? Object.keys(derivative)
-          .filter((key) => derivative[key].allow[firstThingName])
+    const thingNamesWithDescendantKeys = descendant
+      ? Object.keys(descendant)
+          .filter((key) => descendant[key].allow[firstThingName])
           .map((key) => [`${firstThingName}${key}`, key])
       : [];
 
     const wrappedThingNames = thingNamesCohort.map((entityName) => [entityName, '']);
 
-    const combinedThingNames = [...wrappedThingNames, ...thingNamesWithDerivativeKeys] as [
+    const combinedThingNames = [...wrappedThingNames, ...thingNamesWithDescendantKeys] as [
       string,
       string,
     ][];
@@ -65,7 +65,7 @@ const generateEntitiesExcel = async (
       columnGroupShift,
       columns,
       combinedThingNames,
-      derivative,
+      descendant,
       firstThingName,
       generalConfig,
       ws,

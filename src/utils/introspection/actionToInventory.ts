@@ -1,4 +1,4 @@
-import type {InventoryByRoles} from '../../tsTypes';
+import type { InventoryByRoles } from '../../tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 
 const actionToInventory = (
@@ -6,14 +6,14 @@ const actionToInventory = (
   parsedAction: ParsedAction,
   // InventoryByRoles,
   inventoryByRoles: any,
-  derivativeKeyToPermission: {
-    [derivativeKey: string]: string
+  descendantKeyToPermission: {
+    [descendantKey: string]: string;
   },
 ): InventoryByRoles => {
   const { actionType, actionName, entityName } = actionToParse;
-  const { derivativeKey } = parsedAction;
+  const { descendantKey } = parsedAction;
 
-  const permission = derivativeKeyToPermission[derivativeKey];
+  const permission = descendantKeyToPermission[descendantKey];
 
   if (!inventoryByRoles[permission]) {
     inventoryByRoles[permission] = { name: permission }; // eslint-disable-line no-param-reassign

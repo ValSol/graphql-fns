@@ -1,35 +1,38 @@
-import type {GeneralConfig} from '../../tsTypes';
+import type { GeneralConfig } from '../../tsTypes';
 import type { ChildQueries } from './tsTypes';
 
-const parseChildQueries = (childQueries: Array<string>, generalConfig: GeneralConfig): ChildQueries => {
-  const { allEntityConfigs, derivative } = generalConfig;
+const parseChildQueries = (
+  childQueries: Array<string>,
+  generalConfig: GeneralConfig,
+): ChildQueries => {
+  const { allEntityConfigs, descendant } = generalConfig;
 
   return childQueries.map((item) => {
-    const [baseAction, derivativeThingName] = item.split(':');
+    const [baseAction, descendantThingName] = item.split(':');
 
-    if (allEntityConfigs[derivativeThingName]) {
+    if (allEntityConfigs[descendantThingName]) {
       return {
         actionName: baseAction,
         baseAction,
-        derivativeKey: '',
-        entityName: derivativeThingName,
+        descendantKey: '',
+        entityName: descendantThingName,
       };
     }
 
-    if (derivative) {
-      const derivativeKeys = Object.keys(derivative);
+    if (descendant) {
+      const descendantKeys = Object.keys(descendant);
 
-      for (let i = 0; i < derivativeKeys.length; i += 1) {
-        const derivativeKey = derivativeKeys[i];
+      for (let i = 0; i < descendantKeys.length; i += 1) {
+        const descendantKey = descendantKeys[i];
 
-        if (derivativeThingName.endsWith(derivativeKey)) {
-          const entityName = derivativeThingName.slice(0, -derivativeKey.length);
+        if (descendantThingName.endsWith(descendantKey)) {
+          const entityName = descendantThingName.slice(0, -descendantKey.length);
 
           if (allEntityConfigs[entityName]) {
             return {
-              actionName: `${baseAction}${derivativeKey}`,
+              actionName: `${baseAction}${descendantKey}`,
               baseAction,
-              derivativeKey,
+              descendantKey,
               entityName,
             };
           }

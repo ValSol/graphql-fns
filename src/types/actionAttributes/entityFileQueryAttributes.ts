@@ -1,13 +1,14 @@
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createFileWhereOneInputType from '../inputs/createFileWhereOneInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `entityFile${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string => `entityFile${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `${baseName}File${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `${baseName}File${descendantKey}`;
 
 const inputCreators = [createFileWhereOneInputType];
 
@@ -15,26 +16,27 @@ const argNames = ['whereOne'];
 
 const argTypes = [(name: string): string => 'FileWhereOneInput!']; // eslint-disable-line no-unused-vars
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
-} => ({ inputOutputEntity: `${name}${derivativeKey}` });
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
+} => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
-): null | EntityConfig => derivativeKey
-  ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
-  : entityConfig;
+  descendantKey?: string,
+): null | EntityConfig =>
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+    : entityConfig;
 
-const actionAllowed = (entityConfig: EntityConfig): boolean => Boolean(entityConfig.type === 'tangibleFile');
+const actionAllowed = (entityConfig: EntityConfig): boolean =>
+  Boolean(entityConfig.type === 'tangibleFile');
 
-const actionReturnString = (
-  {
-    name,
-  }: EntityConfig,
-  derivativeKey: string = '',
-): string => `${name}${derivativeKey}!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `${name}${descendantKey}!`;
 
 const entityFileQueryAttributes = {
   actionGeneralName,

@@ -103,7 +103,7 @@ const composeEntityConfig = (
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
           );
         } else {
-          // name=undefined if entityConfig is a derivativeConfig
+          // name=undefined if entityConfig is a descendantConfig
           // eslint-disable-next-line no-console
           console.warn(
             '\x1b[33m',

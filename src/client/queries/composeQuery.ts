@@ -1,18 +1,21 @@
-import type {ClientOptions, GeneralConfig, EntityConfig} from '../../tsTypes';
+import type { ClientOptions, GeneralConfig, EntityConfig } from '../../tsTypes';
 
-import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
 import { queryAttributes } from '../../types/actionAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
 import composeFields from '../composeFields';
 import composeCustomEntityQueryArgs from './composeCustomEntityQueryArgs';
 
-const attributesWithoutChildren = Object.keys(queryAttributes).reduce<Record<string, any>>((prev, queyrName) => {
-  if (queyrName !== 'childEntities' && queyrName !== 'childEntity') {
-    prev[queyrName] = queryAttributes[queyrName]; // eslint-disable-line no-param-reassign
-  }
+const attributesWithoutChildren = Object.keys(queryAttributes).reduce<Record<string, any>>(
+  (prev, queyrName) => {
+    if (queyrName !== 'childEntities' && queyrName !== 'childEntity') {
+      prev[queyrName] = queryAttributes[queyrName]; // eslint-disable-line no-param-reassign
+    }
 
-  return prev;
-}, {});
+    return prev;
+  },
+  {},
+);
 
 const composeQuery = (
   prefixName: string,
@@ -50,7 +53,7 @@ const composeQuery = (
     throw new TypeError('"generalConfig" have to be defined!');
   }
 
-  const custom = mergeDerivativeIntoCustom(generalConfig, 'forClient'); // eslint-disable-line no-case-declarations
+  const custom = mergeDescendantIntoCustom(generalConfig, 'forClient'); // eslint-disable-line no-case-declarations
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
   }

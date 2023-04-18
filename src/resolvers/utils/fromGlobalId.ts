@@ -3,17 +3,17 @@ const fromGlobalId = (
 ): {
   _id: null | string;
   entityName: string;
-  derivativeKey: string;
+  descendantKey: string;
 } => {
-  if (!globalId) return { _id: null, entityName: '', derivativeKey: '' }; // eslint-disable-line no-underscore-dangle
+  if (!globalId) return { _id: null, entityName: '', descendantKey: '' }; // eslint-disable-line no-underscore-dangle
 
-  const [_id, entityName, derivativeKey] = Buffer.from(globalId, 'base64')
+  const [_id, entityName, descendantKey] = Buffer.from(globalId, 'base64')
     .toString('binary')
     .split(':');
 
   return _id
-    ? { _id, entityName, derivativeKey }
-    : { _id: null, entityName: '', derivativeKey: '' };
+    ? { _id, entityName, descendantKey }
+    : { _id: null, entityName: '', descendantKey: '' };
 };
 
 export default fromGlobalId;

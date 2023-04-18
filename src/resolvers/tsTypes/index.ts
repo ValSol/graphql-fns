@@ -26,7 +26,7 @@ export type ResolverArg = {
   context: Context;
   info: SintheticResolverInfo;
   involvedFilters: {
-    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   };
 };
 

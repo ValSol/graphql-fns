@@ -1,28 +1,30 @@
-import type {InputCreator, EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { InputCreator, EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `uploadEntityFiles${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `uploadEntityFiles${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `upload${baseName}Files${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `upload${baseName}Files${descendantKey}`;
 
 const inputCreators = [
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    '[Upload!]!',
-    {},
-  ],
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    '[String!]!',
-    {},
-  ],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', '[Upload!]!', {}],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', '[String!]!', {}],
 ];
 
 const argNames = ['files', 'hashes'];
@@ -32,28 +34,29 @@ const argTypes = [
   (name: string): string => '[String!]!', // eslint-disable-line no-unused-vars
 ];
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
-): null | EntityConfig => derivativeKey
-  ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
-  : entityConfig;
+  descendantKey?: string,
+): null | EntityConfig =>
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+    : entityConfig;
 
-const actionAllowed = (entityConfig: EntityConfig): boolean => Boolean(entityConfig.type === 'tangibleFile');
+const actionAllowed = (entityConfig: EntityConfig): boolean =>
+  Boolean(entityConfig.type === 'tangibleFile');
 
-const actionReturnString = (
-  {
-    name,
-  }: EntityConfig,
-  derivativeKey: string = '',
-): string => `[${name}${derivativeKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `[${name}${descendantKey}!]!`;
 
 const uploadEntityFilesMutationAttributes = {
   actionGeneralName,

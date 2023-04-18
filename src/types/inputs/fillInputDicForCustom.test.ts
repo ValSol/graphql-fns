@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import type {
-  DerivativeAttributes,
+  DescendantAttributes,
   Enums,
   GeneralConfig,
   ObjectSignatureMethods,
@@ -57,10 +57,10 @@ describe('fillInputDicForCustom', () => {
   const enumKeys = ['key1', 'key2', 'key3'];
   const enums: Enums = { EnumKeys: enumKeys };
 
-  const ForCatalog: DerivativeAttributes = {
+  const ForCatalog: DescendantAttributes = {
     allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
-    derivativeKey: 'ForCatalog',
-    derivativeFields: {
+    descendantKey: 'ForCatalog',
+    descendantFields: {
       ExampleEdge: { node: 'ForCatalog' },
       ExampleConnection: { edges: 'ForCatalog' },
     },
@@ -79,8 +79,8 @@ describe('fillInputDicForCustom', () => {
 
   const simplifiedAllEntityConfigs = [placeConfig, personConfig, entityConfig];
   const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
-  const derivative = { ForCatalog };
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivative, enums };
+  const descendant = { ForCatalog };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, enums };
 
   test('update nothing for argType = "Int"', () => {
     const argType = 'Int';

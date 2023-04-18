@@ -1,45 +1,47 @@
-import type {EntityConfig, GeneralConfig, InputCreator} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createFileWhereInputType from '../inputs/createFileWhereInputType';
-import connectionDerivativeUpdater from '../actionDerivativeUpdaters/connectionDerivativeUpdater';
+import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
 
 const actionType = 'Query';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `entityFilesThroughConnection${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `entityFilesThroughConnection${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `${baseName}FilesThroughConnection${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `${baseName}FilesThroughConnection${descendantKey}`;
 
 const inputCreators = [
   createFileWhereInputType,
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    'String',
-    {},
-  ],
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    'String',
-    {},
-  ],
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    'Int',
-    {},
-  ],
-  (): [string, string, {
-    [inputSpecificName: string]: [InputCreator, EntityConfig]
-  }] => [
-    '',
-    'Int',
-    {},
-  ],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', 'String', {}],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', 'String', {}],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', 'Int', {}],
+  (): [
+    string,
+    string,
+    {
+      [inputSpecificName: string]: [InputCreator, EntityConfig];
+    },
+  ] => ['', 'Int', {}],
 ];
 
 const argNames = ['where', 'after', 'before', 'first', 'last'];
@@ -52,14 +54,17 @@ const argTypes = [
   (name: string): string => 'Int', // eslint-disable-line no-unused-vars
 ];
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
-} => ({ inputOutputEntity: `${name}${derivativeKey}` });
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
+} => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
@@ -69,19 +74,15 @@ const actionReturnConfig = (
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  return derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, connectionConfig, generalConfig)
+  return descendantKey
+    ? composeDescendantConfigByName(descendantKey, connectionConfig, generalConfig)
     : connectionConfig;
 };
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
-const actionReturnString = (
-  {
-    name,
-  }: EntityConfig,
-  derivativeKey: string = '',
-): string => `${name}Connection${derivativeKey}`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `${name}Connection${descendantKey}`;
 
 const entityFilesThroughConnectionQueryAttributes = {
   actionGeneralName,
@@ -93,7 +94,7 @@ const entityFilesThroughConnectionQueryAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDerivativeUpdater: connectionDerivativeUpdater,
+  actionDescendantUpdater: connectionDescendantUpdater,
   actionAllowed,
 } as const;
 

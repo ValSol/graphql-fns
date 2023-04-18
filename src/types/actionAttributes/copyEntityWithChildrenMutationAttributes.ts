@@ -1,6 +1,6 @@
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import getOppositeFields from '../../utils/getOppositeFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
@@ -8,9 +8,11 @@ import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneT
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `copyEntityWithChildren${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `copyEntityWithChildren${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `copy${baseName}WithChildren${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `copy${baseName}WithChildren${descendantKey}`;
 
 const inputCreators = [
   createEntityCopyWhereOnesInputType,
@@ -26,32 +28,35 @@ const argTypes = [
   (name: string): string => `${name}WhereOneToCopyInput`,
 ];
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
-): null | EntityConfig => derivativeKey
-  ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
-  : entityConfig;
+  descendantKey?: string,
+): null | EntityConfig =>
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+    : entityConfig;
 
-const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible' &&
-Boolean(createEntityCopyWhereOnesInputType(entityConfig)[1]) &&
-Boolean(
-  getOppositeFields(entityConfig).filter(([, { array, parent }]: [any, any]) => !(array || parent)).length,
-);
+const actionAllowed = (entityConfig: EntityConfig): boolean =>
+  entityConfig.type === 'tangible' &&
+  Boolean(createEntityCopyWhereOnesInputType(entityConfig)[1]) &&
+  Boolean(
+    getOppositeFields(entityConfig).filter(
+      ([, { array, parent }]: [any, any]) => !(array || parent),
+    ).length,
+  );
 
-const actionReturnString = (
-  {
-    name,
-  }: EntityConfig,
-  derivativeKey: string = '',
-): string => `${name}${derivativeKey}!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `${name}${descendantKey}!`;
 
 const copyEntityWithChildrenMutationAttributes = {
   actionGeneralName,

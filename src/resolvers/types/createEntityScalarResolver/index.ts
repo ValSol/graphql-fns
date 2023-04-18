@@ -27,12 +27,12 @@ const createEntityScalarResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs, inventory } = generalConfig;
 
-  const { root: nameRoot, derivativeKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
 
-  const childEntityQueryResolver = derivativeKey
+  const childEntityQueryResolver = descendantKey
     ? createCustomResolver(
         'Query',
-        `childEntity${derivativeKey}`,
+        `childEntity${descendantKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -49,13 +49,13 @@ const createEntityScalarResolver = (
   if (!childEntityQueryResolver) {
     throw new TypeError(
       `Not defined childEntityQueryResolver "${
-        derivativeKey ? `childEntity${derivativeKey}` : 'childEntity'
+        descendantKey ? `childEntity${descendantKey}` : 'childEntity'
       }" for entity: "${name}"!`,
     );
   }
 
-  const inventoryChain: InventoryСhain = derivativeKey
-    ? ['Query', `childEntity${derivativeKey}`, nameRoot]
+  const inventoryChain: InventoryСhain = descendantKey
+    ? ['Query', `childEntity${descendantKey}`, nameRoot]
     : ['Query', 'childEntity', name];
 
   if (!checkInventory(inventoryChain, inventory)) return null;
@@ -64,7 +64,7 @@ const createEntityScalarResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntity${
-          derivativeKey || ''
+          descendantKey || ''
         }" for entity: "${name}"!`,
       );
     }

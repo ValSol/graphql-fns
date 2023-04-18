@@ -1,7 +1,7 @@
 import { InvolvedFilter } from '../../../tsTypes';
 
 const getInputAndOutputFilters = (involvedFilters: {
-  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 }): {
   inputFilter: null | InvolvedFilter[];
   outputFilter: null | InvolvedFilter[];

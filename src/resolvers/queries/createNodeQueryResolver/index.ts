@@ -7,7 +7,7 @@ import type {
   SintheticResolverInfo,
 } from '../../../tsTypes';
 
-import composeDerivativeConfig from '../../../utils/composeDerivativeConfig';
+import composeDescendantConfig from '../../../utils/composeDescendantConfig';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
@@ -19,7 +19,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any | null => {
-  const { allEntityConfigs, derivative } = generalConfig;
+  const { allEntityConfigs, descendant } = generalConfig;
 
   const resolver = async (
     parent: null | GraphqlObject,
@@ -29,12 +29,12 @@ const createNodeQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { id: globalId } = args;
 
-    const { _id: id, entityName, derivativeKey } = fromGlobalId(globalId);
+    const { _id: id, entityName, descendantKey } = fromGlobalId(globalId);
 
     if (!id) return null;
 
     const filter = await executeNodeAuthorisation(
-      `${entityName}${derivativeKey}`,
+      `${entityName}${descendantKey}`,
       context,
       serversideConfig,
     );
@@ -43,13 +43,13 @@ const createNodeQueryResolver = (
 
     const entityConfig = allEntityConfigs[entityName];
 
-    if (derivativeKey && !derivative?.[derivativeKey]) {
-      throw new TypeError(`Not found derivativeKey: "${derivativeKey}"!`);
+    if (descendantKey && !descendant?.[descendantKey]) {
+      throw new TypeError(`Not found descendantKey: "${descendantKey}"!`);
     }
 
-    const resultEntityConfig = derivativeKey
+    const resultEntityConfig = descendantKey
       ? // $FlowFixMe
-        composeDerivativeConfig(derivative?.[derivativeKey], entityConfig, generalConfig)
+        composeDescendantConfig(descendant?.[descendantKey], entityConfig, generalConfig)
       : entityConfig;
 
     const inAnyCase = true;
@@ -72,7 +72,7 @@ const createNodeQueryResolver = (
 
       return {
         ...transformAfter(entityFile, entityConfig, null),
-        __typename: `${entityName}${derivativeKey}`,
+        __typename: `${entityName}${descendantKey}`,
       };
     }
 
@@ -93,7 +93,7 @@ const createNodeQueryResolver = (
 
     return {
       ...transformAfter(entity, resultEntityConfig, generalConfig),
-      __typename: `${entityName}${derivativeKey}`,
+      __typename: `${entityName}${descendantKey}`,
     };
   };
 

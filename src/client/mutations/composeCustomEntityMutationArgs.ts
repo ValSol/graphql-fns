@@ -1,6 +1,6 @@
-import type {GeneralConfig, EntityConfig} from '../../tsTypes';
+import type { GeneralConfig, EntityConfig } from '../../tsTypes';
 
-import mergeDerivativeIntoCustom from '../../utils/mergeDerivativeIntoCustom';
+import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
 
 const composeCustomEntityMutationArgs = (
   prefixName: string,
@@ -8,14 +8,14 @@ const composeCustomEntityMutationArgs = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   childArgs: {
-    [argName: string]: string
+    [argName: string]: string;
   },
 ): Array<string> => {
   if (!generalConfig) {
     throw new TypeError('"generalConfig" property have to be defined!');
   }
 
-  const custom = mergeDerivativeIntoCustom(generalConfig, 'forClient');
+  const custom = mergeDescendantIntoCustom(generalConfig, 'forClient');
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');

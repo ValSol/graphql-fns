@@ -18,12 +18,12 @@ type Args = {
 const modifyConnectionArgsAndInvolvedFilters = (
   args: Args,
   involvedFilters: {
-    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   name: string,
 ): [
   Args,
-  { [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number] },
+  { [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number] },
 ] => {
   if (!involvedFilters) {
     return [args, involvedFilters];
@@ -38,7 +38,7 @@ const modifyConnectionArgsAndInvolvedFilters = (
   }
 
   const modifiedInvolvedFilters: {
-    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   } = {
     inputOutputEntity: [filter],
   };

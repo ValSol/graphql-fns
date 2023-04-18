@@ -1,4 +1,4 @@
-import type { DerivativeAttributesActionName, GeneralConfig } from '../../tsTypes';
+import type { DescendantAttributesActionName, GeneralConfig } from '../../tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 
 import actionAttributes from '../../types/actionAttributes';
@@ -11,10 +11,10 @@ const toOtherType = {
 const prohibitedForRootActions = ['childEntity', 'childEntities'];
 
 const parseAction = (
-  { actionType, actionName, entityName, derivativeKey }: ActionToParse,
+  { actionType, actionName, entityName, descendantKey }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
-  const { allEntityConfigs, custom, derivative } = generalConfig;
+  const { allEntityConfigs, custom, descendant } = generalConfig;
 
   if (!allEntityConfigs[entityName]) {
     throw new TypeError(`Not found entity with name: "${entityName}"!`);
@@ -33,9 +33,9 @@ const parseAction = (
       );
     }
 
-    if (!derivativeKey) {
+    if (!descendantKey) {
       throw new TypeError(
-        `Not setted derivativeKey for action "${actionName}" & entity: "${entityName}"!`,
+        `Not setted descendantKey for action "${actionName}" & entity: "${entityName}"!`,
       );
     }
 
@@ -45,7 +45,7 @@ const parseAction = (
       creationType: 'standard',
       entityConfig,
       baseAction: '',
-      derivativeKey,
+      descendantKey,
     };
   }
 
@@ -55,33 +55,33 @@ const parseAction = (
 
       const entityConfig = signatureMethods.config(allEntityConfigs[entityName], generalConfig);
 
-      let calculatedDerivativeKey = '';
+      let calculatedDescendantKey = '';
 
-      if (entityConfig && derivative && !allEntityConfigs[entityConfig.name]) {
+      if (entityConfig && descendant && !allEntityConfigs[entityConfig.name]) {
         const { name } = entityConfig;
-        const derivativeKeys = Object.keys(derivative);
+        const descendantKeys = Object.keys(descendant);
 
-        for (let i = 0; i < derivativeKeys.length; i += 1) {
-          const currentDerivativeKey = derivativeKeys[i];
-          if (name.endsWith(currentDerivativeKey)) {
-            const baseName = name.slice(0, -currentDerivativeKey.length);
+        for (let i = 0; i < descendantKeys.length; i += 1) {
+          const currentDescendantKey = descendantKeys[i];
+          if (name.endsWith(currentDescendantKey)) {
+            const baseName = name.slice(0, -currentDescendantKey.length);
             if (allEntityConfigs[baseName]) {
-              calculatedDerivativeKey = currentDerivativeKey;
+              calculatedDescendantKey = currentDescendantKey;
               break;
             }
           }
         }
       }
 
-      if (calculatedDerivativeKey && derivativeKey && calculatedDerivativeKey !== derivativeKey) {
+      if (calculatedDescendantKey && descendantKey && calculatedDescendantKey !== descendantKey) {
         throw new TypeError(
-          `Setted derivativeKey: "${derivativeKey}" not equal to calculated derivativeKey "${calculatedDerivativeKey}" for action "${actionName}" & entity: "${entityName}"!`,
+          `Setted descendantKey: "${descendantKey}" not equal to calculated descendantKey "${calculatedDescendantKey}" for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
-      if (!calculatedDerivativeKey && !derivativeKey) {
+      if (!calculatedDescendantKey && !descendantKey) {
         throw new TypeError(
-          `Not setted derivativeKey for action "${actionName}" & entity: "${entityName}"!`,
+          `Not setted descendantKey for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
@@ -89,7 +89,7 @@ const parseAction = (
         creationType: 'custom',
         entityConfig,
         baseAction: '',
-        derivativeKey: calculatedDerivativeKey || derivativeKey || '', // last || '' added to prevent flowjs error
+        descendantKey: calculatedDescendantKey || descendantKey || '', // last || '' added to prevent flowjs error
       };
     }
 
@@ -100,14 +100,14 @@ const parseAction = (
     }
   }
 
-  if (derivative) {
-    const derivativeKeys = Object.keys(derivative);
+  if (descendant) {
+    const descendantKeys = Object.keys(descendant);
 
-    for (let i = 0; i < derivativeKeys.length; i += 1) {
-      const currentDerivativeKey = derivativeKeys[i];
+    for (let i = 0; i < descendantKeys.length; i += 1) {
+      const currentDescendantKey = descendantKeys[i];
 
-      if (actionName.endsWith(currentDerivativeKey)) {
-        const baseAction = actionName.slice(0, -currentDerivativeKey.length);
+      if (actionName.endsWith(currentDescendantKey)) {
+        const baseAction = actionName.slice(0, -currentDescendantKey.length);
 
         if (actionAttributes[baseAction]) {
           if (prohibitedForRootActions.includes(baseAction)) {
@@ -116,37 +116,37 @@ const parseAction = (
 
           const {
             allow: { [entityName]: actions },
-          } = derivative[currentDerivativeKey];
+          } = descendant[currentDescendantKey];
 
           if (!actions) {
             throw new TypeError(
-              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative derivativeKey: "${currentDerivativeKey}"!`,
+              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative descendantKey: "${currentDescendantKey}"!`,
             );
           }
 
-          if (!actions.includes(baseAction as DerivativeAttributesActionName)) {
+          if (!actions.includes(baseAction as DescendantAttributesActionName)) {
             throw new TypeError(
-              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative derivativeKey: "${currentDerivativeKey}" & entity: ${entityName}!`,
+              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative descendantKey: "${currentDescendantKey}" & entity: ${entityName}!`,
             );
           }
 
           const entityConfig = actionAttributes[baseAction].actionReturnConfig(
             allEntityConfigs[entityName],
             generalConfig,
-            currentDerivativeKey,
+            currentDescendantKey,
           );
 
-          if (derivativeKey) {
+          if (descendantKey) {
             throw new TypeError(
-              `Need not set derivativeKey: "${derivativeKey}" for action "${actionName}" & entity: "${entityName}"!`,
+              `Need not set descendantKey: "${descendantKey}" for action "${actionName}" & entity: "${entityName}"!`,
             );
           }
 
           return {
-            creationType: 'derivative',
+            creationType: 'descendant',
             entityConfig,
             baseAction,
-            derivativeKey: currentDerivativeKey,
+            descendantKey: currentDescendantKey,
           };
         }
       }

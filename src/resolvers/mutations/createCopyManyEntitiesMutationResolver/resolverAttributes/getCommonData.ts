@@ -15,7 +15,7 @@ const getCommonData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   involvedFilters?: {
-    [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
 ): Promise<null | Array<any>> => {
   const { inputFilter, outputFilter } = involvedFilters

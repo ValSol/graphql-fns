@@ -85,15 +85,15 @@ describe('actionToInventory', () => {
   //   config: (entityConfig) => entityConfig,
   // };
 
-  // const ForCatalog: DerivativeAttributes = {
-  //   derivativeKey: 'ForCatalog',
+  // const ForCatalog: DescendantAttributes = {
+  //   descendantKey: 'ForCatalog',
   //   allow: {
   //     Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
   //     Place: ['childEntity'],
   //     Country: ['childEntity'],
   //   },
 
-  //   derivativeFields: {
+  //   descendantFields: {
   //     Person: {
   //       friends: 'ForCatalog',
   //       place: 'ForCatalog',
@@ -113,9 +113,9 @@ describe('actionToInventory', () => {
   };
   // const queryName = 'getEntity';
   // const custom = { Query: { [queryName]: signatureMethods } };
-  // const derivative = { ForCatalog };
+  // const descendant = { ForCatalog };
 
-  // const generalConfig = { allEntityConfigs, custom, derivative };
+  // const generalConfig = { allEntityConfigs, custom, descendant };
 
   const prefixToPermission = {
     ForCabinet: 'insider',
@@ -132,7 +132,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      derivativeKey: 'ForCabinet',
+      descendantKey: 'ForCabinet',
     };
 
     const inventoryByRoles: Record<string, any> = {};
@@ -169,7 +169,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Place,
       baseAction: '',
-      derivativeKey: 'ForCabinet',
+      descendantKey: 'ForCabinet',
     };
 
     const inventoryByRoles = {

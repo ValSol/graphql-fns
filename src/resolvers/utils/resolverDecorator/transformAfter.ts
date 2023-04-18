@@ -41,12 +41,12 @@ const transformAfter = (
           prev[name] = toGlobalId(item[name], config.name); // eslint-disable-line no-param-reassign
         }
       } else {
-        const { root: rootName, derivativeKey } = parseEntityName(config.name, generalConfig);
+        const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
 
         if (array) {
-          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, derivativeKey)); // eslint-disable-line no-param-reassign
+          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, descendantKey)); // eslint-disable-line no-param-reassign
         } else {
-          prev[name] = toGlobalId(item[name], rootName, derivativeKey); // eslint-disable-line no-param-reassign
+          prev[name] = toGlobalId(item[name], rootName, descendantKey); // eslint-disable-line no-param-reassign
         }
       }
 
@@ -79,9 +79,9 @@ const transformAfter = (
   if (isChild && configType !== 'tangible') {
     globalId = id;
   } else if (generalConfig) {
-    const { root: rootName, derivativeKey } = parseEntityName(entityConfig.name, generalConfig);
+    const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
-    globalId = toGlobalId(id, rootName, derivativeKey); // eslint-disable-line no-param-reassign
+    globalId = toGlobalId(id, rootName, descendantKey); // eslint-disable-line no-param-reassign
   } else {
     globalId = toGlobalId(id, entityConfig.name); // eslint-disable-line no-param-reassign
   }

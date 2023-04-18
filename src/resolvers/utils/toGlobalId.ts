@@ -1,4 +1,4 @@
-const toGlobalId = (id: string, entityName: string, derivativeKey: string = ''): string =>
-  Buffer.from(`${id}:${entityName}:${derivativeKey}`, 'binary').toString('base64');
+const toGlobalId = (id: string, entityName: string, descendantKey: string = ''): string =>
+  Buffer.from(`${id}:${entityName}:${descendantKey}`, 'binary').toString('base64');
 
 export default toGlobalId;

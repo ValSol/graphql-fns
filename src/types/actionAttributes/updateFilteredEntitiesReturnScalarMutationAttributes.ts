@@ -9,11 +9,11 @@ import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string =>
-  `updateFilteredEntitiesReturnScalar${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string =>
+  `updateFilteredEntitiesReturnScalar${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string =>
-  `updateFiltered${pluralize(baseName)}ReturnScalar${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `updateFiltered${pluralize(baseName)}ReturnScalar${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -33,11 +33,11 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): {
   [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
 });
 
 const actionReturnConfig = (
@@ -46,7 +46,7 @@ const actionReturnConfig = (
   // eslint-disable-line no-unused-vars
   generalConfig: GeneralConfig,
   // eslint-disable-line no-unused-vars
-  derivativeKey?: string,
+  descendantKey?: string,
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
@@ -55,7 +55,7 @@ const actionReturnString = (
   // eslint-disable-next-line no-unused-vars
   entityConfig: EntityConfig,
   // eslint-disable-next-line no-unused-vars
-  derivativeKey: string,
+  descendantKey: string,
 ): string => 'Int!';
 
 const updateFilteredEntitiesReturnScalarMutationAttributes = {

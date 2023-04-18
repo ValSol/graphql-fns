@@ -1,13 +1,14 @@
-import type {EntityConfig, GeneralConfig} from '../../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
-import composeDerivativeConfigByName from '../../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (derivativeKey: string = ''): string => `deleteEntity${derivativeKey}`;
+const actionGeneralName = (descendantKey: string = ''): string => `deleteEntity${descendantKey}`;
 
-const actionName = (baseName: string, derivativeKey: string = ''): string => `delete${baseName}${derivativeKey}`;
+const actionName = (baseName: string, descendantKey: string = ''): string =>
+  `delete${baseName}${descendantKey}`;
 
 const inputCreators = [createEntityWhereOneInputType];
 
@@ -15,29 +16,29 @@ const argNames = ['whereOne'];
 
 const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 
-const actionInvolvedEntityNames = (name: string, derivativeKey: string = ''): {
-  [key: string]: string
+const actionInvolvedEntityNames = (
+  name: string,
+  descendantKey: string = '',
+): {
+  [key: string]: string;
 } => ({
-  inputOutputEntity: `${name}${derivativeKey}`,
+  inputOutputEntity: `${name}${descendantKey}`,
   subscribeDeletedEntity: name,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  derivativeKey?: string,
-): null | EntityConfig => derivativeKey
-  ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
-  : entityConfig;
+  descendantKey?: string,
+): null | EntityConfig =>
+  descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+    : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = (
-  {
-    name,
-  }: EntityConfig,
-  derivativeKey: string = '',
-): string => `${name}${derivativeKey}!`;
+const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+  `${name}${descendantKey}!`;
 
 const deleteEntityMutationAttributes = {
   actionGeneralName,

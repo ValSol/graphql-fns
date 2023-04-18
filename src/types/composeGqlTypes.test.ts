@@ -2,7 +2,7 @@
 
 import type {
   ActionSignatureMethods,
-  DerivativeAttributes,
+  DescendantAttributes,
   TangibleEntityConfig,
   GeneralConfig,
   Inventory,
@@ -3566,9 +3566,9 @@ type Query {
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const ForCatalogDerivative: DerivativeAttributes = {
+    const ForCatalogDescendant: DescendantAttributes = {
       allow: { Example: ['entities', 'updateEntity'] },
-      derivativeKey: 'ForCatalog',
+      descendantKey: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -3611,8 +3611,8 @@ type Query {
       Input: { entityInTimeRangeInput },
       Query: { entityInTimeRangeQuery },
     };
-    const derivative = { ForCatalog: ForCatalogDerivative };
-    const generalConfig: GeneralConfig = { allEntityConfigs, custom, derivative, inventory };
+    const descendant = { ForCatalog: ForCatalogDescendant };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3810,7 +3810,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create derivative inputs for custom types with inventory for only one custom query getEntity', () => {
+  test('should create descendant inputs for custom types with inventory for only one custom query getEntity', () => {
     const childNameFromParenName = { Menu: 'MenuSection' };
 
     const updateEntityWithChildren: ActionSignatureMethods = {
@@ -3961,7 +3961,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with derivative & inventory for only queries', () => {
+  test('should create entities types with descendant & inventory for only queries', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -3972,10 +3972,10 @@ type Mutation {
       ],
     };
 
-    const ForCatalog: DerivativeAttributes = {
+    const ForCatalog: DescendantAttributes = {
       allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
-      derivativeKey: 'ForCatalog',
-      derivativeFields: {
+      descendantKey: 'ForCatalog',
+      descendantFields: {
         ExampleEdge: { node: 'ForCatalog' },
         ExampleConnection: { edges: 'ForCatalog' },
       },
@@ -3984,8 +3984,8 @@ type Mutation {
     const simplifiedAllEntityConfigs = [entityConfig];
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = { name: 'test', include: { Query: true } };
-    const derivative = { ForCatalog };
-    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const descendant = { ForCatalog };
+    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4160,7 +4160,7 @@ type Query {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with derivative & inventory for only mutation where involed entities was split', () => {
+  test('should create entities types with descendant & inventory for only mutation where involed entities was split', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -4171,15 +4171,15 @@ type Query {
       ],
     };
 
-    const ForCatalog: DerivativeAttributes = {
+    const ForCatalog: DescendantAttributes = {
       allow: { Example: ['updateEntity'] },
-      derivativeKey: 'ForCatalog',
-      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
+      descendantKey: 'ForCatalog',
+      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const ForView: DerivativeAttributes = {
+    const ForView: DescendantAttributes = {
       allow: { Example: [] },
-      derivativeKey: 'ForView',
+      descendantKey: 'ForView',
     };
 
     const simplifiedAllEntityConfigs = [entityConfig];
@@ -4188,8 +4188,8 @@ type Query {
       name: 'test',
       include: { Mutation: { updateEntityForCatalog: true } },
     };
-    const derivative = { ForCatalog, ForView };
-    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const descendant = { ForCatalog, ForView };
+    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4226,7 +4226,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with derivative & inventory for only queries', () => {
+  test('should create entities types with descendant & inventory for only queries', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -4237,25 +4237,25 @@ type Mutation {
       ],
     };
 
-    const ForCatalog: DerivativeAttributes = {
-      derivativeKey: 'ForCatalog',
+    const ForCatalog: DescendantAttributes = {
+      descendantKey: 'ForCatalog',
       allow: { Example: ['entitiesThroughConnection'] },
-      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForView' } },
+      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const ForView: DerivativeAttributes = {
-      derivativeKey: 'ForView',
+    const ForView: DescendantAttributes = {
+      descendantKey: 'ForView',
       allow: { Example: [], ExampleEdge: [], ExampleConnection: [] },
-      derivativeFields: {
+      descendantFields: {
         ExampleEdge: { node: 'ForView' },
         ExampleConnection: { edges: 'ForView' },
       },
-      // "involvedOutputDerivativeKeys" not change types that are returned by "ForCatalog" derivative actions
-      involvedOutputDerivativeKeys: { Example: { outputEntity: 'ForGuest' } },
+      // "involvedOutputDescendantKeys" not change types that are returned by "ForCatalog" descendant actions
+      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForGuest' } },
     };
 
-    const ForGuest: DerivativeAttributes = {
-      derivativeKey: 'ForGuest',
+    const ForGuest: DescendantAttributes = {
+      descendantKey: 'ForGuest',
       allow: { Example: [] },
     };
 
@@ -4265,8 +4265,8 @@ type Mutation {
       name: 'test',
       include: { Query: { entitiesThroughConnectionForCatalog: true } },
     };
-    const derivative = { ForCatalog, ForView, ForGuest };
-    const generalConfig: GeneralConfig = { allEntityConfigs, derivative, inventory };
+    const descendant = { ForCatalog, ForView, ForGuest };
+    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {

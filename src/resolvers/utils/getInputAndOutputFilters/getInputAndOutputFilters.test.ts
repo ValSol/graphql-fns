@@ -4,7 +4,7 @@ import type { InvolvedFilter } from '../../../tsTypes';
 import getInputAndOutputFilters from './index';
 
 type InvolvedFilters = {
-  [derivativeConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 };
 
 describe('getInputAndOutputFilters', () => {

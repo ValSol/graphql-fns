@@ -6,7 +6,7 @@ import type {
 } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import composeDerivativeConfigByName from '../utils/composeDerivativeConfigByName';
+import composeDescendantConfigByName from '../utils/composeDescendantConfigByName';
 import fillInputDic from './inputs/fillInputDic';
 import fillEntityTypeDic from './fillEntityTypeDic';
 
@@ -16,7 +16,7 @@ const composeActionSignature = (
   actionAttributes: ActionAttributes,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
-  derivativeKey: string = '',
+  descendantKey: string = '',
 ): string => {
   const {
     actionAllowed,
@@ -39,7 +39,7 @@ const composeActionSignature = (
 
   const inventoryChain: ThreeSegmentInventoryChain = [
     actionType,
-    actionGeneralName(derivativeKey),
+    actionGeneralName(descendantKey),
     configName,
   ];
 
@@ -47,12 +47,12 @@ const composeActionSignature = (
     return '';
   }
 
-  const specificName = actionName(configName, derivativeKey);
+  const specificName = actionName(configName, descendantKey);
 
   const toShow: Array<boolean> = [];
 
-  const entityConfigForInputCreator = derivativeKey
-    ? composeDerivativeConfigByName(derivativeKey, entityConfig, generalConfig)
+  const entityConfigForInputCreator = descendantKey
+    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
     : entityConfig;
 
   inputCreators.forEach((inputCreator) => {
@@ -67,7 +67,7 @@ const composeActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(entityConfig, derivativeKey);
+  const returnString = actionReturnString(entityConfig, descendantKey);
 
   if (!filteredArgNames.length) {
     return `  ${specificName}: ${returnString}`;
@@ -77,7 +77,7 @@ const composeActionSignature = (
     .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator.name)}`)
     .join(', ');
 
-  const returnConfig = actionReturnConfig(entityConfig, generalConfig, derivativeKey);
+  const returnConfig = actionReturnConfig(entityConfig, generalConfig, descendantKey);
 
   if (returnConfig) {
     fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic, inventory);
