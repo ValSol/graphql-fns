@@ -6,6 +6,9 @@ import composeServersideConfig from './resolvers/utils/composeServersideConfig';
 
 import composeTypeDefsAndResolvers from './composeTypeDefsAndResolvers';
 
+import composeAllEntityConfigs from './utils/composeAllEntityConfigs'
+
+
 // mutation resolvers
 import createCopyManyEntitiesMutationResolver from './resolvers/mutations/createCopyManyEntitiesMutationResolver';
 import createCopyManyEntitiesWithChildrenMutationResolver from './resolvers/mutations/createCopyManyEntitiesWithChildrenMutationResolver';
@@ -56,6 +59,7 @@ import createExportFile from './client/utils/createExportFile';
 export {
   composeServersideConfig,
   composeTypeDefsAndResolvers,
+  composeAllEntityConfigs,
   createCopyManyEntitiesMutationResolver,
   createCopyManyEntitiesWithChildrenMutationResolver,
   createCopyEntityMutationResolver,

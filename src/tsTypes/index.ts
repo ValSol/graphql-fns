@@ -2,6 +2,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { Connection, Types } from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
+
 export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 
 export type SintheticResolverInfo = GraphQLResolveInfo | ProjectionInfo;

@@ -30,7 +30,7 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
   }
 
   // to work dynamic adding fields
-  mongoose.model(`${name}_Thing`, ThingSchema);
+  mongoose.models[`${name}_Thing`] || mongoose.model(`${name}_Thing`, ThingSchema);
 
   // to supplement cache
   thingSchemas[name] = ThingSchema;

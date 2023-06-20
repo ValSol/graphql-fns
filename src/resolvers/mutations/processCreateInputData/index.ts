@@ -40,7 +40,7 @@ const processCreateInputData = (
   const { mains, core, periphery } = preparedData;
   const { id } = data;
   const prepared = [
-    { data: { ...data, _id: id || mongooseTypes.ObjectId() }, config: entityConfig },
+    { data: { ...data, _id: id || new mongooseTypes.ObjectId() }, config: entityConfig },
   ];
 
   const transform = (data2: any, entityConfig2: TangibleEntityConfig): any => {
@@ -205,7 +205,7 @@ const processCreateInputData = (
 
             data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
-              const _id = item.id || mongooseTypes.ObjectId();
+              const _id = item.id || new mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: { ...item, _id },
@@ -352,7 +352,7 @@ const processCreateInputData = (
 
             data2[key].create.forEach((item, i) => {
               // eslint-disable-next-line no-underscore-dangle
-              const _id = item.id || mongooseTypes.ObjectId();
+              const _id = item.id || new mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: {
@@ -368,7 +368,7 @@ const processCreateInputData = (
             prev[key] = ids;
           } else {
             // eslint-disable-next-line no-underscore-dangle
-            const _id = data2[key].create.id || mongooseTypes.ObjectId();
+            const _id = data2[key].create.id || new mongooseTypes.ObjectId();
 
             prepared.push({
               data: {
