@@ -10,7 +10,7 @@ import type {
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
+import childEntitiesThroughConnectionQueryAttributes from '../../../types/actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
 import fromGlobalId from '../../utils/fromGlobalId';
@@ -51,7 +51,7 @@ const createEntityConnectionResolver = (
           serversideConfig,
         ),
         ['Query', 'childEntitiesThroughConnection', nameRoot],
-        childEntitiesQueryAttributes,
+        childEntitiesThroughConnectionQueryAttributes,
         entityConfig,
         generalConfig,
         serversideConfig,
@@ -86,7 +86,16 @@ const createEntityConnectionResolver = (
 
     const id_in = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
 
-    if (!id_in || !id_in.length) return []; // eslint-disable-line camelcase
+     // eslint-disable-next-line camelcase
+    if (!id_in || !id_in.length) return {
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: null,
+        endCursor: null
+      },
+      edges: []
+    };
 
     const objectIds_from_parent = id_in // eslint-disable-line no-underscore-dangle, camelcase
       .map((id) => fromGlobalId(id)._id) // eslint-disable-line no-underscore-dangle
