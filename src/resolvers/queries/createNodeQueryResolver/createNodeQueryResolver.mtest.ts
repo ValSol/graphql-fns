@@ -15,10 +15,11 @@ import sleep from '../../../utils/sleep';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import info from '../../utils/info.auxiliary';
 import toGlobalId from '../../utils/toGlobalId';
 
 import createNodeQueryResolver from './index';
+
+const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
 
 mongoose.set('strictQuery', false);
 

@@ -9,8 +9,9 @@ import sleep from '../../../utils/sleep';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import info from './scalar-info.auxiliary';
 import createEntityScalarResolver from './index';
+
+const info = { projection: { title: 1 }, fieldName: 'friend' };
 
 mongoose.set('strictQuery', false);
 

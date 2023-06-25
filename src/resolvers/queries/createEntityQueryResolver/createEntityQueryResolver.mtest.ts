@@ -9,8 +9,9 @@ import mongoOptions from '../../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import info from '../../utils/info.auxiliary';
 import createEntityQueryResolver from './index';
+
+const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
 
 mongoose.set('strictQuery', false);
 

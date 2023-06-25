@@ -8,11 +8,12 @@ import mongoOptions from '../../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import sleep from '../../../utils/sleep';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import info from '../../utils/info.auxiliary';
-import info2 from './info-geospatial.auxiliary';
-import infoForSort from './info-sort.auxiliary';
 
 import createEntitiesQueryResolver from './index';
+
+const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
+const info2 = { projection: { name: 1, textField3: 1, createdAt: 1 } };
+const infoForSort = { projection: { first: 1, second: 1, createdAt: 1 } };
 
 mongoose.set('strictQuery', false);
 

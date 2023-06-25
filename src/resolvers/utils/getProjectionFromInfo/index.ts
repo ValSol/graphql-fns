@@ -1,59 +1,16 @@
+import { GraphQLResolveInfo } from 'graphql';
+import { parseResolveInfo } from 'graphql-parse-resolve-info';
+
 import type { ProjectionInfo, SintheticResolverInfo } from '../../../tsTypes';
 
 type Path = Array<string>;
-
-type SelectionSet = {
-  selections: Array<{ kind: string; name: { value: string }; selectionSet: SelectionSet }>;
-};
-
-const getProjectionFromSelectionSet = (
-  selectionSet: SelectionSet,
-  path: Path,
-): {
-  [fieldName: string]: 1;
-} => {
-  const { selections } = selectionSet;
-  if (path.length) {
-    const [fieldName, ...rest] = path;
-    const obj = selections.find(
-      ({ kind, name: { value } }) => kind === 'Field' && value === fieldName,
-    );
-    return obj ? getProjectionFromSelectionSet(obj.selectionSet, rest) : {};
-  }
-
-  const result = (selections as { kind: string; name: { value: string } }[])
-    .filter(({ kind }) => kind === 'Field')
-    .map(({ name: { value } }) => value)
-    .filter((field) => field !== '__typename')
-    .reduce<Record<string, 1>>((prev, value) => {
-      if (value !== 'id') {
-        prev[value] = 1; // eslint-disable-line no-param-reassign
-      }
-
-      return prev;
-    }, {});
-
-  selections
-    .filter(({ kind }) => kind === 'InlineFragment')
-    .forEach(({ selectionSet: selectionSet2 }) => {
-      const inlineResult = getProjectionFromSelectionSet(selectionSet2, []);
-
-      Object.assign(result, inlineResult);
-    });
-
-  if (!Object.keys(result).length) {
-    result._id = 1; // eslint-disable-line no-underscore-dangle
-  }
-
-  return result;
-};
 
 const projectionTypePredicate = (info: SintheticResolverInfo): info is ProjectionInfo =>
   Boolean((info as ProjectionInfo).projection);
 
 const getProjectionFromInfo = (
   info: SintheticResolverInfo,
-  path?: Path,
+  path: Path = [],
 ): {
   [fieldName: string]: 1;
 } => {
@@ -61,29 +18,38 @@ const getProjectionFromInfo = (
     return info.projection;
   }
 
-  const {
-    fieldNodes: [{ selectionSet }],
-  } = info;
-
-  if (!selectionSet) {
-    return { _id: 1 };
+  const resolvedInfo = parseResolveInfo(info as GraphQLResolveInfo);
+  if (!resolvedInfo) {
+    throw new TypeError(
+      `Got resolver info = "${String(info)}" but had be GraphQLResolveInfo Object!`,
+    );
   }
 
-  const preResult = getProjectionFromSelectionSet(
-    selectionSet as unknown as SelectionSet,
-    path || [],
+  const { fieldsByTypeName } = resolvedInfo;
+  const [fieldsTree] = Object.values(fieldsByTypeName);
+
+  let fieldsTreeByPath = fieldsTree;
+
+  path.forEach((item) => {
+    fieldsTreeByPath = Object.values(fieldsTreeByPath[item].fieldsByTypeName)[0];
+  });
+
+  const fields = Object.keys(fieldsTreeByPath).filter(
+    (field) => !['id', '__typename'].includes(field),
   );
 
-  const result = Object.keys(preResult).reduce<Record<string, any>>((prev, key) => {
-    if (key.endsWith('ThroughConnection')) {
-      prev[`${key.slice(0, -'ThroughConnection'.length)}`] = 1; // eslint-disable-line no-param-reassign
+  if (fields.length === 0) {
+    return { _id: 1 } as Record<string, 1>;
+  }
+
+  return fields.reduce<Record<string, 1>>((prev, field) => {
+    if (field.endsWith('ThroughConnection')) {
+      prev[`${field.slice(0, -'ThroughConnection'.length)}`] = 1;
     } else {
-      prev[key] = 1; // eslint-disable-line no-param-reassign
+      prev[field] = 1;
     }
     return prev;
   }, {});
-
-  return result;
 };
 
 export default getProjectionFromInfo;

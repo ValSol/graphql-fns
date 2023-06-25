@@ -10,8 +10,9 @@ import sleep from '../../../utils/sleep';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import info from './array-info.auxiliary';
 import createEntityArrayResolver from './index';
+
+const info = { projection: { title: 1 }, fieldName: 'friends' };
 
 mongoose.set('strictQuery', false);
 
