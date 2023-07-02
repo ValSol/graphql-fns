@@ -50,7 +50,9 @@ const customResolverDecorator = (
       process.env.JEST_WORKER_ID ||
       !argNamesToTransformersStore[argNamesToTransformersStoreKey]
     ) {
-      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<Record<string, any>>((prev, argName, i) => {
+      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<
+        Record<string, any>
+      >((prev, argName, i) => {
         const argType = argTypes[i];
 
         const transformerAndConfig = getTransformerAndConfig(argType, generalConfig);

@@ -20,12 +20,19 @@ import createCreatedEntitySubscriptionResolver from '../subscriptions/createCrea
 import createUpdatedEntitySubscriptionResolver from '../subscriptions/createUpdatedEntitySubscriptionResolver';
 import createDeletedEntitySubscriptionResolver from '../subscriptions/createDeletedEntitySubscriptionResolver';
 
+let resolvers: null | Record<string, any> = null;
+
 const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   entityTypeDic: { [entityName: string]: string },
 
   serversideConfig: ServersideConfig = {},
 ): any => {
+  // use cache if no jest test environment
+  if (!process.env.JEST_WORKER_ID && resolvers) {
+    return resolvers;
+  }
+
   const { allEntityConfigs, inventory, descendant = {} } = generalConfig;
 
   const custom = mergeDescendantIntoCustom(generalConfig);
@@ -38,7 +45,7 @@ const composeGqlResolvers = (
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
-  const resolvers: Record<string, any> = {};
+  resolvers = {};
 
   resolvers.DateTime = DateTimeResolver;
 

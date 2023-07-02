@@ -59,7 +59,7 @@ const createCustomResolver = (
   const descendantResolvers = generateDescendantResolvers(generalConfig);
 
   if (!descendantResolvers) {
-    throw new TypeError(`Have to set the "${actionName}" ${actionKind}!`);
+    throw new TypeError(`Have to set the custom "${actionName}" ${actionKind}!`);
   }
 
   if (descendantResolvers[actionKind]?.[actionName]) {
@@ -73,7 +73,7 @@ const createCustomResolver = (
     );
   }
 
-  throw new TypeError(`Have to set the "${actionName}" ${actionKind}!`);
+  throw new TypeError(`Have to set the descendant or custom "${actionName}" ${actionKind}!`);
 };
 
 export default createCustomResolver;
