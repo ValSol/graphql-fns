@@ -165,4 +165,114 @@ describe('composeRelationalKey', () => {
     expect(transformForJest(result)).toEqual(transformForJest(expectedResult));
     expect(lookupArray).toEqual(expectedLookupArray);
   });
+
+  test('return Textbook Lessons error', () => {
+    const lessonConfig = {} as TangibleEntityConfig;
+    const userConfig = {} as TangibleEntityConfig;
+
+    const textbookConfig: TangibleEntityConfig = {
+      name: 'Textbook',
+      type: 'tangible',
+
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'lessons',
+          oppositeName: 'textbook',
+          config: lessonConfig,
+          array: true,
+          index: true,
+          type: 'duplexFields',
+        },
+
+        {
+          name: 'user',
+          oppositeName: 'textbooks',
+          config: userConfig,
+          required: true,
+          index: true,
+          type: 'duplexFields',
+        },
+      ],
+    };
+
+    Object.assign(lessonConfig, {
+      name: 'Lesson',
+      type: 'tangible',
+
+      textFields: [
+        {
+          name: 'title',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'textbook',
+          oppositeName: 'lessons',
+          config: lessonConfig,
+          required: true,
+          index: true,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    Object.assign(userConfig, {
+      name: 'User',
+      type: 'tangible',
+
+      textFields: [
+        {
+          name: 'email',
+          required: true,
+          type: 'textFields',
+          index: true,
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'textbooks',
+          oppositeName: 'user',
+          array: true,
+          config: textbookConfig,
+          index: true,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    const value = {
+      textbook_: {
+        user: '5f85ad539905d61fb73346a2',
+      },
+    };
+
+    const lookupArray: Array<any> = [];
+
+    const result = composeRelationalKey(value, lookupArray, lessonConfig);
+
+    const expectedResult = {
+      relationalKey: 'textbook_',
+      entityConfig: lessonConfig,
+      value: {
+        user: '5f85ad539905d61fb73346a2',
+      },
+    };
+
+    const expectedLookupArray = [':textbook_:Lesson'];
+
+    // expect(transformForJest(result)).toEqual(transformForJest(expectedResult));
+    expect(lookupArray).toEqual(expectedLookupArray);
+  });
 });

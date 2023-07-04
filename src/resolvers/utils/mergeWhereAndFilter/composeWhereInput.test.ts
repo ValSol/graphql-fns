@@ -171,7 +171,7 @@ describe('composeWhereInput', () => {
   test('should return replace _id ', () => {
     const where = { id: '6096802438f0d5bb46164881' };
 
-    const expectedResult = { where: { _id: '6096802438f0d5bb46164881' }, lookups: [] };
+    const expectedResult = { where: { _id: { $eq: '6096802438f0d5bb46164881' } }, lookups: [] };
     const notCreateObjectId = true;
     const result = composeWhereInput(where, entityConfig, notCreateObjectId);
 
@@ -182,7 +182,7 @@ describe('composeWhereInput', () => {
     const where = { OR: [{ id: '6096802438f0d5bb46164881' }] };
 
     const expectedResult = {
-      where: { $or: [{ _id: '6096802438f0d5bb46164881' }] },
+      where: { $or: [{ _id: { $eq: '6096802438f0d5bb46164881' } }] },
       lookups: [],
     };
     const notCreateObjectId = true;
@@ -221,7 +221,7 @@ describe('composeWhereInput', () => {
         intField3: { $exists: true },
         intFields: { $size: 1 },
         intFields2: { $not: { $size: 0 } },
-        relationalField: null,
+        relationalField: { $eq: null },
         relationalFields: { $size: 1 },
       },
       lookups: [],

@@ -84,7 +84,7 @@ const composeWhereInputRecursively = (
   entireWhere: string,
   notCreateObjectId?: boolean,
 ): any => {
-  if (!where || !Object.keys(where).length) return {};
+  if (!where || Object.keys(where).length === 0) return {};
 
   const { name: entityName, type: entityType } = entityConfig;
 
@@ -259,7 +259,12 @@ const composeWhereInputRecursively = (
       );
     } else if (idFields.includes(key)) {
       const key2 = key === 'id' ? '_id' : key;
-      result[key2] =
+
+      if (!result[`${prefix}${embeddedPrefix}${key2}`]) {
+        result[`${prefix}${embeddedPrefix}${key2}`] = {};
+      }
+
+      result[`${prefix}${embeddedPrefix}${key2}`].$eq =
         where[key] &&
         (notCreateObjectId ? where[key] : new Types.ObjectId(where[key] as unknown as string));
     } else if (key.endsWith('_')) {
