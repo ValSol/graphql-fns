@@ -5,10 +5,9 @@ import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputTy
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entity${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entity${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
-  `${baseName}${descendantKey}`;
+const actionName = (baseName: string, descendantKey = ''): string => `${baseName}${descendantKey}`;
 
 const inputCreators = [createEntityWhereOneInputType];
 
@@ -18,7 +17,7 @@ const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -34,7 +33,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}!`;
 
 const entityQueryAttributes = {

@@ -175,7 +175,7 @@ type PageInfo {
 }
 type MenuCloneEdge {
   cursor: String!
-  node: MenuClone
+  node: MenuClone!
 }
 type MenuConnection {
   pageInfo: PageInfo!
@@ -183,7 +183,7 @@ type MenuConnection {
 }
 type MenuEdge {
   cursor: String!
-  node: Menu
+  node: Menu!
 }
 type MenuCloneSectionConnection {
   pageInfo: PageInfo!
@@ -191,7 +191,7 @@ type MenuCloneSectionConnection {
 }
 type MenuCloneSectionEdge {
   cursor: String!
-  node: MenuCloneSection
+  node: MenuCloneSection!
 }
 type MenuSection implements Node {
   id: ID!
@@ -206,7 +206,7 @@ type MenuSectionConnection {
 }
 type MenuSectionEdge {
   cursor: String!
-  node: MenuSection
+  node: MenuSection!
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -948,7 +948,7 @@ type PageInfo {
 }
 type TangibleImageEdge {
   cursor: String!
-  node: TangibleImage
+  node: TangibleImage!
 }
 type Example implements Node {
   id: ID!
@@ -981,7 +981,7 @@ type ImageConnection {
 }
 type ImageEdge {
   cursor: String!
-  node: Image
+  node: Image!
 }
 type ExampleConnection {
   pageInfo: PageInfo!
@@ -989,7 +989,7 @@ type ExampleConnection {
 }
 type ExampleEdge {
   cursor: String!
-  node: Example
+  node: Example!
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -1465,7 +1465,7 @@ type PageInfo {
 }
 type Example1Edge {
   cursor: String!
-  node: Example1
+  node: Example1!
 }
 type Example2Connection {
   pageInfo: PageInfo!
@@ -1473,7 +1473,7 @@ type Example2Connection {
 }
 type Example2Edge {
   cursor: String!
-  node: Example2
+  node: Example2!
 }
 input Example1WhereInput {
   id_in: [ID!]
@@ -1838,7 +1838,7 @@ type PageInfo {
 }
 type PersonEdge {
   cursor: String!
-  node: Person
+  node: Person!
 }
 type PlaceConnection {
   pageInfo: PageInfo!
@@ -1846,7 +1846,7 @@ type PlaceConnection {
 }
 type PlaceEdge {
   cursor: String!
-  node: Place
+  node: Place!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2205,7 +2205,7 @@ type PageInfo {
 }
 type AddressEdge {
   cursor: String!
-  node: Address
+  node: Address!
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -2213,7 +2213,7 @@ type PersonConnection {
 }
 type PersonEdge {
   cursor: String!
-  node: Person
+  node: Person!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2507,7 +2507,7 @@ type PageInfo {
 }
 type PersonEdge {
   cursor: String!
-  node: Person
+  node: Person!
 }
 type PlaceConnection {
   pageInfo: PageInfo!
@@ -2515,7 +2515,7 @@ type PlaceConnection {
 }
 type PlaceEdge {
   cursor: String!
-  node: Place
+  node: Place!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2912,7 +2912,7 @@ type PageInfo {
 }
 type ExampleEdge {
   cursor: String!
-  node: Example
+  node: Example!
 }
 input ExampleWhereInput {
   id_in: [ID!]
@@ -4017,7 +4017,7 @@ type PageInfo {
 }
 type ExampleEdge {
   cursor: String!
-  node: Example
+  node: Example!
 }
 type ExampleForCatalogConnection {
   pageInfo: PageInfo!
@@ -4025,7 +4025,7 @@ type ExampleForCatalogConnection {
 }
 type ExampleForCatalogEdge {
   cursor: String!
-  node: ExampleForCatalog
+  node: ExampleForCatalog!
 }
 type ExampleForCatalog implements Node {
   id: ID!
@@ -4292,7 +4292,7 @@ type PageInfo {
 }
 type ExampleForViewEdge {
   cursor: String!
-  node: ExampleForView
+  node: ExampleForView!
 }
 type ExampleForView implements Node {
   id: ID!

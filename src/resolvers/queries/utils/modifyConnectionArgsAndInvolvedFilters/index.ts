@@ -29,9 +29,13 @@ const modifyConnectionArgsAndInvolvedFilters = (
     return [args, involvedFilters];
   }
 
-  const {
-    inputOutputEntity: [filter, limit],
-  } = involvedFilters;
+  const { inputOutputEntity } = involvedFilters;
+
+  if (!inputOutputEntity) {
+    return [args, involvedFilters];
+  }
+
+  const [filter, limit] = inputOutputEntity;
 
   if (!limit) {
     return [args, involvedFilters];

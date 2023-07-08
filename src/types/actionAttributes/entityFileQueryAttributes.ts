@@ -5,9 +5,9 @@ import createFileWhereOneInputType from '../inputs/createFileWhereOneInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entityFile${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entityFile${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}File${descendantKey}`;
 
 const inputCreators = [createFileWhereOneInputType];
@@ -18,7 +18,7 @@ const argTypes = [(name: string): string => 'FileWhereOneInput!']; // eslint-dis
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -35,7 +35,7 @@ const actionReturnConfig = (
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'tangibleFile');
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}!`;
 
 const entityFileQueryAttributes = {

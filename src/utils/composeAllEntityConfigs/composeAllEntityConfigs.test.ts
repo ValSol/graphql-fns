@@ -68,7 +68,7 @@ describe('composeAllEntityConfigs', () => {
 
       type: 'virtual',
 
-      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
+      childFields: [{ name: 'node', config: exampleConfig, required: true, type: 'childFields' }],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
@@ -143,7 +143,7 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       descendantNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
+      childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
@@ -238,7 +238,7 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       descendantNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: imageConfig, type: 'childFields' }],
+      childFields: [{ name: 'node', config: imageConfig, required: true, type: 'childFields' }],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
@@ -300,7 +300,7 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       descendantNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: entityConfig, type: 'childFields' }],
+      childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
@@ -321,7 +321,9 @@ describe('composeAllEntityConfigs', () => {
       type: 'virtual',
       descendantNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: tangibleImageConfig, type: 'childFields' }],
+      childFields: [
+        { name: 'node', config: tangibleImageConfig, required: true, type: 'childFields' },
+      ],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };

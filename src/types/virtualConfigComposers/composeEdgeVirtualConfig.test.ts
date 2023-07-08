@@ -40,10 +40,10 @@ describe('composeEdgeVirtualConfig', () => {
 
     const expectedResult = {
       name: 'ExampleEdge',
-      descendantNameSlicePosition: -'Edge'.length,
       type: 'virtual',
+      descendantNameSlicePosition: -'Edge'.length,
 
-      childFields: [{ name: 'node', config: exampleConfig, type: 'childFields' }],
+      childFields: [{ name: 'node', config: exampleConfig, required: true, type: 'childFields' }],
 
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
