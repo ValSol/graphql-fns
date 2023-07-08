@@ -52,11 +52,11 @@ const patch = (
       const tmpArr = [];
       filterObj[key].forEach((filterObj2) => {
         const updatedFilterObjItem = patch(externalReferences, data, filterObj2, fieldsObj);
-        if (Object.keys(updatedFilterObjItem).length) {
+        if (Object.keys(updatedFilterObjItem).length > 0) {
           tmpArr.push(updatedFilterObjItem);
         }
       });
-      if (tmpArr.length) {
+      if (tmpArr.length > 0) {
         updatedFilterObj[key] = tmpArr;
       }
     } else {
@@ -77,13 +77,18 @@ const processData = (
 
   Object.keys(data).forEach((key) => {
     const attributes = fieldsObj[key];
-    const { type: fieldType } = attributes;
+    const { array, type: fieldType } = attributes;
 
     if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
       const { connect, create } = data[key];
       const { array } = attributes;
       if (connect) {
-        result[key] = connect; // eslint-disable-line no-param-reassign
+        if (array) {
+          result[key] =
+            connect !== null && connect !== undefined ? connect.map((item) => item.toString()) : [];
+        } else {
+          result[key] = connect !== null && connect !== undefined ? connect.toString() : connect;
+        }
       } else if (create) {
         // use fake 'newId' value as dummy value for 'create'
         result[key] = array ? ['newId'] : 'newId'; // eslint-disable-line no-param-reassign

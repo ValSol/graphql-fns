@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
 import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
@@ -66,9 +68,19 @@ const getMissingData = async ({
     if (data[key] !== undefined) {
       if (data[key] !== null) result[key] = data[key];
     } else {
-      const { type: fieldType } = fieldsObj[key];
+      const { array, type: fieldType } = fieldsObj[key];
       if (fieldType === 'duplexFields' || fieldType === 'relationalFields') {
-        result[key] = { connect: entity2[key] || null };
+        if (array) {
+          result[key] =
+            entity2[key] !== null && entity2[key] !== undefined
+              ? { connect: entity2[key].map((item: Types.ObjectId) => item.toString()) }
+              : { connect: [] };
+        } else {
+          result[key] = {
+            connect:
+              entity2[key] !== null && entity2[key] !== undefined ? entity2[key].toString() : null,
+          };
+        }
       } else {
         result[key] = entity2[key];
       }

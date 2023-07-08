@@ -897,7 +897,7 @@ describe('createCreateEntityMutationResolver', () => {
     const postData = {
       slug: 'news',
       type: 'newsFeed',
-      restaurant: { connect: restaurantId },
+      restaurant: { connect: restaurantId.toString() },
     };
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {

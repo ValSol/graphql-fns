@@ -37,7 +37,7 @@ const getExternalReferences = async (
     );
 
     if (entity) {
-      results.push(id);
+      results.push(id.toString());
     } else {
       results.push(null);
     }

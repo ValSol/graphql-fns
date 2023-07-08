@@ -18,7 +18,9 @@ const checkData = async (
   serversideConfig: ServersideConfig,
   context: any,
 ): Promise<boolean> => {
-  if (!preFilter.length) {
+  const id = `[${`${Math.random()}`.slice(2, 5)}]`;
+
+  if (preFilter.length === 0) {
     return true;
   }
 
@@ -27,7 +29,7 @@ const checkData = async (
   let preData2 = preData;
   if (processingKind === 'update') {
     const projection = extractMissingDataFields(preData, preFilter);
-    if (Object.keys(projection).length) {
+    if (Object.keys(projection).length > 0) {
       preData2 = await getMissingData({
         args: { ...args, data: preData },
         processingKind,
@@ -42,7 +44,7 @@ const checkData = async (
     }
   } else if (processingKind === 'push') {
     const projection = extractMissingAndPushDataFields(preData, preFilter, entityConfig);
-    if (Object.keys(projection).length) {
+    if (Object.keys(projection).length > 0) {
       preData2 = await getMissingData({
         args: { ...args, data: preData },
         processingKind,
@@ -74,9 +76,11 @@ const checkData = async (
   );
 
   const notCreateObjectId = true;
+
   const { where } = mergeWhereAndFilter(filter, {}, entityConfig, notCreateObjectId);
 
   const query = new mingo.Query(where);
+
   const result = query.test(data);
 
   return result;
