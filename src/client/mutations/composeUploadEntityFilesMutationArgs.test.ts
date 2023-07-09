@@ -26,8 +26,8 @@ describe('composeUploadFilesToEntityMutationResolver', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: imageConfig } };
 
     const expectedResult = [
-      'mutation Home_uploadTangibleImageFiles($files: [Upload!]!, $hashes: [String!]!) {',
-      '  uploadTangibleImageFiles(files: $files, hashes: $hashes) {',
+      'mutation Home_uploadTangibleImageFiles($files: [Upload!]!, $hashes: [String!]!, $token: String) {',
+      '  uploadTangibleImageFiles(files: $files, hashes: $hashes, token: $token) {',
     ];
 
     const result = composeActionArgs(

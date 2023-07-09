@@ -2,6 +2,7 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
@@ -9,11 +10,11 @@ const actionGeneralName = (descendantKey = ''): string => `entity${descendantKey
 
 const actionName = (baseName: string, descendantKey = ''): string => `${baseName}${descendantKey}`;
 
-const inputCreators = [createEntityWhereOneInputType];
+const inputCreators = [createEntityWhereOneInputType, createStringInputType];
 
-const argNames = ['whereOne'];
+const argNames = ['whereOne', 'token'];
 
-const argTypes = [(name: string): string => `${name}WhereOneInput!`];
+const argTypes = [(name: string): string => `${name}WhereOneInput!`, (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,

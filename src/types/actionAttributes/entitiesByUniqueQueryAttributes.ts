@@ -7,13 +7,13 @@ import createEntityWhereByUniqueInputType from '../inputs/createEntityWhereByUni
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
-  `entitiesByUnique${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entitiesByUnique${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${pluralize(baseName)}ByUnique${descendantKey}`;
 
 const inputCreators = [
@@ -21,20 +21,22 @@ const inputCreators = [
   createEntitySortInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
+  createStringInputType,
 ];
 
-const argNames = ['where', 'sort', 'near', 'search'];
+const argNames = ['where', 'sort', 'near', 'search', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereByUniqueInput!`,
   (name: string): string => `${name}SortInput`,
   (name: string): string => `${name}NearInput`,
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
+  (): string => 'String',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -50,7 +52,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const entitiesByUniqueQueryAttributes = {

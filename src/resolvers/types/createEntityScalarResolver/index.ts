@@ -74,7 +74,12 @@ const createEntityScalarResolver = (
 
     const whereOne = { id } as const;
 
-    return childEntityQueryResolver(parent, { ...args, whereOne }, context, info);
+    return childEntityQueryResolver(
+      parent,
+      { ...args, whereOne, token: parent._token },
+      context,
+      info,
+    );
   };
 
   return resolver;

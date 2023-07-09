@@ -23,8 +23,8 @@ describe('composePushIntoEntityMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!, $positions: ExamplePushPositionsInput) {',
-      '  pushIntoExample(whereOne: $whereOne, data: $data, positions: $positions) {',
+      'mutation Home_pushIntoExample($whereOne: ExampleWhereOneInput!, $data: PushIntoExampleInput!, $positions: ExamplePushPositionsInput, $token: String) {',
+      '  pushIntoExample(whereOne: $whereOne, data: $data, positions: $positions, token: $token) {',
     ];
 
     const result = composeActionArgs(

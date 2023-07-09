@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.823",
+  "version": "0.1.2-beta.827",
   "description": "Useful functions to work with graphql",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -56,6 +56,7 @@
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.merge": "^4.6.7",
     "@types/mongoose": "^5.11.97",
+    "@types/pluralize": "^0.0.30",
     "@types/react": "^18.0.33",
     "@types/spark-md5": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^5.54.0",

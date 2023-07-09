@@ -71,8 +71,8 @@ describe('composeGqlClientActionTree', () => {
 
     const expectedResult = {
       name: 'Cabinet_Main_Example',
-      content: `query Cabinet_Main_Example($whereOne: ExampleWhereOneInput!) {
-  Example(whereOne: $whereOne) {
+      content: `query Cabinet_Main_Example($whereOne: ExampleWhereOneInput!, $token: String) {
+  Example(whereOne: $whereOne, token: $token) {
     id
     createdAt
     updatedAt

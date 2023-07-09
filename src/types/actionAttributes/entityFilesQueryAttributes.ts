@@ -2,23 +2,24 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createFileWhereInputType from '../inputs/createFileWhereInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entityFiles${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entityFiles${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}Files${descendantKey}`;
 
-const inputCreators = [createFileWhereInputType];
+const inputCreators = [createFileWhereInputType, createStringInputType];
 
-const argNames = ['where'];
+const argNames = ['where', 'token'];
 
-const argTypes = [(name: string): string => 'FileWhereInput']; // eslint-disable-line no-unused-vars
+const argTypes = [(): string => 'FileWhereInput', (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -34,7 +35,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const entityFilesQueryAttributes = {

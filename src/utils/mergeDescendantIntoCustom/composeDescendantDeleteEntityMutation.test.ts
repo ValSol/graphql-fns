@@ -46,8 +46,8 @@ describe('composeDescendantDeleteEntityMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('deleteEntity')
           ? `delete${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }: any) => [`${name}ForCatalogWhereOneInput!`],
+      argNames: () => ['whereOne', 'token'],
+      argTypes: ({ name }: any) => [`${name}ForCatalogWhereOneInput!`, 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
         subscribeDeletedEntity: 'Example',

@@ -43,7 +43,7 @@ describe('createPushIntoEntityMutationType', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult =
-      '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!';
+      '  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput, token: String): Example!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

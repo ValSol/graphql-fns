@@ -22,8 +22,8 @@ describe('composeCreateEntityMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_createExample($data: ExampleCreateInput!) {',
-      '  createExample(data: $data) {',
+      'mutation Home_createExample($data: ExampleCreateInput!, $token: String) {',
+      '  createExample(data: $data, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -80,8 +80,8 @@ describe('composeCreateEntityMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation Home_createPerson($data: PersonCreateInput!) {',
-      '  createPerson(data: $data) {',
+      'mutation Home_createPerson($data: PersonCreateInput!, $token: String) {',
+      '  createPerson(data: $data, token: $token) {',
     ];
 
     const result = composeActionArgs(

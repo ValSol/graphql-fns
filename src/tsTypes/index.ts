@@ -2,7 +2,6 @@ import { GraphQLResolveInfo } from 'graphql';
 import { Connection, Types } from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-
 export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 
 export type SintheticResolverInfo = GraphQLResolveInfo | ProjectionInfo;
@@ -682,7 +681,7 @@ export type ServersideConfig = {
   };
 
   // *** fields that used in "executeAuthorisation" util
-  getUserAttributes?: (arg1: { context: Context }) => Promise<UserAttributes>;
+  getUserAttributes?: (context: Context, token?: string) => Promise<UserAttributes>;
   inventoryByRoles?: InventoryByRoles; // "inventoryByRoles" can used only with help of "getUserAttributes" & "containedRoles",
   containedRoles?: {
     [roleName: string]: Array<string>;

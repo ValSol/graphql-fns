@@ -48,8 +48,8 @@ describe('composeDescendantImportEntitiesMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('importEntities')
           ? `import${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['file', 'options'],
-      argTypes: () => ['Upload!', 'ImportOptionsInput'],
+      argNames: () => ['file', 'options', 'token'],
+      argTypes: () => ['Upload!', 'ImportOptionsInput', 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
       }),

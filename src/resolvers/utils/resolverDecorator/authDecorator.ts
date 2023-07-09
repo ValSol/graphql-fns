@@ -17,6 +17,7 @@ const authDecorator =
     const filter = await executeAuthorisation(
       inventoryChain,
       involvedEntityNames,
+      args,
       context,
       generalConfig,
       serversideConfig,

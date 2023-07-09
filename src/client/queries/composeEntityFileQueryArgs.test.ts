@@ -20,8 +20,8 @@ describe('composeEntityFileQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: entityConfig } };
 
     const expectedResult = [
-      'query Home_TangibleImageFile($whereOne: FileWhereOneInput!) {',
-      '  TangibleImageFile(whereOne: $whereOne) {',
+      'query Home_TangibleImageFile($whereOne: FileWhereOneInput!, $token: String) {',
+      '  TangibleImageFile(whereOne: $whereOne, token: $token) {',
     ];
 
     const result = composeActionArgs(

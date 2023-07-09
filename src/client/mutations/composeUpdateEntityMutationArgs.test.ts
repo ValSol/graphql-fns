@@ -22,8 +22,8 @@ describe('composeUpdateEntityMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {',
-      '  updateExample(whereOne: $whereOne, data: $data) {',
+      'mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!, $token: String) {',
+      '  updateExample(whereOne: $whereOne, data: $data, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -80,8 +80,8 @@ describe('composeUpdateEntityMutationArgs', () => {
     };
 
     const expectedResult = [
-      'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!) {',
-      '  updatePerson(whereOne: $whereOne, data: $data) {',
+      'mutation Home_updatePerson($whereOne: PersonWhereOneInput!, $data: PersonUpdateInput!, $token: String) {',
+      '  updatePerson(whereOne: $whereOne, data: $data, token: $token) {',
     ];
 
     const result = composeActionArgs(

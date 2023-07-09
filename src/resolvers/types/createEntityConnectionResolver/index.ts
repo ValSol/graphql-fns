@@ -86,16 +86,17 @@ const createEntityConnectionResolver = (
 
     const id_in = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
 
-     // eslint-disable-next-line camelcase
-    if (!id_in || !id_in.length) return {
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: null,
-        endCursor: null
-      },
-      edges: []
-    };
+    // eslint-disable-next-line camelcase
+    if (!id_in || !id_in.length)
+      return {
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+        edges: [],
+      };
 
     const objectIds_from_parent = id_in // eslint-disable-line no-underscore-dangle, camelcase
       .map((id) => fromGlobalId(id)._id) // eslint-disable-line no-underscore-dangle
@@ -109,8 +110,8 @@ const createEntityConnectionResolver = (
       parent,
       // objectIds_from_parent use only for call from this createEntityConnectionResolver
       sort?.length || near || search
-        ? { ...args, where: where2 }
-        : { ...args, where: where2, objectIds_from_parent },
+        ? { ...args, where: where2, token: parent._token }
+        : { ...args, where: where2, token: parent._token, objectIds_from_parent },
       context,
       info,
     );

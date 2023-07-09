@@ -22,8 +22,8 @@ describe('composeEntityCountQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      `query Home_ExampleCount($where: ExampleWhereInput) {
-  ExampleCount(where: $where)
+      `query Home_ExampleCount($where: ExampleWhereInput, $token: String) {
+  ExampleCount(where: $where, token: $token)
 }`,
     ];
 
@@ -54,8 +54,8 @@ describe('composeEntityCountQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      `query Home_ExampleCount($where: ExampleWhereInput) {
-  ExampleCount(where: $where)
+      `query Home_ExampleCount($where: ExampleWhereInput, $token: String) {
+  ExampleCount(where: $where, token: $token)
 }`,
     ];
 

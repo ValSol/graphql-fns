@@ -5,6 +5,7 @@ import type {
   ServersideConfig,
   ThreeSegmentInventoryChain,
   InvolvedFilter,
+  GraphqlObject,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
@@ -33,6 +34,7 @@ const executeAuthorisation = async (
   involvedEntityNames: {
     [key: string]: string;
   },
+  args: GraphqlObject,
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -82,7 +84,8 @@ const executeAuthorisation = async (
     throw new TypeError('Not found "getUserAttributes" callback!');
   }
 
-  const userAttributes = await getUserAttributes(context);
+  const { token } = args as unknown as { token: string };
+  const userAttributes = await getUserAttributes(context, token);
 
   const { roles, ...userAttributesRest } = userAttributes;
 
@@ -134,7 +137,7 @@ const executeAuthorisation = async (
       const filter = filters[entityName][1](arg);
 
       if (filter) {
-        if (!filter.length) {
+        if (filter.length === 0) {
           result[involvedEntityNamesKey] = [];
           break;
         }

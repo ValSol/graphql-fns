@@ -15,7 +15,7 @@ describe('createImportEntitiesMutationType', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult =
-      '  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!';
+      '  importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

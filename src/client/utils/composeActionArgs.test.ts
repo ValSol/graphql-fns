@@ -45,8 +45,8 @@ describe('composeActionArgs util', () => {
       childArgs,
     );
     const expectedResult = [
-      'mutation Home_createManyExamples($data: [ExampleCreateInput!]!, $examples_where: ExampleWhereInput, $examples_sort: ExampleSortInput) {',
-      '  createManyExamples(data: $data) {',
+      'mutation Home_createManyExamples($data: [ExampleCreateInput!]!, $token: String, $examples_where: ExampleWhereInput, $examples_sort: ExampleSortInput) {',
+      '  createManyExamples(data: $data, token: $token) {',
     ];
 
     expect(result).toEqual(expectedResult);

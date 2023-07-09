@@ -8,12 +8,13 @@ import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createPaginationInputType from '../inputs/createPaginationInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entities${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entities${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${pluralize(baseName)}${descendantKey}`;
 
 const inputCreators = [
@@ -22,21 +23,23 @@ const inputCreators = [
   createPaginationInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
+  createStringInputType,
 ];
 
-const argNames = ['where', 'sort', 'pagination', 'near', 'search'];
+const argNames = ['where', 'sort', 'pagination', 'near', 'search', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}SortInput`,
-  (name: string): string => 'PaginationInput', // eslint-disable-line no-unused-vars
+  (): string => 'PaginationInput',
   (name: string): string => `${name}NearInput`,
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
+  (): string => 'String',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -52,7 +55,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const entitiesQueryAttributes = {

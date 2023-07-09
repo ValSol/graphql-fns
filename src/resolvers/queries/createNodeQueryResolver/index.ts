@@ -71,7 +71,7 @@ const createNodeQueryResolver = (
       if (!entityFile) return null;
 
       return {
-        ...transformAfter(entityFile, entityConfig, null),
+        ...transformAfter({}, entityFile, entityConfig, null),
         __typename: `${entityName}${descendantKey}`,
       };
     }
@@ -92,7 +92,7 @@ const createNodeQueryResolver = (
     if (!entity) return null;
 
     return {
-      ...transformAfter(entity, resultEntityConfig, generalConfig),
+      ...transformAfter({}, entity, resultEntityConfig, generalConfig),
       __typename: `${entityName}${descendantKey}`,
     };
   };

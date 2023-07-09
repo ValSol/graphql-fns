@@ -2,23 +2,24 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createEntityCreateInputType from '../inputs/createEntityCreateInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string => `createEntity${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `createEntity${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `create${baseName}${descendantKey}`;
 
-const inputCreators = [createEntityCreateInputType];
+const inputCreators = [createEntityCreateInputType, createStringInputType];
 
-const argNames = ['data'];
+const argNames = ['data', 'token'];
 
-const argTypes = [(name: string): string => `${name}CreateInput!`];
+const argTypes = [(name: string): string => `${name}CreateInput!`, (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -37,7 +38,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}!`;
 
 const createEntityMutationAttributes = {

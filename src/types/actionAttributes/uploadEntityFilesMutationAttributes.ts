@@ -1,13 +1,13 @@
 import type { InputCreator, EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
-  `uploadEntityFiles${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `uploadEntityFiles${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `upload${baseName}Files${descendantKey}`;
 
 const inputCreators = [
@@ -25,18 +25,16 @@ const inputCreators = [
       [inputSpecificName: string]: [InputCreator, EntityConfig];
     },
   ] => ['', '[String!]!', {}],
+  createStringInputType,
 ];
 
-const argNames = ['files', 'hashes'];
+const argNames = ['files', 'hashes', 'token'];
 
-const argTypes = [
-  (name: string): string => `[Upload!]!`, // eslint-disable-line no-unused-vars
-  (name: string): string => '[String!]!', // eslint-disable-line no-unused-vars
-];
+const argTypes = [(): string => `[Upload!]!`, (): string => '[String!]!', (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -55,7 +53,7 @@ const actionReturnConfig = (
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'tangibleFile');
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const uploadEntityFilesMutationAttributes = {

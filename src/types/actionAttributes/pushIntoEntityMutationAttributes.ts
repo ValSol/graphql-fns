@@ -4,31 +4,34 @@ import composeDescendantConfigByName from '../../utils/composeDescendantConfigBy
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createPushIntoEntityInputType from '../inputs/createPushIntoEntityInputType';
 import createEntityPushPositionsInputType from '../inputs/createEntityPushPositionsInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string => `pushIntoEntity${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `pushIntoEntity${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `pushInto${baseName}${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
   createPushIntoEntityInputType,
   createEntityPushPositionsInputType,
+  createStringInputType,
 ];
 
-const argNames = ['whereOne', 'data', 'positions'];
+const argNames = ['whereOne', 'data', 'positions', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereOneInput!`,
   (name: string): string => `PushInto${name}Input!`,
   (name: string): string => `${name}PushPositionsInput`,
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -48,7 +51,7 @@ const actionReturnConfig = (
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' && Boolean(createPushIntoEntityInputType(entityConfig)[1]);
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}!`;
 
 const pushIntoEntityMutationAttributes = {

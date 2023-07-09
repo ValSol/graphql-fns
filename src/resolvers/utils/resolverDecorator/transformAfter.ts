@@ -1,13 +1,14 @@
-import type { EntityConfig, GeneralConfig } from '../../../tsTypes';
+import type { EntityConfig, GeneralConfig, GraphqlObject } from '../../../tsTypes';
 
 import parseEntityName from '../../../utils/parseEntityName';
 import toGlobalId from '../toGlobalId';
 
 const transformAfter = (
+  args: GraphqlObject,
   item: any,
   entityConfig: null | EntityConfig,
   generalConfig: null | GeneralConfig,
-  isChild: boolean = false,
+  isChild = false,
 ): any => {
   if (!entityConfig) {
     return item;
@@ -63,10 +64,10 @@ const transformAfter = (
     if (array) {
       // eslint-disable-next-line no-param-reassign
       prev[name] = item[name].map(
-        (item2) => item2 && transformAfter(item2, config, generalConfig, true),
+        (item2) => item2 && transformAfter(args, item2, config, generalConfig, true),
       );
     } else {
-      prev[name] = transformAfter(item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
+      prev[name] = transformAfter(args, item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
     }
 
     return prev;
@@ -86,11 +87,14 @@ const transformAfter = (
     globalId = toGlobalId(id, entityConfig.name); // eslint-disable-line no-param-reassign
   }
 
+  const { token } = args;
+
   return {
     ...rest,
     ...recursiveFields,
     ...transformedFields,
     id: globalId,
+    _token: token,
   };
 };
 

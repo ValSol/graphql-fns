@@ -45,11 +45,12 @@ describe('composeDescendantPushIntoEntityMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('pushIntoEntity')
           ? `pushInto${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne', 'data', 'positions'],
+      argNames: () => ['whereOne', 'data', 'positions', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereOneInput!`,
         `PushInto${name}ForCatalogInput!`,
         `${name}ForCatalogPushPositionsInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,

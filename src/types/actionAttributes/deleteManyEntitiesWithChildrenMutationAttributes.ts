@@ -6,30 +6,33 @@ import composeDescendantConfigByName from '../../utils/composeDescendantConfigBy
 import getOppositeFields from '../../utils/getOppositeFields';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
+const actionGeneralName = (descendantKey = ''): string =>
   `deleteManyEntitiesWithChildren${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `deleteMany${pluralize(baseName)}WithChildren${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
   createDeleteEntityWithChildrenOptionsInputType,
+  createStringInputType,
 ];
 
-const argNames = ['whereOne', 'options'];
+const argNames = ['whereOne', 'options', 'token'];
 
 const argTypes = [
   (name: string): string => `[${name}WhereOneInput!]!`,
   (name: string): string => `delete${name}WithChildrenOptionsInput`,
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -53,7 +56,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     ).length,
   );
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const deleteManyEntitiesWithChildrenMutationAttributes = {

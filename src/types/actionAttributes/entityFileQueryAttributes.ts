@@ -2,6 +2,7 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createFileWhereOneInputType from '../inputs/createFileWhereOneInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
@@ -10,11 +11,11 @@ const actionGeneralName = (descendantKey = ''): string => `entityFile${descendan
 const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}File${descendantKey}`;
 
-const inputCreators = [createFileWhereOneInputType];
+const inputCreators = [createFileWhereOneInputType, createStringInputType];
 
-const argNames = ['whereOne'];
+const argNames = ['whereOne', 'token'];
 
-const argTypes = [(name: string): string => 'FileWhereOneInput!']; // eslint-disable-line no-unused-vars
+const argTypes = [(): string => 'FileWhereOneInput!', (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,

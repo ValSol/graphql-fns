@@ -5,20 +5,20 @@ import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputTy
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `childEntity${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `childEntity${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `child${baseName}${descendantKey}`;
 
 const inputCreators = [createEntityWhereOneInputType];
 
-const argNames = ['whereOne'];
+const argNames = ['whereOne', 'token'];
 
 const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -36,7 +36,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Scalar';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}`;
 
 const childEntityQueryAttributes = {

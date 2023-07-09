@@ -47,10 +47,11 @@ describe('composeDescendantUpdateEntityMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('updateEntity')
           ? `update${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne', 'data'],
+      argNames: () => ['whereOne', 'data', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereOneInput!`,
         `${name}ForCatalogUpdateInput!`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({
         inputEntity: `${name}ForCatalog`,

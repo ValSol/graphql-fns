@@ -44,8 +44,8 @@ describe('composeDescendantEntityFileCountQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entityFileCount')
           ? `${name}FileCountForCatalog`
           : '',
-      argNames: () => ['where'],
-      argTypes: () => ['FileWhereInput'],
+      argNames: () => ['where', 'token'],
+      argTypes: () => ['FileWhereInput', 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       // eslint-disable-next-line no-unused-vars, no-shadow

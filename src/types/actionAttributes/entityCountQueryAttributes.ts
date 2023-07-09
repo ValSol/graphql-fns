@@ -3,31 +3,34 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entityCount${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entityCount${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}Count${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
+  createStringInputType,
 ];
 
-const argNames = ['where', 'near', 'search'];
+const argNames = ['where', 'near', 'search', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}NearInput`,
   (): string => 'String',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });

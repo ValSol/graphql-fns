@@ -8,13 +8,14 @@ import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
+const actionGeneralName = (descendantKey = ''): string =>
   `deleteFilteredEntitiesWithChildren${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `deleteFiltered${pluralize(baseName)}WithChildren${descendantKey}`;
 
 const inputCreators = [
@@ -22,20 +23,22 @@ const inputCreators = [
   createEntityNearInputType,
   createStringInputTypeForSearch,
   createDeleteEntityWithChildrenOptionsInputType,
+  createStringInputType,
 ];
 
-const argNames = ['where', 'near', 'search', 'options'];
+const argNames = ['where', 'near', 'search', 'options', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}NearInput`,
   (): string => 'String',
   (name: string): string => `delete${name}WithChildrenOptionsInput`,
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -59,7 +62,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     ).length,
   );
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const deleteFilteredEntitiesWithChildrenMutationAttributes = {

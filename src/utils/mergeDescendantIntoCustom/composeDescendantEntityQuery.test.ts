@@ -57,8 +57,8 @@ describe('composeDescendantEntityQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entity')
           ? `${name}ForCatalog`
           : '',
-      argNames: () => ['whereOne'],
-      argTypes: ({ name }: any) => [`${name}ForCatalogWhereOneInput!`],
+      argNames: () => ['whereOne', 'token'],
+      argTypes: ({ name }: any) => [`${name}ForCatalogWhereOneInput!`, 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputEntity: `${name}ForCatalog`,
         outputEntity: `${name}ForView`,

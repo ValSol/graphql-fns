@@ -15,7 +15,8 @@ describe('createCreateManyEntitiesMutationType', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';
+    const expectedResult =
+      '  createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

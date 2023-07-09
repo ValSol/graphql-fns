@@ -11,10 +11,10 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
+const actionGeneralName = (descendantKey = ''): string =>
   `childEntitiesThroughConnection${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `child${pluralize(baseName)}ThroughConnection${descendantKey}`;
 
 const inputCreators = [
@@ -58,16 +58,16 @@ const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}SortInput`,
   (name: string): string => `${name}NearInput`,
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
+  (): string => 'String',
+  (): string => 'String',
+  (): string => 'String',
+  (): string => 'Int',
+  (): string => 'Int',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -98,7 +98,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Array';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}Connection`;
 
 const childEntitiesThroughConnectionQueryAttributes = {

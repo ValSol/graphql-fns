@@ -25,7 +25,7 @@ describe('createEntityCountQueryType', () => {
       allEntityConfigs: { Example: entityConfig },
     };
 
-    const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
+    const expectedResult = '  ExampleCount(where: ExampleWhereInput, token: String): Int!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -63,7 +63,7 @@ describe('createEntityCountQueryType', () => {
       allEntityConfigs: { Example: entityConfig },
     };
 
-    const expectedResult = '  ExampleCount(where: ExampleWhereInput): Int!';
+    const expectedResult = '  ExampleCount(where: ExampleWhereInput, token: String): Int!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

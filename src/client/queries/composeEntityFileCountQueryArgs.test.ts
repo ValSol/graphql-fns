@@ -20,8 +20,8 @@ describe('composeEntityFileCountQuery', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: entityConfig } };
 
     const expectedResult = [
-      `query Home_TangibleImageFileCount($where: FileWhereInput) {
-  TangibleImageFileCount(where: $where)
+      `query Home_TangibleImageFileCount($where: FileWhereInput, $token: String) {
+  TangibleImageFileCount(where: $where, token: $token)
 }`,
     ];
 

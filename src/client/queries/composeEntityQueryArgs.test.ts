@@ -22,8 +22,8 @@ describe('composeEntityQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_Example($whereOne: ExampleWhereOneInput!) {',
-      '  Example(whereOne: $whereOne) {',
+      'query Home_Example($whereOne: ExampleWhereOneInput!, $token: String) {',
+      '  Example(whereOne: $whereOne, token: $token) {',
     ];
 
     const result = composeActionArgs(

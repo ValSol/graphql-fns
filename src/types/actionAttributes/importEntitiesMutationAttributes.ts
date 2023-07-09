@@ -4,12 +4,13 @@ import type { InputCreator, EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createImportOptionsInputTypes from '../inputs/createImportOptionsInputTypes';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string => `importEntities${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `importEntities${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `import${pluralize(baseName)}${descendantKey}`;
 
 const inputCreators = [
@@ -21,18 +22,20 @@ const inputCreators = [
     },
   ] => ['', 'Upload!', {}],
   createImportOptionsInputTypes,
+  createStringInputType,
 ];
 
-const argNames = ['file', 'options'];
+const argNames = ['file', 'options', 'token'];
 
 const argTypes = [
-  (name: string): string => 'Upload!', // eslint-disable-line no-unused-vars
-  (name: string): string => 'ImportOptionsInput', // eslint-disable-line no-unused-vars
+  (): string => 'Upload!',
+  (): string => 'ImportOptionsInput',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -50,7 +53,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const importEntitiesMutationAttributes = {

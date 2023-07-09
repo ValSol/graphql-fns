@@ -22,8 +22,8 @@ describe('composeImportEntitysMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_importExamples($file: Upload!, $options: ImportOptionsInput) {',
-      '  importExamples(file: $file, options: $options) {',
+      'mutation Home_importExamples($file: Upload!, $options: ImportOptionsInput, $token: String) {',
+      '  importExamples(file: $file, options: $options, token: $token) {',
     ];
 
     const result = composeActionArgs(

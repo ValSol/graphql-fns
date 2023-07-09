@@ -62,8 +62,8 @@ describe('composeMutation', () => {
 
   test('should compose createEntity mutation', () => {
     const mutationName = 'createEntity';
-    const expectedResult = `mutation Home_createExample($data: ExampleCreateInput!) {
-  createExample(data: $data) {
+    const expectedResult = `mutation Home_createExample($data: ExampleCreateInput!, $token: String) {
+  createExample(data: $data, token: $token) {
     id
     createdAt
     updatedAt
@@ -77,8 +77,8 @@ describe('composeMutation', () => {
 
   test('should compose createManyEntities mutation', () => {
     const mutationName = 'createManyEntities';
-    const expectedResult = `mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {
-  createManyExamples(data: $data) {
+    const expectedResult = `mutation Home_createManyExamples($data: [ExampleCreateInput!]!, $token: String) {
+  createManyExamples(data: $data, token: $token) {
     id
     createdAt
     updatedAt
@@ -92,8 +92,8 @@ describe('composeMutation', () => {
 
   test('should compose deleteEntity mutation', () => {
     const mutationName = 'deleteEntity';
-    const expectedResult = `mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {
-  deleteExample(whereOne: $whereOne) {
+    const expectedResult = `mutation Home_deleteExample($whereOne: ExampleWhereOneInput!, $token: String) {
+  deleteExample(whereOne: $whereOne, token: $token) {
     id
     createdAt
     updatedAt
@@ -107,8 +107,8 @@ describe('composeMutation', () => {
 
   test('should compose updateEntity mutation', () => {
     const mutationName = 'updateEntity';
-    const expectedResult = `mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!) {
-  updateExample(whereOne: $whereOne, data: $data) {
+    const expectedResult = `mutation Home_updateExample($whereOne: ExampleWhereOneInput!, $data: ExampleUpdateInput!, $token: String) {
+  updateExample(whereOne: $whereOne, data: $data, token: $token) {
     id
     createdAt
     updatedAt

@@ -45,10 +45,11 @@ describe('composeDescendantEntityDistinctValuesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entityDistinctValues')
           ? `${name}DistinctValuesForCatalog`
           : '',
-      argNames: () => ['where', 'options'],
+      argNames: () => ['where', 'options', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogDistinctValuesOptionsInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => '[String!]!',

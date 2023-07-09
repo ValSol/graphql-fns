@@ -48,8 +48,8 @@ describe('composeDescendantUploadEntityFilesMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('uploadEntityFiles')
           ? `upload${name}FilesForCatalog`
           : '',
-      argNames: () => ['files', 'hashes'],
-      argTypes: () => ['[Upload!]!', '[String!]!'],
+      argNames: () => ['files', 'hashes', 'token'],
+      argTypes: () => ['[Upload!]!', '[String!]!', 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
       config: (entityConfig2: any, generalConfig2: any) =>

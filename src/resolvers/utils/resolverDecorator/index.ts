@@ -76,7 +76,9 @@ const resolverDecorator = (
       process.env.JEST_WORKER_ID ||
       !argNamesToTransformersStore[argNamesToTransformersStoreKey]
     ) {
-      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<Record<string, any>>((prev, argName, i) => {
+      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<
+        Record<string, any>
+      >((prev, argName, i) => {
         const argTypeWithoutEntityName = argTypesWithoutEntityNames[i];
 
         const argTypePrefixPlusSuffix = argTypesPrefixPlusSuffixes.find(
@@ -112,10 +114,10 @@ const resolverDecorator = (
     if (!rawResult) return null;
 
     if (Array.isArray(rawResult)) {
-      return rawResult.map((item) => transformAfter(item, returnConfig, null));
+      return rawResult.map((item) => transformAfter(args, item, returnConfig, null));
     }
 
-    return transformAfter(rawResult, returnConfig, null);
+    return transformAfter(args, rawResult, returnConfig, null);
   };
 
   return obj[name];

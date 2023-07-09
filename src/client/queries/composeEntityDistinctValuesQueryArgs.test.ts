@@ -22,8 +22,8 @@ describe('composeEntityDistinctValuesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      `query Home_ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput) {
-  ExampleDistinctValues(where: $where, options: $options)
+      `query Home_ExampleDistinctValues($where: ExampleWhereInput, $options: ExampleDistinctValuesOptionsInput, $token: String) {
+  ExampleDistinctValues(where: $where, options: $options, token: $token)
 }`,
     ];
 

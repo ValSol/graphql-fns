@@ -22,8 +22,8 @@ describe('composeCreateManyEntitysMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_createManyExamples($data: [ExampleCreateInput!]!) {',
-      '  createManyExamples(data: $data) {',
+      'mutation Home_createManyExamples($data: [ExampleCreateInput!]!, $token: String) {',
+      '  createManyExamples(data: $data, token: $token) {',
     ];
 
     const result = composeActionArgs(

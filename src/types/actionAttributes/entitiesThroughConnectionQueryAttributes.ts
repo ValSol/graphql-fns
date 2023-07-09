@@ -8,13 +8,14 @@ import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
+const actionGeneralName = (descendantKey = ''): string =>
   `entitiesThroughConnection${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${pluralize(baseName)}ThroughConnection${descendantKey}`;
 
 const inputCreators = [
@@ -22,20 +23,8 @@ const inputCreators = [
   createEntitySortInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
-  (): [
-    string,
-    string,
-    {
-      [inputSpecificName: string]: [InputCreator, EntityConfig];
-    },
-  ] => ['', 'String', {}],
-  (): [
-    string,
-    string,
-    {
-      [inputSpecificName: string]: [InputCreator, EntityConfig];
-    },
-  ] => ['', 'String', {}],
+  createStringInputType,
+  createStringInputType,
   (): [
     string,
     string,
@@ -50,24 +39,26 @@ const inputCreators = [
       [inputSpecificName: string]: [InputCreator, EntityConfig];
     },
   ] => ['', 'Int', {}],
+  createStringInputType,
 ];
 
-const argNames = ['where', 'sort', 'near', 'search', 'after', 'before', 'first', 'last'];
+const argNames = ['where', 'sort', 'near', 'search', 'after', 'before', 'first', 'last', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}SortInput`,
   (name: string): string => `${name}NearInput`,
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
+  (): string => 'String',
+  (): string => 'String',
+  (): string => 'String',
+  (): string => 'Int',
+  (): string => 'Int',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -92,7 +83,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}Connection`;
 
 const entitiesThroughConnectionQueryAttributes = {

@@ -45,8 +45,8 @@ describe('composeDescendantCreateEntityMutation', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('createEntity')
           ? `create${name}ForCatalog`
           : '',
-      argNames: () => ['data'],
-      argTypes: ({ name }: any) => [`${name}ForCatalogCreateInput!`],
+      argNames: () => ['data', 'token'],
+      argTypes: ({ name }: any) => [`${name}ForCatalogCreateInput!`, 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
         subscribeCreatedEntity: 'Example',

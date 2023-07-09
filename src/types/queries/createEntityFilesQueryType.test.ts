@@ -16,7 +16,8 @@ describe('createEntityFilesQueryType', () => {
       allEntityConfigs: { Example: entityConfig },
     };
 
-    const expectedResult = '  TangibleExampleFiles(where: FileWhereInput): [TangibleExample!]!';
+    const expectedResult =
+      '  TangibleExampleFiles(where: FileWhereInput, token: String): [TangibleExample!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

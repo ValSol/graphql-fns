@@ -14,7 +14,8 @@ describe('createDeleteEntityMutationType', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const expectedResult = '  deleteExample(whereOne: ExampleWhereOneInput!): Example!';
+    const expectedResult =
+      '  deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

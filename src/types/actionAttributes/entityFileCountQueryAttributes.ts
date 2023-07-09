@@ -1,23 +1,24 @@
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import createFileWhereInputType from '../inputs/createFileWhereInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string => `entityFileCount${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entityFileCount${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}FileCount${descendantKey}`;
 
-const inputCreators = [createFileWhereInputType];
+const inputCreators = [createFileWhereInputType, createStringInputType];
 
-const argNames = ['where'];
+const argNames = ['where', 'token'];
 
-const argTypes = [(name: string): string => 'FileWhereInput']; // eslint-disable-line no-unused-vars
+const argTypes = [(): string => 'FileWhereInput', (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });

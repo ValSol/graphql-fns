@@ -63,7 +63,7 @@ describe('createEntityDistinctValuesQueryType', () => {
     };
 
     const expectedResult =
-      '  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!';
+      '  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

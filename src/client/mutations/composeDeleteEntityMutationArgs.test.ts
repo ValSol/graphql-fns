@@ -22,8 +22,8 @@ describe('composeDeleteEntityMutationArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'mutation Home_deleteExample($whereOne: ExampleWhereOneInput!) {',
-      '  deleteExample(whereOne: $whereOne) {',
+      'mutation Home_deleteExample($whereOne: ExampleWhereOneInput!, $token: String) {',
+      '  deleteExample(whereOne: $whereOne, token: $token) {',
     ];
 
     const result = composeActionArgs(

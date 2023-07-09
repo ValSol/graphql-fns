@@ -22,8 +22,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
-      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $token: String) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -52,8 +52,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
-      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $token: String) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -81,8 +81,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput) {',
-      '  Examples(where: $where, sort: $sort, pagination: $pagination) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $token: String) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -111,8 +111,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $near: ExampleNearInput) {',
-      '  Examples(where: $where, sort: $sort, pagination: $pagination, near: $near) {',
+      'query Home_Examples($where: ExampleWhereInput, $sort: ExampleSortInput, $pagination: PaginationInput, $near: ExampleNearInput, $token: String) {',
+      '  Examples(where: $where, sort: $sort, pagination: $pagination, near: $near, token: $token) {',
     ];
 
     const result = composeActionArgs(

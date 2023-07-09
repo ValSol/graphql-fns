@@ -34,7 +34,8 @@ describe('composeActionSignature util', () => {
       entityTypeDic,
       inputDic,
     );
-    const expectedResult = '  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!';
+    const expectedResult =
+      '  createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!';
 
     expect(result).toEqual(expectedResult);
 

@@ -97,11 +97,12 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entities')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'pagination'],
+      argNames: () => ['where', 'sort', 'pagination', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogSortInput`,
         'PaginationInput',
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -135,11 +136,12 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entities')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'pagination'],
+      argNames: () => ['where', 'sort', 'pagination', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogSortInput`,
         'PaginationInput',
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -173,11 +175,12 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entities')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'pagination'],
+      argNames: () => ['where', 'sort', 'pagination', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogSortInput`,
         'PaginationInput',
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -211,12 +214,13 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entities')
           ? `${pluralize(name)}ForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'pagination', 'near'],
+      argNames: () => ['where', 'sort', 'pagination', 'near', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereInput`,
         `${name}ForCatalogSortInput`,
         'PaginationInput',
         `${name}ForCatalogNearInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,

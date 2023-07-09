@@ -2,27 +2,32 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityDistinctValuesOptionsInputType from '../inputs/createEntityDistinctValuesOptionsInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
-  `entityDistinctValues${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `entityDistinctValues${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}DistinctValues${descendantKey}`;
 
-const inputCreators = [createEntityWhereInputType, createEntityDistinctValuesOptionsInputType];
+const inputCreators = [
+  createEntityWhereInputType,
+  createEntityDistinctValuesOptionsInputType,
+  createStringInputType,
+];
 
-const argNames = ['where', 'options'];
+const argNames = ['where', 'options', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}DistinctValuesOptionsInput`,
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });

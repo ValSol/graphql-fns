@@ -672,98 +672,98 @@ type UpdatedMenuCloneSectionPayload {
 }
 type Query {
   node(id: ID!): Node
-  MenuCount(where: MenuWhereInput): Int!
-  MenuCloneCount(where: MenuCloneWhereInput): Int!
-  MenuSectionCount(where: MenuSectionWhereInput): Int!
-  MenuCloneSectionCount(where: MenuCloneSectionWhereInput): Int!
-  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput): [String!]!
-  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput): [String!]!
-  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput): [String!]!
-  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput): [String!]!
-  Menu(whereOne: MenuWhereOneInput!): Menu!
-  MenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
-  MenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
-  MenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
-  Menus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput): [Menu!]!
-  MenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput): [MenuClone!]!
-  MenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
-  MenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
-  MenusThroughConnection(where: MenuWhereInput, sort: MenuSortInput, after: String, before: String, first: Int, last: Int): MenuConnection
-  MenuClonesThroughConnection(where: MenuCloneWhereInput, sort: MenuCloneSortInput, after: String, before: String, first: Int, last: Int): MenuCloneConnection
-  MenuSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection
-  MenuCloneSectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection
-  MenusByUnique(where: MenuWhereByUniqueInput!, sort: MenuSortInput): [Menu!]!
-  MenuClonesByUnique(where: MenuCloneWhereByUniqueInput!, sort: MenuCloneSortInput): [MenuClone!]!
-  MenuSectionsByUnique(where: MenuSectionWhereByUniqueInput!, sort: MenuSectionSortInput): [MenuSection!]!
-  MenuCloneSectionsByUnique(where: MenuCloneSectionWhereByUniqueInput!, sort: MenuCloneSectionSortInput): [MenuCloneSection!]!
+  MenuCount(where: MenuWhereInput, token: String): Int!
+  MenuCloneCount(where: MenuCloneWhereInput, token: String): Int!
+  MenuSectionCount(where: MenuSectionWhereInput, token: String): Int!
+  MenuCloneSectionCount(where: MenuCloneSectionWhereInput, token: String): Int!
+  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput, token: String): [String!]!
+  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput, token: String): [String!]!
+  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput, token: String): [String!]!
+  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput, token: String): [String!]!
+  Menu(whereOne: MenuWhereOneInput!, token: String): Menu!
+  MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone!
+  MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection!
+  MenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
+  Menus(where: MenuWhereInput, sort: MenuSortInput, pagination: PaginationInput, token: String): [Menu!]!
+  MenuClones(where: MenuCloneWhereInput, sort: MenuCloneSortInput, pagination: PaginationInput, token: String): [MenuClone!]!
+  MenuSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput, token: String): [MenuSection!]!
+  MenuCloneSections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput, token: String): [MenuCloneSection!]!
+  MenusThroughConnection(where: MenuWhereInput, sort: MenuSortInput, after: String, before: String, first: Int, last: Int, token: String): MenuConnection
+  MenuClonesThroughConnection(where: MenuCloneWhereInput, sort: MenuCloneSortInput, after: String, before: String, first: Int, last: Int, token: String): MenuCloneConnection
+  MenuSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int, token: String): MenuSectionConnection
+  MenuCloneSectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int, token: String): MenuCloneSectionConnection
+  MenusByUnique(where: MenuWhereByUniqueInput!, sort: MenuSortInput, token: String): [Menu!]!
+  MenuClonesByUnique(where: MenuCloneWhereByUniqueInput!, sort: MenuCloneSortInput, token: String): [MenuClone!]!
+  MenuSectionsByUnique(where: MenuSectionWhereByUniqueInput!, sort: MenuSectionSortInput, token: String): [MenuSection!]!
+  MenuCloneSectionsByUnique(where: MenuCloneSectionWhereByUniqueInput!, sort: MenuCloneSectionSortInput, token: String): [MenuCloneSection!]!
 }
 type Mutation {
-  copyManyMenus(whereOnes: [MenuCopyWhereOnesInput!]!, options: copyMenuOptionsInput): [Menu!]!
-  copyManyMenuClones(whereOnes: [MenuCloneCopyWhereOnesInput!]!, options: copyMenuCloneOptionsInput): [MenuClone!]!
-  copyManyMenuSections(whereOnes: [MenuSectionCopyWhereOnesInput!]!, options: copyMenuSectionOptionsInput, whereOne: [MenuSectionWhereOneToCopyInput!]): [MenuSection!]!
-  copyManyMenuCloneSections(whereOnes: [MenuCloneSectionCopyWhereOnesInput!]!, options: copyMenuCloneSectionOptionsInput, whereOne: [MenuCloneSectionWhereOneToCopyInput!]): [MenuCloneSection!]!
-  copyManyMenusWithChildren(whereOnes: [MenuCopyWhereOnesInput!]!, options: copyMenuOptionsInput): [Menu!]!
-  copyManyMenuClonesWithChildren(whereOnes: [MenuCloneCopyWhereOnesInput!]!, options: copyMenuCloneOptionsInput): [MenuClone!]!
-  copyMenu(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput): Menu!
-  copyMenuClone(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput): MenuClone!
-  copyMenuSection(whereOnes: MenuSectionCopyWhereOnesInput!, options: copyMenuSectionOptionsInput, whereOne: MenuSectionWhereOneToCopyInput): MenuSection!
-  copyMenuCloneSection(whereOnes: MenuCloneSectionCopyWhereOnesInput!, options: copyMenuCloneSectionOptionsInput, whereOne: MenuCloneSectionWhereOneToCopyInput): MenuCloneSection!
-  copyMenuWithChildren(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput): Menu!
-  copyMenuCloneWithChildren(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput): MenuClone!
-  createManyMenus(data: [MenuCreateInput!]!): [Menu!]!
-  createManyMenuClones(data: [MenuCloneCreateInput!]!): [MenuClone!]!
-  createManyMenuSections(data: [MenuSectionCreateInput!]!): [MenuSection!]!
-  createManyMenuCloneSections(data: [MenuCloneSectionCreateInput!]!): [MenuCloneSection!]!
-  createMenu(data: MenuCreateInput!): Menu!
-  createMenuClone(data: MenuCloneCreateInput!): MenuClone!
-  createMenuSection(data: MenuSectionCreateInput!): MenuSection!
-  createMenuCloneSection(data: MenuCloneSectionCreateInput!): MenuCloneSection!
-  deleteFilteredMenus(where: MenuWhereInput): [Menu!]!
-  deleteFilteredMenuClones(where: MenuCloneWhereInput): [MenuClone!]!
-  deleteFilteredMenuSections(where: MenuSectionWhereInput): [MenuSection!]!
-  deleteFilteredMenuCloneSections(where: MenuCloneSectionWhereInput): [MenuCloneSection!]!
-  deleteFilteredMenusReturnScalar(where: MenuWhereInput): Int!
-  deleteFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput): Int!
-  deleteFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput): Int!
-  deleteFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput): Int!
-  deleteFilteredMenusWithChildren(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput): [Menu!]!
-  deleteFilteredMenuClonesWithChildren(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput): [MenuClone!]!
-  deleteFilteredMenusWithChildrenReturnScalar(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput): Int!
-  deleteFilteredMenuClonesWithChildrenReturnScalar(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput): Int!
-  deleteManyMenus(whereOne: [MenuWhereOneInput!]!): [Menu!]!
-  deleteManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!): [MenuClone!]!
-  deleteManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!): [MenuSection!]!
-  deleteManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!): [MenuCloneSection!]!
-  deleteManyMenusWithChildren(whereOne: [MenuWhereOneInput!]!, options: deleteMenuWithChildrenOptionsInput): [Menu!]!
-  deleteManyMenuClonesWithChildren(whereOne: [MenuCloneWhereOneInput!]!, options: deleteMenuCloneWithChildrenOptionsInput): [MenuClone!]!
-  deleteMenu(whereOne: MenuWhereOneInput!): Menu!
-  deleteMenuClone(whereOne: MenuCloneWhereOneInput!): MenuClone!
-  deleteMenuSection(whereOne: MenuSectionWhereOneInput!): MenuSection!
-  deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!): MenuCloneSection!
-  deleteMenuWithChildren(whereOne: MenuWhereOneInput!, options: deleteMenuWithChildrenOptionsInput): Menu!
-  deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput): MenuClone!
-  importMenus(file: Upload!, options: ImportOptionsInput): [Menu!]!
-  importMenuClones(file: Upload!, options: ImportOptionsInput): [MenuClone!]!
-  importMenuSections(file: Upload!, options: ImportOptionsInput): [MenuSection!]!
-  importMenuCloneSections(file: Upload!, options: ImportOptionsInput): [MenuCloneSection!]!
-  pushIntoMenu(whereOne: MenuWhereOneInput!, data: PushIntoMenuInput!, positions: MenuPushPositionsInput): Menu!
-  pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput): MenuClone!
-  updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!): [Menu!]!
-  updateFilteredMenuClones(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!): [MenuClone!]!
-  updateFilteredMenuSections(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!): [MenuSection!]!
-  updateFilteredMenuCloneSections(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!): [MenuCloneSection!]!
-  updateFilteredMenusReturnScalar(where: MenuWhereInput, data: MenuUpdateInput!): Int!
-  updateFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!): Int!
-  updateFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!): Int!
-  updateFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!): Int!
-  updateManyMenus(whereOne: [MenuWhereOneInput!]!, data: [MenuUpdateInput!]!): [Menu!]!
-  updateManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, data: [MenuCloneUpdateInput!]!): [MenuClone!]!
-  updateManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, data: [MenuSectionUpdateInput!]!): [MenuSection!]!
-  updateManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, data: [MenuCloneSectionUpdateInput!]!): [MenuCloneSection!]!
-  updateMenu(whereOne: MenuWhereOneInput!, data: MenuUpdateInput!): Menu!
-  updateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneUpdateInput!): MenuClone!
-  updateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionUpdateInput!): MenuSection!
-  updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!): MenuCloneSection!
+  copyManyMenus(whereOnes: [MenuCopyWhereOnesInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
+  copyManyMenuClones(whereOnes: [MenuCloneCopyWhereOnesInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
+  copyManyMenuSections(whereOnes: [MenuSectionCopyWhereOnesInput!]!, options: copyMenuSectionOptionsInput, whereOne: [MenuSectionWhereOneToCopyInput!], token: String): [MenuSection!]!
+  copyManyMenuCloneSections(whereOnes: [MenuCloneSectionCopyWhereOnesInput!]!, options: copyMenuCloneSectionOptionsInput, whereOne: [MenuCloneSectionWhereOneToCopyInput!], token: String): [MenuCloneSection!]!
+  copyManyMenusWithChildren(whereOnes: [MenuCopyWhereOnesInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
+  copyManyMenuClonesWithChildren(whereOnes: [MenuCloneCopyWhereOnesInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
+  copyMenu(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput, token: String): Menu!
+  copyMenuClone(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput, token: String): MenuClone!
+  copyMenuSection(whereOnes: MenuSectionCopyWhereOnesInput!, options: copyMenuSectionOptionsInput, whereOne: MenuSectionWhereOneToCopyInput, token: String): MenuSection!
+  copyMenuCloneSection(whereOnes: MenuCloneSectionCopyWhereOnesInput!, options: copyMenuCloneSectionOptionsInput, whereOne: MenuCloneSectionWhereOneToCopyInput, token: String): MenuCloneSection!
+  copyMenuWithChildren(whereOnes: MenuCopyWhereOnesInput!, options: copyMenuOptionsInput, token: String): Menu!
+  copyMenuCloneWithChildren(whereOnes: MenuCloneCopyWhereOnesInput!, options: copyMenuCloneOptionsInput, token: String): MenuClone!
+  createManyMenus(data: [MenuCreateInput!]!, token: String): [Menu!]!
+  createManyMenuClones(data: [MenuCloneCreateInput!]!, token: String): [MenuClone!]!
+  createManyMenuSections(data: [MenuSectionCreateInput!]!, token: String): [MenuSection!]!
+  createManyMenuCloneSections(data: [MenuCloneSectionCreateInput!]!, token: String): [MenuCloneSection!]!
+  createMenu(data: MenuCreateInput!, token: String): Menu!
+  createMenuClone(data: MenuCloneCreateInput!, token: String): MenuClone!
+  createMenuSection(data: MenuSectionCreateInput!, token: String): MenuSection!
+  createMenuCloneSection(data: MenuCloneSectionCreateInput!, token: String): MenuCloneSection!
+  deleteFilteredMenus(where: MenuWhereInput, token: String): [Menu!]!
+  deleteFilteredMenuClones(where: MenuCloneWhereInput, token: String): [MenuClone!]!
+  deleteFilteredMenuSections(where: MenuSectionWhereInput, token: String): [MenuSection!]!
+  deleteFilteredMenuCloneSections(where: MenuCloneSectionWhereInput, token: String): [MenuCloneSection!]!
+  deleteFilteredMenusReturnScalar(where: MenuWhereInput, token: String): Int!
+  deleteFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, token: String): Int!
+  deleteFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, token: String): Int!
+  deleteFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, token: String): Int!
+  deleteFilteredMenusWithChildren(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput, token: String): [Menu!]!
+  deleteFilteredMenuClonesWithChildren(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput, token: String): [MenuClone!]!
+  deleteFilteredMenusWithChildrenReturnScalar(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput, token: String): Int!
+  deleteFilteredMenuClonesWithChildrenReturnScalar(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput, token: String): Int!
+  deleteManyMenus(whereOne: [MenuWhereOneInput!]!, token: String): [Menu!]!
+  deleteManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, token: String): [MenuClone!]!
+  deleteManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, token: String): [MenuSection!]!
+  deleteManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, token: String): [MenuCloneSection!]!
+  deleteManyMenusWithChildren(whereOne: [MenuWhereOneInput!]!, options: deleteMenuWithChildrenOptionsInput, token: String): [Menu!]!
+  deleteManyMenuClonesWithChildren(whereOne: [MenuCloneWhereOneInput!]!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): [MenuClone!]!
+  deleteMenu(whereOne: MenuWhereOneInput!, token: String): Menu!
+  deleteMenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone!
+  deleteMenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection!
+  deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
+  deleteMenuWithChildren(whereOne: MenuWhereOneInput!, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
+  deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
+  importMenus(file: Upload!, options: ImportOptionsInput, token: String): [Menu!]!
+  importMenuClones(file: Upload!, options: ImportOptionsInput, token: String): [MenuClone!]!
+  importMenuSections(file: Upload!, options: ImportOptionsInput, token: String): [MenuSection!]!
+  importMenuCloneSections(file: Upload!, options: ImportOptionsInput, token: String): [MenuCloneSection!]!
+  pushIntoMenu(whereOne: MenuWhereOneInput!, data: PushIntoMenuInput!, positions: MenuPushPositionsInput, token: String): Menu!
+  pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput, token: String): MenuClone!
+  updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!, token: String): [Menu!]!
+  updateFilteredMenuClones(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): [MenuClone!]!
+  updateFilteredMenuSections(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!, token: String): [MenuSection!]!
+  updateFilteredMenuCloneSections(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!, token: String): [MenuCloneSection!]!
+  updateFilteredMenusReturnScalar(where: MenuWhereInput, data: MenuUpdateInput!, token: String): Int!
+  updateFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): Int!
+  updateFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!, token: String): Int!
+  updateFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!, token: String): Int!
+  updateManyMenus(whereOne: [MenuWhereOneInput!]!, data: [MenuUpdateInput!]!, token: String): [Menu!]!
+  updateManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, data: [MenuCloneUpdateInput!]!, token: String): [MenuClone!]!
+  updateManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, data: [MenuSectionUpdateInput!]!, token: String): [MenuSection!]!
+  updateManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, data: [MenuCloneSectionUpdateInput!]!, token: String): [MenuCloneSection!]!
+  updateMenu(whereOne: MenuWhereOneInput!, data: MenuUpdateInput!, token: String): Menu!
+  updateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneUpdateInput!, token: String): MenuClone!
+  updateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionUpdateInput!, token: String): MenuSection!
+  updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!, token: String): MenuCloneSection!
 }
 type Subscription {
   createdMenu(where: MenuWhereInput): Menu!
@@ -1313,31 +1313,31 @@ type UpdatedExamplePayload {
 }
 type Query {
   node(id: ID!): Node
-  ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  TangibleImageFileCount(where: FileWhereInput): Int!
-  TangibleImageFile(whereOne: FileWhereOneInput!): TangibleImage!
-  TangibleImageFiles(where: FileWhereInput): [TangibleImage!]!
-  TangibleImageFilesThroughConnection(where: FileWhereInput, after: String, before: String, first: Int, last: Int): TangibleImageConnection
-  Example(whereOne: ExampleWhereOneInput!): Example!
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String): [Example!]!
-  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int): ExampleConnection
-  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String): [Example!]!
+  ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  TangibleImageFileCount(where: FileWhereInput, token: String): Int!
+  TangibleImageFile(whereOne: FileWhereOneInput!, token: String): TangibleImage!
+  TangibleImageFiles(where: FileWhereInput, token: String): [TangibleImage!]!
+  TangibleImageFilesThroughConnection(where: FileWhereInput, after: String, before: String, first: Int, last: Int, token: String): TangibleImageConnection
+  Example(whereOne: ExampleWhereOneInput!, token: String): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String, token: String): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String, token: String): [Example!]!
 }
 type Mutation {
-  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
-  createExample(data: ExampleCreateInput!): Example!
-  deleteFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String): [Example!]!
-  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String): Int!
-  deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
-  deleteExample(whereOne: ExampleWhereOneInput!): Example!
-  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
-  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput): Example!
-  updateFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!): [Example!]!
-  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!): Int!
-  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
-  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
-  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!
+  createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!
+  createExample(data: ExampleCreateInput!, token: String): Example!
+  deleteFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): [Example!]!
+  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): Int!
+  deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
+  deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
+  importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!
+  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput, token: String): Example!
+  updateFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!, token: String): [Example!]!
+  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!, token: String): Int!
+  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!
+  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!
+  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!, token: String): [TangibleImage!]!
 }
 type Subscription {
   createdExample(where: ExampleWhereInput): Example!
@@ -1691,43 +1691,43 @@ type UpdatedExample2Payload {
 }
 type Query {
   node(id: ID!): Node
-  Example1Count(where: Example1WhereInput, near: Example1NearInput): Int!
-  Example2Count(where: Example2WhereInput): Int!
-  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput): [String!]!
-  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput): [String!]!
-  Example1(whereOne: Example1WhereOneInput!): Example1!
-  Example2(whereOne: Example2WhereOneInput!): Example2!
-  Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput): [Example1!]!
-  Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput): [Example2!]!
-  Example1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int): Example1Connection
-  Example2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int): Example2Connection
-  Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput): [Example1!]!
-  Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput): [Example2!]!
+  Example1Count(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
+  Example2Count(where: Example2WhereInput, token: String): Int!
+  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput, token: String): [String!]!
+  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput, token: String): [String!]!
+  Example1(whereOne: Example1WhereOneInput!, token: String): Example1!
+  Example2(whereOne: Example2WhereOneInput!, token: String): Example2!
+  Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
+  Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput, token: String): [Example2!]!
+  Example1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int, token: String): Example1Connection
+  Example2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int, token: String): Example2Connection
+  Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput, token: String): [Example1!]!
+  Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput, token: String): [Example2!]!
 }
 type Mutation {
-  createManyExample1s(data: [Example1CreateInput!]!): [Example1!]!
-  createManyExample2s(data: [Example2CreateInput!]!): [Example2!]!
-  createExample1(data: Example1CreateInput!): Example1!
-  createExample2(data: Example2CreateInput!): Example2!
-  deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput): [Example1!]!
-  deleteFilteredExample2s(where: Example2WhereInput): [Example2!]!
-  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput): Int!
-  deleteFilteredExample2sReturnScalar(where: Example2WhereInput): Int!
-  deleteManyExample1s(whereOne: [Example1WhereOneInput!]!): [Example1!]!
-  deleteManyExample2s(whereOne: [Example2WhereOneInput!]!): [Example2!]!
-  deleteExample1(whereOne: Example1WhereOneInput!): Example1!
-  deleteExample2(whereOne: Example2WhereOneInput!): Example2!
-  importExample1s(file: Upload!, options: ImportOptionsInput): [Example1!]!
-  importExample2s(file: Upload!, options: ImportOptionsInput): [Example2!]!
-  pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput): Example2!
-  updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!): [Example1!]!
-  updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!): [Example2!]!
-  updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!): Int!
-  updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!): Int!
-  updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!): [Example1!]!
-  updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!): [Example2!]!
-  updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!): Example1!
-  updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!): Example2!
+  createManyExample1s(data: [Example1CreateInput!]!, token: String): [Example1!]!
+  createManyExample2s(data: [Example2CreateInput!]!, token: String): [Example2!]!
+  createExample1(data: Example1CreateInput!, token: String): Example1!
+  createExample2(data: Example2CreateInput!, token: String): Example2!
+  deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, token: String): [Example1!]!
+  deleteFilteredExample2s(where: Example2WhereInput, token: String): [Example2!]!
+  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
+  deleteFilteredExample2sReturnScalar(where: Example2WhereInput, token: String): Int!
+  deleteManyExample1s(whereOne: [Example1WhereOneInput!]!, token: String): [Example1!]!
+  deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
+  deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
+  deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
+  importExample1s(file: Upload!, options: ImportOptionsInput, token: String): [Example1!]!
+  importExample2s(file: Upload!, options: ImportOptionsInput, token: String): [Example2!]!
+  pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
+  updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
+  updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!, token: String): [Example2!]!
+  updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): Int!
+  updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!, token: String): Int!
+  updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!, token: String): [Example1!]!
+  updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!, token: String): [Example2!]!
+  updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!, token: String): Example1!
+  updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!, token: String): Example2!
 }
 type Subscription {
   createdExample1(where: Example1WhereInput): Example1!
@@ -2053,43 +2053,43 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  PersonCount(where: PersonWhereInput): Int!
-  PlaceCount(where: PlaceWhereInput): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
-  Person(whereOne: PersonWhereOneInput!): Person!
-  Place(whereOne: PlaceWhereOneInput!): Place!
-  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
-  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
-  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
-  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
-  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
+  PersonCount(where: PersonWhereInput, token: String): Int!
+  PlaceCount(where: PlaceWhereInput, token: String): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput, token: String): [String!]!
+  Person(whereOne: PersonWhereOneInput!, token: String): Person!
+  Place(whereOne: PlaceWhereOneInput!, token: String): Place!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput, token: String): [Place!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection
+  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int, token: String): PlaceConnection
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput, token: String): [Person!]!
+  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput, token: String): [Place!]!
 }
 type Mutation {
-  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  createPerson(data: PersonCreateInput!): Person!
-  createPlace(data: PlaceCreateInput!): Place!
-  deleteFilteredPeople(where: PersonWhereInput): [Person!]!
-  deleteFilteredPlaces(where: PlaceWhereInput): [Place!]!
-  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
-  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput): Int!
-  deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
-  deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
-  deletePerson(whereOne: PersonWhereOneInput!): Person!
-  deletePlace(whereOne: PlaceWhereOneInput!): Place!
-  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
-  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
-  updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!): [Place!]!
-  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
-  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
-  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
-  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
+  createManyPeople(data: [PersonCreateInput!]!, token: String): [Person!]!
+  createManyPlaces(data: [PlaceCreateInput!]!, token: String): [Place!]!
+  createPerson(data: PersonCreateInput!, token: String): Person!
+  createPlace(data: PlaceCreateInput!, token: String): Place!
+  deleteFilteredPeople(where: PersonWhereInput, token: String): [Person!]!
+  deleteFilteredPlaces(where: PlaceWhereInput, token: String): [Place!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
+  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput, token: String): Int!
+  deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
+  deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
+  deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
+  deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
+  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
+  importPlaces(file: Upload!, options: ImportOptionsInput, token: String): [Place!]!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
+  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
+  updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
+  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): Int!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
+  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!, token: String): [Place!]!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -2362,26 +2362,26 @@ type UpdatedPersonPayload {
 }
 type Query {
   node(id: ID!): Node
-  PersonCount(where: PersonWhereInput): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
-  Person(whereOne: PersonWhereOneInput!): Person!
-  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
-  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
+  PersonCount(where: PersonWhereInput, token: String): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
+  Person(whereOne: PersonWhereOneInput!, token: String): Person!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput, token: String): [Person!]!
 }
 type Mutation {
-  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  createPerson(data: PersonCreateInput!): Person!
-  deleteFilteredPeople(where: PersonWhereInput): [Person!]!
-  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
-  deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
-  deletePerson(whereOne: PersonWhereOneInput!): Person!
-  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
-  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
-  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
+  createManyPeople(data: [PersonCreateInput!]!, token: String): [Person!]!
+  createPerson(data: PersonCreateInput!, token: String): Person!
+  deleteFilteredPeople(where: PersonWhereInput, token: String): [Person!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
+  deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
+  deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
+  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
+  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -2808,50 +2808,50 @@ type UpdatedPlacePayload {
 }
 type Query {
   node(id: ID!): Node
-  PersonCount(where: PersonWhereInput): Int!
-  PlaceCount(where: PlaceWhereInput): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput): [String!]!
-  Person(whereOne: PersonWhereOneInput!): Person!
-  Place(whereOne: PlaceWhereOneInput!): Place!
-  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
-  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
-  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection
-  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput): [Person!]!
-  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput): [Place!]!
+  PersonCount(where: PersonWhereInput, token: String): Int!
+  PlaceCount(where: PlaceWhereInput, token: String): Int!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput, token: String): [String!]!
+  Person(whereOne: PersonWhereOneInput!, token: String): Person!
+  Place(whereOne: PlaceWhereOneInput!, token: String): Place!
+  People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
+  Places(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput, token: String): [Place!]!
+  PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection
+  PlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int, token: String): PlaceConnection
+  PeopleByUnique(where: PersonWhereByUniqueInput!, sort: PersonSortInput, token: String): [Person!]!
+  PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput, token: String): [Place!]!
 }
 type Mutation {
-  copyManyPeople(whereOnes: [PersonCopyWhereOnesInput!]!, options: copyPersonOptionsInput, whereOne: [PersonWhereOneToCopyInput!]): [Person!]!
-  copyPerson(whereOnes: PersonCopyWhereOnesInput!, options: copyPersonOptionsInput, whereOne: PersonWhereOneToCopyInput): Person!
-  createManyPeople(data: [PersonCreateInput!]!): [Person!]!
-  createManyPlaces(data: [PlaceCreateInput!]!): [Place!]!
-  createPerson(data: PersonCreateInput!): Person!
-  createPlace(data: PlaceCreateInput!): Place!
-  deleteFilteredPeople(where: PersonWhereInput): [Person!]!
-  deleteFilteredPlaces(where: PlaceWhereInput): [Place!]!
-  deleteFilteredPeopleReturnScalar(where: PersonWhereInput): Int!
-  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput): Int!
-  deleteFilteredPlacesWithChildren(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput): [Place!]!
-  deleteFilteredPlacesWithChildrenReturnScalar(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput): Int!
-  deleteManyPeople(whereOne: [PersonWhereOneInput!]!): [Person!]!
-  deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!): [Place!]!
-  deleteManyPlacesWithChildren(whereOne: [PlaceWhereOneInput!]!, options: deletePlaceWithChildrenOptionsInput): [Place!]!
-  deletePerson(whereOne: PersonWhereOneInput!): Person!
-  deletePlace(whereOne: PlaceWhereOneInput!): Place!
-  deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput): Place!
-  importPeople(file: Upload!, options: ImportOptionsInput): [Person!]!
-  importPlaces(file: Upload!, options: ImportOptionsInput): [Place!]!
-  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput): Person!
-  pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput): Place!
-  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!): [Person!]!
-  updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!): [Place!]!
-  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!): Int!
-  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!): [Person!]!
-  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!): [Place!]!
-  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!
-  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!): Place!
+  copyManyPeople(whereOnes: [PersonCopyWhereOnesInput!]!, options: copyPersonOptionsInput, whereOne: [PersonWhereOneToCopyInput!], token: String): [Person!]!
+  copyPerson(whereOnes: PersonCopyWhereOnesInput!, options: copyPersonOptionsInput, whereOne: PersonWhereOneToCopyInput, token: String): Person!
+  createManyPeople(data: [PersonCreateInput!]!, token: String): [Person!]!
+  createManyPlaces(data: [PlaceCreateInput!]!, token: String): [Place!]!
+  createPerson(data: PersonCreateInput!, token: String): Person!
+  createPlace(data: PlaceCreateInput!, token: String): Place!
+  deleteFilteredPeople(where: PersonWhereInput, token: String): [Person!]!
+  deleteFilteredPlaces(where: PlaceWhereInput, token: String): [Place!]!
+  deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
+  deleteFilteredPlacesReturnScalar(where: PlaceWhereInput, token: String): Int!
+  deleteFilteredPlacesWithChildren(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput, token: String): [Place!]!
+  deleteFilteredPlacesWithChildrenReturnScalar(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput, token: String): Int!
+  deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
+  deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
+  deleteManyPlacesWithChildren(whereOne: [PlaceWhereOneInput!]!, options: deletePlaceWithChildrenOptionsInput, token: String): [Place!]!
+  deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
+  deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
+  deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput, token: String): Place!
+  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
+  importPlaces(file: Upload!, options: ImportOptionsInput, token: String): [Place!]!
+  pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
+  pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput, token: String): Place!
+  updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
+  updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
+  updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
+  updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): Int!
+  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
+  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!, token: String): [Place!]!
+  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
+  updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
   createdPerson(where: PersonWhereInput): Person!
@@ -2980,12 +2980,12 @@ input ExampleWhereByUniqueInput {
 }
 type Query {
   node(id: ID!): Node
-  ExampleCount(where: ExampleWhereInput): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  Example(whereOne: ExampleWhereOneInput!): Example!
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
-  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
-  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
+  ExampleCount(where: ExampleWhereInput, token: String): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  Example(whereOne: ExampleWhereOneInput!, token: String): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, token: String): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3117,17 +3117,17 @@ type Query {
   node(id: ID!): Node
 }
 type Mutation {
-  createManyExamples(data: [ExampleCreateInput!]!): [Example!]!
-  createExample(data: ExampleCreateInput!): Example!
-  deleteFilteredExamples(where: ExampleWhereInput): [Example!]!
-  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput): Int!
-  deleteManyExamples(whereOne: [ExampleWhereOneInput!]!): [Example!]!
-  deleteExample(whereOne: ExampleWhereOneInput!): Example!
-  importExamples(file: Upload!, options: ImportOptionsInput): [Example!]!
-  updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!): [Example!]!
-  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!): Int!
-  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!): [Example!]!
-  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!
+  createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!
+  createExample(data: ExampleCreateInput!, token: String): Example!
+  deleteFilteredExamples(where: ExampleWhereInput, token: String): [Example!]!
+  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, token: String): Int!
+  deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
+  deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
+  importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!
+  updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): [Example!]!
+  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): Int!
+  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!
+  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3223,7 +3223,7 @@ input PaginationInput {
 }
 type Query {
   node(id: ID!): Node
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3318,7 +3318,7 @@ input PaginationInput {
 }
 type Query {
   node(id: ID!): Node
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3377,7 +3377,7 @@ type Query {
   node(id: ID!): Node
 }
 type Mutation {
-  createExample(data: ExampleCreateInput!): Example!
+  createExample(data: ExampleCreateInput!, token: String): Example!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3439,7 +3439,7 @@ type Query {
   node(id: ID!): Node
 }
 type Mutation {
-  createExample(data: ExampleCreateInput!): Example!
+  createExample(data: ExampleCreateInput!, token: String): Example!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -3798,12 +3798,12 @@ input ExampleForCatalogUpdateInput {
 }
 type Query {
   node(id: ID!): Node
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
-  ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput): [ExampleForCatalog!]!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
+  ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput, token: String): [ExampleForCatalog!]!
   ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): Example!
 }
 type Mutation {
-  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForCatalog!
+  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!, token: String): ExampleForCatalog!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -4147,13 +4147,13 @@ input ExampleForCatalogSortInput {
 }
 type Query {
   node(id: ID!): Node
-  ExampleCount(where: ExampleWhereInput): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput): [String!]!
-  Example(whereOne: ExampleWhereOneInput!): Example!
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!
-  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int): ExampleConnection
-  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput): [Example!]!
-  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleForCatalogConnection
+  ExampleCount(where: ExampleWhereInput, token: String): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  Example(whereOne: ExampleWhereOneInput!, token: String): Example!
+  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
+  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection
+  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, token: String): [Example!]!
+  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleForCatalogConnection
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -4219,7 +4219,7 @@ type Query {
   node(id: ID!): Node
 }
 type Mutation {
-  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!): ExampleForView!
+  updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!, token: String): ExampleForView!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -4350,7 +4350,7 @@ input ExampleForCatalogSortInput {
 }
 type Query {
   node(id: ID!): Node
-  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int): ExampleForViewConnection
+  ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleForViewConnection
 }`;
 
     const result = composeGqlTypes(generalConfig);

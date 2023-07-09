@@ -3,31 +3,20 @@ import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createFileWhereInputType from '../inputs/createFileWhereInputType';
 import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
+const actionGeneralName = (descendantKey = ''): string =>
   `entityFilesThroughConnection${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `${baseName}FilesThroughConnection${descendantKey}`;
 
 const inputCreators = [
   createFileWhereInputType,
-  (): [
-    string,
-    string,
-    {
-      [inputSpecificName: string]: [InputCreator, EntityConfig];
-    },
-  ] => ['', 'String', {}],
-  (): [
-    string,
-    string,
-    {
-      [inputSpecificName: string]: [InputCreator, EntityConfig];
-    },
-  ] => ['', 'String', {}],
+  createStringInputType,
+  createStringInputType,
   (): [
     string,
     string,
@@ -42,21 +31,23 @@ const inputCreators = [
       [inputSpecificName: string]: [InputCreator, EntityConfig];
     },
   ] => ['', 'Int', {}],
+  createStringInputType,
 ];
 
-const argNames = ['where', 'after', 'before', 'first', 'last'];
+const argNames = ['where', 'after', 'before', 'first', 'last', 'token'];
 
 const argTypes = [
-  (name: string): string => 'FileWhereInput', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'String', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
-  (name: string): string => 'Int', // eslint-disable-line no-unused-vars
+  (): string => 'FileWhereInput',
+  (): string => 'String',
+  (): string => 'String',
+  (): string => 'Int',
+  (): string => 'Int',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({ inputOutputEntity: `${name}${descendantKey}` });
@@ -81,7 +72,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}Connection${descendantKey}`;
 
 const entityFilesThroughConnectionQueryAttributes = {

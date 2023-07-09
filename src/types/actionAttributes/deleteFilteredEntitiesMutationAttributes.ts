@@ -6,32 +6,34 @@ import composeDescendantConfigByName from '../../utils/composeDescendantConfigBy
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
-  `deleteFilteredEntities${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `deleteFilteredEntities${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `deleteFiltered${pluralize(baseName)}${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
+  createStringInputType,
 ];
 
-const argNames = ['where', 'near', 'search'];
+const argNames = ['where', 'near', 'search', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}NearInput`,
   (): string => 'String',
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -49,7 +51,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `[${name}${descendantKey}!]!`;
 
 const deleteFilteredEntitiesMutationAttributes = {

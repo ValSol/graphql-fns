@@ -21,7 +21,7 @@ describe('createUpdateEntityMutationType', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult =
-      '  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!): Example!';
+      '  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -95,7 +95,7 @@ describe('createUpdateEntityMutationType', () => {
     };
 
     const expectedResult =
-      '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!): Person!';
+      '  updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

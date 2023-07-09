@@ -14,7 +14,7 @@ describe('createCreateEntityMutationType', () => {
 
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
-    const expectedResult = '  createExample(data: ExampleCreateInput!): Example!';
+    const expectedResult = '  createExample(data: ExampleCreateInput!, token: String): Example!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -73,7 +73,7 @@ describe('createCreateEntityMutationType', () => {
       allEntityConfigs: { Place: placeConfig, Person: personConfig },
     };
 
-    const expectedResult = '  createPerson(data: PersonCreateInput!): Person!';
+    const expectedResult = '  createPerson(data: PersonCreateInput!, token: String): Person!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

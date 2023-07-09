@@ -99,8 +99,8 @@ const createEntityArrayResolver = (
       parent,
       // objectIds_from_parent use only for call from this createEntityArrayResolver
       sort?.length || near || search
-        ? { ...args, where: where2 }
-        : { ...args, where: where2, objectIds_from_parent },
+        ? { ...args, where: where2, token: parent._token }
+        : { ...args, where: where2, token: parent._token, objectIds_from_parent },
       context,
       info,
     );

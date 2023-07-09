@@ -44,8 +44,8 @@ describe('composeDescendantEntityFileQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entityFile')
           ? `${name}FileForCatalog`
           : '',
-      argNames: () => ['whereOne'],
-      argTypes: () => ['FileWhereOneInput!'],
+      argNames: () => ['whereOne', 'token'],
+      argTypes: () => ['FileWhereOneInput!', 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `${name}ForCatalog!`,
       config: (entityConfig2: any, generalConfig2: any) =>

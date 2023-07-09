@@ -5,32 +5,34 @@ import getOppositeFields from '../../utils/getOppositeFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
 import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneToCopyInputType';
+import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey: string = ''): string =>
-  `copyEntityWithChildren${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `copyEntityWithChildren${descendantKey}`;
 
-const actionName = (baseName: string, descendantKey: string = ''): string =>
+const actionName = (baseName: string, descendantKey = ''): string =>
   `copy${baseName}WithChildren${descendantKey}`;
 
 const inputCreators = [
   createEntityCopyWhereOnesInputType,
   createCopyEntityOptionsInputType,
   createEntityWhereOneToCopyInputType,
+  createStringInputType,
 ];
 
-const argNames = ['whereOnes', 'options', 'whereOne'];
+const argNames = ['whereOnes', 'options', 'whereOne', 'token'];
 
 const argTypes = [
   (name: string): string => `${name}CopyWhereOnesInput!`,
   (name: string): string => `copy${name}OptionsInput`,
   (name: string): string => `${name}WhereOneToCopyInput`,
+  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey: string = '',
+  descendantKey = '',
 ): {
   [key: string]: string;
 } => ({
@@ -55,7 +57,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     ).length,
   );
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey: string = ''): string =>
+const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
   `${name}${descendantKey}!`;
 
 const copyEntityWithChildrenMutationAttributes = {

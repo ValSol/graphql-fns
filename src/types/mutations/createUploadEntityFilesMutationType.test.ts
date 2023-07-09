@@ -25,7 +25,7 @@ describe('createUploadEntityFilesMutationType', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { TangibleImage: imageConfig } };
 
     const expectedResult =
-      '  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!): [TangibleImage!]!';
+      '  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!, token: String): [TangibleImage!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

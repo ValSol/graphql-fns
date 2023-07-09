@@ -97,10 +97,11 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entitiesByUnique')
           ? `${pluralize(name)}ByUniqueForCatalog`
           : '',
-      argNames: () => ['where', 'sort'],
+      argNames: () => ['where', 'sort', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -134,10 +135,11 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entitiesByUnique')
           ? `${pluralize(name)}ByUniqueForCatalog`
           : '',
-      argNames: () => ['where', 'sort'],
+      argNames: () => ['where', 'sort', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -171,10 +173,11 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entitiesByUnique')
           ? `${pluralize(name)}ByUniqueForCatalog`
           : '',
-      argNames: () => ['where', 'sort'],
+      argNames: () => ['where', 'sort', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,
@@ -208,11 +211,12 @@ describe('composeDescendantEntitiesQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entitiesByUnique')
           ? `${pluralize(name)}ByUniqueForCatalog`
           : '',
-      argNames: () => ['where', 'sort', 'near'],
+      argNames: () => ['where', 'sort', 'near', 'token'],
       argTypes: ({ name }: any) => [
         `${name}ForCatalogWhereByUniqueInput!`,
         `${name}ForCatalogSortInput`,
         `${name}ForCatalogNearInput`,
+        'String',
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: ({ name }: any) => `[${name}ForCatalog!]!`,

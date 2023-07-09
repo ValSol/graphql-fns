@@ -22,8 +22,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
-      '  ExamplesByUnique(where: $where, sort: $sort) {',
+      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $token: String) {',
+      '  ExamplesByUnique(where: $where, sort: $sort, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -52,8 +52,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
-      '  ExamplesByUnique(where: $where, sort: $sort) {',
+      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $token: String) {',
+      '  ExamplesByUnique(where: $where, sort: $sort, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -81,8 +81,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput) {',
-      '  ExamplesByUnique(where: $where, sort: $sort) {',
+      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $token: String) {',
+      '  ExamplesByUnique(where: $where, sort: $sort, token: $token) {',
     ];
 
     const result = composeActionArgs(
@@ -111,8 +111,8 @@ describe('composeEntitiesQueryArgs', () => {
     const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const expectedResult = [
-      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $near: ExampleNearInput) {',
-      '  ExamplesByUnique(where: $where, sort: $sort, near: $near) {',
+      'query Home_ExamplesByUnique($where: ExampleWhereByUniqueInput!, $sort: ExampleSortInput, $near: ExampleNearInput, $token: String) {',
+      '  ExamplesByUnique(where: $where, sort: $sort, near: $near, token: $token) {',
     ];
 
     const result = composeActionArgs(

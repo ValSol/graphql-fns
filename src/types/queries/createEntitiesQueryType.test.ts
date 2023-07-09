@@ -16,7 +16,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -55,7 +55,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -94,7 +94,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, search: String, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -121,7 +121,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -160,7 +160,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
@@ -211,7 +211,7 @@ describe('createEntitiesQueryType', () => {
     };
 
     const expectedResult =
-      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput): [Example!]!';
+      '  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, token: String): [Example!]!';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 
