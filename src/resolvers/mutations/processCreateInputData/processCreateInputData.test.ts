@@ -1,5 +1,7 @@
 /* eslint-env jest */
 
+import { Types } from 'mongoose';
+
 import type { Periphery, TangibleEntityConfig } from '../../../tsTypes';
 import type { PreparedData } from '../../tsTypes';
 
@@ -7,13 +9,36 @@ import processCreateInputData from './index';
 
 // TODO repaire this test!
 
-const mongooseTypes = {
-  count: 0,
-  ObjectId() {
-    this.count += 1;
-    return String(this.count);
-  },
-};
+// const mongooseTypes = {
+//   count: 0,
+//   ObjectId() {
+//     this.count += 1;
+//     return String(this.count);
+//   },
+// };
+
+class ObjectId extends Types.ObjectId {
+  constructor() {
+    ObjectId.count += 1;
+    const id = `00000000000000000000000${ObjectId.count}`.slice(-24);
+    super(id);
+  }
+
+  static count = 0;
+}
+
+const mongooseTypes = { ObjectId };
+
+// describe('describe', () => {
+//   test('test', () => {
+//     const id = new mongooseTypes.ObjectId();
+//     const result = { id };
+
+//     const expectedResult = { id: new Types.ObjectId('000000000000000000000001') };
+
+//     expect(result).toEqual(expectedResult);
+//   });
+// });
 
 describe('processCreateInputData', () => {
   test('should create object with scalar fields', () => {
@@ -72,7 +97,7 @@ describe('processCreateInputData', () => {
     const item = {
       insertOne: {
         document: {
-          _id: '1',
+          _id: new Types.ObjectId('000000000000000000000001'),
           intField1: 0,
           intField2: 55,
           textField1: 'textField1-Value',
@@ -92,7 +117,7 @@ describe('processCreateInputData', () => {
 
       mains: [
         {
-          _id: '1',
+          _id: new Types.ObjectId('000000000000000000000001'),
           intField1: 0,
           intField2: 55,
           floatField1: 0.0,
@@ -156,7 +181,7 @@ describe('processCreateInputData', () => {
     const item = {
       insertOne: {
         document: {
-          _id: '2',
+          _id: new Types.ObjectId('000000000000000000000002'),
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           relationalField1: '5caf757d62552d713461f420',
@@ -172,7 +197,7 @@ describe('processCreateInputData', () => {
 
       mains: [
         {
-          _id: '2',
+          _id: new Types.ObjectId('000000000000000000000002'),
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           relationalField1: '5caf757d62552d713461f420',
@@ -258,7 +283,7 @@ describe('processCreateInputData', () => {
     const item = {
       insertOne: {
         document: {
-          _id: '3',
+          _id: new Types.ObjectId('000000000000000000000003'),
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           embeddedField1: {
@@ -279,7 +304,7 @@ describe('processCreateInputData', () => {
 
       mains: [
         {
-          _id: '3',
+          _id: new Types.ObjectId('000000000000000000000003'),
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           embeddedField1: {
@@ -356,20 +381,41 @@ describe('processCreateInputData', () => {
       {
         insertOne: {
           document: {
-            _id: '4',
+            _id: new Types.ObjectId('000000000000000000000004'),
             firstName: 'Vasya',
             lastName: 'Pupkin',
-            location: '5',
-            favorites: ['6', '777', '8', '7'],
+            location: new Types.ObjectId('000000000000000000000005'),
+            favorites: [
+              new Types.ObjectId('000000000000000000000006'),
+              '777',
+              new Types.ObjectId('000000000000000000000008'),
+              new Types.ObjectId('000000000000000000000007'),
+            ],
           },
         },
       },
     ]);
     core.set(placeConfig, [
-      { insertOne: { document: { _id: '5', city: 'Kyiv' } } },
-      { insertOne: { document: { _id: '6', city: 'Odesa' } } },
-      { insertOne: { document: { _id: '7', city: 'Chernygiv' } } },
-      { insertOne: { document: { _id: '8', city: 'Zhitomyr' } } },
+      {
+        insertOne: {
+          document: { _id: new Types.ObjectId('000000000000000000000005'), city: 'Kyiv' },
+        },
+      },
+      {
+        insertOne: {
+          document: { _id: new Types.ObjectId('000000000000000000000006'), city: 'Odesa' },
+        },
+      },
+      {
+        insertOne: {
+          document: { _id: new Types.ObjectId('000000000000000000000007'), city: 'Chernygiv' },
+        },
+      },
+      {
+        insertOne: {
+          document: { _id: new Types.ObjectId('000000000000000000000008'), city: 'Zhitomyr' },
+        },
+      },
     ]);
     const periphery: Periphery = new Map();
     const expectedResult = {
@@ -377,11 +423,16 @@ describe('processCreateInputData', () => {
       periphery,
       mains: [
         {
-          _id: '4',
+          _id: new Types.ObjectId('000000000000000000000004'),
           firstName: 'Vasya',
           lastName: 'Pupkin',
-          location: '5',
-          favorites: ['6', '777', '8', '7'],
+          location: new Types.ObjectId('000000000000000000000005'),
+          favorites: [
+            new Types.ObjectId('000000000000000000000006'),
+            '777',
+            new Types.ObjectId('000000000000000000000008'),
+            new Types.ObjectId('000000000000000000000007'),
+          ],
         },
       ],
     };
@@ -484,22 +535,27 @@ describe('processCreateInputData', () => {
       {
         insertOne: {
           document: {
-            _id: '9',
+            _id: new Types.ObjectId('000000000000000000000009'),
             firstName: 'Vasya',
             lastName: 'Pupkin',
-            friend: '10',
-            location: '11',
-            favorites: ['12', '777', '14', '13'],
+            friend: new Types.ObjectId('000000000000000000000010'),
+            location: new Types.ObjectId('000000000000000000000011'),
+            favorites: [
+              new Types.ObjectId('000000000000000000000012'),
+              '777',
+              new Types.ObjectId('000000000000000000000014'),
+              new Types.ObjectId('000000000000000000000013'),
+            ],
           },
         },
       },
       {
         insertOne: {
           document: {
-            _id: '10',
+            _id: new Types.ObjectId('000000000000000000000010'),
             firstName: 'Masha',
             lastName: 'Rasteryasha',
-            friend: '9',
+            friend: new Types.ObjectId('000000000000000000000009'),
           },
         },
       },
@@ -512,22 +568,46 @@ describe('processCreateInputData', () => {
           },
           update: {
             $push: {
-              visitors: '9',
+              visitors: new Types.ObjectId('000000000000000000000009'),
             },
           },
         },
       },
       {
-        insertOne: { document: { _id: '11', name: 'Kyiv', citizens: ['9'] } },
+        insertOne: {
+          document: {
+            _id: new Types.ObjectId('000000000000000000000011'),
+            name: 'Kyiv',
+            citizens: [new Types.ObjectId('000000000000000000000009')],
+          },
+        },
       },
       {
-        insertOne: { document: { _id: '12', name: 'Odesa', visitors: ['9'] } },
+        insertOne: {
+          document: {
+            _id: new Types.ObjectId('000000000000000000000012'),
+            name: 'Odesa',
+            visitors: [new Types.ObjectId('000000000000000000000009')],
+          },
+        },
       },
       {
-        insertOne: { document: { _id: '13', name: 'Chernygiv', visitors: ['9'] } },
+        insertOne: {
+          document: {
+            _id: new Types.ObjectId('000000000000000000000013'),
+            name: 'Chernygiv',
+            visitors: [new Types.ObjectId('000000000000000000000009')],
+          },
+        },
       },
       {
-        insertOne: { document: { _id: '14', name: 'Zhitomyr', visitors: ['9'] } },
+        insertOne: {
+          document: {
+            _id: new Types.ObjectId('000000000000000000000014'),
+            name: 'Zhitomyr',
+            visitors: [new Types.ObjectId('000000000000000000000009')],
+          },
+        },
       },
     ]);
     const periphery: Periphery = new Map();
@@ -536,12 +616,17 @@ describe('processCreateInputData', () => {
       periphery,
       mains: [
         {
-          _id: '9',
+          _id: new Types.ObjectId('000000000000000000000009'),
           firstName: 'Vasya',
           lastName: 'Pupkin',
-          friend: '10',
-          location: '11',
-          favorites: ['12', '777', '14', '13'],
+          friend: new Types.ObjectId('000000000000000000000010'),
+          location: new Types.ObjectId('000000000000000000000011'),
+          favorites: [
+            new Types.ObjectId('000000000000000000000012'),
+            '777',
+            new Types.ObjectId('000000000000000000000014'),
+            new Types.ObjectId('000000000000000000000013'),
+          ],
         },
       ],
     };
@@ -660,14 +745,14 @@ describe('processCreateInputData', () => {
             _id: '111',
           },
           update: {
-            friend: '15',
+            friend: new Types.ObjectId('000000000000000000000015'),
           },
         },
       },
       {
         insertOne: {
           document: {
-            _id: '15',
+            _id: new Types.ObjectId('000000000000000000000015'),
             firstName: 'Vasya',
             lastName: 'Pupkin',
             friend: '111',
@@ -686,7 +771,7 @@ describe('processCreateInputData', () => {
           },
           update: {
             $push: {
-              citizens: '15',
+              citizens: new Types.ObjectId('000000000000000000000015'),
             },
           },
         },
@@ -697,7 +782,7 @@ describe('processCreateInputData', () => {
             _id: '333',
           },
           update: {
-            curator: '15',
+            curator: new Types.ObjectId('000000000000000000000015'),
           },
         },
       },
@@ -707,7 +792,7 @@ describe('processCreateInputData', () => {
             _id: '444',
           },
           update: {
-            curator: '15',
+            curator: new Types.ObjectId('000000000000000000000015'),
           },
         },
       },
@@ -718,7 +803,7 @@ describe('processCreateInputData', () => {
           },
           update: {
             $push: {
-              visitors: '15',
+              visitors: new Types.ObjectId('000000000000000000000015'),
             },
           },
         },
@@ -730,7 +815,7 @@ describe('processCreateInputData', () => {
           },
           update: {
             $push: {
-              visitors: '15',
+              visitors: new Types.ObjectId('000000000000000000000015'),
             },
           },
         },
@@ -759,7 +844,7 @@ describe('processCreateInputData', () => {
       periphery,
       mains: [
         {
-          _id: '15',
+          _id: new Types.ObjectId('000000000000000000000015'),
           firstName: 'Vasya',
           lastName: 'Pupkin',
           friend: '111',
@@ -852,7 +937,7 @@ describe('processCreateInputData', () => {
     const item = {
       updateOne: {
         filter: {
-          _id: '16',
+          _id: new Types.ObjectId('000000000000000000000016'),
         },
         update: {
           $set: {
@@ -881,7 +966,7 @@ describe('processCreateInputData', () => {
 
       mains: [
         {
-          _id: '16',
+          _id: new Types.ObjectId('000000000000000000000016'),
           textField1: 'textField1-Value',
           textField2: 'textField2-Value',
           embeddedField1: {
@@ -1174,7 +1259,7 @@ describe('processCreateInputData', () => {
           },
           update: {
             $set: {
-              menu: '17',
+              menu: new Types.ObjectId('000000000000000000000017'),
               title: 'Restaurant Title',
             },
           },
@@ -1186,10 +1271,10 @@ describe('processCreateInputData', () => {
       {
         insertOne: {
           document: {
-            _id: '17',
+            _id: new Types.ObjectId('000000000000000000000017'),
             title: 'Menu Title',
             restaurant: '500',
-            sections: ['510', '18', '520'],
+            sections: ['510', new Types.ObjectId('000000000000000000000018'), '520'],
           },
         },
       },
@@ -1202,7 +1287,7 @@ describe('processCreateInputData', () => {
             _id: '510',
           },
           update: {
-            menu: '17',
+            menu: new Types.ObjectId('000000000000000000000017'),
           },
         },
       },
@@ -1212,16 +1297,16 @@ describe('processCreateInputData', () => {
             _id: '520',
           },
           update: {
-            menu: '17',
+            menu: new Types.ObjectId('000000000000000000000017'),
           },
         },
       },
       {
         insertOne: {
           document: {
-            _id: '18',
+            _id: new Types.ObjectId('000000000000000000000018'),
             title: 'Menu Section 2',
-            menu: '17',
+            menu: new Types.ObjectId('000000000000000000000017'),
           },
         },
       },
@@ -1245,7 +1330,7 @@ describe('processCreateInputData', () => {
         {
           _id: '500',
           title: 'Restaurant Title',
-          menu: '17',
+          menu: new Types.ObjectId('000000000000000000000017'),
         },
       ],
     };

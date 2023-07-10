@@ -14,7 +14,7 @@ import renumeratePositions from './renumeratePositions';
 const getUpdateMany = (rest: any, arr: Array<any>) => {
   const filteredArr = arr.filter(({ updateMany }) => updateMany);
 
-  if (!filteredArr.length) return null;
+  if (filteredArr.length === 0) return null;
 
   const [obj] = filteredArr.slice(-1);
   if (!obj) return null;
@@ -216,7 +216,7 @@ const processCreateInputData = (
             prev[key] = ids;
           } else {
             // eslint-disable-next-line no-underscore-dangle
-            const _id = data2[key].create.id || mongooseTypes.ObjectId();
+            const _id = data2[key].create.id || new mongooseTypes.ObjectId();
 
             prepared.push({
               data: { ...data2[key].create, _id },
@@ -437,7 +437,7 @@ const processCreateInputData = (
   };
 
   let first = true;
-  while (prepared.length) {
+  while (prepared.length > 0) {
     const { data: data3, config } = prepared.shift();
 
     const document = transform(data3, config);
