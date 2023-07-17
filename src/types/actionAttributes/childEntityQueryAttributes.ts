@@ -12,7 +12,7 @@ const actionName = (baseName: string, descendantKey = ''): string =>
 
 const inputCreators = [createEntityWhereOneInputType];
 
-const argNames = ['whereOne', 'token'];
+const argNames = ['whereOne'];
 
 const argTypes = [(name: string): string => `${name}WhereOneInput!`];
 

@@ -31,7 +31,16 @@ describe('composeCustomEntityMutationArgs', () => {
       relationalFields: [
         {
           name: 'examples',
+          oppositeName: 'parentExample',
           array: true,
+          config: entityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentExample',
+          oppositeName: 'examples',
+          array: true,
+          parent: true,
           config: entityConfig,
           type: 'relationalFields',
         },

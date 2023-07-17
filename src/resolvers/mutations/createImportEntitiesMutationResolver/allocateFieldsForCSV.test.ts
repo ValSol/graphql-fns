@@ -70,13 +70,31 @@ describe('allocateFieldsForCSV', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: exampleConfig,
           type: 'relationalFields',
         },
         {
-          name: 'relationalArrayField',
-          array: true,
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
           config: exampleConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'relationalArrayField',
+          oppositeName: 'parentRelationalArrayField',
+          config: exampleConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalArrayField',
+          oppositeName: 'relationalArrayField',
+          config: exampleConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

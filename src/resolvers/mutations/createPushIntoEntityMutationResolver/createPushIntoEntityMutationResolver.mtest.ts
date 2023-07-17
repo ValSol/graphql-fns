@@ -362,6 +362,8 @@ describe('createPushIntoEntityMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -378,8 +380,28 @@ describe('createPushIntoEntityMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentChilds',
+          oppositeName: 'childs',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -400,19 +422,21 @@ describe('createPushIntoEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
         {
           name: 'childs',
+          oppositeName: 'parentChilds',
           array: true,
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
@@ -497,6 +521,8 @@ describe('createPushIntoEntityMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child2',
       type: 'tangible',
@@ -513,8 +539,20 @@ describe('createPushIntoEntityMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChilds',
+          oppositeName: 'childs',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent2',
       type: 'tangible',
       textFields: [
@@ -535,13 +573,14 @@ describe('createPushIntoEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'childs',
+          oppositeName: 'parentChilds',
           array: true,
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent2_Thing', parentSchema);

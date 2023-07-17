@@ -19,7 +19,7 @@ const tangibleTypes = ['tangible', 'tangibleFile'];
 const unwindInverntoryOptions = (
   inventoryOptions: InventoryOptions,
   generalConfig: GeneralConfig,
-  inventoryName: string = '',
+  inventoryName = '',
 ): SimplifiedInventoryOptions => {
   const { allEntityConfigs } = generalConfig;
 
@@ -92,7 +92,7 @@ const unwindInverntoryOptions = (
       }
     });
 
-    if (actionNames.length) {
+    if (actionNames.length > 0) {
       prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
     }
 
@@ -108,7 +108,7 @@ const unwindInverntoryOptions = (
       }
     });
 
-    if (actionNames.length) {
+    if (actionNames.length > 0) {
       prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
     }
 
@@ -157,7 +157,7 @@ const unwindInverntoryOptions = (
       }
     });
 
-    if (actionNames.length) {
+    if (actionNames.length > 0) {
       prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
     }
 
@@ -175,7 +175,7 @@ const unwindInverntoryOptions = (
       }
     });
 
-    if (actionNames.length) {
+    if (actionNames.length > 0) {
       prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
     }
 

@@ -30,6 +30,16 @@ describe('getAllEntityNames', () => {
         type: 'duplexFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'citizens',
+        oppositeName: 'location',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
 
   Object.assign(personConfig, {
@@ -61,19 +71,38 @@ describe('getAllEntityNames', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeNames: 'fellows',
         config: personConfig,
         array: true,
         required: true,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeNames: 'friends',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'enemies',
+        oppositeNames: 'opponents',
         config: personConfig,
         array: true,
         type: 'relationalFields',
       },
       {
+        name: 'opponents',
+        oppositeNames: 'enemies',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'location',
+        oppositeNames: 'citizens',
         config: placeConfig,
         required: true,
         type: 'relationalFields',

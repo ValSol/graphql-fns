@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
@@ -141,6 +141,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
   test('should create query entity DistinctValues resolver to aggregate result', async () => {
     const serversideConfig: Record<string, any> = {};
 
+    const parentConfig = {} as TangibleEntityConfig;
     const childConfig: EntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -157,8 +158,18 @@ describe('createEntityDistinctValuesQueryResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          config: parentConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: EntityConfig = {
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -172,12 +183,13 @@ describe('createEntityDistinctValuesQueryResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const exampleSchema = createThingSchema(parentConfig);
     const Example = mongooseConn.model('Parent_Thing', exampleSchema);

@@ -85,9 +85,11 @@ const allocateFieldsForCSV = (entityConfig: EntityConfig): Result => {
       result.object.push(name);
     });
 
-    relationalFields.forEach(({ name }) => {
-      result.object.push(name);
-    });
+    relationalFields
+      .filter(({ parent }) => !parent)
+      .forEach(({ name }) => {
+        result.object.push(name);
+      });
   }
 
   return result;

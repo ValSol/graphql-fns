@@ -30,7 +30,6 @@ const composeChildActionSignature = (
 
   if (
     inventory &&
-    // $FlowFixMe
     !checkInventory([actionType, actionGeneralName(descendantKey), configName], inventory)
   ) {
     return '';
@@ -53,7 +52,7 @@ const composeChildActionSignature = (
 
   const returnString = actionReturnString(allEntityConfigs[rootName], descendantKey);
 
-  if (!filteredArgNames.length) {
+  if (filteredArgNames.length === 0) {
     return `  ${specificName}: ${returnString}`;
   }
 

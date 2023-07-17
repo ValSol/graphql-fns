@@ -83,6 +83,15 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'sibling',
+          oppositeName: 'parentSibling',
+          config: personConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentSibling',
+          oppositeName: 'sibling',
+          array: true,
+          parent: true,
           config: personConfig,
           type: 'relationalFields',
         },
@@ -1047,6 +1056,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -1068,8 +1078,19 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -1084,12 +1105,13 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
@@ -1163,6 +1185,9 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to update document using checkData', async () => {
+    const postConfig = {} as TangibleEntityConfig;
+    const restaurantConfig = {} as TangibleEntityConfig;
+
     const accessConfig: TangibleEntityConfig = {
       name: 'Access',
       type: 'tangible',
@@ -1177,10 +1202,18 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
         { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
         { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
       ],
-    };
 
-    const postConfig = {} as TangibleEntityConfig;
-    const restaurantConfig = {} as TangibleEntityConfig;
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
 
     Object.assign(postConfig, {
       name: 'Post',
@@ -1194,12 +1227,14 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'restaurant',
+          oppositeName: 'mainPosts',
           config: restaurantConfig,
           index: true,
           type: 'relationalFields',
         },
         {
           name: 'restaurants',
+          oppositeName: 'posts',
           config: restaurantConfig,
           array: true,
           index: true,
@@ -1217,8 +1252,25 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'access',
+          oppositeName: 'restaurants',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'mainPosts',
+          oppositeName: 'restaurant',
+          config: postConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'posts',
+          oppositeName: 'restaurants',
+          config: postConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

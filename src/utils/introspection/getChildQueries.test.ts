@@ -1,9 +1,12 @@
 /* eslint-env jest */
-import type { EntityConfig, ClientOptions } from '../../tsTypes';
+import type { EntityConfig, ClientOptions, TangibleEntityConfig } from '../../tsTypes';
 
 import getChildQueries from './getChildQueries';
 
 describe('getChildQueries', () => {
+  const placeConfig = {} as TangibleEntityConfig;
+  const personConfig = {} as EntityConfig;
+
   const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
@@ -13,8 +16,19 @@ describe('getChildQueries', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'places',
+        oppositeName: 'country',
+        config: placeConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
-  const placeConfig: EntityConfig = {
+
+  Object.assign(placeConfig, {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -26,12 +40,21 @@ describe('getChildQueries', () => {
     relationalFields: [
       {
         name: 'country',
+        oppositeName: 'places',
         config: countryConfig,
         type: 'relationalFields',
       },
+      {
+        name: 'citizens',
+        oppositeName: 'place',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
-  };
-  const personConfig = {} as EntityConfig;
+  });
+
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -48,12 +71,22 @@ describe('getChildQueries', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         array: true,
         config: personConfig,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'place',
+        oppositeName: 'citizens',
         config: placeConfig,
         type: 'relationalFields',
       },

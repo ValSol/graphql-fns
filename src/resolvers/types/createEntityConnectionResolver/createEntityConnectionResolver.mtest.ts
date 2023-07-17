@@ -47,13 +47,31 @@ describe('createEntityConnectionResolver', () => {
       relationalFields: [
         {
           name: 'friend',
+          oppositeName: 'parentFriend',
           config: placeConfig,
           type: 'relationalFields',
         },
         {
-          name: 'friends',
+          name: 'parentFriend',
+          oppositeName: 'friend',
           config: placeConfig,
           array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'friends',
+          oppositeName: 'parentFriends',
+          config: placeConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentFriends',
+          oppositeName: 'friends',
+          config: placeConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

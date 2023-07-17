@@ -7,61 +7,48 @@ const createEntityWhereByUniqueInputType: InputCreator = (entityConfig) => {
 
   const inputName = `${name}WhereByUniqueInput`;
 
-  const { dateTimeFields, intFields, floatFields, textFields, type: entityType } = entityConfig;
+  const { dateTimeFields = [], intFields = [], floatFields = [], textFields = [] } = entityConfig;
 
   const fields = [defaultFields];
 
-  if (textFields) {
-    textFields.forEach(({ name: fieldName, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}_in: [String!]`);
-      }
-    });
-  }
+  textFields.forEach(({ name: fieldName, unique }) => {
+    if (unique) {
+      fields.push(`  ${fieldName}_in: [String!]`);
+    }
+  });
 
-  if (intFields) {
-    intFields.forEach(({ name: fieldName, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}_in: [Int!]`);
-      }
-    });
-  }
+  intFields.forEach(({ name: fieldName, unique }) => {
+    if (unique) {
+      fields.push(`  ${fieldName}_in: [Int!]`);
+    }
+  });
 
-  if (floatFields) {
-    floatFields.forEach(({ name: fieldName, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}_in: [Float!]`);
-      }
-    });
-  }
+  floatFields.forEach(({ name: fieldName, unique }) => {
+    if (unique) {
+      fields.push(`  ${fieldName}_in: [Float!]`);
+    }
+  });
 
-  if (dateTimeFields) {
-    dateTimeFields.forEach(({ name: fieldName, unique }) => {
-      if (unique) {
-        fields.push(`  ${fieldName}_in: [DateTime!]`);
-      }
-    });
-  }
+  dateTimeFields.forEach(({ name: fieldName, unique }) => {
+    if (unique) {
+      fields.push(`  ${fieldName}_in: [DateTime!]`);
+    }
+  });
 
   if (entityConfig.type === 'tangible') {
-    const { duplexFields, relationalFields } = entityConfig;
+    const { duplexFields = [], relationalFields = [] } = entityConfig;
 
-    if (relationalFields) {
-      relationalFields.forEach(({ name: fieldName, unique }) => {
-        if (unique) {
-          fields.push(`  ${fieldName}_in: [ID!]`);
-        }
-      });
-    }
+    relationalFields.forEach(({ name: fieldName, parent, unique }) => {
+      if (!parent && unique) {
+        fields.push(`  ${fieldName}_in: [ID!]`);
+      }
+    });
 
-    // the same code as for relationalFields
-    if (duplexFields) {
-      duplexFields.forEach(({ name: fieldName, unique }) => {
-        if (unique) {
-          fields.push(`  ${fieldName}_in: [ID!]`);
-        }
-      });
-    }
+    duplexFields.forEach(({ name: fieldName, unique }) => {
+      if (unique) {
+        fields.push(`  ${fieldName}_in: [ID!]`);
+      }
+    });
   }
 
   const inputDefinition = [`input ${name}WhereByUniqueInput {`, ...fields, '}'].join('\n');

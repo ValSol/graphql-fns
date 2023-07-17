@@ -67,37 +67,77 @@ describe('createEntityUpdateInputType', () => {
   });
 
   test('should create entity update input type with relational fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as TangibleEntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           array: true,
           required: true,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           config: personConfig,
           array: true,
           type: 'relationalFields',
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citizens',
           config: placeConfig,
           required: true,
           type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },
@@ -122,18 +162,39 @@ describe('createEntityUpdateInputType', () => {
   });
 
   test('should create empty input type with relational fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as TangibleEntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       relationalFields: [
         {
           name: 'location',
+          oppositeName: 'citizens',
           config: placeConfig,
           required: true,
           freeze: true,
@@ -141,6 +202,7 @@ describe('createEntityUpdateInputType', () => {
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           freeze: true,
           type: 'relationalFields',

@@ -1,6 +1,10 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, SimplifiedEntityConfig } from '../../tsTypes';
+import type {
+  EntityConfig,
+  SimplifiedEntityConfig,
+  SimplifiedTangibleEntityConfig,
+} from '../../tsTypes';
 
 import virtualConfigComposers from '../../types/virtualConfigComposers';
 import composeEntityConfig from '../composeEntityConfig';
@@ -15,7 +19,7 @@ const composeAllEntityConfigs = (
 ): {
   [entityName: string]: EntityConfig;
 } => {
-  const result = simplifiedThingConfigs.reduce(
+  const { relationalOppositeNames, result } = simplifiedThingConfigs.reduce(
     (prev, config) => {
       const { name } = config;
 
@@ -31,27 +35,54 @@ const composeAllEntityConfigs = (
         throw new TypeError(`Forbidden entity name: "${name}"!`);
       }
 
-      if (prev[name]) {
+      if (prev.result[name] !== undefined) {
         throw new TypeError(`Unique entity name: "${name}" is used twice!`);
       }
 
-      prev[name] = { ...config }; // eslint-disable-line no-param-reassign
+      ((config as SimplifiedTangibleEntityConfig).relationalFields || []).forEach(
+        ({ oppositeName, configName }) => {
+          if (prev.relationalOppositeNames[configName] === undefined) {
+            prev.relationalOppositeNames[configName] = [];
+          }
+
+          if (prev.relationalOppositeNames[configName].includes(oppositeName)) {
+            throw new TypeError(
+              `Relational field opposite name: "${oppositeName}" is used twice in "${configName}" enity!`,
+            );
+          }
+
+          prev.relationalOppositeNames[configName].push(oppositeName);
+        },
+      );
+
+      // save in result DEEP clone of config
+      prev.result[name] = Object.keys(config).reduce((prev, key) => {
+        const value = config[key];
+
+        if (Array.isArray(value)) {
+          prev[key] = [...value];
+        } else {
+          prev[key] = value;
+        }
+
+        return prev;
+      }, {});
 
       return prev;
     },
-    { PageInfo },
+    { result: { PageInfo }, relationalOppositeNames: {} },
   );
 
   simplifiedThingConfigs.forEach((simplifiedEntityConfig) => {
     const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
-    composeEntityConfig(simplifiedEntityConfig, result[name], result);
+    composeEntityConfig(simplifiedEntityConfig, result[name], result, relationalOppositeNames);
 
     const config = result[name];
 
     if (configType === 'file') {
       const tangibleFileConfigName = composeTangibleFileConfigName(name);
 
-      if (result[tangibleFileConfigName]) {
+      if (result[tangibleFileConfigName] !== undefined) {
         throw new TypeError(
           `Forbidden to use "${tangibleFileConfigName}" becouse there is file name: "${name}"!`,
         );
@@ -75,7 +106,7 @@ const composeAllEntityConfigs = (
 
         const virtualConfigName = composeVirtualConfigName(name);
 
-        if (result[virtualConfigName]) {
+        if (result[virtualConfigName] !== undefined) {
           throw new TypeError(
             `Forbidden to use "${virtualConfigName}" becouse there is tangible config with name: "${name}"!`,
           );

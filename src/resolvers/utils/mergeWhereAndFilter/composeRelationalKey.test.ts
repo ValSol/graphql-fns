@@ -29,7 +29,16 @@ describe('composeRelationalKey', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           index: true,
+          config: entityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          array: true,
+          parent: true,
           config: entityConfig,
           type: 'relationalFields',
         },
@@ -68,6 +77,17 @@ describe('composeRelationalKey', () => {
           index: true,
           array: true,
           type: 'textFields',
+        },
+      ],
+
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
         },
       ],
     };
@@ -127,6 +147,7 @@ describe('composeRelationalKey', () => {
       relationalFields: [
         {
           name: 'access',
+          oppositeName: 'restaurants',
           config: accessConfig,
           index: true,
           type: 'relationalFields',

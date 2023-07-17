@@ -20,7 +20,6 @@ const forbiddenFieldNames = [
   'counter',
   'connect',
   'create',
-  'token',
 ];
 
 const allowedConfigTypes = ['embedded', 'file', 'tangible', 'tangibleFile', 'virtual'];
@@ -31,6 +30,7 @@ const composeEntityConfig = (
   allEntityConfigs: {
     [entityName: string]: EntityConfig;
   },
+  relationalOppositeNames: { [entityName: string]: string[] },
 ) => {
   const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
 
@@ -48,11 +48,25 @@ const composeEntityConfig = (
     relationalFields: simplifiedRelationalFields,
   } = simplifiedEntityConfig as any;
 
+  const fieldNames = [];
+
   // check field names
   Object.keys(simplifiedEntityConfig)
     .filter((key) => key.endsWith('Fields'))
     .forEach((key) => {
       simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze }) => {
+        if (fieldNames.includes(fieldName)) {
+          throw new TypeError(`Field name: "${fieldName}" used twice in entity: "${name}"!`);
+        }
+
+        if (relationalOppositeNames[name]?.includes(fieldName)) {
+          throw new TypeError(
+            `Field name: "${fieldName}" already used as relational opposite name in entity: "${name}"!`,
+          );
+        }
+
+        fieldNames.push(fieldName);
+
         if (fieldName.search('_') !== -1) {
           throw new TypeError(
             `Forbidden to use "_" (underscore) in field name: "${fieldName}" in entity: "${name}"!`,
@@ -173,19 +187,32 @@ const composeEntityConfig = (
   }
 
   if (simplifiedRelationalFields) {
-    // eslint-disable-next-line no-param-reassign
-    (entityConfig as TangibleEntityConfig).relationalFields = simplifiedRelationalFields.map(
-      (field) => {
-        const { configName, ...restField } = field;
-        const config = allEntityConfigs[configName];
-        if (!config) {
-          throw new TypeError(
-            `Incorrect configName: "${configName}" in relational field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
-          );
-        }
-        return { ...restField, config, type: 'relationalFields' };
-      },
-    );
+    const relationalFields = simplifiedRelationalFields.map((field) => {
+      const { configName, ...restField } = field;
+      const config = allEntityConfigs[configName] as TangibleEntityConfig;
+      if (!config) {
+        throw new TypeError(
+          `Incorrect configName: "${configName}" in relational field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
+        );
+      }
+
+      if (!config.relationalFields) {
+        config.relationalFields = [];
+      }
+
+      config.relationalFields.push({
+        name: field.oppositeName,
+        oppositeName: field.name,
+        config: allEntityConfigs[entityConfig.name] as TangibleEntityConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      });
+
+      return { ...restField, config, type: 'relationalFields' };
+    });
+
+    Object.assign((entityConfig as TangibleEntityConfig).relationalFields, relationalFields);
   }
 
   if (simplifiedDuplexFields) {

@@ -159,11 +159,13 @@ describe('processCreateInputData', () => {
       relationalFields: [
         {
           name: 'relationalField1',
+          oppositeName: 'parentRelationalField1',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
           name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
           config: entityConfig,
           array: true,
           type: 'relationalFields',
@@ -333,12 +335,31 @@ describe('processCreateInputData', () => {
   test('should create object and children objectcs', () => {
     const preparedData: PreparedData = { mains: [], core: new Map(), periphery: new Map() };
 
+    const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'city', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citisens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favorites',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig: TangibleEntityConfig = {
+    Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -354,17 +375,21 @@ describe('processCreateInputData', () => {
       relationalFields: [
         {
           name: 'location',
+          oppositeName: 'citisens',
           config: placeConfig,
           type: 'relationalFields',
         },
+
         {
           name: 'favorites',
+          oppositeName: 'customers',
           config: placeConfig,
           array: true,
           type: 'relationalFields',
         },
       ],
-    };
+    });
+
     const data = {
       firstName: 'Vasya',
       lastName: 'Pupkin',

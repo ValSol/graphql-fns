@@ -26,7 +26,16 @@ describe('composeActionArgs util', () => {
       relationalFields: [
         {
           name: 'examples',
+          oppositeName: 'parentExamples',
           array: true,
+          config: entityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentExamples',
+          oppositeName: 'examples',
+          array: true,
+          parent: true,
           config: entityConfig,
           type: 'relationalFields',
         },

@@ -3,7 +3,7 @@
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
@@ -125,7 +125,9 @@ describe('createEntityQueryResolver', () => {
   });
 
   test('should create query entities resolver to aggregate result', async () => {
-    const childConfig: EntityConfig = {
+    const parentConfig = {} as TangibleEntityConfig;
+
+    const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
       textFields: [
@@ -141,8 +143,19 @@ describe('createEntityQueryResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: EntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -156,12 +169,13 @@ describe('createEntityQueryResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const exampleSchema = createThingSchema(parentConfig);
     const ExampleEntity = mongooseConn.model('Parent_Thing', exampleSchema);

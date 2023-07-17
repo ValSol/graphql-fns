@@ -12,14 +12,32 @@ describe('coerceDataFromGql', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          config: entityConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
           config: entityConfig,
           type: 'relationalFields',
           array: true,
+        },
+        {
+          name: 'parentRelationalField2',
+          oppositeName: 'relationalField2',
+          config: entityConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
         },
       ],
       duplexFields: [
@@ -299,13 +317,31 @@ describe('coerceDataFromGql', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
-          name: 'relationalField2',
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
           config: entityConfig,
           array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
+          config: entityConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField2',
+          oppositeName: 'relationalField2',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],
@@ -345,13 +381,31 @@ describe('coerceDataFromGql', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
-          name: 'relationalField2',
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
           config: entityConfig,
           array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
+          config: entityConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField2',
+          oppositeName: 'relationalField2',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

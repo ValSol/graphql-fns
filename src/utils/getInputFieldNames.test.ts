@@ -113,30 +113,77 @@ describe('getInputFieldNames', () => {
   });
 
   test('should create entity input type with relational fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'citizens2',
+          oppositeName: 'location2',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as TangibleEntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           array: true,
           required: true,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           config: personConfig,
           type: 'relationalFields',
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citizens',
           config: placeConfig,
           required: true,
           array: true,
@@ -144,11 +191,13 @@ describe('getInputFieldNames', () => {
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },
         {
           name: 'location2',
+          oppositeName: 'citizens2',
           config: placeConfig,
           required: true,
           array: true,

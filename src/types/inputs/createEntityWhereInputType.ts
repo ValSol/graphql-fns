@@ -167,7 +167,10 @@ const composeInputFields = (
   if (entityType === 'tangible') {
     const { duplexFields = [], relationalFields = [] } = entityConfig;
 
-    relationalFields.forEach(({ name: fieldName, array, index, unique, config }) => {
+    relationalFields.forEach(({ name: fieldName, array, index, parent, unique, config }) => {
+      if (parent) {
+        return;
+      }
       if (unique || index) {
         fields.push(`  ${fieldName}: ID
   ${fieldName}_in: [ID!]
@@ -185,8 +188,6 @@ const composeInputFields = (
 
       childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
     });
-
-    // the same code as for relationalFields
 
     duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
       if (unique || index) {

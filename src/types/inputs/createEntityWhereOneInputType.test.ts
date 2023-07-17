@@ -39,8 +39,17 @@ describe('createEntityWhereOneInputType', () => {
       relationalFields: [
         {
           name: 'copy',
+          oppositeName: 'parentCopy',
           config: entityConfig,
           unique: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentCopy',
+          oppositeName: 'copy',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

@@ -1,10 +1,13 @@
 /* eslint-env jest */
-import type { EntityConfig } from '../../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../../tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 
 import actionToInventory from './actionToInventory';
 
 describe('actionToInventory', () => {
+  const placeConfig = {} as TangibleEntityConfig;
+  const personConfig = {} as EntityConfig;
+
   const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
@@ -14,8 +17,19 @@ describe('actionToInventory', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'places',
+        oppositeName: 'country',
+        config: placeConfig,
+        type: 'relationalFields',
+        array: true,
+        parent: true,
+      },
+    ],
   };
-  const placeConfig: EntityConfig = {
+
+  Object.assign(placeConfig, {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -27,12 +41,21 @@ describe('actionToInventory', () => {
     relationalFields: [
       {
         name: 'country',
+        oppositeName: 'places',
         config: countryConfig,
         type: 'relationalFields',
       },
+      {
+        name: 'citizens',
+        oppositeName: 'place',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
-  };
-  const personConfig = {} as EntityConfig;
+  });
+
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -49,12 +72,22 @@ describe('actionToInventory', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         array: true,
         config: personConfig,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'place',
+        oppositeName: 'citizens',
         config: placeConfig,
         type: 'relationalFields',
       },

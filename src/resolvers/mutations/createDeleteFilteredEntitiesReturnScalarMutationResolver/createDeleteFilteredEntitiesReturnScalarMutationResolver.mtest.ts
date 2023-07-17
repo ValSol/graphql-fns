@@ -286,6 +286,8 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
   test('should create mutation deleteFilteredEntitiesReturnScalar resolver to aggregate result', async () => {
     const serversideConfig = { transactions: true };
 
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -302,8 +304,20 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -318,12 +332,13 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
@@ -399,6 +414,8 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
   test('should create mutation deleteFilteredEntitiesReturnScalar resolver to return []', async () => {
     const serversideConfig = { transactions: true };
 
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -415,8 +432,20 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -431,12 +460,13 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);

@@ -2,11 +2,14 @@
 
 import mingo from 'mingo';
 
-import type { EntityConfig } from '../../../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 
 describe('patchExternalReferences util', () => {
+  const postConfig = {} as EntityConfig;
+  const restaurantConfig = {} as TangibleEntityConfig;
+
   const accessConfig: EntityConfig = {
     name: 'Access',
     type: 'tangible',
@@ -21,10 +24,17 @@ describe('patchExternalReferences util', () => {
       { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
       { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
     ],
+    relationalFields: [
+      {
+        name: 'restaurants',
+        oppositeName: 'access',
+        config: restaurantConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
-
-  const postConfig = {} as EntityConfig;
-  const restaurantConfig = {} as EntityConfig;
 
   Object.assign(postConfig, {
     name: 'Post',
@@ -73,12 +83,14 @@ describe('patchExternalReferences util', () => {
     relationalFields: [
       {
         name: 'restaurant',
+        oppositeName: 'mainPosts',
         config: restaurantConfig,
         index: true,
         type: 'relationalFields',
       },
       {
         name: 'restaurants',
+        oppositeName: 'posts',
         config: restaurantConfig,
         array: true,
         index: true,
@@ -96,8 +108,25 @@ describe('patchExternalReferences util', () => {
     relationalFields: [
       {
         name: 'access',
+        oppositeName: 'restaurants',
         config: accessConfig,
         index: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'mainPosts',
+        oppositeName: 'restaurant',
+        config: postConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'posts',
+        oppositeName: 'restaurants',
+        config: postConfig,
+        array: true,
+        parent: true,
         type: 'relationalFields',
       },
     ],

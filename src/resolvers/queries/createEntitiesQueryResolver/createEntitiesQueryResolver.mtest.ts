@@ -1,5 +1,10 @@
 /* eslint-env jest */
-import type { GeneralConfig, NearInput, EntityConfig } from '../../../tsTypes';
+import type {
+  GeneralConfig,
+  NearInput,
+  EntityConfig,
+  TangibleEntityConfig,
+} from '../../../tsTypes';
 
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
@@ -171,7 +176,16 @@ describe('createEntityQueryResolver', () => {
       relationalFields: [
         {
           name: 'restaurants',
+          oppositeName: 'parentRestaurants',
           array: true,
+          config: restaurantConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRestaurants',
+          oppositeName: 'restaurants',
+          array: true,
+          parent: true,
           config: restaurantConfig,
           type: 'relationalFields',
         },
@@ -341,7 +355,16 @@ describe('createEntityQueryResolver', () => {
       relationalFields: [
         {
           name: 'restaurants',
+          oppositeName: 'parentRestaurants',
           array: true,
+          config: restaurantConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRestaurants',
+          oppositeName: 'restaurants',
+          array: true,
+          parent: true,
           config: restaurantConfig,
           type: 'relationalFields',
         },
@@ -432,6 +455,8 @@ describe('createEntityQueryResolver', () => {
   });
 
   test('should create query entities resolver for entity sorted by several fields', async () => {
+    const tableConfig = {} as TangibleEntityConfig;
+
     const tableItemConfig: EntityConfig = {
       name: 'TableItem',
       type: 'tangible',
@@ -449,19 +474,31 @@ describe('createEntityQueryResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentItems',
+          oppositeName: 'items',
+          array: true,
+          parent: true,
+          config: tableConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const tableConfig: EntityConfig = {
+
+    Object.assign(tableConfig, {
       name: 'Table',
       type: 'tangible',
       relationalFields: [
         {
           name: 'items',
+          oppositeName: 'parentItems',
           array: true,
           config: tableItemConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const exampleSchema = createThingSchema(tableConfig);
     const Example = mongooseConn.model('Table_Thing', exampleSchema);
@@ -563,6 +600,8 @@ describe('createEntityQueryResolver', () => {
   });
 
   test('should create query entities resolver for fullText index', async () => {
+    const tableConfig = {} as TangibleEntityConfig;
+
     const tableItemConfig: EntityConfig = {
       name: 'TableItem',
       type: 'tangible',
@@ -580,19 +619,31 @@ describe('createEntityQueryResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentItems',
+          oppositeName: 'items',
+          array: true,
+          parent: true,
+          config: tableConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const tableConfig: EntityConfig = {
+    Object.assign(tableConfig, {
       name: 'Table',
       type: 'tangible',
       relationalFields: [
         {
           name: 'items',
+          oppositeName: 'parentItems',
           array: true,
           config: tableItemConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const createTable = createCreateEntityMutationResolver(
       tableConfig,
@@ -667,6 +718,7 @@ describe('createEntityQueryResolver', () => {
   });
 
   test('should create query entities resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
     const childConfig: EntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -683,8 +735,18 @@ describe('createEntityQueryResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          config: parentConfig,
+          parent: true,
+          array: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: EntityConfig = {
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -705,12 +767,13 @@ describe('createEntityQueryResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const exampleSchema = createThingSchema(parentConfig);
     const Example = mongooseConn.model('Parent_Thing', exampleSchema);

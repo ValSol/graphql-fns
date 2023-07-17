@@ -87,12 +87,32 @@ describe('composeThingSchemaProperties', () => {
   });
 
   test('should compose schema properties with text and relational fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citisens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as TangibleEntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -111,6 +131,7 @@ describe('composeThingSchemaProperties', () => {
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           array: true,
           config: personConfig,
           index: true,
@@ -118,13 +139,31 @@ describe('composeThingSchemaProperties', () => {
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           array: true,
           config: personConfig,
           type: 'relationalFields',
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          array: true,
+          parent: true,
+          config: personConfig,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citisens',
           config: placeConfig,
           index: true,
           required: true,
@@ -132,6 +171,7 @@ describe('composeThingSchemaProperties', () => {
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },

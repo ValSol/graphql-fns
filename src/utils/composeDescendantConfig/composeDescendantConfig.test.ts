@@ -267,52 +267,6 @@ describe('composeDescendantConfig', () => {
 
       expect(result).toEqual(expectedResult);
     });
-
-    test('should return correct descendant config with added relational field', () => {
-      const ForCatalog: DescendantAttributes = {
-        allow: { Example: ['entity', 'entities'] },
-        descendantKey: 'ForCatalog',
-        excludeFields: { Example: ['anotherField'] },
-        addFields: {
-          Example: {
-            relationalFields: [
-              {
-                name: 'additionalRelationalField',
-                configName: 'AdditionalExample',
-              },
-            ],
-          },
-        },
-      };
-
-      const generalConfig: GeneralConfig = {
-        allEntityConfigs: { Example: entityConfig, AdditionalExample: additionalEntityConfig },
-        descendant: { ForCatalog },
-      };
-
-      const result = composeDescendantConfig(ForCatalog, entityConfig, generalConfig);
-
-      const expectedResult = {
-        name: 'ExampleForCatalog',
-        type: 'tangible',
-        textFields: [
-          {
-            name: 'textField',
-            index: true,
-            type: 'textFields',
-          },
-        ],
-        relationalFields: [
-          {
-            name: 'additionalRelationalField',
-            config: additionalEntityConfig,
-            type: 'relationalFields',
-          },
-        ],
-      };
-
-      expect(result).toEqual(expectedResult);
-    });
   });
 
   test('should return correct descendant config', () => {
@@ -350,6 +304,7 @@ describe('composeDescendantConfig', () => {
   });
 
   describe('composeDescendantConfig with relational third field', () => {
+    const entityConfig2 = {} as TangibleEntityConfig;
     const entityConfig: TangibleEntityConfig = {
       name: 'TextExample',
       type: 'tangible',
@@ -359,19 +314,30 @@ describe('composeDescendantConfig', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          array: true,
+          config: entityConfig2,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const entityConfig2: TangibleEntityConfig = {
+    Object.assign(entityConfig2, {
       name: 'RelationalExample',
       type: 'tangible',
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           array: true,
           config: entityConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     test('should return correct descendant config with derivate field', () => {
       const ForCatalog: DescendantAttributes = {
@@ -380,7 +346,10 @@ describe('composeDescendantConfig', () => {
           RelationalExample: ['entity', 'childEntities'],
         },
         descendantKey: 'ForCatalog',
-        descendantFields: { RelationalExample: { relationalField: 'ForCatalog' } },
+        descendantFields: {
+          RelationalExample: { relationalField: 'ForCatalog' },
+          TextExample: { parentRelationalField: 'ForCatalog' },
+        },
       };
 
       const generalConfig: GeneralConfig = {
@@ -389,6 +358,8 @@ describe('composeDescendantConfig', () => {
       };
 
       const result = composeDescendantConfig(ForCatalog, entityConfig2, generalConfig);
+      const expectedResult = {} as TangibleEntityConfig;
+
       const entityConfigForCatalog = {
         name: 'TextExampleForCatalog',
         type: 'tangible',
@@ -398,101 +369,31 @@ describe('composeDescendantConfig', () => {
             type: 'textFields',
           },
         ],
+        relationalFields: [
+          {
+            name: 'parentRelationalField',
+            oppositeName: 'relationalField',
+            config: expectedResult,
+            array: true,
+            parent: true,
+            type: 'relationalFields',
+          },
+        ],
       };
-      const expectedResult = {
+
+      Object.assign(expectedResult, {
         name: 'RelationalExampleForCatalog',
         type: 'tangible',
         relationalFields: [
           {
             name: 'relationalField',
+            oppositeName: 'parentRelationalField',
             array: true,
             config: entityConfigForCatalog,
             type: 'relationalFields',
           },
         ],
-      };
-
-      expect(result).toEqual(expectedResult);
-    });
-  });
-
-  describe('composeDescendantConfig with added relational third field', () => {
-    const entityConfig: TangibleEntityConfig = {
-      name: 'TextExample2',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField2',
-          type: 'textFields',
-        },
-      ],
-    };
-    const entityConfig2: TangibleEntityConfig = {
-      name: 'RelationalExample2',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-          type: 'textFields',
-        },
-      ],
-    };
-
-    test('should return correct descendant config with added derivate field', () => {
-      const ForCatalog: DescendantAttributes = {
-        allow: {
-          TextExample2: ['entity', 'childEntities'],
-          RelationalExample2: ['entity', 'childEntities'],
-        },
-        descendantKey: 'ForCatalog',
-        addFields: {
-          RelationalExample2: {
-            relationalFields: [
-              {
-                name: 'relationalField',
-                array: true,
-                configName: 'TextExample2',
-              },
-            ],
-          },
-        },
-        descendantFields: { RelationalExample2: { relationalField: 'ForCatalog' } },
-      };
-
-      const generalConfig: GeneralConfig = {
-        allEntityConfigs: { TextExample2: entityConfig, RelationalExample2: entityConfig2 },
-        descendant: { ForCatalog },
-      };
-
-      const result = composeDescendantConfig(ForCatalog, entityConfig2, generalConfig);
-      const entityConfigForCatalog = {
-        name: 'TextExample2ForCatalog',
-        type: 'tangible',
-        textFields: [
-          {
-            name: 'textField2',
-            type: 'textFields',
-          },
-        ],
-      };
-      const expectedResult = {
-        name: 'RelationalExample2ForCatalog',
-        type: 'tangible',
-        textFields: [
-          {
-            name: 'textField',
-            type: 'textFields',
-          },
-        ],
-        relationalFields: [
-          {
-            name: 'relationalField',
-            array: true,
-            config: entityConfigForCatalog,
-            type: 'relationalFields',
-          },
-        ],
-      };
+      });
 
       expect(result).toEqual(expectedResult);
     });

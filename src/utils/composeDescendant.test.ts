@@ -52,10 +52,12 @@ describe('composeDescendant', () => {
 
       addFields: {
         Restaurant: {
-          relationalFields: [{ name: 'submitter', configName: 'User' }],
+          relationalFields: [
+            { name: 'submitter', oppositeName: 'restaurants', configName: 'User' },
+          ],
         },
         Post: {
-          relationalFields: [{ name: 'submitter', configName: 'User' }],
+          relationalFields: [{ name: 'submitter', oppositeName: 'posts', configName: 'User' }],
         },
       },
 

@@ -83,6 +83,15 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'sibling',
+          oppositeName: 'parenSibling',
+          config: personConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parenSibling',
+          oppositeName: 'sibling',
+          array: true,
+          parent: true,
           config: personConfig,
           type: 'relationalFields',
         },
@@ -807,6 +816,8 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -823,8 +834,19 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -839,12 +861,13 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
@@ -922,6 +945,9 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
   });
 
   test('should create mutation updateEntity resolver to update document using checkData', async () => {
+    const postConfig = {} as TangibleEntityConfig;
+    const restaurantConfig = {} as TangibleEntityConfig;
+
     const accessConfig: TangibleEntityConfig = {
       name: 'Access',
       type: 'tangible',
@@ -936,10 +962,18 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
         { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
       ],
-    };
 
-    const postConfig = {} as TangibleEntityConfig;
-    const restaurantConfig = {} as TangibleEntityConfig;
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
 
     Object.assign(postConfig, {
       name: 'Post',
@@ -953,12 +987,14 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'restaurant',
+          oppositeName: 'mainPosts',
           config: restaurantConfig,
           index: true,
           type: 'relationalFields',
         },
         {
           name: 'restaurants',
+          oppositeName: 'posts',
           config: restaurantConfig,
           array: true,
           index: true,
@@ -976,8 +1012,25 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       relationalFields: [
         {
           name: 'access',
+          oppositeName: 'restaurants',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'mainPosts',
+          oppositeName: 'restaurant',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'posts',
+          oppositeName: 'restaurants',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

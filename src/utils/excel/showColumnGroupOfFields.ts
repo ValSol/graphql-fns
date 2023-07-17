@@ -268,7 +268,7 @@ const showColumnGroupOfFields = (args: Args) => {
       const fileFields = composeDescendantFields({
         descendantKey,
         descendant,
-        // $FlowFixMe
+
         fields,
         firstThingName,
         fieldType: 'fileFields',
@@ -298,7 +298,7 @@ const showColumnGroupOfFields = (args: Args) => {
       const embeddedFields = composeDescendantFields({
         descendantKey,
         descendant,
-        // $FlowFixMe
+
         fields,
         firstThingName,
         fieldType: 'embeddedFields',
@@ -328,7 +328,7 @@ const showColumnGroupOfFields = (args: Args) => {
       const relationalFields = composeDescendantFields({
         descendantKey,
         descendant,
-        // $FlowFixMe
+
         fields,
         firstThingName,
         fieldType: 'relationalFields',
@@ -358,7 +358,7 @@ const showColumnGroupOfFields = (args: Args) => {
       const duplexFields = composeDescendantFields({
         descendantKey,
         descendant,
-        // $FlowFixMe
+
         fields,
         firstThingName,
         fieldType: 'duplexFields',

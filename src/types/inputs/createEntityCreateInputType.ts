@@ -4,15 +4,15 @@ import isOppositeRequired from './isOppositeRequired';
 
 const createEntityCreateInputType: InputCreator = (entityConfig) => {
   const {
-    booleanFields,
-    dateTimeFields,
-    embeddedFields,
-    enumFields,
-    fileFields,
-    floatFields,
-    intFields,
-    geospatialFields,
-    textFields,
+    booleanFields = [],
+    dateTimeFields = [],
+    embeddedFields = [],
+    enumFields = [],
+    fileFields = [],
+    floatFields = [],
+    intFields = [],
+    geospatialFields = [],
+    textFields = [],
     type: configType,
     name,
   } = entityConfig;
@@ -75,143 +75,120 @@ const createEntityCreateInputType: InputCreator = (entityConfig) => {
       );
     }
 
-    if (relationalFields) {
-      for (let i = 0; i < entityTypeArray.length; i += 1) {
-        relationalFields.reduce(
-          (
-            prev,
-            { array, name: name2, required, config, config: { name: relationalEntityName } },
-          ) => {
-            prev.push(
-              `  ${name2}: ${relationalEntityName}${
-                array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
-              }${required ? '!' : ''}`,
-            );
-
-            childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
-
-            return prev;
-          },
-          entityTypeArray[i],
-        );
-      }
-    }
-  }
-
-  if (textFields) {
     for (let i = 0; i < entityTypeArray.length; i += 1) {
-      textFields.reduce((prev, { array, name: name2, required }) => {
+      relationalFields.reduce((prev, { array, name: name2, parent, required, config }) => {
+        if (parent) {
+          return prev;
+        }
+
+        const { name: relationalEntityName } = config;
+
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}${required ? '!' : ''}`,
+          `  ${name2}: ${relationalEntityName}${
+            array ? 'CreateOrPushChildrenInput' : 'CreateChildInput'
+          }${required ? '!' : ''}`,
         );
+
+        childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
+
         return prev;
       }, entityTypeArray[i]);
     }
   }
 
-  if (intFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      intFields.reduce((prev, { array, name: name2, required }) => {
-        prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}${required ? '!' : ''}`);
-        return prev;
-      }, entityTypeArray[i]);
-    }
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    textFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}${required ? '!' : ''}`);
+      return prev;
+    }, entityTypeArray[i]);
   }
 
-  if (floatFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      floatFields.reduce((prev, { array, name: name2, required }) => {
-        prev.push(`  ${name2}: ${array ? '[' : ''}Float${array ? '!]' : ''}${required ? '!' : ''}`);
-        return prev;
-      }, entityTypeArray[i]);
-    }
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    intFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}Int${array ? '!]' : ''}${required ? '!' : ''}`);
+      return prev;
+    }, entityTypeArray[i]);
   }
 
-  if (dateTimeFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      dateTimeFields.reduce((prev, { array, name: name2, required }) => {
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    floatFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}Float${array ? '!]' : ''}${required ? '!' : ''}`);
+      return prev;
+    }, entityTypeArray[i]);
+  }
+
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    dateTimeFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]' : ''}${required ? '!' : ''}`,
+      );
+      return prev;
+    }, entityTypeArray[i]);
+  }
+
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    booleanFields.reduce((prev, { array, name: name2, required }) => {
+      prev.push(`  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}${required ? '!' : ''}`);
+      return prev;
+    }, entityTypeArray[i]);
+  }
+
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]' : ''}${
+          required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, entityTypeArray[i]);
+  }
+
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    embeddedFields.reduce(
+      (prev, { array, name: name2, required, config, config: { name: embeddedName } }) => {
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}DateTime${array ? '!]' : ''}${required ? '!' : ''}`,
-        );
-        return prev;
-      }, entityTypeArray[i]);
-    }
-  }
-
-  if (booleanFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      booleanFields.reduce((prev, { array, name: name2, required }) => {
-        prev.push(
-          `  ${name2}: ${array ? '[' : ''}Boolean${array ? '!]' : ''}${required ? '!' : ''}`,
-        );
-        return prev;
-      }, entityTypeArray[i]);
-    }
-  }
-
-  if (enumFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      enumFields.reduce((prev, { array, enumName, name: name2, required }) => {
-        prev.push(
-          `  ${name2}: ${array ? '[' : ''}${enumName}Enumeration${array ? '!]' : ''}${
+          `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}${
             required ? '!' : ''
           }`,
         );
+
+        childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
+
         return prev;
-      }, entityTypeArray[i]);
-    }
-  }
-
-  if (embeddedFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      embeddedFields.reduce(
-        (prev, { array, name: name2, required, config, config: { name: embeddedName } }) => {
-          prev.push(
-            `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}${
-              required ? '!' : ''
-            }`,
-          );
-
-          childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
-
-          return prev;
-        },
-        entityTypeArray[i],
-      );
-    }
+      },
+      entityTypeArray[i],
+    );
   }
 
   // the same code as for embeddedFields
-  if (fileFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      fileFields.reduce(
-        (prev, { array, name: name2, required, config, config: { name: embeddedName } }) => {
-          prev.push(
-            `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}${
-              required ? '!' : ''
-            }`,
-          );
 
-          childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
-
-          return prev;
-        },
-        entityTypeArray[i],
-      );
-    }
-  }
-
-  if (geospatialFields) {
-    for (let i = 0; i < entityTypeArray.length; i += 1) {
-      geospatialFields.reduce((prev, { array, name: name2, geospatialType, required }) => {
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    fileFields.reduce(
+      (prev, { array, name: name2, required, config, config: { name: embeddedName } }) => {
         prev.push(
-          `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}${
+          `  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}${
             required ? '!' : ''
           }`,
         );
+
+        childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
+
         return prev;
-      }, entityTypeArray[i]);
-    }
+      },
+      entityTypeArray[i],
+    );
+  }
+
+  for (let i = 0; i < entityTypeArray.length; i += 1) {
+    geospatialFields.reduce((prev, { array, name: name2, geospatialType, required }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}Geospatial${geospatialType}Input${array ? '!]' : ''}${
+          required ? '!' : ''
+        }`,
+      );
+      return prev;
+    }, entityTypeArray[i]);
   }
 
   for (let i = 0; i < entityTypeArray.length; i += 1) {

@@ -20,7 +20,7 @@ const includeField = (name: string, include?: any, exclude?: any): boolean =>
 
 const findNameWithAlias = (name: string, include?: any): string =>
   include && include !== true
-    ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs doesn't know about that
+    ? // always have 'string' as a result of 'find', but 'flowjs doesn't know about that
       Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
 

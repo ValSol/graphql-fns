@@ -79,7 +79,6 @@ const processCreateInputData = (
       const { duplexFields = [], relationalFields = [] } = entityConfig2 as any;
 
       relationalFields.reduce((prev, { name, array, config }) => {
-        // eslint-disable-next-line
         prev[name] = { array, config };
         return prev;
       }, relationalFieldsObject);

@@ -127,7 +127,16 @@ type UpdatedExamplePayload {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: exampleConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          config: exampleConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

@@ -69,7 +69,7 @@ const createEntityUpdateInputType: InputCreator = (entityConfig) => {
     const { duplexFields = [], relationalFields = [] } = entityConfig;
 
     relationalFields
-      .filter(({ freeze }) => !freeze)
+      .filter(({ freeze, parent }) => !parent && !freeze)
       .reduce((prev, { array, name: name2, config, config: { name: relationalEntityName } }) => {
         prev.push(
           `  ${name2}: ${relationalEntityName}${
@@ -82,7 +82,6 @@ const createEntityUpdateInputType: InputCreator = (entityConfig) => {
         return prev;
       }, entityTypeArray);
 
-    // the same code as for relationalFields
     duplexFields
       .filter(({ freeze }) => !freeze)
       .reduce(

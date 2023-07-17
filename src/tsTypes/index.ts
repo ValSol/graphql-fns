@@ -150,10 +150,12 @@ type SimplifiedFileField = ArraySimplifiedFileField | ScalarSimplifiedFileField;
 type ScalarSimplifiedRelationalField = FieldCommonProperties & {
   array?: false;
   configName: string;
+  oppositeName: string;
 };
 type ArraySimplifiedRelationalField = FieldCommonProperties & {
   array: true;
   configName: string;
+  oppositeName: string;
 };
 type SimplifiedRelationalField = ArraySimplifiedRelationalField | ScalarSimplifiedRelationalField;
 
@@ -258,14 +260,35 @@ export type FileField = ArrayFileField | ScalarFileField;
 type ScalarRelationalField = FieldCommonProperties & {
   array?: false;
   config: TangibleEntityConfig;
+  oppositeName: string;
+  parent?: false;
   type: 'relationalFields';
 };
 type ArrayRelationalField = FieldCommonProperties & {
   array: true;
   config: TangibleEntityConfig;
+  oppositeName: string;
+  parent?: false;
   type: 'relationalFields';
 };
-export type RelationalField = ArrayRelationalField | ScalarRelationalField;
+type ArrayParentRelationalField = Omit<
+  FieldCommonProperties,
+  'required' | 'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  config: TangibleEntityConfig;
+  oppositeName: string;
+  parent: true;
+  required?: false;
+  freeze?: false;
+  index?: false;
+  unique?: false;
+  type: 'relationalFields';
+};
+export type RelationalField =
+  | ArrayRelationalField
+  | ScalarRelationalField
+  | ArrayParentRelationalField;
 
 type ScalarDuplexField = FieldCommonProperties & {
   array?: false;
@@ -372,10 +395,7 @@ export type AnyField =
   | TextField;
 
 export type EntityConfigObject = {
-  [
-    fieldName: // eslint-disable-line flowtype/space-after-type-colon
-    string
-  ]: AnyField;
+  [fieldName: string]: AnyField;
 };
 
 export type Enums = {
@@ -395,14 +415,12 @@ export type SimplifiedInventoryOptions = {
 };
 
 export type InventoryOptions = {
-  // eslint-disable-next-line flowtype/space-after-type-colon
   Query?:
     | true
     | {
         // 'queryName' may be: entity, entities, , 'entityDistinctValues' or any custom query names
         [queryName: string]: entityNamesList;
       };
-  // eslint-disable-next-line flowtype/space-after-type-colon
   Mutation?:
     | true
     | {
@@ -411,7 +429,6 @@ export type InventoryOptions = {
 
         [mutationName: string]: entityNamesList;
       };
-  // eslint-disable-next-line flowtype/space-after-type-colon
   Subscription?:
     | true
     | {

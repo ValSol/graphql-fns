@@ -4,15 +4,15 @@ import createEntityCreateInputType from './createEntityCreateInputType';
 
 const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
   const {
-    booleanFields,
-    dateTimeFields,
-    embeddedFields,
-    enumFields,
-    fileFields,
-    floatFields,
-    intFields,
-    geospatialFields,
-    textFields,
+    booleanFields = [],
+    dateTimeFields = [],
+    embeddedFields = [],
+    enumFields = [],
+    fileFields = [],
+    floatFields = [],
+    intFields = [],
+    geospatialFields = [],
+    textFields = [],
     type: configType,
     name,
   } = entityConfig;
@@ -20,125 +20,102 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
   const inputName = `PushInto${name}Input`;
 
   if (configType !== 'tangible') return [inputName, '', {}];
-  const { duplexFields, relationalFields } = entityConfig;
+  const { duplexFields = [], relationalFields = [] } = entityConfig;
 
   const entityTypeArray: Array<string> = [];
   const childChain: Record<string, any> = {};
 
-  if (textFields) {
-    textFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [String!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  textFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [String!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (intFields) {
-    intFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  intFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (floatFields) {
-    floatFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Float!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  floatFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Float!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (dateTimeFields) {
-    dateTimeFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [DateTime!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  dateTimeFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [DateTime!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (booleanFields) {
-    booleanFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Boolean!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  booleanFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Boolean!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (enumFields) {
-    enumFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { enumName, name: name2 }) => {
-        prev.push(`  ${name2}: [${enumName}Enumeration!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  enumFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { enumName, name: name2 }) => {
+      prev.push(`  ${name2}: [${enumName}Enumeration!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (relationalFields) {
-    relationalFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2, config: config2, config: { name: relationalEntityName } }) => {
-        prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
+  relationalFields
+    .filter(({ array, freeze, parent }) => !parent && array && !freeze)
+    .reduce((prev, { name: name2, config: config2, config: { name: relationalEntityName } }) => {
+      prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
 
-        childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
+      childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  // the same code as for relationalFields
-  if (duplexFields) {
-    duplexFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2, config: config2, config: { name: relationalEntityName } }) => {
-        prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
+  duplexFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2, config: config2, config: { name: relationalEntityName } }) => {
+      prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
 
-        childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
+      childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  if (embeddedFields) {
-    embeddedFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
-        prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
+  embeddedFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
+      prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
 
-        childChain[`${embeddedName}CreateInput`] = [createEntityCreateInputType, config2];
+      childChain[`${embeddedName}CreateInput`] = [createEntityCreateInputType, config2];
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
   // the same code as for embeddedFields
-  if (fileFields) {
-    fileFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
-        prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
+  fileFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
+      prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
 
-        childChain[`${embeddedName}CreateInput`] = [createEntityCreateInputType, config2];
+      childChain[`${embeddedName}CreateInput`] = [createEntityCreateInputType, config2];
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  if (geospatialFields) {
-    geospatialFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2, geospatialType }) => {
-        prev.push(`  ${name2}: [Geospatial${geospatialType}Input!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  geospatialFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2, geospatialType }) => {
+      prev.push(`  ${name2}: [Geospatial${geospatialType}Input!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (!entityTypeArray.length) return [inputName, '', {}];
+  if (entityTypeArray.length === 0) return [inputName, '', {}];
 
   entityTypeArray.unshift(`input PushInto${name}Input {`);
   entityTypeArray.push('}');

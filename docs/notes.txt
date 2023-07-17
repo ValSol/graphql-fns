@@ -1,1 +1,3 @@
 "graphql-subscriptions" package is required even if the subscriptions are not used
+setting descendant "descendantFields" for relationalFields have to set for both sides name & oppositeName
+using descendant relationalFields or duplexFields in "addFields" is forbiden

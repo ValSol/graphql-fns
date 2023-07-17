@@ -25,6 +25,17 @@ describe('checkFilterCorrectness', () => {
         type: 'duplexFields',
       },
     ],
+
+    relationalFields: [
+      {
+        name: 'citizens',
+        oppositeName: 'location',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
 
   Object.assign(personConfig, {
@@ -56,19 +67,38 @@ describe('checkFilterCorrectness', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         config: personConfig,
         array: true,
         required: true,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'enemies',
+        oppositeName: 'opponents',
         config: personConfig,
         array: true,
         type: 'relationalFields',
       },
       {
+        name: 'opponents',
+        oppositeName: 'enemies',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'location',
+        oppositeName: 'citizens',
         config: placeConfig,
         required: true,
         type: 'relationalFields',

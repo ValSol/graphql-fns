@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { EntityConfig, GeneralConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import updateEntityMutationAttributes from '../../types/actionAttributes/updateEntityMutationAttributes';
 import composeActionArgs from '../utils/composeActionArgs';
@@ -38,37 +38,77 @@ describe('composeUpdateEntityMutationArgs', () => {
 
   test('should compose updateEntity with reorder mutation args ', () => {
     const prefixName = 'Home';
+
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citisens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           array: true,
           required: true,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           config: personConfig,
           array: true,
           type: 'relationalFields',
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citisens',
           config: placeConfig,
           required: true,
           type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },

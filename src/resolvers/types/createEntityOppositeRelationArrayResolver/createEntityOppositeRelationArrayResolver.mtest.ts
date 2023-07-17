@@ -10,7 +10,7 @@ import sleep from '../../../utils/sleep';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import createEntityArrayResolver from './index';
+import createEntityOppositeRelationArrayResolver from './index';
 
 const info = { projection: { title: 1 }, fieldName: 'friends' };
 
@@ -20,7 +20,7 @@ let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-array-type';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-array-opposite-relation-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
@@ -31,7 +31,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createEntityArrayResolver', () => {
+describe('createEntityOppositeRelationArrayResolver', () => {
   const serversideConfig: Record<string, any> = {};
   test('should create type entity resolver', async () => {
     const placeConfig = {} as EntityConfig;
@@ -48,28 +48,13 @@ describe('createEntityArrayResolver', () => {
       relationalFields: [
         {
           name: 'friend',
-          oppositeName: 'fellows',
+          oppositeName: 'friends',
           config: placeConfig,
-          type: 'relationalFields',
-        },
-        {
-          name: 'fellows',
-          oppositeName: 'friend',
-          config: placeConfig,
-          array: true,
-          parent: true,
           type: 'relationalFields',
         },
         {
           name: 'friends',
-          oppositeName: 'butties',
-          config: placeConfig,
-          array: true,
-          type: 'relationalFields',
-        },
-        {
-          name: 'butties',
-          oppositeName: 'friends',
+          oppositeName: 'friend',
           config: placeConfig,
           array: true,
           parent: true,
@@ -94,9 +79,16 @@ describe('createEntityArrayResolver', () => {
     expect(typeof createPlace).toBe('function');
     if (!createPlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const data1 = { title: 'title-1' };
-    const data2 = { title: 'title-2' };
-    const data3 = { title: 'title-3' };
+    const data = { title: 'title-main' };
+
+    const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub }, null, {
+      inputOutputEntity: [[]],
+    });
+    const { id } = createdPlace;
+
+    const data1 = { title: 'title-1', friend: { connect: id } };
+    const data2 = { title: 'title-2', friend: { connect: id } };
+    const data3 = { title: 'title-3', friend: { connect: id } };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
       inputOutputEntity: [[]],
@@ -113,34 +105,20 @@ describe('createEntityArrayResolver', () => {
     });
     const { id: id3 } = createdPlace3;
 
-    const Place = createEntityArrayResolver(placeConfig, generalConfig, serversideConfig);
-    const parent = { friends: [toGlobalId(id1, 'Place')] };
+    const Place = createEntityOppositeRelationArrayResolver(
+      placeConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    const parent = { id: toGlobalId(id, 'Place') };
+
     const places = await Place(parent, null, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
 
-    const [place] = places;
-
-    expect(place.title).toBe(data1.title);
-
-    const parent2 = {
-      friends: [
-        toGlobalId(id2, 'Place'),
-        toGlobalId('5cd82d6075fb194334d8c1d7', 'Place'),
-        toGlobalId(id3, 'Place'),
-        toGlobalId('5cd82d6075fb194334d8c1d8', 'Place'),
-        toGlobalId(id1, 'Place'),
-      ],
-    };
-    const places2 = await Place(parent2, null, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
-    });
-    const [place1, place2, place3] = places2;
-
-    expect(places2.length).toBe(3);
-
-    expect(place1.title).toBe(data2.title);
-    expect(place2.title).toBe(data3.title);
-    expect(place3.title).toBe(data1.title);
+    expect(places.length).toBe(3);
+    expect(places[0].title).toBe(data1.title);
+    expect(places[1].title).toBe(data2.title);
+    expect(places[2].title).toBe(data3.title);
   });
 });

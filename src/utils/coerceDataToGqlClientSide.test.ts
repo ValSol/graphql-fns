@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { EmbeddedEntityConfig, EntityConfig, TangibleEntityConfig } from '../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../tsTypes';
 
 import coerceDataToGqlClientSide from './coerceDataToGqlClientSide';
 
@@ -13,13 +13,31 @@ describe('coerceDataToGqlClientSide', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          config: entityConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'relationalFields',
+          oppositeName: 'parentRelationalFields',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalFields',
+          oppositeName: 'relationalFields',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],
@@ -255,11 +273,13 @@ describe('coerceDataToGqlClientSide', () => {
       relationalFields: [
         {
           name: 'relationalField1',
+          oppositeName: 'parentRelationalField1',
           config: relationalConfig1,
           type: 'relationalFields',
         },
         {
           name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
           config: relationalConfig2,
           array: true,
           type: 'relationalFields',

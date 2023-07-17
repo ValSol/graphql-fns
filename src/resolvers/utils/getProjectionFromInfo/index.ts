@@ -34,9 +34,17 @@ const getProjectionFromInfo = (
     fieldsTreeByPath = Object.values(fieldsTreeByPath[item].fieldsByTypeName)[0];
   });
 
-  const fields = Object.keys(fieldsTreeByPath).filter(
-    (field) => !['id', '__typename'].includes(field),
-  );
+  const fields = Object.keys(fieldsTreeByPath)
+    .reduce((prev, key) => {
+      const { name } = fieldsTreeByPath[key];
+
+      if (!prev.includes(name)) {
+        prev.push(name);
+      }
+
+      return prev;
+    }, [])
+    .filter((field) => !['id', '__typename'].includes(field));
 
   if (fields.length === 0) {
     return { _id: 1 } as Record<string, 1>;

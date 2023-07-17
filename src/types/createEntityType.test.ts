@@ -58,37 +58,77 @@ describe('createEntityType', () => {
   });
 
   test('should create entity type with relational fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: EntityConfig = {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'citizens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'customers',
+          oppositeName: 'favoritePlace',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as EntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           array: true,
           required: true,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           config: personConfig,
           array: true,
           type: 'relationalFields',
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citizens',
           config: placeConfig,
           required: true,
           type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },
@@ -105,8 +145,12 @@ describe('createEntityType', () => {
   updatedAt: DateTime!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   location: Place!
   favoritePlace: Place
 }`;

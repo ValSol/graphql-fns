@@ -108,13 +108,31 @@ describe('composeWhereFields', () => {
       relationalFields: [
         {
           name: 'relationalFieldIndexed',
+          oppositeName: 'parentRelationalFieldIndexed',
           config: exampleConfig,
           index: true,
           type: 'relationalFields',
         },
         {
-          name: 'relationalField',
+          name: 'parentRelationalFieldIndexed',
+          oppositeName: 'relationalFieldIndexed',
           config: exampleConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'relationalField',
+          oppositeName: 'parentRelationalField',
+          config: exampleConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          config: exampleConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

@@ -124,13 +124,31 @@ describe('createCreateEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'friend',
+          oppositeName: 'fellows',
           config: personConfig,
           type: 'relationalFields',
         },
         {
-          name: 'friends',
+          name: 'fellows',
+          oppositeName: 'friend',
           config: personConfig,
           array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'friends',
+          oppositeName: 'pals',
+          config: personConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'pals',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],
@@ -186,18 +204,54 @@ describe('createCreateEntityMutationResolver', () => {
   });
 
   test('should create mutation add entity resolver that create related entities', async () => {
+    const placeConfig = {} as TangibleEntityConfig;
+    const personConfig = {} as TangibleEntityConfig;
+
     const cityConfig: TangibleEntityConfig = {
       name: 'City',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
+      relationalFields: [
+        {
+          name: 'places',
+          oppositeName: 'capital',
+          config: placeConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const placeConfig: TangibleEntityConfig = {
+    Object.assign(placeConfig, {
       name: 'Place',
       type: 'tangible',
       textFields: [{ name: 'name', type: 'textFields' }],
-      relationalFields: [{ name: 'capital', config: cityConfig, type: 'relationalFields' }],
-    };
-    const personConfig = {} as TangibleEntityConfig;
+      relationalFields: [
+        {
+          name: 'capital',
+          oppositeName: 'places',
+          config: cityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'citisens',
+          oppositeName: 'location',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'custormers',
+          oppositeName: 'favorities',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
     Object.assign(personConfig, {
       name: 'Person2',
       type: 'tangible',
@@ -217,22 +271,42 @@ describe('createCreateEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'friend',
+          oppositeName: 'fellows',
           config: personConfig,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friend',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'friends',
+          oppositeName: 'pals',
           config: personConfig,
           array: true,
           type: 'relationalFields',
         },
         {
+          name: 'pals',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citisens',
           config: placeConfig,
           type: 'relationalFields',
         },
         {
           name: 'favorities',
+          oppositeName: 'custormers',
           config: placeConfig,
           array: true,
           type: 'relationalFields',
@@ -781,6 +855,9 @@ describe('createCreateEntityMutationResolver', () => {
   });
 
   test('should create mongodb documents using checkData', async () => {
+    const postConfig = {} as TangibleEntityConfig;
+    const restaurantConfig = {} as TangibleEntityConfig;
+
     const accessConfig: TangibleEntityConfig = {
       name: 'Access',
       type: 'tangible',
@@ -795,10 +872,18 @@ describe('createCreateEntityMutationResolver', () => {
         { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
         { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
       ],
-    };
 
-    const postConfig = {} as TangibleEntityConfig;
-    const restaurantConfig = {} as TangibleEntityConfig;
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
 
     Object.assign(postConfig, {
       name: 'Post',
@@ -812,12 +897,14 @@ describe('createCreateEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'restaurant',
+          oppositeName: 'mainPosts',
           config: restaurantConfig,
           index: true,
           type: 'relationalFields',
         },
         {
           name: 'restaurants',
+          oppositeName: 'posts',
           config: restaurantConfig,
           array: true,
           index: true,
@@ -835,8 +922,25 @@ describe('createCreateEntityMutationResolver', () => {
       relationalFields: [
         {
           name: 'access',
+          oppositeName: 'restaurants',
           config: accessConfig,
           index: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'mainPosts',
+          oppositeName: 'restaurant',
+          config: postConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'posts',
+          oppositeName: 'restaurants',
+          config: postConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

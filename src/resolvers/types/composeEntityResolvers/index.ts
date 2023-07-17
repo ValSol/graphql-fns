@@ -8,6 +8,8 @@ import type {
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
+import createEntityOppositeRelationArrayResolver from '../createEntityOppositeRelationArrayResolver';
+import createEntityOppositeRelationConnectionResolver from '../createEntityOppositeRelationConnectionResolver';
 import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
 import fieldArrayResolver from '../fieldArrayResolver';
@@ -65,7 +67,43 @@ const composeEntityResolvers = (
   if (entityType === 'tangible') {
     const { duplexFields = [], relationalFields = [] } = entityConfig as TangibleEntityConfig;
 
-    [...relationalFields, ...duplexFields].reduce((prev, { array, name, config }) => {
+    const { originalRelationalFields, parentRelationalFields } = relationalFields.reduce(
+      (prev, item) => {
+        if (item.parent) {
+          prev.parentRelationalFields.push(item);
+        } else {
+          prev.originalRelationalFields.push(item);
+        }
+
+        return prev;
+      },
+      { originalRelationalFields: [], parentRelationalFields: [] },
+    );
+
+    parentRelationalFields.reduce((prev, { name, config }) => {
+      const resolver = createEntityOppositeRelationArrayResolver(
+        config,
+        generalConfig,
+        serversideConfig,
+      );
+
+      if (resolver) {
+        prev[name] = resolver; // eslint-disable-line no-param-reassign
+      }
+
+      const resolver2 = createEntityOppositeRelationConnectionResolver(
+        config,
+        generalConfig,
+        serversideConfig,
+      );
+
+      if (resolver2) {
+        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+      }
+      return prev;
+    }, resolvers);
+
+    [...originalRelationalFields, ...duplexFields].reduce((prev, { array, name, config }) => {
       if (array) {
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
 

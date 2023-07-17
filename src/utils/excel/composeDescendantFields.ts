@@ -61,14 +61,14 @@ const composeDescendantFields = ({
       : []
     : [];
 
-  const allFieldsFreezed = !freezedFields.length
-    ? allFields
-    : allFields.map((field) =>
-        freezedFields.includes(field.name)
-          ? // $FlowFixMe
-            { ...field, freeze: true }
-          : { ...field, freeze: false },
-      );
+  const allFieldsFreezed =
+    freezedFields.length === 0
+      ? allFields
+      : allFields.map((field) =>
+          freezedFields.includes(field.name)
+            ? { ...field, freeze: true }
+            : { ...field, freeze: false },
+        );
 
   // eslint-disable-next-line no-nested-ternary
   const unfreezedFields = descendant
@@ -78,14 +78,14 @@ const composeDescendantFields = ({
       : []
     : [];
 
-  const allFieldsUnfreezed = !unfreezedFields.length
-    ? allFieldsFreezed
-    : allFieldsFreezed.map((field) =>
-        unfreezedFields.includes(field.name)
-          ? // $FlowFixMe
-            { ...field, freeze: false }
-          : { ...field, freeze: true },
-      );
+  const allFieldsUnfreezed =
+    unfreezedFields.length === 0
+      ? allFieldsFreezed
+      : allFieldsFreezed.map((field) =>
+          unfreezedFields.includes(field.name)
+            ? { ...field, freeze: false }
+            : { ...field, freeze: true },
+        );
 
   return allFieldsUnfreezed;
 };

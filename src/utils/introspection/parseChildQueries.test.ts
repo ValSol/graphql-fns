@@ -1,9 +1,16 @@
 /* eslint-env jest */
-import type { ActionSignatureMethods, DescendantAttributes, EntityConfig } from '../../tsTypes';
+import type {
+  ActionSignatureMethods,
+  DescendantAttributes,
+  EntityConfig,
+  TangibleEntityConfig,
+} from '../../tsTypes';
 
 import parseChildQueries from './parseChildQueries';
 
 describe('parseChildQueries', () => {
+  const placeConfig = {} as TangibleEntityConfig;
+  const personConfig = {} as EntityConfig;
   const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
@@ -13,8 +20,18 @@ describe('parseChildQueries', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'places',
+        oppositeName: 'country',
+        config: placeConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
-  const placeConfig: EntityConfig = {
+  Object.assign(placeConfig, {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -26,12 +43,21 @@ describe('parseChildQueries', () => {
     relationalFields: [
       {
         name: 'country',
+        oppositeName: 'places',
         config: countryConfig,
         type: 'relationalFields',
       },
+      {
+        name: 'citisens',
+        oppositeName: 'place',
+        config: placeConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
-  };
-  const personConfig = {} as EntityConfig;
+  });
+
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -48,12 +74,22 @@ describe('parseChildQueries', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         array: true,
         config: personConfig,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        array: true,
+        parent: true,
+        config: personConfig,
+        type: 'relationalFields',
+      },
+      {
         name: 'place',
+        oppositeName: 'citisens',
         config: placeConfig,
         type: 'relationalFields',
       },

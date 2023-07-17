@@ -284,6 +284,8 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
   test('should create mutation deleteManyEntities resolver to aggregate result', async () => {
     const serversideConfig = { transactions: true };
 
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -300,8 +302,20 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'child',
+          oppositeName: 'parentChild',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -316,12 +330,13 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
@@ -401,6 +416,8 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
   test('should create mutation deleteManyEntities resolver and return []', async () => {
     const serversideConfig = { transactions: true };
 
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: TangibleEntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -417,8 +434,19 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: TangibleEntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -433,12 +461,13 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);

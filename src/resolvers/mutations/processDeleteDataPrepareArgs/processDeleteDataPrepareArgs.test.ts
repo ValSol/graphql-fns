@@ -51,8 +51,17 @@ describe('processDeleteDataPrepareArgs', () => {
     relationalFields: [
       {
         name: 'sibling',
+        oppositeName: 'parentSiblings',
         config: personConfig,
         required: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'parentSiblings',
+        oppositeName: 'sibling',
+        config: personConfig,
+        array: true,
+        parent: true,
         type: 'relationalFields',
       },
     ],

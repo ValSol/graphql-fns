@@ -12,13 +12,31 @@ describe('coerceDataToGqlServerSide', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
+          config: entityConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'relationalFields',
+          oppositeName: 'parentRelationalFields',
           array: true,
           config: entityConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalFields',
+          oppositeName: 'relationalFields',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],
@@ -254,13 +272,31 @@ describe('coerceDataToGqlServerSide', () => {
       relationalFields: [
         {
           name: 'relationalField1',
+          oppositeName: 'parentRelationalField1',
           config: relationalConfig1,
           type: 'relationalFields',
         },
         {
+          name: 'parentRelationalField1',
+          oppositeName: 'relationalField1',
+          config: relationalConfig1,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'relationalField2',
+          oppositeName: 'parentRelationalField2',
           config: relationalConfig2,
           array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalField2',
+          oppositeName: 'relationalField2',
+          config: relationalConfig2,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

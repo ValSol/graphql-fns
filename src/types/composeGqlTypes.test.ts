@@ -1743,6 +1743,7 @@ type Subscription {
   });
 
   test('should create entities types for two related fields', () => {
+    const personConfig = {} as SimplifiedTangibleEntityConfig;
     const placeConfig: SimplifiedTangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
@@ -1753,7 +1754,8 @@ type Subscription {
         },
       ],
     };
-    const personConfig: SimplifiedTangibleEntityConfig = {
+
+    Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
       textFields: [
@@ -1769,26 +1771,30 @@ type Subscription {
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           configName: 'Person',
           array: true,
           required: true,
         },
         {
           name: 'enemies',
+          oppositeName: 'opponents',
           configName: 'Person',
           array: true,
         },
         {
           name: 'location',
+          oppositeName: 'citisens',
           configName: 'Place',
           required: true,
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           configName: 'Place',
         },
       ],
-    };
+    });
 
     const simplifiedAllEntityConfigs = [personConfig, placeConfig];
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
@@ -1819,12 +1825,20 @@ type Person implements Node {
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
   location: Place!
   favoritePlace: Place
+  fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
 }
 type Place implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   title: String!
+  citisens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  citisensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  customers(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  customersThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
 }
 type PersonConnection {
   pageInfo: PageInfo!

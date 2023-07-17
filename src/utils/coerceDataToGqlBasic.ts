@@ -70,7 +70,10 @@ const coerceDataToGqlBasic = (
             )
           : null;
       }
-    } else if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
+    } else if (
+      (fieldType === 'relationalFields' && !(fieldsObject[key] as any).parent) ||
+      fieldType === 'duplexFields'
+    ) {
       const { config } = fieldsObject[key] as RelationalField | DuplexField;
       if (array) {
         // eslint-disable-next-line no-param-reassign

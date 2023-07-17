@@ -2,15 +2,15 @@ import type { InputCreator } from '../../tsTypes';
 
 const createEntityPushPositionsInputType: InputCreator = (entityConfig) => {
   const {
-    booleanFields,
-    dateTimeFields,
-    embeddedFields,
-    enumFields,
-    fileFields,
-    floatFields,
-    intFields,
-    geospatialFields,
-    textFields,
+    booleanFields = [],
+    dateTimeFields = [],
+    embeddedFields = [],
+    enumFields = [],
+    fileFields = [],
+    floatFields = [],
+    intFields = [],
+    geospatialFields = [],
+    textFields = [],
     type: configType,
     name,
   } = entityConfig;
@@ -19,116 +19,93 @@ const createEntityPushPositionsInputType: InputCreator = (entityConfig) => {
 
   if (configType !== 'tangible') return [inputName, '', {}];
 
-  const { duplexFields, relationalFields } = entityConfig;
+  const { duplexFields = [], relationalFields = [] } = entityConfig;
 
   const entityTypeArray: Array<string> = [];
 
-  if (textFields) {
-    textFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  textFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (intFields) {
-    intFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  intFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (floatFields) {
-    floatFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  floatFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (dateTimeFields) {
-    dateTimeFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  dateTimeFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (booleanFields) {
-    booleanFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  booleanFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (enumFields) {
-    enumFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  enumFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (relationalFields) {
-    relationalFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
+  relationalFields
+    .filter(({ array, freeze, parent }) => !parent && array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  // the same code as for relationalFields
-  if (duplexFields) {
-    duplexFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
+  duplexFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  if (embeddedFields) {
-    embeddedFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
+  embeddedFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
   // the same code as for embeddedFields
-  if (fileFields) {
-    fileFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
+  fileFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
 
-        return prev;
-      }, entityTypeArray);
-  }
+      return prev;
+    }, entityTypeArray);
 
-  if (geospatialFields) {
-    geospatialFields
-      .filter(({ array, freeze }) => array && !freeze)
-      .reduce((prev, { name: name2 }) => {
-        prev.push(`  ${name2}: [Int!]`);
-        return prev;
-      }, entityTypeArray);
-  }
+  geospatialFields
+    .filter(({ array, freeze }) => array && !freeze)
+    .reduce((prev, { name: name2 }) => {
+      prev.push(`  ${name2}: [Int!]`);
+      return prev;
+    }, entityTypeArray);
 
-  if (!entityTypeArray.length) return [inputName, '', {}];
+  if (entityTypeArray.length === 0) return [inputName, '', {}];
 
   entityTypeArray.unshift(`input ${name}PushPositionsInput {`);
   entityTypeArray.push('}');

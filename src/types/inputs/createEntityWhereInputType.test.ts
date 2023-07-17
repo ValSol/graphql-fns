@@ -214,15 +214,33 @@ input ExampleWhereWithoutBooleanOperationsInput {
       relationalFields: [
         {
           name: 'spouse',
+          oppositeName: 'partners',
           config: personConfig,
           index: true,
           type: 'relationalFields',
         },
         {
+          name: 'partners',
+          oppositeName: 'spouse',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           index: true,
           array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

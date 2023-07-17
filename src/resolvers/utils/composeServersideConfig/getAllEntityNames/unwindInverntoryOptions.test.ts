@@ -6,6 +6,7 @@ import type {
   GeneralConfig,
   Inventory,
   InventoryOptions,
+  TangibleEntityConfig,
 } from '../../../../tsTypes';
 
 import composeDescendantConfigByName from '../../../../utils/composeDescendantConfigByName';
@@ -28,6 +29,7 @@ describe('unwindInverntoryOptions', () => {
       composeDescendantConfigByName('ForCatalog', exampleConfig, generalConfig),
   };
 
+  const exampleConfig = {} as TangibleEntityConfig;
   const childExampleConfig: EntityConfig = {
     name: 'ChildExample',
     type: 'tangible',
@@ -38,9 +40,19 @@ describe('unwindInverntoryOptions', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'parentChild',
+        oppositeName: 'child',
+        config: exampleConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
 
-  const exampleConfig: EntityConfig = {
+  Object.assign(exampleConfig, {
     name: 'Example',
     type: 'tangible',
     textFields: [
@@ -51,8 +63,15 @@ describe('unwindInverntoryOptions', () => {
       },
     ],
 
-    relationalFields: [{ name: 'child', config: childExampleConfig, type: 'relationalFields' }],
-  };
+    relationalFields: [
+      {
+        name: 'child',
+        oppositeName: 'parentChild',
+        config: childExampleConfig,
+        type: 'relationalFields',
+      },
+    ],
+  });
 
   const exampleFileConfig: EntityConfig = {
     name: 'ExampleFile',
@@ -91,6 +110,8 @@ describe('unwindInverntoryOptions', () => {
   describe('actions full lists', () => {
     const allQueries = {
       childEntity: ['ChildExample'],
+      childEntities: ['Example'],
+      childEntitiesThroughConnection: ['Example'],
       entities: ['Example', 'ChildExample'],
       entitiesByUnique: ['Example', 'ChildExample'],
       entitiesForCatalog: ['Example'],

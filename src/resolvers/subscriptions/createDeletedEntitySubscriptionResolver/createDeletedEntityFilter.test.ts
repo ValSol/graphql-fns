@@ -42,8 +42,17 @@ describe('createDeletedEntityFilter', () => {
     relationalFields: [
       {
         name: 'relationalField',
+        oppositeName: 'parentRelationalField',
         config: entityConfig,
         index: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'parentRelationalField',
+        oppositeName: 'relationalField',
+        config: entityConfig,
+        array: true,
+        parent: true,
         type: 'relationalFields',
       },
     ],

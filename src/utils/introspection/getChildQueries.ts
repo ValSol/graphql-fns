@@ -21,7 +21,7 @@ const includeField = (name: string, include?: any, exclude?: any): boolean =>
 
 const findNameWithAlias = (name: string, include?: any): string =>
   include && include !== true
-    ? // $FlowFixMe - always have 'string' as a result of 'find', but 'flowjs doesn't know about that
+    ? // always have 'string' as a result of 'find', but 'flowjs doesn't know about that
       Object.keys(include).find((key) => key.trim().split(/\s+/).slice(-1)[0] === name)
     : name;
 
@@ -47,35 +47,39 @@ const getChildQueries = (
     if (shift > maxShift) maxShift = shift;
 
     if (relationalFields && depth) {
-      relationalFields.forEach(({ name, array, config }) => {
-        if (includeField(name, include, exclude)) {
-          const nameWithAlias = findNameWithAlias(name, include);
-          const nextInclude = include && include[nameWithAlias];
-          const nextExclude = exclude && exclude[name];
-          const nextOptions = {
-            shift: shift + 1,
-            depth: depth - 1,
-            include: nextInclude,
-            exclude: nextExclude,
-          } as any;
-          getChilds(config, generalConfig, nextOptions, result);
-          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
-          if (!result.includes(item)) {
-            result.push(item);
+      relationalFields
+        .filter(({ parent }) => !parent)
+        .forEach(({ name, array, config }) => {
+          if (includeField(name, include, exclude)) {
+            const nameWithAlias = findNameWithAlias(name, include);
+            const nextInclude = include && include[nameWithAlias];
+            const nextExclude = exclude && exclude[name];
+            const nextOptions = {
+              shift: shift + 1,
+              depth: depth - 1,
+              include: nextInclude,
+              exclude: nextExclude,
+            } as any;
+            getChilds(config, generalConfig, nextOptions, result);
+            const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
+            if (!result.includes(item)) {
+              result.push(item);
+            }
           }
-        }
-      });
+        });
     }
 
     if (relationalFields && !depth) {
-      relationalFields.forEach(({ name, array, config }) => {
-        if (includeField(name, include, exclude)) {
-          const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
-          if (!result.includes(item)) {
-            result.push(item);
+      relationalFields
+        .filter(({ parent }) => !parent)
+        .forEach(({ name, array, config }) => {
+          if (includeField(name, include, exclude)) {
+            const item = `${array ? 'childEntities' : 'childEntity'}:${config.name}`;
+            if (!result.includes(item)) {
+              result.push(item);
+            }
           }
-        }
-      });
+        });
     }
 
     if (duplexFields && depth) {

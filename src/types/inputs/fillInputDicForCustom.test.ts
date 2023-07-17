@@ -33,22 +33,26 @@ describe('fillInputDicForCustom', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         configName: 'Person',
         array: true,
         required: true,
       },
       {
         name: 'enemies',
+        oppositeName: 'opponents',
         configName: 'Person',
         array: true,
       },
       {
         name: 'location',
+        oppositeName: 'citisens',
         configName: 'Place',
         required: true,
       },
       {
         name: 'favoritePlace',
+        oppositeName: 'customers',
         configName: 'Place',
       },
     ],

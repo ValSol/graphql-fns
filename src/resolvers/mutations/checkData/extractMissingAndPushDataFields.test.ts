@@ -1,10 +1,13 @@
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
 
 describe('extractMissingAndPushDataFields util', () => {
+  const postConfig = {} as EntityConfig;
+  const restaurantConfig = {} as TangibleEntityConfig;
+
   const accessConfig: EntityConfig = {
     name: 'Access',
     type: 'tangible',
@@ -19,10 +22,18 @@ describe('extractMissingAndPushDataFields util', () => {
       { name: 'restaurantPublishers', array: true, index: true, type: 'textFields' },
       { name: 'restaurantTogglers', array: true, index: true, type: 'textFields' },
     ],
-  };
 
-  const postConfig = {} as EntityConfig;
-  const restaurantConfig = {} as EntityConfig;
+    relationalFields: [
+      {
+        name: 'restaurants',
+        oppositeName: 'access',
+        config: restaurantConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
+  };
 
   Object.assign(postConfig, {
     name: 'Post',
@@ -66,12 +77,14 @@ describe('extractMissingAndPushDataFields util', () => {
     relationalFields: [
       {
         name: 'restaurant',
+        oppositeName: 'mainPosts',
         config: restaurantConfig,
         index: true,
         type: 'relationalFields',
       },
       {
         name: 'restaurants',
+        oppositeName: 'posts',
         config: restaurantConfig,
         array: true,
         index: true,
@@ -94,11 +107,28 @@ describe('extractMissingAndPushDataFields util', () => {
         index: true,
         type: 'enumFields',
       },
+      {
+        name: 'mainPosts',
+        oppositeName: 'restaurant',
+        config: postConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'posts',
+        oppositeName: 'restaurants',
+        config: postConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
 
     relationalFields: [
       {
         name: 'access',
+        oppositeName: 'restaurants',
         config: accessConfig,
         index: true,
         type: 'relationalFields',

@@ -31,7 +31,7 @@ const actionTypeToArgb = {
 const generateExcel = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  filePath: string = 'roles.xlsx',
+  filePath = 'roles.xlsx',
 ) => {
   const { custom, descendant, inventory, allEntityConfigs } = generalConfig;
 
@@ -60,7 +60,7 @@ const generateExcel = async (
   if (descendant) {
     dataFromDescendant = extractDataFromDescendant({
       actionTypes: ordinaryActionTypes,
-      // $FlowFixMe
+
       descendant,
     });
   }
@@ -143,7 +143,7 @@ const generateExcel = async (
 
     const { column, row, matrix } = squeezeMatrix(combinedMatrix);
 
-    if (!matrix.length) return;
+    if (matrix.length === 0) return;
 
     const columns = [
       { width: 24 },

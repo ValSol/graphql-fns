@@ -2,11 +2,11 @@ import type { InputCreator } from '../../tsTypes';
 
 const createEntityWhereOneInputType: InputCreator = (entityConfig) => {
   const {
-    dateTimeFields,
-    floatFields,
-    intFields,
+    dateTimeFields = [],
+    floatFields = [],
+    intFields = [],
     name,
-    textFields,
+    textFields = [],
     type: entityType,
   } = entityConfig;
 
@@ -14,53 +14,41 @@ const createEntityWhereOneInputType: InputCreator = (entityConfig) => {
 
   const fieldLines: Array<string> = [];
 
-  if (textFields) {
-    textFields.reduce((prev, { name: name2, unique }) => {
+  textFields.reduce((prev, { name: name2, unique }) => {
+    if (unique) prev.push(`  ${name2}: ID`);
+    return prev;
+  }, fieldLines);
+
+  if (entityType === 'tangible') {
+    const { duplexFields = [], relationalFields = [] } = entityConfig;
+
+    duplexFields.reduce((prev, { name: name2, unique }) => {
       if (unique) prev.push(`  ${name2}: ID`);
       return prev;
     }, fieldLines);
-  }
 
-  if (entityType === 'tangible') {
-    const { duplexFields, relationalFields } = entityConfig;
-
-    if (duplexFields) {
-      duplexFields.reduce((prev, { name: name2, unique }) => {
-        if (unique) prev.push(`  ${name2}: ID`);
-        return prev;
-      }, fieldLines);
-    }
-
-    if (relationalFields) {
-      relationalFields.reduce((prev, { name: name2, unique }) => {
-        if (unique) prev.push(`  ${name2}: ID`);
-        return prev;
-      }, fieldLines);
-    }
-  }
-
-  if (intFields) {
-    intFields.reduce((prev, { name: name2, unique }) => {
-      if (unique) prev.push(`  ${name2}: Int`);
+    relationalFields.reduce((prev, { name: name2, unique, parent }) => {
+      if (!parent && unique) prev.push(`  ${name2}: ID`);
       return prev;
     }, fieldLines);
   }
 
-  if (floatFields) {
-    floatFields.reduce((prev, { name: name2, unique }) => {
-      if (unique) prev.push(`  ${name2}: Float`);
-      return prev;
-    }, fieldLines);
-  }
+  intFields.reduce((prev, { name: name2, unique }) => {
+    if (unique) prev.push(`  ${name2}: Int`);
+    return prev;
+  }, fieldLines);
 
-  if (dateTimeFields) {
-    dateTimeFields.reduce((prev, { name: name2, unique }) => {
-      if (unique) prev.push(`  ${name2}: DateTime`);
-      return prev;
-    }, fieldLines);
-  }
+  floatFields.reduce((prev, { name: name2, unique }) => {
+    if (unique) prev.push(`  ${name2}: Float`);
+    return prev;
+  }, fieldLines);
 
-  if (fieldLines.length) {
+  dateTimeFields.reduce((prev, { name: name2, unique }) => {
+    if (unique) prev.push(`  ${name2}: DateTime`);
+    return prev;
+  }, fieldLines);
+
+  if (fieldLines.length > 0) {
     fieldLines.unshift('  id: ID');
   } else {
     fieldLines.unshift('  id: ID!');

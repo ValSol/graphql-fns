@@ -141,6 +141,8 @@ describe('composeGqlResolvers', () => {
   });
 
   test('should create resolvers for two entities with relational entities', () => {
+    const personConfig = {} as TangibleEntityConfig;
+
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
       type: 'tangible',
@@ -151,8 +153,26 @@ describe('composeGqlResolvers', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'fellows',
+          oppositeName: 'friends',
+          array: true,
+          parent: true,
+          config: personConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          array: true,
+          parent: true,
+          config: personConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const personConfig = {} as TangibleEntityConfig;
+
     Object.assign(personConfig, {
       name: 'Person',
       type: 'tangible',
@@ -171,25 +191,45 @@ describe('composeGqlResolvers', () => {
       relationalFields: [
         {
           name: 'friends',
+          oppositeName: 'fellows',
           config: personConfig,
           array: true,
           required: true,
           type: 'relationalFields',
         },
         {
+          name: 'fellows',
+          oppositeName: 'friends',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'enemies',
+          oppositeName: 'opponents',
           config: personConfig,
           type: 'relationalFields',
           array: true,
         },
         {
+          name: 'opponents',
+          oppositeName: 'enemies',
+          config: personConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
           name: 'location',
+          oppositeName: 'citisens',
           config: placeConfig,
           required: true,
           type: 'relationalFields',
         },
         {
           name: 'favoritePlace',
+          oppositeName: 'customers',
           config: placeConfig,
           type: 'relationalFields',
         },

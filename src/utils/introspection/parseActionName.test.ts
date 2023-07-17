@@ -1,10 +1,17 @@
 /* eslint-env jest */
-import type { ActionSignatureMethods, DescendantAttributes, EntityConfig } from '../../tsTypes';
+import type {
+  ActionSignatureMethods,
+  DescendantAttributes,
+  EntityConfig,
+  TangibleEntityConfig,
+} from '../../tsTypes';
 
 import parseActionName from './parseActionName';
 import composeDescendantConfigByName from '../composeDescendantConfigByName';
 
 describe('parseActionName', () => {
+  const placeConfig = {} as TangibleEntityConfig;
+  const personConfig = {} as EntityConfig;
   const countryConfig: EntityConfig = {
     name: 'Country',
     type: 'tangible',
@@ -14,8 +21,18 @@ describe('parseActionName', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'places',
+        oppositeName: 'country',
+        config: placeConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
-  const placeConfig: EntityConfig = {
+  Object.assign(placeConfig, {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -27,12 +44,20 @@ describe('parseActionName', () => {
     relationalFields: [
       {
         name: 'country',
+        oppositeName: 'places',
         config: countryConfig,
         type: 'relationalFields',
       },
+      {
+        name: 'citisens',
+        oppositeName: 'place',
+        config: personConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
-  };
-  const personConfig = {} as EntityConfig;
+  });
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -49,12 +74,22 @@ describe('parseActionName', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         array: true,
         config: personConfig,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        array: true,
+        parent: true,
+        config: personConfig,
+        type: 'relationalFields',
+      },
+      {
         name: 'place',
+        oppositeName: 'citisens',
         config: placeConfig,
         type: 'relationalFields',
       },

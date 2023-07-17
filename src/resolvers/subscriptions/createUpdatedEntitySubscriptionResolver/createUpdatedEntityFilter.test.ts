@@ -76,13 +76,31 @@ describe('createUpdatedEntityFilter', () => {
     relationalFields: [
       {
         name: 'relationalFieldIndexed',
+        oppositeName: 'parentRelationalFieldIndexed',
         config: entityConfig,
         index: true,
         type: 'relationalFields',
       },
       {
-        name: 'relationalField',
+        name: 'parentRelationalFieldIndexed',
+        oppositeName: 'relationalFieldIndexed',
         config: entityConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'relationalField',
+        oppositeName: 'parentRelationalField',
+        config: entityConfig,
+        type: 'relationalFields',
+      },
+      {
+        name: 'parentRelationalField',
+        oppositeName: 'relationalField',
+        config: entityConfig,
+        array: true,
+        parent: true,
         type: 'relationalFields',
       },
     ],

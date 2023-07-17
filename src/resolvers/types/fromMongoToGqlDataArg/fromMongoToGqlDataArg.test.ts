@@ -43,13 +43,31 @@ describe('fromMongoToGqlDataArg', () => {
       relationalFields: [
         {
           name: 'relationalField',
+          oppositeName: 'parentRelationalField',
           config: entityConfig,
           type: 'relationalFields',
         },
         {
-          name: 'relationalArrayField',
+          name: 'parentRelationalField',
+          oppositeName: 'relationalField',
           config: entityConfig,
           array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'relationalArrayField',
+          oppositeName: 'parentRelationalArrayField',
+          config: entityConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentRelationalArrayField',
+          oppositeName: 'relationalArrayField',
+          config: entityConfig,
+          array: true,
+          parent: true,
           type: 'relationalFields',
         },
       ],

@@ -48,8 +48,7 @@ const createNodeQueryResolver = (
     }
 
     const resultEntityConfig = descendantKey
-      ? // $FlowFixMe
-        composeDescendantConfig(descendant?.[descendantKey], entityConfig, generalConfig)
+      ? composeDescendantConfig(descendant?.[descendantKey], entityConfig, generalConfig)
       : entityConfig;
 
     const inAnyCase = true;

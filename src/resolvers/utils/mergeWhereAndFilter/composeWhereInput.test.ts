@@ -127,15 +127,33 @@ describe('composeWhereInput', () => {
     relationalFields: [
       {
         name: 'relationalField',
+        oppositeName: 'parentRelationalField',
         index: true,
         config: entityConfig,
         type: 'relationalFields',
       },
       {
+        name: 'parentRelationalField',
+        oppositeName: 'relationalField',
+        config: entityConfig,
+        array: true,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'relationalFields',
+        oppositeName: 'parentRelationalFields',
         index: true,
         config: entityConfig,
         array: true,
+        type: 'relationalFields',
+      },
+      {
+        name: 'parentRelationalFields',
+        oppositeName: 'relationalFields',
+        config: entityConfig,
+        array: true,
+        parent: true,
         type: 'relationalFields',
       },
     ],
@@ -346,6 +364,16 @@ describe('composeWhereInput', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
 
     Object.assign(menusectionConfig, {
@@ -403,6 +431,7 @@ describe('composeWhereInput', () => {
       relationalFields: [
         {
           name: 'access',
+          oppositeName: 'restaurants',
           config: accessConfig,
           index: true,
           type: 'relationalFields',

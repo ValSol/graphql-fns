@@ -29,11 +29,9 @@ const checkAnyEntityNames =
 const checkAnyFieldNames =
   (rootEntityName: string, fieldsObject: EntityConfigObject, descendantKey: string) =>
   (
-    EntityNamesObject:
-      | Record<any, any>
-      | {
-          [entityName: string]: Array<string>;
-        },
+    EntityNamesObject: {
+      [entityName: string]: string[];
+    },
     fieldType: string,
   ) => {
     if (EntityNamesObject[rootEntityName]) {
@@ -89,7 +87,7 @@ const composeDescendantConfig = (
   const checkEntityNames = checkAnyEntityNames(allowEntityNames, descendantKey);
   const checkFieldNames = checkAnyFieldNames(rootEntityName, fieldsObject, descendantKey);
 
-  // *** check args correctness
+  // *** start check args correctness
 
   checkEntityNames(excludeFields, 'excludeFields');
   checkFieldNames(excludeFields, 'excludeFields');
@@ -109,13 +107,15 @@ const composeDescendantConfig = (
 
   type TangibleFields = Omit<SimplifiedTangibleEntityConfig, 'name' | 'type' | 'counter'>;
 
-  const addedDuplexFields = (addFields[rootEntityName] as TangibleFields)?.duplexFields
-    ? (addFields[rootEntityName] as TangibleFields).duplexFields.map(({ name }) => name)
-    : [];
+  ((addFields[rootEntityName] as TangibleFields)?.relationalFields || []).forEach(({ name }) => {
+    throw new TypeError(
+      `Forbidden to put relationalFields into "addFields" but got "${name}" field!`,
+    );
+  });
 
-  const addedRelationalFields = (addFields[rootEntityName] as TangibleFields)?.relationalFields
-    ? (addFields[rootEntityName] as TangibleFields).relationalFields.map(({ name }) => name)
-    : [];
+  ((addFields[rootEntityName] as TangibleFields)?.duplexFields || []).forEach(({ name }) => {
+    throw new TypeError(`Forbidden to put duplexFields into "addFields" but got "${name}" field!`);
+  });
 
   type VirtualFields = Omit<SimplifiedVirtualEntityConfig, 'name' | 'type' | 'counter'>;
 
@@ -125,6 +125,7 @@ const composeDescendantConfig = (
 
   if (descendantFields[rootEntityName]) {
     Object.keys(descendantFields[rootEntityName]).forEach((fieldName) => {
+      // if field name NOT used in 'rootEntityConfig' and 'addFields'
       if (
         !(
           fieldsObject[fieldName] &&
@@ -132,8 +133,6 @@ const composeDescendantConfig = (
             fieldsObject[fieldName].type === 'duplexFields' ||
             fieldsObject[fieldName].type === 'childFields')
         ) &&
-        !addedDuplexFields.includes(fieldName) &&
-        !addedRelationalFields.includes(fieldName) &&
         !addedChildFields.includes(fieldName)
       ) {
         throw new TypeError(
@@ -155,7 +154,7 @@ const composeDescendantConfig = (
     });
   }
 
-  // ***
+  // *** end check args correctness
 
   const entityConfig = { ...rootEntityConfig, name: descendantEntityName };
 
@@ -175,7 +174,6 @@ const composeDescendantConfig = (
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         entityConfig[key] = entityConfig[key].filter(
-          // $FlowFixMe
           ({ name }) => !excludeFields[rootEntityName].includes(name),
         );
       }
@@ -193,6 +191,7 @@ const composeDescendantConfig = (
       addFields[rootEntityName] as SimplifiedEntityConfig,
       addFields2 as unknown as EntityConfig,
       allEntityConfigs,
+      { [descendantEntityName]: [] }, // TODO use correct relationalOppositeNames
     );
 
     const fieldsToAddObject = composeFieldsObject(addFields2 as unknown as EntityConfig);
@@ -248,6 +247,25 @@ const composeDescendantConfig = (
           return { ...item, config };
         });
 
+        // *** check that the relational fields have opposite relational fields
+
+        if (key === 'relationalFields') {
+          // eslint-disable-next-line
+          entityConfig[key]?.forEach(({ config, oppositeName }) => {
+            const oppositeField = (config.relationalFields || []).find(
+              ({ name }) => name === oppositeName,
+            );
+
+            if (!oppositeField) {
+              throw new TypeError(
+                `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}"!`,
+              );
+            }
+          });
+        }
+
+        // ***
+
         // *** check that the duplex fields have opposite duplex fields
 
         if (key === 'duplexFields') {
@@ -274,12 +292,9 @@ const composeDescendantConfig = (
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         entityConfig[key] = entityConfig[key].map((field) =>
-          // $FlowFixMe
           freezedFields[rootEntityName].includes(field.name)
-            ? // $FlowFixMe
-              { ...field, freeze: true }
-            : // $FlowFixMe
-              { ...field, freeze: false },
+            ? { ...field, freeze: true }
+            : { ...field, freeze: false },
         );
       }
     });
@@ -289,12 +304,9 @@ const composeDescendantConfig = (
     Object.keys(entityConfig).forEach((key) => {
       if (key.endsWith('Fields')) {
         entityConfig[key] = entityConfig[key].map((field) =>
-          // $FlowFixMe
           unfreezedFields[rootEntityName].includes(field.name)
-            ? // $FlowFixMe
-              { ...field, freeze: false }
-            : // $FlowFixMe
-              { ...field, freeze: true },
+            ? { ...field, freeze: false }
+            : { ...field, freeze: true },
         );
       }
     });

@@ -164,6 +164,7 @@ const composeCustomAction = (
 
       return actionAllowed(descendantConfig) ? actionName(baseEntityName, descendantKey) : '';
     },
+
     argNames: composeArgNames(argNames, inputCreators, descendantKey),
     argTypes: composeArgTypes(argTypes, inputCreators, descendantKey),
 

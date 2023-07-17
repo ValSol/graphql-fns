@@ -1,5 +1,10 @@
 /* eslint-env jest */
-import type { GeneralConfig, NearInput, EntityConfig } from '../../../tsTypes';
+import type {
+  GeneralConfig,
+  NearInput,
+  EntityConfig,
+  TangibleEntityConfig,
+} from '../../../tsTypes';
 
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
@@ -143,6 +148,8 @@ describe('createEntityCountQueryResolver', () => {
   });
 
   test('should create query count resolver to aggregate result', async () => {
+    const parentConfig = {} as TangibleEntityConfig;
+
     const childConfig: EntityConfig = {
       name: 'Child',
       type: 'tangible',
@@ -159,8 +166,19 @@ describe('createEntityCountQueryResolver', () => {
           type: 'textFields',
         },
       ],
+      relationalFields: [
+        {
+          name: 'parentChild',
+          oppositeName: 'child',
+          config: parentConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
     };
-    const parentConfig: EntityConfig = {
+
+    Object.assign(parentConfig, {
       name: 'Parent',
       type: 'tangible',
       textFields: [
@@ -181,12 +199,13 @@ describe('createEntityCountQueryResolver', () => {
       relationalFields: [
         {
           name: 'child',
+          oppositeName: 'parentChild',
           index: true,
           config: childConfig,
           type: 'relationalFields',
         },
       ],
-    };
+    });
 
     const exampleSchema = createThingSchema(parentConfig);
     const Example = mongooseConn.model('Parent_', exampleSchema);

@@ -10,6 +10,9 @@ import composeDescendantConfigByName from '../composeDescendantConfigByName';
 import actionToDescendant from './actionToDescendant';
 
 describe('actionToDescendant', () => {
+  const placeConfig = {} as TangibleEntityConfig;
+  const personConfig = {} as TangibleEntityConfig;
+
   const countryConfig: TangibleEntityConfig = {
     name: 'Country',
     type: 'tangible',
@@ -19,8 +22,19 @@ describe('actionToDescendant', () => {
         type: 'textFields',
       },
     ],
+    relationalFields: [
+      {
+        name: 'places',
+        oppositeName: 'country',
+        array: true,
+        config: placeConfig,
+        parent: true,
+        type: 'relationalFields',
+      },
+    ],
   };
-  const placeConfig: TangibleEntityConfig = {
+
+  Object.assign(placeConfig, {
     name: 'Place',
     type: 'tangible',
     textFields: [
@@ -32,12 +46,21 @@ describe('actionToDescendant', () => {
     relationalFields: [
       {
         name: 'country',
+        oppositeName: 'places',
         config: countryConfig,
         type: 'relationalFields',
       },
+      {
+        name: 'citisens',
+        oppositeName: 'place',
+        array: true,
+        config: personConfig,
+        parent: true,
+        type: 'relationalFields',
+      },
     ],
-  };
-  const personConfig = {} as TangibleEntityConfig;
+  });
+
   Object.assign(personConfig, {
     name: 'Person',
     type: 'tangible',
@@ -54,12 +77,22 @@ describe('actionToDescendant', () => {
     relationalFields: [
       {
         name: 'friends',
+        oppositeName: 'fellows',
         array: true,
         config: personConfig,
         type: 'relationalFields',
       },
       {
+        name: 'fellows',
+        oppositeName: 'friends',
+        array: true,
+        config: personConfig,
+        parent: true,
+        type: 'relationalFields',
+      },
+      {
         name: 'place',
+        oppositeName: 'citisens',
         config: placeConfig,
         type: 'relationalFields',
       },

@@ -77,10 +77,12 @@ const createUpdatedEntityPayloadType = (entityConfig: EntityConfig): string => {
       return prev;
     }, entityFieldsArray);
 
-    relationalFields.reduce((prev, { name: name2 }) => {
-      prev.push(`  ${name2}`);
-      return prev;
-    }, entityFieldsArray);
+    relationalFields
+      .filter(({ parent }) => !parent)
+      .reduce((prev, { name: name2 }) => {
+        prev.push(`  ${name2}`);
+        return prev;
+      }, entityFieldsArray);
   }
 
   const result = `enum ${name}FieldNamesEnum {
