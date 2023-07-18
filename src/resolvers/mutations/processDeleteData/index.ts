@@ -9,26 +9,40 @@ const processDeleteData = (
   entityConfig: TangibleEntityConfig,
   forDelete?: boolean,
 ): ProcessDeleteDataResult => {
-  // eslint-disable-next-line no-unused-vars
   const { _id } = data;
-  const { duplexFields } = entityConfig;
+  const { duplexFields = [], relationalFields = [] } = entityConfig;
 
-  const duplexFieldsArray = (duplexFields || []).reduce(
-    (prev, { name, oppositeName, array, config }) => {
-      if (!config.duplexFields) {
-        // to prevent flowjs error
-        throw new TypeError('Expected a duplexFields in config!');
+  const duplexFieldsArray = duplexFields.reduce((prev, { name, oppositeName, array, config }) => {
+    const duplexField = config.duplexFields.find(({ name: name2 }) => name2 === oppositeName);
+    if (!duplexField) {
+      throw new TypeError(
+        `Expected a duplexField with name "${oppositeName}" in "${config.name}" entity!`,
+      );
+    }
+
+    const { array: oppositeArray } = duplexField;
+    prev.push({ array, config, name, oppositeArray, oppositeName });
+
+    return prev;
+  }, []);
+
+  const relationalFieldsArray = relationalFields
+    .filter(({ parent }) => parent)
+    .reduce((prev, { oppositeName, config }) => {
+      const relationalField = config.relationalFields.find(
+        ({ name: name2 }) => name2 === oppositeName,
+      );
+      if (!relationalField) {
+        throw new TypeError(
+          `Expected a relationalField with name "${oppositeName}" in "${config.name}" entity!`,
+        );
       }
-      const duplexField = config.duplexFields.find(({ name: name2 }) => name2 === oppositeName);
-      if (!duplexField) {
-        throw new TypeError(`Expected a duplexField with name "${oppositeName}"!`);
-      }
-      const { array: oppositeArray, config: oppositeConfig } = duplexField;
-      prev.push({ array, config, name, oppositeArray, oppositeConfig, oppositeName });
+
+      const { array: oppositeArray } = relationalField;
+      prev.push({ config, oppositeArray, oppositeName });
+
       return prev;
-    },
-    [],
-  );
+    }, []);
 
   const core: Core = initialCore || new Map();
 
@@ -102,6 +116,34 @@ const processDeleteData = (
           core.set(config, [item]);
         }
       }
+    }
+  });
+
+  relationalFieldsArray.forEach(({ config, oppositeArray, oppositeName }) => {
+    const item = {
+      updateOne: {
+        filter: {
+          [oppositeName]: _id,
+        },
+        update: oppositeArray
+          ? {
+              $pull: {
+                [oppositeName]: _id,
+              },
+            }
+          : {
+              $unset: {
+                [oppositeName]: 1,
+              },
+            },
+      },
+    } as const;
+
+    const resultItem = core.get(config);
+    if (resultItem) {
+      resultItem.push(item);
+    } else {
+      core.set(config, [item]);
     }
   });
 

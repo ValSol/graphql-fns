@@ -198,6 +198,7 @@ describe('composeThingSchemaProperties', () => {
           type: 'ObjectId',
           ref: 'Person',
           required: false,
+          index: true,
         },
       ],
       location: {
@@ -209,6 +210,7 @@ describe('composeThingSchemaProperties', () => {
         type: 'ObjectId',
         ref: 'Place',
         required: false,
+        index: true,
       },
     };
 

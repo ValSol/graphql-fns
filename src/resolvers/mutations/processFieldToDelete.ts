@@ -1,6 +1,6 @@
 import { Connection } from 'mongoose';
 
-import type { DataObject, DuplexField, Enums, TangibleEntityConfig } from '../../tsTypes';
+import type { DuplexField, Enums, TangibleEntityConfig } from '../../tsTypes';
 import type { Core } from '../tsTypes';
 
 import getOppositeFields from '../../utils/getOppositeFields';
@@ -96,7 +96,7 @@ const processChildrenField: ProcessChildrenField = async (
 
   const notArrayOppositeDuplexFields = getNotArrayOppositeDuplexFields(entityConfig);
 
-  if (!notArrayOppositeDuplexFields.length) {
+  if (notArrayOppositeDuplexFields.length === 0) {
     return core;
   }
 

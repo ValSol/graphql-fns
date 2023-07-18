@@ -297,6 +297,14 @@ describe('createDeleteEntityMutationResolver', () => {
           config: parentConfig,
           type: 'relationalFields',
         },
+        {
+          name: 'parentChilds',
+          oppositeName: 'childs',
+          array: true,
+          parent: true,
+          config: parentConfig,
+          type: 'relationalFields',
+        },
       ],
     };
     Object.assign(parentConfig, {
@@ -316,6 +324,13 @@ describe('createDeleteEntityMutationResolver', () => {
           name: 'child',
           oppositeName: 'parentChild',
           index: true,
+          config: childConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'childs',
+          oppositeName: 'parentChilds',
+          array: true,
           config: childConfig,
           type: 'relationalFields',
         },
@@ -347,6 +362,9 @@ describe('createDeleteEntityMutationResolver', () => {
             textField: i < 15 ? 'first' : 'second',
           },
         },
+        childs: {
+          create: [{ textField: `text-${i}` }],
+        },
       };
       // eslint-disable-next-line no-await-in-loop
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
@@ -354,12 +372,12 @@ describe('createDeleteEntityMutationResolver', () => {
       });
     }
 
-    const deletePerson = createDeleteEntityMutationResolver(
+    const deleteParent = createDeleteEntityMutationResolver(
       parentConfig,
       generalConfig,
       serversideConfig,
     );
-    if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+    if (!deleteParent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const whereOne = {
       AND: [
@@ -369,7 +387,7 @@ describe('createDeleteEntityMutationResolver', () => {
     };
 
     const info = { projection: { _id: 1, name: 1 } };
-    const deletedParent = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info, {
+    const deletedParent = await deleteParent(null, { whereOne }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
 
@@ -382,7 +400,7 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     };
 
-    const deletedParent2 = await deletePerson(
+    const deletedParent2 = await deleteParent(
       null,
       { whereOne: whereOne2 },
       { mongooseConn, pubsub },
@@ -391,5 +409,38 @@ describe('createDeleteEntityMutationResolver', () => {
     );
 
     expect(deletedParent2).toBe(null);
+
+    // test deletion entity with relational fields
+
+    const deleteChild = createDeleteEntityMutationResolver(
+      childConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    const parent = await Parent.findOne({ name: 'name-0' });
+
+    const child = await Child.findOne({ textFields: 'text-0' });
+
+    expect(parent.child).toEqual(child._id);
+
+    await deleteChild(null, { whereOne: { id: child._id } }, { mongooseConn, pubsub }, info, {
+      inputOutputEntity: [[]],
+    });
+
+    const parent2 = await Parent.findOne({ name: 'name-0' });
+
+    expect(parent2.child).toEqual(undefined);
+
+    const child2 = await Child.findOne({ textField: 'text-0' });
+
+    expect(parent2.childs).toEqual([child2._id]);
+
+    await deleteChild(null, { whereOne: { id: child2._id } }, { mongooseConn, pubsub }, info, {
+      inputOutputEntity: [[]],
+    });
+
+    const parent3 = await Parent.findOne({ name: 'name-0' });
+    expect(parent3.childs).toEqual([]);
   });
 });

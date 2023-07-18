@@ -167,40 +167,34 @@ const composeThingSchemaProperties = (
 
     relationalFields
       .filter(({ parent }) => !parent)
-      .reduce(
-        (
-          prev,
-          { array, config: { name: relationalEntityName }, index, name, required, unique },
-        ) => {
-          if (configType !== 'tangible') {
-            throw new TypeError(
-              `Must not have an "relational" field in an "${configType}" document!`,
-            );
-          }
+      .reduce((prev, { array, config: { name: relationalEntityName }, name, required, unique }) => {
+        if (configType !== 'tangible') {
+          throw new TypeError(
+            `Must not have an "relational" field in an "${configType}" document!`,
+          );
+        }
 
-          const obj: {
-            ref: string;
-            type: string;
-            required?: boolean;
-            sparse?: boolean;
-            index?: boolean;
-            unique?: boolean;
-          } = {
-            ref: relationalEntityName,
-            type: 'ObjectId',
-          };
-          if (!required) obj.required = false; // by default required = true
-          if (unique) {
-            obj.unique = true; // eslint-disable-line no-param-reassign
-            if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
-          }
-          if (index) obj.index = true;
-          // eslint-disable-next-line no-param-reassign
-          prev[name] = array ? [obj] : obj;
-          return prev;
-        },
-        result,
-      );
+        const obj: {
+          ref: string;
+          type: string;
+          required?: boolean;
+          sparse?: boolean;
+          index?: boolean;
+          unique?: boolean;
+        } = {
+          ref: relationalEntityName,
+          type: 'ObjectId',
+        };
+        if (!required) obj.required = false; // by default required = true
+        if (unique) {
+          obj.unique = true; // eslint-disable-line no-param-reassign
+          if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
+        }
+        obj.index = true; // always create index
+
+        prev[name] = array ? [obj] : obj;
+        return prev;
+      }, result);
 
     duplexFields.reduce(
       (prev, { array, config: { name: duplexThingName }, index, name, required, unique }) => {

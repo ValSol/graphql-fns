@@ -9,7 +9,7 @@ import type {
   SintheticResolverInfo,
   GraphqlScalar,
 } from '../../../tsTypes';
-import type { Core, PreparedData, ResolverAttributes } from '../../tsTypes';
+import type { PreparedData, ResolverAttributes } from '../../tsTypes';
 
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
