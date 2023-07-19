@@ -352,16 +352,28 @@ const composeWhereInput = (
   );
 
   const lookups = lookupArray.reduce<Array<LookupMongoDB>>((prev, fieldEntityPair) => {
-    const [parentFieldName, fieldName, entityName] = fieldEntityPair.split(':');
+    const [parentFieldName, fieldName, entityName, parentRelationalOppositeName] =
+      fieldEntityPair.split(':');
 
-    prev.push({
-      $lookup: {
-        from: `${entityName.toLowerCase()}_things`,
-        localField: `${parentFieldName}${parentFieldName ? '.' : ''}${fieldName.slice(0, -1)}`,
-        foreignField: '_id',
-        as: `${parentFieldName}${fieldName}`,
-      },
-    });
+    if (parentRelationalOppositeName) {
+      prev.push({
+        $lookup: {
+          from: `${entityName.toLowerCase()}_things`,
+          localField: `${parentFieldName}${parentFieldName ? '.' : ''}_id`,
+          foreignField: parentRelationalOppositeName,
+          as: `${parentFieldName}${fieldName}`,
+        },
+      });
+    } else {
+      prev.push({
+        $lookup: {
+          from: `${entityName.toLowerCase()}_things`,
+          localField: `${parentFieldName}${parentFieldName ? '.' : ''}${fieldName.slice(0, -1)}`,
+          foreignField: '_id',
+          as: `${parentFieldName}${fieldName}`,
+        },
+      });
+    }
 
     return prev;
   }, []);

@@ -19,6 +19,7 @@ import createEntitiesQueryResolver from './index';
 const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
 const info2 = { projection: { name: 1, textField3: 1, createdAt: 1 } };
 const infoForSort = { projection: { first: 1, second: 1, createdAt: 1 } };
+const info3 = { projection: { first: 1, textFields: 1, textField: 1 } };
 
 mongoose.set('strictQuery', false);
 
@@ -878,5 +879,167 @@ describe('createEntityQueryResolver', () => {
       { inputOutputEntity: [[]] },
     );
     expect(parents4.length).toBe(3);
+  });
+
+  test('should create query entities resolver to createdAt_gt', async () => {
+    const textbookConfig = {} as TangibleEntityConfig;
+    const lessonConfig = {} as TangibleEntityConfig;
+    const userConfig: EntityConfig = {
+      name: 'User',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'textbooks',
+          oppositeName: 'user',
+          config: textbookConfig,
+          parent: true,
+          array: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
+
+    Object.assign(textbookConfig, {
+      name: 'Textbook',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'title',
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'user',
+          oppositeName: 'textbooks',
+          index: true,
+          config: userConfig,
+          type: 'relationalFields',
+        },
+        {
+          name: 'lessons',
+          oppositeName: 'textbook',
+          config: lessonConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    Object.assign(lessonConfig, {
+      name: 'Lesson',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'title',
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'textbook',
+          oppositeName: 'lessons',
+          config: lessonConfig,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    const userSchema = createThingSchema(userConfig);
+    const User = mongooseConn.model('User_Thing', userSchema);
+    await User.createCollection();
+
+    const textbookSchema = createThingSchema(textbookConfig);
+    const Textbook = mongooseConn.model('Textbook_Thing', textbookSchema);
+    await Textbook.createCollection();
+
+    const lessonSchema = createThingSchema(lessonConfig);
+    const Lesson = mongooseConn.model('Lesson_Thing', lessonSchema);
+    await Lesson.createCollection();
+
+    await sleep(250);
+
+    const createUser = createCreateEntityMutationResolver(
+      userConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    const createTextbook = createCreateEntityMutationResolver(
+      textbookConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    const createLesson = createCreateEntityMutationResolver(
+      lessonConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    for (let i = 0; i < 3; i += 1) {
+      const data = { name: `user${i}` };
+      const user = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
+
+      for (let j = 0; j < 3; j += 1) {
+        const data2 = { title: `textbook${i * 3 + j}`, user: { connect: user.id } };
+        const textbook = await createTextbook(
+          null,
+          { data: data2 },
+          { mongooseConn, pubsub },
+          null,
+          {
+            inputOutputEntity: [[]],
+          },
+        );
+
+        for (let k = 0; k < 3; k += 1) {
+          const data3 = {
+            title: `lesson${(i * 3 + j) * 3 + k}`,
+            textbook: { connect: textbook.id },
+          };
+          const lesson = await createLesson(null, { data: data3 }, { mongooseConn, pubsub }, null, {
+            inputOutputEntity: [[]],
+          });
+        }
+      }
+    }
+
+    const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
+
+    const info4 = { projection: { name: 1 } };
+
+    const where = {
+      textbooks_: { lessons_: { title: 'lesson8' } },
+    };
+
+    const users = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
+      inputOutputEntity: [[]],
+    });
+
+    expect(users.length).toBe(1);
+    expect(users[0].name).toBe('user0');
+
+    const where2 = {
+      textbooks_: { lessons_: { title_in: ['lesson8', 'lesson9'] } },
+    };
+
+    const users2 = await Users(null, { where: where2 }, { mongooseConn, pubsub }, info4, {
+      inputOutputEntity: [[]],
+    });
+
+    expect(users2.length).toBe(2);
+    expect(users2[0].name).toBe('user0');
+    expect(users2[1].name).toBe('user1');
   });
 });

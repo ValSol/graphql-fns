@@ -169,6 +169,14 @@ const composeInputFields = (
 
     relationalFields.forEach(({ name: fieldName, array, index, parent, unique, config }) => {
       if (parent) {
+        const oppositeField = config.relationalFields.find(
+          ({ oppositeName }) => oppositeName === fieldName,
+        );
+
+        if (oppositeField.index) {
+          fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+        }
+
         return;
       }
       if (unique || index) {

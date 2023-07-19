@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import composeWhereInput from './composeWhereInput';
 
@@ -485,7 +485,143 @@ describe('composeWhereInput', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return result for tree for relational where', () => {
+  test('should return result for tree for relational where backward', () => {
+    const menusectionConfig = {} as TangibleEntityConfig;
+    const menuConfig = {} as TangibleEntityConfig;
+    const restaurantConfig = {} as TangibleEntityConfig;
+
+    const accessConfig: TangibleEntityConfig = {
+      name: 'Access',
+      type: 'tangible',
+
+      textFields: [
+        {
+          name: 'restaurantEditors',
+          index: true,
+          array: true,
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'restaurants',
+          oppositeName: 'access',
+          config: restaurantConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
+
+    Object.assign(menusectionConfig, {
+      name: 'Menusection',
+      type: 'tangible',
+      relationalFields: [
+        {
+          name: 'menu',
+          oppositeName: 'sections',
+          config: menuConfig,
+          required: true,
+          index: true,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    Object.assign(menuConfig, {
+      name: 'Menu',
+      type: 'tangible',
+      relationalFields: [
+        {
+          name: 'sections',
+          oppositeName: 'menu',
+          config: menusectionConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'restaurant',
+          oppositeName: 'menus',
+          config: restaurantConfig,
+          required: true,
+          index: true,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+      type: 'tangible',
+
+      relationalFields: [
+        {
+          name: 'access',
+          oppositeName: 'restaurants',
+          config: accessConfig,
+          index: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'menus',
+          oppositeName: 'restaurant',
+          config: menuConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    const where = {
+      restaurants_: {
+        menus_: {
+          sections_: {
+            id: '5f85ad539905d61fb73346a2',
+          },
+        },
+      },
+    };
+
+    const result = composeWhereInput(where, accessConfig);
+
+    const expectedWhere = {
+      'restaurants_menus_sections_._id': { $eq: '5f85ad539905d61fb73346a2' },
+    };
+    const expectedLookups = [
+      {
+        $lookup: {
+          from: 'restaurant_things',
+          localField: '_id',
+          foreignField: 'access',
+          as: 'restaurants_',
+        },
+      },
+      {
+        $lookup: {
+          from: 'menu_things',
+          localField: 'restaurants_._id',
+          foreignField: 'restaurant',
+          as: 'restaurants_menus_',
+        },
+      },
+      {
+        $lookup: {
+          from: 'menusection_things',
+          localField: 'restaurants_menus_._id',
+          foreignField: 'menu',
+          as: 'restaurants_menus_sections_',
+        },
+      },
+    ];
+
+    expect(result.lookups).toEqual(expectedLookups);
+    expect(JSON.stringify(result.where)).toEqual(JSON.stringify(expectedWhere));
+  });
+
+  test('should return result for tree for relational where 2', () => {
     const restaurantLevelConfig: EntityConfig = {
       name: 'RestaurantLevel',
       type: 'tangible',

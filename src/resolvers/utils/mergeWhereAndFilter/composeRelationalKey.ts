@@ -40,7 +40,12 @@ const composeRelationalKey = (
 
       currentConfig = (attributes as DuplexField | RelationalField).config;
 
-      const lookupArrayItem = `${relationalKey}:${key}:${currentConfig.name}`;
+      const parentRelationalOppositeName =
+        attributes.type === 'relationalFields' && attributes.parent
+          ? `:${attributes.oppositeName}`
+          : '';
+
+      const lookupArrayItem = `${relationalKey}:${key}:${currentConfig.name}${parentRelationalOppositeName}`;
 
       if (!lookupArray.includes(lookupArrayItem)) {
         lookupArray.push(lookupArrayItem);

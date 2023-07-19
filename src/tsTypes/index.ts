@@ -776,7 +776,7 @@ export type LookupMongoDB = {
   $lookup: {
     from: string;
     localField: string;
-    foreignField: '_id';
+    foreignField: '_id' | string;
     as: string;
   };
 };

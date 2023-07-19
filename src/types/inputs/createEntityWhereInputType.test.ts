@@ -290,6 +290,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
   spouse_exists: Boolean
+  partners_: PersonWhereWithoutBooleanOperationsInput
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -297,6 +298,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
   friends_: PersonWhereWithoutBooleanOperationsInput
   friends_size: Int
   friends_notsize: Int
+  fellows_: PersonWhereWithoutBooleanOperationsInput
   AND: [PersonWhereInput!]
   NOR: [PersonWhereInput!]
   OR: [PersonWhereInput!]
@@ -344,6 +346,7 @@ input PersonWhereWithoutBooleanOperationsInput {
   spouse_ne: ID
   spouse_: PersonWhereWithoutBooleanOperationsInput
   spouse_exists: Boolean
+  partners_: PersonWhereWithoutBooleanOperationsInput
   friends: ID
   friends_in: [ID!]
   friends_nin: [ID!]
@@ -351,6 +354,7 @@ input PersonWhereWithoutBooleanOperationsInput {
   friends_: PersonWhereWithoutBooleanOperationsInput
   friends_size: Int
   friends_notsize: Int
+  fellows_: PersonWhereWithoutBooleanOperationsInput
 }`,
       { PersonWhereInput: [createEntityWhereInputType, personConfig] },
     ];

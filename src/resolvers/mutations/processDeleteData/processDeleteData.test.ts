@@ -32,6 +32,15 @@ describe('processDeleteData', () => {
           type: 'duplexFields',
         },
       ],
+
+      relationalFields: [
+        {
+          name: 'owner',
+          oppositeName: 'ownerships',
+          config: personConfig,
+          type: 'relationalFields',
+        },
+      ],
     };
     Object.assign(personConfig, {
       name: 'Person',
@@ -75,6 +84,17 @@ describe('processDeleteData', () => {
           config: placeConfig,
           array: true,
           type: 'duplexFields',
+        },
+      ],
+
+      relationalFields: [
+        {
+          name: 'ownerships',
+          oppositeName: 'owner',
+          config: placeConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
         },
       ],
     });
@@ -161,6 +181,18 @@ describe('processDeleteData', () => {
           update: {
             $pull: {
               visitors: '111',
+            },
+          },
+        },
+      },
+      {
+        updateOne: {
+          filter: {
+            owner: '111',
+          },
+          update: {
+            $unset: {
+              owner: 1,
             },
           },
         },
