@@ -13,6 +13,17 @@ describe('modifyConnectionArgsAndInvolvedFilters util', () => {
 
   test('get results for { first: 6 }', () => {
     const args = { first: 6 };
+    const involvedFilters: InvolvedFilters = { inputOutputEntity: [[], 13] };
+
+    const expectedResult = [{ first: 6 }, { inputOutputEntity: [[]] }];
+
+    const result = modifyConnectionArgsAndInvolvedFilters(args, involvedFilters, name);
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('get results for { first: 6 }', () => {
+    const args = { first: 6 };
     const involvedFilters: InvolvedFilters = { inputOutputEntity: [[], 3] };
 
     const expectedResult = [{ first: 3 }, { inputOutputEntity: [[]] }];

@@ -66,7 +66,8 @@ const processUploadedFiles = async ({
   indexesByConfig.forEach((indexes, config) => {
     const { name: name2 } = config;
     const fileSchema = createFileSchema(config);
-    const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
+    const FileModel =
+      mongooseConn.models[`${name2}_File`] || mongooseConn.model(`${name2}_File`, fileSchema);
     indexes.forEach((index) => {
       if (hashDoubles[index] === null) {
         const hash = hashes[index];
@@ -99,7 +100,8 @@ const processUploadedFiles = async ({
   indexesByConfig.forEach((indexes, config) => {
     const { name: name2 } = config;
     const fileSchema = createFileSchema(config);
-    const FileModel = mongooseConn.model(`${name2}_File`, fileSchema);
+    const FileModel =
+      mongooseConn.models[`${name2}_File`] || mongooseConn.model(`${name2}_File`, fileSchema);
     indexes.forEach((index) => {
       if (alreadyUploadedFiles[index]) {
         promises2[index] = Promise.resolve(alreadyUploadedFiles[index]);

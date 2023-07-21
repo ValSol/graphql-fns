@@ -69,7 +69,7 @@ const modifyConnectionArgsAndInvolvedFilters = (
     return [{ ...rest, last: limit }, modifiedInvolvedFilters];
   }
 
-  return [involvedFilters, modifiedInvolvedFilters];
+  return [args, modifiedInvolvedFilters];
 };
 
 export default modifyConnectionArgsAndInvolvedFilters;

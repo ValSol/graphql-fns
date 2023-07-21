@@ -16,7 +16,9 @@ const updatePeriphery = async (
   periphery.forEach((obj, config) => {
     const { name: configName } = config;
     const thingSchema = createThingSchema(config);
-    const Entity = mongooseConn.model(`${configName}_Thing`, thingSchema);
+    const Entity =
+      mongooseConn.models[`${configName}_Thing`] ||
+      mongooseConn.model(`${configName}_Thing`, thingSchema);
 
     Object.keys(obj).forEach((oppositeName) => {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];

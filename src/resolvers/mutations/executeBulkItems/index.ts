@@ -16,7 +16,8 @@ const executeBulkItems = async (
   core.forEach((bulkItems, config) => {
     const { name } = config;
     const thingSchema = createThingSchema(config, enums);
-    const Entity = mongooseConn.model(`${name}_Thing`, thingSchema);
+    const Entity =
+      mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, thingSchema);
 
     // @ts-ignore
     promises.push(Entity.bulkWrite(bulkItems, { session, strict: true }));

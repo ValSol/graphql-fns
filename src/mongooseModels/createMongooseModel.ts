@@ -17,7 +17,8 @@ const createMongooseModel = async (
   if (configType === 'tangible') {
     const thingSchema = createThingSchema(entityConfig, enums);
 
-    const ThingModel = mongooseConn.model(`${name}_Thing`, thingSchema);
+    const ThingModel =
+      mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, thingSchema);
 
     if (!syncedIndexes[name]) {
       syncedIndexes[name] = true;
@@ -32,7 +33,9 @@ const createMongooseModel = async (
 
     const nakedName = name.slice('Tangible'.length);
 
-    const FileModel = mongooseConn.model(`${nakedName}_File`, fileSchema);
+    const FileModel =
+      mongooseConn.models[`${nakedName}_File`] ||
+      mongooseConn.model(`${nakedName}_File`, fileSchema);
 
     return FileModel;
   }

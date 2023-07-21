@@ -51,10 +51,14 @@ const checkUnsetsFields = (bulkItems: Array<any>, entityConfig: EntityConfig): v
   });
 
   unsets.forEach((token) => {
-    const [, fieldName] = token.split(':');
-    throw new TypeError(
-      `Try unset required field: "${fieldName}" for entity: "${entityConfig.name}"!`,
-    );
+    const [id, fieldName] = token.split(':');
+    if (id !== 'undefined') {
+      // TODO correct checking id !== 'undefined'
+
+      throw new TypeError(
+        `Try unset required field: "${fieldName}" for entity: "${entityConfig.name}"!`,
+      );
+    }
   });
 };
 
