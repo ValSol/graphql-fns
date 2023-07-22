@@ -17,6 +17,7 @@ import addPeripheryToCore from '../addPeripheryToCore';
 import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
 import produceResult from '../composeStandardMutationResolver/produceResult';
+import unwindCore from '../unwindCore';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
 
 type StandardMutationsArgs = Array<{
@@ -134,6 +135,8 @@ const workOutMutations = async (
       }
 
       const { core, periphery } = preparedData;
+
+      await unwindCore(core, mongooseConn);
 
       const coreWithPeriphery: Core =
         periphery && periphery.size

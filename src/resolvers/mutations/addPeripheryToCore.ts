@@ -7,7 +7,7 @@ import createThingSchema from '../../mongooseModels/createThingSchema';
 
 type Result = Map<TangibleEntityConfig, Array<DataObject>>;
 
-const updatePeriphery = async (
+const addPeripheryToCore = async (
   periphery: Periphery,
   core: Core,
   mongooseConn: Connection,
@@ -74,4 +74,4 @@ const updatePeriphery = async (
   return core;
 };
 
-export default updatePeriphery;
+export default addPeripheryToCore;

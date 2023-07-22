@@ -881,7 +881,7 @@ describe('createEntityQueryResolver', () => {
     expect(parents4.length).toBe(3);
   });
 
-  test('should create query entities resolver to createdAt_gt', async () => {
+  test('should create query entities resolver to select by relational fields', async () => {
     const textbookConfig = {} as TangibleEntityConfig;
     const lessonConfig = {} as TangibleEntityConfig;
     const userConfig: EntityConfig = {

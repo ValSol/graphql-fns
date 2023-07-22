@@ -186,7 +186,7 @@ describe('processDeleteData', () => {
         },
       },
       {
-        updateOne: {
+        updateMany: {
           filter: {
             owner: '111',
           },

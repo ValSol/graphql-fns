@@ -121,7 +121,7 @@ const processDeleteData = (
 
   relationalFieldsArray.forEach(({ config, oppositeArray, oppositeName }) => {
     const item = {
-      updateOne: {
+      updateMany: {
         filter: {
           [oppositeName]: _id,
         },

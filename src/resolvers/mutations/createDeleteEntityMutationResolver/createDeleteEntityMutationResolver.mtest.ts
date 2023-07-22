@@ -8,6 +8,8 @@ import mongoOptions from '../../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteEntityMutationResolver from './index';
+import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
+import sleep from '../../../utils/sleep';
 
 mongoose.set('strictQuery', false);
 
@@ -442,5 +444,127 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const parent3 = await Parent.findOne({ name: 'name-0' });
     expect(parent3.childs).toEqual([]);
+  });
+  test('should create query entities resolver to select by relational fields', async () => {
+    const textbookConfig = {} as TangibleEntityConfig;
+    const userConfig: TangibleEntityConfig = {
+      name: 'User',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'name',
+          index: true,
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'textbooks',
+          oppositeName: 'user',
+          config: textbookConfig,
+          parent: true,
+          array: true,
+          type: 'relationalFields',
+        },
+      ],
+    };
+
+    Object.assign(textbookConfig, {
+      name: 'Textbook',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'title',
+          type: 'textFields',
+        },
+      ],
+      relationalFields: [
+        {
+          name: 'user',
+          oppositeName: 'textbooks',
+          required: true,
+          config: userConfig,
+          type: 'relationalFields',
+        },
+      ],
+    });
+
+    const userSchema = createThingSchema(userConfig);
+    const User = mongooseConn.model('User_Thing', userSchema);
+    await User.createCollection();
+
+    const textbookSchema = createThingSchema(textbookConfig);
+    const Textbook = mongooseConn.model('Textbook_Thing', textbookSchema);
+    await Textbook.createCollection();
+
+    await sleep(250);
+
+    const serversideConfig = { transactions: true };
+
+    const createUser = createCreateEntityMutationResolver(
+      userConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    const createTextbook = createCreateEntityMutationResolver(
+      textbookConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    for (let i = 0; i < 3; i += 1) {
+      const data = { name: `user${i}` };
+      const user = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
+        inputOutputEntity: [[]],
+      });
+
+      for (let j = 0; j < i; j += 1) {
+        const data2 = { title: `textbook${i * i + j}`, user: { connect: user.id } };
+        const textbook = await createTextbook(
+          null,
+          { data: data2 },
+          { mongooseConn, pubsub },
+          null,
+          {
+            inputOutputEntity: [[]],
+          },
+        );
+      }
+    }
+
+    const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
+
+    const info4 = { projection: { name: 1 } };
+
+    const where = {};
+
+    const users = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
+      inputOutputEntity: [[]],
+    });
+
+    expect(users.length).toBe(3);
+
+    const deleteUser = createDeleteEntityMutationResolver(
+      userConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    await deleteUser(null, { whereOne: { id: users[0].id } }, { mongooseConn, pubsub }, info4, {
+      inputOutputEntity: [[]],
+    });
+
+    const users2 = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
+      inputOutputEntity: [[]],
+    });
+
+    expect(users2.length).toBe(2);
+
+    await expect(async () => {
+      await deleteUser(null, { whereOne: { id: users2[0].id } }, { mongooseConn, pubsub }, info4, {
+        inputOutputEntity: [[]],
+      });
+    }).rejects.toThrow('Try unset required field: "user" for entity: "Textbook"!');
   });
 });

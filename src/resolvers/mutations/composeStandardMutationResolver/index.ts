@@ -18,6 +18,7 @@ import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
 import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
+import unwindCore from '../unwindCore';
 import produceResult from './produceResult';
 
 type Args = {
@@ -140,6 +141,8 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           }
 
           const { core, periphery } = preparedData;
+
+          await unwindCore(core, mongooseConn);
 
           const coreWithPeriphery =
             periphery && periphery.size
