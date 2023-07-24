@@ -99,7 +99,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 const actionIsChild = 'Array';
 
 const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}Connection`;
+  `${name}${descendantKey}Connection!`;
 
 const childEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,

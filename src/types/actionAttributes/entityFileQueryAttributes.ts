@@ -37,7 +37,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
   Boolean(entityConfig.type === 'tangibleFile');
 
 const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}!`;
+  `${name}${descendantKey}`;
 
 const entityFileQueryAttributes = {
   actionGeneralName,

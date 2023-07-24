@@ -63,7 +63,7 @@ describe('composeDescendantEntityQuery', () => {
         inputEntity: `${name}ForCatalog`,
         outputEntity: `${name}ForView`,
       }),
-      type: ({ name }: any) => `${name}ForView!`,
+      type: ({ name }: any) => `${name}ForView`,
       config: (entityConfig2: any, generalConfig2: any) =>
         composeDescendantConfigByName('ForView', entityConfig2, generalConfig2),
     };

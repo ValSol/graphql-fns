@@ -144,13 +144,13 @@ describe('createEntityType', () => {
   createdAt: DateTime!
   updatedAt: DateTime!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   location: Place!
   favoritePlace: Place
 }`;
@@ -231,10 +231,10 @@ describe('createEntityType', () => {
   lastName: String!
   location: Address!
   locations(slice: SliceInput): [Address!]!
-  locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
+  locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
   place: Address
   places(slice: SliceInput): [Address!]!
-  placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection
+  placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
 }`;
 
     const result = createEntityType(personConfig, generalConfig, {}, {});
@@ -352,9 +352,9 @@ describe('createEntityType', () => {
   firstName: String!
   lastName: String!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection
+  enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   location: Place!
   favoritePlace: Place
 }`;
@@ -706,9 +706,9 @@ describe('createEntityType', () => {
   logo: Image!
   hero: Image
   pictures(slice: SliceInput): [Image!]!
-  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
+  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
   photos(slice: SliceInput): [Image!]!
-  photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection
+  photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});

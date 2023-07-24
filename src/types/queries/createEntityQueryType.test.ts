@@ -16,7 +16,7 @@ describe('createEntityQueryType', () => {
       allEntityConfigs: { Example: entityConfig },
     };
 
-    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!, token: String): Example!';
+    const expectedResult = '  Example(whereOne: ExampleWhereOneInput!, token: String): Example';
 
     const entityTypeDic: { [entityName: string]: string } = {};
 

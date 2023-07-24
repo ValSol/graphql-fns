@@ -73,7 +73,7 @@ const actionReturnConfig = (
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangibleFile';
 
 const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}Connection${descendantKey}`;
+  `${name}${descendantKey}Connection!`;
 
 const entityFilesThroughConnectionQueryAttributes = {
   actionGeneralName,
