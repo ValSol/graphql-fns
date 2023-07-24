@@ -16,7 +16,7 @@ const composeActionSignature = (
   actionAttributes: ActionAttributes,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
-  descendantKey: string = '',
+  descendantKey = '',
 ): string => {
   const {
     actionAllowed,
@@ -69,7 +69,7 @@ const composeActionSignature = (
 
   const returnString = actionReturnString(entityConfig, descendantKey);
 
-  if (!filteredArgNames.length) {
+  if (filteredArgNames.length === 0) {
     return `  ${specificName}: ${returnString}`;
   }
 
