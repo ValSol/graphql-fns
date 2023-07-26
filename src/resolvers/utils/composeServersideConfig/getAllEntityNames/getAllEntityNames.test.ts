@@ -167,6 +167,7 @@ describe('getAllEntityNames', () => {
       },
       Person: {
         descriptions: [
+          'inventory "test", option item: "childEntityCount": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntities": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntitiesThroughConnection": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityCount": "Person", involvedEntityKey: "inputOutputEntity"',

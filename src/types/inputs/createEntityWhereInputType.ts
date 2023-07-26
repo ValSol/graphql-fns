@@ -173,10 +173,15 @@ const composeInputFields = (
           ({ oppositeName }) => oppositeName === fieldName,
         );
 
-        if (oppositeField.index) {
-          fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+        try {
+          if (oppositeField.index) {
+            fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
+          }
+        } catch (err) {
+          console.log('*****************');
+          console.log('fieldName =', fieldName);
+          throw new TypeError(err);
         }
-
         return;
       }
       if (unique || index) {

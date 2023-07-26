@@ -1,30 +1,27 @@
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
-import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string => `entityCount${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `childEntityCount${descendantKey}`;
 
 const actionName = (baseName: string, descendantKey = ''): string =>
-  `${baseName}Count${descendantKey}`;
+  `child${baseName}Count${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
   createEntityNearInputType,
   createStringInputTypeForSearch,
-  createStringInputType,
 ];
 
-const argNames = ['where', 'near', 'search', 'token'];
+const argNames = ['where', 'near', 'search'];
 
 const argTypes = [
   (name: string): string => `${name}WhereInput`,
   (name: string): string => `${name}NearInput`,
-  (): string => 'String',
   (): string => 'String',
 ];
 
@@ -39,9 +36,11 @@ const actionReturnConfig = (): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
+const actionIsChild = 'Array'; // TODO check if correct value is "Array"
+
 const actionReturnString = (): string => 'Int!';
 
-const entityCountQueryAttributes = {
+const childEntityCountQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -52,6 +51,7 @@ const entityCountQueryAttributes = {
   actionReturnString,
   actionReturnConfig,
   actionAllowed,
+  actionIsChild,
 } as const;
 
-export default entityCountQueryAttributes;
+export default childEntityCountQueryAttributes;

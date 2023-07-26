@@ -110,6 +110,7 @@ describe('unwindInverntoryOptions', () => {
   describe('actions full lists', () => {
     const allQueries = {
       childEntity: ['ChildExample'],
+      childEntityCount: ['Example'],
       childEntities: ['Example'],
       childEntitiesThroughConnection: ['Example'],
       entities: ['Example', 'ChildExample'],

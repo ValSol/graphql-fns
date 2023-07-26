@@ -53,9 +53,9 @@ const createEntityCountQueryResolver = (
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-    const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
+    const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
-    if (lookups.length || near || search) {
+    if (lookups?.length || near || search) {
       const pipeline = [...lookups];
 
       if (near) {
@@ -68,18 +68,22 @@ const createEntityCountQueryResolver = (
         pipeline.unshift({ $match: { $text: { $search: search } } });
       }
 
-      if (Object.keys(conditions).length) {
-        pipeline.push({ $match: conditions });
+      if (Object.keys(where2)?.length) {
+        pipeline.push({ $match: where2 });
       }
 
       pipeline.push({ $count: 'count' });
 
-      const [{ count }] = await Entity.aggregate(pipeline).exec();
+      const result = await Entity.aggregate(pipeline).exec();
+
+      // somehow if empty result of query ...
+      // ... object {"count": 0} in result is not created
+      const [{ count }] = result.length > 0 ? result : [{ count: 0 }];
 
       return count;
     }
 
-    const result = await Entity.countDocuments(conditions);
+    const result = await Entity.countDocuments(where2);
 
     return result;
   };

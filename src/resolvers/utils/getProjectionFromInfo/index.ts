@@ -53,6 +53,9 @@ const getProjectionFromInfo = (
   return fields.reduce<Record<string, 1>>((prev, field) => {
     if (field.endsWith('ThroughConnection')) {
       prev[`${field.slice(0, -'ThroughConnection'.length)}`] = 1;
+    } else if (field.endsWith('Count')) {
+      prev[field] = 1;
+      prev[`${field.slice(0, -'Count'.length)}`] = 1;
     } else {
       prev[field] = 1;
     }

@@ -10,6 +10,7 @@ const {
   childEntities,
   childEntitiesThroughConnection,
   childEntity,
+  childEntityCount,
 } = queryAttributes;
 
 const composeReturnString = (
@@ -168,6 +169,24 @@ const createEntityType = (
               config,
               generalConfig,
               childEntitiesThroughConnection,
+            )}`,
+          );
+        }
+
+        const childEntityCountArgs = composeChildActionSignature(
+          config,
+          generalConfig,
+          'childEntityCount',
+          inputDic,
+          inventory,
+        );
+
+        if (childEntityCountArgs) {
+          prev.push(
+            `  ${name2}Count(${childEntityCountArgs}): ${composeReturnString(
+              config,
+              generalConfig,
+              childEntityCount,
             )}`,
           );
         }

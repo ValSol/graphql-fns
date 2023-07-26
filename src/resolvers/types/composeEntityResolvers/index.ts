@@ -8,7 +8,9 @@ import type {
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
+import createEntityCountResolver from '../createEntityCountResolver';
 import createEntityOppositeRelationArrayResolver from '../createEntityOppositeRelationArrayResolver';
+import createEntityOppositeRelationCountResolver from '../createEntityOppositeRelationCountResolver';
 import createEntityOppositeRelationConnectionResolver from '../createEntityOppositeRelationConnectionResolver';
 import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
@@ -88,7 +90,7 @@ const composeEntityResolvers = (
       );
 
       if (resolver) {
-        prev[name] = resolver; // eslint-disable-line no-param-reassign
+        prev[name] = resolver;
       }
 
       const resolver2 = createEntityOppositeRelationConnectionResolver(
@@ -98,8 +100,19 @@ const composeEntityResolvers = (
       );
 
       if (resolver2) {
-        prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        prev[`${name}ThroughConnection`] = resolver2;
       }
+
+      const resolver3 = createEntityOppositeRelationCountResolver(
+        config,
+        generalConfig,
+        serversideConfig,
+      );
+
+      if (resolver3) {
+        prev[`${name}Count`] = resolver2;
+      }
+
       return prev;
     }, resolvers);
 
@@ -115,6 +128,12 @@ const composeEntityResolvers = (
 
         if (resolver2) {
           prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+        }
+
+        const resolver3 = createEntityCountResolver(config, generalConfig, serversideConfig);
+
+        if (resolver3) {
+          prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
         }
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);

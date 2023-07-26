@@ -146,6 +146,7 @@ type Menu implements Node {
   clone: MenuClone
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
+  sectionsCount(where: MenuSectionWhereInput): Int!
 }
 type MenuClone implements Node {
   id: ID!
@@ -155,6 +156,7 @@ type MenuClone implements Node {
   original: Menu
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
   sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection!
+  sectionsCount(where: MenuCloneSectionWhereInput): Int!
 }
 type MenuCloneSection implements Node {
   id: ID!
@@ -1821,14 +1823,18 @@ type Person implements Node {
   lastName: String!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  friendsCount(where: PersonWhereInput): Int!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  enemiesCount(where: PersonWhereInput): Int!
   location: Place!
   favoritePlace: Place
   fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  fellowsCount(where: PersonWhereInput): Int!
   opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  opponentsCount(where: PersonWhereInput): Int!
 }
 type Place implements Node {
   id: ID!
@@ -1837,8 +1843,10 @@ type Place implements Node {
   title: String!
   citisens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   citisensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  citisensCount(where: PersonWhereInput): Int!
   customers(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   customersThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  customersCount(where: PersonWhereInput): Int!
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -2494,8 +2502,10 @@ type Person implements Node {
   lastName: String!
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  friendsCount(where: PersonWhereInput): Int!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  enemiesCount(where: PersonWhereInput): Int!
   location: Place!
   favoritePlace: Place
 }
@@ -2506,8 +2516,10 @@ type Place implements Node {
   name: String
   citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   citizensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  citizensCount(where: PersonWhereInput): Int!
   visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  visitorsCount(where: PersonWhereInput): Int!
 }
 type PersonConnection {
   pageInfo: PageInfo!

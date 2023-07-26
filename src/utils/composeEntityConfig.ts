@@ -54,7 +54,7 @@ const composeEntityConfig = (
   Object.keys(simplifiedEntityConfig)
     .filter((key) => key.endsWith('Fields'))
     .forEach((key) => {
-      simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze }) => {
+      simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze, array }) => {
         if (fieldNames.includes(fieldName)) {
           throw new TypeError(`Field name: "${fieldName}" used twice in entity: "${name}"!`);
         }
@@ -76,6 +76,12 @@ const composeEntityConfig = (
         if (fieldName.endsWith('ThroughConnection')) {
           throw new TypeError(
             `Forbidden the field name: "${fieldName}" that ends with "ThroughConnection" in entity: "${name}"!`,
+          );
+        }
+
+        if (array && fieldName.endsWith('Count')) {
+          throw new TypeError(
+            `Forbidden the field name: "${fieldName}" that ends with "Count" in entity: "${name}"!`,
           );
         }
 

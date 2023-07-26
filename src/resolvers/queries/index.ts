@@ -1,6 +1,7 @@
 import childEntities from './createChildEntitiesQueryResolver';
 import childEntitiesThroughConnection from './createChildEntitiesThroughConnectionQueryResolver';
 import childEntity from './createChildEntityQueryResolver';
+import childEntityCount from './createChildEntityCountQueryResolver';
 import entities from './createEntitiesQueryResolver';
 import entitiesByUnique from './createEntitiesByUniqueQueryResolver';
 import entitiesThroughConnection from './createEntitiesThroughConnectionQueryResolver';
@@ -14,6 +15,7 @@ import entityFilesThroughConnection from './createEntityFilesThroughConnectionQu
 
 const queries = {
   childEntity,
+  childEntityCount,
   childEntities,
   childEntitiesThroughConnection,
   entityCount,

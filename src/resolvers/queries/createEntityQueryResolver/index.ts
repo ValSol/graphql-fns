@@ -63,10 +63,10 @@ const createNodeQueryResolver = (
 
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, whereOne, entityConfig);
 
-    if (lookups.length) {
+    if (lookups.length > 0) {
       const pipeline = [...lookups];
 
-      if (Object.keys(conditions).length) {
+      if (Object.keys(conditions).length > 0) {
         pipeline.push({ $match: conditions });
       }
 

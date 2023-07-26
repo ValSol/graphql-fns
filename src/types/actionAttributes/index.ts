@@ -1,7 +1,8 @@
-import type {ActionAttributes} from '../../tsTypes';
+import type { ActionAttributes } from '../../tsTypes';
 
 import arrayEntitiesThroughConnection from './arrayEntitiesThroughConnectionQueryAttributes';
 import childEntity from './childEntityQueryAttributes';
+import childEntityCount from './childEntityCountQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
 import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
 import copyManyEntities from './copyManyEntitiesMutationAttributes';
@@ -39,6 +40,7 @@ import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 const actionAttributes = {
   arrayEntitiesThroughConnection,
   childEntity,
+  childEntityCount,
   childEntities,
   childEntitiesThroughConnection,
   copyManyEntities,
@@ -79,11 +81,11 @@ const {
   queryAttributes,
 }: {
   mutationAttributes: {
-    [actionName: string]: ActionAttributes
-  },
+    [actionName: string]: ActionAttributes;
+  };
   queryAttributes: {
-    [actionName: string]: ActionAttributes
-  }
+    [actionName: string]: ActionAttributes;
+  };
 } = Object.keys(actionAttributes).reduce(
   (prev, actionName) => {
     if (actionAttributes[actionName].actionType === 'Mutation') {
