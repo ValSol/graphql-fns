@@ -65,7 +65,7 @@ const resolverDecorator = (
     const returnConfig = actionAttributes.actionReturnConfig(entityConfig, generalConfig);
     const { argNames } = actionAttributes;
     const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
-      composer('').replace(regExp, ''),
+      composer({ ...entityConfig, name: '' }).replace(regExp, ''),
     );
 
     const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypesWithoutEntityNames.join(

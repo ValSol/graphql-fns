@@ -15,7 +15,7 @@ const inputCreators = [createEntityWhereOneInputType, createStringInputType];
 
 const argNames = ['whereOne', 'token'];
 
-const argTypes = [(name: string): string => `${name}WhereOneInput!`, (): string => 'String'];
+const argTypes = [({ name }): string => `${name}WhereOneInput!`, (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,

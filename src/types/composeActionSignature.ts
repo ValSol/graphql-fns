@@ -1,11 +1,11 @@
 import type {
   ActionAttributes,
+  DescendantAttributesActionName,
   EntityConfig,
   GeneralConfig,
-  ThreeSegmentInventoryChain,
 } from '../tsTypes';
 
-import checkInventory from '../utils/inventory/checkInventory';
+import checkDescendantAction from '../utils/checkDescendantAction';
 import composeDescendantConfigByName from '../utils/composeDescendantConfigByName';
 import fillInputDic from './inputs/fillInputDic';
 import fillEntityTypeDic from './fillEntityTypeDic';
@@ -23,7 +23,6 @@ const composeActionSignature = (
     actionIsChild,
     actionGeneralName,
     actionName,
-    actionType,
     inputCreators,
     actionReturnConfig,
     argNames,
@@ -37,13 +36,13 @@ const composeActionSignature = (
 
   if (actionIsChild || !actionAllowed(entityConfig)) return '';
 
-  const inventoryChain: ThreeSegmentInventoryChain = [
-    actionType,
-    actionGeneralName(descendantKey),
-    configName,
-  ];
-
-  if (inventory && !checkInventory(inventoryChain, inventory)) {
+  if (
+    !checkDescendantAction(
+      actionGeneralName('') as DescendantAttributesActionName,
+      entityConfig,
+      generalConfig,
+    )
+  ) {
     return '';
   }
 
@@ -74,7 +73,7 @@ const composeActionSignature = (
   }
 
   const args = filteredArgNames
-    .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator.name)}`)
+    .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator)}`)
     .join(', ');
 
   const returnConfig = actionReturnConfig(entityConfig, generalConfig, descendantKey);

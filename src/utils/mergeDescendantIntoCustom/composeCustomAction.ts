@@ -26,7 +26,7 @@ const composeArgNames =
 
 const composeArgTypes =
   (
-    argTypes: Array<(name: string) => string>,
+    argTypes: Array<(arg: EntityConfig) => string>,
     inputCreators: Array<InputCreator>,
     descendantKey: string,
   ) =>
@@ -36,10 +36,9 @@ const composeArgTypes =
       entityConfig,
       generalConfig,
     );
-    const { name } = descendantConfig;
 
     return argTypes
-      .map((argType) => argType(name))
+      .map((argType) => argType(descendantConfig))
       .filter((foo, i) => inputCreators[i](descendantConfig)[1]);
   };
 

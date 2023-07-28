@@ -23,9 +23,9 @@ const inputCreators = [
 const argNames = ['whereOne', 'data', 'positions', 'token'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereOneInput!`,
-  (name: string): string => `PushInto${name}Input!`,
-  (name: string): string => `${name}PushPositionsInput`,
+  ({ name }): string => `${name}WhereOneInput!`,
+  ({ name }): string => `PushInto${name}Input!`,
+  ({ name }): string => `${name}PushPositionsInput`,
   (): string => 'String',
 ];
 

@@ -1,6 +1,6 @@
-import type { Inventory, EntityConfig, GeneralConfig } from '../tsTypes';
+import type { DescendantAttributesActionName, EntityConfig, GeneralConfig } from '../tsTypes';
 
-import checkInventory from '../utils/inventory/checkInventory';
+import checkDescendantAction from '../utils/checkDescendantAction';
 import parseEntityName from '../utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
 import { queryAttributes } from './actionAttributes';
@@ -12,28 +12,23 @@ const composeChildActionSignature = (
   inputDic?: {
     [inputName: string]: string;
   },
-  inventory?: Inventory,
 ): string => {
-  const {
-    actionGeneralName,
-    actionName,
-    actionType,
-    inputCreators,
-    argNames,
-    argTypes,
-    actionReturnString,
-  } = queryAttributes[childQueryGeneralName];
-  const { name: configName } = entityConfig;
+  const { actionGeneralName, actionName, inputCreators, argNames, argTypes, actionReturnString } =
+    queryAttributes[childQueryGeneralName];
   const { allEntityConfigs } = generalConfig;
 
   const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
   if (
-    inventory &&
-    !checkInventory([actionType, actionGeneralName(descendantKey), configName], inventory)
+    !checkDescendantAction(
+      actionGeneralName('') as DescendantAttributesActionName,
+      entityConfig,
+      generalConfig,
+    )
   ) {
     return '';
   }
+
   const specificName = actionName(rootName, descendantKey);
 
   const toShow: Array<boolean> = [];
@@ -57,7 +52,7 @@ const composeChildActionSignature = (
   }
 
   const args = filteredArgNames
-    .map((argName, i) => `${argName}: ${filteredArgTypes[i](configName)}`)
+    .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfig)}`)
     .join(', ');
 
   return args;

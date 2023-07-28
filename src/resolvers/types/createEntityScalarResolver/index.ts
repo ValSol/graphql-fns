@@ -1,12 +1,6 @@
-import type {
-  Context,
-  GeneralConfig,
-  InventoryСhain,
-  ServersideConfig,
-  EntityConfig,
-} from '../../../tsTypes';
+import type { Context, GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntityQueryAttributes from '../../../types/actionAttributes/childEntityQueryAttributes';
 import createChildEntityQueryResolver from '../../queries/createChildEntityQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -25,9 +19,13 @@ const createEntityScalarResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs, inventory, descendant } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntity', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntityQueryResolver = descendantKey
     ? createCustomResolver(
@@ -53,12 +51,6 @@ const createEntityScalarResolver = (
       }" for entity: "${name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntity${descendantKey}`, nameRoot]
-    : ['Query', 'childEntity', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: any, args: Args, context: Context, info: any): Promise<any> => {
     if (!parent) {

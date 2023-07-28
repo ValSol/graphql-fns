@@ -447,6 +447,7 @@ export type Inventory = {
 export type DescendantAttributesActionName =
   | 'entity'
   | 'childEntity'
+  | 'childEntityCount'
   | 'entityCount'
   | 'entityDistinctValues'
   | 'entities'
@@ -850,7 +851,7 @@ export type ActionAttributes = {
   actionName: (baseName: string, descendantKey?: string) => string;
   inputCreators: Array<InputCreator>;
   argNames: Array<string>;
-  argTypes: Array<(name: string) => string>;
+  argTypes: Array<(entityConfig: EntityConfig) => string>;
   actionInvolvedEntityNames: (
     name: string,
     descendantKey?: string,

@@ -142,7 +142,6 @@ const createEntityType = (
           generalConfig,
           'childEntities',
           inputDic,
-          inventory,
         );
 
         if (childEntitiesArgs) {
@@ -160,7 +159,6 @@ const createEntityType = (
           generalConfig,
           'childEntitiesThroughConnection',
           inputDic,
-          inventory,
         );
 
         if (childEntitiesThroughConnectionArgs) {
@@ -178,7 +176,6 @@ const createEntityType = (
           generalConfig,
           'childEntityCount',
           inputDic,
-          inventory,
         );
 
         if (childEntityCountArgs) {
@@ -212,7 +209,6 @@ const createEntityType = (
         generalConfig,
         'arrayEntitiesThroughConnection',
         inputDic,
-        // inventory,
       );
 
       if (childEntitiesThroughConnectionArgs) {

@@ -34,7 +34,9 @@ const createCustomResolver = (
   const { [actionName]: signatureMethods } = customActionFolder;
 
   if (!signatureMethods) {
-    throw new TypeError(`Got undefiend signatureMethods for "${actionName}" actionName!`);
+    throw new TypeError(
+      `Got undefiend signatureMethods for "${actionName}" actionName in "${name}" entity!!`,
+    );
   }
 
   if (!composeCustomActionSignature(signatureMethods, entityConfig, generalConfig)) return null;

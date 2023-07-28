@@ -40,7 +40,7 @@ const composeActionArgs = (
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
   const args1arr = filteredArgNames.map(
-    (argName, i) => `$${argName}: ${filteredArgTypes[i](configName)}`,
+    (argName, i) => `$${argName}: ${filteredArgTypes[i](entityConfig)}`,
   );
   Object.keys(childArgs).forEach((argName) => {
     args1arr.push(`$${argName}: ${childArgs[argName]}`);

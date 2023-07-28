@@ -1,19 +1,15 @@
-import mongoose from 'mongoose';
-
 import type {
   Context,
   EntityConfig,
   GeneralConfig,
-  InventoryСhain,
   NearInput,
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
 import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
-import fromGlobalId from '../../utils/fromGlobalId';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
@@ -32,9 +28,13 @@ const createEntityCountResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntityCountQueryResolver = descendantKey
     ? createCustomResolver(
@@ -60,12 +60,6 @@ const createEntityCountResolver = (
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntityCount${descendantKey}`, nameRoot]
-    : ['Query', 'childEntityCount', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: any, args: Args, context: Context, info: any): Promise<any> => {
     if (!parent) {

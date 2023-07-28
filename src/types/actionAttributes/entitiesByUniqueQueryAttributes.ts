@@ -27,9 +27,9 @@ const inputCreators = [
 const argNames = ['where', 'sort', 'near', 'search', 'token'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereByUniqueInput!`,
-  (name: string): string => `${name}SortInput`,
-  (name: string): string => `${name}NearInput`,
+  ({ name }): string => `${name}WhereByUniqueInput!`,
+  ({ name }): string => `${name}SortInput`,
+  ({ name }): string => `${name}NearInput`,
   (): string => 'String',
   (): string => 'String',
 ];

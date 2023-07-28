@@ -4,12 +4,11 @@ import type {
   Context,
   EntityConfig,
   GeneralConfig,
-  InventoryСhain,
   NearInput,
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntitiesThroughConnectionQueryAttributes from '../../../types/actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -32,9 +31,13 @@ const createEntityConnectionResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntitiesThroughConnection', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntitiesThroughConnectionQueryResolver = descendantKey
     ? createCustomResolver(
@@ -66,12 +69,6 @@ const createEntityConnectionResolver = (
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntitiesThroughConnection${descendantKey}`, nameRoot]
-    : ['Query', 'childEntitiesThroughConnection', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (parent: any, args: Args, context: Context, info: any): Promise<any> => {
     if (!parent) {

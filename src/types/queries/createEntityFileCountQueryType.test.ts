@@ -13,7 +13,7 @@ describe('createEntityFileCountQueryType', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
+      allEntityConfigs: { TangibleExample: entityConfig },
     };
 
     const expectedResult = '  TangibleExampleFileCount(where: FileWhereInput, token: String): Int!';

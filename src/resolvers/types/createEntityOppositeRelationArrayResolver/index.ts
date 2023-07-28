@@ -6,9 +6,9 @@ import type {
   GraphqlObject,
   TangibleEntityConfig,
 } from '../../../tsTypes';
-import type { Context, InventoryСhain } from '../../../tsTypes';
+import type { Context } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesQueryResolver from '../../queries/createChildEntitiesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -30,9 +30,13 @@ const createEntityOppositeRelationArrayResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntities', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntitiesQueryResolver = descendantKey
     ? createCustomResolver(
@@ -58,12 +62,6 @@ const createEntityOppositeRelationArrayResolver = (
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntities${descendantKey}`, nameRoot]
-    : ['Query', 'childEntities', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const { relationalFields = [] } = entityConfig as TangibleEntityConfig;
 

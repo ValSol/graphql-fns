@@ -25,8 +25,8 @@ const inputCreators = [
 const argNames = ['whereOne', 'options', 'token'];
 
 const argTypes = [
-  (name: string): string => `[${name}WhereOneInput!]!`,
-  (name: string): string => `delete${name}WithChildrenOptionsInput`,
+  ({ name }): string => `[${name}WhereOneInput!]!`,
+  ({ name }): string => `delete${name}WithChildrenOptionsInput`,
   (): string => 'String',
 ];
 

@@ -27,10 +27,10 @@ const inputCreators = [
 const argNames = ['where', 'near', 'search', 'data', 'token'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput`,
-  (name: string): string => `${name}NearInput`,
+  ({ name }): string => `${name}WhereInput`,
+  ({ name }): string => `${name}NearInput`,
   (): string => 'String',
-  (name: string): string => `${name}UpdateInput!`,
+  ({ name }): string => `${name}UpdateInput!`,
   (): string => 'String',
 ];
 

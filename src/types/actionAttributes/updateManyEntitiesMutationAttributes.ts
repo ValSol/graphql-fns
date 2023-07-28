@@ -23,8 +23,8 @@ const inputCreators = [
 const argNames = ['whereOne', 'data', 'token'];
 
 const argTypes = [
-  (name: string): string => `[${name}WhereOneInput!]!`,
-  (name: string): string => `[${name}UpdateInput!]!`,
+  ({ name }): string => `[${name}WhereOneInput!]!`,
+  ({ name }): string => `[${name}UpdateInput!]!`,
   (): string => 'String',
 ];
 

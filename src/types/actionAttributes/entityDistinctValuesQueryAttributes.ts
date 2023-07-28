@@ -20,8 +20,8 @@ const inputCreators = [
 const argNames = ['where', 'options', 'token'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput`,
-  (name: string): string => `${name}DistinctValuesOptionsInput`,
+  ({ name }): string => `${name}WhereInput`,
+  ({ name }): string => `${name}DistinctValuesOptionsInput`,
   (): string => 'String',
 ];
 

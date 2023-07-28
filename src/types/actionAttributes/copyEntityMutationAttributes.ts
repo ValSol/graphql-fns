@@ -23,9 +23,9 @@ const inputCreators = [
 const argNames = ['whereOnes', 'options', 'whereOne', 'token'];
 
 const argTypes = [
-  (name: string): string => `${name}CopyWhereOnesInput!`,
-  (name: string): string => `copy${name}OptionsInput`,
-  (name: string): string => `${name}WhereOneToCopyInput`,
+  ({ name }): string => `${name}CopyWhereOnesInput!`,
+  ({ name }): string => `copy${name}OptionsInput`,
+  ({ name }): string => `${name}WhereOneToCopyInput`,
   (): string => 'String',
 ];
 

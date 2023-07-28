@@ -27,10 +27,10 @@ const inputCreators = [
 const argNames = ['where', 'sort', 'pagination', 'near', 'search'];
 
 const argTypes = [
-  (name: string): string => `${name}WhereInput`,
-  (name: string): string => `${name}SortInput`,
+  ({ name }): string => `${name}WhereInput`,
+  ({ name }): string => `${name}SortInput`,
   (): string => 'PaginationInput',
-  (name: string): string => `${name}NearInput`,
+  ({ name }): string => `${name}NearInput`,
   (): string => 'String',
 ];
 

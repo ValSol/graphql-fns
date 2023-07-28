@@ -13,7 +13,7 @@ describe('createEntityFilesQueryType', () => {
     };
 
     const generalConfig: GeneralConfig = {
-      allEntityConfigs: { Example: entityConfig },
+      allEntityConfigs: { TangibleExample: entityConfig },
     };
 
     const expectedResult =

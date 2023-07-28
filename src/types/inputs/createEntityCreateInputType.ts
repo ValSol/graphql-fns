@@ -208,7 +208,7 @@ input ${name}CreateOrPushChildrenInput {
   createPositions: [Int!]
 }`);
 
-    if (configType === 'tangible' && entityConfig.duplexFields) {
+    if (configType === 'tangible' && entityConfig?.duplexFields?.length > 0) {
       entityConfig.duplexFields.reduce((prev, { name: name2, required }) => {
         if (required) {
           entityTypeArray2.push(`input ${name}CreateThru_${name2}_FieldChildInput {

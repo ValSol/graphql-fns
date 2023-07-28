@@ -15,7 +15,7 @@ const inputCreators = [createEntityCreateInputType, createStringInputType];
 
 const argNames = ['data', 'token'];
 
-const argTypes = [(name: string): string => `${name}CreateInput!`, (): string => 'String'];
+const argTypes = [({ name }): string => `${name}CreateInput!`, (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,

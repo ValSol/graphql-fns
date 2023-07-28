@@ -6,9 +6,9 @@ import type {
   GraphqlObject,
   TangibleEntityConfig,
 } from '../../../tsTypes';
-import type { Context, InventoryСhain } from '../../../tsTypes';
+import type { Context } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
 import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -30,9 +30,13 @@ const createEntityOppositeRelationCountResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntityCountQueryResolver = descendantKey
     ? createCustomResolver(
@@ -58,12 +62,6 @@ const createEntityOppositeRelationCountResolver = (
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntityCount${descendantKey}`, nameRoot]
-    : ['Query', 'childEntityCount', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const { relationalFields = [] } = entityConfig as TangibleEntityConfig;
 

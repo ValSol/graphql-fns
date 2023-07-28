@@ -1,4 +1,4 @@
-import type {GeneralConfig, ActionSignatureMethods, EntityConfig} from '../tsTypes';
+import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../tsTypes';
 
 import composeSpecificActionName from '../utils/composeSpecificActionName';
 import fillInputDicForCustom from './inputs/fillInputDicForCustom';
@@ -9,10 +9,10 @@ const composeCustomActionSignature = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   entityTypeDic?: {
-    [entityName: string]: string
+    [entityName: string]: string;
   },
   inputDic?: {
-    [inputName: string]: string
+    [inputName: string]: string;
   },
 ): string => {
   const {
@@ -62,7 +62,7 @@ const composeCustomActionSignature = (
     }
   }
 
-  return argNames.length
+  return argNames.length > 0
     ? `${specificName}(${args}): ${returningType}`
     : `${specificName}: ${returningType}`;
 };

@@ -5,13 +5,12 @@ import type {
   EntityConfig,
   GeneralConfig,
   GraphqlObject,
-  InventoryСhain,
   NearInput,
   ServersideConfig,
   TangibleEntityConfig,
 } from '../../../tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntitiesThroughConnectionQueryAttributes from '../../../types/actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -33,9 +32,13 @@ const createEntityOppositeRelationConnectionResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs, inventory, descendant } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+
+  if (!checkDescendantAction('childEntitiesThroughConnection', entityConfig, generalConfig)) {
+    return null;
+  }
 
   const childEntitiesThroughConnectionQueryResolver = descendantKey
     ? createCustomResolver(
@@ -67,12 +70,6 @@ const createEntityOppositeRelationConnectionResolver = (
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
-
-  const inventoryChain: InventoryСhain = descendantKey
-    ? ['Query', `childEntitiesThroughConnection${descendantKey}`, nameRoot]
-    : ['Query', 'childEntitiesThroughConnection', name];
-
-  if (!checkInventory(inventoryChain, inventory)) return null;
 
   const { relationalFields = [] } = entityConfig as TangibleEntityConfig;
 
