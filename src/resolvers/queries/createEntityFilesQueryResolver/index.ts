@@ -56,7 +56,7 @@ const createEntityFilesQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter, limit = Infinity } = getFilterFromInvolvedFilters(involvedFilters);
 
-    if (!filter) return null;
+    if (!filter) return [];
 
     const { where, pagination } = args;
 

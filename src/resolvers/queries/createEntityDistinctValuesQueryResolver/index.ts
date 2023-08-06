@@ -44,7 +44,7 @@ const createEntityDistinctValuesQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
-    if (!filter) return null;
+    if (!filter) return [];
 
     const {
       where,
@@ -57,10 +57,10 @@ const createEntityDistinctValuesQueryResolver = (
 
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
-    if (lookups.length) {
+    if (lookups.length > 0) {
       const pipeline = [...lookups];
 
-      if (Object.keys(conditions).length) {
+      if (Object.keys(conditions).length > 0) {
         pipeline.push({ $match: conditions });
       }
 

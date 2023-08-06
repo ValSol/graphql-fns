@@ -30,10 +30,10 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
   let conditions = preConditions;
 
-  if (lookups.length) {
+  if (lookups.length > 0) {
     const pipeline = [...lookups];
 
-    if (Object.keys(preConditions).length) {
+    if (Object.keys(preConditions).length > 0) {
       pipeline.push({ $match: preConditions });
     }
 

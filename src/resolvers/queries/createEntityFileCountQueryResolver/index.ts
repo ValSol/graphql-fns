@@ -44,7 +44,7 @@ const createEntityFileCountQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
-    if (!filter) return null;
+    if (!filter) return 0;
 
     const { where } = args;
 

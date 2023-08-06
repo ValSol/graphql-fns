@@ -115,13 +115,14 @@ const unwindInverntoryOptions = (
     return prev;
   }, allQueries);
 
+  // TODO check not only right parameters of inventory but rightness "shape" of inventory
   const Query =
     queryInventoryOptions === true
       ? allQueries
       : Object.keys(queryInventoryOptions).reduce<Record<string, any>>((prev, actionName) => {
           if (!allQueries[actionName]) {
             throw new TypeError(
-              `Incorrect inventory query name: ${actionName} of inventoryOptions: "${inventoryName}"!`,
+              `Incorrect inventory query name: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
             );
           }
 

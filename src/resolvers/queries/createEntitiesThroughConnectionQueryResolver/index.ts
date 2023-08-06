@@ -100,7 +100,17 @@ const createEntitiesThroughConnectionQueryResolver = (
 
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
-    if (!filter) return null;
+    if (!filter) {
+      return {
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+        edges: [],
+      };
+    }
 
     const resolverArg = { parent, args, context, info, involvedFilters } as const;
 

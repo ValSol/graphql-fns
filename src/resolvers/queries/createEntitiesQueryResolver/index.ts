@@ -61,7 +61,7 @@ const createEntitiesQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter, limit = Infinity } = getFilterFromInvolvedFilters(involvedFilters);
 
-    if (!filter) return null;
+    if (!filter) return [];
 
     const {
       near,
@@ -83,7 +83,7 @@ const createEntitiesQueryResolver = (
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
-    if (lookups.length || objectIdsFromParent) {
+    if (lookups.length > 0 || objectIdsFromParent) {
       const pipeline = [...lookups];
 
       if (near) {
@@ -97,7 +97,7 @@ const createEntitiesQueryResolver = (
         pipeline.unshift({ $match: { $text: { $search: search } } });
       }
 
-      if (Object.keys(where2).length) {
+      if (Object.keys(where2).length > 0) {
         pipeline.push({ $match: where2 });
       }
 
@@ -148,7 +148,7 @@ const createEntitiesQueryResolver = (
 
     if (near) query = query.where(composeNearInput(near));
 
-    if (Object.keys(where2).length) query = query.where(where2);
+    if (Object.keys(where2).length > 0) query = query.where(where2);
 
     if (search) query = query.where({ $text: { $search: search } });
 
