@@ -5,7 +5,7 @@ import type { FileAttributes, GeneralConfig, EntityConfig } from '../../../tsTyp
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
 import createEntityFileCountQueryResolver from './index';
 

@@ -678,10 +678,10 @@ type Query {
   MenuCloneCount(where: MenuCloneWhereInput, token: String): Int!
   MenuSectionCount(where: MenuSectionWhereInput, token: String): Int!
   MenuCloneSectionCount(where: MenuCloneSectionWhereInput, token: String): Int!
-  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput, token: String): [String!]!
-  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput, token: String): [String!]!
-  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput, token: String): [String!]!
-  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput, token: String): [String!]!
+  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput!, token: String): [String!]!
+  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput!, token: String): [String!]!
+  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!, token: String): [String!]!
+  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput!, token: String): [String!]!
   Menu(whereOne: MenuWhereOneInput!, token: String): Menu
   MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone
   MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection
@@ -1144,6 +1144,8 @@ input ExampleNearInput {
   minDistance: Float
 }
 enum ExampleTextNamesEnum {
+  day
+  cuisines
   textField1
   textField2
   textField3
@@ -1316,7 +1318,7 @@ type UpdatedExamplePayload {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  ExampleDistinctValues(where: ExampleWhereInput, near: ExampleNearInput, search: String, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   TangibleImageFileCount(where: FileWhereInput, token: String): Int!
   TangibleImageFile(whereOne: FileWhereOneInput!, token: String): TangibleImage
   TangibleImageFiles(where: FileWhereInput, token: String): [TangibleImage!]!
@@ -1695,8 +1697,8 @@ type Query {
   node(id: ID!): Node
   Example1Count(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
   Example2Count(where: Example2WhereInput, token: String): Int!
-  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput, token: String): [String!]!
-  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput, token: String): [String!]!
+  Example1DistinctValues(where: Example1WhereInput, near: Example1NearInput, options: Example1DistinctValuesOptionsInput!, token: String): [String!]!
+  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput!, token: String): [String!]!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
@@ -2077,8 +2079,8 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput, token: String): [String!]!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -2385,7 +2387,7 @@ type UpdatedPersonPayload {
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
   PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection!
@@ -2836,8 +2838,8 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput, token: String): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput, token: String): [String!]!
+  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
+  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -3007,7 +3009,7 @@ input ExampleWhereByUniqueInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!
@@ -4174,7 +4176,7 @@ input ExampleForCatalogSortInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput, token: String): [String!]!
+  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!

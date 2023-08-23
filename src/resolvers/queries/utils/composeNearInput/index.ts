@@ -1,12 +1,12 @@
-import type {NearInput, NearMongodb} from '../../../tsTypes';
+import type { NearInput, NearMongodb } from '../../../../tsTypes';
 
 type NearSphere = {
   $geometry: {
-    type: 'Point',
-    coordinates: [number, number]
-  },
-  $maxDistance?: number,
-  $minDistance?: number
+    type: 'Point';
+    coordinates: [number, number];
+  };
+  $maxDistance?: number;
+  $minDistance?: number;
 };
 
 const composeNearInput = (near: NearInput): NearMongodb => {

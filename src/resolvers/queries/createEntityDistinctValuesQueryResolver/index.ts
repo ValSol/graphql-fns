@@ -6,17 +6,22 @@ import type {
   EntityConfig,
   GraphqlObject,
   GraphqlScalar,
+  NearInput,
   SintheticResolverInfo,
   InvolvedFilter,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
+import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import composeNearInput from '../utils/composeNearInput';
 
 type Args = {
   where?: any;
+  near?: NearInput;
+  search?: string;
   options: {
     target: string;
   };
@@ -47,6 +52,8 @@ const createEntityDistinctValuesQueryResolver = (
     if (!filter) return [];
 
     const {
+      near,
+      search,
       where,
       options: { target },
     } = args;
@@ -55,13 +62,24 @@ const createEntityDistinctValuesQueryResolver = (
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-    const { lookups, where: conditions } = mergeWhereAndFilter(filter, where, entityConfig) || {};
+    const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
     if (lookups.length > 0) {
       const pipeline = [...lookups];
 
-      if (Object.keys(conditions).length > 0) {
-        pipeline.push({ $match: conditions });
+      if (near) {
+        const geoNear = composeNearForAggregateInput(near);
+
+        pipeline.unshift({ $geoNear: geoNear });
+      }
+
+      if (search) {
+        pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
+        pipeline.unshift({ $match: { $text: { $search: search } } });
+      }
+
+      if (Object.keys(where2).length > 0) {
+        pipeline.push({ $match: where2 });
       }
 
       pipeline.push({ $project: { _id: 1 } });
@@ -73,9 +91,21 @@ const createEntityDistinctValuesQueryResolver = (
       return result.filter(Boolean);
     }
 
-    const result = await Entity.distinct(target, conditions);
+    let query = Entity.distinct(target);
+
+    if (near) query = query.where(composeNearInput(near));
+
+    if (Object.keys(where2).length > 0) query = query.where(where2);
+
+    if (search) query = query.where({ $text: { $search: search } });
+
+    const result = await query.exec();
 
     return result.filter(Boolean);
+
+    // const result = await Entity.distinct(target, where2);
+
+    // return result.filter(Boolean);
   };
 
   return resolver;

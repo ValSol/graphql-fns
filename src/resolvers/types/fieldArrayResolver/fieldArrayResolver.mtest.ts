@@ -3,7 +3,7 @@
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import fieldArrayResolver from './index';
 
 mongoose.set('strictQuery', false);

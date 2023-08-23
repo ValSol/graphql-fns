@@ -1,20 +1,21 @@
-import type {InputCreator} from '../../tsTypes';
+import type { InputCreator } from '../../tsTypes';
 
 const createEntityDistinctValuesOptionsInputType: InputCreator = (entityConfig) => {
-  const { textFields, name } = entityConfig;
+  const { name, enumFields = [], textFields = [] } = entityConfig;
 
   const inputName = `${name}DistinctValuesOptionsInput`;
 
-  const fieldLines = textFields ? textFields.map(({ name: fieldName }) => `  ${fieldName}`) : [];
+  const fieldLines = [...enumFields, ...textFields].map(({ name: fieldName }) => `  ${fieldName}`);
 
-  const inputDefinition = fieldLines.length
-    ? `enum ${name}TextNamesEnum {
+  const inputDefinition =
+    fieldLines.length > 0
+      ? `enum ${name}TextNamesEnum {
 ${fieldLines.join('\n')}
 }
 input ${name}DistinctValuesOptionsInput {
   target: ${name}TextNamesEnum!
 }`
-    : '';
+      : '';
 
   return [inputName, inputDefinition, {}];
 };

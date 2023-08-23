@@ -18,8 +18,8 @@ import composeNearForAggregateInput from '../../utils/composeNearForAggregateInp
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import composeNearInput from '../utils/composeNearInput';
 import getLimit from '../utils/getLimit';
-import composeNearInput from './composeNearInput';
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
 

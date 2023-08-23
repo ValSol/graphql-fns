@@ -10,7 +10,7 @@ import type {
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
 import createFileSchema from '../../../mongooseModels/createFileSchema';
 import createThingSchema from '../../../mongooseModels/createThingSchema';

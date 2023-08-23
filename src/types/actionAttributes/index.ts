@@ -5,6 +5,7 @@ import childEntity from './childEntityQueryAttributes';
 import childEntityCount from './childEntityCountQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
 import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
+// import cloneEntityMutationAttributes from './cloneEntityMutationAttributes';
 import copyManyEntities from './copyManyEntitiesMutationAttributes';
 import copyManyEntitiesWithChildren from './copyManyEntitiesWithChildrenMutationAttributes';
 import copyEntity from './copyEntityMutationAttributes';
@@ -43,6 +44,7 @@ const actionAttributes = {
   childEntityCount,
   childEntities,
   childEntitiesThroughConnection,
+  // cloneEntityMutationAttributes,
   copyManyEntities,
   copyManyEntitiesWithChildren,
   copyEntity,

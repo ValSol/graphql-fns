@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.866",
+  "version": "0.1.2-beta.869",
   "description": "Useful functions to work with graphql",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "yarn run clean && yarn run build:esm && yarn run build:cjs",
+    "build": "yarn run clean && yarn run build:cjs && yarn run build:esm",
     "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
     "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
     "prepack": "yarn run clean && yarn run build:cjs",

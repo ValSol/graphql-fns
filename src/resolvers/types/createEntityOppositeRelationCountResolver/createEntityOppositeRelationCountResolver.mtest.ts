@@ -5,7 +5,7 @@ import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';

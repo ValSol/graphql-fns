@@ -4,7 +4,7 @@ import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateManyEntitiesMutationResolver from '../createCreateManyEntitiesMutationResolver';
 import createUpdateManyEntitiesMutationResolver from '../createUpdateManyEntitiesMutationResolver';

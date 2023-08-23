@@ -3,7 +3,7 @@ import type { GeneralConfig, EntityConfig, NearInput } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
 
-import mongoOptions from '../../../../test/mongo-options';
+import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateManyEntitiesMutationResolver from '../../mutations/createCreateManyEntitiesMutationResolver';
 import toCursor from '../../utils/toCursor';
