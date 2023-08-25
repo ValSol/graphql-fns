@@ -1,6 +1,7 @@
 import type { ActionAttributes } from '../../tsTypes';
 
 import arrayEntitiesThroughConnection from './arrayEntitiesThroughConnectionQueryAttributes';
+import arrayEntityCount from './arrayEntityCountQueryAttributes';
 import childEntity from './childEntityQueryAttributes';
 import childEntityCount from './childEntityCountQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
@@ -40,6 +41,7 @@ import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 
 const actionAttributes = {
   arrayEntitiesThroughConnection,
+  arrayEntityCount,
   childEntity,
   childEntityCount,
   childEntities,

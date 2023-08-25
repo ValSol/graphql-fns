@@ -7,6 +7,7 @@ import composeChildActionSignature from './composeChildActionSignature';
 
 const {
   arrayEntitiesThroughConnection,
+  arrayEntityCount,
   childEntities,
   childEntitiesThroughConnection,
   childEntity,
@@ -220,6 +221,9 @@ const createEntityType = (
           )}`,
         );
       }
+
+      // array "arrayEntityCount" not have any args
+      prev.push(`  ${name2}Count: ${composeReturnString(config, generalConfig, arrayEntityCount)}`);
     } else {
       prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
     }

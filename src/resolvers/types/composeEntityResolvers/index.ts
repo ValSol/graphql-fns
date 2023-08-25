@@ -14,6 +14,7 @@ import createEntityOppositeRelationCountResolver from '../createEntityOppositeRe
 import createEntityOppositeRelationConnectionResolver from '../createEntityOppositeRelationConnectionResolver';
 import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
+import fieldArrayCountResolver from '../fieldArrayCountResolver';
 import fieldArrayResolver from '../fieldArrayResolver';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
@@ -63,6 +64,7 @@ const composeEntityResolvers = (
 
     if (array) {
       resolvers[`${name}ThroughConnection`] = fieldArrayThroughConnectionResolver;
+      resolvers[`${name}Count`] = fieldArrayCountResolver;
     }
   });
 
@@ -110,7 +112,7 @@ const composeEntityResolvers = (
       );
 
       if (resolver3) {
-        prev[`${name}Count`] = resolver2;
+        prev[`${name}Count`] = resolver3;
       }
 
       return prev;

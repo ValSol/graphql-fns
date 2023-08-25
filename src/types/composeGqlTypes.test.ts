@@ -967,8 +967,10 @@ type Example implements Node {
   hero: Image
   pictures(slice: SliceInput): [Image!]!
   picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
+  picturesCount: Int!
   photos(slice: SliceInput): [Image!]!
   photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
+  photosCount: Int!
   position: GeospatialPoint
 }
 type Image {
@@ -2208,9 +2210,11 @@ type Person implements Node {
   location: Address!
   locations(slice: SliceInput): [Address!]!
   locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
+  locationsCount: Int!
   place: Address
   places(slice: SliceInput): [Address!]!
   placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
+  placesCount: Int!
 }
 type Address {
   id: ID!
