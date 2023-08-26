@@ -225,6 +225,12 @@ const composeDescendantConfig = (
 
           const descendantKey2 = descendantFields[rootEntityName][name];
 
+          if (descendant[descendantKey2].allow[currentConfig.name] === undefined) {
+            throw new TypeError(
+              `Have to include "${currentConfig.name}" entity as "allow" for descendantKey: "${descendantKey2}"!`,
+            );
+          }
+
           const childQuery = array ? 'childEntities' : 'childEntity';
           if (
             !descendant[descendantKey2].allow[currentConfig.name].includes(childQuery) &&

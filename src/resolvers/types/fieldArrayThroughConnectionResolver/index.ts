@@ -91,7 +91,7 @@ const fieldArrayThroughConnectionResolver = (
     return composeConnection(shift, last, wholeArray);
   }
 
-  throw new TypeError(`Incorrect set of args in field: "${fieldName}ThroughConnection"!`);
+  throw new TypeError(`Incorrect set of args in field: "${fieldName}"!`);
 };
 
 export default fieldArrayThroughConnectionResolver;
