@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { parseResolveInfo } from 'graphql-parse-resolve-info';
+import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
 import type { ProjectionInfo, SintheticResolverInfo } from '../../../tsTypes';
 
@@ -26,12 +26,15 @@ const getProjectionFromInfo = (
   }
 
   const { fieldsByTypeName } = resolvedInfo;
-  const [fieldsTree] = Object.values(fieldsByTypeName);
+  const [key1, key2] = Object.keys(fieldsByTypeName);
+
+  // precaution for work with "Node" Query
+  const fieldsTree = key1 === 'Node' ? fieldsByTypeName[key2] : fieldsByTypeName[key1];
 
   let fieldsTreeByPath = fieldsTree;
 
   path.forEach((item) => {
-    fieldsTreeByPath = Object.values(fieldsTreeByPath[item].fieldsByTypeName)[0];
+    fieldsTreeByPath = Object.values(fieldsTreeByPath[item].fieldsByTypeName)[0] as ResolveTree;
   });
 
   const fields = Object.keys(fieldsTreeByPath)
