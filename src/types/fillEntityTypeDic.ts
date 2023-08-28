@@ -1,4 +1,4 @@
-import type { EntityConfig, GeneralConfig, Inventory } from '../tsTypes';
+import type { EntityConfig, GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
@@ -10,7 +10,6 @@ const fillEntityTypeDic = (
   generalConfig: GeneralConfig,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
-  inventory?: Inventory,
 ) => {
   const {
     embeddedFields = [],
@@ -20,25 +19,19 @@ const fillEntityTypeDic = (
     relationalFields = [],
     name,
   } = entityConfig as any;
-  const { allEntityConfigs } = generalConfig;
+  const { allEntityConfigs, inventory } = generalConfig;
 
   const { actionReturnConfig } = childEntitiesThroughConnectionQuery;
 
   if (!entityTypeDic[name]) {
     // eslint-disable-next-line no-param-reassign
-    entityTypeDic[name] = createEntityType(
-      entityConfig,
-      generalConfig,
-      entityTypeDic,
-      inputDic,
-      inventory,
-    );
+    entityTypeDic[name] = createEntityType(entityConfig, generalConfig, entityTypeDic, inputDic);
   }
 
   [...embeddedFields, ...childFields, ...duplexFields, ...fileFields, ...relationalFields].forEach(
     ({ config }) => {
       if (!entityTypeDic[config.name]) {
-        fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic, inventory);
+        fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic);
       }
     },
   );
@@ -52,7 +45,7 @@ const fillEntityTypeDic = (
     const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
 
     if (config2 && !entityTypeDic[config2.name]) {
-      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic, inventory);
+      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);
     }
   });
 
@@ -62,7 +55,7 @@ const fillEntityTypeDic = (
     const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
 
     if (config2 && !entityTypeDic[config2.name]) {
-      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic, inventory);
+      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);
     }
   });
 };

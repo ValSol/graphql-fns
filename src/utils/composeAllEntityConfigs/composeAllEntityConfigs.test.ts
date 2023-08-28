@@ -14,6 +14,9 @@ describe('composeAllEntityConfigs', () => {
   test('compose simple allEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
+
+      interfaces: ['ExampleInterface'],
+
       intFields: [
         {
           name: 'intField',
@@ -39,6 +42,9 @@ describe('composeAllEntityConfigs', () => {
     const exampleConfig: TangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
       intFields: [
         {
           name: 'intField',
@@ -304,6 +310,9 @@ describe('composeAllEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
       textFields: [
         {
           name: 'textField',
@@ -325,6 +334,9 @@ describe('composeAllEntityConfigs', () => {
     const simplifiedImageConfig: SimplifiedFileEntityConfig = {
       name: 'Image',
       type: 'file',
+
+      interfaces: ['FileInterface'],
+
       textFields: [
         {
           name: 'fileId',
@@ -345,6 +357,9 @@ describe('composeAllEntityConfigs', () => {
     const imageConfig: FileEntityConfig = {
       name: 'Image',
       type: 'file',
+
+      interfaces: ['FileInterface'],
+
       textFields: [
         {
           name: 'fileId',
@@ -404,6 +419,9 @@ describe('composeAllEntityConfigs', () => {
     const entityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
       textFields: [
         {
           name: 'textField',

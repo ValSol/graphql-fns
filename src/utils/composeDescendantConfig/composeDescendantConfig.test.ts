@@ -14,6 +14,9 @@ describe('composeDescendantConfig', () => {
     const entityConfig: TangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExamleInterface'],
+
       textFields: [
         {
           name: 'textField',
@@ -43,6 +46,7 @@ describe('composeDescendantConfig', () => {
     test('should return correct descendant config with included field', () => {
       const ForCatalog: DescendantAttributes = {
         allow: { Example: ['entity', 'entities'] },
+        interfaces: { Example: ['ExampleForCatalogInterview'] },
         descendantKey: 'ForCatalog',
         includeFields: { Example: ['anotherField'] },
         addFields: {
@@ -62,6 +66,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        interfaces: ['ExampleForCatalogInterview'],
+
         textFields: [
           {
             name: 'anotherField',

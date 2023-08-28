@@ -26,10 +26,12 @@ const getProjectionFromInfo = (
   }
 
   const { fieldsByTypeName } = resolvedInfo;
-  const [key1, key2] = Object.keys(fieldsByTypeName);
 
-  // precaution for work with "Node" Query
-  const fieldsTree = key1 === 'Node' ? fieldsByTypeName[key2] : fieldsByTypeName[key1];
+  const fieldsTree = Object.keys(fieldsByTypeName).reduce((prev, key) => {
+    Object.assign(prev, fieldsByTypeName[key]);
+
+    return prev;
+  }, {});
 
   let fieldsTreeByPath = fieldsTree;
 

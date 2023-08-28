@@ -12,6 +12,7 @@ import composeTangibleFileConfigName from './composeTangibleFileConfigName';
 import composeTangibleFileEntityConfig from './composeTangibleFileEntityConfig';
 import PageInfo from './pageInfoConfig';
 
+// alsow used in "composeAllEntityConfigs" util
 const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
 
 const composeAllEntityConfigs = (

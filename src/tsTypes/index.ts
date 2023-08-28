@@ -185,6 +185,7 @@ type SimplifiedChildField = ArraySimplifiedChildField | ScalarSimplifiedChildFie
 
 type SimplifiedEntityConfigCommonProperties = {
   name: string;
+  interfaces?: string[];
   dserivativeNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
@@ -320,6 +321,7 @@ type ChildField = ArrayChildField | ScalarChildField;
 
 type EntityConfigCommonProperties = {
   name: string;
+  interfaces?: string[];
   descendantNameSlicePosition?: number;
   duplexFields?: DuplexField[];
   embeddedFields?: EmbeddedField[];
@@ -486,6 +488,9 @@ export type DescendantAttributes = {
   allow: {
     [entityName: string]: DescendantAttributesActionName[];
   };
+  interfaces?: {
+    [entityName: string]: Array<string>;
+  };
   includeFields?: {
     [entityName: string]: Array<string>;
   };
@@ -560,6 +565,7 @@ export type GeneralConfig = {
   };
   enums?: Enums;
   inventory?: Inventory;
+  interfaces?: { [interfaceName: string]: string[] };
 };
 
 // equal to previous code of 'custom' property

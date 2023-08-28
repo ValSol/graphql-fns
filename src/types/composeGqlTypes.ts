@@ -15,6 +15,7 @@ import composeEnumTypes from './specialized/composeEnumTypes';
 import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeActionSignature from './composeActionSignature';
+import composeInterfaceTypeDic from './composeInterfaceTypeDic';
 
 const composeGqlTypes = (
   generalConfig: GeneralConfig,
@@ -116,11 +117,12 @@ const composeGqlTypes = (
   node(id: ID!): Node${['', ...queryTypes].join('\n')}
 }`;
 
-  const mutationTypes2 = mutationTypes.length
-    ? `type Mutation {
+  const mutationTypes2 =
+    mutationTypes.length > 0
+      ? `type Mutation {
 ${mutationTypes.join('\n')}
 }`
-    : '';
+      : '';
 
   // 3. generaqte entity types
 
@@ -128,14 +130,21 @@ ${mutationTypes.join('\n')}
     .map((key) => entityTypeDic[key])
     .join('\n');
 
-  // 4. generate inputs
+  // 4. generate interfaces
+
+  const interfaceTypeDic = composeInterfaceTypeDic(entityTypeDic, generalConfig);
+  const interfaces = Object.keys(interfaceTypeDic)
+    .map((key) => interfaceTypeDic[key])
+    .join('\n');
+
+  // 5. generate inputs
 
   const inputs = Object.keys(inputDic)
     .filter((inputName) => !inputName.startsWith('!'))
     .map((inputName) => inputDic[inputName])
     .join('\n');
 
-  // 5. prepare subscriptions
+  // 6. prepare subscriptions
 
   const updatedEntityPayloadTypes = allowSubscriptions
     ? Object.keys(allEntityConfigs)
@@ -195,6 +204,8 @@ ${entitySubscriptionTypes}
 
   const geospatialTypes = composeGeospatialTypes(generalConfig);
   if (geospatialTypes) resultArray.push(geospatialTypes);
+
+  if (interfaces) resultArray.push(interfaces);
 
   resultArray.push(entityTypes);
 

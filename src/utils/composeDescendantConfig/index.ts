@@ -59,6 +59,7 @@ const composeDescendantConfig = (
     descendantFields = {},
     excludeFields = {},
     includeFields = {},
+    interfaces = {},
     freezedFields = {},
     unfreezedFields = {},
   } = signatureMethods;
@@ -104,6 +105,8 @@ const composeDescendantConfig = (
   checkEntityNames(addFields, 'addFields');
 
   checkEntityNames(descendantFields, 'descendantFields');
+
+  checkEntityNames(interfaces, 'interfaces');
 
   type TangibleFields = Omit<SimplifiedTangibleEntityConfig, 'name' | 'type' | 'counter'>;
 
@@ -159,6 +162,12 @@ const composeDescendantConfig = (
   const entityConfig = { ...rootEntityConfig, name: descendantEntityName };
 
   store[descendantEntityName] = entityConfig;
+
+  if (interfaces[rootEntityName] !== undefined) {
+    entityConfig.interfaces = interfaces[rootEntityName] as string[];
+  } else {
+    delete entityConfig.interfaces;
+  }
 
   if (includeFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {

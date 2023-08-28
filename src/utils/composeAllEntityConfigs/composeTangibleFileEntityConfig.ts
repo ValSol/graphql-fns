@@ -10,6 +10,8 @@ const composeTangibleFileEntityConfig = (
   const tangibleConfig = Object.keys(config).reduce((prev, key) => {
     if (key === 'name') {
       prev[key] = composeTangibleFileConfigName(name); // eslint-disable-line no-param-reassign
+    } else if (key === 'interfaces') {
+      // do nothing
     } else if (key === 'type') {
       prev[key] = 'tangibleFile'; // eslint-disable-line no-param-reassign
     } else if (key.endsWith('Fields')) {

@@ -3420,6 +3420,9 @@ type Mutation {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
       textFields: [
         {
           name: 'textField',
@@ -3428,13 +3431,32 @@ type Mutation {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
+    const entityConfig2: SimplifiedTangibleEntityConfig = {
+      name: 'Example2',
+      type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
+      textFields: [
+        {
+          name: 'textField',
+          index: true,
+        },
+        {
+          name: 'textField2',
+          index: true,
+        },
+      ],
+    };
+
+    const simplifiedAllEntityConfigs = [entityConfig, entityConfig2];
     const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
     const inventory: Inventory = {
       name: 'test',
-      include: { Mutation: { createEntity: ['Example'] } },
+      include: { Mutation: { createEntity: ['Example', 'Example2'] } },
     };
-    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
+    const interfaces = { ExampleInterface: ['textField', 'updatedAt'] };
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory, interfaces };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -3448,11 +3470,22 @@ input SliceInput {
   begin: Int
   end: Int
 }
-type Example implements Node {
+interface ExampleInterface {
+  textField: String
+  updatedAt: DateTime!
+}
+type Example implements Node & ExampleInterface {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type Example2 implements Node & ExampleInterface {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  textField: String
+  textField2: String
 }
 input ExampleCreateInput {
   id: ID
@@ -3467,11 +3500,26 @@ input ExampleCreateOrPushChildrenInput {
   create: [ExampleCreateInput!]
   createPositions: [Int!]
 }
+input Example2CreateInput {
+  id: ID
+  textField: String
+  textField2: String
+}
+input Example2CreateChildInput {
+  connect: ID
+  create: Example2CreateInput
+}
+input Example2CreateOrPushChildrenInput {
+  connect: [ID!]
+  create: [Example2CreateInput!]
+  createPositions: [Int!]
+}
 type Query {
   node(id: ID!): Node
 }
 type Mutation {
   createExample(data: ExampleCreateInput!, token: String): Example!
+  createExample2(data: Example2CreateInput!, token: String): Example2!
 }`;
 
     const result = composeGqlTypes(generalConfig);

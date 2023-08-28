@@ -10,6 +10,9 @@ describe('createEntityType', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
+
+      interfaces: ['ExampleInterface'],
+
       textFields: [
         {
           name: 'textField1',
@@ -42,7 +45,7 @@ describe('createEntityType', () => {
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
 
-    const expectedResult = `type Example implements Node {
+    const expectedResult = `type Example implements Node & ExampleInterface {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!

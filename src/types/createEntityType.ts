@@ -1,4 +1,4 @@
-import type { ActionAttributes, EntityConfig, GeneralConfig, Inventory } from '../tsTypes';
+import type { ActionAttributes, EntityConfig, GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
@@ -44,31 +44,36 @@ const createEntityType = (
   generalConfig: GeneralConfig,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
-  inventory?: Inventory,
 ): string => {
   const {
-    childFields,
+    childFields = [],
     counter,
-    booleanFields,
-    dateTimeFields,
+    interfaces = [],
+    booleanFields = [],
+    dateTimeFields = [],
     duplexFields = [],
     embeddedFields = [],
-    enumFields,
+    enumFields = [],
     fileFields = [],
-    floatFields,
-    intFields,
-    geospatialFields,
+    floatFields = [],
+    intFields = [],
+    geospatialFields = [],
     relationalFields = [],
-    textFields,
+    textFields = [],
     type: configType,
     name,
   } = entityConfig as any;
+
+  const interfacesToImplement =
+    configType === 'tangible' || configType === 'tangibleFile'
+      ? ['Node', ...interfaces]
+      : interfaces;
 
   const entityTypeArray = [
     // use not required ID in embedded entities...
     // ... to not provoke error for null embedded objects
     `type ${name} ${
-      configType === 'tangible' || configType === 'tangibleFile' ? 'implements Node ' : ''
+      interfacesToImplement.length === 0 ? '' : `implements ${interfacesToImplement.join(' & ')} `
     }{`,
   ];
 
@@ -85,55 +90,43 @@ const createEntityType = (
     entityTypeArray.push('  counter: Int!');
   }
 
-  if (textFields) {
-    textFields.reduce((prev, field) => {
-      pushInPrev(field, 'String', prev);
+  textFields.reduce((prev, field) => {
+    pushInPrev(field, 'String', prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (intFields) {
-    intFields.reduce((prev, field) => {
-      pushInPrev(field, 'Int', prev);
+  intFields.reduce((prev, field) => {
+    pushInPrev(field, 'Int', prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (floatFields) {
-    floatFields.reduce((prev, field) => {
-      pushInPrev(field, 'Float', prev);
+  floatFields.reduce((prev, field) => {
+    pushInPrev(field, 'Float', prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (dateTimeFields) {
-    dateTimeFields.reduce((prev, field) => {
-      pushInPrev(field, 'DateTime', prev);
+  dateTimeFields.reduce((prev, field) => {
+    pushInPrev(field, 'DateTime', prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (booleanFields) {
-    booleanFields.reduce((prev, field) => {
-      pushInPrev(field, 'Boolean', prev);
+  booleanFields.reduce((prev, field) => {
+    pushInPrev(field, 'Boolean', prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (enumFields) {
-    enumFields.reduce((prev, field) => {
-      const { enumName } = field;
+  enumFields.reduce((prev, field) => {
+    const { enumName } = field;
 
-      pushInPrev(field, `${enumName}Enumeration`, prev);
+    pushInPrev(field, `${enumName}Enumeration`, prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
   [...relationalFields, ...duplexFields].reduce(
     (prev, { array, name: name2, required, config }) => {
@@ -231,26 +224,22 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  if (geospatialFields) {
-    geospatialFields.reduce((prev, field) => {
-      const { geospatialType } = field;
+  geospatialFields.reduce((prev, field) => {
+    const { geospatialType } = field;
 
-      pushInPrev(field, `Geospatial${geospatialType}`, prev);
+    pushInPrev(field, `Geospatial${geospatialType}`, prev);
 
-      return prev;
-    }, entityTypeArray);
-  }
+    return prev;
+  }, entityTypeArray);
 
-  if (childFields) {
-    childFields.reduce((prev, { array, name: name2, required, config: { name: childName } }) => {
-      prev.push(
-        `  ${name2}: ${array ? '[' : ''}${childName}${array ? '!]!' : ''}${
-          !array && required ? '!' : ''
-        }`,
-      );
-      return prev;
-    }, entityTypeArray);
-  }
+  childFields.reduce((prev, { array, name: name2, required, config: { name: childName } }) => {
+    prev.push(
+      `  ${name2}: ${array ? '[' : ''}${childName}${array ? '!]!' : ''}${
+        !array && required ? '!' : ''
+      }`,
+    );
+    return prev;
+  }, entityTypeArray);
 
   entityTypeArray.push('}');
 

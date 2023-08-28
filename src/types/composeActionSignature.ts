@@ -79,7 +79,7 @@ const composeActionSignature = (
   const returnConfig = actionReturnConfig(entityConfig, generalConfig, descendantKey);
 
   if (returnConfig) {
-    fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic, inventory);
+    fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);
   }
 
   return `  ${specificName}(${args}): ${returnString}`;
