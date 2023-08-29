@@ -96,7 +96,7 @@ const createEntityOppositeRelationCountResolver = (
 
     const { id } = parent;
 
-    const whereById = { [oppositeFields[fieldName]]: id };
+    const whereById = { [oppositeFields[fieldName.slice(0, -'Count'.length)]]: id };
 
     const { where } = args || {};
 

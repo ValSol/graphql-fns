@@ -1,12 +1,11 @@
 import type { EntityConfig } from '../../tsTypes';
 
-const actionType = 'Query';
+const actionType = 'Field';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `childEntitiesThroughConnection${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string => `arrayEntityCount${descendantKey}`;
 
 const actionName = (baseName: string, descendantKey = ''): string =>
-  `child${baseName}Count${descendantKey}`;
+  `array${baseName}Count${descendantKey}`;
 
 const inputCreators = [];
 

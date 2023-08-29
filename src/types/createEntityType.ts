@@ -2,7 +2,7 @@ import type { ActionAttributes, EntityConfig, GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
-import { queryAttributes } from './actionAttributes';
+import allActionAttributes from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
 
 const {
@@ -12,7 +12,7 @@ const {
   childEntitiesThroughConnection,
   childEntity,
   childEntityCount,
-} = queryAttributes;
+} = allActionAttributes;
 
 const composeReturnString = (
   config: EntityConfig,

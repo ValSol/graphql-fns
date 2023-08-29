@@ -3,7 +3,7 @@ import type { DescendantAttributesActionName, EntityConfig, GeneralConfig } from
 import checkDescendantAction from '../utils/checkDescendantAction';
 import parseEntityName from '../utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
-import { queryAttributes } from './actionAttributes';
+import actionAttributes from './actionAttributes';
 
 const composeChildActionSignature = (
   entityConfig: EntityConfig,
@@ -13,13 +13,21 @@ const composeChildActionSignature = (
     [inputName: string]: string;
   },
 ): string => {
-  const { actionGeneralName, actionName, inputCreators, argNames, argTypes, actionReturnString } =
-    queryAttributes[childQueryGeneralName];
+  const {
+    actionGeneralName,
+    actionName,
+    actionType,
+    inputCreators,
+    argNames,
+    argTypes,
+    actionReturnString,
+  } = actionAttributes[childQueryGeneralName];
   const { allEntityConfigs } = generalConfig;
 
   const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
   if (
+    actionType !== 'Field' &&
     !checkDescendantAction(
       actionGeneralName('') as DescendantAttributesActionName,
       entityConfig,

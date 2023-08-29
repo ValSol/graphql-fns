@@ -852,7 +852,7 @@ export type VirtualConfigComposer = (
 
 export type ActionAttributes = {
   actionGeneralName: (descendantKey?: string) => string;
-  actionType: 'Mutation' | 'Query';
+  actionType: 'Mutation' | 'Query' | 'Field';
   actionAllowed: (entityConfig: EntityConfig) => boolean;
   actionIsChild?: 'Array' | 'Scalar';
   actionName: (baseName: string, descendantKey?: string) => string;

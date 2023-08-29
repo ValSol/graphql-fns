@@ -5,13 +5,13 @@ import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
 import composeDescendantConfig from '../../utils/composeDescendantConfig';
 import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
 
-const actionType = 'Query';
+const actionType = 'Field';
 
 const actionGeneralName = (descendantKey = ''): string =>
-  `childEntitiesThroughConnection${descendantKey}`;
+  `arrayEntitiesThroughConnection${descendantKey}`;
 
 const actionName = (baseName: string, descendantKey = ''): string =>
-  `child${pluralize(baseName)}ThroughConnection${descendantKey}`;
+  `array${pluralize(baseName)}ThroughConnection${descendantKey}`;
 
 const inputCreators = [
   (): [

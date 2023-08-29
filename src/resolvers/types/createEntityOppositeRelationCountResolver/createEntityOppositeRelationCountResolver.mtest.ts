@@ -12,7 +12,7 @@ import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityOppositeRelationCountResolver from './index';
 
-const info = { projection: { title: 1 }, fieldName: 'friends' };
+const info = { projection: { title: 1 }, fieldName: 'friendsCount' };
 
 mongoose.set('strictQuery', false);
 

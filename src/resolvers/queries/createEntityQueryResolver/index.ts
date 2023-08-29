@@ -23,7 +23,7 @@ type Args = {
   };
 };
 
-const createNodeQueryResolver = (
+const createEntityQueryResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -91,4 +91,4 @@ const createNodeQueryResolver = (
   return resolver;
 };
 
-export default createNodeQueryResolver;
+export default createEntityQueryResolver;
