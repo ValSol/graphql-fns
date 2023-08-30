@@ -6,6 +6,7 @@ import type {
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
   SimplifiedVirtualEntityConfig,
+  DescendantAttributesActionName,
 } from '../../tsTypes';
 
 import composeFieldsObject from '../composeFieldsObject';
@@ -240,13 +241,21 @@ const composeDescendantConfig = (
             );
           }
 
-          const childQuery = array ? 'childEntities' : 'childEntity';
+          const childQueries = array
+            ? ['childEntities', 'childEntitiesThroughConnection', 'childEntityCount']
+            : ['childEntity'];
           if (
-            !descendant[descendantKey2].allow[currentConfig.name].includes(childQuery) &&
+            !childQueries.some((childQuery: DescendantAttributesActionName) =>
+              descendant[descendantKey2].allow[currentConfig.name].includes(childQuery),
+            ) &&
             key !== 'childFields'
           ) {
             throw new TypeError(
-              `Have to set "${childQuery}" as "allow" for descendantKey: "${descendantKey2}" & entity: "${currentConfig.name}"!`,
+              `Have to set ${childQueries
+                .map((str) => `"${str}"`)
+                .join(' or ')} as "allow" for descendantKey: "${descendantKey2}" & entity: "${
+                currentConfig.name
+              }"!`,
             );
           }
 
