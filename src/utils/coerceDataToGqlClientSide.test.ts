@@ -341,12 +341,14 @@ describe('coerceDataToGqlClientSide', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

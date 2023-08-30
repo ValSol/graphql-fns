@@ -320,12 +320,14 @@ describe('allocateFieldsForCSV', () => {
           name: 'embeddedField',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'embeddedArrayField',
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -366,12 +368,14 @@ describe('allocateFieldsForCSV', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

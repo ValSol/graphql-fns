@@ -318,6 +318,7 @@ describe('composeGqlResolvers', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -329,6 +330,7 @@ describe('composeGqlResolvers', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };

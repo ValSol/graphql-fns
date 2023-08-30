@@ -134,6 +134,7 @@ type ScalarSimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
 type ArraySimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   configName: string;
+  variants?: Array<'plain' | 'connection' | 'count'>;
 };
 type SimplifiedEmbeddedField = ArraySimplifiedEmbeddedField | ScalarSimplifiedEmbeddedField;
 
@@ -144,6 +145,7 @@ type ScalarSimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
 type ArraySimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   configName: string;
+  variants?: Array<'plain' | 'connection' | 'count'>;
 };
 type SimplifiedFileField = ArraySimplifiedFileField | ScalarSimplifiedFileField;
 
@@ -243,6 +245,7 @@ type ArrayEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   config: EmbeddedEntityConfig;
   type: 'embeddedFields';
+  variants: Array<'plain' | 'connection' | 'count'>;
 };
 export type EmbeddedField = ArrayEmbeddedField | ScalarEmbeddedField;
 
@@ -255,6 +258,7 @@ type ArrayFileField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   config: FileEntityConfig;
   type: 'fileFields';
+  variants: Array<'plain' | 'connection' | 'count'>;
 };
 export type FileField = ArrayFileField | ScalarFileField;
 

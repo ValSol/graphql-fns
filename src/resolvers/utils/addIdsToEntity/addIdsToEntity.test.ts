@@ -32,6 +32,7 @@ describe('addIdsToEntity', () => {
           config: embedded3Config,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -50,6 +51,7 @@ describe('addIdsToEntity', () => {
           name: 'embedded2',
           config: embedded2Config,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -68,6 +70,7 @@ describe('addIdsToEntity', () => {
           name: 'embedded1',
           config: embedded1Config,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -154,12 +157,14 @@ describe('addIdsToEntity', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
           array: true,
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

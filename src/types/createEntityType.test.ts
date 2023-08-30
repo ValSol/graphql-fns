@@ -211,6 +211,7 @@ describe('createEntityType', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain', 'connection', 'count'],
         },
         {
           name: 'place',
@@ -222,6 +223,7 @@ describe('createEntityType', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain', 'connection', 'count'],
         },
       ],
     };
@@ -695,12 +697,14 @@ describe('createEntityType', () => {
           array: true,
           required: true,
           type: 'fileFields',
+          variants: ['count'],
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['connection'],
         },
       ],
     });
@@ -716,12 +720,8 @@ describe('createEntityType', () => {
   textField: String
   logo: Image!
   hero: Image
-  pictures(slice: SliceInput): [Image!]!
-  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
   picturesCount: Int!
-  photos(slice: SliceInput): [Image!]!
   photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
-  photosCount: Int!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});

@@ -53,12 +53,14 @@ describe('getNewFilesInArraysPositions util', () => {
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'avatars',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -165,12 +167,14 @@ describe('getNewFilesInArraysPositions util', () => {
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'avatars',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

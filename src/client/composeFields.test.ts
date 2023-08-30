@@ -438,6 +438,7 @@ describe('composeFields', () => {
           config: embedded2Config,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };

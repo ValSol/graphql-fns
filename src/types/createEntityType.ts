@@ -194,35 +194,44 @@ const createEntityType = (
     entityTypeArray,
   );
 
-  [...embeddedFields, ...fileFields].reduce((prev, { array, name: name2, required, config }) => {
-    if (array) {
-      prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
+  [...embeddedFields, ...fileFields].reduce(
+    (prev, { array, name: name2, required, config, variants }) => {
+      if (array) {
+        if (variants.includes('plain')) {
+          prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
+        }
 
-      const childEntitiesThroughConnectionArgs = composeChildActionSignature(
-        config,
-        generalConfig,
-        'arrayEntitiesThroughConnection',
-        inputDic,
-      );
-
-      if (childEntitiesThroughConnectionArgs) {
-        prev.push(
-          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+        if (variants.includes('connection')) {
+          const childEntitiesThroughConnectionArgs = composeChildActionSignature(
             config,
             generalConfig,
-            arrayEntitiesThroughConnection,
-          )}`,
-        );
+            'arrayEntitiesThroughConnection',
+            inputDic,
+          );
+
+          prev.push(
+            `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+              config,
+              generalConfig,
+              arrayEntitiesThroughConnection,
+            )}`,
+          );
+        }
+
+        if (variants.includes('count')) {
+          // array "arrayEntityCount" not have any args
+          prev.push(
+            `  ${name2}Count: ${composeReturnString(config, generalConfig, arrayEntityCount)}`,
+          );
+        }
+      } else {
+        prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
       }
 
-      // array "arrayEntityCount" not have any args
-      prev.push(`  ${name2}Count: ${composeReturnString(config, generalConfig, arrayEntityCount)}`);
-    } else {
-      prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
-    }
-
-    return prev;
-  }, entityTypeArray);
+      return prev;
+    },
+    entityTypeArray,
+  );
 
   geospatialFields.reduce((prev, field) => {
     const { geospatialType } = field;

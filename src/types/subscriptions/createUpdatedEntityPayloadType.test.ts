@@ -108,6 +108,7 @@ type UpdatedExamplePayload {
           name: 'embeddedField',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
       enumFields: [
@@ -145,6 +146,7 @@ type UpdatedExamplePayload {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

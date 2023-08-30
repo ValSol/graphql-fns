@@ -109,17 +109,20 @@ describe('coerceDataFromGql', () => {
           name: 'embedded1',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'embedded2',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'embedded3',
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -192,12 +195,14 @@ describe('coerceDataFromGql', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -278,12 +283,14 @@ describe('coerceDataFromGql', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

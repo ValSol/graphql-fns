@@ -32,12 +32,14 @@ describe('fromMongoToGqlDataArg', () => {
           name: 'embedded',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'embeddedArray',
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
       relationalFields: [

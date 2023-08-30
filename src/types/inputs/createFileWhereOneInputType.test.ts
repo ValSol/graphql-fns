@@ -69,6 +69,7 @@ describe('createFileWhereOneInputType', () => {
         config: imageConfig,
         required: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
     ],
     embeddedFields: [
@@ -77,6 +78,7 @@ describe('createFileWhereOneInputType', () => {
         config: photoConfig,
         required: true,
         type: 'embeddedFields',
+        variants: ['plain'],
       },
     ],
   };

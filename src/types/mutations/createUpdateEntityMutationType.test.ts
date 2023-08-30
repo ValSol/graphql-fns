@@ -75,7 +75,9 @@ describe('createUpdateEntityMutationType', () => {
       name: 'Person',
       type: 'tangible',
 
-      embeddedFields: [{ name: 'address', config: addressConfig, type: 'embeddedFields' }],
+      embeddedFields: [
+        { name: 'address', config: addressConfig, type: 'embeddedFields', variants: ['plain'] },
+      ],
 
       relationalFields: [
         {

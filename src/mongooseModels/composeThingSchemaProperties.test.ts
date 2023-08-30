@@ -375,6 +375,7 @@ describe('composeThingSchemaProperties', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -386,6 +387,7 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -511,6 +513,7 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

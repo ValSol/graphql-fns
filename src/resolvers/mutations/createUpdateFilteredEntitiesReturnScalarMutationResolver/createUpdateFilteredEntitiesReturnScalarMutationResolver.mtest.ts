@@ -660,6 +660,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -752,6 +753,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

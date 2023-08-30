@@ -64,12 +64,14 @@ describe('createFileWhereInputType', () => {
         config: imageConfig,
         required: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
       {
         name: 'photo',
         config: photoConfig,
         required: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
     ],
   };

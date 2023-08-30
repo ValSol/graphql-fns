@@ -869,12 +869,14 @@ type Subscription {
           configName: 'Image',
           array: true,
           required: true,
+          variants: ['plain', 'connection', 'count'],
         },
         {
           name: 'photos',
           configName: 'Image',
           array: true,
           index: true,
+          variants: ['plain', 'connection', 'count'],
         },
       ],
 
@@ -2170,6 +2172,7 @@ type Subscription {
           array: true,
           configName: 'Address',
           required: true,
+          variants: ['plain', 'connection', 'count'],
         },
         {
           name: 'place',
@@ -2180,6 +2183,7 @@ type Subscription {
           name: 'places',
           array: true,
           configName: 'Address',
+          variants: ['plain', 'connection', 'count'],
         },
       ],
     };

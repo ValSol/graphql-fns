@@ -108,7 +108,7 @@ const composeEntityConfig = (
   if (simplifiedEmbeddedFields) {
     // eslint-disable-next-line no-param-reassign
     entityConfig.embeddedFields = simplifiedEmbeddedFields.map((field) => {
-      const { configName, ...restField } = field;
+      const { configName, variants = [], ...restField } = field;
       const config = allEntityConfigs[configName];
 
       if (!config) {
@@ -134,7 +134,15 @@ const composeEntityConfig = (
         }
       }
 
-      return { ...restField, config, type: 'embeddedFields' };
+      if (!restField.array) {
+        return { ...restField, config, type: 'embeddedFields' };
+      }
+
+      if (variants.length === 0) {
+        variants.push('plain');
+      }
+
+      return { ...restField, config, type: 'embeddedFields', variants };
     });
   }
 
@@ -173,7 +181,7 @@ const composeEntityConfig = (
   if (simplifiedFileFields) {
     // eslint-disable-next-line no-param-reassign
     entityConfig.fileFields = simplifiedFileFields.map((field) => {
-      const { configName, ...restField } = field;
+      const { configName, variants = [], ...restField } = field;
       const config = allEntityConfigs[configName];
 
       if (!config) {
@@ -188,7 +196,15 @@ const composeEntityConfig = (
         );
       }
 
-      return { ...restField, config, type: 'fileFields' };
+      if (!field.array) {
+        return { ...restField, config, type: 'fileFields' };
+      }
+
+      if (variants.length === 0) {
+        variants.push('plain');
+      }
+
+      return { ...restField, config, type: 'fileFields', variants };
     });
   }
 

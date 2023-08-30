@@ -51,7 +51,9 @@ const composeEntityResolvers = (
     if (
       fieldType === 'relationalFields' ||
       fieldType === 'duplexFields' ||
-      fieldType === 'geospatialFields'
+      fieldType === 'geospatialFields' ||
+      fieldType === 'embeddedFields' ||
+      fieldType === 'fileFields'
     ) {
       return;
     }
@@ -63,8 +65,19 @@ const composeEntityResolvers = (
     const { array, name } = field;
 
     if (array) {
-      resolvers[`${name}ThroughConnection`] = fieldArrayThroughConnectionResolver;
-      resolvers[`${name}Count`] = fieldArrayCountResolver;
+      const { variants } = field;
+
+      if (variants.includes('plain')) {
+        resolvers[name] = fieldArrayResolver;
+      }
+
+      if (variants.includes('connection')) {
+        resolvers[`${name}ThroughConnection`] = fieldArrayThroughConnectionResolver;
+      }
+
+      if (variants.includes('count')) {
+        resolvers[`${name}Count`] = fieldArrayCountResolver;
+      }
     }
   });
 

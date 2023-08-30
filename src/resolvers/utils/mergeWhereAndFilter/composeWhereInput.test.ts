@@ -36,6 +36,7 @@ describe('composeWhereInput', () => {
         config: child3Config,
         index: true,
         type: 'embeddedFields',
+        variants: ['plain'],
       },
     ],
   };
@@ -58,6 +59,7 @@ describe('composeWhereInput', () => {
         config: child2Config,
         index: true,
         type: 'embeddedFields',
+        variants: ['plain'],
       },
     ],
   };
@@ -164,6 +166,7 @@ describe('composeWhereInput', () => {
         config: childConfig,
         index: true,
         type: 'embeddedFields',
+        variants: ['plain'],
       },
     ],
   });

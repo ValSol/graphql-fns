@@ -866,6 +866,7 @@ describe('createUpdateEntityMutationResolver', () => {
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -966,6 +967,7 @@ describe('createUpdateEntityMutationResolver', () => {
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

@@ -108,6 +108,7 @@ describe('composeEmptyValues', () => {
           name: 'logo',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -143,6 +144,7 @@ describe('composeEmptyValues', () => {
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -173,6 +175,7 @@ describe('composeEmptyValues', () => {
           name: 'embeddedField',
           config: embeddedConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -204,6 +207,7 @@ describe('composeEmptyValues', () => {
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -235,6 +239,7 @@ describe('composeEmptyValues', () => {
           config: embeddedConfig,
           array: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });

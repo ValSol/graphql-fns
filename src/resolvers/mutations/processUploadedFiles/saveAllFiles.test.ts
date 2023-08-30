@@ -51,12 +51,14 @@ describe('saveAllFiles', () => {
         config: imageConfig,
         array: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
       {
         name: 'photos',
         config: photoConfig,
         array: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
     ],
   };

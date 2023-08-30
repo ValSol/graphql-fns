@@ -27,17 +27,20 @@ describe('separateFileFieldsData', () => {
         name: 'logo',
         config: imageConfig,
         type: 'fileFields',
+        variants: ['plain'],
       },
       {
         name: 'header',
         config: imageConfig,
         type: 'fileFields',
+        variants: ['plain'],
       },
       {
         name: 'pictures',
         config: imageConfig,
         array: true,
         type: 'fileFields',
+        variants: ['plain'],
       },
     ],
   });

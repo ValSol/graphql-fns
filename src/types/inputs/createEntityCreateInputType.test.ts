@@ -244,6 +244,7 @@ input PersonCreateOrPushChildrenInput {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -255,6 +256,7 @@ input PersonCreateOrPushChildrenInput {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -885,11 +887,13 @@ input ExampleCreateOrPushChildrenInput {
           config: imageConfig,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'hero',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
@@ -897,12 +901,14 @@ input ExampleCreateOrPushChildrenInput {
           array: true,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

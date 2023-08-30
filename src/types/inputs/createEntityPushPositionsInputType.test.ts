@@ -256,6 +256,7 @@ describe('createEntityPushPositionsInputType', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -267,6 +268,7 @@ describe('createEntityPushPositionsInputType', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -589,6 +591,7 @@ describe('createEntityPushPositionsInputType', () => {
           config: imageConfig,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'logos',
@@ -597,11 +600,13 @@ describe('createEntityPushPositionsInputType', () => {
           array: true,
           freeze: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'hero',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
@@ -609,12 +614,14 @@ describe('createEntityPushPositionsInputType', () => {
           array: true,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -664,11 +671,13 @@ describe('createEntityPushPositionsInputType', () => {
           config: imageConfig,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'hero',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
@@ -677,6 +686,7 @@ describe('createEntityPushPositionsInputType', () => {
           required: true,
           freeze: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
@@ -684,6 +694,7 @@ describe('createEntityPushPositionsInputType', () => {
           array: true,
           freeze: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

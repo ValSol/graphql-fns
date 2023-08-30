@@ -1315,6 +1315,7 @@ input PersonWhereWithoutBooleanOperationsInput {
           index: true,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     };

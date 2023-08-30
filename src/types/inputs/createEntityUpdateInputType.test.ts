@@ -350,6 +350,7 @@ describe('createEntityUpdateInputType', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -361,6 +362,7 @@ describe('createEntityUpdateInputType', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'places2',
@@ -368,6 +370,7 @@ describe('createEntityUpdateInputType', () => {
           config: addressConfig,
           freeze: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -768,11 +771,13 @@ describe('createEntityUpdateInputType', () => {
           config: imageConfig,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'hero',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
@@ -780,18 +785,21 @@ describe('createEntityUpdateInputType', () => {
           array: true,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photo',
           config: photoConfig,
           freeze: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

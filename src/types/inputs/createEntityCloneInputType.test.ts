@@ -220,6 +220,7 @@ describe('createEntityCloneInputType', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
         {
           name: 'place',
@@ -231,6 +232,7 @@ describe('createEntityCloneInputType', () => {
           array: true,
           config: addressConfig,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     };
@@ -729,11 +731,13 @@ describe('createEntityCloneInputType', () => {
           config: imageConfig,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'hero',
           config: imageConfig,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'pictures',
@@ -741,12 +745,14 @@ describe('createEntityCloneInputType', () => {
           array: true,
           required: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
         {
           name: 'photos',
           config: imageConfig,
           array: true,
           type: 'fileFields',
+          variants: ['plain'],
         },
       ],
     });

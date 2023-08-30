@@ -236,7 +236,14 @@ describe('processCreateInputData', () => {
       name: 'Embedded1',
       type: 'embedded',
       textFields: [{ name: 'textField_e1', type: 'textFields' }],
-      embeddedFields: [{ name: 'embeddedField2', config: embedded2Config, type: 'embeddedFields' }],
+      embeddedFields: [
+        {
+          name: 'embeddedField2',
+          config: embedded2Config,
+          type: 'embeddedFields',
+          variants: ['plain'],
+        },
+      ],
     });
 
     Object.assign(embedded2Config, {
@@ -266,6 +273,7 @@ describe('processCreateInputData', () => {
           name: 'embeddedField1',
           config: embedded1Config,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -911,6 +919,7 @@ describe('processCreateInputData', () => {
           name: 'embeddedField2S',
           config: embedded2Config,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
@@ -939,6 +948,7 @@ describe('processCreateInputData', () => {
           name: 'embeddedField1',
           config: embedded1Config,
           type: 'embeddedFields',
+          variants: ['plain'],
         },
       ],
     });
