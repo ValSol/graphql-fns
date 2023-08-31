@@ -81,7 +81,7 @@ const customResolverDecorator = (
       ...rest,
     );
 
-    if (!rawResult) return null;
+    if (!rawResult) return rawResult;
 
     if (Array.isArray(rawResult)) {
       return rawResult.map((item) => transformAfter(args, item, returnConfig, generalConfig));

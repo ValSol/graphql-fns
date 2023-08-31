@@ -69,7 +69,7 @@ const composeGqlTypes = (
   // ... to "entityTypeDic" entity types ...
   // ... to "inputDic" inputs
 
-  const { Query, Mutation } = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {
+  const { Query, Mutation } = mergeDescendantIntoCustom(generalConfig) || {
     Query: {},
     Mutation: {},
   };

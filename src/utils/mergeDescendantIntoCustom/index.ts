@@ -134,7 +134,7 @@ const mergeDescendantIntoCustom = (
 
   if (!descendant) {
     store[variant] = custom || null;
-    return custom || null;
+    return store[variant];
   }
 
   const getAllowedMethods = (allow) =>
