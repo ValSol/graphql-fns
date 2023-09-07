@@ -36,7 +36,6 @@ describe('composeWhereInput', () => {
         config: child3Config,
         index: true,
         type: 'embeddedFields',
-        variants: ['plain'],
       },
     ],
   };
@@ -56,10 +55,11 @@ describe('composeWhereInput', () => {
     embeddedFields: [
       {
         name: 'embedded2',
+        array: true,
         config: child2Config,
         index: true,
-        type: 'embeddedFields',
         variants: ['plain'],
+        type: 'embeddedFields',
       },
     ],
   };
@@ -166,7 +166,6 @@ describe('composeWhereInput', () => {
         config: childConfig,
         index: true,
         type: 'embeddedFields',
-        variants: ['plain'],
       },
     ],
   });
@@ -735,14 +734,14 @@ describe('composeWhereInput', () => {
 
   test('should return result for "embedded.embedded2.embedded3" field', () => {
     const where = {
-      embedded: { embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ' } },
+      embedded: { embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ', _index: 3 } },
     };
 
     const result = composeWhereInput(where, entityConfig);
     const expectedResult = {
       where: {
-        'embedded.embedded2.embedded3.name3': { $gt: 'ABC' },
-        'embedded.embedded2.name2': { $lt: 'XYZ' },
+        'embedded.embedded2.3.embedded3.name3': { $gt: 'ABC' },
+        'embedded.embedded2.3.name2': { $lt: 'XYZ' },
       },
       lookups: [],
     };

@@ -6,8 +6,7 @@ import composeServersideConfig from './resolvers/utils/composeServersideConfig';
 
 import composeTypeDefsAndResolvers from './composeTypeDefsAndResolvers';
 
-import composeAllEntityConfigs from './utils/composeAllEntityConfigs'
-
+import composeAllEntityConfigs from './utils/composeAllEntityConfigs';
 
 // mutation resolvers
 import createCopyManyEntitiesMutationResolver from './resolvers/mutations/createCopyManyEntitiesMutationResolver';
@@ -38,6 +37,7 @@ import createEntityFilesQueryResolver from './resolvers/queries/createEntityFile
 import createEntityQueryResolver from './resolvers/queries/createEntityQueryResolver';
 import createEntitiesQueryResolver from './resolvers/queries/createEntitiesQueryResolver';
 import createEntitiesByUniqueQueryResolver from './resolvers/queries/createEntitiesByUniqueQueryResolver';
+import createEntitiesThroughConnectionQueryResolver from './resolvers/queries/createEntitiesThroughConnectionQueryResolver';
 
 // subscription resolvers
 import createCreatedEntitySubscriptionResolver from './resolvers/subscriptions/createCreatedEntitySubscriptionResolver';
@@ -86,6 +86,7 @@ export {
   createEntityQueryResolver,
   createEntitiesQueryResolver,
   createEntitiesByUniqueQueryResolver,
+  createEntitiesThroughConnectionQueryResolver,
   createCreatedEntitySubscriptionResolver,
   createUpdatedEntitySubscriptionResolver,
   createDeletedEntitySubscriptionResolver,

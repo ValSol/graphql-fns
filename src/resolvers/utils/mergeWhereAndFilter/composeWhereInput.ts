@@ -111,7 +111,9 @@ const composeWhereInputRecursively = (
   const result = {} as { _id: string };
 
   Object.keys(where).forEach((key) => {
-    if (key.endsWith('_in') && idFields.includes(key.slice(0, -'_in'.length))) {
+    if (key === '_index') {
+      // do nothing
+    } else if (key.endsWith('_in') && idFields.includes(key.slice(0, -'_in'.length))) {
       processIdKey(key, '_in', prefix, embeddedPrefix, where, result, notCreateObjectId);
     } else if (key.endsWith('_nin') && idFields.includes(key.slice(0, -'_nin'.length))) {
       processIdKey(key, '_nin', prefix, embeddedPrefix, where, result, notCreateObjectId);
@@ -307,10 +309,18 @@ const composeWhereInputRecursively = (
 
         const { config } = attributes as EmbeddedField | FileField;
 
+        const { _index } = where[key] as { _index?: number };
+
+        if (fieldsObj[key].array !== true && _index !== undefined) {
+          throw new TypeError(
+            `Found "_index" property "${_index}" in "scalar" field "${key}" in "${entityName}" entity in filter: "${entireWhere}!`,
+          );
+        }
+
         const result2 = composeWhereInputRecursively(
           where[key] as InvolvedFilter,
           parentFieldName,
-          `${embeddedPrefix}${key}.`,
+          `${embeddedPrefix}${key}.${_index === undefined ? '' : `${_index}.`}`,
           lookupArray,
           config,
           entireWhere,

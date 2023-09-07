@@ -1127,6 +1127,7 @@ input ExampleWhereWithoutBooleanOperationsInput {
 input ImageWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  _index: Int
   fileId: String
   fileId_in: [String!]
   fileId_nin: [String!]
@@ -2293,6 +2294,7 @@ input PersonWhereWithoutBooleanOperationsInput {
 input AddressWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  _index: Int
   country: String
   country_in: [String!]
   country_nin: [String!]

@@ -1241,6 +1241,7 @@ input PersonWhereWithoutBooleanOperationsInput {
       `input AddressWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  _index: Int
   city: String
   city_in: [String!]
   city_nin: [String!]
@@ -1443,6 +1444,7 @@ input PersonWhereWithoutBooleanOperationsInput {
       `input ImageWhereInput {
   id_in: [ID!]
   id_nin: [ID!]
+  _index: Int
   fileId: String
   fileId_in: [String!]
   fileId_nin: [String!]

@@ -18,7 +18,8 @@ const defaultFields = `  id_in: [ID!]
   updatedAt_lte: DateTime`;
 
 const embeddedOrFileEntityDefaultFields = `  id_in: [ID!]
-  id_nin: [ID!]`;
+  id_nin: [ID!]
+  _index: Int`; // "_index" only used for search in "array" field to select "_index" index of array!
 
 const counterFields = `
   counter_in: [Int!]
@@ -178,8 +179,6 @@ const composeInputFields = (
             fields.push(`  ${fieldName}_: ${config.name}WhereWithoutBooleanOperationsInput`);
           }
         } catch (err) {
-          console.log('*****************');
-          console.log('fieldName =', fieldName);
           throw new TypeError(err);
         }
         return;
