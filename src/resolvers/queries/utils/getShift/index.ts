@@ -73,7 +73,7 @@ const getShift = async (
     pipeline.unshift({ $match: { $text: { $search: search } } });
   }
 
-  if (Object.keys(where2).length) {
+  if (Object.keys(where2).length > 0) {
     pipeline.push({ $match: where2 });
   }
 

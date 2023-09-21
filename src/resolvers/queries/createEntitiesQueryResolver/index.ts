@@ -67,10 +67,30 @@ const createEntitiesQueryResolver = (
       near,
       pagination,
       sort,
-      where,
-      search,
+      where: preWhere,
+      search: preSearch,
       objectIds_from_parent: objectIdsFromParent,
     } = args;
+
+    let where = preWhere;
+    let search = preSearch;
+
+    if (Boolean(near) && Boolean(search)) {
+      const {
+        inputOutputEntity: [filters],
+      } = involvedFilters;
+
+      const ids = await resolver(
+        parent,
+        { search, where },
+        context,
+        { projection: { _id: 1 } },
+        { inputOutputEntity: [filters] },
+      );
+
+      where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };
+      search = undefined;
+    }
 
     // very same code as ...
     // ...at: src/resolvers/queries/createEntitiesThroughConnectionQueryResolver/getShift/index.js

@@ -16,6 +16,7 @@ import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
 
 type Args = {
   where?: any;
@@ -34,6 +35,14 @@ const createEntityCountQueryResolver = (
   const inventoryChain: InventoryСhain = ['Query', 'entityCount', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
+  const entitiesQueryResolver = createEntitiesQueryResolver(
+    entityConfig,
+    generalConfig,
+    serversideConfig,
+    true, // inAnyCase,
+  );
+  if (!entitiesQueryResolver) return null;
+
   const resolver = async (
     parent: null | GraphqlObject,
     args: Args,
@@ -47,7 +56,27 @@ const createEntityCountQueryResolver = (
 
     if (!filter) return 0;
 
-    const { near, where, search } = args;
+    const { near, where: preWhere, search: preSearch } = args;
+
+    let where = preWhere;
+    let search = preSearch;
+
+    if (Boolean(near) && Boolean(search)) {
+      const {
+        inputOutputEntity: [filters],
+      } = involvedFilters;
+
+      const ids = await entitiesQueryResolver(
+        parent,
+        { search, where },
+        context,
+        { projection: { _id: 1 } },
+        { inputOutputEntity: [filters] },
+      );
+
+      where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };
+      search = undefined;
+    }
 
     const { mongooseConn } = context;
 

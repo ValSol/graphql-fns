@@ -92,7 +92,7 @@ const createEntitiesThroughConnectionQueryResolver = (
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const [args, involvedFilters] = modifyConnectionArgsAndInvolvedFilters(
+    const [preArgs2, involvedFilters] = modifyConnectionArgsAndInvolvedFilters(
       preArgs,
       preInvolvedFilters,
       name,
@@ -110,6 +110,25 @@ const createEntitiesThroughConnectionQueryResolver = (
         },
         edges: [],
       };
+    }
+
+    let args = preArgs2;
+
+    if (Boolean(preArgs2.near) && Boolean(preArgs2.search)) {
+      const { search, where, ...restArgs } = preArgs2;
+      const {
+        inputOutputEntity: [filters],
+      } = involvedFilters;
+
+      const ids = await entitiesQueryResolver(
+        parent,
+        { search, where },
+        context,
+        { projection: { _id: 1 } },
+        { inputOutputEntity: [filters] },
+      );
+
+      args = { ...restArgs, where: { id_in: ids.map(({ id }) => id) } };
     }
 
     const resolverArg = { parent, args, context, info, involvedFilters } as const;
