@@ -1,4 +1,4 @@
-import type {GeneralConfig} from '../../tsTypes';
+import type { GeneralConfig } from '../../tsTypes';
 
 const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   const { allEntityConfigs } = generalConfig;
@@ -27,11 +27,24 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
     }
   }
 
-  if (thereIsGeospatialPolygon) {
-    return `type GeospatialPoint {
+  if (!thereIsGeospatialPoint && !thereIsGeospatialPolygon) {
+    return '';
+  }
+
+  return `type GeospatialPoint {
   lng: Float!
   lat: Float!
 }
+input GeospatialPointInput {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}${
+    thereIsGeospatialPolygon
+      ? `
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
 }
@@ -39,31 +52,15 @@ type GeospatialPolygon {
   externalRing: GeospatialPolygonRing!
   internalRings: [GeospatialPolygonRing!]
 }
-input GeospatialPointInput {
-  lng: Float!
-  lat: Float!
-}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
 input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
-}`;
-  }
-
-  if (thereIsGeospatialPoint) {
-    return `type GeospatialPoint {
-  lng: Float!
-  lat: Float!
-}
-input GeospatialPointInput {
-  lng: Float!
-  lat: Float!
-}`;
-  }
-
-  return '';
+}`
+      : ''
+  }`;
 };
 
 export default composeGeospatialTypes;

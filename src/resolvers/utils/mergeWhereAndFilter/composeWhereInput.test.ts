@@ -168,6 +168,14 @@ describe('composeWhereInput', () => {
         type: 'embeddedFields',
       },
     ],
+
+    geospatialFields: [
+      {
+        name: 'position',
+        geospatialType: 'Point',
+        type: 'geospatialFields',
+      },
+    ],
   });
 
   test('should return {}', () => {
@@ -226,6 +234,17 @@ describe('composeWhereInput', () => {
       intFields2_notsize: 0,
       relationalField: null,
       relationalFields_size: 1,
+      position_withinPolygon: [
+        { lat: 50.42551, lng: 30.42759 },
+        { lat: 50.42551, lng: 30.42761 },
+        { lat: 50.42549, lng: 30.42761 },
+        { lat: 50.42549, lng: 30.42759 },
+        { lat: 50.42551, lng: 30.42759 },
+      ],
+      position_withinSphere: {
+        center: { lng: 50.435766, lat: 30.515742 },
+        radius: 6378100,
+      },
     };
 
     const result = composeWhereInput(where, entityConfig);
@@ -243,6 +262,18 @@ describe('composeWhereInput', () => {
         intFields2: { $not: { $size: 0 } },
         relationalField: { $eq: null },
         relationalFields: { $size: 1 },
+        position: {
+          $geoWithin: {
+            $polygon: [
+              [30.42759, 50.42551],
+              [30.42761, 50.42551],
+              [30.42761, 50.42549],
+              [30.42759, 50.42549],
+              [30.42759, 50.42551],
+            ],
+            $centerSphere: [[50.435766, 30.515742], 1],
+          },
+        },
       },
       lookups: [],
     };

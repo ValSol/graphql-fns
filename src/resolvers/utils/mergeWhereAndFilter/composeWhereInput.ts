@@ -12,6 +12,8 @@ import type {
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import composeRelationalKey from './composeRelationalKey';
+import composeWithinPolygonInput from './composeWithinPolygonInput';
+import composeWithinSphereInput from './composeWithinSphereInput';
 
 const checkField = (
   keyWithoutSuffix: string,
@@ -225,7 +227,7 @@ const composeWhereInputRecursively = (
         entireWhere,
         result,
       );
-    } else if (key.slice(-3) === '_re') {
+    } else if (key.endsWith('_re')) {
       const keyWithoutSuffix = key.slice(0, -'_re'.length);
 
       checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
@@ -247,6 +249,38 @@ const composeWhereInputRecursively = (
       }
 
       result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$not = { $size: where[key] };
+    } else if (key.endsWith('_withinPolygon')) {
+      const keyWithoutSuffix = key.slice(0, -'_withinPolygon'.length);
+
+      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      }
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      }
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$polygon =
+        composeWithinPolygonInput(where[key] as { lat: number; lng: number }[]);
+    } else if (key.endsWith('_withinSphere')) {
+      const keyWithoutSuffix = key.slice(0, -'_withinSphere'.length);
+
+      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      }
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      }
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$centerSphere =
+        composeWithinSphereInput(
+          where[key] as { center: { lat: number; lng: number }; radius: number },
+        );
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = (where[key] as InvolvedFilter[]).map((where2) =>
         composeWhereInputRecursively(

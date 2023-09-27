@@ -38,10 +38,11 @@ const composeInputFields = (
 ): string => {
   const {
     booleanFields = [],
+    dateTimeFields = [],
     embeddedFields = [],
     enumFields = [],
-    dateTimeFields = [],
     intFields = [],
+    geospatialFields = [],
     fileFields = [],
     floatFields = [],
     textFields = [],
@@ -146,6 +147,11 @@ const composeInputFields = (
       fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
     }
+  });
+
+  geospatialFields.forEach(({ name: fieldName }) => {
+    fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
+  ${fieldName}_withinSphere: GeospatialSphereInput`);
   });
 
   enumFields.forEach(({ name: fieldName, enumName, array, index }) => {

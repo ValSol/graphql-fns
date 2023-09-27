@@ -37,6 +37,10 @@ describe('composeGeospatialTypes', () => {
 input GeospatialPointInput {
   lng: Float!
   lat: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
 }`;
 
     const result = composeGeospatialTypes(generalConfig);
@@ -61,16 +65,20 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+input GeospatialPointInput {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
 }
 type GeospatialPolygon {
   externalRing: GeospatialPolygonRing!
   internalRings: [GeospatialPolygonRing!]
-}
-input GeospatialPointInput {
-  lng: Float!
-  lat: Float!
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!

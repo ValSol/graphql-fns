@@ -935,6 +935,10 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}
 type TangibleImage implements Node {
   id: ID!
   fileId: String!
@@ -1042,6 +1046,8 @@ input ExampleWhereInput {
   textField3_lte: String
   textField3_re: [RegExp!]
   textField3_exists: Boolean
+  position_withinPolygon: [GeospatialPointInput!]
+  position_withinSphere: GeospatialSphereInput
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
@@ -1107,6 +1113,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField3_lte: String
   textField3_re: [RegExp!]
   textField3_exists: Boolean
+  position_withinPolygon: [GeospatialPointInput!]
+  position_withinSphere: GeospatialSphereInput
   day: WeekdaysEnumeration
   day_in: [WeekdaysEnumeration!]
   day_nin: [WeekdaysEnumeration!]
@@ -1427,16 +1435,20 @@ type GeospatialPoint {
   lng: Float!
   lat: Float!
 }
+input GeospatialPointInput {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
 }
 type GeospatialPolygon {
   externalRing: GeospatialPolygonRing!
   internalRings: [GeospatialPolygonRing!]
-}
-input GeospatialPointInput {
-  lng: Float!
-  lat: Float!
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
@@ -1501,6 +1513,8 @@ input Example1WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  position_withinPolygon: [GeospatialPointInput!]
+  position_withinSphere: GeospatialSphereInput
   AND: [Example1WhereInput!]
   NOR: [Example1WhereInput!]
   OR: [Example1WhereInput!]
@@ -1522,6 +1536,8 @@ input Example1WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  position_withinPolygon: [GeospatialPointInput!]
+  position_withinSphere: GeospatialSphereInput
 }
 enum Example1GeospatialFieldNamesEnum {
   position
@@ -1549,6 +1565,8 @@ input Example2WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  area_withinPolygon: [GeospatialPointInput!]
+  area_withinSphere: GeospatialSphereInput
   AND: [Example2WhereInput!]
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
@@ -1570,6 +1588,8 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  area_withinPolygon: [GeospatialPointInput!]
+  area_withinSphere: GeospatialSphereInput
 }
 enum Example1TextNamesEnum {
   textField1
