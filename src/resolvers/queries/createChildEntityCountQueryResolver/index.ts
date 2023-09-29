@@ -1,8 +1,6 @@
 import type {
   Context,
   GeneralConfig,
-  Inventory,
-  NearInput,
   ServersideConfig,
   EntityConfig,
   InventoryСhain,
@@ -17,15 +15,7 @@ import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
 
 type Args = {
   where?: any;
-  near?: NearInput;
-  sort?: {
-    sortBy: Array<string>;
-  };
   search?: string;
-  after?: string;
-  before?: string;
-  first?: number;
-  last?: number;
 };
 
 const createChildEntityCountQueryResolver = (

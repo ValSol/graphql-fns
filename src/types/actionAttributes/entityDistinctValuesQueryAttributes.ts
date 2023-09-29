@@ -1,7 +1,6 @@
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
-import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 import createEntityDistinctValuesOptionsInputType from '../inputs/createEntityDistinctValuesOptionsInputType';
 import createStringInputType from '../inputs/createStringInputType';
@@ -15,17 +14,15 @@ const actionName = (baseName: string, descendantKey = ''): string =>
 
 const inputCreators = [
   createEntityWhereInputType,
-  createEntityNearInputType,
   createStringInputTypeForSearch,
   createEntityDistinctValuesOptionsInputType,
   createStringInputType,
 ];
 
-const argNames = ['where', 'near', 'search', 'options', 'token'];
+const argNames = ['where', 'search', 'options', 'token'];
 
 const argTypes = [
   ({ name }): string => `${name}WhereInput`,
-  ({ name }): string => `${name}NearInput`,
   (): string => 'String',
   ({ name }): string => `${name}DistinctValuesOptionsInput!`,
   (): string => 'String',

@@ -1,7 +1,6 @@
 import type { EntityConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
-import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 
 const actionType = 'Query';
@@ -11,19 +10,11 @@ const actionGeneralName = (descendantKey = ''): string => `childEntityCount${des
 const actionName = (baseName: string, descendantKey = ''): string =>
   `child${baseName}Count${descendantKey}`;
 
-const inputCreators = [
-  createEntityWhereInputType,
-  createEntityNearInputType,
-  createStringInputTypeForSearch,
-];
+const inputCreators = [createEntityWhereInputType, createStringInputTypeForSearch];
 
-const argNames = ['where', 'near', 'search'];
+const argNames = ['where', 'search'];
 
-const argTypes = [
-  ({ name }): string => `${name}WhereInput`,
-  ({ name }): string => `${name}NearInput`,
-  (): string => 'String',
-];
+const argTypes = [({ name }): string => `${name}WhereInput`, (): string => 'String'];
 
 const actionInvolvedEntityNames = (
   name: string,

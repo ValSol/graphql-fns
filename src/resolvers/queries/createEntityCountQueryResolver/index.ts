@@ -2,7 +2,6 @@ import type {
   Context,
   GeneralConfig,
   InventoryСhain,
-  NearInput,
   ServersideConfig,
   EntityConfig,
   GraphqlScalar,
@@ -13,14 +12,12 @@ import type {
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
 
 type Args = {
   where?: any;
-  near?: NearInput;
   search?: string;
 };
 
@@ -56,27 +53,7 @@ const createEntityCountQueryResolver = (
 
     if (!filter) return 0;
 
-    const { near, where: preWhere, search: preSearch } = args;
-
-    let where = preWhere;
-    let search = preSearch;
-
-    if (Boolean(near) && Boolean(search)) {
-      const {
-        inputOutputEntity: [filters],
-      } = involvedFilters;
-
-      const ids = await entitiesQueryResolver(
-        parent,
-        { search, where },
-        context,
-        { projection: { _id: 1 } },
-        { inputOutputEntity: [filters] },
-      );
-
-      where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };
-      search = undefined;
-    }
+    const { where, search } = args;
 
     const { mongooseConn } = context;
 
@@ -84,14 +61,8 @@ const createEntityCountQueryResolver = (
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig) || {};
 
-    if (lookups?.length || near || search) {
+    if (lookups?.length || search) {
       const pipeline = [...lookups];
-
-      if (near) {
-        const geoNear = composeNearForAggregateInput(near);
-
-        pipeline.unshift({ $geoNear: geoNear });
-      }
 
       if (search) {
         pipeline.unshift({ $match: { $text: { $search: search } } });

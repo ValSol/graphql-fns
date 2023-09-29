@@ -196,12 +196,8 @@ describe('composeDescendantEntityCountQuery', () => {
         ForCatalog.allow[name] && ForCatalog.allow[name].includes('entityCount')
           ? `${name}CountForCatalog`
           : '',
-      argNames: () => ['where', 'near', 'token'],
-      argTypes: ({ name }: any) => [
-        `${name}ForCatalogWhereInput`,
-        `${name}ForCatalogNearInput`,
-        'String',
-      ],
+      argNames: () => ['where', 'token'],
+      argTypes: ({ name }: any) => [`${name}ForCatalogWhereInput`, 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
       // eslint-disable-next-line no-unused-vars, no-shadow

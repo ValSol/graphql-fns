@@ -6,22 +6,18 @@ import type {
   EntityConfig,
   GraphqlObject,
   GraphqlScalar,
-  NearInput,
   SintheticResolverInfo,
   InvolvedFilter,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import composeNearInput from '../utils/composeNearInput';
 import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
 
 type Args = {
   where?: any;
-  near?: NearInput;
   search?: string;
   options: {
     target: string;
@@ -61,31 +57,10 @@ const createEntityDistinctValuesQueryResolver = (
     if (!filter) return [];
 
     const {
-      near,
-      where: preWhere,
-      search: preSearch,
+      where,
+      search,
       options: { target },
     } = args;
-
-    let where = preWhere;
-    let search = preSearch;
-
-    if (Boolean(near) && Boolean(search)) {
-      const {
-        inputOutputEntity: [filters],
-      } = involvedFilters;
-
-      const ids = await entitiesQueryResolver(
-        parent,
-        { search, where },
-        context,
-        { projection: { _id: 1 } },
-        { inputOutputEntity: [filters] },
-      );
-
-      where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };
-      search = undefined;
-    }
 
     const { mongooseConn } = context;
 
@@ -95,12 +70,6 @@ const createEntityDistinctValuesQueryResolver = (
 
     if (lookups.length > 0) {
       const pipeline = [...lookups];
-
-      if (near) {
-        const geoNear = composeNearForAggregateInput(near);
-
-        pipeline.unshift({ $geoNear: geoNear });
-      }
 
       if (search) {
         pipeline.unshift({ $sort: { score: { $meta: 'textScore' } } });
@@ -121,8 +90,6 @@ const createEntityDistinctValuesQueryResolver = (
     }
 
     let query = Entity.distinct(target);
-
-    if (near) query = query.where(composeNearInput(near));
 
     if (Object.keys(where2).length > 0) query = query.where(where2);
 

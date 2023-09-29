@@ -1147,15 +1147,6 @@ input ImageWhereInput {
   fileId_re: [RegExp!]
   fileId_exists: Boolean
 }
-enum ExampleGeospatialFieldNamesEnum {
-  position
-}
-input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnum!
-  coordinates: GeospatialPointInput!
-  maxDistance: Float
-  minDistance: Float
-}
 enum ExampleTextNamesEnum {
   day
   cuisines
@@ -1235,6 +1226,15 @@ input ExampleSortInput {
 input PaginationInput {
   skip: Int
   first: Int
+}
+enum ExampleGeospatialFieldNamesEnum {
+  position
+}
+input ExampleNearInput {
+  geospatialField: ExampleGeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
+  maxDistance: Float
+  minDistance: Float
 }
 input ExampleWhereByUniqueInput {
   id_in: [ID!]
@@ -1330,8 +1330,8 @@ type UpdatedExamplePayload {
 }
 type Query {
   node(id: ID!): Node
-  ExampleCount(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, near: ExampleNearInput, search: String, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
+  ExampleCount(where: ExampleWhereInput, search: String, token: String): Int!
+  ExampleDistinctValues(where: ExampleWhereInput, search: String, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   TangibleImageFileCount(where: FileWhereInput, token: String): Int!
   TangibleImageFile(whereOne: FileWhereOneInput!, token: String): TangibleImage
   TangibleImageFiles(where: FileWhereInput, token: String): [TangibleImage!]!
@@ -1539,15 +1539,6 @@ input Example1WhereWithoutBooleanOperationsInput {
   position_withinPolygon: [GeospatialPointInput!]
   position_withinSphere: GeospatialSphereInput
 }
-enum Example1GeospatialFieldNamesEnum {
-  position
-}
-input Example1NearInput {
-  geospatialField: Example1GeospatialFieldNamesEnum!
-  coordinates: GeospatialPointInput!
-  maxDistance: Float
-  minDistance: Float
-}
 input Example2WhereInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1624,6 +1615,15 @@ input Example1SortInput {
 input PaginationInput {
   skip: Int
   first: Int
+}
+enum Example1GeospatialFieldNamesEnum {
+  position
+}
+input Example1NearInput {
+  geospatialField: Example1GeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
+  maxDistance: Float
+  minDistance: Float
 }
 enum Example2SortEnum {
   createdAt_ASC
@@ -1720,9 +1720,9 @@ type UpdatedExample2Payload {
 }
 type Query {
   node(id: ID!): Node
-  Example1Count(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
+  Example1Count(where: Example1WhereInput, token: String): Int!
   Example2Count(where: Example2WhereInput, token: String): Int!
-  Example1DistinctValues(where: Example1WhereInput, near: Example1NearInput, options: Example1DistinctValuesOptionsInput!, token: String): [String!]!
+  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput!, token: String): [String!]!
   Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput!, token: String): [String!]!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2

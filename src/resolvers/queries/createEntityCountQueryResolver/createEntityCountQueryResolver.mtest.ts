@@ -281,17 +281,6 @@ describe('createEntityCountQueryResolver', () => {
 
     expect(parentCount).toBe(3);
 
-    const near: NearInput = {
-      geospatialField: 'point',
-      coordinates: { lng: 50.425, lat: 30.615 },
-      maxDistance: 1500,
-    };
-
-    const parentCount2 = await ParentCount(null, { near, where }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
-    });
-    expect(parentCount2).toBe(2);
-
     const where2 = { child_: { textField: 'first' } };
     const search = 'name2';
     const parentCount3 = await ParentCount(
