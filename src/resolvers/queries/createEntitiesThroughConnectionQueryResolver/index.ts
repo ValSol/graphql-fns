@@ -120,9 +120,16 @@ const createEntitiesThroughConnectionQueryResolver = (
         inputOutputEntity: [filters],
       } = involvedFilters;
 
+      const { coordinates: center, geospatialField, maxDistance: radius } = preArgs2.near;
+
+      const where2 =
+        radius === undefined
+          ? where
+          : { AND: [where, { [`${geospatialField}_withinSphere`]: { center, radius } }] };
+
       const ids = await entitiesQueryResolver(
         parent,
-        { search, where },
+        { search, where: where2 },
         context,
         { projection: { _id: 1 } },
         { inputOutputEntity: [filters] },

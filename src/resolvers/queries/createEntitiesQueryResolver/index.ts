@@ -80,6 +80,12 @@ const createEntitiesQueryResolver = (
         inputOutputEntity: [filters],
       } = involvedFilters;
 
+      const { coordinates: center, geospatialField, maxDistance: radius } = near;
+
+      if (radius !== undefined) {
+        where = { AND: [preWhere, { [`${geospatialField}_withinSphere`]: { center, radius } }] };
+      }
+
       const ids = await resolver(
         parent,
         { search, where },
