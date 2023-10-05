@@ -1,8 +1,13 @@
-import type { ResolverArg } from '../../../tsTypes';
+import type { ResolverArg } from '../../../../tsTypes';
 
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import composeLastEdges from './composeLastEdges';
-import { InvolvedFilter, GraphqlScalar, GraphqlObject } from '../../../../tsTypes';
+import {
+  InvolvedFilter,
+  GraphqlScalar,
+  GraphqlObject,
+  TangibleEntityConfig,
+} from '../../../../tsTypes';
 
 const getVeryLast = async (
   last: number,
@@ -12,8 +17,9 @@ const getVeryLast = async (
   },
   entitiesQueryResolver: any,
   entityCountQueryResolver: any,
+  entityConfig: TangibleEntityConfig,
 ): null | Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-  const { parent, args, context, info } = resolverArg;
+  const { parent, args, context } = resolverArg;
 
   const { inputOutputEntity } = involvedFilters;
 
@@ -25,7 +31,7 @@ const getVeryLast = async (
     { inputOutputEntity },
   );
 
-  const projection = getProjectionFromInfo(info, ['edges', 'node']);
+  const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
 
   const pagination = { skip: count - last - 1 } as const;
 

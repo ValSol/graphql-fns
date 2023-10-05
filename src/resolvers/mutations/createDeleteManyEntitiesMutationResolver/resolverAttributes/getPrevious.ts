@@ -8,7 +8,7 @@ import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
-  const { args, context, info, involvedFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
@@ -28,7 +28,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     }
   });
 
-  if (!whereOne.length) return [];
+  if (whereOne.length === 0) return [];
 
   const { lookups, where: preConditions } = mergeWhereAndFilter(
     filter,
@@ -38,10 +38,10 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   let conditions = preConditions;
 
-  if (lookups.length) {
+  if (lookups.length > 0) {
     const pipeline = [...lookups];
 
-    if (Object.keys(preConditions).length) {
+    if (Object.keys(preConditions).length > 0) {
       pipeline.push({ $match: preConditions });
     }
 
@@ -54,7 +54,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
   }
 
-  const projection = getProjectionFromInfo(info);
+  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
   ((entityConfig as TangibleEntityConfig).duplexFields || []).reduce((prev, { name: name2 }) => {
     prev[name2] = 1; // eslint-disable-line no-param-reassign

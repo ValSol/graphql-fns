@@ -9,6 +9,7 @@ import type {
   GraphqlObject,
   InvolvedFilter,
   SintheticResolverInfo,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 import type { ResolverCreatorArg } from '../../tsTypes';
 
@@ -162,6 +163,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           resolverArg,
           involvedFilters,
           entitiesQueryResolver,
+          entityConfig as TangibleEntityConfig,
         );
 
         if (result) return result;
@@ -176,13 +178,25 @@ const createEntitiesThroughConnectionQueryResolver = (
         );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, involvedFilters, entitiesQueryResolver);
+          return getVeryFirst(
+            first,
+            resolverArg,
+            involvedFilters,
+            entitiesQueryResolver,
+            entityConfig as TangibleEntityConfig,
+          );
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, involvedFilters, entitiesQueryResolver);
+      return getVeryFirst(
+        first,
+        resolverArg,
+        involvedFilters,
+        entitiesQueryResolver,
+        entityConfig as TangibleEntityConfig,
+      );
     }
 
     if (before) {
@@ -205,6 +219,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           resolverArg,
           involvedFilters,
           entitiesQueryResolver,
+          entityConfig as TangibleEntityConfig,
         );
 
         if (result) return result;
@@ -225,6 +240,7 @@ const createEntitiesThroughConnectionQueryResolver = (
             involvedFilters,
             entitiesQueryResolver,
             entityCountQueryResolver,
+            entityConfig as TangibleEntityConfig,
           );
         }
       }
@@ -237,6 +253,7 @@ const createEntitiesThroughConnectionQueryResolver = (
         involvedFilters,
         entitiesQueryResolver,
         entityCountQueryResolver,
+        entityConfig as TangibleEntityConfig,
       );
     }
 

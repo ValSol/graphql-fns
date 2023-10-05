@@ -37,14 +37,40 @@ const composeEntityResolvers = (
   serversideConfig: ServersideConfig,
 ): EntityResolver => {
   const {
-    embeddedFields = [],
-    geospatialFields = [],
-    fileFields = [],
+    embeddedFields: preEmbeddedFields = [],
+    geospatialFields: preGeospatialFields = [],
+    fileFields: preFileFields = [],
     type: entityType,
   } = entityConfig;
   const fieldsObject = composeFieldsObject(entityConfig);
 
   const resolvers: Record<string, any> = {};
+
+  const embeddedFields = [...preEmbeddedFields];
+  const geospatialFields = [...preGeospatialFields];
+  const fileFields = [...preFileFields];
+
+  if (entityType === 'tangible') {
+    const { calculatedFields = [] } = entityConfig;
+
+    calculatedFields.forEach((field) => {
+      const { calculatedType, array } = field;
+
+      if (calculatedType === 'embeddedFields') {
+        const updatedField = array ? { ...field, variants: 'plain' } : field;
+        embeddedFields.push(updatedField as any);
+      }
+
+      if (calculatedType === 'fileFields') {
+        const updatedField = array ? { ...field, variants: 'plain' } : field;
+        fileFields.push(updatedField as any);
+      }
+
+      if (calculatedType === 'geospatialFields') {
+        geospatialFields.push(field as any);
+      }
+    });
+  }
 
   Object.keys(fieldsObject).forEach((fieldName) => {
     const { array, type: fieldType } = fieldsObject[fieldName];

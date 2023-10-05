@@ -37,7 +37,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   let conditions = preConditions;
 
-  if (lookups.length || near || search) {
+  if (lookups.length > 0 || near || search) {
     const pipeline = [...lookups];
 
     if (near) {
@@ -50,7 +50,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       pipeline.unshift({ $match: { $text: { $search: search } } });
     }
 
-    if (Object.keys(conditions).length) {
+    if (Object.keys(conditions).length > 0) {
       pipeline.push({ $match: conditions });
     }
 

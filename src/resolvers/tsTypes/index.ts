@@ -1,12 +1,10 @@
 import type {
-  Context,
   DataObject,
   GeneralConfig,
   GraphqlObject,
-  InvolvedFilter,
   Periphery,
+  ResolverArg,
   ServersideConfig,
-  SintheticResolverInfo,
   EntityConfig,
   TangibleEntityConfig,
 } from '../../tsTypes';
@@ -18,16 +16,6 @@ export type ResolverCreatorArg = {
   generalConfig: GeneralConfig;
   serversideConfig: ServersideConfig;
   inAnyCase?: boolean;
-};
-
-export type ResolverArg = {
-  parent: null | GraphqlObject;
-  args: GraphqlObject;
-  context: Context;
-  info: SintheticResolverInfo;
-  involvedFilters: {
-    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
-  };
 };
 
 export type PreparedData = {

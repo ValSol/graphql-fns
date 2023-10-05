@@ -1,8 +1,13 @@
-import type { ResolverArg } from '../../../tsTypes';
+import type { ResolverArg } from '../../../../tsTypes';
 
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import composeFirstEdges from './composeFirstEdges';
-import { InvolvedFilter, GraphqlScalar, GraphqlObject } from '../../../../tsTypes';
+import {
+  InvolvedFilter,
+  GraphqlScalar,
+  GraphqlObject,
+  TangibleEntityConfig,
+} from '../../../../tsTypes';
 
 const getVeryFirst = async (
   first: number,
@@ -11,10 +16,11 @@ const getVeryFirst = async (
     [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
+  entityConfig: TangibleEntityConfig,
 ): null | Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-  const { parent, args, context, info } = resolverArg;
+  const { parent, args, context } = resolverArg;
 
-  const projection = getProjectionFromInfo(info, ['edges', 'node']);
+  const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
 
   const pagination = { skip: 0, first: first + 1 } as const;
 

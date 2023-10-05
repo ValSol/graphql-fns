@@ -8,11 +8,14 @@ import type {
   InvolvedFilter,
   SintheticResolverInfo,
   GraphqlScalar,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 import type { PreparedData, ResolverAttributes } from '../../tsTypes';
 
+import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
+import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
@@ -118,7 +121,19 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             return null;
           }
 
-          result.previous = previous.map((item) => addIdsToEntity(item, entityConfig));
+          const projection = getProjectionFromInfo(
+            entityConfig as TangibleEntityConfig,
+            resolverArg,
+          );
+
+          result.previous = previous.map((item) =>
+            addCalculatedFieldsToEntity(
+              addIdsToEntity(item, entityConfig),
+              projection,
+              resolverArg,
+              entityConfig as TangibleEntityConfig,
+            ),
+          );
 
           if (!prepareBulkData) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
@@ -187,7 +202,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           preparedData,
           entityConfig,
           generalConfig,
-          context,
+          resolverArg,
           array,
         );
       }

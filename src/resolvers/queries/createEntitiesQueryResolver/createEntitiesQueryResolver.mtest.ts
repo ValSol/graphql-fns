@@ -78,6 +78,15 @@ describe('createEntityQueryResolver', () => {
           type: 'duplexFields',
         },
       ],
+      calculatedFields: [
+        {
+          name: 'fullName',
+          calculatedType: 'text',
+          args: ['firstName', 'lastName'],
+          func: ({ id, firstName, lastName }) => `${firstName} ${lastName}`,
+          type: 'calculatedFields',
+        },
+      ],
     });
 
     const exampleSchema = createThingSchema(personConfig);
@@ -120,12 +129,21 @@ describe('createEntityQueryResolver', () => {
     const People = createEntitiesQueryResolver(personConfig, generalConfig, serversideConfig);
     if (!People) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const people = await People(null, {}, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
-    });
+    const people = await People(
+      null,
+      {},
+      { mongooseConn, pubsub },
+      { projection: { fullName: 1 } },
+      {
+        inputOutputEntity: [[]],
+      },
+    );
 
     expect(people.length).toBe(5);
     expect(people[0].id).toEqual(createdPerson.id);
+    for (let i = 0; i < people.length; i += 1) {
+      expect(people[i].fullName).toBe(`${people[i].firstName} ${people[i].lastName}`);
+    }
 
     const peopleLimited = await People(null, {}, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[], 3],

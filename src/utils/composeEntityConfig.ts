@@ -46,6 +46,7 @@ const composeEntityConfig = (
     duplexFields: simplifiedDuplexFields,
     fileFields: simplifiedFileFields,
     relationalFields: simplifiedRelationalFields,
+    calculatedFields: simplifiedCalculatedFields,
   } = simplifiedEntityConfig as any;
 
   const fieldNames = [];
@@ -118,7 +119,7 @@ const composeEntityConfig = (
       }
 
       // check "&& name" to only
-      if (config.type !== 'embedded' && config.type !== 'file') {
+      if (config.type !== 'embedded') {
         if (name) {
           throw new TypeError(
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
@@ -250,6 +251,83 @@ const composeEntityConfig = (
 
       return { ...restField, config, type: 'duplexFields' };
     });
+  }
+
+  if (simplifiedCalculatedFields) {
+    (entityConfig as TangibleEntityConfig).calculatedFields = simplifiedCalculatedFields.map(
+      (field) => {
+        const { args, calculatedType } = field;
+
+        const argsRest = args.filter(
+          (str: string) => !['createdAt', 'updatedAt', 'counter', 'id'].includes(str),
+        );
+
+        argsRest.forEach((arg: string) => {
+          if (!fieldNames.includes(arg)) {
+            throw new TypeError(
+              `Incorrect arg: "${arg}" in calculated field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+        });
+
+        if (args.includes('counter') && !(simplifiedEntityConfig as any).counter) {
+          throw new TypeError(
+            `Incorrect arg: "counter" in calculated field: "${field.name}" of simplified entityConfig: "${name}"!`,
+          );
+        }
+
+        if (calculatedType === 'embeddedFields') {
+          const { configName, ...restField } = field;
+          const config = allEntityConfigs[configName];
+
+          if (!config) {
+            throw new TypeError(
+              `Incorrect configName: "${configName}" in calculated embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+
+          // check "&& name" to only
+          if (config.type !== 'embedded') {
+            if (name) {
+              throw new TypeError(
+                `Not embedded config: "${configName}" in calculated embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
+              );
+            } else {
+              // name=undefined if entityConfig is a descendantConfig
+              // eslint-disable-next-line no-console
+              console.warn(
+                '\x1b[33m',
+                `Not embedded config: "${configName}" in embedded field: "${field.name}"!`,
+                '\x1b[0m',
+              );
+            }
+          }
+
+          return { ...restField, config, type: 'calculatedFields' };
+        }
+
+        if (calculatedType === 'fileFields') {
+          const { configName, ...restField } = field;
+          const config = allEntityConfigs[configName];
+
+          if (!config) {
+            throw new TypeError(
+              `Incorrect configName: "${configName}" in calculated file field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+
+          if (config.type !== 'file') {
+            throw new TypeError(
+              `Not file config: "${configName}" in calculated file field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+
+          return { ...restField, config, type: 'calculatedFields' };
+        }
+
+        return { ...field, type: 'calculatedFields' };
+      },
+    );
   }
 };
 

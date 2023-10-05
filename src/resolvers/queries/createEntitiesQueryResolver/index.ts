@@ -9,10 +9,12 @@ import type {
   SintheticResolverInfo,
   GraphqlScalar,
   InvolvedFilter,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
+import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
@@ -105,7 +107,9 @@ const createEntitiesQueryResolver = (
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-    const projection = info ? getProjectionFromInfo(info) : { _id: 1 };
+    const resolverArg = { parent, args, context, info, involvedFilters };
+
+    const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
@@ -165,7 +169,14 @@ const createEntitiesQueryResolver = (
 
       if (!entities) return [];
 
-      const result = entities.map((item) => addIdsToEntity(item, entityConfig));
+      const result = entities.map((item) =>
+        addCalculatedFieldsToEntity(
+          addIdsToEntity(item, entityConfig),
+          projection,
+          resolverArg,
+          entityConfig as TangibleEntityConfig,
+        ),
+      );
 
       return result;
     }
@@ -201,7 +212,14 @@ const createEntitiesQueryResolver = (
     const entities = await query.exec();
     if (!entities) return [];
 
-    const result = entities.map((item) => addIdsToEntity(item, entityConfig));
+    const result = entities.map((item) =>
+      addCalculatedFieldsToEntity(
+        addIdsToEntity(item, entityConfig),
+        projection,
+        resolverArg,
+        entityConfig as TangibleEntityConfig,
+      ),
+    );
 
     return result;
   };

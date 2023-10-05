@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-import type { DataObject, InvolvedFilter } from '../../../../tsTypes';
-import type { ResolverArg, ResolverCreatorArg } from '../../../tsTypes';
+import type { DataObject, InvolvedFilter, ResolverArg } from '../../../../tsTypes';
+import type { ResolverCreatorArg } from '../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';

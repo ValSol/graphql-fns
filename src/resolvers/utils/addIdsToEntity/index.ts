@@ -1,4 +1,3 @@
-import { EndSessionOptions } from 'mongodb';
 import type { DataObject, EntityConfig, GraphqlObject } from '../../../tsTypes';
 
 const addIdsToEntity = <T extends DataObject | GraphqlObject>(

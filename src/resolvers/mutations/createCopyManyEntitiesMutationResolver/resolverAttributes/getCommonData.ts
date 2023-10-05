@@ -1,5 +1,5 @@
-import type { InvolvedFilter } from '../../../../tsTypes';
-import type { ResolverCreatorArg, ResolverArg } from '../../../tsTypes';
+import type { InvolvedFilter, ResolverArg } from '../../../../tsTypes';
+import type { ResolverCreatorArg } from '../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import getMatchingFields from '../../../../utils/getMatchingFields';
@@ -42,7 +42,7 @@ const getCommonData = async (
     }
   });
 
-  if (!whereOnes.length) return [];
+  if (whereOnes.length === 0) return [];
 
   if (whereOne && whereOne.length !== whereOnes.length) {
     throw new TypeError(
@@ -100,7 +100,7 @@ const getCommonData = async (
     return optionFields ? optionFields.includes(matchingField) : true;
   });
 
-  if (!matchingFields.length) {
+  if (matchingFields.length === 0) {
     throw TypeError(
       `Expected at least one matching field in "${name}" and "${config.name}" entities!`,
     );

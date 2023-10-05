@@ -19,8 +19,12 @@ const composeAllFieldsProjection = (entityConfig: EntityConfig): Result => {
       prev[item] = 1; // eslint-disable-line no-param-reassign
       return prev;
     },
-    {},
+    { createdAt: 1, updatedAt: 1 },
   );
+
+  if ((entityConfig as any).counter) {
+    store[entityName].counter = 1;
+  }
 
   return store[entityName];
 };

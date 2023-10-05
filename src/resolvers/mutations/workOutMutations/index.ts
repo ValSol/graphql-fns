@@ -6,11 +6,14 @@ import type {
   EntityConfig,
   InvolvedFilter,
   SintheticResolverInfo,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
+import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
+import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import sleep from '../../../utils/sleep';
 import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
@@ -79,7 +82,7 @@ const workOutMutations = async (
         } = mutationArgs;
 
         const parent = parentInArgs || null;
-        const info = infoInArgs || { projection: {} };
+        const info = infoInArgs || null;
         const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
@@ -192,7 +195,7 @@ const workOutMutations = async (
     } = mutationArgs;
 
     const parent = parentInArgs || null;
-    const info = infoInArgs || { projection: {} };
+    const info = infoInArgs || null;
     const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
 
     const { array, produceCurrent, report, finalResult } =
@@ -219,7 +222,16 @@ const workOutMutations = async (
       : null;
 
     if (result) {
-      result.previous = previous.map((item) => addIdsToEntity(item, entityConfig));
+      const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+
+      result.previous = previous.map((item) =>
+        addCalculatedFieldsToEntity(
+          addIdsToEntity(item, entityConfig),
+          projection,
+          resolverArg,
+          entityConfig as TangibleEntityConfig,
+        ),
+      );
     }
 
     if (result && produceCurrent) {
@@ -233,7 +245,7 @@ const workOutMutations = async (
         fakePreparedData,
         entityConfig,
         generalConfig,
-        context,
+        resolverArg,
         array,
       );
     }

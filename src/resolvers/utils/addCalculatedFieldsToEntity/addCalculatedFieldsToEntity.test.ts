@@ -1,0 +1,98 @@
+/* eslint-env jest */
+
+import type { TangibleEntityConfig } from '../../../tsTypes';
+
+import addCalculatedFieldsToEntity from './index';
+
+describe('addCalculatedFieldsToEntity', () => {
+  const exampleConfig: TangibleEntityConfig = {
+    name: 'Example',
+    type: 'tangible',
+    textFields: [
+      {
+        name: 'text1',
+        type: 'textFields',
+      },
+      {
+        name: 'text2',
+        type: 'textFields',
+      },
+      {
+        name: 'text3',
+        type: 'textFields',
+      },
+    ],
+
+    calculatedFields: [
+      {
+        name: 'text',
+        calculatedType: 'textFields',
+        type: 'calculatedFields',
+        args: ['text1', 'text2'],
+        func: ({ text1, text2 }: any) => `${text1} ${text2}` as string,
+        required: true,
+      },
+
+      {
+        name: 'texts',
+        calculatedType: 'textFields',
+        type: 'calculatedFields',
+        args: ['text2', 'text3'],
+        func: ({ text2, text3 }: any) => [text2, text3] as string[],
+        array: true,
+        required: true,
+      },
+    ],
+  };
+
+  const resolverArg = {
+    parent: null,
+    args: {},
+    context: {},
+    info: { projection: { _id: 1 } as const },
+    involvedFilters: { inputOutputEntity: [[]] as any },
+  };
+
+  test('shoud return {}', () => {
+    const projection: Record<string, 1> = {};
+
+    const data = { id: '1', text1: 'text1', text2: 'text2', text3: 'text3' };
+
+    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+
+    const expectedResult = {
+      id: '1',
+      text1: 'text1',
+      text2: 'text2',
+      text3: 'text3',
+      text: 'text1 text2',
+      texts: ['text2', 'text3'],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('shoud return { text: 1 }', () => {
+    const projection: Record<string, 1> = { text1: 1 };
+
+    const data = { text1: 'text1' };
+
+    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+
+    const expectedResult = { text1: 'text1' };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('shoud return { texs: 1, text2: 1, text3: 1 }', () => {
+    const projection: Record<string, 1> = { texts: 1 };
+
+    const data = { id: '1', text2: 'text2', text3: 'text3' };
+
+    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+
+    const expectedResult = { id: '1', text2: 'text2', text3: 'text3', texts: ['text2', 'text3'] };
+
+    expect(result).toEqual(expectedResult);
+  });
+});

@@ -41,6 +41,28 @@ describe('createEntityType', () => {
           type: 'textFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'textField1AndTextField2',
+          calculatedType: 'textFields',
+          type: 'calculatedFields',
+          args: ['textField1', 'textField2'],
+          func: ({ textField1, textField2 }: any) => `${textField1} ${textField2}` as string,
+          required: true,
+        },
+
+        {
+          name: 'allTextFields',
+          calculatedType: 'textFields',
+          type: 'calculatedFields',
+          args: ['textField1', 'textField2', 'textField3'],
+          func: ({ textField1, textField2, textField3 }: any) =>
+            [textField1, textField2, textField3] as string[],
+          array: true,
+          required: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -54,6 +76,8 @@ describe('createEntityType', () => {
   textField3: String!
   textField4(slice: SliceInput): [String!]!
   textField5(slice: SliceInput): [String!]!
+  textField1AndTextField2: String!
+  allTextFields(slice: SliceInput): [String!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -226,6 +250,28 @@ describe('createEntityType', () => {
           variants: ['plain', 'connection', 'count'],
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'place2',
+          calculatedType: 'embeddedFields',
+          config: addressConfig,
+          type: 'calculatedFields',
+          args: ['place'],
+          func: ({ place }: any) => place,
+          required: true,
+        },
+
+        {
+          name: 'places2',
+          calculatedType: 'embeddedFields',
+          config: addressConfig,
+          type: 'calculatedFields',
+          args: ['places'],
+          func: ({ places }: any) => places,
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = {
@@ -246,6 +292,8 @@ describe('createEntityType', () => {
   places(slice: SliceInput): [Address!]!
   placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
   placesCount: Int!
+  place2: Address!
+  places2(slice: SliceInput): [Address!]!
 }`;
 
     const result = createEntityType(personConfig, generalConfig, {}, {});
@@ -430,6 +478,28 @@ describe('createEntityType', () => {
           type: 'geospatialFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'position2',
+          calculatedType: 'geospatialFields',
+          geospatialType: 'Point',
+          type: 'calculatedFields',
+          args: ['position'],
+          func: ({ position }: any) => position,
+          required: true,
+        },
+
+        {
+          name: 'favoritePositions2',
+          calculatedType: 'geospatialFields',
+          geospatialType: 'Point',
+          type: 'calculatedFields',
+          args: ['favoritePositions'],
+          func: ({ favoritePositions }: any) => favoritePositions,
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -446,6 +516,8 @@ describe('createEntityType', () => {
   precedingArea: GeospatialPolygon
   favoriteAreas(slice: SliceInput): [GeospatialPolygon!]!
   worstAreas(slice: SliceInput): [GeospatialPolygon!]!
+  position2: GeospatialPoint!
+  favoritePositions2(slice: SliceInput): [GeospatialPoint!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -482,6 +554,28 @@ describe('createEntityType', () => {
           type: 'enumFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'weekday',
+          calculatedType: 'enumFields',
+          enumName: 'Weekdays',
+          type: 'calculatedFields',
+          args: ['field1'],
+          func: ({ field1 }: any) => field1,
+          required: true,
+        },
+
+        {
+          name: 'weekdays',
+          calculatedType: 'enumFields',
+          enumName: 'Weekdays',
+          type: 'calculatedFields',
+          args: ['field2'],
+          func: ({ field2 }: any) => field2,
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -494,6 +588,8 @@ describe('createEntityType', () => {
   field2(slice: SliceInput): [CuisinesEnumeration!]!
   field3: WeekdaysEnumeration!
   field4(slice: SliceInput): [CuisinesEnumeration!]!
+  weekday: WeekdaysEnumeration!
+  weekdays(slice: SliceInput): [WeekdaysEnumeration!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -532,6 +628,26 @@ describe('createEntityType', () => {
           type: 'intFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'sum',
+          calculatedType: 'intFields',
+          type: 'calculatedFields',
+          args: ['intField1', 'intField2', 'intField3'],
+          func: ({ intField1, intField2, intField3 }: any) => intField1 + intField2 + intField3,
+          required: true,
+        },
+
+        {
+          name: 'ints',
+          calculatedType: 'intFields',
+          type: 'calculatedFields',
+          args: ['intField1', 'intField2', 'intField3'],
+          func: ({ intField1, intField2, intField3 }: any) => [intField1, intField2, intField3],
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -545,6 +661,8 @@ describe('createEntityType', () => {
   intField3: Int!
   intField4(slice: SliceInput): [Int!]!
   intField5(slice: SliceInput): [Int!]!
+  sum: Int!
+  ints(slice: SliceInput): [Int!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -583,6 +701,31 @@ describe('createEntityType', () => {
           type: 'floatFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'sum',
+          calculatedType: 'floatFields',
+          type: 'calculatedFields',
+          args: ['floatField1', 'floatField2', 'floatField3'],
+          func: ({ floatField1, floatField2, floatField3 }: any) =>
+            floatField1 + floatField2 + floatField3,
+          required: true,
+        },
+
+        {
+          name: 'floats',
+          calculatedType: 'floatFields',
+          type: 'calculatedFields',
+          args: ['floatField1', 'floatField2', 'floatField3'],
+          func: ({ floatField1, floatField2, floatField3 }: any) => [
+            floatField1,
+            floatField2,
+            floatField3,
+          ],
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -596,6 +739,8 @@ describe('createEntityType', () => {
   floatField3: Float!
   floatField4(slice: SliceInput): [Float!]!
   floatField5(slice: SliceInput): [Float!]!
+  sum: Float!
+  floats(slice: SliceInput): [Float!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -634,6 +779,31 @@ describe('createEntityType', () => {
           type: 'booleanFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'is',
+          calculatedType: 'booleanFields',
+          type: 'calculatedFields',
+          args: ['booleanField1', 'booleanField2', 'booleanField3'],
+          func: ({ booleanField1, booleanField2, booleanField3 }: any) =>
+            booleanField1 + booleanField2 + booleanField3,
+          required: true,
+        },
+
+        {
+          name: 'are',
+          calculatedType: 'booleanFields',
+          type: 'calculatedFields',
+          args: ['booleanField1', 'booleanField2', 'booleanField3'],
+          func: ({ booleanField1, booleanField2, booleanField3 }: any) => [
+            booleanField1,
+            booleanField2,
+            booleanField3,
+          ],
+          array: true,
+        },
+      ],
     };
 
     const generalConfig = { allEntityConfigs: { Exmaple: entityConfig } };
@@ -647,6 +817,8 @@ describe('createEntityType', () => {
   booleanField3: Boolean!
   booleanField4(slice: SliceInput): [Boolean!]!
   booleanField5(slice: SliceInput): [Boolean!]!
+  is: Boolean!
+  are(slice: SliceInput): [Boolean!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -707,6 +879,28 @@ describe('createEntityType', () => {
           variants: ['connection'],
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'logo2',
+          calculatedType: 'fileFields',
+          config: imageConfig,
+          type: 'calculatedFields',
+          args: ['logo'],
+          func: ({ logo }: any) => logo,
+          required: true,
+        },
+
+        {
+          name: 'photos2',
+          calculatedType: 'fileFields',
+          config: imageConfig,
+          type: 'calculatedFields',
+          args: ['photos'],
+          func: ({ photos }: any) => photos,
+          array: true,
+        },
+      ],
     });
 
     const generalConfig = {
@@ -722,6 +916,8 @@ describe('createEntityType', () => {
   hero: Image
   picturesCount: Int!
   photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
+  logo2: Image!
+  photos2(slice: SliceInput): [Image!]!
 }`;
 
     const result = createEntityType(entityConfig, generalConfig, {}, {});
@@ -891,6 +1087,92 @@ describe('createEntityType', () => {
 }`;
 
     const result = createEntityType(exampleConnectionConfig, generalConfig, {}, {});
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity type with embedded fields', () => {
+    const addressConfig: EntityConfig = {
+      name: 'Address',
+      type: 'embedded',
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+          type: 'textFields',
+        },
+        {
+          name: 'province',
+          type: 'textFields',
+        },
+      ],
+    };
+    const personConfig: EntityConfig = {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+          type: 'textFields',
+        },
+        {
+          name: 'lastName',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+      embeddedFields: [
+        {
+          name: 'location',
+          config: addressConfig,
+          required: true,
+          type: 'embeddedFields',
+        },
+        {
+          name: 'locations',
+          array: true,
+          config: addressConfig,
+          required: true,
+          type: 'embeddedFields',
+          variants: ['plain', 'connection', 'count'],
+        },
+        {
+          name: 'place',
+          config: addressConfig,
+          type: 'embeddedFields',
+        },
+        {
+          name: 'places',
+          array: true,
+          config: addressConfig,
+          type: 'embeddedFields',
+          variants: ['plain', 'connection', 'count'],
+        },
+      ],
+    };
+
+    const generalConfig = {
+      allEntityConfigs: { Person: personConfig, Address: addressConfig },
+    };
+
+    const expectedResult = `type Person implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  firstName: String!
+  lastName: String!
+  location: Address!
+  locations(slice: SliceInput): [Address!]!
+  locationsThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
+  locationsCount: Int!
+  place: Address
+  places(slice: SliceInput): [Address!]!
+  placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
+  placesCount: Int!
+}`;
+
+    const result = createEntityType(personConfig, generalConfig, {}, {});
     expect(result).toEqual(expectedResult);
   });
 });

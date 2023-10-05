@@ -9,7 +9,7 @@ import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
-  const { args, context, info, involvedFilters } = resolverArg;
+  const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
@@ -26,7 +26,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   let conditions = preConditions;
 
-  if (lookups.length || near || search) {
+  if (lookups.length > 0 || near || search) {
     const pipeline = [...lookups];
 
     if (near) {
@@ -39,7 +39,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       pipeline.unshift({ $match: { $text: { $search: search } } });
     }
 
-    if (Object.keys(conditions).length) {
+    if (Object.keys(conditions).length > 0) {
       pipeline.push({ $match: conditions });
     }
 
@@ -54,7 +54,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
   }
 
-  const projection = getProjectionFromInfo(info);
+  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
   ((entityConfig as TangibleEntityConfig).duplexFields || []).reduce((prev, { name: name2 }) => {
     prev[name2] = 1; // eslint-disable-line no-param-reassign

@@ -1,14 +1,17 @@
 import type {
-  Context,
   GeneralConfig,
   GraphqlObject,
   Periphery,
   EntityConfig,
+  TangibleEntityConfig,
+  ResolverArg,
 } from '../../../tsTypes';
 import type { Core } from '../../tsTypes';
 
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
+import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
+import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 
 type PreparedData = {
   core: Core;
@@ -20,11 +23,13 @@ const produceResult = async (
   preparedData: PreparedData,
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  context: Context,
+  resolverArg: ResolverArg,
   array: boolean,
 ): Promise<Array<GraphqlObject>> => {
   const { enums } = generalConfig;
-  const { mongooseConn } = context;
+  const {
+    context: { mongooseConn },
+  } = resolverArg;
   const {
     mains,
     mains: [first],
@@ -32,20 +37,34 @@ const produceResult = async (
 
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
+  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+
   if (array) {
     const ids = mains.map(({ _id }) => _id);
 
-    const entities = await Entity.find({ _id: { $in: ids } }, null, { lean: true });
+    const entities = await Entity.find({ _id: { $in: ids } }, projection, { lean: true });
 
-    const entities2 = entities.map((item) => addIdsToEntity(item, entityConfig));
+    const entities2 = entities.map((item) =>
+      addCalculatedFieldsToEntity(
+        addIdsToEntity(item, entityConfig),
+        projection,
+        resolverArg,
+        entityConfig as TangibleEntityConfig,
+      ),
+    );
 
     return entities2;
   }
 
   // eslint-disable-next-line no-underscore-dangle
-  const entity = await Entity.findById(first._id, null, { lean: true });
+  const entity = await Entity.findById(first._id, projection, { lean: true });
 
-  const entity2 = addIdsToEntity(entity, entityConfig);
+  const entity2 = addCalculatedFieldsToEntity(
+    addIdsToEntity(entity, entityConfig),
+    projection,
+    resolverArg,
+    entityConfig as TangibleEntityConfig,
+  );
 
   return [entity2];
 };

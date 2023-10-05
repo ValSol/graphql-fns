@@ -1,5 +1,5 @@
-import type { InvolvedFilter } from '../../../../tsTypes';
-import type { ResolverArg } from '../../../tsTypes';
+import type { InvolvedFilter, TangibleEntityConfig } from '../../../../tsTypes';
+import type { ResolverArg } from '../../../../tsTypes';
 
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 import composeLastEdges from './composeLastEdges';
@@ -13,10 +13,11 @@ const getLast = async (
     [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
+  entityConfig: TangibleEntityConfig,
 ): null | Promise<any> => {
   const { parent, args, context, info } = resolverArg;
 
-  const projection = getProjectionFromInfo(info, ['edges', 'node']);
+  const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
 
   const firstForBefore = last + 2 > shift ? shift + 1 : last + 2;
   const skip = last + 2 > shift ? 0 : shift - last - 1;

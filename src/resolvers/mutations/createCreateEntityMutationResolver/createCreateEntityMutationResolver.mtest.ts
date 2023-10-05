@@ -60,6 +60,17 @@ describe('createCreateEntityMutationResolver', () => {
           type: 'textFields',
         },
       ],
+
+      calculatedFields: [
+        {
+          name: 'text',
+          calculatedType: 'textFields',
+          type: 'calculatedFields',
+          args: ['textField1', 'textField2'],
+          func: ({ textField1, textField2 }: any) => `${textField1} + ${textField2}` as string,
+          required: true,
+        },
+      ],
     };
 
     const exampleSchema = createThingSchema(entityConfig);
@@ -97,6 +108,7 @@ describe('createCreateEntityMutationResolver', () => {
     expect(createdExample.textField3).toBe(data.textField3);
     expect(createdExample.textField4).toEqual(data.textField4);
     expect(createdExample.textField5).toEqual(data.textField5);
+    expect(createdExample.text).toBe(`${data.textField1} + ${data.textField2}`);
     expect(createdExample.createdAt instanceof Date).toBeTruthy();
     expect(createdExample.updatedAt instanceof Date).toBeTruthy();
     expect(createdExample.counter).toBe(1);

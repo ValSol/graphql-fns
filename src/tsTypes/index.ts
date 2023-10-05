@@ -6,10 +6,11 @@ export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 
 export type SintheticResolverInfo = GraphQLResolveInfo | ProjectionInfo;
 
-export type Context = Omit<Record<string, any>, 'mongooseConn' | 'pubsub'> & {
-  mongooseConn: Connection;
-  pubsub?: PubSub;
-};
+// export type Context = Omit<Record<string, any>, 'mongooseConn' | 'pubsub'> & {
+//   mongooseConn: Connection;
+//   pubsub?: PubSub;
+// };
+export type Context = Record<string, any>;
 
 export type MongodbGeospatialPoint = {
   type: 'Point';
@@ -185,10 +186,117 @@ type ArraySimplifiedChildField = Omit<FieldCommonProperties, 'freeze' | 'index' 
 };
 type SimplifiedChildField = ArraySimplifiedChildField | ScalarSimplifiedChildField;
 
+type ScalarSimplifiedCalculatedEnumField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'enumFields';
+  enumName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => null | string;
+};
+type ArraySimplifiedCalculatedEnumField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  calculatedType: 'enumFields';
+  enumName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => string[];
+};
+type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'embeddedFields' | 'fileFields';
+  configName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlObject;
+};
+type ArraySimplifiedCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  calculatedType: 'embeddedFields' | 'fileFields';
+  configName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlObject[];
+};
+type ScalarSimplifiedCalculatedGeospatialField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'geospatialFields';
+  geospatialType: 'Point' | 'Polygon';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+  ) => null | GeospatialPoint | GeospatialPolygon;
+};
+type ArraySimplifiedCalculatedGeospatialField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  calculatedType: 'geospatialFields';
+  geospatialType: 'Point' | 'Polygon';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+  ) => GeospatialPoint[] | GeospatialPolygon[];
+};
+type ScalarSimplifiedCalculatedField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlScalar;
+};
+type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array: true;
+  calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlScalar[];
+};
+type SimplifiedCalculatedField =
+  | ArraySimplifiedCalculatedEmbeddedOrFileField
+  | ScalarSimplifiedCalculatedEmbeddedOrFileField
+  | ArraySimplifiedCalculatedEnumField
+  | ScalarSimplifiedCalculatedEnumField
+  | ArraySimplifiedCalculatedGeospatialField
+  | ScalarSimplifiedCalculatedGeospatialField
+  | ArraySimplifiedCalculatedField
+  | ScalarSimplifiedCalculatedField;
+
 type SimplifiedEntityConfigCommonProperties = {
   name: string;
   interfaces?: string[];
-  dserivativeNameSlicePosition?: number;
+  derivativeNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
   fileFields?: SimplifiedFileField[];
@@ -200,6 +308,7 @@ type SimplifiedEntityConfigCommonProperties = {
   intFields?: Omit<IntField, 'type'>[];
   floatFields?: Omit<FloatField, 'type'>[];
   textFields?: Omit<TextField, 'type'>[];
+  calculatedFields?: SimplifiedCalculatedField[];
 };
 
 export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonProperties & {
@@ -323,6 +432,111 @@ type ArrayChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'
 };
 type ChildField = ArrayChildField | ScalarChildField;
 
+type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array?: false;
+  calculatedType: 'enumFields';
+  enumName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => null | string;
+  type: 'calculatedFields';
+};
+type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array: true;
+  calculatedType: 'enumFields';
+  enumName: string;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => string[];
+  type: 'calculatedFields';
+};
+type ScalarCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'embeddedFields' | 'fileFields';
+  config: EmbeddedEntityConfig | FileEntityConfig;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlObject;
+  type: 'calculatedFields';
+};
+type ArrayCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  calculatedType: 'embeddedFields' | 'fileFields';
+  config: EmbeddedEntityConfig | FileEntityConfig;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlObject[];
+  type: 'calculatedFields';
+};
+type ScalarCalculatedGeospatialField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'geospatialFields';
+  geospatialType: 'Point' | 'Polygon';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+  ) => null | GeospatialPoint | GeospatialPolygon;
+  type: 'calculatedFields';
+};
+type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array: true;
+  calculatedType: 'geospatialFields';
+  geospatialType: 'Point' | 'Polygon';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+  ) => GeospatialPoint[] | GeospatialPolygon[];
+  type: 'calculatedFields';
+};
+type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array?: false;
+  calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlScalar;
+  type: 'calculatedFields';
+};
+type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array: true;
+  calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+  ) => GraphqlScalar;
+  type: 'calculatedFields';
+};
+type CalculatedField =
+  | ArrayCalculatedEnumField
+  | ScalarCalculatedEnumField
+  | ArrayCalculatedEmbeddedOrFileField
+  | ScalarCalculatedEmbeddedOrFileField
+  | ArrayCalculatedGeospatialField
+  | ScalarCalculatedGeospatialField
+  | ArrayCalculatedGeospatialField
+  | ScalarCalculatedGeospatialField
+  | ArrayCalculatedField
+  | ScalarCalculatedField;
+
 type EntityConfigCommonProperties = {
   name: string;
   interfaces?: string[];
@@ -338,6 +552,7 @@ type EntityConfigCommonProperties = {
   intFields?: IntField[];
   floatFields?: FloatField[];
   textFields?: TextField[];
+  calculatedFields?: CalculatedField[];
 };
 
 export type TangibleEntityConfig = EntityConfigCommonProperties & {
@@ -346,19 +561,19 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'calculatedFields'
 > & {
   type: 'embedded';
 };
 export type FileEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'calculatedFields'
 > & {
   type: 'file';
 };
 export type TangibleFileEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'calculatedFields'
 > & {
   type: 'tangibleFile';
 };
@@ -384,7 +599,8 @@ export type FlatField =
   | GeospatialField
   | EnumField
   | DateTimeField
-  | BooleanField;
+  | BooleanField
+  | CalculatedField;
 
 export type AnyField =
   | BooleanField
@@ -398,7 +614,8 @@ export type AnyField =
   | IntField
   | RelationalField
   | ChildField
-  | TextField;
+  | TextField
+  | CalculatedField;
 
 export type EntityConfigObject = {
   [fieldName: string]: AnyField;
@@ -744,7 +961,6 @@ export type UploadOptions = {
   hashes: Array<string>; // hash of every uploaded file
 };
 
-// eslint-disable-next-line flowtype/generic-spacing
 export type Periphery = Map<
   TangibleEntityConfig,
   {
@@ -799,7 +1015,7 @@ export type SetWindowFields = {
   };
   output: {
     calculated_number: {
-      $documentNumber: {};
+      $documentNumber: { [key: string]: never };
     };
   };
 };
@@ -885,4 +1101,14 @@ export type GqlActionData = {
   descendantKey?: string;
   entityName: string;
   composeOptions: (arg: GraphqlObject) => GraphqlObject;
+};
+
+export type ResolverArg = {
+  parent: null | GraphqlObject;
+  args: GraphqlObject;
+  context: Context;
+  info: SintheticResolverInfo;
+  involvedFilters: {
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  };
 };

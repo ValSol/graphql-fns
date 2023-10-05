@@ -1,5 +1,5 @@
-import type { TangibleEntityConfig, InvolvedFilter } from '../../../../tsTypes';
-import type { ResolverCreatorArg, ResolverArg } from '../../../tsTypes';
+import type { TangibleEntityConfig, InvolvedFilter, ResolverArg } from '../../../../tsTypes';
+import type { ResolverCreatorArg } from '../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import getMatchingFields from '../../../../utils/getMatchingFields';
@@ -78,7 +78,7 @@ const getCommonData = async (
     return optionFields ? optionFields.includes(matchingField) : true;
   });
 
-  if (!matchingFields.length) {
+  if (matchingFields.length === 0) {
     throw TypeError(
       `Expected at least one matching field in "${name}" and "${config.name}" entities!`,
     );

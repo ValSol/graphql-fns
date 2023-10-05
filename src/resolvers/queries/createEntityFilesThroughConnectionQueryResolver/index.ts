@@ -8,6 +8,7 @@ import type {
   SintheticResolverInfo,
   GraphqlScalar,
   GraphqlObject,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 import type { ResolverCreatorArg } from '../../tsTypes';
 
@@ -128,6 +129,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           resolverArg,
           involvedFilters,
           entityFilesQueryResolver,
+          entityConfig as TangibleEntityConfig,
         );
 
         if (result) return result;
@@ -142,13 +144,25 @@ const createEntityFilesThroughConnectionQueryResolver = (
         );
 
         if (shift2 === null) {
-          return getVeryFirst(first, resolverArg, involvedFilters, entityFilesQueryResolver);
+          return getVeryFirst(
+            first,
+            resolverArg,
+            involvedFilters,
+            entityFilesQueryResolver,
+            entityConfig as TangibleEntityConfig,
+          );
         }
       }
     }
 
     if (first) {
-      return getVeryFirst(first, resolverArg, involvedFilters, entityFilesQueryResolver);
+      return getVeryFirst(
+        first,
+        resolverArg,
+        involvedFilters,
+        entityFilesQueryResolver,
+        entityConfig as TangibleEntityConfig,
+      );
     }
 
     if (before) {
@@ -171,6 +185,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
           resolverArg,
           involvedFilters,
           entityFilesQueryResolver,
+          entityConfig as TangibleEntityConfig,
         );
 
         if (result) return result;
@@ -191,6 +206,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
             involvedFilters,
             entityFilesQueryResolver,
             entityFileCountQueryResolver,
+            entityConfig as TangibleEntityConfig,
           );
         }
       }
@@ -203,6 +219,7 @@ const createEntityFilesThroughConnectionQueryResolver = (
         involvedFilters,
         entityFilesQueryResolver,
         entityFileCountQueryResolver,
+        entityConfig as TangibleEntityConfig,
       );
     }
 

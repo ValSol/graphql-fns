@@ -8,10 +8,12 @@ import type {
   SintheticResolverInfo,
   InvolvedFilter,
   GraphqlScalar,
+  TangibleEntityConfig,
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
+import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
@@ -59,7 +61,12 @@ const createEntityQueryResolver = (
       throw new TypeError('Expected exactly one key in whereOne arg!');
     }
 
-    const projection: { [fieldName: string]: 1 } = info ? getProjectionFromInfo(info) : { _id: 1 };
+    const resolverArg = { parent, args, context, info, involvedFilters };
+
+    const projection: { [fieldName: string]: 1 } = getProjectionFromInfo(
+      entityConfig as TangibleEntityConfig,
+      resolverArg,
+    );
 
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, whereOne, entityConfig);
 
@@ -76,7 +83,12 @@ const createEntityQueryResolver = (
 
       if (!entity) return null;
 
-      const entity2 = addIdsToEntity(entity, entityConfig);
+      const entity2 = addCalculatedFieldsToEntity(
+        addIdsToEntity(entity, entityConfig),
+        projection,
+        resolverArg,
+        entityConfig as TangibleEntityConfig,
+      );
       return entity2;
     }
 
@@ -84,7 +96,12 @@ const createEntityQueryResolver = (
 
     if (!entity) return null;
 
-    const entity2 = addIdsToEntity(entity, entityConfig);
+    const entity2 = addCalculatedFieldsToEntity(
+      addIdsToEntity(entity, entityConfig),
+      projection,
+      resolverArg,
+      entityConfig as TangibleEntityConfig,
+    );
     return entity2;
   };
 

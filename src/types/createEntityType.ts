@@ -50,6 +50,7 @@ const createEntityType = (
     counter,
     interfaces = [],
     booleanFields = [],
+    calculatedFields = [],
     dateTimeFields = [],
     duplexFields = [],
     embeddedFields = [],
@@ -237,6 +238,50 @@ const createEntityType = (
     const { geospatialType } = field;
 
     pushInPrev(field, `Geospatial${geospatialType}`, prev);
+
+    return prev;
+  }, entityTypeArray);
+
+  calculatedFields.reduce((prev, field) => {
+    const { calculatedType } = field;
+
+    if (calculatedType === 'geospatialFields') {
+      const { geospatialType } = field;
+
+      pushInPrev(field, `Geospatial${geospatialType}`, prev);
+    } else if (calculatedType === 'enumFields') {
+      const { enumName } = field;
+
+      pushInPrev(field, `${enumName}Enumeration`, prev);
+    } else if (calculatedType === 'embeddedFields' || calculatedType === 'fileFields') {
+      const { array, name: name2, required, config } = field;
+
+      if (array) {
+        prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
+      } else {
+        prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
+      }
+    } else if (calculatedType === 'textFields') {
+      pushInPrev(field, 'String', prev);
+
+      return prev;
+    } else if (calculatedType === 'intFields') {
+      pushInPrev(field, 'Int', prev);
+
+      return prev;
+    } else if (calculatedType === 'floatFields') {
+      pushInPrev(field, 'Float', prev);
+
+      return prev;
+    } else if (calculatedType === 'dateTimeFields') {
+      pushInPrev(field, 'DateTime', prev);
+
+      return prev;
+    } else if (calculatedType === 'booleanFields') {
+      pushInPrev(field, 'Boolean', prev);
+
+      return prev;
+    }
 
     return prev;
   }, entityTypeArray);

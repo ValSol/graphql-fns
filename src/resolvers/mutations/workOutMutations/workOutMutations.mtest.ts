@@ -22,7 +22,18 @@ const exampleConfig: TangibleEntityConfig = {
     { name: 'name', required: true, type: 'textFields' },
     { name: 'label', type: 'textFields' },
   ],
+
   intFields: [{ name: 'counts', array: true, type: 'intFields' }],
+
+  calculatedFields: [
+    {
+      name: 'nameAndLabel',
+      calculatedType: 'textFields',
+      args: ['name', 'label'],
+      func: ({ name, label }: any) => `${name} with label: "${label}"` as string,
+      type: 'calculatedFields',
+    },
+  ],
 };
 
 const exampleCloneConfig: TangibleEntityConfig = {
@@ -402,6 +413,7 @@ describe('workOutMutations', () => {
     );
 
     expect(result2.label).toBe('test');
+    expect(result2.nameAndLabel).toBe('Name with label: "test"');
     expect(result.name).toBe('Name2');
   });
 
