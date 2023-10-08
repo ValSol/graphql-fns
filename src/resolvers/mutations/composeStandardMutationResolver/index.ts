@@ -23,6 +23,7 @@ import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import produceResult from './produceResult';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
   data: any;
@@ -98,6 +99,14 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         mains: [],
       };
 
+      const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+
+      const asyncFuncResults = await getAsyncFuncResults(
+        projection,
+        resolverArg,
+        entityConfig as TangibleEntityConfig,
+      );
+
       for (let i = 0; i < tryCount; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         const session = transactions ? await mongooseConn.startSession() : null;
@@ -121,15 +130,11 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             return null;
           }
 
-          const projection = getProjectionFromInfo(
-            entityConfig as TangibleEntityConfig,
-            resolverArg,
-          );
-
           result.previous = previous.map((item) =>
             addCalculatedFieldsToEntity(
               addIdsToEntity(item, entityConfig),
               projection,
+              asyncFuncResults,
               resolverArg,
               entityConfig as TangibleEntityConfig,
             ),

@@ -12,6 +12,7 @@ import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type PreparedData = {
   core: Core;
@@ -39,6 +40,12 @@ const produceResult = async (
 
   const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
+  const asyncFuncResults = await getAsyncFuncResults(
+    projection,
+    resolverArg,
+    entityConfig as TangibleEntityConfig,
+  );
+
   if (array) {
     const ids = mains.map(({ _id }) => _id);
 
@@ -48,6 +55,7 @@ const produceResult = async (
       addCalculatedFieldsToEntity(
         addIdsToEntity(item, entityConfig),
         projection,
+        asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
       ),
@@ -62,6 +70,7 @@ const produceResult = async (
   const entity2 = addCalculatedFieldsToEntity(
     addIdsToEntity(entity, entityConfig),
     projection,
+    asyncFuncResults,
     resolverArg,
     entityConfig as TangibleEntityConfig,
   );

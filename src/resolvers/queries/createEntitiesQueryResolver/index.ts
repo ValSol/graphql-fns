@@ -24,6 +24,7 @@ import composeNearInput from '../utils/composeNearInput';
 import getLimit from '../utils/getLimit';
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
   where?: any;
@@ -111,6 +112,12 @@ const createEntitiesQueryResolver = (
 
     const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
+    const asyncFuncResults = getAsyncFuncResults(
+      projection,
+      resolverArg,
+      entityConfig as TangibleEntityConfig,
+    );
+
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
     if (lookups.length > 0 || objectIdsFromParent) {
@@ -173,6 +180,7 @@ const createEntitiesQueryResolver = (
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
           projection,
+          asyncFuncResults,
           resolverArg,
           entityConfig as TangibleEntityConfig,
         ),
@@ -216,6 +224,7 @@ const createEntitiesQueryResolver = (
       addCalculatedFieldsToEntity(
         addIdsToEntity(item, entityConfig),
         projection,
+        asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
       ),

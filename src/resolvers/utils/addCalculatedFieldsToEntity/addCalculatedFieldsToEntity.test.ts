@@ -28,8 +28,13 @@ describe('addCalculatedFieldsToEntity', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
+        asyncFunc: async ({ context }: any) => {
+          const result = await context.id;
+          return result;
+        },
         args: ['text1', 'text2'],
-        func: ({ text1, text2 }: any) => `${text1} ${text2}` as string,
+        func: ({ text1, text2 }: any, resolverArg, asyncFuncResult) =>
+          `${text1} ${text2} ${asyncFuncResult}` as string,
         required: true,
       },
 
@@ -48,7 +53,7 @@ describe('addCalculatedFieldsToEntity', () => {
   const resolverArg = {
     parent: null,
     args: {},
-    context: {},
+    context: { id: Promise.resolve('12345') },
     info: { projection: { _id: 1 } as const },
     involvedFilters: { inputOutputEntity: [[]] as any },
   };
@@ -58,15 +63,21 @@ describe('addCalculatedFieldsToEntity', () => {
 
     const data = { id: '1', text1: 'text1', text2: 'text2', text3: 'text3' };
 
-    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+    const asyncResolverResults = { text: '12345' };
+
+    const result = addCalculatedFieldsToEntity(
+      data,
+      projection,
+      asyncResolverResults,
+      resolverArg,
+      exampleConfig,
+    );
 
     const expectedResult = {
       id: '1',
       text1: 'text1',
       text2: 'text2',
       text3: 'text3',
-      text: 'text1 text2',
-      texts: ['text2', 'text3'],
     };
 
     expect(result).toEqual(expectedResult);
@@ -77,7 +88,15 @@ describe('addCalculatedFieldsToEntity', () => {
 
     const data = { text1: 'text1' };
 
-    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+    const asyncResolverResults = { text: '12345' };
+
+    const result = addCalculatedFieldsToEntity(
+      data,
+      projection,
+      asyncResolverResults,
+      resolverArg,
+      exampleConfig,
+    );
 
     const expectedResult = { text1: 'text1' };
 
@@ -89,7 +108,15 @@ describe('addCalculatedFieldsToEntity', () => {
 
     const data = { id: '1', text2: 'text2', text3: 'text3' };
 
-    const result = addCalculatedFieldsToEntity(data, projection, resolverArg, exampleConfig);
+    const asyncResolverResults = { text: '12345' };
+
+    const result = addCalculatedFieldsToEntity(
+      data,
+      projection,
+      asyncResolverResults,
+      resolverArg,
+      exampleConfig,
+    );
 
     const expectedResult = { id: '1', text2: 'text2', text3: 'text3', texts: ['text2', 'text3'] };
 

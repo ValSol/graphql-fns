@@ -3,6 +3,7 @@ import type { Report } from '../../../tsTypes';
 
 import addCalculatedFieldsToEntity from '../../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../../utils/addIdsToEntity';
+import getAsyncFuncResults from '../../../utils/getAsyncFuncResults';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
@@ -22,11 +23,18 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
 
         const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
+        const asyncFuncResults = getAsyncFuncResults(
+          projection,
+          resolverArg,
+          entityConfig as TangibleEntityConfig,
+        );
+
         const payload = {
           node: current,
           previousNode: addCalculatedFieldsToEntity(
             addIdsToEntity(previous, entityConfig),
             projection,
+            asyncFuncResults,
             resolverArg,
             entityConfig as TangibleEntityConfig,
           ),

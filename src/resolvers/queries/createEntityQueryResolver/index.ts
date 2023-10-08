@@ -18,6 +18,7 @@ import addIdsToEntity from '../../utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
   whereOne: {
@@ -68,6 +69,12 @@ const createEntityQueryResolver = (
       resolverArg,
     );
 
+    const asyncFuncResults = getAsyncFuncResults(
+      projection,
+      resolverArg,
+      entityConfig as TangibleEntityConfig,
+    );
+
     const { lookups, where: conditions } = mergeWhereAndFilter(filter, whereOne, entityConfig);
 
     if (lookups.length > 0) {
@@ -86,6 +93,7 @@ const createEntityQueryResolver = (
       const entity2 = addCalculatedFieldsToEntity(
         addIdsToEntity(entity, entityConfig),
         projection,
+        asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
       );
@@ -99,6 +107,7 @@ const createEntityQueryResolver = (
     const entity2 = addCalculatedFieldsToEntity(
       addIdsToEntity(entity, entityConfig),
       projection,
+      asyncFuncResults,
       resolverArg,
       entityConfig as TangibleEntityConfig,
     );

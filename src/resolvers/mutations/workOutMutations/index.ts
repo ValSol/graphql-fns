@@ -22,6 +22,7 @@ import optimizeBulkItems from '../optimizeBulkItems';
 import produceResult from '../composeStandardMutationResolver/produceResult';
 import unwindCore from '../unwindCore';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type StandardMutationsArgs = Array<{
   actionGeneralName: string;
@@ -224,10 +225,17 @@ const workOutMutations = async (
     if (result) {
       const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
+      const asyncFuncResults = getAsyncFuncResults(
+        projection,
+        resolverArg,
+        entityConfig as TangibleEntityConfig,
+      );
+
       result.previous = previous.map((item) =>
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
           projection,
+          asyncFuncResults,
           resolverArg,
           entityConfig as TangibleEntityConfig,
         ),
