@@ -1345,13 +1345,13 @@ type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!
   createExample(data: ExampleCreateInput!, token: String): Example!
   deleteFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): [Example!]!
-  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): Int!
+  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, search: String, token: String): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
   importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!
   pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput, token: String): Example!
   updateFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!, token: String): [Example!]!
-  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!, token: String): Int!
+  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, search: String, data: ExampleUpdateInput!, token: String): Int!
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!
   uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!, token: String): [TangibleImage!]!
@@ -1740,7 +1740,7 @@ type Mutation {
   createExample2(data: Example2CreateInput!, token: String): Example2!
   deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, token: String): [Example1!]!
   deleteFilteredExample2s(where: Example2WhereInput, token: String): [Example2!]!
-  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
+  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, token: String): Int!
   deleteFilteredExample2sReturnScalar(where: Example2WhereInput, token: String): Int!
   deleteManyExample1s(whereOne: [Example1WhereOneInput!]!, token: String): [Example1!]!
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
@@ -1751,7 +1751,7 @@ type Mutation {
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
   updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!, token: String): [Example2!]!
-  updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): Int!
+  updateFilteredExample1sReturnScalar(where: Example1WhereInput, data: Example1UpdateInput!, token: String): Int!
   updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!, token: String): Int!
   updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!, token: String): [Example1!]!
   updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!, token: String): [Example2!]!

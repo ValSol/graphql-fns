@@ -119,7 +119,7 @@ const composeEntityConfig = (
       }
 
       // check "&& name" to only
-      if (config.type !== 'embedded') {
+      if (config.type !== 'embedded' && config.type !== 'file') {
         if (name) {
           throw new TypeError(
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
