@@ -225,7 +225,7 @@ const workOutMutations = async (
     if (result) {
       const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-      const asyncFuncResults = getAsyncFuncResults(
+      const asyncFuncResults = await getAsyncFuncResults(
         projection,
         resolverArg,
         entityConfig as TangibleEntityConfig,

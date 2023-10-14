@@ -16,14 +16,14 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { subscribeUpdatedEntity: filter } = involvedFilters;
 
   const result = filter
-    ? ({ previous: [previous], current: [current] }) => {
+    ? async ({ previous: [previous], current: [current] }) => {
         const { pubsub } = context;
         if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
         const updatedFields = Object.keys(data);
 
         const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-        const asyncFuncResults = getAsyncFuncResults(
+        const asyncFuncResults = await getAsyncFuncResults(
           projection,
           resolverArg,
           entityConfig as TangibleEntityConfig,

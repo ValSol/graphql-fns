@@ -69,7 +69,7 @@ const createEntityQueryResolver = (
       resolverArg,
     );
 
-    const asyncFuncResults = getAsyncFuncResults(
+    const asyncFuncResults = await getAsyncFuncResults(
       projection,
       resolverArg,
       entityConfig as TangibleEntityConfig,
