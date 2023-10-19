@@ -86,9 +86,15 @@ const actionReturnConfig = (
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
   if (descendantKey) {
-    return descendant
-      ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
-      : null;
+    try {
+      return descendant
+        ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
+        : null;
+    } catch (err) {
+      console.log('allEntityConfigs =', allEntityConfigs);
+
+      throw new TypeError(err);
+    }
   }
 
   return connectionConfig;

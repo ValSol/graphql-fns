@@ -128,20 +128,8 @@ describe('actionToDescendant', () => {
     descendantKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
-      Place: ['childEntity'],
+      Place: ['childEntity', 'childEntities'],
       Country: ['childEntity'],
-    },
-
-    descendantFields: {
-      Person: {
-        friends: 'ForCatalog',
-        place: 'ForCatalog',
-        parent: 'ForCatalog',
-        children: 'ForCatalog',
-      },
-      Place: {
-        country: 'ForCatalog',
-      },
     },
   };
 

@@ -766,11 +766,6 @@ export type DescendantAttributes = {
       'name' | 'type' | 'counter' | 'descendantNameSlicePosition'
     >;
   };
-  descendantFields?: {
-    [entityName: string]: {
-      [fieldName: string]: string;
-    };
-  }; // set appropriate descendant keys,
   involvedOutputDescendantKeys?: {
     [entityName: string]: {
       outputEntity: string;

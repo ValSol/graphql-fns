@@ -57,7 +57,6 @@ const composeDescendantConfig = (
     descendantKey,
     allow,
     addFields = {},
-    descendantFields = {},
     excludeFields = {},
     includeFields = {},
     interfaces = {},
@@ -105,8 +104,6 @@ const composeDescendantConfig = (
 
   checkEntityNames(addFields, 'addFields');
 
-  checkEntityNames(descendantFields, 'descendantFields');
-
   checkEntityNames(interfaces, 'interfaces');
 
   type TangibleFields = Omit<SimplifiedTangibleEntityConfig, 'name' | 'type' | 'counter'>;
@@ -120,45 +117,6 @@ const composeDescendantConfig = (
   ((addFields[rootEntityName] as TangibleFields)?.duplexFields || []).forEach(({ name }) => {
     throw new TypeError(`Forbidden to put duplexFields into "addFields" but got "${name}" field!`);
   });
-
-  type VirtualFields = Omit<SimplifiedVirtualEntityConfig, 'name' | 'type' | 'counter'>;
-
-  const addedChildFields = (addFields[rootEntityName] as VirtualFields)?.childFields
-    ? (addFields[rootEntityName] as VirtualFields).childFields.map(({ name }) => name)
-    : [];
-
-  if (descendantFields[rootEntityName]) {
-    Object.keys(descendantFields[rootEntityName]).forEach((fieldName) => {
-      // if field name NOT used in 'rootEntityConfig' and 'addFields'
-      if (
-        !(
-          fieldsObject[fieldName] &&
-          (fieldsObject[fieldName].type === 'relationalFields' ||
-            fieldsObject[fieldName].type === 'duplexFields' ||
-            fieldsObject[fieldName].type === 'childFields')
-        ) &&
-        !addedChildFields.includes(fieldName)
-      ) {
-        throw new TypeError(
-          `Incorrect descendantFields field name "${fieldName}" for "${rootEntityName}" in: "${descendantKey}" descendant!`,
-        );
-      }
-
-      if (includeFields[rootEntityName] && !includeFields[rootEntityName].includes(fieldName)) {
-        throw new TypeError(
-          `Incorrect descendantFields field name "${fieldName}" for "${rootEntityName}" as not included in: "${descendantKey}" descendant!`,
-        );
-      }
-
-      if (excludeFields[rootEntityName] && excludeFields[rootEntityName].includes(fieldName)) {
-        throw new TypeError(
-          `Incorrect descendantFields field name "${fieldName}" for "${rootEntityName}" as excluded in: "${descendantKey}" descendant!`,
-        );
-      }
-    });
-  }
-
-  // *** end check args correctness
 
   const entityConfig = { ...rootEntityConfig, name: descendantEntityName };
 
@@ -223,94 +181,94 @@ const composeDescendantConfig = (
     });
   }
 
-  if (descendantFields[rootEntityName]) {
-    Object.keys(entityConfig).forEach((key) => {
-      if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
-        entityConfig[key] = entityConfig[key].map((item) => {
-          const { name, array, config: currentConfig } = item;
+  Object.keys(entityConfig).forEach((key) => {
+    if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
+      entityConfig[key] = entityConfig[key].map((item) => {
+        const { name, array, config: currentConfig } = item;
 
-          if (!descendantFields[rootEntityName][name]) {
-            return item;
-          }
+        if (name === 'pageInfo') {
+          // field "pageInfo" refers to standard child config "PageInfo" so skip it
+          return item;
+        }
 
-          const descendantKey2 = descendantFields[rootEntityName][name];
+        if (descendant[descendantKey].allow[currentConfig.name] === undefined) {
+          throw new TypeError(
+            `Have to include "${currentConfig.name}" entity as "allow" for descendantKey: "${descendantKey}"!`,
+          );
+        }
 
-          if (descendant[descendantKey2].allow[currentConfig.name] === undefined) {
+        const childQueries = array
+          ? ['childEntities', 'childEntitiesThroughConnection', 'childEntityCount']
+          : ['childEntity'];
+        if (
+          !childQueries.some((childQuery: DescendantAttributesActionName) =>
+            descendant[descendantKey].allow[currentConfig.name].includes(childQuery),
+          ) &&
+          key !== 'childFields'
+        ) {
+          throw new TypeError(
+            `Have to set ${childQueries
+              .map((str) => `"${str}"`)
+              .join(' or ')} as "allow" for descendantKey: "${descendantKey}" & entity: "${
+              currentConfig.name
+            }"!`,
+          );
+        }
+
+        const config =
+          store[`${currentConfig.name}${descendantKey}`] ||
+          composeDescendantConfig(descendant[descendantKey], currentConfig, generalConfig);
+        if (!config) {
+          throw new TypeError(
+            `Can not set descendant config for entityName: "${currentConfig.name}" & descendant descendantKey:"${descendantKey}"!`,
+          );
+        }
+
+        return { ...item, config };
+      });
+
+      // *** check that the relational fields have opposite relational fields
+
+      if (key === 'relationalFields') {
+        // eslint-disable-next-line
+        entityConfig[key]?.forEach(({ name, config, oppositeName }) => {
+          const oppositeField = (config.relationalFields || []).find(
+            ({ name: name2 }) => name2 === oppositeName,
+          );
+
+          if (!oppositeField) {
+            console.log('oppositeName =', oppositeName);
+            console.log('config.relationalFields =', config.relationalFields);
+
             throw new TypeError(
-              `Have to include "${currentConfig.name}" entity as "allow" for descendantKey: "${descendantKey2}"!`,
+              `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}"!`,
             );
           }
-
-          const childQueries = array
-            ? ['childEntities', 'childEntitiesThroughConnection', 'childEntityCount']
-            : ['childEntity'];
-          if (
-            !childQueries.some((childQuery: DescendantAttributesActionName) =>
-              descendant[descendantKey2].allow[currentConfig.name].includes(childQuery),
-            ) &&
-            key !== 'childFields'
-          ) {
-            throw new TypeError(
-              `Have to set ${childQueries
-                .map((str) => `"${str}"`)
-                .join(' or ')} as "allow" for descendantKey: "${descendantKey2}" & entity: "${
-                currentConfig.name
-              }"!`,
-            );
-          }
-
-          const config =
-            store[`${currentConfig.name}${descendantKey2}`] ||
-            composeDescendantConfig(descendant[descendantKey2], currentConfig, generalConfig);
-          if (!config) {
-            throw new TypeError(
-              `Can not set descendant config for entityName: "${currentConfig.name}" & descendant descendantKey:"${descendantKey2}"!`,
-            );
-          }
-
-          return { ...item, config };
         });
-
-        // *** check that the relational fields have opposite relational fields
-
-        if (key === 'relationalFields') {
-          // eslint-disable-next-line
-          entityConfig[key]?.forEach(({ config, oppositeName }) => {
-            const oppositeField = (config.relationalFields || []).find(
-              ({ name }) => name === oppositeName,
-            );
-
-            if (!oppositeField) {
-              throw new TypeError(
-                `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}"!`,
-              );
-            }
-          });
-        }
-
-        // ***
-
-        // *** check that the duplex fields have opposite duplex fields
-
-        if (key === 'duplexFields') {
-          // eslint-disable-next-line
-          entityConfig[key]?.forEach(({ config, oppositeName }) => {
-            const oppositeField = (config.duplexFields || []).find(
-              ({ name }) => name === oppositeName,
-            );
-
-            if (!oppositeField) {
-              throw new TypeError(
-                `Expected a duplexField with name "${oppositeName}" in descendant config "${config.name}"!`,
-              );
-            }
-          });
-        }
-
-        // ***
       }
-    });
-  }
+
+      // ***
+
+      // *** check that the duplex fields have opposite duplex fields
+
+      if (key === 'duplexFields') {
+        // eslint-disable-next-line
+        entityConfig[key]?.forEach(({ config, oppositeName }) => {
+          const oppositeField = (config.duplexFields || []).find(
+            ({ name }) => name === oppositeName,
+          );
+
+          if (!oppositeField) {
+            throw new TypeError(
+              `Expected a duplexField with name "${oppositeName}" in descendant config "${config.name}"!`,
+            );
+          }
+        });
+      }
+
+      // ***
+    }
+  });
 
   if (freezedFields[rootEntityName]) {
     Object.keys(entityConfig).forEach((key) => {

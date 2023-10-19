@@ -128,18 +128,6 @@ describe('parseChildQueries', () => {
       Place: ['childEntity'],
       Country: ['childEntity'],
     },
-
-    descendantFields: {
-      Person: {
-        friends: 'ForCatalog',
-        place: 'ForCatalog',
-        parent: 'ForCatalog',
-        children: 'ForCatalog',
-      },
-      Place: {
-        country: 'ForCatalog',
-      },
-    },
   };
 
   const allEntityConfigs = {

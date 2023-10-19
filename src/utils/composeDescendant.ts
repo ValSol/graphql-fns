@@ -26,33 +26,6 @@ const composeDescendant = (descendantAttributesArray: Array<DescendantAttributes
     return prev;
   }, []);
 
-  // *** check descendantFields correctness
-
-  descendantAttributesArray.forEach(({ allow, descendantFields, descendantKey }) => {
-    Object.keys(allow).forEach((key) => {
-      allow[key].forEach((actionGenericName) => {
-        if (!actionGenericNames.includes(actionGenericName)) {
-          throw new TypeError(`Incorrect action generic name: "${actionGenericName}"!`);
-        }
-      });
-    });
-    if (descendantFields) {
-      Object.keys(descendantFields).forEach((entityName) => {
-        const entityDescendantFields = descendantFields[entityName];
-
-        Object.keys(entityDescendantFields).forEach((fieldName) => {
-          if (!descendantKeys.includes(entityDescendantFields[fieldName])) {
-            throw new TypeError(
-              `Incorrect descendant descendantKey: "${entityDescendantFields[fieldName]}" for descendantField: "${fieldName}" for entityName: "${entityName}" in descendant: "${descendantKey}"`,
-            );
-          }
-        });
-      });
-    }
-  });
-
-  // ***
-
   const result = descendantAttributesArray.reduce<Record<string, any>>((prev, rawItem) => {
     const { descendantKey } = rawItem;
 

@@ -4081,10 +4081,6 @@ type Mutation {
     const ForCatalog: DescendantAttributes = {
       allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
       descendantKey: 'ForCatalog',
-      descendantFields: {
-        ExampleEdge: { node: 'ForCatalog' },
-        ExampleConnection: { edges: 'ForCatalog' },
-      },
     };
 
     const simplifiedAllEntityConfigs = [entityConfig];
@@ -4352,10 +4348,6 @@ type Mutation {
     const ForView: DescendantAttributes = {
       descendantKey: 'ForView',
       allow: { Example: [], ExampleEdge: [], ExampleConnection: [] },
-      descendantFields: {
-        ExampleEdge: { node: 'ForView' },
-        ExampleConnection: { edges: 'ForView' },
-      },
       // "involvedOutputDescendantKeys" not change types that are returned by "ForCatalog" descendant actions
       involvedOutputDescendantKeys: { Example: { outputEntity: 'ForGuest' } },
     };

@@ -71,7 +71,7 @@ describe('getAllEntityNames', () => {
     relationalFields: [
       {
         name: 'friends',
-        oppositeNames: 'fellows',
+        oppositeName: 'fellows',
         config: personConfig,
         array: true,
         required: true,
@@ -79,7 +79,7 @@ describe('getAllEntityNames', () => {
       },
       {
         name: 'fellows',
-        oppositeNames: 'friends',
+        oppositeName: 'friends',
         config: personConfig,
         array: true,
         parent: true,
@@ -87,14 +87,14 @@ describe('getAllEntityNames', () => {
       },
       {
         name: 'enemies',
-        oppositeNames: 'opponents',
+        oppositeName: 'opponents',
         config: personConfig,
         array: true,
         type: 'relationalFields',
       },
       {
         name: 'opponents',
-        oppositeNames: 'enemies',
+        oppositeName: 'enemies',
         config: personConfig,
         array: true,
         parent: true,
@@ -102,7 +102,7 @@ describe('getAllEntityNames', () => {
       },
       {
         name: 'location',
-        oppositeNames: 'citizens',
+        oppositeName: 'citizens',
         config: placeConfig,
         required: true,
         type: 'relationalFields',
@@ -113,7 +113,8 @@ describe('getAllEntityNames', () => {
   const ForView: DescendantAttributes = {
     descendantKey: 'ForView',
     allow: {
-      Person: ['entity', 'entities'],
+      Person: ['entity', 'entities', 'childEntityCount'],
+      Place: ['childEntity', 'childEntities'],
     },
   };
 
@@ -193,8 +194,16 @@ describe('getAllEntityNames', () => {
       },
       PersonForView: {
         descriptions: [
+          'inventory "test", option item: "childEntityCountForView": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityForView": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entitiesForView": "Person", involvedEntityKey: "inputOutputEntity"',
+        ],
+        isOutput: true,
+      },
+      PlaceForView: {
+        descriptions: [
+          'inventory "test", option item: "childEntityForView": "Place", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "childEntitiesForView": "Place", involvedEntityKey: "inputOutputEntity"',
         ],
         isOutput: true,
       },

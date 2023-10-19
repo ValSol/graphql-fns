@@ -353,10 +353,6 @@ describe('composeDescendantConfig', () => {
           RelationalExample: ['entity', 'childEntities'],
         },
         descendantKey: 'ForCatalog',
-        descendantFields: {
-          RelationalExample: { relationalField: 'ForCatalog' },
-          TextExample: { parentRelationalField: 'ForCatalog' },
-        },
       };
 
       const generalConfig: GeneralConfig = {
@@ -451,10 +447,6 @@ describe('composeDescendantConfig', () => {
       },
       descendantKey: 'ForCatalog',
       excludeFields: { Example2: ['anotherField'] },
-      descendantFields: {
-        Example2Edge: { node: 'ForCatalog' },
-        Example2Connection: { edges: 'ForCatalog' },
-      },
     };
 
     const generalConfig: GeneralConfig = {

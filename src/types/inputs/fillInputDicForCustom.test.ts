@@ -64,10 +64,6 @@ describe('fillInputDicForCustom', () => {
   const ForCatalog: DescendantAttributes = {
     allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
     descendantKey: 'ForCatalog',
-    descendantFields: {
-      ExampleEdge: { node: 'ForCatalog' },
-      ExampleConnection: { edges: 'ForCatalog' },
-    },
   };
 
   const entityInTimeRangeInput: ObjectSignatureMethods = {

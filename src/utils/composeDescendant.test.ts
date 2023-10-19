@@ -60,18 +60,6 @@ describe('composeDescendant', () => {
           relationalFields: [{ name: 'submitter', oppositeName: 'posts', configName: 'User' }],
         },
       },
-
-      descendantFields: {
-        Restaurant: {
-          posts: 'ForView',
-          commentList: 'ForView',
-          submitter: 'ForApprove',
-        },
-        Post: {
-          restaurants: 'ForView',
-          submitter: 'ForApprove',
-        },
-      },
     };
     const result = composeDescendant([ForView, ForApprove]);
 
@@ -108,11 +96,6 @@ describe('composeDescendant', () => {
       descendantKey: 'ForCatalog',
 
       excludeFields: { Example: ['anotherField'] },
-
-      descendantFields: {
-        ExampleEdge: { node: 'ForCatalog' },
-        ExampleConnection: { edges: 'ForCatalog' },
-      },
     };
 
     const expectedResult = { ForView, ForCatalog: expectedForCatalog };
@@ -146,11 +129,6 @@ describe('composeDescendant', () => {
         Post: ['entity', 'entities'],
         ExampleConnection: [],
         ExampleEdge: [],
-      },
-
-      descendantFields: {
-        ExampleEdge: { node: 'ForView' },
-        ExampleConnection: { edges: 'ForView' },
       },
     };
 

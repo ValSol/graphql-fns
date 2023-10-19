@@ -14,7 +14,10 @@ import unwindInverntoryOptions from './unwindInverntoryOptions';
 
 describe('unwindInverntoryOptions', () => {
   const ForCatalogDescendant: DescendantAttributes = {
-    allow: { Example: ['entities', 'updateEntity'] },
+    allow: {
+      Example: ['childEntityCount', 'entities', 'updateEntity'],
+      ChildExample: ['childEntity', 'childEntities'],
+    },
     descendantKey: 'ForCatalog',
   };
 
@@ -112,7 +115,10 @@ describe('unwindInverntoryOptions', () => {
       childEntity: ['ChildExample'],
       childEntityCount: ['Example'],
       childEntities: ['Example'],
+      childEntitiesForCatalog: ['ChildExample'],
       childEntitiesThroughConnection: ['Example'],
+      childEntityCountForCatalog: ['Example'],
+      childEntityForCatalog: ['ChildExample'],
       entities: ['Example', 'ChildExample'],
       entitiesByUnique: ['Example', 'ChildExample'],
       entitiesForCatalog: ['Example'],

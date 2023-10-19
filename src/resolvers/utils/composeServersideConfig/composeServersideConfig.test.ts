@@ -114,7 +114,8 @@ describe('composeFilters', () => {
   const ForView: DescendantAttributes = {
     descendantKey: 'ForView',
     allow: {
-      Person: ['entity', 'entities'],
+      Person: ['entity', 'entities', 'childEntities'],
+      Place: ['childEntity'],
     },
   };
 

@@ -1,8 +1,6 @@
 import type { DescendantAttributes } from '../../tsTypes';
 
 const connectionDescendantUpdater = (entityName: string, item: DescendantAttributes) => {
-  const { descendantKey } = item;
-
   const edgeName = `${entityName}Edge`;
 
   const connectionName = `${entityName}Connection`;
@@ -13,22 +11,6 @@ const connectionDescendantUpdater = (entityName: string, item: DescendantAttribu
 
   if (!item.allow[connectionName]) {
     item.allow = { ...item.allow, [connectionName]: [] }; // eslint-disable-line no-param-reassign
-  }
-
-  if (!item.descendantFields) {
-    item.descendantFields = {}; // eslint-disable-line no-param-reassign
-  }
-
-  if (!item.descendantFields[edgeName]) {
-    item.descendantFields = { ...item.descendantFields, [edgeName]: { node: descendantKey } }; // eslint-disable-line no-param-reassign
-  }
-
-  if (!item.descendantFields[connectionName]) {
-    // eslint-disable-next-line no-param-reassign
-    item.descendantFields = {
-      ...item.descendantFields,
-      [connectionName]: { edges: descendantKey },
-    };
   }
 };
 

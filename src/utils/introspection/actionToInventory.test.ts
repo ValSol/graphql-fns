@@ -109,46 +109,11 @@ describe('actionToInventory', () => {
     ],
   });
 
-  // const signatureMethods: ActionSignatureMethods = {
-  //   name: 'getEntity',
-  //   specificName: ({ name }) => `get${name}`,
-  //   argNames: () => [],
-  //   argTypes: () => [],
-  //   type: ({ name }) => `${name}!`,
-  //   config: (entityConfig) => entityConfig,
-  // };
-
-  // const ForCatalog: DescendantAttributes = {
-  //   descendantKey: 'ForCatalog',
-  //   allow: {
-  //     Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
-  //     Place: ['childEntity'],
-  //     Country: ['childEntity'],
-  //   },
-
-  //   descendantFields: {
-  //     Person: {
-  //       friends: 'ForCatalog',
-  //       place: 'ForCatalog',
-  //       parent: 'ForCatalog',
-  //       children: 'ForCatalog',
-  //     },
-  //     Place: {
-  //       country: 'ForCatalog',
-  //     },
-  //   },
-  // };
-
   const allEntityConfigs = {
     Person: personConfig,
     Place: placeConfig,
     Country: countryConfig,
   };
-  // const queryName = 'getEntity';
-  // const custom = { Query: { [queryName]: signatureMethods } };
-  // const descendant = { ForCatalog };
-
-  // const generalConfig = { allEntityConfigs, custom, descendant };
 
   const prefixToPermission = {
     ForCabinet: 'insider',

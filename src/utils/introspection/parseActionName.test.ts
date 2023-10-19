@@ -136,20 +136,8 @@ describe('parseActionName', () => {
     descendantKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
-      Place: ['childEntity'],
+      Place: ['childEntity', 'childEntities'],
       Country: ['childEntity'],
-    },
-
-    descendantFields: {
-      Person: {
-        friends: 'ForCatalog',
-        place: 'ForCatalog',
-        parent: 'ForCatalog',
-        children: 'ForCatalog',
-      },
-      Place: {
-        country: 'ForCatalog',
-      },
     },
   };
 
