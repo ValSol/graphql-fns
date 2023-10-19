@@ -34,6 +34,8 @@ const transformWhere = (where: any, entityConfig: EntityConfig | null): any => {
         prev[key] = processField(where[key]); // eslint-disable-line no-param-reassign
       } else if (suffix === 'in' || suffix === 'nin') {
         prev[key] = where[key].map(processField); // eslint-disable-line no-param-reassign
+      } else if (suffix === 'exists') {
+        prev[key] = where[key];
       } else if (key === `${baseKey}_`) {
         prev[key] = transformWhere(where[key], fieldsObject[baseKey].config); // eslint-disable-line no-param-reassign
       } else {

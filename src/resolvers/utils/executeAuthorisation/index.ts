@@ -89,7 +89,7 @@ const executeAuthorisation = async (
 
   const { roles, ...userAttributesRest } = userAttributes;
 
-  const result: Record<string, InvolvedFilter[]> = {};
+  const result: Record<string, InvolvedFilter[] | null> = {};
 
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
@@ -97,6 +97,8 @@ const executeAuthorisation = async (
     const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
 
     result[involvedEntityNamesKey] = null;
+
+    if (!checkInventory(amendedInventoryChain as InventoryСhain, inventory)) continue;
 
     if (inventoryByRoles) {
       if (!containedRoles) {
@@ -153,7 +155,6 @@ const executeAuthorisation = async (
     const staticFilter = staticFilters[involvedEntityNames[key]];
     const staticLimit = staticLimits[involvedEntityNames[key]];
 
-    // eslint-disable-next-line no-param-reassign
     prev[key] =
       staticFilter && result[key]
         ? [injectStaticFilter(staticFilter, result[key])]

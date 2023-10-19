@@ -18,7 +18,13 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
   const result = filter
     ? async ({ previous: [previous], current: [current] }) => {
         const { pubsub } = context;
-        if (!pubsub) throw new TypeError('Context have to have pubsub for subscription!'); // to prevent flowjs error
+
+        if (pubsub === undefined) {
+          throw new TypeError(
+            `PubSub not found! If you don't use "Subscription" exclude it in "inventory"!`,
+          );
+        }
+
         const updatedFields = Object.keys(data);
 
         const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);

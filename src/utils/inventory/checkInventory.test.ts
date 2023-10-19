@@ -392,7 +392,7 @@ describe('checkInventory', () => {
       // admin: { include: { Query: true, Mutation: true } },
       // master: {},
     };
-    test('should return correct results for InventoryByRoles guest', () => {
+    test('should return correct results for InventoryByRoles ""', () => {
       const roles = [''];
       const inventoryСhain: InventoryСhain = ['Mutation', 'renewEntity', 'User'];
       const result = roles.some((role: any) =>
@@ -403,6 +403,14 @@ describe('checkInventory', () => {
     test('should return correct results for InventoryByRoles guest', () => {
       const roles = ['guest'];
       const inventoryСhain: InventoryСhain = ['Mutation', 'signoutEntity', 'User'];
+      const result = roles.some((role: any) =>
+        checkInventory(inventoryСhain, inventoryByRoles[role]),
+      );
+      expect(result).toBe(false);
+    });
+    test('should return correct results for InventoryByRoles guest & Subscription', () => {
+      const roles = [''];
+      const inventoryСhain: InventoryСhain = ['Subscription', 'deletedEntity', 'User'];
       const result = roles.some((role: any) =>
         checkInventory(inventoryСhain, inventoryByRoles[role]),
       );
