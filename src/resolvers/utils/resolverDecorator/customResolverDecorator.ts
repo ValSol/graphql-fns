@@ -65,7 +65,15 @@ const customResolverDecorator = (
       }, {});
     }
 
-    const [parent, args, ...rest] = resolverArgs;
+    const actionName = signatureMethods.specificName(entityConfig, generalConfig);
+    const middleware = serversideConfig?.middlewares?.[actionName] || null;
+
+    const [arg1, arg2, arg3, arg4, arg5] = resolverArgs;
+
+    const resolverArgs2 =
+      middleware !== null ? await middleware(arg1, arg2, arg3, arg4, arg5) : resolverArgs;
+
+    const [parent, args, ...rest] = resolverArgs2;
 
     const involvedEntityNames = signatureMethods.involvedEntityNames(entityConfig, generalConfig);
 

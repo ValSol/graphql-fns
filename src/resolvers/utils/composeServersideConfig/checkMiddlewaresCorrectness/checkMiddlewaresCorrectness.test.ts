@@ -1,9 +1,13 @@
 /* eslint-env jest */
-import type { DescendantAttributes, TangibleEntityConfig, GeneralConfig } from '../../../tsTypes';
+import type {
+  DescendantAttributes,
+  TangibleEntityConfig,
+  GeneralConfig,
+} from '../../../../tsTypes';
 
-import checkFilterCorrectness from './checkFilterCorrectness';
+import checkMiddlewaresCorrectness from '.';
 
-describe('checkFilterCorrectness', () => {
+describe('checkMiddlewaresCorrectness', () => {
   const personConfig = {} as TangibleEntityConfig;
 
   const placeConfig: TangibleEntityConfig = {
@@ -110,43 +114,59 @@ describe('checkFilterCorrectness', () => {
     descendantKey: 'ForView',
     allow: {
       Person: ['entity', 'entities'],
-      // Place: ['entity', 'entities'],
+      Place: ['entityCount', 'entitiesThroughConnection'],
     },
   };
 
   const descendant = { ForView };
 
-  const generalConfig: GeneralConfig = {
-    allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    descendant,
-  };
+  const allEntityConfigs = { Person: personConfig, Place: placeConfig };
 
-  test('should check the simplest correct filter', () => {
-    const filter: Record<string, any> = {};
-    const entityName = 'Place';
-    const result = checkFilterCorrectness(entityName, filter, generalConfig);
+  test('should check without "inventory"', () => {
+    const generalConfig = { allEntityConfigs, descendant };
 
-    const expectedResult = true;
-    expect(result).toBe(expectedResult);
+    const middlewares = {
+      PersonCountForView: () => {},
+      PlaceCountForView: () => {},
+      PlaceForView: () => {},
+      PersonCount: 'test',
+      Place: () => {},
+      SignOut: true,
+    };
+
+    const result = checkMiddlewaresCorrectness(middlewares as any, generalConfig);
+
+    const expectedResult = {
+      unfound: ['PersonCountForView', 'PlaceForView', 'SignOut'],
+      noFunc: ['PersonCount'],
+    };
+    expect(result).toEqual(expectedResult);
   });
 
-  test('should check the filter with incorrect "EntityName"', () => {
-    const filter = { address_: { abc: 8 } };
-    const entityName = 'Place';
-    const t = () => checkFilterCorrectness(entityName, filter, generalConfig);
+  test('should check with "inventory"', () => {
+    const inventory = {
+      name: '',
+      include: { Query: { entityCountForView: ['Place'], entityCount: ['Person'] } },
+    };
 
-    expect(t).toThrow(
-      'Field "address" not found in "Place" entity in filter: ""Place": "{"address_":{"abc":8}}"!',
-    );
-  });
+    const generalConfig = { allEntityConfigs, descendant, inventory };
 
-  test('should check the incorrect filter', () => {
-    const filter = { visitors_: { abc: 5 } };
-    const entityName = 'Place';
-    const t = () => checkFilterCorrectness(entityName, filter, generalConfig);
+    const middlewares = {
+      PersonCountForView: () => {},
+      PersonForView: () => {},
+      PlaceCountForView: () => {},
+      PlaceForView: () => {},
+      PersonCount: () => {},
+      Place: () => {},
+      SignOut: () => {},
+    };
 
-    expect(t).toThrow(
-      'Field "abc" not found in "Person" entity in filter: ""Place": "{"visitors_":{"abc":5}}"!',
-    );
+    const result = checkMiddlewaresCorrectness(middlewares as any, generalConfig);
+
+    const expectedResult = {
+      unfound: ['PersonCountForView', 'PersonForView', 'PlaceForView', 'Place', 'SignOut'],
+      noFunc: [],
+    };
+    expect(result).toEqual(expectedResult);
   });
 });

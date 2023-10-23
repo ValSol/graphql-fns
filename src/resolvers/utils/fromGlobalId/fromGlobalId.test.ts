@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import fromGlobalId from './fromGlobalId';
+import fromGlobalId from '.';
 
 describe('fromGlobalId', () => {
   test('normal globalId', () => {

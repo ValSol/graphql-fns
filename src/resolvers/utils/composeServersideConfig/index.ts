@@ -1,6 +1,7 @@
 import type { GeneralConfig, ServersideConfig, SimplifiedEntityFilters } from '../../../tsTypes';
 
 import checkFilterCorrectness from './checkFilterCorrectness';
+import checkMiddlewaresCorrectness from './checkMiddlewaresCorrectness';
 import getAllEntityNames from './getAllEntityNames';
 
 const checkFilter = (
@@ -43,9 +44,26 @@ const composeServersideConfig = (
     filters: simplifiedEntityFilters,
     getUserAttributes,
     inventoryByRoles,
+    middlewares,
     staticFilters,
     staticLimits,
   } = serversideConfig;
+
+  if (middlewares) {
+    const { unfound, noFunc } = checkMiddlewaresCorrectness(middlewares, generalConfig);
+
+    if (unfound.length > 0) {
+      `Found in "middlewares" incorrect action name${unfound.length > 1 ? 's' : ''}: ${unfound
+        .map((str) => `"${str}"`)
+        .join(', ')}!`;
+    }
+
+    if (noFunc.length > 0) {
+      `Found in "middlewares" incorrect (not "function") type${
+        noFunc.length > 1 ? 's' : ''
+      }: ${noFunc.map((str) => `"${str}"`).join(', ')}!`;
+    }
+  }
 
   if (inventoryByRoles && !containedRoles) {
     throw new TypeError(`Not found "containedRoles" to use with "inventoryByRoles"!`);
@@ -123,7 +141,7 @@ const composeServersideConfig = (
         checkFilter(arg, entityName, simplifiedEntityFilters, generalConfig);
       });
     });
-  } else if (allRoles.length) {
+  } else if (allRoles.length > 0) {
     const handler = {
       get(
         target: {

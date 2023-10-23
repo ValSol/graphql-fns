@@ -922,6 +922,24 @@ export type GraphqlObject = {
   [key: string]: GraphqlScalar | GraphqlObject | GraphqlObject[];
 };
 
+export type Middlewares = {
+  [actionName: string]: (
+    parent: null | GraphqlObject,
+    args: GraphqlObject,
+    context: Context,
+    info: SintheticResolverInfo,
+    involvedEntityNames: { [involvedEntityNamesKey: string]: string },
+  ) => Promise<
+    [
+      null | GraphqlObject, // parent
+      GraphqlObject, // args
+      Context, // context
+      SintheticResolverInfo, // info
+      { [involvedEntityNamesKey: string]: string }, // involvedEntityNames
+    ]
+  >;
+};
+
 export type ServersideConfig = {
   transactions?: boolean;
   Query?: {
@@ -970,7 +988,10 @@ export type ServersideConfig = {
   staticLimits?: {
     [tangibleEntityName: string]: number;
   };
+
   // ***
+
+  middlewares?: Middlewares;
 
   saveFiles?: {
     [fileFieldConfigName: string]: (

@@ -1,12 +1,12 @@
-import type {GeneralConfig} from '../../../tsTypes';
+import type { GeneralConfig } from '../../../../tsTypes';
 
-import parseEntityName from '../../../utils/parseEntityName';
-import composeWhereInput from '../mergeWhereAndFilter/composeWhereInput';
+import parseEntityName from '../../../../utils/parseEntityName';
+import composeWhereInput from '../../mergeWhereAndFilter/composeWhereInput';
 
 const checkFilterCorrectness = (
   entityName: string,
   filter: {
-    [key: string]: any
+    [key: string]: any;
   },
   generalConfig: GeneralConfig,
 ): true => {

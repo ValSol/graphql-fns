@@ -95,7 +95,15 @@ const resolverDecorator = (
       }, {});
     }
 
-    const [parent, args, ...rest] = resolverArgs;
+    const actionName = actionAttributes.actionName(entityConfig.name);
+    const middleware = serversideConfig?.middlewares?.[actionName] || null;
+
+    const [arg1, arg2, arg3, arg4, arg5] = resolverArgs;
+
+    const resolverArgs2 =
+      middleware !== null ? await middleware(arg1, arg2, arg3, arg4, arg5) : resolverArgs;
+
+    const [parent, args, ...rest] = resolverArgs2;
 
     const involvedEntityNames = actionAttributes.actionInvolvedEntityNames(name);
 

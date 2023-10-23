@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import toGlobalId from './toGlobalId';
+import toGlobalId from '.';
 
 describe('toGlobalId', () => {
   test('filter empty', () => {

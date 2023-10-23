@@ -30,8 +30,6 @@ const composeActionSignature = (
     actionReturnString,
   } = actionAttributes;
 
-  const { inventory } = generalConfig;
-
   const { name: configName } = entityConfig;
 
   if (actionIsChild || !actionAllowed(entityConfig)) return '';

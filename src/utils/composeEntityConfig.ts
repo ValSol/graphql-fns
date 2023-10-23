@@ -20,6 +20,7 @@ const forbiddenFieldNames = [
   'counter',
   'connect',
   'create',
+  'pageInfo',
 ];
 
 const allowedConfigTypes = ['embedded', 'file', 'tangible', 'tangibleFile', 'virtual'];
