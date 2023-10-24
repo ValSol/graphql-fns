@@ -1,8 +1,4 @@
-import type {
-  GraphqlObject,
-  TangibleEntityConfig,
-  TangibleFileEntityConfig,
-} from '../../../../tsTypes';
+import type { GraphqlObject, TangibleEntityConfig } from '../../../../tsTypes';
 import type { PrepareBulkData, PreparedData } from '../../../tsTypes';
 
 import processCreateInputData from '../../processCreateInputData';
@@ -35,13 +31,18 @@ const prepareBulkData: PrepareBulkData = async (
   let coreForDeletions = core;
 
   previousEntities.forEach((previousEntity: GraphqlObject) => {
-    coreForDeletions = Object.keys(duplexFieldsProjection).length
-      ? processDeleteData(
-          processDeleteDataPrepareArgs(data, previousEntity, entityConfig as TangibleEntityConfig),
-          coreForDeletions,
-          entityConfig as TangibleEntityConfig,
-        )
-      : coreForDeletions;
+    coreForDeletions =
+      Object.keys(duplexFieldsProjection).length > 0
+        ? processDeleteData(
+            processDeleteDataPrepareArgs(
+              data,
+              previousEntity,
+              entityConfig as TangibleEntityConfig,
+            ),
+            coreForDeletions,
+            entityConfig as TangibleEntityConfig,
+          )
+        : coreForDeletions;
   });
 
   let preparedData: PreparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };

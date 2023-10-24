@@ -1230,7 +1230,27 @@ describe('createUpdateEntityMutationResolver', () => {
       name: 'Restaurant',
       type: 'tangible',
 
-      textFields: [{ name: 'slug', type: 'textFields' }],
+      textFields: [
+        { name: 'slug', type: 'textFields' },
+        { name: 'test', type: 'textFields' },
+      ],
+
+      duplexFields: [
+        {
+          name: 'restaurant1',
+          oppositeName: 'restaurant2',
+          config: restaurantConfig,
+          index: true,
+          type: 'duplexFields',
+        },
+        {
+          name: 'restaurant2',
+          oppositeName: 'restaurant1',
+          config: restaurantConfig,
+          index: true,
+          type: 'duplexFields',
+        },
+      ],
 
       relationalFields: [
         {
@@ -1286,6 +1306,7 @@ describe('createUpdateEntityMutationResolver', () => {
 
     const data = {
       slug: 'Pantagruel',
+      test: 'Test!!!',
       access: {
         create: {
           postCreators: ['1234567890'],
@@ -1387,5 +1408,32 @@ describe('createUpdateEntityMutationResolver', () => {
     );
 
     expect(updatedPost3).toBe(null);
+
+    // recursive test for error "removing related relational fields values on update if there is duplex fields"
+
+    const updateRestaurant = createUpdateEntityMutationResolver(
+      restaurantConfig,
+      generalConfig2,
+      serversideConfig,
+      true,
+    );
+
+    expect(typeof updateRestaurant).toBe('function');
+
+    const untouchablePost = await Post.findById(updatedPost2.id);
+
+    expect(untouchablePost.restaurant.toString()).toBe(restaurantId.toString());
+
+    const updatedRestaurant = await updateRestaurant(
+      null,
+      { whereOne: { id: restaurantId }, data: { test: null } },
+      { mongooseConn, pubsub },
+      null,
+      { inputOutputEntity: [[]] },
+    );
+
+    const untouchablePost2 = await Post.findById(updatedPost2.id);
+
+    expect(untouchablePost2.restaurant.toString()).toBe(restaurantId.toString());
   });
 });

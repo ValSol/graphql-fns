@@ -26,23 +26,25 @@ const processDeleteData = (
     return prev;
   }, []);
 
-  const relationalFieldsArray = relationalFields
-    .filter(({ parent }) => parent)
-    .reduce((prev, { oppositeName, config }) => {
-      const relationalField = config.relationalFields.find(
-        ({ name: name2 }) => name2 === oppositeName,
-      );
-      if (!relationalField) {
-        throw new TypeError(
-          `Expected a relationalField with name "${oppositeName}" in "${config.name}" entity!`,
-        );
-      }
+  const relationalFieldsArray = forDelete
+    ? relationalFields
+        .filter(({ parent }) => parent)
+        .reduce((prev, { oppositeName, config }) => {
+          const relationalField = config.relationalFields.find(
+            ({ name: name2 }) => name2 === oppositeName,
+          );
+          if (!relationalField) {
+            throw new TypeError(
+              `Expected a relationalField with name "${oppositeName}" in "${config.name}" entity!`,
+            );
+          }
 
-      const { array: oppositeArray } = relationalField;
-      prev.push({ config, oppositeArray, oppositeName });
+          const { array: oppositeArray } = relationalField;
+          prev.push({ config, oppositeArray, oppositeName });
 
-      return prev;
-    }, []);
+          return prev;
+        }, [])
+    : [];
 
   const core: Core = initialCore || new Map();
 
@@ -58,38 +60,12 @@ const processDeleteData = (
   }
 
   duplexFieldsArray.forEach(({ name, array, config, oppositeArray, oppositeName }) => {
-    if (data[name]) {
-      if (array) {
-        data[name].forEach((oppositeId) => {
-          const item = {
-            updateOne: {
-              filter: {
-                _id: oppositeId,
-              },
-              update: oppositeArray
-                ? {
-                    $pull: {
-                      [oppositeName]: _id,
-                    },
-                  }
-                : {
-                    $unset: {
-                      [oppositeName]: 1,
-                    },
-                  },
-            },
-          } as const;
+    if (!data[name]) {
+      return;
+    }
 
-          const resultItem = core.get(config);
-          if (resultItem) {
-            resultItem.push(item);
-          } else {
-            core.set(config, [item]);
-          }
-        });
-      } else {
-        const oppositeId = data[name];
-
+    if (array) {
+      data[name].forEach((oppositeId) => {
         const item = {
           updateOne: {
             filter: {
@@ -115,6 +91,34 @@ const processDeleteData = (
         } else {
           core.set(config, [item]);
         }
+      });
+    } else {
+      const oppositeId = data[name];
+
+      const item = {
+        updateOne: {
+          filter: {
+            _id: oppositeId,
+          },
+          update: oppositeArray
+            ? {
+                $pull: {
+                  [oppositeName]: _id,
+                },
+              }
+            : {
+                $unset: {
+                  [oppositeName]: 1,
+                },
+              },
+        },
+      } as const;
+
+      const resultItem = core.get(config);
+      if (resultItem) {
+        resultItem.push(item);
+      } else {
+        core.set(config, [item]);
       }
     }
   });

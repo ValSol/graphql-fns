@@ -56,13 +56,14 @@ const prepareBulkData: PrepareBulkData = async (
     );
 
     pairedPreviouseEntities.forEach(([previousEntity, data]: [any, any]) => {
-      coreForDeletions = Object.keys(duplexFieldsProjection).length
-        ? processDeleteData(
-            processDeleteDataPrepareArgs(data, previousEntity, entityConfig),
-            coreForDeletions,
-            entityConfig,
-          )
-        : coreForDeletions;
+      coreForDeletions =
+        Object.keys(duplexFieldsProjection).length > 0
+          ? processDeleteData(
+              processDeleteDataPrepareArgs(data, previousEntity, entityConfig),
+              coreForDeletions,
+              entityConfig,
+            )
+          : coreForDeletions;
     });
 
     let preparedData: PreparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };

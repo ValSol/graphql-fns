@@ -111,6 +111,13 @@ describe('processDeleteData', () => {
     const expectedResult = new Map();
     expectedResult.set(personConfig, [
       {
+        deleteOne: {
+          filter: {
+            _id: '111',
+          },
+        },
+      },
+      {
         updateOne: {
           filter: {
             _id: '222',
@@ -199,7 +206,7 @@ describe('processDeleteData', () => {
       },
     ]);
 
-    const result = processDeleteData(data, null, personConfig);
+    const result = processDeleteData(data, null, personConfig, true);
 
     expect(result).toEqual(expectedResult);
   });
