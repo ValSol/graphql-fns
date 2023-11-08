@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 import { GeneralConfig } from '../tsTypes';
 
 // alsow used in "composeInterfaceTypeDic" util
@@ -47,6 +49,10 @@ const composeInterfaceTypeDic = (
   // *** check interface names correctness
 
   Object.keys(interfaces).forEach((interfaceName) => {
+    if (pluralize(interfaceName) === interfaceName) {
+      throw new TypeError(`Forbidden interface name: "${interfaceName}" in plural form!`);
+    }
+
     if (entityTypeDic[interfaceName] !== undefined) {
       throw new TypeError(`Interface name: "${interfaceName}" already used as entity name!`);
     }
