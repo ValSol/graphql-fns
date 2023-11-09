@@ -707,6 +707,7 @@ export type DescendantAttributesActionName =
   | 'entity'
   | 'childEntity'
   | 'childEntityCount'
+  | 'childEntityGetOrCreate'
   | 'cloneEntity'
   | 'entityCount'
   | 'entityDistinctValues'
@@ -836,7 +837,7 @@ export type Custom = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
-      'Query', // "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
+      'Query', // "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
       string,
     ]
   | [
@@ -848,7 +849,7 @@ export type TwoSegmentInventoryChain =
   | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity'];
 export type ThreeSegmentInventoryChain =
   | [
-      'Query', // first "string" for 'entity', 'childEntity', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
+      'Query', // first "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
       string,
       string,
     ]
@@ -1123,6 +1124,7 @@ export type VirtualConfigComposer = (
 ) => VirtualEntityConfig;
 
 export type ActionAttributes = {
+  actionArgsToHide?: string[]; // some of argNames to hide in schema action signature
   actionGeneralName: (descendantKey?: string) => string;
   actionType: 'Mutation' | 'Query' | 'Field';
   actionAllowed: (entityConfig: EntityConfig) => boolean;

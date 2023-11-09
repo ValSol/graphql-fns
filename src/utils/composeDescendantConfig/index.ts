@@ -184,7 +184,7 @@ const composeDescendantConfig = (
   Object.keys(entityConfig).forEach((key) => {
     if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
       entityConfig[key] = entityConfig[key].map((item) => {
-        const { name, array, config: currentConfig } = item;
+        const { name, oppositeName, array, config: currentConfig, required } = item;
 
         if (name === 'pageInfo') {
           // field "pageInfo" refers to standard child config "PageInfo" so skip it
@@ -197,9 +197,16 @@ const composeDescendantConfig = (
           );
         }
 
+        const { array: oppositeArray } =
+          key === 'duplexFields'
+            ? composeFieldsObject(currentConfig)[oppositeName]
+            : { array: false };
+
         const childQueries = array
           ? ['childEntities', 'childEntitiesThroughConnection', 'childEntityCount']
-          : ['childEntity'];
+          : key !== 'duplexFields' || required || oppositeArray
+          ? ['childEntity']
+          : ['childEntity', 'childEntityGetOrCreate'];
         if (
           !childQueries.some((childQuery: DescendantAttributesActionName) =>
             descendant[descendantKey].allow[currentConfig.name].includes(childQuery),

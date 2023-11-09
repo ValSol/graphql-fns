@@ -81,6 +81,12 @@ const composeEntityConfig = (
           );
         }
 
+        if (fieldName.endsWith('GetOrCreate')) {
+          throw new TypeError(
+            `Forbidden the field name: "${fieldName}" that ends with "GetOrCreate" in entity: "${name}"!`,
+          );
+        }
+
         if (array && fieldName.endsWith('Count')) {
           throw new TypeError(
             `Forbidden the field name: "${fieldName}" that ends with "Count" in entity: "${name}"!`,

@@ -274,7 +274,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }`,
-
       AddressCreateInput: `input AddressCreateInput {
   city: String
 }`,

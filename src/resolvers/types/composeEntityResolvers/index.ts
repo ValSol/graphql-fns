@@ -9,6 +9,7 @@ import type {
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
 import createEntityCountResolver from '../createEntityCountResolver';
+import createEntityGetOrCreateResolver from '../createEntityGetOrCreateResolver';
 import createEntityOppositeRelationArrayResolver from '../createEntityOppositeRelationArrayResolver';
 import createEntityOppositeRelationCountResolver from '../createEntityOppositeRelationCountResolver';
 import createEntityOppositeRelationConnectionResolver from '../createEntityOppositeRelationConnectionResolver';
@@ -183,6 +184,26 @@ const composeEntityResolvers = (
           prev[name] = resolver; // eslint-disable-line no-param-reassign
         }
       }
+      return prev;
+    }, resolvers);
+
+    duplexFields.reduce((prev, { array, name, oppositeName, config, required }) => {
+      if (array || required) {
+        return prev;
+      }
+
+      const { array: oppositeArray } = composeFieldsObject(config)[oppositeName];
+
+      if (oppositeArray) {
+        return prev;
+      }
+
+      const resolver = createEntityGetOrCreateResolver(config, generalConfig, serversideConfig);
+
+      if (resolver) {
+        prev[`${name}GetOrCreate`] = resolver;
+      }
+
       return prev;
     }, resolvers);
   }

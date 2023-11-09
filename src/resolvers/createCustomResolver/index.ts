@@ -75,7 +75,9 @@ const createCustomResolver = (
     );
   }
 
-  throw new TypeError(`Have to set the descendant or custom "${actionName}" ${actionKind}!`);
+  throw new TypeError(
+    `Have to set the descendant or custom "${actionName}" ${actionKind} for "${entityConfig.name}" entity!`,
+  );
 };
 
 export default createCustomResolver;

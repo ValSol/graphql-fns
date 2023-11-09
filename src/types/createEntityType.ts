@@ -1,4 +1,5 @@
 import type { ActionAttributes, EntityConfig, GeneralConfig } from '../tsTypes';
+import composeFieldsObject from '../utils/composeFieldsObject';
 
 import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
@@ -11,6 +12,7 @@ const {
   childEntities,
   childEntitiesThroughConnection,
   childEntity,
+  childEntityGetOrCreate,
   childEntityCount,
 } = allActionAttributes;
 
@@ -194,6 +196,39 @@ const createEntityType = (
     },
     entityTypeArray,
   );
+
+  duplexFields.reduce((prev, { array, name: name2, oppositeName, required, config }) => {
+    if (array || required) {
+      return prev;
+    }
+
+    const { array: oppositeArray } = composeFieldsObject(config)[oppositeName];
+
+    if (oppositeArray) {
+      return prev;
+    }
+
+    if (checkInventory(['Query', 'childEntityGetOrCreate', config.name])) {
+      const childEntityGetOrCreateArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'childEntityGetOrCreate',
+        inputDic,
+      );
+
+      if (childEntityGetOrCreateArgs) {
+        prev.push(
+          `  ${name2}GetOrCreate(${childEntityGetOrCreateArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            childEntityGetOrCreate,
+          )}`,
+        );
+      }
+    }
+
+    return prev;
+  }, entityTypeArray);
 
   [...embeddedFields, ...fileFields].reduce(
     (prev, { array, name: name2, required, config, variants }) => {

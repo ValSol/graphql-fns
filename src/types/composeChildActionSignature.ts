@@ -14,6 +14,7 @@ const composeChildActionSignature = (
   },
 ): string => {
   const {
+    actionArgsToHide = [],
     actionGeneralName,
     actionName,
     actionType,
@@ -41,9 +42,11 @@ const composeChildActionSignature = (
 
   const toShow: Array<boolean> = [];
 
-  inputCreators.forEach((inputCreator) => {
+  inputCreators.forEach((inputCreator, i) => {
     const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
-    toShow.push(Boolean(inputDefinition));
+
+    toShow.push(!actionArgsToHide.includes(argNames[i]) && Boolean(inputDefinition));
+
     if (inputDic && inputName && !inputDic[inputName] && inputDefinition) {
       inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
       fillInputDic(childChain, inputDic);

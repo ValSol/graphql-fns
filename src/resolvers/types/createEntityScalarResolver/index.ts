@@ -19,7 +19,7 @@ const createEntityScalarResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory, descendant } = generalConfig;
+  const { allEntityConfigs } = generalConfig;
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
 

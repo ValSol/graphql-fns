@@ -8,7 +8,11 @@ import composeCustomEntityQueryArgs from './composeCustomEntityQueryArgs';
 
 const attributesWithoutChildren = Object.keys(queryAttributes).reduce<Record<string, any>>(
   (prev, queyrName) => {
-    if (queyrName !== 'childEntities' && queyrName !== 'childEntity') {
+    if (
+      queyrName !== 'childEntities' &&
+      queyrName !== 'childEntityGetOrCreate' &&
+      queyrName !== 'childEntity'
+    ) {
       prev[queyrName] = queryAttributes[queyrName]; // eslint-disable-line no-param-reassign
     }
 
