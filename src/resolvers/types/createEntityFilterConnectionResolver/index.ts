@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import type {
   Context,
   EntityConfig,
@@ -12,7 +10,6 @@ import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntitiesThroughConnectionQueryAttributes from '../../../types/actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
-import fromGlobalId from '../../utils/fromGlobalId';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
@@ -21,11 +18,11 @@ type Args = {
   search?: string;
   sort?: any;
   where?: any;
-  // "objectIds_from_parent" arg used only to call from createEntityConnectionResolver
+  // "objectIds_from_parent" arg used only to call from createEntityFilterConnectionResolver
   objectIds_from_parent?: Array<any>;
 };
 
-const createEntityConnectionResolver = (
+const createEntityFilterConnectionResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -81,10 +78,10 @@ const createEntityConnectionResolver = (
 
     const { fieldName } = info;
 
-    const id_in = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
 
     // eslint-disable-next-line camelcase
-    if (!id_in || !id_in.length)
+    if (!stringifiedFilter)
       return {
         pageInfo: {
           hasNextPage: false,
@@ -95,20 +92,15 @@ const createEntityConnectionResolver = (
         edges: [],
       };
 
-    const objectIds_from_parent = id_in // eslint-disable-line no-underscore-dangle, camelcase
-      .map((id) => fromGlobalId(id)._id) // eslint-disable-line no-underscore-dangle
-      .map((id) => new mongoose.mongo.ObjectId(id));
+    const filter = JSON.parse(stringifiedFilter);
 
-    const { near, search, sort, where = {} } = args;
+    const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, filter] } : filter; // eslint-disable-line camelcase
 
     const entitiesConniection = await childEntitiesThroughConnectionQueryResolver(
       parent,
-      // objectIds_from_parent use only for call from this createEntityConnectionResolver
-      sort?.length || near || search
-        ? { ...args, where: where2, token: parent._token }
-        : { ...args, where: where2, token: parent._token, objectIds_from_parent },
+      { ...args, where: where2, token: parent._token },
       context,
       info,
     );
@@ -119,4 +111,4 @@ const createEntityConnectionResolver = (
   return resolver;
 };
 
-export default createEntityConnectionResolver;
+export default createEntityFilterConnectionResolver;

@@ -1,6 +1,8 @@
 import type { InputCreator } from '../../tsTypes';
 
 import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
 const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
   const {
@@ -20,7 +22,7 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
   const inputName = `PushInto${name}Input`;
 
   if (configType !== 'tangible') return [inputName, '', {}];
-  const { duplexFields = [], relationalFields = [] } = entityConfig;
+  const { duplexFields = [], filterFields = [], relationalFields = [] } = entityConfig;
 
   const entityTypeArray: Array<string> = [];
   const childChain: Record<string, any> = {};
@@ -83,6 +85,22 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
       prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
 
       childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
+
+      return prev;
+    }, entityTypeArray);
+
+  filterFields
+    .filter(({ freeze }) => !freeze)
+    .reduce((prev, { name: name2, array, config: config2, config: { name: entityName } }) => {
+      if (array) {
+        prev.push(`  ${name2}: ${entityName}WhereInput`);
+
+        childChain[`${entityName}WhereInput`] = [createEntityWhereInputType, config2];
+      } else {
+        prev.push(`  ${name2}: ${entityName}WhereOneInput`);
+
+        childChain[`${entityName}WhereOneInput`] = [createEntityWhereOneInputType, config2];
+      }
 
       return prev;
     }, entityTypeArray);

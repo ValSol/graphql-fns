@@ -5,7 +5,6 @@ import type {
   EntityConfigObject,
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
-  SimplifiedVirtualEntityConfig,
   DescendantAttributesActionName,
 } from '../../tsTypes';
 
@@ -118,6 +117,10 @@ const composeDescendantConfig = (
     throw new TypeError(`Forbidden to put duplexFields into "addFields" but got "${name}" field!`);
   });
 
+  ((addFields[rootEntityName] as TangibleFields)?.filterFields || []).forEach(({ name }) => {
+    throw new TypeError(`Forbidden to put filterFields into "addFields" but got "${name}" field!`);
+  });
+
   const entityConfig = { ...rootEntityConfig, name: descendantEntityName };
 
   store[descendantEntityName] = entityConfig;
@@ -182,7 +185,12 @@ const composeDescendantConfig = (
   }
 
   Object.keys(entityConfig).forEach((key) => {
-    if (key === 'relationalFields' || key === 'duplexFields' || key === 'childFields') {
+    if (
+      key === 'relationalFields' ||
+      key === 'duplexFields' ||
+      key === 'filterFields' ||
+      key === 'childFields'
+    ) {
       entityConfig[key] = entityConfig[key].map((item) => {
         const { name, oppositeName, array, config: currentConfig, required } = item;
 

@@ -1,5 +1,7 @@
 import type { InputCreator } from '../../tsTypes';
 
+import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import isOppositeRequired from './isOppositeRequired';
 
 const createEntityCreateInputType: InputCreator = (entityConfig) => {
@@ -25,7 +27,7 @@ const createEntityCreateInputType: InputCreator = (entityConfig) => {
   if (configType === 'tangible') {
     entityTypeArray[0].push('  id: ID');
 
-    const { duplexFields = [], relationalFields = [] } = entityConfig;
+    const { filterFields = [], duplexFields = [], relationalFields = [] } = entityConfig;
 
     duplexFields.reduce((prev, { name: name2, config, required }) => {
       if (required) {
@@ -93,6 +95,30 @@ const createEntityCreateInputType: InputCreator = (entityConfig) => {
 
         return prev;
       }, entityTypeArray[i]);
+    }
+
+    for (let i = 0; i < entityTypeArray.length; i += 1) {
+      filterFields
+        .filter(({ freeze }) => !freeze)
+        .reduce(
+          (
+            prev,
+            { name: name2, array, required, config: config2, config: { name: entityName } },
+          ) => {
+            if (array) {
+              prev.push(`  ${name2}: ${entityName}WhereInput${required ? '!' : ''}`);
+
+              childChain[`${entityName}WhereInput`] = [createEntityWhereInputType, config2];
+            } else {
+              prev.push(`  ${name2}: ${entityName}WhereOneInput${required ? '!' : ''}`);
+
+              childChain[`${entityName}WhereOneInput`] = [createEntityWhereOneInputType, config2];
+            }
+
+            return prev;
+          },
+          entityTypeArray[i],
+        );
     }
   }
 

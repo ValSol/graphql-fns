@@ -62,6 +62,7 @@ const createEntityType = (
     intFields = [],
     geospatialFields = [],
     relationalFields = [],
+    filterFields = [],
     textFields = [],
     type: configType,
     name,
@@ -131,7 +132,7 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  [...relationalFields, ...duplexFields].reduce(
+  [...relationalFields, ...duplexFields, ...filterFields].reduce(
     (prev, { array, name: name2, required, config }) => {
       if (array) {
         const childEntitiesArgs = composeChildActionSignature(
@@ -268,6 +269,16 @@ const createEntityType = (
     },
     entityTypeArray,
   );
+
+  filterFields.reduce((prev, field) => {
+    const { name: name2, required, variants } = field;
+
+    if (variants.includes('stringified')) {
+      prev.push(`  ${name2}Stringified: String${required ? '!' : ''}`);
+    }
+
+    return prev;
+  }, entityTypeArray);
 
   geospatialFields.reduce((prev, field) => {
     const { geospatialType } = field;

@@ -1,6 +1,8 @@
 import type { InputCreator } from '../../tsTypes';
 
 import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import isOppositeRequired from './isOppositeRequired';
 
 const createEntityCloneInputType: InputCreator = (entityConfig) => {
@@ -24,6 +26,7 @@ const createEntityCloneInputType: InputCreator = (entityConfig) => {
     textFields = [],
     duplexFields = [],
     relationalFields = [],
+    filterFields = [],
   } = entityConfig;
 
   const childChain: Record<string, any> = {};
@@ -85,6 +88,22 @@ const createEntityCloneInputType: InputCreator = (entityConfig) => {
 
     return prev;
   }, entityTypeArray);
+
+  filterFields
+    .filter(({ freeze }) => !freeze)
+    .reduce((prev, { name: name2, array, config: config2, config: { name: entityName } }) => {
+      if (array) {
+        prev.push(`  ${name2}: ${entityName}WhereInput`);
+
+        childChain[`${entityName}WhereInput`] = [createEntityWhereInputType, config2];
+      } else {
+        prev.push(`  ${name2}: ${entityName}WhereOneInput`);
+
+        childChain[`${entityName}WhereOneInput`] = [createEntityWhereOneInputType, config2];
+      }
+
+      return prev;
+    }, entityTypeArray);
 
   textFields.reduce((prev, { array, name: name2 }) => {
     prev.push(`  ${name2}: ${array ? '[' : ''}String${array ? '!]' : ''}`);

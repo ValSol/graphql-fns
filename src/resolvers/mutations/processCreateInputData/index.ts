@@ -63,6 +63,10 @@ const processCreateInputData = (
       [fieldName: string]: { array?: boolean; config: TangibleEntityConfig };
     } = {};
 
+    const filterFieldsObject: {
+      [fieldName: string]: { array?: boolean; config: TangibleEntityConfig };
+    } = {};
+
     const duplexFieldsObject: {
       [fieldName: string]: {
         array?: boolean;
@@ -76,12 +80,17 @@ const processCreateInputData = (
     // use "|| true" & "entityConfig2 as any" to let duplexFields & relationalFields inside embedded fields
     // so if schema will allow this processCreateInputData will correctly process data
     if (entityType === 'tangible' || true) {
-      const { duplexFields = [], relationalFields = [] } = entityConfig2 as any;
+      const { duplexFields = [], relationalFields = [], filterFields = [] } = entityConfig2 as any;
 
       relationalFields.reduce((prev, { name, array, config }) => {
         prev[name] = { array, config };
         return prev;
       }, relationalFieldsObject);
+
+      filterFields.reduce((prev, { name, array, config }) => {
+        prev[name] = { array, config };
+        return prev;
+      }, filterFieldsObject);
 
       duplexFields.reduce((prev, { name, oppositeName, parent, array, config }) => {
         if (!config.duplexFields) {
@@ -404,6 +413,12 @@ const processCreateInputData = (
         } else {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key] === null ? null : transform(data2[key], config);
+        }
+      } else if (filterFieldsObject[key]) {
+        if (data2[key] === null) {
+          prev[key] = null;
+        } else {
+          prev[key] = JSON.stringify(data2[key]);
         }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];

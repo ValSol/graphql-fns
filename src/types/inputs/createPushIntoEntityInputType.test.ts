@@ -4,6 +4,8 @@ import type { EmbeddedEntityConfig, FileEntityConfig, TangibleEntityConfig } fro
 
 import createPushIntoEntityInputType from './createPushIntoEntityInputType';
 import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
 describe('createPushIntoEntityInputType', () => {
   test('should create entity input type with text fields', () => {
@@ -297,7 +299,6 @@ describe('createPushIntoEntityInputType', () => {
           config: addressConfig,
           required: true,
           type: 'embeddedFields',
-          variants: ['plain'],
         },
         {
           name: 'locations',
@@ -311,7 +312,6 @@ describe('createPushIntoEntityInputType', () => {
           name: 'place',
           config: addressConfig,
           type: 'embeddedFields',
-          variants: ['plain'],
         },
         {
           name: 'places',
@@ -435,6 +435,70 @@ describe('createPushIntoEntityInputType', () => {
 }`,
       {
         PersonCreateInput: [createEntityCreateInputType, personConfig],
+      },
+    ];
+
+    const result = createPushIntoEntityInputType(personConfig);
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type with filter fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+    const placeConfig: TangibleEntityConfig = {
+      name: 'Place',
+      type: 'tangible',
+      textFields: [{ name: 'name', type: 'textFields' }],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+          type: 'textFields',
+        },
+        {
+          name: 'lastName',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+      filterFields: [
+        {
+          name: 'places',
+          config: placeConfig,
+          array: true,
+        },
+        {
+          name: 'place',
+          config: placeConfig,
+        },
+        {
+          name: 'requiredPlaces',
+          config: placeConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'requiredPlace',
+          config: placeConfig,
+          required: true,
+        },
+      ],
+    });
+    const expectedResult = [
+      'PushIntoPersonInput',
+      `input PushIntoPersonInput {
+  places: PlaceWhereInput
+  place: PlaceWhereOneInput
+  requiredPlaces: PlaceWhereInput
+  requiredPlace: PlaceWhereOneInput
+}`,
+      {
+        PlaceWhereInput: [createEntityWhereInputType, placeConfig],
+        PlaceWhereOneInput: [createEntityWhereOneInputType, placeConfig],
       },
     ];
 

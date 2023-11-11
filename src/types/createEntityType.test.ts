@@ -160,6 +160,22 @@ describe('createEntityType', () => {
           type: 'relationalFields',
         },
       ],
+
+      filterFields: [
+        {
+          name: 'selectedPlaces',
+          config: placeConfig,
+          array: true,
+          variants: [],
+          type: 'filterFields',
+        },
+        {
+          name: 'selectedPlace',
+          config: placeConfig,
+          variants: ['stringified'],
+          type: 'filterFields',
+        },
+      ],
     });
 
     const generalConfig = {
@@ -184,6 +200,11 @@ describe('createEntityType', () => {
   opponentsCount(where: PersonWhereInput): Int!
   location: Place!
   favoritePlace: Place
+  selectedPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  selectedPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection!
+  selectedPlacesCount(where: PlaceWhereInput): Int!
+  selectedPlace: Place
+  selectedPlaceStringified: String
 }`;
 
     const result = createEntityType(personConfig, generalConfig, {}, {});

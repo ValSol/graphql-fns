@@ -47,6 +47,7 @@ const composeEntityConfig = (
     duplexFields: simplifiedDuplexFields,
     fileFields: simplifiedFileFields,
     relationalFields: simplifiedRelationalFields,
+    filterFields: simplifiedFilterFields,
     calculatedFields: simplifiedCalculatedFields,
   } = simplifiedEntityConfig as any;
 
@@ -90,6 +91,12 @@ const composeEntityConfig = (
         if (array && fieldName.endsWith('Count')) {
           throw new TypeError(
             `Forbidden the field name: "${fieldName}" that ends with "Count" in entity: "${name}"!`,
+          );
+        }
+
+        if (key === 'filterFields' && fieldName.endsWith('Stringified')) {
+          throw new TypeError(
+            `Forbidden the filter field name: "${fieldName}" that ends with "Stringified" in entity: "${name}"!`,
           );
         }
 
@@ -257,6 +264,21 @@ const composeEntityConfig = (
       }
 
       return { ...restField, config, type: 'duplexFields' };
+    });
+  }
+
+  if (simplifiedFilterFields) {
+    // eslint-disable-next-line no-param-reassign
+    (entityConfig as TangibleEntityConfig).filterFields = simplifiedFilterFields.map((field) => {
+      const { configName, variants = [], ...restField } = field;
+      const config = allEntityConfigs[configName];
+      if (!config) {
+        throw new TypeError(
+          `Incorrect configName: "${configName}" in filter field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
+        );
+      }
+
+      return { ...restField, config, type: 'filterFields', variants };
     });
   }
 

@@ -163,7 +163,7 @@ const composeThingSchemaProperties = (
   }, result);
 
   if (configType === 'tangible') {
-    const { duplexFields = [], relationalFields = [] } = entityConfig;
+    const { duplexFields = [], relationalFields = [], filterFields = [] } = entityConfig;
 
     relationalFields
       .filter(({ parent }) => !parent)
@@ -225,6 +225,14 @@ const composeThingSchemaProperties = (
       },
       result,
     );
+
+    filterFields.reduce((prev, { name, required }) => {
+      prev[name] = { type: String };
+
+      if (required) prev[name].required = true;
+
+      return prev;
+    }, result);
   }
 
   embeddedFields.reduce((prev, { array, name, config }) => {

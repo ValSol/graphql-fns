@@ -115,7 +115,7 @@ describe('createEntityArrayResolver', () => {
 
     const Place = createEntityArrayResolver(placeConfig, generalConfig, serversideConfig);
     const parent = { friends: [toGlobalId(id1, 'Place')] };
-    const places = await Place(parent, null, { mongooseConn, pubsub }, info, {
+    const places = await Place(parent, {}, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
 
@@ -132,7 +132,7 @@ describe('createEntityArrayResolver', () => {
         toGlobalId(id1, 'Place'),
       ],
     };
-    const places2 = await Place(parent2, null, { mongooseConn, pubsub }, info, {
+    const places2 = await Place(parent2, {}, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
     const [place1, place2, place3] = places2;

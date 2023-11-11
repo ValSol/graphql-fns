@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 import type {
   EntityConfig,
   GeneralConfig,
@@ -13,7 +11,6 @@ import checkDescendantAction from '../../../utils/checkDescendantAction';
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesQueryResolver from '../../queries/createChildEntitiesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
-import fromGlobalId from '../../utils/fromGlobalId';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 
@@ -22,11 +19,11 @@ type Args = {
   search?: string;
   sort?: any;
   where?: any;
-  // "objectIds_from_parent" arg used only to call from createEntityArrayResolver
+  // "objectIds_from_parent" arg used only to call from createEntityFilterArrayResolver
   objectIds_from_parent?: Array<any>;
 };
 
-const createEntityArrayResolver = (
+const createEntityFilterArrayResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -81,24 +78,20 @@ const createEntityArrayResolver = (
 
     const { fieldName } = info;
 
-    const id_in = parent[fieldName]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[fieldName];
 
-    if (!id_in?.length) return []; // eslint-disable-line camelcase
+    if (!stringifiedFilter) return [];
 
-    const objectIds_from_parent = id_in // eslint-disable-line no-underscore-dangle, camelcase
-      .map((id) => fromGlobalId(id)._id) // eslint-disable-line no-underscore-dangle
-      .map((id) => new mongoose.mongo.ObjectId(id));
+    const filter = JSON.parse(stringifiedFilter);
 
-    const { near, search, sort, where = {} } = args;
+    const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, filter] } : filter;
 
     const entities = await childEntitiesQueryResolver(
       parent,
-      // objectIds_from_parent use only for call from this createEntityArrayResolver
-      sort?.length || near || search
-        ? { ...args, where: where2, token: parent._token }
-        : { ...args, where: where2, token: parent._token, objectIds_from_parent },
+      // objectIds_from_parent use only for call from this createEntityFilterArrayResolver
+      { ...args, where: where2, token: parent._token },
       context,
       info,
     );
@@ -109,4 +102,4 @@ const createEntityArrayResolver = (
   return resolver;
 };
 
-export default createEntityArrayResolver;
+export default createEntityFilterArrayResolver;

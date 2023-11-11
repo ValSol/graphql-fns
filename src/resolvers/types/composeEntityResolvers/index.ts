@@ -20,6 +20,11 @@ import fieldArrayResolver from '../fieldArrayResolver';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
 import fieldArrayThroughConnectionResolver from '../fieldArrayThroughConnectionResolver';
+import createEntityFilterArrayResolver from '../createEntityFilterArrayResolver';
+import createEntityFilterConnectionResolver from '../createEntityFilterConnectionResolver';
+import createEntityFilterCountResolver from '../createEntityFilterCountResolver';
+import createEntityFilterScalarResolver from '../createEntityFilterScalarResolver';
+import fieldFilterStringifiedResolver from '../fieldFilterStringifiedResolver';
 
 type EntityResolver = {
   [key: string]: any;
@@ -78,6 +83,7 @@ const composeEntityResolvers = (
     if (
       fieldType === 'relationalFields' ||
       fieldType === 'duplexFields' ||
+      fieldType === 'filterFields' ||
       fieldType === 'geospatialFields' ||
       fieldType === 'embeddedFields' ||
       fieldType === 'fileFields'
@@ -109,7 +115,11 @@ const composeEntityResolvers = (
   });
 
   if (entityType === 'tangible') {
-    const { duplexFields = [], relationalFields = [] } = entityConfig as TangibleEntityConfig;
+    const {
+      duplexFields = [],
+      relationalFields = [],
+      filterFields = [],
+    } = entityConfig as TangibleEntityConfig;
 
     const { originalRelationalFields, parentRelationalFields } = relationalFields.reduce(
       (prev, item) => {
@@ -204,6 +214,43 @@ const composeEntityResolvers = (
         prev[`${name}GetOrCreate`] = resolver;
       }
 
+      return prev;
+    }, resolvers);
+
+    filterFields.reduce((prev, { array, name, config, variants }) => {
+      if (array) {
+        const resolver = createEntityFilterArrayResolver(config, generalConfig, serversideConfig);
+
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
+
+        const resolver2 = createEntityFilterConnectionResolver(
+          config,
+          generalConfig,
+          serversideConfig,
+        );
+
+        if (resolver2) {
+          prev[`${name}ThroughConnection`] = resolver2;
+        }
+
+        const resolver3 = createEntityFilterCountResolver(config, generalConfig, serversideConfig);
+
+        if (resolver3) {
+          prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
+        }
+      } else {
+        const resolver = createEntityFilterScalarResolver(config, generalConfig, serversideConfig);
+
+        if (resolver) {
+          prev[name] = resolver; // eslint-disable-line no-param-reassign
+        }
+      }
+
+      if (variants.includes('stringified')) {
+        prev[`${name}Stringified`] = fieldFilterStringifiedResolver;
+      }
       return prev;
     }, resolvers);
   }

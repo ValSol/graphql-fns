@@ -15,6 +15,7 @@ const fillEntityTypeDic = (
     embeddedFields = [],
     childFields = [],
     duplexFields = [],
+    filterFields = [],
     fileFields = [],
     relationalFields = [],
     name,
@@ -28,15 +29,20 @@ const fillEntityTypeDic = (
     entityTypeDic[name] = createEntityType(entityConfig, generalConfig, entityTypeDic, inputDic);
   }
 
-  [...embeddedFields, ...childFields, ...duplexFields, ...fileFields, ...relationalFields].forEach(
-    ({ config }) => {
-      if (!entityTypeDic[config.name]) {
-        fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic);
-      }
-    },
-  );
+  [
+    ...embeddedFields,
+    ...childFields,
+    ...duplexFields,
+    ...filterFields,
+    ...fileFields,
+    ...relationalFields,
+  ].forEach(({ config }) => {
+    if (!entityTypeDic[config.name]) {
+      fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic);
+    }
+  });
 
-  [...duplexFields, ...relationalFields].forEach(({ config }) => {
+  [...duplexFields, ...relationalFields, ...filterFields].forEach(({ config }) => {
     if (!checkInventory(['Query', 'childEntitiesThroughConnection', config.name], inventory))
       return;
 

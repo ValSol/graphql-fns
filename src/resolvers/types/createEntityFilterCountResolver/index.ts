@@ -18,11 +18,11 @@ type Args = {
   search?: string;
   sort?: any;
   where?: any;
-  // "objectIds_from_parent" arg used only to call from createEntityCountResolver
+  // "objectIds_from_parent" arg used only to call from createEntityFilterCountResolver
   objectIds_from_parent?: Array<any>;
 };
 
-const createEntityCountResolver = (
+const createEntityFilterCountResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -72,14 +72,15 @@ const createEntityCountResolver = (
 
     const { fieldName } = info;
 
-    const id_in = parent[`${fieldName.slice(0, -'Count'.length)}`]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[`${fieldName.slice(0, -'Count'.length)}`]; // eslint-disable-line camelcase
 
-    // eslint-disable-next-line camelcase
-    if (!id_in || !id_in.length) return 0;
+    if (!stringifiedFilter) return 0;
+
+    const filter = JSON.parse(stringifiedFilter);
 
     const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, filter] } : filter;
 
     const entityCount = await childEntityCountQueryResolver(
       parent,
@@ -94,4 +95,4 @@ const createEntityCountResolver = (
   return resolver;
 };
 
-export default createEntityCountResolver;
+export default createEntityFilterCountResolver;

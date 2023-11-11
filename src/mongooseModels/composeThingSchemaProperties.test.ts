@@ -1086,4 +1086,29 @@ describe('composeThingSchemaProperties', () => {
     const result = composeThingSchemaProperties(entityConfig, {});
     expect(result).toEqual(expectedResult);
   });
+
+  test('should compose schema properties with "filter" fields', () => {
+    const entityConfig = {} as TangibleEntityConfig;
+
+    Object.assign(entityConfig, {
+      name: 'Example',
+      type: 'tangible',
+      filterFields: [
+        {
+          name: 'filterField',
+          config: entityConfig,
+          type: 'filterFields',
+        },
+      ],
+    });
+
+    const expectedResult = {
+      filterField: {
+        type: String,
+      },
+    };
+
+    const result = composeThingSchemaProperties(entityConfig, {});
+    expect(result).toEqual(expectedResult);
+  });
 });

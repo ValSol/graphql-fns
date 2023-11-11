@@ -44,6 +44,10 @@ describe('composeGqlTypes', () => {
           parent: true,
         },
       ],
+
+      filterFields: [
+        { name: 'selectedSections', array: true, configName: 'MenuSection', required: true },
+      ],
     };
 
     const menuCloneConfig: SimplifiedTangibleEntityConfig = {
@@ -147,6 +151,9 @@ type Menu implements Node {
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   sectionsCount(where: MenuSectionWhereInput): Int!
+  selectedSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
+  selectedSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
+  selectedSectionsCount(where: MenuSectionWhereInput): Int!
   cloneGetOrCreate(data: MenuCloneCreateInput!): MenuClone
 }
 type MenuClone implements Node {
@@ -430,6 +437,7 @@ input MenuCreateInput {
   id: ID
   clone: MenuCloneCreateChildInput
   sections: MenuSectionCreateOrPushChildrenInput
+  selectedSections: MenuSectionWhereInput!
   name: String!
 }
 input MenuCreateChildInput {
@@ -608,6 +616,7 @@ input ImportOptionsInput {
 }
 input PushIntoMenuInput {
   sections: MenuSectionCreateOrPushChildrenInput
+  selectedSections: MenuSectionWhereInput
 }
 input MenuPushPositionsInput {
   sections: [Int!]
@@ -622,6 +631,7 @@ input MenuUpdateInput {
   name: String
   clone: MenuCloneCreateChildInput
   sections: MenuSectionCreateOrPushChildrenInput
+  selectedSections: MenuSectionWhereInput
 }
 input MenuCloneUpdateInput {
   name: String

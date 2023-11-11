@@ -1,6 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Connection, Types } from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
+import { Filter } from 'mongodb';
 
 export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 
@@ -176,6 +177,18 @@ type ArraySimplifiedDuplexField = FieldCommonProperties & {
 };
 type SimplifiedDuplexField = ArraySimplifiedDuplexField | ScalarSimplifiedDuplexField;
 
+type ScalarSimplifiedFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
+  array?: false;
+  configName: string;
+  variants?: Array<'plain' | 'stringified'>;
+};
+type ArraySimplifiedFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
+  array: true;
+  configName: string;
+  variants?: Array<'plain' | 'stringified'>;
+};
+type SimplifiedFilterField = ArraySimplifiedFilterField | ScalarSimplifiedFilterField;
+
 type ScalarSimplifiedChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   configName: string;
@@ -318,6 +331,7 @@ type SimplifiedEntityConfigCommonProperties = {
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
   fileFields?: SimplifiedFileField[];
+  filterFields?: SimplifiedFilterField[];
   relationalFields?: SimplifiedRelationalField[];
   booleanFields?: Omit<BooleanField, 'type'>[];
   dateTimeFields?: Omit<DateTimeField, 'type'>[];
@@ -335,19 +349,19 @@ export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonPropert
 };
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'filterFields'
 > & {
   type: 'embedded';
 };
 export type SimplifiedFileEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'filterFields'
 > & {
   type: 'file';
 };
 export type SimplifiedTangibleFileEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields'
+  'relationalFields' | 'duplexFields' | 'filterFields'
 > & {
   type: 'tangibleFile';
 };
@@ -437,6 +451,20 @@ type ArrayDuplexField = FieldCommonProperties & {
   type: 'duplexFields';
 };
 export type DuplexField = ArrayDuplexField | ScalarDuplexField;
+
+type ScalarFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
+  array?: false;
+  config: TangibleEntityConfig;
+  type: 'filterFields';
+  variants: Array<'stringified'>;
+};
+type ArrayFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
+  array: true;
+  config: TangibleEntityConfig;
+  type: 'filterFields';
+  variants: Array<'stringified'>;
+};
+export type FilterField = ArrayFilterField | ScalarFilterField;
 
 type ScalarChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
@@ -580,6 +608,7 @@ type EntityConfigCommonProperties = {
   duplexFields?: DuplexField[];
   embeddedFields?: EmbeddedField[];
   fileFields?: FileField[];
+  filterFields?: FilterField[];
   relationalFields?: RelationalField[];
   booleanFields?: BooleanField[];
   dateTimeFields?: DateTimeField[];
@@ -597,19 +626,19 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'calculatedFields'
+  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
 > & {
   type: 'embedded';
 };
 export type FileEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'calculatedFields'
+  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
 > & {
   type: 'file';
 };
 export type TangibleFileEntityConfig = Omit<
   EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'calculatedFields'
+  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
 > & {
   type: 'tangibleFile';
 };
@@ -628,6 +657,7 @@ export type EntityConfig =
 export type FlatField =
   | RelationalField
   | DuplexField
+  | FilterField
   | ChildField
   | TextField
   | FloatField
@@ -642,6 +672,7 @@ export type AnyField =
   | BooleanField
   | DateTimeField
   | DuplexField
+  | FilterField
   | EmbeddedField
   | EnumField
   | FileField
@@ -941,6 +972,16 @@ export type Middlewares = {
   >;
 };
 
+export type ActionResolver = (
+  parent: null | GraphqlObject,
+  args: GraphqlObject,
+  context: Context,
+  info: SintheticResolverInfo,
+  involvedFilters: {
+    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  },
+) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
+
 export type ServersideConfig = {
   transactions?: boolean;
   Query?: {
@@ -949,15 +990,7 @@ export type ServersideConfig = {
       generalConfig: GeneralConfig,
       serversideConfig: ServersideConfig,
       inAnyCase?: boolean,
-    ) => (
-      parent: null | GraphqlObject,
-      args: GraphqlObject,
-      context: Context,
-      info: SintheticResolverInfo,
-      involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
-      },
-    ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
+    ) => ActionResolver;
   };
   Mutation?: {
     [customMutationName: string]: (
@@ -965,15 +998,7 @@ export type ServersideConfig = {
       generalConfig: GeneralConfig,
       serversideConfig: ServersideConfig,
       inAnyCase?: boolean,
-    ) => (
-      parent: null | GraphqlObject,
-      args: GraphqlObject,
-      context: Context,
-      info: SintheticResolverInfo,
-      involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
-      },
-    ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
+    ) => ActionResolver;
   };
 
   // *** fields that used in "executeAuthorisation" util

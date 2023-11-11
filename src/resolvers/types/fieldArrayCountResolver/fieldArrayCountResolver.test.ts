@@ -2,7 +2,7 @@
 
 import type { Context } from '../../../tsTypes';
 
-import fieldArrayCountResolver from './index';
+import fieldArrayCountResolver from '.';
 
 describe('fieldArrayCountResolver', () => {
   const parent = {

@@ -4,6 +4,8 @@ import type { EmbeddedEntityConfig, FileEntityConfig, TangibleEntityConfig } fro
 
 import createEntityCloneInputType from './createEntityCloneInputType';
 import createEntityCreateInputType from './createEntityCreateInputType';
+import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
 describe('createEntityCloneInputType', () => {
   test('should create entity input type with text fields', () => {
@@ -402,6 +404,73 @@ describe('createEntityCloneInputType', () => {
     ];
 
     const result = createEntityCloneInputType(personConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type with filter fields', () => {
+    const personConfig = {} as TangibleEntityConfig;
+    const placeConfig: TangibleEntityConfig = {
+      name: 'Place',
+      type: 'tangible',
+      textFields: [{ name: 'name', type: 'textFields' }],
+    };
+    Object.assign(personConfig, {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+          type: 'textFields',
+        },
+        {
+          name: 'lastName',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+      filterFields: [
+        {
+          name: 'places',
+          config: placeConfig,
+          array: true,
+        },
+        {
+          name: 'place',
+          config: placeConfig,
+        },
+        {
+          name: 'requiredPlaces',
+          config: placeConfig,
+          array: true,
+          required: true,
+        },
+        {
+          name: 'requiredPlace',
+          config: placeConfig,
+          required: true,
+        },
+      ],
+    });
+    const expectedResult = [
+      'PersonCloneInput',
+      `input PersonCloneInput {
+  id: ID
+  places: PlaceWhereInput
+  place: PlaceWhereOneInput
+  requiredPlaces: PlaceWhereInput
+  requiredPlace: PlaceWhereOneInput
+  firstName: String
+  lastName: String
+}`,
+      {
+        PlaceWhereInput: [createEntityWhereInputType, placeConfig],
+        PlaceWhereOneInput: [createEntityWhereOneInputType, placeConfig],
+      },
+    ];
+
+    const result = createEntityCloneInputType(personConfig);
+
     expect(result).toEqual(expectedResult);
   });
 
