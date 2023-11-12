@@ -1,11 +1,14 @@
-import type {GeneralConfig, ServersideConfig} from './tsTypes';
+import { GeneralConfig, ServersideConfig } from './tsTypes';
 
 import composeGqlResolvers from './resolvers/composeGqlResolvers';
 import composeGqlTypes from './types/composeGqlTypes';
 
-const composeTypeDefsAndResolvers = (generalConfig: GeneralConfig, serversideConfig?: ServersideConfig): {
-  typeDefs: string,
-  resolvers: any
+const composeTypeDefsAndResolvers = (
+  generalConfig: GeneralConfig,
+  serversideConfig?: ServersideConfig,
+): {
+  typeDefs: string;
+  resolvers: any;
 } => {
   const { typeDefs, entityTypeDic } = composeGqlTypes(generalConfig);
 
