@@ -14,6 +14,7 @@ const {
   childEntity,
   childEntityGetOrCreate,
   childEntityCount,
+  childEntityDistinctValues,
 } = allActionAttributes;
 
 const composeReturnString = (
@@ -139,6 +140,7 @@ const createEntityType = (
           config,
           generalConfig,
           'childEntities',
+          entityTypeDic,
           inputDic,
         );
 
@@ -156,6 +158,7 @@ const createEntityType = (
           config,
           generalConfig,
           'childEntitiesThroughConnection',
+          entityTypeDic,
           inputDic,
         );
 
@@ -173,6 +176,7 @@ const createEntityType = (
           config,
           generalConfig,
           'childEntityCount',
+          entityTypeDic,
           inputDic,
         );
 
@@ -182,6 +186,24 @@ const createEntityType = (
               config,
               generalConfig,
               childEntityCount,
+            )}`,
+          );
+        }
+
+        const childEntityDistinctValuesArgs = composeChildActionSignature(
+          config,
+          generalConfig,
+          'childEntityDistinctValues',
+          entityTypeDic,
+          inputDic,
+        );
+
+        if (childEntityDistinctValuesArgs) {
+          prev.push(
+            `  ${name2}DistinctValues(${childEntityDistinctValuesArgs}): ${composeReturnString(
+              config,
+              generalConfig,
+              childEntityDistinctValues,
             )}`,
           );
         }
@@ -214,6 +236,7 @@ const createEntityType = (
         config,
         generalConfig,
         'childEntityGetOrCreate',
+        entityTypeDic,
         inputDic,
       );
 
@@ -243,6 +266,7 @@ const createEntityType = (
             config,
             generalConfig,
             'arrayEntitiesThroughConnection',
+            entityTypeDic,
             inputDic,
           );
 

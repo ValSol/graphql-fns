@@ -88,6 +88,12 @@ const composeEntityConfig = (
           );
         }
 
+        if (fieldName.endsWith('DistinctValues')) {
+          throw new TypeError(
+            `Forbidden the field name: "${fieldName}" that ends with "DistinctValues" in entity: "${name}"!`,
+          );
+        }
+
         if (array && fieldName.endsWith('Count')) {
           throw new TypeError(
             `Forbidden the field name: "${fieldName}" that ends with "Count" in entity: "${name}"!`,
@@ -253,13 +259,22 @@ const composeEntityConfig = (
   }
 
   if (simplifiedDuplexFields) {
-    // eslint-disable-next-line no-param-reassign
     (entityConfig as TangibleEntityConfig).duplexFields = simplifiedDuplexFields.map((field) => {
       const { configName, ...restField } = field;
       const config = allEntityConfigs[configName];
       if (!config) {
         throw new TypeError(
           `Incorrect configName: "${configName}" in duplex field: "${field.name}" of simplified entityConfig: "${simplifiedEntityConfig.name}"!`,
+        );
+      }
+
+      const oppositeField = (config as TangibleEntityConfig)?.duplexFields?.find(
+        ({ name }) => restField.oppositeName === name,
+      );
+
+      if (!oppositeField) {
+        throw new TypeError(
+          `Not found duplex field: "${field.oppositeName}" in "${config.name}" entity as opposite for duplex field: "${field.name}" of entity: "${simplifiedEntityConfig.name}"!`,
         );
       }
 

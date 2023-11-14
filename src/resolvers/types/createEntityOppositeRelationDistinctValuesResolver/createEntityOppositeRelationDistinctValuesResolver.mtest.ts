@@ -10,9 +10,9 @@ import sleep from '../../../utils/sleep';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import createEntityOppositeRelationCountResolver from './index';
+import createEntityOppositeRelationDistinctValuesResolver from './index';
 
-const info = { projection: { title: 1 }, fieldName: 'friendsCount' };
+const info = { projection: { title: 1 }, fieldName: 'friendsDistinctValues' };
 
 mongoose.set('strictQuery', false);
 
@@ -31,7 +31,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createEntityOppositeRelationCountResolver', () => {
+describe('createEntityOppositeRelationDistinctValuesResolver', () => {
   const serversideConfig: Record<string, any> = {};
   test('should create type entity resolver', async () => {
     const placeConfig = {} as EntityConfig;
@@ -105,17 +105,23 @@ describe('createEntityOppositeRelationCountResolver', () => {
     });
     const { id: id3 } = createdPlace3;
 
-    const PlaceCount = createEntityOppositeRelationCountResolver(
+    const PlaceDistinctValues = createEntityOppositeRelationDistinctValuesResolver(
       placeConfig,
       generalConfig,
       serversideConfig,
     );
     const parent = { id: toGlobalId(id, 'Place') };
 
-    const count = await PlaceCount(parent, {}, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
-    });
+    const distinctValues = await PlaceDistinctValues(
+      parent,
+      { options: { target: 'title' } },
+      { mongooseConn, pubsub },
+      info,
+      {
+        inputOutputEntity: [[]],
+      },
+    );
 
-    expect(count).toBe(3);
+    expect(distinctValues).toEqual(['title-1', 'title-2', 'title-3']);
   });
 });

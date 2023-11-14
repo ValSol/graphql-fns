@@ -64,6 +64,8 @@ const getSimpleProjectionFromInfo = (
     } else if (field.endsWith('Count')) {
       prev[field] = 1; // we can have NOT generated field that ends by "Count"
       prev[`${field.slice(0, -'Count'.length)}`] = 1;
+    } else if (field.endsWith('DistinctValues')) {
+      prev[`${field.slice(0, -'DistinctValues'.length)}`] = 1;
     } else if (field.endsWith('Stringified')) {
       prev[field] = 1; // we can have NOT generated field that ends by "Stringified"
       prev[`${field.slice(0, -'Stringified'.length)}`] = 1;

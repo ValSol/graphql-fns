@@ -151,58 +151,12 @@ type Menu implements Node {
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   sectionsCount(where: MenuSectionWhereInput): Int!
+  sectionsDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!): [String!]!
   selectedSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   selectedSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   selectedSectionsCount(where: MenuSectionWhereInput): Int!
+  selectedSectionsDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!): [String!]!
   cloneGetOrCreate(data: MenuCloneCreateInput!): MenuClone
-}
-type MenuClone implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  original: Menu
-  sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
-  sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection!
-  sectionsCount(where: MenuCloneSectionWhereInput): Int!
-  originalGetOrCreate(data: MenuCreateInput!): Menu
-}
-type MenuCloneSection implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String!
-  menu: MenuClone
-}
-type MenuCloneConnection {
-  pageInfo: PageInfo!
-  edges: [MenuCloneEdge!]!
-}
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
-type MenuCloneEdge {
-  cursor: String!
-  node: MenuClone!
-}
-type MenuConnection {
-  pageInfo: PageInfo!
-  edges: [MenuEdge!]!
-}
-type MenuEdge {
-  cursor: String!
-  node: Menu!
-}
-type MenuCloneSectionConnection {
-  pageInfo: PageInfo!
-  edges: [MenuCloneSectionEdge!]!
-}
-type MenuCloneSectionEdge {
-  cursor: String!
-  node: MenuCloneSection!
 }
 type MenuSection implements Node {
   id: ID!
@@ -215,9 +169,58 @@ type MenuSectionConnection {
   pageInfo: PageInfo!
   edges: [MenuSectionEdge!]!
 }
+type PageInfo {
+  startCursor: String
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
 type MenuSectionEdge {
   cursor: String!
   node: MenuSection!
+}
+type MenuClone implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  original: Menu
+  sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
+  sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection!
+  sectionsCount(where: MenuCloneSectionWhereInput): Int!
+  sectionsDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput!): [String!]!
+  originalGetOrCreate(data: MenuCreateInput!): Menu
+}
+type MenuCloneSection implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  menu: MenuClone
+}
+type MenuCloneSectionConnection {
+  pageInfo: PageInfo!
+  edges: [MenuCloneSectionEdge!]!
+}
+type MenuCloneSectionEdge {
+  cursor: String!
+  node: MenuCloneSection!
+}
+type MenuConnection {
+  pageInfo: PageInfo!
+  edges: [MenuEdge!]!
+}
+type MenuEdge {
+  cursor: String!
+  node: Menu!
+}
+type MenuCloneConnection {
+  pageInfo: PageInfo!
+  edges: [MenuCloneEdge!]!
+}
+type MenuCloneEdge {
+  cursor: String!
+  node: MenuClone!
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -991,12 +994,6 @@ type Example implements Node {
   photosCount: Int!
   position: GeospatialPoint
 }
-type Image {
-  id: ID!
-  fileId: String!
-  address: String
-  text: String
-}
 type ImageConnection {
   pageInfo: PageInfo!
   edges: [ImageEdge!]!
@@ -1004,6 +1001,12 @@ type ImageConnection {
 type ImageEdge {
   cursor: String!
   node: Image!
+}
+type Image {
+  id: ID!
+  fileId: String!
+  address: String
+  text: String
 }
 type ExampleConnection {
   pageInfo: PageInfo!
@@ -1863,29 +1866,21 @@ type Person implements Node {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
+  friendsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
+  enemiesDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   location: Place!
   favoritePlace: Place
   fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   fellowsCount(where: PersonWhereInput): Int!
+  fellowsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   opponentsCount(where: PersonWhereInput): Int!
-}
-type Place implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  title: String!
-  citisens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  citisensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
-  citisensCount(where: PersonWhereInput): Int!
-  customers(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  customersThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
-  customersCount(where: PersonWhereInput): Int!
+  opponentsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -1900,6 +1895,20 @@ type PageInfo {
 type PersonEdge {
   cursor: String!
   node: Person!
+}
+type Place implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  citisens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  citisensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  citisensCount(where: PersonWhereInput): Int!
+  citisensDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
+  customers(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  customersThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  customersCount(where: PersonWhereInput): Int!
+  customersDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PlaceConnection {
   pageInfo: PageInfo!
@@ -2253,11 +2262,6 @@ type Person implements Node {
   placesThroughConnection(after: String, before: String, first: Int, last: Int): AddressConnection!
   placesCount: Int!
 }
-type Address {
-  id: ID!
-  country: String!
-  province: String
-}
 type AddressConnection {
   pageInfo: PageInfo!
   edges: [AddressEdge!]!
@@ -2271,6 +2275,11 @@ type PageInfo {
 type AddressEdge {
   cursor: String!
   node: Address!
+}
+type Address {
+  id: ID!
+  country: String!
+  province: String
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -2547,23 +2556,13 @@ type Person implements Node {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
+  friendsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
+  enemiesDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   location: Place!
   favoritePlace: Place
-}
-type Place implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String
-  citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  citizensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
-  citizensCount(where: PersonWhereInput): Int!
-  visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
-  visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
-  visitorsCount(where: PersonWhereInput): Int!
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -2578,6 +2577,20 @@ type PageInfo {
 type PersonEdge {
   cursor: String!
   node: Person!
+}
+type Place implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  citizensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  citizensCount(where: PersonWhereInput): Int!
+  citizensDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
+  visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
+  visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
+  visitorsCount(where: PersonWhereInput): Int!
+  visitorsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PlaceConnection {
   pageInfo: PageInfo!

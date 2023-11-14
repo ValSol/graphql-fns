@@ -9,9 +9,11 @@ import type {
 import composeFieldsObject from '../../../utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
 import createEntityCountResolver from '../createEntityCountResolver';
+import createEntityDistinctValuesResolver from '../createEntityDistinctValuesResolver';
 import createEntityGetOrCreateResolver from '../createEntityGetOrCreateResolver';
 import createEntityOppositeRelationArrayResolver from '../createEntityOppositeRelationArrayResolver';
 import createEntityOppositeRelationCountResolver from '../createEntityOppositeRelationCountResolver';
+import createEntityOppositeRelationDistinctValuesResolver from '../createEntityOppositeRelationDistinctValuesResolver';
 import createEntityOppositeRelationConnectionResolver from '../createEntityOppositeRelationConnectionResolver';
 import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
@@ -23,6 +25,7 @@ import fieldArrayThroughConnectionResolver from '../fieldArrayThroughConnectionR
 import createEntityFilterArrayResolver from '../createEntityFilterArrayResolver';
 import createEntityFilterConnectionResolver from '../createEntityFilterConnectionResolver';
 import createEntityFilterCountResolver from '../createEntityFilterCountResolver';
+import createEntityFilterDistinctValuesResolver from '../createEntityFilterDistinctValuesResolver';
 import createEntityFilterScalarResolver from '../createEntityFilterScalarResolver';
 import fieldFilterStringifiedResolver from '../fieldFilterStringifiedResolver';
 
@@ -165,6 +168,16 @@ const composeEntityResolvers = (
         prev[`${name}Count`] = resolver3;
       }
 
+      const resolver4 = createEntityOppositeRelationDistinctValuesResolver(
+        config,
+        generalConfig,
+        serversideConfig,
+      );
+
+      if (resolver4) {
+        prev[`${name}DistinctValues`] = resolver4;
+      }
+
       return prev;
     }, resolvers);
 
@@ -186,6 +199,16 @@ const composeEntityResolvers = (
 
         if (resolver3) {
           prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
+        }
+
+        const resolver4 = createEntityDistinctValuesResolver(
+          config,
+          generalConfig,
+          serversideConfig,
+        );
+
+        if (resolver4) {
+          prev[`${name}DistinctValues`] = resolver4; // eslint-disable-line no-param-reassign
         }
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
@@ -239,6 +262,16 @@ const composeEntityResolvers = (
 
         if (resolver3) {
           prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
+        }
+
+        const resolver4 = createEntityFilterDistinctValuesResolver(
+          config,
+          generalConfig,
+          serversideConfig,
+        );
+
+        if (resolver4) {
+          prev[`${name}DistinctValues`] = resolver4; // eslint-disable-line no-param-reassign
         }
       } else {
         const resolver = createEntityFilterScalarResolver(config, generalConfig, serversideConfig);

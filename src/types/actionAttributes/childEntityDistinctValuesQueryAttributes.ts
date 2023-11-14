@@ -1,31 +1,29 @@
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { EntityConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 import createEntityDistinctValuesOptionsInputType from '../inputs/createEntityDistinctValuesOptionsInputType';
-import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string => `entityDistinctValues${descendantKey}`;
+const actionGeneralName = (descendantKey = ''): string =>
+  `childEntityDistinctValues${descendantKey}`;
 
 const actionName = (baseName: string, descendantKey = ''): string =>
-  `${baseName}DistinctValues${descendantKey}`;
+  `child${baseName}DistinctValues${descendantKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
   createStringInputTypeForSearch,
   createEntityDistinctValuesOptionsInputType,
-  createStringInputType,
 ];
 
-const argNames = ['where', 'search', 'options', 'token'];
+const argNames = ['where', 'search', 'options'];
 
 const argTypes = [
   ({ name }): string => `${name}WhereInput`,
   (): string => 'String',
   ({ name }): string => `${name}DistinctValuesOptionsInput!`,
-  (): string => 'String',
 ];
 
 const actionInvolvedEntityNames = (
@@ -41,9 +39,11 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' &&
   Boolean(createEntityDistinctValuesOptionsInputType(entityConfig)[1]);
 
+const actionIsChild = 'Array';
+
 const actionReturnString = (): string => '[String!]!';
 
-const entityDistinctValuesQueryAttributes = {
+const childEntityDistinctValuesQueryAttributes = {
   actionGeneralName,
   actionType,
   actionName,
@@ -54,6 +54,7 @@ const entityDistinctValuesQueryAttributes = {
   actionReturnString,
   actionReturnConfig,
   actionAllowed,
+  actionIsChild,
 } as const;
 
-export default entityDistinctValuesQueryAttributes;
+export default childEntityDistinctValuesQueryAttributes;

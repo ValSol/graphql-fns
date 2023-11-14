@@ -9,8 +9,8 @@ import type {
 import type { Context } from '../../../tsTypes';
 
 import checkDescendantAction from '../../../utils/checkDescendantAction';
-import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
-import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
+import childEntityDistinctValuesQueryAttributes from '../../../types/actionAttributes/childEntityDistinctValuesQueryAttributes';
+import createChildEntityDistinctValuesQueryResolver from '../../queries/createChildEntityDistinctValuesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
@@ -20,11 +20,11 @@ type Args = {
   search?: string;
   sort?: any;
   where?: any;
-  // "objectIds_from_parent" arg used only to call from createEntityOppositeRelationCountResolver
+  // "objectIds_from_parent" arg used only to call from createEntityOppositeRelationDistinctValuesResolver
   objectIds_from_parent?: Array<any>;
 };
 
-const createEntityOppositeRelationCountResolver = (
+const createEntityOppositeRelationDistinctValuesResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
@@ -34,31 +34,31 @@ const createEntityOppositeRelationCountResolver = (
 
   const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+  if (!checkDescendantAction('childEntityDistinctValues', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityCountQueryResolver = descendantKey
+  const childEntityDistinctValuesQueryResolver = descendantKey
     ? createCustomResolver(
         'Query',
-        `childEntityCount${descendantKey}`,
+        `childEntityDistinctValues${descendantKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
       )
     : resolverDecorator(
-        createChildEntityCountQueryResolver(entityConfig, generalConfig, serversideConfig),
-        ['Query', 'childEntityCount', nameRoot],
-        childEntityCountQueryAttributes,
+        createChildEntityDistinctValuesQueryResolver(entityConfig, generalConfig, serversideConfig),
+        ['Query', 'childEntityDistinctValues', nameRoot],
+        childEntityDistinctValuesQueryAttributes,
         entityConfig,
         generalConfig,
         serversideConfig,
       );
 
-  if (!childEntityCountQueryResolver) {
+  if (!childEntityDistinctValuesQueryResolver) {
     throw new TypeError(
-      `Not defined childEntityCountQueryResolver "${
-        descendantKey ? `childEntityCount${descendantKey}` : 'childEntityCount'
+      `Not defined childEntityDistinctValuesQueryResolver "${
+        descendantKey ? `childEntityDistinctValues${descendantKey}` : 'childEntityDistinctValues'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -86,7 +86,7 @@ const createEntityOppositeRelationCountResolver = (
   ): Promise<GraphqlObject[]> => {
     if (!parent) {
       throw new TypeError(
-        `Got undefined parent in resolver: "childEntityCount${
+        `Got undefined parent in resolver: "childEntityDistinctValues${
           descendantKey || ''
         }" for entity: "${name}"!`,
       );
@@ -96,15 +96,15 @@ const createEntityOppositeRelationCountResolver = (
 
     const { id } = parent;
 
-    const whereById = { [oppositeFields[fieldName.slice(0, -'Count'.length)]]: id };
+    const whereById = { [oppositeFields[fieldName.slice(0, -'DistinctValues'.length)]]: id };
 
     const { where = {} } = args;
 
     const where2 = Object.keys(where).length > 0 ? { AND: [where, whereById] } : whereById; // eslint-disable-line camelcase
 
-    const entities = await childEntityCountQueryResolver(
+    const entities = await childEntityDistinctValuesQueryResolver(
       parent,
-      // objectIds_from_parent use only for call from this createEntityOppositeRelationCountResolver
+      // objectIds_from_parent use only for call from this createEntityOppositeRelationDistinctValuesResolver
       { ...args, where: where2, token: parent._token },
       context,
       info,
@@ -116,4 +116,4 @@ const createEntityOppositeRelationCountResolver = (
   return resolver;
 };
 
-export default createEntityOppositeRelationCountResolver;
+export default createEntityOppositeRelationDistinctValuesResolver;

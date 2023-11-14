@@ -211,7 +211,12 @@ const composeDescendantConfig = (
             : { array: false };
 
         const childQueries = array
-          ? ['childEntities', 'childEntitiesThroughConnection', 'childEntityCount']
+          ? [
+              'childEntities',
+              'childEntitiesThroughConnection',
+              'childEntityCount',
+              'childEntityDistinctValues',
+            ]
           : key !== 'duplexFields' || required || oppositeArray
           ? ['childEntity']
           : ['childEntity', 'childEntityGetOrCreate'];
@@ -252,9 +257,6 @@ const composeDescendantConfig = (
           );
 
           if (!oppositeField) {
-            console.log('oppositeName =', oppositeName);
-            console.log('config.relationalFields =', config.relationalFields);
-
             throw new TypeError(
               `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}"!`,
             );

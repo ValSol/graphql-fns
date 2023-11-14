@@ -7,12 +7,11 @@ import { PubSub } from 'graphql-subscriptions';
 
 import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
+import toCursor from '../../utils/toCursor';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-import createEntityOppositeRelationCountResolver from './index';
-
-const info = { projection: { title: 1 }, fieldName: 'friendsCount' };
+import createEntityDistinctValuesResolver from './index';
 
 mongoose.set('strictQuery', false);
 
@@ -20,7 +19,7 @@ let mongooseConn;
 let pubsub;
 
 beforeAll(async () => {
-  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-count-opposite-relation-type';
+  const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-count-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
 
@@ -31,7 +30,7 @@ afterAll(async () => {
   mongooseConn.connection.close();
 });
 
-describe('createEntityOppositeRelationCountResolver', () => {
+describe('createEntityDistinctValuesResolver', () => {
   const serversideConfig: Record<string, any> = {};
   test('should create type entity resolver', async () => {
     const placeConfig = {} as EntityConfig;
@@ -48,13 +47,28 @@ describe('createEntityOppositeRelationCountResolver', () => {
       relationalFields: [
         {
           name: 'friend',
-          oppositeName: 'friends',
+          oppositeName: 'parentFriend',
           config: placeConfig,
           type: 'relationalFields',
         },
         {
-          name: 'friends',
+          name: 'parentFriend',
           oppositeName: 'friend',
+          config: placeConfig,
+          array: true,
+          parent: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'friends',
+          oppositeName: 'parentFriends',
+          config: placeConfig,
+          array: true,
+          type: 'relationalFields',
+        },
+        {
+          name: 'parentFriends',
+          oppositeName: 'friends',
           config: placeConfig,
           array: true,
           parent: true,
@@ -79,16 +93,9 @@ describe('createEntityOppositeRelationCountResolver', () => {
     expect(typeof createPlace).toBe('function');
     if (!createPlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const data = { title: 'title-main' };
-
-    const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
-    });
-    const { id } = createdPlace;
-
-    const data1 = { title: 'title-1', friend: { connect: id } };
-    const data2 = { title: 'title-2', friend: { connect: id } };
-    const data3 = { title: 'title-3', friend: { connect: id } };
+    const data1 = { title: 'title-1' };
+    const data2 = { title: 'title-2' };
+    const data3 = { title: 'title-3' };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
       inputOutputEntity: [[]],
@@ -105,17 +112,30 @@ describe('createEntityOppositeRelationCountResolver', () => {
     });
     const { id: id3 } = createdPlace3;
 
-    const PlaceCount = createEntityOppositeRelationCountResolver(
-      placeConfig,
-      generalConfig,
-      serversideConfig,
+    const Place = createEntityDistinctValuesResolver(placeConfig, generalConfig, serversideConfig);
+
+    const parent = {
+      friends: [
+        toGlobalId(id2, 'Place'),
+        toGlobalId('5cd82d6075fb194334d8c1d7', 'Place'),
+        toGlobalId(id3, 'Place'),
+        toGlobalId('5cd82d6075fb194334d8c1d8', 'Place'),
+        toGlobalId(id1, 'Place'),
+      ],
+    };
+
+    const info = { fieldName: 'friendsDistinctValues', projection: { title: 1 } };
+
+    const count = await Place(
+      parent,
+      { options: { target: 'title' } },
+      { mongooseConn, pubsub },
+      info,
+      {
+        inputOutputEntity: [[]],
+      },
     );
-    const parent = { id: toGlobalId(id, 'Place') };
 
-    const count = await PlaceCount(parent, {}, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
-    });
-
-    expect(count).toBe(3);
+    expect(count).toEqual(['title-1', 'title-2', 'title-3']);
   });
 });

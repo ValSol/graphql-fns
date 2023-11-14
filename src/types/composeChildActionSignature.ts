@@ -4,11 +4,13 @@ import checkDescendantAction from '../utils/checkDescendantAction';
 import parseEntityName from '../utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
 import actionAttributes from './actionAttributes';
+import fillEntityTypeDic from './fillEntityTypeDic';
 
 const composeChildActionSignature = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   childQueryGeneralName: string,
+  entityTypeDic?: { [entityName: string]: string },
   inputDic?: {
     [inputName: string]: string;
   },
@@ -21,6 +23,7 @@ const composeChildActionSignature = (
     inputCreators,
     argNames,
     argTypes,
+    actionReturnConfig,
     actionReturnString,
   } = actionAttributes[childQueryGeneralName];
   const { allEntityConfigs } = generalConfig;
@@ -57,6 +60,12 @@ const composeChildActionSignature = (
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
   const returnString = actionReturnString(allEntityConfigs[rootName], descendantKey);
+
+  const returnConfig = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
+
+  if (returnConfig && entityTypeDic && !entityTypeDic[returnConfig.name]) {
+    fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);
+  }
 
   if (filteredArgNames.length === 0) {
     return `  ${specificName}: ${returnString}`;

@@ -22,12 +22,14 @@ describe('composeChildActionSignature util', () => {
 
     const generalConfig = { allEntityConfigs: { Example: entityConfig } };
 
+    const enitityDic: { [inputName: string]: string } = {};
     const inputDic: { [inputName: string]: string } = {};
 
     const result = composeChildActionSignature(
       entityConfig,
       generalConfig,
       'childEntities',
+      enitityDic,
       inputDic,
     );
     const expectedResult =
@@ -39,6 +41,7 @@ describe('composeChildActionSignature util', () => {
       entityConfig,
       generalConfig,
       'childEntitiesThroughConnection',
+      enitityDic,
       inputDic,
     );
     const expectedResult2 =

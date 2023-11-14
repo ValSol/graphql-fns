@@ -738,6 +738,7 @@ export type DescendantAttributesActionName =
   | 'entity'
   | 'childEntity'
   | 'childEntityCount'
+  | 'childEntityDistinctValues'
   | 'childEntityGetOrCreate'
   | 'cloneEntity'
   | 'entityCount'

@@ -102,6 +102,41 @@ describe('composeDescendant', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('compose descendants with additional virtual configs if child actions', () => {
+    const ForView: DescendantAttributes = {
+      descendantKey: 'ForView',
+      allow: {
+        Restaurant: ['entity', 'entities'],
+        Post: ['entity', 'entities'],
+      },
+    };
+
+    const ForCatalog: DescendantAttributes = {
+      allow: {
+        Example: ['childEntitiesThroughConnection'],
+      },
+      descendantKey: 'ForCatalog',
+      excludeFields: { Example: ['anotherField'] },
+    };
+
+    const result = composeDescendant([ForView, ForCatalog]);
+
+    const expectedForCatalog: DescendantAttributes = {
+      allow: {
+        Example: ['childEntitiesThroughConnection'],
+        ExampleConnection: [],
+        ExampleEdge: [],
+      },
+
+      descendantKey: 'ForCatalog',
+
+      excludeFields: { Example: ['anotherField'] },
+    };
+
+    const expectedResult = { ForView, ForCatalog: expectedForCatalog };
+    expect(result).toEqual(expectedResult);
+  });
+
   test('compose descendants with additional virtual configs and change output entity', () => {
     const ForView: DescendantAttributes = {
       descendantKey: 'ForView',

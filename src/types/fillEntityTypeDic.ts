@@ -1,9 +1,10 @@
 import type { EntityConfig, GeneralConfig } from '../tsTypes';
 
-import checkInventory from '../utils/inventory/checkInventory';
 import parseEntityName from '../utils/parseEntityName';
 import childEntitiesThroughConnectionQuery from './actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createEntityType from './createEntityType';
+
+const all = [];
 
 const fillEntityTypeDic = (
   entityConfig: EntityConfig,
@@ -20,12 +21,15 @@ const fillEntityTypeDic = (
     relationalFields = [],
     name,
   } = entityConfig as any;
-  const { allEntityConfigs, inventory } = generalConfig;
+
+  const { allEntityConfigs } = generalConfig;
 
   const { actionReturnConfig } = childEntitiesThroughConnectionQuery;
 
   if (!entityTypeDic[name]) {
-    // eslint-disable-next-line no-param-reassign
+    // use "temporary string" to prevent an endless cycle that couse an error "RangeError: Maximum call stack size exceeded"
+    entityTypeDic[name] = 'temporary string';
+
     entityTypeDic[name] = createEntityType(entityConfig, generalConfig, entityTypeDic, inputDic);
   }
 
@@ -39,19 +43,6 @@ const fillEntityTypeDic = (
   ].forEach(({ config }) => {
     if (!entityTypeDic[config.name]) {
       fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic);
-    }
-  });
-
-  [...duplexFields, ...relationalFields, ...filterFields].forEach(({ config }) => {
-    if (!checkInventory(['Query', 'childEntitiesThroughConnection', config.name], inventory))
-      return;
-
-    const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
-
-    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
-
-    if (config2 && !entityTypeDic[config2.name]) {
-      fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);
     }
   });
 
