@@ -828,6 +828,8 @@ export type ActionSignatureMethods = {
   config: (entityConfig: EntityConfig, generalConfig?: GeneralConfig) => null | EntityConfig;
 };
 
+export type ManualyUsedEntity = { name: string; descendantKey?: string };
+
 export type GeneralConfig = {
   allEntityConfigs: {
     [entityConfigName: string]: EntityConfig;
@@ -851,6 +853,7 @@ export type GeneralConfig = {
   enums?: Enums;
   inventory?: Inventory;
   interfaces?: { [interfaceName: string]: string[] };
+  manualyUsedEntities?: ManualyUsedEntity[];
 };
 
 // equal to previous code of 'custom' property

@@ -6,7 +6,7 @@ import pageInfoConfig from '../utils/composeAllEntityConfigs/pageInfoConfig';
 import createEntityType from './createEntityType';
 
 describe('createEntityType', () => {
-  test.skip('should create entity type with Text fields', () => {
+  test('should create entity type with Text fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -216,7 +216,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with embedded fields', () => {
+  test('should create entity type with embedded fields', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
@@ -326,7 +326,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create embeded entity type with text fields', () => {
+  test('should create embeded entity type with text fields', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',
@@ -356,7 +356,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with duplex fields', () => {
+  test('should create entity type with duplex fields', () => {
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
@@ -452,7 +452,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with geospatial fields', () => {
+  test('should create entity type with geospatial fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -552,7 +552,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with enum fields', () => {
+  test('should create entity type with enum fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -624,7 +624,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with int fields', () => {
+  test('should create entity type with int fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -697,7 +697,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with float fields', () => {
+  test('should create entity type with float fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -775,7 +775,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with boolean fields', () => {
+  test('should create entity type with boolean fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -853,7 +853,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with file fields', () => {
+  test('should create entity type with file fields', () => {
     const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
@@ -952,7 +952,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create file entity type with text fields', () => {
+  test('should create file entity type with text fields', () => {
     const imageConfig: EntityConfig = {
       name: 'Image',
       type: 'file',
@@ -980,7 +980,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with Text fields and counter field', () => {
+  test('should create entity type with Text fields and counter field', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -1006,7 +1006,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with Text fields and counter field', () => {
+  test('should create entity type with Text fields and counter field', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -1033,7 +1033,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type for ExampleEdge', () => {
+  test('should create entity type for ExampleEdge', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'virtual',
@@ -1070,7 +1070,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type for ExampleConnection', () => {
+  test('should create entity type for ExampleConnection', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -1118,7 +1118,7 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test.skip('should create entity type with embedded fields', () => {
+  test('should create entity type with embedded fields', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',
       type: 'embedded',

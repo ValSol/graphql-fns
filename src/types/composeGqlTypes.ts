@@ -16,6 +16,7 @@ import composeCommonUseTypes from './specialized/composeCommonUseTypes';
 import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeActionSignature from './composeActionSignature';
 import composeInterfaceTypeDic from './composeInterfaceTypeDic';
+import processManualyUsedEntities from './processManualyUsedEntities';
 
 const composeGqlTypes = (
   generalConfig: GeneralConfig,
@@ -125,6 +126,8 @@ ${mutationTypes.join('\n')}
       : '';
 
   // 3. generaqte entity types
+
+  processManualyUsedEntities(generalConfig, entityTypeDic, inputDic);
 
   const entityTypes = Object.keys(entityTypeDic)
     .map((key) => entityTypeDic[key])
