@@ -169,7 +169,7 @@ const processCreateInputData = (
     return Object.keys(data2).reduce<Record<string, any>>((prev, key) => {
       if (data2[key] === undefined) return prev;
       if (processingKind === 'update' && data2[key] === null) {
-        if (fieldsObject[key].array) {
+        if (fieldsObject[key].array && fieldsObject[key].type !== 'filterFields') {
           throw new TypeError(
             `Try unset array field: "${key}" of entity: "${entityConfig2.name}"!`,
           );
