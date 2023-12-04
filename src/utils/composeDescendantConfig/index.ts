@@ -184,18 +184,31 @@ const composeDescendantConfig = (
     });
   }
 
+  const filterFieldsCalculated =
+    entityConfig.type === 'tangible' && entityConfig.calculatedFields
+      ? entityConfig.calculatedFields.filter(
+          ({ calculatedType }) => calculatedType === 'filterFields',
+        )
+      : [];
+
   Object.keys(entityConfig).forEach((key) => {
     if (
       key === 'relationalFields' ||
       key === 'duplexFields' ||
       key === 'filterFields' ||
-      key === 'childFields'
+      key === 'childFields' ||
+      key === 'calculatedFields'
     ) {
       entityConfig[key] = entityConfig[key].map((item) => {
         const { name, oppositeName, array, config: currentConfig, required } = item;
 
         if (name === 'pageInfo') {
           // field "pageInfo" refers to standard child config "PageInfo" so skip it
+          return item;
+        }
+
+        if (key === 'calculatedFields' && item.calculatedType !== 'filterFields') {
+          // if "calculatedFields" calculatedType is not "filterFields" skip it
           return item;
         }
 

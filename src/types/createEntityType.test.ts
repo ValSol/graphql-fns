@@ -166,14 +166,25 @@ describe('createEntityType', () => {
           name: 'selectedPlaces',
           config: placeConfig,
           array: true,
-          variants: [],
+          variants: ['plain'],
           type: 'filterFields',
         },
         {
           name: 'selectedPlace',
           config: placeConfig,
-          variants: ['stringified'],
+          variants: ['plain', 'stringified'],
           type: 'filterFields',
+        },
+      ],
+
+      calculatedFields: [
+        {
+          name: 'selectedPlacesCalculated',
+          array: true,
+          calculatedType: 'filterFields',
+          config: placeConfig,
+          args: ['selectedPlaces'],
+          func: ({ selectedPlaces }) => selectedPlaces,
         },
       ],
     });
@@ -209,6 +220,10 @@ describe('createEntityType', () => {
   selectedPlacesCount(where: PlaceWhereInput): Int!
   selectedPlacesDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!): [String!]!
   selectedPlace: Place
+  selectedPlacesCalculated(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
+  selectedPlacesCalculatedThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection!
+  selectedPlacesCalculatedCount(where: PlaceWhereInput): Int!
+  selectedPlacesCalculatedDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!): [String!]!
   selectedPlaceStringified: String
 }`;
 

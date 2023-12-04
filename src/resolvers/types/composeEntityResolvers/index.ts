@@ -4,6 +4,8 @@ import type {
   ServersideConfig,
   EntityConfig,
   TangibleEntityConfig,
+  ScalarCalculatedFilterField,
+  ArrayCalculatedFilterField,
 } from '../../../tsTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
@@ -122,6 +124,7 @@ const composeEntityResolvers = (
       duplexFields = [],
       relationalFields = [],
       filterFields = [],
+      calculatedFields = [],
     } = entityConfig as TangibleEntityConfig;
 
     const { originalRelationalFields, parentRelationalFields } = relationalFields.reduce(
@@ -240,7 +243,12 @@ const composeEntityResolvers = (
       return prev;
     }, resolvers);
 
-    filterFields.reduce((prev, { array, name, config, variants }) => {
+    [
+      ...filterFields.filter(({ variants }) => variants.includes('plain')),
+      ...(calculatedFields.filter(({ calculatedType }) => calculatedType === 'filterFields') as
+        | ArrayCalculatedFilterField[]
+        | ScalarCalculatedFilterField[]),
+    ].reduce((prev, { array, name, config }) => {
       if (array) {
         const resolver = createEntityFilterArrayResolver(config, generalConfig, serversideConfig);
 
@@ -281,11 +289,16 @@ const composeEntityResolvers = (
         }
       }
 
-      if (variants.includes('stringified')) {
-        prev[`${name}Stringified`] = fieldFilterStringifiedResolver;
-      }
       return prev;
     }, resolvers);
+
+    filterFields
+      .filter(({ variants }) => variants.includes('stringified'))
+      .reduce((prev, { name }) => {
+        prev[`${name}Stringified`] = fieldFilterStringifiedResolver;
+
+        return prev;
+      }, resolvers);
   }
 
   if (geospatialFields) {

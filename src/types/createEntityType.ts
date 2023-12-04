@@ -133,92 +133,94 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  [...relationalFields, ...duplexFields, ...filterFields].reduce(
-    (prev, { array, name: name2, required, config }) => {
-      if (array) {
-        const childEntitiesArgs = composeChildActionSignature(
-          config,
-          generalConfig,
-          'childEntities',
-          entityTypeDic,
-          inputDic,
-        );
+  [
+    ...relationalFields,
+    ...duplexFields,
+    ...filterFields.filter(({ variants }) => variants.includes('plain')),
+    ...calculatedFields.filter(({ calculatedType }) => calculatedType === 'filterFields'),
+  ].reduce((prev, { array, name: name2, required, config }) => {
+    if (array) {
+      const childEntitiesArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'childEntities',
+        entityTypeDic,
+        inputDic,
+      );
 
-        if (childEntitiesArgs) {
-          prev.push(
-            `  ${name2}(${childEntitiesArgs}): ${composeReturnString(
-              config,
-              generalConfig,
-              childEntities,
-            )}`,
-          );
-        }
-
-        const childEntitiesThroughConnectionArgs = composeChildActionSignature(
-          config,
-          generalConfig,
-          'childEntitiesThroughConnection',
-          entityTypeDic,
-          inputDic,
-        );
-
-        if (childEntitiesThroughConnectionArgs) {
-          prev.push(
-            `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
-              config,
-              generalConfig,
-              childEntitiesThroughConnection,
-            )}`,
-          );
-        }
-
-        const childEntityCountArgs = composeChildActionSignature(
-          config,
-          generalConfig,
-          'childEntityCount',
-          entityTypeDic,
-          inputDic,
-        );
-
-        if (childEntityCountArgs) {
-          prev.push(
-            `  ${name2}Count(${childEntityCountArgs}): ${composeReturnString(
-              config,
-              generalConfig,
-              childEntityCount,
-            )}`,
-          );
-        }
-
-        const childEntityDistinctValuesArgs = composeChildActionSignature(
-          config,
-          generalConfig,
-          'childEntityDistinctValues',
-          entityTypeDic,
-          inputDic,
-        );
-
-        if (childEntityDistinctValuesArgs) {
-          prev.push(
-            `  ${name2}DistinctValues(${childEntityDistinctValuesArgs}): ${composeReturnString(
-              config,
-              generalConfig,
-              childEntityDistinctValues,
-            )}`,
-          );
-        }
-      } else if (checkInventory(['Query', 'childEntity', config.name])) {
+      if (childEntitiesArgs) {
         prev.push(
-          `  ${name2}: ${composeReturnString(config, generalConfig, childEntity)}${
-            required ? '!' : ''
-          }`,
+          `  ${name2}(${childEntitiesArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            childEntities,
+          )}`,
         );
       }
 
-      return prev;
-    },
-    entityTypeArray,
-  );
+      const childEntitiesThroughConnectionArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'childEntitiesThroughConnection',
+        entityTypeDic,
+        inputDic,
+      );
+
+      if (childEntitiesThroughConnectionArgs) {
+        prev.push(
+          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            childEntitiesThroughConnection,
+          )}`,
+        );
+      }
+
+      const childEntityCountArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'childEntityCount',
+        entityTypeDic,
+        inputDic,
+      );
+
+      if (childEntityCountArgs) {
+        prev.push(
+          `  ${name2}Count(${childEntityCountArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            childEntityCount,
+          )}`,
+        );
+      }
+
+      const childEntityDistinctValuesArgs = composeChildActionSignature(
+        config,
+        generalConfig,
+        'childEntityDistinctValues',
+        entityTypeDic,
+        inputDic,
+      );
+
+      if (childEntityDistinctValuesArgs) {
+        prev.push(
+          `  ${name2}DistinctValues(${childEntityDistinctValuesArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            childEntityDistinctValues,
+          )}`,
+        );
+      }
+    } else if (checkInventory(['Query', 'childEntity', config.name])) {
+      prev.push(
+        `  ${name2}: ${composeReturnString(config, generalConfig, childEntity)}${
+          required ? '!' : ''
+        }`,
+      );
+    }
+
+    return prev;
+  }, entityTypeArray);
 
   duplexFields.reduce((prev, { array, name: name2, oppositeName, required, config }) => {
     if (array || required) {

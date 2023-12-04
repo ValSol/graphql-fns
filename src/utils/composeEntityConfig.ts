@@ -285,7 +285,7 @@ const composeEntityConfig = (
   if (simplifiedFilterFields) {
     // eslint-disable-next-line no-param-reassign
     (entityConfig as TangibleEntityConfig).filterFields = simplifiedFilterFields.map((field) => {
-      const { configName, variants = [], ...restField } = field;
+      const { configName, variants = ['plain'], ...restField } = field;
       const config = allEntityConfigs[configName];
       if (!config) {
         throw new TypeError(
@@ -345,6 +345,25 @@ const composeEntityConfig = (
                 '\x1b[0m',
               );
             }
+          }
+
+          return { ...restField, config, type: 'calculatedFields' };
+        }
+
+        if (calculatedType === 'filterFields') {
+          const { configName, ...restField } = field;
+          const config = allEntityConfigs[configName];
+
+          if (!config) {
+            throw new TypeError(
+              `Incorrect configName: "${configName}" in calculated filter field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+
+          if (!(config.type === undefined || config.type === 'tangible')) {
+            throw new TypeError(
+              `Not tangible config: "${configName}" in calculated filter field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
           }
 
           return { ...restField, config, type: 'calculatedFields' };

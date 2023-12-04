@@ -229,12 +229,12 @@ type ArraySimplifiedCalculatedEnumField = Omit<
     asyncFuncResult?: any,
   ) => string[];
 };
-type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
+type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
-  calculatedType: 'embeddedFields' | 'fileFields';
+  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
   configName: string;
   asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
   args: string[];
@@ -244,12 +244,12 @@ type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
     asyncFuncResult?: any,
   ) => GraphqlObject;
 };
-type ArraySimplifiedCalculatedEmbeddedOrFileField = Omit<
+type ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
-  calculatedType: 'embeddedFields' | 'fileFields';
+  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
   configName: string;
   asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
   args: string[];
@@ -315,8 +315,8 @@ type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'in
   ) => GraphqlScalar[];
 };
 type SimplifiedCalculatedField =
-  | ArraySimplifiedCalculatedEmbeddedOrFileField
-  | ScalarSimplifiedCalculatedEmbeddedOrFileField
+  | ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField
+  | ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField
   | ArraySimplifiedCalculatedEnumField
   | ScalarSimplifiedCalculatedEnumField
   | ArraySimplifiedCalculatedGeospatialField
@@ -456,13 +456,13 @@ type ScalarFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array?: false;
   config: TangibleEntityConfig;
   type: 'filterFields';
-  variants: Array<'stringified'>;
+  variants: Array<'plain' | 'stringified'>;
 };
 type ArrayFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array: true;
   config: TangibleEntityConfig;
   type: 'filterFields';
-  variants: Array<'stringified'>;
+  variants: Array<'plain' | 'stringified'>;
 };
 export type FilterField = ArrayFilterField | ScalarFilterField;
 
@@ -565,6 +565,38 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   ) => GeospatialPoint[] | GeospatialPolygon[];
   type: 'calculatedFields';
 };
+export type ScalarCalculatedFilterField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  calculatedType: 'filterFields';
+  config: TangibleEntityConfig;
+  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+  ) => GraphqlObject;
+  type: 'calculatedFields';
+};
+export type ArrayCalculatedFilterField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  calculatedType: 'filterFields';
+  config: TangibleEntityConfig;
+  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+  ) => GraphqlObject[];
+  type: 'calculatedFields';
+};
 type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
@@ -598,6 +630,8 @@ type CalculatedField =
   | ScalarCalculatedGeospatialField
   | ArrayCalculatedGeospatialField
   | ScalarCalculatedGeospatialField
+  | ArrayCalculatedFilterField
+  | ScalarCalculatedFilterField
   | ArrayCalculatedField
   | ScalarCalculatedField;
 
