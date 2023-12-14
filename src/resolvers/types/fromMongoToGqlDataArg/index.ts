@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 import type {
   DataObject,
   EntityConfig,
@@ -10,8 +8,6 @@ import type {
 
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
-
-const { ObjectId } = Types;
 
 const geospatialFromMongToGql = (item: DataObject) => {
   const { type: geoType } = item;
@@ -88,7 +84,7 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
           } else {
             const { connect, create, createPositions } = data[name].reduce(
               (prev2, item, i) => {
-                if (item instanceof ObjectId || typeof item === 'string') {
+                if (typeof item === 'string' || item.constructor.name === 'ObjectId') {
                   prev2.connect.push(item);
                 } else {
                   prev2.create.push(fromMongoToGqlDataArg(item, config));
@@ -114,7 +110,7 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
 
             prev[name] = result2; // eslint-disable-line no-param-reassign
           }
-        } else if (data[name] instanceof ObjectId || typeof data[name] === 'string') {
+        } else if (typeof data[name] === 'string' || data[name].constructor.name === 'ObjectId') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {
@@ -134,7 +130,7 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
           } else {
             const { connect, create, createPositions } = data[name].reduce(
               (prev2, item, i) => {
-                if (item instanceof ObjectId || typeof item === 'string') {
+                if (typeof item === 'string' || item.constructor.name === 'ObjectId') {
                   prev2.connect.push(item);
                 } else {
                   prev2.create.push(fromMongoToGqlDataArg(item, config));
@@ -160,7 +156,7 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
 
             prev[name] = result2; // eslint-disable-line no-param-reassign
           }
-        } else if (data[name] instanceof ObjectId || typeof data[name] === 'string') {
+        } else if (typeof data[name] === 'string' || data[name].constructor.name === 'ObjectId') {
           // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {

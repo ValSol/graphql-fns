@@ -27,10 +27,10 @@ afterAll(async () => {
 });
 
 describe('createCopyEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
-  const serversideConfig = { transactions: true };
+  test('should create mutation copy entity resolver', async () => {
+    const generalConfig: GeneralConfig = { allEntityConfigs: {} };
+    const serversideConfig = { transactions: true };
 
-  test('should create mutation add entity resolver', async () => {
     const personConfig = {} as EntityConfig;
     const personBackupConfig = {} as EntityConfig;
     const personCloneConfig = {} as EntityConfig;
@@ -291,5 +291,133 @@ describe('createCopyEntityMutationResolver', () => {
       personBackup2.id.toString(),
     ]);
     expect(person.clone.toString()).toBe(personClone.id.toString());
+  });
+
+  test('should create mutation for Restaurant & RestauranClone', async () => {
+    const generalConfig: GeneralConfig = { allEntityConfigs: {} };
+    const serversideConfig = { transactions: true };
+
+    const restaurantConfig = {} as EntityConfig;
+    const restaurantCloneConfig = {} as EntityConfig;
+
+    Object.assign(restaurantConfig, {
+      name: 'Restaurant',
+      type: 'tangible',
+      textFields: [
+        { name: 'ukTitle', index: true, required: true, weight: 1, type: 'textFields' },
+        { name: 'ruTitle', index: true, required: true, weight: 1, type: 'textFields' },
+        { name: 'enTitle', index: true, required: true, weight: 1, type: 'textFields' },
+      ],
+
+      intFields: [{ name: 'servicePackage', index: true, required: true, type: 'intFields' }],
+
+      geospatialFields: [
+        {
+          name: 'coordinates',
+          geospatialType: 'Point',
+          required: true,
+          type: 'geospatialFields',
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'clone',
+          oppositeName: 'original',
+          config: restaurantCloneConfig,
+          parent: true,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    Object.assign(restaurantCloneConfig, {
+      name: 'RestaurantClone',
+      type: 'tangible',
+      textFields: [
+        { name: 'ukTitle', index: true, required: true, weight: 1, type: 'textFields' },
+        { name: 'ruTitle', index: true, required: true, weight: 1, type: 'textFields' },
+        { name: 'enTitle', index: true, required: true, weight: 1, type: 'textFields' },
+      ],
+
+      intFields: [{ name: 'servicePackage', index: true, required: true, type: 'intFields' }],
+
+      geospatialFields: [
+        {
+          name: 'coordinates',
+          geospatialType: 'Point',
+          required: true,
+          type: 'geospatialFields',
+        },
+      ],
+
+      duplexFields: [
+        {
+          name: 'original',
+          oppositeName: 'clone',
+          config: restaurantConfig,
+          type: 'duplexFields',
+        },
+      ],
+    });
+
+    const restaurantSchema = createThingSchema(restaurantConfig);
+    const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.createCollection();
+
+    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
+    await RestaurantClone.createCollection();
+
+    const createRestaurant = createCreateEntityMutationResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof createRestaurant).toBe('function');
+
+    const data = {
+      ukTitle: 'Пантагрюель',
+      ruTitle: 'Пантагрюэль',
+      enTitle: 'Pantagruel',
+      servicePackage: 0,
+      coordinates: { lat: 50, lng: 30 },
+    };
+
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      {
+        inputOutputEntity: [[]],
+      },
+    );
+
+    expect(createdRestaurant.ukTitle).toBe(data.ukTitle);
+    expect(createdRestaurant.ruTitle).toBe(data.ruTitle);
+    expect(createdRestaurant.enTitle).toBe(data.enTitle);
+
+    const copyRestaurantClone = createCopyEntityMutationResolver(
+      restaurantCloneConfig,
+      generalConfig,
+      serversideConfig,
+    );
+    expect(typeof copyRestaurantClone).toBe('function');
+
+    const restaurantClone = await copyRestaurantClone(
+      null,
+      {
+        whereOnes: { original: { id: createdRestaurant.id.toString() } },
+      },
+      { mongooseConn, pubsub },
+      null,
+      { inputOutputEntity: [[]] },
+    );
+
+    expect(restaurantClone.ukTitle).toBe(data.ukTitle);
+    expect(restaurantClone.ruTitle).toBe(data.ruTitle);
+    expect(restaurantClone.enTitle).toBe(data.enTitle);
+    expect(restaurantClone.original.toString()).toBe(createdRestaurant.id.toString());
   });
 });

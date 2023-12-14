@@ -1,4 +1,4 @@
-import type {GetPrevious} from '../../../tsTypes';
+import type { GetPrevious } from '../../../tsTypes';
 
 import getCommonData from './getCommonData';
 
