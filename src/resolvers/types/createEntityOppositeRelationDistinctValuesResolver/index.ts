@@ -14,6 +14,7 @@ import createChildEntityDistinctValuesQueryResolver from '../../queries/createCh
 import createCustomResolver from '../../createCustomResolver';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
+import fromGlobalId from '../../utils/fromGlobalId';
 
 type Args = {
   near?: NearInput;
@@ -66,9 +67,14 @@ const createEntityOppositeRelationDistinctValuesResolver = (
   const { relationalFields = [] } = entityConfig as TangibleEntityConfig;
 
   const oppositeFields = relationalFields.reduce((prev, item) => {
-    const { parent, name: fieldName, oppositeName } = item;
+    const {
+      parent,
+      name: fieldName,
+      oppositeName,
+      config: { name: oppositeEnityName },
+    } = item;
     if (!parent) {
-      prev[oppositeName] = fieldName;
+      prev[`${oppositeEnityName}:${oppositeName}`] = fieldName;
     }
 
     return prev;
@@ -96,7 +102,13 @@ const createEntityOppositeRelationDistinctValuesResolver = (
 
     const { id } = parent;
 
-    const whereById = { [oppositeFields[fieldName.slice(0, -'DistinctValues'.length)]]: id };
+    const { entityName, descendantKey: descendantKey2 } = fromGlobalId(id);
+
+    const whereById = {
+      [oppositeFields[
+        `${entityName}${descendantKey2}:${fieldName.slice(0, -'DistinctValues'.length)}`
+      ]]: id,
+    };
 
     const { where = {} } = args;
 
