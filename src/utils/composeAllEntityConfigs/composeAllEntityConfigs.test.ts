@@ -17,6 +17,8 @@ describe('composeAllEntityConfigs', () => {
 
       interfaces: ['ExampleInterface'],
 
+      uniqueCompoundIndexes: [['intField', 'floatField']],
+
       intFields: [
         {
           name: 'intField',
@@ -67,6 +69,8 @@ describe('composeAllEntityConfigs', () => {
           type: 'floatFields',
         },
       ],
+
+      uniqueCompoundIndexes: [['intField', 'floatField']],
     };
 
     const exampleEdgeConfig = {

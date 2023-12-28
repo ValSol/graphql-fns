@@ -49,6 +49,7 @@ const composeEntityConfig = (
     relationalFields: simplifiedRelationalFields,
     filterFields: simplifiedFilterFields,
     calculatedFields: simplifiedCalculatedFields,
+    uniqueCompoundIndexes,
   } = simplifiedEntityConfig as any;
 
   const fieldNames = [];
@@ -125,6 +126,26 @@ const composeEntityConfig = (
         type: key,
       }));
     });
+
+  // check uniqueCompoundIndexes
+
+  if (uniqueCompoundIndexes) {
+    uniqueCompoundIndexes.forEach((uniqueCompoundIndex) => {
+      if (uniqueCompoundIndex.length < 2) {
+        throw new TypeError(
+          `Unique compound index mast have at least 2 fields but has "${uniqueCompoundIndex.length}"!`,
+        );
+      }
+
+      uniqueCompoundIndex.forEach((fieldName: string) => {
+        if (!fieldNames.includes(fieldName)) {
+          throw new TypeError(
+            `Not found unique compaund index field: "${fieldName}" in "${name}" entity!`,
+          );
+        }
+      });
+    });
+  }
 
   if (simplifiedEmbeddedFields) {
     // eslint-disable-next-line no-param-reassign

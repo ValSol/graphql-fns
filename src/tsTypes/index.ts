@@ -346,6 +346,7 @@ type SimplifiedEntityConfigCommonProperties = {
 export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonProperties & {
   type?: 'tangible';
   counter?: boolean;
+  uniqueCompoundIndexes?: string[][];
 };
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
@@ -657,6 +658,7 @@ type EntityConfigCommonProperties = {
 export type TangibleEntityConfig = EntityConfigCommonProperties & {
   type?: 'tangible';
   counter?: boolean;
+  uniqueCompoundIndexes?: string[][];
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
