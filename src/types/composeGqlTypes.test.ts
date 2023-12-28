@@ -537,10 +537,12 @@ enum copyMenuThroughsectionsOptionsEnum {
   name
 }
 input copyMenuThroughcloneOptionInput {
-  fieldsToCopy: [copyMenuThroughcloneOptionsEnum!]!
+  fieldsToCopy: [copyMenuThroughcloneOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuThroughcloneOptionsEnum!]
 }
 input copyMenuThroughsectionsOptionInput {
-  fieldsToCopy: [copyMenuThroughsectionsOptionsEnum!]!
+  fieldsToCopy: [copyMenuThroughsectionsOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuThroughsectionsOptionsEnum!]
 }
 input copyMenuOptionsInput {
   clone: copyMenuThroughcloneOptionInput
@@ -558,10 +560,12 @@ enum copyMenuCloneThroughsectionsOptionsEnum {
   name
 }
 input copyMenuCloneThroughoriginalOptionInput {
-  fieldsToCopy: [copyMenuCloneThroughoriginalOptionsEnum!]!
+  fieldsToCopy: [copyMenuCloneThroughoriginalOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuCloneThroughoriginalOptionsEnum!]
 }
 input copyMenuCloneThroughsectionsOptionInput {
-  fieldsToCopy: [copyMenuCloneThroughsectionsOptionsEnum!]!
+  fieldsToCopy: [copyMenuCloneThroughsectionsOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuCloneThroughsectionsOptionsEnum!]
 }
 input copyMenuCloneOptionsInput {
   original: copyMenuCloneThroughoriginalOptionInput
@@ -574,7 +578,8 @@ enum copyMenuSectionThroughmenuOptionsEnum {
   name
 }
 input copyMenuSectionThroughmenuOptionInput {
-  fieldsToCopy: [copyMenuSectionThroughmenuOptionsEnum!]!
+  fieldsToCopy: [copyMenuSectionThroughmenuOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuSectionThroughmenuOptionsEnum!]
 }
 input copyMenuSectionOptionsInput {
   menu: copyMenuSectionThroughmenuOptionInput
@@ -589,7 +594,8 @@ enum copyMenuCloneSectionThroughmenuOptionsEnum {
   name
 }
 input copyMenuCloneSectionThroughmenuOptionInput {
-  fieldsToCopy: [copyMenuCloneSectionThroughmenuOptionsEnum!]!
+  fieldsToCopy: [copyMenuCloneSectionThroughmenuOptionsEnum!]
+  fieldsForbiddenToCopy: [copyMenuCloneSectionThroughmenuOptionsEnum!]
 }
 input copyMenuCloneSectionOptionsInput {
   menu: copyMenuCloneSectionThroughmenuOptionInput
@@ -2744,10 +2750,12 @@ enum copyPersonThroughenemiesOptionsEnum {
   favoritePlace
 }
 input copyPersonThroughfriendsOptionInput {
-  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]!
+  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughfriendsOptionsEnum!]
 }
 input copyPersonThroughenemiesOptionInput {
-  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]!
+  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughenemiesOptionsEnum!]
 }
 input copyPersonOptionsInput {
   friends: copyPersonThroughfriendsOptionInput

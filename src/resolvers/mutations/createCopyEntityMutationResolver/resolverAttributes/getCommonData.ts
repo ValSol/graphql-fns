@@ -53,6 +53,8 @@ const getCommonData = async (
 
   let optionFields = null;
 
+  let forbiddenFields: string[] = [];
+
   if (options) {
     const optionsKeys = Object.keys(options);
     if (optionsKeys.length !== 1) {
@@ -67,7 +69,17 @@ const getCommonData = async (
       );
     }
 
-    optionFields = options[fieldName].fieldsToCopy;
+    if (options[fieldName].fieldsToCopy && options[fieldName].fieldsForbiddenToCopy) {
+      throw new TypeError(
+        `Got simultaniusly "fieldsToCopy" & "fieldsForbiddenToCopy" for "${fieldName}" fieldName "${entityConfig.name}" entity copy options!`,
+      );
+    }
+
+    if (options[fieldName].fieldsToCopy) {
+      optionFields = options[fieldName].fieldsToCopy;
+    } else {
+      forbiddenFields = options[fieldName].fieldsForbiddenToCopy;
+    }
   }
 
   const [{ array, config, oppositeName }, { array: oppositeArray }] = fieldsPair;
@@ -75,7 +87,9 @@ const getCommonData = async (
   const matchingFields = getMatchingFields(entityConfig, config).filter((matchingField) => {
     if (matchingField === fieldName) return false;
 
-    return optionFields ? optionFields.includes(matchingField) : true;
+    return optionFields
+      ? optionFields.includes(matchingField)
+      : !forbiddenFields.includes(matchingField);
   });
 
   if (matchingFields.length === 0) {

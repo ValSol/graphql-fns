@@ -135,13 +135,16 @@ enum copyPersonThroughcloneOptionsEnum {
   lastName
 }
 input copyPersonThroughfriendsOptionInput {
-  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]!
+  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughfriendsOptionsEnum!]
 }
 input copyPersonThroughenemiesOptionInput {
-  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]!
+  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughenemiesOptionsEnum!]
 }
 input copyPersonThroughcloneOptionInput {
-  fieldsToCopy: [copyPersonThroughcloneOptionsEnum!]!
+  fieldsToCopy: [copyPersonThroughcloneOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughcloneOptionsEnum!]
 }
 input copyPersonOptionsInput {
   friends: copyPersonThroughfriendsOptionInput

@@ -174,6 +174,27 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const whereOnes = createdPersons.map((item) => ({ original: { id: item.id } }));
 
+    const personClonesWithForbiddenField = await copyManyPersonClones(
+      null,
+      {
+        whereOnes,
+        options: { original: { fieldsForbiddenToCopy: ['lastName'] } },
+      },
+      { mongooseConn, pubsub },
+      null,
+      { inputOutputEntity: [[]] },
+    );
+
+    const [personCloneWithForbiddenField] = personClonesWithForbiddenField;
+    expect(personCloneWithForbiddenField.firstName).toBe(data[0].firstName);
+    expect(personCloneWithForbiddenField.lastName).toBe(undefined);
+    expect(personCloneWithForbiddenField.original.toString()).toBe(createdPerson.id.toString());
+    expect(personClonesWithForbiddenField[1].firstName).toBe(data[1].firstName);
+    expect(personClonesWithForbiddenField[1].lastName).toBe(undefined);
+    expect(personClonesWithForbiddenField[1].original.toString()).toBe(
+      createdPersons[1].id.toString(),
+    );
+
     const personClones = await copyManyPersonClones(
       null,
       {

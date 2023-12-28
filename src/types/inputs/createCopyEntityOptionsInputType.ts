@@ -13,7 +13,7 @@ const createCopyEntityOptionsInputType: InputCreator = (entityConfig) => {
 
   const { duplexFields } = entityConfig;
 
-  if (!duplexFields || !duplexFields.length) {
+  if (!duplexFields || duplexFields.length === 0) {
     return [inputName, '', {}];
   }
 
@@ -25,19 +25,20 @@ const createCopyEntityOptionsInputType: InputCreator = (entityConfig) => {
     const matchingFields = getMatchingFields(entityConfig, config).filter(
       (matchingField) => matchingField !== fieldName,
     );
-    if (matchingFields.length) {
+    if (matchingFields.length > 0) {
       enumLines.push(`enum copy${name}Through${fieldName}OptionsEnum {
 ${matchingFields.map((enumItem) => `  ${enumItem}`).join('\n')}
 }`);
 
       inputLines.push(`input copy${name}Through${fieldName}OptionInput {
-  fieldsToCopy: [copy${name}Through${fieldName}OptionsEnum!]!
+  fieldsToCopy: [copy${name}Through${fieldName}OptionsEnum!]
+  fieldsForbiddenToCopy: [copy${name}Through${fieldName}OptionsEnum!]
 }`);
       fieldLines.push(`  ${fieldName}: copy${name}Through${fieldName}OptionInput`);
     }
   });
 
-  if (!fieldLines.length) {
+  if (fieldLines.length === 0) {
     return [inputName, '', {}];
   }
 

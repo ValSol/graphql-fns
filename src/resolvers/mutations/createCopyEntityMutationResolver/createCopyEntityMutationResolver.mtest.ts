@@ -168,6 +168,20 @@ describe('createCopyEntityMutationResolver', () => {
     expect(typeof copyPersonClone).toBe('function');
     if (!copyPersonClone) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
+    const personCloneWithForbiddenField = await copyPersonClone(
+      null,
+      {
+        whereOnes: { original: { id: createdPerson.id } },
+        options: { original: { fieldsForbiddenToCopy: ['lastName'] } },
+      },
+      { mongooseConn, pubsub },
+      null,
+      { inputOutputEntity: [[]] },
+    );
+    expect(personCloneWithForbiddenField.firstName).toBe(data.firstName);
+    expect(personCloneWithForbiddenField.lastName).toBe(undefined);
+    expect(personCloneWithForbiddenField.original.toString()).toBe(createdPerson.id.toString());
+
     const personClone = await copyPersonClone(
       null,
       {

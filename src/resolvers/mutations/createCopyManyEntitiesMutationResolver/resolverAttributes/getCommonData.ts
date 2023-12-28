@@ -75,6 +75,8 @@ const getCommonData = async (
 
   let optionFields = null;
 
+  let forbiddenFields: string[] = [];
+
   if (options) {
     const optionsKeys = Object.keys(options);
     if (optionsKeys.length !== 1) {
@@ -89,7 +91,11 @@ const getCommonData = async (
       );
     }
 
-    optionFields = options[fieldName].fieldsToCopy;
+    if (options[fieldName].fieldsToCopy) {
+      optionFields = options[fieldName].fieldsToCopy;
+    } else {
+      forbiddenFields = options[fieldName].fieldsForbiddenToCopy as string[];
+    }
   }
 
   const [{ array, config, oppositeName }, { array: oppositeArray }] = fieldsPair;
@@ -97,7 +103,9 @@ const getCommonData = async (
   const matchingFields = getMatchingFields(entityConfig, config).filter((matchingField) => {
     if (matchingField === fieldName) return false;
 
-    return optionFields ? optionFields.includes(matchingField) : true;
+    return optionFields
+      ? optionFields.includes(matchingField)
+      : !forbiddenFields.includes(matchingField);
   });
 
   if (matchingFields.length === 0) {
