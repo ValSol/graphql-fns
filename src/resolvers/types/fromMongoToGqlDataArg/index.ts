@@ -117,7 +117,10 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
           // eslint-disable-next-line no-param-reassign
           prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
+      } else if (data[name] === null) {
+        prev[name] = { connect: null };
       }
+
       return prev;
     }, result);
 
@@ -163,7 +166,10 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
           // eslint-disable-next-line no-param-reassign
           prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
+      } else if (data[name] === null) {
+        prev[name] = { connect: null };
       }
+
       return prev;
     }, result);
   }
