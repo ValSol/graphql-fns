@@ -96,6 +96,10 @@ describe('createCopyEntityMutationResolver', () => {
           name: 'lastName',
           type: 'textFields',
         },
+        {
+          name: 'info',
+          type: 'textFields',
+        },
       ],
 
       duplexFields: [
@@ -187,6 +191,7 @@ describe('createCopyEntityMutationResolver', () => {
       {
         whereOnes: { original: { id: createdPerson.id } },
         options: { original: { fieldsToCopy: ['firstName'] } },
+        data: { info: 'test' },
       },
       { mongooseConn, pubsub },
       null,
@@ -195,6 +200,7 @@ describe('createCopyEntityMutationResolver', () => {
     expect(personClone.firstName).toBe(data.firstName);
     expect(personClone.lastName).toBe(undefined);
     expect(personClone.original.toString()).toBe(createdPerson.id.toString());
+    expect(personClone.info).toBe('test');
 
     const copyPersonBackup = createCopyEntityMutationResolver(
       personBackupConfig,
@@ -237,7 +243,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const personClone2 = await copyPersonClone(
       null,
-      { whereOnes: { original: { id: createdPerson.id } } },
+      { whereOnes: { original: { id: createdPerson.id } }, data: { info: 'test2' } },
       { mongooseConn, pubsub },
       null,
       { inputOutputEntity: [[]] },
@@ -246,6 +252,7 @@ describe('createCopyEntityMutationResolver', () => {
     expect(personClone2.lastName).toBe(data2.lastName);
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
     expect(personClone2.id.toString()).toBe(personClone.id.toString());
+    expect(personClone2.info).toBe('test2');
 
     const personBackup2 = await copyPersonBackup(
       null,

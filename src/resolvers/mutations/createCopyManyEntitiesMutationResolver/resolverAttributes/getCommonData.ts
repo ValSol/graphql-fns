@@ -29,10 +29,16 @@ const getCommonData = async (
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
-  const { whereOnes, whereOne, options } = args as {
+  const {
+    whereOnes,
+    whereOne,
+    options,
+    data: preAdditionalData,
+  } = args as {
     whereOnes: GraphqlObject[];
     whereOne?: GraphqlObject[];
     options?: Record<string, GraphqlObject>;
+    data?: Record<string, any>;
   };
 
   whereOnes.forEach((item) => {
@@ -49,6 +55,14 @@ const getCommonData = async (
       `wehreOne length: ${whereOne.length} not equal whereOnes length: ${whereOnes.length}!`,
     );
   }
+
+  if (preAdditionalData && preAdditionalData.length !== whereOnes.length) {
+    throw new TypeError(
+      `data length: ${preAdditionalData.length} not equal whereOnes length: ${whereOnes.length}!`,
+    );
+  }
+
+  const additionalData = preAdditionalData || Array(whereOnes.length).fill({});
 
   const { mongooseConn } = context;
 
@@ -207,7 +221,7 @@ const getCommonData = async (
   const result: Array<any> = [];
 
   for (let i = 0; i < rawData.length; i += 1) {
-    const data = fromMongoToGqlDataArg(rawData[i], entityConfig);
+    const data = { ...fromMongoToGqlDataArg(rawData[i], entityConfig), ...additionalData[i] };
 
     if (ids) {
       const processingKind = 'update';

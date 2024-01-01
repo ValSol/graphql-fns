@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
-import type { EntityConfig } from '../../../tsTypes';
+import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
-import fromMongoToGqlDataArg from './index';
+import fromMongoToGqlDataArg from '.';
 
 describe('fromMongoToGqlDataArg', () => {
   test('shoud process data', () => {
@@ -167,6 +167,72 @@ describe('fromMongoToGqlDataArg', () => {
           ],
         },
       },
+    };
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('shoud process filter fields', () => {
+    const example2Config = {} as TangibleEntityConfig;
+
+    const exampleConfig: EntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      filterFields: [
+        {
+          name: 'filterFieldScalar',
+          type: 'filterFields',
+          config: example2Config,
+          variants: ['plain'],
+        },
+        {
+          name: 'filterFieldScalar2',
+          type: 'filterFields',
+          config: example2Config,
+          variants: ['plain'],
+        },
+        {
+          name: 'filterFieldArray',
+          array: true,
+          type: 'filterFields',
+          config: example2Config,
+          variants: ['plain'],
+        },
+        {
+          name: 'filterFieldArray2',
+          array: true,
+          type: 'filterFields',
+          config: example2Config,
+          variants: ['plain'],
+        },
+      ],
+    };
+
+    Object.assign(example2Config, {
+      name: 'Example2',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'textField',
+          type: 'textFields',
+          unique: true,
+        },
+      ],
+    });
+
+    const data = {
+      filterFieldScalar: null,
+      filterFieldScalar2: '{"textField":"abc"}',
+      filterFieldArray: null,
+      filterFieldArray2: '{}',
+    };
+
+    const result = fromMongoToGqlDataArg(data, exampleConfig);
+
+    const expectedResult = {
+      filterFieldScalar: null,
+      filterFieldScalar2: { textField: 'abc' },
+      filterFieldArray: null,
+      filterFieldArray2: {},
     };
     expect(result).toEqual(expectedResult);
   });

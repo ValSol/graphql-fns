@@ -73,7 +73,7 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
   }, result);
 
   if (entityType === 'tangible') {
-    const { relationalFields = [], duplexFields = [] } = entityConfig;
+    const { relationalFields = [], duplexFields = [], filterFields = [] } = entityConfig;
 
     relationalFields.reduce((prev, { name, array, config }) => {
       if (data[name]) {
@@ -168,6 +168,16 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
         }
       } else if (data[name] === null) {
         prev[name] = { connect: null };
+      }
+
+      return prev;
+    }, result);
+
+    filterFields.reduce((prev, { name }) => {
+      if (data[name]) {
+        prev[name] = JSON.parse(data[name]);
+      } else {
+        prev[name] = null;
       }
 
       return prev;

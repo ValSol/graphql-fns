@@ -15,11 +15,17 @@ const prepareBulkData: PrepareBulkData = async (
 ) => {
   const { entityConfig } = resolverCreatorArg as { entityConfig: TangibleEntityConfig };
   const {
-    args: { whereOnes },
+    args: { whereOnes, data: additionalData },
   } = resolverArg;
   const { core } = prevPreparedData;
 
   const getMains = Array.isArray(whereOnes) ? getCommonManyData : getCommonData;
+
+  const additionalDataArr = Array.isArray(whereOnes)
+    ? additionalData || Array(whereOnes.length).fill({})
+    : additionalData
+    ? [additionalData]
+    : [{}];
 
   const mains = await getMains(resolverCreatorArg, resolverArg);
 
@@ -68,9 +74,9 @@ const prepareBulkData: PrepareBulkData = async (
 
     let preparedData: PreparedData = { ...prevPreparedData, core: coreForDeletions, mains: [] };
 
-    pairedPreviouseEntities.forEach(([previousEntity, data]: [any, any]) => {
+    pairedPreviouseEntities.forEach(([previousEntity, data]: [any, any], i) => {
       preparedData = processCreateInputData(
-        { ...data, id: previousEntity._id }, // eslint-disable-line no-underscore-dangle
+        { ...data, id: previousEntity._id, ...additionalDataArr[i] }, // eslint-disable-line no-underscore-dangle
         preparedData,
         entityConfig,
         'update',
@@ -82,8 +88,13 @@ const prepareBulkData: PrepareBulkData = async (
 
   let preparedData: PreparedData = prevPreparedData;
 
-  previousEntities.forEach((dataItem) => {
-    preparedData = processCreateInputData(dataItem, preparedData, entityConfig, 'create');
+  previousEntities.forEach((dataItem, i) => {
+    preparedData = processCreateInputData(
+      { ...dataItem, ...additionalDataArr[i] },
+      preparedData,
+      entityConfig,
+      'create',
+    );
   });
 
   return preparedData;

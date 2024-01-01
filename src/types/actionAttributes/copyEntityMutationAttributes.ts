@@ -3,6 +3,7 @@ import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
+import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
 import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneToCopyInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
@@ -17,15 +18,17 @@ const inputCreators = [
   createEntityCopyWhereOnesInputType,
   createCopyEntityOptionsInputType,
   createEntityWhereOneToCopyInputType,
+  createEntityUpdateInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOnes', 'options', 'whereOne', 'token'];
+const argNames = ['whereOnes', 'options', 'whereOne', 'data', 'token'];
 
 const argTypes = [
   ({ name }): string => `${name}CopyWhereOnesInput!`,
   ({ name }): string => `copy${name}OptionsInput`,
   ({ name }): string => `${name}WhereOneToCopyInput`,
+  ({ name }): string => `${name}UpdateInput`,
   (): string => 'String',
 ];
 

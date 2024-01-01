@@ -28,7 +28,7 @@ const getCommonData = async (
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
-  const { whereOnes, whereOne, options } = args;
+  const { whereOnes, whereOne, options, data: additionalData = {} } = args;
   const whereOnesKeys = Object.keys(whereOnes);
 
   if (whereOnesKeys.length !== 1) {
@@ -159,7 +159,10 @@ const getCommonData = async (
     rawData[fieldName] = array ? [entity._id] : entity._id; // eslint-disable-line no-underscore-dangle
   }
 
-  const data = fromMongoToGqlDataArg(rawData, entityConfig);
+  const data = {
+    ...fromMongoToGqlDataArg(rawData, entityConfig),
+    ...(additionalData as Record<string, any>),
+  };
 
   if (id) {
     const processingKind = 'update';

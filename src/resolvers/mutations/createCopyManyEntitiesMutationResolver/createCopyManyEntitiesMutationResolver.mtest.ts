@@ -96,6 +96,10 @@ describe('createCopyManyEntitiesMutationResolver', () => {
           name: 'lastName',
           type: 'textFields',
         },
+        {
+          name: 'info',
+          type: 'textFields',
+        },
       ],
 
       duplexFields: [
@@ -200,6 +204,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
       {
         whereOnes,
         options: { original: { fieldsToCopy: ['firstName'] } },
+        data: [{ info: 'test' }, { info: 'test!' }],
       },
       { mongooseConn, pubsub },
       null,
@@ -210,9 +215,11 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     expect(personClone.firstName).toBe(data[0].firstName);
     expect(personClone.lastName).toBe(undefined);
     expect(personClone.original.toString()).toBe(createdPerson.id.toString());
+    expect(personClone.info).toBe('test');
     expect(personClones[1].firstName).toBe(data[1].firstName);
     expect(personClones[1].lastName).toBe(undefined);
     expect(personClones[1].original.toString()).toBe(createdPersons[1].id.toString());
+    expect(personClones[1].info).toBe('test!');
 
     const copyManyPersonBackups = createCopyManyEntitiesMutationResolver(
       personBackupConfig,
@@ -266,7 +273,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personClones2 = await copyManyPersonClones(
       null,
-      { whereOnes },
+      { whereOnes, data: [{ info: 'test2' }, { info: 'test2!' }] },
       { mongooseConn, pubsub },
       null,
       { inputOutputEntity: [[]] },
@@ -277,10 +284,12 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     expect(personClone2.lastName).toBe(data2[0].lastName);
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
     expect(personClone2.id.toString()).toBe(personClone.id.toString());
+    expect(personClone2.info).toBe('test2');
     expect(personClones2[1].firstName).toBe(data2[1].firstName);
     expect(personClones2[1].lastName).toBe(data2[1].lastName);
     expect(personClones2[1].original.toString()).toBe(createdPersons[1].id.toString());
     expect(personClones2[1].id.toString()).toBe(personClones[1].id.toString());
+    expect(personClones2[1].info).toBe('test2!');
 
     const personBackups2 = await copyManyPersonBackups(
       null,
