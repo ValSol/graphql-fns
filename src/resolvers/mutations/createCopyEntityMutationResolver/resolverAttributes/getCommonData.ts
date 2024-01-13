@@ -165,6 +165,12 @@ const getCommonData = async (
   };
 
   if (id) {
+    if (!entity2) {
+      throw new TypeError(
+        `In the "${config.name}" entity with id: "${entity._id}" got dead ref: "${oppositeName}"="${id}"!`,
+      );
+    }
+
     const processingKind = 'update';
     const allowCopy = involvedFilters
       ? await checkData(

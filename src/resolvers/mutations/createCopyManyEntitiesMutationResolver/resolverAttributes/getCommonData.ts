@@ -224,6 +224,12 @@ const getCommonData = async (
     const data = { ...fromMongoToGqlDataArg(rawData[i], entityConfig), ...additionalData[i] };
 
     if (ids) {
+      if (!entities2[i]) {
+        throw new TypeError(
+          `In the "${config.name}" entity with id: "${entities[i]._id}" got dead ref: "${oppositeName}"="${ids[i]}"!`,
+        );
+      }
+
       const processingKind = 'update';
       const id = ids[i];
 

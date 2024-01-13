@@ -58,6 +58,12 @@ const composeEntityConfig = (
   Object.keys(simplifiedEntityConfig)
     .filter((key) => key.endsWith('Fields'))
     .forEach((key) => {
+      if (!Array.isArray(simplifiedEntityConfig[key])) {
+        throw new TypeError(
+          `Property "${key}" of "${name}" entity config has to be array, but it is "${simplifiedEntityConfig[key]}"!`,
+        );
+      }
+
       simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze, array }) => {
         if (fieldNames.includes(fieldName)) {
           throw new TypeError(`Field name: "${fieldName}" used twice in entity: "${name}"!`);
