@@ -13,9 +13,10 @@ const fillEntityTypeDic = (
   inputDic: { [inputName: string]: string },
 ) => {
   const {
-    embeddedFields = [],
+    calculatedFields = [],
     childFields = [],
     duplexFields = [],
+    embeddedFields = [],
     filterFields = [],
     fileFields = [],
     relationalFields = [],
@@ -33,6 +34,14 @@ const fillEntityTypeDic = (
     entityTypeDic[name] = createEntityType(entityConfig, generalConfig, entityTypeDic, inputDic);
   }
 
+  const calculatedEmbdeedOrFileFields = calculatedFields.filter(
+    ({ calculatedType }) => calculatedType === 'embeddedFields' || calculatedType === 'fileFields',
+  );
+
+  const calculatedFilterFields = calculatedFields.filter(
+    ({ calculatedType }) => calculatedType === 'filterFields',
+  );
+
   [
     ...embeddedFields,
     ...childFields,
@@ -40,13 +49,15 @@ const fillEntityTypeDic = (
     ...filterFields,
     ...fileFields,
     ...relationalFields,
+    ...calculatedEmbdeedOrFileFields,
+    ...calculatedFilterFields,
   ].forEach(({ config }) => {
     if (!entityTypeDic[config.name]) {
       fillEntityTypeDic(config, generalConfig, entityTypeDic, inputDic);
     }
   });
 
-  [...embeddedFields, ...fileFields].forEach(({ config }) => {
+  [...embeddedFields, ...fileFields, ...calculatedEmbdeedOrFileFields].forEach(({ config }) => {
     const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
 
     const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);

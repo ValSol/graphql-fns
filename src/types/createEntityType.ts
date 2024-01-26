@@ -222,6 +222,13 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
+  const embeddedOrFileCalculatedFields = calculatedFields
+    .filter(
+      ({ calculatedType }) =>
+        calculatedType === 'embeddedFields' || calculatedType === 'fileFields',
+    )
+    .map((field) => (field.array ? { ...field, variants: ['plain'] } : field));
+
   duplexFields.reduce((prev, { array, name: name2, oppositeName, required, config }) => {
     if (array || required) {
       return prev;
@@ -256,7 +263,7 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  [...embeddedFields, ...fileFields].reduce(
+  [...embeddedFields, ...fileFields, ...embeddedOrFileCalculatedFields].reduce(
     (prev, { array, name: name2, required, config, variants }) => {
       if (array) {
         if (variants.includes('plain')) {
@@ -326,13 +333,7 @@ const createEntityType = (
 
       pushInPrev(field, `${enumName}Enumeration`, prev);
     } else if (calculatedType === 'embeddedFields' || calculatedType === 'fileFields') {
-      const { array, name: name2, required, config } = field;
-
-      if (array) {
-        prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
-      } else {
-        prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
-      }
+      // do nothing because of using "embeddedOrFileCalculatedFields" before
     } else if (calculatedType === 'textFields') {
       pushInPrev(field, 'String', prev);
 
