@@ -6,6 +6,7 @@ import { PubSub } from 'graphql-subscriptions';
 
 import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
+import fromGlobalId from '../../utils/fromGlobalId';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
@@ -170,7 +171,9 @@ describe('createEntityFilterConnectionResolver', () => {
       { inputOutputEntity: [[]] },
     );
 
-    expect(updatedUser.restaurantsFilter).toBe(JSON.stringify({ id_in: restaurantIds }));
+    expect(updatedUser.restaurantsFilter).toBe(
+      JSON.stringify({ id_in: restaurantIds.map((globalId) => fromGlobalId(globalId)._id) }),
+    );
 
     const restaurantFilter2 = await restaurantFilterConnection(
       { ...updatedUser, ...parent },

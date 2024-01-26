@@ -6,6 +6,7 @@ import createChildEntityQueryResolver from '../../queries/createChildEntityQuery
 import createCustomResolver from '../../createCustomResolver';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
+import whereToGlobalIds from '../../utils/whereToGlobalIds';
 
 type Args = {
   where: {
@@ -68,7 +69,8 @@ const createEntityFilterScalarResolver = (
       return null;
     }
 
-    const whereOne = JSON.parse(stringifiedFilter);
+    // all "mongo ids" in whereOne have to be represented like "globalIds" to be transformed back to "mongo ids" by resolverDecorator
+    const whereOne = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, descendantKey);
 
     return childEntityQueryResolver(
       parent,

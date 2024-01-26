@@ -6,6 +6,7 @@ import { PubSub } from 'graphql-subscriptions';
 
 import mongoOptions from '../../../test/mongo-options';
 import sleep from '../../../utils/sleep';
+import fromGlobalId from '../../utils/fromGlobalId';
 import toGlobalId from '../../utils/toGlobalId';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
@@ -157,7 +158,7 @@ describe('createEntityFilterScalarResolver', () => {
       { inputOutputEntity: [[]] },
     );
 
-    expect(updatedUser.restaurantFilter).toBe(`{"id":"${restaurantId}"}`);
+    expect(updatedUser.restaurantFilter).toBe(`{"id":"${fromGlobalId(restaurantId)._id}"}`);
 
     const restaurantFilter2 = await restaurantFilterScalar(
       { ...updatedUser, ...parent },

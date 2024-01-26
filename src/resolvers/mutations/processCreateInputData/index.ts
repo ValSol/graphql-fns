@@ -10,6 +10,7 @@ import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
+import whereFromGlobalIds from '../../utils/whereFromGlobalIds';
 
 const getUpdateMany = (rest: any, arr: Array<any>) => {
   const filteredArr = arr.filter(({ updateMany }) => updateMany);
@@ -418,7 +419,9 @@ const processCreateInputData = (
         if (data2[key] === null) {
           prev[key] = null;
         } else {
-          prev[key] = JSON.stringify(data2[key]);
+          prev[key] = JSON.stringify(
+            whereFromGlobalIds(data2[key], filterFieldsObject[key].config),
+          );
         }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];

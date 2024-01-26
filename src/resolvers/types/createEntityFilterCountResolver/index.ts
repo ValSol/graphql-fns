@@ -12,6 +12,7 @@ import createChildEntityCountQueryResolver from '../../queries/createChildEntity
 import createCustomResolver from '../../createCustomResolver';
 import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
+import whereToGlobalIds from '../../utils/whereToGlobalIds';
 
 type Args = {
   near?: NearInput;
@@ -76,7 +77,8 @@ const createEntityFilterCountResolver = (
 
     if (!stringifiedFilter) return 0;
 
-    const filter = JSON.parse(stringifiedFilter);
+    // all "mongo ids" in filter have to be represented like "globalIds" to be transformed back to "mongo ids" by resolverDecorator
+    const filter = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, descendantKey);
 
     const { where = {} } = args;
 
