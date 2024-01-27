@@ -1,5 +1,4 @@
-import type { InvolvedFilter, ResolverArg } from '../../../../tsTypes';
-import type { ResolverCreatorArg } from '../../../tsTypes';
+import type { InvolvedFilter, ResolverArg, ResolverCreatorArg } from '../../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import getMatchingFields from '../../../../utils/getMatchingFields';

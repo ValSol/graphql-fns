@@ -5,12 +5,12 @@ import type {
   ServersideConfig,
   EntityConfig,
   InvolvedFilter,
+  ResolverCreatorArg,
   SintheticResolverInfo,
   GraphqlScalar,
   GraphqlObject,
   TangibleEntityConfig,
 } from '../../../tsTypes';
-import type { ResolverCreatorArg } from '../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import fromCursor from '../../utils/fromCursor';

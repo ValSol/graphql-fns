@@ -31,8 +31,8 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
 
         const asyncFuncResults = await getAsyncFuncResults(
           projection,
+          resolverCreatorArg,
           resolverArg,
-          entityConfig as TangibleEntityConfig,
         );
 
         const payload = {

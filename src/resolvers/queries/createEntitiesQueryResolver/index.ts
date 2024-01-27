@@ -112,11 +112,14 @@ const createEntitiesQueryResolver = (
 
     const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-    const asyncFuncResults = await getAsyncFuncResults(
-      projection,
-      resolverArg,
-      entityConfig as TangibleEntityConfig,
-    );
+    const resolverCreatorArg = {
+      entityConfig,
+      generalConfig,
+      serversideConfig,
+      inAnyCase,
+    };
+
+    const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 

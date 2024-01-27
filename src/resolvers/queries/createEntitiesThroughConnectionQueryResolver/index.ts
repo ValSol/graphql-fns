@@ -4,6 +4,7 @@ import type {
   InventoryСhain,
   NearInput,
   ServersideConfig,
+  ResolverCreatorArg,
   EntityConfig,
   GraphqlScalar,
   GraphqlObject,
@@ -11,7 +12,6 @@ import type {
   SintheticResolverInfo,
   TangibleEntityConfig,
 } from '../../../tsTypes';
-import type { ResolverCreatorArg } from '../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import fromCursor from '../../utils/fromCursor';

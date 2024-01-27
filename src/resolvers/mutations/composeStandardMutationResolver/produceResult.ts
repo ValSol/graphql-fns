@@ -1,8 +1,7 @@
 import type {
-  GeneralConfig,
   GraphqlObject,
   Periphery,
-  EntityConfig,
+  ResolverCreatorArg,
   TangibleEntityConfig,
   ResolverArg,
 } from '../../../tsTypes';
@@ -22,11 +21,12 @@ type PreparedData = {
 
 const produceResult = async (
   preparedData: PreparedData,
-  entityConfig: EntityConfig,
-  generalConfig: GeneralConfig,
+  resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   array: boolean,
 ): Promise<Array<GraphqlObject>> => {
+  const { entityConfig, generalConfig } = resolverCreatorArg;
+
   const { enums } = generalConfig;
   const {
     context: { mongooseConn },
@@ -40,11 +40,7 @@ const produceResult = async (
 
   const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-  const asyncFuncResults = await getAsyncFuncResults(
-    projection,
-    resolverArg,
-    entityConfig as TangibleEntityConfig,
-  );
+  const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
 
   if (array) {
     const ids = mains.map(({ _id }) => _id);

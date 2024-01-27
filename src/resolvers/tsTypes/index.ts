@@ -1,22 +1,13 @@
 import type {
   DataObject,
-  GeneralConfig,
   GraphqlObject,
   Periphery,
   ResolverArg,
-  ServersideConfig,
-  EntityConfig,
+  ResolverCreatorArg,
   TangibleEntityConfig,
 } from '../../tsTypes';
 
 export type Core = Map<TangibleEntityConfig, DataObject[]>;
-
-export type ResolverCreatorArg = {
-  entityConfig: EntityConfig;
-  generalConfig: GeneralConfig;
-  serversideConfig: ServersideConfig;
-  inAnyCase?: boolean;
-};
 
 export type PreparedData = {
   mains: GraphqlObject[];

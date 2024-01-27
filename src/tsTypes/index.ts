@@ -206,7 +206,7 @@ type ScalarSimplifiedCalculatedEnumField = Omit<
   array?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -221,7 +221,7 @@ type ArraySimplifiedCalculatedEnumField = Omit<
   array: true;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -236,7 +236,7 @@ type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
   array?: false;
   calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -251,7 +251,7 @@ type ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
   array: true;
   calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -266,7 +266,7 @@ type ScalarSimplifiedCalculatedGeospatialField = Omit<
   array?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -281,7 +281,7 @@ type ArraySimplifiedCalculatedGeospatialField = Omit<
   array: true;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -295,7 +295,7 @@ type ScalarSimplifiedCalculatedField = Omit<
 > & {
   array?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -306,7 +306,7 @@ type ScalarSimplifiedCalculatedField = Omit<
 type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -483,7 +483,7 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
   array?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -496,7 +496,7 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
   array: true;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -512,7 +512,7 @@ type ScalarCalculatedEmbeddedOrFileField = Omit<
   array?: false;
   calculatedType: 'embeddedFields' | 'fileFields';
   config: EmbeddedEntityConfig | FileEntityConfig;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -528,7 +528,7 @@ type ArrayCalculatedEmbeddedOrFileField = Omit<
   array: true;
   calculatedType: 'embeddedFields' | 'fileFields';
   config: EmbeddedEntityConfig | FileEntityConfig;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -544,7 +544,7 @@ type ScalarCalculatedGeospatialField = Omit<
   array?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -557,7 +557,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   array: true;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -573,7 +573,7 @@ export type ScalarCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -589,7 +589,7 @@ export type ArrayCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -601,7 +601,7 @@ export type ArrayCalculatedFilterField = Omit<
 type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -613,7 +613,7 @@ type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'u
 type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (resolverArg: ResolverArg) => Promise<any>;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
   func: (
     args: Record<string, GraphqlScalar | GraphqlObject>,
@@ -1220,6 +1220,13 @@ export type GqlActionData = {
   descendantKey?: string;
   entityName: string;
   composeOptions: (arg: GraphqlObject) => GraphqlObject;
+};
+
+export type ResolverCreatorArg = {
+  entityConfig: EntityConfig;
+  generalConfig: GeneralConfig;
+  serversideConfig: ServersideConfig;
+  inAnyCase?: boolean;
 };
 
 export type ResolverArg = {

@@ -1,11 +1,13 @@
-import { ResolverArg, TangibleEntityConfig } from '../../../tsTypes';
+import { ResolverArg, ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
 
 const getAsyncFuncResults = async (
   projection: Record<string, 1>,
+  resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  entityConfig: TangibleEntityConfig,
 ): Promise<Record<string, any>> => {
-  const { calculatedFields = [] } = entityConfig;
+  const { entityConfig } = resolverCreatorArg;
+
+  const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
 
   if (calculatedFields.length === 0) {
     return {};
@@ -17,7 +19,7 @@ const getAsyncFuncResults = async (
     const { asyncFunc, name } = calculatedFields[i];
 
     if (asyncFunc && projection[name] === 1) {
-      result[name] = await asyncFunc(resolverArg);
+      result[name] = await asyncFunc(resolverCreatorArg, resolverArg);
     }
   }
 

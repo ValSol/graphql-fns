@@ -1,5 +1,9 @@
-import type { TangibleEntityConfig, InvolvedFilter, ResolverArg } from '../../../../tsTypes';
-import type { ResolverCreatorArg } from '../../../tsTypes';
+import type {
+  TangibleEntityConfig,
+  InvolvedFilter,
+  ResolverArg,
+  ResolverCreatorArg,
+} from '../../../../tsTypes';
 
 import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
 import getMatchingFields from '../../../../utils/getMatchingFields';

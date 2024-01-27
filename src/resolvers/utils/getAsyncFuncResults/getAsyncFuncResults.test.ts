@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { TangibleEntityConfig } from '../../../tsTypes';
+import type { ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
 
 import getAsyncFuncResults from './index';
 
@@ -28,7 +28,7 @@ describe('getAsyncFuncResults', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        asyncFunc: async ({ context }: any) => {
+        asyncFunc: async (resolverCreatorArg, { context }: any) => {
           const result = await context.id;
           return result;
         },
@@ -53,7 +53,11 @@ describe('getAsyncFuncResults', () => {
 
     const data = { id: '1', text1: 'text1', text2: 'text2', text3: 'text3' };
 
-    const result = await getAsyncFuncResults(projection, resolverArg, exampleConfig);
+    const result = await getAsyncFuncResults(
+      projection,
+      { entityConfig: exampleConfig } as ResolverCreatorArg,
+      resolverArg,
+    );
 
     const expectedResult = { text: '12345' };
 

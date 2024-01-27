@@ -103,8 +103,8 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       const asyncFuncResults = await getAsyncFuncResults(
         projection,
+        resolverCreatorArg,
         resolverArg,
-        entityConfig as TangibleEntityConfig,
       );
 
       for (let i = 0; i < tryCount; i += 1) {
@@ -203,13 +203,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       if (produceCurrent) {
         // eslint-disable-next-line no-await-in-loop
-        result.current = await produceResult(
-          preparedData,
-          entityConfig,
-          generalConfig,
-          resolverArg,
-          array,
-        );
+        result.current = await produceResult(preparedData, resolverCreatorArg, resolverArg, array);
       }
 
       if (!report) {

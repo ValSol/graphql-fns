@@ -227,8 +227,8 @@ const workOutMutations = async (
 
       const asyncFuncResults = await getAsyncFuncResults(
         projection,
+        resolverCreatorArg,
         resolverArg,
-        entityConfig as TangibleEntityConfig,
       );
 
       result.previous = previous.map((item) =>
@@ -251,8 +251,7 @@ const workOutMutations = async (
       // eslint-disable-next-line no-await-in-loop
       result.current = await produceResult(
         fakePreparedData,
-        entityConfig,
-        generalConfig,
+        resolverCreatorArg,
         resolverArg,
         array,
       );
