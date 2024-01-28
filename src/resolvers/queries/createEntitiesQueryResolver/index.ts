@@ -179,13 +179,14 @@ const createEntitiesQueryResolver = (
 
       if (!entities) return [];
 
-      const result = entities.map((item) =>
+      const result = entities.map((item, i) =>
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
           projection,
           asyncFuncResults,
           resolverArg,
           entityConfig as TangibleEntityConfig,
+          i,
         ),
       );
 
@@ -223,13 +224,14 @@ const createEntitiesQueryResolver = (
     const entities = await query.exec();
     if (!entities) return [];
 
-    const result = entities.map((item) =>
+    const result = entities.map((item, i) =>
       addCalculatedFieldsToEntity(
         addIdsToEntity(item, entityConfig),
         projection,
         asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
+        i,
       ),
     );
 

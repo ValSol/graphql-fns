@@ -71,6 +71,7 @@ describe('addCalculatedFieldsToEntity', () => {
       asyncResolverResults,
       resolverArg,
       exampleConfig,
+      0,
     );
 
     const expectedResult = {
@@ -96,6 +97,7 @@ describe('addCalculatedFieldsToEntity', () => {
       asyncResolverResults,
       resolverArg,
       exampleConfig,
+      0,
     );
 
     const expectedResult = { text1: 'text1' };
@@ -116,6 +118,7 @@ describe('addCalculatedFieldsToEntity', () => {
       asyncResolverResults,
       resolverArg,
       exampleConfig,
+      0,
     );
 
     const expectedResult = { id: '1', text2: 'text2', text3: 'text3', texts: ['text2', 'text3'] };

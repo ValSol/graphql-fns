@@ -47,13 +47,14 @@ const produceResult = async (
 
     const entities = await Entity.find({ _id: { $in: ids } }, projection, { lean: true });
 
-    const entities2 = entities.map((item) =>
+    const entities2 = entities.map((item, i) =>
       addCalculatedFieldsToEntity(
         addIdsToEntity(item, entityConfig),
         projection,
         asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
+        i,
       ),
     );
 
@@ -69,6 +70,7 @@ const produceResult = async (
     asyncFuncResults,
     resolverArg,
     entityConfig as TangibleEntityConfig,
+    0, // index
   );
 
   return [entity2];

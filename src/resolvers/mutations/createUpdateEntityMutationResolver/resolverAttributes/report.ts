@@ -43,6 +43,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
             asyncFuncResults,
             resolverArg,
             entityConfig as TangibleEntityConfig,
+            0, // index
           ),
           updatedFields,
         } as const;

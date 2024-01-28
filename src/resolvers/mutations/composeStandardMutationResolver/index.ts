@@ -130,13 +130,14 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             return null;
           }
 
-          result.previous = previous.map((item) =>
+          result.previous = previous.map((item, i) =>
             addCalculatedFieldsToEntity(
               addIdsToEntity(item, entityConfig),
               projection,
               asyncFuncResults,
               resolverArg,
               entityConfig as TangibleEntityConfig,
+              i,
             ),
           );
 

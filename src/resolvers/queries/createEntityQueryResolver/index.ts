@@ -99,6 +99,7 @@ const createEntityQueryResolver = (
         asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
+        0, // index
       );
       return entity2;
     }
@@ -113,6 +114,7 @@ const createEntityQueryResolver = (
       asyncFuncResults,
       resolverArg,
       entityConfig as TangibleEntityConfig,
+      0, // index
     );
     return entity2;
   };

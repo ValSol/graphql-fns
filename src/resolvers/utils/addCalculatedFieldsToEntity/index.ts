@@ -6,6 +6,7 @@ const addCalculatedFieldsToEntity = (
   asyncResolverResults: Record<string, any>,
   resolverArg: ResolverArg,
   entityConfig: TangibleEntityConfig,
+  index: number,
 ) => {
   const { calculatedFields = [] } = entityConfig;
 
@@ -17,7 +18,7 @@ const addCalculatedFieldsToEntity = (
 
   calculatedFields.reduce((prev, { func, name }) => {
     if (projection[name] === 1) {
-      prev[name] = func(data, resolverArg, asyncResolverResults[name]);
+      prev[name] = func(data, resolverArg, asyncResolverResults[name], index);
     }
 
     return prev;

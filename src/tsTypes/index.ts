@@ -212,6 +212,7 @@ type ScalarSimplifiedCalculatedEnumField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => null | string;
 };
 type ArraySimplifiedCalculatedEnumField = Omit<
@@ -227,6 +228,7 @@ type ArraySimplifiedCalculatedEnumField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => string[];
 };
 type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
@@ -242,6 +244,7 @@ type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject;
 };
 type ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
@@ -257,6 +260,7 @@ type ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject[];
 };
 type ScalarSimplifiedCalculatedGeospatialField = Omit<
@@ -272,6 +276,7 @@ type ScalarSimplifiedCalculatedGeospatialField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => null | GeospatialPoint | GeospatialPolygon;
 };
 type ArraySimplifiedCalculatedGeospatialField = Omit<
@@ -287,6 +292,7 @@ type ArraySimplifiedCalculatedGeospatialField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GeospatialPoint[] | GeospatialPolygon[];
 };
 type ScalarSimplifiedCalculatedField = Omit<
@@ -301,6 +307,7 @@ type ScalarSimplifiedCalculatedField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlScalar;
 };
 type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -312,6 +319,7 @@ type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'in
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlScalar[];
 };
 type SimplifiedCalculatedField =
@@ -489,6 +497,7 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => null | string;
   type: 'calculatedFields';
 };
@@ -502,6 +511,7 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => string[];
   type: 'calculatedFields';
 };
@@ -518,6 +528,7 @@ type ScalarCalculatedEmbeddedOrFileField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject;
   type: 'calculatedFields';
 };
@@ -534,6 +545,7 @@ type ArrayCalculatedEmbeddedOrFileField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject[];
   type: 'calculatedFields';
 };
@@ -550,6 +562,7 @@ type ScalarCalculatedGeospatialField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => null | GeospatialPoint | GeospatialPolygon;
   type: 'calculatedFields';
 };
@@ -563,6 +576,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GeospatialPoint[] | GeospatialPolygon[];
   type: 'calculatedFields';
 };
@@ -579,6 +593,7 @@ export type ScalarCalculatedFilterField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject;
   type: 'calculatedFields';
 };
@@ -595,6 +610,7 @@ export type ArrayCalculatedFilterField = Omit<
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlObject[];
   type: 'calculatedFields';
 };
@@ -607,6 +623,7 @@ type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'u
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlScalar;
   type: 'calculatedFields';
 };
@@ -619,6 +636,7 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
     args: Record<string, GraphqlScalar | GraphqlObject>,
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
+    index?: number,
   ) => GraphqlScalar;
   type: 'calculatedFields';
 };
