@@ -1,0 +1,86 @@
+{
+  "name": "ownPostsThroughConnection",
+  "alias": "ownPostsThroughConnection",
+  "args": { "sort": { "sortBy": ["createdAt_DESC"] }, "first": 12 },
+  "fieldsByTypeName": {
+    "PostForViewConnection": {
+      "edges": {
+        "name": "edges",
+        "alias": "edges",
+        "args": {},
+        "fieldsByTypeName": {
+          "PostForViewEdge": {
+            "cursor": { "name": "cursor", "alias": "cursor", "args": {}, "fieldsByTypeName": {} },
+            "node": {
+              "name": "node",
+              "alias": "node",
+              "args": {},
+              "fieldsByTypeName": {
+                "PostForView": {
+                  "id": { "name": "id", "alias": "id", "args": {}, "fieldsByTypeName": {} },
+                  "ukTitle": {
+                    "name": "ukTitle",
+                    "alias": "ukTitle",
+                    "args": {},
+                    "fieldsByTypeName": {}
+                  },
+                  "ukSummary": {
+                    "name": "ukSummary",
+                    "alias": "ukSummary",
+                    "args": {},
+                    "fieldsByTypeName": {}
+                  },
+                  "photoHeader": {
+                    "name": "photoHeader",
+                    "alias": "photoHeader",
+                    "args": {},
+                    "fieldsByTypeName": {
+                      "Photo": {
+                        "address": {
+                          "name": "mobile",
+                          "alias": "address",
+                          "args": {},
+                          "fieldsByTypeName": {}
+                        },
+                        "id": { "name": "id", "alias": "id", "args": {}, "fieldsByTypeName": {} }
+                      }
+                    }
+                  },
+                  "slug": { "name": "slug", "alias": "slug", "args": {}, "fieldsByTypeName": {} },
+                  "startAt": {
+                    "name": "startAt",
+                    "alias": "startAt",
+                    "args": {},
+                    "fieldsByTypeName": {}
+                  },
+                  "endAt": { "name": "endAt", "alias": "endAt", "args": {}, "fieldsByTypeName": {} }
+                }
+              }
+            }
+          }
+        }
+      },
+      "pageInfo": {
+        "name": "pageInfo",
+        "alias": "pageInfo",
+        "args": {},
+        "fieldsByTypeName": {
+          "PageInfo": {
+            "endCursor": {
+              "name": "endCursor",
+              "alias": "endCursor",
+              "args": {},
+              "fieldsByTypeName": {}
+            },
+            "hasNextPage": {
+              "name": "hasNextPage",
+              "alias": "hasNextPage",
+              "args": {},
+              "fieldsByTypeName": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
