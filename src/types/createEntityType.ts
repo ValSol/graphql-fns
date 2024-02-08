@@ -31,12 +31,17 @@ const composeReturnString = (
 const arrayArgs = '(slice: SliceInput)';
 
 const pushInPrev = (
-  { array, name, required }: { array?: boolean; name: string; required?: boolean },
+  {
+    array,
+    nullable,
+    name,
+    required,
+  }: { array?: boolean; name: string; required?: boolean; nullable?: boolean },
   itemType: string,
   prev: Array<string>,
 ) => {
   if (array) {
-    prev.push(`  ${name}${arrayArgs}: [${itemType}!]!`);
+    prev.push(`  ${name}${arrayArgs}: [${itemType}!]${nullable ? '' : '!'}`);
   } else {
     prev.push(`  ${name}: ${itemType}${required ? '!' : ''}`);
   }
@@ -264,10 +269,10 @@ const createEntityType = (
   }, entityTypeArray);
 
   [...embeddedFields, ...fileFields, ...embeddedOrFileCalculatedFields].reduce(
-    (prev, { array, name: name2, required, config, variants }) => {
+    (prev, { array, name: name2, nullable, required, config, variants }) => {
       if (array) {
         if (variants.includes('plain')) {
-          prev.push(`  ${name2}${arrayArgs}: [${config.name}!]!`);
+          prev.push(`  ${name2}${arrayArgs}: [${config.name}!]${nullable ? '' : '!'}`);
         }
 
         if (variants.includes('connection')) {
@@ -359,14 +364,17 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  childFields.reduce((prev, { array, name: name2, required, config: { name: childName } }) => {
-    prev.push(
-      `  ${name2}: ${array ? '[' : ''}${childName}${array ? '!]!' : ''}${
-        !array && required ? '!' : ''
-      }`,
-    );
-    return prev;
-  }, entityTypeArray);
+  childFields.reduce(
+    (prev, { array, name: name2, nullable, required, config: { name: childName } }) => {
+      prev.push(
+        `  ${name2}: ${array ? '[' : ''}${childName}${array ? `!]${nullable ? '' : '!'}` : ''}${
+          !array && required ? '!' : ''
+        }`,
+      );
+      return prev;
+    },
+    entityTypeArray,
+  );
 
   entityTypeArray.push('}');
 

@@ -40,6 +40,12 @@ describe('createEntityType', () => {
           array: true,
           type: 'textFields',
         },
+        {
+          name: 'textFieldNullable',
+          array: true,
+          nullable: true,
+          type: 'textFields',
+        },
       ],
 
       calculatedFields: [
@@ -76,6 +82,7 @@ describe('createEntityType', () => {
   textField3: String!
   textField4(slice: SliceInput): [String!]!
   textField5(slice: SliceInput): [String!]!
+  textFieldNullable(slice: SliceInput): [String!]
   textField1AndTextField2: String!
   allTextFields(slice: SliceInput): [String!]!
 }`;

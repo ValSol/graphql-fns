@@ -47,11 +47,13 @@ type FieldCommonProperties = {
 
 type ArrayBooleanField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   default?: boolean[];
   type: 'booleanFields';
 };
 type ScalarBooleanField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   default?: boolean;
   type: 'booleanFields';
 };
@@ -59,12 +61,14 @@ export type BooleanField = ScalarBooleanField | ArrayBooleanField;
 
 type ScalarEnumField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   default?: string;
   enumName: string;
   type: 'enumFields';
 };
 type ArrayEnumField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   default?: string[];
   enumName: string;
   type: 'enumFields';
@@ -73,11 +77,13 @@ export type EnumField = ArrayEnumField | ScalarEnumField;
 
 type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array?: false;
+  nullable?: false;
   geospatialType: 'Point' | 'Polygon';
   type: 'geospatialFields';
 };
 type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array: true;
+  nullable?: boolean;
   geospatialType: 'Point' | 'Polygon';
   type: 'geospatialFields';
 };
@@ -85,12 +91,14 @@ export type GeospatialField = ScalarGeospatialField | ArrayGeospatialField;
 
 type ScalarTextField = FieldCommonProperties & {
   array?: false;
+  nullable?: false;
   default?: string;
   weight?: number;
   type: 'textFields';
 };
 type ArrayTextField = FieldCommonProperties & {
   array: true;
+  nullable?: boolean;
   default?: string[];
   weight?: number;
   type: 'textFields';
@@ -99,11 +107,13 @@ type TextField = ScalarTextField | ArrayTextField;
 
 type ScalarDateTimeField = FieldCommonProperties & {
   array?: false;
+  nullable?: false;
   default?: Date;
   type: 'dateTimeFields';
 };
 type ArrayDateTimeField = FieldCommonProperties & {
   array: true;
+  nullable?: boolean;
   default?: Date[];
   type: 'dateTimeFields';
 };
@@ -111,19 +121,27 @@ type DateTimeField = ScalarDateTimeField | ArrayDateTimeField;
 
 type ScalarIntField = FieldCommonProperties & {
   array?: false;
+  nullable?: false;
   default?: number;
   type: 'intFields';
 };
-type ArrayIntField = FieldCommonProperties & { array: true; default?: number[]; type: 'intFields' };
+type ArrayIntField = FieldCommonProperties & {
+  array: true;
+  nullable?: boolean;
+  default?: number[];
+  type: 'intFields';
+};
 type IntField = ScalarIntField | ArrayIntField;
 
 type ScalarFloatField = FieldCommonProperties & {
   array?: false;
+  nullable?: false;
   default?: number;
   type: 'floatFields';
 };
 type ArrayFloatField = FieldCommonProperties & {
   array: true;
+  nullable?: boolean;
   default?: number[];
   type: 'floatFields';
 };
@@ -131,10 +149,12 @@ type FloatField = ScalarFloatField | ArrayFloatField;
 
 type ScalarSimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   configName: string;
 };
 type ArraySimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   configName: string;
   variants?: Array<'plain' | 'connection' | 'count'>;
 };
@@ -142,10 +162,12 @@ type SimplifiedEmbeddedField = ArraySimplifiedEmbeddedField | ScalarSimplifiedEm
 
 type ScalarSimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   configName: string;
 };
 type ArraySimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   configName: string;
   variants?: Array<'plain' | 'connection' | 'count'>;
 };
@@ -191,10 +213,12 @@ type SimplifiedFilterField = ArraySimplifiedFilterField | ScalarSimplifiedFilter
 
 type ScalarSimplifiedChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
+  nullable?: false;
   configName: string;
 };
 type ArraySimplifiedChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   configName: string;
 };
 type SimplifiedChildField = ArraySimplifiedChildField | ScalarSimplifiedChildField;
@@ -204,6 +228,7 @@ type ScalarSimplifiedCalculatedEnumField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
+  nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -220,6 +245,7 @@ type ArraySimplifiedCalculatedEnumField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -231,7 +257,41 @@ type ArraySimplifiedCalculatedEnumField = Omit<
     index?: number,
   ) => string[];
 };
-type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
+type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array?: false;
+  nullable?: false;
+  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  configName: string;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+    index?: number,
+  ) => GraphqlObject;
+};
+type ArraySimplifiedCalculatedEmbeddedOrFileField = Omit<
+  FieldCommonProperties,
+  'freeze' | 'index' | 'unique'
+> & {
+  array: true;
+  nullable?: boolean; // TODO fileterField must not to be nullable
+  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  configName: string;
+  asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
+  args: string[];
+  func: (
+    args: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+    index?: number,
+  ) => GraphqlObject[];
+};
+type ScalarSimplifiedCalculatedFilterField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
@@ -247,7 +307,7 @@ type ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
     index?: number,
   ) => GraphqlObject;
 };
-type ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField = Omit<
+type ArraySimplifiedCalculatedFilterField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
@@ -268,6 +328,7 @@ type ScalarSimplifiedCalculatedGeospatialField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
+  nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -284,6 +345,7 @@ type ArraySimplifiedCalculatedGeospatialField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -300,6 +362,7 @@ type ScalarSimplifiedCalculatedField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
+  nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
@@ -312,6 +375,7 @@ type ScalarSimplifiedCalculatedField = Omit<
 };
 type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
@@ -323,8 +387,10 @@ type ArraySimplifiedCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'in
   ) => GraphqlScalar[];
 };
 type SimplifiedCalculatedField =
-  | ArraySimplifiedCalculatedEmbeddedOrFileOrFilterField
-  | ScalarSimplifiedCalculatedEmbeddedOrFileOrFilterField
+  | ArraySimplifiedCalculatedEmbeddedOrFileField
+  | ScalarSimplifiedCalculatedEmbeddedOrFileField
+  | ArraySimplifiedCalculatedFilterField
+  | ScalarSimplifiedCalculatedFilterField
   | ArraySimplifiedCalculatedEnumField
   | ScalarSimplifiedCalculatedEnumField
   | ArraySimplifiedCalculatedGeospatialField
@@ -388,11 +454,13 @@ export type SimplifiedEntityConfig =
 
 type ScalarEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   config: EmbeddedEntityConfig;
   type: 'embeddedFields';
 };
 type ArrayEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   config: EmbeddedEntityConfig;
   type: 'embeddedFields';
   variants: Array<'plain' | 'connection' | 'count'>;
@@ -401,11 +469,13 @@ export type EmbeddedField = ArrayEmbeddedField | ScalarEmbeddedField;
 
 type ScalarFileField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
+  nullable?: false;
   config: FileEntityConfig;
   type: 'fileFields';
 };
 type ArrayFileField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
+  nullable?: boolean;
   config: FileEntityConfig;
   type: 'fileFields';
   variants: Array<'plain' | 'connection' | 'count'>;
@@ -477,11 +547,13 @@ export type FilterField = ArrayFilterField | ScalarFilterField;
 
 type ScalarChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
+  nullable?: false;
   config: VirtualEntityConfig | TangibleEntityConfig;
   type: 'childFields';
 };
 type ArrayChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   config: VirtualEntityConfig | TangibleEntityConfig;
   type: 'childFields';
 };
@@ -489,6 +561,7 @@ type ChildField = ArrayChildField | ScalarChildField;
 
 type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
+  nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -503,6 +576,7 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
 };
 type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -520,6 +594,7 @@ type ScalarCalculatedEmbeddedOrFileField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
+  nullable?: false;
   calculatedType: 'embeddedFields' | 'fileFields';
   config: EmbeddedEntityConfig | FileEntityConfig;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -537,6 +612,7 @@ type ArrayCalculatedEmbeddedOrFileField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'embeddedFields' | 'fileFields';
   config: EmbeddedEntityConfig | FileEntityConfig;
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -554,6 +630,7 @@ type ScalarCalculatedGeospatialField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
+  nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -568,6 +645,7 @@ type ScalarCalculatedGeospatialField = Omit<
 };
 type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
@@ -616,6 +694,7 @@ export type ArrayCalculatedFilterField = Omit<
 };
 type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
+  nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
@@ -629,6 +708,7 @@ type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'u
 };
 type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
+  nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
   asyncFunc?: (resolverCreatorArg: ResolverCreatorArg, resolverArg: ResolverArg) => Promise<any>;
   args: string[];
