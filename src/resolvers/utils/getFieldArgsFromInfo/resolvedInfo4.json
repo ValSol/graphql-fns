@@ -1,0 +1,35 @@
+{
+  "name": "me",
+  "alias": "me",
+  "args": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDY5OTAzMjcuMjMxLCJkYXRhIjp7ImlkIjoiNWVmYjUzOGZjNzc2MWYwMDNiNTg2NDZlIiwibmFtZSI6IlZhbGVudHluIFNvbG92aW92Iiwib2F1dGhTZXJ2ZXIiOiJnb29nbGUiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSXRUTlRSV1VOVGlqMkM5ZTVQdUtXTlJXWDhlLTFwRk5EdEJsa01lbHJjPXM5Ni1jIiwicm9sZXMiOlsiQWRtaW4iXX0sImlhdCI6MTcwNjM4NTUyN30.awbvKJRWYW7ZXrpOtvBylb5CbxOFWMB1oL8uff8nUvw",
+    "coords": "{\"byIp\":null,\"current\":{\"lat\":50.4168448,\"lng\":30.5266688},\"default\":{\"lat\":50.451848013994514,\"lng\":30.598168373107914},\"manual\":null,\"literalAddress\":\"\"}"
+  },
+  "fieldsByTypeName": {
+    "UserForCabinet": {
+      "id": { "name": "id", "alias": "id", "args": {}, "fieldsByTypeName": {} },
+      "name": { "name": "name", "alias": "name", "args": {}, "fieldsByTypeName": {} },
+      "picture": { "name": "picture", "alias": "picture", "args": {}, "fieldsByTypeName": {} },
+      "roles": { "name": "roles", "alias": "roles", "args": {}, "fieldsByTypeName": {} },
+      "firstName": {
+        "name": "firstName",
+        "alias": "firstName",
+        "args": {},
+        "fieldsByTypeName": {}
+      },
+      "lastName": { "name": "lastName", "alias": "lastName", "args": {}, "fieldsByTypeName": {} },
+      "tels": { "name": "tels", "alias": "tels", "args": { "slice": 3 }, "fieldsByTypeName": {} },
+      "coordinates": {
+        "name": "coordinates",
+        "alias": "coordinates",
+        "args": {},
+        "fieldsByTypeName": {
+          "GeospatialPoint": {
+            "lat": { "name": "lat", "alias": "lat", "args": {}, "fieldsByTypeName": {} },
+            "lng": { "name": "lng", "alias": "lng", "args": {}, "fieldsByTypeName": {} }
+          }
+        }
+      }
+    }
+  }
+}

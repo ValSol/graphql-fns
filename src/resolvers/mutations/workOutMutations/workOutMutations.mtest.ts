@@ -29,8 +29,8 @@ const exampleConfig: TangibleEntityConfig = {
     {
       name: 'nameAndLabel',
       calculatedType: 'textFields',
-      args: ['name', 'label'],
-      func: ({ name, label }: any) => `${name} with label: "${label}"` as string,
+      fieldsToUseNames: ['name', 'label'],
+      func: (args, { name, label }: any) => `${name} with label: "${label}"` as string,
       type: 'calculatedFields',
     },
   ],

@@ -327,9 +327,9 @@ const composeEntityConfig = (
   if (simplifiedCalculatedFields) {
     (entityConfig as TangibleEntityConfig).calculatedFields = simplifiedCalculatedFields.map(
       (field) => {
-        const { args, calculatedType } = field;
+        const { fieldsToUseNames = [], calculatedType } = field;
 
-        const argsRest = args.filter(
+        const argsRest = fieldsToUseNames.filter(
           (str: string) => !['createdAt', 'updatedAt', 'counter', 'id'].includes(str),
         );
 
@@ -341,7 +341,7 @@ const composeEntityConfig = (
           }
         });
 
-        if (args.includes('counter') && !(simplifiedEntityConfig as any).counter) {
+        if (fieldsToUseNames.includes('counter') && !(simplifiedEntityConfig as any).counter) {
           throw new TypeError(
             `Incorrect arg: "counter" in calculated field: "${field.name}" of simplified entityConfig: "${name}"!`,
           );

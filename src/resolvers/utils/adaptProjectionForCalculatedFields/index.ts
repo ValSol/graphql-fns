@@ -16,13 +16,13 @@ const adaptProjectionForCalculatedFields = (
 
   const result = { ...projection };
 
-  calculatedFields.reduce((prev, { args, name }) => {
+  calculatedFields.reduce((prev, { fieldsToUseNames = [], name }) => {
     if (projection[name] === undefined) {
       return prev;
     }
 
-    args.forEach((arg) => {
-      prev[arg] = 1;
+    fieldsToUseNames.forEach((fieldName) => {
+      prev[fieldName] = 1;
     });
 
     return prev;

@@ -66,8 +66,9 @@ describe('createCreateEntityMutationResolver', () => {
           name: 'text',
           calculatedType: 'textFields',
           type: 'calculatedFields',
-          args: ['textField1', 'textField2'],
-          func: ({ textField1, textField2 }: any) => `${textField1} + ${textField2}` as string,
+          fieldsToUseNames: ['textField1', 'textField2'],
+          func: (args, { textField1, textField2 }: any) =>
+            `${textField1} + ${textField2}` as string,
           required: true,
         },
       ],

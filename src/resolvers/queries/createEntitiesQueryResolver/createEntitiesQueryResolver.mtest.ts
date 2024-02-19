@@ -82,8 +82,8 @@ describe('createEntityQueryResolver', () => {
         {
           name: 'fullName',
           calculatedType: 'text',
-          args: ['firstName', 'lastName'],
-          func: ({ id, firstName, lastName }) => `${firstName} ${lastName}`,
+          fieldsToUseNames: ['firstName', 'lastName'],
+          func: (args, { id, firstName, lastName }) => `${firstName} ${lastName}`,
           type: 'calculatedFields',
         },
       ],

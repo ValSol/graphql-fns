@@ -1,4 +1,5 @@
 import { ResolverArg, ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
+import getFieldArgsFromInfo from '../getFieldArgsFromInfo';
 
 const getAsyncFuncResults = async (
   projection: Record<string, 1>,
@@ -19,7 +20,9 @@ const getAsyncFuncResults = async (
     const { asyncFunc, name } = calculatedFields[i];
 
     if (asyncFunc && projection[name] === 1) {
-      result[name] = await asyncFunc(resolverCreatorArg, resolverArg);
+      const args = getFieldArgsFromInfo(name, resolverArg.info, []);
+
+      result[name] = await asyncFunc(args, resolverCreatorArg, resolverArg);
     }
   }
 

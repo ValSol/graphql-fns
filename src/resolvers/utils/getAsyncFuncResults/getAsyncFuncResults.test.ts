@@ -28,12 +28,12 @@ describe('getAsyncFuncResults', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        asyncFunc: async (resolverCreatorArg, { context }: any) => {
+        asyncFunc: async (args, resolverCreatorArg, { context }: any) => {
           const result = await context.id;
           return result;
         },
-        args: ['text1', 'text2'],
-        func: ({ text1, text2 }: any, resolverArg, asyncFuncResult) =>
+        fieldsToUseNames: ['text1', 'text2'],
+        func: (args, { text1, text2 }: any, resolverArg, asyncFuncResult) =>
           `${text1} ${text2} ${asyncFuncResult}` as string,
         required: true,
       },

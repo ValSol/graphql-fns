@@ -1,4 +1,5 @@
 import { DataObject, ResolverArg, TangibleEntityConfig } from '../../../tsTypes';
+import getFieldArgsFromInfo from '../getFieldArgsFromInfo';
 
 const addCalculatedFieldsToEntity = (
   data: DataObject,
@@ -18,7 +19,9 @@ const addCalculatedFieldsToEntity = (
 
   calculatedFields.reduce((prev, { func, name }) => {
     if (projection[name] === 1) {
-      prev[name] = func(data, resolverArg, asyncResolverResults[name], index);
+      const args = getFieldArgsFromInfo(name, resolverArg.info, []);
+
+      prev[name] = func(args, data, resolverArg, asyncResolverResults[name], index);
     }
 
     return prev;

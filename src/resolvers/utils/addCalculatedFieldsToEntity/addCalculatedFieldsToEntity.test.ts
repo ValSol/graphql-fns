@@ -28,12 +28,12 @@ describe('addCalculatedFieldsToEntity', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        asyncFunc: async ({ context }: any) => {
+        asyncFunc: async (args, { context }: any) => {
           const result = await context.id;
           return result;
         },
-        args: ['text1', 'text2'],
-        func: ({ text1, text2 }: any, resolverArg, asyncFuncResult) =>
+        fieldsToUseNames: ['text1', 'text2'],
+        func: (args, { text1, text2 }: any, resolverArg, asyncFuncResult) =>
           `${text1} ${text2} ${asyncFuncResult}` as string,
         required: true,
       },
@@ -42,8 +42,8 @@ describe('addCalculatedFieldsToEntity', () => {
         name: 'texts',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        args: ['text2', 'text3'],
-        func: ({ text2, text3 }: any) => [text2, text3] as string[],
+        fieldsToUseNames: ['text2', 'text3'],
+        func: (args, { text2, text3 }: any) => [text2, text3] as string[],
         array: true,
         required: true,
       },

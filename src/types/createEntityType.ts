@@ -30,6 +30,16 @@ const composeReturnString = (
 
 const arrayArgs = '(slice: SliceInput)';
 
+const calculatedArgs = (inputTypes: Record<string, string>, array?: boolean) => {
+  const items = Object.keys(inputTypes).reduce((prev, key) => {
+    prev.push(`${key}: ${inputTypes[key]}`);
+
+    return prev;
+  }, (array ? ['slice: SliceInput'] : []) as string[]);
+
+  return items.length > 0 ? `(${items.join(', ')})` : '';
+};
+
 const pushInPrev = (
   {
     array,
@@ -47,6 +57,31 @@ const pushInPrev = (
   }
 };
 
+const pushCalculatedInPrev = (
+  {
+    array,
+    nullable,
+    name,
+    required,
+    inputTypes = {},
+  }: {
+    array?: boolean;
+    name: string;
+    required?: boolean;
+    nullable?: boolean;
+    inputTypes?: Record<string, string>;
+  },
+  itemType: string,
+  prev: Array<string>,
+) => {
+  if (array) {
+    prev.push(
+      `  ${name}${calculatedArgs(inputTypes, array)}: [${itemType}!]${nullable ? '' : '!'}`,
+    );
+  } else {
+    prev.push(`  ${name}${calculatedArgs(inputTypes, array)}: ${itemType}${required ? '!' : ''}`);
+  }
+};
 const createEntityType = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
@@ -142,7 +177,7 @@ const createEntityType = (
     ...relationalFields,
     ...duplexFields,
     ...filterFields.filter(({ variants }) => variants.includes('plain')),
-    ...calculatedFields.filter(({ calculatedType }) => calculatedType === 'filterFields'),
+    ...calculatedFields.filter(({ calculatedType }) => calculatedType === 'filterFields'), // TODO add "inputTypes"
   ].reduce((prev, { array, name: name2, required, config }) => {
     if (array) {
       const childEntitiesArgs = composeChildActionSignature(
@@ -227,13 +262,6 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  const embeddedOrFileCalculatedFields = calculatedFields
-    .filter(
-      ({ calculatedType }) =>
-        calculatedType === 'embeddedFields' || calculatedType === 'fileFields',
-    )
-    .map((field) => (field.array ? { ...field, variants: ['plain'] } : field));
-
   duplexFields.reduce((prev, { array, name: name2, oppositeName, required, config }) => {
     if (array || required) {
       return prev;
@@ -268,7 +296,7 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  [...embeddedFields, ...fileFields, ...embeddedOrFileCalculatedFields].reduce(
+  [...embeddedFields, ...fileFields].reduce(
     (prev, { array, name: name2, nullable, required, config, variants }) => {
       if (array) {
         if (variants.includes('plain')) {
@@ -308,6 +336,30 @@ const createEntityType = (
     entityTypeArray,
   );
 
+  const embeddedOrFileCalculatedFields = calculatedFields
+    .filter(
+      ({ calculatedType }) =>
+        calculatedType === 'embeddedFields' || calculatedType === 'fileFields',
+    )
+    .map((field) => (field.array ? { ...field, variants: ['plain'] } : field));
+
+  embeddedOrFileCalculatedFields.reduce(
+    (prev, { array, name: name2, nullable, required, config, inputTypes = {} }) => {
+      if (array) {
+        prev.push(
+          `  ${name2}${calculatedArgs(inputTypes, array)}: [${config.name}!]${nullable ? '' : '!'}`,
+        );
+      } else {
+        prev.push(
+          `  ${name2}${calculatedArgs(inputTypes, array)}: ${config.name}${required ? '!' : ''}`,
+        );
+      }
+
+      return prev;
+    },
+    entityTypeArray,
+  );
+
   filterFields.reduce((prev, field) => {
     const { name: name2, required, variants } = field;
 
@@ -332,31 +384,31 @@ const createEntityType = (
     if (calculatedType === 'geospatialFields') {
       const { geospatialType } = field;
 
-      pushInPrev(field, `Geospatial${geospatialType}`, prev);
+      pushCalculatedInPrev(field, `Geospatial${geospatialType}`, prev);
     } else if (calculatedType === 'enumFields') {
       const { enumName } = field;
 
-      pushInPrev(field, `${enumName}Enumeration`, prev);
+      pushCalculatedInPrev(field, `${enumName}Enumeration`, prev);
     } else if (calculatedType === 'embeddedFields' || calculatedType === 'fileFields') {
       // do nothing because of using "embeddedOrFileCalculatedFields" before
     } else if (calculatedType === 'textFields') {
-      pushInPrev(field, 'String', prev);
+      pushCalculatedInPrev(field, 'String', prev);
 
       return prev;
     } else if (calculatedType === 'intFields') {
-      pushInPrev(field, 'Int', prev);
+      pushCalculatedInPrev(field, 'Int', prev);
 
       return prev;
     } else if (calculatedType === 'floatFields') {
-      pushInPrev(field, 'Float', prev);
+      pushCalculatedInPrev(field, 'Float', prev);
 
       return prev;
     } else if (calculatedType === 'dateTimeFields') {
-      pushInPrev(field, 'DateTime', prev);
+      pushCalculatedInPrev(field, 'DateTime', prev);
 
       return prev;
     } else if (calculatedType === 'booleanFields') {
-      pushInPrev(field, 'Boolean', prev);
+      pushCalculatedInPrev(field, 'Boolean', prev);
 
       return prev;
     }
