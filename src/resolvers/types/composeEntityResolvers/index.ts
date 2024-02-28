@@ -57,6 +57,8 @@ const composeEntityResolvers = (
 
   const resolvers: Record<string, any> = {};
 
+  // repack "embeddedFields", "geospatialFields", "fileFields" in the new arrays...
+  // ...to can mix up calculated fields if need
   const embeddedFields = [...preEmbeddedFields];
   const geospatialFields = [...preGeospatialFields];
   const fileFields = [...preFileFields];
@@ -94,6 +96,14 @@ const composeEntityResolvers = (
       fieldType === 'fileFields'
     ) {
       return;
+    }
+
+    if (fieldType === 'calculatedFields') {
+      const { calculatedType } = fieldsObject[fieldName] as any;
+
+      if (calculatedType === 'filterFields') {
+        return;
+      }
     }
 
     if (array) resolvers[fieldName] = fieldArrayResolver;
