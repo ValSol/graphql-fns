@@ -57,7 +57,7 @@ const composeCustomEntityQueryArgs = (
   const returnConfig = composeConfig(entityConfig, generalConfig);
 
   const result = [
-    `query ${prefixName}_${name}${args1arr.length ? `(${args1})` : ''} {`,
+    `query ${prefixName}_${name}${args1arr.length > 0 ? `(${args1})` : ''} {`,
     `  ${name}${args2 ? `(${args2})` : ''}${returnConfig ? ' {' : ''}`,
   ];
 

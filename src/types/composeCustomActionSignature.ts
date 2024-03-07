@@ -45,7 +45,9 @@ const composeCustomActionSignature = (
   const returningType = composeType(entityConfig, generalConfig);
 
   if (argNames.length !== argTypes.length) {
-    throw new TypeError('argNames & argTypes arrays have to have equal length!');
+    throw new TypeError(
+      `Custon action: "${specificName}" argNames & argTypes dimensions have to be equal!`,
+    );
   }
 
   const args = argNames.map((argName, i) => `${argName}: ${argTypes[i]}`).join(', ');
