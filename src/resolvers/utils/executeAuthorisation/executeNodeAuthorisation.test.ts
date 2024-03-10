@@ -1,6 +1,11 @@
 /* eslint-env jest */
 
-import type { EntityFilters, ServersideConfig } from '../../../tsTypes';
+import type {
+  EntityConfig,
+  EntityFilters,
+  GeneralConfig,
+  ServersideConfig,
+} from '../../../tsTypes';
 
 import sleep from '../../../utils/sleep';
 import executeNodeAuthorisation from './executeNodeAuthorisation';
@@ -70,16 +75,28 @@ describe('executeNodeAuthorisation', () => {
 
   const entityName = 'RestaurantForCabinet';
 
+  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
+
   test('should returnv [] for when empty filters', async () => {
     const serversideConfig: ServersideConfig = {};
 
-    const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
+    const result = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult: Array<any> = [[]];
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
 
-    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const result2 = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
     const expectedResult2 = [[{ deleted: false }]];
     expect(result2).toEqual(expectedResult2);
   });
@@ -95,7 +112,12 @@ describe('executeNodeAuthorisation', () => {
       getUserAttributes,
     };
 
-    const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
+    const result = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult = null;
     expect(result).toEqual(expectedResult);
 
@@ -105,7 +127,12 @@ describe('executeNodeAuthorisation', () => {
       staticFilters,
     };
 
-    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const result2 = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
     const expectedResult2 = null;
     expect(result2).toEqual(expectedResult2);
   });
@@ -121,7 +148,12 @@ describe('executeNodeAuthorisation', () => {
       getUserAttributes,
     };
 
-    const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
+    const result = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult: Array<any> = [[]];
     expect(result).toEqual(expectedResult);
 
@@ -131,7 +163,12 @@ describe('executeNodeAuthorisation', () => {
       staticFilters,
     };
 
-    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const result2 = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
     const expectedResult2 = [[{ deleted: false }]];
     expect(result2).toEqual(expectedResult2);
   });
@@ -147,7 +184,12 @@ describe('executeNodeAuthorisation', () => {
       getUserAttributes,
     };
 
-    const result = await executeNodeAuthorisation(entityName, context, serversideConfig);
+    const result = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult = [[{ access_: { restaurantEditors: '1234567890' } }]];
     expect(result).toEqual(expectedResult);
 
@@ -157,7 +199,12 @@ describe('executeNodeAuthorisation', () => {
       staticFilters,
     };
 
-    const result2 = await executeNodeAuthorisation(entityName, context, serversideConfig2);
+    const result2 = await executeNodeAuthorisation(
+      entityName,
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
     const expectedResult2 = [
       [
         {
@@ -181,7 +228,12 @@ describe('executeNodeAuthorisation', () => {
       getUserAttributes,
     };
 
-    const result = await executeNodeAuthorisation(entityName2, context, serversideConfig);
+    const result = await executeNodeAuthorisation(
+      entityName2,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     const expectedResult = [
       [
         { access_: { restaurantEditors: id } },
@@ -198,7 +250,12 @@ describe('executeNodeAuthorisation', () => {
       staticFilters,
     };
 
-    const result2 = await executeNodeAuthorisation(entityName2, context, serversideConfig2);
+    const result2 = await executeNodeAuthorisation(
+      entityName2,
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
     const expectedResult2 = [
       [
         {

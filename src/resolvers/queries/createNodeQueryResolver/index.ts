@@ -36,6 +36,7 @@ const createNodeQueryResolver = (
     const filter = await executeNodeAuthorisation(
       `${entityName}${descendantKey}`,
       context,
+      generalConfig,
       serversideConfig,
     );
 

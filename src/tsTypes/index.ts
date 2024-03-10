@@ -1272,6 +1272,11 @@ export type ServersideConfig = {
   staticFilters?: {
     [tangibleEntityName: string]: InvolvedFilter;
   };
+  personalFilters?: {
+    // entity points to a tuple of 3 strings:
+    // "user entity name", "field of user entity that point to Filter entity", "name of filter field of Filer entity" ]
+    [tangibleEntityName: string]: [string, string, string];
+  };
   staticLimits?: {
     [tangibleEntityName: string]: number;
   };

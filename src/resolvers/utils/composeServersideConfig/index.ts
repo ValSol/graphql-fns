@@ -47,6 +47,7 @@ const composeServersideConfig = (
     middlewares,
     staticFilters,
     staticLimits,
+    personalFilters,
   } = serversideConfig;
 
   if (middlewares) {
@@ -77,7 +78,19 @@ const composeServersideConfig = (
     throw new TypeError(`Not found "getUserAttributes" to use with "filters"!`);
   }
 
+  if (personalFilters && !getUserAttributes) {
+    throw new TypeError(`Not found "getUserAttributes" to use with "personalFilters"!`);
+  }
+
   const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
+
+  if (staticLimits) {
+    Object.keys(staticLimits).forEach((entityName) => {
+      if (!allEntityNames[entityName]) {
+        throw new TypeError(`Found redundant entity "${entityName}" in "staticLimits"!`);
+      }
+    });
+  }
 
   if (staticFilters) {
     Object.keys(staticFilters).forEach((entityName) => {
@@ -91,10 +104,81 @@ const composeServersideConfig = (
     );
   }
 
-  if (staticLimits) {
-    Object.keys(staticLimits).forEach((entityName) => {
+  if (personalFilters) {
+    Object.keys(personalFilters).forEach((entityName) => {
       if (!allEntityNames[entityName]) {
-        throw new TypeError(`Found redundant entity "${entityName}" in "staticLimits"!`);
+        throw new TypeError(`Found redundant entity "${entityName}" in "personalFilters"!`);
+      }
+
+      const [userEntityName, filterEntityPointerName, filterFieldName] =
+        personalFilters[entityName];
+
+      const userEntity = generalConfig.allEntityConfigs[userEntityName];
+
+      if (!userEntity) {
+        throw new TypeError(
+          `Not found user entity "${userEntityName}" for "personalFilters" key: "${entityName}"!`,
+        );
+      }
+
+      if (userEntity.type !== 'tangible') {
+        throw new TypeError(
+          `User entity "${userEntityName}" type: "${userEntity.type}" for "personalFilters" key: "${entityName}", but have to be "tangible"!`,
+        );
+      }
+
+      if (filterEntityPointerName === 'id') {
+        const { filterFields = [] } = userEntity;
+
+        const filterField = filterFields.find(({ name }) => name === filterFieldName);
+
+        if (!filterField) {
+          throw new TypeError(
+            `Not found filter "${filterFieldName}" in filter entity: "${userEntity.name}" for "personalFilters" key: "${entityName}"!`,
+          );
+        }
+
+        if (!filterField.array) {
+          throw new TypeError(
+            `"${filterFieldName}" filter field for "personalFilters" key: "${entityName}" is not array, but has to be!`,
+          );
+        }
+      } else {
+        const { relationalFields = [], duplexFields = [] } = userEntity;
+
+        const filterEntityPointer = [...relationalFields, ...duplexFields].find(
+          ({ name }) => name === filterEntityPointerName,
+        );
+
+        if (!filterEntityPointer) {
+          throw new TypeError(
+            `Not found filter entity pointer "${filterEntityPointerName}" in user entity: "${userEntityName}" for "personalFilters" key: "${entityName}"!`,
+          );
+        }
+
+        if (filterEntityPointer.array) {
+          throw new TypeError(
+            `"${filterEntityPointerName}" filter entity pointer to user entity: "${userEntityName}" for "personalFilters" key: "${entityName}" is array!`,
+          );
+        }
+
+        const {
+          config: { filterFields = [] },
+        } = filterEntityPointer;
+
+        const filterField = filterFields.find(({ name }) => name === filterFieldName);
+
+        if (!filterField) {
+          throw new TypeError(
+            `Not found filter "${filterFieldName}" in filter entity: "${filterEntityPointer.config.name}" for "personalFilters" key: "${entityName}"!`,
+          );
+        }
+
+        if (!filterField.array) {
+          throw new TypeError(
+            `"${filterFieldName}" filter field for "personalFilters" key: "${entityName}" is not array, but has to be!`,
+          );
+        }
       }
     });
   }

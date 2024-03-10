@@ -1,16 +1,30 @@
-import type { FilterArg, ServersideConfig } from '../../../tsTypes';
+import type { FilterArg, GeneralConfig, ServersideConfig } from '../../../tsTypes';
+import getPersonalFilter from './getPersonalFilter';
 
-import injectStaticFilter from './injectStaticFilter';
+import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
 
 const executeNodeAuthorisation = async (
   entityName: string,
   context: any,
+  generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Promise<null | Array<any>> => {
-  const { filters, getUserAttributes, staticFilters = {} } = serversideConfig;
+  const { filters, getUserAttributes, personalFilters = {}, staticFilters = {} } = serversideConfig;
+
+  const personalFilter = personalFilters[entityName]
+    ? await getPersonalFilter(personalFilters[entityName], context, generalConfig, serversideConfig)
+    : undefined;
+
+  if (personalFilter === null) {
+    return null;
+  }
 
   if (!filters) {
-    const involvedFilters = staticFilters[entityName] ? [[staticFilters[entityName]]] : [[]];
+    const filter = staticFilters[entityName] ? [staticFilters[entityName]] : [];
+
+    const involvedFilters = personalFilter
+      ? [injectStaticOrPersonalFilter(personalFilter, filter)]
+      : [filter];
 
     return involvedFilters;
   }
@@ -38,7 +52,7 @@ const executeNodeAuthorisation = async (
     const filter = filters[entityName][0] && filters[entityName][1](arg);
 
     if (filter) {
-      if (!filter.length) {
+      if (filter.length === 0) {
         const involvedFilters = staticFilters[entityName] ? [[staticFilters[entityName]]] : [[]];
 
         return involvedFilters;
@@ -52,12 +66,15 @@ const executeNodeAuthorisation = async (
     }
   }
 
-  const involvedFilters =
-    result && staticFilters[entityName]
-      ? [injectStaticFilter(staticFilters[entityName], result)]
-      : result && [result];
+  if (!result) {
+    return null;
+  }
 
-  return involvedFilters;
+  const filter = staticFilters[entityName]
+    ? injectStaticOrPersonalFilter(staticFilters[entityName], result)
+    : result;
+
+  return personalFilter ? [injectStaticOrPersonalFilter(personalFilter, filter)] : [filter];
 };
 
 export default executeNodeAuthorisation;
