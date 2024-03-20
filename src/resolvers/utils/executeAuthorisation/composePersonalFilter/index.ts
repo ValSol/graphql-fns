@@ -1,36 +1,48 @@
 import { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
 
-import getPersonalFilterFromFilterEntity from './getPersonalFilterFromFilterEntity';
-import getPersonalFilterFromUserEntity from './getPersonalFilterFromUserEntity';
+import personalFilterFromFilterEntity from './personalFilterFromFilterEntity';
+import personalFilterFromUserEntity from './personalFilterFromUserEntity';
 
 const store: Record<string, any> = {};
 
-const getPersonalFilter = async (
-  personalFiltersTuple: [string, string, string],
+const composePersonalFilter = async (
+  entityName: string,
+  userAttributes: Record<string, any>,
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  token?: string,
 ) => {
+  const { personalFilters = {} } = serversideConfig;
+
+  const personalFiltersTuple = personalFilters[entityName];
+
+  if (!personalFilters) {
+    return {};
+  }
+
+  if (!userAttributes?.id) {
+    return null;
+  }
+
   const [, filterEntityPointerName] = personalFiltersTuple;
 
   const result =
     filterEntityPointerName === 'id'
-      ? await getPersonalFilterFromUserEntity(
+      ? await personalFilterFromUserEntity(
           personalFiltersTuple,
+          userAttributes,
           context,
           generalConfig,
           serversideConfig,
           store,
-          token,
         )
-      : await getPersonalFilterFromFilterEntity(
+      : await personalFilterFromFilterEntity(
           personalFiltersTuple,
+          userAttributes,
           context,
           generalConfig,
           serversideConfig,
           store,
-          token,
         );
 
   if (!result) {
@@ -40,4 +52,4 @@ const getPersonalFilter = async (
   return JSON.parse(result);
 };
 
-export default getPersonalFilter;
+export default composePersonalFilter;

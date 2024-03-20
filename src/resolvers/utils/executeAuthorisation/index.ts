@@ -1,5 +1,4 @@
 import type {
-  FilterArg,
   GeneralConfig,
   InventoryСhain,
   ServersideConfig,
@@ -9,7 +8,8 @@ import type {
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import getPersonalFilter from './getPersonalFilter';
+import composePersonalFilter from './composePersonalFilter';
+import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
 
 const amendInventoryChain = (inventoryChain: ThreeSegmentInventoryChain, key: string) => {
@@ -57,6 +57,8 @@ const executeAuthorisation = async (
 
   const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
 
+  const userAttributes = getUserAttributes ? await getUserAttributes(context, token) : null;
+
   // *** compose personalFilterObj
 
   const personalCalculatedFilters = {};
@@ -67,12 +69,12 @@ const executeAuthorisation = async (
     const entityName = involvedEntityNames[involvedEntityNamesKey];
 
     if (personalFilters[entityName]) {
-      personalCalculatedFilters[entityName] = await getPersonalFilter(
-        personalFilters[entityName],
+      personalCalculatedFilters[entityName] = await composePersonalFilter(
+        entityName,
+        userAttributes,
         context,
         generalConfig,
         serversideConfig,
-        token,
       );
     }
   }
@@ -123,11 +125,11 @@ const executeAuthorisation = async (
     return involvedFilters; // return
   }
 
-  if (!getUserAttributes) {
-    throw new TypeError('Not found "getUserAttributes" callback!');
+  if (!userAttributes) {
+    throw new TypeError(
+      `Not found ${getUserAttributes ? '"getUserAttributes" callback' : '"userAttributes"'}!`,
+    );
   }
-
-  const userAttributes = await getUserAttributes(context, token);
 
   const { roles, ...userAttributesRest } = userAttributes;
 
@@ -173,24 +175,7 @@ const executeAuthorisation = async (
 
     const entityName = involvedEntityNames[involvedEntityNamesKey];
 
-    for (let j = 0; j < roles.length; j += 1) {
-      const role = roles[j];
-
-      const arg = { ...userAttributesRest, role } as FilterArg;
-
-      const filter = filters[entityName][1](arg);
-
-      if (filter) {
-        if (filter.length === 0) {
-          result[involvedEntityNamesKey] = [];
-          break;
-        }
-
-        result[involvedEntityNamesKey].push(...filter);
-      } else {
-        result[involvedEntityNamesKey] = null;
-      }
-    }
+    result[involvedEntityNamesKey] = composeUserFilter(entityName, userAttributes, filters);
   }
 
   const involvedFilters = Object.keys(result).reduce((prev, key) => {

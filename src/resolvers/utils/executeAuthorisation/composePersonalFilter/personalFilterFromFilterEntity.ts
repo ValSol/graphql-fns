@@ -1,19 +1,17 @@
 import { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../../../tsTypes';
 import createEntityQueryResolver from '../../../queries/createEntityQueryResolver';
 
-const getPersonalFilterFromFilterEntity = async (
+const personalFilterFromFilterEntity = async (
   personalFiltersTuple: [string, string, string],
+  userAttributes: Record<string, any>,
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   store: Record<string, any>,
-  token?: string,
 ) => {
   const [userEntityName, filterEntityPointerName, filterFieldName] = personalFiltersTuple;
 
   const { allEntityConfigs } = generalConfig;
-
-  const { getUserAttributes } = serversideConfig;
 
   if (!store[userEntityName]) {
     store[userEntityName] = createEntityQueryResolver(
@@ -25,12 +23,6 @@ const getPersonalFilterFromFilterEntity = async (
     if (!store[userEntityName]) {
       throw new Error('query "Complex" was not created!');
     }
-  }
-
-  const userAttributes = await getUserAttributes(context, token);
-
-  if (!userAttributes?.id) {
-    return null;
   }
 
   const { [filterEntityPointerName]: filterEntityPointer } = await store[userEntityName](
@@ -80,4 +72,4 @@ const getPersonalFilterFromFilterEntity = async (
   return filterField;
 };
 
-export default getPersonalFilterFromFilterEntity;
+export default personalFilterFromFilterEntity;

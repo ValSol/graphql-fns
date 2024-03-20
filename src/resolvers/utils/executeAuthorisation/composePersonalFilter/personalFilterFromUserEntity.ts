@@ -1,19 +1,17 @@
 import { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
 import createEntityQueryResolver from '../../../queries/createEntityQueryResolver';
 
-const getPersonalFilterFromUserEntity = async (
+const personalFilterFromUserEntity = async (
   personalFiltersTuple: [string, string, string],
+  userAttributes: Record<string, any>,
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   store: Record<string, any>,
-  token?: string,
 ) => {
   const [userEntityName, , filterFieldName] = personalFiltersTuple;
 
   const { allEntityConfigs } = generalConfig;
-
-  const { getUserAttributes } = serversideConfig;
 
   if (!store[userEntityName]) {
     store[userEntityName] = createEntityQueryResolver(
@@ -27,12 +25,6 @@ const getPersonalFilterFromUserEntity = async (
     }
   }
 
-  const userAttributes = await getUserAttributes(context, token);
-
-  if (!userAttributes?.id) {
-    return null;
-  }
-
   const { [filterFieldName]: filterField } = await store[userEntityName](
     null,
     { whereOne: { id: userAttributes.id } },
@@ -44,4 +36,4 @@ const getPersonalFilterFromUserEntity = async (
   return filterField;
 };
 
-export default getPersonalFilterFromUserEntity;
+export default personalFilterFromUserEntity;
