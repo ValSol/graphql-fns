@@ -197,9 +197,15 @@ describe('composeWhereInput', () => {
   });
 
   test('should return replace _id ', () => {
-    const where = { id: '6096802438f0d5bb46164881' };
+    const where = { id: '6096802438f0d5bb46164881', updatedAt_lt: '2023-09-20T08:57:04.034Z' };
 
-    const expectedResult = { where: { _id: { $eq: '6096802438f0d5bb46164881' } }, lookups: [] };
+    const expectedResult = {
+      where: {
+        _id: { $eq: '6096802438f0d5bb46164881' },
+        updatedAt: { $lt: '2023-09-20T08:57:04.034Z' },
+      },
+      lookups: [],
+    };
     const notCreateObjectId = true;
     const result = composeWhereInput(where, entityConfig, notCreateObjectId);
 
@@ -765,7 +771,9 @@ describe('composeWhereInput', () => {
 
   test('should return result for "embedded.embedded2.embedded3" field', () => {
     const where = {
-      embedded: { embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ', _index: 3 } },
+      embedded: {
+        embedded2: { embedded3: { name3_gt: 'ABC' }, name2_lt: 'XYZ', _index: 3 },
+      },
     };
 
     const result = composeWhereInput(where, entityConfig);

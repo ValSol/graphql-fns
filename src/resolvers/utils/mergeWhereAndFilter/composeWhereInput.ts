@@ -18,9 +18,13 @@ import composeWithinSphereInput from './composeWithinSphereInput';
 const checkField = (
   keyWithoutSuffix: string,
   entityName: string,
+  embeddedPrefix: string,
   fieldsObj: EntityConfigObject,
   entireWhere: string,
 ) => {
+  if (!embeddedPrefix && ['createdAt', 'updatedAt'].includes(keyWithoutSuffix)) {
+    return;
+  }
   if (!fieldsObj[keyWithoutSuffix]) {
     throw new TypeError(
       `Field "${keyWithoutSuffix}" not found in "${entityName}" entity in filter: "${entireWhere}!`,
@@ -68,7 +72,7 @@ const processKey = (
 ) => {
   const keyWithoutSuffix = key.slice(0, -suffix.length);
 
-  checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+  checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
   if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
     result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {}; // eslint-disable-line no-param-reassign
@@ -230,7 +234,7 @@ const composeWhereInputRecursively = (
     } else if (key.endsWith('_re')) {
       const keyWithoutSuffix = key.slice(0, -'_re'.length);
 
-      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
         result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
@@ -242,7 +246,7 @@ const composeWhereInputRecursively = (
     } else if (key.endsWith('_notsize')) {
       const keyWithoutSuffix = key.slice(0, -'_notsize'.length);
 
-      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
         result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
@@ -252,7 +256,7 @@ const composeWhereInputRecursively = (
     } else if (key.endsWith('_withinPolygon')) {
       const keyWithoutSuffix = key.slice(0, -'_withinPolygon'.length);
 
-      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
         result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
@@ -267,7 +271,7 @@ const composeWhereInputRecursively = (
     } else if (key.endsWith('_withinSphere')) {
       const keyWithoutSuffix = key.slice(0, -'_withinSphere'.length);
 
-      checkField(keyWithoutSuffix, entityName, fieldsObj, entireWhere);
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
         result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
@@ -304,7 +308,7 @@ const composeWhereInputRecursively = (
         where[key] &&
         (notCreateObjectId ? where[key] : new Types.ObjectId(where[key] as unknown as string));
     } else if (key.endsWith('_')) {
-      checkField(key.slice(0, -1), entityName, fieldsObj, entireWhere);
+      checkField(key.slice(0, -1), entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (parentFieldName) {
         throw new TypeError(
@@ -336,7 +340,7 @@ const composeWhereInputRecursively = (
         result[key2] = result2[key2];
       });
     } else {
-      checkField(key, entityName, fieldsObj, entireWhere);
+      checkField(key, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (fieldsObj[key].type === 'embeddedFields' || fieldsObj[key].type === 'fileFields') {
         const attributes = fieldsObj[key];
