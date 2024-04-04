@@ -16,7 +16,7 @@ const composePersonalFilter = async (
 
   const personalFiltersTuple = personalFilters[entityName];
 
-  if (!personalFilters) {
+  if (!personalFiltersTuple) {
     return {};
   }
 

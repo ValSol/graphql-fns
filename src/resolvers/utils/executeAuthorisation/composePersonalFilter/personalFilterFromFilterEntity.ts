@@ -65,7 +65,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: filterEntityPointer } },
     context,
-    { projection: { [filterEntityPointerName]: 1 } },
+    { projection: { [filterFieldName]: 1 } },
     { inputOutputEntity: [[]] },
   );
 
