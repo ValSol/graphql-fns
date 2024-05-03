@@ -19,6 +19,7 @@ const argTypesInParts = [
   ['FileWhereInput', 'FileWhereInput', transformFileWhere, true],
   ['', 'WhereByUniqueInput', transformWhere, false],
   ['', 'WhereOneInput', transformWhereOne, false],
+  ['', 'WhereCompoundOneInput', transformWhere, false],
   ['', 'WhereOneToCopyInput', transformWhereOne, false],
   ['FileWhereOneInput', 'FileWhereOneInput', transformFileWhereOne, true],
   ['', 'CopyWhereOnesInput', transformWhereOnes, false],
@@ -79,7 +80,7 @@ const getTransformerAndConfig = (
     [],
   );
 
-  if (!results.length) return null;
+  if (results.length === 0) return null;
 
   if (results.length > 1) {
     throw new TypeError(`got more than 1 (${results.length}) results for argType: "${argType}"`);

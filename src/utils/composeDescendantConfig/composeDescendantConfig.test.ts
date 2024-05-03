@@ -15,6 +15,8 @@ describe('composeDescendantConfig', () => {
       name: 'Example',
       type: 'tangible',
 
+      uniqueCompoundIndexes: [['textField', 'anotherField']],
+
       interfaces: ['ExamleInterface'],
 
       textFields: [
@@ -67,6 +69,8 @@ describe('composeDescendantConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         interfaces: ['ExampleForCatalogInterview'],
 
         textFields: [
@@ -104,6 +108,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         textFields: [
           {
             name: 'textField',
@@ -140,6 +147,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         textFields: [
           {
             name: 'textField',
@@ -181,6 +191,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         textFields: [
           {
             name: 'textField',
@@ -221,6 +234,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         textFields: [
           {
             name: 'textField',
@@ -261,6 +277,9 @@ describe('composeDescendantConfig', () => {
       const expectedResult = {
         name: 'ExampleForCatalog',
         type: 'tangible',
+
+        uniqueCompoundIndexes: [['textField', 'anotherField']],
+
         enumFields: [
           {
             name: 'textField',

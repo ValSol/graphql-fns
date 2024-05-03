@@ -26,6 +26,7 @@ const argTypesPrefixPlusSuffixes = [
   ['FileWhereInputFileWhereInput', transformFileWhere, true],
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
+  ['WhereCompoundOneInput', transformWhere, false],
   ['WhereOneToCopyInput', transformWhereOne, false],
   ['FileWhereOneInputFileWhereOneInput', transformFileWhereOne, true],
   ['CopyWhereOnesInput', transformWhereOnes, false],

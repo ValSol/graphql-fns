@@ -21,6 +21,8 @@ describe('composeGqlTypes', () => {
       name: 'Menu',
       type: 'tangible',
 
+      uniqueCompoundIndexes: [['name', 'clone']],
+
       textFields: [
         {
           name: 'name',
@@ -405,6 +407,12 @@ input MenuCloneSectionDistinctValuesOptionsInput {
 input MenuWhereOneInput {
   id: ID!
 }
+input MenuWhereCompoundOneInput {
+  name: String
+  name_exists: Boolean
+  clone: ID
+  clone_exists: Boolean
+}
 enum MenuSectionSortEnum {
   createdAt_ASC
   createdAt_DESC
@@ -703,7 +711,7 @@ type Query {
   MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput!, token: String): [String!]!
   MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!, token: String): [String!]!
   MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput!, token: String): [String!]!
-  Menu(whereOne: MenuWhereOneInput!, token: String): Menu
+  Menu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, token: String): Menu
   MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone
   MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection
   MenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection
@@ -4365,11 +4373,8 @@ type Mutation {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-        },
-      ],
+
+      textFields: [{ name: 'textField' }, { name: 'textField2' }],
     };
 
     const ForCatalog: DescendantAttributes = {

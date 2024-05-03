@@ -63,16 +63,24 @@ const fillInputDicForCustom = (
       for (let j = 0; j < descendantKeys.length; j += 1) {
         const descendantKey = descendantKeys[j];
 
+        const entityConfig = descendantKey
+          ? composeDescendantConfig(
+              descendant[descendantKey],
+              allEntityConfigs[entityName],
+              generalConfig,
+            )
+          : allEntityConfigs[entityName];
+
         for (let k = 0; k < inputs.length; k += 1) {
           const inputCreator = inputs[k];
 
-          const entityConfig = descendantKey
-            ? composeDescendantConfig(
-                descendant[descendantKey],
-                allEntityConfigs[entityName],
-                generalConfig,
-              )
-            : allEntityConfigs[entityName];
+          // const entityConfig = descendantKey
+          //   ? composeDescendantConfig(
+          //       descendant[descendantKey],
+          //       allEntityConfigs[entityName],
+          //       generalConfig,
+          //     )
+          //   : allEntityConfigs[entityName];
 
           if (!entityConfig) continue; // eslint-disable-line no-continue
 

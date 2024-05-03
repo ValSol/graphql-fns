@@ -53,6 +53,7 @@ const composeEntityConfig = (
   } = simplifiedEntityConfig as any;
 
   const fieldNames = [];
+  const arrayFieldNames = [];
 
   // check field names
   Object.keys(simplifiedEntityConfig)
@@ -76,6 +77,10 @@ const composeEntityConfig = (
         }
 
         fieldNames.push(fieldName);
+
+        if (array) {
+          arrayFieldNames.push(fieldName);
+        }
 
         if (fieldName.search('_') !== -1) {
           throw new TypeError(
@@ -147,6 +152,12 @@ const composeEntityConfig = (
         if (!fieldNames.includes(fieldName)) {
           throw new TypeError(
             `Not found unique compaund index field: "${fieldName}" in "${name}" entity!`,
+          );
+        }
+
+        if (arrayFieldNames.includes(fieldName)) {
+          throw new TypeError(
+            `Found unique compaund index field: "${fieldName}" in "${name}" entity while it is "array"!`,
           );
         }
       });

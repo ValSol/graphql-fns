@@ -21,9 +21,10 @@ import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
-  whereOne: {
+  whereOne?: {
     id: string;
   };
+  whereCompoundOne?: Record<string, any>;
 };
 
 const createEntityQueryResolver = (
@@ -51,15 +52,50 @@ const createEntityQueryResolver = (
 
     if (!filter) return null;
 
-    const { whereOne } = args;
+    const { whereOne, whereCompoundOne } = args;
 
     const { mongooseConn } = context;
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-    const whereOneKeys = Object.keys(whereOne);
-    if (whereOneKeys.length !== 1) {
-      throw new TypeError('Expected exactly one key in whereOne arg!');
+    if (whereCompoundOne && whereOne) {
+      throw new TypeError('Expected exactly one input from "whereCompoundOne" && "whereOne"!');
+    }
+
+    if (whereOne) {
+      const whereOneKeys = Object.keys(whereOne);
+
+      if (whereOneKeys.length !== 1) {
+        throw new TypeError('Expected exactly one key in whereOne arg!');
+      }
+    } else {
+      if (!whereCompoundOne) {
+        throw new TypeError('Expected "whereCompoundOne" or "whereOne" input!');
+      }
+
+      const compoundKeySet = Object.keys(whereCompoundOne).reduce((prev, key) => {
+        if (key.endsWith('_exists')) {
+          prev.add(key.slice(0, -'_exists'.length));
+        } else {
+          prev.add(key);
+        }
+
+        return prev;
+      }, new Set<string>());
+
+      const { uniqueCompoundIndexes } = entityConfig as TangibleEntityConfig;
+
+      const isCorrect = (uniqueCompoundIndexes as string[][]).some((arr) =>
+        arr.every((key) => compoundKeySet.has(key)),
+      );
+
+      if (!isCorrect) {
+        throw new TypeError(
+          `Got "whereCompoundOne" keys: ${JSON.stringify(
+            whereCompoundOne,
+          )} that not fit to "uniqueCompoundIndexes": ${JSON.stringify(uniqueCompoundIndexes)}`,
+        );
+      }
     }
 
     const resolverArg = { parent, args, context, info, involvedFilters };
@@ -78,7 +114,11 @@ const createEntityQueryResolver = (
 
     const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
 
-    const { lookups, where: conditions } = mergeWhereAndFilter(filter, whereOne, entityConfig);
+    const { lookups, where: conditions } = mergeWhereAndFilter(
+      filter,
+      whereOne || whereCompoundOne,
+      entityConfig,
+    );
 
     if (lookups.length > 0) {
       const pipeline = [...lookups];
