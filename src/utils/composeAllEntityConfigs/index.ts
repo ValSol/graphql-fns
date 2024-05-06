@@ -2,6 +2,7 @@ import pluralize from 'pluralize';
 
 import type {
   EntityConfig,
+  Enums,
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
 } from '../../tsTypes';
@@ -17,6 +18,7 @@ const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
 
 const composeAllEntityConfigs = (
   simplifiedThingConfigs: SimplifiedEntityConfig[],
+  enums: Enums = {},
 ): {
   [entityName: string]: EntityConfig;
 } => {
@@ -39,6 +41,14 @@ const composeAllEntityConfigs = (
       if (prev.result[name] !== undefined) {
         throw new TypeError(`Unique entity name: "${name}" is used twice!`);
       }
+
+      (config.enumFields || []).forEach(({ name: fieldName, enumName }) => {
+        if (!enums[enumName]) {
+          throw new TypeError(
+            `Got incorrect enumeration: "${enumName}" enum field: "${fieldName}" of "${name}" entity!`,
+          );
+        }
+      });
 
       ((config as SimplifiedTangibleEntityConfig).relationalFields || []).forEach(
         ({ oppositeName, configName }) => {

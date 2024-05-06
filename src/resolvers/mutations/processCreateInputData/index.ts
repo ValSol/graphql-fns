@@ -103,7 +103,7 @@ const processCreateInputData = (
         }
         if (parent && duplexField.parent) {
           throw new TypeError(
-            `Got the both opposite duplexFields ${name} && "${oppositeName}" are parent!`,
+            `Got the both opposite duplexFields "${name}" && "${oppositeName}" are parent!`,
           );
         }
         const { array: oppositeArray, config: oppositeConfig } = duplexField;

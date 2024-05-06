@@ -316,6 +316,12 @@ const composeEntityConfig = (
         );
       }
 
+      if (field.parent && oppositeField.parent) {
+        throw new TypeError(
+          `Duplex field: "${field.name}" is parent and its opposite duplex field "${oppositeField.name}" is parent!`,
+        );
+      }
+
       return { ...restField, config, type: 'duplexFields' };
     });
   }

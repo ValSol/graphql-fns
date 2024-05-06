@@ -140,7 +140,7 @@ describe('createEntityQueryResolver', () => {
     expect(example3.updatedAt).toBeUndefined();
   });
 
-  test.skip('should create query entities resolver to aggregate result', async () => {
+  test('should create query entities resolver to aggregate result', async () => {
     const parentConfig = {} as TangibleEntityConfig;
 
     const childConfig: TangibleEntityConfig = {

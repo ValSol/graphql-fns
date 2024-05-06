@@ -78,7 +78,7 @@ describe('fillInputDicForCustom', () => {
   };
 
   const simplifiedAllEntityConfigs = [placeConfig, personConfig, entityConfig];
-  const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+  const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs, enums);
   const descendant = { ForCatalog };
   const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, enums };
 

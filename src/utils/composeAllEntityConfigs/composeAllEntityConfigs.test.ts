@@ -11,6 +11,17 @@ import composeAllEntityConfigs from '.';
 import PageInfo from './pageInfoConfig';
 
 describe('composeAllEntityConfigs', () => {
+  const enumeration = {
+    Roles: ['Admin', 'Manager'],
+    DifficultyLevels: [
+      'Initial',
+      'ByFirstLetters',
+      'PlaceholdersInsteadOfWords',
+      'NoPlaceholders',
+      'NoHints',
+    ],
+  };
+
   test('compose simple allEntityConfigs', () => {
     const simplifiedEntityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
@@ -97,7 +108,7 @@ describe('composeAllEntityConfigs', () => {
 
     const simplifiedAllEntityConfigs = [simplifiedEntityConfig];
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     const expectedResult = {
       PageInfo,
       Example: exampleConfig,
@@ -116,6 +127,7 @@ describe('composeAllEntityConfigs', () => {
           name: 'duplexField',
           configName: 'Example',
           oppositeName: 'duplexFields',
+          parent: true,
         },
         {
           name: 'duplexFields',
@@ -138,6 +150,7 @@ describe('composeAllEntityConfigs', () => {
           config: entityConfig,
           oppositeName: 'duplexFields',
           type: 'duplexFields',
+          parent: true,
         },
         {
           name: 'duplexFields',
@@ -177,7 +190,7 @@ describe('composeAllEntityConfigs', () => {
       ExampleConnection: exampleConnectionConfig,
     };
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
 
@@ -306,7 +319,7 @@ describe('composeAllEntityConfigs', () => {
       Example2Connection: exampleConnectionConfig2,
     };
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
 
@@ -505,7 +518,7 @@ describe('composeAllEntityConfigs', () => {
       TangibleImageConnection: tangibleImageConnectionConfig,
     };
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
 
@@ -840,7 +853,7 @@ describe('composeAllEntityConfigs', () => {
       DifficultyLevelCountConnection: difficultyLevelCountConnectionConfig,
     };
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
 
@@ -966,7 +979,7 @@ describe('composeAllEntityConfigs', () => {
       TextbookConnection: textConnectionConfig,
     };
 
-    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
 });
