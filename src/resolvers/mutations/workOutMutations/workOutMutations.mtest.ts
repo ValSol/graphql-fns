@@ -455,7 +455,7 @@ afterAll(async () => {
 });
 
 describe('workOutMutations', () => {
-  test.skip('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
+  test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
     const createPerson = createCreateEntityMutationResolver(
       parentConfig,
       generalConfig,
@@ -517,7 +517,7 @@ describe('workOutMutations', () => {
     expect(findedChild3).toBe(null);
   });
 
-  test.skip('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
+  test('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
@@ -586,7 +586,7 @@ describe('workOutMutations', () => {
     expect(result.name).toBe('Name2');
   });
 
-  test.skip('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
+  test('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
@@ -663,7 +663,7 @@ describe('workOutMutations', () => {
     expect([...example.counts]).toEqual([99, 55]);
   });
 
-  test.skip('should create resolvers for chain of 2 createMany', async () => {
+  test('should create resolvers for chain of 2 createMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -711,7 +711,7 @@ describe('workOutMutations', () => {
     expect(resultToCreateExamples.map(({ name }) => ({ name }))).toEqual(dataToCreateExamples);
   });
 
-  test.skip('should create resolvers for chain of 2 createMany & 2 deleteMany', async () => {
+  test('should create resolvers for chain of 2 createMany & 2 deleteMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -831,7 +831,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test.skip('should create resolvers for chain of 2 createMany & 2 deleteFiltered', async () => {
+  test('should create resolvers for chain of 2 createMany & 2 deleteFiltered', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0', label: 'aaa' },
       { name: 'Name Clone 1', label: 'xxx' },
@@ -974,7 +974,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test.skip('should create resolvers for chain of 2 createMany & 2 updateMany', async () => {
+  test('should create resolvers for chain of 2 createMany & 2 updateMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -1109,7 +1109,7 @@ describe('workOutMutations', () => {
     expect(examples.map(({ name }) => ({ name }))).toEqual(dataToUpdateExamples);
   });
 
-  test.skip('should create resolvers for chain of 2 createMany & 2 updateFiltered', async () => {
+  test('should create resolvers for chain of 2 createMany & 2 updateFiltered', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0', label: 'updateFiltered' },
       { name: 'Name Clone 1', label: '' },
@@ -1240,7 +1240,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test.skip('should create resolvers for chain of 1 copyEntity', async () => {
+  test('should create resolvers for chain of 1 copyEntity', async () => {
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
@@ -1315,7 +1315,7 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test.skip('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
+  test('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
     const menuSchema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.createCollection();
@@ -1412,7 +1412,7 @@ describe('workOutMutations', () => {
     expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
   });
 
-  test.skip('should create resolvers for chain of 1 copyManyEntities', async () => {
+  test('should create resolvers for chain of 1 copyManyEntities', async () => {
     const createPerson = createCreateEntityMutationResolver(
       personConfig,
       generalConfig,
@@ -1483,7 +1483,7 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test.skip('should create resolvers for chain of 1 copyManyEntitiesWithChildren', async () => {
+  test('should create resolvers for chain of 1 copyManyEntitiesWithChildren', async () => {
     const createMenu = createCreateEntityMutationResolver(
       menuConfig,
       generalConfig,
@@ -1692,11 +1692,7 @@ describe('workOutMutations', () => {
       commonResolverCreatorArg,
     );
 
-    console.log('result =', result);
-
     const [originalRestaurant, backupRestaurant, archiveRestaurant] = result;
-
-    console.log('backupRestaurant =', backupRestaurant);
 
     const { id: backup } = backupRestaurant;
 
@@ -1750,9 +1746,6 @@ describe('workOutMutations', () => {
         standardMutationsArgs as any,
         commonResolverCreatorArg as any,
       );
-
-      console.log('originalInstance =', originalInstance);
-      console.log('cloneInstance =', cloneInstance);
     }
 
     {
