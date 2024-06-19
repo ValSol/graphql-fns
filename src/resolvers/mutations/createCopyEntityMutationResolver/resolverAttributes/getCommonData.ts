@@ -37,7 +37,9 @@ const getCommonData = async (
 
   if (whereOnesKeys.length !== 1) {
     throw new TypeError(
-      `Expected exactly one key in whereOnes arg!, but have: ${whereOnesKeys.length}!`,
+      `Expected exactly one key in whereOnes arg!, but have: ${
+        whereOnesKeys.length
+      } (${JSON.stringify(whereOnesKeys)})!`,
     );
   }
 

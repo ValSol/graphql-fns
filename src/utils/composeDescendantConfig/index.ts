@@ -244,7 +244,7 @@ const composeDescendantConfig = (
               .map((str) => `"${str}"`)
               .join(' or ')} as "allow" for descendantKey: "${descendantKey}" & entity: "${
               currentConfig.name
-            }"!`,
+            }" to connect through "${name}" field!`,
           );
         }
 
@@ -253,7 +253,7 @@ const composeDescendantConfig = (
           composeDescendantConfig(descendant[descendantKey], currentConfig, generalConfig);
         if (!config) {
           throw new TypeError(
-            `Can not set descendant config for entityName: "${currentConfig.name}" & descendant descendantKey:"${descendantKey}"!`,
+            `Can not set descendant config for entityName: "${currentConfig.name}" & descendant descendantKey:"${descendantKey}" to connect through "${name}" field!`,
           );
         }
 
@@ -271,7 +271,7 @@ const composeDescendantConfig = (
 
           if (!oppositeField) {
             throw new TypeError(
-              `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}"!`,
+              `Expected a relationalField with name "${oppositeName}" in descendant config "${config.name}" to connect through "${name}" field!`,
             );
           }
         });
@@ -283,14 +283,14 @@ const composeDescendantConfig = (
 
       if (key === 'duplexFields') {
         // eslint-disable-next-line
-        entityConfig[key]?.forEach(({ config, oppositeName }) => {
+        entityConfig[key]?.forEach(({ config, oppositeName, name: name2 }) => {
           const oppositeField = (config.duplexFields || []).find(
             ({ name }) => name === oppositeName,
           );
 
           if (!oppositeField) {
             throw new TypeError(
-              `Expected a duplexField with name "${oppositeName}" in descendant config "${config.name}"!`,
+              `Expected a duplexField with name "${oppositeName}" in descendant config "${config.name}" to connect through "${name2}" field!`,
             );
           }
         });

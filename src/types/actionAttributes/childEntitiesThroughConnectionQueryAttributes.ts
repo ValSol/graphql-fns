@@ -91,8 +91,6 @@ const actionReturnConfig = (
         ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
         : null;
     } catch (err) {
-      console.log('allEntityConfigs =', allEntityConfigs);
-
       throw new TypeError(err);
     }
   }

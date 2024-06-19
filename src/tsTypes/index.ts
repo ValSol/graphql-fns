@@ -197,7 +197,7 @@ type ArraySimplifiedDuplexField = FieldCommonProperties & {
   oppositeName: string;
   parent?: boolean;
 };
-type SimplifiedDuplexField = ArraySimplifiedDuplexField | ScalarSimplifiedDuplexField;
+export type SimplifiedDuplexField = ArraySimplifiedDuplexField | ScalarSimplifiedDuplexField;
 
 type ScalarSimplifiedFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array?: false;

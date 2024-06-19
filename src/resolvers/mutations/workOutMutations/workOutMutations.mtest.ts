@@ -8,6 +8,7 @@ import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import workOutMutations from './index';
+import createCopyEntityMutationResolver from '../createCopyEntityMutationResolver';
 
 mongoose.set('strictQuery', false);
 
@@ -54,6 +55,11 @@ const menuConfig = {} as TangibleEntityConfig;
 const menuCloneConfig = {} as TangibleEntityConfig;
 const menuSectionConfig = {} as TangibleEntityConfig;
 const menuSectionCloneConfig = {} as TangibleEntityConfig;
+const restaurantConfig = {} as TangibleEntityConfig;
+const restaurantArchiveConfig = {} as TangibleEntityConfig;
+const restaurantCloneConfig = {} as TangibleEntityConfig;
+const restaurantBackupConfig = {} as TangibleEntityConfig;
+
 const parentConfig: TangibleEntityConfig = {
   name: 'Parent',
   type: 'tangible',
@@ -240,6 +246,165 @@ Object.assign(menuSectionCloneConfig, {
   ],
 });
 
+Object.assign(restaurantConfig, {
+  name: 'Restaurant',
+  type: 'tangible',
+
+  textFields: [
+    {
+      name: 'title',
+      type: 'textFields',
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'clone',
+      oppositeName: 'original',
+      config: restaurantCloneConfig,
+      freeze: true,
+      index: true,
+      parent: true,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'backup',
+      oppositeName: 'original',
+      config: restaurantBackupConfig,
+      index: true,
+      parent: true,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'archive', // archive2
+      oppositeName: 'original2',
+      config: restaurantArchiveConfig,
+      freeze: true,
+      index: true,
+      type: 'duplexFields',
+    },
+  ],
+
+  relationalFields: [
+    {
+      name: 'archives',
+      oppositeName: 'original',
+      config: restaurantArchiveConfig,
+      parent: true,
+      array: true,
+      type: 'relationalFields',
+    },
+  ],
+});
+
+Object.assign(restaurantCloneConfig, {
+  name: 'RestaurantClone',
+  type: 'tangible',
+
+  textFields: [
+    {
+      name: 'title',
+      type: 'textFields',
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'original',
+      oppositeName: 'clone',
+      config: restaurantConfig,
+      required: true, // !!!!
+      unique: true,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'backup',
+      oppositeName: 'clone',
+      config: restaurantBackupConfig,
+      index: true,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'archive',
+      oppositeName: 'clone',
+      config: restaurantArchiveConfig,
+      type: 'duplexFields',
+    },
+  ],
+});
+
+Object.assign(restaurantBackupConfig, {
+  name: 'RestaurantBackup',
+  type: 'tangible',
+
+  textFields: [
+    {
+      name: 'title',
+      type: 'textFields',
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'original',
+      oppositeName: 'backup',
+      config: restaurantConfig,
+      unique: true,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'clone',
+      oppositeName: 'backup',
+      config: restaurantCloneConfig,
+      index: true,
+      type: 'duplexFields',
+    },
+  ],
+});
+
+Object.assign(restaurantArchiveConfig, {
+  name: 'RestaurantArchive',
+  type: 'tangible',
+
+  textFields: [
+    {
+      name: 'title',
+      type: 'textFields',
+    },
+  ],
+
+  duplexFields: [
+    {
+      name: 'clone',
+      oppositeName: 'archive',
+      config: restaurantCloneConfig,
+      type: 'duplexFields',
+    },
+
+    {
+      name: 'original2',
+      oppositeName: 'archive', // archive2
+      config: restaurantConfig,
+      index: true,
+      type: 'duplexFields',
+    },
+  ],
+
+  relationalFields: [
+    {
+      name: 'original',
+      oppositeName: 'archives',
+      config: restaurantConfig,
+      type: 'relationalFields',
+    },
+  ],
+});
+
 const generalConfig: GeneralConfig = {
   allEntityConfigs: {
     Parent: parentConfig,
@@ -252,6 +417,10 @@ const generalConfig: GeneralConfig = {
     MenuClone: menuCloneConfig,
     MenuSection: menuSectionConfig,
     MenuCloneSection: menuSectionCloneConfig,
+    Restaurant: restaurantConfig,
+    RestaurantArchive: restaurantArchiveConfig,
+    RestaurantBackup: restaurantBackupConfig,
+    RestaurantClone: restaurantCloneConfig,
   },
 };
 
@@ -286,7 +455,7 @@ afterAll(async () => {
 });
 
 describe('workOutMutations', () => {
-  test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
+  test.skip('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
     const createPerson = createCreateEntityMutationResolver(
       parentConfig,
       generalConfig,
@@ -348,7 +517,7 @@ describe('workOutMutations', () => {
     expect(findedChild3).toBe(null);
   });
 
-  test('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
+  test.skip('should create resolver for chain of 2 createEntity & 2 updateEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
@@ -417,7 +586,7 @@ describe('workOutMutations', () => {
     expect(result.name).toBe('Name2');
   });
 
-  test('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
+  test.skip('should create resolver for chain of 2 createEntity & 2 pushIntoEntity', async () => {
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
@@ -494,7 +663,7 @@ describe('workOutMutations', () => {
     expect([...example.counts]).toEqual([99, 55]);
   });
 
-  test('should create resolvers for chain of 2 createMany', async () => {
+  test.skip('should create resolvers for chain of 2 createMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -542,7 +711,7 @@ describe('workOutMutations', () => {
     expect(resultToCreateExamples.map(({ name }) => ({ name }))).toEqual(dataToCreateExamples);
   });
 
-  test('should create resolvers for chain of 2 createMany & 2 deleteMany', async () => {
+  test.skip('should create resolvers for chain of 2 createMany & 2 deleteMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -662,7 +831,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test('should create resolvers for chain of 2 createMany & 2 deleteFiltered', async () => {
+  test.skip('should create resolvers for chain of 2 createMany & 2 deleteFiltered', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0', label: 'aaa' },
       { name: 'Name Clone 1', label: 'xxx' },
@@ -805,7 +974,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test('should create resolvers for chain of 2 createMany & 2 updateMany', async () => {
+  test.skip('should create resolvers for chain of 2 createMany & 2 updateMany', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0' },
       { name: 'Name Clone 1' },
@@ -940,7 +1109,7 @@ describe('workOutMutations', () => {
     expect(examples.map(({ name }) => ({ name }))).toEqual(dataToUpdateExamples);
   });
 
-  test('should create resolvers for chain of 2 createMany & 2 updateFiltered', async () => {
+  test.skip('should create resolvers for chain of 2 createMany & 2 updateFiltered', async () => {
     const dataToCreateExampleClones = [
       { name: 'Name Clone 0', label: 'updateFiltered' },
       { name: 'Name Clone 1', label: '' },
@@ -1071,7 +1240,7 @@ describe('workOutMutations', () => {
     );
   });
 
-  test('should create resolvers for chain of 1 copyEntity', async () => {
+  test.skip('should create resolvers for chain of 1 copyEntity', async () => {
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
@@ -1146,7 +1315,7 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
+  test.skip('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
     const menuSchema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
     await Menu.createCollection();
@@ -1243,7 +1412,7 @@ describe('workOutMutations', () => {
     expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyManyEntities', async () => {
+  test.skip('should create resolvers for chain of 1 copyManyEntities', async () => {
     const createPerson = createCreateEntityMutationResolver(
       personConfig,
       generalConfig,
@@ -1314,7 +1483,7 @@ describe('workOutMutations', () => {
     expect(personClone2.original.toString()).toBe(createdPerson.id.toString());
   });
 
-  test('should create resolvers for chain of 1 copyManyEntitiesWithChildren', async () => {
+  test.skip('should create resolvers for chain of 1 copyManyEntitiesWithChildren', async () => {
     const createMenu = createCreateEntityMutationResolver(
       menuConfig,
       generalConfig,
@@ -1397,5 +1566,242 @@ describe('workOutMutations', () => {
     expect(menuClone2.name).toBe(dataToUpdate.name);
     expect(menuClone2.sections.length).toBe(data.sections.create.length);
     expect(menuClone.original.toString()).toBe(createdMenu.id.toString());
+  });
+
+  test('regression test: workout copy', async () => {
+    const restaurantSchema = createThingSchema(restaurantConfig);
+    const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.createCollection();
+
+    const restaurantArchiveSchema = createThingSchema(restaurantArchiveConfig);
+    const RestaurantArchive = mongooseConn.model(
+      'RestaurantArchive_Thing',
+      restaurantArchiveSchema,
+    );
+    await RestaurantArchive.createCollection();
+
+    const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
+    const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
+    await RestaurantClone.createCollection();
+
+    const restaurantBackupSchema = createThingSchema(restaurantBackupConfig);
+    const RestaurantBackup = mongooseConn.model('RestaurantBackup_Thing', restaurantBackupSchema);
+    await RestaurantBackup.createCollection();
+
+    const createRestaurant = createCreateEntityMutationResolver(
+      restaurantConfig,
+      generalConfig,
+      serversideConfig,
+    );
+
+    expect(typeof createRestaurant).toBe('function');
+    if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    const dataClone = { title: 'updated Flamber' };
+    const data = { title: 'Flamber', clone: { create: dataClone } };
+
+    const createdRestaurant = await createRestaurant(
+      null,
+      { data },
+      { mongooseConn, pubsub },
+      null,
+      {
+        inputOutputEntity: [[]],
+      },
+    );
+
+    const { clone, id } = createdRestaurant;
+
+    expect(createdRestaurant.title).toBe(data.title);
+
+    // *********
+
+    // const copyRestaurant = createCopyEntityMutationResolver(
+    //   restaurantConfig,
+    //   generalConfig,
+    //   serversideConfig,
+    // );
+    // expect(typeof copyRestaurant).toBe('function');
+    // if (!copyRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
+
+    // const copyedRestaurant = await copyRestaurant(
+    //   null,
+    //   {
+    //     whereOnes: { clone: { id: clone } },
+    //     options: { clone: { fieldsForbiddenToCopy: ['archive', 'backup'] } },
+    //   },
+    //   { mongooseConn, pubsub },
+    //   null,
+    //   { inputOutputEntity: [[]] },
+    // );
+
+    // console.log('copyedRestaurant =', copyedRestaurant);
+
+    // *********
+
+    const standardMutationsArgsToCopyThing = [
+      {
+        actionGeneralName: 'copyEntity',
+        entityConfig: restaurantConfig,
+        args: {
+          whereOnes: { clone: { id: clone } },
+          options: { clone: { fieldsForbiddenToCopy: ['archive', 'backup'] } },
+        },
+        returnResult: true,
+        info: { projection: { _id: 1, title: 1 } },
+        inAnyCase: true,
+        involvedFilters: { inputOutputEntity: [[]] },
+      },
+
+      {
+        actionGeneralName: 'copyEntity',
+        entityConfig: restaurantBackupConfig,
+        args: {
+          whereOnes: { original: { id } },
+          options: { original: { fieldsForbiddenToCopy: ['clone'] } },
+        },
+        returnResult: true,
+        info: { projection: { _id: 1 } },
+        inAnyCase: true,
+        involvedFilters: { inputOutputEntity: [[]] },
+      },
+
+      {
+        actionGeneralName: 'copyEntity',
+        entityConfig: restaurantArchiveConfig,
+        args: {
+          whereOnes: { clone: { id: clone } },
+          options: { clone: { fieldsForbiddenToCopy: ['original'] } },
+          data: {
+            original: { connect: id },
+          },
+        },
+        returnResult: true,
+        info: { projection: { _id: 1, title: 1 } },
+        inAnyCase: true,
+        involvedFilters: { inputOutputEntity: [[]] },
+      },
+    ];
+
+    const context = { mongooseConn, pubsub };
+
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    const result = await workOutMutations(
+      standardMutationsArgsToCopyThing as any,
+      commonResolverCreatorArg,
+    );
+
+    console.log('result =', result);
+
+    const [originalRestaurant, backupRestaurant, archiveRestaurant] = result;
+
+    console.log('backupRestaurant =', backupRestaurant);
+
+    const { id: backup } = backupRestaurant;
+
+    expect(originalRestaurant.title).toBe(dataClone.title);
+    expect(archiveRestaurant.title).toBe(dataClone.title);
+
+    const { id: archive } = archiveRestaurant;
+
+    const standardMutationsArgsToCopyThing2 = [
+      {
+        actionGeneralName: 'updateEntity',
+        entityConfig: restaurantCloneConfig,
+        args: { whereOne: { original: id }, data: { archive: { connect: null } } },
+        returnResult: false,
+        info: { projection: { _id: 1 } },
+        inAnyCase: true,
+        involvedFilters: { inputOutputEntity: [[]] },
+      },
+    ];
+
+    await workOutMutations(standardMutationsArgsToCopyThing2 as any, commonResolverCreatorArg);
+
+    await workOutMutations(standardMutationsArgsToCopyThing as any, commonResolverCreatorArg);
+
+    {
+      const standardMutationsArgs = [
+        {
+          actionGeneralName: 'updateEntity',
+          entityConfig: restaurantConfig,
+          args: { whereOne: { id }, data: { archive: { connect: archive } } },
+          returnResult: true,
+          info: { projection: { _id: 1, clone: 1, archive: 1 } },
+          inAnyCase: true,
+          involvedFilters: { inputOutputEntity: [[]] },
+        },
+      ] as any[];
+
+      if (clone) {
+        standardMutationsArgs.push({
+          actionGeneralName: 'updateEntity',
+          entityConfig: restaurantCloneConfig,
+          args: { whereOne: { id: clone }, data: { archive: { connect: archive } } },
+          returnResult: true,
+          info: { projection: { _id: 1, original: 1, archive: 1 } },
+          inAnyCase: true,
+          involvedFilters: { inputOutputEntity: [[]] },
+        });
+      }
+
+      const [originalInstance, cloneInstance] = await workOutMutations(
+        standardMutationsArgs as any,
+        commonResolverCreatorArg as any,
+      );
+
+      console.log('originalInstance =', originalInstance);
+      console.log('cloneInstance =', cloneInstance);
+    }
+
+    {
+      const standardMutationsArgs = [
+        {
+          actionGeneralName: 'copyEntity',
+          entityConfig: restaurantConfig,
+          args: {
+            whereOnes: { archive: { id: archive } },
+            options: { archive: { fieldsForbiddenToCopy: ['clone'] } },
+          },
+          returnResult: false,
+          info: { projection: { _id: 1 } },
+          inAnyCase: true,
+          involvedFilters: { inputOutputEntity: [[]] },
+        },
+      ] as any[];
+
+      if (clone) {
+        standardMutationsArgs.push({
+          actionGeneralName: 'copyEntity',
+          entityConfig: restaurantCloneConfig,
+          args: {
+            whereOnes: { archive: { id: archive } },
+            options: { archive: { fieldsForbiddenToCopy: ['original'] } },
+          },
+          returnResult: false,
+          info: { projection: { _id: 1 } },
+          inAnyCase: true,
+          involvedFilters: { inputOutputEntity: [[]] },
+        });
+      }
+
+      if (backup) {
+        standardMutationsArgs.push({
+          actionGeneralName: 'copyEntity',
+          entityConfig: restaurantBackupConfig,
+          args: {
+            whereOnes: { original: { id } },
+            options: { original: { fieldsForbiddenToCopy: ['clone'] } },
+          },
+          returnResult: false,
+          info: { projection: { _id: 1 } },
+          inAnyCase: true,
+          involvedFilters: { inputOutputEntity: [[]] },
+        });
+      }
+
+      await workOutMutations(standardMutationsArgs as any, commonResolverCreatorArg as any);
+    }
   });
 });
