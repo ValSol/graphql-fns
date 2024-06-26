@@ -255,6 +255,12 @@ Object.assign(restaurantConfig, {
       name: 'title',
       type: 'textFields',
     },
+
+    {
+      name: 'comments',
+      array: true,
+      type: 'textFields',
+    },
   ],
 
   duplexFields: [
@@ -1757,7 +1763,7 @@ describe('workOutMutations', () => {
             whereOnes: { archive: { id: archive } },
             options: { archive: { fieldsForbiddenToCopy: ['clone'] } },
           },
-          returnResult: false,
+          returnResult: true,
           info: { projection: { _id: 1 } },
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
@@ -1794,7 +1800,24 @@ describe('workOutMutations', () => {
         });
       }
 
-      await workOutMutations(standardMutationsArgs as any, commonResolverCreatorArg as any);
+      const core = new Map();
+
+      core.set(restaurantConfig, [
+        {
+          updateMany: {
+            filter: {},
+            update: { $push: { comments: 'test-comment' } },
+          },
+        },
+      ]);
+
+      const preparedBulkData = { core, periphery: new Map(), mains: [] };
+
+      await workOutMutations(
+        standardMutationsArgs as any,
+        commonResolverCreatorArg as any,
+        preparedBulkData as any,
+      );
     }
   });
 });
