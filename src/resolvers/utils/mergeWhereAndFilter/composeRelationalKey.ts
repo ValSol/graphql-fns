@@ -22,9 +22,9 @@ const composeRelationalKey = (
   let goToNext = true;
 
   while (goToNext) {
-    const keys = Object.keys(currentValue);
+    const keys = Object.keys(currentValue).filter((key) => key.endsWith('_'));
     const [key] = keys;
-    if (key.endsWith('_')) {
+    if (key?.endsWith('_')) {
       if (keys.length > 1) {
         throw new TypeError(`keys length must be "1" but "${keys.length}"!`);
       }
