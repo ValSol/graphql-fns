@@ -169,6 +169,9 @@ const processCreateInputData = (
 
     return Object.keys(data2).reduce<Record<string, any>>((prev, key) => {
       if (data2[key] === undefined) return prev;
+
+      if (fieldsObject[key]?.type === 'calculatedFields') return prev;
+
       if (processingKind === 'update' && data2[key] === null) {
         if (fieldsObject[key].array && fieldsObject[key].type !== 'filterFields') {
           throw new TypeError(
