@@ -5,8 +5,9 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 import { TangibleEntityConfig } from '../../../../tsTypes';
+import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -51,10 +52,10 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   let whereOne3 = whereOne2;
 
-  if (lookups.length) {
+  if (lookups.length > 0) {
     const pipeline = [...lookups];
 
-    if (Object.keys(whereOne2).length) {
+    if (Object.keys(whereOne2).length > 0) {
       pipeline.push({ $match: whereOne2 });
     }
 
@@ -67,13 +68,15 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     whereOne3 = { _id: entity._id }; // eslint-disable-line no-underscore-dangle
   }
 
-  const projection = subscribeUpdatedEntity
-    ? {} // if subsciption ON - return empty projection - to get all fields of entity
-    : duplexFieldsProjection;
+  // const projection = subscribeUpdatedEntity
+  //   ? {} // if subsciption ON - return empty projection - to get all fields of entity
+  //   : { duplexFieldsProjection };
+
+  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
   const previousEntity = await Entity.findOne(whereOne3, projection, { lean: true });
 
   return previousEntity && [previousEntity];
 };
 
-export default get;
+export default getPrevious;
