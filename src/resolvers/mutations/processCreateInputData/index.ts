@@ -173,6 +173,10 @@ const processCreateInputData = (
       if (fieldsObject[key]?.type === 'calculatedFields') return prev;
 
       if (processingKind === 'update' && data2[key] === null) {
+        if (!fieldsObject[key]) {
+          throw new TypeError(`Got incorrect field name: "${key}" from "data" input!`);
+        }
+
         if (fieldsObject[key].array && fieldsObject[key].type !== 'filterFields') {
           throw new TypeError(
             `Try unset array field: "${key}" of entity: "${entityConfig2.name}"!`,
