@@ -8,7 +8,6 @@ import type {
   Inventory,
   ObjectSignatureMethods,
   SimplifiedEmbeddedEntityConfig,
-  SimplifiedFileEntityConfig,
   SimplifiedTangibleEntityConfig,
 } from '../tsTypes';
 
@@ -643,13 +642,6 @@ enum deleteMenuCloneWithChildrenOptionsEnum {
 input deleteMenuCloneWithChildrenOptionsInput {
   fieldsToDelete: [deleteMenuCloneWithChildrenOptionsEnum]
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input PushIntoMenuInput {
   sections: MenuSectionCreateOrPushChildrenInput
   selectedSections: MenuSectionWhereInput
@@ -773,10 +765,6 @@ type Mutation {
   deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
   deleteMenuWithChildren(whereOne: MenuWhereOneInput!, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
   deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
-  importMenus(file: Upload!, options: ImportOptionsInput, token: String): [Menu!]!
-  importMenuClones(file: Upload!, options: ImportOptionsInput, token: String): [MenuClone!]!
-  importMenuSections(file: Upload!, options: ImportOptionsInput, token: String): [MenuSection!]!
-  importMenuCloneSections(file: Upload!, options: ImportOptionsInput, token: String): [MenuCloneSection!]!
   pushIntoMenu(whereOne: MenuWhereOneInput!, data: PushIntoMenuInput!, positions: MenuPushPositionsInput, token: String): Menu!
   pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput, token: String): MenuClone!
   updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!, token: String): [Menu!]!
@@ -809,587 +797,6 @@ type Subscription {
   createdMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
   updatedMenuCloneSection(where: MenuCloneSectionWhereInput): UpdatedMenuCloneSectionPayload!
   deletedMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
-}`;
-
-    const result = composeGqlTypes(generalConfig);
-    expect(result.typeDefs).toBe(expectedResult);
-  });
-
-  test('should create entities types for one entity', () => {
-    const imageConfig: SimplifiedFileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          required: true,
-          freeze: true,
-          index: true,
-        },
-        {
-          name: 'address',
-          freeze: true,
-        },
-        {
-          name: 'text',
-        },
-      ],
-    };
-
-    const entityConfig: SimplifiedTangibleEntityConfig = {
-      name: 'Example',
-      type: 'tangible',
-
-      textFields: [
-        {
-          name: 'textField1',
-          unique: true,
-          weight: 1,
-        },
-        {
-          name: 'textField2',
-          default: 'default text',
-          index: true,
-        },
-        {
-          name: 'textField3',
-          required: true,
-          index: true,
-        },
-        {
-          name: 'textField4',
-          array: true,
-        },
-        {
-          name: 'textField5',
-          default: ['default text'],
-          required: true,
-          array: true,
-        },
-      ],
-
-      enumFields: [
-        {
-          name: 'day',
-          enumName: 'Weekdays',
-          index: true,
-        },
-        {
-          name: 'cuisines',
-          array: true,
-          enumName: 'Cuisines',
-          required: true,
-          index: true,
-        },
-      ],
-
-      fileFields: [
-        {
-          name: 'logo',
-          configName: 'Image',
-          required: true,
-        },
-        {
-          name: 'hero',
-          configName: 'Image',
-        },
-        {
-          name: 'pictures',
-          configName: 'Image',
-          array: true,
-          required: true,
-          variants: ['plain', 'connection', 'count'],
-        },
-        {
-          name: 'photos',
-          configName: 'Image',
-          array: true,
-          index: true,
-          variants: ['plain', 'connection', 'count'],
-        },
-      ],
-
-      geospatialFields: [
-        {
-          name: 'position',
-          geospatialType: 'Point',
-        },
-      ],
-    };
-
-    const simplifiedAllEntityConfigs = [entityConfig, imageConfig];
-
-    const enums = {
-      Weekdays: ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
-      Cuisines: ['ukrainian', 'italian', 'georgian', 'japanese', 'chinese'],
-    };
-
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs, enums);
-
-    const generalConfig: GeneralConfig = { allEntityConfigs, enums };
-
-    const expectedResult = `scalar DateTime
-scalar Upload
-interface Node {
-  id: ID!
-}
-input RegExp {
-  pattern: String!
-  flags: String
-}
-input SliceInput {
-  begin: Int
-  end: Int
-}
-enum WeekdaysEnumeration {
-  a0
-  a1
-  a2
-  a3
-  a4
-  a5
-  a6
-}
-enum CuisinesEnumeration {
-  ukrainian
-  italian
-  georgian
-  japanese
-  chinese
-}
-type GeospatialPoint {
-  lng: Float!
-  lat: Float!
-}
-input GeospatialPointInput {
-  lng: Float!
-  lat: Float!
-}
-input GeospatialSphereInput {
-  center: GeospatialPointInput!
-  radius: Float!
-}
-type TangibleImage implements Node {
-  id: ID!
-  fileId: String!
-  address: String
-}
-type TangibleImageConnection {
-  pageInfo: PageInfo!
-  edges: [TangibleImageEdge!]!
-}
-type PageInfo {
-  startCursor: String
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-}
-type TangibleImageEdge {
-  cursor: String!
-  node: TangibleImage!
-}
-type Example implements Node {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  textField1: String
-  textField2: String
-  textField3: String!
-  textField4(slice: SliceInput): [String!]!
-  textField5(slice: SliceInput): [String!]!
-  day: WeekdaysEnumeration
-  cuisines(slice: SliceInput): [CuisinesEnumeration!]!
-  logo: Image!
-  hero: Image
-  pictures(slice: SliceInput): [Image!]!
-  picturesThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
-  picturesCount: Int!
-  photos(slice: SliceInput): [Image!]!
-  photosThroughConnection(after: String, before: String, first: Int, last: Int): ImageConnection!
-  photosCount: Int!
-  position: GeospatialPoint
-}
-type ImageConnection {
-  pageInfo: PageInfo!
-  edges: [ImageEdge!]!
-}
-type ImageEdge {
-  cursor: String!
-  node: Image!
-}
-type Image {
-  id: ID!
-  fileId: String!
-  address: String
-  text: String
-}
-type ExampleConnection {
-  pageInfo: PageInfo!
-  edges: [ExampleEdge!]!
-}
-type ExampleEdge {
-  cursor: String!
-  node: Example!
-}
-input ExampleWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField1_in: [String!]
-  textField1_nin: [String!]
-  textField1_ne: String
-  textField1_gt: String
-  textField1_gte: String
-  textField1_lt: String
-  textField1_lte: String
-  textField1_re: [RegExp!]
-  textField2: String
-  textField2_in: [String!]
-  textField2_nin: [String!]
-  textField2_ne: String
-  textField2_gt: String
-  textField2_gte: String
-  textField2_lt: String
-  textField2_lte: String
-  textField2_re: [RegExp!]
-  textField2_exists: Boolean
-  textField3: String
-  textField3_in: [String!]
-  textField3_nin: [String!]
-  textField3_ne: String
-  textField3_gt: String
-  textField3_gte: String
-  textField3_lt: String
-  textField3_lte: String
-  textField3_re: [RegExp!]
-  textField3_exists: Boolean
-  position_withinPolygon: [GeospatialPointInput!]
-  position_withinSphere: GeospatialSphereInput
-  day: WeekdaysEnumeration
-  day_in: [WeekdaysEnumeration!]
-  day_nin: [WeekdaysEnumeration!]
-  day_ne: WeekdaysEnumeration
-  day_re: [RegExp!]
-  day_exists: Boolean
-  cuisines: CuisinesEnumeration
-  cuisines_in: [CuisinesEnumeration!]
-  cuisines_nin: [CuisinesEnumeration!]
-  cuisines_ne: CuisinesEnumeration
-  cuisines_re: [RegExp!]
-  cuisines_size: Int
-  cuisines_notsize: Int
-  photos: ImageWhereInput
-  photos_size: Int
-  photos_notsize: Int
-  AND: [ExampleWhereInput!]
-  NOR: [ExampleWhereInput!]
-  OR: [ExampleWhereInput!]
-}
-input ExampleWhereWithoutBooleanOperationsInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  textField1_in: [String!]
-  textField1_nin: [String!]
-  textField1_ne: String
-  textField1_gt: String
-  textField1_gte: String
-  textField1_lt: String
-  textField1_lte: String
-  textField1_re: [RegExp!]
-  textField2: String
-  textField2_in: [String!]
-  textField2_nin: [String!]
-  textField2_ne: String
-  textField2_gt: String
-  textField2_gte: String
-  textField2_lt: String
-  textField2_lte: String
-  textField2_re: [RegExp!]
-  textField2_exists: Boolean
-  textField3: String
-  textField3_in: [String!]
-  textField3_nin: [String!]
-  textField3_ne: String
-  textField3_gt: String
-  textField3_gte: String
-  textField3_lt: String
-  textField3_lte: String
-  textField3_re: [RegExp!]
-  textField3_exists: Boolean
-  position_withinPolygon: [GeospatialPointInput!]
-  position_withinSphere: GeospatialSphereInput
-  day: WeekdaysEnumeration
-  day_in: [WeekdaysEnumeration!]
-  day_nin: [WeekdaysEnumeration!]
-  day_ne: WeekdaysEnumeration
-  day_re: [RegExp!]
-  day_exists: Boolean
-  cuisines: CuisinesEnumeration
-  cuisines_in: [CuisinesEnumeration!]
-  cuisines_nin: [CuisinesEnumeration!]
-  cuisines_ne: CuisinesEnumeration
-  cuisines_re: [RegExp!]
-  cuisines_size: Int
-  cuisines_notsize: Int
-  photos: ImageWhereInput
-  photos_size: Int
-  photos_notsize: Int
-}
-input ImageWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  _index: Int
-  fileId: String
-  fileId_in: [String!]
-  fileId_nin: [String!]
-  fileId_ne: String
-  fileId_gt: String
-  fileId_gte: String
-  fileId_lt: String
-  fileId_lte: String
-  fileId_re: [RegExp!]
-  fileId_exists: Boolean
-}
-enum ExampleTextNamesEnum {
-  day
-  cuisines
-  textField1
-  textField2
-  textField3
-  textField4
-  textField5
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
-input FileWhereInput {
-  id_in: [ID!]
-  id_nin: [ID!]
-  createdAt_in: [DateTime!]
-  createdAt_nin: [DateTime!]
-  createdAt_ne: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_nin: [DateTime!]
-  updatedAt_ne: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  uploadedAt: DateTime
-  uploadedAt_in: [DateTime!]
-  uploadedAt_nin: [DateTime!]
-  uploadedAt_ne: DateTime
-  uploadedAt_gt: DateTime
-  uploadedAt_gte: DateTime
-  uploadedAt_lt: DateTime
-  uploadedAt_lte: DateTime
-  filename_in: [String!]
-  filename_nin: [String!]
-  filename_ne: String
-  mimetype_in: [String!]
-  mimetype_nin: [String!]
-  mimetype_ne: String
-  encoding_in: [String!]
-  encoding_nin: [String!]
-  encoding_ne: String
-  hash_in: [String!]
-  hash_nin: [String!]
-  hash_ne: String
-  AND: [FileWhereInput!]
-  NOR: [FileWhereInput!]
-  OR: [FileWhereInput!]
-}
-input FileWhereOneInput {
-  id: ID
-  hash: String
-}
-input ExampleWhereOneInput {
-  id: ID
-  textField1: ID
-}
-enum ExampleSortEnum {
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  day_ASC
-  day_DESC
-  textField2_ASC
-  textField2_DESC
-  textField3_ASC
-  textField3_DESC
-}
-input ExampleSortInput {
-  sortBy: [ExampleSortEnum]
-}
-input PaginationInput {
-  skip: Int
-  first: Int
-}
-enum ExampleGeospatialFieldNamesEnum {
-  position
-}
-input ExampleNearInput {
-  geospatialField: ExampleGeospatialFieldNamesEnum!
-  coordinates: GeospatialPointInput!
-  maxDistance: Float
-  minDistance: Float
-}
-input ExampleWhereByUniqueInput {
-  id_in: [ID!]
-  textField1_in: [String!]
-}
-input ExampleCreateInput {
-  id: ID
-  textField1: String
-  textField2: String
-  textField3: String!
-  textField4: [String!]
-  textField5: [String!]!
-  day: WeekdaysEnumeration
-  cuisines: [CuisinesEnumeration!]!
-  logo: ImageCreateInput!
-  hero: ImageCreateInput
-  pictures: [ImageCreateInput!]!
-  photos: [ImageCreateInput!]
-  position: GeospatialPointInput
-}
-input ExampleCreateChildInput {
-  connect: ID
-  create: ExampleCreateInput
-}
-input ExampleCreateOrPushChildrenInput {
-  connect: [ID!]
-  create: [ExampleCreateInput!]
-  createPositions: [Int!]
-}
-input ImageCreateInput {
-  fileId: String!
-  address: String
-  text: String
-}
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
-input PushIntoExampleInput {
-  textField4: [String!]
-  textField5: [String!]
-  cuisines: [CuisinesEnumeration!]
-  pictures: [ImageCreateInput!]
-  photos: [ImageCreateInput!]
-}
-input ExamplePushPositionsInput {
-  textField4: [Int!]
-  textField5: [Int!]
-  cuisines: [Int!]
-  pictures: [Int!]
-  photos: [Int!]
-}
-input ExampleUpdateInput {
-  textField1: String
-  textField2: String
-  textField3: String
-  textField4: [String!]
-  textField5: [String!]
-  day: WeekdaysEnumeration
-  cuisines: [CuisinesEnumeration!]
-  logo: ImageUpdateInput
-  hero: ImageUpdateInput
-  pictures: [ImageUpdateInput!]
-  photos: [ImageUpdateInput!]
-  position: GeospatialPointInput
-}
-input ImageUpdateInput {
-  fileId: String
-  address: String
-  text: String
-}
-enum ExampleFieldNamesEnum {
-  textField1
-  textField2
-  textField3
-  textField4
-  textField5
-  logo
-  hero
-  pictures
-  photos
-  day
-  cuisines
-  position
-}
-type UpdatedExamplePayload {
-  node: Example
-  previousNode: Example
-  updatedFields: [ExampleFieldNamesEnum!]
-}
-type Query {
-  node(id: ID!): Node
-  ExampleCount(where: ExampleWhereInput, search: String, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, search: String, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
-  TangibleImageFileCount(where: FileWhereInput, token: String): Int!
-  TangibleImageFile(whereOne: FileWhereOneInput!, token: String): TangibleImage
-  TangibleImageFiles(where: FileWhereInput, token: String): [TangibleImage!]!
-  TangibleImageFilesThroughConnection(where: FileWhereInput, after: String, before: String, first: Int, last: Int, token: String): TangibleImageConnection!
-  Example(whereOne: ExampleWhereOneInput!, token: String): Example
-  Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, near: ExampleNearInput, search: String, token: String): [Example!]!
-  ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, near: ExampleNearInput, search: String, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!
-  ExamplesByUnique(where: ExampleWhereByUniqueInput!, sort: ExampleSortInput, near: ExampleNearInput, search: String, token: String): [Example!]!
-}
-type Mutation {
-  createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!
-  createExample(data: ExampleCreateInput!, token: String): Example!
-  deleteFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, token: String): [Example!]!
-  deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, search: String, token: String): Int!
-  deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
-  deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
-  importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!
-  pushIntoExample(whereOne: ExampleWhereOneInput!, data: PushIntoExampleInput!, positions: ExamplePushPositionsInput, token: String): Example!
-  updateFilteredExamples(where: ExampleWhereInput, near: ExampleNearInput, search: String, data: ExampleUpdateInput!, token: String): [Example!]!
-  updateFilteredExamplesReturnScalar(where: ExampleWhereInput, search: String, data: ExampleUpdateInput!, token: String): Int!
-  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!
-  updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!
-  uploadTangibleImageFiles(files: [Upload!]!, hashes: [String!]!, token: String): [TangibleImage!]!
-}
-type Subscription {
-  createdExample(where: ExampleWhereInput): Example!
-  updatedExample(where: ExampleWhereInput): UpdatedExamplePayload!
-  deletedExample(where: ExampleWhereInput): Example!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1701,13 +1108,6 @@ input Example2CreateOrPushChildrenInput {
   create: [Example2CreateInput!]
   createPositions: [Int!]
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input PushIntoExample2Input {
   textField1: [String!]
   textField2: [String!]
@@ -1776,8 +1176,6 @@ type Mutation {
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
   deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
-  importExample1s(file: Upload!, options: ImportOptionsInput, token: String): [Example1!]!
-  importExample2s(file: Upload!, options: ImportOptionsInput, token: String): [Example2!]!
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
   updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!, token: String): [Example2!]!
@@ -2089,13 +1487,6 @@ input PlaceCreateOrPushChildrenInput {
   create: [PlaceCreateInput!]
   createPositions: [Int!]
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
@@ -2164,8 +1555,6 @@ type Mutation {
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
-  importPlaces(file: Upload!, options: ImportOptionsInput, token: String): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
@@ -2410,13 +1799,6 @@ input AddressCreateInput {
   country: String!
   province: String
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input PushIntoPersonInput {
   locations: [AddressCreateInput!]
   places: [AddressCreateInput!]
@@ -2466,7 +1848,6 @@ type Mutation {
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
-  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
@@ -2855,13 +2236,6 @@ enum deletePlaceWithChildrenOptionsEnum {
 input deletePlaceWithChildrenOptionsInput {
   fieldsToDelete: [deletePlaceWithChildrenOptionsEnum]
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input PushIntoPersonInput {
   friends: PersonCreateOrPushChildrenInput
   enemies: PersonCreateOrPushChildrenInput
@@ -2940,8 +2314,6 @@ type Mutation {
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
   deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput, token: String): Place!
-  importPeople(file: Upload!, options: ImportOptionsInput, token: String): [Person!]!
-  importPlaces(file: Upload!, options: ImportOptionsInput, token: String): [Place!]!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
@@ -3203,13 +2575,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
 input ExampleWhereOneInput {
   id: ID!
 }
-enum ImportFormatEnum {
-  csv
-  json
-}
-input ImportOptionsInput {
-  format: ImportFormatEnum
-}
 input ExampleUpdateInput {
   textField: String
 }
@@ -3223,7 +2588,6 @@ type Mutation {
   deleteFilteredExamplesReturnScalar(where: ExampleWhereInput, token: String): Int!
   deleteManyExamples(whereOne: [ExampleWhereOneInput!]!, token: String): [Example!]!
   deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
-  importExamples(file: Upload!, options: ImportOptionsInput, token: String): [Example!]!
   updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): [Example!]!
   updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): Int!
   updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!

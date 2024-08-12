@@ -1,8 +1,4 @@
-import type {
-  TangibleEntityConfig,
-  GraphqlObject,
-  TangibleFileEntityConfig,
-} from '../../../../../tsTypes';
+import type { TangibleEntityConfig, GraphqlObject } from '../../../../../tsTypes';
 import type { PrepareBulkData, PreparedData } from '../../../../tsTypes';
 
 import fromMongoToGqlDataArg from '../../../../types/fromMongoToGqlDataArg';

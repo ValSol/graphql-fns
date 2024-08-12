@@ -58,7 +58,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
-    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.pushIntoExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
     expect(typeof result.Mutation.deleteExample).toBe('function');
@@ -535,7 +534,6 @@ describe('composeGqlResolvers', () => {
     expect(typeof result.Query.Example).toBe('function');
     expect(typeof result.Query.Examples).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
-    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.pushIntoExample).toBe('function');
     expect(typeof result.Mutation.updateExample).toBe('function');
@@ -600,7 +598,6 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.Query.node).toBe('function');
     expect(typeof result.Mutation.createManyExamples).toBe('function');
-    expect(typeof result.Mutation.importExamples).toBe('function');
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(typeof result.Mutation.pushIntoExample).toBe('undefined');
     expect(typeof result.Mutation.updateExample).toBe('function');
@@ -655,7 +652,6 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
-    expect(result.Mutation.importExamples).toBeUndefined();
     expect(typeof result.Mutation.createExample).toBe('function');
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();
@@ -698,7 +694,6 @@ describe('composeGqlResolvers', () => {
 
     expect(typeof result.Query.node).toBe('function');
     expect(result.Mutation.createManyExamples).toBeUndefined();
-    expect(result.Mutation.importExamples).toBeUndefined();
     expect(result.Mutation.createExample).toBeUndefined();
     expect(result.Mutation.updateExample).toBeUndefined();
     expect(result.Mutation.deleteExample).toBeUndefined();

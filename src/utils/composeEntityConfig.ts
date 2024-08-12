@@ -23,7 +23,7 @@ const forbiddenFieldNames = [
   'pageInfo',
 ];
 
-const allowedConfigTypes = ['embedded', 'file', 'tangible', 'tangibleFile', 'virtual'];
+const allowedConfigTypes = ['embedded', 'tangible', 'virtual'];
 
 const composeEntityConfig = (
   simplifiedEntityConfig: SimplifiedEntityConfig,
@@ -45,7 +45,6 @@ const composeEntityConfig = (
     embeddedFields: simplifiedEmbeddedFields,
     childFields: simplifiedChildFields,
     duplexFields: simplifiedDuplexFields,
-    fileFields: simplifiedFileFields,
     relationalFields: simplifiedRelationalFields,
     filterFields: simplifiedFilterFields,
     calculatedFields: simplifiedCalculatedFields,
@@ -177,7 +176,7 @@ const composeEntityConfig = (
       }
 
       // check "&& name" to only
-      if (config.type !== 'embedded' && config.type !== 'file') {
+      if (config.type !== 'embedded') {
         if (name) {
           throw new TypeError(
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
@@ -223,47 +222,13 @@ const composeEntityConfig = (
         );
       }
 
-      if (
-        config.type !== 'tangible' &&
-        config.type !== 'tangibleFile' &&
-        config.type !== 'virtual'
-      ) {
+      if (config.type !== 'tangible' && config.type !== 'virtual') {
         throw new TypeError(
           `Forbidden config type: "${config.type}" in child field: "${field.name}" of simplified entityConfig: "${name}"!`,
         );
       }
 
       return { ...restField, config, type: 'childFields' };
-    });
-  }
-
-  if (simplifiedFileFields) {
-    // eslint-disable-next-line no-param-reassign
-    entityConfig.fileFields = simplifiedFileFields.map((field) => {
-      const { configName, variants = [], ...restField } = field;
-      const config = allEntityConfigs[configName];
-
-      if (!config) {
-        throw new TypeError(
-          `Incorrect configName: "${configName}" in file field: "${field.name}" of simplified entityConfig: "${name}"!`,
-        );
-      }
-
-      if (config.type !== 'file') {
-        throw new TypeError(
-          `Not file config: "${configName}" in file field: "${field.name}" of simplified entityConfig: "${name}"!`,
-        );
-      }
-
-      if (!field.array) {
-        return { ...restField, config, type: 'fileFields' };
-      }
-
-      if (variants.length === 0) {
-        variants.push('plain');
-      }
-
-      return { ...restField, config, type: 'fileFields', variants };
     });
   }
 
@@ -407,25 +372,6 @@ const composeEntityConfig = (
           if (!(config.type === undefined || config.type === 'tangible')) {
             throw new TypeError(
               `Not tangible config: "${configName}" in calculated filter field: "${field.name}" of simplified entityConfig: "${name}"!`,
-            );
-          }
-
-          return { ...restField, config, type: 'calculatedFields' };
-        }
-
-        if (calculatedType === 'fileFields') {
-          const { configName, ...restField } = field;
-          const config = allEntityConfigs[configName];
-
-          if (!config) {
-            throw new TypeError(
-              `Incorrect configName: "${configName}" in calculated file field: "${field.name}" of simplified entityConfig: "${name}"!`,
-            );
-          }
-
-          if (config.type !== 'file') {
-            throw new TypeError(
-              `Not file config: "${configName}" in calculated file field: "${field.name}" of simplified entityConfig: "${name}"!`,
             );
           }
 

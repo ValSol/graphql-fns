@@ -24,29 +24,11 @@ const geospatialFromMongToGql = (item: DataObject) => {
 };
 
 const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): GraphqlObject => {
-  const {
-    embeddedFields = [],
-    fileFields = [],
-    geospatialFields = [],
-    type: entityType,
-  } = entityConfig;
+  const { embeddedFields = [], geospatialFields = [], type: entityType } = entityConfig;
 
   const { id, ...result } = data;
 
   embeddedFields.reduce((prev, { name, array, config }) => {
-    if (data[name]) {
-      if (array) {
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = data[name].map((item) => fromMongoToGqlDataArg(item, config));
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        prev[name] = fromMongoToGqlDataArg(data[name], config);
-      }
-    }
-    return prev;
-  }, result);
-
-  fileFields.reduce((prev, { name, array, config }) => {
     if (data[name]) {
       if (array) {
         // eslint-disable-next-line no-param-reassign

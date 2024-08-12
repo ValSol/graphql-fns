@@ -1,4 +1,4 @@
-import type { EmbeddedField, EntityConfig, FileField, GeospatialField } from '../tsTypes';
+import type { EmbeddedField, EntityConfig, GeospatialField } from '../tsTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
@@ -10,11 +10,8 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
 
     if (array) {
       prev[name] = []; // eslint-disable-line no-param-reassign
-    } else if (
-      fieldsObject[name].type === 'embeddedFields' ||
-      fieldsObject[name].type === 'fileFields'
-    ) {
-      const { config } = fieldsObject[name] as EmbeddedField | FileField;
+    } else if (fieldsObject[name].type === 'embeddedFields') {
+      const { config } = fieldsObject[name] as EmbeddedField;
       prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
     } else if (fieldType === 'booleanFields') {
       prev[name] = false; // eslint-disable-line no-param-reassign

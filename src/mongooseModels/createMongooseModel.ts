@@ -2,7 +2,6 @@ import { Connection } from 'mongoose';
 
 import type { Enums, EntityConfig } from '../tsTypes';
 
-import createFileSchema from './createFileSchema';
 import createThingSchema from './createThingSchema';
 
 const syncedIndexes: Record<string, any> = {};
@@ -26,18 +25,6 @@ const createMongooseModel = async (
     }
 
     return ThingModel;
-  }
-
-  if (configType === 'tangibleFile') {
-    const fileSchema = createFileSchema(entityConfig);
-
-    const nakedName = name.slice('Tangible'.length);
-
-    const FileModel =
-      mongooseConn.models[`${nakedName}_File`] ||
-      mongooseConn.model(`${nakedName}_File`, fileSchema);
-
-    return FileModel;
   }
 
   throw new TypeError(`Incorrect type: "${configType}" in config with name: "${name}"!`);

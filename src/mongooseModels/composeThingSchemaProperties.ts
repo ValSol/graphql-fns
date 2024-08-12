@@ -23,7 +23,6 @@ const composeThingSchemaProperties = (
     embeddedFields = [],
     enumFields = [],
     intFields = [],
-    fileFields = [],
     floatFields = [],
     geospatialFields = [],
     textFields = [],
@@ -236,13 +235,6 @@ const composeThingSchemaProperties = (
   }
 
   embeddedFields.reduce((prev, { array, name, config }) => {
-    const obj = composeThingSchemaProperties(config, enums);
-    // eslint-disable-next-line no-param-reassign
-    prev[name] = array ? [obj] : { type: new Schema(obj) };
-    return prev;
-  }, result);
-
-  fileFields.reduce((prev, { array, name, config }) => {
     const obj = composeThingSchemaProperties(config, enums);
     // eslint-disable-next-line no-param-reassign
     prev[name] = array ? [obj] : { type: new Schema(obj) };

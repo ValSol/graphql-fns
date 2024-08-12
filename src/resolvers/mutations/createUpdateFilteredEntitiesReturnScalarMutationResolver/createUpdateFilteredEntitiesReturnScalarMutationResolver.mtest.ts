@@ -1,11 +1,6 @@
 /* eslint-env jest */
 /* eslint no-underscore-dangle: 0 */
-import type {
-  EmbeddedEntityConfig,
-  FileEntityConfig,
-  GeneralConfig,
-  TangibleEntityConfig,
-} from '../../../tsTypes';
+import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
@@ -703,106 +698,6 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
         },
         {
           embeddedTextField: 'embedded Text Field 2',
-        },
-      ],
-    };
-    const updatedMainCount = await updateMain(
-      null,
-      { where, data: dataForUpdate },
-      { mongooseConn, pubsub },
-      null,
-      { inputOutputEntity: [[]] },
-    );
-
-    expect(updatedMainCount).toBe(1);
-  });
-
-  test('should create mutation update entity resolver to update file array field', async () => {
-    const imageConfig: FileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          type: 'textFields',
-        },
-        {
-          name: 'address',
-          type: 'textFields',
-        },
-      ],
-    };
-
-    const mainConfig: TangibleEntityConfig = {
-      name: 'Main2',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-          type: 'textFields',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-          type: 'fileFields',
-        },
-        {
-          name: 'pictures',
-          config: imageConfig,
-          array: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-      ],
-    };
-
-    const mainSchema = createThingSchema(mainConfig);
-    const Main = mongooseConn.model('Main2_Thing', mainSchema);
-    await Main.createCollection();
-
-    const createMain = createCreateEntityMutationResolver(
-      mainConfig,
-      generalConfig,
-      serversideConfig,
-    );
-
-    expect(typeof createMain).toBe('function');
-    if (!createMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
-
-    const data = {
-      textField: 'text Field',
-    };
-
-    const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
-    });
-    expect(createdMain.textField).toBe(data.textField);
-    const { id } = createdMain;
-
-    const updateMain = createUpdateFilteredEntitiesReturnScalarMutationResolver(
-      mainConfig,
-      generalConfig,
-      serversideConfig,
-    );
-    if (!updateMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
-
-    const where = { id_in: [id] };
-    const dataForUpdate = {
-      textField: 'text Field',
-      logo: {
-        fileId: '123',
-        address: '/images/logo',
-      },
-      pictures: [
-        {
-          fileId: '456',
-          address: '/images/pic1',
-        },
-        {
-          fileId: '789',
-          address: '/images/pic2',
         },
       ],
     };

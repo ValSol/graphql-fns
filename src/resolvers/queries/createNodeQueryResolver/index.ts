@@ -11,8 +11,6 @@ import composeDescendantConfig from '../../../utils/composeDescendantConfig';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
-
-import createEntityFileQueryResolver from '../createEntityFileQueryResolver';
 import createEntityQueryResolver from '../createEntityQueryResolver';
 
 const createNodeQueryResolver = (
@@ -53,28 +51,6 @@ const createNodeQueryResolver = (
       : entityConfig;
 
     const inAnyCase = true;
-
-    if (entityConfig.type === 'tangibleFile') {
-      const entityFileQueryResolver = createEntityFileQueryResolver(
-        entityConfig,
-        generalConfig,
-        serversideConfig,
-        inAnyCase,
-      );
-
-      if (!entityFileQueryResolver) return null;
-
-      const entityFile = await entityFileQueryResolver(null, { whereOne: { id } }, context, info, {
-        inputOutputEntity: filter,
-      });
-
-      if (!entityFile) return null;
-
-      return {
-        ...transformAfter({}, entityFile, entityConfig, null),
-        __typename: `${entityName}${descendantKey}`,
-      };
-    }
 
     const entityQueryResolver = createEntityQueryResolver(
       entityConfig,

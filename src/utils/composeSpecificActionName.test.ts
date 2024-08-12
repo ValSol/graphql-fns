@@ -24,16 +24,6 @@ describe('composeSpecificActionName util', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return importEntities for User', () => {
-    const actionName = 'importEntities';
-
-    const expectedResult = 'importUsers';
-
-    const result = composeSpecificActionName({ actionName, entityName });
-
-    expect(result).toEqual(expectedResult);
-  });
-
   test('should return createEntity for User', () => {
     const actionName = 'createEntity';
 

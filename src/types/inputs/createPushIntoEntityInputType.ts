@@ -10,7 +10,6 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
     dateTimeFields = [],
     embeddedFields = [],
     enumFields = [],
-    fileFields = [],
     floatFields = [],
     intFields = [],
     geospatialFields = [],
@@ -106,17 +105,6 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
     }, entityTypeArray);
 
   embeddedFields
-    .filter(({ array, freeze }) => array && !freeze)
-    .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
-      prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);
-
-      childChain[`${embeddedName}CreateInput`] = [createEntityCreateInputType, config2];
-
-      return prev;
-    }, entityTypeArray);
-
-  // the same code as for embeddedFields
-  fileFields
     .filter(({ array, freeze }) => array && !freeze)
     .reduce((prev, { name: name2, config: config2, config: { name: embeddedName } }) => {
       prev.push(`  ${name2}: [${embeddedName}CreateInput!]`);

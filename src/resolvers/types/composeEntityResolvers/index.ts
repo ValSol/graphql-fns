@@ -50,18 +50,16 @@ const composeEntityResolvers = (
   const {
     embeddedFields: preEmbeddedFields = [],
     geospatialFields: preGeospatialFields = [],
-    fileFields: preFileFields = [],
     type: entityType,
   } = entityConfig;
   const fieldsObject = composeFieldsObject(entityConfig);
 
   const resolvers: Record<string, any> = {};
 
-  // repack "embeddedFields", "geospatialFields", "fileFields" in the new arrays...
+  // repack "embeddedFields", "geospatialFields" in the new arrays...
   // ...to can mix up calculated fields if need
   const embeddedFields = [...preEmbeddedFields];
   const geospatialFields = [...preGeospatialFields];
-  const fileFields = [...preFileFields];
 
   if (entityType === 'tangible') {
     const { calculatedFields = [] } = entityConfig;
@@ -72,11 +70,6 @@ const composeEntityResolvers = (
       if (calculatedType === 'embeddedFields') {
         const updatedField = array ? { ...field, variants: 'plain' } : field;
         embeddedFields.push(updatedField as any);
-      }
-
-      if (calculatedType === 'fileFields') {
-        const updatedField = array ? { ...field, variants: 'plain' } : field;
-        fileFields.push(updatedField as any);
       }
 
       if (calculatedType === 'geospatialFields') {
@@ -92,8 +85,7 @@ const composeEntityResolvers = (
       fieldType === 'duplexFields' ||
       fieldType === 'filterFields' ||
       fieldType === 'geospatialFields' ||
-      fieldType === 'embeddedFields' ||
-      fieldType === 'fileFields'
+      fieldType === 'embeddedFields'
     ) {
       return;
     }
@@ -109,7 +101,7 @@ const composeEntityResolvers = (
     if (array) resolvers[fieldName] = fieldArrayResolver;
   });
 
-  [...embeddedFields, ...fileFields].forEach((field) => {
+  embeddedFields.forEach((field) => {
     const { array, name } = field;
 
     if (array) {

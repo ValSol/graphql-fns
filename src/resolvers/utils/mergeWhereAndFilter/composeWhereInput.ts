@@ -4,7 +4,6 @@ import type {
   EmbeddedField,
   EntityConfig,
   EntityConfigObject,
-  FileField,
   InvolvedFilter,
   LookupMongoDB,
   TangibleEntityConfig,
@@ -342,10 +341,10 @@ const composeWhereInputRecursively = (
     } else {
       checkField(key, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
-      if (fieldsObj[key].type === 'embeddedFields' || fieldsObj[key].type === 'fileFields') {
+      if (fieldsObj[key].type === 'embeddedFields') {
         const attributes = fieldsObj[key];
 
-        const { config } = attributes as EmbeddedField | FileField;
+        const { config } = attributes as EmbeddedField;
 
         const { _index } = where[key] as { _index?: number };
 

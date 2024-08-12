@@ -34,8 +34,8 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
     (prev, fieldName) => {
       if (
         data[fieldName] === undefined ||
-        fieldsObject[fieldName].type !== 'duplexFields' ||
-        fieldsObject[fieldName].type !== 'relationalFields'
+        (fieldsObject[fieldName].type !== 'duplexFields' &&
+        fieldsObject[fieldName].type !== 'relationalFields')
       ) {
         prev[fieldName] = 1;
       }

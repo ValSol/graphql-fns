@@ -94,7 +94,6 @@ describe('composeInventoryByRoles', () => {
         },
         Mutation: {
           createThingForCreate: ['Restaurant', 'Post'],
-          uploadFilesToThingForCreate: ['Restaurant', 'Post'],
         },
       },
     };

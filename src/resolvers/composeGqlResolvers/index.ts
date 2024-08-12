@@ -1,6 +1,4 @@
 import { DateTimeResolver } from 'graphql-scalars';
-// import GraphQLUpload from 'graphql-upload/public/GraphQLUpload';
-import { GraphQLUpload } from 'graphql-upload';
 
 import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../tsTypes';
 
@@ -48,8 +46,6 @@ const composeGqlResolvers = (
   resolvers = {};
 
   resolvers.DateTime = DateTimeResolver;
-
-  resolvers.Upload = GraphQLUpload;
 
   resolvers.Node = {
     __resolveType: (obj) => obj.__typename, // eslint-disable-line no-underscore-dangle

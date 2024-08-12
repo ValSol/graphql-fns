@@ -160,19 +160,6 @@ type ArraySimplifiedEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
 };
 type SimplifiedEmbeddedField = ArraySimplifiedEmbeddedField | ScalarSimplifiedEmbeddedField;
 
-type ScalarSimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
-  array?: false;
-  nullable?: false;
-  configName: string;
-};
-type ArraySimplifiedFileField = Omit<FieldCommonProperties, 'unique'> & {
-  array: true;
-  nullable?: boolean;
-  configName: string;
-  variants?: Array<'plain' | 'connection' | 'count'>;
-};
-type SimplifiedFileField = ArraySimplifiedFileField | ScalarSimplifiedFileField;
-
 type ScalarSimplifiedRelationalField = FieldCommonProperties & {
   array?: false;
   configName: string;
@@ -269,13 +256,13 @@ export type ArraySimplifiedCalculatedEnumField = Omit<
     index?: number,
   ) => string[];
 };
-export type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
+export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
   nullable?: false;
-  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
   asyncFunc?: (
     args: Record<string, any>,
@@ -292,13 +279,13 @@ export type ScalarSimplifiedCalculatedEmbeddedOrFileField = Omit<
     index?: number,
   ) => GraphqlObject;
 };
-export type ArraySimplifiedCalculatedEmbeddedOrFileField = Omit<
+export type ArraySimplifiedCalculatedEmbeddedField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
   nullable?: boolean; // TODO fileterField must not to be nullable
-  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
   asyncFunc?: (
     args: Record<string, any>,
@@ -320,7 +307,7 @@ export type ScalarSimplifiedCalculatedFilterField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array?: false;
-  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
   asyncFunc?: (
     args: Record<string, any>,
@@ -342,7 +329,7 @@ export type ArraySimplifiedCalculatedFilterField = Omit<
   'freeze' | 'index' | 'unique'
 > & {
   array: true;
-  calculatedType: 'embeddedFields' | 'fileFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
   asyncFunc?: (
     args: Record<string, any>,
@@ -450,8 +437,8 @@ export type ArraySimplifiedCalculatedField = Omit<
   ) => GraphqlScalar[];
 };
 type SimplifiedCalculatedField =
-  | ArraySimplifiedCalculatedEmbeddedOrFileField
-  | ScalarSimplifiedCalculatedEmbeddedOrFileField
+  | ArraySimplifiedCalculatedEmbeddedField
+  | ScalarSimplifiedCalculatedEmbeddedField
   | ArraySimplifiedCalculatedFilterField
   | ScalarSimplifiedCalculatedFilterField
   | ArraySimplifiedCalculatedEnumField
@@ -467,7 +454,6 @@ type SimplifiedEntityConfigCommonProperties = {
   derivativeNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
-  fileFields?: SimplifiedFileField[];
   filterFields?: SimplifiedFilterField[];
   relationalFields?: SimplifiedRelationalField[];
   booleanFields?: Omit<BooleanField, 'type'>[];
@@ -491,18 +477,6 @@ export type SimplifiedEmbeddedEntityConfig = Omit<
 > & {
   type: 'embedded';
 };
-export type SimplifiedFileEntityConfig = Omit<
-  SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'filterFields'
-> & {
-  type: 'file';
-};
-export type SimplifiedTangibleFileEntityConfig = Omit<
-  SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'filterFields'
-> & {
-  type: 'tangibleFile';
-};
 export type SimplifiedVirtualEntityConfig = SimplifiedEntityConfigCommonProperties & {
   type: 'virtual';
   childFields?: SimplifiedChildField[];
@@ -511,8 +485,6 @@ export type SimplifiedVirtualEntityConfig = SimplifiedEntityConfigCommonProperti
 export type SimplifiedEntityConfig =
   | SimplifiedTangibleEntityConfig
   | SimplifiedEmbeddedEntityConfig
-  | SimplifiedFileEntityConfig
-  | SimplifiedTangibleFileEntityConfig
   | SimplifiedVirtualEntityConfig;
 
 type ScalarEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
@@ -529,21 +501,6 @@ type ArrayEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   variants: Array<'plain' | 'connection' | 'count'>;
 };
 export type EmbeddedField = ArrayEmbeddedField | ScalarEmbeddedField;
-
-type ScalarFileField = Omit<FieldCommonProperties, 'unique'> & {
-  array?: false;
-  nullable?: false;
-  config: FileEntityConfig;
-  type: 'fileFields';
-};
-type ArrayFileField = Omit<FieldCommonProperties, 'unique'> & {
-  array: true;
-  nullable?: boolean;
-  config: FileEntityConfig;
-  type: 'fileFields';
-  variants: Array<'plain' | 'connection' | 'count'>;
-};
-export type FileField = ArrayFileField | ScalarFileField;
 
 type ScalarRelationalField = FieldCommonProperties & {
   array?: false;
@@ -664,14 +621,11 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
   ) => string[];
   type: 'calculatedFields';
 };
-type ScalarCalculatedEmbeddedOrFileField = Omit<
-  FieldCommonProperties,
-  'freeze' | 'index' | 'unique'
-> & {
+type ScalarCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   nullable?: false;
-  calculatedType: 'embeddedFields' | 'fileFields';
-  config: EmbeddedEntityConfig | FileEntityConfig;
+  calculatedType: 'embeddedFields';
+  config: EmbeddedEntityConfig;
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -688,14 +642,11 @@ type ScalarCalculatedEmbeddedOrFileField = Omit<
   ) => GraphqlObject;
   type: 'calculatedFields';
 };
-type ArrayCalculatedEmbeddedOrFileField = Omit<
-  FieldCommonProperties,
-  'freeze' | 'index' | 'unique'
-> & {
+type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   nullable?: boolean;
-  calculatedType: 'embeddedFields' | 'fileFields';
-  config: EmbeddedEntityConfig | FileEntityConfig;
+  calculatedType: 'embeddedFields';
+  config: EmbeddedEntityConfig;
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -846,8 +797,8 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
 type CalculatedField =
   | ArrayCalculatedEnumField
   | ScalarCalculatedEnumField
-  | ArrayCalculatedEmbeddedOrFileField
-  | ScalarCalculatedEmbeddedOrFileField
+  | ArrayCalculatedEmbeddedField
+  | ScalarCalculatedEmbeddedField
   | ArrayCalculatedGeospatialField
   | ScalarCalculatedGeospatialField
   | ArrayCalculatedGeospatialField
@@ -863,7 +814,6 @@ type EntityConfigCommonProperties = {
   descendantNameSlicePosition?: number;
   duplexFields?: DuplexField[];
   embeddedFields?: EmbeddedField[];
-  fileFields?: FileField[];
   filterFields?: FilterField[];
   relationalFields?: RelationalField[];
   booleanFields?: BooleanField[];
@@ -887,29 +837,12 @@ export type EmbeddedEntityConfig = Omit<
 > & {
   type: 'embedded';
 };
-export type FileEntityConfig = Omit<
-  EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
-> & {
-  type: 'file';
-};
-export type TangibleFileEntityConfig = Omit<
-  EntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
-> & {
-  type: 'tangibleFile';
-};
 export type VirtualEntityConfig = EntityConfigCommonProperties & {
   type: 'virtual';
   childFields?: ChildField[];
 };
 
-export type EntityConfig =
-  | TangibleEntityConfig
-  | EmbeddedEntityConfig
-  | FileEntityConfig
-  | TangibleFileEntityConfig
-  | VirtualEntityConfig;
+export type EntityConfig = TangibleEntityConfig | EmbeddedEntityConfig | VirtualEntityConfig;
 
 export type FlatField =
   | RelationalField
@@ -932,7 +865,6 @@ export type AnyField =
   | FilterField
   | EmbeddedField
   | EnumField
-  | FileField
   | FloatField
   | GeospatialField
   | IntField
@@ -1005,9 +937,6 @@ export type DescendantAttributesActionName =
   | 'childEntities'
   | 'childEntitiesThroughConnection'
   | 'entitiesByUnique'
-  | 'entityFileCount'
-  | 'entityFile'
-  | 'entityFiles'
   | 'copyEntity'
   | 'copyManyEntities'
   | 'copyEntityWithChildren'
@@ -1022,13 +951,11 @@ export type DescendantAttributesActionName =
   | 'deleteManyEntitiesWithChildren'
   | 'deleteEntity'
   | 'deleteEntityWithChildren'
-  | 'importEntities'
   | 'pushIntoEntity'
   | 'updateFilteredEntities'
   | 'updateFilteredEntitiesReturnScalar'
   | 'updateManyEntities'
-  | 'updateEntity'
-  | 'uploadEntityFiles';
+  | 'updateEntity';
 
 export type DescendantAttributes = {
   descendantKey: string;
@@ -1129,7 +1056,7 @@ export type Custom = {
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
 export type TwoSegmentInventoryChain =
   | [
-      'Query', // "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query
+      'Query', // "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query
       string,
     ]
   | [
@@ -1141,7 +1068,7 @@ export type TwoSegmentInventoryChain =
   | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity'];
 export type ThreeSegmentInventoryChain =
   | [
-      'Query', // first "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues', 'entityFile', 'entityFiles', 'entityFileCount' or custom query, second for entity name
+      'Query', // first "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query, second for entity name
       string,
       string,
     ]
@@ -1162,15 +1089,6 @@ export type InventoryСhain =
 export type InventoryByRoles = {
   // must be setted for all roles
   [role: string]: Inventory;
-};
-
-export type FileAttributes = {
-  _id?: string;
-  hash: string;
-  filename: string;
-  mimetype: string;
-  encoding: string;
-  uploadedAt: Date;
 };
 
 export type DataObject = {
@@ -1213,24 +1131,6 @@ export type GraphqlScalar =
 
 export type GraphqlObject = {
   [key: string]: GraphqlScalar | GraphqlObject | GraphqlObject[];
-};
-
-export type Middlewares = {
-  [actionName: string]: (
-    parent: null | GraphqlObject,
-    args: GraphqlObject,
-    context: Context,
-    info: SintheticResolverInfo,
-    involvedEntityNames: { [involvedEntityNamesKey: string]: string },
-  ) => Promise<
-    [
-      null | GraphqlObject, // parent
-      GraphqlObject, // args
-      Context, // context
-      SintheticResolverInfo, // info
-      { [involvedEntityNamesKey: string]: string }, // involvedEntityNames
-    ]
-  >;
 };
 
 export type ActionResolver = (
@@ -1280,29 +1180,6 @@ export type ServersideConfig = {
   staticLimits?: {
     [tangibleEntityName: string]: number;
   };
-
-  // ***
-
-  middlewares?: Middlewares;
-
-  saveFiles?: {
-    [fileFieldConfigName: string]: (
-      file: Record<string, any>,
-      hash: string,
-      date: Date,
-    ) => Promise<FileAttributes>;
-  };
-  composeFileFieldsData?: {
-    [fileFieldConfigName: string]: (fileAttributes: FileAttributes) => {
-      [fieldName: string]: string; // ??? add another primitive fields
-    };
-  };
-};
-
-export type UploadOptions = {
-  targets: Array<string>; // fileFields names,
-  counts: Array<number>; // count of uploaded files for each fileField,
-  hashes: Array<string>; // hash of every uploaded file
 };
 
 export type Periphery = Map<

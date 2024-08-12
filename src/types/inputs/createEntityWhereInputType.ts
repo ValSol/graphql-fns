@@ -17,7 +17,7 @@ const defaultFields = `  id_in: [ID!]
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime`;
 
-const embeddedOrFileEntityDefaultFields = `  id_in: [ID!]
+const embeddedEntityDefaultFields = `  id_in: [ID!]
   id_nin: [ID!]
   _index: Int`; // "_index" only used for search in "array" field to select "_index" index of array!
 
@@ -43,7 +43,6 @@ const composeInputFields = (
     enumFields = [],
     intFields = [],
     geospatialFields = [],
-    fileFields = [],
     floatFields = [],
     textFields = [],
     type: entityType,
@@ -52,7 +51,7 @@ const composeInputFields = (
   const fields =
     entityType === 'tangible'
       ? [`${defaultFields}${entityConfig.counter ? counterFields : ''}`]
-      : [embeddedOrFileEntityDefaultFields];
+      : [embeddedEntityDefaultFields];
 
   textFields.forEach(({ name: fieldName, array, index, unique }) => {
     if (unique || index) {
@@ -227,26 +226,7 @@ const composeInputFields = (
     });
   }
 
-  // the same code as for fileFields
-
   embeddedFields.forEach(({ name: fieldName, array, config, index }) => {
-    if (index) {
-      fields.push(`  ${fieldName}: ${config.name}WhereInput`);
-
-      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
-    }
-    if (index && !array) {
-      fields.push(`  ${fieldName}_exists: Boolean`);
-    }
-    if (index && array) {
-      fields.push(`  ${fieldName}_size: Int
-  ${fieldName}_notsize: Int`);
-    }
-  });
-
-  // the same code as for embeddedFields
-
-  fileFields.forEach(({ name: fieldName, array, config, index }) => {
     if (index) {
       fields.push(`  ${fieldName}: ${config.name}WhereInput`);
 

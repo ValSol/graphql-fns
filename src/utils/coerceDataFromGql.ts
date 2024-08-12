@@ -1,4 +1,4 @@
-import type { EmbeddedField, EntityConfig, GeospatialField, FileField } from '../tsTypes';
+import type { EmbeddedField, EntityConfig, GeospatialField } from '../tsTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 import composeEmptyValues from './composeEmptyValues';
@@ -85,11 +85,8 @@ const coerceDataFromGql = (
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
-    } else if (
-      fieldsObject[key].type === 'embeddedFields' ||
-      fieldsObject[key].type === 'fileFields'
-    ) {
-      const { config } = fieldsObject[key] as EmbeddedField | FileField;
+    } else if (fieldsObject[key].type === 'embeddedFields') {
+      const { config } = fieldsObject[key] as EmbeddedField;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>

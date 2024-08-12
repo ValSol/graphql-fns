@@ -263,36 +263,6 @@ const showColumnGroupOfFields = (args: Args) => {
       const entityConfig = descendantKey
         ? allEntityConfigs[firstThingName]
         : allEntityConfigs[entityName];
-      const fields = entityConfig.fileFields || [];
-
-      const fileFields = composeDescendantFields({
-        descendantKey,
-        descendant,
-
-        fields,
-        firstThingName,
-        fieldType: 'fileFields',
-      });
-
-      const showFieldSettings = {
-        argb: 'FF9999FF',
-        columnGroupShift,
-        fieldType: 'File',
-        usedNames,
-        lastRow,
-        ws,
-        i,
-      } as const;
-      (fileFields || []).forEach(showField(showFieldSettings));
-    });
-  }
-
-  {
-    const usedNames: Record<string, any> = {};
-    combinedThingNames.forEach(([entityName, descendantKey]: [any, any], i) => {
-      const entityConfig = descendantKey
-        ? allEntityConfigs[firstThingName]
-        : allEntityConfigs[entityName];
       const fields = entityConfig.embeddedFields || [];
 
       const embeddedFields = composeDescendantFields({

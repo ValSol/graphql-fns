@@ -1,4 +1,3 @@
-import { number } from 'yup';
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../tsTypes';
 
 const polygonFromGqlToMongo = (
@@ -13,9 +12,9 @@ const polygonFromGqlToMongo = (
 
   const exteranlRing2: [number, number][] = externalRing.map(({ lng, lat }) => [lng, lat]);
 
-  const result = { coordinates: [exteranlRing2], type: 'Polygon' as 'Polygon' };
+  const result = { coordinates: [exteranlRing2], type: 'Polygon' as const };
 
-  if (internalRings && internalRings.length) {
+  if (internalRings && internalRings.length > 0) {
     const internalRings2 = internalRings.map<[number, number][]>(({ ring: array }) =>
       array.map(({ lng, lat }) => [lng, lat]),
     );

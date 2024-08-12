@@ -10,8 +10,6 @@ import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
-import transformFileWhere from './transformBefore/transformFileWhere';
-import transformFileWhereOne from './transformBefore/transformFileWhereOne';
 import transformWhere from './transformBefore/transformWhere';
 import transformWhereOne from './transformBefore/transformWhereOne';
 import transformWhereOnes from './transformBefore/transformWhereOnes';
@@ -21,14 +19,11 @@ const argTypesPrefixPlusSuffixes = [
   ['CreateInput', transformData, true],
   ['PushIntoInput', transformData, true],
   ['UpdateInput', transformData, true],
-  ['UploadFilesToInput', transformData, true],
   ['WhereInput', transformWhere, false],
-  ['FileWhereInputFileWhereInput', transformFileWhere, true],
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],
   ['WhereOneToCopyInput', transformWhereOne, false],
-  ['FileWhereOneInputFileWhereOneInput', transformFileWhereOne, true],
   ['CopyWhereOnesInput', transformWhereOnes, false],
 ];
 
@@ -96,15 +91,7 @@ const resolverDecorator = (
       }, {});
     }
 
-    const actionName = actionAttributes.actionName(entityConfig.name);
-    const middleware = serversideConfig?.middlewares?.[actionName] || null;
-
-    const [arg1, arg2, arg3, arg4, arg5] = resolverArgs;
-
-    const resolverArgs2 =
-      middleware !== null ? await middleware(arg1, arg2, arg3, arg4, arg5) : resolverArgs;
-
-    const [parent, args, ...rest] = resolverArgs2;
+    const [parent, args, ...rest] = resolverArgs;
 
     const involvedEntityNames = actionAttributes.actionInvolvedEntityNames(name);
 

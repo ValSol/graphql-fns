@@ -26,7 +26,6 @@ const transformAfter = (
     childFields = [],
     duplexFields = [],
     embeddedFields = [],
-    fileFields = [],
     relationalFields = [],
     type: configType,
   } = entityConfig as any;
@@ -56,22 +55,23 @@ const transformAfter = (
     {},
   );
 
-  const recursiveFields = [...childFields, ...embeddedFields, ...fileFields].reduce<
-    Record<string, any>
-  >((prev, { array, config, name }) => {
-    if (!item[name]) return prev;
+  const recursiveFields = [...childFields, ...embeddedFields].reduce<Record<string, any>>(
+    (prev, { array, config, name }) => {
+      if (!item[name]) return prev;
 
-    if (array) {
-      // eslint-disable-next-line no-param-reassign
-      prev[name] = item[name].map(
-        (item2) => item2 && transformAfter(args, item2, config, generalConfig, true),
-      );
-    } else {
-      prev[name] = transformAfter(args, item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
-    }
+      if (array) {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = item[name].map(
+          (item2) => item2 && transformAfter(args, item2, config, generalConfig, true),
+        );
+      } else {
+        prev[name] = transformAfter(args, item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
+      }
 
-    return prev;
-  }, {});
+      return prev;
+    },
+    {},
+  );
 
   const { id, ...rest } = item;
 

@@ -1,5 +1,4 @@
 import ExcelJS from 'exceljs';
-import { StringSchema } from 'yup';
 
 import type { GeneralConfig } from '../../../tsTypes';
 
@@ -13,7 +12,7 @@ const { fieldAttrCount } = constants;
 const generateEntitiesExcel = async (
   generalConfig: GeneralConfig,
   thingNames: string[][],
-  filePath: string = 'entities.xlsx',
+  filePath = 'entities.xlsx',
 ) => {
   const wb = new ExcelJS.Workbook();
 
@@ -84,13 +83,11 @@ const generateEntitiesExcel = async (
 
   const flatThingNames = thingNames.flatMap((name) => name);
 
-  const restOfThingNames = { file: [], embedded: [], ordinary: [] };
+  const restOfThingNames = { embedded: [], ordinary: [] };
 
   allThingNames.forEach((name) => {
     if (!flatThingNames.includes(name)) {
-      if (allEntityConfigs[name].type === 'file') {
-        restOfThingNames.file.push(name);
-      } else if (allEntityConfigs[name].type === 'embedded') {
+      if (allEntityConfigs[name].type === 'embedded') {
         restOfThingNames.embedded.push(name);
       } else {
         restOfThingNames.ordinary.push(name);
@@ -98,7 +95,7 @@ const generateEntitiesExcel = async (
     }
   });
 
-  if (restOfThingNames.ordinary.length) {
+  if (restOfThingNames.ordinary.length > 0) {
     // eslint-disable-next-line no-console
     console.warn(
       `Warning: there are unused ordinary entities: ${restOfThingNames.ordinary
@@ -107,19 +104,10 @@ const generateEntitiesExcel = async (
     );
   }
 
-  if (restOfThingNames.embedded.length) {
+  if (restOfThingNames.embedded.length > 0) {
     // eslint-disable-next-line no-console
     console.warn(
       `Warning: there are unused embedded entities: ${restOfThingNames.embedded
-        .map((item) => `"${item}"`)
-        .join(', ')}!`,
-    );
-  }
-
-  if (restOfThingNames.file.length) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      `Warning: there are unused file entities: ${restOfThingNames.file
         .map((item) => `"${item}"`)
         .join(', ')}!`,
     );

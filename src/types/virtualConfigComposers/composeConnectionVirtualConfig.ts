@@ -1,5 +1,3 @@
-import { string } from 'yup/lib/locale';
-import virtualConfigComposers from '.';
 import type { VirtualConfigComposer, VirtualEntityConfig } from '../../tsTypes';
 
 import composeConnectionVirtualConfigName from './composeConnectionVirtualConfigName';

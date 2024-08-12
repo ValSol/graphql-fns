@@ -12,13 +12,11 @@ import deleteFilteredEntitiesWithChildren from './createDeleteFilteredEntitiesWi
 import deleteFilteredEntitiesWithChildrenReturnScalar from './createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver';
 import deleteManyEntities from './createDeleteManyEntitiesMutationResolver';
 import deleteManyEntitiesWithChildren from './createDeleteManyEntitiesWithChildrenMutationResolver';
-import importEntities from './createImportEntitiesMutationResolver';
 import pushIntoEntity from './createPushIntoEntityMutationResolver';
 import updateEntity from './createUpdateEntityMutationResolver';
 import updateFilteredEntities from './createUpdateFilteredEntitiesMutationResolver';
 import updateFilteredEntitiesReturnScalar from './createUpdateFilteredEntitiesReturnScalarMutationResolver';
 import updateManyEntities from './createUpdateManyEntitiesMutationResolver';
-import uploadEntityFiles from './createUploadEntityFilesMutationResolver';
 
 const mutations = {
   copyManyEntities,
@@ -35,13 +33,11 @@ const mutations = {
   deleteFilteredEntitiesReturnScalar,
   deleteManyEntities,
   deleteManyEntitiesWithChildren,
-  importEntities,
   pushIntoEntity,
   updateFilteredEntities,
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
   updateEntity,
-  uploadEntityFiles,
 } as const;
 
 export default mutations;

@@ -76,21 +76,8 @@ describe('unwindInverntoryOptions', () => {
     ],
   });
 
-  const exampleFileConfig: EntityConfig = {
-    name: 'ExampleFile',
-    type: 'tangibleFile',
-    textFields: [
-      {
-        name: 'textField',
-        index: true,
-        type: 'textFields',
-      },
-    ],
-  };
-
   const allEntityConfigs = {
     Example: exampleConfig,
-    ExampleFile: exampleFileConfig,
     ChildExample: childExampleConfig,
   };
   const inventory: Inventory = {
@@ -128,10 +115,6 @@ describe('unwindInverntoryOptions', () => {
       entity: ['Example', 'ChildExample'],
       entityCount: ['Example', 'ChildExample'],
       entityDistinctValues: ['Example', 'ChildExample'],
-      entityFile: ['ExampleFile'],
-      entityFileCount: ['ExampleFile'],
-      entityFiles: ['ExampleFile'],
-      entityFilesThroughConnection: ['ExampleFile'],
       specialUpdateEntity: ['Example'],
     };
 
@@ -142,13 +125,11 @@ describe('unwindInverntoryOptions', () => {
       deleteFilteredEntities: ['Example', 'ChildExample'],
       deleteFilteredEntitiesReturnScalar: ['Example', 'ChildExample'],
       deleteManyEntities: ['Example', 'ChildExample'],
-      importEntities: ['Example', 'ChildExample'],
       updateEntity: ['Example', 'ChildExample'],
       updateEntityForCatalog: ['Example'],
       updateFilteredEntities: ['Example', 'ChildExample'],
       updateFilteredEntitiesReturnScalar: ['Example', 'ChildExample'],
       updateManyEntities: ['Example', 'ChildExample'],
-      uploadEntityFiles: ['ExampleFile'],
     };
 
     test('should unwind all actions', () => {

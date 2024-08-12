@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { EmbeddedEntityConfig, FileEntityConfig, TangibleEntityConfig } from '../../tsTypes';
+import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import createEntityCloneInputType from './createEntityCloneInputType';
 import createEntityCreateInputType from './createEntityCreateInputType';
@@ -740,103 +740,6 @@ describe('createEntityCloneInputType', () => {
   booleanField5: [Boolean!]
 }`,
       {},
-    ];
-
-    const result = createEntityCloneInputType(entityConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create file entity input type with text fields', () => {
-    const imageConfig: FileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          required: true,
-          type: 'textFields',
-        },
-        {
-          name: 'comment',
-          type: 'textFields',
-        },
-      ],
-    };
-    const expectedResult = ['ImageCloneInput', '', {}];
-
-    const result = createEntityCloneInputType(imageConfig);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create entity input type with embedded fields', () => {
-    const imageConfig: FileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          type: 'textFields',
-        },
-        {
-          name: 'address',
-          type: 'textFields',
-        },
-      ],
-    };
-
-    const entityConfig = {} as TangibleEntityConfig;
-    Object.assign(entityConfig, {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-          type: 'textFields',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-          required: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'hero',
-          config: imageConfig,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'pictures',
-          config: imageConfig,
-          array: true,
-          required: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'photos',
-          config: imageConfig,
-          array: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-      ],
-    });
-
-    const expectedResult = [
-      'ExampleCloneInput',
-      `input ExampleCloneInput {
-  id: ID
-  textField: String
-  logo: ImageCreateInput
-  hero: ImageCreateInput
-  pictures: [ImageCreateInput!]
-  photos: [ImageCreateInput!]
-}`,
-      { ImageCreateInput: [createEntityCreateInputType, imageConfig] },
     ];
 
     const result = createEntityCloneInputType(entityConfig);

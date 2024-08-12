@@ -9,12 +9,10 @@ import type {
 
 import virtualConfigComposers from '../../types/virtualConfigComposers';
 import composeEntityConfig from '../composeEntityConfig';
-import composeTangibleFileConfigName from './composeTangibleFileConfigName';
-import composeTangibleFileEntityConfig from './composeTangibleFileEntityConfig';
 import PageInfo from './pageInfoConfig';
 
 // alsow used in "composeAllEntityConfigs" util
-const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
+const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
 
 const composeAllEntityConfigs = (
   simplifiedThingConfigs: SimplifiedEntityConfig[],
@@ -85,24 +83,8 @@ const composeAllEntityConfigs = (
   );
 
   simplifiedThingConfigs.forEach((simplifiedEntityConfig) => {
-    const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
+    const { name } = simplifiedEntityConfig;
     composeEntityConfig(simplifiedEntityConfig, result[name], result, relationalOppositeNames);
-
-    const config = result[name];
-
-    if (configType === 'file') {
-      const tangibleFileConfigName = composeTangibleFileConfigName(name);
-
-      if (result[tangibleFileConfigName] !== undefined) {
-        throw new TypeError(
-          `Forbidden to use "${tangibleFileConfigName}" becouse there is file name: "${name}"!`,
-        );
-      }
-
-      const tangibleFileConfig = composeTangibleFileEntityConfig(config);
-
-      result[tangibleFileConfig.name] = tangibleFileConfig; // eslint-disable-line no-param-reassign
-    }
   });
 
   // copmpose virtual configs

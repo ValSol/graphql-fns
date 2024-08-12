@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { EmbeddedEntityConfig, FileEntityConfig, TangibleEntityConfig } from '../tsTypes';
+import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../tsTypes';
 
 import getInputFieldNames from './getInputFieldNames';
 import createPushIntoEntityInputType from '../types/inputs/createPushIntoEntityInputType';
@@ -655,101 +655,6 @@ describe('getInputFieldNames', () => {
     const expectedResult = ['booleanField4', 'booleanField5'];
 
     const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create file entity input type with text fields', () => {
-    const imageConfig: FileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          required: true,
-          type: 'textFields',
-        },
-        {
-          name: 'comment',
-          type: 'textFields',
-        },
-      ],
-    };
-    const expectedResult: Array<any> = [];
-
-    const result = getInputFieldNames(imageConfig, createPushIntoEntityInputType);
-    expect(result).toEqual(expectedResult);
-  });
-
-  test('should create entity input type with file fields', () => {
-    const imageConfig: FileEntityConfig = {
-      name: 'Image',
-      type: 'file',
-      textFields: [
-        {
-          name: 'fileId',
-          type: 'textFields',
-        },
-        {
-          name: 'address',
-          type: 'textFields',
-        },
-      ],
-    };
-
-    const entityConfig = {} as TangibleEntityConfig;
-    Object.assign(entityConfig, {
-      name: 'Example',
-      type: 'tangible',
-      textFields: [
-        {
-          name: 'textField',
-          type: 'textFields',
-        },
-      ],
-      fileFields: [
-        {
-          name: 'logo',
-          config: imageConfig,
-          required: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'hero',
-          config: imageConfig,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'pictures',
-          config: imageConfig,
-          array: true,
-          required: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'photos',
-          config: imageConfig,
-          array: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-        {
-          name: 'photos2',
-          config: imageConfig,
-          array: true,
-          freeze: true,
-          type: 'fileFields',
-          variants: ['plain'],
-        },
-      ],
-    });
-
-    const expectedResult = ['pictures', 'photos'];
-
-    const result = getInputFieldNames(entityConfig, createPushIntoEntityInputType);
-
     expect(result).toEqual(expectedResult);
   });
 });

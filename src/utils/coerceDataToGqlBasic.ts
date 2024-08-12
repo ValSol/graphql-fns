@@ -4,7 +4,6 @@ import type {
   EmbeddedField,
   EntityConfig,
   GeospatialField,
-  FileField,
   RelationalField,
   DuplexField,
 } from '../tsTypes';
@@ -41,8 +40,8 @@ const coerceDataToGqlBasic = (
       return prev;
     }
 
-    if (fieldsObject[key].type === 'embeddedFields' || fieldsObject[key].type === 'fileFields') {
-      const { config } = fieldsObject[key] as EmbeddedField | FileField;
+    if (fieldsObject[key].type === 'embeddedFields') {
+      const { config } = fieldsObject[key] as EmbeddedField;
       if (array) {
         // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>

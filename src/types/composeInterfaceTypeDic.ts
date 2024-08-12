@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import { GeneralConfig } from '../tsTypes';
 
 // alsow used in "composeInterfaceTypeDic" util
-const forbiddenThingNames = ['File', 'DateTime', 'Node', 'node', 'PageInfo'];
+const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
 
 const IMPLEMETNS = ' implements ';
 

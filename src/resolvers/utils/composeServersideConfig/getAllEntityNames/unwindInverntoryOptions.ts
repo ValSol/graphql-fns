@@ -14,7 +14,7 @@ const childQueryNames = Object.keys(queryAttributes).filter(
   (actionName) => queryAttributes[actionName].actionIsChild,
 );
 
-const tangibleTypes = ['tangible', 'tangibleFile'];
+const tangibleTypes = ['tangible'];
 
 const unwindInverntoryOptions = (
   inventoryOptions: InventoryOptions,

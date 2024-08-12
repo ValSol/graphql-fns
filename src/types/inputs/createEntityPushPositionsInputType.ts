@@ -6,7 +6,6 @@ const createEntityPushPositionsInputType: InputCreator = (entityConfig) => {
     dateTimeFields = [],
     embeddedFields = [],
     enumFields = [],
-    fileFields = [],
     floatFields = [],
     intFields = [],
     geospatialFields = [],
@@ -82,15 +81,6 @@ const createEntityPushPositionsInputType: InputCreator = (entityConfig) => {
     }, entityTypeArray);
 
   embeddedFields
-    .filter(({ array, freeze }) => array && !freeze)
-    .reduce((prev, { name: name2 }) => {
-      prev.push(`  ${name2}: [Int!]`);
-
-      return prev;
-    }, entityTypeArray);
-
-  // the same code as for embeddedFields
-  fileFields
     .filter(({ array, freeze }) => array && !freeze)
     .reduce((prev, { name: name2 }) => {
       prev.push(`  ${name2}: [Int!]`);

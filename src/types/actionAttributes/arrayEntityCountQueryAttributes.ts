@@ -23,8 +23,7 @@ const actionInvolvedEntityNames = (
 
 const actionReturnConfig = (): null | EntityConfig => null;
 
-const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  entityConfig.type === 'embedded' || entityConfig.type === 'file';
+const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'embedded';
 
 const actionIsChild = 'Array';
 

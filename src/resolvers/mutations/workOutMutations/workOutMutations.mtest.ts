@@ -503,6 +503,8 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const result = await workOutMutations(standardMutationsArgs, commonResolverCreatorArg);
+       
+    result.forEach((item) => {delete item.__v}) // remove spare mongodb field
 
     expect(result[0]).toEqual(createdParent);
     expect(result[1].map(({ id }) => id)).toEqual(createdParent.children);

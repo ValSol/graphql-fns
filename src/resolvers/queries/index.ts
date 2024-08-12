@@ -10,10 +10,6 @@ import entitiesThroughConnection from './createEntitiesThroughConnectionQueryRes
 import entity from './createEntityQueryResolver';
 import entityDistinctValues from './createEntityDistinctValuesQueryResolver';
 import entityCount from './createEntityCountQueryResolver';
-import entityFile from './createEntityFileQueryResolver';
-import entityFileCount from './createEntityFileCountQueryResolver';
-import entityFiles from './createEntityFilesQueryResolver';
-import entityFilesThroughConnection from './createEntityFilesThroughConnectionQueryResolver';
 
 const queries = {
   childEntities,
@@ -24,10 +20,6 @@ const queries = {
   childEntityGetOrCreate,
   entityCount,
   entityDistinctValues,
-  entityFileCount,
-  entityFile,
-  entityFiles,
-  entityFilesThroughConnection,
   entity,
   entities,
   entitiesThroughConnection,

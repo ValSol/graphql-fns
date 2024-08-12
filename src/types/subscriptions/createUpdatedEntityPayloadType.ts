@@ -7,7 +7,6 @@ const createUpdatedEntityPayloadType = (entityConfig: EntityConfig): string => {
     embeddedFields = [],
     enumFields = [],
     intFields = [],
-    fileFields = [],
     floatFields = [],
     geospatialFields = [],
     textFields = [],
@@ -46,14 +45,6 @@ const createUpdatedEntityPayloadType = (entityConfig: EntityConfig): string => {
     prev.push(`  ${name2}`);
     return prev;
   }, entityFieldsArray);
-
-  // the same code as for embeddedFields
-  if (fileFields) {
-    fileFields.reduce((prev, { name: name2 }) => {
-      prev.push(`  ${name2}`);
-      return prev;
-    }, entityFieldsArray);
-  }
 
   if (enumFields) {
     enumFields.reduce((prev, { name: name2 }) => {

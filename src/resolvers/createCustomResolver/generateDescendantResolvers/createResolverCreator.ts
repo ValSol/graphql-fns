@@ -1,4 +1,5 @@
 import type {
+  Context,
   EntityConfig,
   GeneralConfig,
   ServersideConfig,
@@ -6,7 +7,6 @@ import type {
   GraphqlObject,
   SintheticResolverInfo,
 } from '../../../tsTypes';
-import { Context } from '@apollo/client';
 
 const store = Object.create(null);
 

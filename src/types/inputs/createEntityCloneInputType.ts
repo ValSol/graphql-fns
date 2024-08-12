@@ -19,7 +19,6 @@ const createEntityCloneInputType: InputCreator = (entityConfig) => {
     dateTimeFields = [],
     embeddedFields = [],
     enumFields = [],
-    fileFields = [],
     floatFields = [],
     intFields = [],
     geospatialFields = [],
@@ -136,16 +135,6 @@ const createEntityCloneInputType: InputCreator = (entityConfig) => {
   }, entityTypeArray);
 
   embeddedFields.reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
-    prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}`);
-
-    childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];
-
-    return prev;
-  }, entityTypeArray);
-
-  // the same code as for embeddedFields
-
-  fileFields.reduce((prev, { array, name: name2, config, config: { name: embeddedName } }) => {
     prev.push(`  ${name2}: ${array ? '[' : ''}${embeddedName}CreateInput${array ? '!]' : ''}`);
 
     childChain[`${config.name}CreateInput`] = [createEntityCreateInputType, config];

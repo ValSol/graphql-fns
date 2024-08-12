@@ -98,7 +98,6 @@ const createEntityType = (
     duplexFields = [],
     embeddedFields = [],
     enumFields = [],
-    fileFields = [],
     floatFields = [],
     intFields = [],
     geospatialFields = [],
@@ -109,10 +108,7 @@ const createEntityType = (
     name,
   } = entityConfig as any;
 
-  const interfacesToImplement =
-    configType === 'tangible' || configType === 'tangibleFile'
-      ? ['Node', ...interfaces]
-      : interfaces;
+  const interfacesToImplement = configType === 'tangible' ? ['Node', ...interfaces] : interfaces;
 
   const entityTypeArray = [
     // use not required ID in embedded entities...
@@ -296,54 +292,48 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  [...embeddedFields, ...fileFields].reduce(
-    (prev, { array, name: name2, nullable, required, config, variants }) => {
-      if (array) {
-        if (variants.includes('plain')) {
-          prev.push(`  ${name2}${arrayArgs}: [${config.name}!]${nullable ? '' : '!'}`);
-        }
-
-        if (variants.includes('connection')) {
-          const childEntitiesThroughConnectionArgs = composeChildActionSignature(
-            config,
-            generalConfig,
-            'arrayEntitiesThroughConnection',
-            entityTypeDic,
-            inputDic,
-          );
-
-          prev.push(
-            `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
-              config,
-              generalConfig,
-              arrayEntitiesThroughConnection,
-            )}`,
-          );
-        }
-
-        if (variants.includes('count')) {
-          // array "arrayEntityCount" not have any args
-          prev.push(
-            `  ${name2}Count: ${composeReturnString(config, generalConfig, arrayEntityCount)}`,
-          );
-        }
-      } else {
-        prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
+  embeddedFields.reduce((prev, { array, name: name2, nullable, required, config, variants }) => {
+    if (array) {
+      if (variants.includes('plain')) {
+        prev.push(`  ${name2}${arrayArgs}: [${config.name}!]${nullable ? '' : '!'}`);
       }
 
-      return prev;
-    },
-    entityTypeArray,
-  );
+      if (variants.includes('connection')) {
+        const childEntitiesThroughConnectionArgs = composeChildActionSignature(
+          config,
+          generalConfig,
+          'arrayEntitiesThroughConnection',
+          entityTypeDic,
+          inputDic,
+        );
 
-  const embeddedOrFileCalculatedFields = calculatedFields
-    .filter(
-      ({ calculatedType }) =>
-        calculatedType === 'embeddedFields' || calculatedType === 'fileFields',
-    )
+        prev.push(
+          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+            config,
+            generalConfig,
+            arrayEntitiesThroughConnection,
+          )}`,
+        );
+      }
+
+      if (variants.includes('count')) {
+        // array "arrayEntityCount" not have any args
+        prev.push(
+          `  ${name2}Count: ${composeReturnString(config, generalConfig, arrayEntityCount)}`,
+        );
+      }
+    } else {
+      prev.push(`  ${name2}: ${config.name}${required ? '!' : ''}`);
+    }
+
+    return prev;
+  }, entityTypeArray);
+
+  const embeddedCalculatedFields = calculatedFields
+    .filter(({ calculatedType }) => calculatedType === 'embeddedFields')
     .map((field) => (field.array ? { ...field, variants: ['plain'] } : field));
 
-  embeddedOrFileCalculatedFields.reduce(
+  embeddedCalculatedFields.reduce(
     (prev, { array, name: name2, nullable, required, config, inputTypes = {} }) => {
       if (array) {
         prev.push(
@@ -389,8 +379,8 @@ const createEntityType = (
       const { enumName } = field;
 
       pushCalculatedInPrev(field, `${enumName}Enumeration`, prev);
-    } else if (calculatedType === 'embeddedFields' || calculatedType === 'fileFields') {
-      // do nothing because of using "embeddedOrFileCalculatedFields" before
+    } else if (calculatedType === 'embeddedFields') {
+      // do nothing because of using "embeddedCalculatedFields" before
     } else if (calculatedType === 'textFields') {
       pushCalculatedInPrev(field, 'String', prev);
 

@@ -1,6 +1,6 @@
-import type { EmbeddedField, FileField, DescendantAttributes, FlatField } from '../../tsTypes';
+import type { EmbeddedField, DescendantAttributes, FlatField } from '../../tsTypes';
 
-type AllFields = ReadonlyArray<FlatField | EmbeddedField | FileField>;
+type AllFields = ReadonlyArray<FlatField | EmbeddedField>;
 
 type Arg = {
   descendantKey: string;

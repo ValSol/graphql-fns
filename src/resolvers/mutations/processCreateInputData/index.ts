@@ -48,7 +48,6 @@ const processCreateInputData = (
     const {
       booleanFields = [],
       dateTimeFields = [],
-      fileFields = [],
       floatFields = [],
       intFields = [],
       embeddedFields = [],
@@ -119,13 +118,6 @@ const processCreateInputData = (
       prev[name] = { array, config };
       return prev;
     }, embeddedFieldsObject);
-
-    const fileFieldsObject: Record<string, any> = {};
-    fileFields.reduce((prev, { array, config, name }) => {
-      // eslint-disable-next-line
-      prev[name] = { array, config };
-      return prev;
-    }, fileFieldsObject);
 
     // the same code as for embeddedFields
     const geospatialFieldsObject: Record<string, any> = {};
@@ -406,15 +398,6 @@ const processCreateInputData = (
         }
       } else if (embeddedFieldsObject[key]) {
         const { array, config } = embeddedFieldsObject[key];
-        if (array) {
-          // eslint-disable-next-line no-param-reassign
-          prev[key] = data2[key].map((value) => transform(value, config));
-        } else {
-          // eslint-disable-next-line no-param-reassign
-          prev[key] = data2[key] === null ? null : transform(data2[key], config);
-        }
-      } else if (fileFieldsObject[key]) {
-        const { array, config } = fileFieldsObject[key];
         if (array) {
           // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key].map((value) => transform(value, config));

@@ -16,10 +16,6 @@ import copyEntityWithChildren from './copyEntityWithChildrenMutationAttributes';
 import createManyEntities from './createManyEntitiesMutationAttributes';
 import entityDistinctValues from './entityDistinctValuesQueryAttributes';
 import entityCount from './entityCountQueryAttributes';
-import entityFileCount from './entityFileCountQueryAttributes';
-import entityFile from './entityFileQueryAttributes';
-import entityFiles from './entityFilesQueryAttributes';
-import entityFilesThroughConnection from './entityFilesThroughConnectionQueryAttributes';
 import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
@@ -33,13 +29,11 @@ import deleteManyEntities from './deleteManyEntitiesMutationAttributes';
 import deleteManyEntitiesWithChildren from './deleteManyEntitiesWithChildrenMutationAttributes';
 import deleteEntity from './deleteEntityMutationAttributes';
 import deleteEntityWithChildren from './deleteEntityWithChildrenMutationAttributes';
-import importEntities from './importEntitiesMutationAttributes';
 import pushIntoEntity from './pushIntoEntityMutationAttributes';
 import updateFilteredEntities from './updateFilteredEntitiesMutationAttributes';
 import updateFilteredEntitiesReturnScalar from './updateFilteredEntitiesReturnScalarMutationAttributes';
 import updateManyEntities from './updateManyEntitiesMutationAttributes';
 import updateEntity from './updateEntityMutationAttributes';
-import uploadEntityFiles from './uploadEntityFilesMutationAttributes';
 
 const actionAttributes = {
   arrayEntitiesThroughConnection,
@@ -65,14 +59,9 @@ const actionAttributes = {
   deleteManyEntitiesWithChildren,
   deleteEntity,
   deleteEntityWithChildren,
-  importEntities,
   pushIntoEntity,
   entityCount,
   entityDistinctValues,
-  entityFileCount,
-  entityFile,
-  entityFiles,
-  entityFilesThroughConnection,
   entity,
   entities,
   entitiesThroughConnection,
@@ -81,7 +70,6 @@ const actionAttributes = {
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
   updateEntity,
-  uploadEntityFiles,
 } as const;
 
 const {

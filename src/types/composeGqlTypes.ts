@@ -77,7 +77,7 @@ const composeGqlTypes = (
 
   entityNames.forEach((entityName) => {
     const { type: entityType } = allEntityConfigs[entityName];
-    if (entityType !== 'tangible' && entityType !== 'tangibleFile') return;
+    if (entityType !== 'tangible') return;
 
     if (Query) {
       Object.keys(Query).forEach((customName) => {
