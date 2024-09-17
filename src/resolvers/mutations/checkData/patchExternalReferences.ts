@@ -77,6 +77,13 @@ const processData = (
 
   Object.keys(data).forEach((key) => {
     const attributes = fieldsObj[key];
+
+    // *** quick patch, may corrupt "dataCheck" (may be not)
+    if (!attributes) {
+      return;
+    }
+    // ***
+
     const { array, type: fieldType } = attributes;
 
     if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {

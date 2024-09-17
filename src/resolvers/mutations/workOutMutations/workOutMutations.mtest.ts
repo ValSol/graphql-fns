@@ -503,8 +503,10 @@ describe('workOutMutations', () => {
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const result = await workOutMutations(standardMutationsArgs, commonResolverCreatorArg);
-       
-    result.forEach((item) => {delete item.__v}) // remove spare mongodb field
+
+    result.forEach((item) => {
+      delete item.__v;
+    }); // remove spare mongodb field
 
     expect(result[0]).toEqual(createdParent);
     expect(result[1].map(({ id }) => id)).toEqual(createdParent.children);
@@ -1273,23 +1275,23 @@ describe('workOutMutations', () => {
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
 
-    const standardMutationsArgsToCopyThing = [
-      {
-        actionGeneralName: 'copyEntity',
-        entityConfig: personCloneConfig,
-        args: {
-          whereOnes: { original: { id: createdPerson.id } },
-        },
-        returnResult: true,
+    const standardMutationsArg = {
+      actionGeneralName: 'copyEntity',
+      entityConfig: personCloneConfig,
+      args: {
+        whereOnes: { original: { id: createdPerson.id } },
       },
-    ];
+      returnResult: true,
+    };
+
+    const lockedData = { args: { whereOne: { original: createdPerson.id } }, result: null };
 
     const context = { mongooseConn, pubsub };
 
     const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
 
     const [personClone] = await workOutMutations(
-      standardMutationsArgsToCopyThing,
+      [{ ...standardMutationsArg, lockedData }],
       commonResolverCreatorArg,
     );
 
@@ -1313,8 +1315,13 @@ describe('workOutMutations', () => {
 
     await workOutMutations(standardMutationsArgsToUpdateEntity, commonResolverCreatorArg);
 
+    const lockedData2 = {
+      args: { whereOne: { original: createdPerson.id } },
+      result: { original: createdPerson.id },
+    };
+
     const [personClone2] = await workOutMutations(
-      standardMutationsArgsToCopyThing,
+      [{ ...standardMutationsArg, lockedData: lockedData2 }],
       commonResolverCreatorArg,
     );
 

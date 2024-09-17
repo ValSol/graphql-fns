@@ -1,51 +1,23 @@
-import type {
-  GeneralConfig,
-  GraphqlObject,
-  InventoryСhain,
-  ServersideConfig,
-  EntityConfig,
-  InvolvedFilter,
-  SintheticResolverInfo,
-  TangibleEntityConfig,
-} from '../../../tsTypes';
+import type { GraphqlObject, InventoryСhain, TangibleEntityConfig } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
+import sleep from '../../../utils/sleep';
 import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '../../utils/addIdsToEntity';
 import checkInventory from '../../../utils/inventory/checkInventory';
+import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
-import sleep from '../../../utils/sleep';
-import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
-import executeBulkItems from '../executeBulkItems';
-import optimizeBulkItems from '../optimizeBulkItems';
 import produceResult from '../composeStandardMutationResolver/produceResult';
+import executeBulkItems from '../executeBulkItems';
+import incCounters from '../incCounters';
+import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
-
-type StandardMutationsArgs = Array<{
-  actionGeneralName: string;
-  entityConfig: EntityConfig;
-  inAnyCase?: boolean;
-  parent?: null | GraphqlObject;
-  args: GraphqlObject;
-  info?: SintheticResolverInfo;
-  involvedFilters?: {
-    inputOutputEntity: [InvolvedFilter[]] | [InvolvedFilter[], number];
-  };
-  returnReport?: boolean;
-  returnResult: boolean;
-}>;
-
-type CommonResolverCreatorArg = {
-  generalConfig: GeneralConfig;
-  serversideConfig: ServersideConfig;
-  context: any;
-};
+import checkLockedData, { StandardMutationsArg, CommonResolverCreatorArg } from './checkLockedData';
 
 const workOutMutations = async (
-  standardMutationsArgs: StandardMutationsArgs,
+  standardMutationsArgs: StandardMutationsArg[],
   commonResolverCreatorArg: CommonResolverCreatorArg,
   preparedBulkData: PreparedData = { core: new Map(), periphery: new Map(), mains: [] },
 ): Promise<Array<any>> => {
@@ -80,6 +52,7 @@ const workOutMutations = async (
           args,
           info: infoInArgs,
           involvedFilters: involvedFiltersInArgs,
+          lockedData,
         } = mutationArgs;
 
         const parent = parentInArgs || null;
@@ -89,6 +62,10 @@ const workOutMutations = async (
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
         const { name } = entityConfig;
+
+        if (lockedData) {
+          await checkLockedData(mutationArgs, commonResolverCreatorArg);
+        }
 
         const inventoryChain: InventoryСhain = ['Mutation', actionGeneralName, name];
         if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
