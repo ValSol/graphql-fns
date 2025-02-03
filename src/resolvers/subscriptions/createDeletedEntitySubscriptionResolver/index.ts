@@ -1,11 +1,14 @@
-import {withFilter} from 'graphql-subscriptions';
+import { withFilter } from 'graphql-subscriptions';
 
 import type { GeneralConfig, Subscribe, EntityConfig } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
 import createDeletedEntityFilter from './createDeletedEntityFilter';
 
-const createDeletedEntitySubscriptionResolver = (entityConfig: EntityConfig, generalConfig: GeneralConfig): any | null => {
+const createDeletedEntitySubscriptionResolver = (
+  entityConfig: EntityConfig,
+  generalConfig: GeneralConfig,
+): any | null => {
   const { inventory } = generalConfig;
   const { name } = entityConfig;
   if (
@@ -17,7 +20,7 @@ const createDeletedEntitySubscriptionResolver = (entityConfig: EntityConfig, gen
 
   const resolver: Subscribe = {
     subscribe: withFilter(
-      (_, args, { pubsub }) => pubsub.asyncIterator(`deleted-${name}`),
+      (_, args, { pubsub }) => pubsub.asyncIterableIterator(`deleted-${name}`),
       createDeletedEntityFilter(entityConfig),
     ),
   };

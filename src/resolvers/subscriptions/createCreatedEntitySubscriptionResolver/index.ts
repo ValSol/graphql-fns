@@ -20,7 +20,7 @@ const createCreatedEntitySubscriptionResolver = (
 
   const resolver: Subscribe = {
     subscribe: withFilter(
-      (_, args, { pubsub }) => pubsub.asyncIterator(`created-${name}`),
+      (_, args, { pubsub }) => pubsub.asyncIterableIterator(`created-${name}`),
       createCreatedEntityFilter(entityConfig),
     ),
   };

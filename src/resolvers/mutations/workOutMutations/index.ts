@@ -26,6 +26,10 @@ const workOutMutations = async (
   const { transactions } = serversideConfig;
   const { mongooseConn } = context;
 
+  if (!Array.isArray(standardMutationsArgs)) {
+    throw new TypeError('Got standardMutationsArgs that is not array!');
+  }
+
   let previouses: GraphqlObject[][] = [];
 
   const tryCount = 7;
