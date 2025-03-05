@@ -80,7 +80,10 @@ const createEntityDistinctValuesQueryResolver = (
         pipeline.push({ $match: where2 });
       }
 
-      pipeline.push({ $project: { _id: 1 } });
+      if (!search) {
+        // not use "$project" if used "search" to prevent error: field names may not start with '$'
+        pipeline.push({ $project: { _id: 1 } });
+      }
 
       const ids = await Entity.aggregate(pipeline).exec();
 
