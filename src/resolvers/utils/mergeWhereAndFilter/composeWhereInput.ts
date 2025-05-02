@@ -10,6 +10,7 @@ import type {
 } from '../../../tsTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
+import pointFromGqlToMongo from '../../mutations/processCreateInputData/pointFromGqlToMongo';
 import composeRelationalKey from './composeRelationalKey';
 import composeWithinPolygonInput from './composeWithinPolygonInput';
 import composeWithinSphereInput from './composeWithinSphereInput';
@@ -284,6 +285,16 @@ const composeWhereInputRecursively = (
         composeWithinSphereInput(
           where[key] as { center: { lat: number; lng: number }; radius: number },
         );
+    } else if (key.endsWith('_intersectsPoint')) {
+      const keyWithoutSuffix = key.slice(0, -'_intersectsPoint'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
+        $geoIntersects: {
+          $geometry: pointFromGqlToMongo(where[key] as { lat: number; lng: number }),
+        },
+      };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {
       result[`$${key.toLowerCase()}`] = (where[key] as InvolvedFilter[]).map((where2) =>
         composeWhereInputRecursively(

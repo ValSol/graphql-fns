@@ -148,9 +148,13 @@ const composeInputFields = (
     }
   });
 
-  geospatialFields.forEach(({ name: fieldName }) => {
-    fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
+  geospatialFields.forEach(({ geospatialType, name: fieldName }) => {
+    if (geospatialType === 'Point') {
+      fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
   ${fieldName}_withinSphere: GeospatialSphereInput`);
+    } else {
+      fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput`);
+    }
   });
 
   enumFields.forEach(({ name: fieldName, enumName, array, index }) => {

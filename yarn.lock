@@ -4639,6 +4639,18 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
+graphql-fns@^0.1.2-beta.998:
+  version "0.1.2-beta.998"
+  resolved "https://registry.yarnpkg.com/graphql-fns/-/graphql-fns-0.1.2-beta.998.tgz#7d0cc8256ff1be4263ac3e74d6beeaaf7e029abf"
+  integrity sha512-wJxQcaJyCH5RiQ/Ui7fZMrCjhUhFQfcOIkWjivMcjhkrgTUQkzI7pwyZUUAjyTXws/YzpSP+VhC5vehL8yocPQ==
+  dependencies:
+    graphql-parse-resolve-info "^4.13.0"
+    graphql-scalars "1.23.0"
+    lodash.get "^4.4.2"
+    lodash.merge "^4.6.2"
+    mingo "^6.5.2"
+    pluralize "^8.0.0"
+
 graphql-parse-resolve-info@^4.13.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/graphql-parse-resolve-info/-/graphql-parse-resolve-info-4.13.0.tgz#03627032e25917bd6f9ed89e768568c61200e6ff"

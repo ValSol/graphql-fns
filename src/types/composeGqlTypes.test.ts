@@ -993,8 +993,7 @@ input Example2WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-  area_withinPolygon: [GeospatialPointInput!]
-  area_withinSphere: GeospatialSphereInput
+  area_intersectsPoint: GeospatialPointInput
   AND: [Example2WhereInput!]
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
@@ -1016,8 +1015,7 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-  area_withinPolygon: [GeospatialPointInput!]
-  area_withinSphere: GeospatialSphereInput
+  area_intersectsPoint: GeospatialPointInput
 }
 enum Example1TextNamesEnum {
   textField1

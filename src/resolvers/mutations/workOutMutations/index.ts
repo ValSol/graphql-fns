@@ -102,7 +102,7 @@ const workOutMutations = async (
 
         if (!previous) {
           throw new TypeError(
-            `Not got preivous for "${actionGeneralName}" mutation for "${name}" entity!`,
+            `Not got previous for "${actionGeneralName}" mutation for "${name}" entity!`,
           );
         }
 

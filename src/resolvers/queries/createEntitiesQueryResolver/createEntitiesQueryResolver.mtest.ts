@@ -249,6 +249,48 @@ describe('createEntityQueryResolver', () => {
     expect(typeof createRestaurant).toBe('function');
     if (!createRestaurant) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
+    const addressPolygon = {
+      externalRing: {
+        ring: [
+          { lng: 23.364866, lat: 49.222376 },
+          { lng: 23.364911, lat: 49.222393 },
+          { lng: 23.364968, lat: 49.222328 },
+          { lng: 23.365005, lat: 49.222286 },
+          { lng: 23.364907, lat: 49.222249 },
+          { lng: 23.364819, lat: 49.222215 },
+          { lng: 23.364786, lat: 49.222252 },
+          { lng: 23.364681, lat: 49.222212 },
+          { lng: 23.364624, lat: 49.222277 },
+          { lng: 23.364582, lat: 49.222323 },
+          { lng: 23.364681, lat: 49.222361 },
+          { lng: 23.36478, lat: 49.222398 },
+          { lng: 23.364829, lat: 49.222417 },
+          { lng: 23.364866, lat: 49.222376 },
+        ],
+      },
+    };
+
+    const addressPolygon2 = {
+      externalRing: {
+        ring: [
+          { lng: 30.364866, lat: 50.222376 },
+          { lng: 30.364911, lat: 50.222393 },
+          { lng: 30.364968, lat: 50.222328 },
+          { lng: 30.365005, lat: 50.222286 },
+          { lng: 30.364907, lat: 50.222249 },
+          { lng: 30.364819, lat: 50.222215 },
+          { lng: 30.364786, lat: 50.222252 },
+          { lng: 30.364681, lat: 50.222212 },
+          { lng: 30.364624, lat: 50.222277 },
+          { lng: 30.364582, lat: 50.222323 },
+          { lng: 30.364681, lat: 50.222361 },
+          { lng: 30.36478, lat: 50.222398 },
+          { lng: 30.364829, lat: 50.222417 },
+          { lng: 30.364866, lat: 50.222376 },
+        ],
+      },
+    };
+
     const data = {
       name: 'Murakami',
       restaurants: {
@@ -257,30 +299,35 @@ describe('createEntityQueryResolver', () => {
             name: 'Fabbrica',
             point: { lng: 50.438198, lat: 30.515858 },
             point2: { lng: 50.438198, lat: 30.515858 },
+            area: addressPolygon2,
             num: '2',
           },
           {
             name: 'Fine Family',
             point: { lng: 50.438061, lat: 30.515879 },
             point2: { lng: 50.438061, lat: 30.515879 },
+            area: addressPolygon,
             num: '3',
           },
           {
             name: 'Zhizn Zamechatelnykh Lyudey',
             point: { lng: 50.438007, lat: 30.515858 },
             point2: { lng: 50.438007, lat: 30.515858 },
+            area: addressPolygon2,
             num: '4',
           },
           {
             name: 'Georgian House',
             point: { lng: 50.437692, lat: 30.51583 },
             point2: { lng: 50.437692, lat: 30.51583 },
+            area: addressPolygon2,
             num: '5',
           },
           {
             name: 'Mama Manana',
             point: { lng: 50.437045, lat: 30.515803 },
             point2: { lng: 50.437045, lat: 30.515803 },
+            area: addressPolygon2,
             num: '6',
           },
           {
@@ -288,6 +335,7 @@ describe('createEntityQueryResolver', () => {
             point: { lng: 50.43673, lat: 30.515007 },
             point2: { lng: 50.43673, lat: 30.515007 },
             recommended: true,
+            area: addressPolygon,
             num: '7',
           },
           {
@@ -295,6 +343,7 @@ describe('createEntityQueryResolver', () => {
             point: { lng: 50.436149, lat: 30.515785 },
             point2: { lng: 50.436149, lat: 30.515785 },
             recommended: true,
+            area: addressPolygon2,
             num: '8',
           },
         ],
@@ -359,6 +408,22 @@ describe('createEntityQueryResolver', () => {
       { inputOutputEntity: [[]] },
     );
     expect(restaurants4.length).toBe(2);
+
+    const where3 = {
+      area_intersectsPoint: { lat: 49.222341251782005, lng: 23.364830017089844 },
+    };
+    const restaurants5 = await Restaurants(
+      null,
+      { where: where3 },
+      { mongooseConn, pubsub },
+      info2,
+      { inputOutputEntity: [[]] },
+    );
+
+    expect(restaurants5[0].name).toEqual('Fine Family');
+    expect(restaurants5[1].name).toEqual('Satori Lounge');
+
+    expect(restaurants5.length).toBe(2);
   });
 
   test('should create query entities resolver for entity with unique field', async () => {

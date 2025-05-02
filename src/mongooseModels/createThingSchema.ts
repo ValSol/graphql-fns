@@ -5,6 +5,7 @@ import type { Enums, EntityConfig } from '../tsTypes';
 import composeCompoundIndexes from './composeCompoundIndexes';
 import composeTextIndexProperties from './composeTextIndexProperties';
 import composeThingSchemaProperties from './composeThingSchemaProperties';
+import composePolygonIndexProperties from './composePolygonIndexProperties';
 
 const { Schema } = mongoose;
 
@@ -33,6 +34,12 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
   if (entityType === 'tangible') {
     composeCompoundIndexes(entityConfig).forEach((index) => {
       ThingSchema.index(index, { unique: true });
+    });
+
+    const polygonIndexProperties = composePolygonIndexProperties(entityConfig);
+
+    polygonIndexProperties.forEach((name) => {
+      ThingSchema.index({ [name]: '2dsphere' });
     });
   }
 
