@@ -6,6 +6,7 @@ import type { TangibleEntityConfig } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
 import composeFieldsObject from '../../../utils/composeFieldsObject';
+import multiPolygonFromGqlToMongo from './multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
@@ -419,19 +420,23 @@ const processCreateInputData = (
           if (geospatialType === 'Point') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map((value) => pointFromGqlToMongo(value));
-          }
-          if (geospatialType === 'Polygon') {
+          } else if (geospatialType === 'Polygon') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map((value) => polygonFromGqlToMongo(value));
+          } else if (geospatialType === 'MultiPolygon') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = data2[key].map((value) => multiPolygonFromGqlToMongo(value));
           }
         } else {
           if (geospatialType === 'Point') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = pointFromGqlToMongo(data2[key]);
-          }
-          if (geospatialType === 'Polygon') {
+          } else if (geospatialType === 'Polygon') {
             // eslint-disable-next-line no-param-reassign
             prev[key] = polygonFromGqlToMongo(data2[key]);
+          } else if (geospatialType === 'MultiPolygon') {
+            // eslint-disable-next-line no-param-reassign
+            prev[key] = multiPolygonFromGqlToMongo(data2[key]);
           }
         }
       } else if (scalarFieldsArray.includes(key)) {

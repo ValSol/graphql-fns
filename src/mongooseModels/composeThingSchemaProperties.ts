@@ -271,6 +271,20 @@ const composeThingSchemaProperties = (
 
       // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
+    } else if (geospatialType === 'MultiPolygon') {
+      const obj: any = {
+        type: {
+          type: String,
+          enum: ['MultiPolygon'],
+        },
+        coordinates: {
+          type: [[[[Number]]]],
+        },
+      };
+      if (required) obj.type.required = true; // by default required = false
+
+      // eslint-disable-next-line no-param-reassign
+      prev[name] = array ? [obj] : obj;
     } else {
       throw new TypeError(`Invalid value "${geospatialType}" of geospatial field geospatialType!`);
     }

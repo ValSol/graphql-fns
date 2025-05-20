@@ -82,6 +82,21 @@ const coerceDataFromGql = (
                 }
               : data[key];
         }
+      } else if (geospatialType === 'MultiPolygon') {
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key].map((item) =>
+            item === null
+              ? { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] }
+              : item,
+          );
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] =
+            data[key] === null
+              ? { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] }
+              : data[key];
+        }
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }

@@ -86,7 +86,7 @@ const coerceDataToGqlBasic = (
                   if (prev2.connect) {
                     prev2.connect.push(item);
                   } else {
-                    prev2.connect = [item]; // eslint-disable-line no-param-reassign
+                    prev2.connect = [item];
                   }
                 } else if (prev2.create) {
                   prev2.create.push(
@@ -117,13 +117,13 @@ const coerceDataToGqlBasic = (
                 return prev2;
               }, {});
       } else if (!data[key]) {
-        prev[key] = { connect: null }; // eslint-disable-line no-param-reassign
+        prev[key] = { connect: null };
       } else {
         const keyData =
           ObjectId && data[key] instanceof ObjectId ? data[key].toString() : data[key];
 
         if (typeof keyData === 'string') {
-          prev[key] = { connect: keyData }; // eslint-disable-line no-param-reassign
+          prev[key] = { connect: keyData };
         } else {
           // eslint-disable-next-line no-param-reassign
           prev[key] = {
@@ -141,33 +141,33 @@ const coerceDataToGqlBasic = (
       }
     } else if (fieldType === 'enumFields') {
       if (array) {
-        prev[key] = data[key]; // eslint-disable-line no-param-reassign
+        prev[key] = data[key];
       } else {
-        prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
+        prev[key] = data[key] || null;
       }
     } else if (fieldType === 'textFields' && setNullForEmptyText) {
       if (array) {
-        prev[key] = data[key].filter((item) => item); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].filter((item) => item);
       } else {
-        prev[key] = data[key] || null; // eslint-disable-line no-param-reassign
+        prev[key] = data[key] || null;
       }
     } else if (fieldType === 'intFields' || fieldType === 'floatFields') {
       if (array) {
-        prev[key] = data[key].filter((item) => item !== ''); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].filter((item) => item !== '');
       } else {
-        prev[key] = data[key] === '' ? null : data[key]; // eslint-disable-line no-param-reassign
+        prev[key] = data[key] === '' ? null : data[key];
       }
     } else if (fieldType === 'dateTimeFields') {
       if (array) {
-        prev[key] = data[key].map((item) => (isNotDate(item) ? null : item)).filter(Boolean); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].map((item) => (isNotDate(item) ? null : item)).filter(Boolean);
       } else {
-        prev[key] = isNotDate(data[key]) ? null : data[key]; // eslint-disable-line no-param-reassign
+        prev[key] = isNotDate(data[key]) ? null : data[key];
       }
     } else if (fieldType === 'booleanFields') {
       if (array) {
-        prev[key] = data[key].map((item) => !!item); // eslint-disable-line no-param-reassign
+        prev[key] = data[key].map((item) => !!item);
       } else {
-        prev[key] = data[key] === null ? null : !!data[key]; // eslint-disable-line no-param-reassign
+        prev[key] = data[key] === null ? null : !!data[key];
       }
     } else if (fieldsObject[key].type === 'geospatialFields') {
       const { geospatialType } = fieldsObject[key] as GeospatialField;
@@ -178,13 +178,13 @@ const coerceDataToGqlBasic = (
             .map((item) => {
               const { lng, lat } = item;
               const item2 = skipUnusedFields ? { lng, lat } : item;
-              return lng === '' || lat === '' ? null : item2; // eslint-disable-line no-param-reassign
+              return lng === '' || lat === '' ? null : item2;
             })
             .filter(Boolean);
         } else {
           const { lng, lat } = data[key];
           const item = skipUnusedFields ? { lng, lat } : data[key];
-          prev[key] = lng === '' || lat === '' ? null : item; // eslint-disable-line no-param-reassign
+          prev[key] = lng === '' || lat === '' ? null : item;
         }
       } else if (geospatialType === 'Polygon') {
         // TODO expand test for skipUnusedFields situations
@@ -196,20 +196,52 @@ const coerceDataToGqlBasic = (
               const {
                 externalRing: { ring: externalRing },
               } = item;
-              return externalRing.length < 4 ? null : item; // eslint-disable-line no-param-reassign
+              return externalRing.length < 4 ? null : item;
             })
             .filter(Boolean);
         } else {
           const {
             externalRing: { ring: externalRing },
           } = data[key];
-          prev[key] = externalRing.length < 4 ? null : data[key]; // eslint-disable-line no-param-reassign
+          prev[key] = externalRing.length < 4 ? null : data[key];
+        }
+      } else if (geospatialType === 'MultiPolygon') {
+        // TODO expand test for skipUnusedFields situations
+        // TODO expand test for all empty situations
+        if (array) {
+          // eslint-disable-next-line no-param-reassign
+          prev[key] = data[key]
+            .map(({ polygons }) =>
+              polygons
+                .map((item) => {
+                  const {
+                    externalRing: { ring: externalRing },
+                  } = item;
+                  return externalRing.length < 4 ? null : item;
+                })
+                .filter(Boolean),
+            )
+            .filter((item) => item.length > 0);
+        } else {
+          const { polygons } = data[key];
+
+          const result = polygons
+            .map((polygon) => {
+              const {
+                externalRing: { ring: externalRing },
+              } = data[key];
+
+              prev[key] = externalRing.length < 4 ? null : polygon;
+            })
+            .filter(Boolean);
+
+          prev[key] = result.length > 0 ? data[key] : null;
         }
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }
     } else {
-      prev[key] = data[key]; // eslint-disable-line no-param-reassign
+      prev[key] = data[key];
     }
     return prev;
   }, {});

@@ -27,6 +27,9 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
           },
           internalRings: [],
         };
+      } else if (geospatialType === 'MultiPolygon') {
+        // eslint-disable-next-line no-param-reassign
+        prev[name] = { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] };
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
       }

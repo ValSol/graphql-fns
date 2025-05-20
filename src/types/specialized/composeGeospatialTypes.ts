@@ -4,6 +4,7 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   const { allEntityConfigs } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialPolygon = false;
+  let thereIsGeospatialMultiPolygon = false;
 
   const allEntityConfigsArray = Object.keys(allEntityConfigs).map(
     (entityName) => allEntityConfigs[entityName],
@@ -23,11 +24,17 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
       geospatialFields.some(({ geospatialType }) => geospatialType === 'Polygon')
     ) {
       thereIsGeospatialPolygon = true;
+    }
+    if (
+      geospatialFields &&
+      geospatialFields.some(({ geospatialType }) => geospatialType === 'MultiPolygon')
+    ) {
+      thereIsGeospatialMultiPolygon = true;
       break;
     }
   }
 
-  if (!thereIsGeospatialPoint && !thereIsGeospatialPolygon) {
+  if (!(thereIsGeospatialPoint || thereIsGeospatialPolygon || thereIsGeospatialMultiPolygon)) {
     return '';
   }
 
@@ -43,7 +50,7 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }${
-    thereIsGeospatialPolygon
+    thereIsGeospatialPolygon || thereIsGeospatialMultiPolygon
       ? `
 type GeospatialPolygonRing {
   ring: [GeospatialPoint!]!
@@ -58,7 +65,17 @@ input GeospatialPolygonRingInput {
 input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
+}${
+          thereIsGeospatialMultiPolygon
+            ? `
+type GeospatialMultiPolygon {
+  polygons: [GeospatialPolygon!]!
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
 }`
+            : ''
+        }`
       : ''
   }`;
 };

@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../tsTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../../tsTypes';
 
-import polygonFromGqlToMongo from './polygonFromGqlToMongo';
+import polygonFromGqlToMongo from '.';
 
 describe('polygonFromGqlToMongo', () => {
   test('should return null for null point', () => {

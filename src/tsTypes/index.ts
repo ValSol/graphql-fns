@@ -20,7 +20,12 @@ export type MongodbGeospatialPoint = {
 
 export type MongodbGeospatialPolygon = {
   type: 'Polygon';
-  coordinates: Array<Array<[number, number]>>;
+  coordinates: [number, number][][];
+};
+
+export type MongodbGeospatialMultiPolygon = {
+  type: 'MultiPolygon';
+  coordinates: [number, number][][][];
 };
 
 export type GeospatialPoint = {
@@ -35,6 +40,10 @@ export type GeospatialPolygon = {
   internalRings?: Array<{
     ring: Array<GeospatialPoint>;
   }>;
+};
+
+export type GeospatialMultiPolygon = {
+  polygons: GeospatialPolygon[];
 };
 
 type FieldCommonProperties = {
@@ -78,13 +87,13 @@ export type EnumField = ArrayEnumField | ScalarEnumField;
 type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array?: false;
   nullable?: false;
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   type: 'geospatialFields';
 };
 type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
   array: true;
   nullable?: boolean;
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   type: 'geospatialFields';
 };
 export type GeospatialField = ScalarGeospatialField | ArrayGeospatialField;
@@ -353,7 +362,7 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -367,7 +376,7 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
     index?: number,
-  ) => null | GeospatialPoint | GeospatialPolygon;
+  ) => null | GeospatialPoint | GeospatialPolygon | GeospatialMultiPolygon;
 };
 export type ArraySimplifiedCalculatedGeospatialField = Omit<
   FieldCommonProperties,
@@ -376,7 +385,7 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
   array: true;
   nullable?: boolean;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -390,7 +399,7 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
     index?: number,
-  ) => GeospatialPoint[] | GeospatialPolygon[];
+  ) => GeospatialPoint[] | GeospatialPolygon[] | GeospatialMultiPolygon[];
 };
 export type ScalarSimplifiedCalculatedField = Omit<
   FieldCommonProperties,
@@ -670,7 +679,7 @@ type ScalarCalculatedGeospatialField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -684,14 +693,14 @@ type ScalarCalculatedGeospatialField = Omit<
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
     index?: number,
-  ) => null | GeospatialPoint | GeospatialPolygon;
+  ) => null | GeospatialPoint | GeospatialPolygon | GeospatialMultiPolygon;
   type: 'calculatedFields';
 };
 type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   nullable?: boolean;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon';
+  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: (
     args: Record<string, any>,
     resolverCreatorArg: ResolverCreatorArg,
@@ -705,7 +714,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
     index?: number,
-  ) => GeospatialPoint[] | GeospatialPolygon[];
+  ) => GeospatialPoint[] | GeospatialPolygon[] | GeospatialMultiPolygon[];
   type: 'calculatedFields';
 };
 export type ScalarCalculatedFilterField = Omit<

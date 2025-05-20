@@ -21,6 +21,7 @@ import createEntityConnectionResolver from '../createEntityConnectionResolver';
 import createEntityScalarResolver from '../createEntityScalarResolver';
 import fieldArrayCountResolver from '../fieldArrayCountResolver';
 import fieldArrayResolver from '../fieldArrayResolver';
+import multiPolygonFromMongoToGql from '../multiPolygonFromMongoToGql';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
 import fieldArrayThroughConnectionResolver from '../fieldArrayThroughConnectionResolver';
@@ -318,6 +319,10 @@ const composeEntityResolvers = (
             return values.map((value) => polygonFromMongoToGql(value));
           }
 
+          if (geospatialType === 'MultiPolygon') {
+            return values.map((value) => multiPolygonFromMongoToGql(value));
+          }
+
           throw new TypeError(
             `Invalid geospatialType value "${name}" of geospatial mongodb field!`,
           );
@@ -329,6 +334,8 @@ const composeEntityResolvers = (
         if (geospatialType === 'Point') return pointFromMongoToGql(value);
 
         if (geospatialType === 'Polygon') return polygonFromMongoToGql(value);
+
+        if (geospatialType === 'MultiPolygon') return multiPolygonFromMongoToGql(value);
 
         throw new TypeError(`Invalid geospatialType value "${name}" of geospatial mongodb field!`);
       };

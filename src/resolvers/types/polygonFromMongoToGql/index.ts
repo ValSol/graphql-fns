@@ -1,9 +1,7 @@
-import type {GeospatialPolygon, MongodbGeospatialPolygon} from '../../../tsTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../tsTypes';
 
-const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPolygon => {
-  const {
-    coordinates: [externalRingArray, ...internalRingsArray],
-  } = polygon;
+export const composeGqlRings = (coordinates: [number, number][][]) => {
+  const [externalRingArray, ...internalRingsArray] = coordinates;
 
   const externalRing = externalRingArray.reduce(
     (prev, item) => {
@@ -28,6 +26,12 @@ const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPol
     return { externalRing, internalRings };
   }
   return { externalRing };
+};
+
+const polygonFromMongoToGql = (polygon: MongodbGeospatialPolygon): GeospatialPolygon => {
+  const { coordinates } = polygon;
+
+  return composeGqlRings(coordinates);
 };
 
 export default polygonFromMongoToGql;

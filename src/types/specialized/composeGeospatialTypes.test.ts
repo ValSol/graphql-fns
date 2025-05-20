@@ -90,4 +90,54 @@ input GeospatialPolygonInput {
     const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('multiPolygon', () => {
+    const entityConfig: EntityConfig = {
+      name: 'District',
+      type: 'tangible',
+      geospatialFields: [
+        {
+          name: 'area',
+          geospatialType: 'MultiPolygon',
+          type: 'geospatialFields',
+        },
+      ],
+    };
+    const allEntityConfigs = { District: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
+    const expectedResult = `type GeospatialPoint {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialPointInput {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  externalRing: GeospatialPolygonRing!
+  internalRings: [GeospatialPolygonRing!]
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  externalRing: GeospatialPolygonRingInput!
+  internalRings: [GeospatialPolygonRingInput!]
+}
+type GeospatialMultiPolygon {
+  polygons: [GeospatialPolygon!]!
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
+}`;
+    const result = composeGeospatialTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
 });

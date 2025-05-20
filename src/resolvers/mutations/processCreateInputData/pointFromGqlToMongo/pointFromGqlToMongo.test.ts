@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import type {GeospatialPoint, MongodbGeospatialPoint} from '../../../tsTypes';
+import type { GeospatialPoint, MongodbGeospatialPoint } from '../../../../tsTypes';
 
-import pointFromGqlToMongo from './pointFromGqlToMongo';
+import pointFromGqlToMongo from '.';
 
 describe('pointFromGqlToMongo', () => {
   test('should return null for null point', () => {

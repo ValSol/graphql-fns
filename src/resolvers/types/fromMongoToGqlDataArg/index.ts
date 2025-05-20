@@ -2,10 +2,12 @@ import type {
   DataObject,
   EntityConfig,
   GraphqlObject,
+  MongodbGeospatialMultiPolygon,
   MongodbGeospatialPoint,
   MongodbGeospatialPolygon,
 } from '../../../tsTypes';
 
+import multiPolygonFromMongoToGql from '../multiPolygonFromMongoToGql';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
 
@@ -17,6 +19,9 @@ const geospatialFromMongToGql = (item: DataObject) => {
 
     case 'Polygon':
       return polygonFromMongoToGql(item as MongodbGeospatialPolygon);
+
+    case 'MultiPolygon':
+      return multiPolygonFromMongoToGql(item as MongodbGeospatialMultiPolygon);
 
     default:
       throw new TypeError(`Incorrect geospatial field type "${geoType}"!`);
