@@ -41,7 +41,7 @@ const workOutMutations = async (
 
     try {
       if (session) {
-        session.startTransaction();
+        await session.startTransaction();
       }
 
       previouses = [];
@@ -140,7 +140,7 @@ const workOutMutations = async (
       if (session) {
         // eslint-disable-next-line no-await-in-loop
         await session.commitTransaction();
-        session.endSession();
+        await session.endSession();
       }
 
       break;
@@ -148,7 +148,7 @@ const workOutMutations = async (
       if (session) {
         // eslint-disable-next-line no-await-in-loop
         await session.abortTransaction();
-        session.endSession();
+        await session.endSession();
       }
 
       if (j === tryCount - 1) {

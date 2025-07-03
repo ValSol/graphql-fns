@@ -27,7 +27,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  mongooseConn.connection.close();
+  await mongooseConn.connection.close();
+  await mongoose.disconnect();
 });
 
 describe('createCopyEntityWithChildrenMutationResolver', () => {
@@ -590,10 +591,13 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { inputOutputEntity: [[]] },
     );
 
-    const sectionsClonesObject = sectionsClone3.reduce((prev, item) => {
-      prev[item.id] = item; // eslint-disable-line no-param-reassign
-      return prev;
-    }, {} as Record<string, GraphqlObject>);
+    const sectionsClonesObject = sectionsClone3.reduce(
+      (prev, item) => {
+        prev[item.id] = item; // eslint-disable-line no-param-reassign
+        return prev;
+      },
+      {} as Record<string, GraphqlObject>,
+    );
 
     menuClone3.sections.forEach((id, i) => {
       const section = sectionsClonesObject[id];
@@ -702,10 +706,13 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       { inputOutputEntity: [[]] },
     );
 
-    const sectionsClonesObject2 = sectionsClone4.reduce((prev, item) => {
-      prev[item.id] = item; // eslint-disable-line no-param-reassign
-      return prev;
-    }, {} as Record<string, GraphqlObject>);
+    const sectionsClonesObject2 = sectionsClone4.reduce(
+      (prev, item) => {
+        prev[item.id] = item; // eslint-disable-line no-param-reassign
+        return prev;
+      },
+      {} as Record<string, GraphqlObject>,
+    );
 
     expect(sectionsClonesObject2[menuClone5.sections[0]].name).toBe(
       menuDataToUpdate3.sections.create[0].name,

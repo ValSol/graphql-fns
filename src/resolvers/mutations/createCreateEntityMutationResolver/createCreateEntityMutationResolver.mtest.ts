@@ -21,7 +21,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  mongooseConn.connection.close();
+  await mongooseConn.connection.close();
+  await mongoose.disconnect();
 });
 
 describe('createCreateEntityMutationResolver', () => {
@@ -861,7 +862,7 @@ describe('createCreateEntityMutationResolver', () => {
     // expect(doc).toBe(null);
 
     // await session.commitTransaction();
-    // session.endSession();
+    // await session.endSession();
 
     // doc = await Person.findOne({ firstName: 'firstNameTest' });
     // expect(doc.firstName).toBe('firstNameTest');

@@ -30,7 +30,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  mongooseConn.connection.close();
+  await mongooseConn.connection.close();
+  await mongoose.disconnect();
 });
 
 describe('createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver', () => {

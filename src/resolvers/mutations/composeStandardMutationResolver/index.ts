@@ -113,7 +113,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
         try {
           if (session) {
-            session.startTransaction();
+            await session.startTransaction();
           }
           if (!getPrevious) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
@@ -125,7 +125,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             if (session) {
               // eslint-disable-next-line no-await-in-loop
               await session.abortTransaction();
-              session.endSession();
+              await session.endSession();
             }
             return null;
           }
@@ -156,7 +156,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             if (session) {
               // eslint-disable-next-line no-await-in-loop
               await session.abortTransaction();
-              session.endSession();
+              await session.endSession();
             }
             return null;
           }
@@ -182,7 +182,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             // eslint-disable-next-line no-await-in-loop
             await session.commitTransaction();
-            session.endSession();
+            await session.endSession();
           }
 
           break;
@@ -190,7 +190,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             // eslint-disable-next-line no-await-in-loop
             await session.abortTransaction();
-            session.endSession();
+            await session.endSession();
           }
 
           if (i === tryCount - 1) {
