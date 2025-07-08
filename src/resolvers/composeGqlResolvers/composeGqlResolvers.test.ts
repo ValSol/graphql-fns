@@ -10,7 +10,7 @@ import type {
 } from '../../tsTypes';
 
 import composeGqlTypes from '../../types/composeGqlTypes';
-import composeGqlResolvers from './index';
+import composeGqlResolvers from '.';
 
 describe('composeGqlResolvers', () => {
   test('should create resolvers for one entity', () => {

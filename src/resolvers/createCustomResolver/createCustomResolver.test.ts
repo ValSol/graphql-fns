@@ -7,7 +7,7 @@ import type {
   EntityConfig,
 } from '../../tsTypes';
 
-import createCustomResolver from './index';
+import createCustomResolver from '.';
 
 describe('createCustomResolver', () => {
   const resultResolver = async () => 'test passed!';

@@ -32,7 +32,7 @@ const workOutMutations = async (
 
   let previouses: GraphqlObject[][] = [];
 
-  const tryCount = 7;
+  const tryCount = 10;
 
   for (let j = 0; j < tryCount; j += 1) {
     let preparedData = preparedBulkData;
@@ -156,8 +156,13 @@ const workOutMutations = async (
       }
 
       // eslint-disable-next-line no-await-in-loop
-      await sleep(2 ** j * 10);
+      await sleep(2 ** j);
     }
+    // finally {
+    //   if (session) {
+    //     await session.endSession(); // 💥 essential!
+    //   }
+    // }
   }
   const finalResults: Array<any | null> = [];
 

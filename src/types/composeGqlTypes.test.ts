@@ -413,6 +413,8 @@ input MenuWhereCompoundOneInput {
   clone_exists: Boolean
 }
 enum MenuSectionSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -488,6 +490,8 @@ input MenuCloneSectionCreateOrPushChildrenInput {
   createPositions: [Int!]
 }
 enum MenuCloneSectionSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -503,6 +507,8 @@ input MenuCloneSectionWhereOneInput {
   id: ID!
 }
 enum MenuSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -512,6 +518,8 @@ input MenuSortInput {
   sortBy: [MenuSortEnum]
 }
 enum MenuCloneSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1039,6 +1047,8 @@ input Example2WhereOneInput {
   id: ID!
 }
 enum Example1SortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1061,6 +1071,8 @@ input Example1NearInput {
   minDistance: Float
 }
 enum Example2SortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1424,6 +1436,8 @@ input PersonWhereOneInput {
   id: ID!
 }
 enum PersonSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1440,6 +1454,8 @@ input PlaceWhereOneInput {
   id: ID!
 }
 enum PlaceSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1760,6 +1776,8 @@ input PersonWhereOneInput {
   id: ID!
 }
 enum PersonSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2089,6 +2107,8 @@ input PersonWhereOneInput {
   id: ID!
 }
 enum PersonSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2105,6 +2125,8 @@ input PlaceWhereOneInput {
   id: ID!
 }
 enum PlaceSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2433,6 +2455,8 @@ input ExampleWhereOneInput {
   id: ID!
 }
 enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2671,6 +2695,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lte: DateTime
 }
 enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2766,6 +2792,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lte: DateTime
 }
 enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3210,6 +3238,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   textField_exists: Boolean
 }
 enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3284,6 +3314,8 @@ input ExampleForCatalogWhereWithoutBooleanOperationsInput {
   textField_exists: Boolean
 }
 enum ExampleForCatalogSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3588,6 +3620,8 @@ input ExampleWhereOneInput {
   id: ID!
 }
 enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3643,6 +3677,8 @@ input ExampleForCatalogWhereWithoutBooleanOperationsInput {
   updatedAt_lte: DateTime
 }
 enum ExampleForCatalogSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3839,6 +3875,8 @@ input ExampleForCatalogWhereWithoutBooleanOperationsInput {
   updatedAt_lte: DateTime
 }
 enum ExampleForCatalogSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC

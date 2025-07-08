@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-import createNodeQueryResolver from './index';
+import createNodeQueryResolver from '.';
 
 describe('createNodeQueryResolver', () => {
   test('should create mutation add entity type', () => {

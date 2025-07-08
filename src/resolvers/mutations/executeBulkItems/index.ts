@@ -23,7 +23,7 @@ const executeBulkItems = async (
     promises.push(Entity.bulkWrite(bulkItems, { session, strict: true }));
   });
 
-  return Promise.all(promises);
+  return await Promise.all(promises);
 };
 
 export default executeBulkItems;

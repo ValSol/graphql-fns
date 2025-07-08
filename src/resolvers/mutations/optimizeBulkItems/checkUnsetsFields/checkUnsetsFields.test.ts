@@ -2,7 +2,7 @@
 
 import type { TangibleEntityConfig } from '../../../../tsTypes';
 
-import checkUnsetsFields from './index';
+import checkUnsetsFields from '.';
 
 describe('checkUnsetsFields', () => {
   test('should return correct result', () => {

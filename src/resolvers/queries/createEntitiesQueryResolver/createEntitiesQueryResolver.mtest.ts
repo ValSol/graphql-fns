@@ -657,7 +657,7 @@ describe('createEntityQueryResolver', () => {
 
     expect(items.length).toBe(9);
 
-    const sort = { sortBy: ['first_ASC', 'second_DESC'] };
+    const sort = { sortBy: ['first_ASC', 'second_DESC', 'id_ASC'] };
 
     const items2 = await Items(null, { sort }, { mongooseConn, pubsub }, infoForSort, {
       inputOutputEntity: [[]],
@@ -682,6 +682,18 @@ describe('createEntityQueryResolver', () => {
     expect(items2[7].second).toBe('b');
     expect(items2[8].first).toBe('c');
     expect(items2[8].second).toBe('a');
+
+    const sort2 = { sortBy: ['id_DESC'] };
+
+    const items3 = await Items(null, { sort: sort2 }, { mongooseConn, pubsub }, infoForSort, {
+      inputOutputEntity: [[]],
+    });
+
+    expect(items3.length).toBe(9);
+
+    for (let i = 0; i < 8; i += 1) {
+      expect(items3[i].id.toString() > items3[i + 1].id.toString()).toBe(true);
+    }
   });
 
   test('should create query entities resolver for fullText index', async () => {

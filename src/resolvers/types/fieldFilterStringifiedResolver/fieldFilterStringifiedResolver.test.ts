@@ -2,7 +2,7 @@
 
 import type { Context } from '../../../tsTypes';
 
-import fieldFilterStringifiedResolver from './index';
+import fieldFilterStringifiedResolver from '.';
 
 describe('fieldFilterStringifiedResolver', () => {
   const parent = {

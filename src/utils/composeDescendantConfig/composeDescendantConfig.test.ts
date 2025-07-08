@@ -7,7 +7,7 @@ import type {
 } from '../../tsTypes';
 
 import pageInfoConfig from '../composeAllEntityConfigs/pageInfoConfig';
-import composeDescendantConfig from './index';
+import composeDescendantConfig from '.';
 
 describe('composeDescendantConfig', () => {
   describe('composeDescendantConfig', () => {

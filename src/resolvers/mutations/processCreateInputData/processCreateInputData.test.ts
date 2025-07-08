@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import type { Periphery, TangibleEntityConfig } from '../../../tsTypes';
 import type { PreparedData } from '../../tsTypes';
 
-import processCreateInputData from './index';
+import processCreateInputData from '.';
 
 // TODO repaire this test!
 

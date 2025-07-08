@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
-import createCopyManyEntitiesMutationResolver from './index';
+import createCopyManyEntitiesMutationResolver from '.';
 
 describe('createCopyManyEntitiesMutationResolver', () => {
   test('should create mutation add entity type', () => {

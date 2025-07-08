@@ -1,4 +1,4 @@
-import type {InputCreator} from '../../tsTypes';
+import type { InputCreator } from '../../tsTypes';
 
 const createEntitySortInputType: InputCreator = (entityConfig) => {
   const { booleanFields, dateTimeFields, enumFields, intFields, floatFields, textFields, name } =
@@ -6,7 +6,14 @@ const createEntitySortInputType: InputCreator = (entityConfig) => {
 
   const inputName = `${name}SortInput`;
 
-  const fieldLines = ['  createdAt_ASC', '  createdAt_DESC', '  updatedAt_ASC', '  updatedAt_DESC'];
+  const fieldLines = [
+    '  id_ASC',
+    '  id_DESC',
+    '  createdAt_ASC',
+    '  createdAt_DESC',
+    '  updatedAt_ASC',
+    '  updatedAt_DESC',
+  ];
 
   if (enumFields) {
     enumFields

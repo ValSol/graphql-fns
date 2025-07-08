@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import type { InvolvedFilter } from '../../../tsTypes';
-import getInputAndOutputFilters from './index';
+import getInputAndOutputFilters from '.';
 
 type InvolvedFilters = {
   [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];

@@ -2,7 +2,7 @@
 
 import type { EntityConfig } from '../../../tsTypes';
 
-import composeWhereFields from './index';
+import composeWhereFields from '.';
 
 describe('composeWhereFields', () => {
   test('should return true if args correspond to payload', () => {

@@ -2,7 +2,7 @@
 
 import type { Context } from '../../../tsTypes';
 
-import fieldArrayThroughConnectionResolver from './index';
+import fieldArrayThroughConnectionResolver from '.';
 import { toCursor } from './fromToCursor';
 
 describe('fieldArrayThroughConnectionResolver', () => {

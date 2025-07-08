@@ -2,7 +2,7 @@
 
 import type { GraphqlObject, TangibleEntityConfig } from '../../../tsTypes';
 
-import processDeleteDataPrepareArgs from './index';
+import processDeleteDataPrepareArgs from '.';
 
 describe('processDeleteDataPrepareArgs', () => {
   const personConfig = {} as TangibleEntityConfig;

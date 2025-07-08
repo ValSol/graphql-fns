@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import getLimit from './index';
+import getLimit from '.';
 
 describe('getLimit util', () => {
   test('get results for limit = Infinity, first = undefined', () => {

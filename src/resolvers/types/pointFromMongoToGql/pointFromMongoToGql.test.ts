@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeospatialPoint, MongodbGeospatialPoint } from '../../../tsTypes';
 
-import pointFromMongoToGql from './index';
+import pointFromMongoToGql from '.';
 
 describe('pointFromMongoToGql', () => {
   test('should transform Mongodb geospatial point format to gql format', () => {

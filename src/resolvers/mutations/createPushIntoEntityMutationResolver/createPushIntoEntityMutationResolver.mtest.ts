@@ -631,7 +631,7 @@ describe('createPushIntoEntityMutationResolver', () => {
 
     expect(updatedParent.places).toEqual([]);
 
-    const childs = await Child.find();
+    const childs = await Child.find({});
 
     expect(childs.length).toEqual(1);
   });

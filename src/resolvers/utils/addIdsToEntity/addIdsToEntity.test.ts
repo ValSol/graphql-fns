@@ -2,7 +2,7 @@
 
 import type { EntityConfig } from '../../../tsTypes';
 
-import addIdsToEntity from './index';
+import addIdsToEntity from '.';
 
 describe('addIdsToEntity', () => {
   test('shoud replace _ids by ids', () => {

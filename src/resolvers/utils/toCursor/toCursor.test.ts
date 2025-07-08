@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import toCursor from './index';
+import toCursor from '.';
 
 describe('toCursor', () => {
   test('filter empty', () => {

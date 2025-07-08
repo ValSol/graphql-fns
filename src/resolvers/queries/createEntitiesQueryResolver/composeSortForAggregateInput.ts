@@ -1,19 +1,24 @@
-const composeSortForAggregateInput = (sortBy: Array<string>): Array<{
+const composeSortForAggregateInput = (
+  sortBy: Array<string>,
+): Array<{
   $sort: {
-    [fieldName: string]: 1 | -1
-  }
-}> => sortBy.map((sortKey) => {
-  const [fieldName, distance] = sortKey.split('_');
+    [fieldName: string]: 1 | -1;
+  };
+}> =>
+  sortBy.map((sortKey) => {
+    const [preFieldName, distance] = sortKey.split('_');
 
-  if (distance === 'ASC') {
-    return { $sort: { [fieldName]: 1 } };
-  }
+    const fieldName = preFieldName === 'id' ? '_id' : preFieldName;
 
-  if (distance === 'DESC') {
-    return { $sort: { [fieldName]: -1 } };
-  }
+    if (distance === 'ASC') {
+      return { $sort: { [fieldName]: 1 } };
+    }
 
-  throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
-});
+    if (distance === 'DESC') {
+      return { $sort: { [fieldName]: -1 } };
+    }
+
+    throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
+  });
 
 export default composeSortForAggregateInput;

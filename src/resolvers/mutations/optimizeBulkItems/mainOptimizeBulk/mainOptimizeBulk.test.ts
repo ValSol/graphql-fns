@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import optimizeBulk from './index';
+import optimizeBulk from '.';
 
 describe('optimizeBulk', () => {
   test('should return correct result 1', () => {

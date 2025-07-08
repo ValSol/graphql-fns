@@ -91,7 +91,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       const result = {} as { previous: GraphqlObject[]; current: GraphqlObject[] };
 
-      const tryCount = 7;
+      const tryCount = 10;
 
       let preparedData: PreparedData = {
         core: new Map(),
@@ -115,6 +115,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             await session.startTransaction();
           }
+
           if (!getPrevious) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }
@@ -198,8 +199,13 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           }
 
           // eslint-disable-next-line no-await-in-loop
-          await sleep(2 ** i * 10);
+          await sleep(2 ** i);
         }
+        // finally {
+        //   if (session) {
+        //     await session.endSession(); // 💥 essential!
+        //   }
+        // }
       }
 
       if (produceCurrent) {

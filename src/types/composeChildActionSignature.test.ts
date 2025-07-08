@@ -116,6 +116,8 @@ input ExampleWhereWithoutBooleanOperationsInput {
   first: Int
 }`,
       ExampleSortInput: `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC

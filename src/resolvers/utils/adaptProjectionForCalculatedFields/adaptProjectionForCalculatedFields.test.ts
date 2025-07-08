@@ -2,7 +2,7 @@
 
 import type { TangibleEntityConfig } from '../../../tsTypes';
 
-import adaptProjectionForCalculatedFields from './index';
+import adaptProjectionForCalculatedFields from '.';
 
 describe('adaptProjectionForCalculatedFields', () => {
   const exampleConfig: TangibleEntityConfig = {

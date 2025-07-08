@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { NearInput } from '../../../tsTypes';
 
-import composeNearForAggregateInput from './index';
+import composeNearForAggregateInput from '.';
 
 describe('composeNearForAggregateInput', () => {
   const near: NearInput = {

@@ -2,7 +2,7 @@
 
 import type { ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
 
-import getAsyncFuncResults from './index';
+import getAsyncFuncResults from '.';
 
 describe('getAsyncFuncResults', () => {
   const exampleConfig: TangibleEntityConfig = {

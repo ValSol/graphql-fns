@@ -2,7 +2,7 @@
 
 import type { TangibleEntityConfig } from '../../../tsTypes';
 
-import addCalculatedFieldsToEntity from './index';
+import addCalculatedFieldsToEntity from '.';
 
 describe('addCalculatedFieldsToEntity', () => {
   const exampleConfig: TangibleEntityConfig = {

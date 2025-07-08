@@ -2,7 +2,7 @@
 
 import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../../tsTypes';
 
-import composeEntityResolvers from './index';
+import composeEntityResolvers from '.';
 
 describe('composeEntityResolvers', () => {
   test('should create resolver for type', () => {

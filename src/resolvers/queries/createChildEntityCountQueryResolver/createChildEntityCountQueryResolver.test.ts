@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-import createChildEntityCountQueryResolver from './index';
+import createChildEntityCountQueryResolver from '.';
 
 describe('createChildEntityCountQueryResolver', () => {
   const generalConfig: GeneralConfig = { allEntityConfigs: {} };

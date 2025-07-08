@@ -7,7 +7,7 @@ import type {
   SimplifiedEntityFilters,
 } from '../../../tsTypes';
 
-import composeServersideConfig from './index';
+import composeServersideConfig from '.';
 
 describe('composeFilters', () => {
   const personConfig = {} as TangibleEntityConfig;

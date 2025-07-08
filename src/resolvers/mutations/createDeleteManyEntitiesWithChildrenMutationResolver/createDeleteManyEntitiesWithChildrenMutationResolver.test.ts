@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-import createDeleteManyEntitiesWithChildrenMutationResolver from './index';
+import createDeleteManyEntitiesWithChildrenMutationResolver from '.';
 
 describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   const generalConfig: GeneralConfig = { allEntityConfigs: {} };

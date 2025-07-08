@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeospatialMultiPolygon, MongodbGeospatialMultiPolygon } from '../../../tsTypes';
 
-import multiPolygonFromMongoToGql from './index';
+import multiPolygonFromMongoToGql from '.';
 
 describe('multiPolygonFromMongoToGql', () => {
   test('should transform Mongodb geospatial multiPolygon format to gql format', () => {

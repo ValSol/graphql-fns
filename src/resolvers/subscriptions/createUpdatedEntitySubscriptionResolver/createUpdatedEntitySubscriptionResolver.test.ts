@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-import createUpdatedEntitySubscriptionResolver from './index';
+import createUpdatedEntitySubscriptionResolver from '.';
 
 describe('createUpdatedEntitySubscriptionResolver', () => {
   const generalConfig: GeneralConfig = { allEntityConfigs: {} };

@@ -6,7 +6,7 @@ import type {
   Inventory,
 } from '../../../../tsTypes';
 
-import getAllEntityNames from './index';
+import getAllEntityNames from '.';
 
 describe('getAllEntityNames', () => {
   const personConfig = {} as TangibleEntityConfig;

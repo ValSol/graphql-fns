@@ -22,6 +22,8 @@ describe('createEntitySortInputType', () => {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -57,6 +59,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -105,6 +109,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -144,6 +150,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -183,6 +191,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -222,6 +232,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -261,6 +273,8 @@ input ExampleSortInput {
     const expectedResult = [
       'ExampleSortInput',
       `enum ExampleSortEnum {
+  id_ASC
+  id_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC

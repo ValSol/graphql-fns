@@ -1,9 +1,19 @@
-const { defaults: tsjPreset } = require('ts-jest/presets'); // eslint-disable-line import/no-extraneous-dependencies
+// const { defaults: tsjPreset } = require('ts-jest/presets'); // eslint-disable-line import/no-extraneous-dependencies
 
-module.exports = {
+export default {
   rootDir: '../',
-  transform: tsjPreset.transform,
-  preset: '@shelf/jest-mongodb',
-  testMatch: ['<rootDir>/**/*.mtest.ts'],
+  preset: '@shelf/jest-mongodb', // uses custom testEnvironment
+  extensionsToTreatAsEsm: ['.ts'],
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { useESM: true, tsconfig: './tsconfig.json' }],
+  },
+  testEnvironment: 'node', // this overrides the mongodb env if you don't want it; otherwise, omit
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  testMatch: ['<rootDir>/src/**/*.mtest.ts'],
   testTimeout: 30000,
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { useESM: true, tsconfig: './tsconfig.json' }],
+  },
 };

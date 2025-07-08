@@ -7,7 +7,7 @@ import type {
   EntityConfig,
 } from '../../tsTypes';
 
-import parseEntityName from './index';
+import parseEntityName from '.';
 
 describe('parseEntityName', () => {
   const entityConfig: EntityConfig = {

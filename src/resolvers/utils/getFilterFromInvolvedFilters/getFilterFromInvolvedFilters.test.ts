@@ -2,7 +2,7 @@
 
 import type { InvolvedFilter } from '../../../tsTypes';
 
-import getFilterFromInvolvedFilters from './index';
+import getFilterFromInvolvedFilters from '.';
 
 type InvolvedFilters = {
   [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];

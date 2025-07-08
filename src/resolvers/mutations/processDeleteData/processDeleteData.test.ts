@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { TangibleEntityConfig } from '../../../tsTypes';
 
-import processDeleteData from './index';
+import processDeleteData from '.';
 
 describe('processDeleteData', () => {
   test('should create object with simple fields', () => {

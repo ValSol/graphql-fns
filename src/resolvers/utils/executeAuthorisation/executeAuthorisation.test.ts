@@ -10,7 +10,7 @@ import type {
 } from '../../../tsTypes';
 
 import sleep from '../../../utils/sleep';
-import executeAuthorisation from './index';
+import executeAuthorisation from '.';
 
 const viewer = 'Viewer';
 const guest = 'Guest';
