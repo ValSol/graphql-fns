@@ -1,15 +1,15 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.1008",
+  "version": "0.1.2-beta.1025",
   "description": "Useful functions to work with graphql",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "files": [
@@ -17,9 +17,8 @@
   ],
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "tsc",
-    "prepare": "npm run build",
-    "prepack": "yarn run clean && yarn run build",
+    "build": "tsup",
+    "prepack": "yarn build",
     "commit": "git-cz",
     "test:once": "jest --config=\"./configs/jest.config.js\" --runInBand --verbose false",
     "test:mongodb": "jest --config=\"./configs/jest.config.mongodb.js\" --runInBand --verbose false --detectOpenHandles",
@@ -87,6 +86,7 @@
     "rimraf": "^6.0.1",
     "semantic-release": "^24.2.1",
     "ts-jest": "^29.4.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.35.1"
   },
