@@ -5,7 +5,7 @@ import type {
   NearInput,
   ServersideConfig,
   EntityConfig,
-  InventoryСhain,
+  InventoryChain,
   SintheticResolverInfo,
   GraphqlObject,
   GraphqlScalar,
@@ -37,7 +37,7 @@ const createChildEntitiesThroughConnectionQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryСhain = ['Query', 'childEntitiesThroughConnection', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const entitiesThroughConnectionQueryResolver = createEntitiesThroughConnectionQueryResolver(

@@ -16,10 +16,11 @@ const prepareBulkData: PrepareBulkData = async (
   const { data } = args as { data: GraphqlObject };
 
   const { duplexFields } = entityConfig as TangibleEntityConfig;
+
   const duplexFieldsProjection = duplexFields
     ? duplexFields.reduce(
         (prev, { name: name2 }) => {
-          prev[name2] = 1; // eslint-disable-line no-param-reassign
+          prev[name2] = 1;
           return prev;
         },
         { _id: 1 },
@@ -49,7 +50,7 @@ const prepareBulkData: PrepareBulkData = async (
 
   previousEntities.forEach((previousEntity) => {
     preparedData = processCreateInputData(
-      { ...data, id: previousEntity._id }, // eslint-disable-line no-underscore-dangle
+      { ...data, id: previousEntity._id },
       preparedData,
       entityConfig as TangibleEntityConfig,
       'update',

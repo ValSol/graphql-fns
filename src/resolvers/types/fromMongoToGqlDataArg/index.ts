@@ -36,10 +36,8 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
   embeddedFields.reduce((prev, { name, array, config }) => {
     if (data[name]) {
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = data[name].map((item) => fromMongoToGqlDataArg(item, config));
       } else {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = fromMongoToGqlDataArg(data[name], config);
       }
     }
@@ -49,10 +47,8 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
   geospatialFields.reduce((prev, { name, array }) => {
     if (data[name]) {
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = data[name].map((item) => geospatialFromMongToGql(item));
       } else {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = geospatialFromMongToGql(data[name]);
       }
     }
@@ -66,7 +62,6 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
       if (data[name]) {
         if (array) {
           if (!data[name].length) {
-            // eslint-disable-next-line no-param-reassign
             prev[name] = { connect: [] };
           } else {
             const { connect, create, createPositions } = data[name].reduce(
@@ -95,13 +90,11 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
               result2.createPositions = createPositions;
             }
 
-            prev[name] = result2; // eslint-disable-line no-param-reassign
+            prev[name] = result2;
           }
         } else if (typeof data[name] === 'string' || data[name].constructor.name === 'ObjectId') {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
       } else if (data[name] === null) {
@@ -115,7 +108,6 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
       if (data[name]) {
         if (array) {
           if (!data[name].length) {
-            // eslint-disable-next-line no-param-reassign
             prev[name] = { connect: [] };
           } else {
             const { connect, create, createPositions } = data[name].reduce(
@@ -144,13 +136,11 @@ const fromMongoToGqlDataArg = (data: DataObject, entityConfig: EntityConfig): Gr
               result2.createPositions = createPositions;
             }
 
-            prev[name] = result2; // eslint-disable-line no-param-reassign
+            prev[name] = result2;
           }
         } else if (typeof data[name] === 'string' || data[name].constructor.name === 'ObjectId') {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = { connect: data[name] };
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = { create: fromMongoToGqlDataArg(data[name], config) };
         }
       } else if (data[name] === null) {

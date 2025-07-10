@@ -6,6 +6,7 @@ import type {
   InvolvedFilter,
   GraphqlObject,
   SintheticResolverInfo,
+  ActionResolver,
 } from '../../../tsTypes';
 
 const store = Object.create(null);
@@ -31,7 +32,7 @@ const createResolverCreator = (
     serversideConfig: ServersideConfig,
   ): null | any => {
     const inAnyCase = true;
-    const regularResolver = regularResolverCreator(
+    const regularResolver: ActionResolver = regularResolverCreator(
       entityConfig,
       generalConfig,
       serversideConfig,

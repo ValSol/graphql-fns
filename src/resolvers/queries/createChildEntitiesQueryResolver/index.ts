@@ -1,7 +1,7 @@
 import type {
   Context,
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   NearInput,
   ServersideConfig,
   EntityConfig,
@@ -36,7 +36,7 @@ const createChildEntitiesQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryСhain = ['Query', 'childEntities', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntities', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const entitiesQueryResolver = createEntitiesQueryResolver(

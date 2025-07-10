@@ -1,7 +1,7 @@
 import type {
   Context,
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   ServersideConfig,
   EntityConfig,
   GraphqlObject,
@@ -28,7 +28,7 @@ const createChildEntityQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryСhain = ['Query', 'childEntity', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntity', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const entityQueryResolver = createEntityQueryResolver(

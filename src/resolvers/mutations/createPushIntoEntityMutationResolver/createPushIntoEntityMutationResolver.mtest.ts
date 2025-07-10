@@ -284,7 +284,7 @@ describe('createPushIntoEntityMutationResolver', () => {
 
     const createdFriendLocation2 = await Place.findById(createdFriend2.location);
     expect(createdFriendLocation2.name).toBe(data2.friend.create.location.create.name);
-    // eslint-disable-next-line
+
     expect(createdFriendLocation2.citizens[0]).toEqual(createdFriend2._id);
 
     const createdLocation2 = await Place.findById(locationId2);
@@ -466,7 +466,7 @@ describe('createPushIntoEntityMutationResolver', () => {
           },
         },
       };
-      // eslint-disable-next-line no-await-in-loop
+
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
         inputOutputEntity: [[]],
       });

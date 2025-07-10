@@ -1,4 +1,4 @@
-import type {ResolverAttributes} from '../../../tsTypes';
+import type { ResolverAttributes } from '../../../tsTypes';
 
 import getPrevious from './getPrevious';
 import prepareBulkData from './prepareBulkData';

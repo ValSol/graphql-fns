@@ -188,7 +188,6 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const createdFriendLocation = await Place.findById(createdFriend.location);
     expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
-    // eslint-disable-next-line no-underscore-dangle
     expect(createdFriendLocation.citizens[0]).toEqual(createdFriend._id);
 
     const createdLocation = await Place.findById(locationId);
@@ -369,7 +368,7 @@ describe('createDeleteEntityMutationResolver', () => {
           create: [{ textField: `text-${i}` }],
         },
       };
-      // eslint-disable-next-line no-await-in-loop
+
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
         inputOutputEntity: [[]],
       });

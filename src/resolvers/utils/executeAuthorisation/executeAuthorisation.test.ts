@@ -5,7 +5,7 @@ import type {
   EntityFilters,
   GeneralConfig,
   Inventory,
-  InventoryСhain,
+  InventoryChain,
   ServersideConfig,
 } from '../../../tsTypes';
 
@@ -148,7 +148,7 @@ describe('executeAuthorisation', () => {
   const id = '1234567890';
 
   test('should returnv [] for "Viewer" role when empty serversideConfig', async () => {
-    const inventoryChain: InventoryСhain = ['Query', 'entitiesForView', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
 
     const serversideConfig: ServersideConfig = { staticLimits };
 
@@ -178,7 +178,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] for "Viewer" role', async () => {
-    const inventoryChain: InventoryСhain = ['Query', 'entitiesForView', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [viewer] };
@@ -222,7 +222,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] for "Guest" role', async () => {
-    const inventoryChain: InventoryСhain = ['Query', 'entitiesForView', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [guest] };
@@ -266,7 +266,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] for "RestaurantOwner" role', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner] };
@@ -310,7 +310,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv "null" for "Guest" role', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [guest] };
@@ -354,7 +354,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [Object] for "RestaurantOwner" role', async () => {
-    const inventoryChain: InventoryСhain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner], id };
@@ -406,7 +406,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [Object] for "Admin" role', async () => {
-    const inventoryChain: InventoryСhain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner, admin], id };
@@ -452,7 +452,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should return [Object, Object] for "Admin" role', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'cloneEntity', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner, admin], id };
@@ -526,7 +526,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] & null for "Admin" role', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner, admin], id };
@@ -578,7 +578,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] & [] without any inventories', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
 
     const serversideConfig: ServersideConfig = { staticLimits };
 
@@ -614,7 +614,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [] & noll without any inventories', async () => {
-    const inventoryChain: InventoryСhain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Mutation', 'updateEntityForSetting', 'Restaurant'];
 
     const serversideConfig: ServersideConfig = {};
 

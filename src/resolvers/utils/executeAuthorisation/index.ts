@@ -1,6 +1,6 @@
 import type {
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   ServersideConfig,
   ThreeSegmentInventoryChain,
   InvolvedFilter,
@@ -99,7 +99,7 @@ const executeAuthorisation = async (
 
       const staticLimit = staticLimits[entityName];
 
-      const filter = checkInventory(amendedInventoryChain as InventoryСhain, inventory)
+      const filter = checkInventory(amendedInventoryChain as InventoryChain, inventory)
         ? staticFilter
           ? [staticFilter]
           : []
@@ -142,7 +142,7 @@ const executeAuthorisation = async (
 
     result[involvedEntityNamesKey] = null;
 
-    if (!checkInventory(amendedInventoryChain as InventoryСhain, inventory)) continue;
+    if (!checkInventory(amendedInventoryChain as InventoryChain, inventory)) continue;
 
     if (inventoryByRoles) {
       if (!containedRoles) {
@@ -164,7 +164,7 @@ const executeAuthorisation = async (
       for (let j = 0; j < allRoles.length; j += 1) {
         const inventoryByRole = inventoryByRoles[allRoles[j]];
 
-        if (checkInventory(amendedInventoryChain as InventoryСhain, inventoryByRole)) {
+        if (checkInventory(amendedInventoryChain as InventoryChain, inventoryByRole)) {
           result[involvedEntityNamesKey] = [];
           break;
         }

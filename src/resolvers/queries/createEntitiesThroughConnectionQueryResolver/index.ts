@@ -1,7 +1,7 @@
 import type {
   Context,
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   NearInput,
   ServersideConfig,
   ResolverCreatorArg,
@@ -50,7 +50,7 @@ const createEntitiesThroughConnectionQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryСhain = ['Query', 'entitiesThroughConnection', name];
+  const inventoryChain: InventoryChain = ['Query', 'entitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const entitiesQueryResolver = createEntitiesQueryResolver(
@@ -155,7 +155,6 @@ const createEntitiesThroughConnectionQueryResolver = (
       let shift2 = shift;
 
       for (let i = 0; i < 10; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
         const result = await getFirst(
           _id,
           shift2,
@@ -168,7 +167,6 @@ const createEntitiesThroughConnectionQueryResolver = (
 
         if (result) return result;
 
-        // eslint-disable-next-line no-await-in-loop
         shift2 = await getShift(
           _id,
           resolverCreatorArg,
@@ -211,7 +209,6 @@ const createEntitiesThroughConnectionQueryResolver = (
       let shift2 = shift;
 
       for (let i = 0; i < 10; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
         const result = await getLast(
           _id,
           shift2,
@@ -224,7 +221,6 @@ const createEntitiesThroughConnectionQueryResolver = (
 
         if (result) return result;
 
-        // eslint-disable-next-line no-await-in-loop
         shift2 = await getShift(
           _id,
           resolverCreatorArg,
@@ -234,7 +230,7 @@ const createEntitiesThroughConnectionQueryResolver = (
         );
 
         if (shift2 === null) {
-          getVeryLast(
+          await getVeryLast(
             last,
             resolverArg,
             involvedFilters,

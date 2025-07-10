@@ -1,7 +1,7 @@
 import type {
   Context,
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   ServersideConfig,
   EntityConfig,
   GraphqlObject,
@@ -32,7 +32,7 @@ const createEntityDistinctValuesQueryResolver = (
 ): any => {
   const { enums, inventory } = generalConfig;
   const { name } = entityConfig;
-  const inventoryChain: InventoryСhain = ['Query', 'entityDistinctValues', name];
+  const inventoryChain: InventoryChain = ['Query', 'entityDistinctValues', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const entitiesQueryResolver = createEntitiesQueryResolver(

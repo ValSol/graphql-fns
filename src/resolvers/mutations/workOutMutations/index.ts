@@ -1,4 +1,4 @@
-import type { GraphqlObject, InventoryСhain, TangibleEntityConfig } from '../../../tsTypes';
+import type { GraphqlObject, InventoryChain, TangibleEntityConfig } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
 import sleep from '../../../utils/sleep';
@@ -36,7 +36,7 @@ const workOutMutations = async (
 
   for (let j = 0; j < tryCount; j += 1) {
     let preparedData = preparedBulkData;
-    // eslint-disable-next-line no-await-in-loop
+
     const session = transactions ? await mongooseConn.startSession() : null;
 
     try {
@@ -71,7 +71,7 @@ const workOutMutations = async (
           await checkLockedData(mutationArgs, commonResolverCreatorArg);
         }
 
-        const inventoryChain: InventoryСhain = ['Mutation', actionGeneralName, name];
+        const inventoryChain: InventoryChain = ['Mutation', actionGeneralName, name];
         if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
           throw new TypeError(
             `Not authorized "${actionGeneralName}" mutation for "${name}" entity!`,
@@ -93,7 +93,6 @@ const workOutMutations = async (
           involvedFilters,
         } as const;
 
-        // eslint-disable-next-line no-await-in-loop
         const previous: GraphqlObject[] = await getPrevious(
           actionGeneralName,
           resolverCreatorArg,
@@ -108,7 +107,7 @@ const workOutMutations = async (
 
         const { core, periphery } = preparedData;
         const preparedData2 = { core, periphery, mains: previous } as const;
-        // eslint-disable-next-line no-await-in-loop
+
         preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, preparedData2);
         if (!preparedData) {
           throw new TypeError(
@@ -125,20 +124,16 @@ const workOutMutations = async (
 
       const coreWithPeriphery: Core =
         periphery && periphery.size
-          ? // eslint-disable-next-line no-await-in-loop
-            await addPeripheryToCore(periphery, core, mongooseConn)
+          ? await addPeripheryToCore(periphery, core, mongooseConn)
           : core;
 
       const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
-      // eslint-disable-next-line no-await-in-loop
       const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
-      // eslint-disable-next-line no-await-in-loop
       await executeBulkItems(coreWithCounters, generalConfig, context, null);
 
       if (session) {
-        // eslint-disable-next-line no-await-in-loop
         await session.commitTransaction();
         await session.endSession();
       }
@@ -146,7 +141,6 @@ const workOutMutations = async (
       break;
     } catch (err) {
       if (session) {
-        // eslint-disable-next-line no-await-in-loop
         await session.abortTransaction();
         await session.endSession();
       }
@@ -155,7 +149,6 @@ const workOutMutations = async (
         throw new Error(err);
       }
 
-      // eslint-disable-next-line no-await-in-loop
       await sleep(2 ** j);
     }
     // finally {
@@ -235,7 +228,7 @@ const workOutMutations = async (
         periphery: new Map(),
         mains: previous,
       };
-      // eslint-disable-next-line no-await-in-loop
+
       result.current = await produceResult(
         fakePreparedData,
         resolverCreatorArg,
@@ -245,7 +238,6 @@ const workOutMutations = async (
     }
 
     if (result && returnReport) {
-      // eslint-disable-next-line no-await-in-loop
       const subscription = await report(resolverCreatorArg, resolverArg);
       if (subscription) {
         subscription(result);

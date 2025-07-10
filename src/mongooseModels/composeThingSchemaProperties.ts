@@ -51,17 +51,17 @@ const composeThingSchemaProperties = (
 
     if (index && configType !== 'tangible') {
       throw new TypeError(`Must not have an "unique" field in an "${configType}" document!`);
-    } // eslint-disable-next-line no-param-reassign
+    }
 
-    prev[name] = { type: array ? [String] : String }; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
+    prev[name] = { type: array ? [String] : String };
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     if (required) prev[name].required = true; // by default required = false
     if (unique) {
-      prev[name].unique = true; // eslint-disable-line no-param-reassign
-      if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      prev[name].unique = true;
+      if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
     return prev;
   }, result);
 
@@ -77,17 +77,17 @@ const composeThingSchemaProperties = (
 
     if (unique && configType !== 'tangible') {
       throw new TypeError(`Must not have an "unique" field in an "${configType}" document!`);
-    } // eslint-disable-next-line no-param-reassign
+    }
 
-    prev[name] = { type: array ? [Date] : Date }; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
+    prev[name] = { type: array ? [Date] : Date };
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     if (required) prev[name].required = true; // by default required = false
     if (unique) {
-      prev[name].unique = true; // eslint-disable-line no-param-reassign
-      if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      prev[name].unique = true;
+      if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
     return prev;
   }, result);
 
@@ -103,17 +103,17 @@ const composeThingSchemaProperties = (
 
     if (unique && configType !== 'tangible') {
       throw new TypeError(`Must not have an "unique" field in an "${configType}" document!`);
-    } // eslint-disable-next-line no-param-reassign
+    }
 
-    prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
+    prev[name] = { type: array ? [Number] : Number };
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     if (required) prev[name].required = true; // by default required = false
     if (unique) {
-      prev[name].unique = true; // eslint-disable-line no-param-reassign
-      if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      prev[name].unique = true;
+      if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
     return prev;
   }, result);
 
@@ -129,17 +129,17 @@ const composeThingSchemaProperties = (
 
     if (unique && configType !== 'tangible') {
       throw new TypeError(`Must not have an "unique" field in an "${configType}" document!`);
-    } // eslint-disable-next-line no-param-reassign
+    }
 
-    prev[name] = { type: array ? [Number] : Number }; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
+    prev[name] = { type: array ? [Number] : Number };
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     if (required) prev[name].required = true; // by default required = false
     if (unique) {
-      prev[name].unique = true; // eslint-disable-line no-param-reassign
-      if (!required) prev[name].sparse = true; // eslint-disable-line no-param-reassign
+      prev[name].unique = true;
+      if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
     return prev;
   }, result);
 
@@ -153,11 +153,11 @@ const composeThingSchemaProperties = (
       }
     }
 
-    prev[name] = { type: array ? [Boolean] : Boolean }; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
-    // eslint-disable-next-line no-param-reassign
+    prev[name] = { type: array ? [Boolean] : Boolean };
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     if (required) prev[name].required = true; // by default required = false
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
     return prev;
   }, result);
 
@@ -186,8 +186,8 @@ const composeThingSchemaProperties = (
         };
         if (!required) obj.required = false; // by default required = true
         if (unique) {
-          obj.unique = true; // eslint-disable-line no-param-reassign
-          if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
+          obj.unique = true;
+          if (!required) obj.sparse = true;
         }
         obj.index = true; // always create index
 
@@ -214,11 +214,11 @@ const composeThingSchemaProperties = (
         };
         if (!required) obj.required = false; // by default required = true
         if (unique) {
-          obj.unique = true; // eslint-disable-line no-param-reassign
-          if (!required) obj.sparse = true; // eslint-disable-line no-param-reassign
+          obj.unique = true;
+          if (!required) obj.sparse = true;
         }
         if (index) obj.index = true;
-        // eslint-disable-next-line no-param-reassign
+
         prev[name] = array ? [obj] : obj;
         return prev;
       },
@@ -236,7 +236,7 @@ const composeThingSchemaProperties = (
 
   embeddedFields.reduce((prev, { array, name, config }) => {
     const obj = composeThingSchemaProperties(config, enums);
-    // eslint-disable-next-line no-param-reassign
+
     prev[name] = array ? [obj] : { type: new Schema(obj) };
     return prev;
   }, result);
@@ -255,7 +255,6 @@ const composeThingSchemaProperties = (
       };
       if (required) obj.type.required = true; // by default required = false
 
-      // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
     } else if (geospatialType === 'Polygon') {
       const obj: any = {
@@ -269,7 +268,6 @@ const composeThingSchemaProperties = (
       };
       if (required) obj.type.required = true; // by default required = false
 
-      // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
     } else if (geospatialType === 'MultiPolygon') {
       const obj: any = {
@@ -283,7 +281,6 @@ const composeThingSchemaProperties = (
       };
       if (required) obj.type.required = true; // by default required = false
 
-      // eslint-disable-next-line no-param-reassign
       prev[name] = array ? [obj] : obj;
     } else {
       throw new TypeError(`Invalid value "${geospatialType}" of geospatial field geospatialType!`);
@@ -301,15 +298,14 @@ const composeThingSchemaProperties = (
       }
     }
 
-    // eslint-disable-next-line no-param-reassign
     prev[name] = {
       enum: enums[enumName],
       type: array ? [String] : String,
     };
-    // eslint-disable-next-line no-param-reassign
+
     if (required) prev[name].required = true; // by default required = false
-    if (index) prev[name].index = true; // eslint-disable-line no-param-reassign
-    if (defaultValue !== undefined) prev[name].default = defaultValue; // eslint-disable-line no-param-reassign
+    if (index) prev[name].index = true;
+    if (defaultValue !== undefined) prev[name].default = defaultValue;
     return prev;
   }, result);
 

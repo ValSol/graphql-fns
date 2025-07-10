@@ -1,7 +1,7 @@
 import type {
   Context,
   GeneralConfig,
-  InventoryСhain,
+  InventoryChain,
   NearInput,
   ServersideConfig,
   EntityConfig,
@@ -50,7 +50,7 @@ const createEntitiesQueryResolver = (
   const { enums, inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryСhain = ['Query', 'entities', name];
+  const inventoryChain: InventoryChain = ['Query', 'entities', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (

@@ -2,7 +2,7 @@ import type {
   Context,
   GeneralConfig,
   GraphqlObject,
-  InventoryСhain,
+  InventoryChain,
   ServersideConfig,
   EntityConfig,
   InvolvedFilter,
@@ -61,7 +61,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
     const { transactions } = serversideConfig;
     const { name } = entityConfig;
 
-    const inventoryChain: InventoryСhain = ['Mutation', actionGeneralName, name];
+    const inventoryChain: InventoryChain = ['Mutation', actionGeneralName, name];
     if (!inAnyCase && !checkInventory(inventoryChain, inventory)) {
       return null;
     }
@@ -108,7 +108,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       );
 
       for (let i = 0; i < tryCount; i += 1) {
-        // eslint-disable-next-line no-await-in-loop
         const session = transactions ? await mongooseConn.startSession() : null;
 
         try {
@@ -119,12 +118,11 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (!getPrevious) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }
-          // eslint-disable-next-line no-await-in-loop
+
           const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
 
           if (!previous) {
             if (session) {
-              // eslint-disable-next-line no-await-in-loop
               await session.abortTransaction();
               await session.endSession();
             }
@@ -145,17 +143,17 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (!prepareBulkData) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }
+
           const prevPreparedData: PreparedData = {
             core: new Map(),
             periphery: new Map(),
             mains: previous,
           };
-          // eslint-disable-next-line no-await-in-loop
+
           preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, prevPreparedData);
 
           if (!preparedData) {
             if (session) {
-              // eslint-disable-next-line no-await-in-loop
               await session.abortTransaction();
               await session.endSession();
             }
@@ -168,20 +166,16 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
           const coreWithPeriphery =
             periphery && periphery.size
-              ? // eslint-disable-next-line no-await-in-loop
-                await addPeripheryToCore(periphery, core, mongooseConn)
+              ? await addPeripheryToCore(periphery, core, mongooseConn)
               : core;
 
           const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
-          // eslint-disable-next-line no-await-in-loop
           const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
 
-          // eslint-disable-next-line no-await-in-loop
           await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
           if (session) {
-            // eslint-disable-next-line no-await-in-loop
             await session.commitTransaction();
             await session.endSession();
           }
@@ -189,7 +183,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           break;
         } catch (err) {
           if (session) {
-            // eslint-disable-next-line no-await-in-loop
             await session.abortTransaction();
             await session.endSession();
           }
@@ -198,7 +191,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             throw new Error(err);
           }
 
-          // eslint-disable-next-line no-await-in-loop
           await sleep(2 ** i);
         }
         // finally {
@@ -209,7 +201,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       }
 
       if (produceCurrent) {
-        // eslint-disable-next-line no-await-in-loop
         result.current = await produceResult(preparedData, resolverCreatorArg, resolverArg, array);
       }
 

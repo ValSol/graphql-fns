@@ -6,6 +6,7 @@ import getMatchingFields from '../../../../../utils/getMatchingFields';
 import createMongooseModel from '../../../../../mongooseModels/createMongooseModel';
 
 import { getNotArrayOppositeDuplexFields } from '../../../processFieldToDelete';
+import sleep from '../../../../../utils/sleep';
 
 const composeProjectionAndDuplexFieldsToCopy = (
   fieldName: undefined | string,
@@ -19,19 +20,19 @@ const composeProjectionAndDuplexFieldsToCopy = (
   const duplexFieldsToCopy = getNotArrayOppositeDuplexFields(secondEntityConfig)
     .filter(([{ name }]) => matchingFields.includes(name))
     .reduce((prev, [{ name, oppositeName, config, array }]) => {
-      prev[name] = [{ oppositeName, config, array }]; // eslint-disable-line no-param-reassign
+      prev[name] = [{ oppositeName, config, array }];
       return prev;
     }, {});
 
   getNotArrayOppositeDuplexFields(secondEntityConfig2)
     .filter(([{ name }]) => matchingFields.includes(name))
     .reduce((prev, [{ name, oppositeName, config, array }]) => {
-      prev[name].push({ oppositeName, config, array }); // eslint-disable-line no-param-reassign
+      prev[name].push({ oppositeName, config, array });
       return prev;
     }, duplexFieldsToCopy);
 
   const projection = matchingFields.reduce<Record<string, any>>((prev, matchingField) => {
-    prev[matchingField] = 1; // eslint-disable-line no-param-reassign
+    prev[matchingField] = 1;
     return prev;
   }, {});
 
@@ -63,23 +64,22 @@ const composeCreateTree = async (
     const fieldName = entityFieldNames[i];
 
     if (fieldName === oppositeFieldName) {
-      continue; // eslint-disable-line no-continue
+      continue;
     }
 
     if (duplexFieldsToCopy[fieldName]) {
       const [{ config: entityConfig2, array, oppositeName }, { config: secondEntityConfig2 }] =
         duplexFieldsToCopy[fieldName];
 
-      const Entity = await createMongooseModel(mongooseConn, entityConfig2, enums); // eslint-disable-line no-await-in-loop
+      const Entity = await createMongooseModel(mongooseConn, entityConfig2, enums);
 
       if (array) {
-        // eslint-disable-next-line no-await-in-loop
         const entities = await Entity.find({ _id: { $in: entity[fieldName] } }, null, {
           lean: true,
         });
 
         const entitiesObject = entities.reduce((prev, item) => {
-          prev[item._id] = item; // eslint-disable-line no-param-reassign, no-underscore-dangle
+          prev[item._id] = item;
 
           return prev;
         }, {});
@@ -88,7 +88,7 @@ const composeCreateTree = async (
 
         result[fieldName] = [];
         if (currentBranch) {
-          currentBranch[fieldName] = []; // eslint-disable-line no-param-reassign
+          currentBranch[fieldName] = [];
         }
 
         for (let j = 0; j < rangeredEntities.length; j += 1) {
@@ -98,7 +98,6 @@ const composeCreateTree = async (
           }
 
           result[fieldName].push(
-            // eslint-disable-next-line no-await-in-loop
             await composeCreateTree(
               rangeredEntity,
               entityConfig2,
@@ -111,19 +110,16 @@ const composeCreateTree = async (
           );
         }
       } else if (!entity[fieldName]) {
-        continue; // eslint-disable-line no-continue
+        continue;
       } else {
-        // eslint-disable-next-line no-await-in-loop
         const entity2 = await Entity.findOne({ _id: entity[fieldName] }, null, {
           lean: true,
         });
 
         if (currentBranch) {
-          // eslint-disable-next-line no-underscore-dangle
-          currentBranch[fieldName] = [{}, entity2, entityConfig2]; // eslint-disable-line no-param-reassign
+          currentBranch[fieldName] = [{}, entity2, entityConfig2];
         }
 
-        // eslint-disable-next-line no-await-in-loop
         result[fieldName] = await composeCreateTree(
           entity2,
           entityConfig2,

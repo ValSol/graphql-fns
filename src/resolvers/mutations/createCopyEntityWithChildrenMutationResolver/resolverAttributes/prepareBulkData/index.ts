@@ -37,20 +37,21 @@ const prepareBulkData: PrepareBulkData = async (
   const fieldToConnect = ((entityConfig as TangibleEntityConfig).duplexFields || []).find(
     ({ name }) => name === fieldName,
   );
+
   if (!fieldToConnect) {
     throw new TypeError(
       `Not found duplex field: "${fieldName}" in entity: "${entityConfig.name}"!`,
     );
   }
+
   const { config: copiedEntityConfig } = fieldToConnect;
 
-  // eslint-disable-next-line no-underscore-dangle
   if (previousEntities[0]._id) {
     const { duplexFields } = entityConfig as TangibleEntityConfig;
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce(
           (prev, { name: name2 }) => {
-            prev[name2] = 1; // eslint-disable-line no-param-reassign
+            prev[name2] = 1;
             return prev;
           },
           { _id: 1 },
@@ -91,7 +92,6 @@ const prepareBulkData: PrepareBulkData = async (
     for (let i = 0; i < pairedPreviouseEntities.length; i += 1) {
       const [currentEntity, copiedEntity] = pairedPreviouseEntities[i];
 
-      // eslint-disable-next-line no-await-in-loop
       const tree = await composeCreateTree(
         copiedEntity,
         copiedEntityConfig,
@@ -107,7 +107,6 @@ const prepareBulkData: PrepareBulkData = async (
         entityConfig as TangibleEntityConfig,
       ];
 
-      // eslint-disable-next-line no-await-in-loop
       const currentTree = await composeCreateTree(
         currentEntity,
         entityConfig as TangibleEntityConfig,
@@ -122,7 +121,7 @@ const prepareBulkData: PrepareBulkData = async (
       const tree2 = fromMongoToGqlDataArg(Object.assign(copiedEntity, mixedTrees), entityConfig);
 
       preparedData = processCreateInputData(
-        { ...tree2, id: currentEntity._id }, // eslint-disable-line no-underscore-dangle
+        { ...tree2, id: currentEntity._id },
         preparedData,
         entityConfig as TangibleEntityConfig,
         'update',
@@ -143,7 +142,6 @@ const prepareBulkData: PrepareBulkData = async (
       entityConfig as TangibleEntityConfig,
     ];
 
-    // eslint-disable-next-line no-await-in-loop
     const tree = await composeCreateTree(
       copiedEntity,
       copiedEntityConfig,

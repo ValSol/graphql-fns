@@ -1090,7 +1090,7 @@ export type ThreeSegmentInventoryChain =
     ]
   | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity', string]; //  "string" for entity name
 
-export type InventoryСhain =
+export type InventoryChain =
   | OneSegmentInventoryChain
   | TwoSegmentInventoryChain
   | ThreeSegmentInventoryChain;

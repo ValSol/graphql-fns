@@ -3,7 +3,7 @@ import type { Core } from '../../tsTypes';
 
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 
-const executeBulkItems = async (
+const executeBulkItems = (
   core: Core,
   generalConfig: GeneralConfig,
   context: Context,
@@ -23,7 +23,7 @@ const executeBulkItems = async (
     promises.push(Entity.bulkWrite(bulkItems, { session, strict: true }));
   });
 
-  return await Promise.all(promises);
+  return Promise.all(promises);
 };
 
 export default executeBulkItems;
