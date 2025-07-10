@@ -11,7 +11,7 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -43,7 +43,6 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const processingKind = 'update';
   for (let i = 0; i < data.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
     const allowUpdate = await checkData(
       { data: data[i], whereOne: whereOne[i] },
       outputFilter,
@@ -65,7 +64,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const duplexFieldsProjection = duplexFields
     ? duplexFields.reduce(
         (prev, { name: name2 }) => {
-          prev[name2] = 1; // eslint-disable-line no-param-reassign
+          prev[name2] = 1;
           return prev;
         },
         { _id: 1 },
@@ -93,25 +92,31 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const entities = await Entity.aggregate(pipeline).exec();
+    const entities = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (!entities || entities.length !== whereOne.length) return null;
 
-    whereOne3 = { _id: { $in: entities.map(({ _id }) => _id) } }; // eslint-disable-line no-underscore-dangle
+    whereOne3 = { _id: { $in: entities.map(({ _id }) => _id) } };
   }
 
   const previousEntities: DataObject[] = await Entity.find(whereOne3, duplexFieldsProjection, {
     lean: true,
+    session,
   });
 
   if (!previousEntities || previousEntities.length !== whereOne.length) return null;
 
   const whereKey2 = whereKey === 'id' ? '_id' : whereKey;
 
-  const previousentitiesObject = previousEntities.reduce((prev, entity) => {
-    prev[entity[whereKey2]] = entity; // eslint-disable-line no-param-reassign
-    return prev;
-  }, {} as { [id: string]: DataObject });
+  const previousentitiesObject = previousEntities.reduce(
+    (prev, entity) => {
+      prev[entity[whereKey2]] = entity;
+      return prev;
+    },
+    {} as { [id: string]: DataObject },
+  );
 
   const result = whereOne.map(
     ({ [whereKey]: key }) => previousentitiesObject[key as unknown as string] as GraphqlObject,

@@ -12,6 +12,7 @@ const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,
   resolverArg,
   prevPreparedData,
+  session,
 ) => {
   const { entityConfig } = resolverCreatorArg as { entityConfig: TangibleEntityConfig };
   const {
@@ -24,23 +25,22 @@ const prepareBulkData: PrepareBulkData = async (
   const additionalDataArr = Array.isArray(whereOnes)
     ? additionalData || Array(whereOnes.length).fill({})
     : additionalData
-    ? [additionalData]
-    : [{}];
+      ? [additionalData]
+      : [{}];
 
-  const mains = await getMains(resolverCreatorArg, resolverArg);
+  const mains = await getMains(resolverCreatorArg, resolverArg, session);
 
   const previousEntities = mains.map((previousEntity) => ({
     ...fromMongoToGqlDataArg(previousEntity, entityConfig),
-    _id: previousEntity._id, // eslint-disable-line no-underscore-dangle
+    _id: previousEntity._id,
   }));
 
-  // eslint-disable-next-line no-underscore-dangle
   if (previousEntities[0]._id) {
     const { duplexFields } = entityConfig;
     const duplexFieldsProjection = duplexFields
       ? duplexFields.reduce(
           (prev, { name: name2 }) => {
-            prev[name2] = 1; // eslint-disable-line no-param-reassign
+            prev[name2] = 1;
             return prev;
           },
           { _id: 1 },
@@ -76,7 +76,7 @@ const prepareBulkData: PrepareBulkData = async (
 
     pairedPreviouseEntities.forEach(([previousEntity, data]: [any, any], i) => {
       preparedData = processCreateInputData(
-        { ...data, id: previousEntity._id, ...additionalDataArr[i] }, // eslint-disable-line no-underscore-dangle
+        { ...data, id: previousEntity._id, ...additionalDataArr[i] },
         preparedData,
         entityConfig,
         'update',

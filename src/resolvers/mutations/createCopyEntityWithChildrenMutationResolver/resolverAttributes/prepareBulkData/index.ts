@@ -15,6 +15,7 @@ const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,
   resolverArg,
   prevPreparedData,
+  session,
 ) => {
   const {
     entityConfig,
@@ -28,7 +29,7 @@ const prepareBulkData: PrepareBulkData = async (
 
   const getPreviousEntities = Array.isArray(whereOnes) ? getCommonManyData : getCommonData;
 
-  const previousEntities = await getPreviousEntities(resolverCreatorArg, resolverArg);
+  const previousEntities = await getPreviousEntities(resolverCreatorArg, resolverArg, session);
 
   const whereOnesKeys = Object.keys(Array.isArray(whereOnes) ? whereOnes[0] : whereOnes);
 
@@ -99,6 +100,7 @@ const prepareBulkData: PrepareBulkData = async (
         enums,
         mongooseConn,
         null,
+        session,
       );
 
       const idsAndEntityConfigs: [GraphqlObject, GraphqlObject, TangibleEntityConfig] = [
@@ -114,6 +116,7 @@ const prepareBulkData: PrepareBulkData = async (
         enums,
         mongooseConn,
         idsAndEntityConfigs,
+        session,
       );
 
       const mixedTrees = mixTrees(tree, currentTree, idsAndEntityConfigs, core);
@@ -149,6 +152,7 @@ const prepareBulkData: PrepareBulkData = async (
       enums,
       mongooseConn,
       idsAndEntityConfigs,
+      session,
     );
 
     const tree2 = fromMongoToGqlDataArg(Object.assign(copiedEntity, tree), entityConfig);

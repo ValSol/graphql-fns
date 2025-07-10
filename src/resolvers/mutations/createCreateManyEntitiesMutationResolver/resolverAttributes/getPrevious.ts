@@ -17,7 +17,6 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const { data } = args as { data: GraphqlObject[] };
   const processingKind = 'create';
   for (let i = 0; i < data.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
     const allowCreate = await checkData(
       { data: data[i] },
       filter,

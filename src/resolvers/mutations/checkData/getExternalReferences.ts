@@ -27,7 +27,6 @@ const getExternalReferences = async (
       );
     }
 
-    // eslint-disable-next-line no-await-in-loop
     const entity = await entityQueryResolvers[entityName](
       null,
       { whereOne: { id } },

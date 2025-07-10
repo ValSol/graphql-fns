@@ -2,10 +2,15 @@ import type { GetPrevious } from '../../../tsTypes';
 
 import getCommonData from './getCommonData';
 
-const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session,
+) => {
   const { involvedFilters } = resolverArg;
 
-  const result = await getCommonData(resolverCreatorArg, resolverArg, involvedFilters);
+  const result = await getCommonData(resolverCreatorArg, resolverArg, session, involvedFilters);
 
   if (!result) return result;
 
@@ -13,7 +18,6 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
   const [item1] = result;
 
-  // eslint-disable-next-line no-underscore-dangle
   if (item1._id) {
     const result2 = result.reduce<Array<any>>((prev, item, i) => {
       if (!(i % 2)) {

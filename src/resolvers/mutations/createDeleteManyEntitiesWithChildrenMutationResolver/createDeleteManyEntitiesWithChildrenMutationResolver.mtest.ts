@@ -289,34 +289,42 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   test('should delete all children of Restaurant', async () => {
     let schema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', schema);
+    await Restaurant.init();
     await Restaurant.createCollection();
 
     schema = createThingSchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', schema);
+    await RestaurantClone.init();
     await RestaurantClone.createCollection();
 
     schema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', schema);
+    await Menu.init();
     await Menu.createCollection();
 
     schema = createThingSchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', schema);
+    await MenuClone.init();
     await MenuClone.createCollection();
 
     schema = createThingSchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', schema);
+    await MenuSection.init();
     await MenuSection.createCollection();
 
     schema = createThingSchema(menuSectionCloneConfig);
     const menuSectionClone = mongooseConn.model('MenuSectionClone_Thing', schema);
+    await menuSectionClone.init();
     await menuSectionClone.createCollection();
 
     schema = createThingSchema(postConfig);
     const Post = mongooseConn.model('Post_Thing', schema);
+    await Post.init();
     await Post.createCollection();
 
     schema = createThingSchema(postCloneConfig);
     const PostClone = mongooseConn.model('PostClone_Thing', schema);
+    await PostClone.init();
     await PostClone.createCollection();
 
     const serversideConfig = { transactions: true };
@@ -443,27 +451,43 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   test('should delete all children of MenuClone', async () => {
     let schema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', schema);
+    await Restaurant.init();
+    await Restaurant.createCollection();
 
     schema = createThingSchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', schema);
+    await RestaurantClone.init();
+    await RestaurantClone.createCollection();
 
     schema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', schema);
+    await Menu.init();
+    await Menu.createCollection();
 
     schema = createThingSchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', schema);
+    await MenuClone.init();
+    await MenuClone.createCollection();
 
     schema = createThingSchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', schema);
+    await MenuSection.init();
+    await MenuSection.createCollection();
 
     schema = createThingSchema(menuSectionCloneConfig);
     const menuSectionClone = mongooseConn.model('MenuSectionClone_Thing', schema);
+    await menuSectionClone.init();
+    await menuSectionClone.createCollection();
 
     schema = createThingSchema(postConfig);
     const Post = mongooseConn.model('Post_Thing', schema);
+    await Post.init();
+    await Post.createCollection();
 
     schema = createThingSchema(postCloneConfig);
     const PostClone = mongooseConn.model('PostClone_Thing', schema);
+    await PostClone.init();
+    await PostClone.createCollection();
 
     const serversideConfig = { transactions: true };
     const createRestaurant = createCreateEntityMutationResolver(
@@ -604,27 +628,43 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
   test('should delete some children of Restauarnt', async () => {
     let schema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', schema);
+    await Restaurant.init();
+    await Restaurant.createCollection();
 
     schema = createThingSchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', schema);
+    await RestaurantClone.init();
+    await RestaurantClone.createCollection();
 
     schema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', schema);
+    await Menu.init();
+    await Menu.createCollection();
 
     schema = createThingSchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', schema);
+    await MenuClone.init();
+    await MenuClone.createCollection();
 
     schema = createThingSchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', schema);
+    await MenuSection.init();
+    await MenuSection.createCollection();
 
     schema = createThingSchema(menuSectionCloneConfig);
     const menuSectionClone = mongooseConn.model('MenuSectionClone_Thing', schema);
+    await menuSectionClone.init();
+    await menuSectionClone.createCollection();
 
     schema = createThingSchema(postConfig);
     const Post = mongooseConn.model('Post_Thing', schema);
+    await Post.init();
+    await Post.createCollection();
 
     schema = createThingSchema(postCloneConfig);
     const PostClone = mongooseConn.model('PostClone_Thing', schema);
+    await PostClone.init();
+    await PostClone.createCollection();
 
     const serversideConfig = { transactions: true };
     const createRestaurant = createCreateEntityMutationResolver(

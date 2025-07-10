@@ -46,6 +46,7 @@ const composeCreateTree = async (
   enums: Enums | null | undefined,
   mongooseConn: Connection,
   idsAndEntityConfigs: null | [GraphqlObject, GraphqlObject, TangibleEntityConfig],
+  session: any,
   oppositeFieldName?: string,
 ): Promise<GraphqlObject> => {
   const { duplexFieldsToCopy, projection } = composeProjectionAndDuplexFieldsToCopy(
@@ -76,6 +77,7 @@ const composeCreateTree = async (
       if (array) {
         const entities = await Entity.find({ _id: { $in: entity[fieldName] } }, null, {
           lean: true,
+          session,
         });
 
         const entitiesObject = entities.reduce((prev, item) => {
@@ -105,6 +107,7 @@ const composeCreateTree = async (
               enums,
               mongooseConn,
               currentBranch ? currentBranch[fieldName][j] : null,
+              session,
               oppositeName,
             ),
           );
@@ -114,6 +117,7 @@ const composeCreateTree = async (
       } else {
         const entity2 = await Entity.findOne({ _id: entity[fieldName] }, null, {
           lean: true,
+          session,
         });
 
         if (currentBranch) {
@@ -127,6 +131,7 @@ const composeCreateTree = async (
           enums,
           mongooseConn,
           currentBranch ? (currentBranch[fieldName] as any) : null,
+          session,
           oppositeName,
         );
       }

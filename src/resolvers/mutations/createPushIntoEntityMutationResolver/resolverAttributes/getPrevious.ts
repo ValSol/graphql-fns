@@ -5,7 +5,7 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -38,7 +38,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-  let _id = id; // eslint-disable-line no-underscore-dangle
+  let _id = id;
   const whereOne2 = id ? { _id } : whereOne;
   const { lookups, where: whereOne3 } = mergeWhereAndFilter(inputFilter, whereOne, entityConfig);
 
@@ -53,11 +53,13 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const [entity] = await Entity.aggregate(pipeline).exec();
+    const [entity] = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (!entity) return null;
 
-    conditions = { _id: entity._id }; // eslint-disable-line no-underscore-dangle
+    conditions = { _id: entity._id };
   }
 
   let previousEntity: Record<string, any> = {};
@@ -67,12 +69,12 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
       ? {} // if subsciption ON - return empty projection - to get all fields of entity
       : { _id: 1 };
 
-    previousEntity = await Entity.findOne(conditions, projection, { lean: true });
+    previousEntity = await Entity.findOne(conditions, projection, { lean: true, session });
     if (!previousEntity) return null;
-    _id = previousEntity._id; // eslint-disable-line no-underscore-dangle
+    _id = previousEntity._id;
   }
 
-  const entity = await Entity.findOne(conditions, { _id: 1 }, { lean: true });
+  const entity = await Entity.findOne(conditions, { _id: 1 }, { lean: true, session });
 
   return entity && [entity];
 };

@@ -97,6 +97,7 @@ const workOutMutations = async (
           actionGeneralName,
           resolverCreatorArg,
           resolverArg,
+          session,
         );
 
         if (!previous) {
@@ -108,7 +109,12 @@ const workOutMutations = async (
         const { core, periphery } = preparedData;
         const preparedData2 = { core, periphery, mains: previous } as const;
 
-        preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, preparedData2);
+        preparedData = await prepareBulkData(
+          resolverCreatorArg,
+          resolverArg,
+          preparedData2,
+          session,
+        );
         if (!preparedData) {
           throw new TypeError(
             `Not got preparedData for "${actionGeneralName}" mutation for "${name}" entity!`,
@@ -131,7 +137,7 @@ const workOutMutations = async (
 
       const coreWithCounters = await incCounters(optimizedCore, mongooseConn, session);
 
-      await executeBulkItems(coreWithCounters, generalConfig, context, null);
+      await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
       if (session) {
         await session.commitTransaction();
@@ -151,11 +157,6 @@ const workOutMutations = async (
 
       await sleep(2 ** j);
     }
-    // finally {
-    //   if (session) {
-    //     await session.endSession(); // 💥 essential!
-    //   }
-    // }
   }
   const finalResults: Array<any | null> = [];
 

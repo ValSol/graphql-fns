@@ -6,7 +6,7 @@ import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFi
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -47,7 +47,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const entities = await Entity.aggregate(pipeline).exec();
+    const entities = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (entities.length !== whereOne.length) return null;
 
@@ -57,11 +59,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
   ((entityConfig as TangibleEntityConfig).duplexFields || []).reduce((prev, { name: name2 }) => {
-    prev[name2] = 1; // eslint-disable-line no-param-reassign
+    prev[name2] = 1;
     return prev;
   }, projection);
 
-  const entities = await Entity.find(conditions, projection, { lean: true });
+  const entities = await Entity.find(conditions, projection, { lean: true, session });
   if (entities.length !== whereOne.length) return null;
 
   return entities;

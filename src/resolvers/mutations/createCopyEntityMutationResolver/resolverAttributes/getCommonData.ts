@@ -17,6 +17,7 @@ import checkData from '../../checkData';
 const getCommonData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
+  session: any,
   involvedFilters?: {
     [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
@@ -106,7 +107,7 @@ const getCommonData = async (
 
   const matchingFieldsProjection = matchingFields.reduce(
     (prev, matchingField) => {
-      prev[matchingField] = 1; // eslint-disable-line no-param-reassign
+      prev[matchingField] = 1;
       return prev;
     },
     { _id: 1, [oppositeName]: 1 },
@@ -116,7 +117,10 @@ const getCommonData = async (
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const { where } = composeWhereInput(whereOnes[fieldName], config);
-  const entity = await CopiedEntity.findOne(where, matchingFieldsProjection, { lean: true });
+  const entity = await CopiedEntity.findOne(where, matchingFieldsProjection, {
+    lean: true,
+    session,
+  });
 
   if (!entity) return null;
 
@@ -134,26 +138,27 @@ const getCommonData = async (
 
       entity2 = await Entity.findOne({ _id: entity[oppositeName] }, matchingFieldsProjection, {
         lean: true,
+        session,
       });
     }
   } else if (whereOne) {
     const { where: where2 } = mergeWhereAndFilter(inputFilter, whereOne, entityConfig);
-    entity2 = await Entity.findOne(where2, matchingFieldsProjection, { lean: true });
+    entity2 = await Entity.findOne(where2, matchingFieldsProjection, { lean: true, session });
 
-    id = entity2._id.toString(); // eslint-disable-line no-underscore-dangle
+    id = entity2._id.toString();
 
     if (!entity[oppositeName].map((id2) => id2.toString()).includes(id)) {
-      throw new TypeError(`Try to copy to unconnected "${name}" entity with id: "${id}"!`); // eslint-disable-line no-underscore-dangle
+      throw new TypeError(`Try to copy to unconnected "${name}" entity with id: "${id}"!`);
     }
   }
 
   const { rawData, rawData2 } = matchingFields.reduce(
     (prev, matchingField) => {
-      prev.rawData[matchingField] = // eslint-disable-line no-param-reassign
+      prev.rawData[matchingField] =
         entity[matchingField] === undefined ? null : entity[matchingField];
 
       if (entity2) {
-        prev.rawData2[matchingField] = // eslint-disable-line no-param-reassign
+        prev.rawData2[matchingField] =
           entity2[matchingField] === undefined ? null : entity2[matchingField];
       }
       return prev;
@@ -162,7 +167,7 @@ const getCommonData = async (
   );
 
   if (!id) {
-    rawData[fieldName] = array ? [entity._id] : entity._id; // eslint-disable-line no-underscore-dangle
+    rawData[fieldName] = array ? [entity._id] : entity._id;
   }
 
   const data = {

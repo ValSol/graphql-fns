@@ -10,9 +10,10 @@ import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereIn
 import checkData from '../../checkData';
 import { GraphqlObject } from '../../../../tsTypes';
 
-const getCommonData = async (
+const getCommonManyData = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
+  session: any,
   involvedFilters?: {
     [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
@@ -129,7 +130,7 @@ const getCommonData = async (
 
   const matchingFieldsProjection = matchingFields.reduce(
     (prev, matchingField) => {
-      prev[matchingField] = 1; // eslint-disable-line no-param-reassign
+      prev[matchingField] = 1;
       return prev;
     },
     { _id: 1, [oppositeName]: 1 },
@@ -141,7 +142,10 @@ const getCommonData = async (
   const arg = { OR: whereOnes.map((item) => item[fieldName]) } as InvolvedFilter;
 
   const { where } = composeWhereInput(arg, config);
-  const entities = await CopiedEntity.find(where, matchingFieldsProjection, { lean: true });
+  const entities = await CopiedEntity.find(where, matchingFieldsProjection, {
+    lean: true,
+    session,
+  });
 
   if (entities.length !== whereOnes.length) return null;
 
@@ -165,13 +169,14 @@ const getCommonData = async (
 
       entities2 = await Entity.find({ _id: { $in: ids } }, matchingFieldsProjection, {
         lean: true,
+        session,
       });
     }
   } else if (whereOne) {
     const { where: where2 } = mergeWhereAndFilter(inputFilter, { OR: whereOne }, entityConfig);
-    entities2 = await Entity.find(where2, matchingFieldsProjection, { lean: true });
+    entities2 = await Entity.find(where2, matchingFieldsProjection, { lean: true, session });
 
-    ids = entities2.map((entity2) => entity2._id.toString()); // eslint-disable-line no-underscore-dangle
+    ids = entities2.map((entity2) => entity2._id.toString());
 
     entities.forEach((entity, i) => {
       if (!ids) {
@@ -179,7 +184,7 @@ const getCommonData = async (
         throw new TypeError('Got "ids" that null!');
       }
       if (!entity[oppositeName].map((id2) => id2.toString()).includes(ids[i])) {
-        throw new TypeError(`Try to copy to unconnected "${name}" entity with id: "${ids[i]}"!`); // eslint-disable-line no-underscore-dangle
+        throw new TypeError(`Try to copy to unconnected "${name}" entity with id: "${ids[i]}"!`);
       }
     });
   }
@@ -188,13 +193,13 @@ const getCommonData = async (
     (prev, entity, i) => {
       const item = matchingFields.reduce(
         (prev2, matchingField) => {
-          prev2.rawData[matchingField] = // eslint-disable-line no-param-reassign
+          prev2.rawData[matchingField] =
             entity[matchingField] === undefined ? null : entity[matchingField];
 
           if (entities2) {
             const entity2 = entities2[i];
 
-            prev2.rawData2[matchingField] = // eslint-disable-line no-param-reassign
+            prev2.rawData2[matchingField] =
               entity2[matchingField] === undefined ? null : entity2[matchingField];
           }
           return prev2;
@@ -212,7 +217,7 @@ const getCommonData = async (
 
   if (!ids) {
     rawData.forEach((item, i) => {
-      item[fieldName] = array ? [entities[i]._id] : entities[i]._id; // eslint-disable-line no-underscore-dangle, no-param-reassign
+      item[fieldName] = array ? [entities[i]._id] : entities[i]._id;
     });
   }
 
@@ -235,8 +240,7 @@ const getCommonData = async (
       allowCopy =
         allowCopy &&
         (involvedFilters
-          ? // eslint-disable-next-line no-await-in-loop
-            await checkData(
+          ? await checkData(
               { whereOne: { id }, data },
               outputFilter,
               entityConfig,
@@ -255,8 +259,7 @@ const getCommonData = async (
       allowCopy =
         allowCopy &&
         (involvedFilters
-          ? // eslint-disable-next-line no-await-in-loop
-            await checkData(
+          ? await checkData(
               { data },
               outputFilter,
               entityConfig,
@@ -274,4 +277,4 @@ const getCommonData = async (
   return allowCopy && result;
 };
 
-export default getCommonData;
+export default getCommonManyData;

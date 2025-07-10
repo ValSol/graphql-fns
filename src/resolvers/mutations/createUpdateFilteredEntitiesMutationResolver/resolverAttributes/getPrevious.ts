@@ -7,7 +7,7 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -26,7 +26,7 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const duplexFieldsProjection = duplexFields
     ? duplexFields.reduce(
         (prev, { name: name2 }) => {
-          prev[name2] = 1; // eslint-disable-line no-param-reassign
+          prev[name2] = 1;
           return prev;
         },
         { _id: 1 },
@@ -56,7 +56,9 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const entities = await Entity.aggregate(pipeline).exec();
+    const entities = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (!entities) return null;
 
@@ -65,7 +67,10 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
   }
 
-  const previousEntities = await Entity.find(conditions, duplexFieldsProjection, { lean: true });
+  const previousEntities = await Entity.find(conditions, duplexFieldsProjection, {
+    lean: true,
+    session,
+  });
 
   const previousEntities2: Array<any> = [];
   const processingKind = 'update';
@@ -73,7 +78,6 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     const previousEntity = previousEntities[i];
     const { _id: id } = previousEntity;
 
-    // eslint-disable-next-line no-await-in-loop
     const allowCreate = await checkData(
       { data, whereOne: { id } },
       outputFilter,

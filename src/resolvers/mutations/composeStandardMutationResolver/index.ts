@@ -119,7 +119,12 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }
 
-          const previous = await getPrevious(actionGeneralName, resolverCreatorArg, resolverArg);
+          const previous = await getPrevious(
+            actionGeneralName,
+            resolverCreatorArg,
+            resolverArg,
+            session,
+          );
 
           if (!previous) {
             if (session) {
@@ -150,7 +155,12 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             mains: previous,
           };
 
-          preparedData = await prepareBulkData(resolverCreatorArg, resolverArg, prevPreparedData);
+          preparedData = await prepareBulkData(
+            resolverCreatorArg,
+            resolverArg,
+            prevPreparedData,
+            session,
+          );
 
           if (!preparedData) {
             if (session) {
@@ -193,11 +203,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
           await sleep(2 ** i);
         }
-        // finally {
-        //   if (session) {
-        //     await session.endSession(); // 💥 essential!
-        //   }
-        // }
       }
 
       if (produceCurrent) {

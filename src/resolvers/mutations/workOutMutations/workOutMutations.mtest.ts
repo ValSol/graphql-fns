@@ -441,18 +441,22 @@ beforeAll(async () => {
 
   const parentSchema = createThingSchema(parentConfig);
   const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+  await Parent.init();
   await Parent.createCollection();
 
   const childSchema = createThingSchema(childConfig);
   const Child = mongooseConn.model('Child_Thing', childSchema);
+  await Child.init();
   await Child.createCollection();
 
   const exampleSchema = createThingSchema(exampleConfig);
   const Example = mongooseConn.model('Example_Thing', exampleSchema);
+  await Example.init();
   await Example.createCollection();
 
   const exampleCloneSchema = createThingSchema(exampleCloneConfig);
   const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+  await ExampleClone.init();
   await ExampleClone.createCollection();
 });
 
@@ -514,9 +518,11 @@ describe('workOutMutations', () => {
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.init();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.init();
 
     const findedParent = await Parent.findById(createdParent.id);
     expect(findedParent).toBe(null);
@@ -663,9 +669,11 @@ describe('workOutMutations', () => {
 
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+    await ExampleClone.init();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
 
     const exampleClone = await ExampleClone.findOne({ _id: createdExampleClone.id });
     const example = await Example.findOne({ _id: createdExample.id });
@@ -814,9 +822,11 @@ describe('workOutMutations', () => {
 
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+    await ExampleClone.init();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
 
     const exampleClonesBeforeDelete = await ExampleClone.find({});
     const examplesBeforeDelete = await Example.find({});
@@ -955,9 +965,11 @@ describe('workOutMutations', () => {
 
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+    await ExampleClone.init();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
 
     const exampleClonesBeforeDelete = await ExampleClone.find(whereToDeleteExampleClones);
     const examplesBeforeDelete = await Example.find(whereToDeleteExamples);
@@ -1105,9 +1117,11 @@ describe('workOutMutations', () => {
 
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+    await ExampleClone.init();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
 
     const exampleClones = await ExampleClone.find({
       _id: { $in: whereOneToUpdateManyExampleClones.map(({ id }) => id) },
@@ -1235,9 +1249,11 @@ describe('workOutMutations', () => {
 
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
+    await ExampleClone.init();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
 
     const exampleClones = await ExampleClone.find({ label: 'updateFiltered updated' });
     const examples = await Example.find({ label: 'updateFiltered updated2' });
@@ -1254,10 +1270,12 @@ describe('workOutMutations', () => {
   test('should create resolvers for chain of 1 copyEntity', async () => {
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.init();
     await Person.createCollection();
 
     const personCloneSchema = createThingSchema(personCloneConfig);
     const PersonClone = mongooseConn.model('PersonClone_Thing', personCloneSchema);
+    await PersonClone.init();
     await PersonClone.createCollection();
 
     const createPerson = createCreateEntityMutationResolver(
@@ -1334,18 +1352,22 @@ describe('workOutMutations', () => {
   test('should create resolvers for chain of 1 copyEntityWithChildren', async () => {
     const menuSchema = createThingSchema(menuConfig);
     const Menu = mongooseConn.model('Menu_Thing', menuSchema);
+    await Menu.init();
     await Menu.createCollection();
 
     const menuSectionSchema = createThingSchema(menuSectionConfig);
     const MenuSection = mongooseConn.model('MenuSection_Thing', menuSectionSchema);
+    await MenuSection.init();
     await MenuSection.createCollection();
 
     const menuCloneSchema = createThingSchema(menuCloneConfig);
     const MenuClone = mongooseConn.model('MenuClone_Thing', menuCloneSchema);
+    await MenuClone.init();
     await MenuClone.createCollection();
 
     const menuCloneSectionSchema = createThingSchema(menuSectionCloneConfig);
     const MenuCloneSection = mongooseConn.model('MenuCloneSection_Thing', menuCloneSectionSchema);
+    await MenuCloneSection.init();
     await MenuCloneSection.createCollection();
 
     const createMenu = createCreateEntityMutationResolver(
@@ -1587,6 +1609,7 @@ describe('workOutMutations', () => {
   test('regression test: workout copy', async () => {
     const restaurantSchema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);
+    await Restaurant.init();
     await Restaurant.createCollection();
 
     const restaurantArchiveSchema = createThingSchema(restaurantArchiveConfig);
@@ -1594,14 +1617,17 @@ describe('workOutMutations', () => {
       'RestaurantArchive_Thing',
       restaurantArchiveSchema,
     );
+    await RestaurantArchive.init();
     await RestaurantArchive.createCollection();
 
     const restaurantCloneSchema = createThingSchema(restaurantCloneConfig);
     const RestaurantClone = mongooseConn.model('RestaurantClone_Thing', restaurantCloneSchema);
+    await RestaurantClone.init();
     await RestaurantClone.createCollection();
 
     const restaurantBackupSchema = createThingSchema(restaurantBackupConfig);
     const RestaurantBackup = mongooseConn.model('RestaurantBackup_Thing', restaurantBackupSchema);
+    await RestaurantBackup.init();
     await RestaurantBackup.createCollection();
 
     const createRestaurant = createCreateEntityMutationResolver(

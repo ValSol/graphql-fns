@@ -106,10 +106,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.init();
     await Person.createCollection();
 
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.init();
     await Place.createCollection();
 
     const serversideConfig = { transactions: true };
@@ -186,7 +188,6 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const createdFriendLocation = await Place.findById(createdFriend.location);
     expect(createdFriendLocation.name).toBe(data.friend.create.location.create.name);
-    // eslint-disable-next-line no-underscore-dangle
     expect(createdFriendLocation.citizens[0]).toEqual(createdFriend._id);
 
     const createdLocation = await Place.findById(locationId);
@@ -343,10 +344,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.init();
     await Parent.createCollection();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.init();
     await Child.createCollection();
 
     const createParent = createCreateEntityMutationResolver(
@@ -367,7 +370,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           },
         },
       };
-      // eslint-disable-next-line no-await-in-loop
+
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
         inputOutputEntity: [[]],
       });
@@ -471,10 +474,12 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.init();
     await Parent.createCollection();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.init();
     await Child.createCollection();
 
     const createParent = createCreateEntityMutationResolver(
@@ -495,7 +500,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
           },
         },
       };
-      // eslint-disable-next-line no-await-in-loop
+
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
         inputOutputEntity: [[]],
       });

@@ -4,7 +4,12 @@ import createMongooseModel from '../../../../mongooseModels/createMongooseModel'
 import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 
-const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session,
+) => {
   const { entityConfig, generalConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -39,14 +44,16 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const [entity] = await Entity.aggregate(pipeline).exec();
+    const [entity] = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (!entity) return null;
 
-    conditions = { _id: entity._id }; // eslint-disable-line no-underscore-dangle
+    conditions = { _id: entity._id };
   }
 
-  const entity = await Entity.findOne(conditions, null, { lean: true });
+  const entity = await Entity.findOne(conditions, null, { lean: true, session });
   if (!entity) return null;
 
   return [entity];

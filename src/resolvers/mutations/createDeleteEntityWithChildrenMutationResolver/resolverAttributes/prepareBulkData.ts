@@ -13,6 +13,7 @@ const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,
   resolverArg,
   prevPreparedData,
+  session,
 ) => {
   const {
     args: { options },
@@ -44,7 +45,7 @@ const prepareBulkData: PrepareBulkData = async (
     ? notArrayOppositeDuplexFields.filter(([{ name }]) => options.fieldsToDelete.includes(name))
     : notArrayOppositeDuplexFields;
 
-  const usedIds = { [entityConfig.name]: [] }; // eslint-disable-line no-underscore-dangle
+  const usedIds = { [entityConfig.name]: [] };
 
   for (let i = 0; i < mains.length; i += 1) {
     const entity = mains[i];
@@ -55,9 +56,8 @@ const prepareBulkData: PrepareBulkData = async (
       toDelete,
     );
 
-    usedIds[entityConfig.name].push(entity._id.toString()); // eslint-disable-line no-underscore-dangle
+    usedIds[entityConfig.name].push(entity._id.toString());
 
-    // eslint-disable-next-line no-await-in-loop
     await processEveryField(
       fieldsToDelete,
       entity,
@@ -66,6 +66,7 @@ const prepareBulkData: PrepareBulkData = async (
       mongooseConn,
       enums,
       processChildrenField,
+      session,
     );
   }
 

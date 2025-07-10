@@ -6,7 +6,12 @@ import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFi
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
-const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session: any,
+) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -35,7 +40,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
       if (
         data[fieldName] === undefined ||
         (fieldsObject[fieldName].type !== 'duplexFields' &&
-        fieldsObject[fieldName].type !== 'relationalFields')
+          fieldsObject[fieldName].type !== 'relationalFields')
       ) {
         prev[fieldName] = 1;
       }
@@ -60,11 +65,13 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
     pipeline.push({ $project });
 
-    const entities = await Entity.aggregate(pipeline).exec();
+    const entities = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     entity = entities[0];
   } else {
-    entity = await Entity.findOne(conditions, $project, { lean: true });
+    entity = await Entity.findOne(conditions, $project, { lean: true, session });
   }
 
   if (!entity) return null;

@@ -19,6 +19,7 @@ export type PrepareBulkData = (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   preparedData: PreparedData,
+  session: any,
 ) => Promise<PreparedData>;
 
 export type Report = (
@@ -30,6 +31,7 @@ export type GetPrevious = (
   actionGeneralName: string,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
+  session: any,
 ) => Promise<null | GraphqlObject[]>;
 
 export type Loophole = (

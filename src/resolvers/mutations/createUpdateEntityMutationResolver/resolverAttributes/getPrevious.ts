@@ -7,7 +7,12 @@ import checkData from '../../checkData';
 import { TangibleEntityConfig } from '../../../../tsTypes';
 import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
 
-const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session,
+) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -41,7 +46,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const duplexFieldsProjection = duplexFields
     ? duplexFields.reduce(
         (prev, { name: name2 }) => {
-          prev[name2] = 1; // eslint-disable-line no-param-reassign
+          prev[name2] = 1;
           return prev;
         },
         { _id: 1 },
@@ -61,11 +66,13 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
     pipeline.push({ $project: { _id: 1 } });
 
-    const [entity] = await Entity.aggregate(pipeline).exec();
+    const [entity] = await (session
+      ? Entity.aggregate(pipeline).session(session).exec()
+      : Entity.aggregate(pipeline).exec());
 
     if (!entity) return null;
 
-    whereOne3 = { _id: entity._id }; // eslint-disable-line no-underscore-dangle
+    whereOne3 = { _id: entity._id };
   }
 
   // const projection = subscribeUpdatedEntity
@@ -74,7 +81,7 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
 
   const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-  const previousEntity = await Entity.findOne(whereOne3, projection, { lean: true });
+  const previousEntity = await Entity.findOne(whereOne3, projection, { lean: true, session });
 
   return previousEntity && [previousEntity];
 };

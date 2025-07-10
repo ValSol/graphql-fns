@@ -16,6 +16,7 @@ type ProcessChildrenField = (
   entityConfig: TangibleEntityConfig,
   usedIds: UsedIds,
   mongooseConn: Connection,
+  session: any,
   enums?: Enums,
 ) => Promise<Core>;
 
@@ -34,6 +35,7 @@ const processEveryField = async (
   mongooseConn: Connection,
   enums: Enums | null | undefined,
   processChildrenField: ProcessChildrenField,
+  session: any,
 ) => {
   for (let i = 0; i < fields.length; i += 1) {
     const [{ array, name, config }] = fields[i];
@@ -43,31 +45,31 @@ const processEveryField = async (
         const value = entity[name][j] && entity[name][j].toString();
 
         if (!value || (usedIds[config.name] && usedIds[config.name].includes(value))) {
-          continue; // eslint-disable-line no-continue
+          continue;
         }
 
         if (!usedIds[config.name]) {
-          usedIds[config.name] = []; // eslint-disable-line no-param-reassign
+          usedIds[config.name] = [];
         }
 
         usedIds[config.name].push(value);
 
-        await processChildrenField(value, core, config, usedIds, mongooseConn, enums); // eslint-disable-line no-await-in-loop
+        await processChildrenField(value, core, config, usedIds, mongooseConn, session, enums);
       }
     } else {
       const value = entity[name] && entity[name].toString();
 
       if (!value || (usedIds[config.name] && usedIds[config.name].includes(value))) {
-        continue; // eslint-disable-line no-continue
+        continue;
       }
 
       if (!usedIds[config.name]) {
-        usedIds[config.name] = []; // eslint-disable-line no-param-reassign
+        usedIds[config.name] = [];
       }
 
       usedIds[config.name].push(value);
 
-      await processChildrenField(value, core, config, usedIds, mongooseConn, enums); // eslint-disable-line no-await-in-loop
+      await processChildrenField(value, core, config, usedIds, mongooseConn, session, enums);
     }
   }
 };
@@ -78,19 +80,20 @@ const processChildrenField: ProcessChildrenField = async (
   entityConfig,
   usedIds,
   mongooseConn,
+  session,
   enums,
 ) => {
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   const projection = (entityConfig.duplexFields || []).reduce(
     (prev, { name }) => {
-      prev[name] = 1; // eslint-disable-line no-param-reassign
+      prev[name] = 1;
       return prev;
     },
     { _id: 1 },
   );
 
-  const entity = await Entity.findOne({ _id: id }, projection, { lean: true });
+  const entity = await Entity.findOne({ _id: id }, projection, { lean: true, session });
 
   processDeleteData(entity, core, entityConfig, true);
 
@@ -108,6 +111,7 @@ const processChildrenField: ProcessChildrenField = async (
     mongooseConn,
     enums,
     processChildrenField,
+    session,
   );
 
   return core;
