@@ -120,11 +120,11 @@ const workOutMutations = async (
 
       const { core, periphery } = preparedData;
 
-      await unwindCore(core, mongooseConn);
+      await unwindCore(core, mongooseConn, session);
 
       const coreWithPeriphery: Core =
         periphery && periphery.size
-          ? await addPeripheryToCore(periphery, core, mongooseConn)
+          ? await addPeripheryToCore(periphery, core, mongooseConn, session)
           : core;
 
       const optimizedCore = optimizeBulkItems(coreWithPeriphery);

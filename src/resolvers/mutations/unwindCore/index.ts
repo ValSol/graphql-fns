@@ -8,7 +8,7 @@ import extractItemsToProcess from './extractItemsToProcess';
 
 type Result = Map<TangibleEntityConfig, Array<DataObject>>;
 
-const unwindCore = async (core: Core, mongooseConn: Connection): Promise<Result> => {
+const unwindCore = async (core: Core, mongooseConn: Connection, session?: any): Promise<Result> => {
   const itemsToProcess = extractItemsToProcess(core);
 
   if (itemsToProcess.length === 0) {
@@ -32,7 +32,7 @@ const unwindCore = async (core: Core, mongooseConn: Connection): Promise<Result>
       updateMany: { filter, update },
     } = bulkItems[index];
 
-    const entities = await mongooseModels[config.name].find(filter, { _id: 1 });
+    const entities = await mongooseModels[config.name].find(filter, { _id: 1 }, { session });
 
     if (entities.length === 0) {
       bulkItems.splice(index, 1); // remove "updateMany" item

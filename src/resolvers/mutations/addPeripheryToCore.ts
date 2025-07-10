@@ -11,6 +11,7 @@ const addPeripheryToCore = async (
   periphery: Periphery,
   core: Core,
   mongooseConn: Connection,
+  session?: any,
 ): Promise<Result> => {
   const promises: Array<Promise<void | DataObject>> = [];
   periphery.forEach((obj, config) => {
@@ -25,13 +26,9 @@ const addPeripheryToCore = async (
 
       promises.push(
         Entity.find(
-          {
-            _id: { $in: oppositeIds },
-            [oppositeName]: { $exists: true, $ne: null },
-          },
-          {
-            [oppositeName]: 1,
-          },
+          { _id: { $in: oppositeIds }, [oppositeName]: { $exists: true, $ne: null } },
+          { [oppositeName]: 1 },
+          { session },
         ).then((items) => {
           const bulkItems = items
             .map((item, i) =>
@@ -39,7 +36,6 @@ const addPeripheryToCore = async (
                 ? {
                     updateOne: {
                       filter: {
-                        // eslint-disable-next-line no-underscore-dangle
                         _id: item[oppositeName],
                       },
                       update: array
