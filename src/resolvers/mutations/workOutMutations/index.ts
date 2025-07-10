@@ -129,7 +129,7 @@ const workOutMutations = async (
 
       const optimizedCore = optimizeBulkItems(coreWithPeriphery);
 
-      const coreWithCounters = await incCounters(optimizedCore, mongooseConn);
+      const coreWithCounters = await incCounters(optimizedCore, mongooseConn, session);
 
       await executeBulkItems(coreWithCounters, generalConfig, context, null);
 

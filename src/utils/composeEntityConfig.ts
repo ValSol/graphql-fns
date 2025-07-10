@@ -39,7 +39,7 @@ const composeEntityConfig = (
     throw new TypeError(`Not allowed config name: "${configType}"`);
   }
 
-  entityConfig.type = configType; // eslint-disable-line no-param-reassign
+  entityConfig.type = configType;
 
   const {
     embeddedFields: simplifiedEmbeddedFields,
@@ -164,7 +164,6 @@ const composeEntityConfig = (
   }
 
   if (simplifiedEmbeddedFields) {
-    // eslint-disable-next-line no-param-reassign
     entityConfig.embeddedFields = simplifiedEmbeddedFields.map((field) => {
       const { configName, variants = [], ...restField } = field;
       const config = allEntityConfigs[configName];
@@ -183,7 +182,7 @@ const composeEntityConfig = (
           );
         } else {
           // name=undefined if entityConfig is a descendantConfig
-          // eslint-disable-next-line no-console
+
           console.warn(
             '\x1b[33m',
             `Not embedded config: "${configName}" in embedded field: "${field.name}"!`,
@@ -211,7 +210,6 @@ const composeEntityConfig = (
       );
     }
 
-    // eslint-disable-next-line no-param-reassign
     (entityConfig as VirtualEntityConfig).childFields = simplifiedChildFields.map((field) => {
       const { configName, ...restField } = field;
       const config = allEntityConfigs[configName];
@@ -292,7 +290,6 @@ const composeEntityConfig = (
   }
 
   if (simplifiedFilterFields) {
-    // eslint-disable-next-line no-param-reassign
     (entityConfig as TangibleEntityConfig).filterFields = simplifiedFilterFields.map((field) => {
       const { configName, variants = ['plain'], ...restField } = field;
       const config = allEntityConfigs[configName];
@@ -347,7 +344,7 @@ const composeEntityConfig = (
               );
             } else {
               // name=undefined if entityConfig is a descendantConfig
-              // eslint-disable-next-line no-console
+
               console.warn(
                 '\x1b[33m',
                 `Not embedded config: "${configName}" in embedded field: "${field.name}"!`,

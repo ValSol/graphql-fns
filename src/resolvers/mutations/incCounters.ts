@@ -8,6 +8,7 @@ import createCounter from '../../mongooseModels/createCounter';
 const incCounters = async (
   core: Core,
   mongooseConn: Connection,
+  session?: any,
 ): Promise<Map<TangibleEntityConfig, Array<DataObject>>> => {
   const itemsToInc: Record<string, any> = {};
   core.forEach((bulkItems, config) => {
@@ -33,7 +34,7 @@ const incCounters = async (
 
   for (let i = 0; i < names.length; i += 1) {
     const name = names[i];
-    // eslint-disable-next-line no-await-in-loop
+
     const { seq } = await Counter.findOneAndUpdate(
       { _id: name },
       { $inc: { seq: itemsToInc[name] } },
@@ -41,6 +42,7 @@ const incCounters = async (
         new: true,
         upsert: true,
         lean: true,
+        session,
       },
     );
 
