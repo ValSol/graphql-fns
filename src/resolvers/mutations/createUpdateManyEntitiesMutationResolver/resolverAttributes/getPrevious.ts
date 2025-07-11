@@ -44,13 +44,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   const processingKind = 'update';
   for (let i = 0; i < data.length; i += 1) {
     const allowUpdate = await checkData(
-      { data: data[i], whereOne: whereOne[i] },
+      resolverCreatorArg,
+      { ...resolverArg, args: { data: data[i], whereOne: whereOne[i] } },
       outputFilter,
-      entityConfig,
       processingKind,
-      generalConfig,
-      serversideConfig,
-      context,
+      session,
     );
 
     if (!allowUpdate) return null;

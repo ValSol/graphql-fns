@@ -241,13 +241,11 @@ const getCommonManyData = async (
         allowCopy &&
         (involvedFilters
           ? await checkData(
-              { whereOne: { id }, data },
+              resolverCreatorArg,
+              { ...resolverArg, args: { whereOne: { id }, data } },
               outputFilter,
-              entityConfig,
               processingKind,
-              generalConfig,
-              serversideConfig,
-              context,
+              session,
             )
           : true);
 
@@ -260,13 +258,11 @@ const getCommonManyData = async (
         allowCopy &&
         (involvedFilters
           ? await checkData(
-              { data },
+              resolverCreatorArg,
+              { ...resolverArg, args: { data } },
               outputFilter,
-              entityConfig,
               processingKind,
-              generalConfig,
-              serversideConfig,
-              context,
+              session,
             )
           : true);
 

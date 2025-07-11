@@ -32,6 +32,7 @@ const createEntityQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
+  session?: any,
 ): any | null => {
   const { enums, inventory } = generalConfig;
   const { name } = entityConfig;
@@ -55,8 +56,6 @@ const createEntityQueryResolver = (
     const { whereOne, whereCompoundOne } = args;
 
     const { mongooseConn } = context;
-
-    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     if (whereCompoundOne && whereOne) {
       throw new TypeError('Expected exactly one input from "whereCompoundOne" && "whereOne"!');
@@ -114,6 +113,8 @@ const createEntityQueryResolver = (
 
     const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
 
+    const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
+
     const { lookups, where: conditions } = mergeWhereAndFilter(
       filter,
       whereOne || whereCompoundOne,
@@ -129,7 +130,9 @@ const createEntityQueryResolver = (
 
       pipeline.push({ $project: projection });
 
-      const [entity] = await Entity.aggregate(pipeline).exec();
+      const [entity] = await (session
+        ? Entity.aggregate(pipeline).session(session).exec()
+        : Entity.aggregate(pipeline).exec());
 
       if (!entity) return null;
 
@@ -144,7 +147,7 @@ const createEntityQueryResolver = (
       return entity2;
     }
 
-    const entity = await Entity.findOne(conditions, projection, { lean: true });
+    const entity = await Entity.findOne(conditions, projection, { lean: true, session });
 
     if (!entity) return null;
 

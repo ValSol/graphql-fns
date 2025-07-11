@@ -68,7 +68,7 @@ const workOutMutations = async (
         const { name } = entityConfig;
 
         if (lockedData) {
-          await checkLockedData(mutationArgs, commonResolverCreatorArg);
+          await checkLockedData(mutationArgs, commonResolverCreatorArg, session);
         }
 
         const inventoryChain: InventoryChain = ['Mutation', actionGeneralName, name];

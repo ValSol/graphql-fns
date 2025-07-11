@@ -8,6 +8,7 @@ const getExternalReferences = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   context: any,
+  session: any,
 ): Promise<Array<string | null>> => {
   const { allEntityConfigs } = generalConfig;
   const inAnyCase = true;
@@ -33,6 +34,7 @@ const getExternalReferences = async (
       context,
       { projection: { _id: 1 } },
       { inputOutputEntity: [filter] },
+      session,
     );
 
     if (entity) {

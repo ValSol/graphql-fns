@@ -23,13 +23,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
 
   const processingKind = 'push';
   const allowCreate = await checkData(
-    args,
+    resolverCreatorArg,
+    resolverArg,
     outputFilter,
-    entityConfig,
     processingKind,
-    generalConfig,
-    serversideConfig,
-    context,
+    session,
   );
 
   if (!allowCreate) return null;

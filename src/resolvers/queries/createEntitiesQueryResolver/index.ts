@@ -46,6 +46,7 @@ const createEntitiesQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
+  session?: any,
 ): any => {
   const { enums, inventory } = generalConfig;
   const { name } = entityConfig;
@@ -175,7 +176,9 @@ const createEntitiesQueryResolver = (
         pipeline.push({ $project: projection as { [fieldName: string]: 1 } });
       }
 
-      const entities = await Entity.aggregate(pipeline).exec();
+      const entities = await (session
+        ? Entity.aggregate(pipeline).session(session).exec()
+        : Entity.aggregate(pipeline).exec());
 
       if (!entities) return [];
 
@@ -221,7 +224,7 @@ const createEntitiesQueryResolver = (
       query = query.limit(limit);
     }
 
-    const entities = await query.exec();
+    const entities = await (session ? query.session(session).exec() : query.exec());
     if (!entities) return [];
 
     const result = entities.map((item, i) =>

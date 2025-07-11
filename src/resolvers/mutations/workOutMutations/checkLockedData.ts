@@ -70,6 +70,7 @@ const checkObject = (resultItem: ResultObject, currentResultItem: ResultObject) 
 const checkLockedData = async (
   mutationArgs: StandardMutationsArg,
   commonResolverCreatorArg: CommonResolverCreatorArg,
+  session: any,
 ) => {
   const { generalConfig, serversideConfig, context } = commonResolverCreatorArg;
   const { entityConfig, lockedData } = mutationArgs;
@@ -158,6 +159,7 @@ const checkLockedData = async (
       context,
       { projection },
       { inputOutputEntity: [[]] },
+      session,
     );
 
     if ((!currentResult && result) || (currentResult && !result)) {

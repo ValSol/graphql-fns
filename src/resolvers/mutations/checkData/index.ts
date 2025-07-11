@@ -1,6 +1,6 @@
 import mingo from 'mingo';
 
-import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
+import type { ResolverCreatorArg, ResolverArg } from '../../../tsTypes';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import extractExternalReferences from './extractExternalReferences';
 import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
@@ -10,13 +10,11 @@ import getMissingData from './getMissingData';
 import patchExternalReferences from './patchExternalReferences';
 
 const checkData = async (
-  args: any,
+  resolverCreatorArg: ResolverCreatorArg,
+  resolverArg: ResolverArg,
   preFilter: Array<any>,
-  entityConfig: EntityConfig,
   processingKind: 'create' | 'update' | 'push',
-  generalConfig: GeneralConfig,
-  serversideConfig: ServersideConfig,
-  context: any,
+  session: any,
 ): Promise<boolean> => {
   const id = `[${`${Math.random()}`.slice(2, 5)}]`;
 
@@ -24,7 +22,22 @@ const checkData = async (
     return true;
   }
 
-  const { data: preData } = args;
+  const { entityConfig, generalConfig, serversideConfig } =
+    resolverCreatorArg as ResolverCreatorArg;
+
+  const { context } = resolverArg;
+
+  const args = resolverArg.args as {
+    whereOne: any;
+    data: {
+      [fieldName: string]: any;
+    };
+    positions?: {
+      [fieldName: string]: Array<number>;
+    };
+  };
+
+  const { data: preData } = args as { data: any; whereOne: any };
 
   let preData2 = preData;
   if (processingKind === 'update') {
@@ -38,6 +51,7 @@ const checkData = async (
         generalConfig,
         serversideConfig,
         context,
+        session,
       });
 
       if (!preData2) return false;
@@ -53,6 +67,7 @@ const checkData = async (
         generalConfig,
         serversideConfig,
         context,
+        session,
       });
 
       if (!preData2) return false;
@@ -66,6 +81,7 @@ const checkData = async (
     generalConfig,
     serversideConfig,
     context,
+    session,
   );
 
   const { data, filter } = patchExternalReferences(

@@ -13,7 +13,7 @@ const getPrevious: GetPrevious = async (
   resolverArg,
   session,
 ) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
+  const { entityConfig, generalConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
@@ -27,13 +27,11 @@ const getPrevious: GetPrevious = async (
 
   const processingKind = 'update';
   const allowCreate = await checkData(
-    args,
+    resolverCreatorArg,
+    resolverArg,
     outputFilter,
-    entityConfig,
     processingKind,
-    generalConfig,
-    serversideConfig,
-    context,
+    session,
   );
 
   if (!allowCreate) return null;

@@ -23,6 +23,7 @@ type Arg = {
   generalConfig: GeneralConfig;
   serversideConfig: ServersideConfig;
   context: any;
+  session: any;
 };
 
 const getMissingData = async ({
@@ -33,6 +34,7 @@ const getMissingData = async ({
   generalConfig,
   serversideConfig,
   context,
+  session,
 }: Arg): Promise<any | null> => {
   const inAnyCase = true;
 
@@ -53,6 +55,7 @@ const getMissingData = async ({
     context,
     { projection },
     { inputOutputEntity: [[]] },
+    session,
   );
 
   if (!entity) return null;

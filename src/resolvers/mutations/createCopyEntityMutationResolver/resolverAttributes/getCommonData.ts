@@ -185,13 +185,11 @@ const getCommonData = async (
     const processingKind = 'update';
     const allowCopy = involvedFilters
       ? await checkData(
-          { whereOne: { id }, data },
+          resolverCreatorArg,
+          { ...resolverArg, args: { whereOne: { id }, data } },
           outputFilter,
-          entityConfig,
           processingKind,
-          generalConfig,
-          serversideConfig,
-          context,
+          session,
         )
       : true;
 
@@ -201,13 +199,11 @@ const getCommonData = async (
   const processingKind = 'create';
   const allowCopy = involvedFilters
     ? await checkData(
-        { data },
+        resolverCreatorArg,
+        { ...resolverArg, args: { data } },
         outputFilter,
-        entityConfig,
         processingKind,
-        generalConfig,
-        serversideConfig,
-        context,
+        session,
       )
     : true;
 

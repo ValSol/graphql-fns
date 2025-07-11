@@ -4,9 +4,13 @@ import type { GetPrevious } from '../../../tsTypes';
 import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
 import checkData from '../../checkData';
 
-const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
-  const { args, context, involvedFilters } = resolverArg;
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session,
+) => {
+  const { args, involvedFilters } = resolverArg;
 
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
@@ -18,13 +22,11 @@ const getPrevious: GetPrevious = async (actionGeneralName, resolverCreatorArg, r
   const processingKind = 'create';
   for (let i = 0; i < data.length; i += 1) {
     const allowCreate = await checkData(
-      { data: data[i] },
+      resolverCreatorArg,
+      { ...resolverArg, args: { data: data[i] } },
       filter,
-      entityConfig,
       processingKind,
-      generalConfig,
-      serversideConfig,
-      context,
+      session,
     );
 
     if (!allowCreate) return null;

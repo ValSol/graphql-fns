@@ -8,7 +8,7 @@ import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
 const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
+  const { entityConfig, generalConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
 
@@ -79,13 +79,11 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
     const { _id: id } = previousEntity;
 
     const allowCreate = await checkData(
-      { data, whereOne: { id } },
+      resolverCreatorArg,
+      { ...resolverArg, args: { data, whereOne: { id } } },
       outputFilter,
-      entityConfig,
       processingKind,
-      generalConfig,
-      serversideConfig,
-      context,
+      session,
     );
 
     if (allowCreate) previousEntities2.push(previousEntity);

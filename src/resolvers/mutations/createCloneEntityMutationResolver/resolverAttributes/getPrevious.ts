@@ -78,13 +78,11 @@ const getPrevious: GetPrevious = async (
 
   const processingKind = 'create';
   const allowCreate = await checkData(
-    args,
+    resolverCreatorArg,
+    resolverArg,
     filter,
-    entityConfig,
     processingKind,
-    generalConfig,
-    serversideConfig,
-    context,
+    session,
   );
 
   return allowCreate && [];
