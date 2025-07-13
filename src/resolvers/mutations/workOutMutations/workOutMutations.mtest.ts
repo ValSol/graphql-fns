@@ -519,10 +519,12 @@ describe('workOutMutations', () => {
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.init();
+    await Parent.createCollection();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.init();
+    await Child.createCollection();
 
     const findedParent = await Parent.findById(createdParent.id);
     expect(findedParent).toBe(null);
@@ -670,10 +672,12 @@ describe('workOutMutations', () => {
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
+    await ExampleClone.createCollection();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
+    await Example.createCollection();
 
     const exampleClone = await ExampleClone.findOne({ _id: createdExampleClone.id });
     const example = await Example.findOne({ _id: createdExample.id });
@@ -823,10 +827,12 @@ describe('workOutMutations', () => {
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
+    await ExampleClone.createCollection();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
+    await Example.createCollection();
 
     const exampleClonesBeforeDelete = await ExampleClone.find({});
     const examplesBeforeDelete = await Example.find({});
@@ -966,10 +972,12 @@ describe('workOutMutations', () => {
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
+    await ExampleClone.createCollection();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
+    await Example.createCollection();
 
     const exampleClonesBeforeDelete = await ExampleClone.find(whereToDeleteExampleClones);
     const examplesBeforeDelete = await Example.find(whereToDeleteExamples);
@@ -1118,10 +1126,12 @@ describe('workOutMutations', () => {
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
+    await ExampleClone.createCollection();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
+    await Example.createCollection();
 
     const exampleClones = await ExampleClone.find({
       _id: { $in: whereOneToUpdateManyExampleClones.map(({ id }) => id) },
@@ -1250,10 +1260,12 @@ describe('workOutMutations', () => {
     const exampleCloneSchema = createThingSchema(exampleCloneConfig);
     const ExampleClone = mongooseConn.model('ExampleClone_Thing', exampleCloneSchema);
     await ExampleClone.init();
+    await ExampleClone.createCollection();
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.init();
+    await Example.createCollection();
 
     const exampleClones = await ExampleClone.find({ label: 'updateFiltered updated' });
     const examples = await Example.find({ label: 'updateFiltered updated2' });

@@ -14,14 +14,15 @@ const addPeripheryToCore = async (
   session?: any,
 ): Promise<Result> => {
   const promises: Array<Promise<void | DataObject>> = [];
-  periphery.forEach((obj, config) => {
+
+  for (const [config, obj] of periphery.entries()) {
     const { name: configName } = config;
     const thingSchema = createThingSchema(config);
     const Entity =
       mongooseConn.models[`${configName}_Thing`] ||
       mongooseConn.model(`${configName}_Thing`, thingSchema);
 
-    Object.keys(obj).forEach((oppositeName) => {
+    for (const oppositeName of Object.keys(obj)) {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];
 
       promises.push(
@@ -54,6 +55,7 @@ const addPeripheryToCore = async (
             .filter(Boolean);
 
           const resultItem = core.get(oppositeConfig);
+
           if (resultItem) {
             bulkItems.reverse();
             resultItem.unshift(...bulkItems);
@@ -62,8 +64,8 @@ const addPeripheryToCore = async (
           }
         }),
       );
-    });
-  });
+    }
+  }
 
   await Promise.all(promises);
 

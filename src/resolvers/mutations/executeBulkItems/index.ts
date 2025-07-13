@@ -3,7 +3,7 @@ import type { Core } from '../../tsTypes';
 
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 
-const executeBulkItems = (
+const executeBulkItems = async (
   core: Core,
   generalConfig: GeneralConfig,
   context: Context,
@@ -12,18 +12,18 @@ const executeBulkItems = (
   const { enums } = generalConfig;
   const { mongooseConn } = context;
 
-  const promises: Promise<any>[] = [];
-  core.forEach((bulkItems, config) => {
+  const result: any[] = [];
+
+  for (const [config, bulkItems] of core.entries()) {
     const { name } = config;
     const thingSchema = createThingSchema(config, enums);
     const Entity =
       mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, thingSchema);
 
-    // @ts-ignore
-    promises.push(Entity.bulkWrite(bulkItems, { session, strict: true }));
-  });
+    result.push(await Entity.bulkWrite(bulkItems, { session, strict: true }));
+  }
 
-  return Promise.all(promises);
+  return result;
 };
 
 export default executeBulkItems;

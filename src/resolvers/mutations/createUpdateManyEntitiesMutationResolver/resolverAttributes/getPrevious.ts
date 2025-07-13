@@ -11,7 +11,12 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import checkData from '../../checkData';
 
-const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverArg, session) => {
+const getPrevious: GetPrevious = async (
+  actionGeneralName,
+  resolverCreatorArg,
+  resolverArg,
+  session,
+) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
   const { args, context, involvedFilters } = resolverArg;
   const { enums } = generalConfig;
@@ -123,4 +128,4 @@ const get: GetPrevious = async (actionGeneralName, resolverCreatorArg, resolverA
   return result;
 };
 
-export default get;
+export default getPrevious;
