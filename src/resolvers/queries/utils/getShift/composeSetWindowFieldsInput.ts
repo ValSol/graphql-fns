@@ -21,9 +21,9 @@ const composeSetWindowFieldsInput = (arg: Args): SetWindowFields => {
       const [fieldName, distance] = sortKey.split('_');
 
       if (distance === 'ASC') {
-        prev[fieldName] = 1; // eslint-disable-line no-param-reassign
+        prev[fieldName] = 1;
       } else if (distance === 'DESC') {
-        prev[fieldName] = -1; // eslint-disable-line no-param-reassign
+        prev[fieldName] = -1;
       } else {
         throw new TypeError(`Incorrect sort key: "${sortKey}!"`);
       }

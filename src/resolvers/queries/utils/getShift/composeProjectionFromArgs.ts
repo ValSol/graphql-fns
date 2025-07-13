@@ -1,20 +1,22 @@
-import type {NearInput} from '../../../../tsTypes';
+import type { NearInput } from '../../../../tsTypes';
 
 type Args = {
-  where?: any,
-  near?: NearInput,
+  where?: any;
+  near?: NearInput;
   sort?: {
-    sortBy: Array<string>
-  },
-  search?: string,
-  after?: string,
-  before?: string,
-  first?: number,
-  last?: number
+    sortBy: Array<string>;
+  };
+  search?: string;
+  after?: string;
+  before?: string;
+  first?: number;
+  last?: number;
 };
 
-const composeProjectionFromArgs = (args: Args): {
-  [fieldName: string]: 1
+const composeProjectionFromArgs = (
+  args: Args,
+): {
+  [fieldName: string]: 1;
 } => {
   const { sort, near } = args;
 
@@ -23,7 +25,7 @@ const composeProjectionFromArgs = (args: Args): {
   if (sort?.sortBy) {
     sort.sortBy.reduce((prev, sortField) => {
       const [fieldName] = sortField.split('_');
-      prev[fieldName] = 1; // eslint-disable-line no-param-reassign
+      prev[fieldName] = 1;
       return prev;
     }, result);
   }

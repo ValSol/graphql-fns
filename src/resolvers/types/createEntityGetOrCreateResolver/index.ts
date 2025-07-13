@@ -72,7 +72,7 @@ const createEntityGetOrCreateResolver = (
 
     const tangibleFieldName = `${fieldName.slice(0, -'GetOrCreate'.length)}`;
 
-    const id = parent[tangibleFieldName]; // eslint-disable-line camelcase
+    const id = parent[tangibleFieldName];
 
     if (id) {
       const whereOne = { id } as const;

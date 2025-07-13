@@ -236,7 +236,7 @@ const composeServersideConfig = (
     (prev, entityName) => {
       const { isOutput } = allEntityNames[entityName];
 
-      prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]]; // eslint-disable-line no-param-reassign
+      prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]];
 
       return prev;
     },

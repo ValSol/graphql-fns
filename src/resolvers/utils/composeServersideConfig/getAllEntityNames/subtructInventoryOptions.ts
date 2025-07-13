@@ -1,6 +1,9 @@
-import type {SimplifiedInventoryOptions} from '../../../../tsTypes';
+import type { SimplifiedInventoryOptions } from '../../../../tsTypes';
 
-const subtructInventoryOptions = (include: SimplifiedInventoryOptions, exclude: SimplifiedInventoryOptions): SimplifiedInventoryOptions => {
+const subtructInventoryOptions = (
+  include: SimplifiedInventoryOptions,
+  exclude: SimplifiedInventoryOptions,
+): SimplifiedInventoryOptions => {
   const { Query: includeQueries, Mutation: includeMutations } = include;
   const { Query: excludeQueries, Mutation: excludeMutations } = exclude;
 
@@ -11,10 +14,10 @@ const subtructInventoryOptions = (include: SimplifiedInventoryOptions, exclude: 
       );
 
       if (rest.length) {
-        prev[actionName] = rest; // eslint-disable-line no-param-reassign
+        prev[actionName] = rest;
       }
     } else {
-      prev[actionName] = includeQueries[actionName]; // eslint-disable-line no-param-reassign
+      prev[actionName] = includeQueries[actionName];
     }
     return prev;
   }, {});
@@ -26,10 +29,10 @@ const subtructInventoryOptions = (include: SimplifiedInventoryOptions, exclude: 
       );
 
       if (rest.length) {
-        prev[actionName] = rest; // eslint-disable-line no-param-reassign
+        prev[actionName] = rest;
       }
     } else {
-      prev[actionName] = includeMutations[actionName]; // eslint-disable-line no-param-reassign
+      prev[actionName] = includeMutations[actionName];
     }
     return prev;
   }, {});

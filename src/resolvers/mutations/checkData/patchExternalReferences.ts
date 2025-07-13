@@ -98,10 +98,10 @@ const processData = (
         }
       } else if (create) {
         // use fake 'newId' value as dummy value for 'create'
-        result[key] = array ? ['newId'] : 'newId'; // eslint-disable-line no-param-reassign
+        result[key] = array ? ['newId'] : 'newId';
       }
     } else {
-      result[key] = data[key]; // eslint-disable-line no-param-reassign
+      result[key] = data[key];
     }
   });
 

@@ -192,19 +192,19 @@ const composeEntityResolvers = (
         const resolver = createEntityArrayResolver(config, generalConfig, serversideConfig);
 
         if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
+          prev[name] = resolver;
         }
 
         const resolver2 = createEntityConnectionResolver(config, generalConfig, serversideConfig);
 
         if (resolver2) {
-          prev[`${name}ThroughConnection`] = resolver2; // eslint-disable-line no-param-reassign
+          prev[`${name}ThroughConnection`] = resolver2;
         }
 
         const resolver3 = createEntityCountResolver(config, generalConfig, serversideConfig);
 
         if (resolver3) {
-          prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
+          prev[`${name}Count`] = resolver3;
         }
 
         const resolver4 = createEntityDistinctValuesResolver(
@@ -214,13 +214,13 @@ const composeEntityResolvers = (
         );
 
         if (resolver4) {
-          prev[`${name}DistinctValues`] = resolver4; // eslint-disable-line no-param-reassign
+          prev[`${name}DistinctValues`] = resolver4;
         }
       } else {
         const resolver = createEntityScalarResolver(config, generalConfig, serversideConfig);
 
         if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
+          prev[name] = resolver;
         }
       }
       return prev;
@@ -256,7 +256,7 @@ const composeEntityResolvers = (
         const resolver = createEntityFilterArrayResolver(config, generalConfig, serversideConfig);
 
         if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
+          prev[name] = resolver;
         }
 
         const resolver2 = createEntityFilterConnectionResolver(
@@ -272,7 +272,7 @@ const composeEntityResolvers = (
         const resolver3 = createEntityFilterCountResolver(config, generalConfig, serversideConfig);
 
         if (resolver3) {
-          prev[`${name}Count`] = resolver3; // eslint-disable-line no-param-reassign
+          prev[`${name}Count`] = resolver3;
         }
 
         const resolver4 = createEntityFilterDistinctValuesResolver(
@@ -282,13 +282,13 @@ const composeEntityResolvers = (
         );
 
         if (resolver4) {
-          prev[`${name}DistinctValues`] = resolver4; // eslint-disable-line no-param-reassign
+          prev[`${name}DistinctValues`] = resolver4;
         }
       } else {
         const resolver = createEntityFilterScalarResolver(config, generalConfig, serversideConfig);
 
         if (resolver) {
-          prev[name] = resolver; // eslint-disable-line no-param-reassign
+          prev[name] = resolver;
         }
       }
 
@@ -339,7 +339,7 @@ const composeEntityResolvers = (
 
         throw new TypeError(`Invalid geospatialType value "${name}" of geospatial mongodb field!`);
       };
-      // eslint-disable-next-line no-param-reassign
+
       prev[name] = resolver;
       return prev;
     }, resolvers);

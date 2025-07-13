@@ -16,23 +16,23 @@ const actionToInventory = (
   const permission = descendantKeyToPermission[descendantKey];
 
   if (!inventoryByRoles[permission]) {
-    inventoryByRoles[permission] = { name: permission }; // eslint-disable-line no-param-reassign
+    inventoryByRoles[permission] = { name: permission };
   }
 
   if (!inventoryByRoles[permission].include) {
-    inventoryByRoles[permission].include = {}; // eslint-disable-line no-param-reassign
+    inventoryByRoles[permission].include = {};
   }
 
   if (!inventoryByRoles[permission].include[actionType]) {
-    inventoryByRoles[permission].include[actionType] = {}; // eslint-disable-line no-param-reassign
+    inventoryByRoles[permission].include[actionType] = {};
   }
 
   if (!inventoryByRoles[permission].include[actionType][actionName]) {
-    inventoryByRoles[permission].include[actionType][actionName] = []; // eslint-disable-line no-param-reassign
+    inventoryByRoles[permission].include[actionType][actionName] = [];
   }
 
   if (!inventoryByRoles[permission].include[actionType][actionName].includes(entityName)) {
-    inventoryByRoles[permission].include[actionType][actionName].push(entityName); // eslint-disable-line no-param-reassign
+    inventoryByRoles[permission].include[actionType][actionName].push(entityName);
   }
 
   return inventoryByRoles;

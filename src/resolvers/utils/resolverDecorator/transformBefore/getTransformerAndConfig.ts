@@ -23,13 +23,13 @@ const argTypesInParts = [
 const getPossibleEntityName = (prefix: string, suffix: string, argType: string) =>
   argType.slice(prefix.length, -suffix.length);
 
-const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
+const regExp = /[\[\]\!]/g;
 
 const getTransformerAndConfig = (
   rawArgType: string,
   generalConfig: GeneralConfig,
 ): null | [any, null | EntityConfig] => {
-  const argType = rawArgType.replace(regExp, ''); // eslint-disable-line no-useless-escape
+  const argType = rawArgType.replace(regExp, '');
 
   const results = argTypesInParts.reduce<Array<any>>(
     (prev, [prefix, suffix, transformer, notUseConfig]: [any, any, any, any]) => {

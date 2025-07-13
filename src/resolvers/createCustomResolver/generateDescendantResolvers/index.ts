@@ -9,7 +9,7 @@ const store = Object.create(null);
 const getAllowedActions = (allow) =>
   Object.keys(allow).reduce<Record<string, any>>((prev, entityName) => {
     allow[entityName].forEach((methodName) => {
-      prev[methodName] = true; // eslint-disable-line no-param-reassign
+      prev[methodName] = true;
     });
     return prev;
   }, {});
@@ -37,7 +37,6 @@ const generateDescendantResolvers = (
 
     Object.keys(queries).forEach((actionName) => {
       if (allowedActions[actionName]) {
-        // eslint-disable-next-line no-param-reassign
         prev[`${actionName}${descendantKey}`] = createResolverCreator(
           actionName,
           queries[actionName],
@@ -54,7 +53,6 @@ const generateDescendantResolvers = (
 
     Object.keys(mutations).forEach((actionName) => {
       if (allowedActions[actionName]) {
-        // eslint-disable-next-line no-param-reassign
         prev[`${actionName}${descendantKey}`] = createResolverCreator(
           actionName,
           mutations[actionName],

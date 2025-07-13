@@ -34,7 +34,6 @@ const getFirst = async (
     involvedFilters,
   );
 
-  // eslint-disable-next-line no-underscore-dangle
   if (entities?.[0]?.id?.toString() === _id) {
     return composeFirstEdges(shift, first, entities);
   }

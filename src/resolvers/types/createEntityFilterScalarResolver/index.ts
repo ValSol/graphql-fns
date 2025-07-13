@@ -63,7 +63,7 @@ const createEntityFilterScalarResolver = (
     }
     const { fieldName } = info;
 
-    const stringifiedFilter = parent[fieldName]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[fieldName];
 
     if (!stringifiedFilter) {
       return null;

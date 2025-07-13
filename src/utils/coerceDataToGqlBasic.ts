@@ -43,7 +43,6 @@ const coerceDataToGqlBasic = (
     if (fieldsObject[key].type === 'embeddedFields') {
       const { config } = fieldsObject[key] as EmbeddedField;
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
           coerceDataToGqlBasic(
             ObjectId,
@@ -56,7 +55,6 @@ const coerceDataToGqlBasic = (
           ),
         );
       } else {
-        // eslint-disable-next-line no-param-reassign
         prev[key] = data[key]
           ? coerceDataToGqlBasic(
               ObjectId,
@@ -75,7 +73,6 @@ const coerceDataToGqlBasic = (
     ) {
       const { config } = fieldsObject[key] as RelationalField | DuplexField;
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[key] =
           !data[key] || !data[key].length
             ? { connect: [] }
@@ -101,7 +98,6 @@ const coerceDataToGqlBasic = (
                     ),
                   );
                 } else {
-                  // eslint-disable-next-line no-param-reassign
                   prev2.create = [
                     coerceDataToGqlBasic(
                       ObjectId,
@@ -125,7 +121,6 @@ const coerceDataToGqlBasic = (
         if (typeof keyData === 'string') {
           prev[key] = { connect: keyData };
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = {
             create: coerceDataToGqlBasic(
               ObjectId,
@@ -173,7 +168,6 @@ const coerceDataToGqlBasic = (
       const { geospatialType } = fieldsObject[key] as GeospatialField;
       if (geospatialType === 'Point') {
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
             .map((item) => {
               const { lng, lat } = item;
@@ -190,7 +184,6 @@ const coerceDataToGqlBasic = (
         // TODO expand test for skipUnusedFields situations
         // TODO expand test for all empty situations
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
             .map((item) => {
               const {
@@ -209,7 +202,6 @@ const coerceDataToGqlBasic = (
         // TODO expand test for skipUnusedFields situations
         // TODO expand test for all empty situations
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key]
             .map(({ polygons }) =>
               polygons

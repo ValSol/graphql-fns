@@ -110,7 +110,7 @@ const createEntityOppositeRelationCountResolver = (
 
     const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, whereById] } : whereById; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, whereById] } : whereById;
 
     const entities = await childEntityCountQueryResolver(
       parent,

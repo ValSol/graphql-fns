@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 import type {
   DataObject,
@@ -35,7 +35,6 @@ const getShift = async (
 
   if (!filter) return null;
 
-  // eslint-disable-next-line no-await-in-loop
   const thing = await entityQueryResolver(
     parent,
     { whereOne: { id: _id } },
@@ -90,7 +89,7 @@ const getShift = async (
 
   pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });
 
-  const $eq = new mongoose.mongo.ObjectId(_id);
+  const $eq = new ObjectId(_id);
 
   const $match = { _id: { $eq } } as unknown as DataObject;
 

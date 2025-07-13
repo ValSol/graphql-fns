@@ -231,8 +231,8 @@ const composeDescendantConfig = (
               'childEntityDistinctValues',
             ]
           : key !== 'duplexFields' || required || oppositeArray
-          ? ['childEntity']
-          : ['childEntity', 'childEntityGetOrCreate'];
+            ? ['childEntity']
+            : ['childEntity', 'childEntityGetOrCreate'];
         if (
           !childQueries.some((childQuery: DescendantAttributesActionName) =>
             descendant[descendantKey].allow[currentConfig.name].includes(childQuery),
@@ -263,7 +263,6 @@ const composeDescendantConfig = (
       // *** check that the relational fields have opposite relational fields
 
       if (key === 'relationalFields') {
-        // eslint-disable-next-line
         entityConfig[key]?.forEach(({ name, config, oppositeName }) => {
           const oppositeField = (config.relationalFields || []).find(
             ({ name: name2 }) => name2 === oppositeName,
@@ -282,7 +281,6 @@ const composeDescendantConfig = (
       // *** check that the duplex fields have opposite duplex fields
 
       if (key === 'duplexFields') {
-        // eslint-disable-next-line
         entityConfig[key]?.forEach(({ config, oppositeName, name: name2 }) => {
           const oppositeField = (config.duplexFields || []).find(
             ({ name }) => name === oppositeName,

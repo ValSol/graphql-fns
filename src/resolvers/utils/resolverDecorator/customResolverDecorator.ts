@@ -58,7 +58,7 @@ const customResolverDecorator = (
         const transformerAndConfig = getTransformerAndConfig(argType, generalConfig);
 
         if (transformerAndConfig) {
-          prev[argName] = transformerAndConfig; // eslint-disable-line no-param-reassign
+          prev[argName] = transformerAndConfig;
         }
 
         return prev;

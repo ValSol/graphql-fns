@@ -36,17 +36,17 @@ const transformAfter = (
 
       if (!generalConfig) {
         if (array) {
-          prev[name] = item[name].map((item2) => toGlobalId(item2, config.name)); // eslint-disable-line no-param-reassign
+          prev[name] = item[name].map((item2) => toGlobalId(item2, config.name));
         } else {
-          prev[name] = toGlobalId(item[name], config.name); // eslint-disable-line no-param-reassign
+          prev[name] = toGlobalId(item[name], config.name);
         }
       } else {
         const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
 
         if (array) {
-          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, descendantKey)); // eslint-disable-line no-param-reassign
+          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, descendantKey));
         } else {
-          prev[name] = toGlobalId(item[name], rootName, descendantKey); // eslint-disable-line no-param-reassign
+          prev[name] = toGlobalId(item[name], rootName, descendantKey);
         }
       }
 
@@ -60,12 +60,11 @@ const transformAfter = (
       if (!item[name]) return prev;
 
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = item[name].map(
           (item2) => item2 && transformAfter(args, item2, config, generalConfig, true),
         );
       } else {
-        prev[name] = transformAfter(args, item[name], config, generalConfig, true); // eslint-disable-line no-param-reassign
+        prev[name] = transformAfter(args, item[name], config, generalConfig, true);
       }
 
       return prev;
@@ -82,9 +81,9 @@ const transformAfter = (
   } else if (generalConfig) {
     const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
 
-    globalId = toGlobalId(id, rootName, descendantKey); // eslint-disable-line no-param-reassign
+    globalId = toGlobalId(id, rootName, descendantKey);
   } else {
-    globalId = toGlobalId(id, entityConfig.name); // eslint-disable-line no-param-reassign
+    globalId = toGlobalId(id, entityConfig.name);
   }
 
   const { token } = args;

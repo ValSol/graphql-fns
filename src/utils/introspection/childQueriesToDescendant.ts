@@ -13,11 +13,11 @@ const childQueriesToDescendant = (
     if (actionName === baseAction) return;
 
     if (!descendantAttributes[descendantKey]) {
-      descendantAttributes[descendantKey] = { descendantKey, allow: {} }; // eslint-disable-line no-param-reassign
+      descendantAttributes[descendantKey] = { descendantKey, allow: {} };
     }
 
     if (!descendantAttributes[descendantKey].allow[entityName]) {
-      descendantAttributes[descendantKey].allow[entityName] = []; // eslint-disable-line no-param-reassign
+      descendantAttributes[descendantKey].allow[entityName] = [];
     }
 
     if (

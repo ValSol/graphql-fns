@@ -56,7 +56,7 @@ const composeActionSignature = (
     const [inputName, inputDefinition, childChain] = inputCreator(entityConfigForInputCreator);
     toShow.push(Boolean(inputDefinition));
     if (inputName && !inputDic[inputName] && inputDefinition) {
-      inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+      inputDic[inputName] = inputDefinition;
       fillInputDic(childChain, inputDic);
     }
   });

@@ -72,14 +72,13 @@ const createEntityCountResolver = (
 
     const { fieldName } = info;
 
-    const id_in = parent[`${fieldName.slice(0, -'Count'.length)}`]; // eslint-disable-line camelcase
+    const id_in = parent[`${fieldName.slice(0, -'Count'.length)}`];
 
-    // eslint-disable-next-line camelcase
     if (!id_in || !id_in.length) return 0;
 
     const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, { id_in }] } : { id_in }; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, { id_in }] } : { id_in };
 
     const entityCount = await childEntityCountQueryResolver(
       parent,

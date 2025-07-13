@@ -3,24 +3,24 @@ import renumeratePositions from './renumeratePositions';
 type Result = Array<{
   $push: {
     [key: string]: {
-      $each: Array<any>
-    }
-  }
+      $each: Array<any>;
+    };
+  };
 }>;
 
 const processForPushEach = (
   data: {
-    [key: string]: Array<any>
+    [key: string]: Array<any>;
   },
   positions: {
-    [key: string]: Array<number>
+    [key: string]: Array<number>;
   } = {},
 ): Result => {
   const firstItem = Object.keys(data)
     .filter((key) => !positions[key])
     .reduce(
       (prev, key) => {
-        prev.$push[key] = { $each: data[key] }; // eslint-disable-line no-param-reassign
+        prev.$push[key] = { $each: data[key] };
         return prev;
       },
       { $push: {} },

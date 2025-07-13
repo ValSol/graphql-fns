@@ -22,9 +22,9 @@ const processWhere = (
     const { array } = duplexField;
 
     if (array) {
-      prev[key] = whereOnes[key].map(processItem); // eslint-disable-line no-param-reassign
+      prev[key] = whereOnes[key].map(processItem);
     } else {
-      prev[key] = processItem(whereOnes[key]); // eslint-disable-line no-param-reassign
+      prev[key] = processItem(whereOnes[key]);
     }
 
     return prev;
@@ -42,7 +42,7 @@ const transformWhereOnes = (
     const { duplexFields = [] } = entityConfig;
 
     duplexFields.reduce<Record<string, DuplexField>>((prev, duplexField) => {
-      prev[duplexField.name] = duplexField; // eslint-disable-line no-param-reassign
+      prev[duplexField.name] = duplexField;
 
       return prev;
     }, duplexFieldsObject);

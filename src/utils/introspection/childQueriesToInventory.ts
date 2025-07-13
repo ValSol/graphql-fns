@@ -19,23 +19,23 @@ const childQueriesToInventory = (
 
     const inventory1 = inventoryByRoles[permission];
     if (!inventory1) {
-      inventoryByRoles[permission] = { name: permission }; // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission] = { name: permission };
     }
 
     if (!inventoryByRoles[permission].include) {
-      inventoryByRoles[permission].include = {}; // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission].include = {};
     }
 
     if (!inventoryByRoles[permission].include.Query) {
-      inventoryByRoles[permission].include.Query = {}; // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission].include.Query = {};
     }
 
     if (!inventoryByRoles[permission].include.Query[actionName]) {
-      inventoryByRoles[permission].include.Query[actionName] = []; // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission].include.Query[actionName] = [];
     }
 
     if (!inventoryByRoles[permission].include.Query[actionName].includes(entityName)) {
-      inventoryByRoles[permission].include.Query[actionName].push(entityName); // eslint-disable-line no-param-reassign
+      inventoryByRoles[permission].include.Query[actionName].push(entityName);
     }
   });
 

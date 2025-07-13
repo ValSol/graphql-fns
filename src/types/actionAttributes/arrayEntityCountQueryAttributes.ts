@@ -15,7 +15,6 @@ const argTypes = [];
 
 const actionInvolvedEntityNames = (
   name: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   descendantKey = '',
 ): {
   [key: string]: string;

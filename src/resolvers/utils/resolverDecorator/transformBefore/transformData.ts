@@ -5,21 +5,21 @@ const processData = (data: any) =>
     if (key === 'id') {
       const { _id: id } = fromGlobalId(data.id);
 
-      prev.id = id; // eslint-disable-line no-param-reassign
+      prev.id = id;
     } else if (data[key]?.connect) {
       if (Array.isArray(data[key].connect)) {
-        const connect = data[key].connect.map((globalId) => fromGlobalId(globalId)._id); // eslint-disable-line no-param-reassign, no-underscore-dangle
+        const connect = data[key].connect.map((globalId) => fromGlobalId(globalId)._id);
 
-        prev[key] = { connect }; // eslint-disable-line no-param-reassign
+        prev[key] = { connect };
       } else {
         const { _id: connect } = fromGlobalId(data[key].connect);
 
-        prev[key] = { connect }; // eslint-disable-line no-param-reassign
+        prev[key] = { connect };
       }
     } else if (data[key]?.create) {
-      prev[key] = { create: transformData(data[key].create) }; // eslint-disable-line no-param-reassign, no-use-before-define
+      prev[key] = { create: transformData(data[key].create) };
     } else {
-      prev[key] = data[key]; // eslint-disable-line no-param-reassign
+      prev[key] = data[key];
     }
 
     return prev;

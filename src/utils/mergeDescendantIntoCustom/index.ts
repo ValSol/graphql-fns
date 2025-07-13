@@ -6,7 +6,7 @@ import getTangibleEntities from './getTangibleEntities';
 
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
-const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
+const regExp = /[\[\]\!]/g;
 
 const scalarTypes = [
   'Boolean',
@@ -140,7 +140,7 @@ const mergeDescendantIntoCustom = (
   const getAllowedMethods = (allow) =>
     Object.keys(allow).reduce<Record<string, any>>((prev, entityName) => {
       allow[entityName].forEach((methodName) => {
-        prev[methodName] = true; // eslint-disable-line no-param-reassign
+        prev[methodName] = true;
       });
       return prev;
     }, {});
@@ -155,7 +155,6 @@ const mergeDescendantIntoCustom = (
         allowedMethods[actionName] &&
         (variant === 'forCustomResolver' || !queryAttributes[actionName].actionIsChild)
       ) {
-        // eslint-disable-next-line no-param-reassign
         prev[queryAttributes[actionName].actionGeneralName(descendantKey)] = composeCustomAction(
           descendant[descendantKey],
           queryAttributes[actionName],
@@ -172,7 +171,6 @@ const mergeDescendantIntoCustom = (
 
     Object.keys(mutationAttributes).forEach((actionName) => {
       if (allowedMethods[actionName]) {
-        // eslint-disable-next-line no-param-reassign
         prev[mutationAttributes[actionName].actionGeneralName(descendantKey)] = composeCustomAction(
           descendant[descendantKey],
           mutationAttributes[actionName],

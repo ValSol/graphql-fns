@@ -16,7 +16,7 @@ const composeAllFieldsProjection = (entityConfig: EntityConfig): Result => {
 
   store[entityName] = Object.keys(composeFieldsObject(entityConfig)).reduce<Record<string, 1>>(
     (prev, item) => {
-      prev[item] = 1; // eslint-disable-line no-param-reassign
+      prev[item] = 1;
       return prev;
     },
     { createdAt: 1, updatedAt: 1 },

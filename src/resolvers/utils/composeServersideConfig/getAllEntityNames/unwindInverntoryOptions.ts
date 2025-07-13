@@ -64,7 +64,7 @@ const unwindInverntoryOptions = (
         }
 
         if (!prev[childQueryName]) {
-          prev[childQueryName] = []; // eslint-disable-line no-param-reassign
+          prev[childQueryName] = [];
         }
 
         if (!prev[childQueryName].includes(name)) {
@@ -93,7 +93,7 @@ const unwindInverntoryOptions = (
     });
 
     if (actionNames.length > 0) {
-      prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
+      prev[actionName] = actionNames;
     }
 
     return prev;
@@ -109,7 +109,7 @@ const unwindInverntoryOptions = (
     });
 
     if (actionNames.length > 0) {
-      prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
+      prev[actionName] = actionNames;
     }
 
     return prev;
@@ -129,7 +129,7 @@ const unwindInverntoryOptions = (
           const allActionEntities = allQueries[actionName];
 
           if (queryInventoryOptions[actionName] === true) {
-            prev[actionName] = allActionEntities; // eslint-disable-line no-param-reassign
+            prev[actionName] = allActionEntities;
           } else {
             queryInventoryOptions[actionName].forEach((entityName) => {
               if (!allActionEntities.includes(entityName)) {
@@ -139,7 +139,7 @@ const unwindInverntoryOptions = (
               }
             });
 
-            prev[actionName] = queryInventoryOptions[actionName]; // eslint-disable-line no-param-reassign
+            prev[actionName] = queryInventoryOptions[actionName];
           }
 
           return prev;
@@ -159,7 +159,7 @@ const unwindInverntoryOptions = (
     });
 
     if (actionNames.length > 0) {
-      prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
+      prev[actionName] = actionNames;
     }
 
     return prev;
@@ -177,7 +177,7 @@ const unwindInverntoryOptions = (
     });
 
     if (actionNames.length > 0) {
-      prev[actionName] = actionNames; // eslint-disable-line no-param-reassign
+      prev[actionName] = actionNames;
     }
 
     return prev;
@@ -196,7 +196,7 @@ const unwindInverntoryOptions = (
           const allActionEntities = allMutations[actionName];
 
           if (mutationInventoryOptions[actionName] === true) {
-            prev[actionName] = allActionEntities; // eslint-disable-line no-param-reassign
+            prev[actionName] = allActionEntities;
           } else {
             mutationInventoryOptions[actionName].forEach((entityName) => {
               if (!allActionEntities.includes(entityName)) {
@@ -206,7 +206,7 @@ const unwindInverntoryOptions = (
               }
             });
 
-            prev[actionName] = mutationInventoryOptions[actionName]; // eslint-disable-line no-param-reassign
+            prev[actionName] = mutationInventoryOptions[actionName];
           }
 
           return prev;

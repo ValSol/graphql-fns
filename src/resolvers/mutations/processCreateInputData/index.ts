@@ -1,5 +1,4 @@
 import deepEqual from 'fast-deep-equal';
-
 import { Types } from 'mongoose';
 
 import type { TangibleEntityConfig } from '../../../tsTypes';
@@ -107,7 +106,7 @@ const processCreateInputData = (
           );
         }
         const { array: oppositeArray, config: oppositeConfig } = duplexField;
-        // eslint-disable-next-line
+
         prev[name] = { array, config, oppositeArray, oppositeConfig, oppositeName };
         return prev;
       }, duplexFieldsObject);
@@ -115,7 +114,6 @@ const processCreateInputData = (
 
     const embeddedFieldsObject: Record<string, any> = {};
     embeddedFields.reduce((prev, { array, config, name }) => {
-      // eslint-disable-next-line
       prev[name] = { array, config };
       return prev;
     }, embeddedFieldsObject);
@@ -123,7 +121,6 @@ const processCreateInputData = (
     // the same code as for embeddedFields
     const geospatialFieldsObject: Record<string, any> = {};
     geospatialFields.reduce((prev, { name, array, geospatialType }) => {
-      // eslint-disable-next-line
       prev[name] = { array, geospatialType };
       return prev;
     }, geospatialFieldsObject);
@@ -176,9 +173,9 @@ const processCreateInputData = (
           );
         }
 
-        if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
+        if (!prev.$unset) prev.$unset = {};
 
-        prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+        prev.$unset[key] = 1;
 
         return prev;
       }
@@ -192,14 +189,13 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
-            if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
-            prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+            if (!prev.$unset) prev.$unset = {};
+            prev.$unset[key] = 1;
           }
 
           return prev;
         }
         if (data2[key].connect) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key].connect;
         }
         if (data2[key].create) {
@@ -213,7 +209,6 @@ const processCreateInputData = (
             );
 
             data2[key].create.forEach((item, i) => {
-              // eslint-disable-next-line no-underscore-dangle
               const _id = item.id || new mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
@@ -221,17 +216,16 @@ const processCreateInputData = (
                 config,
               });
             });
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = ids;
           } else {
-            // eslint-disable-next-line no-underscore-dangle
             const _id = data2[key].create.id || new mongooseTypes.ObjectId();
 
             prepared.push({
               data: { ...data2[key].create, _id },
               config,
             });
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = _id;
           }
         }
@@ -245,8 +239,8 @@ const processCreateInputData = (
         }
         if (!array && data2[key].connect === null) {
           if (processingKind === 'update') {
-            if (!prev.$unset) prev.$unset = {}; // eslint-disable-line no-param-reassign
-            prev.$unset[key] = 1; // eslint-disable-line no-param-reassign
+            if (!prev.$unset) prev.$unset = {};
+            prev.$unset[key] = 1;
           }
 
           return prev;
@@ -254,7 +248,7 @@ const processCreateInputData = (
         if (data2[key].connect) {
           if (array) {
             const { connect: oppositeIds } = data2[key];
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = oppositeIds;
 
             oppositeIds.forEach((oppositeId) => {
@@ -262,10 +256,8 @@ const processCreateInputData = (
                 updateOne: {
                   filter: { _id: oppositeId },
                   update: oppositeArray
-                    ? // eslint-disable-next-line no-underscore-dangle
-                      { $push: { [oppositeName]: data2._id } }
-                    : // eslint-disable-next-line no-underscore-dangle
-                      { [oppositeName]: data2._id },
+                    ? { $push: { [oppositeName]: data2._id } }
+                    : { [oppositeName]: data2._id },
                 },
               } as const;
               const coreItem = core.get(config);
@@ -301,17 +293,15 @@ const processCreateInputData = (
             });
           } else {
             const { connect: oppositeId } = data2[key];
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = oppositeId;
 
             const item = {
               updateOne: {
                 filter: { _id: oppositeId },
                 update: oppositeArray
-                  ? // eslint-disable-next-line no-underscore-dangle
-                    { $push: { [oppositeName]: data2._id } }
-                  : // eslint-disable-next-line no-underscore-dangle
-                    { [oppositeName]: data2._id },
+                  ? { $push: { [oppositeName]: data2._id } }
+                  : { [oppositeName]: data2._id },
               },
             } as const;
 
@@ -360,50 +350,46 @@ const processCreateInputData = (
             );
 
             data2[key].create.forEach((item, i) => {
-              // eslint-disable-next-line no-underscore-dangle
               const _id = item.id || new mongooseTypes.ObjectId();
               ids.splice(positions[i], 0, _id);
               prepared.push({
                 data: {
                   ...item,
                   _id,
-                  // eslint-disable-next-line no-underscore-dangle
+
                   [oppositeName]: oppositeArray ? [data2._id] : data2._id,
                 },
                 config,
               });
             });
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = ids;
           } else {
-            // eslint-disable-next-line no-underscore-dangle
             const _id = data2[key].create.id || new mongooseTypes.ObjectId();
 
             prepared.push({
               data: {
                 ...data2[key].create,
                 _id,
-                // eslint-disable-next-line no-underscore-dangle
+
                 [oppositeName]: oppositeArray ? [data2._id] : data2._id,
               },
               config: duplexFieldsObject[key].config,
             });
-            // eslint-disable-next-line no-param-reassign
+
             prev[key] = _id;
           }
         }
         if (data2[key].connect === undefined && data2[key].create === undefined && data2[key]) {
           // set id of created entity
-          // eslint-disable-next-line no-param-reassign
+
           prev[key] = data2[key];
         }
       } else if (embeddedFieldsObject[key]) {
         const { array, config } = embeddedFieldsObject[key];
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key].map((value) => transform(value, config));
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data2[key] === null ? null : transform(data2[key], config);
         }
       } else if (filterFieldsObject[key]) {
@@ -418,30 +404,24 @@ const processCreateInputData = (
         const { array, geospatialType } = geospatialFieldsObject[key];
         if (array) {
           if (geospatialType === 'Point') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map((value) => pointFromGqlToMongo(value));
           } else if (geospatialType === 'Polygon') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map((value) => polygonFromGqlToMongo(value));
           } else if (geospatialType === 'MultiPolygon') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = data2[key].map((value) => multiPolygonFromGqlToMongo(value));
           }
         } else {
           if (geospatialType === 'Point') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = pointFromGqlToMongo(data2[key]);
           } else if (geospatialType === 'Polygon') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = polygonFromGqlToMongo(data2[key]);
           } else if (geospatialType === 'MultiPolygon') {
-            // eslint-disable-next-line no-param-reassign
             prev[key] = multiPolygonFromGqlToMongo(data2[key]);
           }
         }
       } else if (scalarFieldsArray.includes(key)) {
         if (data2[key] !== null) {
-          prev[key] = data2[key]; // eslint-disable-line no-param-reassign
+          prev[key] = data2[key];
         }
       }
       return prev;
@@ -485,8 +465,8 @@ const processCreateInputData = (
         const arr = core.get(config);
         const filter = arr && getUpdateMany($set, arr);
         if (filter) {
-          filter._id.$in.push(_id); // eslint-disable-line no-underscore-dangle
-          continue; // eslint-disable-line no-continue
+          filter._id.$in.push(_id);
+          continue;
         } else {
           item = [
             {

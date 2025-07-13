@@ -17,9 +17,8 @@ const coerceDataFromGql = (
     const { array, type: fieldType } = fieldsObject[key];
     if (fieldType === 'relationalFields' || fieldType === 'duplexFields') {
       if (data[key] === null) {
-        prev[key] = ''; // eslint-disable-line no-param-reassign
+        prev[key] = '';
       } else if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) => {
           if (item === null) return '';
           const { id } = item;
@@ -27,22 +26,21 @@ const coerceDataFromGql = (
         });
       } else {
         const { id } = data[key];
-        prev[key] = id === null ? '' : id; // eslint-disable-line no-param-reassign
+        prev[key] = id === null ? '' : id;
       }
     } else if (fieldType === 'dateTimeFields') {
-      prev[key] = data[key]; // eslint-disable-line no-param-reassign
+      prev[key] = data[key];
       // if (array) {
-      //   // eslint-disable-next-line no-param-reassign
+      //
       //   prev[key] = data[key].map((item) => (item === null ? '' : item));
       // } else {
-      //   // eslint-disable-next-line no-param-reassign
+      //
       //   prev[key] = data[key] === null ? '' : data[key];
       // }
     } else if (fieldsObject[key].type === 'geospatialFields') {
       const { geospatialType } = fieldsObject[key] as GeospatialField;
       if (geospatialType === 'Point') {
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key].map((item) => {
             if (!item) {
               return { lng: '', lat: '' };
@@ -51,15 +49,13 @@ const coerceDataFromGql = (
             return { lng, lat };
           });
         } else if (!data[key]) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = { lng: '', lat: '' };
         } else {
           const { lng, lat } = data[key];
-          prev[key] = { lng, lat }; // eslint-disable-line no-param-reassign
+          prev[key] = { lng, lat };
         }
       } else if (geospatialType === 'Polygon') {
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key].map((item) =>
             item === null
               ? {
@@ -71,7 +67,6 @@ const coerceDataFromGql = (
               : item,
           );
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[key] =
             data[key] === null
               ? {
@@ -84,14 +79,12 @@ const coerceDataFromGql = (
         }
       } else if (geospatialType === 'MultiPolygon') {
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[key] = data[key].map((item) =>
             item === null
               ? { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] }
               : item,
           );
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[key] =
             data[key] === null
               ? { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] }
@@ -103,19 +96,17 @@ const coerceDataFromGql = (
     } else if (fieldsObject[key].type === 'embeddedFields') {
       const { config } = fieldsObject[key] as EmbeddedField;
       if (array) {
-        // eslint-disable-next-line no-param-reassign
         prev[key] = data[key].map((item) =>
           item === null ? composeEmptyValues(config) : coerceDataFromGql(item, config, allFields),
         );
       } else {
-        // eslint-disable-next-line no-param-reassign
         prev[key] =
           data[key] === null
             ? composeEmptyValues(config)
             : coerceDataFromGql(data[key], config, allFields);
       }
     } else {
-      prev[key] = data[key] === null ? '' : data[key]; // eslint-disable-line no-param-reassign
+      prev[key] = data[key] === null ? '' : data[key];
     }
     return prev;
   }, {});

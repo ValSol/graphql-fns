@@ -10,7 +10,7 @@ const composeTextIndexProperties = (
 
   const result = textFields.reduce<Record<string, any>>((prev, { name, weight }) => {
     if (weight) {
-      prev[`${parent}${name}`] = weight; // eslint-disable-line no-param-reassign
+      prev[`${parent}${name}`] = weight;
     }
 
     return prev;
@@ -20,7 +20,7 @@ const composeTextIndexProperties = (
     const result2 = composeTextIndexProperties(config, `${parent}${name}.`);
 
     Object.keys(result2).forEach((key) => {
-      prev[key] = result2[key]; // eslint-disable-line no-param-reassign
+      prev[key] = result2[key];
     });
 
     return prev;

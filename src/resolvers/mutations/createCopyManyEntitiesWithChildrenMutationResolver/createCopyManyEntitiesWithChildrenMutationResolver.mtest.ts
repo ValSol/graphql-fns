@@ -506,7 +506,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
 
     const sectionsClonesObject = sectionsClone3.reduce(
       (prev, item) => {
-        prev[item.id] = item; // eslint-disable-line no-param-reassign
+        prev[item.id] = item;
         return prev;
       },
       {} as Record<string, GraphqlObject>,
@@ -617,7 +617,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
 
     const sectionsClonesObject2 = sectionsClone4.reduce(
       (prev, item) => {
-        prev[item.id] = item; // eslint-disable-line no-param-reassign
+        prev[item.id] = item;
         return prev;
       },
       {} as Record<string, GraphqlObject>,

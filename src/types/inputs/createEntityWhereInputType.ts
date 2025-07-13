@@ -207,7 +207,7 @@ const composeInputFields = (
   ${fieldName}_notsize: Int`);
       }
 
-      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+      childChain[`${config.name}WhereInput`] = config;
     });
 
     duplexFields.forEach(({ name: fieldName, array, config, index, unique }) => {
@@ -226,7 +226,7 @@ const composeInputFields = (
   ${fieldName}_notsize: Int`);
       }
 
-      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+      childChain[`${config.name}WhereInput`] = config;
     });
   }
 
@@ -234,7 +234,7 @@ const composeInputFields = (
     if (index) {
       fields.push(`  ${fieldName}: ${config.name}WhereInput`);
 
-      childChain[`${config.name}WhereInput`] = config; // eslint-disable-line no-param-reassign
+      childChain[`${config.name}WhereInput`] = config;
     }
     if (index && !array) {
       fields.push(`  ${fieldName}_exists: Boolean`);
@@ -274,7 +274,7 @@ const createEntityWhereInputType: InputCreator = (entityConfig) => {
   const inputDefinition = result.join('\n');
 
   const childChain = Object.keys(preChildChain).reduce<Record<string, any>>((prev, inputName2) => {
-    prev[inputName2] = [createEntityWhereInputType, preChildChain[inputName2]]; // eslint-disable-line no-param-reassign
+    prev[inputName2] = [createEntityWhereInputType, preChildChain[inputName2]];
     return prev;
   }, {});
 

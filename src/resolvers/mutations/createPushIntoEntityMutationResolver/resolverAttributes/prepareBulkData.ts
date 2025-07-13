@@ -18,7 +18,7 @@ const prepareBulkData: PrepareBulkData = async (
   } = prevPreparedData;
 
   const preparedData = processCreateInputData(
-    { ...data, id: previousEntity._id }, // eslint-disable-line no-underscore-dangle
+    { ...data, id: previousEntity._id },
     { ...prevPreparedData, mains: [] },
     entityConfig as TangibleEntityConfig,
     'push',

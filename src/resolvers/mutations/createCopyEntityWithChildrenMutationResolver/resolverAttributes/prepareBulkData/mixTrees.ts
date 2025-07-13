@@ -33,7 +33,7 @@ const mixTrees = (
 
       const unusedTreeIndexes: Array<any> = [];
       const usedTree2Indexes: Array<any> = [];
-      prev[fieldName] = []; // eslint-disable-line no-param-reassign
+      prev[fieldName] = [];
       tree[fieldName].forEach((treeItem, i) => {
         const index = tree2[fieldName].findIndex((tree2Item) => deepEqual(treeItem, tree2Item));
 
@@ -64,7 +64,6 @@ const mixTrees = (
             true, // forDelete
           );
 
-          // eslint-disable-next-line no-param-reassign
           prev[fieldName][i] = mixTrees(
             tree[fieldName][i],
             tree2[fieldName][firstUnusedTree2Index],
@@ -72,7 +71,6 @@ const mixTrees = (
             core,
           );
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[fieldName][i] = mixTrees(tree[fieldName][i], {}, null, core);
         }
       });
@@ -87,7 +85,7 @@ const mixTrees = (
     } else if (deepEqual(tree[fieldName], tree2[fieldName])) {
       const [, { _id: id }] = currentBranch[fieldName];
 
-      prev[fieldName] = id; // eslint-disable-line no-param-reassign, no-underscore-dangle
+      prev[fieldName] = id;
     } else {
       const [, entity, entityConfig] = currentBranch[fieldName];
 
@@ -98,7 +96,7 @@ const mixTrees = (
         true, // forDelete
       );
 
-      prev[fieldName] = mixTrees(tree[fieldName], tree2[fieldName], currentBranch[fieldName], core); // eslint-disable-line no-param-reassign
+      prev[fieldName] = mixTrees(tree[fieldName], tree2[fieldName], currentBranch[fieldName], core);
     }
 
     return prev;

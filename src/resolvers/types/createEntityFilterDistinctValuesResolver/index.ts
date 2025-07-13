@@ -73,7 +73,7 @@ const createEntityFilterDistinctValuesResolver = (
 
     const { fieldName } = info;
 
-    const stringifiedFilter = parent[`${fieldName.slice(0, -'DistinctValues'.length)}`]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[`${fieldName.slice(0, -'DistinctValues'.length)}`];
 
     if (!stringifiedFilter) return [];
 

@@ -55,7 +55,6 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  // eslint-disable-line no-unused-vars
   descendantKey = '',
 ): {
   [key: string]: string;

@@ -35,9 +35,8 @@ const composeGqlResolvers = (
 
   const custom = mergeDescendantIntoCustom(generalConfig);
 
-  // eslint-disable-next-line no-nested-ternary
   const customQuery = custom?.Query || {};
-  // eslint-disable-next-line no-nested-ternary
+
   const customMutation = custom?.Mutation || {};
 
   const allowMutations = checkInventory(['Mutation'], inventory);
@@ -48,7 +47,7 @@ const composeGqlResolvers = (
   resolvers.DateTime = DateTimeResolver;
 
   resolvers.Node = {
-    __resolveType: (obj) => obj.__typename, // eslint-disable-line no-underscore-dangle
+    __resolveType: (obj) => obj.__typename,
   };
 
   resolvers.Query = {
@@ -67,7 +66,6 @@ const composeGqlResolvers = (
       ) {
         const resolver = queries[actionName](entityConfig, generalConfig, serversideConfig);
         if (resolver) {
-          // eslint-disable-next-line no-param-reassign
           prev.Query[queryAttributes[actionName].actionName(entityName)] = resolverDecorator(
             resolver,
             ['Query', actionName, entityConfig.name],
@@ -92,7 +90,6 @@ const composeGqlResolvers = (
       );
 
       if (customQueryResolver) {
-        // eslint-disable-next-line no-param-reassign
         prev.Query[customQuery[customName].specificName(entityConfig, generalConfig)] =
           customQueryResolver;
       }
@@ -106,7 +103,6 @@ const composeGqlResolvers = (
         ) {
           const resolver = mutations[actionName](entityConfig, generalConfig, serversideConfig);
           if (resolver) {
-            // eslint-disable-next-line no-param-reassign
             prev.Mutation[mutationAttributes[actionName].actionName(entityName)] =
               resolverDecorator(
                 resolver,
@@ -131,7 +127,6 @@ const composeGqlResolvers = (
           serversideConfig,
         );
         if (customMutationResolver) {
-          // eslint-disable-next-line no-param-reassign
           prev.Mutation[customMutation[customName].specificName(entityConfig, generalConfig)] =
             customMutationResolver;
         }
@@ -153,7 +148,6 @@ const composeGqlResolvers = (
           generalConfig,
         );
         if (createdEntitySubscriptionResolver) {
-          // eslint-disable-next-line no-param-reassign
           prev.Subscription[`created${name}`] = createdEntitySubscriptionResolver;
         }
 
@@ -162,7 +156,6 @@ const composeGqlResolvers = (
           generalConfig,
         );
         if (deletedEntitySubscriptionResolver) {
-          // eslint-disable-next-line no-param-reassign
           prev.Subscription[`deleted${name}`] = deletedEntitySubscriptionResolver;
         }
 
@@ -171,7 +164,6 @@ const composeGqlResolvers = (
           generalConfig,
         );
         if (updatedEntitySubscriptionResolver) {
-          // eslint-disable-next-line no-param-reassign
           prev.Subscription[`updated${name}`] = updatedEntitySubscriptionResolver;
         }
       }
@@ -191,7 +183,6 @@ const composeGqlResolvers = (
         relationalFields,
       } = entityConfig;
       if (entityTypeDic[name] && (duplexFields || geospatialFields || relationalFields)) {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
       }
 
@@ -205,7 +196,7 @@ const composeGqlResolvers = (
 
         if (descendantConfig && entityTypeDic[descendantConfig.name]) {
           const key = composeDescendantConfigName(name, descendantKey, descendantNameSlicePosition);
-          // eslint-disable-next-line no-param-reassign
+
           prev[key] = composeEntityResolvers(descendantConfig, generalConfig, serversideConfig);
         }
       });

@@ -108,7 +108,7 @@ const createEntityOppositeRelationArrayResolver = (
 
     const { where } = args || {};
 
-    const where2 = where !== undefined ? { AND: [where, whereById] } : whereById; // eslint-disable-line camelcase
+    const where2 = where !== undefined ? { AND: [where, whereById] } : whereById;
 
     const entities = await childEntitiesQueryResolver(
       parent,

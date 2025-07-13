@@ -31,7 +31,7 @@ const composeDescendant = (descendantAttributesArray: Array<DescendantAttributes
 
     const item = { ...rawItem } as const;
 
-    prev[descendantKey] = item; // eslint-disable-line no-param-reassign
+    prev[descendantKey] = item;
 
     return prev;
   }, {});

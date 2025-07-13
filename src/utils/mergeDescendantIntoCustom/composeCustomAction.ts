@@ -72,7 +72,7 @@ const composeInvolvedEntityNames =
 
     const outputEntityNames = Object.keys(outputDescendantKeys).reduce<Record<string, any>>(
       (prev, outputEntityKey) => {
-        prev[outputEntityKey] = `${entityConfig.name}${outputDescendantKeys[outputEntityKey]}`; // eslint-disable-line no-param-reassign
+        prev[outputEntityKey] = `${entityConfig.name}${outputDescendantKeys[outputEntityKey]}`;
 
         return prev;
       },

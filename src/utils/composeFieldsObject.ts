@@ -14,7 +14,7 @@ const composeFieldsObject = (entityConfig: EntityConfig): EntityConfigObject => 
     (entityConfig[key] as AnyField[]).forEach((item) => {
       const { name } = item;
 
-      prev[name] = item; // eslint-disable-line no-param-reassign
+      prev[name] = item;
     });
 
     return prev;

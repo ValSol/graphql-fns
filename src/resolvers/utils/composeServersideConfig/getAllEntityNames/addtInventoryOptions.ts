@@ -1,16 +1,20 @@
-import type {SimplifiedInventoryOptions} from '../../../../tsTypes';
+import type { SimplifiedInventoryOptions } from '../../../../tsTypes';
 
-const add = (obj: {
-  [queryName: string]: Array<string>
-}, obj2: {
-  [queryName: string]: Array<string>
-}, result: Record<any, any>) =>
+const add = (
+  obj: {
+    [queryName: string]: Array<string>;
+  },
+  obj2: {
+    [queryName: string]: Array<string>;
+  },
+  result: Record<any, any>,
+) =>
   Object.keys(obj).forEach((key) => {
     if (result[key]) {
       return;
     }
 
-    result[key] = obj[key]; // eslint-disable-line no-param-reassign
+    result[key] = obj[key];
 
     obj2[key]?.forEach((name: string) => {
       if (!result[key].includes(name)) {
@@ -19,7 +23,10 @@ const add = (obj: {
     });
   });
 
-const addtInventoryOptions = (include: SimplifiedInventoryOptions, include2: SimplifiedInventoryOptions): SimplifiedInventoryOptions => {
+const addtInventoryOptions = (
+  include: SimplifiedInventoryOptions,
+  include2: SimplifiedInventoryOptions,
+): SimplifiedInventoryOptions => {
   const { Query: includeQueries, Mutation: includeMutations } = include;
   const { Query: include2Queries, Mutation: include2Mutations } = include2;
 

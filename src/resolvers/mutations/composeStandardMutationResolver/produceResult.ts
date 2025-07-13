@@ -61,7 +61,6 @@ const produceResult = async (
     return entities2;
   }
 
-  // eslint-disable-next-line no-underscore-dangle
   const entity = await Entity.findById(first._id, projection, { lean: true });
 
   const entity2 = addCalculatedFieldsToEntity(

@@ -14,10 +14,8 @@ const addIdsToEntity = <T extends DataObject | GraphqlObject>(
     embeddedFields.reduce((prev, { name, array, config }) => {
       if (data[name]) {
         if (array) {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = (data[name] as (typeof data)[]).map((item) => addIdsToEntity(item, config));
         } else {
-          // eslint-disable-next-line no-param-reassign
           prev[name] = addIdsToEntity(data[name] as typeof data, config);
         }
       }

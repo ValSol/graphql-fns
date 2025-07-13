@@ -73,7 +73,7 @@ const createEntityFilterCountResolver = (
 
     const { fieldName } = info;
 
-    const stringifiedFilter = parent[`${fieldName.slice(0, -'Count'.length)}`]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[`${fieldName.slice(0, -'Count'.length)}`];
 
     if (!stringifiedFilter) return 0;
 

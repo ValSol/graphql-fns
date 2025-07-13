@@ -11,7 +11,7 @@ const fillInputDic: FillDic = (childChain, inputDic) => {
       const [inputCreator, entityConfig] = childChain[inputName];
       const [inputName2, inputDefinition, childChain2] = inputCreator(entityConfig);
       if (inputName2 && !inputDic[inputName2] && inputDefinition) {
-        inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+        inputDic[inputName] = inputDefinition;
         fillInputDic(childChain2, inputDic);
       }
     }

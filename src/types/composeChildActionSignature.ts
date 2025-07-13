@@ -51,7 +51,7 @@ const composeChildActionSignature = (
     toShow.push(!actionArgsToHide.includes(argNames[i]) && Boolean(inputDefinition));
 
     if (inputDic && inputName && !inputDic[inputName] && inputDefinition) {
-      inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+      inputDic[inputName] = inputDefinition;
       fillInputDic(childChain, inputDic);
     }
   });

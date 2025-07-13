@@ -52,7 +52,7 @@ const processActions =
       const involvedEntityName = involvedEntityNames[involvedEntityKey];
 
       if (!prev[involvedEntityName]) {
-        prev[involvedEntityName] = { descriptions: [], isOutput: false }; // eslint-disable-line no-param-reassign
+        prev[involvedEntityName] = { descriptions: [], isOutput: false };
       }
 
       prev[involvedEntityName].descriptions.push(
@@ -61,7 +61,6 @@ const processActions =
 
       const config = getConfig(actionName, entityName);
 
-      // eslint-disable-next-line no-param-reassign
       prev[involvedEntityName].isOutput =
         prev[involvedEntityName].isOutput ||
         (Boolean(config) &&
@@ -103,9 +102,9 @@ const addEntityNames = (
     typeof exclude === 'object'
       ? inventoryKeys.reduce<Record<string, any>>((prev, key) => {
           if (exclude[key]) {
-            prev[key] = exclude[key]; // eslint-disable-line no-param-reassign
+            prev[key] = exclude[key];
           } else {
-            prev[key] = {}; // eslint-disable-line no-param-reassign
+            prev[key] = {};
           }
 
           return prev;

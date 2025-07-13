@@ -107,7 +107,7 @@ const composeAllEntityConfigs = (
 
         const virtualConfig = composeVirtualConfig(config, { allEntityConfigs: result }); // imitate generalConfig
 
-        result[virtualConfig.name] = virtualConfig; // eslint-disable-line no-param-reassign
+        result[virtualConfig.name] = virtualConfig;
       },
     );
   });

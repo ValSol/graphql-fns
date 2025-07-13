@@ -62,7 +62,7 @@ const createEntityScalarResolver = (
     }
     const { fieldName } = info;
 
-    const id = parent[fieldName]; // eslint-disable-line camelcase
+    const id = parent[fieldName];
 
     const whereOne = { id } as const;
 

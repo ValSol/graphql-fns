@@ -20,7 +20,7 @@ const commonInputTypes = [
   'GeospatialPolygonInput',
 ];
 
-const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
+const regExp = /[\[\]\!]/g;
 
 const fillInputDicForCustom = (
   rawArgType: string,
@@ -82,7 +82,7 @@ const fillInputDicForCustom = (
           //     )
           //   : allEntityConfigs[entityName];
 
-          if (!entityConfig) continue; // eslint-disable-line no-continue
+          if (!entityConfig) continue;
 
           const [inputName, inputDefinition, childChain] = inputCreator(entityConfig);
 
@@ -91,11 +91,11 @@ const fillInputDicForCustom = (
             : new RegExp(`^enum ${argType} {$`, 'm');
 
           if (re.test(inputDefinition)) {
-            inputDic[inputName] = inputDefinition; // eslint-disable-line no-param-reassign
+            inputDic[inputName] = inputDefinition;
             fillInputDic(childChain, inputDic);
 
             if (inputName !== argType) {
-              inputDic[`!${argType}`] = 'defined'; // eslint-disable-line no-param-reassign
+              inputDic[`!${argType}`] = 'defined';
             }
 
             return;
@@ -113,7 +113,7 @@ const fillInputDicForCustom = (
 
       const specificName = composeSpecificName(allEntityConfigs[entityName], generalConfig);
 
-      if (specificName !== argType) continue; // eslint-disable-line no-continue
+      if (specificName !== argType) continue;
 
       const fieldNames = composeFieldNames(allEntityConfigs[entityName], generalConfig);
       const fieldTypes = composeFieldTypes(allEntityConfigs[entityName], generalConfig);
@@ -130,7 +130,7 @@ const fillInputDicForCustom = (
         '}',
       ].join('\n');
 
-      inputDic[specificName] = inputDefinition; // eslint-disable-line no-param-reassign
+      inputDic[specificName] = inputDefinition;
 
       fieldTypes.forEach((rawfieldType) => {
         const fieldType = rawfieldType.replace(regExp, '');

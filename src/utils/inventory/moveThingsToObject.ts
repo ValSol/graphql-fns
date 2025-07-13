@@ -28,7 +28,7 @@ const mergeInventories = (inventoryByRoles: InventoryByRoles): InventoryByRoles 
         }
 
         result[permission].include.Query[action] = Query[action].reduce((prev, entityName) => {
-          prev[entityName] = true; // eslint-disable-line no-param-reassign
+          prev[entityName] = true;
           return prev;
         }, {});
       });
@@ -46,7 +46,7 @@ const mergeInventories = (inventoryByRoles: InventoryByRoles): InventoryByRoles 
 
         result[permission].include.Mutation[action] = Mutation[action].reduce(
           (prev, entityName) => {
-            prev[entityName] = true; // eslint-disable-line no-param-reassign
+            prev[entityName] = true;
             return prev;
           },
           {},

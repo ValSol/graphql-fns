@@ -1,4 +1,4 @@
-// const { defaults: tsjPreset } = require('ts-jest/presets'); // eslint-disable-line import/no-extraneous-dependencies
+// const { defaults: tsjPreset } = require('ts-jest/presets');
 
 export default {
   rootDir: '../',

@@ -171,7 +171,7 @@ const executeAuthorisation = async (
       }
     }
 
-    if (!filters || !result[involvedEntityNamesKey]) continue; // eslint-disable-line no-continue
+    if (!filters || !result[involvedEntityNamesKey]) continue;
 
     const entityName = involvedEntityNames[involvedEntityNamesKey];
 

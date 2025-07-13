@@ -2,10 +2,7 @@ import type { VirtualConfigComposer, VirtualEntityConfig } from '../../tsTypes';
 
 import composeEdgeVirtualConfigName from './composeEdgeVirtualConfigName';
 
-const composeEdgeVirtualConfig: VirtualConfigComposer = (
-  config,
-  generalConfig, // eslint-disable-line no-unused-vars
-) => {
+const composeEdgeVirtualConfig: VirtualConfigComposer = (config, generalConfig) => {
   const { name, type: configType = 'tangible' } = config;
 
   if (configType === 'virtual') {

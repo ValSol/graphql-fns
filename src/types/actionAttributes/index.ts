@@ -85,9 +85,9 @@ const {
 } = Object.keys(actionAttributes).reduce(
   (prev, actionName) => {
     if (actionAttributes[actionName].actionType === 'Mutation') {
-      prev.mutationAttributes[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+      prev.mutationAttributes[actionName] = actionAttributes[actionName];
     } else if (actionAttributes[actionName].actionType === 'Query') {
-      prev.queryAttributes[actionName] = actionAttributes[actionName]; // eslint-disable-line no-param-reassign
+      prev.queryAttributes[actionName] = actionAttributes[actionName];
     }
 
     return prev;

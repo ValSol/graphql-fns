@@ -7,7 +7,7 @@ const processDeleteDataPrepareArgs = (
 ): { [key: string]: string } => {
   const { duplexFields } = entityConfig;
 
-  const result = { _id: prevData._id as string }; // eslint-disable-line no-underscore-dangle
+  const result = { _id: prevData._id as string };
 
   if (duplexFields) {
     duplexFields.forEach(({ array, name }) => {

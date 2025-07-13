@@ -48,10 +48,9 @@ const processIdKey = (
   const key2 = keyWithoutSuffix === 'id' ? '_id' : keyWithoutSuffix;
 
   if (!result[`${prefix}${embeddedPrefix}${key2}`]) {
-    result[`${prefix}${embeddedPrefix}${key2}`] = {}; // eslint-disable-line no-param-reassign
+    result[`${prefix}${embeddedPrefix}${key2}`] = {};
   }
 
-  // eslint-disable-next-line no-param-reassign
   result[`${prefix}${embeddedPrefix}${key2}`][`$${suffix.slice(1)}`] = (
     where[key] as unknown as string[]
   ).map((id) => id && (notCreateObjectId ? id : new Types.ObjectId(id)));
@@ -75,10 +74,10 @@ const processKey = (
   checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
 
   if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
-    result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {}; // eslint-disable-line no-param-reassign
+    result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
   }
 
-  result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`][`$${suffix.slice(1)}`] = where[key]; // eslint-disable-line no-param-reassign
+  result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`][`$${suffix.slice(1)}`] = where[key];
 };
 
 const composeWhereInputRecursively = (

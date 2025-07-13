@@ -6,11 +6,11 @@ const connectionDescendantUpdater = (entityName: string, item: DescendantAttribu
   const connectionName = `${entityName}Connection`;
 
   if (!item.allow[edgeName]) {
-    item.allow = { ...item.allow, [edgeName]: [] }; // eslint-disable-line no-param-reassign
+    item.allow = { ...item.allow, [edgeName]: [] };
   }
 
   if (!item.allow[connectionName]) {
-    item.allow = { ...item.allow, [connectionName]: [] }; // eslint-disable-line no-param-reassign
+    item.allow = { ...item.allow, [connectionName]: [] };
   }
 };
 

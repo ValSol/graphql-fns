@@ -15,11 +15,11 @@ const categorizeBulkOperations = (preparedData: Array<any>): Result =>
       if (deleteOne) {
         const { filter } = deleteOne;
 
-        prev.deleteOne[filter._id] = i; // eslint-disable-line no-underscore-dangle, no-param-reassign
+        prev.deleteOne[filter._id] = i;
       } else if (insertOne) {
         const { document: filter } = insertOne;
 
-        prev.insertOne[filter._id] = i; // eslint-disable-line no-underscore-dangle, no-param-reassign
+        prev.insertOne[filter._id] = i;
       } else if (!(updateOne || updateMany || deleteMany)) {
         throw new TypeError(
           `Got bulk item: ${JSON.stringify(

@@ -34,7 +34,6 @@ const getLast = async (
 
   const { length } = entities;
 
-  // eslint-disable-next-line no-underscore-dangle
   if (entities?.[length - 1]?.id?.toString() === _id) {
     return composeLastEdges(shift, last, entities);
   }

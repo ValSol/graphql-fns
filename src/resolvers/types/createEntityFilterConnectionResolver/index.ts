@@ -79,9 +79,8 @@ const createEntityFilterConnectionResolver = (
 
     const { fieldName } = info;
 
-    const stringifiedFilter = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`]; // eslint-disable-line camelcase
+    const stringifiedFilter = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`];
 
-    // eslint-disable-next-line camelcase
     if (!stringifiedFilter)
       return {
         pageInfo: {
@@ -98,7 +97,7 @@ const createEntityFilterConnectionResolver = (
 
     const { where = {} } = args;
 
-    const where2 = Object.keys(where).length > 0 ? { AND: [where, filter] } : filter; // eslint-disable-line camelcase
+    const where2 = Object.keys(where).length > 0 ? { AND: [where, filter] } : filter;
 
     const entitiesConniection = await childEntitiesThroughConnectionQueryResolver(
       parent,

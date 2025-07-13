@@ -15,7 +15,7 @@ const processWhere = (where: any, entityConfig: EntityConfig | null): any => {
 
   const fieldsObject = [...duplexFields, ...relationalFields].reduce<Record<string, any>>(
     (prev, field) => {
-      prev[field.name] = field; // eslint-disable-line no-param-reassign
+      prev[field.name] = field;
 
       return prev;
     },
@@ -26,27 +26,27 @@ const processWhere = (where: any, entityConfig: EntityConfig | null): any => {
     const [baseKey, suffix] = key.split('_');
 
     if (key === 'id') {
-      prev[key] = processField(where[key]); // eslint-disable-line no-param-reassign
+      prev[key] = processField(where[key]);
     } else if (key === 'id_in') {
-      prev[key] = where[key].map(processField); // eslint-disable-line no-param-reassign
+      prev[key] = where[key].map(processField);
     } else if (key === 'id_nin') {
-      prev[key] = where[key].map(processField); // eslint-disable-line no-param-reassign
+      prev[key] = where[key].map(processField);
     } else if (fieldsObject[baseKey]) {
       if (key === baseKey || suffix === 'ne') {
-        prev[key] = processField(where[key]); // eslint-disable-line no-param-reassign
+        prev[key] = processField(where[key]);
       } else if (suffix === 'in' || suffix === 'nin') {
-        prev[key] = where[key].map(processField); // eslint-disable-line no-param-reassign
+        prev[key] = where[key].map(processField);
       } else if (suffix === 'exists') {
         prev[key] = where[key];
       } else if (key === `${baseKey}_`) {
-        prev[key] = processWhere(where[key], fieldsObject[baseKey].config); // eslint-disable-line no-param-reassign
+        prev[key] = processWhere(where[key], fieldsObject[baseKey].config);
       } else {
         throw new TypeError(`Incorrect key: "${key}"!`);
       }
     } else if (key === 'AND' || key === 'NOR' || key === 'OR') {
-      prev[key] = where[key].map((item) => processWhere(item, entityConfig)); // eslint-disable-line no-param-reassign
+      prev[key] = where[key].map((item) => processWhere(item, entityConfig));
     } else {
-      prev[key] = where[key]; // eslint-disable-line no-param-reassign
+      prev[key] = where[key];
     }
 
     return prev;

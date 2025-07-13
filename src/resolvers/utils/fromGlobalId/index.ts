@@ -5,7 +5,7 @@ const fromGlobalId = (
   entityName: string;
   descendantKey: string;
 } => {
-  if (!globalId) return { _id: null, entityName: '', descendantKey: '' }; // eslint-disable-line no-underscore-dangle
+  if (!globalId) return { _id: null, entityName: '', descendantKey: '' };
 
   const [_id, entityName, descendantKey] = Buffer.from(globalId, 'base64')
     .toString('binary')

@@ -1,7 +1,7 @@
-import type {Inventory} from '../../tsTypes';
+import type { Inventory } from '../../tsTypes';
 
 type Result = {
-  [permissionName: string]: Inventory
+  [permissionName: string]: Inventory;
 };
 
 const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
@@ -14,7 +14,7 @@ const composeInventoryByRoles = (inventories: Array<Inventory>): Result => {
       throw new TypeError(`Unique permission name: "${name}" is used twice!`);
     }
 
-    prev[name] = inventory; // eslint-disable-line no-param-reassign
+    prev[name] = inventory;
 
     return prev;
   }, {});

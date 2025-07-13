@@ -31,11 +31,11 @@ const actionToDescendant = (
   if (!allEntityConfigs[returningThingName]) return descendantAttributes;
 
   if (!descendantAttributes[descendantKey]) {
-    descendantAttributes[descendantKey] = { descendantKey, allow: {} }; // eslint-disable-line no-param-reassign
+    descendantAttributes[descendantKey] = { descendantKey, allow: {} };
   }
 
   if (!descendantAttributes[descendantKey].allow[returningThingName]) {
-    descendantAttributes[descendantKey].allow[returningThingName] = []; // eslint-disable-line no-param-reassign
+    descendantAttributes[descendantKey].allow[returningThingName] = [];
   }
 
   if (

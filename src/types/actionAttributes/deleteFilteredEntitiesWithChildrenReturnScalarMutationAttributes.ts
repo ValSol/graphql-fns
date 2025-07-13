@@ -42,11 +42,10 @@ const actionInvolvedEntityNames = (
 });
 
 const actionReturnConfig = (
-  // eslint-disable-line no-unused-vars
   entityConfig: EntityConfig,
-  // eslint-disable-line no-unused-vars
+
   generalConfig: GeneralConfig,
-  // eslint-disable-line no-unused-vars
+
   descendantKey?: string,
 ): null | EntityConfig => null;
 
@@ -59,9 +58,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
   );
 
 const actionReturnString = (
-  // eslint-disable-next-line no-unused-vars
   entityConfig: EntityConfig,
-  // eslint-disable-next-line no-unused-vars
+
   descendantKey: string,
 ): string => 'Int!';
 

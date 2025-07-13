@@ -9,18 +9,17 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
     const { array, type: fieldType } = fieldsObject[name];
 
     if (array) {
-      prev[name] = []; // eslint-disable-line no-param-reassign
+      prev[name] = [];
     } else if (fieldsObject[name].type === 'embeddedFields') {
       const { config } = fieldsObject[name] as EmbeddedField;
-      prev[name] = composeEmptyValues(config); // eslint-disable-line no-param-reassign
+      prev[name] = composeEmptyValues(config);
     } else if (fieldType === 'booleanFields') {
-      prev[name] = false; // eslint-disable-line no-param-reassign
+      prev[name] = false;
     } else if (fieldsObject[name].type === 'geospatialFields') {
       const { geospatialType } = fieldsObject[name] as GeospatialField;
       if (geospatialType === 'Point') {
-        prev[name] = { lng: '', lat: '' }; // eslint-disable-line no-param-reassign
+        prev[name] = { lng: '', lat: '' };
       } else if (geospatialType === 'Polygon') {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = {
           externalRing: {
             ring: [],
@@ -28,13 +27,12 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
           internalRings: [],
         };
       } else if (geospatialType === 'MultiPolygon') {
-        // eslint-disable-next-line no-param-reassign
         prev[name] = { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] };
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
       }
     } else {
-      prev[name] = ''; // eslint-disable-line no-param-reassign
+      prev[name] = '';
     }
 
     return prev;

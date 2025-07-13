@@ -1,20 +1,20 @@
-import type {NearInput} from '../../../../tsTypes';
+import type { NearInput } from '../../../../tsTypes';
 
 import getDistanceFromLatLng from '../../../../utils/getDistanceFromLatLng';
 
 type Args = {
-  where?: any,
-  near?: NearInput,
+  where?: any;
+  near?: NearInput;
   sort?: {
-    sortBy: Array<string>
-  },
-  search?: string,
-  after?: string,
-  before?: string,
-  first?: number,
-  last?: number,
+    sortBy: Array<string>;
+  };
+  search?: string;
+  after?: string;
+  before?: string;
+  first?: number;
+  last?: number;
   // "objectIds_from_parent" used only to process the call from createEntityArrayResolver
-  objectIds_from_parent?: Array<any>
+  objectIds_from_parent?: Array<any>;
 };
 
 const composeLimitingArgs = (args: Args, thing: any): Args => {
@@ -34,9 +34,9 @@ const composeLimitingArgs = (args: Args, thing: any): Args => {
 
       if (thing[fieldName] !== null) {
         if (direction === 'ASC') {
-          prev[`${fieldName}_lte`] = thing[fieldName]; // eslint-disable-line no-param-reassign
+          prev[`${fieldName}_lte`] = thing[fieldName];
         } else if (direction === 'DESC') {
-          prev[`${fieldName}_gte`] = thing[fieldName]; // eslint-disable-line no-param-reassign
+          prev[`${fieldName}_gte`] = thing[fieldName];
         } else {
           throw new TypeError(`Incorrect sort direction: "${direction}"`);
         }

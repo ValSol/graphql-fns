@@ -30,7 +30,7 @@ const argTypesPrefixPlusSuffixes = [
 const store = new Map();
 const argNamesToTransformersStore: Record<string, any> = {};
 
-const regExp = /[\[\]\!]/g; // eslint-disable-line no-useless-escape
+const regExp = /[\[\]\!]/g;
 
 const resolverDecorator = (
   func: any,
@@ -85,7 +85,7 @@ const resolverDecorator = (
 
         const [, transformer, notUseConfig] = argTypePrefixPlusSuffix;
 
-        prev[argName] = [transformer, notUseConfig ? null : entityConfig]; // eslint-disable-line no-param-reassign
+        prev[argName] = [transformer, notUseConfig ? null : entityConfig];
 
         return prev;
       }, {});
