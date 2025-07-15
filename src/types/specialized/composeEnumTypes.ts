@@ -1,14 +1,25 @@
-import type {GeneralConfig} from '../../tsTypes';
+import type { GeneralConfig } from '../../tsTypes';
+import isCommonlyAllowedTypeName from '../../utils/isCommonlyAllowedTypeName';
 
 const composeEnumTypes = (generalConfig: GeneralConfig): string => {
   const { enums } = generalConfig;
 
   const linesArray = enums
     ? Object.keys(enums).reduce<Array<any>>((prev, name) => {
-        const enumValue = enums[name];
+        const enumValues = enums[name];
+
+        if (!isCommonlyAllowedTypeName(name)) {
+          throw new TypeError(`Incorrect enum name: "${name}"!`);
+        }
 
         prev.push(`enum ${name}Enumeration {`);
-        enumValue.forEach((item) => prev.push(`  ${item}`));
+        enumValues.forEach((item) => {
+          if (!isCommonlyAllowedTypeName(item)) {
+            throw new TypeError(`Incorrect enum item name: "${item}"!`);
+          }
+
+          prev.push(`  ${item}`);
+        });
         prev.push('}');
         return prev;
       }, [])

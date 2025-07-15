@@ -1,7 +1,7 @@
 import type { DescendantAttributes } from '../tsTypes';
 
-// import only to get all standard action NAMES
-import actionAttributes from '../types/actionAttributes';
+import actionAttributes from '../types/actionAttributes'; // import only to get all standard action NAMES
+import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 type Result = {
   [descendantName: string]: DescendantAttributes;
@@ -12,13 +12,19 @@ const actionGenericNames = Object.keys(actionAttributes);
 const composeDescendant = (descendantAttributesArray: Array<DescendantAttributes>): Result => {
   const descendantKeys = descendantAttributesArray.reduce<Array<any>>((prev, item) => {
     const { descendantKey } = item;
+
     if (!descendantKey) {
       throw new TypeError('Descendant attributes must have descendantKey!');
     }
+
     if (prev.includes(descendantKey)) {
       throw new TypeError(
         `Unique descendant attributes descendantKey: "${descendantKey}" is used twice!`,
       );
+    }
+
+    if (!isCommonlyAllowedTypeName(descendantKey)) {
+      throw new TypeError(`Incorrect descendantKey: "${descendantKey}"!`);
     }
 
     prev.push(descendantKey);

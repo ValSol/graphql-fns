@@ -4,6 +4,7 @@ import type {
   TangibleEntityConfig,
   VirtualEntityConfig,
 } from '../tsTypes';
+import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 const forbiddenFieldNames = [
   'in',
@@ -34,6 +35,10 @@ const composeEntityConfig = (
   relationalOppositeNames: { [entityName: string]: string[] },
 ) => {
   const { name, type: configType = 'tangible' } = simplifiedEntityConfig;
+
+  if (!isCommonlyAllowedTypeName(name)) {
+    throw new TypeError(`Incorrect entity name: "${name}"!`);
+  }
 
   if (!allowedConfigTypes.includes(configType)) {
     throw new TypeError(`Not allowed config name: "${configType}"`);
@@ -73,6 +78,10 @@ const composeEntityConfig = (
           throw new TypeError(
             `Field name: "${fieldName}" already used as relational opposite name in entity: "${name}"!`,
           );
+        }
+
+        if (!isCommonlyAllowedTypeName(fieldName)) {
+          throw new TypeError(`Incorrect fieldName: "${fieldName}" of entity: "${name}"!`);
         }
 
         fieldNames.push(fieldName);

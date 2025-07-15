@@ -1,9 +1,10 @@
-import type {Custom, ActionSignatureMethods, ObjectSignatureMethods} from '../tsTypes';
+import type { Custom, ActionSignatureMethods, ObjectSignatureMethods } from '../tsTypes';
+import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 type Arg = {
-  Input?: Array<ObjectSignatureMethods>,
-  Query?: Array<ActionSignatureMethods>,
-  Mutation?: Array<ActionSignatureMethods>
+  Input?: Array<ObjectSignatureMethods>;
+  Query?: Array<ActionSignatureMethods>;
+  Mutation?: Array<ActionSignatureMethods>;
 };
 
 const composeCustom = (arg: Arg): Custom => {
@@ -16,6 +17,11 @@ const composeCustom = (arg: Arg): Custom => {
     result.Input = {};
     Input.forEach((item) => {
       const { name } = item;
+
+      if (!isCommonlyAllowedTypeName(name)) {
+        throw new TypeError(`Incorrect custom input name: "${name}"!`);
+      }
+
       if (tmp[name]) {
         throw new TypeError(
           `Unique custom input name: "${name}" already was used in custom ${tmp[name]}!`,
@@ -30,6 +36,11 @@ const composeCustom = (arg: Arg): Custom => {
     result.Query = {};
     Query.forEach((item) => {
       const { name } = item;
+
+      if (!isCommonlyAllowedTypeName(name)) {
+        throw new TypeError(`Incorrect custom query name: "${name}"!`);
+      }
+
       if (tmp[name]) {
         throw new TypeError(
           `Unique custom query name: "${name}" already was used in custom ${tmp[name]}!`,
@@ -44,6 +55,11 @@ const composeCustom = (arg: Arg): Custom => {
     result.Mutation = {};
     Mutation.forEach((item) => {
       const { name } = item;
+
+      if (!isCommonlyAllowedTypeName(name)) {
+        throw new TypeError(`Incorrect custom mutation name: "${name}"!`);
+      }
+
       if (tmp[name]) {
         throw new TypeError(
           `Unique custom mutation name: "${name}" already was used in custom ${tmp[name]}!`,

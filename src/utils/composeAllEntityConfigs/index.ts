@@ -9,6 +9,7 @@ import type {
 
 import virtualConfigComposers from '../../types/virtualConfigComposers';
 import composeEntityConfig from '../composeEntityConfig';
+import isCommonlyAllowedTypeName from '../isCommonlyAllowedTypeName';
 import PageInfo from './pageInfoConfig';
 
 // alsow used in "composeAllEntityConfigs" util
@@ -34,6 +35,10 @@ const composeAllEntityConfigs = (
 
       if (forbiddenThingNames.includes(name)) {
         throw new TypeError(`Forbidden entity name: "${name}"!`);
+      }
+
+      if (!isCommonlyAllowedTypeName(name)) {
+        throw new TypeError(`Incorrect entity name: "${name}"!`);
       }
 
       if (prev.result[name] !== undefined) {

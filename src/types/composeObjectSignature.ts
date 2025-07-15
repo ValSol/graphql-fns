@@ -1,4 +1,4 @@
-import type {GeneralConfig, ObjectSignatureMethods, EntityConfig} from '../tsTypes';
+import type { GeneralConfig, ObjectSignatureMethods, EntityConfig } from '../tsTypes';
 
 import composeSpecificActionName from '../utils/composeSpecificActionName';
 

@@ -1,6 +1,7 @@
 import pluralize from 'pluralize';
 
 import { GeneralConfig } from '../tsTypes';
+import isCommonlyAllowedTypeName from '../utils/isCommonlyAllowedTypeName';
 
 // alsow used in "composeInterfaceTypeDic" util
 const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
@@ -49,6 +50,10 @@ const composeInterfaceTypeDic = (
   // *** check interface names correctness
 
   Object.keys(interfaces).forEach((interfaceName) => {
+    if (!isCommonlyAllowedTypeName(interfaceName)) {
+      throw new TypeError(`Incorrect interface name: "${interfaceName}"!`);
+    }
+
     if (pluralize(interfaceName) === interfaceName) {
       throw new TypeError(`Forbidden interface name: "${interfaceName}" in plural form!`);
     }
@@ -64,50 +69,55 @@ const composeInterfaceTypeDic = (
 
   // *** check end
 
-  const interfaceTypeDic = Object.keys(entityTypeDic).reduce((prev, entityName) => {
-    const entityInterfaces = getIntefaces(entityTypeDic[entityName]);
+  const interfaceTypeDic = Object.keys(entityTypeDic).reduce(
+    (prev, entityName) => {
+      const entityInterfaces = getIntefaces(entityTypeDic[entityName]);
 
-    if (entityInterfaces.length > 0) {
-      const entityFields = getFieldTypes(entityTypeDic[entityName]);
+      if (entityInterfaces.length > 0) {
+        const entityFields = getFieldTypes(entityTypeDic[entityName]);
 
-      entityInterfaces.forEach((entityInterface: string) => {
-        if (interfaces[entityInterface] === undefined) {
-          throw new TypeError(
-            `Not found "${entityInterface}" interface of "${entityName}" entity in "generalConfig"!`,
-          );
-        }
-
-        const alreadySaved =
-          prev[entityInterface] === undefined ? null : getFieldTypes(prev[entityInterface]);
-
-        const fieldTypes = interfaces[entityInterface].reduce((prev2, interfaceField) => {
-          if (entityFields[interfaceField] === undefined) {
+        entityInterfaces.forEach((entityInterface: string) => {
+          if (interfaces[entityInterface] === undefined) {
             throw new TypeError(
-              `Got not used field "${interfaceField}" of interface "${entityInterface}" in "${entityName}" entity!`,
+              `Not found "${entityInterface}" interface of "${entityName}" entity in "generalConfig"!`,
             );
           }
 
-          const fieldRest = entityFields[interfaceField];
+          const alreadySaved =
+            prev[entityInterface] === undefined ? null : getFieldTypes(prev[entityInterface]);
 
-          if (alreadySaved !== null && alreadySaved[interfaceField] !== fieldRest) {
-            throw new TypeError(
-              `Got not matching field "${interfaceField}${fieldRest}" of interface "${entityInterface}" in "${entityName}" entity!`,
+          const fieldTypes = interfaces[entityInterface].reduce((prev2, interfaceField) => {
+            if (entityFields[interfaceField] === undefined) {
+              throw new TypeError(
+                `Got not used field "${interfaceField}" of interface "${entityInterface}" in "${entityName}" entity!`,
+              );
+            }
+
+            const fieldRest = entityFields[interfaceField];
+
+            if (alreadySaved !== null && alreadySaved[interfaceField] !== fieldRest) {
+              throw new TypeError(
+                `Got not matching field "${interfaceField}${fieldRest}" of interface "${entityInterface}" in "${entityName}" entity!`,
+              );
+            }
+
+            prev2.push(`  ${interfaceField}${fieldRest}`);
+
+            return prev2;
+          }, [] as string[]);
+
+          if (alreadySaved === null) {
+            prev[entityInterface] = [`interface ${entityInterface} {`, ...fieldTypes, '}'].join(
+              '\n',
             );
           }
+        });
+      }
 
-          prev2.push(`  ${interfaceField}${fieldRest}`);
-
-          return prev2;
-        }, [] as string[]);
-
-        if (alreadySaved === null) {
-          prev[entityInterface] = [`interface ${entityInterface} {`, ...fieldTypes, '}'].join('\n');
-        }
-      });
-    }
-
-    return prev;
-  }, {} as { [entityName: string]: string });
+      return prev;
+    },
+    {} as { [entityName: string]: string },
+  );
 
   return interfaceTypeDic;
 };

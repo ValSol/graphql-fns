@@ -2,6 +2,7 @@ import type { GeneralConfig } from '../tsTypes';
 
 import composeDescendantConfigByName from '../utils/composeDescendantConfigByName';
 import fillEntityTypeDic from './fillEntityTypeDic';
+import isCommonlyAllowedTypeName from '../utils/isCommonlyAllowedTypeName';
 
 // !!! have to use after all other functions that fill "entityTypeDic"
 
@@ -28,6 +29,10 @@ const processManualyUsedEntities = (
       : rootConfig;
 
     const { name } = config;
+
+    if (!isCommonlyAllowedTypeName(name)) {
+      throw new TypeError(`Incorrect manually used entity name: "${name}"!`);
+    }
 
     if (entityTypeDic[name]) {
       throw new TypeError(`Found redundant entity "${name}" in "manualyUsedEntities"!`);
