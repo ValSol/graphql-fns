@@ -1,5 +1,3 @@
-import lodashGet from 'lodash.get';
-
 import type { InventoryByRoles } from '../../tsTypes';
 
 const compressInventory = (
@@ -23,8 +21,9 @@ const compressInventory = (
 
     if (Query) {
       Object.keys(Query).forEach((action) => {
-        const correspondingValues = umbrellaInventory[permission].map((umbrellaPermission) =>
-          lodashGet(inventoryByRoles, `${umbrellaPermission}.include.Query.${action}`, []),
+        const correspondingValues = umbrellaInventory[permission].map(
+          (umbrellaPermission) =>
+            inventoryByRoles?.[umbrellaPermission]?.include?.Query?.[action] ?? [], // replace for "lodash.get"
         );
         Query[action].forEach((entityName) => {
           const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));
@@ -49,8 +48,9 @@ const compressInventory = (
 
     if (Mutation) {
       Object.keys(Mutation).forEach((action) => {
-        const correspondingValues = umbrellaInventory[permission].map((umbrellaPermission) =>
-          lodashGet(inventoryByRoles, `${umbrellaPermission}.include.Mutation.${action}`, []),
+        const correspondingValues = umbrellaInventory[permission].map(
+          (umbrellaPermission) =>
+            inventoryByRoles?.[umbrellaPermission]?.include?.Mutation?.[action] ?? [], // replace for "lodash.get"
         );
         Mutation[action].forEach((entityName) => {
           const skip = correspondingValues.some((thingNames) => thingNames.includes(entityName));

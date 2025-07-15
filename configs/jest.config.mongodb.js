@@ -1,5 +1,3 @@
-// const { defaults: tsjPreset } = require('ts-jest/presets');
-
 export default {
   rootDir: '../',
   preset: '@shelf/jest-mongodb', // uses custom testEnvironment
