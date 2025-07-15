@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 import type {
   EntityConfig,
@@ -87,7 +87,7 @@ const createEntityArrayResolver = (
 
     const objectIds_from_parent = id_in
       .map((id: string) => fromGlobalId(id)._id)
-      .map((id: string) => new ObjectId(id));
+      .map((id: string) => new mongoose.Types.ObjectId(id));
 
     const { near, search, sort, where = {} } = args;
 

@@ -1,7 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Connection, Types } from 'mongoose';
 import { PubSub } from 'graphql-subscriptions';
-import { Filter } from 'mongodb';
 
 export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 

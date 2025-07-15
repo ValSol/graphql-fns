@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 import type {
   DataObject,
@@ -89,7 +89,7 @@ const getShift = async (
 
   pipeline.push({ $setWindowFields: composeSetWindowFieldsInput(limitingArgs) });
 
-  const $eq = new ObjectId(_id);
+  const $eq = new mongoose.Types.ObjectId(_id);
 
   const $match = { _id: { $eq } } as unknown as DataObject;
 
