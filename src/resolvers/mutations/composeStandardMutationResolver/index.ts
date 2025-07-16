@@ -91,7 +91,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       const result = {} as { previous: GraphqlObject[]; current: GraphqlObject[] };
 
-      const tryCount = 10;
+      const tryCount = 7;
 
       let preparedData: PreparedData = {
         core: new Map(),
@@ -109,6 +109,8 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       for (let i = 0; i < tryCount; i += 1) {
         const session = transactions ? await mongooseConn.startSession() : null;
+
+        const preCommitResult = { current: false }; // to select errors on session.commitTransaction from others
 
         try {
           if (session) {
@@ -185,15 +187,20 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
           await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
+          preCommitResult.current = true;
+
           if (session) {
             await session.commitTransaction();
+
             await session.endSession();
           }
 
           break;
         } catch (err) {
           if (session) {
-            await session.abortTransaction();
+            if (preCommitResult.current === false) {
+              await session.abortTransaction();
+            }
             await session.endSession();
           }
 
@@ -201,7 +208,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             throw new Error(err);
           }
 
-          await sleep(2 ** i);
+          await sleep(100 * 2 ** i);
         }
       }
 

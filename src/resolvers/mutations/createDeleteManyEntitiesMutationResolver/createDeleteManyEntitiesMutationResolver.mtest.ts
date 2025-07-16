@@ -106,10 +106,12 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
+    await Person.init();
     await Person.createCollection();
 
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
+    await Place.init();
     await Place.createCollection();
 
     const serversideConfig = { transactions: true };
@@ -341,10 +343,12 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.init();
     await Parent.createCollection();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.init();
     await Child.createCollection();
 
     const createParent = createCreateEntityMutationResolver(
@@ -472,10 +476,12 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
+    await Parent.init();
     await Parent.createCollection();
 
     const childSchema = createThingSchema(childConfig);
     const Child = mongooseConn.model('Child_Thing', childSchema);
+    await Child.init();
     await Child.createCollection();
 
     const createParent = createCreateEntityMutationResolver(

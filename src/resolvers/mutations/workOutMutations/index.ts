@@ -32,12 +32,14 @@ const workOutMutations = async (
 
   let previouses: GraphqlObject[][] = [];
 
-  const tryCount = 10;
+  const tryCount = 7;
 
-  for (let j = 0; j < tryCount; j += 1) {
+  for (let i = 0; i < tryCount; i += 1) {
     let preparedData = preparedBulkData;
 
     const session = transactions ? await mongooseConn.startSession() : null;
+
+    const preCommitResult = { current: false }; // to select errors on session.commitTransaction from others
 
     try {
       if (session) {
@@ -45,8 +47,8 @@ const workOutMutations = async (
       }
 
       previouses = [];
-      for (let i = 0; i < standardMutationsArgs.length; i += 1) {
-        const mutationArgs = standardMutationsArgs[i];
+      for (let j = 0; j < standardMutationsArgs.length; j += 1) {
+        const mutationArgs = standardMutationsArgs[j];
 
         const {
           actionGeneralName,
@@ -139,6 +141,8 @@ const workOutMutations = async (
 
       await executeBulkItems(coreWithCounters, generalConfig, context, session);
 
+      preCommitResult.current = true;
+
       if (session) {
         await session.commitTransaction();
         await session.endSession();
@@ -147,15 +151,17 @@ const workOutMutations = async (
       break;
     } catch (err) {
       if (session) {
-        await session.abortTransaction();
+        if (preCommitResult.current === false) {
+          await session.abortTransaction();
+        }
         await session.endSession();
       }
 
-      if (j === tryCount - 1) {
+      if (i === tryCount - 1) {
         throw new Error(err);
       }
 
-      await sleep(2 ** j);
+      await sleep(100 * 2 ** i);
     }
   }
   const finalResults: Array<any | null> = [];

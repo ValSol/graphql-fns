@@ -62,6 +62,7 @@ describe('createCreateManyEntitiesMutationResolver', () => {
 
     const exampleSchema = createThingSchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
+    await Example.init();
     await Example.createCollection();
 
     const serversideConfig = { transactions: true };
@@ -149,8 +150,9 @@ describe('createCreateManyEntitiesMutationResolver', () => {
     const serversideConfig = { transactions: true };
 
     const exampleSchema = createThingSchema(entityConfig);
-    const Example = mongooseConn.model('Example2_Thing', exampleSchema);
-    await Example.createCollection();
+    const Example2 = mongooseConn.model('Example2_Thing', exampleSchema);
+    await Example2.init();
+    await Example2.createCollection();
 
     const createManyExamples = createCreateManyEntitiesMutationResolver(
       entityConfig,
