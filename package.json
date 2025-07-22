@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.1040",
+  "version": "0.1.2-beta.1041",
   "description": "Useful functions to work with graphql",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -67,7 +67,6 @@
     "graphql-subscriptions": "^3.0.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "mkdirp": "^3.0.1",
     "mongoose": "^8.16.2",

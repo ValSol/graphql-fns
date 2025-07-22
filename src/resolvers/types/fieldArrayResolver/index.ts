@@ -12,6 +12,10 @@ const fieldArrayResolver = (parent: any, args: Args, context: Context, info: any
 
   const arr = parent[fieldName];
 
+  if (!arr) {
+    return null; // in case of "nullable" array field
+  }
+
   if (!arr.length) return [];
 
   const { slice } = args || {};
