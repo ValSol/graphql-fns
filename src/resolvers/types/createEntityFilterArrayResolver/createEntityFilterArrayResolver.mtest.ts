@@ -1,14 +1,15 @@
 /* eslint-env jest */
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
+
+import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
 import sleep from '../../../utils/sleep';
 import fromGlobalId from '../../utils/fromGlobalId';
 import toGlobalId from '../../utils/toGlobalId';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createUpdateEntityMutationResolver from '../../mutations/createUpdateEntityMutationResolver';
 import createEntityFilterArrayResolver from '.';
@@ -16,14 +17,11 @@ import createEntityFilterArrayResolver from '.';
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-filter-array-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 });
 
 afterAll(async () => {

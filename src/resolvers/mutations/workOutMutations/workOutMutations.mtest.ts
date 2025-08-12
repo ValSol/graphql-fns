@@ -1,11 +1,12 @@
 /* eslint-env jest */
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
+
+import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
+import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import workOutMutations from './index';
 import createCopyEntityMutationResolver from '../createCopyEntityMutationResolver';
@@ -13,7 +14,6 @@ import createCopyEntityMutationResolver from '../createCopyEntityMutationResolve
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 const exampleConfig: TangibleEntityConfig = {
   name: 'Example',
@@ -436,8 +436,6 @@ beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-work-out-mutations';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 
   const parentSchema = createThingSchema(parentConfig);
   const Parent = mongooseConn.model('Parent_Thing', parentSchema);

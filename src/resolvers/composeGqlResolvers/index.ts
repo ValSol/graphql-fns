@@ -146,6 +146,7 @@ const composeGqlResolvers = (
         const createdEntitySubscriptionResolver = createCreatedEntitySubscriptionResolver(
           entityConfig,
           generalConfig,
+          serversideConfig,
         );
         if (createdEntitySubscriptionResolver) {
           prev.Subscription[`created${name}`] = createdEntitySubscriptionResolver;

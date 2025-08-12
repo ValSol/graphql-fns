@@ -1,6 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Connection, Types } from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
 
 export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
 
@@ -1265,12 +1263,12 @@ export type PipelineMongoDB = Array<
 
 export type Subscribe = {
   subscribe: (
-    _: null | GraphqlObject,
-    arg2: {
-      name: string;
-    },
-    arg3: {
-      pubsub: PubSub;
+    parent: null | GraphqlObject,
+    args: { where?: GraphqlObject },
+    context: Context,
+    info: SintheticResolverInfo,
+    involvedFilters: {
+      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ) => any;
 };

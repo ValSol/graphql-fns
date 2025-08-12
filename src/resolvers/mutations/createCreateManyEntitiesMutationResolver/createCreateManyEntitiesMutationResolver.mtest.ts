@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
-
 import mongoose from 'mongoose';
+
+import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';

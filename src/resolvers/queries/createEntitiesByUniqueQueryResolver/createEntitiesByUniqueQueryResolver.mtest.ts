@@ -1,12 +1,13 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
+
+import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
 import sleep from '../../../utils/sleep';
+import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 
 import createEntitiesByUniqueQueryResolver from './index';
@@ -16,14 +17,11 @@ const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-entities-by-unique-query';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 });
 
 afterAll(async () => {

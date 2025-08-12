@@ -1,11 +1,12 @@
 /* eslint-env jest */
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
+
+import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
+import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteFilteredEntitiesWithChildrenMutationResolver from './index';
 
@@ -18,14 +19,11 @@ const info = {
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-delete-filtered-entities-with-children-mutation';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 });
 
 afterAll(async () => {

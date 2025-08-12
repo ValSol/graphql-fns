@@ -11,6 +11,7 @@ import composeAllEntityConfigs from './utils/composeAllEntityConfigs';
 import composeCustom from './utils/composeCustom';
 import composeDescendant from './utils/composeDescendant';
 import composeDescendantConfigByName from './utils/composeDescendantConfigByName';
+import pubsub from './resolvers/utils/pubsub';
 
 // mutation resolvers
 
@@ -85,6 +86,7 @@ export {
   composeCustom,
   composeDescendant,
   composeDescendantConfigByName,
+  pubsub,
   createCopyManyEntitiesMutationResolver,
   createCopyManyEntitiesWithChildrenMutationResolver,
   createCopyEntityMutationResolver,

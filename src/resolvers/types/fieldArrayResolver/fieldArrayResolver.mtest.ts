@@ -1,22 +1,19 @@
 /* eslint-env jest */
 
 import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
 
 import mongoOptions from '../../../test/mongo-options';
+import pubsub from '../../utils/pubsub';
 import fieldArrayResolver from './index';
 
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-field-array-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 });
 
 afterAll(async () => {

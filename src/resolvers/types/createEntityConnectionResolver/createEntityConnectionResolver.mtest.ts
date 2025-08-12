@@ -1,29 +1,26 @@
 /* eslint-env jest */
 
+import mongoose from 'mongoose';
+
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
-import mongoose from 'mongoose';
-import { PubSub } from 'graphql-subscriptions';
-
 import mongoOptions from '../../../test/mongo-options';
+import createThingSchema from '../../../mongooseModels/createThingSchema';
 import sleep from '../../../utils/sleep';
 import toCursor from '../../utils/toCursor';
 import toGlobalId from '../../utils/toGlobalId';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityConnectionResolver from './index';
 
 mongoose.set('strictQuery', false);
 
 let mongooseConn;
-let pubsub;
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-entity-connection-type';
   mongooseConn = await mongoose.connect(dbURI, mongoOptions);
   await mongooseConn.connection.db.dropDatabase();
-
-  pubsub = new PubSub();
 });
 
 afterAll(async () => {
