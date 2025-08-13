@@ -1,5 +1,5 @@
 import type { GeneralConfig, ServersideConfig } from '../../../tsTypes';
-import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 
 type ExternalReferencesArgs = Array<[string, string, any]>;
 
@@ -10,25 +10,12 @@ const getExternalReferences = async (
   context: any,
   session: any,
 ): Promise<Array<string | null>> => {
-  const { allEntityConfigs } = generalConfig;
-  const inAnyCase = true;
-  const entityQueryResolvers: Record<string, any> = {};
-
   const results: Array<string | null> = [];
 
   for (let i = 0; i < externalReferencesArgs.length; i += 1) {
     const [entityName, id, filter] = externalReferencesArgs[i];
 
-    if (!entityQueryResolvers[entityName]) {
-      entityQueryResolvers[entityName] = createEntityQueryResolver(
-        allEntityConfigs[entityName],
-        generalConfig,
-        serversideConfig,
-        inAnyCase,
-      );
-    }
-
-    const entity = await entityQueryResolvers[entityName](
+    const instance = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
       null,
       { whereOne: { id } },
       context,
@@ -37,7 +24,7 @@ const getExternalReferences = async (
       session,
     );
 
-    if (entity) {
+    if (instance) {
       results.push(id.toString());
     } else {
       results.push(null);

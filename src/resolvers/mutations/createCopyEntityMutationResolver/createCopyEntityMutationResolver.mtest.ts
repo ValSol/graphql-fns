@@ -27,7 +27,6 @@ afterAll(async () => {
 
 describe('createCopyEntityMutationResolver', () => {
   test('should create mutation copy entity resolver', async () => {
-    const generalConfig: GeneralConfig = { allEntityConfigs: {} };
     const serversideConfig = { transactions: true };
 
     const personConfig = {} as EntityConfig;
@@ -139,6 +138,15 @@ describe('createCopyEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: {
+        Person: personConfig,
+        PersonClone: personCloneConfig,
+        PersonBackup: personBackupConfig,
+      },
+    };
+
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
@@ -314,7 +322,6 @@ describe('createCopyEntityMutationResolver', () => {
   });
 
   test('should create mutation for Restaurant & RestauranClone', async () => {
-    const generalConfig: GeneralConfig = { allEntityConfigs: {} };
     const serversideConfig = { transactions: true };
 
     const restaurantConfig = {} as EntityConfig;
@@ -380,6 +387,10 @@ describe('createCopyEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Restaurant: restaurantConfig, RestaurantClone: restaurantCloneConfig },
+    };
 
     const restaurantSchema = createThingSchema(restaurantConfig);
     const Restaurant = mongooseConn.model('Restaurant_Thing', restaurantSchema);

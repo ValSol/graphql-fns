@@ -24,7 +24,6 @@ afterAll(async () => {
 });
 
 describe('createCreateEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
   test('should create mutation add entity resolver', async () => {
     const entityConfig: TangibleEntityConfig = {
@@ -72,6 +71,8 @@ describe('createCreateEntityMutationResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const exampleSchema = createThingSchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
@@ -165,6 +166,8 @@ describe('createCreateEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
@@ -325,6 +328,10 @@ describe('createCreateEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person2: personConfig, Place: placeConfig, City: cityConfig },
+    };
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person2_Thing', personSchema);
@@ -512,6 +519,10 @@ describe('createCreateEntityMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person3: personConfig, Place2: placeConfig },
+    };
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person3_Thing', personSchema);
@@ -738,6 +749,10 @@ describe('createCreateEntityMutationResolver', () => {
     const Person = mongooseConn.model('Person4_Thing', personSchema);
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place3_Thing', placeSchema);
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person4: personConfig, Place3: placeConfig },
+    };
 
     await Person.createCollection();
     await Place.createCollection();

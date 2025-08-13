@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 import type {
   GraphqlObject,
   Periphery,
@@ -8,10 +10,9 @@ import type {
 import type { Core } from '../../tsTypes';
 
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../utils/addIdsToEntity';
+import composeAllFieldsProjection from '../../utils/composeAllFieldsProjection';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type PreparedData = {
   core: Core;
@@ -25,10 +26,16 @@ const produceResult = async (
   resolverArg: ResolverArg,
   array: boolean,
 ): Promise<Array<GraphqlObject>> => {
-  const { entityConfig, generalConfig } = resolverCreatorArg;
+  const {
+    entityConfig,
+    entityConfig: { name: entityName },
+    generalConfig,
+    serversideConfig,
+  } = resolverCreatorArg;
 
   const { enums } = generalConfig;
   const {
+    context,
     context: { mongooseConn },
   } = resolverArg;
   const {
@@ -38,41 +45,37 @@ const produceResult = async (
 
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
+  const {
+    involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
+  } = resolverArg;
+
   const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-  const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
-
-  if (array) {
-    const ids = mains.map(({ _id }) => _id);
-
-    const entities = await Entity.find({ _id: { $in: ids } }, projection, { lean: true });
-
-    const entities2 = entities.map((item, i) =>
-      addCalculatedFieldsToEntity(
-        addIdsToEntity(item, entityConfig),
-        projection,
-        asyncFuncResults,
-        resolverArg,
-        entityConfig as TangibleEntityConfig,
-        i,
-      ),
-    );
-
-    return entities2;
+  if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
+    Object.assign(projection, composeAllFieldsProjection(entityConfig), {
+      withoutCalculatedFieldsWithAsyncFunc: true,
+    });
   }
 
-  const entity = await Entity.findById(first._id, projection, { lean: true });
+  if (array) {
+    return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
+      null,
+      { where: { id_in: mains.map(({ _id }) => _id) } },
+      context,
+      { projection },
+      { inputOutputEntity: [[]] },
+    );
+  }
 
-  const entity2 = addCalculatedFieldsToEntity(
-    addIdsToEntity(entity, entityConfig),
-    projection,
-    asyncFuncResults,
-    resolverArg,
-    entityConfig as TangibleEntityConfig,
-    0, // index
+  const instance = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
+    null,
+    { whereOne: { id: first._id } },
+    context,
+    { projection },
+    { inputOutputEntity: [[]] },
   );
 
-  return [entity2];
+  return [instance];
 };
 
 export default produceResult;

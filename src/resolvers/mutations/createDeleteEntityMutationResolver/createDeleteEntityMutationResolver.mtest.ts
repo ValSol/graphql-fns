@@ -28,7 +28,6 @@ afterAll(async () => {
 });
 
 describe('createDeleteEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
@@ -111,6 +110,10 @@ describe('createDeleteEntityMutationResolver', () => {
     const placeSchema = createThingSchema(placeConfig);
     const Place = mongooseConn.model('Place_Thing', placeSchema);
     await Place.createCollection();
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
 
     const serversideConfig = { transactions: true };
     const createPerson = createCreateEntityMutationResolver(
@@ -345,6 +348,10 @@ describe('createDeleteEntityMutationResolver', () => {
     const Child = mongooseConn.model('Child_Thing', childSchema);
     await Child.createCollection();
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
+
     const createParent = createCreateEntityMutationResolver(
       parentConfig,
       generalConfig,
@@ -494,6 +501,10 @@ describe('createDeleteEntityMutationResolver', () => {
     const textbookSchema = createThingSchema(textbookConfig);
     const Textbook = mongooseConn.model('Textbook_Thing', textbookSchema);
     await Textbook.createCollection();
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Textbook: textbookConfig, User: userConfig },
+    };
 
     await sleep(250);
 

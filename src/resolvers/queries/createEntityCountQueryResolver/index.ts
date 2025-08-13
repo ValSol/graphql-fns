@@ -28,17 +28,9 @@ const createEntityCountQueryResolver = (
   inAnyCase?: boolean,
 ): any => {
   const { enums, inventory } = generalConfig;
-  const { name } = entityConfig;
-  const inventoryChain: InventoryChain = ['Query', 'entityCount', name];
+  const { name: entityName } = entityConfig;
+  const inventoryChain: InventoryChain = ['Query', 'entityCount', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
-
-  const entitiesQueryResolver = createEntitiesQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entitiesQueryResolver) return null;
 
   const resolver = async (
     parent: null | GraphqlObject,

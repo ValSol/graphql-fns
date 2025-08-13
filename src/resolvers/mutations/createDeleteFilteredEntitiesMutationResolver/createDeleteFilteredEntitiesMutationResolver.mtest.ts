@@ -26,7 +26,6 @@ afterAll(async () => {
 });
 
 describe('createDeleteFilteredEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation delete entity resolver with wipe out duplex fields values', async () => {
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
@@ -101,6 +100,10 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
 
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
@@ -336,6 +339,10 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       ],
     });
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
+
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
@@ -462,6 +469,10 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);

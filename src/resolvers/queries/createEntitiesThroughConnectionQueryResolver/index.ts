@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 import type {
   Context,
   GeneralConfig,
@@ -14,11 +16,10 @@ import type {
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import fromCursor from '../../utils/fromCursor';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
-import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
-import createEntityQueryResolver from '../createEntityQueryResolver';
 import getFirst from '../utils/getFirst';
 import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
@@ -48,26 +49,16 @@ const createEntitiesThroughConnectionQueryResolver = (
   inAnyCase?: boolean,
 ): any => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name: entityName } = entityConfig;
 
-  const inventoryChain: InventoryChain = ['Query', 'entitiesThroughConnection', name];
+  const inventoryChain: InventoryChain = ['Query', 'entitiesThroughConnection', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entitiesQueryResolver = createEntitiesQueryResolver(
-    entityConfig,
+  const entitiesQueryResolver = composeQueryResolver(
+    pluralize(entityName),
     generalConfig,
     serversideConfig,
-    true, // inAnyCase,
   );
-  if (!entitiesQueryResolver) return null;
-
-  const entityQueryResolver = createEntityQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entityQueryResolver) return null;
 
   const entityCountQueryResolver = createEntityCountQueryResolver(
     entityConfig,
@@ -96,7 +87,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     const [preArgs2, involvedFilters] = modifyConnectionArgsAndInvolvedFilters(
       preArgs,
       preInvolvedFilters,
-      name,
+      entityName,
     );
 
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
@@ -146,7 +137,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     if (after) {
       if (typeof first === 'undefined') {
         throw new TypeError(
-          `For "after" arg ("${after}", entity: "${name}") not found "first" arg!`,
+          `For "after" arg ("${after}", entity: "${entityName}") not found "first" arg!`,
         );
       }
 
@@ -172,7 +163,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           resolverCreatorArg,
           resolverArg,
           involvedFilters,
-          entityQueryResolver,
+          composeQueryResolver(entityName, generalConfig, serversideConfig),
         );
 
         if (shift2 === null) {
@@ -200,7 +191,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     if (before) {
       if (typeof last === 'undefined') {
         throw new TypeError(
-          `For "before" arg ("${before}", entity: "${name}") not found "last" arg!`,
+          `For "before" arg ("${before}", entity: "${entityName}") not found "last" arg!`,
         );
       }
 
@@ -226,7 +217,7 @@ const createEntitiesThroughConnectionQueryResolver = (
           resolverCreatorArg,
           resolverArg,
           involvedFilters,
-          entityQueryResolver,
+          composeQueryResolver(entityName, generalConfig, serversideConfig),
         );
 
         if (shift2 === null) {
@@ -254,7 +245,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     }
 
     throw new TypeError(
-      `Incorrect set of args in "entitiesThroughConnection" query, entity: "${name}"!`,
+      `Incorrect set of args in "entitiesThroughConnection" query, entity: "${entityName}"!`,
     );
   };
   return resolver;

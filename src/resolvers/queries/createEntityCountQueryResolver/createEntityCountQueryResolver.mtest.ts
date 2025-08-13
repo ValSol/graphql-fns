@@ -27,7 +27,6 @@ afterAll(async () => {
 });
 
 describe('createEntityCountQueryResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig: Record<string, any> = {};
 
   test('should create query entities resolver', async () => {
@@ -68,6 +67,8 @@ describe('createEntityCountQueryResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
     const exampleSchema = createThingSchema(personConfig);
     const Example = mongooseConn.model('Person_', exampleSchema);
@@ -200,6 +201,10 @@ describe('createEntityCountQueryResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
 
     const exampleSchema = createThingSchema(parentConfig);
     const Example = mongooseConn.model('Parent_', exampleSchema);

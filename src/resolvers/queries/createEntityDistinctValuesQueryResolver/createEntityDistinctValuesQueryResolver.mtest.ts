@@ -27,7 +27,6 @@ afterAll(async () => {
 });
 
 describe('createEntityDistinctValuesQueryResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create query entities resolver', async () => {
     const serversideConfig: Record<string, any> = {};
     const personConfig = {} as EntityConfig;
@@ -67,6 +66,8 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Person: personConfig } };
 
     const exampleSchema = createThingSchema(personConfig);
     const Example = mongooseConn.model('Person_Thing', exampleSchema);
@@ -189,6 +190,10 @@ describe('createEntityDistinctValuesQueryResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
 
     const exampleSchema = createThingSchema(parentConfig);
     const Example = mongooseConn.model('Parent_Thing', exampleSchema);

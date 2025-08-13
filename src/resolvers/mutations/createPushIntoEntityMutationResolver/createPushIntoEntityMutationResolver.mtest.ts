@@ -26,7 +26,6 @@ afterAll(async () => {
 });
 
 describe('createPushIntoEntityMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
 
   test('should create mutation pushInto entity resolver with wipe out duplex fields values', async () => {
@@ -106,6 +105,10 @@ describe('createPushIntoEntityMutationResolver', () => {
       ],
     });
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
+
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();
@@ -119,6 +122,7 @@ describe('createPushIntoEntityMutationResolver', () => {
       generalConfig,
       serversideConfig,
     );
+
     expect(typeof createPerson).toBe('function');
     if (!createPerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
@@ -436,6 +440,10 @@ describe('createPushIntoEntityMutationResolver', () => {
       ],
     });
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
+
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);
     await Parent.createCollection();
@@ -580,6 +588,10 @@ describe('createPushIntoEntityMutationResolver', () => {
       ],
     });
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent2: parentConfig, Child2: childConfig },
+    };
+
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent2_Thing', parentSchema);
     await Parent.createCollection();
@@ -645,6 +657,8 @@ describe('createPushIntoEntityMutationResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: exampleConfig } };
 
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);

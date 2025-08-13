@@ -26,8 +26,8 @@ afterAll(async () => {
 });
 
 describe('createUpdateFilteredEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
+
   describe('for entities that have duplex fields', () => {
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
@@ -120,6 +120,10 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    };
 
     test('should create mutation update entity resolver that create childrent entities', async () => {
       const personSchema = createThingSchema(personConfig);
@@ -729,6 +733,10 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       ],
     };
 
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: exampleConfig },
+    };
+
     const exampleSchema = createThingSchema(exampleConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
     await Example.createCollection();
@@ -861,6 +869,8 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       ],
     };
 
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Main: mainConfig } };
+
     const mainSchema = createThingSchema(mainConfig);
     const Main = mongooseConn.model('Main_Thing', mainSchema);
     await Main.createCollection();
@@ -973,6 +983,10 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
 
     const parentSchema = createThingSchema(parentConfig);
     const Parent = mongooseConn.model('Parent_Thing', parentSchema);

@@ -1,4 +1,5 @@
 import deepEqual from 'fast-deep-equal';
+import pluralize from 'pluralize';
 
 import type {
   GeneralConfig,
@@ -9,11 +10,7 @@ import type {
   SintheticResolverInfo,
 } from '../../../tsTypes';
 
-import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
-import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
-
-const whereQuery: Record<string, any> = {};
-const whereOneQuery: Record<string, any> = {};
+import composeQueryResolver from '../../utils/composeQueryResolver';
 
 type ResultObject = Record<string, any>;
 
@@ -81,18 +78,9 @@ const checkLockedData = async (
 
   const { args, result } = lockedData;
 
-  const { name } = entityConfig;
+  const { name: entityName } = entityConfig;
 
   if (result && Array.isArray(result)) {
-    if (!whereQuery[name]) {
-      whereQuery[name] = createEntitiesQueryResolver(
-        entityConfig,
-        generalConfig,
-        serversideConfig,
-        true, // inAnyCase,
-      );
-    }
-
     const projection = result.reduce(
       (prev, resultItem) => {
         Object.keys(resultItem).forEach((key) => {
@@ -113,13 +101,13 @@ const checkLockedData = async (
       {} as Record<string, 1>,
     );
 
-    const currentResult = await whereQuery[name](
-      null,
-      args,
-      context,
-      { projection },
-      { inputOutputEntity: [[]] },
-    );
+    const pluralizedEntityName = pluralize(entityName);
+
+    const currentResult = await composeQueryResolver(
+      pluralizedEntityName,
+      generalConfig,
+      serversideConfig,
+    )(null, args, context, { projection }, { inputOutputEntity: [[]] });
 
     if (result.length !== currentResult.length) {
       throw new TypeError(
@@ -133,15 +121,6 @@ const checkLockedData = async (
       checkObject(resultItem, currentResultItem);
     });
   } else {
-    if (!whereOneQuery[name]) {
-      whereOneQuery[name] = createEntityQueryResolver(
-        entityConfig,
-        generalConfig,
-        serversideConfig,
-        true, // inAnyCase,
-      );
-    }
-
     const projection = result
       ? Object.keys(result).reduce(
           (prev, key) => {
@@ -153,7 +132,7 @@ const checkLockedData = async (
         )
       : { _id: 1 };
 
-    const currentResult = await whereOneQuery[name](
+    const currentResult = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
       null,
       args,
       context,

@@ -47,6 +47,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
           ),
           updatedFields,
         } as const;
+
         pubsub.publish(`updated-${name}`, { [`updated${name}`]: payload });
       }
     : null;

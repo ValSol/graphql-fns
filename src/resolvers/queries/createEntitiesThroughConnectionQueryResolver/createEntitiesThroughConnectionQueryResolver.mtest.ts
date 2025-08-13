@@ -18,7 +18,6 @@ let createdExamples;
 let Example;
 let examplesThroughConnection;
 
-const generalConfig: GeneralConfig = { allEntityConfigs: {} };
 const entityConfig: EntityConfig = {
   name: 'Example',
   type: 'tangible',
@@ -42,6 +41,9 @@ const entityConfig: EntityConfig = {
     },
   ],
 };
+
+const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
 const serversideConfig = { transactions: true };
 
 beforeAll(async () => {

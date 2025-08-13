@@ -1,5 +1,5 @@
 import { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
-import createEntityQueryResolver from '../../../queries/createEntityQueryResolver';
+import composeQueryResolver from '../../composeQueryResolver';
 
 const personalFilterFromUserEntity = async (
   personalFiltersTuple: [string, string, string],
@@ -7,25 +7,14 @@ const personalFilterFromUserEntity = async (
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  store: Record<string, any>,
 ) => {
   const [userEntityName, , filterFieldName] = personalFiltersTuple;
 
-  const { allEntityConfigs } = generalConfig;
-
-  if (!store[userEntityName]) {
-    store[userEntityName] = createEntityQueryResolver(
-      allEntityConfigs[userEntityName],
-      generalConfig,
-      serversideConfig,
-      true, // inAnyCase,
-    );
-    if (!store[userEntityName]) {
-      throw new Error('query "Complex" was not created!');
-    }
-  }
-
-  const { [filterFieldName]: filterField } = await store[userEntityName](
+  const { [filterFieldName]: filterField } = await composeQueryResolver(
+    userEntityName,
+    generalConfig,
+    serversideConfig,
+  )(
     null,
     { whereOne: { id: userAttributes.id } },
     context,

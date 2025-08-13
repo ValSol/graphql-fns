@@ -8,10 +8,10 @@ import type {
 } from '../../../tsTypes';
 
 import composeDescendantConfig from '../../../utils/composeDescendantConfig';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
-import createEntityQueryResolver from '../createEntityQueryResolver';
 
 const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
@@ -50,20 +50,13 @@ const createNodeQueryResolver = (
       ? composeDescendantConfig(descendant?.[descendantKey], entityConfig, generalConfig)
       : entityConfig;
 
-    const inAnyCase = true;
-
-    const entityQueryResolver = createEntityQueryResolver(
-      entityConfig,
-      generalConfig,
-      serversideConfig,
-      inAnyCase,
+    const entity = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
+      null,
+      { whereOne: { id } },
+      context,
+      info,
+      { inputOutputEntity: filter },
     );
-
-    if (!entityQueryResolver) return null;
-
-    const entity = await entityQueryResolver(null, { whereOne: { id } }, context, info, {
-      inputOutputEntity: filter,
-    });
 
     if (!entity) return null;
 

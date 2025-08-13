@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 import type {
   Context,
   GeneralConfig,
@@ -12,7 +14,7 @@ import type {
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 
 type Args = {
   where?: any;
@@ -34,18 +36,10 @@ const createChildEntitiesQueryResolver = (
   inAnyCase?: boolean,
 ): any => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name: entityName } = entityConfig;
 
-  const inventoryChain: InventoryChain = ['Query', 'childEntities', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntities', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
-
-  const entitiesQueryResolver = createEntitiesQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entitiesQueryResolver) return null;
 
   const resolver = async (
     parent: null | GraphqlObject,
@@ -56,7 +50,13 @@ const createChildEntitiesQueryResolver = (
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
-    entitiesQueryResolver(parent, args, context, info, involvedFilters);
+    composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
+      parent,
+      args,
+      context,
+      info,
+      involvedFilters,
+    );
 
   return resolver;
 };

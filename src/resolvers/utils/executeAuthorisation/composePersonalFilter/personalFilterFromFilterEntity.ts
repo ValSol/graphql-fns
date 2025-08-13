@@ -1,5 +1,6 @@
 import { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../../../tsTypes';
 import createEntityQueryResolver from '../../../queries/createEntityQueryResolver';
+import composeQueryResolver from '../../composeQueryResolver';
 
 const personalFilterFromFilterEntity = async (
   personalFiltersTuple: [string, string, string],
@@ -7,25 +8,16 @@ const personalFilterFromFilterEntity = async (
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  store: Record<string, any>,
 ) => {
   const [userEntityName, filterEntityPointerName, filterFieldName] = personalFiltersTuple;
 
   const { allEntityConfigs } = generalConfig;
 
-  if (!store[userEntityName]) {
-    store[userEntityName] = createEntityQueryResolver(
-      allEntityConfigs[userEntityName],
-      generalConfig,
-      serversideConfig,
-      true, // inAnyCase,
-    );
-    if (!store[userEntityName]) {
-      throw new Error('query "Complex" was not created!');
-    }
-  }
-
-  const { [filterEntityPointerName]: filterEntityPointer } = await store[userEntityName](
+  const { [filterEntityPointerName]: filterEntityPointer } = await composeQueryResolver(
+    userEntityName,
+    generalConfig,
+    serversideConfig,
+  )(
     null,
     { whereOne: { id: userAttributes.id } },
     context,
@@ -49,19 +41,11 @@ const personalFilterFromFilterEntity = async (
 
   // ***
 
-  if (!store[filterEntityConfig.name]) {
-    store[filterEntityConfig.name] = createEntityQueryResolver(
-      filterEntityConfig,
-      generalConfig,
-      serversideConfig,
-      true, // inAnyCase,
-    );
-    if (!store[filterEntityConfig.name]) {
-      throw new Error('query "Complex" was not created!');
-    }
-  }
-
-  const { [filterFieldName]: filterField } = await store[filterEntityConfig.name](
+  const { [filterFieldName]: filterField } = await composeQueryResolver(
+    filterEntityConfig.name,
+    generalConfig,
+    serversideConfig,
+  )(
     null,
     { whereOne: { id: filterEntityPointer } },
     context,

@@ -4,7 +4,6 @@ import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 import createEntitiesThroughConnectionQueryResolver from '.';
 
 describe('createEntitiesThroughConnectionQueryResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create query resolver', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
@@ -38,6 +37,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const serversideConfig: Record<string, any> = {};
     const result = createEntitiesThroughConnectionQueryResolver(
       entityConfig,

@@ -27,7 +27,6 @@ afterAll(async () => {
 });
 
 describe('createCopyManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig = { transactions: true };
 
   test('should create mutation add entity resolver', async () => {
@@ -140,6 +139,15 @@ describe('createCopyManyEntitiesMutationResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: {
+        Person: personConfig,
+        PersonClone: personCloneConfig,
+        PersonBackup: personBackupConfig,
+      },
+    };
+
     const personSchema = createThingSchema(personConfig);
     const Person = mongooseConn.model('Person_Thing', personSchema);
     await Person.createCollection();

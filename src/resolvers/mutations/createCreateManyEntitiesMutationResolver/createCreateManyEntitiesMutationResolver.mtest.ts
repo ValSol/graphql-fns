@@ -23,8 +23,6 @@ afterAll(async () => {
 });
 
 describe('createCreateManyEntitiesMutationResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
-
   test('should create mutation add entity resolver', async () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
@@ -59,6 +57,8 @@ describe('createCreateManyEntitiesMutationResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const exampleSchema = createThingSchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
@@ -148,6 +148,8 @@ describe('createCreateManyEntitiesMutationResolver', () => {
       ],
     };
     const serversideConfig = { transactions: true };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example2: entityConfig } };
 
     const exampleSchema = createThingSchema(entityConfig);
     const Example2 = mongooseConn.model('Example2_Thing', exampleSchema);

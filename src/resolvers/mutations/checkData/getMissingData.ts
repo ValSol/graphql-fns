@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
 
 import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
-import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
 import composeFieldsObject from '../../../utils/composeFieldsObject';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import transformDataForPush from './transformDataForPush';
 
 type Arg = {
@@ -38,18 +38,11 @@ const getMissingData = async ({
 }: Arg): Promise<any | null> => {
   const inAnyCase = true;
 
-  const entityQueryResolver = createEntityQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    inAnyCase,
-  );
-
-  if (!entityQueryResolver) return null;
+  const { name: entityName } = entityConfig;
 
   const { whereOne, data } = args;
 
-  const entity = await entityQueryResolver(
+  const instance = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
     null,
     { whereOne },
     context,
@@ -58,10 +51,10 @@ const getMissingData = async ({
     session,
   );
 
-  if (!entity) return null;
+  if (!instance) return null;
 
-  const entity2 =
-    processingKind === 'push' ? transformDataForPush(entity, args, entityConfig) : entity;
+  const instance2 =
+    processingKind === 'push' ? transformDataForPush(instance, args, entityConfig) : instance;
 
   const fieldsObj = composeFieldsObject(entityConfig);
 
@@ -75,17 +68,19 @@ const getMissingData = async ({
       if (fieldType === 'duplexFields' || fieldType === 'relationalFields') {
         if (array) {
           result[key] =
-            entity2[key] !== null && entity2[key] !== undefined
-              ? { connect: entity2[key].map((item: Types.ObjectId) => item.toString()) }
+            instance2[key] !== null && instance2[key] !== undefined
+              ? { connect: instance2[key].map((item: Types.ObjectId) => item.toString()) }
               : { connect: [] };
         } else {
           result[key] = {
             connect:
-              entity2[key] !== null && entity2[key] !== undefined ? entity2[key].toString() : null,
+              instance2[key] !== null && instance2[key] !== undefined
+                ? instance2[key].toString()
+                : null,
           };
         }
       } else {
-        result[key] = entity2[key];
+        result[key] = instance2[key];
       }
     }
   });

@@ -29,7 +29,6 @@ afterAll(async () => {
 });
 
 describe('createEntityQueryResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   const serversideConfig: Record<string, any> = {};
   test('should create query entity resolver', async () => {
     const entityConfig: EntityConfig = {
@@ -68,6 +67,8 @@ describe('createEntityQueryResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
 
     const exampleSchema = createThingSchema(entityConfig);
     const ExampleEntity = mongooseConn.model('Example_Thing', exampleSchema);
@@ -190,6 +191,10 @@ describe('createEntityQueryResolver', () => {
         },
       ],
     });
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Parent: parentConfig, Child: childConfig },
+    };
 
     const exampleSchema = createThingSchema(parentConfig);
     const ExampleEntity = mongooseConn.model('Parent_Thing', exampleSchema);

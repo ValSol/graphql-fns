@@ -219,7 +219,9 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       if (!report) {
         throw new TypeError(`report have to be setted for "${actionGeneralName}"`);
       }
+
       const subscription = await report(resolverCreatorArg, resolverArg);
+
       if (subscription) {
         subscription(result);
       }

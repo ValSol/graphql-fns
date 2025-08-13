@@ -11,7 +11,7 @@ import type {
 } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntityQueryResolver from '../createEntityQueryResolver';
+import composeQueryResolver from '../../utils/composeQueryResolver';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 
 type Args = {
@@ -28,18 +28,10 @@ const createChildEntityGetOrCreateQueryResolver = (
   inAnyCase?: boolean,
 ): any | null => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name: entityName } = entityConfig;
 
-  const inventoryChain: InventoryChain = ['Query', 'childEntityGetOrCreate', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntityGetOrCreate', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
-
-  const entityQueryResolver = createEntityQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entityQueryResolver) return null;
 
   const createEntityMutationResolver = createCreateEntityMutationResolver(
     entityConfig,
@@ -59,7 +51,13 @@ const createChildEntityGetOrCreateQueryResolver = (
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     if (args.whereOne) {
-      return entityQueryResolver(parent, args, context, info, involvedFilters);
+      return composeQueryResolver(entityName, generalConfig, serversideConfig)(
+        parent,
+        args,
+        context,
+        info,
+        involvedFilters,
+      );
     }
 
     return createEntityMutationResolver(parent, args, context, info, involvedFilters);

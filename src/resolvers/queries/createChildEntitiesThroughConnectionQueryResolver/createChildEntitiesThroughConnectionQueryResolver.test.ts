@@ -4,7 +4,6 @@ import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 import createchildEntitiesQueryResolver from '.';
 
 describe('createchildEntitiesQueryResolver', () => {
-  const generalConfig: GeneralConfig = { allEntityConfigs: {} };
   test('should create mutation add entity type', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
@@ -38,6 +37,9 @@ describe('createchildEntitiesQueryResolver', () => {
         },
       ],
     };
+
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+
     const serversideConfig: Record<string, any> = {};
     const result = createchildEntitiesQueryResolver(entityConfig, generalConfig, serversideConfig);
 

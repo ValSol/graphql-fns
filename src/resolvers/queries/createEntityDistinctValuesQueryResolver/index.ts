@@ -14,7 +14,6 @@ import checkInventory from '../../../utils/inventory/checkInventory';
 import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import createEntitiesQueryResolver from '../createEntitiesQueryResolver';
 
 type Args = {
   where?: any;
@@ -31,17 +30,9 @@ const createEntityDistinctValuesQueryResolver = (
   inAnyCase?: boolean,
 ): any => {
   const { enums, inventory } = generalConfig;
-  const { name } = entityConfig;
-  const inventoryChain: InventoryChain = ['Query', 'entityDistinctValues', name];
+  const { name: entityName } = entityConfig;
+  const inventoryChain: InventoryChain = ['Query', 'entityDistinctValues', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
-
-  const entitiesQueryResolver = createEntitiesQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entitiesQueryResolver) return null;
 
   const resolver = async (
     parent: null | GraphqlObject,
