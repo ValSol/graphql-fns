@@ -10,7 +10,12 @@ describe('fieldFilterStringifiedResolver', () => {
     filterField: '{}',
   };
 
-  const info = { fieldName: 'filterFieldStringified' };
+  const info = {
+    projection: { _id: 1 },
+    fieldArgs: {},
+    path: [],
+    fieldName: 'filterFieldStringified',
+  };
 
   test('should return field content', async () => {
     const args = {};

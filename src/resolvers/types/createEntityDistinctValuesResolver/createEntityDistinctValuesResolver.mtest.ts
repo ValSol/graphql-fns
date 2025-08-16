@@ -121,7 +121,12 @@ describe('createEntityDistinctValuesResolver', () => {
       ],
     };
 
-    const info = { fieldName: 'friendsDistinctValues', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'friendsDistinctValues',
+    };
 
     const count = await Place(
       parent,

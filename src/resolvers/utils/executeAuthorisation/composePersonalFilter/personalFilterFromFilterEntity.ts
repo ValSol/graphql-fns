@@ -21,7 +21,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: userAttributes.id } },
     context,
-    { projection: { [filterEntityPointerName]: 1 } },
+    { projection: { [filterEntityPointerName]: 1 }, fieldArgs: {}, path: [] },
     { inputOutputEntity: [[]] },
   );
 
@@ -49,7 +49,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: filterEntityPointer } },
     context,
-    { projection: { [filterFieldName]: 1 } },
+    { projection: { [filterFieldName]: 1 }, fieldArgs: {}, path: [] },
     { inputOutputEntity: [[]] },
   );
 

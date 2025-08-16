@@ -44,7 +44,7 @@ describe('getAsyncFuncResults', () => {
     parent: null,
     args: {},
     context: { id: Promise.resolve('12345') },
-    info: { projection: { _id: 1 } as const },
+    info: { projection: { _id: 1 } as const, fieldArgs: {}, path: [] as [] },
     involvedFilters: { inputOutputEntity: [[]] as any },
   };
 

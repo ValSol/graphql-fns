@@ -1,11 +1,9 @@
 import type { InfoEssence, SintheticResolverInfo } from '@/tsTypes';
 
-const infoEssenceProperties = ['projection', 'fieldArgs', 'originalInfo', 'path'];
-const infoEssenceTypePredicate = (info: SintheticResolverInfo): info is InfoEssence => {
-  if (!info) {
-    throw new TypeError(`Arg 'info' is not defined!`);
-  }
+// "path" not used in "onlyInfoEssenceProperties" because it also used in "GraphQLResolveInfo"
+const onlyInfoEssenceProperties = ['projection', 'fieldArgs', 'originalInfo'];
 
+const infoEssenceTypePredicate = (info: SintheticResolverInfo): info is InfoEssence => {
   const result = Boolean(
     (info as InfoEssence).projection &&
       (info as InfoEssence).fieldArgs &&
@@ -19,7 +17,7 @@ const infoEssenceTypePredicate = (info: SintheticResolverInfo): info is InfoEsse
   }
 
   if (!result) {
-    const definedInfoEssenceProperties = infoEssenceProperties.filter((key) => info[key]);
+    const definedInfoEssenceProperties = onlyInfoEssenceProperties.filter((key) => info[key]);
 
     if (definedInfoEssenceProperties.length > 0) {
       throw new TypeError(

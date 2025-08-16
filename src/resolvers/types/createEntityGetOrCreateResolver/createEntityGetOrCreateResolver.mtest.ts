@@ -115,7 +115,12 @@ describe('createEntityGetOrCreateResolver', () => {
 
     const parent = { id: toGlobalId(id, 'User'), restaurant: toGlobalId(restaurant, 'Restaurant') };
 
-    const info = { fieldName: 'restaurantGetOrCreate', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantGetOrCreate',
+    };
 
     const firstRestaurant = await getOrCreateRestaurant(
       parent,
@@ -140,7 +145,12 @@ describe('createEntityGetOrCreateResolver', () => {
 
     const parent2 = { id: toGlobalId(userId, 'User') };
 
-    const info2 = { fieldName: 'restaurantGetOrCreate', projection: { title: 1 } };
+    const info2 = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantGetOrCreate',
+    };
 
     const secondRestaurant = await getOrCreateRestaurant(
       parent2,

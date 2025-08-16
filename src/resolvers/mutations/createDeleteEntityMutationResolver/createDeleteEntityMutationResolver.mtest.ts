@@ -393,7 +393,7 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const deletedParent = await deleteParent(null, { whereOne }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
@@ -544,7 +544,7 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
 
-    const info4 = { projection: { name: 1 } };
+    const info4 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
 
     const where = {};
 

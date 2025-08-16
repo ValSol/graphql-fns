@@ -1,6 +1,10 @@
 import { GraphQLResolveInfo } from 'graphql';
 
-type BaseInfoEssence = { projection: Record<string, 1>; fieldArgs: Record<string, any> };
+type BaseInfoEssence = {
+  projection: Record<string, 1>;
+  fieldArgs: Record<string, any>;
+  fieldName?: string; // used to emulate "GraphQLResolveInfo" info in tests
+};
 export type InfoEssence =
   | (BaseInfoEssence & { originalInfo: GraphQLResolveInfo; path: string[] })
   | (BaseInfoEssence & { originalInfo?: undefined; path: [] });

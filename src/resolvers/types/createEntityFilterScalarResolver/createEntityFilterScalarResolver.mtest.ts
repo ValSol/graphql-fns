@@ -128,7 +128,12 @@ describe('createEntityFilterScalarResolver', () => {
 
     const parent = { id: userId, restaurant: restaurantId };
 
-    const info = { fieldName: 'restaurantFilter', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantFilter',
+    };
 
     const restaurantFilter = await restaurantFilterScalar(
       parent,

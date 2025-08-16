@@ -123,7 +123,7 @@ const createEntitiesThroughConnectionQueryResolver = (
         parent,
         { search, where: where2 },
         context,
-        { projection: { _id: 1 } },
+        { projection: { _id: 1 }, fieldArgs: {}, path: [] },
         { inputOutputEntity: [filters] },
       );
 

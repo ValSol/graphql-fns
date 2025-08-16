@@ -27,7 +27,7 @@ const getVeryLast = async (
     parent,
     args,
     context,
-    { projection: { _id: 1 } },
+    { projection: { _id: 1 }, fieldArgs: {}, path: [] },
     { inputOutputEntity },
   );
 
@@ -39,7 +39,7 @@ const getVeryLast = async (
     parent,
     last < count ? { ...args, pagination } : args,
     context,
-    { projection },
+    { projection, fieldArgs: {}, path: [] },
     involvedFilters,
   );
 

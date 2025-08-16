@@ -18,7 +18,11 @@ import toGlobalId from '../../utils/toGlobalId';
 
 import createNodeQueryResolver from './index';
 
-const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
+const info = {
+  projection: { textField1: 1, textField3: 1, createdAt: 1 },
+  fieldArgs: {},
+  path: [],
+};
 
 mongoose.set('strictQuery', false);
 

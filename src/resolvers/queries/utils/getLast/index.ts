@@ -28,7 +28,7 @@ const getLast = async (
     parent,
     { ...args, pagination },
     context,
-    { projection },
+    { projection, fieldArgs: {}, path: [] },
     involvedFilters,
   );
 

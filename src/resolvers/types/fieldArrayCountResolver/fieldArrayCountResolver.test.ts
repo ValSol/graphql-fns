@@ -22,7 +22,7 @@ describe('fieldArrayCountResolver', () => {
     ],
   };
 
-  const info = { fieldName: 'filesCount' };
+  const info = { projection: { _id: 1 }, fieldArgs: {}, path: [], fieldName: 'filesCount' };
 
   test('should return length of array', async () => {
     const args = {};

@@ -30,7 +30,7 @@ const getFirst = async (
     parent,
     { ...args, pagination },
     context,
-    { projection },
+    { projection, fieldArgs: {}, path: [] },
     involvedFilters,
   );
 

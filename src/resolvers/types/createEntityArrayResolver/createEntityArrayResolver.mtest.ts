@@ -11,7 +11,7 @@ import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityArrayResolver from './index';
 
-const info = { projection: { title: 1 }, fieldName: 'friends' };
+const info = { projection: { title: 1 }, fieldArgs: {}, path: [], fieldName: 'friends' };
 
 mongoose.set('strictQuery', false);
 

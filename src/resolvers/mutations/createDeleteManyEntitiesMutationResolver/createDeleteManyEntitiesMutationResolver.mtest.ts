@@ -226,6 +226,8 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
         locations: 1,
         favorities: 1,
       },
+      fieldArgs: {},
+      path: [],
     };
 
     const whereOne = [{ id }];
@@ -261,7 +263,7 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
     );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = { projection: { name: 1 } };
+    const info2 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
 
     const where2 = [{ name: data.location.create.name }];
     const [deletedPlace] = await deletePlace(
@@ -396,7 +398,7 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
       },
     ];
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const [deletedParent] = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
@@ -526,7 +528,7 @@ describe('createDeleteManyEntitiesMutationResolver', () => {
 
     const whereOne: Array<never> = [];
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const deletedParents = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });

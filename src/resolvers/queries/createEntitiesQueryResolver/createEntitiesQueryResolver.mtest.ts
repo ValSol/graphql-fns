@@ -17,10 +17,14 @@ import createCreateEntityMutationResolver from '../../mutations/createCreateEnti
 
 import createEntitiesQueryResolver from './index';
 
-const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
-const info2 = { projection: { name: 1, textField3: 1, createdAt: 1 } };
-const infoForSort = { projection: { first: 1, second: 1, createdAt: 1 } };
-const info3 = { projection: { first: 1, textFields: 1, textField: 1 } };
+const info = {
+  projection: { textField1: 1, textField3: 1, createdAt: 1 },
+  fieldArgs: {},
+  path: [],
+};
+const info2 = { projection: { name: 1, textField3: 1, createdAt: 1 }, fieldArgs: {}, path: [] };
+const infoForSort = { projection: { first: 1, second: 1, createdAt: 1 }, fieldArgs: {}, path: [] };
+const info3 = { projection: { first: 1, textFields: 1, textField: 1 }, fieldArgs: {}, path: [] };
 
 mongoose.set('strictQuery', false);
 
@@ -133,7 +137,7 @@ describe('createEntityQueryResolver', () => {
       null,
       {},
       { mongooseConn, pubsub },
-      { projection: { fullName: 1 } },
+      { projection: { fullName: 1 }, fieldArgs: {}, path: [] },
       {
         inputOutputEntity: [[]],
       },
@@ -1132,7 +1136,7 @@ describe('createEntityQueryResolver', () => {
 
     const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
 
-    const info4 = { projection: { name: 1 } };
+    const info4 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
 
     const where = {
       textbooks_: { lessons_: { title: 'lesson8' } },

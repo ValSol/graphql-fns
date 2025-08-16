@@ -131,7 +131,12 @@ describe('createEntityFilterCountResolver', () => {
 
     const parent = { id: userId, restaurants: restaurantIds };
 
-    const info = { fieldName: 'restaurantsFilterCount', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantsFilterCount',
+    };
 
     const restaurantsFilter = await restaurantFilterCount(
       parent,

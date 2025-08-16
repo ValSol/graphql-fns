@@ -121,7 +121,7 @@ describe('createEntityCountResolver', () => {
       ],
     };
 
-    const info = { fieldName: 'friendsCount', projection: { title: 1 } };
+    const info = { projection: { title: 1 }, fieldArgs: {}, path: [], fieldName: 'friendsCount' };
 
     const count = await Place(parent, { first: 1 }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],

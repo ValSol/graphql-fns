@@ -1037,7 +1037,7 @@ describe('createUpdateEntityMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const data = { name: 'updatedName' };
     const updatedParent = await updatePerson(
       null,

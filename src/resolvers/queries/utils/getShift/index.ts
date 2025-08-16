@@ -39,7 +39,7 @@ const getShift = async (
     parent,
     { whereOne: { id: _id } },
     context,
-    { projection },
+    { projection, fieldArgs: {}, path: [] },
     involvedFilters,
   );
 

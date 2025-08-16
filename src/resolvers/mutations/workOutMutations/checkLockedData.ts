@@ -107,7 +107,7 @@ const checkLockedData = async (
       pluralizedEntityName,
       generalConfig,
       serversideConfig,
-    )(null, args, context, { projection }, { inputOutputEntity: [[]] });
+    )(null, args, context, { projection, fieldArgs: {}, path: [] }, { inputOutputEntity: [[]] });
 
     if (result.length !== currentResult.length) {
       throw new TypeError(
@@ -136,7 +136,7 @@ const checkLockedData = async (
       null,
       args,
       context,
-      { projection },
+      { projection, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
       session,
     );

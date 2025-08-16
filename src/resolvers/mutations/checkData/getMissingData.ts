@@ -46,7 +46,7 @@ const getMissingData = async ({
     null,
     { whereOne },
     context,
-    { projection },
+    { projection, fieldArgs: {}, path: [] },
     { inputOutputEntity: [[]] },
     session,
   );

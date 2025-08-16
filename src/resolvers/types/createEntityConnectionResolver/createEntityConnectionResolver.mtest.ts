@@ -122,7 +122,12 @@ describe('createEntityConnectionResolver', () => {
       ],
     };
 
-    const info = { fieldName: 'friendsThroughConnection', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'friendsThroughConnection',
+    };
 
     const {
       pageInfo: { hasNextPage, hasPreviousPage, startCursor, endCursor },

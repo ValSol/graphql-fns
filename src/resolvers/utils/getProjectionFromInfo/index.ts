@@ -10,7 +10,7 @@ const getProjectionFromInfo = (
   entityConfig: TangibleEntityConfig,
   resolverArg: ResolverArg,
   path: Path = [],
-) => {
+): Record<string, 1> => {
   const { info } = resolverArg;
 
   if (!info) {

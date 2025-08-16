@@ -12,7 +12,7 @@ import toGlobalId from '../../utils/toGlobalId';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityOppositeRelationCountResolver from './index';
 
-const info = { projection: { title: 1 }, fieldName: 'friendsCount' };
+const info = { projection: { title: 1 }, fieldArgs: {}, path: [], fieldName: 'friendsCount' };
 
 mongoose.set('strictQuery', false);
 

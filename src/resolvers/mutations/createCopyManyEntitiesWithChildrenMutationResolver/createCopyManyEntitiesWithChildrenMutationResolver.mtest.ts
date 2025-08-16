@@ -327,7 +327,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -346,7 +346,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1 } },
+      { projection: { name: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -430,7 +430,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone3.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -441,7 +441,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 } },
+      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -491,7 +491,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone4.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -499,7 +499,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone3.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 } },
+      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -553,7 +553,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone5.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -597,7 +597,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone6.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -610,7 +610,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone5.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 } },
+      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -644,7 +644,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: updatedMenu.sections.map((id) => ({ id: id.toString() })) },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 } },
+      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 
@@ -663,7 +663,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone7.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 } },
+      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
       { inputOutputEntity: [[]] },
     );
 

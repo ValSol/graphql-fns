@@ -103,7 +103,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -129,7 +133,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 6 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[], 3] },
     );
 
@@ -159,7 +167,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -192,7 +204,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[], 3] },
     );
 
@@ -227,7 +243,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -260,7 +280,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -293,7 +317,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[], 3] },
     );
 
@@ -326,7 +354,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -361,7 +393,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 11 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -395,7 +431,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 4 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -427,7 +467,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 4 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[], 3] },
     );
 
@@ -461,7 +505,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 11 },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -497,7 +545,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -528,7 +580,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 3, before },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -559,7 +615,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -592,7 +652,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -619,7 +683,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -652,7 +720,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -685,7 +757,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -718,7 +794,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -755,7 +835,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -788,7 +872,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 1, where: { oddEven: 'even' } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -814,7 +902,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 2, after: endCursor, where: { oddEven: 'even' } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -851,7 +943,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, where: { oddEven: 'even' } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -889,7 +985,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, near },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -916,7 +1016,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor, near },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -949,7 +1053,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2, near },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -982,7 +1090,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3, near },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -1015,7 +1127,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 
@@ -1057,7 +1173,11 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, near },
       { mongooseConn },
-      { projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 } },
+      {
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+        fieldArgs: {},
+        path: [],
+      },
       { inputOutputEntity: [[]] },
     );
 

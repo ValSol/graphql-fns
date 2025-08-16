@@ -11,7 +11,11 @@ import pubsub from '../../utils/pubsub';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityQueryResolver from './index';
 
-const info = { projection: { textField1: 1, textField3: 1, createdAt: 1 } };
+const info = {
+  projection: { textField1: 1, textField3: 1, createdAt: 1 },
+  fieldArgs: {},
+  path: [],
+};
 
 mongoose.set('strictQuery', false);
 
@@ -233,7 +237,7 @@ describe('createEntityQueryResolver', () => {
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
     if (!Parent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = { projection: { _id: 1, name: 1 } };
+    const info2 = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const whereOne = {
       AND: [
         { name: 'name-2' },

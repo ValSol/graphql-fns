@@ -131,7 +131,12 @@ describe('createEntityFilterConnectionResolver', () => {
 
     const parent = { id: userId, restaurants: restaurantIds };
 
-    const info = { fieldName: 'restaurantsFilterThroughConnection', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantsFilterThroughConnection',
+    };
 
     const restaurantsFilter = await restaurantFilterConnection(
       parent,

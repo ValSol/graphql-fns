@@ -225,6 +225,8 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
         locations: 1,
         favorities: 1,
       },
+      fieldArgs: {},
+      path: [],
     };
 
     const where = { id_in: [id] };
@@ -263,7 +265,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
     );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = { projection: { name: 1 } };
+    const info2 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
 
     const where2 = { name_in: [data.location.create.name] };
     const deletedPlaceCount = await deletePlace(
@@ -395,7 +397,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const deletedParentCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
@@ -524,7 +526,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const where = { name: 'name-is-absent' };
 
-    const info = { projection: { _id: 1, name: 1 } };
+    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
     const deletedParentsCounts = await deletePerson(
       null,
       { where },

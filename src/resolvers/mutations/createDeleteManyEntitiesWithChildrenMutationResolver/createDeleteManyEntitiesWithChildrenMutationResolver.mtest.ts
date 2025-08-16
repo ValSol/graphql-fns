@@ -14,6 +14,8 @@ const info = {
   projection: {
     title: 1,
   },
+  fieldArgs: {},
+  path: [],
 };
 
 mongoose.set('strictQuery', false);

@@ -1,13 +1,15 @@
-import type { ResolverArg, TangibleEntityConfig } from '@/tsTypes';
+import type { InfoEssence, ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
 import getProjectionFromInfo from '../getProjectionFromInfo';
-
-type Path = string[];
 
 const InfoEssence = (
   entityConfig: TangibleEntityConfig,
   resolverArg: ResolverArg,
-  path: Path = [],
-) => ({ projection: getProjectionFromInfo(entityConfig, resolverArg, path), path });
+  path: string[] = [],
+): InfoEssence => ({
+  projection: getProjectionFromInfo(entityConfig, resolverArg, path),
+  path: path as [],
+  fieldArgs: {} as Record<string, any>,
+});
 
 export default InfoEssence;

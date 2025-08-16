@@ -28,7 +28,7 @@ describe('createFieldArrayResolver', () => {
       features: ['Capital', 'Сultural', 'Historical', 'Gastronomic'],
     };
 
-    const info = { fieldName: 'features' };
+    const info = { projection: { _id: 1 }, fieldArgs: {}, path: [], fieldName: 'features' };
 
     const args = { slice: { begin: 1, end: 3 } };
 

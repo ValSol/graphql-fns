@@ -11,7 +11,7 @@ import toGlobalId from '../../utils/toGlobalId';
 import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
 import createEntityScalarResolver from './index';
 
-const info = { projection: { title: 1 }, fieldName: 'friend' };
+const info = { projection: { title: 1 }, fieldArgs: {}, path: [], fieldName: 'friend' };
 
 mongoose.set('strictQuery', false);
 

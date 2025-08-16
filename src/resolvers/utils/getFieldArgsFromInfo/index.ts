@@ -1,12 +1,10 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 
-import type { ProjectionInfo, SintheticResolverInfo } from '../../../tsTypes';
+import type { InfoEssence, SintheticResolverInfo } from '@/tsTypes';
 
 import getFieldArgsFromResolvedInfo from './getFieldArgsFromResolvedInfo';
-
-const projectionTypePredicate = (info: SintheticResolverInfo): info is ProjectionInfo =>
-  Boolean((info as ProjectionInfo).projection);
+import infoEssenceTypePredicate from '../infoEssenceTypePredicate';
 
 const getFieldArgsFromInfo = (
   fieldName: string,
@@ -15,7 +13,7 @@ const getFieldArgsFromInfo = (
 ): {
   [fieldName: string]: 1;
 } => {
-  if (!info || projectionTypePredicate(info)) {
+  if (!info || infoEssenceTypePredicate(info)) {
     return {};
     // throw new TypeError(`Got sinthetic resolver info with projection: "${info.projection}"!`);
   }

@@ -131,7 +131,12 @@ describe('createEntityFilterDistinctValuesResolver', () => {
 
     const parent = { id: userId, restaurants: restaurantIds };
 
-    const info = { fieldName: 'restaurantsFilterDistinctValues', projection: { title: 1 } };
+    const info = {
+      projection: { title: 1 },
+      fieldArgs: {},
+      path: [],
+      fieldName: 'restaurantsFilterDistinctValues',
+    };
 
     const restaurantsFilter = await restaurantFilterDistinctValues(
       parent,

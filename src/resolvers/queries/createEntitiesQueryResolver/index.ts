@@ -94,7 +94,7 @@ const createEntitiesQueryResolver = (
         parent,
         { search, where },
         context,
-        { projection: { _id: 1 } },
+        { projection: { _id: 1 }, fieldArgs: {}, path: [] },
         { inputOutputEntity: [filters] },
       );
 

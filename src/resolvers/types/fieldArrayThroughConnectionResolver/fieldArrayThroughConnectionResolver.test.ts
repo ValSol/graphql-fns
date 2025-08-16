@@ -23,7 +23,12 @@ describe('fieldArrayThroughConnectionResolver', () => {
     ],
   };
 
-  const info = { fieldName: 'filesThroughConnection' };
+  const info = {
+    projection: { _id: 1 },
+    fieldArgs: {},
+    path: [],
+    fieldName: 'filesThroughConnection',
+  };
 
   test('should return for after: "2", first: 4', async () => {
     const args = { after: toCursor(2), first: 4 };
