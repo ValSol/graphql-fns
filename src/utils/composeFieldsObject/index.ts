@@ -9,7 +9,7 @@ const composeFieldsObject = (
   const { name: entityName } = entityConfig;
   const { withoutCalculatedFieldsWithAsyncFunc } = options;
 
-  const storeKey = `${store[entityName]}${options.withoutCalculatedFieldsWithAsyncFunc || false}`;
+  const storeKey = `${entityName}${options.withoutCalculatedFieldsWithAsyncFunc || false}`;
 
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];

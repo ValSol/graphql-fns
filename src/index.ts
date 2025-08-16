@@ -62,6 +62,7 @@ import polygonFromMongoToGql from './resolvers/types/polygonFromMongoToGql';
 import composeAllFieldsProjection from './resolvers/utils/composeAllFieldsProjection';
 import composeFieldsObject from './utils/composeFieldsObject';
 import composePersonalFilter from './resolvers/utils/executeAuthorisation/composePersonalFilter';
+import composeQueryResolver from './resolvers/utils/composeQueryResolver';
 import composeUserFilter from './resolvers/utils/executeAuthorisation/composeUserFilter';
 import injectStaticOrPersonalFilter from './resolvers/utils/executeAuthorisation/injectStaticOrPersonalFilter';
 import fromGlobalId from './resolvers/utils/fromGlobalId';
@@ -85,6 +86,7 @@ export {
   composeCustom,
   composeDescendant,
   composeDescendantConfigByName,
+  composeQueryResolver,
   createCopyManyEntitiesMutationResolver,
   createCopyManyEntitiesWithChildrenMutationResolver,
   createCopyEntityMutationResolver,

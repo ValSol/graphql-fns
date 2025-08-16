@@ -1,9 +1,7 @@
-import { withFilter } from 'graphql-subscriptions';
-
 import type { GeneralConfig, Subscribe, EntityConfig } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createUpdatedEntityFilter from './createUpdatedEntityFilter';
+import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createUpdatedEntitySubscriptionResolver = (
   entityConfig: EntityConfig,
@@ -11,18 +9,17 @@ const createUpdatedEntitySubscriptionResolver = (
 ): any | null => {
   const { inventory } = generalConfig;
   const { name } = entityConfig;
-  if (
-    !checkInventory(['Mutation', 'updateEntity', name], inventory) ||
-    !checkInventory(['Subscription', 'updatedEntity', name], inventory)
-  ) {
+  if (!checkInventory(['Subscription', 'updatedEntity', name], inventory)) {
     return null;
   }
 
   const resolver: Subscribe = {
-    subscribe: withFilter(
-      (_, args, { pubsub }) => pubsub.asyncIterableIterator(`updated-${name}`),
-      createUpdatedEntityFilter(entityConfig),
-    ),
+    subscribe: (_, args, context, info, involvedFilters) =>
+      withFilterAndTransformer(context.pubsub.subscribe(`updated-${name}`), (payload) => {
+        const { where } = args;
+
+        return true;
+      }),
   };
 
   return resolver;

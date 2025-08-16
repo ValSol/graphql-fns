@@ -14,7 +14,7 @@ const composeAllFieldsProjection = (
 ): Result => {
   const { name: entityName } = entityConfig;
 
-  const storeKey = `${store[entityName]}${options.withoutCalculatedFieldsWithAsyncFunc || false}`;
+  const storeKey = `${entityName}${options.withoutCalculatedFieldsWithAsyncFunc || false}`;
 
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];

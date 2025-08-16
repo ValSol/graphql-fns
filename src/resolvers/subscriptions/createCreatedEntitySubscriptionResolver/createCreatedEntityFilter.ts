@@ -1,10 +1,10 @@
-import type {EntityConfig} from '../../../tsTypes';
+import type { EntityConfig } from '../../../tsTypes';
 
 import composeWhereFields from '../composeWhereFields';
 
 type СreatedEntityFilter = (
   payload: {
-    [key: string]: any
+    [key: string]: any;
   },
   args: any,
 ) => boolean;
@@ -13,9 +13,12 @@ const createCreatedEntityFilter = (entityConfig: EntityConfig): СreatedEntityFi
   const { name } = entityConfig;
   const whereFields = composeWhereFields(entityConfig);
 
-  const filter = (payload: {
-    [key: string]: any
-  }, args: any) => {
+  const filter = (
+    payload: {
+      [key: string]: any;
+    },
+    args: any,
+  ) => {
     const { where } = args;
 
     if (!where) return true;

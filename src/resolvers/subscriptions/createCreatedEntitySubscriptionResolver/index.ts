@@ -1,28 +1,38 @@
-import { withFilter } from 'graphql-subscriptions';
-
-import type { GeneralConfig, Subscribe, EntityConfig, GraphqlObject } from '../../../tsTypes';
+import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '../../../tsTypes';
 
 import checkInventory from '../../../utils/inventory/checkInventory';
-import createCreatedEntityFilter from './createCreatedEntityFilter';
+import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createCreatedEntitySubscriptionResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
+  inAnyCase?: boolean,
 ): any => {
   const { inventory } = generalConfig;
   const { name } = entityConfig;
-  if (
-    !checkInventory(['Mutation', 'createEntity', name], inventory) ||
-    !checkInventory(['Subscription', 'createdEntity', name], inventory)
-  ) {
+
+  if (!checkInventory(['Subscription', 'createdEntity', name], inventory)) {
     return null;
   }
 
   const resolver: Subscribe = {
-    subscribe: withFilter(
-      (_, args, { pubsub }) => pubsub.asyncIterableIterator(`created-${name}`),
-      createCreatedEntityFilter(entityConfig),
-    ),
+    subscribe: (_, args, context, info, involvedFilters) =>
+      withFilterAndTransformer(context.pubsub.subscribe(`created-${name}`), (payload) => {
+        // const { filter } = getFilterFromInvolvedFilters(involvedFilters);
+
+        // if (!filter) {
+        //   return false;
+        // }
+
+        // const { where } = mergeWhereAndFilter(filter, args.where || {}, entityConfig);
+
+        console.log('payload =', payload);
+
+        return true;
+      }),
   };
 
   return resolver;

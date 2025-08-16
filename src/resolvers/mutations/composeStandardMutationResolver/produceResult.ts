@@ -9,7 +9,6 @@ import type {
 } from '../../../tsTypes';
 import type { Core } from '../../tsTypes';
 
-import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import composeAllFieldsProjection from '../../utils/composeAllFieldsProjection';
 import composeQueryResolver from '../../utils/composeQueryResolver';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
@@ -33,45 +32,43 @@ const produceResult = async (
     serversideConfig,
   } = resolverCreatorArg;
 
-  const { enums } = generalConfig;
   const {
+    args: { token },
     context,
-    context: { mongooseConn },
+    info,
   } = resolverArg;
   const {
     mains,
     mains: [first],
   } = preparedData;
 
-  const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
-
   const {
     involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
   } = resolverArg;
 
-  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+  // const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
 
-  if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
-    Object.assign(projection, composeAllFieldsProjection(entityConfig), {
-      withoutCalculatedFieldsWithAsyncFunc: true,
-    });
-  }
+  // if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
+  //   Object.assign(projection, composeAllFieldsProjection(entityConfig), {
+  //     withoutCalculatedFieldsWithAsyncFunc: true,
+  //   });
+  // }
 
   if (array) {
     return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
       null,
-      { where: { id_in: mains.map(({ _id }) => _id) } },
+      { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
-      { projection },
+      info, // { projection }, TODO replace with "infoOptions"
       { inputOutputEntity: [[]] },
     );
   }
 
   const instance = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
     null,
-    { whereOne: { id: first._id } },
+    { whereOne: { id: first._id }, token },
     context,
-    { projection },
+    info, // { projection }, TODO replace with "infoOptions"
     { inputOutputEntity: [[]] },
   );
 

@@ -3,8 +3,6 @@ import { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
 import personalFilterFromFilterEntity from './personalFilterFromFilterEntity';
 import personalFilterFromUserEntity from './personalFilterFromUserEntity';
 
-const store: Record<string, any> = {};
-
 const composePersonalFilter = async (
   entityName: string,
   userAttributes: Record<string, any>,
@@ -34,7 +32,6 @@ const composePersonalFilter = async (
           context,
           generalConfig,
           serversideConfig,
-          store,
         )
       : await personalFilterFromFilterEntity(
           personalFiltersTuple,
@@ -42,7 +39,6 @@ const composePersonalFilter = async (
           context,
           generalConfig,
           serversideConfig,
-          store,
         );
 
   if (!result) {

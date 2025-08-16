@@ -1,8 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
 
-export type ProjectionInfo = { projection: { [fieldName: string]: 1 } };
+type BaseInfoEssence = { projection: Record<string, 1>; fieldArgs: Record<string, any> };
+export type InfoEssence =
+  | (BaseInfoEssence & { originalInfo: GraphQLResolveInfo; path: string[] })
+  | (BaseInfoEssence & { originalInfo?: undefined; path: [] });
 
-export type SintheticResolverInfo = GraphQLResolveInfo | ProjectionInfo;
+export type SintheticResolverInfo = GraphQLResolveInfo | InfoEssence;
 
 // export type Context = Omit<Record<string, any>, 'mongooseConn' | 'pubsub'> & {
 //   mongooseConn: Connection;
