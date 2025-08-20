@@ -2,11 +2,12 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteFilteredEntitiesMutationResolver from './index';
 
@@ -215,18 +216,14 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
     );
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info = {
-      projection: {
-        firstName: 1,
-        lastName: 1,
-        friend: 1,
-        location: 1,
-        locations: 1,
-        favorities: 1,
-      },
-      fieldArgs: {},
-      path: [],
-    };
+    const info = createInfoEssence({
+      firstName: 1,
+      lastName: 1,
+      friend: 1,
+      location: 1,
+      locations: 1,
+      favorities: 1,
+    });
 
     const where = { id_in: [id] };
     const [deletedPerson] = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
@@ -261,7 +258,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
     );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
+    const info2 = createInfoEssence({ name: 1 });
 
     const where2 = { name_in: [data.location.create.name] };
     const [deletedPlace] = await deletePlace(
@@ -391,7 +388,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info = createInfoEssence({ _id: 1, name: 1 });
     const [deletedParent] = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
@@ -517,7 +514,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
 
     const where = { name: 'name-is-absent' };
 
-    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info = createInfoEssence({ _id: 1, name: 1 });
     const deletedParents = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });

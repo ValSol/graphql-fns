@@ -1,13 +1,14 @@
-import type { ResolverArg } from '../../../../tsTypes';
-
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
-import composeLastEdges from './composeLastEdges';
 import {
   InvolvedFilter,
   GraphqlScalar,
   GraphqlObject,
+  ResolverArg,
   TangibleEntityConfig,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
+
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
+import composeLastEdges from './composeLastEdges';
 
 const getVeryLast = async (
   last: number,
@@ -27,7 +28,7 @@ const getVeryLast = async (
     parent,
     args,
     context,
-    { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+    createInfoEssence({ _id: 1 }),
     { inputOutputEntity },
   );
 
@@ -39,7 +40,7 @@ const getVeryLast = async (
     parent,
     last < count ? { ...args, pagination } : args,
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     involvedFilters,
   );
 

@@ -2,16 +2,17 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
+import createEntityQueryResolver from '@/resolvers/queries/createEntityQueryResolver';
+import createEntitiesQueryResolver from '@/resolvers/queries/createEntitiesQueryResolver';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createUpdateEntityMutationResolver from '../createUpdateEntityMutationResolver';
 import createDeleteManyEntitiesMutationResolver from '../createDeleteManyEntitiesMutationResolver';
-import createEntityQueryResolver from '../../queries/createEntityQueryResolver';
-import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
 
 import createCopyManyEntitiesWithChildrenMutationResolver from './index';
 
@@ -327,7 +328,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -346,7 +347,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -430,7 +431,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone3.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -441,7 +442,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, menu: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -491,7 +492,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone4.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -499,7 +500,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone3.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, menu: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -553,7 +554,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone5.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -597,7 +598,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone6.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -610,7 +611,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone5.sections } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, menu: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -644,7 +645,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: updatedMenu.sections.map((id) => ({ id: id.toString() })) },
       { mongooseConn, pubsub },
-      { projection: { name: 1, menu: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, menu: 1 }),
       { inputOutputEntity: [[]] },
     );
 
@@ -663,7 +664,7 @@ describe('createCopyManyEntitiesWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone7.menu.toString() } },
       { mongooseConn, pubsub },
-      { projection: { name: 1, sections: 1, restaurant: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
       { inputOutputEntity: [[]] },
     );
 

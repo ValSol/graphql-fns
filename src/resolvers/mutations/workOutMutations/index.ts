@@ -1,12 +1,12 @@
 import type { GraphqlObject, InventoryChain, TangibleEntityConfig } from '../../../tsTypes';
 import type { Core, PreparedData } from '../../tsTypes';
 
-import sleep from '../../../utils/sleep';
-import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../utils/addIdsToEntity';
-import checkInventory from '../../../utils/inventory/checkInventory';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
-import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
+import checkInventory from '@/utils/inventory/checkInventory';
+import sleep from '@/utils/sleep';
+import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
+import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import addPeripheryToCore from '../addPeripheryToCore';
 import produceResult from '../composeStandardMutationResolver/produceResult';
 import executeBulkItems from '../executeBulkItems';
@@ -209,10 +209,10 @@ const workOutMutations = async (
       : null;
 
     if (result) {
-      const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+      const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
       const asyncFuncResults = await getAsyncFuncResults(
-        projection,
+        infoEssence,
         resolverCreatorArg,
         resolverArg,
       );
@@ -220,7 +220,7 @@ const workOutMutations = async (
       result.previous = previous.map((item, i) =>
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
-          projection,
+          infoEssence,
           asyncFuncResults,
           resolverArg,
           entityConfig as TangibleEntityConfig,

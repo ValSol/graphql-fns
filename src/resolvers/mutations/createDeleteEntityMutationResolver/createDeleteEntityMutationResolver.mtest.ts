@@ -2,15 +2,16 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import sleep from '@/utils/sleep';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
+import createEntitiesQueryResolver from '@/resolvers/queries/createEntitiesQueryResolver';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteEntityMutationResolver from './index';
-import createEntitiesQueryResolver from '../../queries/createEntitiesQueryResolver';
-import sleep from '../../../utils/sleep';
 
 mongoose.set('strictQuery', false);
 
@@ -393,7 +394,7 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info = createInfoEssence({ _id: 1, name: 1 });
     const deletedParent = await deleteParent(null, { whereOne }, { mongooseConn, pubsub }, info, {
       inputOutputEntity: [[]],
     });
@@ -544,7 +545,7 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
 
-    const info4 = { projection: { name: 1 }, fieldArgs: {}, path: [] };
+    const info4 = createInfoEssence({ name: 1 });
 
     const where = {};
 

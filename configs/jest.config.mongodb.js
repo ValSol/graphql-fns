@@ -6,9 +6,7 @@ export default {
     '^.+\\.ts$': ['ts-jest', { useESM: true, tsconfig: './tsconfig.json' }],
   },
   testEnvironment: 'node', // this overrides the mongodb env if you don't want it; otherwise, omit
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
+  moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   testMatch: ['<rootDir>/src/**/*.mtest.ts'],
   testTimeout: 30000,
   transform: {

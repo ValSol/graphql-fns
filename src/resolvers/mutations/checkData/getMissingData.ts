@@ -1,8 +1,9 @@
 import { Types } from 'mongoose';
 
-import type { GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
-import composeFieldsObject from '../../../utils/composeFieldsObject';
-import composeQueryResolver from '../../utils/composeQueryResolver';
+import type { GeneralConfig, ServersideConfig, EntityConfig } from '@/tsTypes';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import transformDataForPush from './transformDataForPush';
 
 type Arg = {
@@ -46,7 +47,7 @@ const getMissingData = async ({
     null,
     { whereOne },
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     { inputOutputEntity: [[]] },
     session,
   );

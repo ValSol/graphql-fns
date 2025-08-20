@@ -1,14 +1,14 @@
-import { TangibleEntityConfig } from '../../../../tsTypes';
-import type { Report } from '../../../tsTypes';
+import { TangibleEntityConfig } from '@/tsTypes';
+import type { Report } from '@/resolvers/tsTypes';
 
-import addCalculatedFieldsToEntity from '../../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../../utils/addIdsToEntity';
-import getAsyncFuncResults from '../../../utils/getAsyncFuncResults';
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
+import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
+import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { args, context, involvedFilters } = resolverArg;
+  const { args, context, info, involvedFilters } = resolverArg;
   const { name } = entityConfig;
 
   const { data } = args;
@@ -27,10 +27,10 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
 
         const updatedFields = Object.keys(data);
 
-        const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+        const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
         const asyncFuncResults = await getAsyncFuncResults(
-          projection,
+          infoEssence,
           resolverCreatorArg,
           resolverArg,
         );
@@ -39,7 +39,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
           node: current,
           previousNode: addCalculatedFieldsToEntity(
             addIdsToEntity(previous, entityConfig),
-            projection,
+            infoEssence,
             asyncFuncResults,
             resolverArg,
             entityConfig as TangibleEntityConfig,

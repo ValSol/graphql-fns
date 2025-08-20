@@ -1,7 +1,7 @@
-import type { InvolvedFilter, TangibleEntityConfig } from '../../../../tsTypes';
-import type { ResolverArg } from '../../../../tsTypes';
+import type { InvolvedFilter, ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 import composeLastEdges from './composeLastEdges';
 
 const getLast = async (
@@ -28,7 +28,7 @@ const getLast = async (
     parent,
     { ...args, pagination },
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     involvedFilters,
   );
 

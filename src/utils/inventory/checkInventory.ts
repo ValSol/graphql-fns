@@ -1,4 +1,4 @@
-import type { Inventory, InventoryChain } from '../../tsTypes';
+import type { Inventory, InventoryChain } from '@/tsTypes';
 
 const store = Object.create(null);
 

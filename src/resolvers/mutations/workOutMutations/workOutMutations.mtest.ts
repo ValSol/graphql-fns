@@ -2,14 +2,14 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import workOutMutations from './index';
-import createCopyEntityMutationResolver from '../createCopyEntityMutationResolver';
 
 mongoose.set('strictQuery', false);
 
@@ -1700,7 +1700,7 @@ describe('workOutMutations', () => {
           options: { clone: { fieldsForbiddenToCopy: ['archive', 'backup'] } },
         },
         returnResult: true,
-        info: { projection: { _id: 1, title: 1 }, fieldArgs: {}, path: [] },
+        info: createInfoEssence({ _id: 1, title: 1 }),
         inAnyCase: true,
         involvedFilters: { inputOutputEntity: [[]] },
       },
@@ -1713,7 +1713,7 @@ describe('workOutMutations', () => {
           options: { original: { fieldsForbiddenToCopy: ['clone'] } },
         },
         returnResult: true,
-        info: { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+        info: createInfoEssence({ _id: 1 }),
         inAnyCase: true,
         involvedFilters: { inputOutputEntity: [[]] },
       },
@@ -1729,7 +1729,7 @@ describe('workOutMutations', () => {
           },
         },
         returnResult: true,
-        info: { projection: { _id: 1, title: 1 }, fieldArgs: {}, path: [] },
+        info: createInfoEssence({ _id: 1, title: 1 }),
         inAnyCase: true,
         involvedFilters: { inputOutputEntity: [[]] },
       },
@@ -1759,7 +1759,7 @@ describe('workOutMutations', () => {
         entityConfig: restaurantCloneConfig,
         args: { whereOne: { original: id }, data: { archive: { connect: null } } },
         returnResult: false,
-        info: { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+        info: createInfoEssence({ _id: 1 }),
         inAnyCase: true,
         involvedFilters: { inputOutputEntity: [[]] },
       },
@@ -1776,7 +1776,7 @@ describe('workOutMutations', () => {
           entityConfig: restaurantConfig,
           args: { whereOne: { id }, data: { archive: { connect: archive } } },
           returnResult: true,
-          info: { projection: { _id: 1, clone: 1, archive: 1 }, fieldArgs: {}, path: [] },
+          info: createInfoEssence({ _id: 1, clone: 1, archive: 1 }),
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
         },
@@ -1788,7 +1788,7 @@ describe('workOutMutations', () => {
           entityConfig: restaurantCloneConfig,
           args: { whereOne: { id: clone }, data: { archive: { connect: archive } } },
           returnResult: true,
-          info: { projection: { _id: 1, original: 1, archive: 1 }, fieldArgs: {}, path: [] },
+          info: createInfoEssence({ _id: 1, original: 1, archive: 1 }),
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
         });
@@ -1810,7 +1810,7 @@ describe('workOutMutations', () => {
             options: { archive: { fieldsForbiddenToCopy: ['clone'] } },
           },
           returnResult: true,
-          info: { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+          info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
         },
@@ -1825,7 +1825,7 @@ describe('workOutMutations', () => {
             options: { archive: { fieldsForbiddenToCopy: ['original'] } },
           },
           returnResult: false,
-          info: { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+          info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
         });
@@ -1840,7 +1840,7 @@ describe('workOutMutations', () => {
             options: { original: { fieldsForbiddenToCopy: ['clone'] } },
           },
           returnResult: false,
-          info: { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+          info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
           involvedFilters: { inputOutputEntity: [[]] },
         });

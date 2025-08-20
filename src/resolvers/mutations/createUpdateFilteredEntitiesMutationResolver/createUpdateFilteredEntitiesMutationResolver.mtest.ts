@@ -1,12 +1,13 @@
 /* eslint-env jest */
 /* eslint no-underscore-dangle: 0 */
-import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoose from 'mongoose';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createUpdateFilteredEntitiesMutationResolver from './index';
 
@@ -1034,7 +1035,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info = createInfoEssence({ _id: 1, name: 1 });
     const data = { name: 'updatedName' };
     const [updatedParent] = await updateFilteredPersons(
       null,

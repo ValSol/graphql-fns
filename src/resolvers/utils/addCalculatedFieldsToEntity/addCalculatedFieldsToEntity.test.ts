@@ -61,13 +61,15 @@ describe('addCalculatedFieldsToEntity', () => {
   test('shoud return {}', () => {
     const projection: Record<string, 1> = {};
 
+    const infoEssence = { projection, fieldArgs: {}, path: [] as [] };
+
     const data = { id: '1', text1: 'text1', text2: 'text2', text3: 'text3' };
 
     const asyncResolverResults = { text: '12345' };
 
     const result = addCalculatedFieldsToEntity(
       data,
-      projection,
+      infoEssence,
       asyncResolverResults,
       resolverArg,
       exampleConfig,
@@ -87,13 +89,15 @@ describe('addCalculatedFieldsToEntity', () => {
   test('shoud return { text: 1 }', () => {
     const projection: Record<string, 1> = { text1: 1 };
 
+    const infoEssence = { projection, fieldArgs: {}, path: [] as [] };
+
     const data = { text1: 'text1' };
 
     const asyncResolverResults = { text: '12345' };
 
     const result = addCalculatedFieldsToEntity(
       data,
-      projection,
+      infoEssence,
       asyncResolverResults,
       resolverArg,
       exampleConfig,
@@ -108,13 +112,15 @@ describe('addCalculatedFieldsToEntity', () => {
   test('shoud return { texs: 1, text2: 1, text3: 1 }', () => {
     const projection: Record<string, 1> = { texts: 1 };
 
+    const infoEssence = { projection, fieldArgs: {}, path: [] as [] };
+
     const data = { id: '1', text2: 'text2', text3: 'text3' };
 
     const asyncResolverResults = { text: '12345' };
 
     const result = addCalculatedFieldsToEntity(
       data,
-      projection,
+      infoEssence,
       asyncResolverResults,
       resolverArg,
       exampleConfig,

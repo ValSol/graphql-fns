@@ -1,5 +1,6 @@
-import { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
+import { GeneralConfig, ServersideConfig } from '@/tsTypes';
 import composeQueryResolver from '../../composeQueryResolver';
+import createInfoEssence from '../../createInfoEssence';
 
 const personalFilterFromUserEntity = async (
   personalFiltersTuple: [string, string, string],
@@ -18,7 +19,7 @@ const personalFilterFromUserEntity = async (
     null,
     { whereOne: { id: userAttributes.id } },
     context,
-    { projection: { [filterFieldName]: 1 }, fieldArgs: {}, path: [] },
+    createInfoEssence({ [filterFieldName]: 1 }),
     { inputOutputEntity: [[]] },
   );
 

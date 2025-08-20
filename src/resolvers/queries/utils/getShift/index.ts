@@ -1,16 +1,12 @@
 import mongoose from 'mongoose';
 
-import type {
-  DataObject,
-  InvolvedFilter,
-  ResolverArg,
-  ResolverCreatorArg,
-} from '../../../../tsTypes';
+import type { DataObject, InvolvedFilter, ResolverArg, ResolverCreatorArg } from '@/tsTypes';
 
-import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
-import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import composeLimitingArgs from './composeLimitingArgs';
 import composeProjectionFromArgs from './composeProjectionFromArgs';
 import composeSetWindowFieldsInput from './composeSetWindowFieldsInput';
@@ -39,7 +35,7 @@ const getShift = async (
     parent,
     { whereOne: { id: _id } },
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     involvedFilters,
   );
 

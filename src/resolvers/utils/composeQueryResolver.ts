@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 
-import { GeneralConfig, ServersideConfig } from '../../tsTypes';
+import { GeneralConfig, ServersideConfig } from '@/tsTypes';
 import createEntitiesQueryResolver from '../queries/createEntitiesQueryResolver';
 import createEntityQueryResolver from '../queries/createEntityQueryResolver';
 

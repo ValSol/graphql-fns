@@ -1,13 +1,14 @@
-import type { ResolverArg } from '../../../../tsTypes';
-
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
-import composeFirstEdges from './composeFirstEdges';
 import {
   InvolvedFilter,
   GraphqlScalar,
   GraphqlObject,
+  ResolverArg,
   TangibleEntityConfig,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
+
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
+import composeFirstEdges from './composeFirstEdges';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 
 const getVeryFirst = async (
   first: number,
@@ -28,7 +29,7 @@ const getVeryFirst = async (
     parent,
     { ...args, pagination },
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     involvedFilters,
   );
 

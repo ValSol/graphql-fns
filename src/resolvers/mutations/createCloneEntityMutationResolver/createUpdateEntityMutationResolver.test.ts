@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig } from '@/tsTypes';
 
 import createCloneEntityMutationResolver from '.';
 

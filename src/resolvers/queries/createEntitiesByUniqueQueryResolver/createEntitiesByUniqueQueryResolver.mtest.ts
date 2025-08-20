@@ -2,21 +2,17 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import sleep from '../../../utils/sleep';
-import pubsub from '../../utils/pubsub';
-import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
-
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import sleep from '@/utils/sleep';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
+import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
 import createEntitiesByUniqueQueryResolver from './index';
 
-const info = {
-  projection: { textField1: 1, textField3: 1, createdAt: 1 },
-  fieldArgs: {},
-  path: [],
-};
+const info = createInfoEssence({ textField1: 1, textField3: 1, createdAt: 1 });
 
 mongoose.set('strictQuery', false);
 

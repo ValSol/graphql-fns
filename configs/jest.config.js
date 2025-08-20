@@ -6,8 +6,6 @@ export default {
   transform: {
     '^.+\\.ts$': ['ts-jest', { useESM: true, tsconfig: './tsconfig.json' }],
   },
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1', // support relative .js ESM imports
-  },
+  moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
   testMatch: ['<rootDir>/src/**/*.test.ts'],
 };

@@ -1,6 +1,6 @@
-import { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../../../tsTypes';
-import createEntityQueryResolver from '../../../queries/createEntityQueryResolver';
+import { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
 import composeQueryResolver from '../../composeQueryResolver';
+import createInfoEssence from '../../createInfoEssence';
 
 const personalFilterFromFilterEntity = async (
   personalFiltersTuple: [string, string, string],
@@ -21,7 +21,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: userAttributes.id } },
     context,
-    { projection: { [filterEntityPointerName]: 1 }, fieldArgs: {}, path: [] },
+    createInfoEssence({ [filterEntityPointerName]: 1 }),
     { inputOutputEntity: [[]] },
   );
 
@@ -49,7 +49,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: filterEntityPointer } },
     context,
-    { projection: { [filterFieldName]: 1 }, fieldArgs: {}, path: [] },
+    createInfoEssence({ [filterFieldName]: 1 }),
     { inputOutputEntity: [[]] },
   );
 

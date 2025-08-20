@@ -51,10 +51,10 @@ describe('getAsyncFuncResults', () => {
   test('shoud return "12345"', async () => {
     const projection: Record<string, 1> = { text: 1 };
 
-    const data = { id: '1', text1: 'text1', text2: 'text2', text3: 'text3' };
+    const infoEssence = { projection, fieldArgs: {}, path: [] as [] };
 
     const result = await getAsyncFuncResults(
-      projection,
+      infoEssence,
       { entityConfig: exampleConfig } as ResolverCreatorArg,
       resolverArg,
     );

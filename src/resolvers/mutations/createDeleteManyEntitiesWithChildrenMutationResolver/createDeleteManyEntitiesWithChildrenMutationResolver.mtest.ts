@@ -2,21 +2,16 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteManyEntitiesWithChildrenMutationResolver from './index';
 
-const info = {
-  projection: {
-    title: 1,
-  },
-  fieldArgs: {},
-  path: [],
-};
+const info = createInfoEssence({ title: 1 });
 
 mongoose.set('strictQuery', false);
 

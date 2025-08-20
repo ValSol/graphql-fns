@@ -2,20 +2,17 @@
 
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import sleep from '../../../utils/sleep';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
-import createCreateEntityMutationResolver from '../../mutations/createCreateEntityMutationResolver';
+import mongoOptions from '@/test/mongo-options';
+import sleep from '@/utils/sleep';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
+import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
 import createEntityQueryResolver from './index';
 
-const info = {
-  projection: { textField1: 1, textField3: 1, createdAt: 1 },
-  fieldArgs: {},
-  path: [],
-};
+const info = createInfoEssence({ textField1: 1, textField3: 1, createdAt: 1 });
 
 mongoose.set('strictQuery', false);
 
@@ -237,7 +234,7 @@ describe('createEntityQueryResolver', () => {
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
     if (!Parent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info2 = createInfoEssence({ _id: 1, name: 1 });
     const whereOne = {
       AND: [
         { name: 'name-2' },

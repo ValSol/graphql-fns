@@ -19,6 +19,7 @@ import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilte
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
 import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
 import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 type Args = {
   whereOne?: {
@@ -99,11 +100,6 @@ const createEntityQueryResolver = (
 
     const resolverArg = { parent, args, context, info, involvedFilters };
 
-    const projection: { [fieldName: string]: 1 } = getProjectionFromInfo(
-      entityConfig as TangibleEntityConfig,
-      resolverArg,
-    );
-
     const resolverCreatorArg = {
       entityConfig,
       generalConfig,
@@ -111,7 +107,15 @@ const createEntityQueryResolver = (
       inAnyCase,
     };
 
-    const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
+    const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
+
+    const { projection } = infoEssence;
+
+    const asyncFuncResults = await getAsyncFuncResults(
+      infoEssence,
+      resolverCreatorArg,
+      resolverArg,
+    );
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
@@ -138,7 +142,7 @@ const createEntityQueryResolver = (
 
       const entity2 = addCalculatedFieldsToEntity(
         addIdsToEntity(entity, entityConfig),
-        projection,
+        infoEssence,
         asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,
@@ -153,7 +157,7 @@ const createEntityQueryResolver = (
 
     const entity2 = addCalculatedFieldsToEntity(
       addIdsToEntity(entity, entityConfig),
-      projection,
+      infoEssence,
       asyncFuncResults,
       resolverArg,
       entityConfig as TangibleEntityConfig,

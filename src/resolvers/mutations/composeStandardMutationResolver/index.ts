@@ -9,21 +9,21 @@ import type {
   SintheticResolverInfo,
   GraphqlScalar,
   TangibleEntityConfig,
-} from '../../../tsTypes';
-import type { PreparedData, ResolverAttributes } from '../../tsTypes';
+} from '@/tsTypes';
+import type { PreparedData, ResolverAttributes } from '@/resolvers/tsTypes';
 
-import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../utils/addIdsToEntity';
-import checkInventory from '../../../utils/inventory/checkInventory';
-import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
-import sleep from '../../../utils/sleep';
+import checkInventory from '@/utils/inventory/checkInventory';
+import sleep from '@/utils/sleep';
+import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
+import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
 import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import produceResult from './produceResult';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
   data: any;
@@ -99,10 +99,10 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         mains: [],
       };
 
-      const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+      const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
       const asyncFuncResults = await getAsyncFuncResults(
-        projection,
+        infoEssence,
         resolverCreatorArg,
         resolverArg,
       );
@@ -139,7 +139,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           result.previous = previous.map((item, i) =>
             addCalculatedFieldsToEntity(
               addIdsToEntity(item, entityConfig),
-              projection,
+              infoEssence,
               asyncFuncResults,
               resolverArg,
               entityConfig as TangibleEntityConfig,

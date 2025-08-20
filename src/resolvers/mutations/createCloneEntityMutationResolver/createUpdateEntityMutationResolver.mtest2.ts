@@ -2,11 +2,12 @@
 
 import mongoose from 'mongoose';
 
-import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 
-import mongoOptions from '../../../test/mongo-options';
-import createThingSchema from '../../../mongooseModels/createThingSchema';
-import pubsub from '../../utils/pubsub';
+import mongoOptions from '@/test/mongo-options';
+import createThingSchema from '@/mongooseModels/createThingSchema';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createCloneEntityMutationResolver from './index';
 
@@ -1025,7 +1026,7 @@ describe('createCloneEntityMutationResolver', () => {
       ],
     };
 
-    const info = { projection: { _id: 1, name: 1 }, fieldArgs: {}, path: [] };
+    const info = createInfoEssence({ _id: 1, name: 1 });
     const data = { name: 'updatedName' };
     const updatedParent = await updatePerson(
       null,

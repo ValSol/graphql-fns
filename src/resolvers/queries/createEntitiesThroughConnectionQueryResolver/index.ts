@@ -13,12 +13,13 @@ import type {
   InvolvedFilter,
   SintheticResolverInfo,
   TangibleEntityConfig,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
-import composeQueryResolver from '../../utils/composeQueryResolver';
-import fromCursor from '../../utils/fromCursor';
-import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
+import checkInventory from '@/utils/inventory/checkInventory';
+import fromCursor from '@/resolvers/utils/fromCursor';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
 import getFirst from '../utils/getFirst';
 import getShift from '../utils/getShift';
@@ -123,7 +124,7 @@ const createEntitiesThroughConnectionQueryResolver = (
         parent,
         { search, where: where2 },
         context,
-        { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+        createInfoEssence({ _id: 1 }),
         { inputOutputEntity: [filters] },
       );
 

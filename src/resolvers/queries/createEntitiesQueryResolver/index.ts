@@ -10,21 +10,22 @@ import type {
   GraphqlScalar,
   InvolvedFilter,
   TangibleEntityConfig,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
-import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../utils/addIdsToEntity';
-import composeNearForAggregateInput from '../../utils/composeNearForAggregateInput';
-import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
-import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import checkInventory from '@/utils/inventory/checkInventory';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
+import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import composeNearInput from '../utils/composeNearInput';
 import getLimit from '../utils/getLimit';
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 import composeSortInput from './composeSortInput';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
 
 type Args = {
   where?: any;
@@ -94,7 +95,7 @@ const createEntitiesQueryResolver = (
         parent,
         { search, where },
         context,
-        { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+        createInfoEssence({ _id: 1 }),
         { inputOutputEntity: [filters] },
       );
 
@@ -111,7 +112,9 @@ const createEntitiesQueryResolver = (
 
     const resolverArg = { parent, args, context, info, involvedFilters };
 
-    const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+    const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
+
+    const { projection } = infoEssence;
 
     const resolverCreatorArg = {
       entityConfig,
@@ -120,7 +123,11 @@ const createEntitiesQueryResolver = (
       inAnyCase,
     };
 
-    const asyncFuncResults = await getAsyncFuncResults(projection, resolverCreatorArg, resolverArg);
+    const asyncFuncResults = await getAsyncFuncResults(
+      infoEssence,
+      resolverCreatorArg,
+      resolverArg,
+    );
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
@@ -185,7 +192,7 @@ const createEntitiesQueryResolver = (
       const result = entities.map((item, i) =>
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
-          projection,
+          infoEssence,
           asyncFuncResults,
           resolverArg,
           entityConfig as TangibleEntityConfig,
@@ -230,7 +237,7 @@ const createEntitiesQueryResolver = (
     const result = entities.map((item, i) =>
       addCalculatedFieldsToEntity(
         addIdsToEntity(item, entityConfig),
-        projection,
+        infoEssence,
         asyncFuncResults,
         resolverArg,
         entityConfig as TangibleEntityConfig,

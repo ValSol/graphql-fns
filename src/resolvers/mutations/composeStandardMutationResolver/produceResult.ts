@@ -12,6 +12,7 @@ import type { Core } from '../../tsTypes';
 import composeAllFieldsProjection from '../../utils/composeAllFieldsProjection';
 import composeQueryResolver from '../../utils/composeQueryResolver';
 import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 type PreparedData = {
   core: Core;
@@ -46,20 +47,22 @@ const produceResult = async (
     involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
   } = resolverArg;
 
-  // const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+  const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
-  // if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
-  //   Object.assign(projection, composeAllFieldsProjection(entityConfig), {
-  //     withoutCalculatedFieldsWithAsyncFunc: true,
-  //   });
-  // }
+  const { projection } = infoEssence;
+
+  if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
+    Object.assign(projection, composeAllFieldsProjection(entityConfig), {
+      withoutCalculatedFieldsWithAsyncFunc: true,
+    });
+  }
 
   if (array) {
     return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
       null,
       { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
-      info, // { projection }, TODO replace with "infoOptions"
+      infoEssence,
       { inputOutputEntity: [[]] },
     );
   }
@@ -68,7 +71,7 @@ const produceResult = async (
     null,
     { whereOne: { id: first._id }, token },
     context,
-    info, // { projection }, TODO replace with "infoOptions"
+    infoEssence,
     { inputOutputEntity: [[]] },
   );
 

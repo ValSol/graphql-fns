@@ -1,13 +1,14 @@
-import type { ResolverArg } from '../../../../tsTypes';
-
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
-import composeFirstEdges from './composeFirstEdges';
 import {
   GraphqlScalar,
   GraphqlObject,
   InvolvedFilter,
+  ResolverArg,
   TangibleEntityConfig,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
+
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
+import composeFirstEdges from './composeFirstEdges';
 
 const getFirst = async (
   _id: string,
@@ -30,7 +31,7 @@ const getFirst = async (
     parent,
     { ...args, pagination },
     context,
-    { projection, fieldArgs: {}, path: [] },
+    createInfoEssence(projection),
     involvedFilters,
   );
 

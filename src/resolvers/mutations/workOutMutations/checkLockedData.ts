@@ -8,9 +8,10 @@ import type {
   EntityConfig,
   InvolvedFilter,
   SintheticResolverInfo,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import composeQueryResolver from '../../utils/composeQueryResolver';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 
 type ResultObject = Record<string, any>;
 
@@ -107,7 +108,7 @@ const checkLockedData = async (
       pluralizedEntityName,
       generalConfig,
       serversideConfig,
-    )(null, args, context, { projection, fieldArgs: {}, path: [] }, { inputOutputEntity: [[]] });
+    )(null, args, context, createInfoEssence(projection), { inputOutputEntity: [[]] });
 
     if (result.length !== currentResult.length) {
       throw new TypeError(
@@ -130,13 +131,13 @@ const checkLockedData = async (
           },
           {} as Record<string, 1>,
         )
-      : { _id: 1 };
+      : ({ _id: 1 } as Record<string, 1>);
 
     const currentResult = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
       null,
       args,
       context,
-      { projection, fieldArgs: {}, path: [] },
+      createInfoEssence(projection),
       { inputOutputEntity: [[]] },
       session,
     );

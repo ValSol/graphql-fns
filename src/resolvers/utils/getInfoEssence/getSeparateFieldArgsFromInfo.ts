@@ -6,7 +6,7 @@ import type { InfoEssence, SintheticResolverInfo } from '@/tsTypes';
 import getFieldArgsFromResolvedInfo from './getFieldArgsFromResolvedInfo';
 import infoEssenceTypePredicate from '../infoEssenceTypePredicate';
 
-const getFieldArgsFromInfo = (
+const getSeparateFieldArgsFromInfo = (
   fieldName: string,
   info: SintheticResolverInfo,
   path: string[] = [],
@@ -29,4 +29,4 @@ const getFieldArgsFromInfo = (
   return getFieldArgsFromResolvedInfo(fieldName, resolvedInfo, path);
 };
 
-export default getFieldArgsFromInfo;
+export default getSeparateFieldArgsFromInfo;

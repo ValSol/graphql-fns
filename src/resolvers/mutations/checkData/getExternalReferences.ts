@@ -1,3 +1,4 @@
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import type { GeneralConfig, ServersideConfig } from '../../../tsTypes';
 import composeQueryResolver from '../../utils/composeQueryResolver';
 
@@ -19,7 +20,7 @@ const getExternalReferences = async (
       null,
       { whereOne: { id } },
       context,
-      { projection: { _id: 1 }, fieldArgs: {}, path: [] },
+      createInfoEssence({ _id: 1 }),
       { inputOutputEntity: [filter] },
       session,
     );
