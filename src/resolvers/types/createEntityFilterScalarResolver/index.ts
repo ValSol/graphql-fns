@@ -8,11 +8,7 @@ import parseEntityName from '../../../utils/parseEntityName';
 import resolverDecorator from '../../utils/resolverDecorator';
 import whereToGlobalIds from '../../utils/whereToGlobalIds';
 
-type Args = {
-  where: {
-    id: string;
-  };
-};
+type Args = { where: { id: string } };
 
 const createEntityFilterScalarResolver = (
   entityConfig: EntityConfig,

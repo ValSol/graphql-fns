@@ -33,7 +33,6 @@ const createEntityQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
   inAnyCase?: boolean,
-  session?: any,
 ): any | null => {
   const { enums, inventory } = generalConfig;
   const { name } = entityConfig;
@@ -49,6 +48,7 @@ const createEntityQueryResolver = (
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
+    session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 

@@ -8,10 +8,9 @@ import type {
   GraphqlObject,
   GraphqlScalar,
   InvolvedFilter,
-} from '../../../tsTypes';
-
-import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
+} from '@/tsTypes';
+import checkInventory from '@/utils/inventory/checkInventory';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 
 type Args = {
   where?: any;
@@ -30,14 +29,6 @@ const createChildEntityCountQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entityCountQueryResolver = createEntityCountQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entityCountQueryResolver) return null;
-
   const resolver = async (
     parent: null | GraphqlObject,
     args: Args,
@@ -47,7 +38,13 @@ const createChildEntityCountQueryResolver = (
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
-    entityCountQueryResolver(parent, args, context, info, involvedFilters);
+    composeQueryResolver(`${name}_Count`, generalConfig, serversideConfig)(
+      parent,
+      args,
+      context,
+      info,
+      involvedFilters,
+    );
 
   return resolver;
 };

@@ -1,7 +1,6 @@
 import type {
   Context,
   GeneralConfig,
-  Inventory,
   NearInput,
   ServersideConfig,
   EntityConfig,
@@ -10,10 +9,9 @@ import type {
   GraphqlObject,
   GraphqlScalar,
   InvolvedFilter,
-} from '../../../tsTypes';
-
-import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntitiesThroughConnectionQueryResolver from '../createEntitiesThroughConnectionQueryResolver';
+} from '@/tsTypes';
+import checkInventory from '@/utils/inventory/checkInventory';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 
 type Args = {
   where?: any;
@@ -40,14 +38,6 @@ const createChildEntitiesThroughConnectionQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entitiesThroughConnectionQueryResolver = createEntitiesThroughConnectionQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entitiesThroughConnectionQueryResolver) return null;
-
   const resolver = async (
     parent: null | GraphqlObject,
     args: Args,
@@ -57,7 +47,13 @@ const createChildEntitiesThroughConnectionQueryResolver = (
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
-    entitiesThroughConnectionQueryResolver(parent, args, context, info, involvedFilters);
+    composeQueryResolver(`${name}_ThroughConnection`, generalConfig, serversideConfig)(
+      parent,
+      args,
+      context,
+      info,
+      involvedFilters,
+    );
 
   return resolver;
 };

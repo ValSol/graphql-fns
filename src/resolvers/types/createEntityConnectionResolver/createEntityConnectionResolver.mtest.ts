@@ -75,13 +75,13 @@ describe('createEntityConnectionResolver', () => {
       ],
     });
 
+    const generalConfig: GeneralConfig = { allEntityConfigs: { Place: placeConfig } };
+
     const exampleSchema = createThingSchema(placeConfig);
     const Example = mongooseConn.model('Place_Thing', exampleSchema);
     await Example.createCollection();
 
     await sleep(250);
-
-    const generalConfig: GeneralConfig = { allEntityConfigs: { Place: placeConfig } };
 
     const createPlace = createCreateEntityMutationResolver(
       placeConfig,

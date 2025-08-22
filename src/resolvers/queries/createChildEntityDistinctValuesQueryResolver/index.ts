@@ -8,10 +8,10 @@ import type {
   GraphqlObject,
   GraphqlScalar,
   InvolvedFilter,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
-import createEntityDistinctValuesQueryResolver from '../createEntityDistinctValuesQueryResolver';
+import checkInventory from '@/utils/inventory/checkInventory';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 
 type Args = {
   where?: any;
@@ -30,14 +30,6 @@ const createChildEntityDistinctValuesQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const entityDistinctValuesQueryResolver = createEntityDistinctValuesQueryResolver(
-    entityConfig,
-    generalConfig,
-    serversideConfig,
-    true, // inAnyCase,
-  );
-  if (!entityDistinctValuesQueryResolver) return null;
-
   const resolver = async (
     parent: null | GraphqlObject,
     args: Args,
@@ -47,7 +39,13 @@ const createChildEntityDistinctValuesQueryResolver = (
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
-    entityDistinctValuesQueryResolver(parent, args, context, info, involvedFilters);
+    composeQueryResolver(`${name}_DistinctValues`, generalConfig, serversideConfig)(
+      parent,
+      args,
+      context,
+      info,
+      involvedFilters,
+    );
 
   return resolver;
 };

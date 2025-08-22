@@ -20,7 +20,6 @@ import fromCursor from '@/resolvers/utils/fromCursor';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
-import createEntityCountQueryResolver from '../createEntityCountQueryResolver';
 import getFirst from '../utils/getFirst';
 import getShift from '../utils/getShift';
 import getVeryFirst from '../utils/getFirst/getVeryFirst';
@@ -61,13 +60,11 @@ const createEntitiesThroughConnectionQueryResolver = (
     serversideConfig,
   );
 
-  const entityCountQueryResolver = createEntityCountQueryResolver(
-    entityConfig,
+  const entityCountQueryResolver = composeQueryResolver(
+    `${entityName}_Count`,
     generalConfig,
     serversideConfig,
-    true, // inAnyCase,
   );
-  if (!entityCountQueryResolver) return null;
 
   const resolverCreatorArg: ResolverCreatorArg = {
     entityConfig,

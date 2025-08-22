@@ -64,6 +64,10 @@ const createEntityScalarResolver = (
 
     const id = parent[fieldName];
 
+    if (!id) {
+      return null;
+    }
+
     const whereOne = { id } as const;
 
     return childEntityQueryResolver(
