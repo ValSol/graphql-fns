@@ -1190,6 +1190,9 @@ export type ServersideConfig = {
     // "user entity name", "field of user entity that point to Filter entity", "name of filter field of Filer entity" ]
     [tangibleEntityName: string]: [string, string, string];
   };
+  // can used only if "personalFilters" is defined
+  skipPersonalFilter?: (entityName: string, userAttributes: Record<string, any>) => boolean;
+
   staticLimits?: {
     [tangibleEntityName: string]: number;
   };

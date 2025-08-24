@@ -10,7 +10,7 @@ const composePersonalFilter = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ) => {
-  const { personalFilters = {} } = serversideConfig;
+  const { personalFilters = {}, skipPersonalFilter } = serversideConfig;
 
   const personalFiltersTuple = personalFilters[entityName];
 
@@ -20,6 +20,10 @@ const composePersonalFilter = async (
 
   if (!userAttributes?.id) {
     return null;
+  }
+
+  if (skipPersonalFilter && skipPersonalFilter(entityName, userAttributes)) {
+    return {};
   }
 
   const [, filterEntityPointerName] = personalFiltersTuple;

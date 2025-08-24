@@ -46,6 +46,7 @@ const composeServersideConfig = (
     staticFilters,
     staticLimits,
     personalFilters,
+    skipPersonalFilter,
   } = serversideConfig;
 
   if (inventoryByRoles && !containedRoles) {
@@ -62,6 +63,10 @@ const composeServersideConfig = (
 
   if (personalFilters && !getUserAttributes) {
     throw new TypeError(`Not found "getUserAttributes" to use with "personalFilters"!`);
+  }
+
+  if (skipPersonalFilter && !personalFilters) {
+    throw new TypeError(`Not found "personalFilters" to use with "skipPersonalFilter"!`);
   }
 
   const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
