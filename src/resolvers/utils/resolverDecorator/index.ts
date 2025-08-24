@@ -4,7 +4,7 @@ import type {
   GeneralConfig,
   ServersideConfig,
   ThreeSegmentInventoryChain,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
 import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';

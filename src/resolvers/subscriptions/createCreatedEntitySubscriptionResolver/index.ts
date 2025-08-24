@@ -23,9 +23,13 @@ const createCreatedEntitySubscriptionResolver = (
       withFilterAndTransformer(context.pubsub.subscribe(`created-${name}`), (payload) => {
         // const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
+        console.log('involvedFilters =', involvedFilters);
+
         // if (!filter) {
         //   return false;
         // }
+
+        // const { id } = payload;
 
         // const { where } = mergeWhereAndFilter(filter, args.where || {}, entityConfig);
 

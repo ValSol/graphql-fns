@@ -1,4 +1,4 @@
-import type { GeneralConfig, ThreeSegmentInventoryChain, ServersideConfig } from '../../../tsTypes';
+import type { GeneralConfig, ThreeSegmentInventoryChain, ServersideConfig } from '@/tsTypes';
 
 import executeAuthorisation from '../executeAuthorisation';
 

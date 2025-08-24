@@ -118,9 +118,9 @@ export {
   createEntitiesQueryResolver,
   createEntitiesByUniqueQueryResolver,
   createEntitiesThroughConnectionQueryResolver,
-  createCreatedEntitySubscriptionResolver,
-  createUpdatedEntitySubscriptionResolver,
-  createDeletedEntitySubscriptionResolver,
+  createCreatedEntitySubscriptionResolver, // why may be need to pass this?
+  createUpdatedEntitySubscriptionResolver, // why may be need to pass this?
+  createDeletedEntitySubscriptionResolver, // why may be need to pass this?
   multiPolygonFromMongoToGql,
   pointFromGqlToMongo,
   pointFromMongoToGql,

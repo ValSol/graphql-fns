@@ -17,6 +17,7 @@ import mutations from '../mutations';
 import createCreatedEntitySubscriptionResolver from '../subscriptions/createCreatedEntitySubscriptionResolver';
 import createUpdatedEntitySubscriptionResolver from '../subscriptions/createUpdatedEntitySubscriptionResolver';
 import createDeletedEntitySubscriptionResolver from '../subscriptions/createDeletedEntitySubscriptionResolver';
+import subscriptionResolverDecorator from '../utils/resolverDecorator/subscriptionResolverDecorator';
 
 let resolvers: null | Record<string, any> = null;
 
@@ -148,8 +149,15 @@ const composeGqlResolvers = (
           generalConfig,
           serversideConfig,
         );
+
         if (createdEntitySubscriptionResolver) {
-          prev.Subscription[`created${name}`] = createdEntitySubscriptionResolver;
+          prev.Subscription[`created${name}`] = subscriptionResolverDecorator(
+            createdEntitySubscriptionResolver,
+            ['Subscription', 'createdEntity', entityConfig.name],
+            entityConfig,
+            generalConfig,
+            serversideConfig,
+          );
         }
 
         const deletedEntitySubscriptionResolver = createDeletedEntitySubscriptionResolver(
@@ -157,7 +165,13 @@ const composeGqlResolvers = (
           generalConfig,
         );
         if (deletedEntitySubscriptionResolver) {
-          prev.Subscription[`deleted${name}`] = deletedEntitySubscriptionResolver;
+          prev.Subscription[`deleted${name}`] = subscriptionResolverDecorator(
+            deletedEntitySubscriptionResolver,
+            ['Subscription', 'deletedEntity', entityConfig.name],
+            entityConfig,
+            generalConfig,
+            serversideConfig,
+          );
         }
 
         const updatedEntitySubscriptionResolver = createUpdatedEntitySubscriptionResolver(
@@ -165,7 +179,13 @@ const composeGqlResolvers = (
           generalConfig,
         );
         if (updatedEntitySubscriptionResolver) {
-          prev.Subscription[`updated${name}`] = updatedEntitySubscriptionResolver;
+          prev.Subscription[`updated${name}`] = subscriptionResolverDecorator(
+            updatedEntitySubscriptionResolver,
+            ['Subscription', 'updatedEntity', entityConfig.name],
+            entityConfig,
+            generalConfig,
+            serversideConfig,
+          );
         }
       }
 
