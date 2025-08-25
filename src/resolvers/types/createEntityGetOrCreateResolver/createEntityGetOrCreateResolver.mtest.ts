@@ -103,7 +103,7 @@ describe('createEntityGetOrCreateResolver', () => {
     };
 
     const createdUser = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id, restaurant } = createdUser;
 
@@ -127,9 +127,7 @@ describe('createEntityGetOrCreateResolver', () => {
       { data: { title: 'New Restaurant' } },
       { mongooseConn, pubsub },
       info,
-      {
-        inputOutputEntity: [[]],
-      },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(firstRestaurant.title).toBe('Belle Vue');
@@ -139,7 +137,7 @@ describe('createEntityGetOrCreateResolver', () => {
     };
 
     const createdUser2 = await createUser(null, { data: data2 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id: userId } = createdUser;
 
@@ -157,9 +155,7 @@ describe('createEntityGetOrCreateResolver', () => {
       { data: { title: 'New Restaurant' } },
       { mongooseConn, pubsub },
       info2,
-      {
-        inputOutputEntity: [[]],
-      },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(secondRestaurant.title).toBe('New Restaurant');

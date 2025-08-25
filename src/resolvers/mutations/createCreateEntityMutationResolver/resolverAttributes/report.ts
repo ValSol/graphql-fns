@@ -1,8 +1,11 @@
-import type { Report } from '../../../tsTypes';
+import type { Report } from '@/resolvers/tsTypes';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { context, involvedFilters } = resolverArg;
+  const {
+    context,
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
   const { name } = entityConfig;
 
   const { subscribeCreatedEntity: filter } = involvedFilters;

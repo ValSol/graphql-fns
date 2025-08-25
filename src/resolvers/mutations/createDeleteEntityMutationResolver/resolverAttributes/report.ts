@@ -2,7 +2,10 @@ import type { Report } from '../../../tsTypes';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { context, involvedFilters } = resolverArg;
+  const {
+    context,
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
   const { name } = entityConfig;
 
   const { subscribeDelatedEntity: filter } = involvedFilters;

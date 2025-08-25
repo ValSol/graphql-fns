@@ -19,7 +19,7 @@ const createCreatedEntitySubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: (_, args, context, info, involvedFilters) =>
+    subscribe: (_, args, context, info, { involvedFilters }) =>
       withFilterAndTransformer(context.pubsub.subscribe(`created-${name}`), (payload) => {
         // const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 

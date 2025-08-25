@@ -8,7 +8,9 @@ const getPrevious: GetPrevious = async (
   resolverArg,
   session,
 ) => {
-  const { involvedFilters } = resolverArg;
+  const {
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
 
   const result = await getCommonData(resolverCreatorArg, resolverArg, session, involvedFilters);
 

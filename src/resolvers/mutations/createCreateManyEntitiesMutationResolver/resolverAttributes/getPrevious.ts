@@ -10,7 +10,10 @@ const getPrevious: GetPrevious = async (
   resolverArg,
   session,
 ) => {
-  const { args, involvedFilters } = resolverArg;
+  const {
+    args,
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
 
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 

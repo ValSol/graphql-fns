@@ -59,11 +59,15 @@ const createEntitiesQueryResolver = (
     args: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
     session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
+    const { involvedFilters } = resolverOptions;
+
     const { filter, limit = Infinity } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return [];
@@ -96,7 +100,7 @@ const createEntitiesQueryResolver = (
         { search, where },
         context,
         createInfoEssence({ _id: 1 }),
-        { inputOutputEntity: [filters] },
+        { involvedFilters: { inputOutputEntity: [filters] } },
       );
 
       where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };
@@ -110,7 +114,7 @@ const createEntitiesQueryResolver = (
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-    const resolverArg = { parent, args, context, info, involvedFilters };
+    const resolverArg = { parent, args, context, info, resolverOptions };
 
     const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 

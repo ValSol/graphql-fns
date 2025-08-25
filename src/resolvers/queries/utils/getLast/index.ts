@@ -29,7 +29,7 @@ const getLast = async (
     { ...args, pagination },
     context,
     createInfoEssence(projection),
-    involvedFilters,
+    { involvedFilters },
   );
 
   const { length } = entities;

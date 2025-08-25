@@ -20,7 +20,7 @@ const personalFilterFromUserEntity = async (
     { whereOne: { id: userAttributes.id } },
     context,
     createInfoEssence({ [filterFieldName]: 1 }),
-    { inputOutputEntity: [[]] },
+    { involvedFilters: { inputOutputEntity: [[]] } },
   );
 
   return filterField;

@@ -334,7 +334,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -398,7 +398,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantId } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(restaurantDeleted.title).toBe(data.title);
@@ -496,7 +496,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -560,7 +560,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: menuCloneId } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(menuCloneDeleted.title).toBe(data.menu.create.clone.create.title);
@@ -613,7 +613,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantId }, options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
   });
 
@@ -673,7 +673,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -737,7 +737,7 @@ describe('createDeleteEntityWithChildrenMutationResolver', () => {
       { whereOne: { id: restaurantId }, options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(restaurantDeleted.title).toBe(restaurantDeleted.title);

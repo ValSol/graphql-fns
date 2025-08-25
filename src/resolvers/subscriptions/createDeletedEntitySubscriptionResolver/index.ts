@@ -15,7 +15,7 @@ const createDeletedEntitySubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: (_, args, context, info, involvedFilters) =>
+    subscribe: (_, args, context, info, { involvedFilters }) =>
       withFilterAndTransformer(context.pubsub.subscribe(`deleted-${name}`), (payload) => {
         console.log('payload =', payload);
 

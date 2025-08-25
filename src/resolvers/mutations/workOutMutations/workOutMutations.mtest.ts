@@ -480,7 +480,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdParent = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     expect(createdParent.name).toBe(data.name);
@@ -1299,7 +1299,7 @@ describe('workOutMutations', () => {
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -1405,7 +1405,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
@@ -1472,7 +1472,7 @@ describe('workOutMutations', () => {
     const data = { firstName: 'Vasy', lastName: 'Pupkin' };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -1557,7 +1557,7 @@ describe('workOutMutations', () => {
       },
     };
     const createdMenu = await createMenu(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdMenu.name).toBe(data.name);
     expect(createdMenu.sections.length).toBe(data.sections.create.length);
@@ -1658,7 +1658,7 @@ describe('workOutMutations', () => {
       { mongooseConn, pubsub },
       null,
       {
-        inputOutputEntity: [[]],
+        involvedFilters: { inputOutputEntity: [[]] },
       },
     );
 
@@ -1684,7 +1684,7 @@ describe('workOutMutations', () => {
     //   },
     //   { mongooseConn, pubsub },
     //   null,
-    //   { inputOutputEntity: [[]] },
+    //   involvedFilters: { inputOutputEntity: [[]] },
     // );
 
     // console.log('copyedRestaurant =', copyedRestaurant);
@@ -1702,7 +1702,7 @@ describe('workOutMutations', () => {
         returnResult: true,
         info: createInfoEssence({ _id: 1, title: 1 }),
         inAnyCase: true,
-        involvedFilters: { inputOutputEntity: [[]] },
+        resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
       },
 
       {
@@ -1715,7 +1715,7 @@ describe('workOutMutations', () => {
         returnResult: true,
         info: createInfoEssence({ _id: 1 }),
         inAnyCase: true,
-        involvedFilters: { inputOutputEntity: [[]] },
+        resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
       },
 
       {
@@ -1731,7 +1731,7 @@ describe('workOutMutations', () => {
         returnResult: true,
         info: createInfoEssence({ _id: 1, title: 1 }),
         inAnyCase: true,
-        involvedFilters: { inputOutputEntity: [[]] },
+        resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
       },
     ];
 
@@ -1761,7 +1761,7 @@ describe('workOutMutations', () => {
         returnResult: false,
         info: createInfoEssence({ _id: 1 }),
         inAnyCase: true,
-        involvedFilters: { inputOutputEntity: [[]] },
+        resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
       },
     ];
 
@@ -1778,7 +1778,7 @@ describe('workOutMutations', () => {
           returnResult: true,
           info: createInfoEssence({ _id: 1, clone: 1, archive: 1 }),
           inAnyCase: true,
-          involvedFilters: { inputOutputEntity: [[]] },
+          resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
         },
       ] as any[];
 
@@ -1790,7 +1790,7 @@ describe('workOutMutations', () => {
           returnResult: true,
           info: createInfoEssence({ _id: 1, original: 1, archive: 1 }),
           inAnyCase: true,
-          involvedFilters: { inputOutputEntity: [[]] },
+          resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
         });
       }
 
@@ -1812,7 +1812,7 @@ describe('workOutMutations', () => {
           returnResult: true,
           info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
-          involvedFilters: { inputOutputEntity: [[]] },
+          resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
         },
       ] as any[];
 
@@ -1827,7 +1827,7 @@ describe('workOutMutations', () => {
           returnResult: false,
           info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
-          involvedFilters: { inputOutputEntity: [[]] },
+          resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
         });
       }
 
@@ -1842,7 +1842,7 @@ describe('workOutMutations', () => {
           returnResult: false,
           info: createInfoEssence({ _id: 1 }),
           inAnyCase: true,
-          involvedFilters: { inputOutputEntity: [[]] },
+          resolverOptions: { involvedFilters: { inputOutputEntity: [[]] } },
         });
       }
 

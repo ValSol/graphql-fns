@@ -1,6 +1,6 @@
-import type { GetPrevious } from '../../../tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import checkData from '../../checkData';
 
 const getPrevious: GetPrevious = async (
@@ -9,7 +9,9 @@ const getPrevious: GetPrevious = async (
   resolverArg,
   session,
 ) => {
-  const { involvedFilters } = resolverArg;
+  const {
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
 
   const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 

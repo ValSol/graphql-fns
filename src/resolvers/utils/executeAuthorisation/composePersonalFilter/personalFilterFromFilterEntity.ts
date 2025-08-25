@@ -22,7 +22,7 @@ const personalFilterFromFilterEntity = async (
     { whereOne: { id: userAttributes.id } },
     context,
     createInfoEssence({ [filterEntityPointerName]: 1 }),
-    { inputOutputEntity: [[]] },
+    { involvedFilters: { inputOutputEntity: [[]] } },
   );
 
   if (!filterEntityPointer) {
@@ -50,7 +50,7 @@ const personalFilterFromFilterEntity = async (
     { whereOne: { id: filterEntityPointer } },
     context,
     createInfoEssence({ [filterFieldName]: 1 }),
-    { inputOutputEntity: [[]] },
+    { involvedFilters: { inputOutputEntity: [[]] } },
   );
 
   return filterField;

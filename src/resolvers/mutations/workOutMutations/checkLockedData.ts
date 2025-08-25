@@ -22,8 +22,10 @@ export type StandardMutationsArg = {
   parent?: null | GraphqlObject;
   args: GraphqlObject;
   info?: SintheticResolverInfo;
-  involvedFilters?: {
-    inputOutputEntity: [InvolvedFilter[]] | [InvolvedFilter[], number];
+  resolverOptions?: {
+    involvedFilters: {
+      inputOutputEntity: [InvolvedFilter[]] | [InvolvedFilter[], number];
+    };
   };
   returnReport?: boolean;
   returnResult: boolean;
@@ -108,7 +110,9 @@ const checkLockedData = async (
       pluralizedEntityName,
       generalConfig,
       serversideConfig,
-    )(null, args, context, createInfoEssence(projection), { inputOutputEntity: [[]] });
+    )(null, args, context, createInfoEssence(projection), {
+      involvedFilters: { inputOutputEntity: [[]] },
+    });
 
     if (result.length !== currentResult.length) {
       throw new TypeError(
@@ -138,7 +142,7 @@ const checkLockedData = async (
       args,
       context,
       createInfoEssence(projection),
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
       session,
     );
 

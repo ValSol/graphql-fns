@@ -14,7 +14,7 @@ const createUpdatedEntitySubscriptionResolver = (
   }
 
   const resolver: Subscribe = {
-    subscribe: (_, args, context, info, involvedFilters) =>
+    subscribe: (_, args, context, info, { involvedFilters }) =>
       withFilterAndTransformer(context.pubsub.subscribe(`updated-${name}`), (payload) => {
         const { where } = args;
 

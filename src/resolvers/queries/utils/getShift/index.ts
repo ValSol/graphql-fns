@@ -36,7 +36,7 @@ const getShift = async (
     { whereOne: { id: _id } },
     context,
     createInfoEssence(projection),
-    involvedFilters,
+    { involvedFilters },
   );
 
   if (!thing) return null;

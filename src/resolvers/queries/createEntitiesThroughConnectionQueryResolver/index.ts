@@ -13,6 +13,7 @@ import type {
   InvolvedFilter,
   SintheticResolverInfo,
   TangibleEntityConfig,
+  ResolverArg,
 } from '@/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -78,10 +79,14 @@ const createEntitiesThroughConnectionQueryResolver = (
     preArgs: Args,
     context: Context,
     info: SintheticResolverInfo,
-    preInvolvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
+    const { involvedFilters: preInvolvedFilters } = resolverOptions;
+
     const [preArgs2, involvedFilters] = modifyConnectionArgsAndInvolvedFilters(
       preArgs,
       preInvolvedFilters,
@@ -122,13 +127,19 @@ const createEntitiesThroughConnectionQueryResolver = (
         { search, where: where2 },
         context,
         createInfoEssence({ _id: 1 }),
-        { inputOutputEntity: [filters] },
+        { involvedFilters: { inputOutputEntity: [filters] } },
       );
 
       args = { ...restArgs, where: { id_in: ids.map(({ id }) => id) } };
     }
 
-    const resolverArg = { parent, args, context, info, involvedFilters } as const;
+    const resolverArg = {
+      parent,
+      args,
+      context,
+      info,
+      resolverOptions: { involvedFilters },
+    } as ResolverArg;
 
     const { after, before, first, last } = args;
 

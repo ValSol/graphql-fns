@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { InvolvedFilter } from '../../../../tsTypes';
+import type { InvolvedFilter } from '@/tsTypes';
 
 import modifyConnectionArgsAndInvolvedFilters from '.';
 

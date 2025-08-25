@@ -71,8 +71,10 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       args: Args,
       context: Context,
       info: SintheticResolverInfo,
-      involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      resolverOptions: {
+        involvedFilters: {
+          [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        };
       },
     ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
       const resolverCreatorArg = {
@@ -82,7 +84,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         inAnyCase,
       } as const;
 
-      const resolverArg = { parent, args, context, info, involvedFilters } as const;
+      const resolverArg = { parent, args, context, info, resolverOptions } as const;
       const { mongooseConn } = context;
 
       if (loophole) {

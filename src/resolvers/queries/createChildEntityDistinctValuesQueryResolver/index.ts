@@ -35,8 +35,10 @@ const createChildEntityDistinctValuesQueryResolver = (
     args: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
     composeQueryResolver(`${name}_DistinctValues`, generalConfig, serversideConfig)(
@@ -44,7 +46,7 @@ const createChildEntityDistinctValuesQueryResolver = (
       args,
       context,
       info,
-      involvedFilters,
+      resolverOptions,
     );
 
   return resolver;

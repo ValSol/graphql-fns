@@ -46,8 +46,10 @@ const createEntitiesByUniqueQueryResolver = (
     args: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>
     composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
@@ -55,7 +57,7 @@ const createEntitiesByUniqueQueryResolver = (
       args,
       context,
       info,
-      involvedFilters,
+      resolverOptions,
     );
 
   return resolver;

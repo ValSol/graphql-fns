@@ -85,7 +85,7 @@ describe('createEntityOppositeRelationConnectionResolver', () => {
     const data = { title: 'title-main' };
 
     const createdPlace = await createPlace(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id } = createdPlace;
 
@@ -94,17 +94,17 @@ describe('createEntityOppositeRelationConnectionResolver', () => {
     const data3 = { title: 'title-3', friend: { connect: id } };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id: id1 } = createdPlace1;
 
     const createdPlace2 = await createPlace(null, { data: data2 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id: id2 } = createdPlace2;
 
     const createdPlace3 = await createPlace(null, { data: data3 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const { id: id3 } = createdPlace3;
 
@@ -115,7 +115,7 @@ describe('createEntityOppositeRelationConnectionResolver', () => {
     );
     const parent = { id: toGlobalId(id, 'Place') };
     const places = await Place(parent, { first: 10 }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     const { edges } = places;

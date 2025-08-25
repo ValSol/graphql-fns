@@ -166,7 +166,7 @@ describe('createCopyEntityMutationResolver', () => {
     const data = { firstName: 'Hugo', lastName: 'Boss' };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -187,7 +187,7 @@ describe('createCopyEntityMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personCloneWithForbiddenField.firstName).toBe(data.firstName);
     expect(personCloneWithForbiddenField.lastName).toBe(undefined);
@@ -202,7 +202,7 @@ describe('createCopyEntityMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personClone.firstName).toBe(data.firstName);
     expect(personClone.lastName).toBe(undefined);
@@ -222,7 +222,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOnes: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personBackup.firstName).toBe(data.firstName);
     expect(personBackup.lastName).toBe(data.lastName);
@@ -243,7 +243,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOne: { id: createdPerson.id }, data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(updatedPerson.firstName).toBe(data2.firstName);
     expect(updatedPerson.lastName).toBe(data2.lastName);
@@ -253,7 +253,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOnes: { original: { id: createdPerson.id } }, data: { info: 'test2' } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personClone2.firstName).toBe(data2.firstName);
     expect(personClone2.lastName).toBe(data2.lastName);
@@ -266,7 +266,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOnes: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personBackup2.firstName).toBe(data2.firstName);
     expect(personBackup2.lastName).toBe(data2.lastName);
@@ -278,7 +278,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOne: { id: createdPerson.id }, data: data3 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(updatedPerson2.firstName).toBe(data3.firstName);
     expect(updatedPerson2.lastName).toBe(undefined);
@@ -291,7 +291,7 @@ describe('createCopyEntityMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(personBackup3.firstName).toBe(data3.firstName);
     expect(personBackup3.lastName).toBe(undefined);
@@ -310,7 +310,7 @@ describe('createCopyEntityMutationResolver', () => {
       { whereOnes: { backups: { id: personBackup.id } } },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(person.firstName).toBe(data.firstName);
     expect(person.lastName).toBe(data.lastName);
@@ -420,9 +420,7 @@ describe('createCopyEntityMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      {
-        inputOutputEntity: [[]],
-      },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(createdRestaurant.ukTitle).toBe(data.ukTitle);
@@ -443,7 +441,7 @@ describe('createCopyEntityMutationResolver', () => {
       },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(restaurantClone.ukTitle).toBe(data.ukTitle);

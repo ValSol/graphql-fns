@@ -55,7 +55,7 @@ describe('addCalculatedFieldsToEntity', () => {
     args: {},
     context: { id: Promise.resolve('12345') },
     info: { projection: { _id: 1 } as const, fieldArgs: {}, path: [] as [] },
-    involvedFilters: { inputOutputEntity: [[]] as any },
+    resolverOptions: { involvedFilters: { inputOutputEntity: [[]] as any } },
   };
 
   test('shoud return {}', () => {

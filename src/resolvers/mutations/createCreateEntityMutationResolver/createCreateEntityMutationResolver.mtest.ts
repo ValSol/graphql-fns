@@ -95,13 +95,13 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const createdExample2 = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     const createdExample3 = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     expect(createdExample.textField1).toBe(data.textField1);
@@ -187,7 +187,7 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -208,7 +208,7 @@ describe('createCreateEntityMutationResolver', () => {
       { data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -359,7 +359,7 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     expect(createdPerson.firstName).toBe(data.firstName);
@@ -416,7 +416,7 @@ describe('createCreateEntityMutationResolver', () => {
       { data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -581,7 +581,7 @@ describe('createCreateEntityMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -648,7 +648,7 @@ describe('createCreateEntityMutationResolver', () => {
       { data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -796,7 +796,7 @@ describe('createCreateEntityMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -849,7 +849,7 @@ describe('createCreateEntityMutationResolver', () => {
       { data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(createdPerson2.firstName).toBe(data2.firstName);
     expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -1012,7 +1012,7 @@ describe('createCreateEntityMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     const createPost = createCreateEntityMutationResolver(
@@ -1032,13 +1032,17 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '9876543210' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '9876543210' } } }]],
+      },
     });
 
     expect(post).toBe(null);
 
     const post2 = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post2.restaurant.toString()).toBe(restaurantId.toString());
@@ -1050,7 +1054,9 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post3 = await createPost(null, { data: postData3 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post3).toBe(null);
@@ -1062,7 +1068,9 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post4 = await createPost(null, { data: postData4 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post4.restaurants[0].toString()).toBe(restaurantId.toString());
@@ -1074,7 +1082,9 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post5 = await createPost(null, { data: postData5 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post5).toBe(null);
@@ -1086,7 +1096,9 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post6 = await createPost(null, { data: postData6 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post6.restaurants[0].toString()).toBe(restaurantId.toString());
@@ -1098,7 +1110,9 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post7 = await createPost(null, { data: postData7 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      involvedFilters: {
+        inputOutputEntity: [[{ restaurants_: { access_: { postCreators: '1234567890' } } }]],
+      },
     });
 
     expect(post7).toBe(null);
@@ -1111,14 +1125,16 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post8 = await createPost(null, { data: postData8 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [
-        [
-          {
-            restaurants_: { access_: { postCreators: '1234567890' } },
-            restaurant_: { access_: { postCreators: '1234567890' } },
-          },
+      involvedFilters: {
+        inputOutputEntity: [
+          [
+            {
+              restaurants_: { access_: { postCreators: '1234567890' } },
+              restaurant_: { access_: { postCreators: '1234567890' } },
+            },
+          ],
         ],
-      ],
+      },
     });
 
     expect(post8.restaurants[0].toString()).toBe(restaurantId.toString());
@@ -1131,14 +1147,16 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post9 = await createPost(null, { data: postData9 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [
-        [
-          {
-            restaurants_: { access_: { postCreators: '1234567890' } },
-            restaurant_: { access_: { postCreators: '1234567890' } },
-          },
+      involvedFilters: {
+        inputOutputEntity: [
+          [
+            {
+              restaurants_: { access_: { postCreators: '1234567890' } },
+              restaurant_: { access_: { postCreators: '1234567890' } },
+            },
+          ],
         ],
-      ],
+      },
     });
 
     expect(post9).toBe(null);
@@ -1151,14 +1169,16 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post10 = await createPost(null, { data: postData10 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [
-        [
-          {
-            type: 'newsFeed',
-            restaurant_: { access_: { postCreators: '1234567890' } },
-          },
+      involvedFilters: {
+        inputOutputEntity: [
+          [
+            {
+              type: 'newsFeed',
+              restaurant_: { access_: { postCreators: '1234567890' } },
+            },
+          ],
         ],
-      ],
+      },
     });
 
     expect(post10.type).toBe(postData10.type);
@@ -1171,14 +1191,16 @@ describe('createCreateEntityMutationResolver', () => {
     };
 
     const post11 = await createPost(null, { data: postData11 }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [
-        [
-          {
-            type: 'newsFeed',
-            restaurant_: { access_: { postCreators: '1234567890' } },
-          },
+      involvedFilters: {
+        inputOutputEntity: [
+          [
+            {
+              type: 'newsFeed',
+              restaurant_: { access_: { postCreators: '1234567890' } },
+            },
+          ],
         ],
-      ],
+      },
     });
 
     expect(post11).toBe(null);

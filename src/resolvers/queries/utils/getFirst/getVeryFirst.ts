@@ -30,7 +30,7 @@ const getVeryFirst = async (
     { ...args, pagination },
     context,
     createInfoEssence(projection),
-    involvedFilters,
+    { involvedFilters },
   );
 
   const shift = -1;

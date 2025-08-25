@@ -1,4 +1,4 @@
-import type { NearInput, InvolvedFilter } from '../../../../tsTypes';
+import type { NearInput, InvolvedFilter } from '@/tsTypes';
 
 type Args = {
   where?: any;

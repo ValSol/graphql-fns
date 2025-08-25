@@ -32,7 +32,7 @@ const getFirst = async (
     { ...args, pagination },
     context,
     createInfoEssence(projection),
-    involvedFilters,
+    { involvedFilters },
   );
 
   if (entities?.[0]?.id?.toString() === _id) {

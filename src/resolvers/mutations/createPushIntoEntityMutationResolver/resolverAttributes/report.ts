@@ -8,7 +8,12 @@ import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
-  const { args, context, info, involvedFilters } = resolverArg;
+  const {
+    args,
+    context,
+    info,
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
   const { name } = entityConfig;
 
   const { data } = args;

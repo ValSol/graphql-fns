@@ -166,7 +166,9 @@ describe('createDeleteEntityMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -219,7 +221,9 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const whereOne = { id };
     const deletedPerson = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
     expect(deletedPerson.firstName).toBe(data.firstName);
     expect(deletedPerson.lastName).toBe(data.lastName);
@@ -239,7 +243,9 @@ describe('createDeleteEntityMutationResolver', () => {
     expect(createdFavorities2[1].visitors.length).toEqual(0);
 
     const deletedPerson2 = await deletePerson(null, { whereOne }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
     expect(deletedPerson2).toBeNull();
 
@@ -256,7 +262,7 @@ describe('createDeleteEntityMutationResolver', () => {
       { whereOne: where2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(deletedPlace.name).toBe(data.location.create.name);
 
@@ -265,7 +271,7 @@ describe('createDeleteEntityMutationResolver', () => {
       { whereOne: where2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
     expect(deletedPlace2).toBeNull();
   });
@@ -376,7 +382,9 @@ describe('createDeleteEntityMutationResolver', () => {
       };
 
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        inputOutputEntity: [[]],
+        involvedFilters: {
+          inputOutputEntity: [[]],
+        },
       });
     }
 
@@ -396,7 +404,9 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const info = createInfoEssence({ _id: 1, name: 1 });
     const deletedParent = await deleteParent(null, { whereOne }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
 
     expect(deletedParent.name).toBe('name-2');
@@ -413,7 +423,7 @@ describe('createDeleteEntityMutationResolver', () => {
       { whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(deletedParent2).toBe(null);
@@ -433,7 +443,9 @@ describe('createDeleteEntityMutationResolver', () => {
     expect(parent.child).toEqual(child._id);
 
     await deleteChild(null, { whereOne: { id: child._id } }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
 
     const parent2 = await Parent.findOne({ name: 'name-0' });
@@ -445,7 +457,9 @@ describe('createDeleteEntityMutationResolver', () => {
     expect(parent2.childs).toEqual([child2._id]);
 
     await deleteChild(null, { whereOne: { id: child2._id } }, { mongooseConn, pubsub }, info, {
-      inputOutputEntity: [[]],
+      involvedFilters: {
+        inputOutputEntity: [[]],
+      },
     });
 
     const parent3 = await Parent.findOne({ name: 'name-0' });
@@ -526,7 +540,7 @@ describe('createDeleteEntityMutationResolver', () => {
     for (let i = 0; i < 3; i += 1) {
       const data = { name: `user${i}` };
       const user = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-        inputOutputEntity: [[]],
+        involvedFilters: { inputOutputEntity: [[]] },
       });
 
       for (let j = 0; j < i; j += 1) {
@@ -536,9 +550,7 @@ describe('createDeleteEntityMutationResolver', () => {
           { data: data2 },
           { mongooseConn, pubsub },
           null,
-          {
-            inputOutputEntity: [[]],
-          },
+          { involvedFilters: { inputOutputEntity: [[]] } },
         );
       }
     }
@@ -550,7 +562,7 @@ describe('createDeleteEntityMutationResolver', () => {
     const where = {};
 
     const users = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     expect(users.length).toBe(3);
@@ -562,18 +574,18 @@ describe('createDeleteEntityMutationResolver', () => {
     );
 
     await deleteUser(null, { whereOne: { id: users[0].id } }, { mongooseConn, pubsub }, info4, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     const users2 = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     expect(users2.length).toBe(2);
 
     await expect(async () => {
       await deleteUser(null, { whereOne: { id: users2[0].id } }, { mongooseConn, pubsub }, info4, {
-        inputOutputEntity: [[]],
+        involvedFilters: { inputOutputEntity: [[]] },
       });
     }).rejects.toThrow('Try unset required field: "user" for entity: "Textbook"!');
   });

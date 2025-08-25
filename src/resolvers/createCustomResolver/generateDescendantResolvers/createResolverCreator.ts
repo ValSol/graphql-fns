@@ -7,7 +7,7 @@ import type {
   GraphqlObject,
   SintheticResolverInfo,
   ActionResolver,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
 const store = Object.create(null);
 
@@ -46,10 +46,12 @@ const createResolverCreator = (
       context: Context,
       info: SintheticResolverInfo,
       // transfer 'filter' into reguqlar resolver to know how to select data if inAnyCase = true
-      involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      resolverOptions: {
+        involvedFilters: {
+          [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        };
       },
-    ) => regularResolver(_, args, context, info, involvedFilters);
+    ) => regularResolver(_, args, context, info, resolverOptions);
 
     return resolver;
   };

@@ -115,7 +115,7 @@ describe('createEntityFilterCountResolver', () => {
     };
 
     const createdUser = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-      inputOutputEntity: [[]],
+      involvedFilters: { inputOutputEntity: [[]] },
     });
 
     const { id, restaurants } = createdUser;
@@ -144,7 +144,7 @@ describe('createEntityFilterCountResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        inputOutputEntity: [[]],
+        involvedFilters: { inputOutputEntity: [[]] },
       },
     );
 
@@ -164,7 +164,7 @@ describe('createEntityFilterCountResolver', () => {
       { whereOne: { id }, data: data2 },
       { mongooseConn, pubsub },
       null,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
 
     expect(updatedUser.restaurantsFilter).toBe(
@@ -177,7 +177,7 @@ describe('createEntityFilterCountResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        inputOutputEntity: [[]],
+        involvedFilters: { inputOutputEntity: [[]] },
       },
     );
 

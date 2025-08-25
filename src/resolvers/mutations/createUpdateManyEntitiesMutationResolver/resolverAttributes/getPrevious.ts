@@ -18,7 +18,11 @@ const getPrevious: GetPrevious = async (
   session,
 ) => {
   const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
-  const { args, context, involvedFilters } = resolverArg;
+  const {
+    args,
+    context,
+    resolverOptions: { involvedFilters },
+  } = resolverArg;
   const { enums } = generalConfig;
 
   const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);

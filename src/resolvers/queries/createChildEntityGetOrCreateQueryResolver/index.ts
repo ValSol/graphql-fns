@@ -46,8 +46,10 @@ const createChildEntityGetOrCreateQueryResolver = (
     args: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     if (args.whereOne) {
@@ -56,11 +58,11 @@ const createChildEntityGetOrCreateQueryResolver = (
         args,
         context,
         info,
-        involvedFilters,
+        resolverOptions,
       );
     }
 
-    return createEntityMutationResolver(parent, args, context, info, involvedFilters);
+    return createEntityMutationResolver(parent, args, context, info, resolverOptions);
   };
 
   return resolver;

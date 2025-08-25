@@ -44,7 +44,9 @@ const produceResult = async (
   } = preparedData;
 
   const {
-    involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
+    resolverOptions: {
+      involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
+    },
   } = resolverArg;
 
   const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
@@ -63,7 +65,7 @@ const produceResult = async (
       { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
       infoEssence,
-      { inputOutputEntity: [[]] },
+      { involvedFilters: { inputOutputEntity: [[]] } },
     );
   }
 
@@ -72,7 +74,7 @@ const produceResult = async (
     { whereOne: { id: first._id }, token },
     context,
     infoEssence,
-    { inputOutputEntity: [[]] },
+    { involvedFilters: { inputOutputEntity: [[]] } },
   );
 
   return [instance];

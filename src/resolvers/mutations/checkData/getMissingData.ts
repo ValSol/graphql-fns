@@ -48,7 +48,7 @@ const getMissingData = async ({
     { whereOne },
     context,
     createInfoEssence(projection),
-    { inputOutputEntity: [[]] },
+    { involvedFilters: { inputOutputEntity: [[]] } },
     session,
   );
 

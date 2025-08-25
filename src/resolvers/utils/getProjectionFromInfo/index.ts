@@ -1,4 +1,4 @@
-import type { ResolverArg, TangibleEntityConfig } from '../../../tsTypes';
+import type { ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
 import getSimpleProjectionFromInfo from '../getSimpleProjectionFromInfo';
 import composeAllFieldsProjection from '../composeAllFieldsProjection';

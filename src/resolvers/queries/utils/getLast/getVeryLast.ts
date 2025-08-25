@@ -29,7 +29,7 @@ const getVeryLast = async (
     args,
     context,
     createInfoEssence({ _id: 1 }),
-    { inputOutputEntity },
+    { involvedFilters: { inputOutputEntity } },
   );
 
   const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
@@ -41,7 +41,7 @@ const getVeryLast = async (
     last < count ? { ...args, pagination } : args,
     context,
     createInfoEssence(projection),
-    involvedFilters,
+    { involvedFilters },
   );
 
   return composeLastEdges(-count, last, entities);

@@ -1,5 +1,11 @@
-import type { GraphqlObject, InventoryChain, TangibleEntityConfig } from '../../../tsTypes';
-import type { Core, PreparedData } from '../../tsTypes';
+import type {
+  GraphqlObject,
+  InventoryChain,
+  ResolverArg,
+  ResolverCreatorArg,
+  TangibleEntityConfig,
+} from '@/tsTypes';
+import type { Core, PreparedData } from '@/resolvers/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
 import sleep from '@/utils/sleep';
@@ -57,13 +63,15 @@ const workOutMutations = async (
           parent: parentInArgs,
           args,
           info: infoInArgs,
-          involvedFilters: involvedFiltersInArgs,
+          resolverOptions: resolverOptionsInArgs,
           lockedData,
         } = mutationArgs;
 
         const parent = parentInArgs || null;
         const info = infoInArgs || null;
-        const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
+        const resolverOptions = resolverOptionsInArgs || {
+          involvedFilters: { inputOutputEntity: [[]] },
+        };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
 
@@ -92,7 +100,7 @@ const workOutMutations = async (
           args,
           context,
           info,
-          involvedFilters,
+          resolverOptions,
         } as const;
 
         const previous: GraphqlObject[] = await getPrevious(
@@ -176,14 +184,16 @@ const workOutMutations = async (
       parent: parentInArgs,
       args,
       info: infoInArgs,
-      involvedFilters: involvedFiltersInArgs,
+      resolverOptions: resolverOptionsInArgs,
       returnReport,
       returnResult,
     } = mutationArgs;
 
     const parent = parentInArgs || null;
     const info = infoInArgs || null;
-    const involvedFilters = involvedFiltersInArgs || { inputOutputEntity: [[]] };
+    const resolverOptions = resolverOptionsInArgs || {
+      involvedFilters: { inputOutputEntity: [[]] },
+    };
 
     const { array, produceCurrent, report, finalResult } =
       mutationsResolverAttributes[actionGeneralName];
@@ -193,15 +203,15 @@ const workOutMutations = async (
       generalConfig,
       serversideConfig,
       inAnyCase,
-    } as const;
+    } as ResolverCreatorArg;
 
     const resolverArg = {
       parent,
       args,
       context,
       info,
-      involvedFilters,
-    } as const;
+      resolverOptions,
+    } as ResolverArg;
 
     const previous = previouses[i];
     const result: null | { previous: GraphqlObject[]; current?: GraphqlObject[] } = returnResult

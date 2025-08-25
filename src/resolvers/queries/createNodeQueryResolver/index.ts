@@ -55,7 +55,7 @@ const createNodeQueryResolver = (
       { whereOne: { id } },
       context,
       info,
-      { inputOutputEntity: filter },
+      { involvedFilters: { inputOutputEntity: filter } },
     );
 
     if (!entity) return null;

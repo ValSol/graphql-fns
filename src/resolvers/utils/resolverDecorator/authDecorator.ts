@@ -14,7 +14,7 @@ const authDecorator =
   ): any =>
   async (...argarray) => {
     const [parent, args, context, info] = argarray;
-    const filter = await executeAuthorisation(
+    const involvedFilters = await executeAuthorisation(
       inventoryChain,
       involvedEntityNames,
       args,
@@ -22,9 +22,9 @@ const authDecorator =
       generalConfig,
       serversideConfig,
     );
-    if (!filter) return null;
+    if (!involvedFilters) return null;
 
-    const result = await func(parent, args, context, info, filter);
+    const result = await func(parent, args, context, info, { involvedFilters });
     return result;
   };
 

@@ -45,11 +45,15 @@ const createEntityQueryResolver = (
     args: Args,
     context: Context,
     info: SintheticResolverInfo,
-    involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    resolverOptions: {
+      involvedFilters: {
+        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      };
     },
     session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
+    const { involvedFilters } = resolverOptions;
+
     const { filter } = getFilterFromInvolvedFilters(involvedFilters);
 
     if (!filter) return null;
@@ -98,7 +102,7 @@ const createEntityQueryResolver = (
       }
     }
 
-    const resolverArg = { parent, args, context, info, involvedFilters };
+    const resolverArg = { parent, args, context, info, resolverOptions };
 
     const resolverCreatorArg = {
       entityConfig,
