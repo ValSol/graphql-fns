@@ -152,7 +152,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       };
 
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -231,7 +231,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
@@ -298,7 +298,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend2 = await Person.findById(friendId);
@@ -338,7 +338,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where, data: dataForUpdate3 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend3 = await Person.findById(friendId);
@@ -369,7 +369,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where, data: dataForUpdate4 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend4 = await Person.findById(friendId2);
@@ -447,7 +447,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         },
       };
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
 
       expect(createdPerson.firstName).toBe(data.firstName);
@@ -539,7 +539,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { data: data2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -605,7 +605,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
       expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
@@ -683,7 +683,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       expect(updatedPlace.name).toBe(dataForUpdate2.name);
@@ -693,7 +693,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
         { where: where2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       expect(updatedPlaces).toEqual([]);
@@ -759,7 +759,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -791,7 +791,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
     expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
@@ -809,7 +809,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { where, data: dataForUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
@@ -827,7 +827,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { where, data: dataForUpdate3 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample3.textField2).toBe(undefined);
@@ -889,7 +889,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -918,7 +918,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { where, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate.textField);
@@ -1017,7 +1017,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       };
 
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -1042,7 +1042,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { data, where },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedParent.name).toBe('updatedName');
@@ -1058,7 +1058,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { data, where: where2 },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedParents).toEqual([]);
@@ -1195,7 +1195,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     const createPost = createCreateEntityMutationResolver(
@@ -1216,7 +1216,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
       involvedFilters: {
-        inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+        inputOutputFilterAndLimit: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
       },
     });
 
@@ -1245,7 +1245,9 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+          inputOutputFilterAndLimit: [
+            [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+          ],
         },
       },
     );
@@ -1264,7 +1266,9 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+          inputOutputFilterAndLimit: [
+            [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+          ],
         },
       },
     );
@@ -1281,7 +1285,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [
+          inputOutputFilterAndLimit: [
             [
               {
                 restaurant_: { access_: { postCreators: '1234567890' } },
@@ -1303,7 +1307,7 @@ describe('createUpdateFilteredEntitiesMutationResolver', () => {
       { where: { slug: 'name is absent' }, data: dataToUpdate4 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedPosts3).toEqual([]);

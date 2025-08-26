@@ -107,7 +107,7 @@ describe('createEntityQueryResolver', () => {
     };
 
     await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const allPeople = await Example.find({});
@@ -125,7 +125,7 @@ describe('createEntityQueryResolver', () => {
       { where: { id_in } },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(people.length).toBe(allPeople.length);

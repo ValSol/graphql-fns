@@ -1309,6 +1309,15 @@ export type VirtualConfigComposer = (
   generalConfig: GeneralConfig,
 ) => VirtualEntityConfig;
 
+export type ActionInvolvedEntityNames = {
+  inputOutputEntity?: string;
+  inputEntity?: string;
+  outputEntity?: string;
+  subscribeCreatedEntity?: string;
+  subscribeDeletedEntity?: string;
+  subscribeUpdatedEntity?: string;
+};
+
 export type ActionAttributes = {
   actionArgsToHide?: string[]; // some of argNames to hide in schema action signature
   actionGeneralName: (descendantKey?: string) => string;
@@ -1319,12 +1328,7 @@ export type ActionAttributes = {
   inputCreators: Array<InputCreator>;
   argNames: Array<string>;
   argTypes: Array<(entityConfig: EntityConfig) => string>;
-  actionInvolvedEntityNames: (
-    name: string,
-    descendantKey?: string,
-  ) => {
-    [key: string]: string;
-  };
+  actionInvolvedEntityNames: (name: string, descendantKey?: string) => ActionInvolvedEntityNames;
   actionReturnString: (entityConfig: EntityConfig, descendantKey: string) => string;
   actionReturnConfig: (
     entityConfig: EntityConfig,
@@ -1332,7 +1336,6 @@ export type ActionAttributes = {
     descendantKey?: string,
   ) => EntityConfig | null;
   actionDescendantUpdater?: (entityName: string, item: DescendantAttributes) => void;
-  actionUseSubscription?: string;
 };
 
 export type GqlActionData = {

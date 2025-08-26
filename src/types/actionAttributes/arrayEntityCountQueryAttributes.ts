@@ -1,4 +1,4 @@
-import type { EntityConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig } from '@/tsTypes';
 
 const actionType = 'Field';
 
@@ -16,9 +16,7 @@ const argTypes = [];
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({});
+): ActionInvolvedEntityNames => ({});
 
 const actionReturnConfig = (): null | EntityConfig => null;
 

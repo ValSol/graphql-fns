@@ -1,8 +1,8 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import createEntityCreateInputType from '../inputs/createEntityCreateInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
@@ -22,9 +22,7 @@ const argTypes = [({ name }): string => `[${name}CreateInput!]!`, (): string => 
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
 });
 

@@ -1,9 +1,9 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
-import getOppositeFields from '../../utils/getOppositeFields';
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import getOppositeFields from '@/utils/getOppositeFields';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
@@ -39,9 +39,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
 });
 

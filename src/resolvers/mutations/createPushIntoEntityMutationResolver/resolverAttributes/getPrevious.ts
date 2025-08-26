@@ -19,7 +19,7 @@ const getPrevious: GetPrevious = async (
   } = resolverArg;
   const { enums } = generalConfig;
 
-  const { subscribeUpdatedEntity } = involvedFilters;
+  const { subscribeUpdatedFilterAndLimit } = involvedFilters;
 
   const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
 
@@ -71,8 +71,8 @@ const getPrevious: GetPrevious = async (
 
   let previousEntity: Record<string, any> = {};
 
-  if (whereOne === whereOne2 || subscribeUpdatedEntity) {
-    const projection = subscribeUpdatedEntity
+  if (whereOne === whereOne2 || subscribeUpdatedFilterAndLimit) {
+    const projection = subscribeUpdatedFilterAndLimit
       ? {} // if subsciption ON - return empty projection - to get all fields of entity
       : { _id: 1 };
 

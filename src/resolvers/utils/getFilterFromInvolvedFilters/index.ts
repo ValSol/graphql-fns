@@ -1,4 +1,4 @@
-import { InvolvedFilter } from '../../../tsTypes';
+import { InvolvedFilter } from '@/tsTypes';
 
 const addOR = ([arr]: [InvolvedFilter[]] | [InvolvedFilter[], number]) =>
   arr.length === 1 ? arr[0] : { OR: arr };
@@ -6,34 +6,39 @@ const addOR = ([arr]: [InvolvedFilter[]] | [InvolvedFilter[], number]) =>
 const getFilterFromInvolvedFilters = (involvedFilters: {
   [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 }): { filter: null | InvolvedFilter[]; limit?: number } => {
-  const { inputEntity, inputOutputEntity, outputEntity } = involvedFilters;
+  const { inputFilterAndLimit, inputOutputFilterAndLimit, outputFilterAndLimit } = involvedFilters;
 
-  if (inputOutputEntity) {
-    const [filter, limit] = inputOutputEntity;
+  if (inputOutputFilterAndLimit) {
+    const [filter, limit] = inputOutputFilterAndLimit;
 
     return limit ? { filter, limit } : { filter };
   }
 
-  if (!inputEntity || !outputEntity || !inputEntity[0] || !outputEntity[0]) {
+  if (
+    !inputFilterAndLimit ||
+    !outputFilterAndLimit ||
+    !inputFilterAndLimit[0] ||
+    !outputFilterAndLimit[0]
+  ) {
     return { filter: null };
   }
 
-  if (!inputEntity[0].length) {
-    const [filter, limit] = outputEntity;
+  if (!inputFilterAndLimit[0].length) {
+    const [filter, limit] = outputFilterAndLimit;
 
     return limit ? { filter, limit } : { filter };
   }
 
-  if (!outputEntity[0].length) {
-    const [filter] = inputEntity;
-    const [, limit] = outputEntity;
+  if (!outputFilterAndLimit[0].length) {
+    const [filter] = inputFilterAndLimit;
+    const [, limit] = outputFilterAndLimit;
 
     return limit ? { filter, limit } : { filter };
   }
 
-  const [, limit] = outputEntity;
+  const [, limit] = outputFilterAndLimit;
 
-  const filter = [{ AND: [addOR(inputEntity), addOR(outputEntity)] }];
+  const filter = [{ AND: [addOR(inputFilterAndLimit), addOR(outputFilterAndLimit)] }];
 
   return limit === limit ? { filter, limit } : { filter };
 };

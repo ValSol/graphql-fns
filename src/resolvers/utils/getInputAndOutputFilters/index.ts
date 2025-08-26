@@ -8,10 +8,10 @@ const getInputAndOutputFilters = (involvedFilters: {
   inputLimit?: number;
   outputLimit?: number;
 } => {
-  const { inputEntity, inputOutputEntity, outputEntity } = involvedFilters;
+  const { inputFilterAndLimit, inputOutputFilterAndLimit, outputFilterAndLimit } = involvedFilters;
 
-  if (inputOutputEntity) {
-    const [filter, limit] = inputOutputEntity;
+  if (inputOutputFilterAndLimit) {
+    const [filter, limit] = inputOutputFilterAndLimit;
 
     if (limit) {
       return { inputFilter: filter, inputLimit: limit, outputFilter: filter, outputLimit: limit };
@@ -20,9 +20,9 @@ const getInputAndOutputFilters = (involvedFilters: {
     }
   }
 
-  if (inputEntity && outputEntity) {
-    const [inputFilter, inputLimit] = inputEntity;
-    const [outputFilter, outputLimit] = outputEntity;
+  if (inputFilterAndLimit && outputFilterAndLimit) {
+    const [inputFilter, inputLimit] = inputFilterAndLimit;
+    const [outputFilter, outputLimit] = outputFilterAndLimit;
 
     if (!inputLimit && !outputLimit) {
       return { inputFilter, outputFilter };
@@ -39,20 +39,20 @@ const getInputAndOutputFilters = (involvedFilters: {
     return { inputFilter, outputFilter, inputLimit, outputLimit };
   }
 
-  if (!inputEntity && !outputEntity) {
+  if (!inputFilterAndLimit && !outputFilterAndLimit) {
     return { inputFilter: null, outputFilter: null };
   }
 
-  if (inputEntity) {
-    const [inputFilter, inputLimit] = inputEntity;
+  if (inputFilterAndLimit) {
+    const [inputFilter, inputLimit] = inputFilterAndLimit;
 
     return inputLimit
       ? { inputFilter, outputFilter: null, inputLimit }
       : { inputFilter, outputFilter: null };
   }
 
-  if (outputEntity) {
-    const [outputFilter, outputLimit] = outputEntity;
+  if (outputFilterAndLimit) {
+    const [outputFilter, outputLimit] = outputFilterAndLimit;
 
     return outputLimit
       ? { inputFilter: null, outputFilter, outputLimit }

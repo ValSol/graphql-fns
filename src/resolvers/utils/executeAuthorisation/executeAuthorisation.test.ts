@@ -160,7 +160,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[], 4] };
+    const expectedResult = { inputOutputFilterAndLimit: [[], 4] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
@@ -173,7 +173,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }]] };
+    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }]] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -198,7 +198,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[]] };
+    const expectedResult = { inputOutputFilterAndLimit: [[]] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -217,7 +217,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }], 4] };
+    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }], 4] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -243,7 +243,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[], 4] };
+    const expectedResult = { inputOutputFilterAndLimit: [[], 4] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -261,7 +261,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }]] };
+    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }]] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -286,7 +286,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[]] };
+    const expectedResult = { inputOutputFilterAndLimit: [[]] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -305,7 +305,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ show: true }], 4] };
+    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }], 4] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -331,7 +331,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: null };
+    const expectedResult = { inputOutputFilterAndLimit: null };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -349,7 +349,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: null };
+    const expectedResult2 = { inputOutputFilterAndLimit: null };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -377,7 +377,7 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
+      inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
     };
     expect(result).toEqual(expectedResult);
 
@@ -398,7 +398,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [
+      inputOutputFilterAndLimit: [
         [{ AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] }],
       ],
     };
@@ -427,7 +427,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputEntity: [[]] };
+    const expectedResult = { inputOutputFilterAndLimit: [[]] };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -447,7 +447,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputEntity: [[{ deleted: false }], 2] };
+    const expectedResult2 = { inputOutputFilterAndLimit: [[{ deleted: false }], 2] };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -475,7 +475,7 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [
+      inputOutputFilterAndLimit: [
         [
           { access_: { restaurantEditors: id } },
           { access_: { restaurantPublishers: id } },
@@ -504,7 +504,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [
+      inputOutputFilterAndLimit: [
         [
           {
             AND: [
@@ -548,8 +548,8 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[]],
-      subscribeUpdatedEntity: null,
+      inputOutputFilterAndLimit: [[]],
+      subscribeUpdatedFilterAndLimit: null,
     };
     expect(result).toEqual(expectedResult);
 
@@ -571,8 +571,8 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedEntity: null,
+      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+      subscribeUpdatedFilterAndLimit: null,
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -591,8 +591,8 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[], 8],
-      subscribeUpdatedEntity: [[], 6],
+      inputOutputFilterAndLimit: [[], 8],
+      subscribeUpdatedFilterAndLimit: [[], 6],
     };
     expect(result).toEqual(expectedResult);
 
@@ -607,8 +607,8 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedEntity: [[{ test: true }], 6],
+      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+      subscribeUpdatedFilterAndLimit: [[{ test: true }], 6],
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -631,8 +631,8 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputEntity: [[]],
-      subscribeUpdatedEntity: null,
+      inputOutputFilterAndLimit: [[]],
+      subscribeUpdatedFilterAndLimit: null,
     };
     expect(result).toEqual(expectedResult);
 
@@ -647,8 +647,8 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputEntity: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedEntity: null,
+      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+      subscribeUpdatedFilterAndLimit: null,
     };
     expect(result2).toEqual(expectedResult2);
   });

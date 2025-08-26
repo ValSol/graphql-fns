@@ -21,7 +21,7 @@ const getExternalReferences = async (
       { whereOne: { id } },
       context,
       createInfoEssence({ _id: 1 }),
-      { involvedFilters: { inputOutputEntity: [filter] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [filter] } },
       session,
     );
 

@@ -1,4 +1,4 @@
-import type { EntityConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig } from '@/tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
@@ -28,9 +28,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({ inputOutputEntity: `${name}${descendantKey}` });
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (): null | EntityConfig => null;
 

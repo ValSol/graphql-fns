@@ -45,7 +45,11 @@ const produceResult = async (
 
   const {
     resolverOptions: {
-      involvedFilters: { subscribeCreatedEntity, subscribeDeletedEntity, subscribeUpdatedEntity },
+      involvedFilters: {
+        subscribeCreatedFilterAndLimit,
+        subscribeDeletedFilterAndLimit,
+        subscribeUpdatedFilterAndLimit,
+      },
     },
   } = resolverArg;
 
@@ -53,7 +57,11 @@ const produceResult = async (
 
   const { projection } = infoEssence;
 
-  if (subscribeCreatedEntity || subscribeDeletedEntity || subscribeUpdatedEntity) {
+  if (
+    subscribeCreatedFilterAndLimit ||
+    subscribeDeletedFilterAndLimit ||
+    subscribeUpdatedFilterAndLimit
+  ) {
     Object.assign(projection, composeAllFieldsProjection(entityConfig), {
       withoutCalculatedFieldsWithAsyncFunc: true,
     });
@@ -65,7 +73,7 @@ const produceResult = async (
       { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
       infoEssence,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
   }
 
@@ -74,7 +82,7 @@ const produceResult = async (
     { whereOne: { id: first._id }, token },
     context,
     infoEssence,
-    { involvedFilters: { inputOutputEntity: [[]] } },
+    { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 
   return [instance];

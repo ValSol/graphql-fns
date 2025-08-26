@@ -86,7 +86,7 @@ const createEntitiesQueryResolver = (
 
     if (Boolean(near) && Boolean(search)) {
       const {
-        inputOutputEntity: [filters],
+        inputOutputFilterAndLimit: [filters],
       } = involvedFilters;
 
       const { coordinates: center, geospatialField, maxDistance: radius } = near;
@@ -100,7 +100,7 @@ const createEntitiesQueryResolver = (
         { search, where },
         context,
         createInfoEssence({ _id: 1 }),
-        { involvedFilters: { inputOutputEntity: [filters] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [filters] } },
       );
 
       where = { id_in: (ids as { id: string }[]).map(({ id }) => id) };

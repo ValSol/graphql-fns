@@ -112,7 +112,7 @@ const createEntitiesThroughConnectionQueryResolver = (
     if (Boolean(preArgs2.near) && Boolean(preArgs2.search)) {
       const { search, where, ...restArgs } = preArgs2;
       const {
-        inputOutputEntity: [filters],
+        inputOutputFilterAndLimit: [filters],
       } = involvedFilters;
 
       const { coordinates: center, geospatialField, maxDistance: radius } = preArgs2.near;
@@ -127,7 +127,7 @@ const createEntitiesThroughConnectionQueryResolver = (
         { search, where: where2 },
         context,
         createInfoEssence({ _id: 1 }),
-        { involvedFilters: { inputOutputEntity: [filters] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [filters] } },
       );
 
       args = { ...restArgs, where: { id_in: ids.map(({ id }) => id) } };

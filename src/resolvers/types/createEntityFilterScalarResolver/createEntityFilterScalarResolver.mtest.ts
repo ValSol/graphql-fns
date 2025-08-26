@@ -113,7 +113,7 @@ describe('createEntityFilterScalarResolver', () => {
     };
 
     const createdUser = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id, restaurant } = createdUser;
 
@@ -141,7 +141,7 @@ describe('createEntityFilterScalarResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       },
     );
 
@@ -159,7 +159,7 @@ describe('createEntityFilterScalarResolver', () => {
       { whereOne: { id }, data: { restaurantFilter: { id: restaurantId } } },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedUser.restaurantFilter).toBe(`{"id":"${fromGlobalId(restaurantId)._id}"}`);
@@ -170,7 +170,7 @@ describe('createEntityFilterScalarResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       },
     );
 

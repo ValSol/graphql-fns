@@ -96,24 +96,24 @@ describe('createEntityArrayResolver', () => {
     const data3 = { title: 'title-3' };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id1 } = createdPlace1;
 
     const createdPlace2 = await createPlace(null, { data: data2 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id2 } = createdPlace2;
 
     const createdPlace3 = await createPlace(null, { data: data3 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id3 } = createdPlace3;
 
     const Place = createEntityArrayResolver(placeConfig, generalConfig, serversideConfig);
     const parent = { friends: [toGlobalId(id1, 'Place')] };
     const places = await Place(parent, {}, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const [place] = places;
@@ -130,7 +130,7 @@ describe('createEntityArrayResolver', () => {
       ],
     };
     const places2 = await Place(parent2, {}, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const [place1, place2, place3] = places2;
 

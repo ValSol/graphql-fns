@@ -45,7 +45,7 @@ describe('getAsyncFuncResults', () => {
     args: {},
     context: { id: Promise.resolve('12345') },
     info: { projection: { _id: 1 } as const, fieldArgs: {}, path: [] as [] },
-    resolverOptions: { involvedFilters: { inputOutputEntity: [[]] as any } },
+    resolverOptions: { involvedFilters: { inputOutputFilterAndLimit: [[]] as any } },
   };
 
   test('shoud return "12345"', async () => {

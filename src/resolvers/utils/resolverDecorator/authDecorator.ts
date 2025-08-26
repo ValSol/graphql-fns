@@ -1,4 +1,9 @@
-import type { GeneralConfig, ThreeSegmentInventoryChain, ServersideConfig } from '@/tsTypes';
+import type {
+  GeneralConfig,
+  ThreeSegmentInventoryChain,
+  ServersideConfig,
+  ActionInvolvedEntityNames,
+} from '@/tsTypes';
 
 import executeAuthorisation from '../executeAuthorisation';
 
@@ -6,9 +11,7 @@ const authDecorator =
   (
     func: any,
     inventoryChain: ThreeSegmentInventoryChain,
-    involvedEntityNames: {
-      [key: string]: string;
-    },
+    involvedEntityNames: ActionInvolvedEntityNames,
     generalConfig: GeneralConfig,
     serversideConfig: ServersideConfig,
   ): any =>

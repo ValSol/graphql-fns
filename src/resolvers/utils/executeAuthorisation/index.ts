@@ -1,13 +1,14 @@
 import type {
+  ActionInvolvedEntityNames,
   GeneralConfig,
   InventoryChain,
   ServersideConfig,
   ThreeSegmentInventoryChain,
   InvolvedFilter,
   GraphqlObject,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
+import checkInventory from '@/utils/inventory/checkInventory';
 import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
@@ -30,11 +31,12 @@ const amendInventoryChain = (inventoryChain: ThreeSegmentInventoryChain, key: st
   }
 };
 
+const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
+  `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
+
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
-  involvedEntityNames: {
-    [key: string]: string;
-  },
+  involvedEntityNames: ActionInvolvedEntityNames,
   args: GraphqlObject,
   context: any,
   generalConfig: GeneralConfig,
@@ -53,11 +55,13 @@ const executeAuthorisation = async (
     staticLimits = {},
   } = serversideConfig;
 
-  const { token } = args as unknown as { token: string };
+  const { token: tokenFromArgs } = args as { token: string };
 
-  const involvedEntityNamesKeys = Object.keys(involvedEntityNames);
+  const involvedEntityNamesKeys = Object.keys(
+    involvedEntityNames,
+  ) as (keyof ActionInvolvedEntityNames)[];
 
-  const userAttributes = getUserAttributes ? await getUserAttributes(context, token) : null;
+  const userAttributes = getUserAttributes ? await getUserAttributes(context, tokenFromArgs) : null;
 
   // *** compose personalFilterObj
 
@@ -68,7 +72,7 @@ const executeAuthorisation = async (
 
     const entityName = involvedEntityNames[involvedEntityNamesKey];
 
-    if (personalFilters[entityName]) {
+    if (personalFilters[entityName] && !personalCalculatedFilters[entityName]) {
       personalCalculatedFilters[entityName] = await composePersonalFilter(
         entityName,
         userAttributes,
@@ -87,10 +91,12 @@ const executeAuthorisation = async (
 
       const entityName = involvedEntityNames[involvedEntityNamesKey];
 
+      const involvedFilterName = composeInvolvedFilterName(involvedEntityNamesKey);
+
       const personalFilter = personalCalculatedFilters[entityName];
 
       if (personalFilter === null) {
-        prev[involvedEntityNamesKey] = null;
+        prev[involvedFilterName] = null;
 
         return prev;
       }
@@ -106,17 +112,17 @@ const executeAuthorisation = async (
         : null;
 
       if (!filter) {
-        prev[involvedEntityNamesKey] = null;
+        prev[involvedFilterName] = null;
 
         return prev;
       }
 
-      prev[involvedEntityNamesKey] = personalFilter
+      prev[involvedFilterName] = personalFilter
         ? [injectStaticOrPersonalFilter(personalFilter, filter)]
         : [filter];
 
-      if (staticLimit && prev[involvedEntityNamesKey]) {
-        prev[involvedEntityNamesKey].push(staticLimit);
+      if (staticLimit && prev[involvedFilterName]) {
+        prev[involvedFilterName].push(staticLimit);
       }
 
       return prev;
@@ -181,10 +187,12 @@ const executeAuthorisation = async (
   const involvedFilters = Object.keys(result).reduce((prev, key) => {
     const entityName = involvedEntityNames[key];
 
+    const involvedFilterName = composeInvolvedFilterName(key as keyof ActionInvolvedEntityNames);
+
     const personalFilter = personalCalculatedFilters[entityName];
 
     if (personalFilter === null) {
-      prev[key] = null;
+      prev[involvedFilterName] = null;
 
       return prev;
     }
@@ -193,7 +201,7 @@ const executeAuthorisation = async (
     const staticLimit = staticLimits[entityName];
 
     if (!result[key]) {
-      prev[key] = null;
+      prev[involvedFilterName] = null;
 
       return prev;
     }
@@ -202,10 +210,12 @@ const executeAuthorisation = async (
       ? injectStaticOrPersonalFilter(staticFilter, result[key])
       : result[key];
 
-    prev[key] = personalFilter ? [injectStaticOrPersonalFilter(personalFilter, filter)] : [filter];
+    prev[involvedFilterName] = personalFilter
+      ? [injectStaticOrPersonalFilter(personalFilter, filter)]
+      : [filter];
 
-    if (staticLimit && prev[key]) {
-      prev[key].push(staticLimit);
+    if (staticLimit && prev[involvedFilterName]) {
+      prev[involvedFilterName].push(staticLimit);
     }
 
     return prev;

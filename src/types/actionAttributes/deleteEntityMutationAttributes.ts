@@ -1,6 +1,6 @@
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
@@ -20,9 +20,7 @@ const argTypes = [({ name }): string => `${name}WhereOneInput!`, (): string => '
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
   subscribeDeletedEntity: `${name}${descendantKey}`,
 });

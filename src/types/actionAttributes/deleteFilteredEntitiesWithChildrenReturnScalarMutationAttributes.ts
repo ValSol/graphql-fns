@@ -1,8 +1,8 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import getOppositeFields from '../../utils/getOppositeFields';
+import getOppositeFields from '@/utils/getOppositeFields';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
@@ -35,9 +35,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
 });
 

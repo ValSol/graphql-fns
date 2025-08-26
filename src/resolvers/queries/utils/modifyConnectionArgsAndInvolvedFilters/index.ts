@@ -29,13 +29,13 @@ const modifyConnectionArgsAndInvolvedFilters = (
     return [args, involvedFilters];
   }
 
-  const { inputOutputEntity } = involvedFilters;
+  const { inputOutputFilterAndLimit } = involvedFilters;
 
-  if (!inputOutputEntity) {
+  if (!inputOutputFilterAndLimit) {
     return [args, involvedFilters];
   }
 
-  const [filter, limit] = inputOutputEntity;
+  const [filter, limit] = inputOutputFilterAndLimit;
 
   if (!limit) {
     return [args, involvedFilters];
@@ -44,7 +44,7 @@ const modifyConnectionArgsAndInvolvedFilters = (
   const modifiedInvolvedFilters: {
     [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   } = {
-    inputOutputEntity: [filter],
+    inputOutputFilterAndLimit: [filter],
   };
 
   const { first, last, ...rest } = args;

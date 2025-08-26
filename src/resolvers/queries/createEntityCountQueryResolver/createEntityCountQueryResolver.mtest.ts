@@ -104,7 +104,7 @@ describe('createEntityCountQueryResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const PersonCount = createEntityCountQueryResolver(
@@ -115,28 +115,28 @@ describe('createEntityCountQueryResolver', () => {
     if (!PersonCount) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const count = await PersonCount(null, {}, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(count).toBe(5);
 
     const where = { position: data.theBestFriend.create.position };
     const count2 = await PersonCount(null, { where }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(count2).toBe(4);
 
     const where2 = { friends: createdPerson.id };
     const count3 = await PersonCount(null, { where: where2 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(count3).toBe(3);
 
     const where3 = { position: 'bla-bla-bla' };
     const count4 = await PersonCount(null, { where: where3 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(count4).toBe(0);
@@ -260,7 +260,7 @@ describe('createEntityCountQueryResolver', () => {
       };
       // eslint-disable-next-line no-await-in-loop
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -275,7 +275,7 @@ describe('createEntityCountQueryResolver', () => {
       child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] },
     };
     const parentCount = await ParentCount(null, { where }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(parentCount).toBe(3);
@@ -287,7 +287,7 @@ describe('createEntityCountQueryResolver', () => {
       { search, where: where2 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(parentCount3).toBe(3);
   });

@@ -100,7 +100,7 @@ describe('createNodeQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id } = createdExample;
 
@@ -134,7 +134,7 @@ describe('createNodeQueryResolver', () => {
       { mongooseConn, pubsub },
       null,
       {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       },
     );
     const { id: id2 } = createdExample2;

@@ -148,7 +148,7 @@ describe('createCloneEntityMutationResolver', () => {
       };
 
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -228,7 +228,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
@@ -296,7 +296,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend2 = await Person.findById(friendId);
@@ -337,7 +337,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate3 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend3 = await Person.findById(friendId);
@@ -369,7 +369,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate4 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       const createdFriend4 = await Person.findById(friendId2);
@@ -447,7 +447,7 @@ describe('createCloneEntityMutationResolver', () => {
         },
       };
       const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
       expect(createdPerson.firstName).toBe(data.firstName);
       expect(createdPerson.lastName).toBe(data.lastName);
@@ -537,7 +537,7 @@ describe('createCloneEntityMutationResolver', () => {
         { data: data2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
       expect(createdPerson2.firstName).toBe(data2.firstName);
       expect(createdPerson2.lastName).toBe(data2.lastName);
@@ -603,7 +603,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne, data: dataForUpdate },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
       expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
       expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
@@ -681,7 +681,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
       expect(updatedPlace.name).toBe(dataForUpdate2.name);
@@ -691,7 +691,7 @@ describe('createCloneEntityMutationResolver', () => {
         { whereOne: whereOne2, data: dataForUpdate2 },
         { mongooseConn, pubsub },
         null,
-        { involvedFilters: { inputOutputEntity: [[]] } },
+        { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
       expect(updatedPlace2).toBeNull();
     });
@@ -753,7 +753,7 @@ describe('createCloneEntityMutationResolver', () => {
     };
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(createdExample.textField1).toBe(data.textField1);
     expect(createdExample.textField2).toBe(data.textField2);
@@ -784,7 +784,7 @@ describe('createCloneEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
     expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
@@ -803,7 +803,7 @@ describe('createCloneEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate2 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
@@ -822,7 +822,7 @@ describe('createCloneEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate3 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
@@ -883,7 +883,7 @@ describe('createCloneEntityMutationResolver', () => {
     };
 
     const createdMain = await createMain(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(createdMain.textField).toBe(data.textField);
     const { id } = createdMain;
@@ -913,7 +913,7 @@ describe('createCloneEntityMutationResolver', () => {
       { whereOne, data: dataForUpdate },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedMain.textField).toBe(dataForUpdate.textField);
@@ -1008,7 +1008,7 @@ describe('createCloneEntityMutationResolver', () => {
       };
 
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -1033,7 +1033,7 @@ describe('createCloneEntityMutationResolver', () => {
       { data, whereOne },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedParent.name).toBe('updatedName');
@@ -1050,7 +1050,7 @@ describe('createCloneEntityMutationResolver', () => {
       { data, whereOne: whereOne2 },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedParent2).toBe(null);
@@ -1187,7 +1187,7 @@ describe('createCloneEntityMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     const createPost = createCreateEntityMutationResolver(
@@ -1208,7 +1208,7 @@ describe('createCloneEntityMutationResolver', () => {
 
     const post = await createPost(null, { data: postData }, { mongooseConn, pubsub }, null, {
       involvedFilters: {
-        inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+        inputOutputFilterAndLimit: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
       },
     });
 
@@ -1238,7 +1238,9 @@ describe('createCloneEntityMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+          inputOutputFilterAndLimit: [
+            [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+          ],
         },
       },
     );
@@ -1257,7 +1259,9 @@ describe('createCloneEntityMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [[{ restaurant_: { access_: { postCreators: '1234567890' } } }]],
+          inputOutputFilterAndLimit: [
+            [{ restaurant_: { access_: { postCreators: '1234567890' } } }],
+          ],
         },
       },
     );
@@ -1275,7 +1279,7 @@ describe('createCloneEntityMutationResolver', () => {
       null,
       {
         involvedFilters: {
-          inputOutputEntity: [
+          inputOutputFilterAndLimit: [
             [
               {
                 restaurant_: { access_: { postCreators: '1234567890' } },

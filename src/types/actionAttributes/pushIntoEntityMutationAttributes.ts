@@ -1,4 +1,4 @@
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
@@ -32,9 +32,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
   subscribeUpdatedEntity: `${name}${descendantKey}`,
 });

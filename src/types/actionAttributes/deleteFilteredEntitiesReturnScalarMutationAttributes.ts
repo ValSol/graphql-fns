@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
@@ -31,9 +31,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
 });
 

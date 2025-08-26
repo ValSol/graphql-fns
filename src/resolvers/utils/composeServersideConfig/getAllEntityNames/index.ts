@@ -4,10 +4,10 @@ import type {
   ServersideConfig,
   SimplifiedEntityFilters,
   SimplifiedInventoryOptions,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
 
-import mergeDescendantIntoCustom from '../../../../utils/mergeDescendantIntoCustom';
-import { mutationAttributes, queryAttributes } from '../../../../types/actionAttributes';
+import mergeDescendantIntoCustom from '@/utils/mergeDescendantIntoCustom';
+import { mutationAttributes, queryAttributes } from '@/types/actionAttributes';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 import subtructInventoryOptions from './subtructInventoryOptions';
 

@@ -93,7 +93,7 @@ describe('createEntityQueryResolver', () => {
       textField5: ['textField5'],
     };
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id } = createdExample;
 
@@ -102,7 +102,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereOne = { id };
     const example = await Example(null, { whereOne }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(example.textField1).toBe(data.textField1);
@@ -115,7 +115,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereOne2 = { textField1: data.textField1 };
     const example2 = await Example(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(example2.textField1).toBe(data.textField1);
@@ -128,7 +128,7 @@ describe('createEntityQueryResolver', () => {
 
     const whereCompoundOne = { textField2: data.textField2, textField3: data.textField3 };
     const example3 = await Example(null, { whereCompoundOne }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(example3.textField1).toBe(data.textField1);
@@ -227,7 +227,7 @@ describe('createEntityQueryResolver', () => {
       };
       // eslint-disable-next-line no-await-in-loop
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -242,7 +242,7 @@ describe('createEntityQueryResolver', () => {
       ],
     };
     const parent = await Parent(null, { whereOne }, { mongooseConn, pubsub }, info2, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(parent.name).toBe('name-2');
@@ -254,7 +254,7 @@ describe('createEntityQueryResolver', () => {
       ],
     };
     const parent2 = await Parent(null, { whereOne: whereOne2 }, { mongooseConn, pubsub }, info2, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(parent2).toBe(null);

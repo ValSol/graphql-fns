@@ -18,7 +18,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
 
   const { data } = args;
 
-  const { subscribeUpdatedEntity: filter } = involvedFilters;
+  const { subscribeUpdatedFilterAndLimit: filter } = involvedFilters;
 
   const result = filter
     ? async ({ previous: [previous], current: [current] }) => {

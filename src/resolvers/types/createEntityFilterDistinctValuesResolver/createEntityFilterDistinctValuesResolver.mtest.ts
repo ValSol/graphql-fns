@@ -115,7 +115,7 @@ describe('createEntityFilterDistinctValuesResolver', () => {
     };
 
     const createdUser = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const { id, restaurants } = createdUser;
@@ -144,7 +144,7 @@ describe('createEntityFilterDistinctValuesResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       },
     );
 
@@ -164,7 +164,7 @@ describe('createEntityFilterDistinctValuesResolver', () => {
       { whereOne: { id }, data: data2 },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(updatedUser.restaurantsFilter).toBe(
@@ -177,7 +177,7 @@ describe('createEntityFilterDistinctValuesResolver', () => {
       { mongooseConn, pubsub },
       info,
       {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       },
     );
 

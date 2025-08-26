@@ -166,7 +166,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(createdPerson.firstName).toBe(data.firstName);
     expect(createdPerson.lastName).toBe(data.lastName);
@@ -228,7 +228,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const where = { id_in: [id] };
     const deletedPersonCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(deletedPersonCount).toBe(1);
 
@@ -251,7 +251,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(deletedPersonCount2).toEqual(0);
 
@@ -270,7 +270,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(deletedPlaceCount).toBe(1);
@@ -280,7 +280,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(deletedPlaceCount2).toEqual(0);
   });
@@ -376,7 +376,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       };
 
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -396,7 +396,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
 
     const info = createInfoEssence({ _id: 1, name: 1 });
     const deletedParentCount = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(deletedParentCount).toBe(1);
@@ -413,7 +413,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(deletedParentCount2).toEqual(0);
@@ -510,7 +510,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       };
 
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -529,7 +529,7 @@ describe('createDeleteFilteredEntitiesReturnScalarMutationResolver', () => {
       { where },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(deletedParentsCounts).toEqual(0);

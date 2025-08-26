@@ -1,8 +1,13 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
+import type {
+  ActionInvolvedEntityNames,
+  EntityConfig,
+  GeneralConfig,
+  InputCreator,
+} from '@/tsTypes';
 
-import composeDescendantConfig from '../../utils/composeDescendantConfig';
+import composeDescendantConfig from '@/utils/composeDescendantConfig';
 import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
@@ -68,9 +73,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({ inputOutputEntity: `${name}${descendantKey}` });
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,

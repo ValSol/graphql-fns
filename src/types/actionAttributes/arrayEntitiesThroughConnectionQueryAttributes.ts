@@ -1,8 +1,13 @@
 import pluralize from 'pluralize';
 
-import type { EntityConfig, GeneralConfig, InputCreator } from '../../tsTypes';
+import type {
+  ActionInvolvedEntityNames,
+  EntityConfig,
+  GeneralConfig,
+  InputCreator,
+} from '@/tsTypes';
 
-import composeDescendantConfig from '../../utils/composeDescendantConfig';
+import composeDescendantConfig from '@/utils/composeDescendantConfig';
 import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
 
 const actionType = 'Field';
@@ -56,9 +61,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({});
+): ActionInvolvedEntityNames => ({});
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,

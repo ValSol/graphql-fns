@@ -70,7 +70,7 @@ const workOutMutations = async (
         const parent = parentInArgs || null;
         const info = infoInArgs || null;
         const resolverOptions = resolverOptionsInArgs || {
-          involvedFilters: { inputOutputEntity: [[]] },
+          involvedFilters: { inputOutputFilterAndLimit: [[]] },
         };
 
         const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
@@ -192,7 +192,7 @@ const workOutMutations = async (
     const parent = parentInArgs || null;
     const info = infoInArgs || null;
     const resolverOptions = resolverOptionsInArgs || {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     };
 
     const { array, produceCurrent, report, finalResult } =

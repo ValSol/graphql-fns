@@ -22,14 +22,14 @@ const getVeryLast = async (
 ): null | Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
   const { parent, args, context } = resolverArg;
 
-  const { inputOutputEntity } = involvedFilters;
+  const { inputOutputFilterAndLimit } = involvedFilters;
 
   const count = await entityCountQueryResolver(
     parent,
     args,
     context,
     createInfoEssence({ _id: 1 }),
-    { involvedFilters: { inputOutputEntity } },
+    { involvedFilters: { inputOutputFilterAndLimit } },
   );
 
   const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);

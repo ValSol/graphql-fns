@@ -337,7 +337,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -401,7 +401,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }] },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(restaurantDeleted.title).toBe(data.title);
@@ -499,7 +499,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -563,7 +563,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: menuCloneId }] },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(menuCloneDeleted.title).toBe(data.menu.create.clone.create.title);
@@ -616,7 +616,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }] },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
   });
 
@@ -676,7 +676,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(createdRestaurant.title).toBe(data.title);
@@ -740,7 +740,7 @@ describe('createDeleteManyEntitiesWithChildrenMutationResolver', () => {
       { whereOne: [{ id: restaurantId.toString() }], options: { fieldsToDelete: ['menu'] } },
       { mongooseConn, pubsub },
       info,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(restaurantDeleted.title).toBe(restaurantDeleted.title);

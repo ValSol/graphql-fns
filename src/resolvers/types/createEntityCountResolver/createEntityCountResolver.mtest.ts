@@ -95,17 +95,17 @@ describe('createEntityCountResolver', () => {
     const data3 = { title: 'title-3' };
 
     const createdPlace1 = await createPlace(null, { data: data1 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id1 } = createdPlace1;
 
     const createdPlace2 = await createPlace(null, { data: data2 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id2 } = createdPlace2;
 
     const createdPlace3 = await createPlace(null, { data: data3 }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     const { id: id3 } = createdPlace3;
 
@@ -124,7 +124,7 @@ describe('createEntityCountResolver', () => {
     const info = { projection: { title: 1 }, fieldArgs: {}, path: [], fieldName: 'friendsCount' };
 
     const count = await Place(parent, { first: 1 }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(count).toBe(3);

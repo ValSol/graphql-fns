@@ -118,7 +118,7 @@ describe('createEntityQueryResolver', () => {
       },
     };
     const createdPerson = await createPerson(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const People = createEntitiesQueryResolver(personConfig, generalConfig, serversideConfig);
@@ -129,7 +129,7 @@ describe('createEntityQueryResolver', () => {
       {},
       { mongooseConn, pubsub },
       createInfoEssence({ fullName: 1 }),
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(people.length).toBe(5);
@@ -139,7 +139,7 @@ describe('createEntityQueryResolver', () => {
     }
 
     const peopleLimited = await People(null, {}, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[], 3] },
+      involvedFilters: { inputOutputFilterAndLimit: [[], 3] },
     });
 
     expect(peopleLimited.length).toBe(3);
@@ -147,28 +147,28 @@ describe('createEntityQueryResolver', () => {
 
     const where = { position: data.theBestFriend.create.position };
     const people2 = await People(null, { where }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(people2.length).toBe(4);
 
     const where2 = { friends: createdPerson.id };
     const people3 = await People(null, { where: where2 }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(people3.length).toBe(3);
 
     const pagination = { skip: 1, first: 3 };
     const people4 = await People(null, { pagination }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(people4.length).toBe(3);
 
     const where3 = { friends_: { position: 'programmer' } };
     const people5 = await People(null, { where: where3 }, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(people5.length).toBe(1);
   });
@@ -352,7 +352,7 @@ describe('createEntityQueryResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     const Restaurants = createEntitiesQueryResolver(
@@ -363,7 +363,7 @@ describe('createEntityQueryResolver', () => {
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(restaurants.length).toBe(8);
@@ -375,7 +375,7 @@ describe('createEntityQueryResolver', () => {
       maxDistance: 150,
     };
     const restaurants2 = await Restaurants(null, { near }, { mongooseConn, pubsub }, info2, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(restaurants2.length).toBe(3);
     expect(restaurants2[0].name).toEqual('NAM');
@@ -386,7 +386,7 @@ describe('createEntityQueryResolver', () => {
       recommended: true,
     };
     const restaurants3 = await Restaurants(null, { near, where }, { mongooseConn, pubsub }, info2, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(restaurants3.length).toBe(2);
     expect(restaurants3[0].name).toEqual('NAM');
@@ -400,7 +400,7 @@ describe('createEntityQueryResolver', () => {
       { where: where2 },
       { mongooseConn, pubsub },
       info2,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(restaurants4.length).toBe(2);
 
@@ -412,7 +412,7 @@ describe('createEntityQueryResolver', () => {
       { where: where3 },
       { mongooseConn, pubsub },
       info2,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(restaurants5[0].name).toEqual('Fine Family');
@@ -509,7 +509,7 @@ describe('createEntityQueryResolver', () => {
       { data },
       { mongooseConn, pubsub },
       null,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     const Restaurants = createEntitiesQueryResolver(
@@ -520,7 +520,7 @@ describe('createEntityQueryResolver', () => {
     if (!Restaurants) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const restaurants = await Restaurants(null, {}, { mongooseConn, pubsub }, info, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(restaurants.length).toBe(8);
@@ -530,7 +530,7 @@ describe('createEntityQueryResolver', () => {
       num_in: ['4', '2', '8', '6'],
     };
     const restaurants2 = await Restaurants(null, { where }, { mongooseConn, pubsub }, info2, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(restaurants2.length).toBe(4);
   });
@@ -647,14 +647,14 @@ describe('createEntityQueryResolver', () => {
     };
 
     await createTable(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const Items = createEntitiesQueryResolver(tableItemConfig, generalConfig, serversideConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(items.length).toBe(9);
@@ -662,7 +662,7 @@ describe('createEntityQueryResolver', () => {
     const sort = { sortBy: ['first_ASC', 'second_DESC', 'id_ASC'] };
 
     const items2 = await Items(null, { sort }, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(items2.length).toBe(9);
@@ -688,7 +688,7 @@ describe('createEntityQueryResolver', () => {
     const sort2 = { sortBy: ['id_DESC'] };
 
     const items3 = await Items(null, { sort: sort2 }, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(items3.length).toBe(9);
@@ -788,14 +788,14 @@ describe('createEntityQueryResolver', () => {
     };
 
     await createTable(null, { data }, { mongooseConn, pubsub }, null, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     const Items = createEntitiesQueryResolver(tableItemConfig, generalConfig, serversideConfig);
     if (!Items) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const items = await Items(null, {}, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(items.length).toBe(15);
@@ -807,7 +807,7 @@ describe('createEntityQueryResolver', () => {
       { search },
       { mongooseConn, pubsub },
       { ...infoForSort, score: 1 },
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(items2.length).toBe(4);
@@ -938,7 +938,7 @@ describe('createEntityQueryResolver', () => {
       };
       // eslint-disable-next-line no-await-in-loop
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
     }
 
@@ -949,7 +949,7 @@ describe('createEntityQueryResolver', () => {
       child_: { textFields_in: ['text-2', 'text-4', 'text-12', 'text-99'] },
     };
     const parents = await Parents(null, { where }, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(parents.length).toBe(3);
@@ -962,7 +962,7 @@ describe('createEntityQueryResolver', () => {
       { pagination, sort, where: where2 },
       { mongooseConn, pubsub },
       infoForSort,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
     expect(parents2.length).toBe(7);
@@ -974,7 +974,7 @@ describe('createEntityQueryResolver', () => {
     };
 
     const parents3 = await Parents(null, { near, where }, { mongooseConn, pubsub }, infoForSort, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
     expect(parents3.length).toBe(2);
 
@@ -984,7 +984,7 @@ describe('createEntityQueryResolver', () => {
       { search, where: where2 },
       { mongooseConn, pubsub },
       infoForSort,
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
     expect(parents4.length).toBe(3);
   });
@@ -1100,7 +1100,7 @@ describe('createEntityQueryResolver', () => {
     for (let i = 0; i < 3; i += 1) {
       const data = { name: `user${i}` };
       const user = await createUser(null, { data }, { mongooseConn, pubsub }, null, {
-        involvedFilters: { inputOutputEntity: [[]] },
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });
 
       for (let j = 0; j < 3; j += 1) {
@@ -1110,7 +1110,7 @@ describe('createEntityQueryResolver', () => {
           { data: data2 },
           { mongooseConn, pubsub },
           null,
-          { involvedFilters: { inputOutputEntity: [[]] } },
+          { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
         );
 
         for (let k = 0; k < 3; k += 1) {
@@ -1119,7 +1119,7 @@ describe('createEntityQueryResolver', () => {
             textbook: { connect: textbook.id },
           };
           const lesson = await createLesson(null, { data: data3 }, { mongooseConn, pubsub }, null, {
-            involvedFilters: { inputOutputEntity: [[]] },
+            involvedFilters: { inputOutputFilterAndLimit: [[]] },
           });
         }
       }
@@ -1134,7 +1134,7 @@ describe('createEntityQueryResolver', () => {
     };
 
     const users = await Users(null, { where }, { mongooseConn, pubsub }, info4, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(users.length).toBe(1);
@@ -1145,7 +1145,7 @@ describe('createEntityQueryResolver', () => {
     };
 
     const users2 = await Users(null, { where: where2 }, { mongooseConn, pubsub }, info4, {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     expect(users2.length).toBe(2);

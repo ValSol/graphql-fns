@@ -1,6 +1,6 @@
-import type { EntityConfig, GeneralConfig } from '../../tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '../../utils/composeDescendantConfigByName';
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import getOppositeFields from '../../utils/getOppositeFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
@@ -33,9 +33,7 @@ const argTypes = [
 const actionInvolvedEntityNames = (
   name: string,
   descendantKey = '',
-): {
-  [key: string]: string;
-} => ({
+): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
 });
 

@@ -8,8 +8,8 @@ type InvolvedFilters = {
 };
 
 describe('getInputAndOutputFilters', () => {
-  test('inputOutputEntity = null', () => {
-    const involvedFilters = { inputOutputEntity: null };
+  test('inputOutputFilterAndLimit = null', () => {
+    const involvedFilters = { inputOutputFilterAndLimit: null };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -18,8 +18,11 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = null, outputEntity = []', () => {
-    const involvedFilters: InvolvedFilters = { inputEntity: null, outputEntity: [[]] };
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = null, outputFilterAndLimit = []', () => {
+    const involvedFilters: InvolvedFilters = {
+      inputFilterAndLimit: null,
+      outputFilterAndLimit: [[]],
+    };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -28,8 +31,11 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = null, outputEntity = []', () => {
-    const involvedFilters: InvolvedFilters = { inputEntity: null, outputEntity: [[], 5] };
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = null, outputFilterAndLimit = []', () => {
+    const involvedFilters: InvolvedFilters = {
+      inputFilterAndLimit: null,
+      outputFilterAndLimit: [[], 5],
+    };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -38,8 +44,11 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = [], outputEntity = null', () => {
-    const involvedFilters: InvolvedFilters = { inputEntity: [[]], outputEntity: null };
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = [], outputFilterAndLimit = null', () => {
+    const involvedFilters: InvolvedFilters = {
+      inputFilterAndLimit: [[]],
+      outputFilterAndLimit: null,
+    };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -48,8 +57,11 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = [], outputEntity = null', () => {
-    const involvedFilters: InvolvedFilters = { inputEntity: [[], 5], outputEntity: null };
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = [], outputFilterAndLimit = null', () => {
+    const involvedFilters: InvolvedFilters = {
+      inputFilterAndLimit: [[], 5],
+      outputFilterAndLimit: null,
+    };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -58,10 +70,10 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = [{ a: 1 }], outputEntity = [{ b: 2 }]', () => {
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = [{ a: 1 }], outputFilterAndLimit = [{ b: 2 }]', () => {
     const involvedFilters: InvolvedFilters = {
-      inputEntity: [[{ a: 1 }]],
-      outputEntity: [[{ b: 2 }]],
+      inputFilterAndLimit: [[{ a: 1 }]],
+      outputFilterAndLimit: [[{ b: 2 }]],
     };
 
     const result = getInputAndOutputFilters(involvedFilters);
@@ -71,10 +83,10 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = undefined, inputEntity = [{ a: 1 }, 5], outputEntity = [{ b: 2 }, 50]', () => {
+  test('inputOutputFilterAndLimit = undefined, inputFilterAndLimit = [{ a: 1 }, 5], outputFilterAndLimit = [{ b: 2 }, 50]', () => {
     const involvedFilters: InvolvedFilters = {
-      inputEntity: [[{ a: 1 }], 5],
-      outputEntity: [[{ b: 2 }], 50],
+      inputFilterAndLimit: [[{ a: 1 }], 5],
+      outputFilterAndLimit: [[{ b: 2 }], 50],
     };
 
     const result = getInputAndOutputFilters(involvedFilters);
@@ -89,8 +101,8 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = []', () => {
-    const involvedFilters: InvolvedFilters = { inputOutputEntity: [[]] };
+  test('inputOutputFilterAndLimit = []', () => {
+    const involvedFilters: InvolvedFilters = { inputOutputFilterAndLimit: [[]] };
 
     const result = getInputAndOutputFilters(involvedFilters);
 
@@ -99,8 +111,8 @@ describe('getInputAndOutputFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('inputOutputEntity = [[], 5]', () => {
-    const involvedFilters: InvolvedFilters = { inputOutputEntity: [[], 5] };
+  test('inputOutputFilterAndLimit = [[], 5]', () => {
+    const involvedFilters: InvolvedFilters = { inputOutputFilterAndLimit: [[], 5] };
 
     const result = getInputAndOutputFilters(involvedFilters);
 

@@ -8,7 +8,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
   } = resolverArg;
   const { name } = entityConfig;
 
-  const { subscribeCreatedEntity: filter } = involvedFilters;
+  const { subscribeCreatedFilterAndLimit: filter } = involvedFilters;
 
   const result = filter
     ? ({ current: [current] }) => {

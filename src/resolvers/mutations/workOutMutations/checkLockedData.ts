@@ -24,7 +24,7 @@ export type StandardMutationsArg = {
   info?: SintheticResolverInfo;
   resolverOptions?: {
     involvedFilters: {
-      inputOutputEntity: [InvolvedFilter[]] | [InvolvedFilter[], number];
+      inputOutputFilterAndLimit: [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
   };
   returnReport?: boolean;
@@ -111,7 +111,7 @@ const checkLockedData = async (
       generalConfig,
       serversideConfig,
     )(null, args, context, createInfoEssence(projection), {
-      involvedFilters: { inputOutputEntity: [[]] },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
     if (result.length !== currentResult.length) {
@@ -142,7 +142,7 @@ const checkLockedData = async (
       args,
       context,
       createInfoEssence(projection),
-      { involvedFilters: { inputOutputEntity: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       session,
     );
 
