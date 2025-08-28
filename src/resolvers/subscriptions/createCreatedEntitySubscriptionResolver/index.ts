@@ -1,15 +1,15 @@
-import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '../../../tsTypes';
+import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
-import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import checkInventory from '@/utils/inventory/checkInventory';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createCreatedEntitySubscriptionResolver = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  inAnyCase?: boolean,
 ): any => {
   const { inventory } = generalConfig;
   const { name } = entityConfig;
@@ -20,23 +20,19 @@ const createCreatedEntitySubscriptionResolver = (
 
   const resolver: Subscribe = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
-      withFilterAndTransformer(context.pubsub.subscribe(`created-${name}`), (payload) => {
-        // const { filter } = getFilterFromInvolvedFilters(involvedFilters);
+      withFilterAndTransformer(
+        context.pubsub.subscribe(`created-${name}`),
+        (payload) => {
+          // const { where } = mergeWhereAndFilter(filter, args.where || {}, entityConfig);
 
-        console.log('involvedFilters =', involvedFilters);
+          return true;
+        },
+        (payload) => {
+          const { [`created${name}`]: item } = payload as Record<string, any>;
 
-        // if (!filter) {
-        //   return false;
-        // }
-
-        // const { id } = payload;
-
-        // const { where } = mergeWhereAndFilter(filter, args.where || {}, entityConfig);
-
-        console.log('payload =', payload);
-
-        return true;
-      }),
+          return { [`created${name}`]: transformAfter({}, item, entityConfig, generalConfig) };
+        },
+      ),
   };
 
   return resolver;

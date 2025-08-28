@@ -1,4 +1,4 @@
-import type { Report } from '../../../tsTypes';
+import type { Report } from '@/resolvers/tsTypes';
 
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
@@ -8,7 +8,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
   } = resolverArg;
   const { name } = entityConfig;
 
-  const { subscribeDelatedEntity: filter } = involvedFilters;
+  const { subscribeDeletedFilterAndLimit: filter } = involvedFilters;
 
   const result = filter
     ? ({ previous: [previous] }) => {

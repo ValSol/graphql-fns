@@ -9,30 +9,47 @@ import type {
 } from '@/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
+import parseEntityName from '@/utils/parseEntityName';
 import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
-
-const amendInventoryChain = (inventoryChain: ThreeSegmentInventoryChain, key: string) => {
-  const [, , entityName] = inventoryChain;
-
-  switch (key) {
-    case 'subscribeCreatedEntity':
-      return ['Subscription', 'createdEntity', entityName];
-
-    case 'subscribeDeletedEntity':
-      return ['Subscription', 'deletedEntity', entityName];
-
-    case 'subscribeUpdatedEntity':
-      return ['Subscription', 'updatedEntity', entityName];
-
-    default:
-      return inventoryChain;
-  }
-};
+import composeDescendantConfigName from '@/utils/composeDescendantConfig/composeDescendantConfigName';
 
 const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
   `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
+
+type SubscribeInvolvedKey =
+  | 'subscribeCreatedEntity'
+  | 'subscribeDeletedEntity'
+  | 'subscribeUpdatedEntity';
+
+const composeSubscribeInventoryChain = (
+  key: SubscribeInvolvedKey,
+  entityName: string,
+  generalConfig: GeneralConfig,
+) => {
+  const { root, descendantKey } = parseEntityName(entityName, generalConfig);
+
+  const {
+    allEntityConfigs: {
+      [root]: { descendantNameSlicePosition },
+    },
+  } = generalConfig;
+
+  switch (key) {
+    case 'subscribeCreatedEntity':
+      return ['Subscription', 'createdEntity', root];
+
+    case 'subscribeDeletedEntity':
+      return ['Subscription', 'deletedEntity', root];
+
+    case 'subscribeUpdatedEntity':
+      return ['Subscription', 'updatedEntity', root];
+
+    default:
+      throw TypeError(`Got incorrect involvedEntityNamesKey: "${key}"!`);
+  }
+};
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
@@ -87,7 +104,13 @@ const executeAuthorisation = async (
 
   if (!inventoryByRoles && !filters) {
     const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
-      const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
+      const amendedInventoryChain = involvedEntityNamesKey.startsWith('subscribe')
+        ? composeSubscribeInventoryChain(
+            involvedEntityNamesKey as SubscribeInvolvedKey,
+            involvedEntityNames[involvedEntityNamesKey],
+            generalConfig,
+          )
+        : inventoryChain;
 
       const entityName = involvedEntityNames[involvedEntityNamesKey];
 
@@ -144,7 +167,13 @@ const executeAuthorisation = async (
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-    const amendedInventoryChain = amendInventoryChain(inventoryChain, involvedEntityNamesKey);
+    const amendedInventoryChain = involvedEntityNamesKey.startsWith('subscribe')
+      ? composeSubscribeInventoryChain(
+          involvedEntityNamesKey as SubscribeInvolvedKey,
+          involvedEntityNames[involvedEntityNamesKey],
+          generalConfig,
+        )
+      : inventoryChain;
 
     result[involvedEntityNamesKey] = null;
 

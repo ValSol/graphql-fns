@@ -59,6 +59,7 @@ const resolverDecorator = (
 
   obj[name] = async (...resolverArgs) => {
     const returnConfig = actionAttributes.actionReturnConfig(entityConfig, generalConfig);
+
     const { argNames } = actionAttributes;
     const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
       composer({ ...entityConfig, name: '' }).replace(regExp, ''),

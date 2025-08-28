@@ -6,6 +6,7 @@ import type {
 } from '@/tsTypes';
 
 import authDecorator from './authDecorator';
+import transformWhere from './transformBefore/transformWhere';
 
 const subscriptionResolverDecorator = (
   subscribeObject: { subscribe: any },
@@ -14,19 +15,27 @@ const subscriptionResolverDecorator = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any => {
-  const { subscribe } = subscribeObject;
+  const { subscribe: preSubscribe } = subscribeObject;
 
   const involvedEntityNames = { inputOutputEntity: entityConfig.name };
 
-  return {
-    subscribe: authDecorator(
-      subscribe,
+  const subscribe = async (...resolverArgs) => {
+    const [parent, args, ...rest] = resolverArgs;
+
+    const { where: preWherePayload = {} } = args;
+
+    const where = transformWhere(preWherePayload, entityConfig);
+
+    return await authDecorator(
+      preSubscribe,
       inventoryChain,
       involvedEntityNames,
       generalConfig,
       serversideConfig,
-    ),
+    )(parent, { ...args, where }, ...rest);
   };
+
+  return { subscribe };
 };
 
 export default subscriptionResolverDecorator;

@@ -1,4 +1,4 @@
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
 const createCreatedEntitySubscriptionType = (entityConfig: EntityConfig): string => {
   const { name } = entityConfig;

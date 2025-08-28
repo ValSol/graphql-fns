@@ -2,14 +2,17 @@
 
 import type {
   Context,
+  DescendantAttributes,
   EntityFilters,
   GeneralConfig,
   Inventory,
+  InventoryByRoles,
   InventoryChain,
   ServersideConfig,
-} from '../../../tsTypes';
+  TangibleEntityConfig,
+} from '@/tsTypes';
 
-import sleep from '../../../utils/sleep';
+import sleep from '@/utils/sleep';
 import executeAuthorisation from '.';
 
 const viewer = 'Viewer';
@@ -61,6 +64,9 @@ describe('executeAuthorisation', () => {
         Mutation: {
           cloneEntity: ['Restaurant'],
         },
+        Subscription: {
+          updatedEntityForCabinet: ['Restaurant'],
+        },
       },
     },
 
@@ -76,7 +82,7 @@ describe('executeAuthorisation', () => {
         },
       },
     },
-  };
+  } as InventoryByRoles;
 
   const filters: EntityFilters = {
     RestaurantForCabinet: [
@@ -143,7 +149,23 @@ describe('executeAuthorisation', () => {
 
   const context = {} as Context;
 
-  const generalConfig = {} as GeneralConfig;
+  const ForCatalog: DescendantAttributes = {
+    allow: { Restaurant: ['entity', 'entities'] },
+    descendantKey: 'ForCatalog',
+  };
+  const ForSetting: DescendantAttributes = {
+    allow: { Restaurant: ['entity', 'entities'] },
+    descendantKey: 'ForSetting',
+  };
+  const ForView: DescendantAttributes = {
+    allow: { Restaurant: ['entity', 'entities'] },
+    descendantKey: 'ForView',
+  };
+
+  const allEntityConfigs = { Restaurant: {} as TangibleEntityConfig };
+  const descendant = { ForCatalog, ForSetting, ForView };
+
+  const generalConfig = { allEntityConfigs, descendant } as GeneralConfig;
 
   const id = '1234567890';
 
@@ -564,7 +586,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'RestaurantForView' },
       {},
       context,
       generalConfig,
@@ -584,7 +606,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'RestaurantForSetting' },
       {},
       context,
       generalConfig,
@@ -592,7 +614,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult = {
       inputOutputFilterAndLimit: [[], 8],
-      subscribeUpdatedFilterAndLimit: [[], 6],
+      subscribeUpdatedFilterAndLimit: [[], 8],
     };
     expect(result).toEqual(expectedResult);
 
@@ -620,7 +642,9 @@ describe('executeAuthorisation', () => {
 
     const inventory: Inventory = { name: 'test', exclude: { Subscription: true } };
 
-    const generalConfig2: GeneralConfig = { allEntityConfigs: {}, inventory };
+    const generalConfig2: GeneralConfig = { inventory, allEntityConfigs: {} };
+
+    Object.assign(generalConfig2, generalConfig);
 
     const result = await executeAuthorisation(
       inventoryChain,

@@ -163,6 +163,7 @@ const composeGqlResolvers = (
         const deletedEntitySubscriptionResolver = createDeletedEntitySubscriptionResolver(
           entityConfig,
           generalConfig,
+          serversideConfig,
         );
         if (deletedEntitySubscriptionResolver) {
           prev.Subscription[`deleted${name}`] = subscriptionResolverDecorator(
@@ -177,6 +178,7 @@ const composeGqlResolvers = (
         const updatedEntitySubscriptionResolver = createUpdatedEntitySubscriptionResolver(
           entityConfig,
           generalConfig,
+          serversideConfig,
         );
         if (updatedEntitySubscriptionResolver) {
           prev.Subscription[`updated${name}`] = subscriptionResolverDecorator(

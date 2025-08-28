@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { EntityConfig } from '../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
 import createUpdatedEntitySubscriptionType from './createUpdatedEntitySubscriptionType';
 

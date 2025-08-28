@@ -1,4 +1,4 @@
-import type { EntityConfig } from '../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
 const createUpdatedEntityPayloadType = (entityConfig: EntityConfig): string => {
   const {

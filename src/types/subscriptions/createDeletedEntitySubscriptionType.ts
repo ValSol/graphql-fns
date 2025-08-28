@@ -1,4 +1,4 @@
-import type {EntityConfig} from '../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
 const createDeletedEntitySubscriptionType = (entityConfig: EntityConfig): string => {
   const { name } = entityConfig;

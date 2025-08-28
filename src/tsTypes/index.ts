@@ -464,7 +464,7 @@ type SimplifiedCalculatedField =
 type SimplifiedEntityConfigCommonProperties = {
   name: string;
   interfaces?: string[];
-  derivativeNameSlicePosition?: number;
+  descendantNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
   filterFields?: SimplifiedFilterField[];
