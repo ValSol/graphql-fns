@@ -1,4 +1,4 @@
-import type { GeneralConfig } from '../../tsTypes';
+import type { GeneralConfig } from '@/tsTypes';
 
 import composeDescendantConfigName from '../composeDescendantConfig/composeDescendantConfigName';
 

@@ -9,9 +9,9 @@ import type {
   ObjectSignatureMethods,
   SimplifiedEmbeddedEntityConfig,
   SimplifiedTangibleEntityConfig,
-} from '../tsTypes';
+} from '@/tsTypes';
 
-import composeAllEntityConfigs from '../utils/composeAllEntityConfigs';
+import composeAllEntityConfigsAndEnums from '@/utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
 
 describe('composeGqlTypes', () => {
@@ -119,14 +119,14 @@ describe('composeGqlTypes', () => {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [
+    const simplifiedEntityConfigs = [
       menuConfig,
       menuCloneConfig,
       menuSectionConfig,
       menuCloneSectionConfig,
     ];
 
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
@@ -222,6 +222,26 @@ type MenuCloneConnection {
 type MenuCloneEdge {
   cursor: String!
   node: MenuClone!
+}
+type MenuUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Menu!
+  previousNode: Menu!
+}
+type MenuCloneUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: MenuClone!
+  previousNode: MenuClone!
+}
+type MenuSectionUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: MenuSection!
+  previousNode: MenuSection!
+}
+type MenuCloneSectionUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: MenuCloneSection!
+  previousNode: MenuCloneSection!
 }
 input MenuWhereInput {
   id_in: [ID!]
@@ -663,43 +683,172 @@ input PushIntoMenuCloneInput {
 input MenuClonePushPositionsInput {
   sections: [Int!]
 }
-enum MenuFieldNamesEnum {
-  name
-  clone
-  sections
+input MenuWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  clone: ID
+  clone_in: [ID!]
+  clone_nin: [ID!]
+  clone_ne: ID
+  clone_exists: Boolean
+  sections: ID
+  sections_in: [ID!]
+  sections_nin: [ID!]
+  sections_ne: ID
+  sections_size: Int
+  sections_notsize: Int
+  selectedSections: String
+  selectedSections_in: [String!]
+  selectedSections_nin: [String!]
+  selectedSections_ne: String
+  selectedSections_gt: String
+  selectedSections_gte: String
+  selectedSections_lt: String
+  selectedSections_lte: String
+  selectedSections_re: [RegExp!]
+  selectedSections_size: Int
+  selectedSections_notsize: Int
+  AND: [MenuWherePayloadInput!]
+  NOR: [MenuWherePayloadInput!]
+  OR: [MenuWherePayloadInput!]
 }
-type UpdatedMenuPayload {
-  node: Menu
-  previousNode: Menu
-  updatedFields: [MenuFieldNamesEnum!]
+input MenuCloneWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  original: ID
+  original_in: [ID!]
+  original_nin: [ID!]
+  original_ne: ID
+  original_exists: Boolean
+  sections: ID
+  sections_in: [ID!]
+  sections_nin: [ID!]
+  sections_ne: ID
+  sections_size: Int
+  sections_notsize: Int
+  AND: [MenuCloneWherePayloadInput!]
+  NOR: [MenuCloneWherePayloadInput!]
+  OR: [MenuCloneWherePayloadInput!]
 }
-enum MenuCloneFieldNamesEnum {
-  name
-  original
-  sections
+input MenuSectionWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  menu: ID
+  menu_in: [ID!]
+  menu_nin: [ID!]
+  menu_ne: ID
+  menu_exists: Boolean
+  AND: [MenuSectionWherePayloadInput!]
+  NOR: [MenuSectionWherePayloadInput!]
+  OR: [MenuSectionWherePayloadInput!]
 }
-type UpdatedMenuClonePayload {
-  node: MenuClone
-  previousNode: MenuClone
-  updatedFields: [MenuCloneFieldNamesEnum!]
-}
-enum MenuSectionFieldNamesEnum {
-  name
-  menu
-}
-type UpdatedMenuSectionPayload {
-  node: MenuSection
-  previousNode: MenuSection
-  updatedFields: [MenuSectionFieldNamesEnum!]
-}
-enum MenuCloneSectionFieldNamesEnum {
-  name
-  menu
-}
-type UpdatedMenuCloneSectionPayload {
-  node: MenuCloneSection
-  previousNode: MenuCloneSection
-  updatedFields: [MenuCloneSectionFieldNamesEnum!]
+input MenuCloneSectionWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  menu: ID
+  menu_in: [ID!]
+  menu_nin: [ID!]
+  menu_ne: ID
+  menu_exists: Boolean
+  AND: [MenuCloneSectionWherePayloadInput!]
+  NOR: [MenuCloneSectionWherePayloadInput!]
+  OR: [MenuCloneSectionWherePayloadInput!]
 }
 type Query {
   node(id: ID!): Node
@@ -793,18 +942,18 @@ type Mutation {
   updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!, token: String): MenuCloneSection!
 }
 type Subscription {
-  createdMenu(where: MenuWhereInput): Menu!
-  updatedMenu(where: MenuWhereInput): UpdatedMenuPayload!
-  deletedMenu(where: MenuWhereInput): Menu!
-  createdMenuClone(where: MenuCloneWhereInput): MenuClone!
-  updatedMenuClone(where: MenuCloneWhereInput): UpdatedMenuClonePayload!
-  deletedMenuClone(where: MenuCloneWhereInput): MenuClone!
-  createdMenuSection(where: MenuSectionWhereInput): MenuSection!
-  updatedMenuSection(where: MenuSectionWhereInput): UpdatedMenuSectionPayload!
-  deletedMenuSection(where: MenuSectionWhereInput): MenuSection!
-  createdMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
-  updatedMenuCloneSection(where: MenuCloneSectionWhereInput): UpdatedMenuCloneSectionPayload!
-  deletedMenuCloneSection(where: MenuCloneSectionWhereInput): MenuCloneSection!
+  createdMenu(wherePayload: MenuWherePayloadInput): Menu!
+  createdMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuClone!
+  createdMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSection!
+  createdMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSection!
+  deletedMenu(wherePayload: MenuWherePayloadInput): Menu!
+  deletedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuClone!
+  deletedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSection!
+  deletedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSection!
+  updatedMenu(wherePayload: MenuWherePayloadInput): MenuUpdatedPayload!
+  updatedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuCloneUpdatedPayload!
+  updatedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSectionUpdatedPayload!
+  updatedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSectionUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -858,9 +1007,10 @@ type Subscription {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig1, entityConfig2];
+    const simplifiedEntityConfigs = [entityConfig1, entityConfig2];
 
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
@@ -940,6 +1090,16 @@ type Example2Connection {
 type Example2Edge {
   cursor: String!
   node: Example2!
+}
+type Example1UpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Example1!
+  previousNode: Example1!
+}
+type Example2UpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Example2!
+  previousNode: Example2!
 }
 input Example1WhereInput {
   id_in: [ID!]
@@ -1137,26 +1297,102 @@ input Example2UpdateInput {
   textField2: [String!]
   area: GeospatialPolygonInput
 }
-enum Example1FieldNamesEnum {
-  textField1
-  textField2
-  textField3
-  position
+input Example1WherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField1: String
+  textField1_in: [String!]
+  textField1_nin: [String!]
+  textField1_ne: String
+  textField1_gt: String
+  textField1_gte: String
+  textField1_lt: String
+  textField1_lte: String
+  textField1_re: [RegExp!]
+  textField1_exists: Boolean
+  textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
+  textField2_ne: String
+  textField2_gt: String
+  textField2_gte: String
+  textField2_lt: String
+  textField2_lte: String
+  textField2_re: [RegExp!]
+  textField2_exists: Boolean
+  textField3: String
+  textField3_in: [String!]
+  textField3_nin: [String!]
+  textField3_ne: String
+  textField3_gt: String
+  textField3_gte: String
+  textField3_lt: String
+  textField3_lte: String
+  textField3_re: [RegExp!]
+  textField3_exists: Boolean
+  position_withinPolygon: [GeospatialPointInput!]
+  position_withinSphere: GeospatialSphereInput
+  AND: [Example1WherePayloadInput!]
+  NOR: [Example1WherePayloadInput!]
+  OR: [Example1WherePayloadInput!]
 }
-type UpdatedExample1Payload {
-  node: Example1
-  previousNode: Example1
-  updatedFields: [Example1FieldNamesEnum!]
-}
-enum Example2FieldNamesEnum {
-  textField1
-  textField2
-  area
-}
-type UpdatedExample2Payload {
-  node: Example2
-  previousNode: Example2
-  updatedFields: [Example2FieldNamesEnum!]
+input Example2WherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField1: String
+  textField1_in: [String!]
+  textField1_nin: [String!]
+  textField1_ne: String
+  textField1_gt: String
+  textField1_gte: String
+  textField1_lt: String
+  textField1_lte: String
+  textField1_re: [RegExp!]
+  textField1_size: Int
+  textField1_notsize: Int
+  textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
+  textField2_ne: String
+  textField2_gt: String
+  textField2_gte: String
+  textField2_lt: String
+  textField2_lte: String
+  textField2_re: [RegExp!]
+  textField2_size: Int
+  textField2_notsize: Int
+  area_intersectsPoint: GeospatialPointInput
+  AND: [Example2WherePayloadInput!]
+  NOR: [Example2WherePayloadInput!]
+  OR: [Example2WherePayloadInput!]
 }
 type Query {
   node(id: ID!): Node
@@ -1197,12 +1433,12 @@ type Mutation {
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!, token: String): Example2!
 }
 type Subscription {
-  createdExample1(where: Example1WhereInput): Example1!
-  updatedExample1(where: Example1WhereInput): UpdatedExample1Payload!
-  deletedExample1(where: Example1WhereInput): Example1!
-  createdExample2(where: Example2WhereInput): Example2!
-  updatedExample2(where: Example2WhereInput): UpdatedExample2Payload!
-  deletedExample2(where: Example2WhereInput): Example2!
+  createdExample1(wherePayload: Example1WherePayloadInput): Example1!
+  createdExample2(wherePayload: Example2WherePayloadInput): Example2!
+  deletedExample1(wherePayload: Example1WherePayloadInput): Example1!
+  deletedExample2(wherePayload: Example2WherePayloadInput): Example2!
+  updatedExample1(wherePayload: Example1WherePayloadInput): Example1UpdatedPayload!
+  updatedExample2(wherePayload: Example2WherePayloadInput): Example2UpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1263,8 +1499,9 @@ type Subscription {
       ],
     });
 
-    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
@@ -1340,6 +1577,16 @@ type PlaceConnection {
 type PlaceEdge {
   cursor: String!
   node: Place!
+}
+type PersonUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Person!
+  previousNode: Person!
+}
+type PlaceUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Place!
+  previousNode: Place!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1520,26 +1767,99 @@ input PersonUpdateInput {
 input PlaceUpdateInput {
   title: String
 }
-enum PersonFieldNamesEnum {
-  firstName
-  lastName
-  friends
-  enemies
-  location
-  favoritePlace
+input PersonWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  friends: ID
+  friends_in: [ID!]
+  friends_nin: [ID!]
+  friends_ne: ID
+  friends_size: Int
+  friends_notsize: Int
+  enemies: ID
+  enemies_in: [ID!]
+  enemies_nin: [ID!]
+  enemies_ne: ID
+  enemies_size: Int
+  enemies_notsize: Int
+  location: ID
+  location_in: [ID!]
+  location_nin: [ID!]
+  location_ne: ID
+  location_exists: Boolean
+  favoritePlace: ID
+  favoritePlace_in: [ID!]
+  favoritePlace_nin: [ID!]
+  favoritePlace_ne: ID
+  favoritePlace_exists: Boolean
+  AND: [PersonWherePayloadInput!]
+  NOR: [PersonWherePayloadInput!]
+  OR: [PersonWherePayloadInput!]
 }
-type UpdatedPersonPayload {
-  node: Person
-  previousNode: Person
-  updatedFields: [PersonFieldNamesEnum!]
-}
-enum PlaceFieldNamesEnum {
-  title
-}
-type UpdatedPlacePayload {
-  node: Place
-  previousNode: Place
-  updatedFields: [PlaceFieldNamesEnum!]
+input PlaceWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  title: String
+  title_in: [String!]
+  title_nin: [String!]
+  title_ne: String
+  title_gt: String
+  title_gte: String
+  title_lt: String
+  title_lte: String
+  title_re: [RegExp!]
+  title_exists: Boolean
+  AND: [PlaceWherePayloadInput!]
+  NOR: [PlaceWherePayloadInput!]
+  OR: [PlaceWherePayloadInput!]
 }
 type Query {
   node(id: ID!): Node
@@ -1580,12 +1900,12 @@ type Mutation {
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
-  createdPerson(where: PersonWhereInput): Person!
-  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
-  deletedPerson(where: PersonWhereInput): Person!
-  createdPlace(where: PlaceWhereInput): Place!
-  updatedPlace(where: PlaceWhereInput): UpdatedPlacePayload!
-  deletedPlace(where: PlaceWhereInput): Place!
+  createdPerson(wherePayload: PersonWherePayloadInput): Person!
+  createdPlace(wherePayload: PlaceWherePayloadInput): Place!
+  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
+  deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
+  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
+  updatedPlace(wherePayload: PlaceWherePayloadInput): PlaceUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1648,8 +1968,9 @@ type Subscription {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [personConfig, addressConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [personConfig, addressConfig];
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
@@ -1706,6 +2027,11 @@ type PersonConnection {
 type PersonEdge {
   cursor: String!
   node: Person!
+}
+type PersonUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Person!
+  previousNode: Person!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -1835,18 +2161,81 @@ input AddressUpdateInput {
   country: String
   province: String
 }
-enum PersonFieldNamesEnum {
-  firstName
-  lastName
-  location
-  locations
-  place
-  places
+input PersonWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  location: AddressWherePayloadInput
+  location_exists: Boolean
+  locations: AddressWherePayloadInput
+  locations_size: Int
+  locations_notsize: Int
+  place: AddressWherePayloadInput
+  place_exists: Boolean
+  places: AddressWherePayloadInput
+  places_size: Int
+  places_notsize: Int
+  AND: [PersonWherePayloadInput!]
+  NOR: [PersonWherePayloadInput!]
+  OR: [PersonWherePayloadInput!]
 }
-type UpdatedPersonPayload {
-  node: Person
-  previousNode: Person
-  updatedFields: [PersonFieldNamesEnum!]
+input AddressWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  _index: Int
+  country: String
+  country_in: [String!]
+  country_nin: [String!]
+  country_ne: String
+  country_gt: String
+  country_gte: String
+  country_lt: String
+  country_lte: String
+  country_re: [RegExp!]
+  country_exists: Boolean
+  province: String
+  province_in: [String!]
+  province_nin: [String!]
+  province_ne: String
+  province_gt: String
+  province_gte: String
+  province_lt: String
+  province_lte: String
+  province_re: [RegExp!]
+  province_exists: Boolean
 }
 type Query {
   node(id: ID!): Node
@@ -1871,9 +2260,9 @@ type Mutation {
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
 }
 type Subscription {
-  createdPerson(where: PersonWhereInput): Person!
-  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
-  deletedPerson(where: PersonWhereInput): Person!
+  createdPerson(wherePayload: PersonWherePayloadInput): Person!
+  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
+  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1942,8 +2331,9 @@ type Subscription {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [personConfig, placeConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [personConfig, placeConfig];
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs };
 
     const expectedResult = `scalar DateTime
@@ -2011,6 +2401,16 @@ type PlaceConnection {
 type PlaceEdge {
   cursor: String!
   node: Place!
+}
+type PersonUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Person!
+  previousNode: Person!
+}
+type PlaceUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: Place!
+  previousNode: Place!
 }
 input PersonWhereInput {
   id_in: [ID!]
@@ -2277,28 +2677,111 @@ input PlaceUpdateInput {
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
 }
-enum PersonFieldNamesEnum {
-  firstName
-  lastName
-  friends
-  enemies
-  location
-  favoritePlace
+input PersonWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
+  lastName: String
+  lastName_in: [String!]
+  lastName_nin: [String!]
+  lastName_ne: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_lt: String
+  lastName_lte: String
+  lastName_re: [RegExp!]
+  lastName_exists: Boolean
+  friends: ID
+  friends_in: [ID!]
+  friends_nin: [ID!]
+  friends_ne: ID
+  friends_size: Int
+  friends_notsize: Int
+  enemies: ID
+  enemies_in: [ID!]
+  enemies_nin: [ID!]
+  enemies_ne: ID
+  enemies_size: Int
+  enemies_notsize: Int
+  location: ID
+  location_in: [ID!]
+  location_nin: [ID!]
+  location_ne: ID
+  location_exists: Boolean
+  favoritePlace: ID
+  favoritePlace_in: [ID!]
+  favoritePlace_nin: [ID!]
+  favoritePlace_ne: ID
+  favoritePlace_exists: Boolean
+  AND: [PersonWherePayloadInput!]
+  NOR: [PersonWherePayloadInput!]
+  OR: [PersonWherePayloadInput!]
 }
-type UpdatedPersonPayload {
-  node: Person
-  previousNode: Person
-  updatedFields: [PersonFieldNamesEnum!]
-}
-enum PlaceFieldNamesEnum {
-  name
-  citizens
-  visitors
-}
-type UpdatedPlacePayload {
-  node: Place
-  previousNode: Place
-  updatedFields: [PlaceFieldNamesEnum!]
+input PlaceWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  citizens: ID
+  citizens_in: [ID!]
+  citizens_nin: [ID!]
+  citizens_ne: ID
+  citizens_size: Int
+  citizens_notsize: Int
+  visitors: ID
+  visitors_in: [ID!]
+  visitors_nin: [ID!]
+  visitors_ne: ID
+  visitors_size: Int
+  visitors_notsize: Int
+  AND: [PlaceWherePayloadInput!]
+  NOR: [PlaceWherePayloadInput!]
+  OR: [PlaceWherePayloadInput!]
 }
 type Query {
   node(id: ID!): Node
@@ -2346,12 +2829,12 @@ type Mutation {
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
-  createdPerson(where: PersonWhereInput): Person!
-  updatedPerson(where: PersonWhereInput): UpdatedPersonPayload!
-  deletedPerson(where: PersonWhereInput): Person!
-  createdPlace(where: PlaceWhereInput): Place!
-  updatedPlace(where: PlaceWhereInput): UpdatedPlacePayload!
-  deletedPlace(where: PlaceWhereInput): Place!
+  createdPerson(wherePayload: PersonWherePayloadInput): Person!
+  createdPlace(wherePayload: PlaceWherePayloadInput): Place!
+  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
+  deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
+  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
+  updatedPlace(wherePayload: PlaceWherePayloadInput): PlaceUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -2369,9 +2852,10 @@ type Subscription {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: true } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2498,9 +2982,10 @@ type Query {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Mutation: true } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
@@ -2631,9 +3116,10 @@ type Mutation {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: { entities: true } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
 
     const expectedResult = `scalar DateTime
@@ -2729,9 +3215,10 @@ type Query {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: { entities: ['Example'] } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2827,9 +3314,10 @@ type Query {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Mutation: { createEntity: true } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -2907,12 +3395,13 @@ type Mutation {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig, entityConfig2];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig, entityConfig2];
     const inventory: Inventory = {
       name: 'test',
       include: { Mutation: { createEntity: ['Example', 'Example2'] } },
     };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const interfaces = { ExampleInterface: ['textField', 'updatedAt'] };
     const generalConfig: GeneralConfig = { allEntityConfigs, inventory, interfaces };
     const expectedResult = `scalar DateTime
@@ -3006,9 +3495,10 @@ type Mutation {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Mutation: { loadEntity: true } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const custom = { Mutation: { loadEntity: signatureMethods } };
     const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
@@ -3063,9 +3553,10 @@ type Mutation {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: { getEntity: true } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const custom = { Query: { getEntity } };
     const generalConfig: GeneralConfig = { allEntityConfigs, custom, inventory };
     const expectedResult = `scalar DateTime
@@ -3519,9 +4010,10 @@ type Mutation {
       descendantKey: 'ForCatalog',
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: true } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const descendant = { ForCatalog };
     const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
@@ -3724,12 +4216,13 @@ type Query {
       descendantKey: 'ForView',
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = {
       name: 'test',
       include: { Mutation: { updateEntityForCatalog: true } },
     };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const descendant = { ForCatalog, ForView };
     const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
@@ -3768,6 +4261,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
+  // NOT SKIP
   test('should create entities types with descendant & inventory for only queries', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
@@ -3778,13 +4272,13 @@ type Mutation {
 
     const ForCatalog: DescendantAttributes = {
       descendantKey: 'ForCatalog',
-      allow: { Example: ['entitiesThroughConnection'] },
+      allow: { Example: ['entitiesThroughConnection', 'updatedEntity'] },
       involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
     };
 
     const ForView: DescendantAttributes = {
       descendantKey: 'ForView',
-      allow: { Example: [], ExampleEdge: [], ExampleConnection: [] },
+      allow: { Example: [], ExampleEdge: [], ExampleConnection: [], ExampleUpdatedPayload: [] },
       // "involvedOutputDescendantKeys" not change types that are returned by "ForCatalog" descendant actions
       involvedOutputDescendantKeys: { Example: { outputEntity: 'ForGuest' } },
     };
@@ -3794,12 +4288,16 @@ type Mutation {
       allow: { Example: [] },
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = {
       name: 'test',
-      include: { Query: { entitiesThroughConnectionForCatalog: true } },
+      include: {
+        Query: { entitiesThroughConnectionForCatalog: true },
+        Subscription: { updatedEntityForCatalog: ['Example'] },
+      },
     };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
     const descendant = { ForCatalog, ForView, ForGuest };
     const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
@@ -3834,6 +4332,11 @@ type ExampleForView implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+}
+type ExampleForViewUpdatedPayload {
+  updatedFields(slice: SliceInput): [String!]!
+  node: ExampleForView!
+  previousNode: ExampleForView!
 }
 input ExampleForCatalogWhereInput {
   id_in: [ID!]
@@ -3885,9 +4388,53 @@ enum ExampleForCatalogSortEnum {
 input ExampleForCatalogSortInput {
   sortBy: [ExampleForCatalogSortEnum]
 }
+input ExampleForCatalogWherePayloadInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  textField: String
+  textField_in: [String!]
+  textField_nin: [String!]
+  textField_ne: String
+  textField_gt: String
+  textField_gte: String
+  textField_lt: String
+  textField_lte: String
+  textField_re: [RegExp!]
+  textField_exists: Boolean
+  textField2: String
+  textField2_in: [String!]
+  textField2_nin: [String!]
+  textField2_ne: String
+  textField2_gt: String
+  textField2_gte: String
+  textField2_lt: String
+  textField2_lte: String
+  textField2_re: [RegExp!]
+  textField2_exists: Boolean
+  AND: [ExampleForCatalogWherePayloadInput!]
+  NOR: [ExampleForCatalogWherePayloadInput!]
+  OR: [ExampleForCatalogWherePayloadInput!]
+}
 type Query {
   node(id: ID!): Node
   ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleForViewConnection!
+}
+type Subscription {
+  updatedExampleForCatalog(wherePayload: ExampleForCatalogWherePayloadInput): ExampleForViewUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);

@@ -27,7 +27,22 @@ const authDecorator =
     );
     if (!involvedFilters) return null;
 
-    const result = await func(parent, args, context, info, { involvedFilters });
+    const [actionType] = inventoryChain;
+
+    const result = await func(
+      parent,
+      args,
+      context,
+      info,
+      actionType === 'Subscription'
+        ? {
+            involvedFilters,
+
+            involvedEntityName:
+              involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
+          }
+        : { involvedFilters },
+    );
     return result;
   };
 

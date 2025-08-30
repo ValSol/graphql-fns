@@ -23,11 +23,14 @@ type SubscribeInvolvedKey =
   | 'subscribeDeletedEntity'
   | 'subscribeUpdatedEntity';
 
-const composeSubscribeInventoryChain = (
+const composeSubscribeInventoryChains = (
   key: SubscribeInvolvedKey,
   entityName: string,
   generalConfig: GeneralConfig,
 ) => {
+  const { descendant = {} } = generalConfig;
+  const descendantKeys = ['', ...Object.keys(descendant)];
+
   const { root, descendantKey } = parseEntityName(entityName, generalConfig);
 
   const {
@@ -38,13 +41,25 @@ const composeSubscribeInventoryChain = (
 
   switch (key) {
     case 'subscribeCreatedEntity':
-      return ['Subscription', 'createdEntity', root];
+      return descendantKeys.map((descendantKey) => [
+        'Subscription',
+        `createdEntity${descendantKey}`,
+        root,
+      ]);
 
     case 'subscribeDeletedEntity':
-      return ['Subscription', 'deletedEntity', root];
+      return descendantKeys.map((descendantKey) => [
+        'Subscription',
+        `deletedEntity${descendantKey}`,
+        root,
+      ]);
 
     case 'subscribeUpdatedEntity':
-      return ['Subscription', 'updatedEntity', root];
+      return descendantKeys.map((descendantKey) => [
+        'Subscription',
+        `updatedEntity${descendantKey}`,
+        root,
+      ]);
 
     default:
       throw TypeError(`Got incorrect involvedEntityNamesKey: "${key}"!`);
@@ -104,13 +119,13 @@ const executeAuthorisation = async (
 
   if (!inventoryByRoles && !filters) {
     const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
-      const amendedInventoryChain = involvedEntityNamesKey.startsWith('subscribe')
-        ? composeSubscribeInventoryChain(
+      const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscribe')
+        ? composeSubscribeInventoryChains(
             involvedEntityNamesKey as SubscribeInvolvedKey,
             involvedEntityNames[involvedEntityNamesKey],
             generalConfig,
           )
-        : inventoryChain;
+        : [inventoryChain];
 
       const entityName = involvedEntityNames[involvedEntityNamesKey];
 
@@ -128,7 +143,9 @@ const executeAuthorisation = async (
 
       const staticLimit = staticLimits[entityName];
 
-      const filter = checkInventory(amendedInventoryChain as InventoryChain, inventory)
+      const filter = amendedInventoryChains.some((amendedInventoryChain) =>
+        checkInventory(amendedInventoryChain as InventoryChain, inventory),
+      )
         ? staticFilter
           ? [staticFilter]
           : []
@@ -167,17 +184,22 @@ const executeAuthorisation = async (
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-    const amendedInventoryChain = involvedEntityNamesKey.startsWith('subscribe')
-      ? composeSubscribeInventoryChain(
+    const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscribe')
+      ? composeSubscribeInventoryChains(
           involvedEntityNamesKey as SubscribeInvolvedKey,
           involvedEntityNames[involvedEntityNamesKey],
           generalConfig,
         )
-      : inventoryChain;
+      : [inventoryChain];
 
     result[involvedEntityNamesKey] = null;
 
-    if (!checkInventory(amendedInventoryChain as InventoryChain, inventory)) continue;
+    if (
+      !amendedInventoryChains.some((amendedInventoryChain) =>
+        checkInventory(amendedInventoryChain as InventoryChain, inventory),
+      )
+    )
+      continue;
 
     if (inventoryByRoles) {
       if (!containedRoles) {
@@ -199,7 +221,11 @@ const executeAuthorisation = async (
       for (let j = 0; j < allRoles.length; j += 1) {
         const inventoryByRole = inventoryByRoles[allRoles[j]];
 
-        if (checkInventory(amendedInventoryChain as InventoryChain, inventoryByRole)) {
+        if (
+          amendedInventoryChains.some((amendedInventoryChain) =>
+            checkInventory(amendedInventoryChain as InventoryChain, inventoryByRole),
+          )
+        ) {
           result[involvedEntityNamesKey] = [];
           break;
         }

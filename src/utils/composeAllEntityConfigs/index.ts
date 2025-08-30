@@ -5,9 +5,9 @@ import type {
   Enums,
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
-} from '../../tsTypes';
+} from '@/tsTypes';
 
-import virtualConfigComposers from '../../types/virtualConfigComposers';
+import virtualConfigComposers, { VirtualConfigComposerItem } from '@/types/virtualConfigComposers';
 import composeEntityConfig from '../composeEntityConfig';
 import isCommonlyAllowedTypeName from '../isCommonlyAllowedTypeName';
 import PageInfo from './pageInfoConfig';
@@ -15,13 +15,11 @@ import PageInfo from './pageInfoConfig';
 // alsow used in "composeAllEntityConfigs" util
 const forbiddenThingNames = ['DateTime', 'Node', 'node', 'PageInfo'];
 
-const composeAllEntityConfigs = (
-  simplifiedThingConfigs: SimplifiedEntityConfig[],
+const composeAllEntityConfigsAndEnums = (
+  simplifiedEntityConfigs: SimplifiedEntityConfig[],
   enums: Enums = {},
-): {
-  [entityName: string]: EntityConfig;
-} => {
-  const { relationalOppositeNames, result } = simplifiedThingConfigs.reduce(
+): { [entityName: string]: EntityConfig } => {
+  const { relationalOppositeNames, result } = simplifiedEntityConfigs.reduce(
     (prev, config) => {
       const { name } = config;
 
@@ -87,7 +85,7 @@ const composeAllEntityConfigs = (
     { result: { PageInfo }, relationalOppositeNames: {} },
   );
 
-  simplifiedThingConfigs.forEach((simplifiedEntityConfig) => {
+  simplifiedEntityConfigs.forEach((simplifiedEntityConfig) => {
     const { name } = simplifiedEntityConfig;
     composeEntityConfig(simplifiedEntityConfig, result[name], result, relationalOppositeNames);
   });
@@ -99,7 +97,7 @@ const composeAllEntityConfigs = (
     const { type: configType } = config;
 
     virtualConfigComposers.forEach(
-      ([composeVirtualConfig, composeVirtualConfigName, checker]: [any, any, any]) => {
+      ([composeVirtualConfig, composeVirtualConfigName, checker]: VirtualConfigComposerItem) => {
         if (!checker(configType)) return;
 
         const virtualConfigName = composeVirtualConfigName(name);
@@ -120,4 +118,4 @@ const composeAllEntityConfigs = (
   return result;
 };
 
-export default composeAllEntityConfigs;
+export default composeAllEntityConfigsAndEnums;

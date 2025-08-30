@@ -1,20 +1,28 @@
 import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '../../../tsTypes';
 
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createDeletedEntitySubscriptionResolver = (
-  entityConfig: EntityConfig,
+  originalOrCustomName: string,
+  preEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any | null => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name } = preEntityConfig;
 
-  if (!checkInventory(['Subscription', 'deletedEntity', name], inventory)) {
+  if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
   }
+
+  const descendantKey = originalOrCustomName.slice('deletedEntity'.length);
+
+  const entityConfig = descendantKey
+    ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
+    : preEntityConfig;
 
   const resolver: Subscribe = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
@@ -28,7 +36,14 @@ const createDeletedEntitySubscriptionResolver = (
         (payload) => {
           const { [`deleted${name}`]: item } = payload as Record<string, any>;
 
-          return { [`deleted${name}`]: transformAfter({}, item, entityConfig, generalConfig) };
+          return {
+            [`deleted${name}${descendantKey}`]: transformAfter(
+              {},
+              item,
+              entityConfig,
+              generalConfig,
+            ),
+          };
         },
       ),
   };

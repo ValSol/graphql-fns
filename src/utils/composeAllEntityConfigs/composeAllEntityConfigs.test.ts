@@ -104,6 +104,20 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleUpdatedPayloadConfig = {
+      name: 'ExampleUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: exampleConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: exampleConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const simplifiedAllEntityConfigs = [simplifiedEntityConfig];
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
@@ -112,6 +126,7 @@ describe('composeAllEntityConfigs', () => {
       Example: exampleConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
+      ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
     };
     expect(result).toEqual(expectedResult);
   });
@@ -181,11 +196,26 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleUpdatedPayloadConfig = {
+      name: 'ExampleUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: entityConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const expectedResult = {
       PageInfo,
       Example: entityConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
+      ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
@@ -270,6 +300,20 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleUpdatedPayloadConfig = {
+      name: 'ExampleUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: entityConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     Object.assign(entityConfig2, {
       name: 'Example2',
       type: 'tangible',
@@ -307,14 +351,30 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleUpdatedPayloadConfig2 = {
+      name: 'Example2UpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: entityConfig2, required: true, type: 'childFields' },
+        { name: 'previousNode', config: entityConfig2, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const expectedResult = {
       PageInfo,
       Example: entityConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
+      ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
       Example2: entityConfig2,
       Example2Edge: exampleEdgeConfig2,
       Example2Connection: exampleConnectionConfig2,
+      Example2UpdatedPayload: exampleUpdatedPayloadConfig2,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
@@ -594,6 +654,20 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const userUpdatedPayloadConfig = {
+      name: 'UserUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: userConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: userConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const textbookEdgeConfig = {
       name: 'TextbookEdge',
       type: 'virtual',
@@ -604,7 +678,7 @@ describe('composeAllEntityConfigs', () => {
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
-    const textConnectionConfig = {
+    const textbookConnectionConfig = {
       name: 'TextbookConnection',
       type: 'virtual',
       descendantNameSlicePosition: -'Connection'.length,
@@ -613,6 +687,20 @@ describe('composeAllEntityConfigs', () => {
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
         { name: 'edges', config: textbookEdgeConfig, array: true, type: 'childFields' },
       ],
+    };
+
+    const textbookUpdatedPayloadConfig = {
+      name: 'TextbookUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: textbookConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: textbookConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
     };
 
     const lessonEdgeConfig = {
@@ -636,6 +724,20 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const lessonUpdatedPayloadConfig = {
+      name: 'LessonUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: lessonConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: lessonConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const expectedResult = {
       PageInfo,
       User: userConfig,
@@ -643,10 +745,13 @@ describe('composeAllEntityConfigs', () => {
       Lesson: lessonConfig,
       UserEdge: userEdgeConfig,
       UserConnection: userConnectionConfig,
+      UserUpdatedPayload: userUpdatedPayloadConfig,
       TextbookEdge: textbookEdgeConfig,
-      TextbookConnection: textConnectionConfig,
+      TextbookConnection: textbookConnectionConfig,
+      TextbookUpdatedPayload: textbookUpdatedPayloadConfig,
       LessonEdge: lessonEdgeConfig,
       LessonConnection: lessonConnectionConfig,
+      LessonUpdatedPayload: lessonUpdatedPayloadConfig,
       DifficultyLevelCount: difficultyLevelCountConfig,
       DifficultyLevelCountEdge: difficultyLevelCountEdgeConfig,
       DifficultyLevelCountConnection: difficultyLevelCountConnectionConfig,
@@ -747,6 +852,20 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const userUpdatedPayloadConfig = {
+      name: 'UserUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: userConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: userConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const textbookEdgeConfig = {
       name: 'TextbookEdge',
       type: 'virtual',
@@ -757,7 +876,7 @@ describe('composeAllEntityConfigs', () => {
       textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
     };
 
-    const textConnectionConfig = {
+    const textbookConnectionConfig = {
       name: 'TextbookConnection',
       type: 'virtual',
       descendantNameSlicePosition: -'Connection'.length,
@@ -768,14 +887,30 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const textbookUpdatedPayloadConfig = {
+      name: 'TextbookUpdatedPayload',
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [
+        { name: 'node', config: textbookConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: textbookConfig, required: true, type: 'childFields' },
+      ],
+
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
+    };
+
     const expectedResult = {
       PageInfo,
       User: userConfig,
       Textbook: textbookConfig,
       UserEdge: userEdgeConfig,
       UserConnection: userConnectionConfig,
+      UserUpdatedPayload: userUpdatedPayloadConfig,
       TextbookEdge: textbookEdgeConfig,
-      TextbookConnection: textConnectionConfig,
+      TextbookConnection: textbookConnectionConfig,
+      TextbookUpdatedPayload: textbookUpdatedPayloadConfig,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);

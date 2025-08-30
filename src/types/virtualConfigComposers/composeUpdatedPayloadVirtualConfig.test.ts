@@ -1,9 +1,9 @@
 /* eslint-env jest */
 import type { EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeEdgeVirtualConfig from './composeEdgeVirtualConfig';
+import composeUpdatedPayloadVirtualConfig from './composeUpdatedPayloadVirtualConfig';
 
-describe('composeEdgeVirtualConfig', () => {
+describe('composeUpdatedPayloadVirtualConfig', () => {
   test('compose simple entityConfig', () => {
     const exampleConfig: EntityConfig = {
       name: 'Example',
@@ -36,16 +36,19 @@ describe('composeEdgeVirtualConfig', () => {
       allEntityConfigs: {},
     };
 
-    const result = composeEdgeVirtualConfig(exampleConfig, generalConfig);
+    const result = composeUpdatedPayloadVirtualConfig(exampleConfig, generalConfig);
 
     const expectedResult = {
-      name: 'ExampleEdge',
+      name: 'ExampleUpdatedPayload',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      descendantNameSlicePosition: -'UpdatedPayload'.length,
 
-      childFields: [{ name: 'node', config: exampleConfig, required: true, type: 'childFields' }],
+      childFields: [
+        { name: 'node', config: exampleConfig, required: true, type: 'childFields' },
+        { name: 'previousNode', config: exampleConfig, required: true, type: 'childFields' },
+      ],
 
-      textFields: [{ name: 'cursor', required: true, type: 'textFields' }],
+      textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
     };
 
     expect(result).toEqual(expectedResult);

@@ -1,4 +1,4 @@
-import type { DescendantAttributes } from '../../tsTypes';
+import type { DescendantAttributes } from '@/tsTypes';
 
 const connectionDescendantUpdater = (entityName: string, item: DescendantAttributes) => {
   const edgeName = `${entityName}Edge`;

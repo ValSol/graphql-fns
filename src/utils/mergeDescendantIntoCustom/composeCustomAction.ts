@@ -141,6 +141,7 @@ const composeCustomAction = (
     actionReturnString,
     actionReturnConfig,
   } = actionAttributes;
+
   const name = actionGeneralName(descendantKey);
 
   return {

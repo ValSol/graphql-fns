@@ -4,12 +4,7 @@ import checkInventory from '../utils/inventory/checkInventory';
 import mergeDescendantIntoCustom from '../utils/mergeDescendantIntoCustom';
 import composeCustomActionSignature from './composeCustomActionSignature';
 
-import { mutationAttributes, queryAttributes } from './actionAttributes';
-
-import createCreatedEntitySubscriptionType from './subscriptions/createCreatedEntitySubscriptionType';
-import createDeletedEntitySubscriptionType from './subscriptions/createDeletedEntitySubscriptionType';
-import createUpdatedEntitySubscriptionType from './subscriptions/createUpdatedEntitySubscriptionType';
-import createUpdatedEntityPayloadType from './subscriptions/createUpdatedEntityPayloadType';
+import { mutationAttributes, queryAttributes, subscriptionAttributes } from './actionAttributes';
 
 import composeEnumTypes from './specialized/composeEnumTypes';
 import composeCommonUseTypes from './specialized/composeCommonUseTypes';
@@ -24,7 +19,7 @@ const composeGqlTypes = (
   typeDefs: string;
   entityTypeDic: { [entityName: string]: string };
 } => {
-  const { allEntityConfigs, inventory } = generalConfig;
+  const { allEntityConfigs, inventory, descendant = {} } = generalConfig;
 
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
@@ -47,6 +42,7 @@ const composeGqlTypes = (
         entityTypeDic,
         inputDic,
       );
+
       if (action) prev.push(action);
     });
     return prev;
@@ -61,18 +57,38 @@ const composeGqlTypes = (
         entityTypeDic,
         inputDic,
       );
+
       if (action) prev.push(action);
     });
     return prev;
   }, []);
 
+  const subscriptionTypes = Object.keys(subscriptionAttributes).reduce<Array<any>>(
+    (prev, actionName) => {
+      entityNames.forEach((entityName) => {
+        const action = composeActionSignature(
+          allEntityConfigs[entityName],
+          generalConfig,
+          subscriptionAttributes[actionName],
+          entityTypeDic,
+          inputDic,
+        );
+
+        if (action) prev.push(action);
+      });
+      return prev;
+    },
+    [],
+  );
+
   // 2. generate custom actions signatures AND add ...
   // ... to "entityTypeDic" entity types ...
   // ... to "inputDic" inputs
 
-  const { Query, Mutation } = mergeDescendantIntoCustom(generalConfig) || {
+  const { Query, Mutation, Subscription } = mergeDescendantIntoCustom(generalConfig) || {
     Query: {},
     Mutation: {},
+    Subscription: {},
   };
 
   entityNames.forEach((entityName) => {
@@ -112,6 +128,23 @@ const composeGqlTypes = (
         }
       });
     }
+
+    if (Subscription) {
+      Object.keys(Subscription).forEach((customName) => {
+        if (checkInventory(['Subscription', customName, entityName], inventory)) {
+          const action = composeCustomActionSignature(
+            Subscription[customName],
+            allEntityConfigs[entityName],
+            generalConfig,
+            entityTypeDic,
+            inputDic,
+          );
+          if (action) {
+            subscriptionTypes.push(`  ${action}`);
+          }
+        }
+      });
+    }
   });
 
   const queryTypes2 = `type Query {
@@ -122,6 +155,13 @@ const composeGqlTypes = (
     mutationTypes.length > 0
       ? `type Mutation {
 ${mutationTypes.join('\n')}
+}`
+      : '';
+
+  const subscriptionTypes2 =
+    subscriptionTypes.length > 0
+      ? `type Subscription {
+${subscriptionTypes.join('\n')}
 }`
       : '';
 
@@ -149,57 +189,6 @@ ${mutationTypes.join('\n')}
 
   // 6. prepare subscriptions
 
-  const updatedEntityPayloadTypes = allowSubscriptions
-    ? Object.keys(allEntityConfigs)
-        .map((entityName) => allEntityConfigs[entityName])
-        .filter(({ type: configType }) => configType === 'tangible')
-        .reduce<Array<any>>((prev, entityConfig) => {
-          const { name } = entityConfig;
-          if (
-            checkInventory(['Subscription', 'updatedEntity', name], inventory) &&
-            checkInventory(['Mutation', 'updateEntity', name], inventory)
-          ) {
-            prev.push(createUpdatedEntityPayloadType(entityConfig));
-          }
-          return prev;
-        }, [])
-        .join('\n')
-    : '';
-
-  const entitySubscriptionTypes = allowSubscriptions
-    ? Object.keys(allEntityConfigs)
-        .map((entityName) => allEntityConfigs[entityName])
-        .filter(({ type: configType }) => configType === 'tangible')
-        .reduce<Array<any>>((prev, entityConfig) => {
-          const { name } = entityConfig;
-          if (
-            checkInventory(['Subscription', 'createdEntity', name], inventory) &&
-            checkInventory(['Mutation', 'createEntity', name], inventory)
-          ) {
-            prev.push(createCreatedEntitySubscriptionType(entityConfig));
-          }
-          if (
-            checkInventory(['Subscription', 'updatedEntity', name], inventory) &&
-            checkInventory(['Mutation', 'updateEntity', name], inventory)
-          ) {
-            prev.push(createUpdatedEntitySubscriptionType(entityConfig));
-          }
-          if (
-            checkInventory(['Subscription', 'deletedEntity', name], inventory) &&
-            checkInventory(['Mutation', 'deleteEntity', name], inventory)
-          ) {
-            prev.push(createDeletedEntitySubscriptionType(entityConfig));
-          }
-          return prev;
-        }, [])
-        .join('\n')
-    : '';
-  const entitySubscriptionTypes2 = allowSubscriptions
-    ? `type Subscription {
-${entitySubscriptionTypes}
-}`
-    : '';
-
   const resultArray = composeCommonUseTypes();
 
   const enumTypes = composeEnumTypes(generalConfig);
@@ -213,10 +202,9 @@ ${entitySubscriptionTypes}
   resultArray.push(entityTypes);
 
   if (inputs) resultArray.push(inputs);
-  if (updatedEntityPayloadTypes) resultArray.push(updatedEntityPayloadTypes);
   if (queryTypes2) resultArray.push(queryTypes2);
   if (mutationTypes2) resultArray.push(mutationTypes2);
-  if (entitySubscriptionTypes2) resultArray.push(entitySubscriptionTypes2);
+  if (subscriptionTypes2) resultArray.push(subscriptionTypes2);
 
   return { typeDefs: resultArray.join('\n'), entityTypeDic };
 };

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { TangibleEntityConfig, GeneralConfig, VirtualEntityConfig } from '../../tsTypes';
+import type { TangibleEntityConfig, GeneralConfig, VirtualEntityConfig } from '@/tsTypes';
 
 import pageInfoConfig from '../../utils/composeAllEntityConfigs/pageInfoConfig';
 import composeConnectionVirtualConfig from './composeConnectionVirtualConfig';

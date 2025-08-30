@@ -1,4 +1,4 @@
-import type { ActionAttributes } from '../../tsTypes';
+import type { ActionAttributes } from '@/tsTypes';
 
 import arrayEntitiesThroughConnection from './arrayEntitiesThroughConnectionQueryAttributes';
 import arrayEntityCount from './arrayEntityCountQueryAttributes';
@@ -13,6 +13,7 @@ import copyManyEntities from './copyManyEntitiesMutationAttributes';
 import copyManyEntitiesWithChildren from './copyManyEntitiesWithChildrenMutationAttributes';
 import copyEntity from './copyEntityMutationAttributes';
 import copyEntityWithChildren from './copyEntityWithChildrenMutationAttributes';
+import createdEntity from './createdEntitySubscriptionAttributes';
 import createManyEntities from './createManyEntitiesMutationAttributes';
 import entityDistinctValues from './entityDistinctValuesQueryAttributes';
 import entityCount from './entityCountQueryAttributes';
@@ -21,6 +22,7 @@ import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
 import entitiesByUnique from './entitiesByUniqueQueryAttributes';
 import createEntity from './createEntityMutationAttributes';
+import deletedEntity from './deletedEntitySubscriptionAttributes';
 import deleteFilteredEntities from './deleteFilteredEntitiesMutationAttributes';
 import deleteFilteredEntitiesReturnScalar from './deleteFilteredEntitiesReturnScalarMutationAttributes';
 import deleteFilteredEntitiesWithChildren from './deleteFilteredEntitiesWithChildrenMutationAttributes';
@@ -30,6 +32,7 @@ import deleteManyEntitiesWithChildren from './deleteManyEntitiesWithChildrenMuta
 import deleteEntity from './deleteEntityMutationAttributes';
 import deleteEntityWithChildren from './deleteEntityWithChildrenMutationAttributes';
 import pushIntoEntity from './pushIntoEntityMutationAttributes';
+import updatedEntity from './updatedEntitySubscriptionAttributes';
 import updateFilteredEntities from './updateFilteredEntitiesMutationAttributes';
 import updateFilteredEntitiesReturnScalar from './updateFilteredEntitiesReturnScalarMutationAttributes';
 import updateManyEntities from './updateManyEntitiesMutationAttributes';
@@ -49,8 +52,10 @@ const actionAttributes = {
   copyManyEntitiesWithChildren,
   copyEntity,
   copyEntityWithChildren,
+  createdEntity,
   createManyEntities,
   createEntity,
+  deletedEntity,
   deleteFilteredEntities,
   deleteFilteredEntitiesReturnScalar,
   deleteFilteredEntitiesWithChildren,
@@ -66,6 +71,7 @@ const actionAttributes = {
   entities,
   entitiesThroughConnection,
   entitiesByUnique,
+  updatedEntity,
   updateFilteredEntities,
   updateFilteredEntitiesReturnScalar,
   updateManyEntities,
@@ -75,11 +81,15 @@ const actionAttributes = {
 const {
   mutationAttributes,
   queryAttributes,
+  subscriptionAttributes,
 }: {
   mutationAttributes: {
     [actionName: string]: ActionAttributes;
   };
   queryAttributes: {
+    [actionName: string]: ActionAttributes;
+  };
+  subscriptionAttributes: {
     [actionName: string]: ActionAttributes;
   };
 } = Object.keys(actionAttributes).reduce(
@@ -88,6 +98,8 @@ const {
       prev.mutationAttributes[actionName] = actionAttributes[actionName];
     } else if (actionAttributes[actionName].actionType === 'Query') {
       prev.queryAttributes[actionName] = actionAttributes[actionName];
+    } else if (actionAttributes[actionName].actionType === 'Subscription') {
+      prev.subscriptionAttributes[actionName] = actionAttributes[actionName];
     }
 
     return prev;
@@ -95,8 +107,9 @@ const {
   {
     mutationAttributes: {},
     queryAttributes: {},
+    subscriptionAttributes: {},
   },
 );
 
-export { mutationAttributes, queryAttributes };
+export { mutationAttributes, queryAttributes, subscriptionAttributes };
 export default actionAttributes;

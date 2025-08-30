@@ -1,5 +1,6 @@
 import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '@/tsTypes';
 
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
@@ -7,16 +8,23 @@ import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createCreatedEntitySubscriptionResolver = (
-  entityConfig: EntityConfig,
+  originalOrCustomName: string,
+  preEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name } = preEntityConfig;
 
-  if (!checkInventory(['Subscription', 'createdEntity', name], inventory)) {
+  if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
   }
+
+  const descendantKey = originalOrCustomName.slice('createdEntity'.length);
+
+  const entityConfig = descendantKey
+    ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
+    : preEntityConfig;
 
   const resolver: Subscribe = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
@@ -30,7 +38,14 @@ const createCreatedEntitySubscriptionResolver = (
         (payload) => {
           const { [`created${name}`]: item } = payload as Record<string, any>;
 
-          return { [`created${name}`]: transformAfter({}, item, entityConfig, generalConfig) };
+          return {
+            [`created${name}${descendantKey}`]: transformAfter(
+              {},
+              item,
+              entityConfig,
+              generalConfig,
+            ),
+          };
         },
       ),
   };

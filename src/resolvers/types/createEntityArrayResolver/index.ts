@@ -6,16 +6,16 @@ import type {
   NearInput,
   ServersideConfig,
   GraphqlObject,
-} from '../../../tsTypes';
-import type { Context } from '../../../tsTypes';
+} from '@/tsTypes';
+import type { Context } from '@/tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
-import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
-import createChildEntitiesQueryResolver from '../../queries/createChildEntitiesQueryResolver';
-import createCustomResolver from '../../createCustomResolver';
-import fromGlobalId from '../../utils/fromGlobalId';
-import parseEntityName from '../../../utils/parseEntityName';
-import resolverDecorator from '../../utils/resolverDecorator';
+import checkDescendantAction from '@/utils/checkDescendantAction';
+import childEntitiesQueryAttributes from '@/types/actionAttributes/childEntitiesQueryAttributes';
+import createChildEntitiesQueryResolver from '@/resolvers/queries/createChildEntitiesQueryResolver';
+import createCustomResolver from '@/resolvers/createCustomResolver';
+import fromGlobalId from '@/resolvers/utils/fromGlobalId';
+import parseEntityName from '@/utils/parseEntityName';
+import resolverDecorator from '@/resolvers/utils/resolverDecorator';
 
 type Args = {
   near?: NearInput;

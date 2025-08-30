@@ -483,6 +483,7 @@ export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonPropert
   type?: 'tangible';
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
+  subscriptionCalculatedFieldNames?: string[];
 };
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
@@ -843,6 +844,7 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
   type?: 'tangible';
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
+  subscriptionCalculatedFieldNames?: string[];
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
@@ -924,9 +926,9 @@ export type InventoryOptions = {
   Subscription?:
     | true
     | {
-        createdEntity?: entityNamesList;
-        updatedEntity?: entityNamesList;
-        deletedEntity?: entityNamesList;
+        // 'subscriptionName' may be: 'createdEntity', 'updatedEntity', 'deletedEntity', 'updateManyEntities', 'updateEntity', 'deleteEntity', ...
+
+        [subscriptionName: string]: entityNamesList;
       };
 };
 
@@ -950,6 +952,7 @@ export type DescendantAttributesActionName =
   | 'childEntities'
   | 'childEntitiesThroughConnection'
   | 'entitiesByUnique'
+  //
   | 'copyEntity'
   | 'copyManyEntities'
   | 'copyEntityWithChildren'
@@ -968,7 +971,11 @@ export type DescendantAttributesActionName =
   | 'updateFilteredEntities'
   | 'updateFilteredEntitiesReturnScalar'
   | 'updateManyEntities'
-  | 'updateEntity';
+  | 'updateEntity'
+  //
+  | 'createdEntity'
+  | 'deletedEntity'
+  | 'updatedEntity';
 
 export type DescendantAttributes = {
   descendantKey: string;
@@ -1064,6 +1071,9 @@ export type Custom = {
   Mutation?: {
     [customMutationName: string]: ActionSignatureMethods;
   };
+  Subscription?: {
+    [customSubscriptionName: string]: ActionSignatureMethods;
+  };
 };
 
 type OneSegmentInventoryChain = ['Query'] | ['Mutation'] | ['Subscription'];
@@ -1078,7 +1088,11 @@ export type TwoSegmentInventoryChain =
       // ... 'deleteEntity', 'deleteEntityWithChildren', 'pushIntoEntity' or custom mutation
       string,
     ]
-  | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity'];
+  | [
+      'Subscription', //  'createdEntity', 'updatedEntity', 'deletedEntity'
+      string,
+    ];
+
 export type ThreeSegmentInventoryChain =
   | [
       'Query', // first "string" for 'entity', 'childEntity', 'childEntityGetOrCreate', 'entities', 'childEntities', 'childEntitiesThroughConnection', 'entitiesByUnique', 'entitiesThroughConnection', 'entityDistinctValues' or custom query, second for entity name
@@ -1092,7 +1106,11 @@ export type ThreeSegmentInventoryChain =
       string, //  second "string" for entity name
       string,
     ]
-  | ['Subscription', 'createdEntity' | 'updatedEntity' | 'deletedEntity', string]; //  "string" for entity name
+  | [
+      'Subscription', // "string" for 'createdEntity', 'updatedEntity', 'deletedEntity'
+      string,
+      string,
+    ];
 
 export type InventoryChain =
   | OneSegmentInventoryChain
@@ -1155,6 +1173,7 @@ export type ActionResolver = (
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
+    involvedEntityName?: string; // used in Subscription
   },
 ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
 
@@ -1321,7 +1340,7 @@ export type ActionInvolvedEntityNames = {
 export type ActionAttributes = {
   actionArgsToHide?: string[]; // some of argNames to hide in schema action signature
   actionGeneralName: (descendantKey?: string) => string;
-  actionType: 'Mutation' | 'Query' | 'Field';
+  actionType: 'Mutation' | 'Query' | 'Subscription' | 'Field';
   actionAllowed: (entityConfig: EntityConfig) => boolean;
   actionIsChild?: 'Array' | 'Scalar';
   actionName: (baseName: string, descendantKey?: string) => string;
@@ -1362,5 +1381,6 @@ export type ResolverArg = {
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
+    involvedEntityName?: string; // used in Subscription
   };
 };

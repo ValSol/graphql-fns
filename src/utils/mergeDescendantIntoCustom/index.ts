@@ -1,10 +1,13 @@
-import type { Custom, GeneralConfig } from '../../tsTypes';
+import type { Custom, GeneralConfig } from '@/tsTypes';
+import {
+  mutationAttributes,
+  queryAttributes,
+  subscriptionAttributes,
+} from '@/types/actionAttributes';
 
 import parseEntityName from '../parseEntityName';
 import composeCustomAction from './composeCustomAction';
 import getTangibleEntities from './getTangibleEntities';
-
-import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 
 const regExp = /[\[\]\!]/g;
 
@@ -181,13 +184,31 @@ const mergeDescendantIntoCustom = (
     return prev;
   }, {});
 
+  const Subscription = Object.keys(descendant).reduce<Record<string, any>>(
+    (prev, descendantKey) => {
+      const { allow } = descendant[descendantKey];
+      const allowedMethods = getAllowedMethods(allow);
+
+      Object.keys(subscriptionAttributes).forEach((actionName) => {
+        if (allowedMethods[actionName]) {
+          prev[subscriptionAttributes[actionName].actionGeneralName(descendantKey)] =
+            composeCustomAction(descendant[descendantKey], subscriptionAttributes[actionName]);
+        }
+      });
+
+      return prev;
+    },
+    {},
+  );
+
   if (!custom) {
-    store[variant] = { Query, Mutation };
+    store[variant] = { Query, Mutation, Subscription };
   } else {
     store[variant] = {
       ...custom,
       Query: { ...Query, ...custom.Query },
       Mutation: { ...Mutation, ...custom.Mutation },
+      Subscription,
     };
   }
 

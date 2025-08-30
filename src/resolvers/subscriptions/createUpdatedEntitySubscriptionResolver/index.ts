@@ -1,20 +1,28 @@
 import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '@/tsTypes';
 
+import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
 const createUpdatedEntitySubscriptionResolver = (
-  entityConfig: EntityConfig,
+  originalOrCustomName: string,
+  preEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any | null => {
   const { inventory } = generalConfig;
-  const { name } = entityConfig;
+  const { name } = preEntityConfig;
 
-  if (!checkInventory(['Subscription', 'updatedEntity', name], inventory)) {
+  if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
   }
+
+  const descendantKey = originalOrCustomName.slice('updatedEntity'.length);
+
+  const entityConfig = descendantKey
+    ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
+    : preEntityConfig;
 
   const resolver: Subscribe = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
@@ -31,7 +39,7 @@ const createUpdatedEntitySubscriptionResolver = (
           } = payload as Record<string, any>;
 
           return {
-            [`updated${name}`]: {
+            [`updated${name}${descendantKey}`]: {
               node: transformAfter({}, node, entityConfig, generalConfig),
               previousNode: transformAfter({}, previousNode, entityConfig, generalConfig),
               updatedFields,

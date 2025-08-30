@@ -1,4 +1,4 @@
-import type { VirtualConfigComposer, VirtualEntityConfig } from '../../tsTypes';
+import type { VirtualConfigComposer, VirtualEntityConfig } from '@/tsTypes';
 
 import composeEdgeVirtualConfigName from './composeEdgeVirtualConfigName';
 

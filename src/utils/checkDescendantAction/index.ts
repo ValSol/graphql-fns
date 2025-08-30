@@ -1,6 +1,6 @@
 import type { EntityConfig, GeneralConfig, DescendantAttributesActionName } from '../../tsTypes';
 
-import actionAttributes from '../../types/actionAttributes';
+import actionAttributes from '@/types/actionAttributes';
 import checkInventory from '../inventory/checkInventory';
 import parseEntityName from '../parseEntityName';
 

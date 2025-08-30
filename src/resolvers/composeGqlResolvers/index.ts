@@ -40,6 +40,8 @@ const composeGqlResolvers = (
 
   const customMutation = custom?.Mutation || {};
 
+  const customSubscription = custom?.Subscription || {};
+
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
@@ -47,13 +49,10 @@ const composeGqlResolvers = (
 
   resolvers.DateTime = DateTimeResolver;
 
-  resolvers.Node = {
-    __resolveType: (obj) => obj.__typename,
-  };
+  resolvers.Node = { __resolveType: (obj) => obj.__typename };
 
-  resolvers.Query = {
-    node: createNodeQueryResolver(generalConfig, serversideConfig),
-  };
+  resolvers.Query = { node: createNodeQueryResolver(generalConfig, serversideConfig) };
+
   if (allowMutations) resolvers.Mutation = {};
   if (allowSubscriptions) resolvers.Subscription = {};
 
@@ -145,6 +144,7 @@ const composeGqlResolvers = (
 
       if (allowSubscriptions) {
         const createdEntitySubscriptionResolver = createCreatedEntitySubscriptionResolver(
+          'createdEntity',
           entityConfig,
           generalConfig,
           serversideConfig,
@@ -161,6 +161,7 @@ const composeGqlResolvers = (
         }
 
         const deletedEntitySubscriptionResolver = createDeletedEntitySubscriptionResolver(
+          'deletedEntity',
           entityConfig,
           generalConfig,
           serversideConfig,
@@ -176,6 +177,7 @@ const composeGqlResolvers = (
         }
 
         const updatedEntitySubscriptionResolver = createUpdatedEntitySubscriptionResolver(
+          'updatedEntity',
           entityConfig,
           generalConfig,
           serversideConfig,
@@ -183,12 +185,56 @@ const composeGqlResolvers = (
         if (updatedEntitySubscriptionResolver) {
           prev.Subscription[`updated${name}`] = subscriptionResolverDecorator(
             updatedEntitySubscriptionResolver,
-            ['Subscription', 'updatedEntity', entityConfig.name],
+            ['Subscription', 'updatedEntity', name],
             entityConfig,
             generalConfig,
             serversideConfig,
           );
         }
+
+        Object.keys(customSubscription).forEach((customName) => {
+          const specificName = customSubscription[customName].specificName(
+            entityConfig,
+            generalConfig,
+          );
+
+          let subscriptionResolver;
+
+          if (customName.startsWith('createdEntity')) {
+            subscriptionResolver = createCreatedEntitySubscriptionResolver(
+              customName,
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+            );
+          } else if (customName.startsWith('deletedEntity')) {
+            subscriptionResolver = createDeletedEntitySubscriptionResolver(
+              customName,
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+            );
+          } else if (customName.startsWith('updatedEntity')) {
+            subscriptionResolver = createUpdatedEntitySubscriptionResolver(
+              customName,
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+            );
+          } else {
+            throw new TypeError(`Got incorrect subscription customName: "${customName}"!`);
+          }
+
+          if (subscriptionResolver) {
+            prev.Subscription[specificName] = subscriptionResolverDecorator(
+              subscriptionResolver,
+              ['Subscription', customName, name],
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+            );
+          }
+        });
       }
 
       return prev;

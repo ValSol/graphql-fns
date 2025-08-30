@@ -45,8 +45,8 @@ describe('graphql schema', () => {
       ],
     };
 
-    const simplifiedAllEntityConfigs = [entityConfig];
-    const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs);
+    const simplifiedEntityConfigs = [entityConfig];
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
     const generalConfig: GeneralConfig = { allEntityConfigs };
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
     const schema = makeExecutableSchema({
