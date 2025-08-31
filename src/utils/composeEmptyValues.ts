@@ -1,9 +1,9 @@
-import type { EmbeddedField, EntityConfig, GeospatialField } from '../tsTypes';
+import type { EmbeddedField, EntityConfig, GeospatialField } from '@/tsTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
 const composeEmptyValues = (entityConfig: EntityConfig): any => {
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const result = Object.keys(fieldsObject).reduce<Record<string, any>>((prev, name) => {
     const { array, type: fieldType } = fieldsObject[name];

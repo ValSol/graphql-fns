@@ -6,7 +6,7 @@ import type {
   GeospatialField,
   RelationalField,
   DuplexField,
-} from '../tsTypes';
+} from '@/tsTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 
@@ -24,7 +24,7 @@ const coerceDataToGqlBasic = (
   // when create data to prevent creation text fields with "" value
   setNullForEmptyText?: boolean,
 ): any => {
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const { id, createdAt, updatedAt, ...rest } = data;
 

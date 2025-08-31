@@ -1,8 +1,8 @@
-import type { ActionAttributes, EntityConfig, GeneralConfig } from '../tsTypes';
-import composeFieldsObject from '../utils/composeFieldsObject';
+import type { ActionAttributes, EntityConfig, GeneralConfig } from '@/tsTypes';
+import composeFieldsObject from '@/utils/composeFieldsObject';
 
-import checkInventory from '../utils/inventory/checkInventory';
-import parseEntityName from '../utils/parseEntityName';
+import checkInventory from '@/utils/inventory/checkInventory';
+import parseEntityName from '@/utils/parseEntityName';
 import allActionAttributes from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
 
@@ -31,11 +31,14 @@ const composeReturnString = (
 const arrayArgs = '(slice: SliceInput)';
 
 const calculatedArgs = (inputTypes: Record<string, string>, array?: boolean) => {
-  const items = Object.keys(inputTypes).reduce((prev, key) => {
-    prev.push(`${key}: ${inputTypes[key]}`);
+  const items = Object.keys(inputTypes).reduce(
+    (prev, key) => {
+      prev.push(`${key}: ${inputTypes[key]}`);
 
-    return prev;
-  }, (array ? ['slice: SliceInput'] : []) as string[]);
+      return prev;
+    },
+    (array ? ['slice: SliceInput'] : []) as string[],
+  );
 
   return items.length > 0 ? `(${items.join(', ')})` : '';
 };
@@ -263,7 +266,7 @@ const createEntityType = (
       return prev;
     }
 
-    const { array: oppositeArray } = composeFieldsObject(config)[oppositeName];
+    const { array: oppositeArray } = composeFieldsObject(config).fieldsObject[oppositeName];
 
     if (oppositeArray) {
       return prev;

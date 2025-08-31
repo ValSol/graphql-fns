@@ -57,7 +57,7 @@ const getMissingData = async ({
   const instance2 =
     processingKind === 'push' ? transformDataForPush(instance, args, entityConfig) : instance;
 
-  const fieldsObj = composeFieldsObject(entityConfig);
+  const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig);
 
   const result: Record<string, any> = {};
 

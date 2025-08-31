@@ -6,9 +6,9 @@ import type {
   TangibleEntityConfig,
   ScalarCalculatedFilterField,
   ArrayCalculatedFilterField,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import composeFieldsObject from '../../../utils/composeFieldsObject';
+import composeFieldsObject from '@/utils/composeFieldsObject';
 import createEntityArrayResolver from '../createEntityArrayResolver';
 import createEntityCountResolver from '../createEntityCountResolver';
 import createEntityDistinctValuesResolver from '../createEntityDistinctValuesResolver';
@@ -53,7 +53,7 @@ const composeEntityResolvers = (
     geospatialFields: preGeospatialFields = [],
     type: entityType,
   } = entityConfig;
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const resolvers: Record<string, any> = {};
 
@@ -231,7 +231,7 @@ const composeEntityResolvers = (
         return prev;
       }
 
-      const { array: oppositeArray } = composeFieldsObject(config)[oppositeName];
+      const { array: oppositeArray } = composeFieldsObject(config).fieldsObject[oppositeName];
 
       if (oppositeArray) {
         return prev;

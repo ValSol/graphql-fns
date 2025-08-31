@@ -1,6 +1,6 @@
-import type { EntityConfig } from '../../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
-import composeFieldsObject from '../../../utils/composeFieldsObject';
+import composeFieldsObject from '@/utils/composeFieldsObject';
 
 type Result = {
   [fieldName: string]: 1;
@@ -19,7 +19,7 @@ const composeAllFieldsProjection = (
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
 
-  store[storeKey] = Object.keys(composeFieldsObject(entityConfig, options)).reduce<
+  store[storeKey] = Object.keys(composeFieldsObject(entityConfig, options).fieldsObject).reduce<
     Record<string, 1>
   >(
     (prev, item) => {

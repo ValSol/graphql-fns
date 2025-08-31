@@ -1,10 +1,5 @@
-import type {
-  DuplexField,
-  EntityConfig,
-  EntityConfigObject,
-  RelationalField,
-} from '../../../tsTypes';
-import composeFieldsObject from '../../../utils/composeFieldsObject';
+import type { DuplexField, EntityConfig, EntityConfigObject, RelationalField } from '@/tsTypes';
+import composeFieldsObject from '@/utils/composeFieldsObject';
 
 const extract = (
   data: {
@@ -58,7 +53,7 @@ const extractExternalReferences = (
   filter: Array<any>,
   entityConfig: EntityConfig,
 ): Array<[string, string, [any]]> => {
-  const fieldsObj = composeFieldsObject(entityConfig);
+  const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig);
 
   const result: Array<[string, string, [any]]> = [];
 

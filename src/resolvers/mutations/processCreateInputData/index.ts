@@ -1,16 +1,16 @@
 import deepEqual from 'fast-deep-equal';
 import { Types } from 'mongoose';
 
-import type { TangibleEntityConfig } from '../../../tsTypes';
-import type { Core, PreparedData } from '../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
+import type { Core, PreparedData } from '@/resolvers/tsTypes';
 
-import composeFieldsObject from '../../../utils/composeFieldsObject';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import whereFromGlobalIds from '@/resolvers/utils/whereFromGlobalIds';
 import multiPolygonFromGqlToMongo from './multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
-import whereFromGlobalIds from '../../utils/whereFromGlobalIds';
 
 const getUpdateMany = (rest: any, arr: Array<any>) => {
   const filteredArr = arr.filter(({ updateMany }) => updateMany);
@@ -57,7 +57,7 @@ const processCreateInputData = (
       type: entityType,
     } = entityConfig2;
 
-    const fieldsObject = composeFieldsObject(entityConfig2);
+    const { fieldsObject } = composeFieldsObject(entityConfig2);
 
     const relationalFieldsObject: {
       [fieldName: string]: { array?: boolean; config: TangibleEntityConfig };

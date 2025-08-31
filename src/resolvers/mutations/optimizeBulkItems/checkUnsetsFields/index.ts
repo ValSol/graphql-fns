@@ -1,11 +1,11 @@
-import type { EntityConfig } from '../../../../tsTypes';
+import type { EntityConfig } from '@/tsTypes';
 
-import composeFieldsObject from '../../../../utils/composeFieldsObject';
+import composeFieldsObject from '@/utils/composeFieldsObject';
 
 const composeToken = (fieldName: string, id: any) => `${id}:${fieldName}`;
 
 const checkUnsetsFields = (bulkItems: Array<any>, entityConfig: EntityConfig): void => {
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
   const unsets = new Set<string>();
 
   bulkItems.forEach((item) => {

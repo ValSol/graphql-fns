@@ -6,10 +6,10 @@ import type {
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
   DescendantAttributesActionName,
-} from '../../tsTypes';
+} from '@/tsTypes';
 
-import composeFieldsObject from '../composeFieldsObject';
-import composeEntityConfig from '../composeEntityConfig';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeEntityConfig from '@/utils/composeEntityConfig';
 import composeDescendantConfigName from './composeDescendantConfigName';
 
 const store = Object.create(null);
@@ -80,7 +80,7 @@ const composeDescendantConfig = (
     return store[descendantEntityName];
   }
 
-  const fieldsObject = composeFieldsObject(rootEntityConfig);
+  const { fieldsObject } = composeFieldsObject(rootEntityConfig);
 
   const allowEntityNames = Object.keys(allow);
 
@@ -165,7 +165,9 @@ const composeDescendantConfig = (
       { [descendantEntityName]: [] }, // TODO use correct relationalOppositeNames
     );
 
-    const fieldsToAddObject = composeFieldsObject(addFields2 as unknown as EntityConfig);
+    const { fieldsObject: fieldsToAddObject } = composeFieldsObject(
+      addFields2 as unknown as EntityConfig,
+    );
 
     Object.keys(fieldsToAddObject).forEach((fieldName) => {
       if (fieldsObject[fieldName]) {
@@ -220,7 +222,7 @@ const composeDescendantConfig = (
 
         const { array: oppositeArray } =
           key === 'duplexFields'
-            ? composeFieldsObject(currentConfig)[oppositeName]
+            ? composeFieldsObject(currentConfig).fieldsObject[oppositeName]
             : { array: false };
 
         const childQueries = array

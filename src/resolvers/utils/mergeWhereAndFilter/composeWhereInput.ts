@@ -7,10 +7,10 @@ import type {
   InvolvedFilter,
   LookupMongoDB,
   TangibleEntityConfig,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import composeFieldsObject from '../../../utils/composeFieldsObject';
-import pointFromGqlToMongo from '../../mutations/processCreateInputData/pointFromGqlToMongo';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
 import composeRelationalKey from './composeRelationalKey';
 import composeWithinPolygonInput from './composeWithinPolygonInput';
 import composeWithinSphereInput from './composeWithinSphereInput';
@@ -93,7 +93,7 @@ const composeWhereInputRecursively = (
 
   const { name: entityName, type: entityType } = entityConfig;
 
-  const fieldsObj = composeFieldsObject(entityConfig);
+  const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig);
 
   const idFields = ['id'];
 

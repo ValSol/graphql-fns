@@ -1,8 +1,8 @@
-import type { TangibleEntityConfig } from '../../../../../tsTypes';
-import type { Core } from '../../../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
+import type { Core } from '@/resolvers/tsTypes';
 
-import composeFieldsObject from '../../../../../utils/composeFieldsObject';
-import processDeleteData from '../../../processDeleteData';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import processDeleteData from '@/resolvers/mutations/processDeleteData';
 
 const deleteTree = (idsAndEntityConfigs: null | [any, any, TangibleEntityConfig], core: Core) => {
   if (!idsAndEntityConfigs) return;
@@ -11,7 +11,7 @@ const deleteTree = (idsAndEntityConfigs: null | [any, any, TangibleEntityConfig]
 
   const fieldNames = Object.keys(currentBranch);
 
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   processDeleteData(
     entity,

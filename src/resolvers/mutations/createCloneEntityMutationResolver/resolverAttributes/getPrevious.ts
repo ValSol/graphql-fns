@@ -1,10 +1,10 @@
-import type { GetPrevious } from '../../../tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import composeFieldsObject from '../../../../utils/composeFieldsObject';
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
-import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-import checkData from '../../checkData';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import checkData from '@/resolvers/mutations/checkData';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,
@@ -37,7 +37,7 @@ const getPrevious: GetPrevious = async (
     );
   }
 
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const $project = Object.keys(fieldsObject).reduce<Record<string, 1>>(
     (prev, fieldName) => {

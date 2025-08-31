@@ -1,4 +1,4 @@
-import type { EmbeddedField, EntityConfig, GeospatialField } from '../tsTypes';
+import type { EmbeddedField, EntityConfig, GeospatialField } from '@/tsTypes';
 
 import composeFieldsObject from './composeFieldsObject';
 import composeEmptyValues from './composeEmptyValues';
@@ -10,7 +10,7 @@ const coerceDataFromGql = (
   // set ON if use for creation JSON export file
   forExport?: boolean,
 ): any => {
-  const fieldsObject = composeFieldsObject(entityConfig);
+  const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const result = Object.keys(data).reduce<Record<string, any>>((prev, key) => {
     if (fieldsObject[key] === undefined || (forExport && data[key] === null)) return prev;

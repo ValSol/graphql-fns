@@ -30,7 +30,7 @@ const composeRelationalKey = (
       }
 
       const fieldName = key.slice(0, -1);
-      const fieldsObject = composeFieldsObject(currentConfig);
+      const { fieldsObject } = composeFieldsObject(currentConfig);
 
       const attributes = fieldsObject[fieldName];
 

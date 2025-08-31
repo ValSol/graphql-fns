@@ -1,10 +1,10 @@
 import deepEqual from 'fast-deep-equal';
 
-import type { DataObject, TangibleEntityConfig } from '../../../../../tsTypes';
-import type { Core } from '../../../../tsTypes';
+import type { DataObject, TangibleEntityConfig } from '@/tsTypes';
+import type { Core } from '@/resolvers/tsTypes';
 
-import composeFieldsObject from '../../../../../utils/composeFieldsObject';
-import processDeleteData from '../../../processDeleteData';
+import composeFieldsObject from '@/utils/composeFieldsObject';
+import processDeleteData from '@/resolvers/mutations/processDeleteData';
 import deleteTree from './deleteTree';
 
 const mixTrees = (
@@ -19,7 +19,7 @@ const mixTrees = (
 
   const fieldNames = Object.keys(currentBranch);
 
-  const fieldsObject = composeFieldsObject(parentEntityConfig);
+  const { fieldsObject } = composeFieldsObject(parentEntityConfig);
 
   const result = fieldNames.reduce<Record<string, any>>((prev, fieldName) => {
     const { array } = fieldsObject[fieldName];

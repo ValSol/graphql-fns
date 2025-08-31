@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { TangibleEntityConfig } from '../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
 
 import composeFieldsObject from '.';
 
@@ -51,7 +51,7 @@ describe('composeFieldsObject', () => {
 
     const result = composeFieldsObject(entityConfig);
 
-    const expectedResult = {
+    const fieldsObject = {
       textField1: {
         name: 'textField1',
         type: 'textFields',
@@ -88,13 +88,17 @@ describe('composeFieldsObject', () => {
       },
     };
 
+    const expectedResult = { fieldsObject };
+
     expect(result).toEqual(expectedResult);
 
     const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
       withoutCalculatedFieldsWithAsyncFunc: true,
     });
 
-    expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult);
+    const expectedResult2 = { fieldsObject, calculatedFieldsWithAsyncObject: {} };
+
+    expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult2);
   });
 
   describe('calculatedFields', () => {
@@ -117,7 +121,7 @@ describe('composeFieldsObject', () => {
 
       const result = composeFieldsObject(entityConfig);
 
-      const expectedResult = {
+      const fieldsObject = {
         simpleCalculatedText: {
           name: 'simpleCalculatedText',
           calculatedType: 'textFields',
@@ -127,13 +131,18 @@ describe('composeFieldsObject', () => {
           required: true,
         },
       };
+
+      const expectedResult = { fieldsObject };
+
       expect(result).toEqual(expectedResult);
 
       const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
         withoutCalculatedFieldsWithAsyncFunc: true,
       });
 
-      expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult);
+      const expectedResult2 = { fieldsObject, calculatedFieldsWithAsyncObject: {} };
+
+      expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult2);
     });
 
     test('with asyncFunc', () => {
@@ -165,7 +174,7 @@ describe('composeFieldsObject', () => {
 
       const result = composeFieldsObject(entityConfig);
 
-      const expectedResult = {
+      const fieldsObject = {
         simpleCalculatedText: {
           name: 'simpleCalculatedText',
           calculatedType: 'textFields',
@@ -186,13 +195,15 @@ describe('composeFieldsObject', () => {
         },
       };
 
+      const expectedResult = { fieldsObject };
+
       expect(result).toEqual(expectedResult);
 
       const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
         withoutCalculatedFieldsWithAsyncFunc: true,
       });
 
-      const expectedWithoutCalculatedFieldsWithAsyncFuncResult = {
+      const fieldsObject2 = {
         simpleCalculatedText: {
           name: 'simpleCalculatedText',
           calculatedType: 'textFields',
@@ -201,6 +212,23 @@ describe('composeFieldsObject', () => {
           func: 'DYMMY function ONLY for test',
           required: true,
         },
+      };
+
+      const calculatedFieldsWithAsyncObject = {
+        asyncCalculatedText: {
+          asyncFunc: 'DYMMY async function ONLY for test',
+          calculatedType: 'textFields',
+          fieldsToUseNames: [],
+          func: 'DYMMY function ONLY for test',
+          name: 'asyncCalculatedText',
+          required: true,
+          type: 'calculatedFields',
+        },
+      };
+
+      const expectedWithoutCalculatedFieldsWithAsyncFuncResult = {
+        fieldsObject: fieldsObject2,
+        calculatedFieldsWithAsyncObject,
       };
 
       expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(
