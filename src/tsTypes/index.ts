@@ -906,6 +906,9 @@ export type SimplifiedInventoryOptions = {
   Mutation: {
     [mutationName: string]: Array<string>;
   };
+  Subscription: {
+    [subscriptionName: string]: Array<string>;
+  };
 };
 
 export type InventoryOptions = {
@@ -1292,7 +1295,7 @@ export type PipelineMongoDB = Array<
   | { $setWindowFields: SetWindowFields }
 >;
 
-export type Subscribe = {
+export type Subscription = {
   subscribe: (
     parent: null | GraphqlObject,
     args: { where?: GraphqlObject },
@@ -1332,9 +1335,9 @@ export type ActionInvolvedEntityNames = {
   inputOutputEntity?: string;
   inputEntity?: string;
   outputEntity?: string;
-  subscribeCreatedEntity?: string;
-  subscribeDeletedEntity?: string;
-  subscribeUpdatedEntity?: string;
+  subscriptionCreatedEntity?: string;
+  subscriptionDeletedEntity?: string;
+  subscriptionUpdatedEntity?: string;
 };
 
 export type ActionAttributes = {

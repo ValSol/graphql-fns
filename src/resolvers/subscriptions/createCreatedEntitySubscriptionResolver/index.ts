@@ -1,4 +1,4 @@
-import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '@/tsTypes';
+import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from '@/tsTypes';
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -7,12 +7,14 @@ import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
+const store = Object.create(null);
+
 const createCreatedEntitySubscriptionResolver = (
   originalOrCustomName: string,
   preEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-): any => {
+): null | { subscribe: Subscription } => {
   const { inventory } = generalConfig;
   const { name } = preEntityConfig;
 
@@ -20,13 +22,17 @@ const createCreatedEntitySubscriptionResolver = (
     return null;
   }
 
+  const storeKey = `${originalOrCustomName}:${name}`;
+
+  if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
+
   const descendantKey = originalOrCustomName.slice('createdEntity'.length);
 
   const entityConfig = descendantKey
     ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
     : preEntityConfig;
 
-  const resolver: Subscribe = {
+  store[storeKey] = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`created-${name}`),
@@ -50,7 +56,7 @@ const createCreatedEntitySubscriptionResolver = (
       ),
   };
 
-  return resolver;
+  return store[storeKey];
 };
 
 export default createCreatedEntitySubscriptionResolver;

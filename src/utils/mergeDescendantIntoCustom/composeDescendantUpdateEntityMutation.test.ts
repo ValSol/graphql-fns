@@ -56,7 +56,7 @@ describe('composeDescendantUpdateEntityMutation', () => {
       involvedEntityNames: ({ name }: any) => ({
         inputEntity: `${name}ForCatalog`,
         outputEntity: name,
-        subscribeUpdatedEntity: `${name}ForCatalog`,
+        subscriptionUpdatedEntity: `${name}ForCatalog`,
       }),
       type: ({ name }: any) => `${name}!`,
       config: (entityConfig2: any, generalConfig: any) => entityConfig2, // eslint-disable-line no-unused-vars, no-shadow

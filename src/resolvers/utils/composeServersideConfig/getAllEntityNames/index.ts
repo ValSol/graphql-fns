@@ -7,26 +7,26 @@ import type {
 } from '@/tsTypes';
 
 import mergeDescendantIntoCustom from '@/utils/mergeDescendantIntoCustom';
-import { mutationAttributes, queryAttributes } from '@/types/actionAttributes';
+import {
+  mutationAttributes,
+  queryAttributes,
+  subscriptionAttributes,
+} from '@/types/actionAttributes';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 import subtructInventoryOptions from './subtructInventoryOptions';
 
 const inventoryKeys = ['Query', 'Mutation', 'Subscription'];
 
 const unusedInvolvedEntityKeys = [
-  'subscribeCreatedEntity',
-  'subscribeDeletedEntity',
-  'subscribeUpdatedEntity',
+  'subscriptionCreatedEntity',
+  'subscriptionDeletedEntity',
+  'subscriptionUpdatedEntity',
 ];
 
 const processActions =
   (
-    prev: {
-      [entityName: string]: {
-        descriptions: Array<string>;
-        isOutput: boolean;
-      };
-    },
+    prev: { [entityName: string]: { descriptions: Array<string>; isOutput: boolean } },
+    role: string,
     actionName: string,
     actionType: string,
     baseInventory: undefined | SimplifiedInventoryOptions,
@@ -37,7 +37,7 @@ const processActions =
   (entityName: string) => {
     if (baseInventory && !baseInventory[actionType][actionName].includes(entityName)) {
       throw new TypeError(
-        `Entity name "${entityName}" of ${actionType.toLowerCase()} "${actionName}" not found in general inventory!`,
+        `Entity name "${entityName}" of ${actionType.toLowerCase()} "${actionName}" of "${role}" role not found in general inventory!`,
       );
     }
 
@@ -79,14 +79,18 @@ const addEntityNames = (
     };
   },
   baseInventory?: SimplifiedInventoryOptions,
+  role?: string,
 ) => {
   const { allEntityConfigs } = generalConfig;
 
-  const { Query: customQueries = {}, Mutation: customMutations = {} } =
-    mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
+  const {
+    Query: customQueries = {},
+    Mutation: customMutations = {},
+    Subscription: customSubscriptions = {},
+  } = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
 
   const { name, include, exclude } = inventory || {
-    include: { Query: true, Mutation: true },
+    include: { Query: true, Mutation: true, Subscription: true },
     exclude: undefined,
     name: '',
   };
@@ -94,7 +98,11 @@ const addEntityNames = (
   const amendedInclude =
     typeof include === 'object'
       ? include
-      : ({ Query: true, Mutation: true } as { Query: true; Mutation: true });
+      : ({ Query: true, Mutation: true, Subscription: true } as {
+          Query: true;
+          Mutation: true;
+          Subscription: true;
+        });
 
   const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig, name);
 
@@ -113,6 +121,7 @@ const addEntityNames = (
           // "exclude" may be "true" or 'undefined"
           Query: exclude || {},
           Mutation: exclude || {},
+          Subscription: exclude || {},
         };
 
   const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig, name);
@@ -123,13 +132,16 @@ const addEntityNames = (
 
   Object.keys(includeMinusExclude.Query).reduce((prev, actionName) => {
     if (baseInventory && !baseInventory.Query[actionName]) {
-      throw new TypeError(`Query "${actionName}" not found in general inventory!`);
+      throw new TypeError(
+        `Query "${actionName}" of "${role}" role not found in general inventory!`,
+      );
     }
 
     if (queryAttributes[actionName]) {
       includeMinusExclude.Query[actionName].forEach(
         processActions(
           prev,
+          role,
           actionName,
           'Query',
           baseInventory,
@@ -147,6 +159,7 @@ const addEntityNames = (
       includeMinusExclude.Query[actionName].forEach(
         processActions(
           prev,
+          role,
           actionName,
           'Query',
           baseInventory,
@@ -171,13 +184,16 @@ const addEntityNames = (
 
   Object.keys(includeMinusExclude.Mutation).reduce((prev, actionName) => {
     if (baseInventory && !baseInventory.Mutation[actionName]) {
-      throw new TypeError(`Mutation "${actionName}" not found in general inventory!`);
+      throw new TypeError(
+        `Mutation "${actionName}" of "${role}" role not found in general inventory!`,
+      );
     }
 
     if (mutationAttributes[actionName]) {
       includeMinusExclude.Mutation[actionName].forEach(
         processActions(
           prev,
+          role,
           actionName,
           'Mutation',
           baseInventory,
@@ -195,6 +211,7 @@ const addEntityNames = (
       includeMinusExclude.Mutation[actionName].forEach(
         processActions(
           prev,
+          role,
           actionName,
           'Mutation',
           baseInventory,
@@ -213,9 +230,61 @@ const addEntityNames = (
     return prev;
   }, result);
 
-  return includeMinusExclude;
+  // ***
+
+  // *** almost the same as above for the "Mutation"
+
+  Object.keys(includeMinusExclude.Subscription).reduce((prev, actionName) => {
+    if (baseInventory && !baseInventory.Subscription[actionName]) {
+      throw new TypeError(
+        `Subscription "${actionName}" of "${role}" role not found in general inventory!`,
+      );
+    }
+
+    if (subscriptionAttributes[actionName]) {
+      includeMinusExclude.Subscription[actionName].forEach(
+        processActions(
+          prev,
+          role,
+          actionName,
+          'Subscription',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            subscriptionAttributes[actionName2].actionInvolvedEntityNames(entityName2),
+          (actionName2, entityName2) =>
+            subscriptionAttributes[actionName2].actionReturnConfig(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+        ),
+      );
+    } else {
+      includeMinusExclude.Subscription[actionName].forEach(
+        processActions(
+          prev,
+          role,
+          actionName,
+          'Subscription',
+          baseInventory,
+          name,
+          (actionName2, entityName2) =>
+            customSubscriptions[actionName2].involvedEntityNames(
+              allEntityConfigs[entityName2],
+              generalConfig,
+            ),
+          (actionName2, entityName2) =>
+            customSubscriptions[actionName2].config(allEntityConfigs[entityName2], generalConfig),
+        ),
+      );
+    }
+
+    return prev;
+  }, result);
 
   // ***
+
+  return includeMinusExclude;
 };
 
 const getAllEntityNames = (
@@ -235,7 +304,7 @@ const getAllEntityNames = (
 
   const amendedInventory = inventory || {
     name: '',
-    include: { Query: true, Mutation: true },
+    include: { Query: true, Mutation: true, Subscription: true },
     exclude: undefined,
   };
 
@@ -248,7 +317,7 @@ const getAllEntityNames = (
     Object.keys(inventoryByRoles).forEach((role) => {
       const roleInventory = inventoryByRoles[role];
 
-      addEntityNames(roleInventory, generalConfig, result, baseInventory);
+      addEntityNames(roleInventory, generalConfig, result, baseInventory, role);
     });
 
     return result;

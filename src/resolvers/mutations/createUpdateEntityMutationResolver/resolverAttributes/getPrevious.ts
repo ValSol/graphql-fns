@@ -21,7 +21,7 @@ const getPrevious: GetPrevious = async (
   } = resolverArg;
   const { enums } = generalConfig;
 
-  const { subscribeUpdatedFilterAndLimit } = involvedFilters;
+  const { subscriptionUpdatedFilterAndLimit } = involvedFilters;
 
   const { inputFilter, outputFilter } = getInputAndOutputFilters(involvedFilters);
 
@@ -77,7 +77,7 @@ const getPrevious: GetPrevious = async (
     whereOne3 = { _id: entity._id };
   }
 
-  // const projection = subscribeUpdatedFilterAndLimit
+  // const projection = subscriptionUpdatedFilterAndLimit
   //   ? {} // if subsciption ON - return empty projection - to get all fields of entity
   //   : { duplexFieldsProjection };
 

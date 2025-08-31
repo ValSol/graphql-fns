@@ -1,14 +1,15 @@
-import type {
-  GeneralConfig,
-  InventoryOptions,
-  SimplifiedInventoryOptions,
-} from '../../../../tsTypes';
+import type { GeneralConfig, InventoryOptions, SimplifiedInventoryOptions } from '@/tsTypes';
 
-import mergeDescendantIntoCustom from '../../../../utils/mergeDescendantIntoCustom';
-import { mutationAttributes, queryAttributes } from '../../../../types/actionAttributes';
+import mergeDescendantIntoCustom from '@/utils/mergeDescendantIntoCustom';
+import {
+  mutationAttributes,
+  queryAttributes,
+  subscriptionAttributes,
+} from '@/types/actionAttributes';
 
 const mutationNames = Object.keys(mutationAttributes);
 const queryNames = Object.keys(queryAttributes);
+const subscriptionNames = Object.keys(subscriptionAttributes);
 
 const childQueryNames = Object.keys(queryAttributes).filter(
   (actionName) => queryAttributes[actionName].actionIsChild,
@@ -24,19 +25,28 @@ const unwindInverntoryOptions = (
   const { allEntityConfigs } = generalConfig;
 
   const amendedInventoryOptions =
-    inventoryOptions && !inventoryOptions.Query && !inventoryOptions.Mutation
-      ? { Query: true, Mutation: true }
+    inventoryOptions &&
+    !inventoryOptions.Query &&
+    !inventoryOptions.Mutation &&
+    !inventoryOptions.Subscription
+      ? { Query: true, Mutation: true, Subscription: true }
       : inventoryOptions;
 
-  const { Query: queryInventoryOptions = {}, Mutation: mutationInventoryOptions = {} } =
-    amendedInventoryOptions;
+  const {
+    Query: queryInventoryOptions = {},
+    Mutation: mutationInventoryOptions = {},
+    Subscription: subscriptionInventoryOptions = {},
+  } = amendedInventoryOptions;
 
   const rootEntityNames = Object.keys(allEntityConfigs).filter((name) =>
     tangibleTypes.includes(allEntityConfigs[name].type),
   );
 
-  const { Query: customQueries = {}, Mutation: customMutations = {} } =
-    mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
+  const {
+    Query: customQueries = {},
+    Mutation: customMutations = {},
+    Subscription: customSubscriptions = {},
+  } = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
 
   // *** process child queries
 
@@ -214,6 +224,79 @@ const unwindInverntoryOptions = (
 
   // ***
 
-  return { Query, Mutation };
+  // *** almost the same as above for the "Mutation"
+
+  const allSubscriptions = subscriptionNames.reduce<Record<string, any>>((prev, actionName) => {
+    const actionNames: Array<any | string> = [];
+
+    rootEntityNames.forEach((rootEntityName) => {
+      if (subscriptionAttributes[actionName].actionAllowed(allEntityConfigs[rootEntityName])) {
+        actionNames.push(rootEntityName);
+      }
+    });
+
+    if (actionNames.length > 0) {
+      prev[actionName] = actionNames;
+    }
+
+    return prev;
+  }, {});
+
+  Object.keys(customSubscriptions).reduce((prev, actionName) => {
+    const actionNames: Array<any | string> = [];
+
+    rootEntityNames.forEach((rootEntityName) => {
+      if (
+        customSubscriptions[actionName].specificName(
+          allEntityConfigs[rootEntityName],
+          generalConfig,
+        )
+      ) {
+        actionNames.push(rootEntityName);
+      }
+    });
+
+    if (actionNames.length > 0) {
+      prev[actionName] = actionNames;
+    }
+
+    return prev;
+  }, allSubscriptions);
+
+  const Subscription =
+    subscriptionInventoryOptions === true
+      ? allSubscriptions
+      : Object.keys(subscriptionInventoryOptions).reduce<Record<string, any>>(
+          (prev, actionName) => {
+            if (!allSubscriptions[actionName]) {
+              throw new TypeError(
+                `Incorrect inventory subscription name: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
+              );
+            }
+
+            const allActionEntities = allSubscriptions[actionName];
+
+            if (subscriptionInventoryOptions[actionName] === true) {
+              prev[actionName] = allActionEntities;
+            } else {
+              subscriptionInventoryOptions[actionName].forEach((entityName) => {
+                if (!allActionEntities.includes(entityName)) {
+                  throw new TypeError(
+                    `Incorrect entity name: "${entityName}" in inventory allSubscription: "${actionName}" of inventoryOptions: "${inventoryName}"!`,
+                  );
+                }
+              });
+
+              prev[actionName] = subscriptionInventoryOptions[actionName];
+            }
+
+            return prev;
+          },
+          {},
+        );
+
+  // ***
+
+  return { Query, Mutation, Subscription };
 };
 export default unwindInverntoryOptions;

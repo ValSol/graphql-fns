@@ -563,7 +563,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig,
@@ -571,7 +571,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult = {
       inputOutputFilterAndLimit: [[]],
-      subscribeUpdatedFilterAndLimit: null,
+      subscriptionUpdatedFilterAndLimit: null,
     };
     expect(result).toEqual(expectedResult);
 
@@ -586,7 +586,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'RestaurantForView' },
       {},
       context,
       generalConfig,
@@ -594,7 +594,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult2 = {
       inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedFilterAndLimit: null,
+      subscriptionUpdatedFilterAndLimit: null,
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -606,7 +606,10 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'RestaurantForSetting' },
+      {
+        inputOutputEntity: 'RestaurantForSetting',
+        subscriptionUpdatedEntity: 'RestaurantForSetting',
+      },
       {},
       context,
       generalConfig,
@@ -614,7 +617,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult = {
       inputOutputFilterAndLimit: [[], 8],
-      subscribeUpdatedFilterAndLimit: [[], 8],
+      subscriptionUpdatedFilterAndLimit: [[], 8],
     };
     expect(result).toEqual(expectedResult);
 
@@ -622,7 +625,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig,
@@ -630,7 +633,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult2 = {
       inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedFilterAndLimit: [[{ test: true }], 6],
+      subscriptionUpdatedFilterAndLimit: [[{ test: true }], 6],
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -648,7 +651,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig2,
@@ -656,7 +659,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult = {
       inputOutputFilterAndLimit: [[]],
-      subscribeUpdatedFilterAndLimit: null,
+      subscriptionUpdatedFilterAndLimit: null,
     };
     expect(result).toEqual(expectedResult);
 
@@ -664,7 +667,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscribeUpdatedEntity: 'Restaurant' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig2,
@@ -672,7 +675,7 @@ describe('executeAuthorisation', () => {
     );
     const expectedResult2 = {
       inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscribeUpdatedFilterAndLimit: null,
+      subscriptionUpdatedFilterAndLimit: null,
     };
     expect(result2).toEqual(expectedResult2);
   });

@@ -18,13 +18,13 @@ import composeDescendantConfigName from '@/utils/composeDescendantConfig/compose
 const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
   `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
 
-type SubscribeInvolvedKey =
-  | 'subscribeCreatedEntity'
-  | 'subscribeDeletedEntity'
-  | 'subscribeUpdatedEntity';
+type SubscriptionInvolvedKey =
+  | 'subscriptionCreatedEntity'
+  | 'subscriptionDeletedEntity'
+  | 'subscriptionUpdatedEntity';
 
-const composeSubscribeInventoryChains = (
-  key: SubscribeInvolvedKey,
+const composeSubscriptionInventoryChains = (
+  key: SubscriptionInvolvedKey,
   entityName: string,
   generalConfig: GeneralConfig,
 ) => {
@@ -40,21 +40,21 @@ const composeSubscribeInventoryChains = (
   } = generalConfig;
 
   switch (key) {
-    case 'subscribeCreatedEntity':
+    case 'subscriptionCreatedEntity':
       return descendantKeys.map((descendantKey) => [
         'Subscription',
         `createdEntity${descendantKey}`,
         root,
       ]);
 
-    case 'subscribeDeletedEntity':
+    case 'subscriptionDeletedEntity':
       return descendantKeys.map((descendantKey) => [
         'Subscription',
         `deletedEntity${descendantKey}`,
         root,
       ]);
 
-    case 'subscribeUpdatedEntity':
+    case 'subscriptionUpdatedEntity':
       return descendantKeys.map((descendantKey) => [
         'Subscription',
         `updatedEntity${descendantKey}`,
@@ -119,9 +119,9 @@ const executeAuthorisation = async (
 
   if (!inventoryByRoles && !filters) {
     const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
-      const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscribe')
-        ? composeSubscribeInventoryChains(
-            involvedEntityNamesKey as SubscribeInvolvedKey,
+      const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscription')
+        ? composeSubscriptionInventoryChains(
+            involvedEntityNamesKey as SubscriptionInvolvedKey,
             involvedEntityNames[involvedEntityNamesKey],
             generalConfig,
           )
@@ -184,9 +184,9 @@ const executeAuthorisation = async (
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-    const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscribe')
-      ? composeSubscribeInventoryChains(
-          involvedEntityNamesKey as SubscribeInvolvedKey,
+    const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscription')
+      ? composeSubscriptionInventoryChains(
+          involvedEntityNamesKey as SubscriptionInvolvedKey,
           involvedEntityNames[involvedEntityNamesKey],
           generalConfig,
         )

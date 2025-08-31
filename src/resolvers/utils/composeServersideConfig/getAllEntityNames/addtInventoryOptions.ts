@@ -1,4 +1,4 @@
-import type { SimplifiedInventoryOptions } from '../../../../tsTypes';
+import type { SimplifiedInventoryOptions } from '@/tsTypes';
 
 const add = (
   obj: {
@@ -27,8 +27,16 @@ const addtInventoryOptions = (
   include: SimplifiedInventoryOptions,
   include2: SimplifiedInventoryOptions,
 ): SimplifiedInventoryOptions => {
-  const { Query: includeQueries, Mutation: includeMutations } = include;
-  const { Query: include2Queries, Mutation: include2Mutations } = include2;
+  const {
+    Query: includeQueries,
+    Mutation: includeMutations,
+    Subscription: includeSubscriptions,
+  } = include;
+  const {
+    Query: include2Queries,
+    Mutation: include2Mutations,
+    Subscription: include2Subscriptions,
+  } = include2;
 
   const Query: Record<string, any> = {};
   add(includeQueries, include2Queries, Query);
@@ -38,6 +46,10 @@ const addtInventoryOptions = (
   add(includeMutations, include2Mutations, Mutation);
   add(include2Mutations, includeMutations, Mutation);
 
-  return { Query, Mutation };
+  const Subscription: Record<string, any> = {};
+  add(includeSubscriptions, include2Subscriptions, Subscription);
+  add(include2Subscriptions, includeSubscriptions, Subscription);
+
+  return { Query, Mutation, Subscription };
 };
 export default addtInventoryOptions;

@@ -3,7 +3,7 @@ import type {
   ServersideConfig,
   EntityConfig,
   ThreeSegmentInventoryChain,
-} from '../../tsTypes';
+} from '@/tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';

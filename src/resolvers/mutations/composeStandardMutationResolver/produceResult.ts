@@ -46,9 +46,9 @@ const produceResult = async (
   const {
     resolverOptions: {
       involvedFilters: {
-        subscribeCreatedFilterAndLimit,
-        subscribeDeletedFilterAndLimit,
-        subscribeUpdatedFilterAndLimit,
+        subscriptionCreatedFilterAndLimit,
+        subscriptionDeletedFilterAndLimit,
+        subscriptionUpdatedFilterAndLimit,
       },
     },
   } = resolverArg;
@@ -58,9 +58,9 @@ const produceResult = async (
   const { projection } = infoEssence;
 
   if (
-    subscribeCreatedFilterAndLimit ||
-    subscribeDeletedFilterAndLimit ||
-    subscribeUpdatedFilterAndLimit
+    subscriptionCreatedFilterAndLimit ||
+    subscriptionDeletedFilterAndLimit ||
+    subscriptionUpdatedFilterAndLimit
   ) {
     Object.assign(projection, composeAllFieldsProjection(entityConfig), {
       withoutCalculatedFieldsWithAsyncFunc: true,

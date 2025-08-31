@@ -4,7 +4,7 @@ import type {
   TangibleEntityConfig,
   GeneralConfig,
   Inventory,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
 
 import getAllEntityNames from '.';
 

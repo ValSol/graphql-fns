@@ -132,12 +132,22 @@ describe('unwindInverntoryOptions', () => {
       updateManyEntities: ['Example', 'ChildExample'],
     };
 
+    const allSubscriptions = {
+      createdEntity: ['Example', 'ChildExample'],
+      deletedEntity: ['Example', 'ChildExample'],
+      updatedEntity: ['Example', 'ChildExample'],
+    };
+
     test('should unwind all actions', () => {
       const inventoryOptions: InventoryOptions = {};
 
       const result = unwindInverntoryOptions(inventoryOptions, generalConfig);
 
-      const expectedResult = { Query: allQueries, Mutation: allMutations };
+      const expectedResult = {
+        Query: allQueries,
+        Mutation: allMutations,
+        Subscription: allSubscriptions,
+      };
       expect(result).toEqual(expectedResult);
     });
 
@@ -146,7 +156,7 @@ describe('unwindInverntoryOptions', () => {
 
       const result = unwindInverntoryOptions(inventoryOptions, generalConfig);
 
-      const expectedResult = { Query: allQueries, Mutation: {} };
+      const expectedResult = { Query: allQueries, Mutation: {}, Subscription: {} };
       expect(result).toEqual(expectedResult);
     });
 
@@ -155,7 +165,7 @@ describe('unwindInverntoryOptions', () => {
 
       const result = unwindInverntoryOptions(inventoryOptions, generalConfig);
 
-      const expectedResult = { Query: {}, Mutation: allMutations };
+      const expectedResult = { Query: {}, Mutation: allMutations, Subscription: {} };
       expect(result).toEqual(expectedResult);
     });
 
@@ -164,7 +174,7 @@ describe('unwindInverntoryOptions', () => {
 
       const result = unwindInverntoryOptions(inventoryOptions, generalConfig);
 
-      const expectedResult = { Query: {}, Mutation: allMutations };
+      const expectedResult = { Query: {}, Mutation: allMutations, Subscription: {} };
       expect(result).toEqual(expectedResult);
     });
   });
@@ -176,7 +186,11 @@ describe('unwindInverntoryOptions', () => {
 
     const result = unwindInverntoryOptions(inventoryOptions, generalConfig);
 
-    const expectedResult = { Query: {}, Mutation: { createEntity: ['Example', 'ChildExample'] } };
+    const expectedResult = {
+      Query: {},
+      Mutation: { createEntity: ['Example', 'ChildExample'] },
+      Subscription: {},
+    };
     expect(result).toEqual(expectedResult);
   });
 });

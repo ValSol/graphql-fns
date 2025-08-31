@@ -1,16 +1,18 @@
-import type { GeneralConfig, Subscribe, EntityConfig, ServersideConfig } from '../../../tsTypes';
+import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from '../../../tsTypes';
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
+const store = Object.create(null);
+
 const createDeletedEntitySubscriptionResolver = (
   originalOrCustomName: string,
   preEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-): any | null => {
+): null | { subscribe: Subscription } => {
   const { inventory } = generalConfig;
   const { name } = preEntityConfig;
 
@@ -18,13 +20,17 @@ const createDeletedEntitySubscriptionResolver = (
     return null;
   }
 
+  const storeKey = `${originalOrCustomName}:${name}`;
+
+  if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
+
   const descendantKey = originalOrCustomName.slice('deletedEntity'.length);
 
   const entityConfig = descendantKey
     ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
     : preEntityConfig;
 
-  const resolver: Subscribe = {
+  store[storeKey] = {
     subscribe: (_, args, context, info, { involvedFilters }) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`deleted-${name}`),
@@ -48,7 +54,7 @@ const createDeletedEntitySubscriptionResolver = (
       ),
   };
 
-  return resolver;
+  return store[storeKey];
 };
 
 export default createDeletedEntitySubscriptionResolver;
