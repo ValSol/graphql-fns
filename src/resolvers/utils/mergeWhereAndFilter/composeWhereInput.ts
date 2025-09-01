@@ -9,7 +9,7 @@ import type {
   TangibleEntityConfig,
 } from '@/tsTypes';
 
-import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeFieldsObject, { FOR_MONGO_QUERY } from '@/utils/composeFieldsObject';
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
 import composeRelationalKey from './composeRelationalKey';
 import composeWithinPolygonInput from './composeWithinPolygonInput';
@@ -93,7 +93,7 @@ const composeWhereInputRecursively = (
 
   const { name: entityName, type: entityType } = entityConfig;
 
-  const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig);
+  const { fieldsObject: fieldsObj } = composeFieldsObject(entityConfig, FOR_MONGO_QUERY);
 
   const idFields = ['id'];
 

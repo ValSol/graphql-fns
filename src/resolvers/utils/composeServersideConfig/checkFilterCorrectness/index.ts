@@ -1,7 +1,7 @@
-import type { GeneralConfig } from '../../../../tsTypes';
+import type { GeneralConfig } from '@/tsTypes';
 
-import parseEntityName from '../../../../utils/parseEntityName';
-import composeWhereInput from '../../mergeWhereAndFilter/composeWhereInput';
+import parseEntityName from '@/utils/parseEntityName';
+import composeWhereInput from '@/resolvers/utils/mergeWhereAndFilter/composeWhereInput';
 
 const checkFilterCorrectness = (
   entityName: string,

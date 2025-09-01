@@ -127,6 +127,46 @@ describe('executeAuthorisation', () => {
     RestaurantForSetting: [true, () => []],
   };
 
+  const subscribePayloadFilters: EntityFilters = {
+    RestaurantForCabinet: [
+      true,
+      ({ id, role }: { id: string; role: string }): null | Array<any> => {
+        switch (role) {
+          case viewer:
+          case guest:
+            return null;
+          case admin:
+            return [];
+          case restaurantOwner:
+            return [{ restaurantEditors: id }];
+
+          default:
+            throw new TypeError(`Role "${role}" not in use!`);
+        }
+      },
+    ],
+
+    Restaurant: [
+      true,
+      ({ id, role }: { role: string; id: string }): null | Array<any> => {
+        switch (role) {
+          case viewer:
+          case guest:
+            return null;
+          case admin:
+            return [{ show_exists: true }];
+          case restaurantOwner:
+            return [{ restaurantEditors: id }, { restaurantPublishers: id }];
+
+          default:
+            throw new TypeError(`Role "${role}" not in use!`);
+        }
+      },
+    ],
+
+    RestaurantForSetting: [true, () => []],
+  };
+
   const staticFilters = {
     RestaurantForCabinet: { deleted: false },
 
@@ -162,7 +202,35 @@ describe('executeAuthorisation', () => {
     descendantKey: 'ForView',
   };
 
-  const allEntityConfigs = { Restaurant: {} as TangibleEntityConfig };
+  const Restaurant: TangibleEntityConfig = {
+    name: 'Restaurant',
+    type: 'tangible',
+
+    allowedCalculatedWithAsyncFuncFieldNames: ['restaurantEditors'],
+
+    textFields: [{ name: 'title', type: 'textFields' }],
+
+    calculatedFields: [
+      {
+        name: 'restaurantEditors',
+        type: 'calculatedFields',
+        calculatedType: 'textFields',
+        array: true,
+        func: (() => []) as any,
+        asyncFunc: (() => []) as any,
+      },
+      {
+        name: 'restaurantPublishers',
+        type: 'calculatedFields',
+        calculatedType: 'textFields',
+        array: true,
+        func: (() => []) as any,
+        asyncFunc: (() => []) as any,
+      },
+    ],
+  };
+
+  const allEntityConfigs = { Restaurant };
   const descendant = { ForCatalog, ForSetting, ForView };
 
   const generalConfig = { allEntityConfigs, descendant } as GeneralConfig;
@@ -182,7 +250,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: [[], 4] };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: [[], 4] } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = { staticFilters };
@@ -195,7 +263,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }]] };
+    const expectedResult2 = { involvedFilters: { inputOutputFilterAndLimit: [[{ show: true }]] } };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -220,7 +288,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: [[]] };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -239,7 +307,9 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }], 4] };
+    const expectedResult2 = {
+      involvedFilters: { inputOutputFilterAndLimit: [[{ show: true }], 4] },
+    };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -265,7 +335,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: [[], 4] };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: [[], 4] } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -283,7 +353,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }]] };
+    const expectedResult2 = { involvedFilters: { inputOutputFilterAndLimit: [[{ show: true }]] } };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -308,7 +378,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: [[]] };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -327,7 +397,9 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: [[{ show: true }], 4] };
+    const expectedResult2 = {
+      involvedFilters: { inputOutputFilterAndLimit: [[{ show: true }], 4] },
+    };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -353,7 +425,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: null };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: null } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -371,7 +443,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: null };
+    const expectedResult2 = { involvedFilters: { inputOutputFilterAndLimit: null } };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -399,7 +471,9 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
+      },
     };
     expect(result).toEqual(expectedResult);
 
@@ -420,11 +494,103 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputFilterAndLimit: [
-        [{ AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] }],
-      ],
+      involvedFilters: {
+        inputOutputFilterAndLimit: [
+          [{ AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] }],
+        ],
+      },
     };
     expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should returnv [Object] for "RestaurantOwner" role for "Subscription"', async () => {
+    const inventoryChain: InventoryChain = [
+      'Subscription',
+      'updatedEntityForCabinet',
+      'Restaurant',
+    ];
+    const getUserAttributes = async () => {
+      await sleep(100);
+      return { roles: [restaurantOwner], id };
+    };
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+      staticLimits,
+    };
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForCabinet' },
+      {},
+      context,
+      generalConfig,
+      serversideConfig,
+    );
+    const expectedResult = {
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
+      },
+      subscribePayloadMongoFilter: {},
+    };
+    expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+      staticFilters,
+    };
+
+    const result2 = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForCabinet' },
+      {},
+      context,
+      generalConfig,
+      serversideConfig2,
+    );
+    const expectedResult2 = {
+      involvedFilters: {
+        inputOutputFilterAndLimit: [
+          [{ AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] }],
+        ],
+      },
+      subscribePayloadMongoFilter: {},
+    };
+    expect(result2).toEqual(expectedResult2);
+
+    const serversideConfig3: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+      filters,
+      subscribePayloadFilters,
+      staticFilters,
+    };
+
+    const result3 = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForCabinet' },
+      {},
+      context,
+      generalConfig,
+      serversideConfig3,
+    );
+    const expectedResult3 = {
+      involvedFilters: {
+        inputOutputFilterAndLimit: [
+          [{ AND: [{ deleted: false }, { access_: { restaurantEditors: '1234567890' } }] }],
+        ],
+      },
+
+      subscribePayloadMongoFilter: { restaurantEditors: { $eq: '1234567890' } },
+    };
+    expect(result3).toEqual(expectedResult3);
   });
 
   test('should returnv [Object] for "Admin" role', async () => {
@@ -449,7 +615,7 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig,
     );
-    const expectedResult = { inputOutputFilterAndLimit: [[]] };
+    const expectedResult = { involvedFilters: { inputOutputFilterAndLimit: [[]] } };
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -469,7 +635,9 @@ describe('executeAuthorisation', () => {
       generalConfig,
       serversideConfig2,
     );
-    const expectedResult2 = { inputOutputFilterAndLimit: [[{ deleted: false }], 2] };
+    const expectedResult2 = {
+      involvedFilters: { inputOutputFilterAndLimit: [[{ deleted: false }], 2] },
+    };
     expect(result2).toEqual(expectedResult2);
   });
 
@@ -497,14 +665,16 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputFilterAndLimit: [
-        [
-          { access_: { restaurantEditors: id } },
-          { access_: { restaurantPublishers: id } },
-          { show_exists: true },
+      involvedFilters: {
+        inputOutputFilterAndLimit: [
+          [
+            { access_: { restaurantEditors: id } },
+            { access_: { restaurantPublishers: id } },
+            { show_exists: true },
+          ],
+          6,
         ],
-        6,
-      ],
+      },
     };
     expect(result).toEqual(expectedResult);
 
@@ -526,23 +696,25 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputFilterAndLimit: [
-        [
-          {
-            AND: [
-              { test: true },
-              {
-                OR: [
-                  { access_: { restaurantEditors: id } },
-                  { access_: { restaurantPublishers: id } },
-                  { show_exists: true },
-                ],
-              },
-            ],
-          },
+      involvedFilters: {
+        inputOutputFilterAndLimit: [
+          [
+            {
+              AND: [
+                { test: true },
+                {
+                  OR: [
+                    { access_: { restaurantEditors: id } },
+                    { access_: { restaurantPublishers: id } },
+                    { show_exists: true },
+                  ],
+                },
+              ],
+            },
+          ],
+          6,
         ],
-        6,
-      ],
+      },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -570,8 +742,10 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputFilterAndLimit: [[]],
-      subscriptionUpdatedFilterAndLimit: null,
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[]],
+        subscriptionUpdatedFilterAndLimit: null,
+      },
     };
     expect(result).toEqual(expectedResult);
 
@@ -593,8 +767,10 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscriptionUpdatedFilterAndLimit: null,
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+        subscriptionUpdatedFilterAndLimit: null,
+      },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -616,8 +792,10 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputFilterAndLimit: [[], 8],
-      subscriptionUpdatedFilterAndLimit: [[], 8],
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[], 8],
+        subscriptionUpdatedFilterAndLimit: [[], 8],
+      },
     };
     expect(result).toEqual(expectedResult);
 
@@ -632,8 +810,10 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscriptionUpdatedFilterAndLimit: [[{ test: true }], 6],
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+        subscriptionUpdatedFilterAndLimit: [[{ test: true }], 6],
+      },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -658,8 +838,10 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      inputOutputFilterAndLimit: [[]],
-      subscriptionUpdatedFilterAndLimit: null,
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[]],
+        subscriptionUpdatedFilterAndLimit: null,
+      },
     };
     expect(result).toEqual(expectedResult);
 
@@ -674,9 +856,61 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      subscriptionUpdatedFilterAndLimit: null,
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+        subscriptionUpdatedFilterAndLimit: null,
+      },
     };
+    expect(result2).toEqual(expectedResult2);
+  });
+
+  test('should returnv [] & noll without any inventories', async () => {
+    const inventoryChain: InventoryChain = [
+      'Subscription',
+      'updatedEntityForSetting',
+      'Restaurant',
+    ];
+
+    const serversideConfig: ServersideConfig = {};
+
+    const inventory: Inventory = { name: 'test' };
+
+    const generalConfig2: GeneralConfig = { inventory, allEntityConfigs: {} };
+
+    Object.assign(generalConfig2, generalConfig);
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForSetting' },
+      {},
+      context,
+      generalConfig2,
+      serversideConfig,
+    );
+    const expectedResult = {
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      subscribePayloadMongoFilter: {},
+    };
+
+    expect(result).toEqual(expectedResult);
+
+    const serversideConfig2: ServersideConfig = { staticFilters, staticLimits };
+
+    const result2 = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForSetting' },
+      {},
+      context,
+      generalConfig2,
+      serversideConfig2,
+    );
+    const expectedResult2 = {
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
+      },
+      subscribePayloadMongoFilter: {},
+    };
+
     expect(result2).toEqual(expectedResult2);
   });
 });

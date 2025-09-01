@@ -983,7 +983,7 @@ describe('createEntityWherePayloadInputType', () => {
             func: (() => {}) as any,
           },
         ],
-        subscriptionCalculatedFieldNames: ['code'],
+        allowedCalculatedWithAsyncFuncFieldNames: ['code'],
       };
       const expectedResult = [
         'ExampleWherePayloadInput',

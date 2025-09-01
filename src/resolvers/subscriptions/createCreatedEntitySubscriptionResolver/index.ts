@@ -33,7 +33,7 @@ const createCreatedEntitySubscriptionResolver = (
     : preEntityConfig;
 
   store[storeKey] = {
-    subscribe: (_, args, context, info, { involvedFilters }) =>
+    subscribe: (_, args, context, info, resolverOptions) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`created-${name}`),
         (payload) => {

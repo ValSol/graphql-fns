@@ -483,7 +483,7 @@ export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonPropert
   type?: 'tangible';
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
-  subscriptionCalculatedFieldNames?: string[];
+  allowedCalculatedWithAsyncFuncFieldNames?: string[];
 };
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
@@ -844,7 +844,7 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
   type?: 'tangible';
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
-  subscriptionCalculatedFieldNames?: string[];
+  allowedCalculatedWithAsyncFuncFieldNames?: string[];
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
@@ -1136,7 +1136,7 @@ export type InvolvedFilter = Merge<
   { AND?: InvolvedFilter[]; OR?: InvolvedFilter[]; XOR?: InvolvedFilter[] }
 >;
 
-type UserAttributes = Merge<DataObject, { roles: string[] }>;
+export type UserAttributes = Merge<DataObject, { roles: string[] }>;
 
 export type FilterArg = Merge<DataObject, { role: string }>;
 
@@ -1176,7 +1176,7 @@ export type ActionResolver = (
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
-    involvedEntityName?: string; // used in Subscription
+    subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
   },
 ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
 
@@ -1206,6 +1206,7 @@ export type ServersideConfig = {
     [roleName: string]: Array<string>;
   };
   filters?: EntityFilters; // "filters" can used only with help of "getUserAttributes",
+  subscribePayloadFilters?: EntityFilters; // "subscribePayloadFilter" can used only with help of "getUserAttributes",
   staticFilters?: {
     [tangibleEntityName: string]: InvolvedFilter;
   };
@@ -1384,6 +1385,6 @@ export type ResolverArg = {
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
-    involvedEntityName?: string; // used in Subscription
+    subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
   };
 };

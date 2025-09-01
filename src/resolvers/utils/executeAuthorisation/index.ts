@@ -14,6 +14,8 @@ import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
 import composeDescendantConfigName from '@/utils/composeDescendantConfig/composeDescendantConfigName';
+import mergeWhereAndFilter from '../mergeWhereAndFilter';
+import composeSubscriptionDummyEntityConfig from './composeSubscriptionDummyEntityConfig';
 
 const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
   `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
@@ -74,9 +76,12 @@ const executeAuthorisation = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Promise<{
-  [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  involvedFilters: {
+    [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  };
+  subscribePayloadMongoFilter?: Record<string, any>;
 }> => {
-  const { inventory } = generalConfig;
+  const { allEntityConfigs, inventory } = generalConfig;
   const {
     containedRoles,
     filters,
@@ -85,7 +90,9 @@ const executeAuthorisation = async (
     personalFilters = {},
     staticFilters = {},
     staticLimits = {},
+    subscribePayloadFilters,
   } = serversideConfig;
+  const [actionType, , entityName] = inventoryChain;
 
   const { token: tokenFromArgs } = args as { token: string };
 
@@ -168,12 +175,36 @@ const executeAuthorisation = async (
       return prev;
     }, {});
 
-    return involvedFilters; // return
+    if (actionType !== 'Subscription') {
+      return { involvedFilters }; // return
+    }
+
+    if (!subscribePayloadFilters) {
+      return { involvedFilters, subscribePayloadMongoFilter: {} }; // return
+    }
+
+    if (!userAttributes) {
+      throw new TypeError(
+        `Not found ${getUserAttributes ? '"getUserAttributes" callback' : '"userAttributes"'} to process: "subscribePayloadFilters!`,
+      );
+    }
+
+    const { where: subscribePayloadMongoFilter } = mergeWhereAndFilter(
+      composeUserFilter(
+        involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
+        userAttributes,
+        subscribePayloadFilters,
+      ),
+      {},
+      composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
+    );
+
+    return { involvedFilters, subscribePayloadMongoFilter }; // return
   }
 
   if (!userAttributes) {
     throw new TypeError(
-      `Not found ${getUserAttributes ? '"getUserAttributes" callback' : '"userAttributes"'}!`,
+      `Not found ${getUserAttributes ? '"getUserAttributes" callback' : '"userAttributes" to process: "filters"'}!`,
     );
   }
 
@@ -276,7 +307,25 @@ const executeAuthorisation = async (
     return prev;
   }, {});
 
-  return involvedFilters; // return
+  if (actionType !== 'Subscription') {
+    return { involvedFilters }; // return
+  }
+
+  if (!subscribePayloadFilters) {
+    return { involvedFilters, subscribePayloadMongoFilter: {} }; // return
+  }
+
+  const { where: subscribePayloadMongoFilter } = mergeWhereAndFilter(
+    composeUserFilter(
+      involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
+      userAttributes,
+      subscribePayloadFilters,
+    ),
+    {},
+    composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
+  );
+
+  return { involvedFilters, subscribePayloadMongoFilter }; // return
 };
 
 export default executeAuthorisation;

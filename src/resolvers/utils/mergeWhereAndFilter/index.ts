@@ -1,4 +1,4 @@
-import type { EntityConfig, GraphqlObject, PipelineMongoDB } from '../../../tsTypes';
+import type { EntityConfig, GraphqlObject, PipelineMongoDB } from '@/tsTypes';
 
 import addFilter from './addFilter';
 import composeWhereInput from './composeWhereInput';

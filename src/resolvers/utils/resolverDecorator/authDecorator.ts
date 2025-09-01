@@ -17,7 +17,7 @@ const authDecorator =
   ): any =>
   async (...argarray) => {
     const [parent, args, context, info] = argarray;
-    const involvedFilters = await executeAuthorisation(
+    const { involvedFilters, subscribePayloadMongoFilter } = await executeAuthorisation(
       inventoryChain,
       involvedEntityNames,
       args,
@@ -35,12 +35,7 @@ const authDecorator =
       context,
       info,
       actionType === 'Subscription'
-        ? {
-            involvedFilters,
-
-            involvedEntityName:
-              involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
-          }
+        ? { involvedFilters, subscribePayloadMongoFilter }
         : { involvedFilters },
     );
     return result;

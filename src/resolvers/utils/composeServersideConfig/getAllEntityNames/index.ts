@@ -49,20 +49,20 @@ const processActions =
         return;
       }
 
-      const involvedEntityName = involvedEntityNames[involvedEntityKey];
+      const subscribePayloadMongoFilter = involvedEntityNames[involvedEntityKey];
 
-      if (!prev[involvedEntityName]) {
-        prev[involvedEntityName] = { descriptions: [], isOutput: false };
+      if (!prev[subscribePayloadMongoFilter]) {
+        prev[subscribePayloadMongoFilter] = { descriptions: [], isOutput: false };
       }
 
-      prev[involvedEntityName].descriptions.push(
+      prev[subscribePayloadMongoFilter].descriptions.push(
         `inventory "${inventoryName}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
       );
 
       const config = getConfig(actionName, entityName);
 
-      prev[involvedEntityName].isOutput =
-        prev[involvedEntityName].isOutput ||
+      prev[subscribePayloadMongoFilter].isOutput =
+        prev[subscribePayloadMongoFilter].isOutput ||
         (Boolean(config) &&
           (involvedEntityKey === 'inputOutputEntity' || involvedEntityKey.startsWith('output')));
     });

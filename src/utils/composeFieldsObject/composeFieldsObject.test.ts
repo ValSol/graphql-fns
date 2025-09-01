@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type { TangibleEntityConfig } from '@/tsTypes';
 
-import composeFieldsObject from '.';
+import composeFieldsObject, { FOR_MONGO_QUERY, WITHOUT_CALCULATED_WITH_ASYNC } from '.';
 
 describe('composeFieldsObject', () => {
   test('simple config', () => {
@@ -92,11 +92,14 @@ describe('composeFieldsObject', () => {
 
     expect(result).toEqual(expectedResult);
 
-    const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
-      withoutCalculatedFieldsWithAsyncFunc: true,
-    });
+    const filterVariant = WITHOUT_CALCULATED_WITH_ASYNC;
 
-    const expectedResult2 = { fieldsObject, calculatedFieldsWithAsyncObject: {} };
+    const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(
+      entityConfig,
+      filterVariant,
+    );
+
+    const expectedResult2 = { fieldsObject, restOfFieldsObject: {} };
 
     expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult2);
   });
@@ -136,19 +139,34 @@ describe('composeFieldsObject', () => {
 
       expect(result).toEqual(expectedResult);
 
-      const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
-        withoutCalculatedFieldsWithAsyncFunc: true,
-      });
+      const filterVariant = WITHOUT_CALCULATED_WITH_ASYNC;
 
-      const expectedResult2 = { fieldsObject, calculatedFieldsWithAsyncObject: {} };
+      const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(
+        entityConfig,
+        filterVariant,
+      );
+
+      const expectedResult2 = { fieldsObject, restOfFieldsObject: {} };
 
       expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult2);
     });
 
     test('with asyncFunc', () => {
-      const entityConfig: TangibleEntityConfig = {
+      const entityConfig = {} as TangibleEntityConfig;
+
+      Object.assign(entityConfig, {
         name: 'Example',
         type: 'tangible',
+
+        filterFields: [
+          {
+            name: 'filterField',
+            type: 'filterFields',
+            config: entityConfig,
+            func: 'DYMMY function ONLY for test' as any,
+            required: true,
+          },
+        ],
 
         calculatedFields: [
           {
@@ -170,11 +188,19 @@ describe('composeFieldsObject', () => {
             required: true,
           },
         ],
-      };
+      });
 
       const result = composeFieldsObject(entityConfig);
 
       const fieldsObject = {
+        filterField: {
+          name: 'filterField',
+          type: 'filterFields',
+          config: entityConfig,
+          func: 'DYMMY function ONLY for test' as any,
+          required: true,
+        },
+
         simpleCalculatedText: {
           name: 'simpleCalculatedText',
           calculatedType: 'textFields',
@@ -199,11 +225,22 @@ describe('composeFieldsObject', () => {
 
       expect(result).toEqual(expectedResult);
 
-      const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(entityConfig, {
-        withoutCalculatedFieldsWithAsyncFunc: true,
-      });
+      const filterVariant = WITHOUT_CALCULATED_WITH_ASYNC;
+
+      const withoutCalculatedFieldsWithAsyncFuncResult = composeFieldsObject(
+        entityConfig,
+        filterVariant,
+      );
 
       const fieldsObject2 = {
+        filterField: {
+          name: 'filterField',
+          type: 'filterFields',
+          config: entityConfig,
+          func: 'DYMMY function ONLY for test' as any,
+          required: true,
+        },
+
         simpleCalculatedText: {
           name: 'simpleCalculatedText',
           calculatedType: 'textFields',
@@ -214,7 +251,7 @@ describe('composeFieldsObject', () => {
         },
       };
 
-      const calculatedFieldsWithAsyncObject = {
+      const restOfFieldsObject = {
         asyncCalculatedText: {
           asyncFunc: 'DYMMY async function ONLY for test',
           calculatedType: 'textFields',
@@ -228,12 +265,54 @@ describe('composeFieldsObject', () => {
 
       const expectedWithoutCalculatedFieldsWithAsyncFuncResult = {
         fieldsObject: fieldsObject2,
-        calculatedFieldsWithAsyncObject,
+        restOfFieldsObject,
       };
 
       expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(
         expectedWithoutCalculatedFieldsWithAsyncFuncResult,
       );
+
+      const filterVariant2 = FOR_MONGO_QUERY;
+
+      const forMongoQueryResult = composeFieldsObject(entityConfig, filterVariant2);
+
+      const fieldsObject3 = {};
+
+      const restOfFieldsObject2 = {
+        filterField: {
+          name: 'filterField',
+          type: 'filterFields',
+          config: entityConfig,
+          func: 'DYMMY function ONLY for test' as any,
+          required: true,
+        },
+
+        simpleCalculatedText: {
+          name: 'simpleCalculatedText',
+          calculatedType: 'textFields',
+          type: 'calculatedFields',
+          fieldsToUseNames: ['textField1', 'textField2'],
+          func: 'DYMMY function ONLY for test',
+          required: true,
+        },
+
+        asyncCalculatedText: {
+          asyncFunc: 'DYMMY async function ONLY for test',
+          calculatedType: 'textFields',
+          fieldsToUseNames: [],
+          func: 'DYMMY function ONLY for test',
+          name: 'asyncCalculatedText',
+          required: true,
+          type: 'calculatedFields',
+        },
+      };
+
+      const expectedForMongoQueryResult = {
+        fieldsObject: fieldsObject3,
+        restOfFieldsObject: restOfFieldsObject2,
+      };
+
+      expect(forMongoQueryResult).toEqual(expectedForMongoQueryResult);
     });
   });
 });

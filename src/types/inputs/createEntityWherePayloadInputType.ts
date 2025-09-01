@@ -57,13 +57,13 @@ const composeInputFields = (
 
   const { type: entityType } = entityConfig;
 
-  const { calculatedFields = [], subscriptionCalculatedFieldNames = [] } =
+  const { calculatedFields = [], allowedCalculatedWithAsyncFuncFieldNames = [] } =
     entityConfig as TangibleEntityConfig;
 
   calculatedFields.forEach((field) => {
     const { name, calculatedType } = field;
 
-    if (subscriptionCalculatedFieldNames.includes(name)) {
+    if (allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       preFields[calculatedType].push(field);
     }
   });

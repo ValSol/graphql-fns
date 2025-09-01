@@ -2,6 +2,7 @@
 import type { TangibleEntityConfig } from '../../../tsTypes';
 
 import composeAllFieldsProjection from '.';
+import { WITHOUT_CALCULATED_WITH_ASYNC } from '@/utils/composeFieldsObject';
 
 describe('composeAllFieldsProjection', () => {
   test('should create object with simple fields', () => {
@@ -80,9 +81,10 @@ describe('composeAllFieldsProjection', () => {
       };
       expect(result).toEqual(expectedResult);
 
-      const withoutCalculatedFieldsWithAsyncFuncResult = composeAllFieldsProjection(entityConfig, {
-        withoutCalculatedFieldsWithAsyncFunc: true,
-      });
+      const withoutCalculatedFieldsWithAsyncFuncResult = composeAllFieldsProjection(
+        entityConfig,
+        WITHOUT_CALCULATED_WITH_ASYNC,
+      );
 
       expect(withoutCalculatedFieldsWithAsyncFuncResult).toEqual(expectedResult);
     });
@@ -125,9 +127,10 @@ describe('composeAllFieldsProjection', () => {
 
       expect(result).toEqual(expectedResult);
 
-      const withoutCalculatedFieldsWithAsyncFuncResult = composeAllFieldsProjection(entityConfig, {
-        withoutCalculatedFieldsWithAsyncFunc: true,
-      });
+      const withoutCalculatedFieldsWithAsyncFuncResult = composeAllFieldsProjection(
+        entityConfig,
+        WITHOUT_CALCULATED_WITH_ASYNC,
+      );
 
       const expectedWithoutCalculatedFieldsWithAsyncFuncResult = {
         createdAt: 1,

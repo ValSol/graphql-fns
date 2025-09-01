@@ -1,11 +1,6 @@
-import type {
-  DuplexField,
-  GraphqlObject,
-  RelationalField,
-  TangibleEntityConfig,
-} from '../../../tsTypes';
+import type { DuplexField, GraphqlObject, RelationalField, TangibleEntityConfig } from '@/tsTypes';
 
-import composeFieldsObject from '../../../utils/composeFieldsObject';
+import composeFieldsObject, { FOR_MONGO_QUERY } from '@/utils/composeFieldsObject';
 
 const composeRelationalKey = (
   value: GraphqlObject,
@@ -30,7 +25,7 @@ const composeRelationalKey = (
       }
 
       const fieldName = key.slice(0, -1);
-      const { fieldsObject } = composeFieldsObject(currentConfig);
+      const { fieldsObject } = composeFieldsObject(currentConfig, FOR_MONGO_QUERY);
 
       const attributes = fieldsObject[fieldName];
 

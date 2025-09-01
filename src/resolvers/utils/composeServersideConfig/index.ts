@@ -1,4 +1,4 @@
-import type { GeneralConfig, ServersideConfig, SimplifiedEntityFilters } from '../../../tsTypes';
+import type { GeneralConfig, ServersideConfig, SimplifiedEntityFilters } from '@/tsTypes';
 
 import checkFilterCorrectness from './checkFilterCorrectness';
 import getAllEntityNames from './getAllEntityNames';
