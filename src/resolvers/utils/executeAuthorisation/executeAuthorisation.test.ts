@@ -658,7 +658,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'Restaurant' },
+      { inputOutputEntity: 'Restaurant', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig,
@@ -675,6 +675,8 @@ describe('executeAuthorisation', () => {
           6,
         ],
       },
+
+      subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Restaurant' },
     };
     expect(result).toEqual(expectedResult);
 
@@ -742,10 +744,8 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[]],
-        subscriptionUpdatedFilterAndLimit: null,
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Restaurant' },
     };
     expect(result).toEqual(expectedResult);
 
@@ -760,17 +760,15 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'RestaurantForView' },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig,
       serversideConfig2,
     );
     const expectedResult2 = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-        subscriptionUpdatedFilterAndLimit: null,
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8] },
+      subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Restaurant' },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -782,20 +780,15 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      {
-        inputOutputEntity: 'RestaurantForSetting',
-        subscriptionUpdatedEntity: 'RestaurantForSetting',
-      },
+      { inputOutputEntity: 'RestaurantForSetting', subscriptionUpdatedEntity: 'Restaurant' },
       {},
       context,
       generalConfig,
       serversideConfig,
     );
     const expectedResult = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[], 8],
-        subscriptionUpdatedFilterAndLimit: [[], 8],
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[], 8] },
+      subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Restaurant' },
     };
     expect(result).toEqual(expectedResult);
 
@@ -810,10 +803,8 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-        subscriptionUpdatedFilterAndLimit: [[{ test: true }], 6],
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8] },
+      subscriptionEntityNames: { subscriptionUpdatedEntityName: 'Restaurant' },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -838,10 +829,7 @@ describe('executeAuthorisation', () => {
       serversideConfig,
     );
     const expectedResult = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[]],
-        subscriptionUpdatedFilterAndLimit: null,
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
     };
     expect(result).toEqual(expectedResult);
 
@@ -856,10 +844,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-        subscriptionUpdatedFilterAndLimit: null,
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8] },
     };
     expect(result2).toEqual(expectedResult2);
   });
@@ -905,9 +890,7 @@ describe('executeAuthorisation', () => {
       serversideConfig2,
     );
     const expectedResult2 = {
-      involvedFilters: {
-        inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8],
-      },
+      involvedFilters: { inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8] },
       subscribePayloadMongoFilter: {},
     };
 

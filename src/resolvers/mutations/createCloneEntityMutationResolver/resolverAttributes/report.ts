@@ -12,15 +12,15 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
     args,
     context,
     info,
-    resolverOptions: { involvedFilters },
+    resolverOptions: { subscriptionEntityNames },
   } = resolverArg;
   const { name } = entityConfig;
 
   const { data } = args;
 
-  const { subscriptionUpdatedFilterAndLimit: filter } = involvedFilters;
+  const { subscriptionUpdatedEntityName } = subscriptionEntityNames || {};
 
-  const result = filter
+  const result = subscriptionUpdatedEntityName
     ? async ({ previous: [previous], current: [current] }) => {
         const { pubsub } = context;
 

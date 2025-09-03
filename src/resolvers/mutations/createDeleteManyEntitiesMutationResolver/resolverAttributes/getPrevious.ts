@@ -1,10 +1,10 @@
-import type { InvolvedFilter, TangibleEntityConfig } from '../../../../tsTypes';
-import type { GetPrevious } from '../../../tsTypes';
+import type { InvolvedFilter, TangibleEntityConfig } from '@/tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
-import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,

@@ -50,7 +50,7 @@ describe('composeDescendantDeleteEntityMutation', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogWhereOneInput!`, 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
-        subscriptionDeletedEntity: `${name}ForCatalog`,
+        subscriptionDeletedEntity: name,
       }),
       type: ({ name }: any) => `${name}ForCatalog!`,
       config: (entityConfig2: any, generalConfig2: any) =>

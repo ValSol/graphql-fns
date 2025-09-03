@@ -1,9 +1,9 @@
-import type { GetPrevious } from '../../../tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
-import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-import checkData from '../../checkData';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import getInputAndOutputFilters from '@/resolvers/utils/getInputAndOutputFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import checkData from '@/resolvers/mutations/checkData';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,

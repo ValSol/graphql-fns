@@ -54,7 +54,7 @@ describe('composeDescendantPushIntoEntityMutation', () => {
       ],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
-        subscriptionUpdatedEntity: `${name}ForCatalog`,
+        subscriptionUpdatedEntity: name,
       }),
       type: ({ name }: any) => `${name}ForCatalog!`,
       config: (entityConfig2: any, generalConfig2: any) =>

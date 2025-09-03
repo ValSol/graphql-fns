@@ -1,11 +1,11 @@
-import type { NearInput, TangibleEntityConfig } from '../../../../tsTypes';
-import type { GetPrevious } from '../../../tsTypes';
+import type { NearInput, TangibleEntityConfig } from '@/tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import createMongooseModel from '../../../../mongooseModels/createMongooseModel';
-import composeNearForAggregateInput from '../../../utils/composeNearForAggregateInput';
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
-import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
-import getProjectionFromInfo from '../../../utils/getProjectionFromInfo';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,

@@ -6,6 +6,7 @@ import type {
   ThreeSegmentInventoryChain,
   InvolvedFilter,
   GraphqlObject,
+  SubscriptionInvolvedEntityNames,
 } from '@/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -13,12 +14,13 @@ import parseEntityName from '@/utils/parseEntityName';
 import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
-import composeDescendantConfigName from '@/utils/composeDescendantConfig/composeDescendantConfigName';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import composeSubscriptionDummyEntityConfig from './composeSubscriptionDummyEntityConfig';
 
+const SUBSCRIPTION = 'subscription';
+
 const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
-  `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
+  key.startsWith(SUBSCRIPTION) ? `${key}Name` : `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
 
 type SubscriptionInvolvedKey =
   | 'subscriptionCreatedEntity'
@@ -34,6 +36,12 @@ const composeSubscriptionInventoryChains = (
   const descendantKeys = ['', ...Object.keys(descendant)];
 
   const { root, descendantKey } = parseEntityName(entityName, generalConfig);
+
+  if (descendantKey) {
+    throw new TypeError(
+      `Value for key: "${key}" has to be original name: "${root}" but got descendantKey name "${entityName}"!`,
+    );
+  }
 
   const {
     allEntityConfigs: {
@@ -76,9 +84,8 @@ const executeAuthorisation = async (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): Promise<{
-  involvedFilters: {
-    [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
-  };
+  involvedFilters: { [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number] };
+  subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
   subscribePayloadMongoFilter?: Record<string, any>;
 }> => {
   const { allEntityConfigs, inventory } = generalConfig;
@@ -125,58 +132,73 @@ const executeAuthorisation = async (
   // ***
 
   if (!inventoryByRoles && !filters) {
-    const involvedFilters = involvedEntityNamesKeys.reduce((prev, involvedEntityNamesKey) => {
-      const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscription')
-        ? composeSubscriptionInventoryChains(
+    const { involvedFilters, subscriptionEntityNames } = involvedEntityNamesKeys.reduce(
+      (prev, involvedEntityNamesKey) => {
+        const entityName = involvedEntityNames[involvedEntityNamesKey];
+
+        const involvedFilterName = composeInvolvedFilterName(involvedEntityNamesKey);
+
+        if (involvedEntityNamesKey.startsWith(SUBSCRIPTION)) {
+          const amendedInventoryChains = composeSubscriptionInventoryChains(
             involvedEntityNamesKey as SubscriptionInvolvedKey,
-            involvedEntityNames[involvedEntityNamesKey],
+            entityName,
             generalConfig,
-          )
-        : [inventoryChain];
+          );
 
-      const entityName = involvedEntityNames[involvedEntityNamesKey];
+          if (
+            amendedInventoryChains.some((amendedInventoryChain) =>
+              checkInventory(amendedInventoryChain as InventoryChain, inventory),
+            )
+          ) {
+            prev.subscriptionEntityNames[involvedFilterName] = entityName;
+          }
+        } else {
+          const personalFilter = personalCalculatedFilters[entityName];
 
-      const involvedFilterName = composeInvolvedFilterName(involvedEntityNamesKey);
+          if (personalFilter === null) {
+            prev.involvedFilters[involvedFilterName] = null;
 
-      const personalFilter = personalCalculatedFilters[entityName];
+            return prev;
+          }
 
-      if (personalFilter === null) {
-        prev[involvedFilterName] = null;
+          const staticFilter = staticFilters[entityName];
+
+          const staticLimit = staticLimits[entityName];
+
+          const filter = checkInventory(inventoryChain as InventoryChain, inventory)
+            ? staticFilter
+              ? [staticFilter]
+              : []
+            : null;
+
+          if (!filter) {
+            prev.involvedFilters[involvedFilterName] = null;
+
+            return prev;
+          }
+
+          prev.involvedFilters[involvedFilterName] = personalFilter
+            ? [injectStaticOrPersonalFilter(personalFilter, filter)]
+            : [filter];
+
+          if (staticLimit && prev.involvedFilters[involvedFilterName]) {
+            prev.involvedFilters[involvedFilterName].push(staticLimit);
+          }
+        }
 
         return prev;
-      }
+      },
 
-      const staticFilter = staticFilters[entityName];
-
-      const staticLimit = staticLimits[entityName];
-
-      const filter = amendedInventoryChains.some((amendedInventoryChain) =>
-        checkInventory(amendedInventoryChain as InventoryChain, inventory),
-      )
-        ? staticFilter
-          ? [staticFilter]
-          : []
-        : null;
-
-      if (!filter) {
-        prev[involvedFilterName] = null;
-
-        return prev;
-      }
-
-      prev[involvedFilterName] = personalFilter
-        ? [injectStaticOrPersonalFilter(personalFilter, filter)]
-        : [filter];
-
-      if (staticLimit && prev[involvedFilterName]) {
-        prev[involvedFilterName].push(staticLimit);
-      }
-
-      return prev;
-    }, {});
+      {
+        involvedFilters: {},
+        subscriptionEntityNames: {} as Record<SubscriptionInvolvedEntityNames, string>,
+      },
+    );
 
     if (actionType !== 'Subscription') {
-      return { involvedFilters }; // return
+      return Object.keys(subscriptionEntityNames).length === 0
+        ? { involvedFilters }
+        : { involvedFilters, subscriptionEntityNames }; // return
     }
 
     if (!subscribePayloadFilters) {
@@ -208,107 +230,120 @@ const executeAuthorisation = async (
     );
   }
 
-  const { roles, ...userAttributesRest } = userAttributes;
+  const { roles } = userAttributes;
 
-  const result: Record<string, InvolvedFilter[] | null> = {};
+  const result: Record<string, InvolvedFilter[] | null | string> = {};
 
   for (let i = 0; i < involvedEntityNamesKeys.length; i += 1) {
     const involvedEntityNamesKey = involvedEntityNamesKeys[i];
 
-    const amendedInventoryChains = involvedEntityNamesKey.startsWith('subscription')
-      ? composeSubscriptionInventoryChains(
-          involvedEntityNamesKey as SubscriptionInvolvedKey,
-          involvedEntityNames[involvedEntityNamesKey],
-          generalConfig,
-        )
-      : [inventoryChain];
-
-    result[involvedEntityNamesKey] = null;
-
-    if (
-      !amendedInventoryChains.some((amendedInventoryChain) =>
-        checkInventory(amendedInventoryChain as InventoryChain, inventory),
-      )
-    )
-      continue;
-
-    if (inventoryByRoles) {
-      if (!containedRoles) {
-        throw new TypeError(
-          'Not found "containedRoles" dictionary, to use it with "inventoryByRoles"!',
-        );
-      }
-
-      const allRoles = roles.reduce<Array<string>>((prev, role) => {
-        [...containedRoles[role], role].forEach((role2) => {
-          if (!prev.includes(role2)) {
-            prev.push(role2);
-          }
-        });
-
-        return prev;
-      }, []);
-
-      for (let j = 0; j < allRoles.length; j += 1) {
-        const inventoryByRole = inventoryByRoles[allRoles[j]];
-
-        if (
-          amendedInventoryChains.some((amendedInventoryChain) =>
-            checkInventory(amendedInventoryChain as InventoryChain, inventoryByRole),
-          )
-        ) {
-          result[involvedEntityNamesKey] = [];
-          break;
-        }
-      }
-    }
-
-    if (!filters || !result[involvedEntityNamesKey]) continue;
-
     const entityName = involvedEntityNames[involvedEntityNamesKey];
 
-    result[involvedEntityNamesKey] = composeUserFilter(entityName, userAttributes, filters);
+    if (involvedEntityNamesKey.startsWith(SUBSCRIPTION)) {
+      const amendedInventoryChains = composeSubscriptionInventoryChains(
+        involvedEntityNamesKey as SubscriptionInvolvedKey,
+        entityName,
+        generalConfig,
+      );
+
+      if (
+        amendedInventoryChains.some((amendedInventoryChain) =>
+          checkInventory(amendedInventoryChain as InventoryChain, inventory),
+        )
+      ) {
+        result[involvedEntityNamesKey] = entityName;
+      }
+    } else {
+      result[involvedEntityNamesKey] = null;
+
+      if (!checkInventory(inventoryChain as InventoryChain, inventory)) {
+        continue;
+      }
+
+      if (inventoryByRoles) {
+        if (!containedRoles) {
+          throw new TypeError(
+            'Not found "containedRoles" dictionary, to use it with "inventoryByRoles"!',
+          );
+        }
+
+        const allRoles = roles.reduce<Array<string>>((prev, role) => {
+          [...containedRoles[role], role].forEach((role2) => {
+            if (!prev.includes(role2)) {
+              prev.push(role2);
+            }
+          });
+
+          return prev;
+        }, []);
+
+        for (let j = 0; j < allRoles.length; j += 1) {
+          const inventoryByRole = inventoryByRoles[allRoles[j]];
+
+          if (checkInventory(inventoryChain as InventoryChain, inventoryByRole)) {
+            result[involvedEntityNamesKey] = [];
+            break;
+          }
+        }
+      }
+
+      if (!filters || !result[involvedEntityNamesKey]) continue;
+
+      result[involvedEntityNamesKey] = composeUserFilter(entityName, userAttributes, filters);
+    }
   }
 
-  const involvedFilters = Object.keys(result).reduce((prev, key) => {
-    const entityName = involvedEntityNames[key];
+  const { involvedFilters, subscriptionEntityNames } = Object.keys(result).reduce(
+    (prev, key) => {
+      const involvedFilterName = composeInvolvedFilterName(key as keyof ActionInvolvedEntityNames);
 
-    const involvedFilterName = composeInvolvedFilterName(key as keyof ActionInvolvedEntityNames);
+      if (key.startsWith(SUBSCRIPTION)) {
+        prev.subscriptionEntityNames[involvedFilterName] = result[key];
+      } else {
+        const entityName = involvedEntityNames[key];
 
-    const personalFilter = personalCalculatedFilters[entityName];
+        const personalFilter = personalCalculatedFilters[entityName];
 
-    if (personalFilter === null) {
-      prev[involvedFilterName] = null;
+        if (personalFilter === null) {
+          prev.involvedFilters[involvedFilterName] = null;
+
+          return prev;
+        }
+
+        const staticFilter = staticFilters[entityName];
+        const staticLimit = staticLimits[entityName];
+
+        if (!result[key]) {
+          prev.involvedFilters[involvedFilterName] = null;
+
+          return prev;
+        }
+
+        const filter = staticFilter
+          ? injectStaticOrPersonalFilter(staticFilter, result[key] as InvolvedFilter[])
+          : (result[key] as InvolvedFilter[]);
+
+        prev.involvedFilters[involvedFilterName] = personalFilter
+          ? [injectStaticOrPersonalFilter(personalFilter, filter)]
+          : [filter];
+
+        if (staticLimit && prev.involvedFilters[involvedFilterName]) {
+          prev.involvedFilters[involvedFilterName].push(staticLimit);
+        }
+      }
 
       return prev;
-    }
-
-    const staticFilter = staticFilters[entityName];
-    const staticLimit = staticLimits[entityName];
-
-    if (!result[key]) {
-      prev[involvedFilterName] = null;
-
-      return prev;
-    }
-
-    const filter = staticFilter
-      ? injectStaticOrPersonalFilter(staticFilter, result[key])
-      : result[key];
-
-    prev[involvedFilterName] = personalFilter
-      ? [injectStaticOrPersonalFilter(personalFilter, filter)]
-      : [filter];
-
-    if (staticLimit && prev[involvedFilterName]) {
-      prev[involvedFilterName].push(staticLimit);
-    }
-
-    return prev;
-  }, {});
+    },
+    {
+      involvedFilters: {},
+      subscriptionEntityNames: {} as Record<SubscriptionInvolvedEntityNames, string>,
+    },
+  );
 
   if (actionType !== 'Subscription') {
-    return { involvedFilters }; // return
+    return Object.keys(subscriptionEntityNames).length === 0
+      ? { involvedFilters }
+      : { involvedFilters, subscriptionEntityNames }; // return
   }
 
   if (!subscribePayloadFilters) {

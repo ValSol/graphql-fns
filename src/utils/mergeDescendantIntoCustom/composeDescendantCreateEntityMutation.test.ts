@@ -49,7 +49,7 @@ describe('composeDescendantCreateEntityMutation', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogCreateInput!`, 'String'],
       involvedEntityNames: ({ name }: any) => ({
         inputOutputEntity: `${name}ForCatalog`,
-        subscriptionCreatedEntity: `${name}ForCatalog`,
+        subscriptionCreatedEntity: name,
       }),
       type: ({ name }: any) => `${name}ForCatalog!`,
       config: (entityConfig2: any, generalConfig2: any) =>

@@ -1,8 +1,8 @@
-import type { GraphqlObject } from '../../../../tsTypes';
-import type { GetPrevious } from '../../../tsTypes';
+import type { GraphqlObject } from '@/tsTypes';
+import type { GetPrevious } from '@/resolvers/tsTypes';
 
-import getFilterFromInvolvedFilters from '../../../utils/getFilterFromInvolvedFilters';
-import checkData from '../../checkData';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import checkData from '@/resolvers/mutations/checkData';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,

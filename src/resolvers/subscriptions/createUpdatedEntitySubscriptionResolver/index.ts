@@ -1,3 +1,5 @@
+import mingo from 'mingo';
+
 import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from '@/tsTypes';
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
@@ -31,14 +33,22 @@ const createUpdatedEntitySubscriptionResolver = (
     : preEntityConfig;
 
   store[storeKey] = {
-    subscribe: (_, args, context, info, { involvedFilters }) =>
+    subscribe: (_, args, context, info, resolverOptions) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`updated-${name}`),
-        (payload) => {
-          // const { where } = mergeWhereAndFilter(filter, args.where || {}, entityConfig);
 
-          return true;
+        (payload) => {
+          const { involvedFilters, subscribePayloadMongoFilter } = resolverOptions;
+
+          if (!involvedFilters || !subscribePayloadMongoFilter) {
+            return false;
+          }
+
+          const query = new mingo.Query(subscribePayloadMongoFilter);
+
+          return query.test(payload[`updated${name}`].previousNode);
         },
+
         (payload) => {
           const {
             [`updated${name}`]: { node, previousNode, updatedFields },

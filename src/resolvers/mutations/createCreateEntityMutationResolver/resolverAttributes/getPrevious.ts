@@ -1,7 +1,7 @@
 import type { GetPrevious } from '@/resolvers/tsTypes';
 
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
-import checkData from '../../checkData';
+import checkData from '@/resolvers/mutations/checkData';
 
 const getPrevious: GetPrevious = async (
   actionGeneralName,

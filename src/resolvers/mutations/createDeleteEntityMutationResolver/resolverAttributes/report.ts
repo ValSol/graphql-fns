@@ -4,13 +4,13 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
   const {
     context,
-    resolverOptions: { involvedFilters },
+    resolverOptions: { subscriptionEntityNames },
   } = resolverArg;
   const { name } = entityConfig;
 
-  const { subscriptionDeletedFilterAndLimit: filter } = involvedFilters;
+  const { subscriptionDeletedEntityName } = subscriptionEntityNames || {};
 
-  const result = filter
+  const result = subscriptionDeletedEntityName
     ? ({ previous: [previous] }) => {
         const { pubsub } = context;
 

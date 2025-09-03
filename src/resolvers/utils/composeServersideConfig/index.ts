@@ -1,4 +1,9 @@
-import type { GeneralConfig, ServersideConfig, SimplifiedEntityFilters } from '@/tsTypes';
+import type {
+  EntityFilters,
+  GeneralConfig,
+  ServersideConfig,
+  SimplifiedEntityFilters,
+} from '@/tsTypes';
 
 import checkFilterCorrectness from './checkFilterCorrectness';
 import getAllEntityNames from './getAllEntityNames';
@@ -33,6 +38,7 @@ const composeServersideConfig = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig & {
     filters?: SimplifiedEntityFilters;
+    subscribePayloadFilters?: SimplifiedEntityFilters;
   },
   filterDummyArgs?: Array<{
     [key: string]: any;
@@ -40,13 +46,17 @@ const composeServersideConfig = (
 ): ServersideConfig => {
   const {
     containedRoles,
-    filters: simplifiedEntityFilters,
     getUserAttributes,
     inventoryByRoles,
     staticFilters,
     staticLimits,
     personalFilters,
     skipPersonalFilter,
+  } = serversideConfig;
+  const {
+    filters: simplifiedEntityFilters,
+    subscribePayloadFilters: simplifiedSubscribePayloadFilters,
+    ...result
   } = serversideConfig;
 
   if (inventoryByRoles && !containedRoles) {
@@ -59,6 +69,10 @@ const composeServersideConfig = (
 
   if (simplifiedEntityFilters && !getUserAttributes) {
     throw new TypeError(`Not found "getUserAttributes" to use with "filters"!`);
+  }
+
+  if (simplifiedSubscribePayloadFilters && !getUserAttributes) {
+    throw new TypeError(`Not found "getUserAttributes" to use with "subscribePayloadFilters"!`);
   }
 
   if (personalFilters && !getUserAttributes) {
@@ -185,70 +199,130 @@ const composeServersideConfig = (
     }
   });
 
-  if (!simplifiedEntityFilters) {
-    const { filters, ...rest } = serversideConfig; // explicetly remove filters to elimiante flowjs error
-    return rest;
-  }
-
-  Object.keys(allEntityNames).forEach((entityName) => {
-    if (!simplifiedEntityFilters[entityName]) {
-      throw new TypeError(
-        `Entity name "${entityName}" not found in "filters" but used in: ${allEntityNames[
-          entityName
-        ].descriptions.join('; ')}!`,
-      );
-    }
-  });
-
-  Object.keys(simplifiedEntityFilters).forEach((entityName) => {
-    if (!allEntityNames[entityName]) {
-      throw new TypeError(`Found redundant entity "${entityName}" in "filters"`);
-    }
-  });
-
-  if (filterDummyArgs?.length) {
-    Object.keys(simplifiedEntityFilters).forEach((entityName) => {
-      filterDummyArgs.forEach((arg) => {
-        checkFilter(arg, entityName, simplifiedEntityFilters, generalConfig);
-      });
+  if (simplifiedEntityFilters) {
+    Object.keys(allEntityNames).forEach((entityName) => {
+      if (!simplifiedEntityFilters[entityName]) {
+        throw new TypeError(
+          `Entity name "${entityName}" not found in "filters" but used in: ${allEntityNames[
+            entityName
+          ].descriptions.join('; ')}!`,
+        );
+      }
     });
-  } else if (allRoles.length > 0) {
-    const handler = {
-      get(
-        target: {
-          role: string;
+
+    Object.keys(simplifiedEntityFilters).forEach((entityName) => {
+      if (!allEntityNames[entityName]) {
+        throw new TypeError(`Found redundant entity "${entityName}" in "filters"`);
+      }
+    });
+
+    if (filterDummyArgs?.length) {
+      Object.keys(simplifiedEntityFilters).forEach((entityName) => {
+        filterDummyArgs.forEach((arg) => {
+          checkFilter(arg, entityName, simplifiedEntityFilters, generalConfig);
+        });
+      });
+    } else if (allRoles.length > 0) {
+      const handler = {
+        get(
+          target: {
+            role: string;
+          },
+          key: string,
+        ) {
+          if (key === 'role') return target.role;
+
+          if (key === 'id') return '000000000000000000000000';
+
+          return `${key}ForTest`;
         },
-        key: string,
-      ) {
-        if (key === 'role') return target.role;
+      } as const;
 
-        if (key === 'id') return '000000000000000000000000';
+      Object.keys(simplifiedEntityFilters).forEach((entityName) => {
+        allRoles.forEach((role) => {
+          const arg = new Proxy({ role }, handler);
 
-        return `${key}ForTest`;
-      },
-    } as const;
-
-    Object.keys(simplifiedEntityFilters).forEach((entityName) => {
-      allRoles.forEach((role) => {
-        const arg = new Proxy({ role }, handler);
-
-        checkFilter(arg, entityName, simplifiedEntityFilters, generalConfig);
+          checkFilter(arg, entityName, simplifiedEntityFilters, generalConfig);
+        });
       });
-    });
+    }
+
+    const filters = Object.keys(simplifiedEntityFilters).reduce<Record<string, any>>(
+      (prev, entityName) => {
+        const { isOutput } = allEntityNames[entityName];
+
+        prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]];
+
+        return prev;
+      },
+      {},
+    ) as EntityFilters;
+
+    (result as ServersideConfig).filters = filters;
   }
 
-  const filters = Object.keys(simplifiedEntityFilters).reduce<Record<string, any>>(
-    (prev, entityName) => {
+  if (simplifiedSubscribePayloadFilters) {
+    Object.keys(allEntityNames).forEach((entityName) => {
+      if (!simplifiedSubscribePayloadFilters[entityName]) {
+        throw new TypeError(
+          `Entity name "${entityName}" not found in "subscribePayloadFilters" but used in: ${allEntityNames[
+            entityName
+          ].descriptions.join('; ')}!`,
+        );
+      }
+    });
+
+    Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
+      if (!allEntityNames[entityName]) {
+        throw new TypeError(`Found redundant entity "${entityName}" in "subscribePayloadFilters"`);
+      }
+    });
+
+    // if (filterDummyArgs?.length) {
+    //   Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
+    //     filterDummyArgs.forEach((arg) => {
+    //       checkFilter(arg, (entityName), simplifiedSubscribePayloadFilters, generalConfig);
+    //     });
+    //   });
+    // } else if (allRoles.length > 0) {
+    //   const handler = {
+    //     get(
+    //       target: {
+    //         role: string;
+    //       },
+    //       key: string,
+    //     ) {
+    //       if (key === 'role') return target.role;
+
+    //       if (key === 'id') return '000000000000000000000000';
+
+    //       return `${key}ForTest`;
+    //     },
+    //   } as const;
+
+    //   Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
+    //     allRoles.forEach((role) => {
+    //       const arg = new Proxy({ role }, handler);
+
+    //       checkFilter(arg, entityName, simplifiedSubscribePayloadFilters, generalConfig);
+    //     });
+    //   });
+    // }
+
+    const subscribePayloadFilters = Object.keys(simplifiedSubscribePayloadFilters).reduce<
+      Record<string, any>
+    >((prev, entityName) => {
       const { isOutput } = allEntityNames[entityName];
 
-      prev[entityName] = [isOutput, simplifiedEntityFilters[entityName]];
+      prev[entityName] = [isOutput, simplifiedSubscribePayloadFilters[entityName]];
 
       return prev;
-    },
-    {},
-  );
+    }, {}) as EntityFilters;
 
-  return { ...serversideConfig, filters };
+    (result as ServersideConfig).subscribePayloadFilters = subscribePayloadFilters;
+  }
+
+  return result;
 };
 
 export default composeServersideConfig;

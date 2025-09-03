@@ -22,7 +22,7 @@ const actionInvolvedEntityNames = (
   descendantKey = '',
 ): ActionInvolvedEntityNames => ({
   inputOutputEntity: `${name}${descendantKey}`,
-  subscriptionDeletedEntity: `${name}${descendantKey}`,
+  subscriptionDeletedEntity: name, // provide for "name" & all its descendants
 });
 
 const actionReturnConfig = (

@@ -1167,6 +1167,11 @@ export type GraphqlObject = {
   [key: string]: GraphqlScalar | GraphqlObject | GraphqlObject[];
 };
 
+export type SubscriptionInvolvedEntityNames =
+  | 'subscriptionCreatedEntityName'
+  | 'subscriptionDeletedEntityName'
+  | 'subscriptionUpdatedEntityName';
+
 export type ActionResolver = (
   parent: null | GraphqlObject,
   args: GraphqlObject,
@@ -1176,6 +1181,7 @@ export type ActionResolver = (
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
+    subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
   },
 ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
@@ -1385,6 +1391,7 @@ export type ResolverArg = {
     involvedFilters: {
       [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
+    subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
   };
 };

@@ -1,7 +1,7 @@
 import mingo from 'mingo';
 
-import type { ResolverCreatorArg, ResolverArg } from '../../../tsTypes';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
+import type { ResolverCreatorArg, ResolverArg } from '@/tsTypes';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import extractExternalReferences from './extractExternalReferences';
 import extractMissingAndPushDataFields from './extractMissingAndPushDataFields';
 import extractMissingDataFields from './extractMissingDataFields';
