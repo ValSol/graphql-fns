@@ -1,8 +1,8 @@
-import type {ResolverAttributes} from '../../../tsTypes';
+import type { ResolverAttributes } from '@/resolvers/tsTypes';
 
+import report from '@/resolvers/mutations/createUpdateEntityMutationResolver/resolverAttributes/report';
 import getPrevious from './getPrevious';
 import prepareBulkData from './prepareBulkData';
-import report from './report';
 
 const pushIntoEntityResolverAttributes: ResolverAttributes = {
   actionGeneralName: 'pushIntoEntity',

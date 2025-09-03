@@ -1,5 +1,7 @@
 import type { Report } from '@/resolvers/tsTypes';
 
+import composeReport from '@/utils/composeReport';
+
 const report: Report = async (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
   const {
@@ -10,21 +12,11 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
 
   const { subscriptionCreatedEntityName } = subscriptionEntityNames || {};
 
-  const result = subscriptionCreatedEntityName
-    ? ({ current: [current] }) => {
-        const { pubsub } = context;
+  if (!subscriptionCreatedEntityName) {
+    return null;
+  }
 
-        if (pubsub === undefined) {
-          throw new TypeError(
-            `PubSub not found! If you don't use "Subscription" exclude it in "inventory"!`,
-          );
-        }
-
-        pubsub.publish(`created-${name}`, { [`created${name}`]: current });
-      }
-    : null;
-
-  return result;
+  return ({ current: [node] }) => composeReport('created', name, context, node);
 };
 
 export default report;
