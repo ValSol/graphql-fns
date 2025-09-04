@@ -1,4 +1,4 @@
-import type { AnyField, EntityConfig, EntityConfigObject } from '@/tsTypes';
+import type { AnyField, EntityConfig, EntityConfigObject, TangibleEntityConfig } from '@/tsTypes';
 
 const store = Object.create(null);
 
@@ -11,7 +11,8 @@ const composeFieldsObject = (
   entityConfig: EntityConfig,
   filterVariant: Filter = '',
 ): { fieldsObject: EntityConfigObject; restOfFieldsObject?: EntityConfig } => {
-  const { name: entityName } = entityConfig;
+  const { name: entityName, allowedCalculatedWithAsyncFuncFieldNames = [] } =
+    entityConfig as TangibleEntityConfig;
 
   const storeKey = `${entityName}${filterVariant}`;
 
@@ -36,7 +37,11 @@ const composeFieldsObject = (
             break;
 
           case WITHOUT_CALCULATED_WITH_ASYNC:
-            if (fieldType === 'calculatedFields' && asyncFunc) {
+            if (
+              fieldType === 'calculatedFields' &&
+              asyncFunc &&
+              !allowedCalculatedWithAsyncFuncFieldNames.includes(name)
+            ) {
               prev.restOfFieldsObject[name] = item;
             } else {
               prev.fieldsObject[name] = item;

@@ -963,6 +963,7 @@ describe('createEntityWherePayloadInputType', () => {
       const entityConfig: TangibleEntityConfig = {
         name: 'Example',
         type: 'tangible',
+        allowedCalculatedWithAsyncFuncFieldNames: ['code'],
         calculatedFields: [
           {
             name: 'firstName',
@@ -975,15 +976,16 @@ describe('createEntityWherePayloadInputType', () => {
             type: 'calculatedFields',
             calculatedType: 'textFields',
             func: (() => {}) as any,
+            asyncFunc: (() => {}) as any,
           },
           {
             name: 'code',
             type: 'calculatedFields',
             calculatedType: 'textFields',
             func: (() => {}) as any,
+            asyncFunc: (() => {}) as any,
           },
         ],
-        allowedCalculatedWithAsyncFuncFieldNames: ['code'],
       };
       const expectedResult = [
         'ExampleWherePayloadInput',
@@ -1004,6 +1006,16 @@ describe('createEntityWherePayloadInputType', () => {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  firstName: String
+  firstName_in: [String!]
+  firstName_nin: [String!]
+  firstName_ne: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_lt: String
+  firstName_lte: String
+  firstName_re: [RegExp!]
+  firstName_exists: Boolean
   code: String
   code_in: [String!]
   code_nin: [String!]

@@ -3,9 +3,14 @@ import type {
   ThreeSegmentInventoryChain,
   ServersideConfig,
   ActionInvolvedEntityNames,
+  TangibleEntityConfig,
 } from '@/tsTypes';
 
 import executeAuthorisation from '../executeAuthorisation';
+import createInfoEssence from '../createInfoEssence';
+import composeAllFieldsProjection from '../composeAllFieldsProjection';
+import { WITHOUT_CALCULATED_WITH_ASYNC } from '@/utils/composeFieldsObject';
+import getInfoEssence from '../getInfoEssence';
 
 const authDecorator =
   (
@@ -28,13 +33,32 @@ const authDecorator =
       );
     if (!involvedFilters) return null;
 
-    const [actionType] = inventoryChain;
+    const [actionType, , entityName] = inventoryChain;
+
+    // *** start expanding info for subscriptions: "updated" & "created"
+
+    const { subscriptionDeletedEntityName, subscriptionUpdatedEntityName } =
+      subscriptionEntityNames || {};
+
+    const { allEntityConfigs } = generalConfig;
+    const entityConfig = allEntityConfigs[entityName] as TangibleEntityConfig;
+
+    const infoOrInfoEssence =
+      subscriptionDeletedEntityName || subscriptionUpdatedEntityName
+        ? createInfoEssence(
+            composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
+            entityConfig,
+            getInfoEssence(entityConfig, info),
+          )
+        : info;
+
+    // *** end expanding info for subscriptions: "updated" & "created"
 
     const result = await func(
       parent,
       args,
       context,
-      info,
+      infoOrInfoEssence,
       actionType === 'Subscription'
         ? { involvedFilters, subscribePayloadMongoFilter }
         : subscriptionEntityNames

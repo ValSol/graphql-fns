@@ -1,4 +1,4 @@
-import type { InputCreator, EntityConfig, TangibleEntityConfig } from '../../tsTypes';
+import type { InputCreator, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
 const defaultFields = `  id_in: [ID!]
   id_nin: [ID!]
@@ -61,9 +61,9 @@ const composeInputFields = (
     entityConfig as TangibleEntityConfig;
 
   calculatedFields.forEach((field) => {
-    const { name, calculatedType } = field;
+    const { name, asyncFunc, calculatedType } = field;
 
-    if (allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
+    if (!asyncFunc || allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       preFields[calculatedType].push(field);
     }
   });

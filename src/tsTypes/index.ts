@@ -844,6 +844,7 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
   type?: 'tangible';
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
+  // used for subscription
   allowedCalculatedWithAsyncFuncFieldNames?: string[];
 };
 export type EmbeddedEntityConfig = Omit<

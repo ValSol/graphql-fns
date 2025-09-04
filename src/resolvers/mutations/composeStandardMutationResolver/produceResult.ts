@@ -6,12 +6,15 @@ import type {
   ResolverCreatorArg,
   TangibleEntityConfig,
   ResolverArg,
-} from '../../../tsTypes';
-import type { Core } from '../../tsTypes';
+  GeneralConfig,
+  ServersideConfig,
+} from '@/tsTypes';
+import type { Core } from '@/resolvers/tsTypes';
 
-import composeAllFieldsProjection from '../../utils/composeAllFieldsProjection';
-import composeQueryResolver from '../../utils/composeQueryResolver';
-import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
+import { WITHOUT_CALCULATED_WITH_ASYNC } from '@/utils/composeFieldsObject';
+import composeAllFieldsProjection from '@/resolvers/utils/composeAllFieldsProjection';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 type PreparedData = {
@@ -31,7 +34,11 @@ const produceResult = async (
     entityConfig: { name: entityName },
     generalConfig,
     serversideConfig,
-  } = resolverCreatorArg;
+  } = resolverCreatorArg as {
+    entityConfig: TangibleEntityConfig;
+    generalConfig: GeneralConfig;
+    serversideConfig: ServersideConfig;
+  };
 
   const {
     args: { token },
@@ -44,28 +51,17 @@ const produceResult = async (
   } = preparedData;
 
   const {
-    resolverOptions: {
-      involvedFilters: {
-        subscriptionCreatedFilterAndLimit,
-        subscriptionDeletedFilterAndLimit,
-        subscriptionUpdatedFilterAndLimit,
-      },
-    },
+    resolverOptions: { subscriptionEntityNames },
   } = resolverArg;
 
-  const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
-
-  const { projection } = infoEssence;
-
-  if (
-    subscriptionCreatedFilterAndLimit ||
-    subscriptionDeletedFilterAndLimit ||
-    subscriptionUpdatedFilterAndLimit
-  ) {
-    Object.assign(projection, composeAllFieldsProjection(entityConfig), {
-      withoutCalculatedFieldsWithAsyncFunc: true,
-    });
-  }
+  const infoEssence =
+    subscriptionEntityNames && !array
+      ? createInfoEssence(
+          composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
+          entityConfig,
+          getInfoEssence(entityConfig, info),
+        )
+      : getInfoEssence(entityConfig, info);
 
   if (array) {
     return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
