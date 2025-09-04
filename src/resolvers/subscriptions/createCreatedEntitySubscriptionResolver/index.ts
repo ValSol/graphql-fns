@@ -4,6 +4,8 @@ import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
+import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/executeAuthorisation/composeSubscriptionDummyEntityConfig';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 
@@ -15,7 +17,7 @@ const createCreatedEntitySubscriptionResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): null | { subscribe: Subscription } => {
-  const { inventory } = generalConfig;
+  const { allEntityConfigs, inventory } = generalConfig;
   const { name } = preEntityConfig;
 
   if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
@@ -33,7 +35,7 @@ const createCreatedEntitySubscriptionResolver = (
     : preEntityConfig;
 
   store[storeKey] = {
-    subscribe: (_, args, context, info, resolverOptions) =>
+    subscribe: (_, { wherePayload = {} }, context, info, resolverOptions) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`created-${name}`),
 
@@ -44,7 +46,20 @@ const createCreatedEntitySubscriptionResolver = (
             return false;
           }
 
-          const query = new mingo.Query(subscribePayloadMongoFilter);
+          const { where: wherePayloadMongo } = mergeWhereAndFilter(
+            [],
+            wherePayload,
+            composeSubscriptionDummyEntityConfig(allEntityConfigs[name]),
+          );
+
+          const where =
+            Object.keys(wherePayloadMongo).length === 0
+              ? subscribePayloadMongoFilter
+              : Object.keys(subscribePayloadMongoFilter).length === 0
+                ? wherePayloadMongo
+                : { $and: [wherePayloadMongo, subscribePayloadMongoFilter] };
+
+          const query = new mingo.Query(where);
 
           return query.test(payload[`created${name}`]);
         },
