@@ -1,7 +1,7 @@
-import type { DescendantAttributesActionName, GeneralConfig } from '../../tsTypes';
+import type { DescendantAttributesActionName, GeneralConfig } from '@/tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 
-import actionAttributes from '../../types/actionAttributes';
+import actionAttributes from '@/types/actionAttributes';
 
 const toOtherType = {
   Query: 'Mutation',

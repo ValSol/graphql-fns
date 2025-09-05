@@ -2,6 +2,7 @@ import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/t
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import createEntityWherePayloadInputType from '../inputs/createEntityWherePayloadInputType';
+import createEntityWhichUpdatedInputType from '../inputs/createEntityWhichUpdatedInputType';
 import updatedPayloadDescendantUpdater from '../actionDescendantUpdaters/updatedPayloadDescendantUpdater';
 
 const actionType = 'Subscription';
@@ -11,11 +12,14 @@ const actionGeneralName = (descendantKey = ''): string => `updatedEntity${descen
 const actionName = (baseName: string, descendantKey = ''): string =>
   `updated${baseName}${descendantKey}`;
 
-const inputCreators = [createEntityWherePayloadInputType];
+const inputCreators = [createEntityWherePayloadInputType, createEntityWhichUpdatedInputType];
 
-const argNames = ['wherePayload'];
+const argNames = ['wherePayload', 'whichUpdated'];
 
-const argTypes = [({ name }): string => `${name}WherePayloadInput`];
+const argTypes = [
+  ({ name }): string => `${name}WherePayloadInput`,
+  ({ name }): string => `${name}WhichUpdatedInput`,
+];
 
 // may will not be in use
 const actionInvolvedEntityNames = (

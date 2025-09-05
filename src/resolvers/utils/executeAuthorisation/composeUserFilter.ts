@@ -1,4 +1,4 @@
-import { EntityFilters, FilterArg } from '../../../tsTypes';
+import { EntityFilters, FilterArg } from '@/tsTypes';
 
 const composeUserFilter = (
   entityName: string,

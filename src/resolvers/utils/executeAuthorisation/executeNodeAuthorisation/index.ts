@@ -1,8 +1,8 @@
-import type { GeneralConfig, ServersideConfig } from '../../../tsTypes';
-import composePersonalFilter from './composePersonalFilter';
-import composeUserFilter from './composeUserFilter';
+import type { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
+import composePersonalFilter from '../composePersonalFilter';
+import composeUserFilter from '../composeUserFilter';
 
-import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
+import injectStaticOrPersonalFilter from '../injectStaticOrPersonalFilter';
 
 const executeNodeAuthorisation = async (
   entityName: string,

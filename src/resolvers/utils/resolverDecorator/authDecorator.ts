@@ -22,15 +22,19 @@ const authDecorator =
   ): any =>
   async (...argarray) => {
     const [parent, args, context, info] = argarray;
-    const { involvedFilters, subscriptionEntityNames, subscribePayloadMongoFilter } =
-      await executeAuthorisation(
-        inventoryChain,
-        involvedEntityNames,
-        args,
-        context,
-        generalConfig,
-        serversideConfig,
-      );
+    const {
+      involvedFilters,
+      subscriptionEntityNames,
+      subscribePayloadMongoFilter,
+      subscriptionUpdatedFields,
+    } = await executeAuthorisation(
+      inventoryChain,
+      involvedEntityNames,
+      args,
+      context,
+      generalConfig,
+      serversideConfig,
+    );
     if (!involvedFilters) return null;
 
     const [actionType, , entityName] = inventoryChain;
@@ -60,7 +64,7 @@ const authDecorator =
       context,
       infoOrInfoEssence,
       actionType === 'Subscription'
-        ? { involvedFilters, subscribePayloadMongoFilter }
+        ? { involvedFilters, subscribePayloadMongoFilter, subscriptionUpdatedFields }
         : subscriptionEntityNames
           ? { involvedFilters, subscriptionEntityNames }
           : { involvedFilters },

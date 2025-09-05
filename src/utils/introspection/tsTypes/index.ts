@@ -3,7 +3,7 @@ import type {
   DescendantAttributes,
   InventoryByRoles,
   EntityConfig,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
 export type ActionToParse = {
   actionType: 'Query' | 'Mutation';

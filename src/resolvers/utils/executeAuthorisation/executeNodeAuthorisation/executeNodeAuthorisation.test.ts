@@ -5,10 +5,10 @@ import type {
   EntityFilters,
   GeneralConfig,
   ServersideConfig,
-} from '../../../tsTypes';
+} from '../../../../tsTypes';
 
-import sleep from '../../../utils/sleep';
-import executeNodeAuthorisation from './executeNodeAuthorisation';
+import sleep from '../../../../utils/sleep';
+import executeNodeAuthorisation from '.';
 
 const viewer = 'Viewer';
 const guest = 'Guest';

@@ -15,7 +15,8 @@ import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
-import composeSubscriptionDummyEntityConfig from './composeSubscriptionDummyEntityConfig';
+import composeSubscriptionDummyEntityConfig from '../composeSubscriptionDummyEntityConfig';
+import composeSubscriptionUpdatedFields from './composeSubscriptionUpdatedFields';
 
 const SUBSCRIPTION = 'subscription';
 
@@ -87,6 +88,7 @@ const executeAuthorisation = async (
   involvedFilters: { [key: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number] };
   subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
   subscribePayloadMongoFilter?: Record<string, any>;
+  subscriptionUpdatedFields?: string[];
 }> => {
   const { allEntityConfigs, inventory } = generalConfig;
   const {
@@ -99,7 +101,7 @@ const executeAuthorisation = async (
     staticLimits = {},
     subscribePayloadFilters,
   } = serversideConfig;
-  const [actionType, , entityName] = inventoryChain;
+  const [actionType, actionName, entityName] = inventoryChain;
 
   const { token: tokenFromArgs } = args as { token: string };
 
@@ -128,6 +130,15 @@ const executeAuthorisation = async (
       );
     }
   }
+
+  // ***
+
+  // *** compose subscriptionUpdatedFields
+
+  const subscriptionUpdatedFields =
+    actionName.startsWith('updatedEntity') && actionType === 'Subscription'
+      ? composeSubscriptionUpdatedFields(inventoryChain, generalConfig)
+      : null;
 
   // ***
 
@@ -202,7 +213,9 @@ const executeAuthorisation = async (
     }
 
     if (!subscribePayloadFilters) {
-      return { involvedFilters, subscribePayloadMongoFilter: {} }; // return
+      return subscriptionUpdatedFields
+        ? { involvedFilters, subscribePayloadMongoFilter: {}, subscriptionUpdatedFields }
+        : { involvedFilters, subscribePayloadMongoFilter: {} }; // return
     }
 
     if (!userAttributes) {
@@ -221,7 +234,9 @@ const executeAuthorisation = async (
       composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
     );
 
-    return { involvedFilters, subscribePayloadMongoFilter }; // return
+    return subscriptionUpdatedFields
+      ? { involvedFilters, subscribePayloadMongoFilter, subscriptionUpdatedFields }
+      : { involvedFilters, subscribePayloadMongoFilter }; // return
   }
 
   if (!userAttributes) {
@@ -347,7 +362,9 @@ const executeAuthorisation = async (
   }
 
   if (!subscribePayloadFilters) {
-    return { involvedFilters, subscribePayloadMongoFilter: {} }; // return
+    return subscriptionUpdatedFields
+      ? { involvedFilters, subscribePayloadMongoFilter: {}, subscriptionUpdatedFields }
+      : { involvedFilters, subscribePayloadMongoFilter: {} }; // return
   }
 
   const { where: subscribePayloadMongoFilter } = mergeWhereAndFilter(
@@ -360,7 +377,9 @@ const executeAuthorisation = async (
     composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
   );
 
-  return { involvedFilters, subscribePayloadMongoFilter }; // return
+  return subscriptionUpdatedFields
+    ? { involvedFilters, subscribePayloadMongoFilter, subscriptionUpdatedFields }
+    : { involvedFilters, subscribePayloadMongoFilter }; // return
 };
 
 export default executeAuthorisation;

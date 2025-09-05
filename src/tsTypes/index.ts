@@ -1184,6 +1184,7 @@ export type ActionResolver = (
     };
     subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
+    subscriptionUpdatedFields?: string[]; // used in Subscription
   },
 ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
 
@@ -1394,5 +1395,6 @@ export type ResolverArg = {
     };
     subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
+    subscriptionUpdatedFields?: string[]; // used in Subscription
   };
 };

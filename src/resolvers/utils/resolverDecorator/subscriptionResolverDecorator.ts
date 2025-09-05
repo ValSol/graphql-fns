@@ -24,7 +24,7 @@ const subscriptionResolverDecorator = (
 
     const { where: preWherePayload = {} } = args;
 
-    const where = transformWhere(preWherePayload, entityConfig);
+    const wherePayload = transformWhere(preWherePayload, entityConfig);
 
     return await authDecorator(
       preSubscribe,
@@ -32,7 +32,7 @@ const subscriptionResolverDecorator = (
       involvedEntityNames,
       generalConfig,
       serversideConfig,
-    )(parent, { ...args, where }, ...rest);
+    )(parent, { ...args, wherePayload }, ...rest);
   };
 
   return { subscribe };

@@ -850,6 +850,49 @@ input MenuCloneSectionWherePayloadInput {
   NOR: [MenuCloneSectionWherePayloadInput!]
   OR: [MenuCloneSectionWherePayloadInput!]
 }
+enum MenuWhichUpdatedEnum {
+  name
+  clone
+  sections
+  selectedSections
+}
+input MenuWhichUpdatedInput {
+  updatedFields: MenuWhichUpdatedEnum
+  updatedFields_ne: MenuWhichUpdatedEnum
+  updatedFields_in: [MenuWhichUpdatedEnum!]
+  updatedFields_nin: [MenuWhichUpdatedEnum!]
+}
+enum MenuCloneWhichUpdatedEnum {
+  name
+  original
+  sections
+}
+input MenuCloneWhichUpdatedInput {
+  updatedFields: MenuCloneWhichUpdatedEnum
+  updatedFields_ne: MenuCloneWhichUpdatedEnum
+  updatedFields_in: [MenuCloneWhichUpdatedEnum!]
+  updatedFields_nin: [MenuCloneWhichUpdatedEnum!]
+}
+enum MenuSectionWhichUpdatedEnum {
+  name
+  menu
+}
+input MenuSectionWhichUpdatedInput {
+  updatedFields: MenuSectionWhichUpdatedEnum
+  updatedFields_ne: MenuSectionWhichUpdatedEnum
+  updatedFields_in: [MenuSectionWhichUpdatedEnum!]
+  updatedFields_nin: [MenuSectionWhichUpdatedEnum!]
+}
+enum MenuCloneSectionWhichUpdatedEnum {
+  name
+  menu
+}
+input MenuCloneSectionWhichUpdatedInput {
+  updatedFields: MenuCloneSectionWhichUpdatedEnum
+  updatedFields_ne: MenuCloneSectionWhichUpdatedEnum
+  updatedFields_in: [MenuCloneSectionWhichUpdatedEnum!]
+  updatedFields_nin: [MenuCloneSectionWhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   MenuCount(where: MenuWhereInput, token: String): Int!
@@ -950,10 +993,10 @@ type Subscription {
   deletedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuClone!
   deletedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSection!
   deletedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSection!
-  updatedMenu(wherePayload: MenuWherePayloadInput): MenuUpdatedPayload!
-  updatedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuCloneUpdatedPayload!
-  updatedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSectionUpdatedPayload!
-  updatedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSectionUpdatedPayload!
+  updatedMenu(wherePayload: MenuWherePayloadInput, whichUpdated: MenuWhichUpdatedInput): MenuUpdatedPayload!
+  updatedMenuClone(wherePayload: MenuCloneWherePayloadInput, whichUpdated: MenuCloneWhichUpdatedInput): MenuCloneUpdatedPayload!
+  updatedMenuSection(wherePayload: MenuSectionWherePayloadInput, whichUpdated: MenuSectionWhichUpdatedInput): MenuSectionUpdatedPayload!
+  updatedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput, whichUpdated: MenuCloneSectionWhichUpdatedInput): MenuCloneSectionUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1394,6 +1437,29 @@ input Example2WherePayloadInput {
   NOR: [Example2WherePayloadInput!]
   OR: [Example2WherePayloadInput!]
 }
+enum Example1WhichUpdatedEnum {
+  textField1
+  textField2
+  textField3
+  position
+}
+input Example1WhichUpdatedInput {
+  updatedFields: Example1WhichUpdatedEnum
+  updatedFields_ne: Example1WhichUpdatedEnum
+  updatedFields_in: [Example1WhichUpdatedEnum!]
+  updatedFields_nin: [Example1WhichUpdatedEnum!]
+}
+enum Example2WhichUpdatedEnum {
+  textField1
+  textField2
+  area
+}
+input Example2WhichUpdatedInput {
+  updatedFields: Example2WhichUpdatedEnum
+  updatedFields_ne: Example2WhichUpdatedEnum
+  updatedFields_in: [Example2WhichUpdatedEnum!]
+  updatedFields_nin: [Example2WhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   Example1Count(where: Example1WhereInput, token: String): Int!
@@ -1437,8 +1503,8 @@ type Subscription {
   createdExample2(wherePayload: Example2WherePayloadInput): Example2!
   deletedExample1(wherePayload: Example1WherePayloadInput): Example1!
   deletedExample2(wherePayload: Example2WherePayloadInput): Example2!
-  updatedExample1(wherePayload: Example1WherePayloadInput): Example1UpdatedPayload!
-  updatedExample2(wherePayload: Example2WherePayloadInput): Example2UpdatedPayload!
+  updatedExample1(wherePayload: Example1WherePayloadInput, whichUpdated: Example1WhichUpdatedInput): Example1UpdatedPayload!
+  updatedExample2(wherePayload: Example2WherePayloadInput, whichUpdated: Example2WhichUpdatedInput): Example2UpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -1861,6 +1927,33 @@ input PlaceWherePayloadInput {
   NOR: [PlaceWherePayloadInput!]
   OR: [PlaceWherePayloadInput!]
 }
+enum PersonWhichUpdatedEnum {
+  firstName
+  lastName
+  friends
+  enemies
+  location
+  favoritePlace
+  fellows
+  opponents
+}
+input PersonWhichUpdatedInput {
+  updatedFields: PersonWhichUpdatedEnum
+  updatedFields_ne: PersonWhichUpdatedEnum
+  updatedFields_in: [PersonWhichUpdatedEnum!]
+  updatedFields_nin: [PersonWhichUpdatedEnum!]
+}
+enum PlaceWhichUpdatedEnum {
+  title
+  citisens
+  customers
+}
+input PlaceWhichUpdatedInput {
+  updatedFields: PlaceWhichUpdatedEnum
+  updatedFields_ne: PlaceWhichUpdatedEnum
+  updatedFields_in: [PlaceWhichUpdatedEnum!]
+  updatedFields_nin: [PlaceWhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
@@ -1904,8 +1997,8 @@ type Subscription {
   createdPlace(wherePayload: PlaceWherePayloadInput): Place!
   deletedPerson(wherePayload: PersonWherePayloadInput): Person!
   deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
-  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
-  updatedPlace(wherePayload: PlaceWherePayloadInput): PlaceUpdatedPayload!
+  updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
+  updatedPlace(wherePayload: PlaceWherePayloadInput, whichUpdated: PlaceWhichUpdatedInput): PlaceUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -2237,6 +2330,20 @@ input AddressWherePayloadInput {
   province_re: [RegExp!]
   province_exists: Boolean
 }
+enum PersonWhichUpdatedEnum {
+  firstName
+  lastName
+  location
+  locations
+  place
+  places
+}
+input PersonWhichUpdatedInput {
+  updatedFields: PersonWhichUpdatedEnum
+  updatedFields_ne: PersonWhichUpdatedEnum
+  updatedFields_in: [PersonWhichUpdatedEnum!]
+  updatedFields_nin: [PersonWhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
@@ -2262,7 +2369,7 @@ type Mutation {
 type Subscription {
   createdPerson(wherePayload: PersonWherePayloadInput): Person!
   deletedPerson(wherePayload: PersonWherePayloadInput): Person!
-  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
+  updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -2783,6 +2890,31 @@ input PlaceWherePayloadInput {
   NOR: [PlaceWherePayloadInput!]
   OR: [PlaceWherePayloadInput!]
 }
+enum PersonWhichUpdatedEnum {
+  firstName
+  lastName
+  friends
+  enemies
+  location
+  favoritePlace
+}
+input PersonWhichUpdatedInput {
+  updatedFields: PersonWhichUpdatedEnum
+  updatedFields_ne: PersonWhichUpdatedEnum
+  updatedFields_in: [PersonWhichUpdatedEnum!]
+  updatedFields_nin: [PersonWhichUpdatedEnum!]
+}
+enum PlaceWhichUpdatedEnum {
+  name
+  citizens
+  visitors
+}
+input PlaceWhichUpdatedInput {
+  updatedFields: PlaceWhichUpdatedEnum
+  updatedFields_ne: PlaceWhichUpdatedEnum
+  updatedFields_in: [PlaceWhichUpdatedEnum!]
+  updatedFields_nin: [PlaceWhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
@@ -2833,8 +2965,8 @@ type Subscription {
   createdPlace(wherePayload: PlaceWherePayloadInput): Place!
   deletedPerson(wherePayload: PersonWherePayloadInput): Person!
   deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
-  updatedPerson(wherePayload: PersonWherePayloadInput): PersonUpdatedPayload!
-  updatedPlace(wherePayload: PlaceWherePayloadInput): PlaceUpdatedPayload!
+  updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
+  updatedPlace(wherePayload: PlaceWherePayloadInput, whichUpdated: PlaceWhichUpdatedInput): PlaceUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);
@@ -4261,7 +4393,6 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  // NOT SKIP
   test('should create entities types with descendant & inventory for only queries', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
@@ -4429,12 +4560,22 @@ input ExampleForCatalogWherePayloadInput {
   NOR: [ExampleForCatalogWherePayloadInput!]
   OR: [ExampleForCatalogWherePayloadInput!]
 }
+enum ExampleForCatalogWhichUpdatedEnum {
+  textField
+  textField2
+}
+input ExampleForCatalogWhichUpdatedInput {
+  updatedFields: ExampleForCatalogWhichUpdatedEnum
+  updatedFields_ne: ExampleForCatalogWhichUpdatedEnum
+  updatedFields_in: [ExampleForCatalogWhichUpdatedEnum!]
+  updatedFields_nin: [ExampleForCatalogWhichUpdatedEnum!]
+}
 type Query {
   node(id: ID!): Node
   ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleForViewConnection!
 }
 type Subscription {
-  updatedExampleForCatalog(wherePayload: ExampleForCatalogWherePayloadInput): ExampleForViewUpdatedPayload!
+  updatedExampleForCatalog(wherePayload: ExampleForCatalogWherePayloadInput, whichUpdated: ExampleForCatalogWhichUpdatedInput): ExampleForViewUpdatedPayload!
 }`;
 
     const result = composeGqlTypes(generalConfig);

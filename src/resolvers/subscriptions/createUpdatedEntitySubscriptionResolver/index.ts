@@ -4,10 +4,11 @@ import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
-import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/executeAuthorisation/composeSubscriptionDummyEntityConfig';
+import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/composeSubscriptionDummyEntityConfig';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
+import filterUpdatedFields, { WhichUpdated } from './filterUpdatedFields';
 
 const store = Object.create(null);
 
@@ -35,14 +36,32 @@ const createUpdatedEntitySubscriptionResolver = (
     : preEntityConfig;
 
   store[storeKey] = {
-    subscribe: (_, { wherePayload = {} }, context, info, resolverOptions) =>
+    subscribe: (
+      _,
+      { wherePayload = {}, whichUpdated = {} },
+      context,
+      info,
+      { involvedFilters, subscribePayloadMongoFilter, subscriptionUpdatedFields },
+    ) =>
       withFilterAndTransformer(
         context.pubsub.subscribe(`updated-${name}`),
 
         (payload) => {
-          const { involvedFilters, subscribePayloadMongoFilter } = resolverOptions;
-
           if (!involvedFilters || !subscribePayloadMongoFilter) {
+            return false;
+          }
+
+          const {
+            [`updated${name}`]: { updatedFields: preUpdatedFields },
+          } = payload as Record<string, any>;
+
+          const updatedFields = filterUpdatedFields(
+            preUpdatedFields,
+            subscriptionUpdatedFields,
+            whichUpdated as WhichUpdated,
+          );
+
+          if (updatedFields.length === 0) {
             return false;
           }
 
@@ -66,8 +85,14 @@ const createUpdatedEntitySubscriptionResolver = (
 
         (payload) => {
           const {
-            [`updated${name}`]: { node, previousNode, updatedFields },
+            [`updated${name}`]: { node, previousNode, updatedFields: preUpdatedFields },
           } = payload as Record<string, any>;
+
+          const updatedFields = filterUpdatedFields(
+            preUpdatedFields,
+            subscriptionUpdatedFields,
+            whichUpdated as WhichUpdated,
+          );
 
           return {
             [`updated${name}${descendantKey}`]: {

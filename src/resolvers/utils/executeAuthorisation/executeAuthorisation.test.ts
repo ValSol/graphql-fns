@@ -57,15 +57,15 @@ describe('executeAuthorisation', () => {
       include: {
         Query: {
           entityClone: ['RestaurantClone'],
-          entitiesForCabinet: ['Restaurant'],
-          entityForCabinet: ['Restaurant'],
-          childEntityForCabinet: ['CommentListForRestaurant'],
+          entitiesForCatalog: ['Restaurant'],
+          entityForCatalog: ['Restaurant'],
+          childEntityForCatalog: ['CommentListForRestaurant'],
         },
         Mutation: {
           cloneEntity: ['Restaurant'],
         },
         Subscription: {
-          updatedEntityForCabinet: ['Restaurant'],
+          updatedEntityForCatalog: ['Restaurant'],
         },
       },
     },
@@ -85,7 +85,7 @@ describe('executeAuthorisation', () => {
   } as InventoryByRoles;
 
   const filters: EntityFilters = {
-    RestaurantForCabinet: [
+    RestaurantForCatalog: [
       true,
       ({ id, role }: { id: string; role: string }): null | Array<any> => {
         switch (role) {
@@ -128,7 +128,7 @@ describe('executeAuthorisation', () => {
   };
 
   const subscribePayloadFilters: EntityFilters = {
-    RestaurantForCabinet: [
+    RestaurantForCatalog: [
       true,
       ({ id, role }: { id: string; role: string }): null | Array<any> => {
         switch (role) {
@@ -168,7 +168,7 @@ describe('executeAuthorisation', () => {
   };
 
   const staticFilters = {
-    RestaurantForCabinet: { deleted: false },
+    RestaurantForCatalog: { deleted: false },
 
     RestaurantForView: { show: true },
 
@@ -178,7 +178,7 @@ describe('executeAuthorisation', () => {
   };
 
   const staticLimits = {
-    RestaurantForCabinet: 2,
+    RestaurantForCatalog: 2,
 
     RestaurantForView: 4,
 
@@ -448,7 +448,7 @@ describe('executeAuthorisation', () => {
   });
 
   test('should returnv [Object] for "RestaurantOwner" role', async () => {
-    const inventoryChain: InventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entityForCatalog', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner], id };
@@ -464,7 +464,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -487,7 +487,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -506,7 +506,7 @@ describe('executeAuthorisation', () => {
   test('should returnv [Object] for "RestaurantOwner" role for "Subscription"', async () => {
     const inventoryChain: InventoryChain = [
       'Subscription',
-      'updatedEntityForCabinet',
+      'updatedEntityForCatalog',
       'Restaurant',
     ];
     const getUserAttributes = async () => {
@@ -524,7 +524,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -535,7 +535,9 @@ describe('executeAuthorisation', () => {
         inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: '1234567890' } }], 2],
       },
       subscribePayloadMongoFilter: {},
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
     };
+
     expect(result).toEqual(expectedResult);
 
     const serversideConfig2: ServersideConfig = {
@@ -548,7 +550,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -561,7 +563,9 @@ describe('executeAuthorisation', () => {
         ],
       },
       subscribePayloadMongoFilter: {},
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
     };
+
     expect(result2).toEqual(expectedResult2);
 
     const serversideConfig3: ServersideConfig = {
@@ -575,7 +579,7 @@ describe('executeAuthorisation', () => {
 
     const result3 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -589,12 +593,14 @@ describe('executeAuthorisation', () => {
       },
 
       subscribePayloadMongoFilter: { restaurantEditors: { $eq: '1234567890' } },
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
     };
+
     expect(result3).toEqual(expectedResult3);
   });
 
   test('should returnv [Object] for "Admin" role', async () => {
-    const inventoryChain: InventoryChain = ['Query', 'entityForCabinet', 'Restaurant'];
+    const inventoryChain: InventoryChain = ['Query', 'entityForCatalog', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
       return { roles: [restaurantOwner, admin], id };
@@ -609,7 +615,7 @@ describe('executeAuthorisation', () => {
 
     const result = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -629,7 +635,7 @@ describe('executeAuthorisation', () => {
 
     const result2 = await executeAuthorisation(
       inventoryChain,
-      { inputOutputEntity: 'RestaurantForCabinet' },
+      { inputOutputEntity: 'RestaurantForCatalog' },
       {},
       context,
       generalConfig,
@@ -875,6 +881,7 @@ describe('executeAuthorisation', () => {
     const expectedResult = {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
       subscribePayloadMongoFilter: {},
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
     };
 
     expect(result).toEqual(expectedResult);
@@ -892,6 +899,7 @@ describe('executeAuthorisation', () => {
     const expectedResult2 = {
       involvedFilters: { inputOutputFilterAndLimit: [[{ level_gt: 0 }], 8] },
       subscribePayloadMongoFilter: {},
+      subscriptionUpdatedFields: ['title', 'restaurantEditors'],
     };
 
     expect(result2).toEqual(expectedResult2);

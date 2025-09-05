@@ -4,7 +4,7 @@ import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
-import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/executeAuthorisation/composeSubscriptionDummyEntityConfig';
+import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/composeSubscriptionDummyEntityConfig';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
