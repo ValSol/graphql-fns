@@ -1,120 +1,49 @@
 /* eslint-env jest */
-import type {
-  DescendantAttributes,
-  TangibleEntityConfig,
-  GeneralConfig,
-  Inventory,
-} from '@/tsTypes';
+import type { DescendantAttributes, GeneralConfig, Inventory } from '@/tsTypes';
 
+import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import getAllEntityNames from '.';
 
 describe('getAllEntityNames', () => {
-  const personConfig = {} as TangibleEntityConfig;
-
-  const placeConfig: TangibleEntityConfig = {
+  const Place = {
     name: 'Place',
-    type: 'tangible',
-    textFields: [
-      {
-        name: 'title',
-        required: true,
-        type: 'textFields',
-      },
-    ],
+
+    textFields: [{ name: 'title', required: true }],
+
     duplexFields: [
-      {
-        name: 'visitors',
-        oppositeName: 'favoritePlace',
-        array: true,
-        config: personConfig,
-        type: 'duplexFields',
-      },
-    ],
-    relationalFields: [
-      {
-        name: 'citizens',
-        oppositeName: 'location',
-        config: personConfig,
-        array: true,
-        parent: true,
-        type: 'relationalFields',
-      },
+      { name: 'visitors', oppositeName: 'favoritePlace', array: true, configName: 'Person' },
     ],
   };
 
-  Object.assign(personConfig, {
+  const Person = {
     name: 'Person',
-    type: 'tangible',
 
     textFields: [
-      {
-        name: 'firstName',
-        required: true,
-        type: 'textFields',
-      },
-      {
-        name: 'lastName',
-        required: true,
-        type: 'textFields',
-      },
+      { name: 'firstName', required: true },
+      { name: 'lastName', required: true },
     ],
 
-    duplexFields: [
-      {
-        name: 'favoritePlace',
-        oppositeName: 'visitors',
-        config: placeConfig,
-        type: 'duplexFields',
-      },
-    ],
+    duplexFields: [{ name: 'favoritePlace', oppositeName: 'visitors', configName: 'Place' }],
 
     relationalFields: [
       {
         name: 'friends',
         oppositeName: 'fellows',
-        config: personConfig,
+        configName: 'Person',
         array: true,
         required: true,
-        type: 'relationalFields',
       },
-      {
-        name: 'fellows',
-        oppositeName: 'friends',
-        config: personConfig,
-        array: true,
-        parent: true,
-        type: 'relationalFields',
-      },
-      {
-        name: 'enemies',
-        oppositeName: 'opponents',
-        config: personConfig,
-        array: true,
-        type: 'relationalFields',
-      },
-      {
-        name: 'opponents',
-        oppositeName: 'enemies',
-        config: personConfig,
-        array: true,
-        parent: true,
-        type: 'relationalFields',
-      },
-      {
-        name: 'location',
-        oppositeName: 'citizens',
-        config: placeConfig,
-        required: true,
-        type: 'relationalFields',
-      },
+      { name: 'enemies', oppositeName: 'opponents', configName: 'Person', array: true },
+      { name: 'location', oppositeName: 'citizens', configName: 'Place', required: true },
     ],
-  });
+  };
 
   const ForView: DescendantAttributes = {
     descendantKey: 'ForView',
     allow: {
       Person: ['entity', 'entities', 'childEntityCount'],
-      Place: ['childEntity', 'childEntities'],
+      Place: ['childEntity', 'childEntities', 'updatedEntity'],
+      PlaceUpdatedPayload: [],
     },
   };
 
@@ -123,11 +52,10 @@ describe('getAllEntityNames', () => {
   const inventory: Inventory = {
     name: 'test',
     include: true,
-    exclude: { Subscription: true },
   };
 
   const generalConfig: GeneralConfig = {
-    allEntityConfigs: { Person: personConfig, Place: placeConfig },
+    allEntityConfigs: composeAllEntityConfigs([Person, Place]),
     descendant,
     inventory,
   };
@@ -137,7 +65,7 @@ describe('getAllEntityNames', () => {
 
     const result = getAllEntityNames(generalConfig, serversideConfig);
 
-    const expectedResult = {
+    const allEntityNames = {
       Place: {
         descriptions: [
           'inventory "test", option item: "childEntity": "Place", involvedEntityKey: "inputOutputEntity"',
@@ -163,6 +91,9 @@ describe('getAllEntityNames', () => {
           'inventory "test", option item: "updateFilteredEntitiesReturnScalar": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "updateManyEntities": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "updateEntity": "Place", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "createdEntity": "Place", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "deletedEntity": "Place", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "updatedEntity": "Place", involvedEntityKey: "inputOutputEntity"',
         ],
         isOutput: true,
       },
@@ -189,6 +120,9 @@ describe('getAllEntityNames', () => {
           'inventory "test", option item: "updateFilteredEntitiesReturnScalar": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "updateManyEntities": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "updateEntity": "Person", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "createdEntity": "Person", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "deletedEntity": "Person", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "updatedEntity": "Person", involvedEntityKey: "inputOutputEntity"',
         ],
         isOutput: true,
       },
@@ -204,10 +138,33 @@ describe('getAllEntityNames', () => {
         descriptions: [
           'inventory "test", option item: "childEntityForView": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntitiesForView": "Place", involvedEntityKey: "inputOutputEntity"',
+          'inventory "test", option item: "updatedEntityForView": "Place", involvedEntityKey: "inputOutputEntity"',
         ],
         isOutput: true,
       },
     };
+
+    const subscribePayloadEntityNames = {
+      Person: {
+        descriptions: [
+          'inventory "test", option item: "createdEntity": "Person", involvedEntityKey: "inputOutputEntity',
+          'inventory "test", option item: "deletedEntity": "Person", involvedEntityKey: "inputOutputEntity',
+          'inventory "test", option item: "updatedEntity": "Person", involvedEntityKey: "inputOutputEntity',
+        ],
+        isOutput: true,
+      },
+      Place: {
+        descriptions: [
+          'inventory "test", option item: "createdEntity": "Place", involvedEntityKey: "inputOutputEntity',
+          'inventory "test", option item: "deletedEntity": "Place", involvedEntityKey: "inputOutputEntity',
+          'inventory "test", option item: "updatedEntity": "Place", involvedEntityKey: "inputOutputEntity',
+          'inventory "test", option item: "updatedEntityForView": "Place", involvedEntityKey: "inputOutputEntity',
+        ],
+        isOutput: true,
+      },
+    };
+
+    const expectedResult = { allEntityNames, subscribePayloadEntityNames };
 
     expect(result).toEqual(expectedResult);
   });

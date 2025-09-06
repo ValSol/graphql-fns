@@ -23,9 +23,14 @@ const unusedInvolvedEntityKeys = [
   'subscriptionUpdatedEntity',
 ];
 
+export type AllEntityNames = {
+  // { entityName: { descriptions: 'inventory name, action, rootEntityName, involvedEntityKey', isOutput: boolean } }
+  [entityName: string]: { descriptions: Array<string>; isOutput: boolean };
+};
+
 const processActions =
   (
-    prev: { [entityName: string]: { descriptions: Array<string>; isOutput: boolean } },
+    prev: { allEntityNames: AllEntityNames; subscribePayloadEntityNames: AllEntityNames },
     role: string,
     actionName: string,
     actionType: string,
@@ -49,35 +54,39 @@ const processActions =
         return;
       }
 
-      const subscribePayloadMongoFilter = involvedEntityNames[involvedEntityKey];
+      const involvedEntityName = involvedEntityNames[involvedEntityKey];
 
-      if (!prev[subscribePayloadMongoFilter]) {
-        prev[subscribePayloadMongoFilter] = { descriptions: [], isOutput: false };
+      if (!prev.allEntityNames[involvedEntityName]) {
+        prev.allEntityNames[involvedEntityName] = { descriptions: [], isOutput: false };
       }
 
-      prev[subscribePayloadMongoFilter].descriptions.push(
+      prev.allEntityNames[involvedEntityName].descriptions.push(
         `inventory "${inventoryName}", option item: "${actionName}": "${entityName}", involvedEntityKey: "${involvedEntityKey}"`,
       );
 
       const config = getConfig(actionName, entityName);
 
-      prev[subscribePayloadMongoFilter].isOutput =
-        prev[subscribePayloadMongoFilter].isOutput ||
+      prev.allEntityNames[involvedEntityName].isOutput =
+        prev.allEntityNames[involvedEntityName].isOutput ||
         (Boolean(config) &&
           (involvedEntityKey === 'inputOutputEntity' || involvedEntityKey.startsWith('output')));
     });
+
+    if (actionType === 'Subscription') {
+      if (!prev.subscribePayloadEntityNames[entityName]) {
+        prev.subscribePayloadEntityNames[entityName] = { descriptions: [], isOutput: true };
+      }
+
+      prev.subscribePayloadEntityNames[entityName].descriptions.push(
+        `inventory "${inventoryName}", option item: "${actionName}": "${entityName}", involvedEntityKey: "inputOutputEntity`,
+      );
+    }
   };
 
 const addEntityNames = (
   inventory: Inventory,
   generalConfig: GeneralConfig,
-  // { entityName: { descriptions: 'inventory name, action, rootEntityName, involvedEntityKey', isOutput: boolean } }
-  result: {
-    [entityName: string]: {
-      descriptions: Array<string>;
-      isOutput: boolean;
-    };
-  },
+  result: { allEntityNames: AllEntityNames; subscribePayloadEntityNames: AllEntityNames },
   baseInventory?: SimplifiedInventoryOptions,
   role?: string,
 ) => {
@@ -292,12 +301,7 @@ const getAllEntityNames = (
   serversideConfig: ServersideConfig & {
     filters?: SimplifiedEntityFilters;
   },
-): {
-  [entityName: string]: {
-    descriptions: Array<string>;
-    isOutput: boolean;
-  };
-} => {
+): { allEntityNames: AllEntityNames; subscribePayloadEntityNames: AllEntityNames } => {
   const { inventory } = generalConfig;
 
   const { inventoryByRoles } = serversideConfig;
@@ -308,11 +312,15 @@ const getAllEntityNames = (
     exclude: undefined,
   };
 
-  const generalInventoryResult: Record<string, any> = {};
+  const generalInventoryResult: {
+    allEntityNames: AllEntityNames;
+    subscribePayloadEntityNames: AllEntityNames;
+  } = { allEntityNames: {}, subscribePayloadEntityNames: {} };
   const baseInventory = addEntityNames(amendedInventory, generalConfig, generalInventoryResult);
 
   if (inventoryByRoles) {
-    const result: Record<string, any> = {};
+    const result: { allEntityNames: AllEntityNames; subscribePayloadEntityNames: AllEntityNames } =
+      { allEntityNames: {}, subscribePayloadEntityNames: {} };
 
     Object.keys(inventoryByRoles).forEach((role) => {
       const roleInventory = inventoryByRoles[role];

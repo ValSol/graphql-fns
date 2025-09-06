@@ -145,13 +145,36 @@ describe('composeFilters', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should check filters when inventory with exclude "Subscription"', () => {
+  test('should check filters when inventory with "subscribePayloadFilters"', () => {
     const staticFilters = { Place: { title_gt: 'Ivan' } };
-    const serversideConfig = { staticFilters };
+
+    const subscribePayloadFilters = {
+      Place: () => [],
+      Person: () => [],
+    } as SimplifiedEntityFilters;
+
+    const filters = {
+      Place: () => [],
+      Person: () => [],
+      PlaceForView: () => [],
+      PersonForView: () => [],
+    } as SimplifiedEntityFilters;
+
+    const getUserAttributes = () => Promise<{ id: '123456890'; roles: ['Admin'] }>;
+
+    const serversideConfig = {
+      getUserAttributes,
+      filters,
+      staticFilters,
+      subscribePayloadFilters,
+    } as any;
 
     const result = composeServersideConfig(generalConfig, serversideConfig);
 
-    const expectedResult = serversideConfig;
-    expect(result).toEqual(expectedResult);
+    expect(Object.keys(filters)).toEqual(Object.keys(result.filters));
+
+    expect(Object.keys(subscribePayloadFilters)).toEqual(
+      Object.keys(result.subscribePayloadFilters),
+    );
   });
 });

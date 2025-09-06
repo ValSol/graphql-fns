@@ -13,7 +13,18 @@ const checkFilter = (
   entityName: string,
   filters: SimplifiedEntityFilters,
   generalConfig: GeneralConfig,
+  isSubscribePayloadFilter = false,
 ) => {
+  if (isSubscribePayloadFilter) {
+    const { allEntityConfigs } = generalConfig;
+
+    if (!allEntityConfigs[entityName]) {
+      throw new TypeError(
+        `SubscribePayloadFilters can include only original entityNames, but got: "${entityName}"!`,
+      );
+    }
+  }
+
   let filterArr;
 
   try {
@@ -30,7 +41,7 @@ const checkFilter = (
   if (!filterArr) return;
 
   filterArr.forEach((filter) => {
-    checkFilterCorrectness(entityName, filter, generalConfig);
+    checkFilterCorrectness(entityName, filter, generalConfig, isSubscribePayloadFilter);
   });
 };
 
@@ -83,7 +94,10 @@ const composeServersideConfig = (
     throw new TypeError(`Not found "personalFilters" to use with "skipPersonalFilter"!`);
   }
 
-  const allEntityNames = getAllEntityNames(generalConfig, serversideConfig);
+  const { allEntityNames, subscribePayloadEntityNames } = getAllEntityNames(
+    generalConfig,
+    serversideConfig,
+  );
 
   if (staticLimits) {
     Object.keys(staticLimits).forEach((entityName) => {
@@ -262,10 +276,10 @@ const composeServersideConfig = (
   }
 
   if (simplifiedSubscribePayloadFilters) {
-    Object.keys(allEntityNames).forEach((entityName) => {
+    Object.keys(subscribePayloadEntityNames).forEach((entityName) => {
       if (!simplifiedSubscribePayloadFilters[entityName]) {
         throw new TypeError(
-          `Entity name "${entityName}" not found in "subscribePayloadFilters" but used in: ${allEntityNames[
+          `Entity name "${entityName}" not found in "subscribePayloadFilters" but used in: ${subscribePayloadEntityNames[
             entityName
           ].descriptions.join('; ')}!`,
         );
@@ -278,36 +292,48 @@ const composeServersideConfig = (
       }
     });
 
-    // if (filterDummyArgs?.length) {
-    //   Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
-    //     filterDummyArgs.forEach((arg) => {
-    //       checkFilter(arg, (entityName), simplifiedSubscribePayloadFilters, generalConfig);
-    //     });
-    //   });
-    // } else if (allRoles.length > 0) {
-    //   const handler = {
-    //     get(
-    //       target: {
-    //         role: string;
-    //       },
-    //       key: string,
-    //     ) {
-    //       if (key === 'role') return target.role;
+    if (filterDummyArgs?.length) {
+      Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
+        filterDummyArgs.forEach((arg) => {
+          checkFilter(
+            arg,
+            entityName,
+            simplifiedSubscribePayloadFilters,
+            generalConfig,
+            true, // isSubscribePayloadFilter
+          );
+        });
+      });
+    } else if (allRoles.length > 0) {
+      const handler = {
+        get(
+          target: {
+            role: string;
+          },
+          key: string,
+        ) {
+          if (key === 'role') return target.role;
 
-    //       if (key === 'id') return '000000000000000000000000';
+          if (key === 'id') return '000000000000000000000000';
 
-    //       return `${key}ForTest`;
-    //     },
-    //   } as const;
+          return `${key}ForTest`;
+        },
+      } as const;
 
-    //   Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
-    //     allRoles.forEach((role) => {
-    //       const arg = new Proxy({ role }, handler);
+      Object.keys(simplifiedSubscribePayloadFilters).forEach((entityName) => {
+        allRoles.forEach((role) => {
+          const arg = new Proxy({ role }, handler);
 
-    //       checkFilter(arg, entityName, simplifiedSubscribePayloadFilters, generalConfig);
-    //     });
-    //   });
-    // }
+          checkFilter(
+            arg,
+            entityName,
+            simplifiedSubscribePayloadFilters,
+            generalConfig,
+            true, // isSubscribePayloadFilter
+          );
+        });
+      });
+    }
 
     const subscribePayloadFilters = Object.keys(simplifiedSubscribePayloadFilters).reduce<
       Record<string, any>

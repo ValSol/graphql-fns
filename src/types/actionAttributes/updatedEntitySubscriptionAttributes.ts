@@ -38,11 +38,11 @@ const actionReturnConfig = (
 
   const updatedPayloadConfigName = `${name}UpdatedPayload`;
 
-  const connectionConfig = allEntityConfigs[updatedPayloadConfigName];
+  const updatedPayloadConfig = allEntityConfigs[updatedPayloadConfigName];
 
   return descendantKey
-    ? composeDescendantConfigByName(descendantKey, connectionConfig, generalConfig)
-    : connectionConfig;
+    ? composeDescendantConfigByName(descendantKey, updatedPayloadConfig, generalConfig)
+    : updatedPayloadConfig;
 };
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';

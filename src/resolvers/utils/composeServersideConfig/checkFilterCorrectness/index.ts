@@ -1,6 +1,7 @@
 import type { GeneralConfig } from '@/tsTypes';
 
 import parseEntityName from '@/utils/parseEntityName';
+import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/composeSubscriptionDummyEntityConfig';
 import composeWhereInput from '@/resolvers/utils/mergeWhereAndFilter/composeWhereInput';
 
 const checkFilterCorrectness = (
@@ -9,6 +10,7 @@ const checkFilterCorrectness = (
     [key: string]: any;
   },
   generalConfig: GeneralConfig,
+  isSubscribePayloadFilter: boolean = false,
 ): true => {
   const typeofFilter = typeof filter;
   if (typeofFilter !== 'object') {
@@ -23,13 +25,21 @@ const checkFilterCorrectness = (
     throw new TypeError('Filter is "Array" but has to be "Object!"');
   }
 
-  const { root: rootEntityName } = parseEntityName(entityName, generalConfig);
+  const { allEntityConfigs } = generalConfig;
 
-  const {
-    allEntityConfigs: { [rootEntityName]: entityConfig },
-  } = generalConfig;
+  if (isSubscribePayloadFilter) {
+    const entityConfig = allEntityConfigs[entityName];
 
-  composeWhereInput(filter, entityConfig);
+    const dummyEntityConfig = composeSubscriptionDummyEntityConfig(entityConfig);
+
+    composeWhereInput(filter, dummyEntityConfig);
+  } else {
+    const { root: rootEntityName } = parseEntityName(entityName, generalConfig);
+
+    const entityConfig = allEntityConfigs[rootEntityName];
+
+    composeWhereInput(filter, entityConfig);
+  }
 
   return true;
 };
