@@ -1,10 +1,18 @@
-import type { TangibleEntityConfig, VirtualConfigComposer, VirtualEntityConfig } from '@/tsTypes';
+import type {
+  EmbeddedField,
+  TangibleEntityConfig,
+  VirtualConfigComposer,
+  VirtualEntityConfig,
+} from '@/tsTypes';
 
-import composeUpdatedPayloadVirtualConfigName from './composeUpdatedPayloadVirtualConfigName';
 import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeCreatedOrDeletedPayloadVirtualConfigName from './composeCreatedOrDeletedPayloadVirtualConfigName';
 import checkSubscriptionActorConfig from './checkSubscriptionActorConfig';
 
-const composeUpdatedPayloadVirtualConfig: VirtualConfigComposer = (config, generalConfig) => {
+const composeCreatedOrDeletedPayloadVirtualConfig: VirtualConfigComposer = (
+  config,
+  generalConfig,
+) => {
   const {
     name,
     type: configType = 'tangible',
@@ -18,10 +26,7 @@ const composeUpdatedPayloadVirtualConfig: VirtualConfigComposer = (config, gener
     );
   }
 
-  const childFields = [
-    { name: 'node', config, required: true, type: 'childFields' },
-    { name: 'previousNode', config, required: true, type: 'childFields' },
-  ];
+  const childFields = [{ name: 'node', config, required: true, type: 'childFields' }];
 
   if (subscriptionActorConfig) {
     checkSubscriptionActorConfig(calculatedFields, subscriptionActorConfig);
@@ -35,14 +40,12 @@ const composeUpdatedPayloadVirtualConfig: VirtualConfigComposer = (config, gener
   }
 
   return {
-    name: composeUpdatedPayloadVirtualConfigName(name),
+    name: composeCreatedOrDeletedPayloadVirtualConfigName(name),
     type: 'virtual',
-    descendantNameSlicePosition: -'UpdatedPayload'.length,
+    descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
     childFields,
-
-    textFields: [{ name: 'updatedFields', array: true, type: 'textFields' }],
   } as VirtualEntityConfig;
 };
 
-export default composeUpdatedPayloadVirtualConfig;
+export default composeCreatedOrDeletedPayloadVirtualConfig;

@@ -80,7 +80,10 @@ const createUpdatedEntitySubscriptionResolver = (
 
           const query = new mingo.Query(where);
 
-          return query.test(payload[`updated${name}`].previousNode);
+          return (
+            query.test(payload[`updated${name}`].previousNode) &&
+            query.test(payload[`updated${name}`].node)
+          );
         },
 
         (payload) => {

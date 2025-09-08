@@ -1,12 +1,13 @@
 import { diff } from 'deep-object-diff';
 
-import { Context } from '@/tsTypes';
+import { Context, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
+import composeFieldsObject from '../composeFieldsObject';
 
 type About = 'created' | 'deleted' | 'updated';
 
 const composeReport = (
   about: About,
-  name: string,
+  entityConfig: EntityConfig,
   context: Context,
   node: Record<string, any>,
   previousNode?: Record<string, any>, // used only for "updated"
@@ -19,10 +20,20 @@ const composeReport = (
     );
   }
 
+  const { name, subscriptionActorConfig } = entityConfig as TangibleEntityConfig;
+
+  const actor = subscriptionActorConfig
+    ? Object.keys(composeFieldsObject(subscriptionActorConfig).fieldsObject).reduce((prev, key) => {
+        prev[key] = node[key];
+
+        return prev;
+      }, {})
+    : null;
+
   switch (about) {
     case 'created':
     case 'deleted':
-      pubsub.publish(`${about}-${name}`, { [`${about}${name}`]: node });
+      pubsub.publish(`${about}-${name}`, { [`${about}${name}`]: { actor, node } });
 
       return;
 
@@ -30,7 +41,7 @@ const composeReport = (
       const updatedFields = Object.keys(diff(node, previousNode));
 
       pubsub.publish(`${about}-${name}`, {
-        [`${about}${name}`]: { node, previousNode, updatedFields },
+        [`${about}${name}`]: { actor, node, previousNode, updatedFields },
       });
 
       return;

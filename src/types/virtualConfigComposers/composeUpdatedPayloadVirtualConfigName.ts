@@ -1,3 +1,3 @@
-const composeUpdatedPayloadVirtualConfig = (name: string): string => `${name}UpdatedPayload`;
+const composeUpdatedPayloadVirtualConfigName = (name: string): string => `${name}UpdatedPayload`;
 
-export default composeUpdatedPayloadVirtualConfig;
+export default composeUpdatedPayloadVirtualConfigName;

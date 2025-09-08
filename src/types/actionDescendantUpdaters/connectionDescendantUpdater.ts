@@ -1,6 +1,8 @@
-import type { DescendantAttributes } from '@/tsTypes';
+import type { DescendantAttributes, EntityConfig } from '@/tsTypes';
 
-const connectionDescendantUpdater = (entityName: string, item: DescendantAttributes) => {
+const connectionDescendantUpdater = (entityConfig: EntityConfig, item: DescendantAttributes) => {
+  const { name: entityName } = entityConfig;
+
   const edgeName = `${entityName}Edge`;
 
   const connectionName = `${entityName}Connection`;

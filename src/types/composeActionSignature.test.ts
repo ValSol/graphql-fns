@@ -71,7 +71,8 @@ input ExampleCreateOrPushChildrenInput {
       entityTypeDic,
       inputDic,
     );
-    const expectedResult = '  deletedExample(wherePayload: ExampleWherePayloadInput): Example!';
+    const expectedResult =
+      '  deletedExample(wherePayload: ExampleWherePayloadInput): ExampleCreatedOrDeletedPayload!';
 
     expect(result).toEqual(expectedResult);
 

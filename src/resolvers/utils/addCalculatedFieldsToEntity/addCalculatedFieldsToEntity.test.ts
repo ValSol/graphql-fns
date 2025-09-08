@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import type { TangibleEntityConfig } from '../../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
 
 import addCalculatedFieldsToEntity from '.';
 

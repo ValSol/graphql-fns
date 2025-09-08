@@ -9,10 +9,12 @@ import type {
   ObjectSignatureMethods,
   SimplifiedEmbeddedEntityConfig,
   SimplifiedTangibleEntityConfig,
+  SimplifiedVirtualEntityConfig,
 } from '@/tsTypes';
 
 import composeAllEntityConfigsAndEnums from '@/utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
+import composeDescendant from '@/utils/composeDescendant';
 
 describe('composeGqlTypes', () => {
   test('should create entities types to copy with children', () => {
@@ -222,6 +224,18 @@ type MenuCloneConnection {
 type MenuCloneEdge {
   cursor: String!
   node: MenuClone!
+}
+type MenuCreatedOrDeletedPayload {
+  node: Menu!
+}
+type MenuCloneCreatedOrDeletedPayload {
+  node: MenuClone!
+}
+type MenuSectionCreatedOrDeletedPayload {
+  node: MenuSection!
+}
+type MenuCloneSectionCreatedOrDeletedPayload {
+  node: MenuCloneSection!
 }
 type MenuUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
@@ -985,14 +999,14 @@ type Mutation {
   updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!, token: String): MenuCloneSection!
 }
 type Subscription {
-  createdMenu(wherePayload: MenuWherePayloadInput): Menu!
-  createdMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuClone!
-  createdMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSection!
-  createdMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSection!
-  deletedMenu(wherePayload: MenuWherePayloadInput): Menu!
-  deletedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuClone!
-  deletedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSection!
-  deletedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSection!
+  createdMenu(wherePayload: MenuWherePayloadInput): MenuCreatedOrDeletedPayload!
+  createdMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuCloneCreatedOrDeletedPayload!
+  createdMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSectionCreatedOrDeletedPayload!
+  createdMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSectionCreatedOrDeletedPayload!
+  deletedMenu(wherePayload: MenuWherePayloadInput): MenuCreatedOrDeletedPayload!
+  deletedMenuClone(wherePayload: MenuCloneWherePayloadInput): MenuCloneCreatedOrDeletedPayload!
+  deletedMenuSection(wherePayload: MenuSectionWherePayloadInput): MenuSectionCreatedOrDeletedPayload!
+  deletedMenuCloneSection(wherePayload: MenuCloneSectionWherePayloadInput): MenuCloneSectionCreatedOrDeletedPayload!
   updatedMenu(wherePayload: MenuWherePayloadInput, whichUpdated: MenuWhichUpdatedInput): MenuUpdatedPayload!
   updatedMenuClone(wherePayload: MenuCloneWherePayloadInput, whichUpdated: MenuCloneWhichUpdatedInput): MenuCloneUpdatedPayload!
   updatedMenuSection(wherePayload: MenuSectionWherePayloadInput, whichUpdated: MenuSectionWhichUpdatedInput): MenuSectionUpdatedPayload!
@@ -1132,6 +1146,12 @@ type Example2Connection {
 }
 type Example2Edge {
   cursor: String!
+  node: Example2!
+}
+type Example1CreatedOrDeletedPayload {
+  node: Example1!
+}
+type Example2CreatedOrDeletedPayload {
   node: Example2!
 }
 type Example1UpdatedPayload {
@@ -1499,10 +1519,10 @@ type Mutation {
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!, token: String): Example2!
 }
 type Subscription {
-  createdExample1(wherePayload: Example1WherePayloadInput): Example1!
-  createdExample2(wherePayload: Example2WherePayloadInput): Example2!
-  deletedExample1(wherePayload: Example1WherePayloadInput): Example1!
-  deletedExample2(wherePayload: Example2WherePayloadInput): Example2!
+  createdExample1(wherePayload: Example1WherePayloadInput): Example1CreatedOrDeletedPayload!
+  createdExample2(wherePayload: Example2WherePayloadInput): Example2CreatedOrDeletedPayload!
+  deletedExample1(wherePayload: Example1WherePayloadInput): Example1CreatedOrDeletedPayload!
+  deletedExample2(wherePayload: Example2WherePayloadInput): Example2CreatedOrDeletedPayload!
   updatedExample1(wherePayload: Example1WherePayloadInput, whichUpdated: Example1WhichUpdatedInput): Example1UpdatedPayload!
   updatedExample2(wherePayload: Example2WherePayloadInput, whichUpdated: Example2WhichUpdatedInput): Example2UpdatedPayload!
 }`;
@@ -1642,6 +1662,12 @@ type PlaceConnection {
 }
 type PlaceEdge {
   cursor: String!
+  node: Place!
+}
+type PersonCreatedOrDeletedPayload {
+  node: Person!
+}
+type PlaceCreatedOrDeletedPayload {
   node: Place!
 }
 type PersonUpdatedPayload {
@@ -1993,10 +2019,10 @@ type Mutation {
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
-  createdPerson(wherePayload: PersonWherePayloadInput): Person!
-  createdPlace(wherePayload: PlaceWherePayloadInput): Place!
-  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
-  deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
+  createdPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
+  createdPlace(wherePayload: PlaceWherePayloadInput): PlaceCreatedOrDeletedPayload!
+  deletedPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
+  deletedPlace(wherePayload: PlaceWherePayloadInput): PlaceCreatedOrDeletedPayload!
   updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
   updatedPlace(wherePayload: PlaceWherePayloadInput, whichUpdated: PlaceWhichUpdatedInput): PlaceUpdatedPayload!
 }`;
@@ -2119,6 +2145,9 @@ type PersonConnection {
 }
 type PersonEdge {
   cursor: String!
+  node: Person!
+}
+type PersonCreatedOrDeletedPayload {
   node: Person!
 }
 type PersonUpdatedPayload {
@@ -2367,8 +2396,8 @@ type Mutation {
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
 }
 type Subscription {
-  createdPerson(wherePayload: PersonWherePayloadInput): Person!
-  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
+  createdPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
+  deletedPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
   updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
 }`;
 
@@ -2507,6 +2536,12 @@ type PlaceConnection {
 }
 type PlaceEdge {
   cursor: String!
+  node: Place!
+}
+type PersonCreatedOrDeletedPayload {
+  node: Person!
+}
+type PlaceCreatedOrDeletedPayload {
   node: Place!
 }
 type PersonUpdatedPayload {
@@ -2961,10 +2996,10 @@ type Mutation {
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
 type Subscription {
-  createdPerson(wherePayload: PersonWherePayloadInput): Person!
-  createdPlace(wherePayload: PlaceWherePayloadInput): Place!
-  deletedPerson(wherePayload: PersonWherePayloadInput): Person!
-  deletedPlace(wherePayload: PlaceWherePayloadInput): Place!
+  createdPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
+  createdPlace(wherePayload: PlaceWherePayloadInput): PlaceCreatedOrDeletedPayload!
+  deletedPerson(wherePayload: PersonWherePayloadInput): PersonCreatedOrDeletedPayload!
+  deletedPlace(wherePayload: PlaceWherePayloadInput): PlaceCreatedOrDeletedPayload!
   updatedPerson(wherePayload: PersonWherePayloadInput, whichUpdated: PersonWhichUpdatedInput): PersonUpdatedPayload!
   updatedPlace(wherePayload: PlaceWherePayloadInput, whichUpdated: PlaceWhichUpdatedInput): PlaceUpdatedPayload!
 }`;
@@ -4394,11 +4429,22 @@ type Mutation {
   });
 
   test('should create entities types with descendant & inventory for only queries', () => {
+    const tokenConfig: SimplifiedVirtualEntityConfig = {
+      name: 'Token',
+      type: 'virtual',
+
+      textFields: [{ name: 'userId' }],
+    };
+
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
 
+      subscriptionActorConfigName: 'Token',
+
       textFields: [{ name: 'textField' }, { name: 'textField2' }],
+
+      calculatedFields: [{ name: 'userId', calculatedType: 'textFields', func: (() => {}) as any }],
     };
 
     const ForCatalog: DescendantAttributes = {
@@ -4419,7 +4465,7 @@ type Mutation {
       allow: { Example: [] },
     };
 
-    const simplifiedEntityConfigs = [entityConfig];
+    const simplifiedEntityConfigs = [entityConfig, tokenConfig];
     const inventory: Inventory = {
       name: 'test',
       include: {
@@ -4427,9 +4473,11 @@ type Mutation {
         Subscription: { updatedEntityForCatalog: ['Example'] },
       },
     };
+
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const descendant = { ForCatalog, ForView, ForGuest };
+    const descendant = composeDescendant([ForCatalog, ForView, ForGuest], allEntityConfigs);
+
     const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
@@ -4468,6 +4516,10 @@ type ExampleForViewUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!
   node: ExampleForView!
   previousNode: ExampleForView!
+  actor: TokenForView
+}
+type TokenForView {
+  userId: String
 }
 input ExampleForCatalogWhereInput {
   id_in: [ID!]
@@ -4556,6 +4608,16 @@ input ExampleForCatalogWherePayloadInput {
   textField2_lte: String
   textField2_re: [RegExp!]
   textField2_exists: Boolean
+  userId: String
+  userId_in: [String!]
+  userId_nin: [String!]
+  userId_ne: String
+  userId_gt: String
+  userId_gte: String
+  userId_lt: String
+  userId_lte: String
+  userId_re: [RegExp!]
+  userId_exists: Boolean
   AND: [ExampleForCatalogWherePayloadInput!]
   NOR: [ExampleForCatalogWherePayloadInput!]
   OR: [ExampleForCatalogWherePayloadInput!]
@@ -4563,6 +4625,7 @@ input ExampleForCatalogWherePayloadInput {
 enum ExampleForCatalogWhichUpdatedEnum {
   textField
   textField2
+  userId
 }
 input ExampleForCatalogWhichUpdatedInput {
   updatedFields: ExampleForCatalogWhichUpdatedEnum

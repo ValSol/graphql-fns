@@ -1,6 +1,12 @@
 import mingo from 'mingo';
 
-import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from '@/tsTypes';
+import type {
+  GeneralConfig,
+  Subscription,
+  EntityConfig,
+  ServersideConfig,
+  TangibleEntityConfig,
+} from '@/tsTypes';
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -18,7 +24,8 @@ const createCreatedEntitySubscriptionResolver = (
   serversideConfig: ServersideConfig,
 ): null | { subscribe: Subscription } => {
   const { allEntityConfigs, inventory } = generalConfig;
-  const { name } = preEntityConfig;
+  const { name, subscriptionActorConfig: preSubscriptionActorConfig } =
+    preEntityConfig as TangibleEntityConfig;
 
   if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
@@ -33,6 +40,12 @@ const createCreatedEntitySubscriptionResolver = (
   const entityConfig = descendantKey
     ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
     : preEntityConfig;
+
+  const subscriptionActorConfig =
+    preSubscriptionActorConfig &&
+    (descendantKey
+      ? composeDescendantConfigByName(descendantKey, preSubscriptionActorConfig, generalConfig)
+      : preSubscriptionActorConfig);
 
   store[storeKey] = {
     subscribe: (_, { wherePayload = {} }, context, info, resolverOptions) =>
@@ -61,19 +74,19 @@ const createCreatedEntitySubscriptionResolver = (
 
           const query = new mingo.Query(where);
 
-          return query.test(payload[`created${name}`]);
+          return query.test(payload[`created${name}`].node);
         },
 
         (payload) => {
-          const { [`created${name}`]: item } = payload as Record<string, any>;
+          const {
+            [`created${name}`]: { actor, node },
+          } = payload as Record<string, any>;
 
           return {
-            [`created${name}${descendantKey}`]: transformAfter(
-              {},
-              item,
-              entityConfig,
-              generalConfig,
-            ),
+            [`created${name}${descendantKey}`]: {
+              actor: actor && transformAfter({}, actor, subscriptionActorConfig, generalConfig),
+              node: transformAfter({}, node, entityConfig, generalConfig),
+            },
           };
         },
       ),

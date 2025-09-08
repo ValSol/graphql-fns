@@ -484,13 +484,16 @@ export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonPropert
   counter?: boolean;
   uniqueCompoundIndexes?: string[][];
   allowedCalculatedWithAsyncFuncFieldNames?: string[];
+  subscriptionActorConfigName?: string;
 };
+
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
   'relationalFields' | 'duplexFields' | 'filterFields'
 > & {
   type: 'embedded';
 };
+
 export type SimplifiedVirtualEntityConfig = SimplifiedEntityConfigCommonProperties & {
   type: 'virtual';
   childFields?: SimplifiedChildField[];
@@ -808,7 +811,7 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
   ) => GraphqlScalar;
   type: 'calculatedFields';
 };
-type CalculatedField =
+export type CalculatedField =
   | ArrayCalculatedEnumField
   | ScalarCalculatedEnumField
   | ArrayCalculatedEmbeddedField
@@ -846,6 +849,7 @@ export type TangibleEntityConfig = EntityConfigCommonProperties & {
   uniqueCompoundIndexes?: string[][];
   // used for subscription
   allowedCalculatedWithAsyncFuncFieldNames?: string[];
+  subscriptionActorConfig?: VirtualEntityConfig;
 };
 export type EmbeddedEntityConfig = Omit<
   EntityConfigCommonProperties,
@@ -1366,7 +1370,7 @@ export type ActionAttributes = {
     generalConfig: GeneralConfig,
     descendantKey?: string,
   ) => EntityConfig | null;
-  actionDescendantUpdater?: (entityName: string, item: DescendantAttributes) => void;
+  actionDescendantUpdater?: (entityConfig: EntityConfig, item: DescendantAttributes) => void;
 };
 
 export type GqlActionData = {

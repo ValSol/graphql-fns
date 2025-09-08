@@ -9,16 +9,15 @@ import type {
   InvolvedFilter,
   GraphqlScalar,
   TangibleEntityConfig,
-} from '../../../tsTypes';
+} from '@/tsTypes';
 
-import checkInventory from '../../../utils/inventory/checkInventory';
-import createMongooseModel from '../../../mongooseModels/createMongooseModel';
-import addCalculatedFieldsToEntity from '../../utils/addCalculatedFieldsToEntity';
-import addIdsToEntity from '../../utils/addIdsToEntity';
-import getFilterFromInvolvedFilters from '../../utils/getFilterFromInvolvedFilters';
-import getProjectionFromInfo from '../../utils/getProjectionFromInfo';
-import mergeWhereAndFilter from '../../utils/mergeWhereAndFilter';
-import getAsyncFuncResults from '../../utils/getAsyncFuncResults';
+import checkInventory from '@/utils/inventory/checkInventory';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
+import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
+import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 
 type Args = {

@@ -8,7 +8,6 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
     context,
     resolverOptions: { subscriptionEntityNames },
   } = resolverArg;
-  const { name } = entityConfig;
 
   const { subscriptionCreatedEntityName } = subscriptionEntityNames || {};
 
@@ -16,7 +15,7 @@ const report: Report = async (resolverCreatorArg, resolverArg) => {
     return null;
   }
 
-  return ({ current: [node] }) => composeReport('created', name, context, node);
+  return ({ current: [node] }) => composeReport('created', entityConfig, context, node);
 };
 
 export default report;

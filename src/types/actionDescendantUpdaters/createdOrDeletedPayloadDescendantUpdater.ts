@@ -1,15 +1,15 @@
 import type { DescendantAttributes, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
-const updatedPayloadDescendantUpdater = (
+const createdOrDeletedPayloadDescendantUpdater = (
   entityConfig: EntityConfig,
   item: DescendantAttributes,
 ) => {
   const { name: entityName, subscriptionActorConfig } = entityConfig as TangibleEntityConfig;
 
-  const updatedPayloadName = `${entityName}UpdatedPayload`;
+  const createdOrDeletedPayloadName = `${entityName}CreatedOrDeletedPayload`;
 
-  if (!item.allow[updatedPayloadName]) {
-    item.allow = { ...item.allow, [updatedPayloadName]: [] };
+  if (!item.allow[createdOrDeletedPayloadName]) {
+    item.allow = { ...item.allow, [createdOrDeletedPayloadName]: [] };
   }
 
   if (subscriptionActorConfig && !item.allow[subscriptionActorConfig.name]) {
@@ -17,4 +17,4 @@ const updatedPayloadDescendantUpdater = (
   }
 };
 
-export default updatedPayloadDescendantUpdater;
+export default createdOrDeletedPayloadDescendantUpdater;

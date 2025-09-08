@@ -1,13 +1,22 @@
-import { AnyField, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
+import { EntityConfig, TangibleEntityConfig } from '@/tsTypes';
+
+const store = Object.create(null);
 
 const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): EntityConfig => {
+  const { name } = entityConfig as TangibleEntityConfig;
+
+  // use cache if no jest test environment
+  if (!process.env.JEST_WORKER_ID && store[name]) {
+    return store[name];
+  }
+
   const {
-    name,
     allowedCalculatedWithAsyncFuncFieldNames = [],
     relationalFields = [],
     duplexFields = [],
     filterFields = [],
     calculatedFields = [],
+
     ...dummyEntityConfig
   } = entityConfig as TangibleEntityConfig;
 
@@ -43,7 +52,9 @@ const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): Entit
     }
   });
 
-  return dummyEntityConfig as EntityConfig;
+  store[name] = dummyEntityConfig as EntityConfig;
+
+  return store[name];
 };
 
 export default composeSubscriptionDummyEntityConfig;

@@ -6,6 +6,8 @@ import composeEdgeVirtualConfig from './composeEdgeVirtualConfig';
 import composeEdgeVirtualConfigName from './composeEdgeVirtualConfigName';
 import composeUpdatedPayloadVirtualConfig from './composeUpdatedPayloadVirtualConfig';
 import composeUpdatedPayloadVirtualConfigName from './composeUpdatedPayloadVirtualConfigName';
+import composeCreatedOrDeletedPayloadVirtualConfigName from './composeCreatedOrDeletedPayloadVirtualConfigName';
+import composeCreatedOrDeletedPayloadVirtualConfig from './composeCreatedOrDeletedPayloadVirtualConfig';
 
 export type VirtualConfigComposerItem = [
   VirtualConfigComposer,
@@ -29,6 +31,12 @@ const virtualConfigComposers: VirtualConfigComposerItem[] = [
   [
     composeUpdatedPayloadVirtualConfig,
     composeUpdatedPayloadVirtualConfigName,
+    (configType: string): boolean => configType === 'tangible',
+  ],
+
+  [
+    composeCreatedOrDeletedPayloadVirtualConfig,
+    composeCreatedOrDeletedPayloadVirtualConfigName,
     (configType: string): boolean => configType === 'tangible',
   ],
 ];

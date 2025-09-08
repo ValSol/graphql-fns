@@ -11,13 +11,20 @@ const composeFieldsObject = (
   entityConfig: EntityConfig,
   filterVariant: Filter = '',
 ): { fieldsObject: EntityConfigObject; restOfFieldsObject?: EntityConfig } => {
-  const { name: entityName, allowedCalculatedWithAsyncFuncFieldNames = [] } =
-    entityConfig as TangibleEntityConfig;
+  const {
+    name: entityName,
+    allowedCalculatedWithAsyncFuncFieldNames = [],
+    subscriptionActorConfig,
+  } = entityConfig as TangibleEntityConfig;
 
   const storeKey = `${entityName}${filterVariant}`;
 
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
+
+  const subscriptionActorConfigFieldNames = (subscriptionActorConfig?.calculatedFields || []).map(
+    ({ name }) => name,
+  );
 
   const { fieldsObject, restOfFieldsObject } = Object.keys(entityConfig).reduce(
     (prev, key) => {
@@ -40,7 +47,8 @@ const composeFieldsObject = (
             if (
               fieldType === 'calculatedFields' &&
               asyncFunc &&
-              !allowedCalculatedWithAsyncFuncFieldNames.includes(name)
+              !allowedCalculatedWithAsyncFuncFieldNames.includes(name) &&
+              !subscriptionActorConfigFieldNames.includes(name)
             ) {
               prev.restOfFieldsObject[name] = item;
             } else {

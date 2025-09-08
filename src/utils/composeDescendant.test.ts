@@ -4,6 +4,10 @@ import type { DescendantAttributes } from '../tsTypes';
 import composeDescendant from './composeDescendant';
 
 describe('composeDescendant', () => {
+  const exampleConfig = { name: 'Example' };
+
+  const allEntityConfigs = { Example: exampleConfig };
+
   test('compose simple descendants', () => {
     const filteredRestaurantFieldNames = [
       'clone',
@@ -61,7 +65,13 @@ describe('composeDescendant', () => {
         },
       },
     };
-    const result = composeDescendant([ForView, ForApprove]);
+
+    const postConfig = { name: 'Post' };
+    const restaurantConfig = { name: 'Restaurant' };
+
+    const allEntityConfigs = { Post: postConfig, Restaurant: restaurantConfig };
+
+    const result = composeDescendant([ForView, ForApprove], allEntityConfigs);
 
     const expectedResult = { ForView, ForApprove };
     expect(result).toEqual(expectedResult);
@@ -84,7 +94,7 @@ describe('composeDescendant', () => {
       excludeFields: { Example: ['anotherField'] },
     };
 
-    const result = composeDescendant([ForView, ForCatalog]);
+    const result = composeDescendant([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForCatalog: DescendantAttributes = {
       allow: {
@@ -119,7 +129,7 @@ describe('composeDescendant', () => {
       excludeFields: { Example: ['anotherField'] },
     };
 
-    const result = composeDescendant([ForView, ForCatalog]);
+    const result = composeDescendant([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForCatalog: DescendantAttributes = {
       allow: {
@@ -155,7 +165,7 @@ describe('composeDescendant', () => {
       involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const result = composeDescendant([ForView, ForCatalog]);
+    const result = composeDescendant([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForView: DescendantAttributes = {
       descendantKey: 'ForView',

@@ -5,6 +5,7 @@ import type {
   Enums,
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
+  TangibleEntityConfig,
 } from '@/tsTypes';
 
 import virtualConfigComposers, { VirtualConfigComposerItem } from '@/types/virtualConfigComposers';
@@ -87,7 +88,29 @@ const composeAllEntityConfigsAndEnums = (
 
   simplifiedEntityConfigs.forEach((simplifiedEntityConfig) => {
     const { name } = simplifiedEntityConfig;
-    composeEntityConfig(simplifiedEntityConfig, result[name], result, relationalOppositeNames);
+
+    const { subscriptionActorConfigName, ...rest } =
+      simplifiedEntityConfig as SimplifiedTangibleEntityConfig;
+
+    if (subscriptionActorConfigName) {
+      const subscriptionActorConfig = result[subscriptionActorConfigName];
+
+      if (!subscriptionActorConfig) {
+        throw new TypeError(
+          `Not found subscription actor config: "${subscriptionActorConfigName}" for tangible config: "${name}"!`,
+        );
+      }
+
+      if (subscriptionActorConfig.type !== 'virtual') {
+        throw new TypeError(
+          `Subscription actor config: "${subscriptionActorConfigName}" has type "${subscriptionActorConfig.type}" but has to have: "virtual"!`,
+        );
+      }
+
+      result[name].subscriptionActorConfig = subscriptionActorConfig;
+    }
+
+    composeEntityConfig(rest, result[name], result, relationalOppositeNames);
   });
 
   // copmpose virtual configs

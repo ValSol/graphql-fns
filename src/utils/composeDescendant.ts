@@ -1,6 +1,6 @@
-import type { DescendantAttributes } from '../tsTypes';
+import type { DescendantAttributes, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import actionAttributes from '../types/actionAttributes'; // import only to get all standard action NAMES
+import actionAttributes from '@/types/actionAttributes'; // import only to get all standard action NAMES
 import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 type Result = {
@@ -9,7 +9,10 @@ type Result = {
 
 const actionGenericNames = Object.keys(actionAttributes);
 
-const composeDescendant = (descendantAttributesArray: Array<DescendantAttributes>): Result => {
+const composeDescendant = (
+  descendantAttributesArray: Array<DescendantAttributes>,
+  allEntityConfigs: { [entityConfigName: string]: EntityConfig },
+): Result => {
   const descendantKeys = descendantAttributesArray.reduce<Array<any>>((prev, item) => {
     const { descendantKey } = item;
 
@@ -66,7 +69,10 @@ const composeDescendant = (descendantAttributesArray: Array<DescendantAttributes
       }
 
       allow[entityName].forEach((actionGenericName) => {
-        actionAttributes[actionGenericName].actionDescendantUpdater?.(entityName, item);
+        actionAttributes[actionGenericName].actionDescendantUpdater?.(
+          allEntityConfigs[entityName],
+          item,
+        );
       });
     });
   }, {});

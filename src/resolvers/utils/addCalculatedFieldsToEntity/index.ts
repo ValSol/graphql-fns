@@ -1,4 +1,4 @@
-import { DataObject, InfoEssence, ResolverArg, TangibleEntityConfig } from '../../../tsTypes';
+import { DataObject, InfoEssence, ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
 const addCalculatedFieldsToEntity = (
   data: DataObject,

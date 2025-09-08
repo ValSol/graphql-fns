@@ -3,7 +3,7 @@ import type {
   SimplifiedEmbeddedEntityConfig,
   SimplifiedTangibleEntityConfig,
   TangibleEntityConfig,
-} from '../../tsTypes';
+} from '@/tsTypes';
 
 import composeAllEntityConfigs from '.';
 import PageInfo from './pageInfoConfig';
@@ -104,6 +104,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleCreatedOrDeletedPayload = {
+      name: 'ExampleCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: exampleConfig, required: true, type: 'childFields' }],
+    };
+
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -126,6 +135,7 @@ describe('composeAllEntityConfigs', () => {
       Example: exampleConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
+      ExampleCreatedOrDeletedPayload: exampleCreatedOrDeletedPayload,
       ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
     };
     expect(result).toEqual(expectedResult);
@@ -196,6 +206,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleCreatedOrDeletedPayload = {
+      name: 'ExampleCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
+    };
+
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -216,6 +235,7 @@ describe('composeAllEntityConfigs', () => {
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
       ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
+      ExampleCreatedOrDeletedPayload: exampleCreatedOrDeletedPayload,
     };
 
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
@@ -300,6 +320,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleCreatedOrDeletedPayload = {
+      name: 'ExampleCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
+    };
+
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -351,6 +380,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const exampleCreatedOrDeletedPayload2 = {
+      name: 'Example2CreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: entityConfig2, required: true, type: 'childFields' }],
+    };
+
     const exampleUpdatedPayloadConfig2 = {
       name: 'Example2UpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -370,10 +408,12 @@ describe('composeAllEntityConfigs', () => {
       Example: entityConfig,
       ExampleEdge: exampleEdgeConfig,
       ExampleConnection: exampleConnectionConfig,
+      ExampleCreatedOrDeletedPayload: exampleCreatedOrDeletedPayload,
       ExampleUpdatedPayload: exampleUpdatedPayloadConfig,
       Example2: entityConfig2,
       Example2Edge: exampleEdgeConfig2,
       Example2Connection: exampleConnectionConfig2,
+      Example2CreatedOrDeletedPayload: exampleCreatedOrDeletedPayload2,
       Example2UpdatedPayload: exampleUpdatedPayloadConfig2,
     };
 
@@ -654,6 +694,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const userCreatedOrDeletedPayload = {
+      name: 'UserCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: userConfig, required: true, type: 'childFields' }],
+    };
+
     const userUpdatedPayloadConfig = {
       name: 'UserUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -687,6 +736,15 @@ describe('composeAllEntityConfigs', () => {
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
         { name: 'edges', config: textbookEdgeConfig, array: true, type: 'childFields' },
       ],
+    };
+
+    const textbookCreatedOrDeletedPayload = {
+      name: 'TextbookCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: textbookConfig, required: true, type: 'childFields' }],
     };
 
     const textbookUpdatedPayloadConfig = {
@@ -724,6 +782,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const lessonCreatedOrDeletedPayload = {
+      name: 'LessonCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: lessonConfig, required: true, type: 'childFields' }],
+    };
+
     const lessonUpdatedPayloadConfig = {
       name: 'LessonUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -745,13 +812,16 @@ describe('composeAllEntityConfigs', () => {
       Lesson: lessonConfig,
       UserEdge: userEdgeConfig,
       UserConnection: userConnectionConfig,
+      UserCreatedOrDeletedPayload: userCreatedOrDeletedPayload,
       UserUpdatedPayload: userUpdatedPayloadConfig,
       TextbookEdge: textbookEdgeConfig,
       TextbookConnection: textbookConnectionConfig,
+      TextbookCreatedOrDeletedPayload: textbookCreatedOrDeletedPayload,
       TextbookUpdatedPayload: textbookUpdatedPayloadConfig,
       LessonEdge: lessonEdgeConfig,
       LessonConnection: lessonConnectionConfig,
       LessonUpdatedPayload: lessonUpdatedPayloadConfig,
+      LessonCreatedOrDeletedPayload: lessonCreatedOrDeletedPayload,
       DifficultyLevelCount: difficultyLevelCountConfig,
       DifficultyLevelCountEdge: difficultyLevelCountEdgeConfig,
       DifficultyLevelCountConnection: difficultyLevelCountConnectionConfig,
@@ -852,6 +922,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const userCreatedOrDeletedPayload = {
+      name: 'UserCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: userConfig, required: true, type: 'childFields' }],
+    };
+
     const userUpdatedPayloadConfig = {
       name: 'UserUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -887,6 +966,15 @@ describe('composeAllEntityConfigs', () => {
       ],
     };
 
+    const textbookCreatedOrDeletedPayload = {
+      name: 'TextbookCreatedOrDeletedPayload',
+      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+
+      type: 'virtual',
+
+      childFields: [{ name: 'node', config: textbookConfig, required: true, type: 'childFields' }],
+    };
+
     const textbookUpdatedPayloadConfig = {
       name: 'TextbookUpdatedPayload',
       descendantNameSlicePosition: -'UpdatedPayload'.length,
@@ -907,9 +995,11 @@ describe('composeAllEntityConfigs', () => {
       Textbook: textbookConfig,
       UserEdge: userEdgeConfig,
       UserConnection: userConnectionConfig,
+      UserCreatedOrDeletedPayload: userCreatedOrDeletedPayload,
       UserUpdatedPayload: userUpdatedPayloadConfig,
       TextbookEdge: textbookEdgeConfig,
       TextbookConnection: textbookConnectionConfig,
+      TextbookCreatedOrDeletedPayload: textbookCreatedOrDeletedPayload,
       TextbookUpdatedPayload: textbookUpdatedPayloadConfig,
     };
 

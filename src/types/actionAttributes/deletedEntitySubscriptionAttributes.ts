@@ -2,6 +2,7 @@ import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/t
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import createEntityWherePayloadInputType from '../inputs/createEntityWherePayloadInputType';
+import createdOrDeletedPayloadDescendantUpdater from '../actionDescendantUpdaters/createdOrDeletedPayloadDescendantUpdater';
 
 const actionType = 'Subscription';
 
@@ -26,15 +27,23 @@ const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
   descendantKey?: string,
-): null | EntityConfig =>
-  descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
-    : entityConfig;
+): null | EntityConfig => {
+  const { name } = entityConfig;
 
+  const { allEntityConfigs } = generalConfig;
+
+  const deletedPayloadConfigName = `${name}CreatedOrDeletedPayload`;
+
+  const deletedPayloadConfig = allEntityConfigs[deletedPayloadConfigName];
+
+  return descendantKey
+    ? composeDescendantConfigByName(descendantKey, deletedPayloadConfig, generalConfig)
+    : deletedPayloadConfig;
+};
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
 const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}!`;
+  `${name}${descendantKey}CreatedOrDeletedPayload!`;
 
 const deletedEntitySubscriptionAttributes = {
   actionGeneralName,
@@ -46,6 +55,7 @@ const deletedEntitySubscriptionAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
+  actionDescendantUpdater: createdOrDeletedPayloadDescendantUpdater,
   actionAllowed,
 } as const;
 
