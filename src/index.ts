@@ -50,6 +50,8 @@ import createEntitiesThroughConnectionQueryResolver from '@/resolvers/queries/cr
 import createCreatedEntitySubscriptionResolver from '@/resolvers/subscriptions/createCreatedEntitySubscriptionResolver';
 import createUpdatedEntitySubscriptionResolver from '@/resolvers/subscriptions/createUpdatedEntitySubscriptionResolver';
 import createDeletedEntitySubscriptionResolver from '@/resolvers/subscriptions/createDeletedEntitySubscriptionResolver';
+import testSubscriptionNode from './resolvers/subscriptions/testSubscriptionNode';
+import { composeSubscribePayloadMongoFilter } from './resolvers/utils/executeAuthorisation';
 
 // graphql types utils
 
@@ -121,6 +123,8 @@ export {
   createCreatedEntitySubscriptionResolver, // why may be need to pass this?
   createUpdatedEntitySubscriptionResolver, // why may be need to pass this?
   createDeletedEntitySubscriptionResolver, // why may be need to pass this?
+  testSubscriptionNode,
+  composeSubscribePayloadMongoFilter,
   multiPolygonFromMongoToGql,
   pointFromGqlToMongo,
   pointFromMongoToGql,

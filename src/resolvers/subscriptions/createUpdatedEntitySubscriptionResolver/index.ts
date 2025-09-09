@@ -10,11 +10,10 @@ import type {
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
-import composeSubscriptionDummyEntityConfig from '@/resolvers/utils/composeSubscriptionDummyEntityConfig';
-import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 import filterUpdatedFields, { WhichUpdated } from './filterUpdatedFields';
+import testSubscriptionNode from '../testSubscriptionNode';
 
 const store = Object.create(null);
 
@@ -78,24 +77,11 @@ const createUpdatedEntitySubscriptionResolver = (
             return false;
           }
 
-          const { where: wherePayloadMongo } = mergeWhereAndFilter(
-            [],
+          return testSubscriptionNode(
+            [payload[`updated${name}`].previousNode, payload[`updated${name}`].node],
             wherePayload,
-            composeSubscriptionDummyEntityConfig(allEntityConfigs[name]),
-          );
-
-          const where =
-            Object.keys(wherePayloadMongo).length === 0
-              ? subscribePayloadMongoFilter
-              : Object.keys(subscribePayloadMongoFilter).length === 0
-                ? wherePayloadMongo
-                : { $and: [wherePayloadMongo, subscribePayloadMongoFilter] };
-
-          const query = new mingo.Query(where);
-
-          return (
-            query.test(payload[`updated${name}`].previousNode) &&
-            query.test(payload[`updated${name}`].node)
+            subscribePayloadMongoFilter,
+            allEntityConfigs[name],
           );
         },
 

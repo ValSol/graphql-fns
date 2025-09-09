@@ -7,6 +7,10 @@ import type {
   InvolvedFilter,
   GraphqlObject,
   SubscriptionInvolvedEntityNames,
+  EntityConfig,
+  TangibleEntityConfig,
+  EntityFilters,
+  UserAttributes,
 } from '@/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -76,6 +80,22 @@ const composeSubscriptionInventoryChains = (
       throw TypeError(`Got incorrect involvedEntityNamesKey: "${key}"!`);
   }
 };
+
+export const composeSubscribePayloadMongoFilter = (
+  subscribePayloadFilters: EntityFilters,
+  involvedEntityNames: ActionInvolvedEntityNames,
+  userAttributes: UserAttributes,
+  entityConfig: EntityConfig,
+) =>
+  mergeWhereAndFilter(
+    composeUserFilter(
+      involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
+      userAttributes,
+      subscribePayloadFilters,
+    ),
+    {},
+    composeSubscriptionDummyEntityConfig(entityConfig),
+  ).where;
 
 const executeAuthorisation = async (
   inventoryChain: ThreeSegmentInventoryChain,
@@ -224,14 +244,11 @@ const executeAuthorisation = async (
       );
     }
 
-    const { where: subscribePayloadMongoFilter } = mergeWhereAndFilter(
-      composeUserFilter(
-        involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
-        userAttributes,
-        subscribePayloadFilters,
-      ),
-      {},
-      composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
+    const subscribePayloadMongoFilter = composeSubscribePayloadMongoFilter(
+      subscribePayloadFilters,
+      involvedEntityNames,
+      userAttributes,
+      allEntityConfigs[entityName],
     );
 
     return subscriptionUpdatedFields
@@ -367,14 +384,11 @@ const executeAuthorisation = async (
       : { involvedFilters, subscribePayloadMongoFilter: {} }; // return
   }
 
-  const { where: subscribePayloadMongoFilter } = mergeWhereAndFilter(
-    composeUserFilter(
-      involvedEntityNames.inputOutputEntity || involvedEntityNames.outputEntity,
-      userAttributes,
-      subscribePayloadFilters,
-    ),
-    {},
-    composeSubscriptionDummyEntityConfig(allEntityConfigs[entityName]),
+  const subscribePayloadMongoFilter = composeSubscribePayloadMongoFilter(
+    subscribePayloadFilters,
+    involvedEntityNames,
+    userAttributes,
+    allEntityConfigs[entityName],
   );
 
   return subscriptionUpdatedFields
