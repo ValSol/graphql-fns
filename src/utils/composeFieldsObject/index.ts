@@ -22,9 +22,9 @@ const composeFieldsObject = (
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
 
-  const subscriptionActorConfigFieldNames = (subscriptionActorConfig?.calculatedFields || []).map(
-    ({ name }) => name,
-  );
+  const subscriptionActorConfigFieldNames = subscriptionActorConfig
+    ? Object.keys(composeFieldsObject(subscriptionActorConfig, FOR_MONGO_QUERY).fieldsObject)
+    : [];
 
   const { fieldsObject, restOfFieldsObject } = Object.keys(entityConfig).reduce(
     (prev, key) => {

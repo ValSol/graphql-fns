@@ -28,12 +28,13 @@ const checkSubscriptionActorConfig = (
   }, {});
 
   subscriptionActorFieldNames.forEach((actorFieldName) => {
-    const [calculatedType, embeddedEntityName] =
-      calculatedFieldNameToCalculatedType[actorFieldName].split(':');
+    const calculatedTypeEndEmbeddedEntityName = calculatedFieldNameToCalculatedType[actorFieldName];
 
-    if (!calculatedType) {
+    if (!calculatedTypeEndEmbeddedEntityName) {
       throw new TypeError(`Not found actor field: "${actorFieldName}" in calculated fields!`);
     }
+
+    const [calculatedType, embeddedEntityName] = calculatedTypeEndEmbeddedEntityName.split(':');
 
     const actorFieldType = subscriptionActorFieldsObject[actorFieldName].type;
 

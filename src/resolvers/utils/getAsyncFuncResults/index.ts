@@ -1,9 +1,4 @@
-import {
-  InfoEssence,
-  ResolverArg,
-  ResolverCreatorArg,
-  TangibleEntityConfig,
-} from '../../../tsTypes';
+import { InfoEssence, ResolverArg, ResolverCreatorArg, TangibleEntityConfig } from '@/tsTypes';
 
 const getAsyncFuncResults = async (
   infoEssence: InfoEssence,
@@ -14,25 +9,29 @@ const getAsyncFuncResults = async (
 
   const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
 
-  if (calculatedFields.length === 0) {
+  const { projection, fieldArgs } = infoEssence;
+
+  const asyncCalculatedFieldsToProcess = calculatedFields.filter(
+    ({ asyncFunc, name }) => asyncFunc && projection[name] === 1,
+  );
+
+  if (asyncCalculatedFieldsToProcess.length === 0) {
     return {};
   }
 
-  const result = {};
-
-  const { projection, fieldArgs } = infoEssence;
-
-  for (let i = 0; i < calculatedFields.length; i += 1) {
-    const { asyncFunc, name } = calculatedFields[i];
-
-    if (asyncFunc && projection[name] === 1) {
+  const results = await Promise.all(
+    asyncCalculatedFieldsToProcess.map(({ asyncFunc, name }) => {
       const args = fieldArgs[name];
 
-      result[name] = await asyncFunc(args, resolverCreatorArg, resolverArg);
-    }
-  }
+      return asyncFunc(args, resolverCreatorArg, resolverArg);
+    }),
+  );
 
-  return result;
+  return asyncCalculatedFieldsToProcess.reduce((prev, { name }, i) => {
+    prev[name] = results[i];
+
+    return prev;
+  }, {});
 };
 
 export default getAsyncFuncResults;

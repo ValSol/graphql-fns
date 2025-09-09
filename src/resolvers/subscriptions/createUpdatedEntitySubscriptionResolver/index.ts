@@ -1,6 +1,12 @@
 import mingo from 'mingo';
 
-import type { GeneralConfig, Subscription, EntityConfig, ServersideConfig } from '@/tsTypes';
+import type {
+  GeneralConfig,
+  Subscription,
+  EntityConfig,
+  ServersideConfig,
+  TangibleEntityConfig,
+} from '@/tsTypes';
 
 import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
@@ -19,7 +25,8 @@ const createUpdatedEntitySubscriptionResolver = (
   serversideConfig: ServersideConfig,
 ): null | { subscribe: Subscription } => {
   const { allEntityConfigs, inventory } = generalConfig;
-  const { name } = preEntityConfig;
+  const { name, subscriptionActorConfig: preSubscriptionActorConfig } =
+    preEntityConfig as TangibleEntityConfig;
 
   if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
@@ -34,6 +41,12 @@ const createUpdatedEntitySubscriptionResolver = (
   const entityConfig = descendantKey
     ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
     : preEntityConfig;
+
+  const subscriptionActorConfig =
+    preSubscriptionActorConfig &&
+    (descendantKey
+      ? composeDescendantConfigByName(descendantKey, preSubscriptionActorConfig, generalConfig)
+      : preSubscriptionActorConfig);
 
   store[storeKey] = {
     subscribe: (
@@ -88,7 +101,7 @@ const createUpdatedEntitySubscriptionResolver = (
 
         (payload) => {
           const {
-            [`updated${name}`]: { node, previousNode, updatedFields: preUpdatedFields },
+            [`updated${name}`]: { actor, node, previousNode, updatedFields: preUpdatedFields },
           } = payload as Record<string, any>;
 
           const updatedFields = filterUpdatedFields(
@@ -99,6 +112,7 @@ const createUpdatedEntitySubscriptionResolver = (
 
           return {
             [`updated${name}${descendantKey}`]: {
+              actor: actor && transformAfter({}, actor, subscriptionActorConfig, generalConfig),
               node: transformAfter({}, node, entityConfig, generalConfig),
               previousNode: transformAfter({}, previousNode, entityConfig, generalConfig),
               updatedFields,

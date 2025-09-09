@@ -1,7 +1,7 @@
 import { diff } from 'deep-object-diff';
 
 import { Context, EntityConfig, TangibleEntityConfig } from '@/tsTypes';
-import composeFieldsObject from '../composeFieldsObject';
+import composeFieldsObject, { FOR_MONGO_QUERY } from '../composeFieldsObject';
 
 type About = 'created' | 'deleted' | 'updated';
 
@@ -22,13 +22,21 @@ const composeReport = (
 
   const { name, subscriptionActorConfig } = entityConfig as TangibleEntityConfig;
 
-  const actor = subscriptionActorConfig
-    ? Object.keys(composeFieldsObject(subscriptionActorConfig).fieldsObject).reduce((prev, key) => {
-        prev[key] = node[key];
+  const preActor = subscriptionActorConfig
+    ? Object.keys(
+        composeFieldsObject(subscriptionActorConfig, FOR_MONGO_QUERY).fieldsObject,
+      ).reduce((prev, key) => {
+        const value = node[key];
+
+        if (value !== null && value !== undefined) {
+          prev[key] = node[key];
+        }
 
         return prev;
       }, {})
-    : null;
+    : {};
+
+  const actor = Object.keys(preActor).length === 0 ? null : preActor;
 
   switch (about) {
     case 'created':
