@@ -5,8 +5,14 @@ import composeDescendant from './composeDescendant';
 
 describe('composeDescendant', () => {
   const exampleConfig = { name: 'Example' };
+  const postConfig = { name: 'Post' };
+  const restaurantConfig = { name: 'Restaurant' };
 
-  const allEntityConfigs = { Example: exampleConfig };
+  const allEntityConfigs = {
+    Example: exampleConfig,
+    Post: postConfig,
+    Restaurant: restaurantConfig,
+  };
 
   test('compose simple descendants', () => {
     const filteredRestaurantFieldNames = [
@@ -68,8 +74,9 @@ describe('composeDescendant', () => {
 
     const postConfig = { name: 'Post' };
     const restaurantConfig = { name: 'Restaurant' };
+    const userConfig = { name: 'User' };
 
-    const allEntityConfigs = { Post: postConfig, Restaurant: restaurantConfig };
+    const allEntityConfigs = { Post: postConfig, Restaurant: restaurantConfig, User: userConfig };
 
     const result = composeDescendant([ForView, ForApprove], allEntityConfigs);
 

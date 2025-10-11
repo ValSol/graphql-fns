@@ -49,6 +49,10 @@ const composeDescendant = (
     const { allow, involvedOutputDescendantKeys = {} } = result[descendantKey];
 
     Object.keys(allow).forEach((entityName) => {
+      if (!allEntityConfigs[entityName]) {
+        throw new TypeError(`Entity config: "${entityName}" not found in allEntityConfigs!`);
+      }
+
       const descendantKey2 =
         involvedOutputDescendantKeys?.[entityName]?.outputEntity || descendantKey;
 
