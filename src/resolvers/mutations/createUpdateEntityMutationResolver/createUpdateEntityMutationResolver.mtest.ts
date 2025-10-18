@@ -819,6 +819,7 @@ describe('createUpdateEntityMutationResolver', () => {
     const dataForUpdate3 = {
       textField1: 'text Field 1 Plus Plus Plus',
       textField2: null,
+      embeddedField: null,
     };
 
     const updatedExample3 = await updateExample(
@@ -836,6 +837,8 @@ describe('createUpdateEntityMutationResolver', () => {
     const updatedExample32 = updatedExample31.toObject();
     expect(updatedExample32.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample32.textField2).toBe(undefined);
+
+    expect(updatedExample3.embeddedField).toBe(undefined);
   });
 
   test('should create mutation update entity resolver to update embedded array field', async () => {

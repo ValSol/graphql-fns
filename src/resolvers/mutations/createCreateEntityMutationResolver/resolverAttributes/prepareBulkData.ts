@@ -1,7 +1,7 @@
-import { TangibleEntityConfig } from '../../../../tsTypes';
-import type { PrepareBulkData } from '../../../tsTypes';
+import { TangibleEntityConfig } from '@/tsTypes';
+import type { PrepareBulkData } from '@/resolvers/tsTypes';
 
-import processCreateInputData from '../../processCreateInputData';
+import processCreateInputData from '@/resolvers/mutations/processCreateInputData';
 
 const prepareBulkData: PrepareBulkData = async (
   resolverCreatorArg,

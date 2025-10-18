@@ -389,17 +389,28 @@ const processCreateInputData = (
         const { array, config } = embeddedFieldsObject[key];
         if (array) {
           prev[key] = data2[key].map((value) => transform(value, config));
-        } else {
-          prev[key] = data2[key] === null ? null : transform(data2[key], config);
+          // } else {
+          //   prev[key] = data2[key] === null ? null : transform(data2[key], config);
+        } else if (data2[key] !== null) {
+          prev[key] = transform(data2[key], config);
         }
+        // else if (['update', 'updateMany'].includes(processingKind)) {
+        //   prev[key] = null;
+        // }
       } else if (filterFieldsObject[key]) {
-        if (data2[key] === null) {
-          prev[key] = null;
-        } else {
+        if (data2[key] !== null) {
           prev[key] = JSON.stringify(
             whereFromGlobalIds(data2[key], filterFieldsObject[key].config),
           );
         }
+
+        // if (data2[key] === null) {
+        //   prev[key] = null;
+        // } else {
+        //   prev[key] = JSON.stringify(
+        //     whereFromGlobalIds(data2[key], filterFieldsObject[key].config),
+        //   );
+        // }
       } else if (geospatialFieldsObject[key]) {
         const { array, geospatialType } = geospatialFieldsObject[key];
         if (array) {

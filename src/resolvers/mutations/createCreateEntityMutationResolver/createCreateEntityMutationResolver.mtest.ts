@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
@@ -25,7 +25,14 @@ afterAll(async () => {
 
 describe('createCreateEntityMutationResolver', () => {
   const serversideConfig = { transactions: true };
+
   test('should create mutation add entity resolver', async () => {
+    const embeddedConfig: EmbeddedEntityConfig = {
+      name: 'Embedded',
+      type: 'embedded',
+      textFields: [{ name: 'textField', type: 'textFields' }],
+    };
+
     const entityConfig: TangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -59,6 +66,14 @@ describe('createCreateEntityMutationResolver', () => {
         },
       ],
 
+      embeddedFields: [
+        {
+          name: 'embed',
+          type: 'embeddedFields',
+          config: embeddedConfig,
+        },
+      ],
+
       calculatedFields: [
         {
           name: 'text',
@@ -72,7 +87,9 @@ describe('createCreateEntityMutationResolver', () => {
       ],
     };
 
-    const generalConfig: GeneralConfig = { allEntityConfigs: { Example: entityConfig } };
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: entityConfig, Embedded: embeddedConfig },
+    };
 
     const exampleSchema = createThingSchema(entityConfig);
     const Example = mongooseConn.model('Example_Thing', exampleSchema);
@@ -87,6 +104,7 @@ describe('createCreateEntityMutationResolver', () => {
     if (!createExample) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const data = {
+      embed: null,
       textField1: 'textField1',
       textField2: 'textField2',
       textField3: 'textField3',
