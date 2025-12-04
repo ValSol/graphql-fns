@@ -6,9 +6,8 @@ import {
   TangibleEntityConfig,
 } from '@/tsTypes';
 
-import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import composeFirstEdges from './composeFirstEdges';
-import createInfoEssence from '@/resolvers/utils/createInfoEssence';
 
 const getVeryFirst = async (
   first: number,
@@ -21,7 +20,7 @@ const getVeryFirst = async (
 ): null | Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
   const { parent, args, context } = resolverArg;
 
-  const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
+  const infoEssence = getInfoEssence(entityConfig, resolverArg.info, ['edges', 'node']);
 
   const pagination = { skip: 0, first: first + 1 } as const;
 
@@ -29,7 +28,7 @@ const getVeryFirst = async (
     parent,
     { ...args, pagination },
     context,
-    createInfoEssence(projection),
+    infoEssence,
     { involvedFilters },
   );
 

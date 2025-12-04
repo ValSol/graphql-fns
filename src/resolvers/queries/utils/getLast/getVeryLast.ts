@@ -7,7 +7,7 @@ import {
 } from '@/tsTypes';
 
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
-import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
+import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import composeLastEdges from './composeLastEdges';
 
 const getVeryLast = async (
@@ -32,7 +32,7 @@ const getVeryLast = async (
     { involvedFilters: { inputOutputFilterAndLimit } },
   );
 
-  const projection = getProjectionFromInfo(entityConfig, resolverArg, ['edges', 'node']);
+  const infoEssence = getInfoEssence(entityConfig, resolverArg.info, ['edges', 'node']);
 
   const pagination = { skip: count - last - 1 } as const;
 
@@ -40,7 +40,7 @@ const getVeryLast = async (
     parent,
     last < count ? { ...args, pagination } : args,
     context,
-    createInfoEssence(projection),
+    infoEssence,
     { involvedFilters },
   );
 
