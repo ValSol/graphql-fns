@@ -24,7 +24,9 @@ const getInfoEssence = (
   }
 
   if (infoEssenceTypePredicate(info)) {
-    return info;
+    const projection = adaptProjectionForCalculatedFields(info.projection, entityConfig);
+
+    return { ...info, projection };
   }
 
   const resolvedInfo = parseResolveInfo(info as GraphQLResolveInfo);

@@ -14,6 +14,10 @@ const getProjectionFromInfo = (
   const { info } = resolverArg;
 
   if (!info) {
+    if (path.length !== 0) {
+      `Got incorrect path: ${path} that has to be empty array!`;
+    }
+
     return composeAllFieldsProjection(entityConfig);
   }
 
