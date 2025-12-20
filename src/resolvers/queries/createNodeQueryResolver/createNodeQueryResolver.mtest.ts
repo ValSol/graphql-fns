@@ -14,7 +14,7 @@ import toGlobalId from '../../utils/toGlobalId';
 
 import createNodeQueryResolver from './index';
 
-const info = createInfoEssence({ textField1: 1, textField3: 1, createdAt: 1 });
+const info = createInfoEssence({ projection: { textField1: 1, textField3: 1, createdAt: 1 } });
 
 mongoose.set('strictQuery', false);
 

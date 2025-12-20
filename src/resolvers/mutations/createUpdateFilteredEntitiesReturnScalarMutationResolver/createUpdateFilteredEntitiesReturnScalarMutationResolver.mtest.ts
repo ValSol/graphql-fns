@@ -835,7 +835,7 @@ describe('createUpdateFilteredEntitiesReturnScalarMutationResolver', () => {
       ],
     };
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const data = { name: 'updatedName' };
     const updatedParentCount = await updateFilteredPersons(
       null,

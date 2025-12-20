@@ -492,7 +492,9 @@ describe('createPushIntoEntityMutationResolver', () => {
       ],
     };
 
-    const info = createInfoEssence({ _id: 1, name: 1, places: 1, child: 1, childs: 1 });
+    const info = createInfoEssence({
+      projection: { _id: 1, name: 1, places: 1, child: 1, childs: 1 },
+    });
 
     const data = {
       places: ['newPlace-1', 'newPlace-2'],
@@ -623,7 +625,7 @@ describe('createPushIntoEntityMutationResolver', () => {
 
     const whereOne = { name: 'ParentName' };
 
-    const info = createInfoEssence({ _id: 1, name: 1, places: 1, childs: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1, places: 1, childs: 1 } });
 
     const data = {
       childs: {

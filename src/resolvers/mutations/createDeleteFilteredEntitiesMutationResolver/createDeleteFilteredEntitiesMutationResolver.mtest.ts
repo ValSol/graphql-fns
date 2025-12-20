@@ -217,12 +217,14 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
     if (!deletePerson) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
     const info = createInfoEssence({
-      firstName: 1,
-      lastName: 1,
-      friend: 1,
-      location: 1,
-      locations: 1,
-      favorities: 1,
+      projection: {
+        firstName: 1,
+        lastName: 1,
+        friend: 1,
+        location: 1,
+        locations: 1,
+        favorities: 1,
+      },
     });
 
     const where = { id_in: [id] };
@@ -258,7 +260,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
     );
     if (!deletePlace) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = createInfoEssence({ name: 1 });
+    const info2 = createInfoEssence({ projection: { name: 1 } });
 
     const where2 = { name_in: [data.location.create.name] };
     const [deletedPlace] = await deletePlace(
@@ -388,7 +390,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
       ],
     };
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const [deletedParent] = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
@@ -514,7 +516,7 @@ describe('createDeleteFilteredEntitiesMutationResolver', () => {
 
     const where = { name: 'name-is-absent' };
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const deletedParents = await deletePerson(null, { where }, { mongooseConn, pubsub }, info, {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });

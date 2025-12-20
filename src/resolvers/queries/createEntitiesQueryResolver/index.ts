@@ -99,7 +99,7 @@ const createEntitiesQueryResolver = (
         parent,
         { search, where },
         context,
-        createInfoEssence({ _id: 1 }),
+        createInfoEssence({ projection: { _id: 1 } }),
         { involvedFilters: { inputOutputFilterAndLimit: [filters] } },
       );
 

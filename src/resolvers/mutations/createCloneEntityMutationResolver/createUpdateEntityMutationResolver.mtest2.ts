@@ -1026,7 +1026,7 @@ describe('createCloneEntityMutationResolver', () => {
       ],
     };
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const data = { name: 'updatedName' };
     const updatedParent = await updatePerson(
       null,

@@ -19,7 +19,7 @@ const personalFilterFromUserEntity = async (
     null,
     { whereOne: { id: userAttributes.id } },
     context,
-    createInfoEssence({ [filterFieldName]: 1 }),
+    createInfoEssence({ projection: { [filterFieldName]: 1 } }),
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 

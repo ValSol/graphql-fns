@@ -110,7 +110,7 @@ const checkLockedData = async (
       pluralizedEntityName,
       generalConfig,
       serversideConfig,
-    )(null, args, context, createInfoEssence(projection), {
+    )(null, args, context, createInfoEssence({ projection }), {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
     });
 
@@ -141,7 +141,7 @@ const checkLockedData = async (
       null,
       args,
       context,
-      createInfoEssence(projection),
+      createInfoEssence({ projection }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       session,
     );

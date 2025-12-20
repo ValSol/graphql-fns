@@ -28,7 +28,7 @@ const getVeryLast = async (
     parent,
     args,
     context,
-    createInfoEssence({ _id: 1 }),
+    createInfoEssence({ projection: { _id: 1 } }),
     { involvedFilters: { inputOutputFilterAndLimit } },
   );
 

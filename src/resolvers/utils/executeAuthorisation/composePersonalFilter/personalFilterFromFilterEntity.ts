@@ -21,7 +21,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: userAttributes.id } },
     context,
-    createInfoEssence({ [filterEntityPointerName]: 1 }),
+    createInfoEssence({ projection: { [filterEntityPointerName]: 1 } }),
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 
@@ -49,7 +49,7 @@ const personalFilterFromFilterEntity = async (
     null,
     { whereOne: { id: filterEntityPointer } },
     context,
-    createInfoEssence({ [filterFieldName]: 1 }),
+    createInfoEssence({ projection: { [filterFieldName]: 1 } }),
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 

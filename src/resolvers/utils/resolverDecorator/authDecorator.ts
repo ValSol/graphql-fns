@@ -49,11 +49,11 @@ const authDecorator =
 
     const infoOrInfoEssence =
       subscriptionDeletedEntityName || subscriptionUpdatedEntityName
-        ? createInfoEssence(
-            composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
+        ? createInfoEssence({
+            projection: composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
             entityConfig,
-            getInfoEssence(entityConfig, info),
-          )
+            infoEssence: getInfoEssence(entityConfig, info),
+          })
         : info;
 
     // *** end expanding info for subscriptions: "updated" & "created"

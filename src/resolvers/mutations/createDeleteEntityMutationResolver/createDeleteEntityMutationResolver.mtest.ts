@@ -402,7 +402,7 @@ describe('createDeleteEntityMutationResolver', () => {
       ],
     };
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const deletedParent = await deleteParent(null, { whereOne }, { mongooseConn, pubsub }, info, {
       involvedFilters: {
         inputOutputFilterAndLimit: [[]],
@@ -557,7 +557,7 @@ describe('createDeleteEntityMutationResolver', () => {
 
     const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
 
-    const info4 = createInfoEssence({ name: 1 });
+    const info4 = createInfoEssence({ projection: { name: 1 } });
 
     const where = {};
 

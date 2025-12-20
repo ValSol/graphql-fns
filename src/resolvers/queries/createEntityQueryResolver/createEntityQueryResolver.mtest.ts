@@ -12,7 +12,7 @@ import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
 import createEntityQueryResolver from './index';
 
-const info = createInfoEssence({ textField1: 1, textField3: 1, createdAt: 1 });
+const info = createInfoEssence({ projection: { textField1: 1, textField3: 1, createdAt: 1 } });
 
 mongoose.set('strictQuery', false);
 
@@ -234,7 +234,7 @@ describe('createEntityQueryResolver', () => {
     const Parent = createEntityQueryResolver(parentConfig, generalConfig, serversideConfig);
     if (!Parent) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const info2 = createInfoEssence({ _id: 1, name: 1 });
+    const info2 = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const whereOne = {
       AND: [
         { name: 'name-2' },

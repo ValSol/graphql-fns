@@ -104,7 +104,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -130,7 +132,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 6 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[], 3] } },
     );
 
@@ -160,7 +164,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -193,7 +199,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[], 3] } },
     );
 
@@ -228,7 +236,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -261,7 +271,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -294,7 +306,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[], 3] } },
     );
 
@@ -327,7 +341,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -362,7 +378,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 11 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -396,7 +414,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 4 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -428,7 +448,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 4 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[], 3] } },
     );
 
@@ -462,7 +484,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 11 },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -498,7 +522,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -529,7 +555,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 3, before },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -560,7 +588,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -593,7 +623,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -620,7 +652,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -653,7 +687,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -686,7 +722,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -719,7 +757,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -756,7 +796,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -789,7 +831,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 1, where: { oddEven: 'even' } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -815,7 +859,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 2, after: endCursor, where: { oddEven: 'even' } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -852,7 +898,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, where: { oddEven: 'even' } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -890,7 +938,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, near },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -917,7 +967,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor, near },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -950,7 +1002,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 5, after: endCursor2, near },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -983,7 +1037,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor3, near },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -1016,7 +1072,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { last: 5, before: startCursor4, sort: { sortBy: ['num_DESC'] } },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -1058,7 +1116,9 @@ describe('createEntitiesThroughConnectionQueryResolver', () => {
       null,
       { first: 3, after, near },
       { mongooseConn },
-      createInfoEssence({ createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 }),
+      createInfoEssence({
+        projection: { createdAt: 1, updatedAt: 1, num: 1, oddEven: 1, point: 1 },
+      }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 

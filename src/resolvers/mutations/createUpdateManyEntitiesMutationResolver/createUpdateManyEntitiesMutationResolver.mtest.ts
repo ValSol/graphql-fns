@@ -1058,7 +1058,7 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     const whereOne = [{ name: 'name-2' }];
 
-    const info = createInfoEssence({ _id: 1, name: 1 });
+    const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
     const data = [{ name: 'name-99' }];
     const [updatedParent] = await updateManyParents(
       null,

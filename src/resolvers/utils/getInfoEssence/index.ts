@@ -20,7 +20,7 @@ const getInfoEssence = (
       `Got incorrect path: ${path} that has to be empty array!`;
     }
 
-    return createInfoEssence(composeAllFieldsProjection(entityConfig));
+    return createInfoEssence({ projection: composeAllFieldsProjection(entityConfig) });
   }
 
   if (infoEssenceTypePredicate(info)) {

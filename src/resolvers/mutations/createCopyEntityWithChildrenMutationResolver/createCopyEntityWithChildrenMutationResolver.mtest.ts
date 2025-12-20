@@ -425,7 +425,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -444,7 +444,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1 }),
+      createInfoEssence({ projection: { name: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -527,7 +527,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone3.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -538,7 +538,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone.sections } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, menu: 1 }),
+      createInfoEssence({ projection: { name: 1, menu: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -586,7 +586,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone4.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -594,7 +594,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone3.sections } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, menu: 1 }),
+      createInfoEssence({ projection: { name: 1, menu: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -646,7 +646,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone5.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -696,7 +696,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone6.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -709,7 +709,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { where: { id_in: menuClone5.sections } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, menu: 1 }),
+      createInfoEssence({ projection: { name: 1, menu: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -743,7 +743,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: updatedMenu.sections.map((id) => ({ id: id.toString() })) },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, menu: 1 }),
+      createInfoEssence({ projection: { name: 1, menu: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -761,7 +761,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: { id: restaurantClone7.menu.toString() } },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1, sections: 1, restaurant: 1 }),
+      createInfoEssence({ projection: { name: 1, sections: 1, restaurant: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -782,7 +782,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       { whereOne: [{ id: createdRestaurant.menu }] },
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1 }),
+      createInfoEssence({ projection: { name: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -800,7 +800,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       {},
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1 }),
+      createInfoEssence({ projection: { name: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -818,7 +818,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
       null,
       {},
       { mongooseConn, pubsub },
-      createInfoEssence({ name: 1 }),
+      createInfoEssence({ projection: { name: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 

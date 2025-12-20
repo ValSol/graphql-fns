@@ -12,10 +12,10 @@ import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '@/resolvers/mutations/createCreateEntityMutationResolver';
 import createEntitiesQueryResolver from './index';
 
-const info = createInfoEssence({ textField1: 1, textField3: 1, createdAt: 1 });
-const info2 = createInfoEssence({ name: 1, textField3: 1, createdAt: 1 });
-const infoForSort = createInfoEssence({ first: 1, second: 1, createdAt: 1 });
-const info3 = createInfoEssence({ first: 1, textFields: 1, textField: 1 });
+const info = createInfoEssence({ projection: { textField1: 1, textField3: 1, createdAt: 1 } });
+const info2 = createInfoEssence({ projection: { name: 1, textField3: 1, createdAt: 1 } });
+const infoForSort = createInfoEssence({ projection: { first: 1, second: 1, createdAt: 1 } });
+const info3 = createInfoEssence({ projection: { first: 1, textFields: 1, textField: 1 } });
 
 mongoose.set('strictQuery', false);
 
@@ -128,7 +128,7 @@ describe('createEntityQueryResolver', () => {
       null,
       {},
       { mongooseConn, pubsub },
-      createInfoEssence({ fullName: 1 }),
+      createInfoEssence({ projection: { fullName: 1 } }),
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
@@ -1127,7 +1127,7 @@ describe('createEntityQueryResolver', () => {
 
     const Users = createEntitiesQueryResolver(userConfig, generalConfig, serversideConfig);
 
-    const info4 = createInfoEssence({ name: 1 });
+    const info4 = createInfoEssence({ projection: { name: 1 } });
 
     const where = {
       textbooks_: { lessons_: { title: 'lesson8' } },

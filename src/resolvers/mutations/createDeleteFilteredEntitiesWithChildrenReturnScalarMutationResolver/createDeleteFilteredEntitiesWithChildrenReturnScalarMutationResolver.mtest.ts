@@ -11,7 +11,7 @@ import pubsub from '@/resolvers/utils/pubsub';
 import createCreateEntityMutationResolver from '../createCreateEntityMutationResolver';
 import createDeleteFilteredEntitiesWithChildrenReturnScalarMutationResolver from './index';
 
-const info = createInfoEssence({ title: 1 });
+const info = createInfoEssence({ projection: { title: 1 } });
 
 mongoose.set('strictQuery', false);
 

@@ -56,11 +56,11 @@ const produceResult = async (
 
   const infoEssence =
     subscriptionEntityNames && !array
-      ? createInfoEssence(
-          composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
+      ? createInfoEssence({
+          projection: composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
           entityConfig,
-          getInfoEssence(entityConfig, info),
-        )
+          infoEssence: getInfoEssence(entityConfig, info),
+        })
       : getInfoEssence(entityConfig, info);
 
   if (array) {
