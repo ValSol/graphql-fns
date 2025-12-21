@@ -1301,6 +1301,7 @@ export type PipelineMongoDB = Array<
   | { $geoNear: NearForAggregateMongodb }
   | { $skip: number }
   | { $limit: number }
+  | { $sort: Record<string, 1 | -1> }
   | { $sort: { index_from_parent_ids: 1 } }
   | { $sort: { score: { $meta: 'textScore' } } }
   | { $set: { index_from_parent_ids: { $indexOfArray: [DataObject[], '$_id'] } } }

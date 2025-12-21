@@ -156,7 +156,7 @@ const createEntitiesQueryResolver = (
       if (sort) {
         const { sortBy } = sort;
         const sortInputs = composeSortForAggregateInput(sortBy);
-        Array.prototype.push.apply(pipeline, sortInputs);
+        pipeline.push(sortInputs);
       }
 
       if (objectIdsFromParent) {
