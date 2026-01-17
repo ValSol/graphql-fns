@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.1102",
+  "version": "0.1.2-beta.1103",
   "description": "Useful functions to work with graphql",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ValSol/graphql-fns.git"
+    "url": "git+https://github.com/ValSol/graphql-fns.git"
   },
   "keywords": [
     "graphql",

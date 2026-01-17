@@ -12,6 +12,10 @@ const composeEnumTypes = (generalConfig: GeneralConfig): string => {
           throw new TypeError(`Incorrect enum name: "${name}"!`);
         }
 
+        if (enumValues.length === 0) {
+          throw new TypeError(`Got empty enum with name: "${name}"!`);
+        }
+
         prev.push(`enum ${name}Enumeration {`);
         enumValues.forEach((item) => {
           if (!isCommonlyAllowedTypeName(item)) {
