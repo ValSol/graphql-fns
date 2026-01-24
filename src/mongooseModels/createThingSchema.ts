@@ -41,6 +41,14 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
     polygonIndexProperties.forEach((name) => {
       ThingSchema.index({ [name]: '2dsphere' });
     });
+
+    const { length: indexesLength } = ThingSchema.indexes();
+
+    if (indexesLength > 64) {
+      throw new TypeError(
+        `For "${name}" entity created ${indexesLength} indexes but MongoDB allows a maximum of 64 indexes per collection!`,
+      );
+    }
   }
 
   // to work dynamic adding fields
@@ -49,7 +57,7 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
   // to supplement cache
   thingSchemas[name] = ThingSchema;
 
-  return ThingSchema;
+  return thingSchemas[name];
 };
 
 export default createThingSchema;

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import type { Enums, EntityConfig, EnumField } from '../tsTypes';
+import type { Enums, EntityConfig } from '../tsTypes';
 
 type ThingSchemaProperty = {
   type: any | [any];
@@ -16,6 +16,7 @@ const { Schema } = mongoose;
 const composeThingSchemaProperties = (
   entityConfig: EntityConfig,
   enums: Enums,
+  parentIndexedField = '',
 ): ThingSchemaProperties => {
   const {
     booleanFields = [],
@@ -27,6 +28,7 @@ const composeThingSchemaProperties = (
     geospatialFields = [],
     textFields = [],
     type: configType,
+    name: entityName,
   } = entityConfig;
 
   const result: Record<string, any> = {};
@@ -44,24 +46,32 @@ const composeThingSchemaProperties = (
       if (!array && Array.isArray(defaultValue)) {
         throw new TypeError('Expected not an array as default value');
       }
+
       if (array && !Array.isArray(defaultValue)) {
         throw new TypeError('Expected an array as default value');
       }
     }
 
-    if (index && configType !== 'tangible') {
+    if (unique && configType !== 'tangible') {
       throw new TypeError(`Must not have an "unique" field in an "${configType}" document!`);
     }
 
     prev[name] = { type: array ? [String] : String };
+
     if (defaultValue !== undefined) prev[name].default = defaultValue;
 
     if (required) prev[name].required = true; // by default required = false
+
     if (unique) {
       prev[name].unique = true;
+
       if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     return prev;
   }, result);
 
@@ -70,6 +80,7 @@ const composeThingSchemaProperties = (
       if (!array && Array.isArray(defaultValue)) {
         throw new TypeError('Expected not an array as default value');
       }
+
       if (array && !Array.isArray(defaultValue)) {
         throw new TypeError('Expected an array as default value');
       }
@@ -80,14 +91,20 @@ const composeThingSchemaProperties = (
     }
 
     prev[name] = { type: array ? [Date] : Date };
+
     if (defaultValue !== undefined) prev[name].default = defaultValue;
 
     if (required) prev[name].required = true; // by default required = false
+
     if (unique) {
       prev[name].unique = true;
       if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     return prev;
   }, result);
 
@@ -109,11 +126,16 @@ const composeThingSchemaProperties = (
     if (defaultValue !== undefined) prev[name].default = defaultValue;
 
     if (required) prev[name].required = true; // by default required = false
+
     if (unique) {
       prev[name].unique = true;
       if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     return prev;
   }, result);
 
@@ -122,6 +144,7 @@ const composeThingSchemaProperties = (
       if (!array && Array.isArray(defaultValue)) {
         throw new TypeError('Expected not an array as default value');
       }
+
       if (array && !Array.isArray(defaultValue)) {
         throw new TypeError('Expected an array as default value');
       }
@@ -132,14 +155,21 @@ const composeThingSchemaProperties = (
     }
 
     prev[name] = { type: array ? [Number] : Number };
+
     if (defaultValue !== undefined) prev[name].default = defaultValue;
 
     if (required) prev[name].required = true; // by default required = false
+
     if (unique) {
       prev[name].unique = true;
+
       if (!required) prev[name].sparse = true;
     }
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     return prev;
   }, result);
 
@@ -148,16 +178,22 @@ const composeThingSchemaProperties = (
       if (!array && Array.isArray(defaultValue)) {
         throw new TypeError('Expected not an array as default value');
       }
+
       if (array && !Array.isArray(defaultValue)) {
         throw new TypeError('Expected an array as default value');
       }
     }
 
     prev[name] = { type: array ? [Boolean] : Boolean };
+
     if (defaultValue !== undefined) prev[name].default = defaultValue;
 
     if (required) prev[name].required = true; // by default required = false
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     return prev;
   }, result);
 
@@ -200,6 +236,7 @@ const composeThingSchemaProperties = (
         if (configType !== 'tangible') {
           throw new TypeError(`Must not have an "duplexField" in an "${configType}" document!`);
         }
+
         // the same code as for relationalFields
         const obj: {
           ref: string;
@@ -212,14 +249,18 @@ const composeThingSchemaProperties = (
           ref: duplexThingName,
           type: 'ObjectId',
         };
+
         if (!required) obj.required = false; // by default required = true
+
         if (unique) {
           obj.unique = true;
           if (!required) obj.sparse = true;
         }
+
         if (index) obj.index = true;
 
         prev[name] = array ? [obj] : obj;
+
         return prev;
       },
       result,
@@ -234,10 +275,11 @@ const composeThingSchemaProperties = (
     }, result);
   }
 
-  embeddedFields.reduce((prev, { array, name, config }) => {
-    const obj = composeThingSchemaProperties(config, enums);
+  embeddedFields.reduce((prev, { array, name, config, index }) => {
+    const obj = composeThingSchemaProperties(config, enums, index ? `${entityName}.${name}` : '');
 
     prev[name] = array ? [obj] : { type: new Schema(obj) };
+
     return prev;
   }, result);
 
@@ -253,6 +295,7 @@ const composeThingSchemaProperties = (
           index: '2dsphere',
         },
       };
+
       if (required) obj.type.required = true; // by default required = false
 
       prev[name] = array ? [obj] : obj;
@@ -266,6 +309,7 @@ const composeThingSchemaProperties = (
           type: [[[Number]]],
         },
       };
+
       if (required) obj.type.required = true; // by default required = false
 
       prev[name] = array ? [obj] : obj;
@@ -279,6 +323,7 @@ const composeThingSchemaProperties = (
           type: [[[[Number]]]],
         },
       };
+
       if (required) obj.type.required = true; // by default required = false
 
       prev[name] = array ? [obj] : obj;
@@ -293,6 +338,7 @@ const composeThingSchemaProperties = (
       if (!array && !(typeof defaultValue === 'string')) {
         throw new TypeError('Expected a string as default value');
       }
+
       if (array && !Array.isArray(defaultValue)) {
         throw new TypeError('Expected an array as default value');
       }
@@ -304,8 +350,13 @@ const composeThingSchemaProperties = (
     };
 
     if (required) prev[name].required = true; // by default required = false
-    if (index) prev[name].index = true;
+
+    if (index && (configType === 'tangible' || parentIndexedField)) {
+      prev[name].index = true;
+    }
+
     if (defaultValue !== undefined) prev[name].default = defaultValue;
+
     return prev;
   }, result);
 
