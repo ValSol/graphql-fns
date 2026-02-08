@@ -73,7 +73,8 @@ const workOutMutations = async (
           involvedFilters: { inputOutputFilterAndLimit: [[]] },
         };
 
-        const { getPrevious, prepareBulkData } = mutationsResolverAttributes[actionGeneralName];
+        const { array, getPrevious, prepareBulkData } =
+          mutationsResolverAttributes[actionGeneralName];
 
         const { name } = entityConfig;
 
@@ -221,11 +222,23 @@ const workOutMutations = async (
     if (result) {
       const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
-      const asyncFuncResults = await getAsyncFuncResults(
-        infoEssence,
-        resolverCreatorArg,
-        resolverArg,
-      );
+      // compose "argsForAsyncFunc" to prevent leak of MUTATION args instead of "where" or "whereOne"("whereCompoundOne")
+      const argsForAsyncFunc =
+        previous.length === 0
+          ? null
+          : array
+            ? {
+                where: { id_in: previous.map(({ _id }) => _id) },
+                token: resolverArg.args.token,
+              }
+            : { whereOne: { id: previous[0]._id }, token: resolverArg.args.token };
+
+      const asyncFuncResults = argsForAsyncFunc
+        ? await getAsyncFuncResults(infoEssence, resolverCreatorArg, {
+            ...resolverArg,
+            args: argsForAsyncFunc,
+          } as ResolverArg)
+        : {};
 
       result.previous = previous.map((item, i) =>
         addCalculatedFieldsToEntity(
