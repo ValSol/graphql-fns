@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.1107",
+  "version": "0.1.2-beta.1114",
   "description": "Useful functions to work with graphql",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -10,6 +10,10 @@
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
+    },
+    "./client": {
+      "require": "./dist/client/index.cjs",
+      "import": "./dist/client/index.js"
     }
   },
   "files": [
@@ -42,45 +46,47 @@
   "homepage": "https://github.com/ValSol/graphql-fns#readme",
   "dependencies": {
     "deep-object-diff": "^1.1.9",
-    "graphql-parse-resolve-info": "^4.13.0",
+    "graphql-parse-resolve-info": "^4.14.1",
     "graphql-scalars": "1.23.0",
     "lodash.merge": "^4.6.2",
-    "mingo": "^6.5.2",
+    "mingo": "^7.2.0",
     "pluralize": "^8.0.0"
   },
   "devDependencies": {
-    "@graphql-tools/schema": "^10.0.16",
+    "@graphql-tools/schema": "^10.0.31",
     "@graphql-yoga/subscription": "^5.0.5",
-    "@shelf/jest-mongodb": "^4.3.2",
-    "@types/jest": "^29.5.14",
+    "@shelf/jest-mongodb": "^6.0.2",
+    "@swc/core": "^1.15.11",
+    "@types/jest": "^30.0.0",
     "@types/lodash.merge": "^4.6.9",
-    "@types/node": "20.9.0",
+    "@types/node": "^25.2.2",
     "@types/pluralize": "^0.0.33",
-    "@typescript-eslint/eslint-plugin": "^8.36.0",
-    "@typescript-eslint/parser": "^8.36.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^9.30.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-promise": "^7.2.1",
     "fast-deep-equal": "^3.1.3",
-    "graphql": "^16.10.0",
+    "graphql": "^16.12.0",
     "husky": "^9.1.7",
-    "jest": "^30.1.3",
-    "jest-environment-node": "^29.7.0",
+    "jest": "^30.2.0",
+    "jest-environment-node": "^30.2.0",
     "mkdirp": "^3.0.1",
-    "mongoose": "^8.16.2",
-    "prettier": "^3.4.2",
-    "rimraf": "^6.0.1",
-    "semantic-release": "^24.2.1",
-    "ts-jest": "^29.4.0",
-    "tsup": "^8.5.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.35.1"
+    "mongoose": "^9.1.6",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.2",
+    "semantic-release": "^25.0.3",
+    "ts-jest": "^29.4.6",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
   },
   "peerDependencies": {
     "@graphql-yoga/subscription": "5.x",
+    "@swc/core": "^1.x",
     "fast-deep-equal": "3.x",
     "graphql": "16.x",
     "mongoose": "8.x"
