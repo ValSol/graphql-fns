@@ -62,7 +62,7 @@ const getShift = async (
   const pipeline = [...lookups];
 
   if (near) {
-    const geoNear = composeNearForAggregateInput(near);
+    const geoNear = composeNearForAggregateInput(near, entityConfig);
 
     pipeline.unshift({ $geoNear: geoNear });
   }

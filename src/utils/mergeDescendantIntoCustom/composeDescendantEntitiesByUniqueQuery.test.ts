@@ -2,11 +2,11 @@
 
 import pluralize from 'pluralize';
 
-import type { DescendantAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
+import type { DescendantAttributes, GeneralConfig, EntityConfig } from '@/tsTypes';
 
-import entitiesByUniqueQueryAttributes from '../../types/actionAttributes/entitiesByUniqueQueryAttributes';
+import composeCustomActionSignature from '@/types/composeCustomActionSignature';
+import entitiesByUniqueQueryAttributes from '@/types/actionAttributes/entitiesByUniqueQueryAttributes';
 import composeDescendantConfigByName from '../composeDescendantConfigByName';
-import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
 
 describe('composeDescendantEntitiesQuery', () => {
@@ -51,6 +51,7 @@ describe('composeDescendantEntitiesQuery', () => {
       {
         name: 'position',
         geospatialType: 'Point',
+        index: true,
         type: 'geospatialFields',
       },
     ],

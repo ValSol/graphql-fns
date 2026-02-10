@@ -1038,6 +1038,7 @@ type Subscription {
         {
           name: 'position',
           geospatialType: 'Point',
+          index: true,
         },
       ],
     };
@@ -1060,6 +1061,7 @@ type Subscription {
         {
           name: 'area',
           geospatialType: 'Polygon',
+          index: true,
         },
       ],
     };
@@ -1304,6 +1306,15 @@ enum Example2SortEnum {
 input Example2SortInput {
   sortBy: [Example2SortEnum]
 }
+enum Example2GeospatialFieldNamesEnum {
+  area
+}
+input Example2NearInput {
+  geospatialField: Example2GeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
+  maxDistance: Float
+  minDistance: Float
+}
 input Example1WhereByUniqueInput {
   id_in: [ID!]
 }
@@ -1489,11 +1500,11 @@ type Query {
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
-  Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput, token: String): [Example2!]!
+  Example2s(where: Example2WhereInput, sort: Example2SortInput, pagination: PaginationInput, near: Example2NearInput, token: String): [Example2!]!
   Example1sThroughConnection(where: Example1WhereInput, sort: Example1SortInput, near: Example1NearInput, after: String, before: String, first: Int, last: Int, token: String): Example1Connection!
-  Example2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, after: String, before: String, first: Int, last: Int, token: String): Example2Connection!
+  Example2sThroughConnection(where: Example2WhereInput, sort: Example2SortInput, near: Example2NearInput, after: String, before: String, first: Int, last: Int, token: String): Example2Connection!
   Example1sByUnique(where: Example1WhereByUniqueInput!, sort: Example1SortInput, near: Example1NearInput, token: String): [Example1!]!
-  Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput, token: String): [Example2!]!
+  Example2sByUnique(where: Example2WhereByUniqueInput!, sort: Example2SortInput, near: Example2NearInput, token: String): [Example2!]!
 }
 type Mutation {
   createManyExample1s(data: [Example1CreateInput!]!, token: String): [Example1!]!
@@ -1501,7 +1512,7 @@ type Mutation {
   createExample1(data: Example1CreateInput!, token: String): Example1!
   createExample2(data: Example2CreateInput!, token: String): Example2!
   deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, token: String): [Example1!]!
-  deleteFilteredExample2s(where: Example2WhereInput, token: String): [Example2!]!
+  deleteFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, token: String): [Example2!]!
   deleteFilteredExample1sReturnScalar(where: Example1WhereInput, token: String): Int!
   deleteFilteredExample2sReturnScalar(where: Example2WhereInput, token: String): Int!
   deleteManyExample1s(whereOne: [Example1WhereOneInput!]!, token: String): [Example1!]!
@@ -1510,7 +1521,7 @@ type Mutation {
   deleteExample2(whereOne: Example2WhereOneInput!, token: String): Example2!
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
-  updateFilteredExample2s(where: Example2WhereInput, data: Example2UpdateInput!, token: String): [Example2!]!
+  updateFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): [Example2!]!
   updateFilteredExample1sReturnScalar(where: Example1WhereInput, data: Example1UpdateInput!, token: String): Int!
   updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!, token: String): Int!
   updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!, token: String): [Example1!]!

@@ -13,11 +13,13 @@ describe('composePolygonIndexProperties', () => {
         {
           name: 'point',
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
+          index: true,
           type: 'geospatialFields',
         },
       ],

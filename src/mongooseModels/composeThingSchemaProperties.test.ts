@@ -596,18 +596,21 @@ describe('composeThingSchemaProperties', () => {
         {
           name: 'pointField1',
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
           name: 'pointField2',
           required: true,
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
           name: 'pointField3',
           array: true,
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
@@ -615,17 +618,20 @@ describe('composeThingSchemaProperties', () => {
           array: true,
           required: true,
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
           name: 'polygonField1',
           geospatialType: 'Polygon',
+          index: true,
           type: 'geospatialFields',
         },
         {
           name: 'polygonField2',
           required: true,
           geospatialType: 'Polygon',
+          index: true,
           type: 'geospatialFields',
         },
         {

@@ -208,22 +208,26 @@ describe('createEntityQueryResolver', () => {
           name: 'point',
           geospatialType: 'Point',
           type: 'geospatialFields',
+          index: true,
         },
         {
           name: 'point2',
           geospatialType: 'Point',
           type: 'geospatialFields',
+          index: true,
         },
         {
           name: 'area',
           geospatialType: 'Polygon',
           type: 'geospatialFields',
+          index: true,
         },
         {
           name: 'areas',
           array: true,
           geospatialType: 'Polygon',
           type: 'geospatialFields',
+          index: true,
         },
       ],
     });
@@ -867,6 +871,7 @@ describe('createEntityQueryResolver', () => {
           name: 'point',
           geospatialType: 'Point',
           type: 'geospatialFields',
+          index: true,
         },
       ],
       relationalFields: [

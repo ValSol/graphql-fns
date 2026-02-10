@@ -1,4 +1,4 @@
-import type { NearInput, NearMongodb } from '../../../../tsTypes';
+import type { EntityConfig, NearInput, NearMongodb } from '@/tsTypes';
 
 type NearSphere = {
   $geometry: {
@@ -9,13 +9,17 @@ type NearSphere = {
   $minDistance?: number;
 };
 
-const composeNearInput = (near: NearInput): NearMongodb => {
+const composeNearInput = (near: NearInput, entityConfig: EntityConfig): NearMongodb => {
   const {
     geospatialField,
     coordinates: { lng, lat },
     maxDistance,
     minDistance,
   } = near;
+
+  const { geospatialFields = [] } = entityConfig;
+
+  const { geospatialType } = geospatialFields.find(({ name }) => name === geospatialField);
 
   const $nearSphere: NearSphere = {
     $geometry: {
@@ -33,7 +37,7 @@ const composeNearInput = (near: NearInput): NearMongodb => {
   }
 
   return {
-    [`${geospatialField}.coordinates`]: {
+    [geospatialType === 'Point' ? `${geospatialField}.coordinates` : geospatialField]: {
       $nearSphere,
     },
   };

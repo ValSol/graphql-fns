@@ -139,7 +139,7 @@ const createEntitiesQueryResolver = (
       const pipeline = [...lookups];
 
       if (near) {
-        const geoNear = composeNearForAggregateInput(near);
+        const geoNear = composeNearForAggregateInput(near, entityConfig);
 
         pipeline.unshift({ $geoNear: geoNear });
       }
@@ -209,7 +209,7 @@ const createEntitiesQueryResolver = (
 
     let query = Entity.find({}, projection, { lean: true });
 
-    if (near) query = query.where(composeNearInput(near));
+    if (near) query = query.where(composeNearInput(near, entityConfig));
 
     if (Object.keys(where2).length > 0) query = query.where(where2);
 

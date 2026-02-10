@@ -33,6 +33,7 @@ describe('createEntityNearInputType', () => {
         {
           name: 'position',
           geospatialType: 'Point',
+          index: true,
           type: 'geospatialFields',
         },
         {
@@ -44,6 +45,7 @@ describe('createEntityNearInputType', () => {
         {
           name: 'area',
           geospatialType: 'Polygon',
+          index: true,
           type: 'geospatialFields',
         },
       ],
@@ -52,6 +54,7 @@ describe('createEntityNearInputType', () => {
       'ExampleNearInput',
       `enum ExampleGeospatialFieldNamesEnum {
   position
+  area
 }
 input ExampleNearInput {
   geospatialField: ExampleGeospatialFieldNamesEnum!

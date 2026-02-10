@@ -38,6 +38,7 @@ const entityConfig: EntityConfig = {
     {
       name: 'point',
       geospatialType: 'Point',
+      index: true,
       type: 'geospatialFields',
     },
   ],

@@ -2,9 +2,9 @@
 
 import pluralize from 'pluralize';
 
-import type { DescendantAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
+import type { DescendantAttributes, GeneralConfig, EntityConfig } from '@/tsTypes';
 
-import entitiesQueryAttributes from '../../types/actionAttributes/entitiesQueryAttributes';
+import entitiesQueryAttributes from '@/types/actionAttributes/entitiesQueryAttributes';
 import composeDescendantConfigByName from '../composeDescendantConfigByName';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import composeCustomAction from './composeCustomAction';
@@ -51,6 +51,7 @@ describe('composeDescendantEntitiesQuery', () => {
       {
         name: 'position',
         geospatialType: 'Point',
+        index: true,
         type: 'geospatialFields',
       },
     ],

@@ -1,6 +1,9 @@
-import type {NearInput, NearForAggregateMongodb} from '../../../tsTypes';
+import type { NearInput, NearForAggregateMongodb, EntityConfig } from '@/tsTypes';
 
-const composeNearForAggregateInput = (near: NearInput): NearForAggregateMongodb => {
+const composeNearForAggregateInput = (
+  near: NearInput,
+  entityConfig: EntityConfig,
+): NearForAggregateMongodb => {
   const {
     geospatialField,
     coordinates: { lng, lat },
@@ -8,10 +11,14 @@ const composeNearForAggregateInput = (near: NearInput): NearForAggregateMongodb 
     minDistance,
   } = near;
 
+  const { geospatialFields = [] } = entityConfig;
+
+  const { geospatialType } = geospatialFields.find(({ name }) => name === geospatialField);
+
   const result: NearForAggregateMongodb = {
     near: { type: 'Point', coordinates: [lng, lat] },
     distanceField: `${geospatialField}_distance`,
-    key: `${geospatialField}.coordinates`,
+    key: geospatialType === 'Point' ? `${geospatialField}.coordinates` : geospatialField,
     spherical: true,
   };
 

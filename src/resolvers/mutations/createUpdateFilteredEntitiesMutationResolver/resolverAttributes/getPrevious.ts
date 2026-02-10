@@ -50,7 +50,7 @@ const getPrevious: GetPrevious = async (
     const pipeline = [...lookups];
 
     if (near) {
-      const geoNear = composeNearForAggregateInput(near as NearInput);
+      const geoNear = composeNearForAggregateInput(near as NearInput, entityConfig);
 
       pipeline.unshift({ $geoNear: geoNear });
     }

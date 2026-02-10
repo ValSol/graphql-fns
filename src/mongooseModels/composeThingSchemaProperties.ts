@@ -283,7 +283,7 @@ const composeThingSchemaProperties = (
     return prev;
   }, result);
 
-  geospatialFields.reduce((prev, { array, name, required, geospatialType }) => {
+  geospatialFields.reduce((prev, { array, index, name, required, geospatialType }) => {
     if (geospatialType === 'Point') {
       const obj: any = {
         type: {
@@ -292,11 +292,12 @@ const composeThingSchemaProperties = (
         },
         coordinates: {
           type: [Number],
-          index: '2dsphere',
         },
       };
 
       if (required) obj.type.required = true; // by default required = false
+
+      if (index) obj.coordinates.index = '2dsphere';
 
       prev[name] = array ? [obj] : obj;
     } else if (geospatialType === 'Polygon') {

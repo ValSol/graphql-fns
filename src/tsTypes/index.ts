@@ -88,13 +88,13 @@ type ArrayEnumField = Omit<FieldCommonProperties, 'unique'> & {
 };
 export type EnumField = ArrayEnumField | ScalarEnumField;
 
-type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
+type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   nullable?: false;
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
   type: 'geospatialFields';
 };
-type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique' | 'index'> & {
+type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   nullable?: boolean;
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
