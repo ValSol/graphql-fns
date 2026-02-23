@@ -1,4 +1,4 @@
-import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../../tsTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '@/tsTypes';
 
 export const composePolynomCoordinates = (polygon: GeospatialPolygon): [number, number][][] => {
   const { externalRing, internalRings = [] } = polygon;

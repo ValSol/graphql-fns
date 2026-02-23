@@ -1,4 +1,4 @@
-import type { GeospatialMultiPolygon, MongodbGeospatialMultiPolygon } from '../../../../tsTypes';
+import type { GeospatialMultiPolygon, MongodbGeospatialMultiPolygon } from '@/tsTypes';
 
 import { composePolynomCoordinates } from '../polygonFromGqlToMongo';
 

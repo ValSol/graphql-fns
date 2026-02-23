@@ -1,4 +1,4 @@
-import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../tsTypes';
+import type { GeospatialPolygon, MongodbGeospatialPolygon } from '@/tsTypes';
 
 export const composeGqlRings = (coordinates: [number, number][][]) => {
   const [externalRingArray, ...internalRingsArray] = coordinates;

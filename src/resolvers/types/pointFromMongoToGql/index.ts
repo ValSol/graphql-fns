@@ -1,4 +1,4 @@
-import type {GeospatialPoint, MongodbGeospatialPoint} from '../../../tsTypes';
+import type { GeospatialPoint, MongodbGeospatialPoint } from '@/tsTypes';
 
 const pointFromMongoToGql = (point: MongodbGeospatialPoint): GeospatialPoint => {
   const {
