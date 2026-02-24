@@ -1,6 +1,6 @@
 {
   "name": "graphql-fns",
-  "version": "0.1.2-beta.1119",
+  "version": "0.1.2-beta.1120",
   "description": "Useful functions to work with graphql",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -89,7 +89,7 @@
     "@swc/core": "^1.x",
     "fast-deep-equal": "3.x",
     "graphql": "16.x",
-    "mongoose": "8.x"
+    "mongoose": "9.x"
   },
   "config": {
     "commitizen": {

@@ -135,21 +135,37 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           }
 
           // compose "argsForAsyncFunc" to prevent leak of MUTATION args instead of "where" or "whereOne"("whereCompoundOne")
-          const argsForAsyncFunc =
+          const { argsForAsyncFunc, notAsyncCalculatedFieldValues } =
             previous.length === 0
-              ? null
+              ? { argsForAsyncFunc: null }
               : array
                 ? {
-                    where: { id_in: previous.map(({ _id }) => _id) },
-                    token: resolverArg.args.token,
+                    argsForAsyncFunc: {
+                      where: { id_in: previous.map(({ _id }) => _id) },
+                      token: resolverArg.args.token,
+                    },
+
+                    notAsyncCalculatedFieldValues: previous,
                   }
-                : { whereOne: { id: previous[0]._id }, token: resolverArg.args.token };
+                : {
+                    argsForAsyncFunc: {
+                      whereOne: { id: previous[0]._id },
+                      token: resolverArg.args.token,
+                    },
+
+                    notAsyncCalculatedFieldValues: previous[0],
+                  };
 
           const asyncFuncResults = argsForAsyncFunc
-            ? await getAsyncFuncResults(infoEssence, resolverCreatorArg, {
-                ...resolverArg,
-                args: argsForAsyncFunc,
-              } as ResolverArg)
+            ? await getAsyncFuncResults(
+                infoEssence,
+                resolverCreatorArg,
+                {
+                  ...resolverArg,
+                  args: argsForAsyncFunc,
+                } as ResolverArg,
+                notAsyncCalculatedFieldValues,
+              )
             : {};
 
           result.previous = previous.map((item, i) =>

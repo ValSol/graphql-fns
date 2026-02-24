@@ -50,6 +50,13 @@ export type GeospatialMultiPolygon = {
   polygons: GeospatialPolygon[];
 };
 
+export type AsyncFunc = (
+  args: Record<string, any>,
+  resolverCreatorArg: ResolverCreatorArg,
+  resolverArg: ResolverArg,
+  notAsyncCalculatedFieldValues?: any,
+) => Promise<any>;
+
 type FieldCommonProperties = {
   name: string;
   required?: boolean;
@@ -231,11 +238,7 @@ export type ScalarSimplifiedCalculatedEnumField = Omit<
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -254,11 +257,7 @@ export type ArraySimplifiedCalculatedEnumField = Omit<
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -277,11 +276,7 @@ export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
   nullable?: false;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -300,11 +295,7 @@ export type ArraySimplifiedCalculatedEmbeddedField = Omit<
   nullable?: boolean; // TODO fileterField must not to be nullable
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -322,11 +313,7 @@ export type ScalarSimplifiedCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -344,11 +331,7 @@ export type ArraySimplifiedCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -367,11 +350,7 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -390,11 +369,7 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -412,11 +387,7 @@ export type ScalarSimplifiedCalculatedField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -434,11 +405,7 @@ export type ArraySimplifiedCalculatedField = Omit<
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -601,11 +568,7 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -622,11 +585,7 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -643,11 +602,7 @@ type ScalarCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'ind
   nullable?: false;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -664,11 +619,7 @@ type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'inde
   nullable?: boolean;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -688,11 +639,7 @@ type ScalarCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -709,11 +656,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -732,11 +675,7 @@ export type ScalarCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -755,11 +694,7 @@ export type ArrayCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -775,11 +710,7 @@ type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'u
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -795,11 +726,7 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: (
-    args: Record<string, any>,
-    resolverCreatorArg: ResolverCreatorArg,
-    resolverArg: ResolverArg,
-  ) => Promise<any>;
+  asyncFunc?: AsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (

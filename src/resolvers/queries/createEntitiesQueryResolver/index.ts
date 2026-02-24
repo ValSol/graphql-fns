@@ -127,11 +127,11 @@ const createEntitiesQueryResolver = (
       inAnyCase,
     };
 
-    const asyncFuncResults = await getAsyncFuncResults(
-      infoEssence,
-      resolverCreatorArg,
-      resolverArg,
-    );
+    // const asyncFuncResults = await getAsyncFuncResults(
+    //   infoEssence,
+    //   resolverCreatorArg,
+    //   resolverArg,
+    // );
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
@@ -193,6 +193,13 @@ const createEntitiesQueryResolver = (
 
       if (!entities) return [];
 
+      const asyncFuncResults = await getAsyncFuncResults(
+        infoEssence,
+        resolverCreatorArg,
+        resolverArg,
+        entities,
+      );
+
       const result = entities.map((item, i) =>
         addCalculatedFieldsToEntity(
           addIdsToEntity(item, entityConfig),
@@ -237,6 +244,13 @@ const createEntitiesQueryResolver = (
 
     const entities = await (session ? query.session(session).exec() : query.exec());
     if (!entities) return [];
+
+    const asyncFuncResults = await getAsyncFuncResults(
+      infoEssence,
+      resolverCreatorArg,
+      resolverArg,
+      entities,
+    );
 
     const result = entities.map((item, i) =>
       addCalculatedFieldsToEntity(

@@ -114,11 +114,11 @@ const createEntityQueryResolver = (
 
     const { projection } = infoEssence;
 
-    const asyncFuncResults = await getAsyncFuncResults(
-      infoEssence,
-      resolverCreatorArg,
-      resolverArg,
-    );
+    // const asyncFuncResults = await getAsyncFuncResults(
+    //   infoEssence,
+    //   resolverCreatorArg,
+    //   resolverArg,
+    // );
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
@@ -143,6 +143,13 @@ const createEntityQueryResolver = (
 
       if (!entity) return null;
 
+      const asyncFuncResults = await getAsyncFuncResults(
+        infoEssence,
+        resolverCreatorArg,
+        resolverArg,
+        entity,
+      );
+
       const entity2 = addCalculatedFieldsToEntity(
         addIdsToEntity(entity, entityConfig),
         infoEssence,
@@ -157,6 +164,13 @@ const createEntityQueryResolver = (
     const entity = await Entity.findOne(conditions, projection, { lean: true, session });
 
     if (!entity) return null;
+
+    const asyncFuncResults = await getAsyncFuncResults(
+      infoEssence,
+      resolverCreatorArg,
+      resolverArg,
+      entity,
+    );
 
     const entity2 = addCalculatedFieldsToEntity(
       addIdsToEntity(entity, entityConfig),

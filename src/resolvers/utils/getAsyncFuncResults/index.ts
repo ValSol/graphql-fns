@@ -4,6 +4,7 @@ const getAsyncFuncResults = async (
   infoEssence: InfoEssence,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
+  notAsyncCalculatedFieldValues: any,
 ): Promise<Record<string, any>> => {
   const { entityConfig } = resolverCreatorArg;
 
@@ -23,7 +24,7 @@ const getAsyncFuncResults = async (
     asyncCalculatedFieldsToProcess.map(({ asyncFunc, name }) => {
       const args = fieldArgs[name];
 
-      return asyncFunc(args, resolverCreatorArg, resolverArg);
+      return asyncFunc(args, resolverCreatorArg, resolverArg, notAsyncCalculatedFieldValues);
     }),
   );
 
