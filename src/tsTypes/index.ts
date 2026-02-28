@@ -50,7 +50,7 @@ export type GeospatialMultiPolygon = {
   polygons: GeospatialPolygon[];
 };
 
-export type AsyncFunc = (
+export type CalculatedFieldAsyncFunc = (
   args: Record<string, any>,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
@@ -209,14 +209,16 @@ export type SimplifiedDuplexField = ArraySimplifiedDuplexField | ScalarSimplifie
 type ScalarSimplifiedFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array?: false;
   configName: string;
+  default?: string;
   variants?: Array<'plain' | 'stringified'>;
 };
 type ArraySimplifiedFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array: true;
   configName: string;
+  default?: string;
   variants?: Array<'plain' | 'stringified'>;
 };
-type SimplifiedFilterField = ArraySimplifiedFilterField | ScalarSimplifiedFilterField;
+export type SimplifiedFilterField = ArraySimplifiedFilterField | ScalarSimplifiedFilterField;
 
 type ScalarSimplifiedChildField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
@@ -238,7 +240,7 @@ export type ScalarSimplifiedCalculatedEnumField = Omit<
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -257,7 +259,7 @@ export type ArraySimplifiedCalculatedEnumField = Omit<
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -276,7 +278,7 @@ export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
   nullable?: false;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -295,7 +297,7 @@ export type ArraySimplifiedCalculatedEmbeddedField = Omit<
   nullable?: boolean; // TODO fileterField must not to be nullable
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -313,7 +315,7 @@ export type ScalarSimplifiedCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -331,7 +333,7 @@ export type ArraySimplifiedCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -350,7 +352,7 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -369,7 +371,7 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -387,7 +389,7 @@ export type ScalarSimplifiedCalculatedField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -405,7 +407,7 @@ export type ArraySimplifiedCalculatedField = Omit<
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -538,12 +540,14 @@ export type DuplexField = ArrayDuplexField | ScalarDuplexField;
 type ScalarFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array?: false;
   config: TangibleEntityConfig;
+  default?: string;
   type: 'filterFields';
   variants: Array<'plain' | 'stringified'>;
 };
 type ArrayFilterField = Omit<FieldCommonProperties, 'index' | 'unique'> & {
   array: true;
   config: TangibleEntityConfig;
+  default?: string;
   type: 'filterFields';
   variants: Array<'plain' | 'stringified'>;
 };
@@ -568,7 +572,7 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -585,7 +589,7 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -602,7 +606,7 @@ type ScalarCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'ind
   nullable?: false;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -619,7 +623,7 @@ type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'inde
   nullable?: boolean;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -639,7 +643,7 @@ type ScalarCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -656,7 +660,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -675,7 +679,7 @@ export type ScalarCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -694,7 +698,7 @@ export type ArrayCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -710,7 +714,7 @@ type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'u
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (
@@ -726,7 +730,7 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: AsyncFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
   func: (

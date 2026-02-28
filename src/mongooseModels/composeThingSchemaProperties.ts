@@ -266,8 +266,16 @@ const composeThingSchemaProperties = (
       result,
     );
 
-    filterFields.reduce((prev, { name, required }) => {
+    filterFields.reduce((prev, { default: defaultValue, name, required }) => {
+      if (defaultValue) {
+        if (typeof defaultValue !== 'string') {
+          throw new TypeError('Expected "string" as default value');
+        }
+      }
+
       prev[name] = { type: String };
+
+      if (defaultValue !== undefined) prev[name].default = defaultValue;
 
       if (required) prev[name].required = true;
 
