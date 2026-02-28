@@ -4,13 +4,17 @@ import type {
   EmbeddedField,
   EntityConfig,
   EntityConfigObject,
+  GeospatialMultiPolygon,
+  GeospatialPolygon,
   InvolvedFilter,
   LookupMongoDB,
   TangibleEntityConfig,
 } from '@/tsTypes';
 
 import composeFieldsObject, { FOR_MONGO_QUERY } from '@/utils/composeFieldsObject';
+import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
+import polygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/polygonFromGqlToMongo';
 import composeRelationalKey from './composeRelationalKey';
 import composeWithinPolygonInput from './composeWithinPolygonInput';
 import composeWithinSphereInput from './composeWithinSphereInput';
@@ -292,6 +296,26 @@ const composeWhereInputRecursively = (
       result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
         $geoIntersects: {
           $geometry: pointFromGqlToMongo(where[key] as { lat: number; lng: number }),
+        },
+      };
+    } else if (key.endsWith('_intersectsPolygon')) {
+      const keyWithoutSuffix = key.slice(0, -'_intersectsPolygon'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
+        $geoIntersects: {
+          $geometry: polygonFromGqlToMongo(where[key] as GeospatialPolygon),
+        },
+      };
+    } else if (key.endsWith('_intersectsMultiPolygon')) {
+      const keyWithoutSuffix = key.slice(0, -'_intersectsMultiPolygon'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
+        $geoIntersects: {
+          $geometry: multiPolygonFromGqlToMongo(where[key] as GeospatialMultiPolygon),
         },
       };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {

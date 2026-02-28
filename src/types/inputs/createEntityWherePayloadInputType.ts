@@ -179,7 +179,9 @@ const composeInputFields = (
       fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
   ${fieldName}_withinSphere: GeospatialSphereInput`);
     } else {
-      fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput`);
+      fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput
+  ${fieldName}_intersectsPolygon: GeospatialPolygonInput
+  ${fieldName}_intersectsMultiPolygon: GeospatialMultiPolygonInput`);
     }
   });
 

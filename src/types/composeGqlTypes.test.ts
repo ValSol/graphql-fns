@@ -1227,6 +1227,8 @@ input Example2WhereInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   area_intersectsPoint: GeospatialPointInput
+  area_intersectsPolygon: GeospatialPolygonInput
+  area_intersectsMultiPolygon: GeospatialMultiPolygonInput
   AND: [Example2WhereInput!]
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
@@ -1249,6 +1251,8 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
   area_intersectsPoint: GeospatialPointInput
+  area_intersectsPolygon: GeospatialPolygonInput
+  area_intersectsMultiPolygon: GeospatialMultiPolygonInput
 }
 enum Example1TextNamesEnum {
   textField1
@@ -1464,6 +1468,8 @@ input Example2WherePayloadInput {
   textField2_size: Int
   textField2_notsize: Int
   area_intersectsPoint: GeospatialPointInput
+  area_intersectsPolygon: GeospatialPolygonInput
+  area_intersectsMultiPolygon: GeospatialMultiPolygonInput
   AND: [Example2WherePayloadInput!]
   NOR: [Example2WherePayloadInput!]
   OR: [Example2WherePayloadInput!]

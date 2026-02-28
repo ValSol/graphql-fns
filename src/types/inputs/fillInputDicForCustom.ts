@@ -18,6 +18,7 @@ const commonInputTypes = [
   'GeospatialPointInput',
   'GeospatialPolygonRingInput',
   'GeospatialPolygonInput',
+  'GeospatialMultiPolygonInput',
 ];
 
 const regExp = /[\[\]\!]/g;

@@ -148,12 +148,17 @@ const composeInputFields = (
     }
   });
 
-  geospatialFields.forEach(({ geospatialType, name: fieldName }) => {
+  geospatialFields.forEach(({ geospatialType, name: fieldName, index }) => {
+    if (!index) {
+      return;
+    }
     if (geospatialType === 'Point') {
       fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
   ${fieldName}_withinSphere: GeospatialSphereInput`);
     } else {
-      fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput`);
+      fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput
+  ${fieldName}_intersectsPolygon: GeospatialPolygonInput
+  ${fieldName}_intersectsMultiPolygon: GeospatialMultiPolygonInput`);
     }
   });
 
