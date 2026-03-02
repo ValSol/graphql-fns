@@ -66,7 +66,10 @@ import polygonFromMongoToGql from '@/resolvers/types/polygonFromMongoToGql';
 
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import composeAllFieldsProjection from '@/resolvers/utils/composeAllFieldsProjection';
-import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeFieldsObject, {
+  FOR_MONGO_QUERY,
+  WITHOUT_CALCULATED_WITH_ASYNC,
+} from '@/utils/composeFieldsObject';
 import composePersonalFilter from '@/resolvers/utils/executeAuthorisation/composePersonalFilter';
 import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
 import composeUserFilter from '@/resolvers/utils/executeAuthorisation/composeUserFilter';
@@ -146,4 +149,6 @@ export {
   getSimpleProjectionFromInfo,
   transformAfter,
   toGlobalId,
+  FOR_MONGO_QUERY,
+  WITHOUT_CALCULATED_WITH_ASYNC,
 };

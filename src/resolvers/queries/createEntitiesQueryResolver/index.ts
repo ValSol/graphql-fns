@@ -127,12 +127,6 @@ const createEntitiesQueryResolver = (
       inAnyCase,
     };
 
-    // const asyncFuncResults = await getAsyncFuncResults(
-    //   infoEssence,
-    //   resolverCreatorArg,
-    //   resolverArg,
-    // );
-
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 
     if (lookups.length > 0 || objectIdsFromParent) {

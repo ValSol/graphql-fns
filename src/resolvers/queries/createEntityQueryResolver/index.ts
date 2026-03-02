@@ -114,12 +114,6 @@ const createEntityQueryResolver = (
 
     const { projection } = infoEssence;
 
-    // const asyncFuncResults = await getAsyncFuncResults(
-    //   infoEssence,
-    //   resolverCreatorArg,
-    //   resolverArg,
-    // );
-
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
     const { lookups, where: conditions } = mergeWhereAndFilter(
