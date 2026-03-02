@@ -16,7 +16,6 @@ import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInput
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
 import polygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/polygonFromGqlToMongo';
 import composeRelationalKey from './composeRelationalKey';
-import composeWithinPolygonInput from './composeWithinPolygonInput';
 import composeWithinSphereInput from './composeWithinSphereInput';
 
 const checkField = (
@@ -269,8 +268,23 @@ const composeWhereInputRecursively = (
         result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
       }
 
-      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$polygon =
-        composeWithinPolygonInput(where[key] as { lat: number; lng: number }[]);
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
+        polygonFromGqlToMongo(where[key] as GeospatialPolygon);
+    } else if (key.endsWith('_withinMultiPolygon')) {
+      const keyWithoutSuffix = key.slice(0, -'_withinMultiPolygon'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      }
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      }
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
+        multiPolygonFromGqlToMongo(where[key] as GeospatialMultiPolygon);
     } else if (key.endsWith('_withinSphere')) {
       const keyWithoutSuffix = key.slice(0, -'_withinSphere'.length);
 

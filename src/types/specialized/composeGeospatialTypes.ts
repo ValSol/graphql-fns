@@ -49,6 +49,16 @@ input GeospatialPointInput {
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  externalRing: GeospatialPolygonRingInput!
+  internalRings: [GeospatialPolygonRingInput!]
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
 }${
     thereIsGeospatialPolygon || thereIsGeospatialMultiPolygon
       ? `
@@ -58,21 +68,11 @@ type GeospatialPolygonRing {
 type GeospatialPolygon {
   externalRing: GeospatialPolygonRing!
   internalRings: [GeospatialPolygonRing!]
-}
-input GeospatialPolygonRingInput {
-  ring: [GeospatialPointInput!]!
-}
-input GeospatialPolygonInput {
-  externalRing: GeospatialPolygonRingInput!
-  internalRings: [GeospatialPolygonRingInput!]
 }${
           thereIsGeospatialMultiPolygon
             ? `
 type GeospatialMultiPolygon {
   polygons: [GeospatialPolygon!]!
-}
-input GeospatialMultiPolygonInput {
-  polygons: [GeospatialPolygonInput!]!
 }`
             : ''
         }`

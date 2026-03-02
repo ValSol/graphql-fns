@@ -176,7 +176,8 @@ const composeInputFields = (
 
   geospatialFields.forEach(({ geospatialType, name: fieldName }) => {
     if (geospatialType === 'Point') {
-      fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
+      fields.push(`  ${fieldName}_withinPolygon: GeospatialPolygonInput
+  ${fieldName}_withinMultiPolygon: GeospatialMultiPolygonInput
   ${fieldName}_withinSphere: GeospatialSphereInput`);
     } else {
       fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput

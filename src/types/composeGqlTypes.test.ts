@@ -1097,19 +1097,22 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }
-type GeospatialPolygonRing {
-  ring: [GeospatialPoint!]!
-}
-type GeospatialPolygon {
-  externalRing: GeospatialPolygonRing!
-  internalRings: [GeospatialPolygonRing!]
-}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
 input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  externalRing: GeospatialPolygonRing!
+  internalRings: [GeospatialPolygonRing!]
 }
 type Example1 implements Node {
   id: ID!
@@ -1183,7 +1186,8 @@ input Example1WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-  position_withinPolygon: [GeospatialPointInput!]
+  position_withinPolygon: GeospatialPolygonInput
+  position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
   AND: [Example1WhereInput!]
   NOR: [Example1WhereInput!]
@@ -1206,7 +1210,8 @@ input Example1WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-  position_withinPolygon: [GeospatialPointInput!]
+  position_withinPolygon: GeospatialPolygonInput
+  position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
 }
 input Example2WhereInput {
@@ -1422,7 +1427,8 @@ input Example1WherePayloadInput {
   textField3_lte: String
   textField3_re: [RegExp!]
   textField3_exists: Boolean
-  position_withinPolygon: [GeospatialPointInput!]
+  position_withinPolygon: GeospatialPolygonInput
+  position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
   AND: [Example1WherePayloadInput!]
   NOR: [Example1WherePayloadInput!]

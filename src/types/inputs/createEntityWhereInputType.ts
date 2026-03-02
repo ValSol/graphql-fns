@@ -153,7 +153,8 @@ const composeInputFields = (
       return;
     }
     if (geospatialType === 'Point') {
-      fields.push(`  ${fieldName}_withinPolygon: [GeospatialPointInput!]
+      fields.push(`  ${fieldName}_withinPolygon: GeospatialPolygonInput
+  ${fieldName}_withinMultiPolygon: GeospatialMultiPolygonInput
   ${fieldName}_withinSphere: GeospatialSphereInput`);
     } else {
       fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput

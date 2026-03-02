@@ -41,6 +41,16 @@ input GeospatialPointInput {
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  externalRing: GeospatialPolygonRingInput!
+  internalRings: [GeospatialPolygonRingInput!]
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
 }`;
 
     const result = composeGeospatialTypes(generalConfig);
@@ -73,19 +83,22 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }
-type GeospatialPolygonRing {
-  ring: [GeospatialPoint!]!
-}
-type GeospatialPolygon {
-  externalRing: GeospatialPolygonRing!
-  internalRings: [GeospatialPolygonRing!]
-}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
 input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  externalRing: GeospatialPolygonRing!
+  internalRings: [GeospatialPolygonRing!]
 }`;
     const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
@@ -117,13 +130,6 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }
-type GeospatialPolygonRing {
-  ring: [GeospatialPoint!]!
-}
-type GeospatialPolygon {
-  externalRing: GeospatialPolygonRing!
-  internalRings: [GeospatialPolygonRing!]
-}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
@@ -131,11 +137,18 @@ input GeospatialPolygonInput {
   externalRing: GeospatialPolygonRingInput!
   internalRings: [GeospatialPolygonRingInput!]
 }
-type GeospatialMultiPolygon {
-  polygons: [GeospatialPolygon!]!
-}
 input GeospatialMultiPolygonInput {
   polygons: [GeospatialPolygonInput!]!
+}
+type GeospatialPolygonRing {
+  ring: [GeospatialPoint!]!
+}
+type GeospatialPolygon {
+  externalRing: GeospatialPolygonRing!
+  internalRings: [GeospatialPolygonRing!]
+}
+type GeospatialMultiPolygon {
+  polygons: [GeospatialPolygon!]!
 }`;
     const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);
