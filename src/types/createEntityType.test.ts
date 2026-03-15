@@ -238,6 +238,80 @@ describe('createEntityType', () => {
     expect(result).toEqual(expectedResult);
   });
 
+  test('should create entity type with calculated virtual fields', () => {
+    const addressConfig: EntityConfig = {
+      name: 'Address',
+      type: 'virtual',
+      textFields: [
+        {
+          name: 'country',
+          required: true,
+          default: 'Ukraine',
+          type: 'textFields',
+        },
+        {
+          name: 'province',
+          type: 'textFields',
+        },
+      ],
+    };
+    const personConfig: EntityConfig = {
+      name: 'Person',
+      type: 'tangible',
+      textFields: [
+        {
+          name: 'firstName',
+          required: true,
+          type: 'textFields',
+        },
+        {
+          name: 'lastName',
+          required: true,
+          type: 'textFields',
+        },
+      ],
+
+      calculatedFields: [
+        {
+          name: 'place2',
+          calculatedType: 'virtualFields',
+          config: addressConfig,
+          type: 'calculatedFields',
+          fieldsToUseNames: ['place'],
+          func: ({ place }: any) => place,
+          required: true,
+        },
+
+        {
+          name: 'places2',
+          calculatedType: 'virtualFields',
+          config: addressConfig,
+          type: 'calculatedFields',
+          fieldsToUseNames: ['places'],
+          func: ({ places }: any) => places,
+          array: true,
+        },
+      ],
+    };
+
+    const generalConfig = {
+      allEntityConfigs: { Person: personConfig, Address: addressConfig },
+    };
+
+    const expectedResult = `type Person implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  firstName: String!
+  lastName: String!
+  place2: Address!
+  places2(slice: SliceInput): [Address!]!
+}`;
+
+    const result = createEntityType(personConfig, generalConfig, {}, {});
+    expect(result).toEqual(expectedResult);
+  });
+
   test('should create entity type with embedded fields', () => {
     const addressConfig: EntityConfig = {
       name: 'Address',

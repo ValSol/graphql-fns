@@ -1,7 +1,6 @@
 import type { CalculatedField, EmbeddedField, VirtualEntityConfig } from '@/tsTypes';
 
 import composeFieldsObject from '@/utils/composeFieldsObject';
-import composeCreatedOrDeletedPayloadVirtualConfigName from './composeCreatedOrDeletedPayloadVirtualConfigName';
 
 const checkSubscriptionActorConfig = (
   calculatedFields: CalculatedField[],

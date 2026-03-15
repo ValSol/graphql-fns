@@ -276,7 +276,7 @@ export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
 > & {
   array?: false;
   nullable?: false;
-  calculatedType: 'embeddedFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields' | 'virtualFields';
   configName: string;
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
@@ -295,7 +295,7 @@ export type ArraySimplifiedCalculatedEmbeddedField = Omit<
 > & {
   array: true;
   nullable?: boolean; // TODO fileterField must not to be nullable
-  calculatedType: 'embeddedFields' | 'filterFields';
+  calculatedType: 'embeddedFields' | 'filterFields' | 'virtualFields';
   configName: string;
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
@@ -635,6 +635,40 @@ type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'inde
   ) => GraphqlObject[];
   type: 'calculatedFields';
 };
+type ScalarCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array?: false;
+  nullable?: false;
+  calculatedType: 'virtualFields';
+  config: VirtualEntityConfig;
+  asyncFunc?: CalculatedFieldAsyncFunc;
+  fieldsToUseNames?: string[];
+  inputTypes?: Record<string, string>;
+  func: (
+    args: Record<string, any>,
+    data: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+    index?: number,
+  ) => GraphqlObject;
+  type: 'calculatedFields';
+};
+type ArrayCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
+  array: true;
+  nullable?: boolean;
+  calculatedType: 'virtualFields';
+  config: VirtualEntityConfig;
+  asyncFunc?: CalculatedFieldAsyncFunc;
+  fieldsToUseNames?: string[];
+  inputTypes?: Record<string, string>;
+  func: (
+    args: Record<string, any>,
+    data: Record<string, GraphqlScalar | GraphqlObject>,
+    resolverArg?: ResolverArg,
+    asyncFuncResult?: any,
+    index?: number,
+  ) => GraphqlObject[];
+  type: 'calculatedFields';
+};
 type ScalarCalculatedGeospatialField = Omit<
   FieldCommonProperties,
   'freeze' | 'index' | 'unique'
@@ -747,6 +781,8 @@ export type CalculatedField =
   | ScalarCalculatedEnumField
   | ArrayCalculatedEmbeddedField
   | ScalarCalculatedEmbeddedField
+  | ArrayCalculatedVirtualField
+  | ScalarCalculatedVirtualField
   | ArrayCalculatedGeospatialField
   | ScalarCalculatedGeospatialField
   | ArrayCalculatedGeospatialField

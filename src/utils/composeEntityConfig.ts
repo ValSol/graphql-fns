@@ -126,7 +126,7 @@ const composeEntityConfig = (
           );
         }
 
-        if (forbiddenFieldNames.includes(fieldName)) {
+        if (forbiddenFieldNames.includes(fieldName) && configType !== 'virtual') {
           throw new TypeError(`Forbidden field name: "${fieldName}" in entity: "${name}"!`);
         }
 
@@ -357,6 +357,38 @@ const composeEntityConfig = (
               console.warn(
                 '\x1b[33m',
                 `Not embedded config: "${configName}" in embedded field: "${field.name}"!`,
+                '\x1b[0m',
+              );
+            }
+          }
+
+          return { ...restField, config, type: 'calculatedFields' };
+        }
+
+        if (calculatedType === 'virtualFields') {
+          // similar to the above (with 'embeddedFields')
+
+          const { configName, ...restField } = field;
+          const config = allEntityConfigs[configName];
+
+          if (!config) {
+            throw new TypeError(
+              `Incorrect configName: "${configName}" in calculated virtual field: "${field.name}" of simplified entityConfig: "${name}"!`,
+            );
+          }
+
+          // check "&& name" to only
+          if (config.type !== 'virtual') {
+            if (name) {
+              throw new TypeError(
+                `Not virtual config: "${configName}" in calculated virtual field: "${field.name}" of simplified entityConfig: "${name}"!`,
+              );
+            } else {
+              // name=undefined if entityConfig is a descendantConfig
+
+              console.warn(
+                '\x1b[33m',
+                `Not virtual config: "${configName}" in virtual field: "${field.name}"!`,
                 '\x1b[0m',
               );
             }

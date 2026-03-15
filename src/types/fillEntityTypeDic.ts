@@ -37,6 +37,10 @@ const fillEntityTypeDic = (
     ({ calculatedType }) => calculatedType === 'embeddedFields',
   );
 
+  const calculatedVirtualFields = calculatedFields.filter(
+    ({ calculatedType }) => calculatedType === 'virtualFields',
+  );
+
   const calculatedFilterFields = calculatedFields.filter(
     ({ calculatedType }) => calculatedType === 'filterFields',
   );
@@ -48,6 +52,7 @@ const fillEntityTypeDic = (
     ...filterFields,
     ...relationalFields,
     ...calculatedEmbdeedFields,
+    ...calculatedVirtualFields,
     ...calculatedFilterFields,
   ].forEach(({ config }) => {
     if (!entityTypeDic[config.name]) {

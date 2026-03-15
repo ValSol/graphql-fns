@@ -57,6 +57,7 @@ describe('getAsyncFuncResults', () => {
       infoEssence,
       { entityConfig: exampleConfig } as ResolverCreatorArg,
       resolverArg,
+      [], // notAsyncCalculatedFieldValues
     );
 
     const expectedResult = { text: '12345' };

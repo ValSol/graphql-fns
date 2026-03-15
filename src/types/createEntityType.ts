@@ -332,11 +332,14 @@ const createEntityType = (
     return prev;
   }, entityTypeArray);
 
-  const embeddedCalculatedFields = calculatedFields
-    .filter(({ calculatedType }) => calculatedType === 'embeddedFields')
+  const embeddedOrVirtualCalculatedFields = calculatedFields
+    .filter(
+      ({ calculatedType }) =>
+        calculatedType === 'embeddedFields' || calculatedType === 'virtualFields',
+    )
     .map((field) => (field.array ? { ...field, variants: ['plain'] } : field));
 
-  embeddedCalculatedFields.reduce(
+  embeddedOrVirtualCalculatedFields.reduce(
     (prev, { array, name: name2, nullable, required, config, inputTypes = {} }) => {
       if (array) {
         prev.push(
@@ -382,8 +385,8 @@ const createEntityType = (
       const { enumName } = field;
 
       pushCalculatedInPrev(field, `${enumName}Enumeration`, prev);
-    } else if (calculatedType === 'embeddedFields') {
-      // do nothing because of using "embeddedCalculatedFields" before
+    } else if (calculatedType === 'embeddedFields' || calculatedType === 'virtualFields') {
+      // do nothing because of using "embeddedOrVirtualCalculatedFields" before
     } else if (calculatedType === 'textFields') {
       pushCalculatedInPrev(field, 'String', prev);
 
