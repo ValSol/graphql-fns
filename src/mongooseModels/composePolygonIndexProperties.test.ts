@@ -2,9 +2,9 @@
 
 import type { EntityConfig } from '../tsTypes';
 
-import composePolygonIndexProperties from './composePolygonIndexProperties';
+import composePolygonOrLineStringIndexProperties from './composePolygonOrLineStringIndexProperties';
 
-describe('composePolygonIndexProperties', () => {
+describe('composePolygonOrLineStringIndexProperties', () => {
   test('should compose schema properties with text fields', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
@@ -27,7 +27,7 @@ describe('composePolygonIndexProperties', () => {
 
     const expectedResult = ['area'];
 
-    const result = composePolygonIndexProperties(entityConfig);
+    const result = composePolygonOrLineStringIndexProperties(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 });

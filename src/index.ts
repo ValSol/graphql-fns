@@ -55,6 +55,10 @@ import { composeSubscribePayloadMongoFilter } from './resolvers/utils/executeAut
 
 // graphql types utils
 
+import lineStringFromGqlToMongo from './resolvers/mutations/processCreateInputData/lineStringFromGqlToMongo';
+import lineStringFromMongoToGql from './resolvers/types/lineStringFromMongoToGql';
+import multiLineStringFromGqlToMongo from './resolvers/mutations/processCreateInputData/multiLineStringFromGqlToMongo';
+import multiLineStringFromMongoToGql from './resolvers/types/multiLineStringFromMongoToGql';
 import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiPolygonFromGqlToMongo';
 import multiPolygonFromMongoToGql from '@/resolvers/types/multiPolygonFromMongoToGql';
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
@@ -130,6 +134,10 @@ export {
   createDeletedEntitySubscriptionResolver, // why may be need to pass this?
   testSubscriptionNode,
   composeSubscribePayloadMongoFilter,
+  lineStringFromGqlToMongo,
+  lineStringFromMongoToGql,
+  multiLineStringFromGqlToMongo,
+  multiLineStringFromMongoToGql,
   multiPolygonFromGqlToMongo,
   multiPolygonFromMongoToGql,
   pointFromGqlToMongo,

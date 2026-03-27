@@ -11,6 +11,8 @@ import pointFromGqlToMongo from './pointFromGqlToMongo';
 import polygonFromGqlToMongo from './polygonFromGqlToMongo';
 import processForPushEach from './processForPushEach';
 import renumeratePositions from './renumeratePositions';
+import lineStringFromGqlToMongo from './lineStringFromGqlToMongo';
+import multiLineStringFromGqlToMongo from './multiLineStringFromGqlToMongo';
 
 const getUpdateMany = (rest: any, arr: Array<any>) => {
   const filteredArr = arr.filter(({ updateMany }) => updateMany);
@@ -416,6 +418,10 @@ const processCreateInputData = (
         if (array) {
           if (geospatialType === 'Point') {
             prev[key] = data2[key].map((value) => pointFromGqlToMongo(value));
+          } else if (geospatialType === 'LineString') {
+            prev[key] = data2[key].map((value) => lineStringFromGqlToMongo(value));
+          } else if (geospatialType === 'MultiLineString') {
+            prev[key] = data2[key].map((value) => multiLineStringFromGqlToMongo(value));
           } else if (geospatialType === 'Polygon') {
             prev[key] = data2[key].map((value) => polygonFromGqlToMongo(value));
           } else if (geospatialType === 'MultiPolygon') {
@@ -424,6 +430,10 @@ const processCreateInputData = (
         } else {
           if (geospatialType === 'Point') {
             prev[key] = pointFromGqlToMongo(data2[key]);
+          } else if (geospatialType === 'LineString') {
+            prev[key] = lineStringFromGqlToMongo(data2[key]);
+          } else if (geospatialType === 'MultiLineString') {
+            prev[key] = multiLineStringFromGqlToMongo(data2[key]);
           } else if (geospatialType === 'Polygon') {
             prev[key] = polygonFromGqlToMongo(data2[key]);
           } else if (geospatialType === 'MultiPolygon') {

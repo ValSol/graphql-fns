@@ -90,6 +90,20 @@ const coerceDataFromGql = (
               ? { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] }
               : data[key];
         }
+      } else if (geospatialType === 'LineString') {
+        if (array) {
+          prev[key] = data[key].map((item) => (item === null ? { coordinates: [] } : item));
+        } else {
+          prev[key] = data[key] === null ? { coordinates: [] } : data[key];
+        }
+      } else if (geospatialType === 'MultiLineString') {
+        if (array) {
+          prev[key] = data[key].map((item) =>
+            item === null ? { lineStrings: [{ coordinates: [] }] } : item,
+          );
+        } else {
+          prev[key] = data[key] === null ? { lineStrings: [{ coordinates: [] }] } : data[key];
+        }
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${key}"!`);
       }

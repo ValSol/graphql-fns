@@ -4,7 +4,7 @@ import type { EntityConfig } from '../../tsTypes';
 import createEntityNearInputType from './createEntityNearInputType';
 
 describe('createEntityNearInputType', () => {
-  test('should create empty string if there are not any geospatial fields', () => {
+  test('should create empty string if there are not any geospatial fields 1', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -25,7 +25,7 @@ describe('createEntityNearInputType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create entity input type if there are geospatial fields', () => {
+  test('should create entity input type if there are geospatial fields 2', () => {
     const entityConfig: EntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -55,6 +55,64 @@ describe('createEntityNearInputType', () => {
       `enum ExampleGeospatialFieldNamesEnum {
   position
   area
+}
+input ExampleNearInput {
+  geospatialField: ExampleGeospatialFieldNamesEnum!
+  coordinates: GeospatialPointInput!
+  maxDistance: Float
+  minDistance: Float
+}`,
+      {},
+    ];
+
+    const result = createEntityNearInputType(entityConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create entity input type if there are geospatial fields 3', () => {
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      geospatialFields: [
+        {
+          name: 'position',
+          geospatialType: 'Point',
+          index: true,
+          type: 'geospatialFields',
+        },
+        {
+          name: 'positions',
+          array: true,
+          geospatialType: 'Point',
+          type: 'geospatialFields',
+        },
+        {
+          name: 'area',
+          geospatialType: 'Polygon',
+          index: true,
+          type: 'geospatialFields',
+        },
+        {
+          name: 'road',
+          geospatialType: 'LineString',
+          index: true,
+          type: 'geospatialFields',
+        },
+        {
+          name: 'street',
+          geospatialType: 'MultiLineString',
+          index: true,
+          type: 'geospatialFields',
+        },
+      ],
+    };
+    const expectedResult = [
+      'ExampleNearInput',
+      `enum ExampleGeospatialFieldNamesEnum {
+  position
+  area
+  road
+  street
 }
 input ExampleNearInput {
   geospatialField: ExampleGeospatialFieldNamesEnum!

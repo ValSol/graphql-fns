@@ -308,6 +308,34 @@ const composeThingSchemaProperties = (
       if (index) obj.coordinates.index = '2dsphere';
 
       prev[name] = array ? [obj] : obj;
+    } else if (geospatialType === 'LineString') {
+      const obj: any = {
+        type: {
+          type: String,
+          enum: ['LineString'],
+        },
+        coordinates: {
+          type: [[Number]],
+        },
+      };
+
+      if (required) obj.type.required = true; // by default required = false
+
+      prev[name] = array ? [obj] : obj;
+    } else if (geospatialType === 'MultiLineString') {
+      const obj: any = {
+        type: {
+          type: String,
+          enum: ['MultiLineString'],
+        },
+        coordinates: {
+          type: [[[Number]]],
+        },
+      };
+
+      if (required) obj.type.required = true; // by default required = false
+
+      prev[name] = array ? [obj] : obj;
     } else if (geospatialType === 'Polygon') {
       const obj: any = {
         type: {

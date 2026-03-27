@@ -1,9 +1,13 @@
 import { Types } from 'mongoose';
+import buffer from '@turf/buffer';
+import { lineString, multiLineString } from '@turf/helpers';
 
 import type {
   EmbeddedField,
   EntityConfig,
   EntityConfigObject,
+  GeospatialLineString,
+  GeospatialMultiLineString,
   GeospatialMultiPolygon,
   GeospatialPolygon,
   InvolvedFilter,
@@ -12,6 +16,8 @@ import type {
 } from '@/tsTypes';
 
 import composeFieldsObject, { FOR_MONGO_QUERY } from '@/utils/composeFieldsObject';
+import lineStringFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/lineStringFromGqlToMongo';
+import multiLineStringFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiLineStringFromGqlToMongo';
 import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiPolygonFromGqlToMongo';
 import pointFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/pointFromGqlToMongo';
 import polygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/polygonFromGqlToMongo';
@@ -302,6 +308,58 @@ const composeWhereInputRecursively = (
         composeWithinSphereInput(
           where[key] as { center: { lat: number; lng: number }; radius: number },
         );
+    } else if (key.endsWith('_aroundLineString')) {
+      const keyWithoutSuffix = key.slice(0, -'_aroundLineString'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      }
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      }
+
+      const { coordinates, distance } = where[key] as {
+        coordinates: { lat: number; lng: number }[];
+        distance: number;
+      };
+
+      const mongoGeospatialLineString = lineStringFromGqlToMongo({ coordinates });
+
+      const line = lineString(mongoGeospatialLineString.coordinates);
+
+      const corridor = buffer(line, distance, { units: 'meters' });
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
+        corridor.geometry;
+    } else if (key.endsWith('_aroundMultiLineString')) {
+      const keyWithoutSuffix = key.slice(0, -'_aroundMultiLineString'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`]) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {};
+      }
+
+      if (!result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin) {
+        result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin = {};
+      }
+
+      const { lineStrings, distance } = where[key] as {
+        lineStrings: GeospatialLineString[];
+        distance: number;
+      };
+
+      const mongoGeospatialLineString = multiLineStringFromGqlToMongo({ lineStrings });
+
+      const multiLine = multiLineString(mongoGeospatialLineString.coordinates);
+
+      const corridor = buffer(multiLine, distance, { units: 'meters' });
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`].$geoWithin.$geometry =
+        corridor.geometry;
     } else if (key.endsWith('_intersectsPoint')) {
       const keyWithoutSuffix = key.slice(0, -'_intersectsPoint'.length);
 

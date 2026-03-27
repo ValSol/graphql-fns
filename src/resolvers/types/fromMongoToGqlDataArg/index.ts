@@ -2,11 +2,14 @@ import type {
   DataObject,
   EntityConfig,
   GraphqlObject,
+  MongodbGeospatialLineString,
+  MongodbGeospatialMultiLineString,
   MongodbGeospatialMultiPolygon,
   MongodbGeospatialPoint,
   MongodbGeospatialPolygon,
-} from '../../../tsTypes';
-
+} from '@/tsTypes';
+import lineStringFromMongoToGql from '../lineStringFromMongoToGql';
+import multiLineStringFromMongoToGql from '../multiLineStringFromMongoToGql';
 import multiPolygonFromMongoToGql from '../multiPolygonFromMongoToGql';
 import pointFromMongoToGql from '../pointFromMongoToGql';
 import polygonFromMongoToGql from '../polygonFromMongoToGql';
@@ -16,6 +19,12 @@ const geospatialFromMongToGql = (item: DataObject) => {
   switch (geoType) {
     case 'Point':
       return pointFromMongoToGql(item as MongodbGeospatialPoint);
+
+    case 'LineString':
+      return lineStringFromMongoToGql(item as MongodbGeospatialLineString);
+
+    case 'MultiLineString':
+      return multiLineStringFromMongoToGql(item as MongodbGeospatialMultiLineString);
 
     case 'Polygon':
       return polygonFromMongoToGql(item as MongodbGeospatialPolygon);

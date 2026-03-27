@@ -148,14 +148,23 @@ const composeInputFields = (
     }
   });
 
-  geospatialFields.forEach(({ geospatialType, name: fieldName, index }) => {
+  geospatialFields.forEach(({ geospatialType, name: fieldName, array, index }) => {
     if (!index) {
       return;
+    }
+    if (array) {
+      fields.push(`${fieldName}_size: Int
+  ${fieldName}_notsize: Int`);
+    }
+    if (!array) {
+      fields.push(`  ${fieldName}_exists: Boolean`);
     }
     if (geospatialType === 'Point') {
       fields.push(`  ${fieldName}_withinPolygon: GeospatialPolygonInput
   ${fieldName}_withinMultiPolygon: GeospatialMultiPolygonInput
-  ${fieldName}_withinSphere: GeospatialSphereInput`);
+  ${fieldName}_withinSphere: GeospatialSphereInput
+  ${fieldName}_aroundLineString: GeospatialLineStringCorridorInput
+  ${fieldName}_aroundMultiLineString: GeospatialMultiLineStringCorridorInput`);
     } else {
       fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput
   ${fieldName}_intersectsPolygon: GeospatialPolygonInput

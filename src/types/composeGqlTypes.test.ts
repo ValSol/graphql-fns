@@ -1093,6 +1093,17 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+input GeospatialLineStringInput {
+  coordinates: [GeospatialPointInput!]!
+}
+input GeospatialLineStringCorridorInput {
+  coordinates: [GeospatialPointInput!]!
+  distance: Float!
+}
+input GeospatialMultiLineStringCorridorInput {
+  lineStrings: [GeospatialLineStringInput!]!
+  distance: Float!
+}
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
@@ -1186,9 +1197,12 @@ input Example1WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  position_exists: Boolean
   position_withinPolygon: GeospatialPolygonInput
   position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
+  position_aroundLineString: GeospatialLineStringCorridorInput
+  position_aroundMultiLineString: GeospatialMultiLineStringCorridorInput
   AND: [Example1WhereInput!]
   NOR: [Example1WhereInput!]
   OR: [Example1WhereInput!]
@@ -1210,9 +1224,12 @@ input Example1WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  position_exists: Boolean
   position_withinPolygon: GeospatialPolygonInput
   position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
+  position_aroundLineString: GeospatialLineStringCorridorInput
+  position_aroundMultiLineString: GeospatialMultiLineStringCorridorInput
 }
 input Example2WhereInput {
   id_in: [ID!]
@@ -1231,6 +1248,7 @@ input Example2WhereInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  area_exists: Boolean
   area_intersectsPoint: GeospatialPointInput
   area_intersectsPolygon: GeospatialPolygonInput
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
@@ -1255,6 +1273,7 @@ input Example2WhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+  area_exists: Boolean
   area_intersectsPoint: GeospatialPointInput
   area_intersectsPolygon: GeospatialPolygonInput
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
@@ -1430,6 +1449,8 @@ input Example1WherePayloadInput {
   position_withinPolygon: GeospatialPolygonInput
   position_withinMultiPolygon: GeospatialMultiPolygonInput
   position_withinSphere: GeospatialSphereInput
+  position_aroundLineString: GeospatialLineStringCorridorInput
+  position_aroundMultiLineString: GeospatialMultiLineStringCorridorInput
   AND: [Example1WherePayloadInput!]
   NOR: [Example1WherePayloadInput!]
   OR: [Example1WherePayloadInput!]

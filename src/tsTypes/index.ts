@@ -22,6 +22,16 @@ export type MongodbGeospatialPoint = {
   coordinates: [number, number];
 };
 
+export type MongodbGeospatialLineString = {
+  type: 'LineString';
+  coordinates: [number, number][];
+};
+
+export type MongodbGeospatialMultiLineString = {
+  type: 'MultiLineString';
+  coordinates: [number, number][][];
+};
+
 export type MongodbGeospatialPolygon = {
   type: 'Polygon';
   coordinates: [number, number][][];
@@ -35,6 +45,14 @@ export type MongodbGeospatialMultiPolygon = {
 export type GeospatialPoint = {
   lng: number;
   lat: number;
+};
+
+export type GeospatialLineString = {
+  coordinates: GeospatialPoint[];
+};
+
+export type GeospatialMultiLineString = {
+  lineStrings: GeospatialLineString[];
 };
 
 export type GeospatialPolygon = {
@@ -98,13 +116,13 @@ export type EnumField = ArrayEnumField | ScalarEnumField;
 type ScalarGeospatialField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
   nullable?: false;
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   type: 'geospatialFields';
 };
 type ArrayGeospatialField = Omit<FieldCommonProperties, 'unique'> & {
   array: true;
   nullable?: boolean;
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   type: 'geospatialFields';
 };
 export type GeospatialField = ScalarGeospatialField | ArrayGeospatialField;
@@ -351,7 +369,7 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
@@ -370,7 +388,7 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
   array: true;
   nullable?: boolean;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
@@ -676,7 +694,7 @@ type ScalarCalculatedGeospatialField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;
@@ -693,7 +711,7 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   array: true;
   nullable?: boolean;
   calculatedType: 'geospatialFields';
-  geospatialType: 'Point' | 'Polygon' | 'MultiPolygon';
+  geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
   asyncFunc?: CalculatedFieldAsyncFunc;
   fieldsToUseNames?: string[];
   inputTypes?: Record<string, string>;

@@ -12,6 +12,8 @@ const createEntityNearInputType: InputCreator = (entityConfig) => {
           ({ geospatialType, index }) =>
             index &&
             (geospatialType === 'Point' ||
+              geospatialType === 'LineString' ||
+              geospatialType === 'MultiLineString' ||
               geospatialType === 'Polygon' ||
               geospatialType === 'MultiPolygon'),
         )

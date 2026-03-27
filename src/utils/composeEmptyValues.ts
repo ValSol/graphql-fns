@@ -28,6 +28,10 @@ const composeEmptyValues = (entityConfig: EntityConfig): any => {
         };
       } else if (geospatialType === 'MultiPolygon') {
         prev[name] = { polygons: [{ externalRing: { ring: [] }, internalRings: [] }] };
+      } else if (geospatialType === 'LineString') {
+        prev[name] = { coordinates: [] };
+      } else if (geospatialType === 'MultiLineString') {
+        prev[name] = { lineStrings: [{ coordinates: [] }] };
       } else {
         throw new TypeError(`Invalid geospatialType: "${geospatialType}" of field "${name}"!`);
       }

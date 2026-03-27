@@ -38,6 +38,17 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+input GeospatialLineStringInput {
+  coordinates: [GeospatialPointInput!]!
+}
+input GeospatialLineStringCorridorInput {
+  coordinates: [GeospatialPointInput!]!
+  distance: Float!
+}
+input GeospatialMultiLineStringCorridorInput {
+  lineStrings: [GeospatialLineStringInput!]!
+  distance: Float!
+}
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
@@ -78,6 +89,17 @@ input GeospatialMultiPolygonInput {
 input GeospatialPointInput {
   lng: Float!
   lat: Float!
+}
+input GeospatialLineStringInput {
+  coordinates: [GeospatialPointInput!]!
+}
+input GeospatialLineStringCorridorInput {
+  coordinates: [GeospatialPointInput!]!
+  distance: Float!
+}
+input GeospatialMultiLineStringCorridorInput {
+  lineStrings: [GeospatialLineStringInput!]!
+  distance: Float!
 }
 input GeospatialSphereInput {
   center: GeospatialPointInput!
@@ -126,6 +148,17 @@ input GeospatialPointInput {
   lng: Float!
   lat: Float!
 }
+input GeospatialLineStringInput {
+  coordinates: [GeospatialPointInput!]!
+}
+input GeospatialLineStringCorridorInput {
+  coordinates: [GeospatialPointInput!]!
+  distance: Float!
+}
+input GeospatialMultiLineStringCorridorInput {
+  lineStrings: [GeospatialLineStringInput!]!
+  distance: Float!
+}
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
@@ -149,6 +182,60 @@ type GeospatialPolygon {
 }
 type GeospatialMultiPolygon {
   polygons: [GeospatialPolygon!]!
+}`;
+    const result = composeGeospatialTypes(generalConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('LineString', () => {
+    const entityConfig: EntityConfig = {
+      name: 'District',
+      type: 'tangible',
+      geospatialFields: [
+        {
+          name: 'road',
+          geospatialType: 'LineString',
+          type: 'geospatialFields',
+        },
+      ],
+    };
+    const allEntityConfigs = { District: entityConfig };
+    const generalConfig: GeneralConfig = { allEntityConfigs };
+    const expectedResult = `type GeospatialPoint {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialPointInput {
+  lng: Float!
+  lat: Float!
+}
+input GeospatialLineStringInput {
+  coordinates: [GeospatialPointInput!]!
+}
+input GeospatialLineStringCorridorInput {
+  coordinates: [GeospatialPointInput!]!
+  distance: Float!
+}
+input GeospatialMultiLineStringCorridorInput {
+  lineStrings: [GeospatialLineStringInput!]!
+  distance: Float!
+}
+input GeospatialSphereInput {
+  center: GeospatialPointInput!
+  radius: Float!
+}
+input GeospatialPolygonRingInput {
+  ring: [GeospatialPointInput!]!
+}
+input GeospatialPolygonInput {
+  externalRing: GeospatialPolygonRingInput!
+  internalRings: [GeospatialPolygonRingInput!]
+}
+input GeospatialMultiPolygonInput {
+  polygons: [GeospatialPolygonInput!]!
+}
+type GeospatialLineString {
+  coordinates: [GeospatialPoint!]!
 }`;
     const result = composeGeospatialTypes(generalConfig);
     expect(result).toEqual(expectedResult);

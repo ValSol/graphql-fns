@@ -31,6 +31,8 @@ import createEntityFilterCountResolver from '../createEntityFilterCountResolver'
 import createEntityFilterDistinctValuesResolver from '../createEntityFilterDistinctValuesResolver';
 import createEntityFilterScalarResolver from '../createEntityFilterScalarResolver';
 import fieldFilterStringifiedResolver from '../fieldFilterStringifiedResolver';
+import lineStringFromMongoToGql from '../lineStringFromMongoToGql';
+import multiLineStringFromMongoToGql from '../multiLineStringFromMongoToGql';
 
 type EntityResolver = {
   [key: string]: any;
@@ -315,6 +317,14 @@ const composeEntityResolvers = (
             return values.map((value) => pointFromMongoToGql(value));
           }
 
+          if (geospatialType === 'LineString') {
+            return values.map((value) => lineStringFromMongoToGql(value));
+          }
+
+          if (geospatialType === 'MultiLineString') {
+            return values.map((value) => multiLineStringFromMongoToGql(value));
+          }
+
           if (geospatialType === 'Polygon') {
             return values.map((value) => polygonFromMongoToGql(value));
           }
@@ -332,6 +342,10 @@ const composeEntityResolvers = (
         if (!value || !value.type) return null;
 
         if (geospatialType === 'Point') return pointFromMongoToGql(value);
+
+        if (geospatialType === 'LineString') return lineStringFromMongoToGql(value);
+
+        if (geospatialType === 'MultiLineString') return multiLineStringFromMongoToGql(value);
 
         if (geospatialType === 'Polygon') return polygonFromMongoToGql(value);
 
