@@ -1,7 +1,13 @@
-import type { InputCreator } from '../../tsTypes';
+import type { InputCreator, TangibleEntityConfig } from '@/tsTypes';
 
 const createEntityDistinctValuesOptionsInputType: InputCreator = (entityConfig) => {
-  const { name, enumFields = [], textFields = [] } = entityConfig;
+  const {
+    name,
+    enumFields = [],
+    textFields = [],
+    relationalFields = [],
+    duplexFields = [],
+  } = entityConfig as TangibleEntityConfig;
 
   const inputName = `${name}DistinctValuesOptionsInput`;
 

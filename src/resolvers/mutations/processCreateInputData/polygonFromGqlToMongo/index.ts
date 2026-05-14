@@ -1,11 +1,11 @@
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '@/tsTypes';
 
 export const composePolynomCoordinates = (polygon: GeospatialPolygon): [number, number][][] => {
-  const { externalRing, internalRings = [] } = polygon;
+  const { externalRing, internalRings } = polygon;
 
   return [
     externalRing.ring.map(({ lng, lat }) => [lng, lat]),
-    ...internalRings.map(({ ring: ring2 }) =>
+    ...(internalRings || []).map(({ ring: ring2 }) =>
       ring2.map(({ lng, lat }) => [lng, lat] as [number, number]),
     ),
   ];
