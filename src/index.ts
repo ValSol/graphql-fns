@@ -55,6 +55,7 @@ import { composeSubscribePayloadMongoFilter } from './resolvers/utils/executeAut
 
 // graphql types utils
 
+import composeCircleApproximatedByPolygon from './resolvers/mutations/processCreateInputData/composeCircleApproximatedByPolygon';
 import lineStringFromGqlToMongo from './resolvers/mutations/processCreateInputData/lineStringFromGqlToMongo';
 import lineStringFromMongoToGql from './resolvers/types/lineStringFromMongoToGql';
 import multiLineStringFromGqlToMongo from './resolvers/mutations/processCreateInputData/multiLineStringFromGqlToMongo';
@@ -134,6 +135,7 @@ export {
   createDeletedEntitySubscriptionResolver, // why may be need to pass this?
   testSubscriptionNode,
   composeSubscribePayloadMongoFilter,
+  composeCircleApproximatedByPolygon,
   lineStringFromGqlToMongo,
   lineStringFromMongoToGql,
   multiLineStringFromGqlToMongo,

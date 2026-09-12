@@ -1108,6 +1108,11 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }
+input GeospatialCircleApproximatedByPolygonInput {
+  center: GeospatialPointInput!
+  radius: Float!
+  steps: Int
+}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
@@ -1252,6 +1257,7 @@ input Example2WhereInput {
   area_intersectsPoint: GeospatialPointInput
   area_intersectsPolygon: GeospatialPolygonInput
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
+  area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
   AND: [Example2WhereInput!]
   NOR: [Example2WhereInput!]
   OR: [Example2WhereInput!]
@@ -1277,6 +1283,7 @@ input Example2WhereWithoutBooleanOperationsInput {
   area_intersectsPoint: GeospatialPointInput
   area_intersectsPolygon: GeospatialPolygonInput
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
+  area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
 }
 enum Example1TextNamesEnum {
   textField1
@@ -1497,6 +1504,7 @@ input Example2WherePayloadInput {
   area_intersectsPoint: GeospatialPointInput
   area_intersectsPolygon: GeospatialPolygonInput
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
+  area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
   AND: [Example2WherePayloadInput!]
   NOR: [Example2WherePayloadInput!]
   OR: [Example2WherePayloadInput!]

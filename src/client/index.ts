@@ -1,3 +1,4 @@
+import composeCircleApproximatedByPolygon from '@/resolvers/mutations/processCreateInputData/composeCircleApproximatedByPolygon';
 import fromGlobalId from '@/resolvers/utils/fromGlobalId';
 import lineStringFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/lineStringFromGqlToMongo';
 import lineStringFromMongoToGql from '@/resolvers/types/lineStringFromMongoToGql';
@@ -18,6 +19,7 @@ export type * from '@/tsTypes';
 // export all
 
 export {
+  composeCircleApproximatedByPolygon,
   fromGlobalId,
   lineStringFromGqlToMongo,
   lineStringFromMongoToGql,

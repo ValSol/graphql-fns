@@ -1,2 +1,4 @@
 using descendant relationalFields or duplexFields in "addFields" is forbiden
 in Subscription selections forbidden to use calculated fields with defined "asyncFunc" property
+
+to publish on npm: "npm publish --tag beta"

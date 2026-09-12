@@ -16,6 +16,7 @@ import type {
 } from '@/tsTypes';
 
 import composeFieldsObject, { FOR_MONGO_QUERY } from '@/utils/composeFieldsObject';
+import composeCircleApproximatedByPolygon from '@/resolvers/mutations/processCreateInputData/composeCircleApproximatedByPolygon';
 import lineStringFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/lineStringFromGqlToMongo';
 import multiLineStringFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiLineStringFromGqlToMongo';
 import multiPolygonFromGqlToMongo from '@/resolvers/mutations/processCreateInputData/multiPolygonFromGqlToMongo';
@@ -388,6 +389,18 @@ const composeWhereInputRecursively = (
       result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
         $geoIntersects: {
           $geometry: multiPolygonFromGqlToMongo(where[key] as GeospatialMultiPolygon),
+        },
+      };
+    } else if (key.endsWith('_intersectsCircleApproximatedByPolygon')) {
+      const keyWithoutSuffix = key.slice(0, -'_intersectsCircleApproximatedByPolygon'.length);
+
+      checkField(keyWithoutSuffix, entityName, embeddedPrefix, fieldsObj, entireWhere);
+
+      result[`${prefix}${embeddedPrefix}${keyWithoutSuffix}`] = {
+        $geoIntersects: {
+          $geometry: composeCircleApproximatedByPolygon(
+            where[key] as { center: { lat: number; lng: number }; radius: number; steps?: number },
+          ),
         },
       };
     } else if (key === 'AND' || key === 'OR' || key === 'NOR') {

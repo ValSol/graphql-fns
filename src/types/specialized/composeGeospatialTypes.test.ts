@@ -53,6 +53,11 @@ input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
 }
+input GeospatialCircleApproximatedByPolygonInput {
+  center: GeospatialPointInput!
+  radius: Float!
+  steps: Int
+}
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
 }
@@ -104,6 +109,11 @@ input GeospatialMultiLineStringCorridorInput {
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
+}
+input GeospatialCircleApproximatedByPolygonInput {
+  center: GeospatialPointInput!
+  radius: Float!
+  steps: Int
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
@@ -162,6 +172,11 @@ input GeospatialMultiLineStringCorridorInput {
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
+}
+input GeospatialCircleApproximatedByPolygonInput {
+  center: GeospatialPointInput!
+  radius: Float!
+  steps: Int
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!
@@ -223,6 +238,11 @@ input GeospatialMultiLineStringCorridorInput {
 input GeospatialSphereInput {
   center: GeospatialPointInput!
   radius: Float!
+}
+input GeospatialCircleApproximatedByPolygonInput {
+  center: GeospatialPointInput!
+  radius: Float!
+  steps: Int
 }
 input GeospatialPolygonRingInput {
   ring: [GeospatialPointInput!]!

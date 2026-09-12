@@ -168,7 +168,8 @@ const composeInputFields = (
     } else {
       fields.push(`  ${fieldName}_intersectsPoint: GeospatialPointInput
   ${fieldName}_intersectsPolygon: GeospatialPolygonInput
-  ${fieldName}_intersectsMultiPolygon: GeospatialMultiPolygonInput`);
+  ${fieldName}_intersectsMultiPolygon: GeospatialMultiPolygonInput
+  ${fieldName}_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput`);
     }
   });
 
