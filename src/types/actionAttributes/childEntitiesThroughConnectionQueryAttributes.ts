@@ -7,8 +7,8 @@ import type {
   InputCreator,
 } from '@/tsTypes';
 
-import composeDescendantConfig from '@/utils/composeDescendantConfig';
-import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
+import composeRepresentationConfig from '@/utils/composeRepresentationConfig';
+import connectionRepresentationUpdater from '../actionRepresentationUpdaters/connectionRepresentationUpdater';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntitySortInputType from '../inputs/createEntitySortInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
@@ -16,11 +16,11 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `childEntitiesThroughConnection${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `childEntitiesThroughConnection${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `child${pluralize(baseName)}ThroughConnection${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `child${pluralize(baseName)}ThroughConnection${representationKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -72,26 +72,30 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { allEntityConfigs, descendant } = generalConfig;
+  const { allEntityConfigs, representation } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  if (descendantKey) {
+  if (representationKey) {
     try {
-      return descendant
-        ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
+      return representation
+        ? composeRepresentationConfig(
+            representation[representationKey],
+            connectionConfig,
+            generalConfig,
+          )
         : null;
     } catch (err) {
       throw new TypeError(err);
@@ -105,8 +109,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Array';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}Connection!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}Connection!`;
 
 const childEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,
@@ -118,7 +122,7 @@ const childEntitiesThroughConnectionQueryAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDescendantUpdater: connectionDescendantUpdater,
+  actionRepresentationUpdater: connectionRepresentationUpdater,
   actionAllowed,
   actionIsChild,
 } as const;

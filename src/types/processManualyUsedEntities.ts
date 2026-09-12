@@ -1,6 +1,6 @@
 import type { GeneralConfig } from '../tsTypes';
 
-import composeDescendantConfigByName from '../utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '../utils/composeRepresentationConfigByName';
 import fillEntityTypeDic from './fillEntityTypeDic';
 import isCommonlyAllowedTypeName from '../utils/isCommonlyAllowedTypeName';
 
@@ -17,15 +17,15 @@ const processManualyUsedEntities = (
     return;
   }
 
-  manualyUsedEntities.forEach(({ name: rootName, descendantKey }) => {
+  manualyUsedEntities.forEach(({ name: rootName, representationKey }) => {
     const rootConfig = allEntityConfigs[rootName];
 
     if (rootConfig === undefined) {
       throw new TypeError(`Entity "${rootName}" not found in "allEntityConfigs"!`);
     }
 
-    const config = descendantKey
-      ? composeDescendantConfigByName(descendantKey, rootConfig, generalConfig)
+    const config = representationKey
+      ? composeRepresentationConfigByName(representationKey, rootConfig, generalConfig)
       : rootConfig;
 
     const { name } = config;

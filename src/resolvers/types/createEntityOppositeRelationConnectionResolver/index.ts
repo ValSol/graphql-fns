@@ -10,7 +10,7 @@ import type {
   TangibleEntityConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntitiesThroughConnectionQueryAttributes from '../../../types/actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createChildEntitiesThroughConnectionQueryResolver from '../../queries/createChildEntitiesThroughConnectionQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -33,18 +33,18 @@ const createEntityOppositeRelationConnectionResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory, descendant } = generalConfig;
+  const { allEntityConfigs, inventory, representation } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntitiesThroughConnection', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntitiesThroughConnection', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntitiesThroughConnectionQueryResolver = descendantKey
+  const childEntitiesThroughConnectionQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntitiesThroughConnection${descendantKey}`,
+        `childEntitiesThroughConnection${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -65,8 +65,8 @@ const createEntityOppositeRelationConnectionResolver = (
   if (!childEntitiesThroughConnectionQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesThroughConnectionQueryResolver "${
-        descendantKey
-          ? `childEntitiesThroughConnection${descendantKey}`
+        representationKey
+          ? `childEntitiesThroughConnection${representationKey}`
           : 'childEntitiesThroughConnection'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
@@ -101,7 +101,7 @@ const createEntityOppositeRelationConnectionResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -110,11 +110,11 @@ const createEntityOppositeRelationConnectionResolver = (
 
     const { id } = parent;
 
-    const { entityName, descendantKey: descendantKey2 } = fromGlobalId(id);
+    const { entityName, representationKey: representationKey2 } = fromGlobalId(id);
 
     const whereById = {
       [oppositeFields[
-        `${entityName}${descendantKey2}:${fieldName.slice(0, -'ThroughConnection'.length)}`
+        `${entityName}${representationKey2}:${fieldName.slice(0, -'ThroughConnection'.length)}`
       ]]: id,
     };
 

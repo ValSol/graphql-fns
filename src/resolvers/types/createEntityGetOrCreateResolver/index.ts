@@ -7,7 +7,7 @@ import type {
   TangibleEntityConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityGetOrCreateQueryAttributes from '../../../types/actionAttributes/childEntityGetOrCreateQueryAttributes';
 import createChildEntityGetOrCreateQueryResolver from '../../queries/createChildEntityGetOrCreateQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -29,16 +29,16 @@ const createEntityGetOrCreateResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityGetOrCreate', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityGetOrCreate', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityGetOrCreateQueryResolver = descendantKey
+  const childEntityGetOrCreateQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityGetOrCreate${descendantKey}`,
+        `childEntityGetOrCreate${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -55,7 +55,7 @@ const createEntityGetOrCreateResolver = (
   if (!childEntityGetOrCreateQueryResolver) {
     throw new TypeError(
       `Not defined childEntityGetOrCreateQueryResolver "${
-        descendantKey ? `childEntityGetOrCreate${descendantKey}` : 'childEntityGetOrCreate'
+        representationKey ? `childEntityGetOrCreate${representationKey}` : 'childEntityGetOrCreate'
       }" for entity: "${name}"!`,
     );
   }
@@ -64,7 +64,7 @@ const createEntityGetOrCreateResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityGetOrCreate${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }

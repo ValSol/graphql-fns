@@ -1,14 +1,14 @@
 /* eslint-env jest */
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityConfig,
   TangibleEntityConfig,
 } from '../../tsTypes';
 import type { ParseActionArgs } from './tsTypes';
 
 import parseActions from './parseActions';
-import composeDescendantConfigByName from '../composeDescendantConfigByName';
+import composeRepresentationConfigByName from '../composeRepresentationConfigByName';
 
 describe('parseActions', () => {
   const personConfig = {} as EntityConfig;
@@ -131,11 +131,11 @@ describe('parseActions', () => {
     involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: name }),
     type: ({ name }: any) => `${name}!`,
     config: (entityConfig: any, generalConfig: any) =>
-      composeDescendantConfigByName('ForCatalog', entityConfig, generalConfig),
+      composeRepresentationConfigByName('ForCatalog', entityConfig, generalConfig),
   };
 
-  const ForCatalog: DescendantAttributes = {
-    descendantKey: 'ForCatalog',
+  const ForCatalog: RepresentationAttributes = {
+    representationKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
       Place: ['childEntity', 'childEntityCount'],
@@ -149,11 +149,11 @@ describe('parseActions', () => {
     Country: countryConfig,
   };
   const custom = { Query: { getEntity, putThing } };
-  const descendant = { ForCatalog };
+  const representation = { ForCatalog };
 
-  const generalConfig = { allEntityConfigs, custom, descendant };
+  const generalConfig = { allEntityConfigs, custom, representation };
 
-  const descendantKeyToPermission = { ForCatalog: 'insider', ForView: '' };
+  const representationKeyToPermission = { ForCatalog: 'insider', ForView: '' };
 
   test('should return result', () => {
     const args = [
@@ -168,19 +168,19 @@ describe('parseActions', () => {
         actionName: 'entitiesByUnique',
         entityName: 'Person',
         options: { shift: 0, depth: 1 },
-        descendantKey: 'ForView',
+        representationKey: 'ForView',
       },
     ];
 
     const expectedResult = {
-      descendantAttributes: {
+      representationAttributes: {
         ForCatalog: {
           allow: {
             Country: ['childEntity'],
             Person: ['entitiesByUnique', 'childEntities', 'childEntity'],
             Place: ['childEntity'],
           },
-          descendantKey: 'ForCatalog',
+          representationKey: 'ForCatalog',
         },
       },
       inventoryByRoles: {
@@ -210,7 +210,7 @@ describe('parseActions', () => {
 
     const result = parseActions(
       args as ParseActionArgs[],
-      descendantKeyToPermission,
+      representationKeyToPermission,
       generalConfig,
     );
     expect(result).toEqual(expectedResult);

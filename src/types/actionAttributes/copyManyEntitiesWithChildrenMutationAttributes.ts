@@ -2,7 +2,7 @@ import pluralize from 'pluralize';
 
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import getOppositeFields from '@/utils/getOppositeFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
@@ -11,11 +11,11 @@ import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `copyManyEntitiesWithChildren${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `copyManyEntitiesWithChildren${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `copyMany${pluralize(baseName)}WithChildren${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `copyMany${pluralize(baseName)}WithChildren${representationKey}`;
 
 const inputCreators = [
   createEntityCopyWhereOnesInputType,
@@ -35,18 +35,18 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
+  inputOutputEntity: `${name}${representationKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig =>
-  descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+  representationKey
+    ? composeRepresentationConfigByName(representationKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
@@ -58,8 +58,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
     ).length,
   );
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `[${name}${descendantKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `[${name}${representationKey}!]!`;
 
 const copyManyEntitiesWithChildrenMutationAttributes = {
   actionGeneralName,

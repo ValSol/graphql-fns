@@ -5,34 +5,34 @@ const parseChildQueries = (
   childQueries: Array<string>,
   generalConfig: GeneralConfig,
 ): ChildQueries => {
-  const { allEntityConfigs, descendant } = generalConfig;
+  const { allEntityConfigs, representation } = generalConfig;
 
   return childQueries.map((item) => {
-    const [baseAction, descendantThingName] = item.split(':');
+    const [baseAction, representationThingName] = item.split(':');
 
-    if (allEntityConfigs[descendantThingName]) {
+    if (allEntityConfigs[representationThingName]) {
       return {
         actionName: baseAction,
         baseAction,
-        descendantKey: '',
-        entityName: descendantThingName,
+        representationKey: '',
+        entityName: representationThingName,
       };
     }
 
-    if (descendant) {
-      const descendantKeys = Object.keys(descendant);
+    if (representation) {
+      const representationKeys = Object.keys(representation);
 
-      for (let i = 0; i < descendantKeys.length; i += 1) {
-        const descendantKey = descendantKeys[i];
+      for (let i = 0; i < representationKeys.length; i += 1) {
+        const representationKey = representationKeys[i];
 
-        if (descendantThingName.endsWith(descendantKey)) {
-          const entityName = descendantThingName.slice(0, -descendantKey.length);
+        if (representationThingName.endsWith(representationKey)) {
+          const entityName = representationThingName.slice(0, -representationKey.length);
 
           if (allEntityConfigs[entityName]) {
             return {
-              actionName: `${baseAction}${descendantKey}`,
+              actionName: `${baseAction}${representationKey}`,
               baseAction,
-              descendantKey,
+              representationKey,
               entityName,
             };
           }

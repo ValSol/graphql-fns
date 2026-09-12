@@ -2,7 +2,7 @@
 
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   TangibleEntityConfig,
   GeneralConfig,
   Inventory,
@@ -14,7 +14,7 @@ import type {
 
 import composeAllEntityConfigsAndEnums from '@/utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
-import composeDescendant from '@/utils/composeDescendant';
+import composeRepresentation from '@/utils/composeRepresentation';
 
 describe('composeGqlTypes', () => {
   test('should create entities types to copy with children', () => {
@@ -3814,9 +3814,9 @@ type Query {
       fieldTypes: () => ['DateTime!', 'DateTime!'],
     };
 
-    const ForCatalogDescendant: DescendantAttributes = {
+    const ForCatalogRepresentation: RepresentationAttributes = {
       allow: { Example: ['entities', 'updateEntity'] },
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -3859,8 +3859,8 @@ type Query {
       Input: { entityInTimeRangeInput },
       Query: { entityInTimeRangeQuery },
     };
-    const descendant = { ForCatalog: ForCatalogDescendant };
-    const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, inventory };
+    const representation = { ForCatalog: ForCatalogRepresentation };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4062,7 +4062,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create descendant inputs for custom types with inventory for only one custom query getEntity', () => {
+  test('should create representation inputs for custom types with inventory for only one custom query getEntity', () => {
     const childNameFromParenName = { Menu: 'MenuSection' };
 
     const updateEntityWithChildren: ActionSignatureMethods = {
@@ -4213,7 +4213,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with descendant & inventory for only queries', () => {
+  test('should create entities types with representation & inventory for only queries', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -4224,17 +4224,17 @@ type Mutation {
       ],
     };
 
-    const ForCatalog: DescendantAttributes = {
+    const ForCatalog: RepresentationAttributes = {
       allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
     };
 
     const simplifiedEntityConfigs = [entityConfig];
     const inventory: Inventory = { name: 'test', include: { Query: true } };
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const descendant = { ForCatalog };
-    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
+    const representation = { ForCatalog };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4413,7 +4413,7 @@ type Query {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with descendant & inventory for only mutation where involed entities was split', () => {
+  test('should create entities types with representation & inventory for only mutation where involed entities was split', () => {
     const entityConfig: SimplifiedTangibleEntityConfig = {
       name: 'Example',
       type: 'tangible',
@@ -4424,15 +4424,15 @@ type Query {
       ],
     };
 
-    const ForCatalog: DescendantAttributes = {
+    const ForCatalog: RepresentationAttributes = {
       allow: { Example: ['updateEntity'] },
-      descendantKey: 'ForCatalog',
-      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
+      representationKey: 'ForCatalog',
+      involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const ForView: DescendantAttributes = {
+    const ForView: RepresentationAttributes = {
       allow: { Example: [] },
-      descendantKey: 'ForView',
+      representationKey: 'ForView',
     };
 
     const simplifiedEntityConfigs = [entityConfig];
@@ -4442,8 +4442,8 @@ type Query {
     };
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const descendant = { ForCatalog, ForView };
-    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
+    const representation = { ForCatalog, ForView };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4480,7 +4480,7 @@ type Mutation {
     expect(result.typeDefs).toBe(expectedResult);
   });
 
-  test('should create entities types with descendant & inventory for only queries', () => {
+  test('should create entities types with representation & inventory for only queries', () => {
     const tokenConfig: SimplifiedVirtualEntityConfig = {
       name: 'Token',
       type: 'virtual',
@@ -4499,21 +4499,21 @@ type Mutation {
       calculatedFields: [{ name: 'userId', calculatedType: 'textFields', func: (() => {}) as any }],
     };
 
-    const ForCatalog: DescendantAttributes = {
-      descendantKey: 'ForCatalog',
+    const ForCatalog: RepresentationAttributes = {
+      representationKey: 'ForCatalog',
       allow: { Example: ['entitiesThroughConnection', 'updatedEntity'] },
-      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
+      involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const ForView: DescendantAttributes = {
-      descendantKey: 'ForView',
+    const ForView: RepresentationAttributes = {
+      representationKey: 'ForView',
       allow: { Example: [], ExampleEdge: [], ExampleConnection: [], ExampleUpdatedPayload: [] },
-      // "involvedOutputDescendantKeys" not change types that are returned by "ForCatalog" descendant actions
-      involvedOutputDescendantKeys: { Example: { outputEntity: 'ForGuest' } },
+      // "involvedOutputRepresentationKeys" not change types that are returned by "ForCatalog" representation actions
+      involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForGuest' } },
     };
 
-    const ForGuest: DescendantAttributes = {
-      descendantKey: 'ForGuest',
+    const ForGuest: RepresentationAttributes = {
+      representationKey: 'ForGuest',
       allow: { Example: [] },
     };
 
@@ -4528,9 +4528,9 @@ type Mutation {
 
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const descendant = composeDescendant([ForCatalog, ForView, ForGuest], allEntityConfigs);
+    const representation = composeRepresentation([ForCatalog, ForView, ForGuest], allEntityConfigs);
 
-    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {

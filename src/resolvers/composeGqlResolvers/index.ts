@@ -3,9 +3,9 @@ import { DateTimeResolver } from 'graphql-scalars';
 import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
-import composeDescendantConfigName from '../../utils/composeDescendantConfig/composeDescendantConfigName';
-import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
-import composeDescendantConfig from '../../utils/composeDescendantConfig';
+import composeRepresentationConfigName from '../../utils/composeRepresentationConfig/composeRepresentationConfigName';
+import mergeRepresentationIntoCustom from '../../utils/mergeRepresentationIntoCustom';
+import composeRepresentationConfig from '../../utils/composeRepresentationConfig';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 import resolverDecorator from '../utils/resolverDecorator';
 import composeEntityResolvers from '../types/composeEntityResolvers';
@@ -32,9 +32,9 @@ const composeGqlResolvers = (
     return resolvers;
   }
 
-  const { allEntityConfigs, inventory, descendant = {} } = generalConfig;
+  const { allEntityConfigs, inventory, representation = {} } = generalConfig;
 
-  const custom = mergeDescendantIntoCustom(generalConfig);
+  const custom = mergeRepresentationIntoCustom(generalConfig);
 
   const customQuery = custom?.Query || {};
 
@@ -246,7 +246,7 @@ const composeGqlResolvers = (
     .reduce((prev, entityConfig: TangibleEntityConfig) => {
       const {
         name,
-        descendantNameSlicePosition,
+        representationNameSlicePosition,
         duplexFields,
         geospatialFields,
         relationalFields,
@@ -255,18 +255,22 @@ const composeGqlResolvers = (
         prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
       }
 
-      // process descendant objects fields
-      Object.keys(descendant).forEach((descendantKey) => {
-        const descendantConfig = composeDescendantConfig(
-          descendant[descendantKey],
+      // process representation objects fields
+      Object.keys(representation).forEach((representationKey) => {
+        const representationConfig = composeRepresentationConfig(
+          representation[representationKey],
           entityConfig,
           generalConfig,
         );
 
-        if (descendantConfig && entityTypeDic[descendantConfig.name]) {
-          const key = composeDescendantConfigName(name, descendantKey, descendantNameSlicePosition);
+        if (representationConfig && entityTypeDic[representationConfig.name]) {
+          const key = composeRepresentationConfigName(
+            name,
+            representationKey,
+            representationNameSlicePosition,
+          );
 
-          prev[key] = composeEntityResolvers(descendantConfig, generalConfig, serversideConfig);
+          prev[key] = composeEntityResolvers(representationConfig, generalConfig, serversideConfig);
         }
       });
 

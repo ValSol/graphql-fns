@@ -84,7 +84,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleEdgeConfig = {
       name: 'ExampleEdge',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       type: 'virtual',
 
@@ -96,7 +96,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleConnectionConfig = {
       name: 'ExampleConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -106,7 +106,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleCreatedOrDeletedPayload = {
       name: 'ExampleCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -115,7 +115,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -188,7 +188,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleEdgeConfig = {
       name: 'ExampleEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
 
@@ -198,7 +198,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleConnectionConfig = {
       name: 'ExampleConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -208,7 +208,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleCreatedOrDeletedPayload = {
       name: 'ExampleCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -217,7 +217,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -302,7 +302,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleEdgeConfig = {
       name: 'ExampleEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: entityConfig, required: true, type: 'childFields' }],
 
@@ -312,7 +312,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleConnectionConfig = {
       name: 'ExampleConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -322,7 +322,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleCreatedOrDeletedPayload = {
       name: 'ExampleCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -331,7 +331,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleUpdatedPayloadConfig = {
       name: 'ExampleUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -362,7 +362,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleEdgeConfig2 = {
       name: 'Example2Edge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: entityConfig2, required: true, type: 'childFields' }],
 
@@ -372,7 +372,7 @@ describe('composeAllEntityConfigs', () => {
     const exampleConnectionConfig2 = {
       name: 'Example2Connection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -382,7 +382,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleCreatedOrDeletedPayload2 = {
       name: 'Example2CreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -391,7 +391,7 @@ describe('composeAllEntityConfigs', () => {
 
     const exampleUpdatedPayloadConfig2 = {
       name: 'Example2UpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -539,7 +539,7 @@ describe('composeAllEntityConfigs', () => {
     const difficultyLevelCountEdgeConfig = {
       name: 'DifficultyLevelCountEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [
         { name: 'node', config: difficultyLevelCountConfig, required: true, type: 'childFields' },
@@ -551,7 +551,7 @@ describe('composeAllEntityConfigs', () => {
     const difficultyLevelCountConnectionConfig = {
       name: 'DifficultyLevelCountConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -676,7 +676,7 @@ describe('composeAllEntityConfigs', () => {
     const userEdgeConfig = {
       name: 'UserEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: userConfig, required: true, type: 'childFields' }],
 
@@ -686,7 +686,7 @@ describe('composeAllEntityConfigs', () => {
     const userConnectionConfig = {
       name: 'UserConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -696,7 +696,7 @@ describe('composeAllEntityConfigs', () => {
 
     const userCreatedOrDeletedPayload = {
       name: 'UserCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -705,7 +705,7 @@ describe('composeAllEntityConfigs', () => {
 
     const userUpdatedPayloadConfig = {
       name: 'UserUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -720,7 +720,7 @@ describe('composeAllEntityConfigs', () => {
     const textbookEdgeConfig = {
       name: 'TextbookEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: textbookConfig, required: true, type: 'childFields' }],
 
@@ -730,7 +730,7 @@ describe('composeAllEntityConfigs', () => {
     const textbookConnectionConfig = {
       name: 'TextbookConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -740,7 +740,7 @@ describe('composeAllEntityConfigs', () => {
 
     const textbookCreatedOrDeletedPayload = {
       name: 'TextbookCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -749,7 +749,7 @@ describe('composeAllEntityConfigs', () => {
 
     const textbookUpdatedPayloadConfig = {
       name: 'TextbookUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -764,7 +764,7 @@ describe('composeAllEntityConfigs', () => {
     const lessonEdgeConfig = {
       name: 'LessonEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: lessonConfig, required: true, type: 'childFields' }],
 
@@ -774,7 +774,7 @@ describe('composeAllEntityConfigs', () => {
     const lessonConnectionConfig = {
       name: 'LessonConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -784,7 +784,7 @@ describe('composeAllEntityConfigs', () => {
 
     const lessonCreatedOrDeletedPayload = {
       name: 'LessonCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -793,7 +793,7 @@ describe('composeAllEntityConfigs', () => {
 
     const lessonUpdatedPayloadConfig = {
       name: 'LessonUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -904,7 +904,7 @@ describe('composeAllEntityConfigs', () => {
     const userEdgeConfig = {
       name: 'UserEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: userConfig, required: true, type: 'childFields' }],
 
@@ -914,7 +914,7 @@ describe('composeAllEntityConfigs', () => {
     const userConnectionConfig = {
       name: 'UserConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -924,7 +924,7 @@ describe('composeAllEntityConfigs', () => {
 
     const userCreatedOrDeletedPayload = {
       name: 'UserCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -933,7 +933,7 @@ describe('composeAllEntityConfigs', () => {
 
     const userUpdatedPayloadConfig = {
       name: 'UserUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 
@@ -948,7 +948,7 @@ describe('composeAllEntityConfigs', () => {
     const textbookEdgeConfig = {
       name: 'TextbookEdge',
       type: 'virtual',
-      descendantNameSlicePosition: -'Edge'.length,
+      representationNameSlicePosition: -'Edge'.length,
 
       childFields: [{ name: 'node', config: textbookConfig, required: true, type: 'childFields' }],
 
@@ -958,7 +958,7 @@ describe('composeAllEntityConfigs', () => {
     const textbookConnectionConfig = {
       name: 'TextbookConnection',
       type: 'virtual',
-      descendantNameSlicePosition: -'Connection'.length,
+      representationNameSlicePosition: -'Connection'.length,
 
       childFields: [
         { name: 'pageInfo', config: PageInfo, required: true, type: 'childFields' },
@@ -968,7 +968,7 @@ describe('composeAllEntityConfigs', () => {
 
     const textbookCreatedOrDeletedPayload = {
       name: 'TextbookCreatedOrDeletedPayload',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       type: 'virtual',
 
@@ -977,7 +977,7 @@ describe('composeAllEntityConfigs', () => {
 
     const textbookUpdatedPayloadConfig = {
       name: 'TextbookUpdatedPayload',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       type: 'virtual',
 

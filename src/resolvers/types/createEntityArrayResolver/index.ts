@@ -9,7 +9,7 @@ import type {
 } from '@/tsTypes';
 import type { Context } from '@/tsTypes';
 
-import checkDescendantAction from '@/utils/checkDescendantAction';
+import checkRepresentationAction from '@/utils/checkRepresentationAction';
 import childEntitiesQueryAttributes from '@/types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesQueryResolver from '@/resolvers/queries/createChildEntitiesQueryResolver';
 import createCustomResolver from '@/resolvers/createCustomResolver';
@@ -34,16 +34,16 @@ const createEntityArrayResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntities', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntities', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntitiesQueryResolver = descendantKey
+  const childEntitiesQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntities${descendantKey}`,
+        `childEntities${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -60,7 +60,7 @@ const createEntityArrayResolver = (
   if (!childEntitiesQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesQueryResolver "${
-        descendantKey ? `childEntities${descendantKey}` : 'childEntities'
+        representationKey ? `childEntities${representationKey}` : 'childEntities'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -74,7 +74,7 @@ const createEntityArrayResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }

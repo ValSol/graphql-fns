@@ -1,16 +1,16 @@
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createEntityWherePayloadInputType from '../inputs/createEntityWherePayloadInputType';
 import createEntityWhichUpdatedInputType from '../inputs/createEntityWhichUpdatedInputType';
-import updatedPayloadDescendantUpdater from '../actionDescendantUpdaters/updatedPayloadDescendantUpdater';
+import updatedPayloadRepresentationUpdater from '../actionRepresentationUpdaters/updatedPayloadRepresentationUpdater';
 
 const actionType = 'Subscription';
 
-const actionGeneralName = (descendantKey = ''): string => `updatedEntity${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string => `updatedEntity${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `updated${baseName}${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `updated${baseName}${representationKey}`;
 
 const inputCreators = [createEntityWherePayloadInputType, createEntityWhichUpdatedInputType];
 
@@ -24,13 +24,13 @@ const argTypes = [
 // may will not be in use
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
@@ -40,15 +40,15 @@ const actionReturnConfig = (
 
   const updatedPayloadConfig = allEntityConfigs[updatedPayloadConfigName];
 
-  return descendantKey
-    ? composeDescendantConfigByName(descendantKey, updatedPayloadConfig, generalConfig)
+  return representationKey
+    ? composeRepresentationConfigByName(representationKey, updatedPayloadConfig, generalConfig)
     : updatedPayloadConfig;
 };
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}UpdatedPayload!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}UpdatedPayload!`;
 
 const updatedEntitySubscriptionAttributes = {
   actionGeneralName,
@@ -60,7 +60,7 @@ const updatedEntitySubscriptionAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDescendantUpdater: updatedPayloadDescendantUpdater,
+  actionRepresentationUpdater: updatedPayloadRepresentationUpdater,
   actionAllowed,
 } as const;
 

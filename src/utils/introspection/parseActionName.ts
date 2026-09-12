@@ -1,4 +1,4 @@
-import type { DescendantAttributesActionName, GeneralConfig } from '@/tsTypes';
+import type { RepresentationAttributesActionName, GeneralConfig } from '@/tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 
 import actionAttributes from '@/types/actionAttributes';
@@ -11,10 +11,10 @@ const toOtherType = {
 const prohibitedForRootActions = ['childEntity', 'childEntities'];
 
 const parseAction = (
-  { actionType, actionName, entityName, descendantKey }: ActionToParse,
+  { actionType, actionName, entityName, representationKey }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
-  const { allEntityConfigs, custom, descendant } = generalConfig;
+  const { allEntityConfigs, custom, representation } = generalConfig;
 
   if (!allEntityConfigs[entityName]) {
     throw new TypeError(`Not found entity with name: "${entityName}"!`);
@@ -33,9 +33,9 @@ const parseAction = (
       );
     }
 
-    if (!descendantKey) {
+    if (!representationKey) {
       throw new TypeError(
-        `Not setted descendantKey for action "${actionName}" & entity: "${entityName}"!`,
+        `Not setted representationKey for action "${actionName}" & entity: "${entityName}"!`,
       );
     }
 
@@ -45,7 +45,7 @@ const parseAction = (
       creationType: 'standard',
       entityConfig,
       baseAction: '',
-      descendantKey,
+      representationKey,
     };
   }
 
@@ -55,33 +55,37 @@ const parseAction = (
 
       const entityConfig = signatureMethods.config(allEntityConfigs[entityName], generalConfig);
 
-      let calculatedDescendantKey = '';
+      let calculatedRepresentationKey = '';
 
-      if (entityConfig && descendant && !allEntityConfigs[entityConfig.name]) {
+      if (entityConfig && representation && !allEntityConfigs[entityConfig.name]) {
         const { name } = entityConfig;
-        const descendantKeys = Object.keys(descendant);
+        const representationKeys = Object.keys(representation);
 
-        for (let i = 0; i < descendantKeys.length; i += 1) {
-          const currentDescendantKey = descendantKeys[i];
-          if (name.endsWith(currentDescendantKey)) {
-            const baseName = name.slice(0, -currentDescendantKey.length);
+        for (let i = 0; i < representationKeys.length; i += 1) {
+          const currentRepresentationKey = representationKeys[i];
+          if (name.endsWith(currentRepresentationKey)) {
+            const baseName = name.slice(0, -currentRepresentationKey.length);
             if (allEntityConfigs[baseName]) {
-              calculatedDescendantKey = currentDescendantKey;
+              calculatedRepresentationKey = currentRepresentationKey;
               break;
             }
           }
         }
       }
 
-      if (calculatedDescendantKey && descendantKey && calculatedDescendantKey !== descendantKey) {
+      if (
+        calculatedRepresentationKey &&
+        representationKey &&
+        calculatedRepresentationKey !== representationKey
+      ) {
         throw new TypeError(
-          `Setted descendantKey: "${descendantKey}" not equal to calculated descendantKey "${calculatedDescendantKey}" for action "${actionName}" & entity: "${entityName}"!`,
+          `Setted representationKey: "${representationKey}" not equal to calculated representationKey "${calculatedRepresentationKey}" for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
-      if (!calculatedDescendantKey && !descendantKey) {
+      if (!calculatedRepresentationKey && !representationKey) {
         throw new TypeError(
-          `Not setted descendantKey for action "${actionName}" & entity: "${entityName}"!`,
+          `Not setted representationKey for action "${actionName}" & entity: "${entityName}"!`,
         );
       }
 
@@ -89,7 +93,7 @@ const parseAction = (
         creationType: 'custom',
         entityConfig,
         baseAction: '',
-        descendantKey: calculatedDescendantKey || descendantKey || '', // last || '' added to prevent flowjs error
+        representationKey: calculatedRepresentationKey || representationKey || '', // last || '' added to prevent flowjs error
       };
     }
 
@@ -100,14 +104,14 @@ const parseAction = (
     }
   }
 
-  if (descendant) {
-    const descendantKeys = Object.keys(descendant);
+  if (representation) {
+    const representationKeys = Object.keys(representation);
 
-    for (let i = 0; i < descendantKeys.length; i += 1) {
-      const currentDescendantKey = descendantKeys[i];
+    for (let i = 0; i < representationKeys.length; i += 1) {
+      const currentRepresentationKey = representationKeys[i];
 
-      if (actionName.endsWith(currentDescendantKey)) {
-        const baseAction = actionName.slice(0, -currentDescendantKey.length);
+      if (actionName.endsWith(currentRepresentationKey)) {
+        const baseAction = actionName.slice(0, -currentRepresentationKey.length);
 
         if (actionAttributes[baseAction]) {
           if (prohibitedForRootActions.includes(baseAction)) {
@@ -116,37 +120,37 @@ const parseAction = (
 
           const {
             allow: { [entityName]: actions },
-          } = descendant[currentDescendantKey];
+          } = representation[currentRepresentationKey];
 
           if (!actions) {
             throw new TypeError(
-              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative descendantKey: "${currentDescendantKey}"!`,
+              `For action "${actionName}" not allowed entity: "${entityName}" with derfivative representationKey: "${currentRepresentationKey}"!`,
             );
           }
 
-          if (!actions.includes(baseAction as DescendantAttributesActionName)) {
+          if (!actions.includes(baseAction as RepresentationAttributesActionName)) {
             throw new TypeError(
-              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative descendantKey: "${currentDescendantKey}" & entity: ${entityName}!`,
+              `For action "${actionName}" not found baseAction: "${baseAction}" with derfivative representationKey: "${currentRepresentationKey}" & entity: ${entityName}!`,
             );
           }
 
           const entityConfig = actionAttributes[baseAction].actionReturnConfig(
             allEntityConfigs[entityName],
             generalConfig,
-            currentDescendantKey,
+            currentRepresentationKey,
           );
 
-          if (descendantKey) {
+          if (representationKey) {
             throw new TypeError(
-              `Need not set descendantKey: "${descendantKey}" for action "${actionName}" & entity: "${entityName}"!`,
+              `Need not set representationKey: "${representationKey}" for action "${actionName}" & entity: "${entityName}"!`,
             );
           }
 
           return {
-            creationType: 'descendant',
+            creationType: 'representation',
             entityConfig,
             baseAction,
-            descendantKey: currentDescendantKey,
+            representationKey: currentRepresentationKey,
           };
         }
       }

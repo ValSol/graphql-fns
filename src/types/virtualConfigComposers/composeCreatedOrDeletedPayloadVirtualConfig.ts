@@ -42,7 +42,7 @@ const composeCreatedOrDeletedPayloadVirtualConfig: VirtualConfigComposer = (
   return {
     name: composeCreatedOrDeletedPayloadVirtualConfigName(name),
     type: 'virtual',
-    descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+    representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
     childFields,
   } as VirtualEntityConfig;

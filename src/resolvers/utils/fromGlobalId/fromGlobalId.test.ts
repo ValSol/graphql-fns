@@ -10,9 +10,9 @@ describe('fromGlobalId', () => {
 
     const _id = '61af380a5c2825441ca07902'; // eslint-disable-line no-underscore-dangle
     const entityName = 'Restaurant';
-    const descendantKey = 'ForView';
+    const representationKey = 'ForView';
 
-    const expectedResult = { _id, entityName, descendantKey };
+    const expectedResult = { _id, entityName, representationKey };
 
     expect(result).toEqual(expectedResult);
   });
@@ -22,7 +22,7 @@ describe('fromGlobalId', () => {
 
     const result = fromGlobalId(globalId);
 
-    const expectedResult = { _id: null, entityName: '', descendantKey: '' };
+    const expectedResult = { _id: null, entityName: '', representationKey: '' };
 
     expect(result).toEqual(expectedResult);
   });

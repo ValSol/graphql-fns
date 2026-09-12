@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import type { DescendantAttributes, GeneralConfig, Inventory } from '@/tsTypes';
+import type { RepresentationAttributes, GeneralConfig, Inventory } from '@/tsTypes';
 
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import getAllEntityNames from '.';
@@ -38,8 +38,8 @@ describe('getAllEntityNames', () => {
     ],
   };
 
-  const ForView: DescendantAttributes = {
-    descendantKey: 'ForView',
+  const ForView: RepresentationAttributes = {
+    representationKey: 'ForView',
     allow: {
       Person: ['entity', 'entities', 'childEntityCount'],
       Place: ['childEntity', 'childEntities', 'updatedEntity'],
@@ -47,7 +47,7 @@ describe('getAllEntityNames', () => {
     },
   };
 
-  const descendant = { ForView };
+  const representation = { ForView };
 
   const inventory: Inventory = {
     name: 'test',
@@ -56,7 +56,7 @@ describe('getAllEntityNames', () => {
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: composeAllEntityConfigs([Person, Place]),
-    descendant,
+    representation,
     inventory,
   };
 

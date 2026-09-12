@@ -8,7 +8,7 @@ import type {
   TangibleEntityConfig,
 } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
@@ -34,16 +34,20 @@ const createDeletedEntitySubscriptionResolver = (
 
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
 
-  const descendantKey = originalOrCustomName.slice('deletedEntity'.length);
+  const representationKey = originalOrCustomName.slice('deletedEntity'.length);
 
-  const entityConfig = descendantKey
-    ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
+  const entityConfig = representationKey
+    ? composeRepresentationConfigByName(representationKey, preEntityConfig, generalConfig)
     : preEntityConfig;
 
   const subscriptionActorConfig =
     preSubscriptionActorConfig &&
-    (descendantKey
-      ? composeDescendantConfigByName(descendantKey, preSubscriptionActorConfig, generalConfig)
+    (representationKey
+      ? composeRepresentationConfigByName(
+          representationKey,
+          preSubscriptionActorConfig,
+          generalConfig,
+        )
       : preSubscriptionActorConfig);
 
   store[storeKey] = {
@@ -72,7 +76,7 @@ const createDeletedEntitySubscriptionResolver = (
           } = payload as Record<string, any>;
 
           return {
-            [`deleted${name}${descendantKey}`]: {
+            [`deleted${name}${representationKey}`]: {
               actor: actor && transformAfter({}, actor, subscriptionActorConfig, generalConfig),
               node: transformAfter({}, node, entityConfig, generalConfig),
             },

@@ -5,25 +5,25 @@ import parseAction from './parseAction';
 
 const parseActions = (
   actions: ParseActionArgs[],
-  descendantKeyToPermission: {
-    [descendantKey: string]: string;
+  representationKeyToPermission: {
+    [representationKey: string]: string;
   },
   generalConfig: GeneralConfig,
 ): ParseActionResult => {
-  const descendantAttributes: Record<string, any> = {};
+  const representationAttributes: Record<string, any> = {};
   const inventoryByRoles: Record<string, any> = {};
   let maxShift = 0;
 
   actions.forEach((action) => {
     maxShift = parseAction(
-      { ...action, generalConfig, descendantKeyToPermission },
-      { maxShift, descendantAttributes, inventoryByRoles },
+      { ...action, generalConfig, representationKeyToPermission },
+      { maxShift, representationAttributes, inventoryByRoles },
     ).maxShift;
   });
 
   return {
     inventoryByRoles,
-    descendantAttributes,
+    representationAttributes,
     maxShift,
   };
 };

@@ -16,7 +16,7 @@ const getShift = async (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entityQueryResolver: any,
 ): Promise<null | number> => {

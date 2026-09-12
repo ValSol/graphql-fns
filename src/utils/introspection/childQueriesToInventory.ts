@@ -6,16 +6,16 @@ const childQueriesToInventory = (
   parsedAction: ParsedAction,
   // InventoryByRoles,
   inventoryByRoles: any,
-  descendantKeyToPermission: {
-    [descendantKey: string]: string;
+  representationKeyToPermission: {
+    [representationKey: string]: string;
   },
 ): InventoryByRoles => {
-  const { descendantKey: defaultDescendantKey } = parsedAction;
+  const { representationKey: defaultRepresentationKey } = parsedAction;
 
-  childQueries.forEach(({ actionName, descendantKey, entityName }) => {
-    const permission = descendantKey
-      ? descendantKeyToPermission[descendantKey]
-      : descendantKeyToPermission[defaultDescendantKey];
+  childQueries.forEach(({ actionName, representationKey, entityName }) => {
+    const permission = representationKey
+      ? representationKeyToPermission[representationKey]
+      : representationKeyToPermission[defaultRepresentationKey];
 
     const inventory1 = inventoryByRoles[permission];
     if (!inventory1) {

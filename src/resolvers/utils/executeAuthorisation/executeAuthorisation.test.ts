@@ -2,7 +2,7 @@
 
 import type {
   Context,
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityFilters,
   GeneralConfig,
   Inventory,
@@ -189,17 +189,17 @@ describe('executeAuthorisation', () => {
 
   const context = {} as Context;
 
-  const ForCatalog: DescendantAttributes = {
+  const ForCatalog: RepresentationAttributes = {
     allow: { Restaurant: ['entity', 'entities'] },
-    descendantKey: 'ForCatalog',
+    representationKey: 'ForCatalog',
   };
-  const ForSetting: DescendantAttributes = {
+  const ForSetting: RepresentationAttributes = {
     allow: { Restaurant: ['entity', 'entities'] },
-    descendantKey: 'ForSetting',
+    representationKey: 'ForSetting',
   };
-  const ForView: DescendantAttributes = {
+  const ForView: RepresentationAttributes = {
     allow: { Restaurant: ['entity', 'entities'] },
-    descendantKey: 'ForView',
+    representationKey: 'ForView',
   };
 
   const Restaurant: TangibleEntityConfig = {
@@ -231,9 +231,9 @@ describe('executeAuthorisation', () => {
   };
 
   const allEntityConfigs = { Restaurant };
-  const descendant = { ForCatalog, ForSetting, ForView };
+  const representation = { ForCatalog, ForSetting, ForView };
 
-  const generalConfig = { allEntityConfigs, descendant } as GeneralConfig;
+  const generalConfig = { allEntityConfigs, representation } as GeneralConfig;
 
   const id = '1234567890';
 

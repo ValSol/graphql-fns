@@ -6,10 +6,10 @@ import type {
 } from '@/tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
-import mergeDescendantIntoCustom from '../../utils/mergeDescendantIntoCustom';
+import mergeRepresentationIntoCustom from '../../utils/mergeRepresentationIntoCustom';
 import composeCustomActionSignature from '../../types/composeCustomActionSignature';
 import customResolverDecorator from '../utils/resolverDecorator/customResolverDecorator';
-import generateDescendantResolvers from './generateDescendantResolvers';
+import generateRepresentationResolvers from './generateRepresentationResolvers';
 
 const createCustomResolver = (
   actionKind: 'Query' | 'Mutation',
@@ -22,7 +22,7 @@ const createCustomResolver = (
 
   const { inventory } = generalConfig;
 
-  const custom = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver');
+  const custom = mergeRepresentationIntoCustom(generalConfig, 'forCustomResolver');
 
   if (!custom) {
     throw new TypeError('"custom" property have to be defined!');
@@ -56,17 +56,21 @@ const createCustomResolver = (
     );
   }
 
-  // use generated descendant resolvers
+  // use generated representation resolvers
 
-  const descendantResolvers = generateDescendantResolvers(generalConfig);
+  const representationResolvers = generateRepresentationResolvers(generalConfig);
 
-  if (!descendantResolvers) {
+  if (!representationResolvers) {
     throw new TypeError(`Have to set the custom "${actionName}" ${actionKind}!`);
   }
 
-  if (descendantResolvers[actionKind]?.[actionName]) {
+  if (representationResolvers[actionKind]?.[actionName]) {
     return customResolverDecorator(
-      descendantResolvers[actionKind][actionName](entityConfig, generalConfig, serversideConfig),
+      representationResolvers[actionKind][actionName](
+        entityConfig,
+        generalConfig,
+        serversideConfig,
+      ),
       inventoryChain,
       signatureMethods,
       entityConfig,
@@ -76,7 +80,7 @@ const createCustomResolver = (
   }
 
   throw new TypeError(
-    `Have to set the descendant or custom "${actionName}" ${actionKind} for "${entityConfig.name}" entity!`,
+    `Have to set the representation or custom "${actionName}" ${actionKind} for "${entityConfig.name}" entity!`,
   );
 };
 

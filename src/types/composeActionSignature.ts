@@ -1,12 +1,12 @@
 import type {
   ActionAttributes,
-  DescendantAttributesActionName,
+  RepresentationAttributesActionName,
   EntityConfig,
   GeneralConfig,
 } from '../tsTypes';
 
-import checkDescendantAction from '../utils/checkDescendantAction';
-import composeDescendantConfigByName from '../utils/composeDescendantConfigByName';
+import checkRepresentationAction from '../utils/checkRepresentationAction';
+import composeRepresentationConfigByName from '../utils/composeRepresentationConfigByName';
 import fillInputDic from './inputs/fillInputDic';
 import fillEntityTypeDic from './fillEntityTypeDic';
 
@@ -16,7 +16,7 @@ const composeActionSignature = (
   actionAttributes: ActionAttributes,
   entityTypeDic: { [entityName: string]: string },
   inputDic: { [inputName: string]: string },
-  descendantKey = '',
+  representationKey = '',
 ): string => {
   const {
     actionAllowed,
@@ -35,8 +35,8 @@ const composeActionSignature = (
   if (actionIsChild || !actionAllowed(entityConfig)) return '';
 
   if (
-    !checkDescendantAction(
-      actionGeneralName('') as DescendantAttributesActionName,
+    !checkRepresentationAction(
+      actionGeneralName('') as RepresentationAttributesActionName,
       entityConfig,
       generalConfig,
     )
@@ -44,12 +44,12 @@ const composeActionSignature = (
     return '';
   }
 
-  const specificName = actionName(configName, descendantKey);
+  const specificName = actionName(configName, representationKey);
 
   const toShow: Array<boolean> = [];
 
-  const entityConfigForInputCreator = descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+  const entityConfigForInputCreator = representationKey
+    ? composeRepresentationConfigByName(representationKey, entityConfig, generalConfig)
     : entityConfig;
 
   inputCreators.forEach((inputCreator) => {
@@ -64,7 +64,7 @@ const composeActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(entityConfig, descendantKey);
+  const returnString = actionReturnString(entityConfig, representationKey);
 
   if (filteredArgNames.length === 0) {
     return `  ${specificName}: ${returnString}`;
@@ -74,7 +74,7 @@ const composeActionSignature = (
     .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator)}`)
     .join(', ');
 
-  const returnConfig = actionReturnConfig(entityConfig, generalConfig, descendantKey);
+  const returnConfig = actionReturnConfig(entityConfig, generalConfig, representationKey);
 
   if (returnConfig) {
     fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);

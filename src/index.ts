@@ -9,8 +9,8 @@ import composeManuallyCreatedResolvers from '@/composeManuallyCreatedResolvers';
 import composeServersideConfig from '@/resolvers/utils/composeServersideConfig';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeCustom from '@/utils/composeCustom';
-import composeDescendant from '@/utils/composeDescendant';
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentation from '@/utils/composeRepresentation';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import pubsub from '@/resolvers/utils/pubsub';
 
 // mutation resolvers
@@ -101,8 +101,8 @@ export {
   composeServersideConfig,
   composeAllEntityConfigs,
   composeCustom,
-  composeDescendant,
-  composeDescendantConfigByName,
+  composeRepresentation,
+  composeRepresentationConfigByName,
   composeQueryResolver,
   createCopyManyEntitiesMutationResolver,
   createCopyManyEntitiesWithChildrenMutationResolver,

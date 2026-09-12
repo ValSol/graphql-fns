@@ -6,11 +6,11 @@ import createEntityDistinctValuesOptionsInputType from '../inputs/createEntityDi
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `childEntityDistinctValues${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `childEntityDistinctValues${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `child${baseName}DistinctValues${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `child${baseName}DistinctValues${representationKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -28,8 +28,8 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (): null | EntityConfig => null;
 

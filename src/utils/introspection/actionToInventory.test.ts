@@ -130,7 +130,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      descendantKey: 'ForCabinet',
+      representationKey: 'ForCabinet',
     };
 
     const inventoryByRoles: Record<string, any> = {};
@@ -167,7 +167,7 @@ describe('actionToInventory', () => {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Place,
       baseAction: '',
-      descendantKey: 'ForCabinet',
+      representationKey: 'ForCabinet',
     };
 
     const inventoryByRoles = {

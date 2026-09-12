@@ -3,7 +3,7 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import type {
-  DescendantAttributes,
+  RepresentationAttributes,
   Enums,
   EntityConfig,
   GeneralConfig,
@@ -409,10 +409,10 @@ describe('graphql schema', () => {
     });
   });
 
-  test('test schema with descendant queries', () => {
-    const ForCatalogDescendant: DescendantAttributes = {
+  test('test schema with representation queries', () => {
+    const ForCatalogRepresentation: RepresentationAttributes = {
       allow: { Example: ['entities', 'updateEntity'] },
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
       addFields: {
         Example: {
           dateTimeFields: [{ name: 'start', required: true }, { name: 'end' }],
@@ -464,8 +464,8 @@ describe('graphql schema', () => {
       },
     };
 
-    const descendant = { ForCatalog: ForCatalogDescendant };
-    const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
+    const representation = { ForCatalog: ForCatalogRepresentation };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
 
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
 

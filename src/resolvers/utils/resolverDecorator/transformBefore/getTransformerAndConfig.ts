@@ -1,6 +1,6 @@
 import type { GeneralConfig, EntityConfig } from '../../../../tsTypes';
 
-import composeDescendantConfigByName from '../../../../utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '../../../../utils/composeRepresentationConfigByName';
 import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
 import transformWhere from './transformWhere';
@@ -45,7 +45,7 @@ const getTransformerAndConfig = (
         }
       } else {
         try {
-          const { root: entityName, descendantKey } = parseEntityName(
+          const { root: entityName, representationKey } = parseEntityName(
             possibleEntityName,
             generalConfig,
           );
@@ -54,16 +54,16 @@ const getTransformerAndConfig = (
 
           const entityConfig = allEntityConfigs[entityName];
 
-          if (!descendantKey) {
+          if (!representationKey) {
             prev.push([transformer, entityConfig]);
           } else {
-            const descendantConfig = composeDescendantConfigByName(
-              descendantKey,
+            const representationConfig = composeRepresentationConfigByName(
+              representationKey,
               entityConfig,
               generalConfig,
             );
 
-            prev.push([transformer, descendantConfig]);
+            prev.push([transformer, representationConfig]);
           }
         } catch {
           // do nothing

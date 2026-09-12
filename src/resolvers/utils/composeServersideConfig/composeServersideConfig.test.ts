@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import type {
-  DescendantAttributes,
+  RepresentationAttributes,
   TangibleEntityConfig,
   GeneralConfig,
   ServersideConfig,
@@ -111,19 +111,19 @@ describe('composeFilters', () => {
     ],
   });
 
-  const ForView: DescendantAttributes = {
-    descendantKey: 'ForView',
+  const ForView: RepresentationAttributes = {
+    representationKey: 'ForView',
     allow: {
       Person: ['entity', 'entities', 'childEntities'],
       Place: ['childEntity'],
     },
   };
 
-  const descendant = { ForView };
+  const representation = { ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    descendant,
+    representation,
   };
 
   test('should check the simplest correct filter', () => {

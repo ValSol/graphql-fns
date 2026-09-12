@@ -1,7 +1,7 @@
 import type { GeneralConfig } from '../tsTypes';
 
 import checkInventory from '../utils/inventory/checkInventory';
-import mergeDescendantIntoCustom from '../utils/mergeDescendantIntoCustom';
+import mergeRepresentationIntoCustom from '../utils/mergeRepresentationIntoCustom';
 import composeCustomActionSignature from './composeCustomActionSignature';
 
 import { mutationAttributes, queryAttributes, subscriptionAttributes } from './actionAttributes';
@@ -19,7 +19,7 @@ const composeGqlTypes = (
   typeDefs: string;
   entityTypeDic: { [entityName: string]: string };
 } => {
-  const { allEntityConfigs, inventory, descendant = {} } = generalConfig;
+  const { allEntityConfigs, inventory, representation = {} } = generalConfig;
 
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
@@ -85,7 +85,7 @@ const composeGqlTypes = (
   // ... to "entityTypeDic" entity types ...
   // ... to "inputDic" inputs
 
-  const { Query, Mutation, Subscription } = mergeDescendantIntoCustom(generalConfig) || {
+  const { Query, Mutation, Subscription } = mergeRepresentationIntoCustom(generalConfig) || {
     Query: {},
     Mutation: {},
     Subscription: {},

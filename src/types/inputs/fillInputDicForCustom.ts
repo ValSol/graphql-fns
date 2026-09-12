@@ -1,6 +1,6 @@
 import type { GeneralConfig } from '../../tsTypes';
 
-import composeDescendantConfig from '../../utils/composeDescendantConfig';
+import composeRepresentationConfig from '../../utils/composeRepresentationConfig';
 import fillInputDic from './fillInputDic';
 import inputs from './index';
 
@@ -41,11 +41,11 @@ const fillInputDicForCustom = (
     return;
   }
 
-  const { custom = {}, allEntityConfigs, descendant = {}, enums = {} } = generalConfig;
+  const { custom = {}, allEntityConfigs, representation = {}, enums = {} } = generalConfig;
 
   const allEntityNames = Object.keys(allEntityConfigs).map((name) => name);
 
-  const descendantKeys = ['', ...Object.keys(descendant)];
+  const representationKeys = ['', ...Object.keys(representation)];
 
   const { Input: customInput = {} } = custom;
 
@@ -61,12 +61,12 @@ const fillInputDicForCustom = (
     const entityName = allEntityNames[i];
 
     if (argType.endsWith('Input') || argType.endsWith('Enum')) {
-      for (let j = 0; j < descendantKeys.length; j += 1) {
-        const descendantKey = descendantKeys[j];
+      for (let j = 0; j < representationKeys.length; j += 1) {
+        const representationKey = representationKeys[j];
 
-        const entityConfig = descendantKey
-          ? composeDescendantConfig(
-              descendant[descendantKey],
+        const entityConfig = representationKey
+          ? composeRepresentationConfig(
+              representation[representationKey],
               allEntityConfigs[entityName],
               generalConfig,
             )
@@ -75,9 +75,9 @@ const fillInputDicForCustom = (
         for (let k = 0; k < inputs.length; k += 1) {
           const inputCreator = inputs[k];
 
-          // const entityConfig = descendantKey
-          //   ? composeDescendantConfig(
-          //       descendant[descendantKey],
+          // const entityConfig = representationKey
+          //   ? composeRepresentationConfig(
+          //       representation[representationKey],
           //       allEntityConfigs[entityName],
           //       generalConfig,
           //     )

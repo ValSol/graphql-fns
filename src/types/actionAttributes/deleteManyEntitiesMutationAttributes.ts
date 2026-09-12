@@ -2,16 +2,17 @@ import pluralize from 'pluralize';
 
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string => `deleteManyEntities${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `deleteManyEntities${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `deleteMany${pluralize(baseName)}${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `deleteMany${pluralize(baseName)}${representationKey}`;
 
 const inputCreators = [createEntityWhereOneInputType, createStringInputType];
 
@@ -21,24 +22,24 @@ const argTypes = [({ name }): string => `[${name}WhereOneInput!]!`, (): string =
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
+  inputOutputEntity: `${name}${representationKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig =>
-  descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+  representationKey
+    ? composeRepresentationConfigByName(representationKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `[${name}${descendantKey}!]!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `[${name}${representationKey}!]!`;
 
 const deleteManyEntitiesMutationAttributes = {
   actionGeneralName,

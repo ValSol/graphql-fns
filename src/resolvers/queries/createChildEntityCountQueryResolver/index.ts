@@ -36,7 +36,7 @@ const createChildEntityCountQueryResolver = (
     info: SintheticResolverInfo,
     resolverOptions: {
       involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> =>

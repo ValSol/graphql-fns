@@ -190,7 +190,7 @@ const composeEntityConfig = (
             `Not embedded config: "${configName}" in embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
           );
         } else {
-          // name=undefined if entityConfig is a descendantConfig
+          // name=undefined if entityConfig is a representationConfig
 
           console.warn(
             '\x1b[33m',
@@ -352,7 +352,7 @@ const composeEntityConfig = (
                 `Not embedded config: "${configName}" in calculated embedded field: "${field.name}" of simplified entityConfig: "${name}"!`,
               );
             } else {
-              // name=undefined if entityConfig is a descendantConfig
+              // name=undefined if entityConfig is a representationConfig
 
               console.warn(
                 '\x1b[33m',
@@ -384,7 +384,7 @@ const composeEntityConfig = (
                 `Not virtual config: "${configName}" in calculated virtual field: "${field.name}" of simplified entityConfig: "${name}"!`,
               );
             } else {
-              // name=undefined if entityConfig is a descendantConfig
+              // name=undefined if entityConfig is a representationConfig
 
               console.warn(
                 '\x1b[33m',

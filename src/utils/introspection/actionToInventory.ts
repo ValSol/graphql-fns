@@ -6,14 +6,14 @@ const actionToInventory = (
   parsedAction: ParsedAction,
   // InventoryByRoles,
   inventoryByRoles: any,
-  descendantKeyToPermission: {
-    [descendantKey: string]: string;
+  representationKeyToPermission: {
+    [representationKey: string]: string;
   },
 ): InventoryByRoles => {
   const { actionType, actionName, entityName } = actionToParse;
-  const { descendantKey } = parsedAction;
+  const { representationKey } = parsedAction;
 
-  const permission = descendantKeyToPermission[descendantKey];
+  const permission = representationKeyToPermission[representationKey];
 
   if (!inventoryByRoles[permission]) {
     inventoryByRoles[permission] = { name: permission };

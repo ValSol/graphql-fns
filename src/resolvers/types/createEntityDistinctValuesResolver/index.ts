@@ -6,7 +6,7 @@ import type {
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityDistinctValuesQueryAttributes from '../../../types/actionAttributes/childEntityDistinctValuesQueryAttributes';
 import createChildEntityDistinctValuesQueryResolver from '../../queries/createChildEntityDistinctValuesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -30,16 +30,16 @@ const createEntityDistinctValuesResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityDistinctValues', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityDistinctValues', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityDistinctValuesQueryResolver = descendantKey
+  const childEntityDistinctValuesQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityDistinctValues${descendantKey}`,
+        `childEntityDistinctValues${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -56,7 +56,9 @@ const createEntityDistinctValuesResolver = (
   if (!childEntityDistinctValuesQueryResolver) {
     throw new TypeError(
       `Not defined childEntityDistinctValuesQueryResolver "${
-        descendantKey ? `childEntityDistinctValues${descendantKey}` : 'childEntityDistinctValues'
+        representationKey
+          ? `childEntityDistinctValues${representationKey}`
+          : 'childEntityDistinctValues'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -65,7 +67,7 @@ const createEntityDistinctValuesResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityDistinctValues${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }

@@ -2,15 +2,15 @@ import type { EntityConfig } from '../../../tsTypes';
 
 import toGlobalId from '../toGlobalId';
 
-const processField = (id: any, configName: string, descendantKey: string) => {
+const processField = (id: any, configName: string, representationKey: string) => {
   if (!id) {
     return id;
   }
 
-  return toGlobalId(id, configName, descendantKey);
+  return toGlobalId(id, configName, representationKey);
 };
 
-const processWhere = (where: any, entityConfig: EntityConfig, descendantKey: string): any => {
+const processWhere = (where: any, entityConfig: EntityConfig, representationKey: string): any => {
   const { duplexFields = [], relationalFields = [] } = (entityConfig as any) || {};
 
   const fieldsObject = [...duplexFields, ...relationalFields].reduce<Record<string, any>>(
@@ -26,27 +26,27 @@ const processWhere = (where: any, entityConfig: EntityConfig, descendantKey: str
     const [baseKey, suffix] = key.split('_');
 
     if (key === 'id') {
-      prev[key] = processField(where[key], entityConfig.name, descendantKey);
+      prev[key] = processField(where[key], entityConfig.name, representationKey);
     } else if (key === 'id_in') {
-      prev[key] = where[key].map((id) => processField(id, entityConfig.name, descendantKey));
+      prev[key] = where[key].map((id) => processField(id, entityConfig.name, representationKey));
     } else if (key === 'id_nin') {
-      prev[key] = where[key].map((id) => processField(id, entityConfig.name, descendantKey));
+      prev[key] = where[key].map((id) => processField(id, entityConfig.name, representationKey));
     } else if (fieldsObject[baseKey]) {
       if (key === baseKey || suffix === 'ne') {
-        prev[key] = processField(where[key], fieldsObject[baseKey].config.name, descendantKey);
+        prev[key] = processField(where[key], fieldsObject[baseKey].config.name, representationKey);
       } else if (suffix === 'in' || suffix === 'nin') {
         prev[key] = where[key].map((id: string) =>
-          processField(id, fieldsObject[baseKey].config.name, descendantKey),
+          processField(id, fieldsObject[baseKey].config.name, representationKey),
         );
       } else if (suffix === 'exists') {
         prev[key] = where[key];
       } else if (key === `${baseKey}_`) {
-        prev[key] = processWhere(where[key], fieldsObject[baseKey].config, descendantKey);
+        prev[key] = processWhere(where[key], fieldsObject[baseKey].config, representationKey);
       } else {
         throw new TypeError(`Incorrect key: "${key}"!`);
       }
     } else if (key === 'AND' || key === 'NOR' || key === 'OR') {
-      prev[key] = where[key].map((item) => processWhere(item, entityConfig, descendantKey));
+      prev[key] = where[key].map((item) => processWhere(item, entityConfig, representationKey));
     } else {
       prev[key] = where[key];
     }
@@ -55,12 +55,16 @@ const processWhere = (where: any, entityConfig: EntityConfig, descendantKey: str
   }, {});
 };
 
-const whereFromGlobalIds = (whereOne: any, entityConfig: EntityConfig, descendantKey = ''): any => {
+const whereFromGlobalIds = (
+  whereOne: any,
+  entityConfig: EntityConfig,
+  representationKey = '',
+): any => {
   if (Array.isArray(whereOne)) {
-    return whereOne.map((whereOne2) => processWhere(whereOne2, entityConfig, descendantKey));
+    return whereOne.map((whereOne2) => processWhere(whereOne2, entityConfig, representationKey));
   }
 
-  return processWhere(whereOne, entityConfig, descendantKey);
+  return processWhere(whereOne, entityConfig, representationKey);
 };
 
 export default whereFromGlobalIds;

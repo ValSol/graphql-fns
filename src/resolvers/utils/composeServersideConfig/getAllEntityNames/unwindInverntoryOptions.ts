@@ -1,6 +1,6 @@
 import type { GeneralConfig, InventoryOptions, SimplifiedInventoryOptions } from '@/tsTypes';
 
-import mergeDescendantIntoCustom from '@/utils/mergeDescendantIntoCustom';
+import mergeRepresentationIntoCustom from '@/utils/mergeRepresentationIntoCustom';
 import {
   mutationAttributes,
   queryAttributes,
@@ -46,7 +46,7 @@ const unwindInverntoryOptions = (
     Query: customQueries = {},
     Mutation: customMutations = {},
     Subscription: customSubscriptions = {},
-  } = mergeDescendantIntoCustom(generalConfig, 'forCustomResolver') || {};
+  } = mergeRepresentationIntoCustom(generalConfig, 'forCustomResolver') || {};
 
   // *** process child queries
 

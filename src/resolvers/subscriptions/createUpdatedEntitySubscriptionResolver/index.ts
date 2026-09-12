@@ -8,7 +8,7 @@ import type {
   TangibleEntityConfig,
 } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import checkInventory from '@/utils/inventory/checkInventory';
 import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
@@ -35,16 +35,20 @@ const createUpdatedEntitySubscriptionResolver = (
 
   if (!process.env.JEST_WORKER_ID && store[storeKey]) return store[storeKey];
 
-  const descendantKey = originalOrCustomName.slice('updatedEntity'.length);
+  const representationKey = originalOrCustomName.slice('updatedEntity'.length);
 
-  const entityConfig = descendantKey
-    ? composeDescendantConfigByName(descendantKey, preEntityConfig, generalConfig)
+  const entityConfig = representationKey
+    ? composeRepresentationConfigByName(representationKey, preEntityConfig, generalConfig)
     : preEntityConfig;
 
   const subscriptionActorConfig =
     preSubscriptionActorConfig &&
-    (descendantKey
-      ? composeDescendantConfigByName(descendantKey, preSubscriptionActorConfig, generalConfig)
+    (representationKey
+      ? composeRepresentationConfigByName(
+          representationKey,
+          preSubscriptionActorConfig,
+          generalConfig,
+        )
       : preSubscriptionActorConfig);
 
   store[storeKey] = {
@@ -97,7 +101,7 @@ const createUpdatedEntitySubscriptionResolver = (
           );
 
           return {
-            [`updated${name}${descendantKey}`]: {
+            [`updated${name}${representationKey}`]: {
               actor: actor && transformAfter({}, actor, subscriptionActorConfig, generalConfig),
               node: transformAfter({}, node, entityConfig, generalConfig),
               previousNode: transformAfter({}, previousNode, entityConfig, generalConfig),

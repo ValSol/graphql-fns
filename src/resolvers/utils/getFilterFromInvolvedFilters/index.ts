@@ -4,7 +4,7 @@ const addOR = ([arr]: [InvolvedFilter[]] | [InvolvedFilter[], number]) =>
   arr.length === 1 ? arr[0] : { OR: arr };
 
 const getFilterFromInvolvedFilters = (involvedFilters: {
-  [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+  [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
 }): { filter: null | InvolvedFilter[]; limit?: number } => {
   const { inputFilterAndLimit, inputOutputFilterAndLimit, outputFilterAndLimit } = involvedFilters;
 

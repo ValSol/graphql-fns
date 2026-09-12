@@ -451,7 +451,7 @@ type SimplifiedCalculatedField =
 type SimplifiedEntityConfigCommonProperties = {
   name: string;
   interfaces?: string[];
-  descendantNameSlicePosition?: number;
+  representationNameSlicePosition?: number;
   duplexFields?: SimplifiedDuplexField[];
   embeddedFields?: SimplifiedEmbeddedField[];
   filterFields?: SimplifiedFilterField[];
@@ -813,7 +813,7 @@ export type CalculatedField =
 type EntityConfigCommonProperties = {
   name: string;
   interfaces?: string[];
-  descendantNameSlicePosition?: number;
+  representationNameSlicePosition?: number;
   duplexFields?: DuplexField[];
   embeddedFields?: EmbeddedField[];
   filterFields?: FilterField[];
@@ -931,7 +931,7 @@ export type Inventory = {
   exclude?: true | InventoryOptions;
 };
 
-export type DescendantAttributesActionName =
+export type RepresentationAttributesActionName =
   | 'entity'
   | 'childEntity'
   | 'childEntityCount'
@@ -970,10 +970,10 @@ export type DescendantAttributesActionName =
   | 'deletedEntity'
   | 'updatedEntity';
 
-export type DescendantAttributes = {
-  descendantKey: string;
+export type RepresentationAttributes = {
+  representationKey: string;
   allow: {
-    [entityName: string]: DescendantAttributesActionName[];
+    [entityName: string]: RepresentationAttributesActionName[];
   };
   interfaces?: {
     [entityName: string]: Array<string>;
@@ -993,10 +993,10 @@ export type DescendantAttributes = {
   addFields?: {
     [entityName: string]: Omit<
       SimplifiedTangibleEntityConfig,
-      'name' | 'type' | 'counter' | 'descendantNameSlicePosition'
+      'name' | 'type' | 'counter' | 'representationNameSlicePosition'
     >;
   };
-  involvedOutputDescendantKeys?: {
+  involvedOutputRepresentationKeys?: {
     [entityName: string]: {
       outputEntity: string;
     };
@@ -1025,7 +1025,7 @@ export type ActionSignatureMethods = {
   config: (entityConfig: EntityConfig, generalConfig?: GeneralConfig) => null | EntityConfig;
 };
 
-export type ManualyUsedEntity = { name: string; descendantKey?: string };
+export type ManualyUsedEntity = { name: string; representationKey?: string };
 
 export type GeneralConfig = {
   allEntityConfigs: {
@@ -1042,10 +1042,10 @@ export type GeneralConfig = {
       [customMutationName: string]: ActionSignatureMethods;
     };
   };
-  descendant?: {
-    // whole fefault descendant name = entityName (baseName) + descendantKey
-    // OR compose from descendantNameSlicePosition entity config attribute (if it's setted)
-    [descendantKey: string]: DescendantAttributes;
+  representation?: {
+    // whole fefault representation name = entityName (baseName) + representationKey
+    // OR compose from representationNameSlicePosition entity config attribute (if it's setted)
+    [representationKey: string]: RepresentationAttributes;
   };
   enums?: Enums;
   inventory?: Inventory;
@@ -1169,7 +1169,7 @@ export type ActionResolver = (
   info: SintheticResolverInfo,
   resolverOptions: {
     involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
     subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
@@ -1301,7 +1301,7 @@ export type Subscription = {
     context: Context,
     info: SintheticResolverInfo,
     involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     },
   ) => any;
 };
@@ -1341,28 +1341,34 @@ export type ActionInvolvedEntityNames = {
 
 export type ActionAttributes = {
   actionArgsToHide?: string[]; // some of argNames to hide in schema action signature
-  actionGeneralName: (descendantKey?: string) => string;
+  actionGeneralName: (representationKey?: string) => string;
   actionType: 'Mutation' | 'Query' | 'Subscription' | 'Field';
   actionAllowed: (entityConfig: EntityConfig) => boolean;
   actionIsChild?: 'Array' | 'Scalar';
-  actionName: (baseName: string, descendantKey?: string) => string;
+  actionName: (baseName: string, representationKey?: string) => string;
   inputCreators: Array<InputCreator>;
   argNames: Array<string>;
   argTypes: Array<(entityConfig: EntityConfig) => string>;
-  actionInvolvedEntityNames: (name: string, descendantKey?: string) => ActionInvolvedEntityNames;
-  actionReturnString: (entityConfig: EntityConfig, descendantKey: string) => string;
+  actionInvolvedEntityNames: (
+    name: string,
+    representationKey?: string,
+  ) => ActionInvolvedEntityNames;
+  actionReturnString: (entityConfig: EntityConfig, representationKey: string) => string;
   actionReturnConfig: (
     entityConfig: EntityConfig,
     generalConfig: GeneralConfig,
-    descendantKey?: string,
+    representationKey?: string,
   ) => EntityConfig | null;
-  actionDescendantUpdater?: (entityConfig: EntityConfig, item: DescendantAttributes) => void;
+  actionRepresentationUpdater?: (
+    entityConfig: EntityConfig,
+    item: RepresentationAttributes,
+  ) => void;
 };
 
 export type GqlActionData = {
   actionType: 'Query' | 'Mutation';
   actionName: string;
-  descendantKey?: string;
+  representationKey?: string;
   entityName: string;
   composeOptions: (arg: GraphqlObject) => GraphqlObject;
 };
@@ -1381,7 +1387,7 @@ export type ResolverArg = {
   info: SintheticResolverInfo;
   resolverOptions: {
     involvedFilters: {
-      [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+      [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
     subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription

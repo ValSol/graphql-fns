@@ -8,7 +8,7 @@ import type {
 } from '../../../tsTypes';
 import type { Context } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntitiesQueryAttributes from '../../../types/actionAttributes/childEntitiesQueryAttributes';
 import createChildEntitiesQueryResolver from '../../queries/createChildEntitiesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -33,16 +33,16 @@ const createEntityOppositeRelationArrayResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntities', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntities', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntitiesQueryResolver = descendantKey
+  const childEntitiesQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntities${descendantKey}`,
+        `childEntities${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -59,7 +59,7 @@ const createEntityOppositeRelationArrayResolver = (
   if (!childEntitiesQueryResolver) {
     throw new TypeError(
       `Not defined childEntitiesQueryResolver "${
-        descendantKey ? `childEntities${descendantKey}` : 'childEntities'
+        representationKey ? `childEntities${representationKey}` : 'childEntities'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -93,7 +93,7 @@ const createEntityOppositeRelationArrayResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntities${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -102,9 +102,9 @@ const createEntityOppositeRelationArrayResolver = (
 
     const { id } = parent;
 
-    const { entityName, descendantKey: descendantKey2 } = fromGlobalId(id);
+    const { entityName, representationKey: representationKey2 } = fromGlobalId(id);
 
-    const whereById = { [oppositeFields[`${entityName}${descendantKey2}:${fieldName}`]]: id };
+    const whereById = { [oppositeFields[`${entityName}${representationKey2}:${fieldName}`]]: id };
 
     const { where } = args || {};
 

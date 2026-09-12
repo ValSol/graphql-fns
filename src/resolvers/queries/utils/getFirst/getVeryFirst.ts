@@ -13,7 +13,7 @@ const getVeryFirst = async (
   first: number,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
   entityConfig: TangibleEntityConfig,

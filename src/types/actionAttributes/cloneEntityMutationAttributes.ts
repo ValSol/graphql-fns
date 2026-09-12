@@ -5,17 +5,17 @@ import type {
   TangibleEntityConfig,
 } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createEntityCloneInputType from '../inputs/createEntityCloneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string => `cloneEntity${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string => `cloneEntity${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `clone${baseName}${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `clone${baseName}${representationKey}`;
 
 const inputCreators = [
   createEntityWhereOneInputType,
@@ -42,25 +42,25 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
-  subscriptionUpdatedEntity: name, // provide for "name" & all its descendants
+  inputOutputEntity: `${name}${representationKey}`,
+  subscriptionUpdatedEntity: name, // provide for "name" & all its representations
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig =>
-  descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+  representationKey
+    ? composeRepresentationConfigByName(representationKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}!`;
 
 const cloneEntityMutationAttributes = {
   actionGeneralName,

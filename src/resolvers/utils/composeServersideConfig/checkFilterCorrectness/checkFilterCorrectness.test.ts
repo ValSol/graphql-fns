@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import type {
-  DescendantAttributes,
+  RepresentationAttributes,
   TangibleEntityConfig,
   GeneralConfig,
 } from '../../../../tsTypes';
@@ -110,19 +110,19 @@ describe('checkFilterCorrectness', () => {
     ],
   });
 
-  const ForView: DescendantAttributes = {
-    descendantKey: 'ForView',
+  const ForView: RepresentationAttributes = {
+    representationKey: 'ForView',
     allow: {
       Person: ['entity', 'entities'],
       // Place: ['entity', 'entities'],
     },
   };
 
-  const descendant = { ForView };
+  const representation = { ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    descendant,
+    representation,
   };
 
   test('should check the simplest correct filter', () => {

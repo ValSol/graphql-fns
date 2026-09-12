@@ -8,7 +8,7 @@ import type {
 } from '../../../tsTypes';
 import type { Context } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityDistinctValuesQueryAttributes from '../../../types/actionAttributes/childEntityDistinctValuesQueryAttributes';
 import createChildEntityDistinctValuesQueryResolver from '../../queries/createChildEntityDistinctValuesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -33,16 +33,16 @@ const createEntityOppositeRelationDistinctValuesResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityDistinctValues', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityDistinctValues', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityDistinctValuesQueryResolver = descendantKey
+  const childEntityDistinctValuesQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityDistinctValues${descendantKey}`,
+        `childEntityDistinctValues${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -59,7 +59,9 @@ const createEntityOppositeRelationDistinctValuesResolver = (
   if (!childEntityDistinctValuesQueryResolver) {
     throw new TypeError(
       `Not defined childEntityDistinctValuesQueryResolver "${
-        descendantKey ? `childEntityDistinctValues${descendantKey}` : 'childEntityDistinctValues'
+        representationKey
+          ? `childEntityDistinctValues${representationKey}`
+          : 'childEntityDistinctValues'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -93,7 +95,7 @@ const createEntityOppositeRelationDistinctValuesResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityDistinctValues${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -102,11 +104,11 @@ const createEntityOppositeRelationDistinctValuesResolver = (
 
     const { id } = parent;
 
-    const { entityName, descendantKey: descendantKey2 } = fromGlobalId(id);
+    const { entityName, representationKey: representationKey2 } = fromGlobalId(id);
 
     const whereById = {
       [oppositeFields[
-        `${entityName}${descendantKey2}:${fieldName.slice(0, -'DistinctValues'.length)}`
+        `${entityName}${representationKey2}:${fieldName.slice(0, -'DistinctValues'.length)}`
       ]]: id,
     };
 

@@ -10,11 +10,11 @@ import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `deleteFilteredEntitiesWithChildrenReturnScalar${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `deleteFilteredEntitiesWithChildrenReturnScalar${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `deleteFiltered${pluralize(baseName)}WithChildrenReturnScalar${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `deleteFiltered${pluralize(baseName)}WithChildrenReturnScalar${representationKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -34,9 +34,9 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
+  inputOutputEntity: `${name}${representationKey}`,
 });
 
 const actionReturnConfig = (
@@ -44,7 +44,7 @@ const actionReturnConfig = (
 
   generalConfig: GeneralConfig,
 
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
@@ -58,7 +58,7 @@ const actionAllowed = (entityConfig: EntityConfig): boolean =>
 const actionReturnString = (
   entityConfig: EntityConfig,
 
-  descendantKey: string,
+  representationKey: string,
 ): string => 'Int!';
 
 const deleteFilteredEntitiesWithChildrenReturnScalarMutationAttributes = {

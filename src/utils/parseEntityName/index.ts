@@ -1,6 +1,6 @@
 import type { GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigName from '../composeDescendantConfig/composeDescendantConfigName';
+import composeRepresentationConfigName from '../composeRepresentationConfig/composeRepresentationConfigName';
 
 const store = Object.create(null);
 
@@ -9,35 +9,36 @@ const parseEntityName = (
   generalConfig: GeneralConfig,
 ): {
   root: string;
-  descendantKey: string;
+  representationKey: string;
 } => {
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[entityConfigName]) {
     return store[entityConfigName];
   }
 
-  const { allEntityConfigs, descendant } = generalConfig;
+  const { allEntityConfigs, representation } = generalConfig;
   if (allEntityConfigs[entityConfigName]) {
-    store[entityConfigName] = { root: entityConfigName, descendantKey: '' };
+    store[entityConfigName] = { root: entityConfigName, representationKey: '' };
     return store[entityConfigName];
   }
 
-  if (!descendant) throw new TypeError('"descendant" attribute of generalConfig must be setted!');
+  if (!representation)
+    throw new TypeError('"representation" attribute of generalConfig must be setted!');
 
-  const results = Object.keys(descendant).reduce<Array<any>>((prev, descendantKey) => {
-    const root = entityConfigName.replace(descendantKey, '');
+  const results = Object.keys(representation).reduce<Array<any>>((prev, representationKey) => {
+    const root = entityConfigName.replace(representationKey, '');
 
     if (
       root !== entityConfigName &&
       allEntityConfigs[root] &&
       entityConfigName ===
-        composeDescendantConfigName(
+        composeRepresentationConfigName(
           root,
-          descendantKey,
-          allEntityConfigs[root].descendantNameSlicePosition,
+          representationKey,
+          allEntityConfigs[root].representationNameSlicePosition,
         )
     ) {
-      prev.push({ root, descendantKey });
+      prev.push({ root, representationKey });
     }
 
     return prev;
@@ -45,25 +46,25 @@ const parseEntityName = (
 
   if (!results.length) {
     throw new TypeError(
-      `Not found descendantKey for "${entityConfigName}" descendant config name!`,
+      `Not found representationKey for "${entityConfigName}" representation config name!`,
     );
   }
 
   if (results.length > 1) {
     throw new TypeError(
-      `Found more than 1 descendantKeys: ${results
-        .map(({ descendantKey }) => descendantKey)
-        .join(', ')} for "${entityConfigName}" descendant config name!`,
+      `Found more than 1 representationKeys: ${results
+        .map(({ representationKey }) => representationKey)
+        .join(', ')} for "${entityConfigName}" representation config name!`,
     );
   }
 
   const [result] = results;
 
-  const { root: rootEntityName, descendantKey } = result;
+  const { root: rootEntityName, representationKey } = result;
 
-  if (!descendant[descendantKey].allow[rootEntityName]) {
+  if (!representation[representationKey].allow[rootEntityName]) {
     throw new TypeError(
-      `Not allow descendantKey: ${descendantKey} for "${rootEntityName}" entity name!`,
+      `Not allow representationKey: ${representationKey} for "${rootEntityName}" entity name!`,
     );
   }
 

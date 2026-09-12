@@ -1,15 +1,15 @@
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createEntityWherePayloadInputType from '../inputs/createEntityWherePayloadInputType';
-import createdOrDeletedPayloadDescendantUpdater from '../actionDescendantUpdaters/createdOrDeletedPayloadDescendantUpdater';
+import createdOrDeletedPayloadRepresentationUpdater from '../actionRepresentationUpdaters/createdOrDeletedPayloadRepresentationUpdater';
 
 const actionType = 'Subscription';
 
-const actionGeneralName = (descendantKey = ''): string => `deletedEntity${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string => `deletedEntity${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `deleted${baseName}${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `deleted${baseName}${representationKey}`;
 
 const inputCreators = [createEntityWherePayloadInputType];
 
@@ -20,13 +20,13 @@ const argTypes = [({ name }): string => `${name}WherePayloadInput`];
 // may will not be in use
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
@@ -36,14 +36,14 @@ const actionReturnConfig = (
 
   const deletedPayloadConfig = allEntityConfigs[deletedPayloadConfigName];
 
-  return descendantKey
-    ? composeDescendantConfigByName(descendantKey, deletedPayloadConfig, generalConfig)
+  return representationKey
+    ? composeRepresentationConfigByName(representationKey, deletedPayloadConfig, generalConfig)
     : deletedPayloadConfig;
 };
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}CreatedOrDeletedPayload!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}CreatedOrDeletedPayload!`;
 
 const deletedEntitySubscriptionAttributes = {
   actionGeneralName,
@@ -55,7 +55,7 @@ const deletedEntitySubscriptionAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDescendantUpdater: createdOrDeletedPayloadDescendantUpdater,
+  actionRepresentationUpdater: createdOrDeletedPayloadRepresentationUpdater,
   actionAllowed,
 } as const;
 

@@ -7,10 +7,11 @@ import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string => `entityDistinctValues${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `entityDistinctValues${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `${baseName}DistinctValues${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `${baseName}DistinctValues${representationKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -30,8 +31,8 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (): null | EntityConfig => null;
 

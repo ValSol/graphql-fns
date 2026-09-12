@@ -5,10 +5,11 @@ import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSe
 
 const actionType = 'Query';
 
-const actionGeneralName = (descendantKey = ''): string => `childEntityCount${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `childEntityCount${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `child${baseName}Count${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `child${baseName}Count${representationKey}`;
 
 const inputCreators = [createEntityWhereInputType, createStringInputTypeForSearch];
 
@@ -18,8 +19,8 @@ const argTypes = [({ name }): string => `${name}WhereInput`, (): string => 'Stri
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
-): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${descendantKey}` });
+  representationKey = '',
+): ActionInvolvedEntityNames => ({ inputOutputEntity: `${name}${representationKey}` });
 
 const actionReturnConfig = (): null | EntityConfig => null;
 

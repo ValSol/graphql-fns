@@ -14,7 +14,7 @@ const getVeryLast = async (
   last: number,
   resolverArg: ResolverArg,
   involvedFilters: {
-    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
   entitiesQueryResolver: any,
   entityCountQueryResolver: any,

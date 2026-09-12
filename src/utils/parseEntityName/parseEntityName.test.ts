@@ -2,7 +2,7 @@
 
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   GeneralConfig,
   EntityConfig,
 } from '../../tsTypes';
@@ -30,9 +30,9 @@ describe('parseEntityName', () => {
     config: (thinConfig: any) => thinConfig,
   };
 
-  const ForCatalog: DescendantAttributes = {
+  const ForCatalog: RepresentationAttributes = {
     allow: { Example: ['entity', 'entities'] },
-    descendantKey: 'ForCatalog',
+    representationKey: 'ForCatalog',
     addFields: {
       Example: {
         floatFields: [{ name: 'floatField' }],
@@ -42,22 +42,22 @@ describe('parseEntityName', () => {
 
   const allEntityConfigs = { Example: entityConfig };
   const custom = { Mutation: { entitiesForCatalog } };
-  const descendant = { ForCatalog };
+  const representation = { ForCatalog };
 
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation };
 
   test('should return only root', () => {
     const result = parseEntityName('Example', generalConfig);
 
-    const expectedResult = { root: 'Example', descendantKey: '' };
+    const expectedResult = { root: 'Example', representationKey: '' };
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('should return root & descendantKey', () => {
+  test('should return root & representationKey', () => {
     const result = parseEntityName('ExampleForCatalog', generalConfig);
 
-    const expectedResult = { root: 'Example', descendantKey: 'ForCatalog' };
+    const expectedResult = { root: 'Example', representationKey: 'ForCatalog' };
 
     expect(result).toEqual(expectedResult);
   });

@@ -8,7 +8,7 @@ import type {
 } from '../../../tsTypes';
 import type { Context } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
 import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -33,16 +33,16 @@ const createEntityOppositeRelationCountResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityCount', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityCountQueryResolver = descendantKey
+  const childEntityCountQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityCount${descendantKey}`,
+        `childEntityCount${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -59,7 +59,7 @@ const createEntityOppositeRelationCountResolver = (
   if (!childEntityCountQueryResolver) {
     throw new TypeError(
       `Not defined childEntityCountQueryResolver "${
-        descendantKey ? `childEntityCount${descendantKey}` : 'childEntityCount'
+        representationKey ? `childEntityCount${representationKey}` : 'childEntityCount'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -93,7 +93,7 @@ const createEntityOppositeRelationCountResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityCount${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -102,10 +102,11 @@ const createEntityOppositeRelationCountResolver = (
 
     const { id } = parent;
 
-    const { entityName, descendantKey: descendantKey2 } = fromGlobalId(id);
+    const { entityName, representationKey: representationKey2 } = fromGlobalId(id);
 
     const whereById = {
-      [oppositeFields[`${entityName}${descendantKey2}:${fieldName.slice(0, -'Count'.length)}`]]: id,
+      [oppositeFields[`${entityName}${representationKey2}:${fieldName.slice(0, -'Count'.length)}`]]:
+        id,
     };
 
     const { where = {} } = args;

@@ -18,7 +18,7 @@ const composeConnectionVirtualConfig: VirtualConfigComposer = (config, generalCo
   const result: VirtualEntityConfig = {
     name: composeConnectionVirtualConfigName(name),
     type: 'virtual',
-    descendantNameSlicePosition: -'Connection'.length,
+    representationNameSlicePosition: -'Connection'.length,
 
     childFields: [
       {

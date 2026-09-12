@@ -7,7 +7,7 @@ import type {
   SintheticResolverInfo,
 } from '../../../tsTypes';
 
-import composeDescendantConfig from '../../../utils/composeDescendantConfig';
+import composeRepresentationConfig from '../../../utils/composeRepresentationConfig';
 import composeQueryResolver from '../../utils/composeQueryResolver';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
@@ -17,7 +17,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any | null => {
-  const { allEntityConfigs, descendant } = generalConfig;
+  const { allEntityConfigs, representation } = generalConfig;
 
   const resolver = async (
     parent: null | GraphqlObject,
@@ -27,12 +27,12 @@ const createNodeQueryResolver = (
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { id: globalId } = args;
 
-    const { _id: id, entityName, descendantKey } = fromGlobalId(globalId);
+    const { _id: id, entityName, representationKey } = fromGlobalId(globalId);
 
     if (!id) return null;
 
     const filter = await executeNodeAuthorisation(
-      `${entityName}${descendantKey}`,
+      `${entityName}${representationKey}`,
       context,
       generalConfig,
       serversideConfig,
@@ -42,12 +42,16 @@ const createNodeQueryResolver = (
 
     const entityConfig = allEntityConfigs[entityName];
 
-    if (descendantKey && !descendant?.[descendantKey]) {
-      throw new TypeError(`Not found descendantKey: "${descendantKey}"!`);
+    if (representationKey && !representation?.[representationKey]) {
+      throw new TypeError(`Not found representationKey: "${representationKey}"!`);
     }
 
-    const resultEntityConfig = descendantKey
-      ? composeDescendantConfig(descendant?.[descendantKey], entityConfig, generalConfig)
+    const resultEntityConfig = representationKey
+      ? composeRepresentationConfig(
+          representation?.[representationKey],
+          entityConfig,
+          generalConfig,
+        )
       : entityConfig;
 
     const entity = await composeQueryResolver(entityName, generalConfig, serversideConfig)(
@@ -62,7 +66,7 @@ const createNodeQueryResolver = (
 
     return {
       ...transformAfter({}, entity, resultEntityConfig, generalConfig),
-      __typename: `${entityName}${descendantKey}`,
+      __typename: `${entityName}${representationKey}`,
     };
   };
 

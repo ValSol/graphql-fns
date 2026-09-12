@@ -1,15 +1,15 @@
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createEntityCreateInputType from '../inputs/createEntityCreateInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string => `createEntity${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string => `createEntity${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `create${baseName}${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `create${baseName}${representationKey}`;
 
 const inputCreators = [createEntityCreateInputType, createStringInputType];
 
@@ -19,25 +19,25 @@ const argTypes = [({ name }): string => `${name}CreateInput!`, (): string => 'St
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
-  subscriptionCreatedEntity: name, // provide for "name" & all its descendants
+  inputOutputEntity: `${name}${representationKey}`,
+  subscriptionCreatedEntity: name, // provide for "name" & all its representations
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig =>
-  descendantKey
-    ? composeDescendantConfigByName(descendantKey, entityConfig, generalConfig)
+  representationKey
+    ? composeRepresentationConfigByName(representationKey, entityConfig, generalConfig)
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}!`;
 
 const createEntityMutationAttributes = {
   actionGeneralName,

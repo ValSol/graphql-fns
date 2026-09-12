@@ -41,7 +41,7 @@ describe('composeUpdatedPayloadVirtualConfig', () => {
     const expectedResult = {
       name: 'ExampleUpdatedPayload',
       type: 'virtual',
-      descendantNameSlicePosition: -'UpdatedPayload'.length,
+      representationNameSlicePosition: -'UpdatedPayload'.length,
 
       childFields: [
         { name: 'node', config: exampleConfig, required: true, type: 'childFields' },

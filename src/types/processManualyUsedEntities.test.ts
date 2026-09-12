@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import type {
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityConfig,
   GeneralConfig,
   TangibleEntityConfig,
@@ -23,9 +23,9 @@ describe('processManualyUsedEntities', () => {
         },
       ],
     };
-    const ForCatalog: DescendantAttributes = {
+    const ForCatalog: RepresentationAttributes = {
       allow: { Example: ['entity', 'entities'] },
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
       addFields: {
         Example: {
           floatFields: [{ name: 'floatField' }],
@@ -33,11 +33,11 @@ describe('processManualyUsedEntities', () => {
       },
     };
 
-    const descendant = { ForCatalog };
+    const representation = { ForCatalog };
 
     const manualyUsedEntities = [
       { name: 'Example' },
-      { name: 'Example', descendantKey: 'ForCatalog' },
+      { name: 'Example', representationKey: 'ForCatalog' },
     ];
 
     const entityTypeDic = {};
@@ -45,7 +45,7 @@ describe('processManualyUsedEntities', () => {
 
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Example: entityConfig },
-      descendant,
+      representation,
       manualyUsedEntities,
     };
 

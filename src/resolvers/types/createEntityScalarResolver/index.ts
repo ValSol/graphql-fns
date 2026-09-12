@@ -1,6 +1,6 @@
 import type { Context, GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityQueryAttributes from '../../../types/actionAttributes/childEntityQueryAttributes';
 import createChildEntityQueryResolver from '../../queries/createChildEntityQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -21,16 +21,16 @@ const createEntityScalarResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntity', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntity', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityQueryResolver = descendantKey
+  const childEntityQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntity${descendantKey}`,
+        `childEntity${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -47,7 +47,7 @@ const createEntityScalarResolver = (
   if (!childEntityQueryResolver) {
     throw new TypeError(
       `Not defined childEntityQueryResolver "${
-        descendantKey ? `childEntity${descendantKey}` : 'childEntity'
+        representationKey ? `childEntity${representationKey}` : 'childEntity'
       }" for entity: "${name}"!`,
     );
   }
@@ -56,7 +56,7 @@ const createEntityScalarResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntity${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }

@@ -75,7 +75,7 @@ describe('composeCreatedOrDeletedPayloadVirtualConfig', () => {
     const expectedResult = {
       name: 'ExampleCreatedOrDeletedPayload',
       type: 'virtual',
-      descendantNameSlicePosition: -'CreatedOrDeletedPayload'.length,
+      representationNameSlicePosition: -'CreatedOrDeletedPayload'.length,
 
       childFields: [
         { name: 'node', config: exampleConfig, required: true, type: 'childFields' },

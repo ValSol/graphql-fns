@@ -46,7 +46,7 @@ const createEntityQueryResolver = (
     info: SintheticResolverInfo,
     resolverOptions: {
       involvedFilters: {
-        [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+        [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
     },
     session?: any,

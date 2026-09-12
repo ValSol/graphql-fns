@@ -15,7 +15,7 @@ const getCommonManyData = async (
   resolverArg: ResolverArg,
   session: any,
   involvedFilters?: {
-    [descendantConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
+    [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
   },
 ): Promise<null | Array<any>> => {
   const { inputFilter, outputFilter } = involvedFilters

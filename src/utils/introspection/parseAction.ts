@@ -1,17 +1,17 @@
 import type { GeneralConfig } from '../../tsTypes';
 import type { ParseActionArgs, ParseActionResult } from './tsTypes';
 
-import actionToDescendant from './actionToDescendant';
+import actionToRepresentation from './actionToRepresentation';
 import actionToInventory from './actionToInventory';
-import childQueriesToDescendant from './childQueriesToDescendant';
+import childQueriesToRepresentation from './childQueriesToRepresentation';
 import childQueriesToInventory from './childQueriesToInventory';
 import getChildQueries from './getChildQueries';
 import parseActionName from './parseActionName';
 
 type Arg1 = ParseActionArgs & {
   generalConfig: GeneralConfig;
-  descendantKeyToPermission: {
-    [descendantKey: string]: string;
+  representationKeyToPermission: {
+    [representationKey: string]: string;
   };
 };
 
@@ -21,22 +21,22 @@ const parseAction = (
     actionName,
     generalConfig,
     options,
-    descendantKey,
-    descendantKeyToPermission,
+    representationKey,
+    representationKeyToPermission,
     entityName,
   }: Arg1,
-  { descendantAttributes, inventoryByRoles, maxShift }: ParseActionResult,
+  { representationAttributes, inventoryByRoles, maxShift }: ParseActionResult,
 ): ParseActionResult => {
-  const actionToParse = { actionType, actionName, entityName, descendantKey } as const;
+  const actionToParse = { actionType, actionName, entityName, representationKey } as const;
 
   const parsedAction = parseActionName(actionToParse, generalConfig);
 
-  actionToDescendant(actionToParse, parsedAction, descendantAttributes, generalConfig);
+  actionToRepresentation(actionToParse, parsedAction, representationAttributes, generalConfig);
 
-  actionToInventory(actionToParse, parsedAction, inventoryByRoles, descendantKeyToPermission);
+  actionToInventory(actionToParse, parsedAction, inventoryByRoles, representationKeyToPermission);
 
   if (!parsedAction.entityConfig) {
-    return { inventoryByRoles, descendantAttributes, maxShift };
+    return { inventoryByRoles, representationAttributes, maxShift };
   }
 
   const { childQueries, maxShift: newMaxShift } = getChildQueries(
@@ -45,13 +45,18 @@ const parseAction = (
     options,
   );
 
-  childQueriesToDescendant(childQueries, descendantAttributes);
+  childQueriesToRepresentation(childQueries, representationAttributes);
 
-  childQueriesToInventory(childQueries, parsedAction, inventoryByRoles, descendantKeyToPermission);
+  childQueriesToInventory(
+    childQueries,
+    parsedAction,
+    inventoryByRoles,
+    representationKeyToPermission,
+  );
 
   return {
     inventoryByRoles,
-    descendantAttributes,
+    representationAttributes,
     maxShift: newMaxShift > maxShift ? newMaxShift : maxShift,
   };
 };

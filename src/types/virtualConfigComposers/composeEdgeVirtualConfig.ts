@@ -14,7 +14,7 @@ const composeEdgeVirtualConfig: VirtualConfigComposer = (config, generalConfig) 
   return {
     name: composeEdgeVirtualConfigName(name),
     type: 'virtual',
-    descendantNameSlicePosition: -'Edge'.length,
+    representationNameSlicePosition: -'Edge'.length,
 
     childFields: [{ name: 'node', config, required: true, type: 'childFields' }],
 

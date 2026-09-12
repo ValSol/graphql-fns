@@ -9,11 +9,11 @@ import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `updateFilteredEntitiesReturnScalar${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `updateFilteredEntitiesReturnScalar${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `updateFiltered${pluralize(baseName)}ReturnScalar${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `updateFiltered${pluralize(baseName)}ReturnScalar${representationKey}`;
 
 const inputCreators = [
   createEntityWhereInputType,
@@ -33,20 +33,21 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({
-  inputOutputEntity: `${name}${descendantKey}`,
+  inputOutputEntity: `${name}${representationKey}`,
 });
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => null;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type === 'tangible';
 
-const actionReturnString = (entityConfig: EntityConfig, descendantKey: string): string => 'Int!';
+const actionReturnString = (entityConfig: EntityConfig, representationKey: string): string =>
+  'Int!';
 
 const updateFilteredEntitiesReturnScalarMutationAttributes = {
   actionGeneralName,

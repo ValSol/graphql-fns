@@ -41,12 +41,12 @@ const transformAfter = (
           prev[name] = toGlobalId(item[name], config.name);
         }
       } else {
-        const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
+        const { root: rootName, representationKey } = parseEntityName(config.name, generalConfig);
 
         if (array) {
-          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, descendantKey));
+          prev[name] = item[name].map((item2) => toGlobalId(item2, rootName, representationKey));
         } else {
-          prev[name] = toGlobalId(item[name], rootName, descendantKey);
+          prev[name] = toGlobalId(item[name], rootName, representationKey);
         }
       }
 
@@ -79,9 +79,9 @@ const transformAfter = (
   if (isChild && configType !== 'tangible') {
     globalId = id;
   } else if (generalConfig) {
-    const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
+    const { root: rootName, representationKey } = parseEntityName(entityConfig.name, generalConfig);
 
-    globalId = toGlobalId(id, rootName, descendantKey);
+    globalId = toGlobalId(id, rootName, representationKey);
   } else {
     globalId = toGlobalId(id, entityConfig.name);
   }

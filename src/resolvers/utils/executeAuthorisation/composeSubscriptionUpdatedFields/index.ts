@@ -1,5 +1,5 @@
 import { GeneralConfig, ThreeSegmentInventoryChain } from '@/tsTypes';
-import composeDescendantConfigByName from '@/utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import composeFieldsObject, { WITHOUT_CALCULATED_WITH_ASYNC } from '@/utils/composeFieldsObject';
 
 const composeSubscriptionUpdatedFields = (
@@ -14,10 +14,14 @@ const composeSubscriptionUpdatedFields = (
 
   const { allEntityConfigs } = generalConfig;
 
-  const descendantKey = actionName.slice('updatedEntity'.length);
+  const representationKey = actionName.slice('updatedEntity'.length);
 
-  const entityConfig = descendantKey
-    ? composeDescendantConfigByName(descendantKey, allEntityConfigs[entityName], generalConfig)
+  const entityConfig = representationKey
+    ? composeRepresentationConfigByName(
+        representationKey,
+        allEntityConfigs[entityName],
+        generalConfig,
+      )
     : allEntityConfigs[entityName];
 
   return Object.keys(composeFieldsObject(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC).fieldsObject);

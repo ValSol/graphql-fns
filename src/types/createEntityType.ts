@@ -23,9 +23,9 @@ const composeReturnString = (
   actionAttributes: ActionAttributes,
 ) => {
   const { allEntityConfigs } = generalConfig;
-  const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
+  const { root: rootName, representationKey } = parseEntityName(config.name, generalConfig);
 
-  return actionAttributes.actionReturnString(allEntityConfigs[rootName], descendantKey);
+  return actionAttributes.actionReturnString(allEntityConfigs[rootName], representationKey);
 };
 
 const arrayArgs = '(slice: SliceInput)';

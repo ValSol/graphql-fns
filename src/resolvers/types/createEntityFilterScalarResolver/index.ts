@@ -1,6 +1,6 @@
 import type { Context, GeneralConfig, ServersideConfig, EntityConfig } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityQueryAttributes from '../../../types/actionAttributes/childEntityQueryAttributes';
 import createChildEntityQueryResolver from '../../queries/createChildEntityQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -18,16 +18,16 @@ const createEntityFilterScalarResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntity', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntity', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityQueryResolver = descendantKey
+  const childEntityQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntity${descendantKey}`,
+        `childEntity${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -44,7 +44,7 @@ const createEntityFilterScalarResolver = (
   if (!childEntityQueryResolver) {
     throw new TypeError(
       `Not defined childEntityQueryResolver "${
-        descendantKey ? `childEntity${descendantKey}` : 'childEntity'
+        representationKey ? `childEntity${representationKey}` : 'childEntity'
       }" for entity: "${name}"!`,
     );
   }
@@ -53,7 +53,7 @@ const createEntityFilterScalarResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntity${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -66,7 +66,11 @@ const createEntityFilterScalarResolver = (
     }
 
     // all "mongo ids" in whereOne have to be represented like "globalIds" to be transformed back to "mongo ids" by resolverDecorator
-    const whereOne = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, descendantKey);
+    const whereOne = whereToGlobalIds(
+      JSON.parse(stringifiedFilter),
+      entityConfig,
+      representationKey,
+    );
 
     return childEntityQueryResolver(
       parent,

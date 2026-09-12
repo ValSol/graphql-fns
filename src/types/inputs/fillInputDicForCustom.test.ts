@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import type {
-  DescendantAttributes,
+  RepresentationAttributes,
   Enums,
   GeneralConfig,
   ObjectSignatureMethods,
@@ -61,9 +61,9 @@ describe('fillInputDicForCustom', () => {
   const enumKeys = ['key1', 'key2', 'key3'];
   const enums: Enums = { EnumKeys: enumKeys };
 
-  const ForCatalog: DescendantAttributes = {
+  const ForCatalog: RepresentationAttributes = {
     allow: { Example: ['entitiesThroughConnection'], ExampleEdge: [], ExampleConnection: [] },
-    descendantKey: 'ForCatalog',
+    representationKey: 'ForCatalog',
   };
 
   const entityInTimeRangeInput: ObjectSignatureMethods = {
@@ -79,8 +79,8 @@ describe('fillInputDicForCustom', () => {
 
   const simplifiedAllEntityConfigs = [placeConfig, personConfig, entityConfig];
   const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs, enums);
-  const descendant = { ForCatalog };
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, enums };
+  const representation = { ForCatalog };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, enums };
 
   test('update nothing for argType = "Int"', () => {
     const argType = 'Int';

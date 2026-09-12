@@ -61,9 +61,13 @@ const fillEntityTypeDic = (
   });
 
   [...embeddedFields, ...calculatedEmbdeedFields].forEach(({ config }) => {
-    const { root: rootName, descendantKey } = parseEntityName(config.name, generalConfig);
+    const { root: rootName, representationKey } = parseEntityName(config.name, generalConfig);
 
-    const config2 = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
+    const config2 = actionReturnConfig(
+      allEntityConfigs[rootName],
+      generalConfig,
+      representationKey,
+    );
 
     if (config2 && !entityTypeDic[config2.name]) {
       fillEntityTypeDic(config2, generalConfig, entityTypeDic, inputDic);

@@ -7,16 +7,16 @@ import type {
   InputCreator,
 } from '@/tsTypes';
 
-import composeDescendantConfig from '@/utils/composeDescendantConfig';
-import connectionDescendantUpdater from '../actionDescendantUpdaters/connectionDescendantUpdater';
+import composeRepresentationConfig from '@/utils/composeRepresentationConfig';
+import connectionRepresentationUpdater from '../actionRepresentationUpdaters/connectionRepresentationUpdater';
 
 const actionType = 'Field';
 
-const actionGeneralName = (descendantKey = ''): string =>
-  `arrayEntitiesThroughConnection${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `arrayEntitiesThroughConnection${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `array${pluralize(baseName)}ThroughConnection${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `array${pluralize(baseName)}ThroughConnection${representationKey}`;
 
 const inputCreators = [
   (): [
@@ -60,25 +60,29 @@ const argTypes = [
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({});
 
 const actionReturnConfig = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
-  descendantKey?: string,
+  representationKey?: string,
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { allEntityConfigs, descendant } = generalConfig;
+  const { allEntityConfigs, representation } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
-  if (descendantKey) {
-    return descendant
-      ? composeDescendantConfig(descendant[descendantKey], connectionConfig, generalConfig)
+  if (representationKey) {
+    return representation
+      ? composeRepresentationConfig(
+          representation[representationKey],
+          connectionConfig,
+          generalConfig,
+        )
       : null;
   }
 
@@ -89,8 +93,8 @@ const actionAllowed = (entityConfig: EntityConfig): boolean => entityConfig.type
 
 const actionIsChild = 'Array';
 
-const actionReturnString = ({ name }: EntityConfig, descendantKey = ''): string =>
-  `${name}${descendantKey}Connection!`;
+const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
+  `${name}${representationKey}Connection!`;
 
 const arrayEntitiesThroughConnectionQueryAttributes = {
   actionGeneralName,
@@ -102,7 +106,7 @@ const arrayEntitiesThroughConnectionQueryAttributes = {
   actionInvolvedEntityNames,
   actionReturnString,
   actionReturnConfig,
-  actionDescendantUpdater: connectionDescendantUpdater,
+  actionRepresentationUpdater: connectionRepresentationUpdater,
   actionAllowed,
   actionIsChild,
 } as const;

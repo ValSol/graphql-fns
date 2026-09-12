@@ -37,7 +37,7 @@ const composeUpdatedPayloadVirtualConfig: VirtualConfigComposer = (config, gener
   return {
     name: composeUpdatedPayloadVirtualConfigName(name),
     type: 'virtual',
-    descendantNameSlicePosition: -'UpdatedPayload'.length,
+    representationNameSlicePosition: -'UpdatedPayload'.length,
 
     childFields,
 

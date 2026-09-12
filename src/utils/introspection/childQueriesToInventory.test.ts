@@ -15,22 +15,22 @@ describe('childQueriesToInventory', () => {
       {
         actionName: 'childentitiesForCatalog',
         baseAction: 'childEntities',
-        descendantKey: 'ForCatalog',
+        representationKey: 'ForCatalog',
         entityName: 'Person',
       },
       {
         actionName: 'childThingForCatalog',
         baseAction: 'childEntity',
-        descendantKey: 'ForCatalog',
+        representationKey: 'ForCatalog',
         entityName: 'Place',
       },
     ];
 
     const parsedAction: ParsedAction = {
-      creationType: 'descendant',
+      creationType: 'representation',
       entityConfig: { name: 'Person', type: 'tangible' },
       baseAction: 'entitiesByUnique',
-      descendantKey: 'ForView',
+      representationKey: 'ForView',
     };
 
     const inventoryByRoles: Record<string, any> = {};
@@ -57,18 +57,18 @@ describe('childQueriesToInventory', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('have to return inventoryByRoles for childQueries without descendantKey', () => {
+  test('have to return inventoryByRoles for childQueries without representationKey', () => {
     const childQueries = [
       {
         actionName: 'childEntities',
         baseAction: 'childEntities',
-        descendantKey: '',
+        representationKey: '',
         entityName: 'Person',
       },
       {
         actionName: 'childEntity',
         baseAction: 'childEntity',
-        descendantKey: '',
+        representationKey: '',
         entityName: 'Place',
       },
     ];
@@ -77,7 +77,7 @@ describe('childQueriesToInventory', () => {
       creationType: 'standard',
       entityConfig: { name: 'Person', type: 'tangible' },
       baseAction: '',
-      descendantKey: 'ForView',
+      representationKey: 'ForView',
     };
 
     const inventoryByRoles: Record<string, any> = {};

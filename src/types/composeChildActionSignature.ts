@@ -1,6 +1,6 @@
-import type { DescendantAttributesActionName, EntityConfig, GeneralConfig } from '../tsTypes';
+import type { RepresentationAttributesActionName, EntityConfig, GeneralConfig } from '../tsTypes';
 
-import checkDescendantAction from '../utils/checkDescendantAction';
+import checkRepresentationAction from '../utils/checkRepresentationAction';
 import parseEntityName from '../utils/parseEntityName';
 import fillInputDic from './inputs/fillInputDic';
 import actionAttributes from './actionAttributes';
@@ -28,12 +28,12 @@ const composeChildActionSignature = (
   } = actionAttributes[childQueryGeneralName];
   const { allEntityConfigs } = generalConfig;
 
-  const { root: rootName, descendantKey } = parseEntityName(entityConfig.name, generalConfig);
+  const { root: rootName, representationKey } = parseEntityName(entityConfig.name, generalConfig);
 
   if (
     actionType !== 'Field' &&
-    !checkDescendantAction(
-      actionGeneralName('') as DescendantAttributesActionName,
+    !checkRepresentationAction(
+      actionGeneralName('') as RepresentationAttributesActionName,
       entityConfig,
       generalConfig,
     )
@@ -41,7 +41,7 @@ const composeChildActionSignature = (
     return '';
   }
 
-  const specificName = actionName(rootName, descendantKey);
+  const specificName = actionName(rootName, representationKey);
 
   const toShow: Array<boolean> = [];
 
@@ -59,9 +59,13 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(allEntityConfigs[rootName], descendantKey);
+  const returnString = actionReturnString(allEntityConfigs[rootName], representationKey);
 
-  const returnConfig = actionReturnConfig(allEntityConfigs[rootName], generalConfig, descendantKey);
+  const returnConfig = actionReturnConfig(
+    allEntityConfigs[rootName],
+    generalConfig,
+    representationKey,
+  );
 
   if (returnConfig && entityTypeDic && !entityTypeDic[returnConfig.name]) {
     fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);

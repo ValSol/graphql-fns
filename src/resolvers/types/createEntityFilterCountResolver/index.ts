@@ -6,7 +6,7 @@ import type {
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
 import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -31,16 +31,16 @@ const createEntityFilterCountResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityCount', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityCountQueryResolver = descendantKey
+  const childEntityCountQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityCount${descendantKey}`,
+        `childEntityCount${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -57,7 +57,7 @@ const createEntityFilterCountResolver = (
   if (!childEntityCountQueryResolver) {
     throw new TypeError(
       `Not defined childEntityCountQueryResolver "${
-        descendantKey ? `childEntityCount${descendantKey}` : 'childEntityCount'
+        representationKey ? `childEntityCount${representationKey}` : 'childEntityCount'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -66,7 +66,7 @@ const createEntityFilterCountResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityCount${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -78,7 +78,7 @@ const createEntityFilterCountResolver = (
     if (!stringifiedFilter) return 0;
 
     // all "mongo ids" in filter have to be represented like "globalIds" to be transformed back to "mongo ids" by resolverDecorator
-    const filter = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, descendantKey);
+    const filter = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, representationKey);
 
     const { where = {} } = args;
 

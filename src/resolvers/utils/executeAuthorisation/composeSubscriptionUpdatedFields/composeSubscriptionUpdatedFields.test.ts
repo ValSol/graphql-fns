@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityConfig,
   Inventory,
   GeneralConfig,
@@ -21,22 +21,22 @@ describe('composeSubscriptionUpdatedFields', () => {
     textFields: [{ name: 'textField' }, { name: 'textField2' }],
   };
 
-  const ForCatalog: DescendantAttributes = {
-    descendantKey: 'ForCatalog',
+  const ForCatalog: RepresentationAttributes = {
+    representationKey: 'ForCatalog',
     allow: { Example: ['entitiesThroughConnection', 'updatedEntity'] },
-    involvedOutputDescendantKeys: { Example: { outputEntity: 'ForView' } },
+    involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForView' } },
     excludeFields: { Example: ['textField2'] },
   };
 
-  const ForView: DescendantAttributes = {
-    descendantKey: 'ForView',
+  const ForView: RepresentationAttributes = {
+    representationKey: 'ForView',
     allow: { Example: [], ExampleEdge: [], ExampleConnection: [], ExampleUpdatedPayload: [] },
-    // "involvedOutputDescendantKeys" not change types that are returned by "ForCatalog" descendant actions
-    involvedOutputDescendantKeys: { Example: { outputEntity: 'ForGuest' } },
+    // "involvedOutputRepresentationKeys" not change types that are returned by "ForCatalog" representation actions
+    involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForGuest' } },
   };
 
-  const ForGuest: DescendantAttributes = {
-    descendantKey: 'ForGuest',
+  const ForGuest: RepresentationAttributes = {
+    representationKey: 'ForGuest',
     allow: { Example: [] },
   };
 
@@ -50,8 +50,8 @@ describe('composeSubscriptionUpdatedFields', () => {
   };
   const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-  const descendant = { ForCatalog, ForView, ForGuest };
-  const generalConfig: GeneralConfig = { allEntityConfigs, descendant, inventory };
+  const representation = { ForCatalog, ForView, ForGuest };
+  const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
 
   test('actionName: "updatedEntity"', () => {
     const actionName = 'updatedEntity';

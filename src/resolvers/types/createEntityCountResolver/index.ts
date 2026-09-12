@@ -6,7 +6,7 @@ import type {
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityCountQueryAttributes from '../../../types/actionAttributes/childEntityCountQueryAttributes';
 import createChildEntityCountQueryResolver from '../../queries/createChildEntityCountQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -30,16 +30,16 @@ const createEntityCountResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityCount', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityCount', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityCountQueryResolver = descendantKey
+  const childEntityCountQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityCount${descendantKey}`,
+        `childEntityCount${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -56,7 +56,7 @@ const createEntityCountResolver = (
   if (!childEntityCountQueryResolver) {
     throw new TypeError(
       `Not defined childEntityCountQueryResolver "${
-        descendantKey ? `childEntityCount${descendantKey}` : 'childEntityCount'
+        representationKey ? `childEntityCount${representationKey}` : 'childEntityCount'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -65,7 +65,7 @@ const createEntityCountResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityCount${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }

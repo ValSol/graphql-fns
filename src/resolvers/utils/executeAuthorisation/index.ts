@@ -37,42 +37,42 @@ const composeSubscriptionInventoryChains = (
   entityName: string,
   generalConfig: GeneralConfig,
 ) => {
-  const { descendant = {} } = generalConfig;
-  const descendantKeys = ['', ...Object.keys(descendant)];
+  const { representation = {} } = generalConfig;
+  const representationKeys = ['', ...Object.keys(representation)];
 
-  const { root, descendantKey } = parseEntityName(entityName, generalConfig);
+  const { root, representationKey } = parseEntityName(entityName, generalConfig);
 
-  if (descendantKey) {
+  if (representationKey) {
     throw new TypeError(
-      `Value for key: "${key}" has to be original name: "${root}" but got descendantKey name "${entityName}"!`,
+      `Value for key: "${key}" has to be original name: "${root}" but got representationKey name "${entityName}"!`,
     );
   }
 
   const {
     allEntityConfigs: {
-      [root]: { descendantNameSlicePosition },
+      [root]: { representationNameSlicePosition },
     },
   } = generalConfig;
 
   switch (key) {
     case 'subscriptionCreatedEntity':
-      return descendantKeys.map((descendantKey) => [
+      return representationKeys.map((representationKey) => [
         'Subscription',
-        `createdEntity${descendantKey}`,
+        `createdEntity${representationKey}`,
         root,
       ]);
 
     case 'subscriptionDeletedEntity':
-      return descendantKeys.map((descendantKey) => [
+      return representationKeys.map((representationKey) => [
         'Subscription',
-        `deletedEntity${descendantKey}`,
+        `deletedEntity${representationKey}`,
         root,
       ]);
 
     case 'subscriptionUpdatedEntity':
-      return descendantKeys.map((descendantKey) => [
+      return representationKeys.map((representationKey) => [
         'Subscription',
-        `updatedEntity${descendantKey}`,
+        `updatedEntity${representationKey}`,
         root,
       ]);
 

@@ -2,10 +2,11 @@ import type { ActionInvolvedEntityNames, EntityConfig } from '@/tsTypes';
 
 const actionType = 'Field';
 
-const actionGeneralName = (descendantKey = ''): string => `arrayEntityCount${descendantKey}`;
+const actionGeneralName = (representationKey = ''): string =>
+  `arrayEntityCount${representationKey}`;
 
-const actionName = (baseName: string, descendantKey = ''): string =>
-  `array${baseName}Count${descendantKey}`;
+const actionName = (baseName: string, representationKey = ''): string =>
+  `array${baseName}Count${representationKey}`;
 
 const inputCreators = [];
 
@@ -15,7 +16,7 @@ const argTypes = [];
 
 const actionInvolvedEntityNames = (
   name: string,
-  descendantKey = '',
+  representationKey = '',
 ): ActionInvolvedEntityNames => ({});
 
 const actionReturnConfig = (): null | EntityConfig => null;

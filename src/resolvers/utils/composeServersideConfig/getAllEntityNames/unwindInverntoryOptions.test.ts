@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityConfig,
   GeneralConfig,
   Inventory,
@@ -9,16 +9,16 @@ import type {
   TangibleEntityConfig,
 } from '../../../../tsTypes';
 
-import composeDescendantConfigByName from '../../../../utils/composeDescendantConfigByName';
+import composeRepresentationConfigByName from '../../../../utils/composeRepresentationConfigByName';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 
 describe('unwindInverntoryOptions', () => {
-  const ForCatalogDescendant: DescendantAttributes = {
+  const ForCatalogRepresentation: RepresentationAttributes = {
     allow: {
       Example: ['childEntityCount', 'entities', 'updateEntity'],
       ChildExample: ['childEntity', 'childEntities'],
     },
-    descendantKey: 'ForCatalog',
+    representationKey: 'ForCatalog',
   };
 
   const specialUpdateEntity: ActionSignatureMethods = {
@@ -29,7 +29,7 @@ describe('unwindInverntoryOptions', () => {
     involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
     type: ({ name }: any) => `${name}ForCatalog`,
     config: (exampleConfig: any, generalConfig: any) =>
-      composeDescendantConfigByName('ForCatalog', exampleConfig, generalConfig),
+      composeRepresentationConfigByName('ForCatalog', exampleConfig, generalConfig),
   };
 
   const exampleConfig = {} as TangibleEntityConfig;
@@ -93,9 +93,9 @@ describe('unwindInverntoryOptions', () => {
     Query: { specialUpdateEntity },
   };
 
-  const descendant = { ForCatalog: ForCatalogDescendant };
+  const representation = { ForCatalog: ForCatalogRepresentation };
 
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, descendant, inventory };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, inventory };
 
   describe('actions full lists', () => {
     const allQueries = {

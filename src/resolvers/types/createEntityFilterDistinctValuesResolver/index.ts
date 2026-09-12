@@ -6,7 +6,7 @@ import type {
   ServersideConfig,
 } from '../../../tsTypes';
 
-import checkDescendantAction from '../../../utils/checkDescendantAction';
+import checkRepresentationAction from '../../../utils/checkRepresentationAction';
 import childEntityDistinctValuesQueryAttributes from '../../../types/actionAttributes/childEntityDistinctValuesQueryAttributes';
 import createChildEntityDistinctValuesQueryResolver from '../../queries/createChildEntityDistinctValuesQueryResolver';
 import createCustomResolver from '../../createCustomResolver';
@@ -31,16 +31,16 @@ const createEntityFilterDistinctValuesResolver = (
   const { name } = entityConfig;
   const { allEntityConfigs } = generalConfig;
 
-  const { root: nameRoot, descendantKey } = parseEntityName(name, generalConfig);
+  const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 
-  if (!checkDescendantAction('childEntityDistinctValues', entityConfig, generalConfig)) {
+  if (!checkRepresentationAction('childEntityDistinctValues', entityConfig, generalConfig)) {
     return null;
   }
 
-  const childEntityDistinctValuesQueryResolver = descendantKey
+  const childEntityDistinctValuesQueryResolver = representationKey
     ? createCustomResolver(
         'Query',
-        `childEntityDistinctValues${descendantKey}`,
+        `childEntityDistinctValues${representationKey}`,
         allEntityConfigs[nameRoot],
         generalConfig,
         serversideConfig,
@@ -57,7 +57,9 @@ const createEntityFilterDistinctValuesResolver = (
   if (!childEntityDistinctValuesQueryResolver) {
     throw new TypeError(
       `Not defined childEntityDistinctValuesQueryResolver "${
-        descendantKey ? `childEntityDistinctValues${descendantKey}` : 'childEntityDistinctValues'
+        representationKey
+          ? `childEntityDistinctValues${representationKey}`
+          : 'childEntityDistinctValues'
       }" for entity: "${allEntityConfigs[nameRoot].name}"!`,
     );
   }
@@ -66,7 +68,7 @@ const createEntityFilterDistinctValuesResolver = (
     if (!parent) {
       throw new TypeError(
         `Got undefined parent in resolver: "childEntityDistinctValues${
-          descendantKey || ''
+          representationKey || ''
         }" for entity: "${name}"!`,
       );
     }
@@ -78,7 +80,7 @@ const createEntityFilterDistinctValuesResolver = (
     if (!stringifiedFilter) return [];
 
     // all "mongo ids" in filter have to be represented like "globalIds" to be transformed back to "mongo ids" by resolverDecorator
-    const filter = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, descendantKey);
+    const filter = whereToGlobalIds(JSON.parse(stringifiedFilter), entityConfig, representationKey);
 
     const { where = {} } = args;
 

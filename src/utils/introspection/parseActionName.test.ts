@@ -1,13 +1,13 @@
 /* eslint-env jest */
 import type {
   ActionSignatureMethods,
-  DescendantAttributes,
+  RepresentationAttributes,
   EntityConfig,
   TangibleEntityConfig,
 } from '../../tsTypes';
 
 import parseActionName from './parseActionName';
-import composeDescendantConfigByName from '../composeDescendantConfigByName';
+import composeRepresentationConfigByName from '../composeRepresentationConfigByName';
 
 describe('parseActionName', () => {
   const placeConfig = {} as TangibleEntityConfig;
@@ -129,11 +129,11 @@ describe('parseActionName', () => {
     involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: name }),
     type: ({ name }: any) => `${name}!`,
     config: (entityConfig: any, generalConfig: any) =>
-      composeDescendantConfigByName('ForCatalog', entityConfig, generalConfig),
+      composeRepresentationConfigByName('ForCatalog', entityConfig, generalConfig),
   };
 
-  const ForCatalog: DescendantAttributes = {
-    descendantKey: 'ForCatalog',
+  const ForCatalog: RepresentationAttributes = {
+    representationKey: 'ForCatalog',
     allow: {
       Person: ['entitiesByUnique', 'childEntities', 'childEntity', 'entityCount'],
       Place: ['childEntity', 'childEntities'],
@@ -147,24 +147,24 @@ describe('parseActionName', () => {
     Country: countryConfig,
   };
   const custom = { Query: { getEntity, putThing } };
-  const descendant = { ForCatalog };
+  const representation = { ForCatalog };
 
-  const generalConfig = { allEntityConfigs, custom, descendant };
+  const generalConfig = { allEntityConfigs, custom, representation };
 
   test('should return result for entitiesByUnique action', () => {
     const actionType = 'Query';
     const actionName = 'entitiesByUnique';
     const entityName = 'Person';
-    const descendantKey = 'ForCabinet';
+    const representationKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      descendantKey: 'ForCabinet',
+      representationKey: 'ForCabinet',
     };
 
     const result = parseActionName(
-      { actionType, actionName, entityName, descendantKey },
+      { actionType, actionName, entityName, representationKey },
       generalConfig,
     );
     expect(result).toEqual(expectedResult);
@@ -174,16 +174,16 @@ describe('parseActionName', () => {
     const actionType = 'Query';
     const actionName = 'entityCount';
     const entityName = 'Person';
-    const descendantKey = 'ForCabinet';
+    const representationKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'standard',
       entityConfig: null,
       baseAction: '',
-      descendantKey: 'ForCabinet',
+      representationKey: 'ForCabinet',
     };
 
     const result = parseActionName(
-      { actionType, actionName, entityName, descendantKey },
+      { actionType, actionName, entityName, representationKey },
       generalConfig,
     );
     expect(result).toEqual(expectedResult);
@@ -193,16 +193,16 @@ describe('parseActionName', () => {
     const actionType = 'Query';
     const actionName = 'getEntity';
     const entityName = 'Person';
-    const descendantKey = 'ForCabinet';
+    const representationKey = 'ForCabinet';
     const expectedResult = {
       creationType: 'custom',
       entityConfig: allEntityConfigs.Person,
       baseAction: '',
-      descendantKey: 'ForCabinet',
+      representationKey: 'ForCabinet',
     };
 
     const result = parseActionName(
-      { actionType, actionName, entityName, descendantKey },
+      { actionType, actionName, entityName, representationKey },
       generalConfig,
     );
     expect(result).toEqual(expectedResult);
@@ -214,13 +214,13 @@ describe('parseActionName', () => {
     const entityName = 'Person';
     const expectedResult = {
       creationType: 'custom',
-      entityConfig: composeDescendantConfigByName(
+      entityConfig: composeRepresentationConfigByName(
         'ForCatalog',
         allEntityConfigs.Person,
         generalConfig,
       ),
       baseAction: '',
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
@@ -232,14 +232,14 @@ describe('parseActionName', () => {
     const actionName = 'entitiesByUniqueForCatalog';
     const entityName = 'Person';
     const expectedResult = {
-      creationType: 'descendant',
-      entityConfig: composeDescendantConfigByName(
+      creationType: 'representation',
+      entityConfig: composeRepresentationConfigByName(
         'ForCatalog',
         allEntityConfigs.Person,
         generalConfig,
       ),
       baseAction: 'entitiesByUnique',
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
@@ -251,10 +251,10 @@ describe('parseActionName', () => {
     const actionName = 'entityCountForCatalog';
     const entityName = 'Person';
     const expectedResult = {
-      creationType: 'descendant',
+      creationType: 'representation',
       entityConfig: null,
       baseAction: 'entityCount',
-      descendantKey: 'ForCatalog',
+      representationKey: 'ForCatalog',
     };
 
     const result = parseActionName({ actionType, actionName, entityName }, generalConfig);
