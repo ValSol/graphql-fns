@@ -39,10 +39,10 @@ const incCounters = async (
       { _id: name },
       { $inc: { seq: itemsToInc[name] } },
       {
-        new: true,
-        upsert: true,
         lean: true,
+        returnDocument: 'after',
         session,
+        upsert: true,
       },
     );
 

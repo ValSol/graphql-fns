@@ -13,7 +13,7 @@ const addPeripheryToCore = async (
   mongooseConn: Connection,
   session?: any,
 ): Promise<Result> => {
-  const promises: Array<Promise<void | DataObject>> = [];
+  const tasks: Array<() => Promise<void | DataObject>> = [];
 
   for (const [config, obj] of periphery.entries()) {
     const { name: configName } = config;
@@ -25,7 +25,7 @@ const addPeripheryToCore = async (
     for (const oppositeName of Object.keys(obj)) {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];
 
-      promises.push(
+      tasks.push(() =>
         Entity.find(
           { _id: { $in: oppositeIds }, [oppositeName]: { $exists: true, $ne: null } },
           { [oppositeName]: 1 },
@@ -67,7 +67,9 @@ const addPeripheryToCore = async (
     }
   }
 
-  await Promise.all(promises);
+  for (const task of tasks) {
+    await task();
+  }
 
   return core;
 };
