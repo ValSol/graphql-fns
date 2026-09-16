@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { parseResolveInfo } from 'graphql-parse-resolve-info';
 
 import type { InfoEssence, SintheticResolverInfo, TangibleEntityConfig } from '@/tsTypes';
 
@@ -8,6 +7,7 @@ import composeAllFieldsProjection from '../composeAllFieldsProjection';
 import createInfoEssence from '../createInfoEssence';
 import getSimpleProjectionFromResolvedInfo from '../getSimpleProjectionFromInfo/getSimpleProjectionFromResolvedInfo';
 import infoEssenceTypePredicate from '../infoEssenceTypePredicate';
+import parseResolveInfoCompat from '../parseResolveInfoCompat';
 import getFieldArgsFromResolvedInfo from './getFieldArgsFromResolvedInfo';
 
 const getInfoEssence = (
@@ -29,7 +29,7 @@ const getInfoEssence = (
     return { ...info, projection };
   }
 
-  const resolvedInfo = parseResolveInfo(info as GraphQLResolveInfo);
+  const resolvedInfo = parseResolveInfoCompat(info as GraphQLResolveInfo);
 
   if (!resolvedInfo) {
     throw new TypeError(

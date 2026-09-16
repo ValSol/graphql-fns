@@ -1,10 +1,10 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { parseResolveInfo } from 'graphql-parse-resolve-info';
 
 import type { SintheticResolverInfo } from '../../../tsTypes';
 
 import getSimpleProjectionFromResolvedInfo from './getSimpleProjectionFromResolvedInfo';
 import infoEssenceTypePredicate from '../infoEssenceTypePredicate';
+import parseResolveInfoCompat from '../parseResolveInfoCompat';
 
 const getSimpleProjectionFromInfo = (
   info: SintheticResolverInfo,
@@ -16,7 +16,7 @@ const getSimpleProjectionFromInfo = (
     return info.projection;
   }
 
-  const resolvedInfo = parseResolveInfo(info as GraphQLResolveInfo);
+  const resolvedInfo = parseResolveInfoCompat(info as GraphQLResolveInfo);
 
   if (!resolvedInfo) {
     throw new TypeError(
