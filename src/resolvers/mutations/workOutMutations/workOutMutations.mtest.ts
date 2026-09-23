@@ -1866,4 +1866,68 @@ describe('workOutMutations', () => {
       );
     }
   });
+
+  test('should write single copy into collection with unique index when first attempt fails', async () => {
+    // separate connection to catch "commandFailed" events
+    const conn = await mongoose
+      .createConnection('mongodb://127.0.0.1:27017/jest-work-out-mutations', {
+        ...mongoOptions,
+        monitorCommands: true,
+      })
+      .asPromise();
+
+    const Restaurant = conn.model('Restaurant_Thing', createThingSchema(restaurantConfig));
+    await Restaurant.init();
+    await Restaurant.createCollection();
+
+    const RestaurantBackup = conn.model(
+      'RestaurantBackup_Thing',
+      createThingSchema(restaurantBackupConfig),
+    );
+    await RestaurantBackup.init(); // builds unique index on "original"
+    await RestaurantBackup.createCollection();
+
+    const { _id: id }: any = await Restaurant.create({ title: 'Unique Backup' });
+
+    // uncommitted write of other transaction into the same document
+    // makes first attempt fail with "WriteConflict" ("TransientTransactionError")
+    const blocker = await conn.startSession();
+    blocker.startTransaction();
+    await Restaurant.updateOne({ _id: id }, { $set: { title: 'blocked' } }, { session: blocker });
+
+    let writeConflicts = 0;
+    conn.getClient().on('commandFailed', (event) => {
+      if ((event.failure as any)?.code === 112 && blocker.inTransaction()) {
+        writeConflicts += 1;
+        blocker.abortTransaction();
+      }
+    });
+
+    const context = { mongooseConn: conn, pubsub };
+    const commonResolverCreatorArg = { generalConfig, serversideConfig, context };
+
+    try {
+      await workOutMutations(
+        [
+          {
+            actionGeneralName: 'copyEntity',
+            entityConfig: restaurantBackupConfig,
+            args: { whereOnes: { original: { id } } },
+          },
+        ] as any,
+        commonResolverCreatorArg as any,
+      );
+    } finally {
+      if (blocker.inTransaction()) await blocker.abortTransaction();
+      await blocker.endSession();
+    }
+
+    expect(writeConflicts).toBe(1);
+
+    const backups = await RestaurantBackup.find({ original: id }, null, { lean: true });
+    await conn.close();
+
+    expect(backups.length).toBe(1);
+    expect(backups[0].title).toBe('Unique Backup');
+  });
 });

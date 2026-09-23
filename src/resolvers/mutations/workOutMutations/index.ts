@@ -21,6 +21,9 @@ import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
 import checkLockedData, { StandardMutationsArg, CommonResolverCreatorArg } from './checkLockedData';
+import commitTransactionWithRetry from './commitTransactionWithRetry';
+import copyPreparedData from './copyPreparedData';
+import isTransientTransactionError from './isTransientTransactionError';
 
 const workOutMutations = async (
   standardMutationsArgs: StandardMutationsArg[],
@@ -40,8 +43,10 @@ const workOutMutations = async (
 
   const tryCount = 7;
 
+  const initialPreparedData = copyPreparedData(preparedBulkData);
+
   for (let i = 0; i < tryCount; i += 1) {
-    let preparedData = preparedBulkData;
+    let preparedData = copyPreparedData(initialPreparedData);
 
     const session = transactions ? await mongooseConn.startSession() : null;
 
@@ -153,7 +158,7 @@ const workOutMutations = async (
       preCommitResult.current = true;
 
       if (session) {
-        await session.commitTransaction();
+        await commitTransactionWithRetry(session, tryCount);
         await session.endSession();
       }
 
@@ -166,8 +171,8 @@ const workOutMutations = async (
         await session.endSession();
       }
 
-      if (i === tryCount - 1) {
-        throw new Error(err);
+      if (i === tryCount - 1 || !isTransientTransactionError(err)) {
+        throw err;
       }
 
       await sleep(100 * 2 ** i);
