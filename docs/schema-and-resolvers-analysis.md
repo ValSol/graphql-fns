@@ -14,6 +14,7 @@
 | `da657196` | ?9 — calculated geospatial-значення не конвертуються з Mongo-формату |
 | `226010ff` | B9, частково B15 — стандартні мутації повторюють лише transient-помилки транзакцій, помилки прокидаються без обгортки |
 | `6002a955` | B9 (доповнення) — `workOutMutations` так само не повторює мутації без транзакцій |
+| `a323df29` | B7 — `PushIntoXInput` для duplex-масиву з обов'язковим опозитом використовує `Thru`-input, як Create/Update |
 
 ---
 
@@ -70,7 +71,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | F4 | embedded | `name: E` / `name(slice): [E!]!` + варіанти `connection` (`nameThroughConnection`) і `count` (`nameCount`) | `ECreateInput` | `EUpdateInput` | `name: EWhereInput` |
 | F5 | relational (tangible→tangible) | дочірні поля C1/C2 | `YCreateChildInput` / `YCreateOrPushChildrenInput` (`connect`/`create`) | те саме | `name, _in, _nin, _ne, name_: YWhereWithoutBooleanOperationsInput` |
 | F6 | **parent relational** (автоматично додається у Y як опозит для кожного relational X→Y) | масив: C1 | — | — | `name_: …WhereWithoutBooleanOperationsInput`, якщо в опозита є `index` |
-| F7 | duplex (двобічний зв'язок) | C1/C2 (+C3 GetOrCreate) | як F5, але якщо опозит `required`, то `YCreateThru_{opp}_FieldChildInput` | як Create | як F5 |
+| F7 | duplex (двобічний зв'язок) | C1/C2 (+C3 GetOrCreate) | як F5, але якщо опозит `required`, то `YCreateThru_{opp}_FieldChildInput` / `YCreateOrPushThru_{opp}_FieldChildrenInput` (у Create, Update і PushInto; у такому input поле-опозит необов'язкове й заповнюється id батька) | як Create | як F5 |
 | F8 | filter (зберігає фільтр по Y) | `variants: plain` → C1/C2; `stringified` → `nameStringified: String` | масив: `YWhereInput`, скаляр: `YWhereOneInput` (**без frozen**, див. I5) | так | — |
 | F9 | calculated | за `calculatedType`, з аргументами `inputTypes` (+`slice` для масивів); `filterFields` як C1/C2 | — | — | — (але у WherePayloadInput — так) |
 | F10 | child (тільки virtual) | `name: Y` / `[Y!]!` | — | — | — |
@@ -179,7 +180,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | **B5** **[виправлено `124e7e33`]** | `WherePayloadInput` падає для calculated-поля з `calculatedType: 'virtualFields'`: у `preFields` немає ключа `virtualFields` | `src/types/inputs/createEntityWherePayloadInputType.ts:67` | `composeTypeDefsAndResolvers` → `TypeError: Cannot read properties of undefined (reading 'push')` |
 | **B6** **[виправлено `124e7e33`]** | `composeGeospatialTypes` дивиться лише на `geospatialFields`, а calculated geospatial-поля ігнорує | `src/types/specialized/composeGeospatialTypes.ts:17` | сутність лише з calculated `Point` → `Unknown type "GeospatialPoint"` (і `…PolygonInput` та інші з WherePayload) |
 | **B5a** **[виправлено `124e7e33`]** | (знайдено під час виправлення B5) Runtime-фільтр `wherePayload` за calculated embedded-полем падав: dummy-конфіг subscription губив `config` поля (`Cannot destructure property 'name' of 'entityConfig'`) | `src/resolvers/utils/composeSubscriptionDummyEntityConfig/index.ts` | тепер зберігаються `config`, `enumName`, `geospatialType`; calculated virtual-поля не фільтруються ні в SDL, ні в runtime |
-| **B7** | `PushIntoXInput` для duplex-масиву завжди використовує `YCreateOrPushChildrenInput`, а Create/Update, коли опозит `required`, беруть `YCreateOrPushThru_{opp}_FieldChildrenInput` | `src/types/inputs/createPushIntoEntityInputType.ts:84` | `PushIntoMenuInput.sections: SectionCreateOrPushChildrenInput` → `create: [SectionCreateInput!]`, де обов'язкове `menu: MenuCreateChildInput!`: клієнт змушений вказувати батька, якого й так відомо (для `MenuCreateInput` цього не треба) |
+| **B7** **[виправлено `a323df29`]** | `PushIntoXInput` для duplex-масиву завжди використовує `YCreateOrPushChildrenInput`, а Create/Update, коли опозит `required`, беруть `YCreateOrPushThru_{opp}_FieldChildrenInput` | `src/types/inputs/createPushIntoEntityInputType.ts:84` | `PushIntoMenuInput.sections: SectionCreateOrPushChildrenInput` → `create: [SectionCreateInput!]`, де обов'язкове `menu: MenuCreateChildInput!`: клієнт змушений вказувати батька, якого й так відомо (для `MenuCreateInput` цього не треба) |
 | **B8** (частково: кеш `checkInventory` тепер окремий для кожного об'єкта inventory, **[виправлено `2a2e24d4`]**) | Глобальний кеш resolvers на рівні модуля не враховує аргументи | `resolvers/composeGqlResolvers/index.ts:22,31` | поза jest другий виклик з **іншим** `generalConfig` повертає resolvers першого (`a.resolvers === b.resolvers`). Схожі глобальні кеші без прив'язки до конфігу: `mergeRepresentationIntoCustom` (ключ — `variant`), `parseEntityName`, `composeRepresentationConfig` (ключ — ім'я), `checkInventory` (ключ — `inventory.name`), `resolverDecorator`, subscription creators |
 
 ## 9. Помилки, встановлені читанням коду 📖
