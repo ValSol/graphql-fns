@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { RepresentationAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
 
 import entityCountQueryAttributes from '../../types/actionAttributes/entityCountQueryAttributes';
@@ -98,7 +96,7 @@ describe('composeRepresentationEntityCountQuery', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogWhereInput`, 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      // eslint-disable-next-line no-unused-vars, no-shadow
+
       config: (entityConfig: any, generalConfig: any) => null,
     };
 
@@ -132,7 +130,7 @@ describe('composeRepresentationEntityCountQuery', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogWhereInput`, 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      // eslint-disable-next-line no-unused-vars, no-shadow
+
       config: (entityConfig: any, generalConfig: any) => null,
     };
 
@@ -166,7 +164,7 @@ describe('composeRepresentationEntityCountQuery', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogWhereInput`, 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      // eslint-disable-next-line no-unused-vars, no-shadow
+
       config: (entityConfig: any, generalConfig: any) => null,
     };
 
@@ -200,7 +198,7 @@ describe('composeRepresentationEntityCountQuery', () => {
       argTypes: ({ name }: any) => [`${name}ForCatalogWhereInput`, 'String'],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => 'Int!',
-      // eslint-disable-next-line no-unused-vars, no-shadow
+
       config: (entityConfig: any, generalConfig: any) => null,
     };
 

@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import composeSortInput from './composeSortInput';
 
 describe('composeSortInput', () => {

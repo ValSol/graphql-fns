@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig, SimplifiedEntityConfig } from './tsTypes';
 
 import composeTypeDefsAndResolvers from './composeTypeDefsAndResolvers';

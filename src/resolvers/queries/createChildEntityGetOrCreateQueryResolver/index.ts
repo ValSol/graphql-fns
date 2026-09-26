@@ -41,7 +41,7 @@ const createChildEntityGetOrCreateQueryResolver = (
   );
   if (!createEntityMutationResolver) return null;
 
-  const resolver = async (
+  const resolver = (
     parent: null | GraphqlObject,
     args: Args,
     context: Context,

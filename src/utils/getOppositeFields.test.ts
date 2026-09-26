@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { TangibleEntityConfig } from '../tsTypes';
 
 import getOppositeFields from './getOppositeFields';

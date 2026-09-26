@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import type { GeneralConfig, EntityConfig } from '@/tsTypes';
@@ -111,7 +109,7 @@ describe('createEntityQueryResolver', () => {
     });
 
     const allPeople = await Example.find({});
-    const id_in = allPeople.map(({ _id }) => _id); // eslint-disable-line camelcase
+    const id_in = allPeople.map(({ _id }) => _id);
 
     const PeopleByUnique = createEntitiesByUniqueQueryResolver(
       personConfig,

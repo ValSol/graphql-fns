@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import getLimit from '.';
 
 describe('getLimit util', () => {

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeLimitingArgs from './composeLimitingArgs';
 
 describe('composeLimitingArgs', () => {

@@ -29,7 +29,7 @@ const createChildEntityCountQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntityCount', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (
+  const resolver = (
     parent: null | GraphqlObject,
     args: Args,
     context: Context,

@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { SimplifiedInventoryOptions } from '@/tsTypes';
 
 import subtructInventoryOptions from './subtructInventoryOptions';

@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeospatialMultiPolygon, MongodbGeospatialMultiPolygon } from '../../../../tsTypes';
 
 import multiPolygonFromGqlToMongo from '.';

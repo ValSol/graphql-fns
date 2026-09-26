@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mergeInventories from './mergeInventories';
 
 describe('mergeInventories', () => {

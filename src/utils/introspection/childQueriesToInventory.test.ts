@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { ParsedAction } from './tsTypes';
 
 import childQueriesToInventory from './childQueriesToInventory';

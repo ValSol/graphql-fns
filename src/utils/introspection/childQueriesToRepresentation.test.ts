@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import childQueriesToRepresentation from './childQueriesToRepresentation';
 
 describe('childQueriesToRepresentation', () => {

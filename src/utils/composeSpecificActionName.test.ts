@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeSpecificActionName from './composeSpecificActionName';
 
 describe('composeSpecificActionName util', () => {

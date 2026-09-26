@@ -35,22 +35,23 @@ const createEntityGetOrCreateResolver = (
     return null;
   }
 
-  const childEntityGetOrCreateQueryResolver = representationKey
-    ? createCustomResolver(
-        'Query',
-        `childEntityGetOrCreate${representationKey}`,
-        allEntityConfigs[nameRoot],
-        generalConfig,
-        serversideConfig,
-      )
-    : resolverDecorator(
-        createChildEntityGetOrCreateQueryResolver(entityConfig, generalConfig, serversideConfig),
-        ['Query', 'childEntityGetOrCreate', nameRoot],
-        childEntityGetOrCreateQueryAttributes,
-        entityConfig,
-        generalConfig,
-        serversideConfig,
-      );
+  const childEntityGetOrCreateQueryResolver: null | ((...args: any[]) => Promise<any>) =
+    representationKey
+      ? createCustomResolver(
+          'Query',
+          `childEntityGetOrCreate${representationKey}`,
+          allEntityConfigs[nameRoot],
+          generalConfig,
+          serversideConfig,
+        )
+      : resolverDecorator(
+          createChildEntityGetOrCreateQueryResolver(entityConfig, generalConfig, serversideConfig),
+          ['Query', 'childEntityGetOrCreate', nameRoot],
+          childEntityGetOrCreateQueryAttributes,
+          entityConfig,
+          generalConfig,
+          serversideConfig,
+        );
 
   if (!childEntityGetOrCreateQueryResolver) {
     throw new TypeError(

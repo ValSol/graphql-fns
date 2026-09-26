@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import createObjectBoundStore from './createObjectBoundStore';
 
 describe('createObjectBoundStore', () => {

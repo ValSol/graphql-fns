@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { NearInput } from '../../../../tsTypes';
 
 import composeSetWindowFieldsInput from './composeSetWindowFieldsInput';

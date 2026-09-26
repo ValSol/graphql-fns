@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { RepresentationAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
 
 import entityDistinctValuesQueryAttributes from '../../types/actionAttributes/entityDistinctValuesQueryAttributes';
@@ -53,7 +51,7 @@ describe('composeRepresentationEntityDistinctValuesQuery', () => {
       ],
       involvedEntityNames: ({ name }: any) => ({ inputOutputEntity: `${name}ForCatalog` }),
       type: () => '[String!]!',
-      // eslint-disable-next-line no-unused-vars, no-shadow
+
       config: (entityConfig: any, generalConfig: any) => null,
     };
 

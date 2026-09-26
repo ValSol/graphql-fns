@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import toCursor from '../../../utils/toCursor';
 
 import composeFirstEdges from './composeFirstEdges';

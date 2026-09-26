@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mingo from 'mingo';
 
 import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';

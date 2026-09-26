@@ -3,11 +3,7 @@ import type { PrepareBulkData } from '../../../tsTypes';
 
 import processDeleteData from '../../processDeleteData';
 
-const prepareBulkData: PrepareBulkData = async (
-  resolverCreatorArg,
-  resolverArg,
-  prevPreparedData,
-) => {
+const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevPreparedData) => {
   const { entityConfig } = resolverCreatorArg;
 
   const toDelete = true;

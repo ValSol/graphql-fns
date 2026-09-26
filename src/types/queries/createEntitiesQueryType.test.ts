@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EntityConfig, GeneralConfig } from '../../tsTypes';
 
 import entitiesQueryAttributes from '../actionAttributes/entitiesQueryAttributes';

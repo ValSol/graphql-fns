@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeWithinPolygonInput from '.';
 
 describe('composeWithinPolygonInput', () => {

@@ -5,11 +5,7 @@ import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../processDeleteDataPrepareArgs';
 
-const prepareBulkData: PrepareBulkData = async (
-  resolverCreatorArg,
-  resolverArg,
-  prevPreparedData,
-) => {
+const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevPreparedData) => {
   const { entityConfig } = resolverCreatorArg;
   const { args } = resolverArg;
 

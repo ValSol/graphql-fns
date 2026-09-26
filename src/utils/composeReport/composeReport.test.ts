@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { TangibleEntityConfig, VirtualEntityConfig } from '@/tsTypes';
 import composeReport from '.';
 

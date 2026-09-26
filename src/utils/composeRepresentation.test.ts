@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { RepresentationAttributes } from '../tsTypes';
 
 import composeRepresentation from './composeRepresentation';

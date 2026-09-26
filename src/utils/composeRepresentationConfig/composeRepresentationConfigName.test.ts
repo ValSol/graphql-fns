@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeRepresentationConfigName from './composeRepresentationConfigName';
 
 describe('composeRepresentationConfigName', () => {

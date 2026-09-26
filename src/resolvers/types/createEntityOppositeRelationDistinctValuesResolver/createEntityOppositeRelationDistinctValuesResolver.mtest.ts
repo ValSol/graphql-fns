@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import mongoose from 'mongoose';

@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { TangibleEntityConfig } from '@/tsTypes';
 
 import composeFieldsObject, { FOR_MONGO_QUERY, WITHOUT_CALCULATED_WITH_ASYNC } from '.';

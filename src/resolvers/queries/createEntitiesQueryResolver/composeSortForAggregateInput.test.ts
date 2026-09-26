@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import composeSortForAggregateInput from './composeSortForAggregateInput';
 
 describe('composeSortForAggregateInput', () => {

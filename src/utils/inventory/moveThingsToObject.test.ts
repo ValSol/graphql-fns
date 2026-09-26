@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import moveThingsToObject from './moveThingsToObject';
 
 describe('moveThingsToObject', () => {

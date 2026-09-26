@@ -9,7 +9,7 @@ const createEntityResolverAttributes: ResolverAttributes = {
   getPrevious,
   produceCurrent: true,
   prepareBulkData,
-  report: async () => null,
+  report: () => null,
   finalResult: ({ current: [current] }) => current,
 };
 

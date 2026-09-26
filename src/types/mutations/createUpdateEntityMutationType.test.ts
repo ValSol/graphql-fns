@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { EntityConfig, GeneralConfig, Inventory, TangibleEntityConfig } from '../../tsTypes';
 
 import updateEntityMutationAttributes from '../actionAttributes/updateEntityMutationAttributes';

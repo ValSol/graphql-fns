@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import mongoose from 'mongoose';
 
 import type { GeneralConfig, TangibleEntityConfig, GraphqlObject } from '@/tsTypes';

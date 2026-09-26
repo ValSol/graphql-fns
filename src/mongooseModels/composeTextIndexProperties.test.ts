@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { EntityConfig } from '../tsTypes';
 
 import composeTextIndexProperties from './composeTextIndexProperties';

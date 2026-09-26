@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import categorizeBulkOperations from './categorizeBulkOperations';
 
 describe('categorizeBulkOperations', () => {

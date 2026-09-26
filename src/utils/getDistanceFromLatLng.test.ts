@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import getDistanceFromLatLng from './getDistanceFromLatLng';
 
 describe('getDistanceFromLatLng', () => {

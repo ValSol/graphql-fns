@@ -41,7 +41,7 @@ const createEntitiesByUniqueQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'entitiesByUnique', entityName];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (
+  const resolver = (
     parent: null | GraphqlObject,
     args: Args,
     context: Context,

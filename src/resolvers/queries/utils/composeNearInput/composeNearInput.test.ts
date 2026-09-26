@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EntityConfig, NearInput, NearMongodb } from '@/tsTypes';
 
 import composeNearInput from '.';

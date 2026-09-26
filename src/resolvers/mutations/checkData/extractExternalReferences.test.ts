@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import extractExternalReferences from './extractExternalReferences';

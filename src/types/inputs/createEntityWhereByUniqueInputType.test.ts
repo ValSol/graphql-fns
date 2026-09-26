@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EntityConfig } from '../../tsTypes';
 
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { GraphqlObject, TangibleEntityConfig } from '../../../tsTypes';
 
 import processDeleteDataPrepareArgs from '.';

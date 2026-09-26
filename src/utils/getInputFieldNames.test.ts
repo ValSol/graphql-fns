@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../tsTypes';
 
 import getInputFieldNames from './getInputFieldNames';

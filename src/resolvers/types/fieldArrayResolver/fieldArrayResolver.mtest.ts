@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import mongoOptions from '../../../test/mongo-options';

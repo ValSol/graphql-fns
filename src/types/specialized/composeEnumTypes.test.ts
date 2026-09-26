@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type {Enums, GeneralConfig} from '../../tsTypes';
 
 import composeEnumTypes from './composeEnumTypes';

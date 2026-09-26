@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeWithinSphereInput from '.';
 
 describe('composeWithinSphereInput', () => {

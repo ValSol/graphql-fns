@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 describe('isCommonlyAllowedTypeName', () => {

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import optimizeBulk from '.';
 
 describe('optimizeBulk', () => {

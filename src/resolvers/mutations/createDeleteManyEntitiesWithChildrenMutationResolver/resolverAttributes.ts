@@ -1,4 +1,4 @@
-import type {ResolverAttributes} from '../../tsTypes';
+import type { ResolverAttributes } from '../../tsTypes';
 
 import getPrevious from '../createDeleteManyEntitiesMutationResolver/resolverAttributes/getPrevious';
 import prepareBulkData from '../createDeleteEntityWithChildrenMutationResolver/resolverAttributes/prepareBulkData';
@@ -9,7 +9,7 @@ const deleteManysResolverAttributes: ResolverAttributes = {
   getPrevious,
   produceCurrent: false,
   prepareBulkData,
-  report: async () => null,
+  report: () => null,
   finalResult: ({ previous }) => previous,
 };
 

@@ -24,7 +24,7 @@ const createEntityFilterScalarResolver = (
     return null;
   }
 
-  const childEntityQueryResolver = representationKey
+  const childEntityQueryResolver: null | ((...args: any[]) => Promise<any>) = representationKey
     ? createCustomResolver(
         'Query',
         `childEntity${representationKey}`,

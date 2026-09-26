@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { InvolvedFilter } from '../../../tsTypes';
 import getInputAndOutputFilters from '.';
 

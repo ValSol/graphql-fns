@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import composeEntityResolvers from '.';

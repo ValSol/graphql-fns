@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig, ObjectSignatureMethods, EntityConfig } from '../tsTypes';
 
 import composeObjectSignature from './composeObjectSignature';

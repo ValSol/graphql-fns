@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeospatialPoint, MongodbGeospatialPoint } from '../../../../tsTypes';
 
 import pointFromGqlToMongo from '.';

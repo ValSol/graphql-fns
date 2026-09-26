@@ -1,4 +1,4 @@
-import type {ResolverAttributes} from '../../../tsTypes';
+import type { ResolverAttributes } from '../../../tsTypes';
 
 import getPrevious from '../../createCopyManyEntitiesMutationResolver/resolverAttributes/getPrevious';
 import prepareBulkData from '../../createCopyEntityWithChildrenMutationResolver/resolverAttributes/prepareBulkData';
@@ -9,7 +9,7 @@ const createEntityResolverAttributes: ResolverAttributes = {
   getPrevious,
   produceCurrent: true,
   prepareBulkData,
-  report: async () => null,
+  report: () => null,
   finalResult: ({ current }) => current,
 };
 

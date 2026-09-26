@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import fromCursor from '.';
 
 describe('fromCursor', () => {
@@ -8,7 +6,7 @@ describe('fromCursor', () => {
 
     const result = fromCursor(cursor);
 
-    const _id = '61af380a5c2825441ca07902'; // eslint-disable-line no-underscore-dangle
+    const _id = '61af380a5c2825441ca07902';
     const shift = 10;
 
     const expectedResult = { _id, shift };

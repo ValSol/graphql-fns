@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import createEntityWhereInputType from './createEntityWhereInputType';

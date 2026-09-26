@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
 
 import getAsyncFuncResults from '.';

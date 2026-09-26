@@ -2,7 +2,7 @@ import type { Report } from '@/resolvers/tsTypes';
 
 import composeReport from '@/utils/composeReport';
 
-const report: Report = async (resolverCreatorArg, resolverArg) => {
+const report: Report = (resolverCreatorArg, resolverArg) => {
   const { entityConfig } = resolverCreatorArg;
   const {
     context,

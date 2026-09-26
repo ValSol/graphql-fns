@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { Types } from 'mongoose';
 
 import type { SimplifiedEntityConfig, TangibleEntityConfig } from '@/tsTypes';

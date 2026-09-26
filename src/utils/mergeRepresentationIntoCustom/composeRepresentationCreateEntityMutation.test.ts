@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { RepresentationAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
 
 import createEntityMutationAttributes from '../../types/actionAttributes/createEntityMutationAttributes';

@@ -38,7 +38,7 @@ const createChildEntitiesThroughConnectionQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (
+  const resolver = (
     parent: null | GraphqlObject,
     args: Args,
     context: Context,

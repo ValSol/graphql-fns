@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { TangibleEntityConfig } from '../../tsTypes';
 
 import createDeleteEntityWithChildrenOptionsInputType from './createDeleteEntityWithChildrenOptionsInputType';

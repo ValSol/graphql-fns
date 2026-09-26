@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { ActionSignatureMethods, ObjectSignatureMethods } from '../tsTypes';
 
 import composeCustom from './composeCustom';

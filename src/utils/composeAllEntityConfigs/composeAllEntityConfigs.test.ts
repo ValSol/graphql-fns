@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type {
   SimplifiedEmbeddedEntityConfig,
   SimplifiedTangibleEntityConfig,

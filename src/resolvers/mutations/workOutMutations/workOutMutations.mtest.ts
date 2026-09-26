@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
@@ -1899,7 +1897,7 @@ describe('workOutMutations', () => {
     conn.getClient().on('commandFailed', (event) => {
       if ((event.failure as any)?.code === 112 && blocker.inTransaction()) {
         writeConflicts += 1;
-        blocker.abortTransaction();
+        void blocker.abortTransaction();
       }
     });
 

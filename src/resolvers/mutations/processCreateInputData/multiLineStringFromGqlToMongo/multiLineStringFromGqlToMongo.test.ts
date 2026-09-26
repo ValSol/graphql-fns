@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeospatialMultiLineString, MongodbGeospatialMultiLineString } from '@/tsTypes';
 
 import multiLineStringFromGqlToMongo from '.';

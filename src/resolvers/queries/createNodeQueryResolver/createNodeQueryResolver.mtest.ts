@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import type { EntityFilters, GeneralConfig, EntityConfig, ServersideConfig } from '@/tsTypes';
@@ -118,7 +116,7 @@ describe('createNodeQueryResolver', () => {
     expect(example.textField5).toBeUndefined();
     expect(example.createdAt instanceof Date).toBeTruthy();
     expect(example.updatedAt).toBeUndefined();
-    expect(example.__typename).toBe('Example'); // eslint-disable-line no-underscore-dangle
+    expect(example.__typename).toBe('Example');
 
     const data2 = {
       textField1: 'textField1-2',

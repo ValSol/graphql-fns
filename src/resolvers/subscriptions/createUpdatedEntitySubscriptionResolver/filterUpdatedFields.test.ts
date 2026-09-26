@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import filterUpdatedFields, { WhichUpdated } from './filterUpdatedFields';
 
 describe('filterUpdatedFields util', () => {

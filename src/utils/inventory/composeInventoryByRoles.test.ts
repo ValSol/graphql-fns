@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { Inventory } from '../../tsTypes';
 
 import composeInventoryByRoles from './composeInventoryByRoles';

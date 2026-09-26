@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeospatialPolygon, MongodbGeospatialPolygon } from '../../../tsTypes';
 
 import polygonFromMongoToGql from '.';

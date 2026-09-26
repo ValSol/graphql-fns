@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EntityConfig, TangibleEntityConfig } from '../../tsTypes';
 import type { ActionToParse, ParsedAction } from './tsTypes';
 

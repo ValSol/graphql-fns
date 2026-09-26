@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { MongoServerError } from 'mongodb';
 
 import type { TangibleEntityConfig } from '@/tsTypes';

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import setByPositions from './setByPositions';
 
 describe('setByPositions', () => {

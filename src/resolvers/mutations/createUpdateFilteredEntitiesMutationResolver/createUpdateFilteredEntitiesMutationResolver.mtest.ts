@@ -1,4 +1,3 @@
-/* eslint-env jest */
 /* eslint no-underscore-dangle: 0 */
 import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
 

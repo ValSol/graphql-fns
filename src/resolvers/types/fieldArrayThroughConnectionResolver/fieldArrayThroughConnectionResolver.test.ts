@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { Context } from '../../../tsTypes';
 
 import fieldArrayThroughConnectionResolver from '.';

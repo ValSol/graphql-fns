@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import infoEssenceTypePredicate from '.';
 
 describe('infoEssenceTypePredicate', () => {

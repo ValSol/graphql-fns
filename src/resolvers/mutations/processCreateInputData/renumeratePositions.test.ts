@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import renumeratePositions from './renumeratePositions';
 
 describe('renumeratePositions', () => {

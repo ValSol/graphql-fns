@@ -1,4 +1,4 @@
-import type {ResolverAttributes} from '../../../tsTypes';
+import type { ResolverAttributes } from '../../../tsTypes';
 
 import getPrevious from './getPrevious';
 import prepareBulkData from '../../createUpdateEntityMutationResolver/resolverAttributes/prepareBulkData';
@@ -9,7 +9,7 @@ const updateFilteredEntitiesResolverAttributes: ResolverAttributes = {
   getPrevious,
   produceCurrent: true,
   prepareBulkData,
-  report: async () => null,
+  report: () => null,
   finalResult: ({ current }) => current,
 };
 

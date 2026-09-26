@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig } from '@/tsTypes';
 
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';

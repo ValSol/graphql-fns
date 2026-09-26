@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeCommonUseTypes from './composeCommonUseTypes';
 
 describe('composeCommonUseTypes', () => {

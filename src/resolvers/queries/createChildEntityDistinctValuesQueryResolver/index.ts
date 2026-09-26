@@ -30,7 +30,7 @@ const createChildEntityDistinctValuesQueryResolver = (
   const inventoryChain: InventoryChain = ['Query', 'childEntityDistinctValues', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
-  const resolver = async (
+  const resolver = (
     parent: null | GraphqlObject,
     args: Args,
     context: Context,

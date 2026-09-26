@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import pluralize from 'pluralize';
 
 import type { RepresentationAttributes, GeneralConfig, EntityConfig } from '@/tsTypes';

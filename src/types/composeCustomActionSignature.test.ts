@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig, ActionSignatureMethods, EntityConfig } from '../tsTypes';
 
 import composeCustomActionSignature from './composeCustomActionSignature';

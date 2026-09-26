@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import toGlobalId from '../../toGlobalId';
 import transformData from './transformData';
 

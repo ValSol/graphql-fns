@@ -28,7 +28,8 @@
     "test:mongodb": "NODE_OPTIONS=--experimental-vm-modules jest --config=\"./configs/jest.config.mongodb.js\" --runInBand --verbose false --detectOpenHandles",
     "test": "jest  --config=\"./configs/jest.config.js\" --watch",
     "semantic-release": "semantic-release",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",

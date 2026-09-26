@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import processForPushEach from './processForPushEach';
 
 describe('processForPushEach', () => {

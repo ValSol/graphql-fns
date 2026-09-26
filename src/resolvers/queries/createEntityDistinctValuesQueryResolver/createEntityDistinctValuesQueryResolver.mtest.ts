@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import type { GeneralConfig, EntityConfig, TangibleEntityConfig } from '../../../tsTypes';
@@ -225,7 +223,7 @@ describe('createEntityDistinctValuesQueryResolver', () => {
           },
         },
       };
-      // eslint-disable-next-line no-await-in-loop
+
       await createParent(null, { data }, { mongooseConn, pubsub }, null, {
         involvedFilters: { inputOutputFilterAndLimit: [[]] },
       });

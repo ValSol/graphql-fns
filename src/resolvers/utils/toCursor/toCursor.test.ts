@@ -1,10 +1,8 @@
-/* eslint-env jest */
-
 import toCursor from '.';
 
 describe('toCursor', () => {
   test('filter empty', () => {
-    const _id = '61af380a5c2825441ca07902'; // eslint-disable-line no-underscore-dangle
+    const _id = '61af380a5c2825441ca07902';
     const shift = 10;
 
     const result = toCursor(_id, shift);

@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import resolvedInfo1 from './resolvedInfo1.json';
 import resolvedInfo2 from './resolvedInfo2.json';
 import resolvedInfo3 from './resolvedInfo3.json';

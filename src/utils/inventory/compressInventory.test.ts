@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import compressInventory from './compressInventory';
 
 describe('compressInventory', () => {

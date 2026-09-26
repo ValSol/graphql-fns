@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import type { InvolvedFilter, TangibleEntityConfig } from '../../../../tsTypes';
 
 import toGlobalId from '../../toGlobalId';

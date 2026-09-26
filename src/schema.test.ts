@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import type {

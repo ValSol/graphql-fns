@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { GraphQLResolveInfo } from 'graphql';
 
 import { InfoEssence, TangibleEntityConfig } from '@/tsTypes';

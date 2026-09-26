@@ -20,12 +20,15 @@ export type PrepareBulkData = (
   resolverArg: ResolverArg,
   preparedData: PreparedData,
   session: any,
-) => Promise<PreparedData>;
+) => PreparedData | Promise<PreparedData>;
+
+type ReportResult =
+  null | ((arg1: { previous?: GraphqlObject[]; current?: GraphqlObject[] }) => void);
 
 export type Report = (
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-) => Promise<null | ((arg1: { previous?: GraphqlObject[]; current?: GraphqlObject[] }) => void)>;
+) => ReportResult | Promise<ReportResult>;
 
 export type GetPrevious = (
   actionGeneralName: string,

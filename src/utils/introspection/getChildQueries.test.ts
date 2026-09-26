@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { EntityConfig, ClientOptions, TangibleEntityConfig } from '../../tsTypes';
 
 import getChildQueries from './getChildQueries';

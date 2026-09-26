@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig, EntityConfig } from '../../../tsTypes';
 
 import createUpdateManyEntitiesMutationResolver from '.';

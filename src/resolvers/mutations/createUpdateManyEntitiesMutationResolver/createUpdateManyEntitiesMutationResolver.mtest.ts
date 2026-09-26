@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import mongoose from 'mongoose';
 
 import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '@/tsTypes';

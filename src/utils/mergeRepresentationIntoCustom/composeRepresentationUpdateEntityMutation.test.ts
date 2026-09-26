@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { RepresentationAttributes, GeneralConfig, EntityConfig } from '../../tsTypes';
 
 import updateEntityMutationAttributes from '../../types/actionAttributes/updateEntityMutationAttributes';
@@ -59,7 +58,7 @@ describe('composeRepresentationUpdateEntityMutation', () => {
         subscriptionUpdatedEntity: name,
       }),
       type: ({ name }: any) => `${name}!`,
-      config: (entityConfig2: any, generalConfig: any) => entityConfig2, // eslint-disable-line no-unused-vars, no-shadow
+      config: (entityConfig2: any, generalConfig: any) => entityConfig2,
     };
 
     const result2 = composeCustomActionSignature(result, entityConfig, generalConfig);

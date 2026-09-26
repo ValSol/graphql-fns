@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { SimplifiedEntityConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';

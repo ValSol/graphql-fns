@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
 
 import createCopyEntityMutationResolver from '.';

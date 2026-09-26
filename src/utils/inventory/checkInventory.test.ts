@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import type { InventoryByRoles, Inventory, InventoryChain } from '../../tsTypes';
 
 import checkInventory from './checkInventory';

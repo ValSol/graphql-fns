@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import fromGlobalId from '.';
 
 describe('fromGlobalId', () => {
@@ -8,7 +6,7 @@ describe('fromGlobalId', () => {
 
     const result = fromGlobalId(globalId);
 
-    const _id = '61af380a5c2825441ca07902'; // eslint-disable-line no-underscore-dangle
+    const _id = '61af380a5c2825441ca07902';
     const entityName = 'Restaurant';
     const representationKey = 'ForView';
 

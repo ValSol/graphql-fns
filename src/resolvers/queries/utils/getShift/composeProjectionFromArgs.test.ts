@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import composeProjectionFromArgs from './composeProjectionFromArgs';
 
 describe('composeProjectionFromArgs', () => {

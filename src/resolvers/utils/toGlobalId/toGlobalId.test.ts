@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import toGlobalId from '.';
 
 describe('toGlobalId', () => {
