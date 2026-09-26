@@ -303,7 +303,20 @@ MenuClone   { name, description, original ↔ Menu.clone }
 1. **`data` має тип `XUpdateInput` і при створенні копії.** Через це frozen-поля новій копії через `data` не задати (хоча при звичайному створенні можна, після Q1), а обов'язкові поля X, яких немає серед спільних, не перевіряються схемою — помилка з'явиться лише під час запису. Для створення логічніший `XCreateInput`, але той самий аргумент працює й для оновлення.
 2. **Поєднання записів за індексом у `copyManyXs` / `copyManyXsWithChildren` (B19).** Y знаходяться одним `find({ OR: whereOnes })`, X — `find({ _id: { $in: ids } })` або `find({ OR: whereOne })`, а далі код поєднує `entities[i]` ↔ `whereOnes[i]` ↔ `data[i]` ↔ `whereOne[i]`. MongoDB не гарантує порядок результатів `find`, тож `data[i]` може потрапити не в ту копію, а в режимі А Y може поєднатися з чужим X. У режимі Б хибний порядок швидше дасть помилку `Try to copy to unconnected …`.
 
-### 12.8. Варіанти рішення
+### 12.8. Перейменування аргументів (погоджено, ще не реалізовано)
+
+Нинішні назви описують форму аргументу, а не роль: `whereOnes` (джерело, рівно один ключ) і `whereOne` (ціль) різняться однією літерою, хоча означають протилежне. Погоджено перейменувати:
+
+| Зараз | Нова назва аргументу | Зараз тип | Новий тип |
+|---|---|---|---|
+| `whereOnes` | `whereSource` | `XCopyWhereOnesInput` | `XWhereSourceInput` |
+| `whereOne` | `whereKeyToTarget` | `XWhereOneToCopyInput` | `XWhereKeyToTarget` (запропоновано `XWhereKeyToTargetInput` для однаковості з іншими input-типами — очікує підтвердження) |
+
+У `copyMany…` назви лишаються в однині з масивним типом, як у `updateManyXs(whereOne: [..])`.
+
+Що зачепить: 4 attributes-файли `copy…`, 2 input-генератори (`createEntityCopyWhereOnesInputType`, `createEntityWhereOneToCopyInputType`), 4 resolver-файли (`args.whereOnes` / `args.whereOne`), `resolverDecorator` (суфікси типів `CopyWhereOnesInput`, `WhereOneToCopyInput`) і `transformWhereOnes`; `src/client` бере назви з attributes. Це зміна API для клієнтів.
+
+### 12.9. Варіанти рішення
 
 - **А. Вирівняти:** `whereOne` необов'язковий і в `copyManyXsWithChildren`; додати `data` до обох `…WithChildren` (з реалізацією в `prepareBulkData`); виправити поєднання за індексом (впорядковувати результати `find` за `whereOnes`/`whereOne`). Тип `data` лишається `XUpdateInput`.
 - **Б. Лише виправити помилки:** `whereOne` необов'язковий у `copyManyXsWithChildren` і поєднання за індексом; `data` у `…WithChildren` не додаємо (так задумано).
