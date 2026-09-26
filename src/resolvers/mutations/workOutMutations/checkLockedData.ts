@@ -95,24 +95,20 @@ const checkLockedData = async (
       {} as Record<string, 1>,
     );
 
-    const projection2 = Object.keys(result).reduce(
-      (prev, key) => {
-        prev[key] = 1;
-
-        return prev;
-      },
-      {} as Record<string, 1>,
-    );
-
     const pluralizedEntityName = pluralize(entityName);
 
     const currentResult = await composeQueryResolver(
       pluralizedEntityName,
       generalConfig,
       serversideConfig,
-    )(null, args, context, createInfoEssence({ projection }), {
-      involvedFilters: { inputOutputFilterAndLimit: [[]] },
-    });
+    )(
+      null,
+      args,
+      context,
+      createInfoEssence({ projection }),
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+      session, // read inside the same transaction as the scalar branch does
+    );
 
     if (result.length !== currentResult.length) {
       throw new TypeError(
