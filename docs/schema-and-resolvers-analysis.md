@@ -12,6 +12,7 @@
 | `2a2e24d4` | B1, B2, B4, частково B8 (кеш `checkInventory`) — узгоджена перевірка inventory у SDL і resolvers |
 | `124e7e33` | B3, B5, B5a, B6 — field-resolvers для всіх сутностей, `WherePayloadInput` без calculated virtual-полів, runtime-фільтр за calculated embedded, geospatial-типи для calculated-полів |
 | `da657196` | ?9 — calculated geospatial-значення не конвертуються з Mongo-формату |
+| `226010ff` | B9, частково B15 — стандартні мутації повторюють лише transient-помилки транзакцій, помилки прокидаються без обгортки |
 
 ---
 
@@ -117,7 +118,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 (*) «Діти» — це duplex-поля X, у яких поле-опозит **скалярне і не `parent`** (`getOppositeFields(...).filter(([, {array, parent}]) => !(array || parent))`).
 (**) Існує duplex-поле `f`, для якого `getMatchingFields(X, Y)` дає хоч одне поле, окрім `f` (тобто в X і Y є однойменні поля, які можна скопіювати).
 
-Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`.
+Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`. Повтор усієї транзакції (до 7 спроб з backoff) відбувається лише для помилок з міткою `TransientTransactionError` / `WriteConflict` і лише коли `serversideConfig.transactions` увімкнено; при `UnknownTransactionCommitResult` повторюється тільки `commitTransaction`. Інші помилки прокидаються як є.
 
 ## 5. Subscription (для tangible `X`)
 
@@ -184,13 +185,13 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 
 | ID | Суть | Місце |
 |---|---|---|
-| **B9** | `composeStandardMutationResolver` повторює **будь-яку** помилку 7 разів (backoff ≈ 6,3 с), навіть валідаційну, а наприкінці кидає `new Error(err)`, через що втрачаються тип і повідомлення (`"Error: TypeError: …"`). Без `transactions` повторюються неідемпотентні часткові записи. Для `workOutMutations` саме це виправлено в `3c87337`, а стандартні мутації лишилися з тією ж поведінкою | `resolvers/mutations/composeStandardMutationResolver/index.ts:101-245` |
+| **B9** **[виправлено `226010ff`]** | `composeStandardMutationResolver` повторює **будь-яку** помилку 7 разів (backoff ≈ 6,3 с), навіть валідаційну, а наприкінці кидає `new Error(err)`, через що втрачаються тип і повідомлення (`"Error: TypeError: …"`). Без `transactions` повторюються неідемпотентні часткові записи. Для `workOutMutations` саме це виправлено в `3c87337`, а стандартні мутації лишилися з тією ж поведінкою | `resolvers/mutations/composeStandardMutationResolver/index.ts:101-245` |
 | **B10** | Коли задано `representation`, `mergeRepresentationIntoCustom` **перезаписує `custom.Subscription`** представницькими subscription-ами. Custom-підписки до того ж не валідуються | `src/utils/mergeRepresentationIntoCustom/index.ts:212-217` |
 | B11 | `prev.includes(entityName)`, а в масив потрапляє `entityName2` (опечатка: дублікати, перевірка не працює як задумано) | `mergeRepresentationIntoCustom/index.ts:112` |
 | B12 | `composeActionSignature`: якщо у дії не лишилося аргументів, функція виходить **до** `fillEntityTypeDic`, і тип повернення може не потрапити в SDL. Зараз для стандартних дій це недосяжно (завжди є `token`/`where`), але це латентна помилка | `src/types/composeActionSignature.ts:69` |
 | B13 | `composeChildActionSignature` повертає або рядок аргументів, або повну сигнатуру `  name: type` (коли аргументів немає); виклики вставляють результат у `(...)`, і SDL стане невалідним | `src/types/composeChildActionSignature.ts:74` vs `:82` |
 | B14 | Resolvers для custom-дій створюються для всіх сутностей, а сигнатури в SDL — лише для tangible. Якщо custom `specificName` поверне непорожнє ім'я для embedded/virtual, `makeExecutableSchema` впаде (resolver без поля) | `composeGqlResolvers/index.ts:83` vs `composeGqlTypes.ts:96` |
-| B15 | Скопійовані тексти помилок: `getPrevious have to be setted` для `prepareBulkData`, `report have to be setted` для `finalResult`, `"UpdatedPayload"` у composer для `CreatedOrDeletedPayload` | `composeStandardMutationResolver/index.ts:186,265`; `composeCreatedOrDeletedPayloadVirtualConfig.ts:25` |
+| B15 (частково: тексти для `prepareBulkData` і `finalResult` виправлено в `226010ff`, лишається `"UpdatedPayload"`) | Скопійовані тексти помилок: `getPrevious have to be setted` для `prepareBulkData`, `report have to be setted` для `finalResult`, `"UpdatedPayload"` у composer для `CreatedOrDeletedPayload` | `composeStandardMutationResolver/index.ts:186,265`; `composeCreatedOrDeletedPayloadVirtualConfig.ts:25` |
 | B16 | TS-типи: `ArrayCalculatedField.func` повертає `GraphqlScalar` замість масиву; у union `CalculatedField` двічі повторюється Geospatial; `EmbeddedEntityConfig` виключає `calculatedFields`, а `SimplifiedEmbeddedEntityConfig` їх дозволяє | `src/tsTypes/index.ts:794, 804-807, 839-844` |
 | B17 | Дрібниці: у WhereInput для масивного geospatial `_size` немає відступу; коментар «use not required ID in embedded» суперечить `id: ID!`; коментар «only scalar points» у NearInput не відповідає фільтру (усі типи й масиви); `createEntitySortInputType` має недосяжну гілку `if (!fieldLines.length)`; ~~`allowMutations/allowSubscriptions` у `composeGqlTypes` не використовуються~~ (прибрано в `2a2e24d4`); `const all = []` у `fillEntityTypeDic`; `createCloneEntityMutationResolver` має `actionGeneralName: 'updateEntity'` | різні |
 
