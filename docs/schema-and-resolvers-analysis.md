@@ -15,6 +15,7 @@
 | `226010ff` | B9, частково B15 — стандартні мутації повторюють лише transient-помилки транзакцій, помилки прокидаються без обгортки |
 | `6002a955` | B9 (доповнення) — `workOutMutations` так само не повторює мутації без транзакцій |
 | `a323df29` | B7 — `PushIntoXInput` для duplex-масиву з обов'язковим опозитом використовує `Thru`-input, як Create/Update |
+| `dc922b25` | B10, ?8 — власні subscriptions явно заборонені: `custom.Subscription` дає зрозумілу помилку |
 
 ---
 
@@ -162,7 +163,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | G1 | `actionAllowed(entityConfig)` | і в типах, і в resolvers (узгоджено) |
 | G2 | `inventory` (`include`/`exclude`, ланцюжок `[Kind, action, entity]`; `include` обмежує на всіх рівнях, `exclude` виключає лише повністю покритий ланцюжок, `exclude: true` — усе) | типи: `checkRepresentationAction` (і для root-дій, і для дочірніх полів); resolvers: кожен creator викликає `checkInventory` і повертає `null`; у runtime ролі перевіряються через `inventoryByRoles` в `executeAuthorisation` |
 | G3 | `representation[Key].allow[X]` — список дій | типи + resolvers (через `mergeRepresentationIntoCustom` → custom-дії з назвою `${action}${Key}`) |
-| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (див. B14) |
+| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (див. B14) `custom.Subscription` заборонено (лише стандартні та representation-subscriptions) |
 | G5 | `manualyUsedEntities` | додає тип, навіть якщо він не досяжний |
 
 Ланцюжок runtime-декораторів: `resolverDecorator` → `transformBefore` (args за суфіксом типу: `CreateInput/UpdateInput/PushIntoInput` → `transformData`; `Where*` → `transformWhere`; `WhereOne*` → `transformWhereOne`; `CopyWhereOnesInput` → `transformWhereOnes`) → `authDecorator` (`executeAuthorisation`: inventoryByRoles, filters, staticFilters, personalFilters → `involvedFilters`, `subscriptionEntityNames`) → resolver → `transformAfter` (глобальні id).
@@ -188,7 +189,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | ID | Суть | Місце |
 |---|---|---|
 | **B9** **[виправлено `226010ff`]** | `composeStandardMutationResolver` повторює **будь-яку** помилку 7 разів (backoff ≈ 6,3 с), навіть валідаційну, а наприкінці кидає `new Error(err)`, через що втрачаються тип і повідомлення (`"Error: TypeError: …"`). Без `transactions` повторюються неідемпотентні часткові записи. Для `workOutMutations` саме це виправлено в `3c87337`, а стандартні мутації лишилися з тією ж поведінкою | `resolvers/mutations/composeStandardMutationResolver/index.ts:101-245` |
-| **B10** | Коли задано `representation`, `mergeRepresentationIntoCustom` **перезаписує `custom.Subscription`** представницькими subscription-ами. Custom-підписки до того ж не валідуються | `src/utils/mergeRepresentationIntoCustom/index.ts:212-217` |
+| **B10** **[виправлено `dc922b25`]** | Коли задано `representation`, `mergeRepresentationIntoCustom` **перезаписує `custom.Subscription`** представницькими subscription-ами. Custom-підписки до того ж не валідуються | `src/utils/mergeRepresentationIntoCustom/index.ts:212-217` |
 | B11 | `prev.includes(entityName)`, а в масив потрапляє `entityName2` (опечатка: дублікати, перевірка не працює як задумано) | `mergeRepresentationIntoCustom/index.ts:112` |
 | B12 | `composeActionSignature`: якщо у дії не лишилося аргументів, функція виходить **до** `fillEntityTypeDic`, і тип повернення може не потрапити в SDL. Зараз для стандартних дій це недосяжно (завжди є `token`/`where`), але це латентна помилка | `src/types/composeActionSignature.ts:69` |
 | B13 | `composeChildActionSignature` повертає або рядок аргументів, або повну сигнатуру `  name: type` (коли аргументів немає); виклики вставляють результат у `(...)`, і SDL стане невалідним | `src/types/composeChildActionSignature.ts:74` vs `:82` |
@@ -222,6 +223,6 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 - ?5 I7: `freezedFields`/`unfreezedFields` мають «перевизначати повністю» чи «доповнювати» базовий `freeze`?
 - ?6 B8: чи підтримується кілька різних `generalConfig` в одному процесі (multi-tenant, hot reload, тести поза jest)? Якщо так, кеші треба прив'язати до конфігу (наприклад, `WeakMap` за `generalConfig`).
 - ?7 `cloneEntity`: код resolver-а та `createEntityCloneInputType` лишаються. Їх видалити чи відновити?
-- ?8 Custom Subscription (`custom.Subscription`): це підтримувана функція? `composeGqlResolvers` приймає лише імена з префіксами `createdEntity*/deletedEntity*/updatedEntity*`.
+- ?8 ~~Custom Subscription (`custom.Subscription`): це підтримувана функція?~~ Відповідь: ні. Вирішено в `dc922b25`: якщо в `generalConfig.custom` передано `Subscription`, кидається `TypeError`; підтримуються лише стандартні та representation-subscriptions.
 - ?9 ~~Формат calculated geospatial-значень~~ Відповідь: `func` повертає GraphQL-формат (`{ lng, lat }`). Виправлено в `da657196`: calculated geospatial-поля більше не проходять через Mongo→GraphQL-конвертер (який повертав `null`), масиви зберігають підтримку `slice`.
 - ?10 ~~Фільтрація `wherePayload` за calculated virtual-полями~~ Відповідь: не потрібна. Поточна поведінка (virtual-поля не фільтруються) остаточна.
