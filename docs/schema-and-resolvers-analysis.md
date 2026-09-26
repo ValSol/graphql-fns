@@ -21,6 +21,7 @@
 | `81f368db` | I2, I4, I5, I6, I9, I11, ?7 — неузгодженості схеми за вашими рішеннями, видалено `cloneEntity`; I7, I10 — так задумано; I3, I8 — відкладено |
 | `0fb7a9fe` | B20 — однакова умова «діти» (`parent: true` + скалярний опозит) у схемі й resolvers `…WithChildren` |
 | `e2303727` | Q6 (варіант Б), B18, B19, B21 — перейменування аргументів `copy…` (`whereSource`, `whereKeyToTarget`), необов'язковий `whereKeyToTarget` у `copyManyXsWithChildren`, порядок записів у `copyMany…` |
+| `e92f738a` | B22 — перевірка `lockedData` для масиву в тій самій транзакції |
 
 ---
 
@@ -130,6 +131,8 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 
 Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`. Повтор усієї транзакції (до 7 спроб з backoff) відбувається лише для помилок з міткою `TransientTransactionError` / `WriteConflict` і лише коли `serversideConfig.transactions` увімкнено; при `UnknownTransactionCommitResult` повторюється тільки `commitTransaction`. Інші помилки прокидаються як є. Те саме правило діє й для `workOutMutations`.
 
+**`lockedData` у `workOutMutations`** — оптимістичне блокування (не входить до GraphQL-схеми). Перед мутацією `checkLockedData` виконує стандартний query сутності, яку змінює мутація (для `copy…` — X, куди копіюємо), з аргументами `lockedData.args` і порівнює результат з `lockedData.result`: якщо `result` — об'єкт або `null`, викликається `X(whereOne | whereCompoundOne)`; якщо масив — `Xs(where, sort, …)`, і результати порівнюються **за індексом**, тож для масиву в `lockedData.args` варто передавати `sort`, інакше порядок від MongoDB не гарантований і перевірка може хибно впасти. `whereOne` у `lockedData.args` — аргумент query `X`, а не `whereKeyToTarget` мутацій `copy…`.
+
 ## 5. Subscription (для tangible `X`)
 
 | ID | SDL | Канал pubsub |
@@ -211,6 +214,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | **B19** **[виправлено `e2303727`]** | `copyManyXs` / `copyManyXsWithChildren` поєднують записи **за індексом** (`entities[i]` ↔ `whereOnes[i]` ↔ `data[i]` ↔ `whereOne[i]`), хоча Y знаходяться одним `find({ OR: whereOnes })`, а X — `find({ _id: { $in: ids } })` / `find({ OR: whereOne })`. MongoDB не гарантує порядок результатів, тож `data[i]` може потрапити не в ту копію, а в режимі А Y може поєднатися з чужим X (дані скопіюються не туди). Детально див. §12 | `resolvers/mutations/createCopyManyEntitiesMutationResolver/resolverAttributes/getCommonData.ts` |
 | **B20** **[виправлено `0fb7a9fe`]** | Умова «є діти» в SDL і під час виконання різна. Виконання (`getNotArrayOppositeDuplexFields`) вважає дітьми лише duplex-поля з власним **`parent: true`** і скалярним опозитом. `actionAllowed` усіх `copy…WithChildren` / `delete…WithChildren` і enum `deleteXWithChildrenOptionsInput` перевіряють лише, що опозит скалярний і не `parent` (`!(array \| parent)`). Наслідок: для сутності з duplex-полем без `parent: true`, але зі скалярним опозитом, генеруються `…WithChildren`-мутації, які дітей не копіюють і не видаляють (працюють як звичайні), а `fieldsToDelete` пропонує поля, які ні на що не впливають | `types/actionAttributes/*WithChildren*MutationAttributes.ts`; `types/inputs/createDeleteEntityWithChildrenOptionsInputType.ts` vs `resolvers/mutations/processFieldToDelete.ts:23-26` |
 | **B21** **[виправлено `e2303727`]** | (знайдено під час виправлення Q6) Перетворювач аргументу `whereSource` (`transformWhereOnes`) для масивного duplex-поля `f` викликав `whereSource[f].map(...)`, хоча значення завжди один `YWhereOneInput`; копіювання через масивне duplex-поле падало з `TypeError` | `resolvers/utils/resolverDecorator/transformBefore/transformWhereSource.ts` |
+| **B22** **[виправлено `e92f738a`]** | `checkLockedData` (оптимістичне блокування `workOutMutations`) для масивного `lockedData.result` викликав query `Xs` **без `session`**, хоча для скалярного передавав; перевірка блокування читала дані поза транзакцією й могла пропустити конфлікт. Також прибрано невикористаний `projection2` | `resolvers/mutations/workOutMutations/checkLockedData.ts` |
 
 ## 10. Неузгодженості (можливо, так задумано: потрібне ваше рішення)
 
