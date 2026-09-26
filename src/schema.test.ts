@@ -652,6 +652,13 @@ describe('graphql schema', () => {
             geospatialType: 'Polygon',
             func: () => null,
           } as any,
+          {
+            name: 'route',
+            array: true,
+            calculatedType: 'geospatialFields',
+            geospatialType: 'Point',
+            func: () => [],
+          } as any,
         ],
       },
     ];
@@ -662,6 +669,19 @@ describe('graphql schema', () => {
 
     expect(typeDefs).toMatch(/\ntype GeospatialPoint \{/);
     expect(typeDefs).toMatch(/\ntype GeospatialPolygon \{/);
+
+    // calculated geospatial values are already in graphql format, so they are not converted
+    expect(resolvers.Place?.center).toBeUndefined();
+    expect(resolvers.Place?.area).toBeUndefined();
+
+    const route = [
+      { lng: 1, lat: 2 },
+      { lng: 3, lat: 4 },
+    ];
+
+    expect(
+      resolvers.Place.route({ route }, { slice: { begin: 1 } }, {}, { fieldName: 'route' }),
+    ).toEqual([{ lng: 3, lat: 4 }]);
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });

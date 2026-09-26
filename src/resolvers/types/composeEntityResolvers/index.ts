@@ -75,9 +75,8 @@ const composeEntityResolvers = (
         embeddedFields.push(updatedField as any);
       }
 
-      if (calculatedType === 'geospatialFields') {
-        geospatialFields.push(field as any);
-      }
+      // calculated geospatial fields are NOT mixed up with "geospatialFields" because...
+      // ... calculated "func" returns value in graphql format (not mongodb one) that doesn't need conversion
     });
   }
 
@@ -251,8 +250,7 @@ const composeEntityResolvers = (
     [
       ...filterFields.filter(({ variants }) => variants.includes('plain')),
       ...(calculatedFields.filter(({ calculatedType }) => calculatedType === 'filterFields') as
-        | ArrayCalculatedFilterField[]
-        | ScalarCalculatedFilterField[]),
+        ArrayCalculatedFilterField[] | ScalarCalculatedFilterField[]),
     ].reduce((prev, { array, name, config }) => {
       if (array) {
         const resolver = createEntityFilterArrayResolver(config, generalConfig, serversideConfig);
