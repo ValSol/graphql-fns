@@ -1,10 +1,16 @@
-import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
+import type {
+  ActionInvolvedEntityNames,
+  EntityConfig,
+  GeneralConfig,
+  InputCreator,
+} from '@/tsTypes';
 
+import canBeCopyTarget from '@/utils/canBeCopyTarget';
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import getChildDuplexFields from '@/utils/getChildDuplexFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityWhereKeyToSourceInputType from '../inputs/createEntityWhereKeyToSourceInputType';
-import createEntityWhereTargetInputType from '../inputs/createEntityWhereTargetInputType';
+import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -15,10 +21,16 @@ const actionGeneralName = (representationKey = ''): string =>
 const actionName = (baseName: string, representationKey = ''): string =>
   `copy${baseName}WithChildren${representationKey}`;
 
+// "whereTarget" arg (existing X to copy to) is available only if X can be copy target
+const whereTargetInputCreator: InputCreator = (entityConfig) =>
+  canBeCopyTarget(entityConfig)
+    ? createEntityWhereOneInputType(entityConfig)
+    : [`${entityConfig.name}WhereOneInput`, '', {}];
+
 const inputCreators = [
   createEntityWhereKeyToSourceInputType,
   createCopyEntityOptionsInputType,
-  createEntityWhereTargetInputType,
+  whereTargetInputCreator,
   createStringInputType,
 ];
 

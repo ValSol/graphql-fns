@@ -1,8 +1,8 @@
-import type { TangibleEntityConfig } from '../../tsTypes';
+import type { TangibleEntityConfig } from '@/tsTypes';
 
-import createEntityWhereTargetInputType from './createEntityWhereTargetInputType';
+import canBeCopyTarget from './canBeCopyTarget';
 
-describe('createEntityWhereTargetInputType', () => {
+describe('canBeCopyTarget', () => {
   const personConfig = {} as TangibleEntityConfig;
   const personCloneConfig = {} as TangibleEntityConfig;
   const placeConfig: TangibleEntityConfig = {
@@ -110,23 +110,15 @@ describe('createEntityWhereTargetInputType', () => {
     ],
   });
 
-  test('should use "PersonWhereOneInput" if existing Person can be copy target', () => {
-    const expectedResult = [
-      'PersonWhereOneInput',
-      `input PersonWhereOneInput {
-  id: ID!
-}`,
-      {},
-    ];
-
-    const result = createEntityWhereTargetInputType(personConfig);
-    expect(result).toEqual(expectedResult);
+  test('should return "true" if duplex field with common fields has array opposite field', () => {
+    expect(canBeCopyTarget(personConfig)).toBe(true);
   });
 
-  test('should not create input if PersonClone cannot be copy target', () => {
-    const expectedResult = ['PersonCloneWhereOneInput', '', {}];
+  test('should return "false" if duplex fields have only scalar opposite fields', () => {
+    expect(canBeCopyTarget(personCloneConfig)).toBe(false);
+  });
 
-    const result = createEntityWhereTargetInputType(personCloneConfig);
-    expect(result).toEqual(expectedResult);
+  test('should return "false" if there are no common fields to copy', () => {
+    expect(canBeCopyTarget(placeConfig)).toBe(false);
   });
 });

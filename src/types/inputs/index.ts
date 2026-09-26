@@ -12,7 +12,6 @@ import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOn
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
-import createEntityWhereTargetInputType from './createEntityWhereTargetInputType';
 import createEntityWhichUpdatedInputType from './createEntityWhichUpdatedInputType';
 import createPaginationInputType from './createPaginationInputType';
 import createPushIntoEntityInputType from './createPushIntoEntityInputType';
@@ -32,7 +31,6 @@ const inputs = [
   createEntityWhereInputType,
   createEntityWhereOneInputType,
   createEntityWherePayloadInputType,
-  createEntityWhereTargetInputType,
   createEntityWhichUpdatedInputType,
   createPaginationInputType,
   createPushIntoEntityInputType,

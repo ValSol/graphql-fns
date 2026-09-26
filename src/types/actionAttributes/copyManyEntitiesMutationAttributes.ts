@@ -1,12 +1,18 @@
 import pluralize from 'pluralize';
 
-import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
+import type {
+  ActionInvolvedEntityNames,
+  EntityConfig,
+  GeneralConfig,
+  InputCreator,
+} from '@/tsTypes';
 
+import canBeCopyTarget from '@/utils/canBeCopyTarget';
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityWhereKeyToSourceInputType from '../inputs/createEntityWhereKeyToSourceInputType';
 import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
-import createEntityWhereTargetInputType from '../inputs/createEntityWhereTargetInputType';
+import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -17,10 +23,16 @@ const actionGeneralName = (representationKey = ''): string =>
 const actionName = (baseName: string, representationKey = ''): string =>
   `copyMany${pluralize(baseName)}${representationKey}`;
 
+// "whereTarget" arg (existing X to copy to) is available only if X can be copy target
+const whereTargetInputCreator: InputCreator = (entityConfig) =>
+  canBeCopyTarget(entityConfig)
+    ? createEntityWhereOneInputType(entityConfig)
+    : [`${entityConfig.name}WhereOneInput`, '', {}];
+
 const inputCreators = [
   createEntityWhereKeyToSourceInputType,
   createCopyEntityOptionsInputType,
-  createEntityWhereTargetInputType,
+  whereTargetInputCreator,
   createEntityUpdateInputType,
   createStringInputType,
 ];

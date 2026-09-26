@@ -290,7 +290,7 @@ MenuClone   { name, description, original ↔ Menu.clone }
 - **Mode A: `g` is scalar (1:1).** If `Y.g` already points to an X, that X is **updated** with the copied fields; if `Y.g` is empty, a new X linked to Y is **created**. `whereTarget` is forbidden (`Needless whereTarget arg!`), since X is uniquely determined.
 - **Mode B: `g` is an array (1:N).** Without `whereTarget` a new X linked to Y is **created**. With `whereTarget` the specified X is **updated**; it must already be linked to Y (`Try to copy to unconnected …`).
 
-Hence `whereTarget` is optional, and it is added to the signature only when X has a duplex field with common fields and an array opposite field (mode B is possible).
+Hence `whereTarget` is optional, and it is added to the signature only when X has a duplex field with common fields and an array opposite field (mode B is possible; `src/utils/canBeCopyTarget.ts`).
 
 ### 12.4. Mutation variants
 
