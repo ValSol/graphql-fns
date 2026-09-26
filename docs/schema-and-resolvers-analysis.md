@@ -25,6 +25,7 @@
 | `dcf28990` | Final names of `copy…` arguments: `whereKeyToSource` (`XWhereKeyToSourceInput`), `whereTarget` (`XWhereTargetInput`) |
 | `894c564e` | B23, B24, B25: authorization: `userAttributes` are cached per request, unknown roles are ignored, `node` accepts `token` (see §13) |
 | `f7587dd2` | B26, B27, B28: subscriptions: access denial is respected, `subscribePayloadFilters` are required with `filters`, the client `wherePayload` filter works; tests for all subscriptions |
+| `e35ba325` | B25 reverted: Relay requires exactly `node(id: ID!): Node`, so `node` has no `token` argument again |
 
 ---
 
@@ -47,7 +48,7 @@ Order of steps in `composeGqlTypes` (`src/types/composeGqlTypes.ts`):
 2. Custom and representation actions: `mergeRepresentationIntoCustom` → `composeCustomActionSignature`, **for tangible entities only**.
 3. `processManualyUsedEntities` adds types of entities not reachable from any action.
 4. `interface`s are built (`composeInterfaceTypeDic`).
-5. The result is assembled as: `scalar DateTime`, `scalar Upload`, `interface Node`, `input RegExp`, `input SliceInput`, enums (`XEnumeration`), geospatial types, interfaces, entity types, inputs, `type Query { node(id: ID!, token: String): Node … }`, `type Mutation`, `type Subscription`.
+5. The result is assembled as: `scalar DateTime`, `scalar Upload`, `interface Node`, `input RegExp`, `input SliceInput`, enums (`XEnumeration`), geospatial types, interfaces, entity types, inputs, `type Query { node(id: ID!): Node … }`, `type Mutation`, `type Subscription`.
 
 Key point: **an entity type gets into the SDL only if it is reachable** from some action, child field or `manualyUsedEntities`.
 
@@ -94,7 +95,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 
 | ID | actionName | SDL | When present | Resolver creator |
 |---|---|---|---|---|
-| Q0 | — | `node(id: ID!, token: String): Node` | always | `createNodeQueryResolver` |
+| Q0 | — | `node(id: ID!): Node` (exactly this signature: Relay requires it, e.g. for `@refetchable` fragments, see B25) | always | `createNodeQueryResolver` |
 | Q1 | `entity` | `X(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, token: String): X` | tangible (`whereOne` has `!` if there are no `uniqueCompoundIndexes`; `whereCompoundOne` exists only with them) | `createEntityQueryResolver` |
 | Q2 | `entities` | `Xs(where, sort, pagination, near?, search?, token): [X!]!` | tangible | `createEntitiesQueryResolver` |
 | Q3 | `entitiesThroughConnection` | `XsThroughConnection(where, sort, near?, search?, after, before, first, last, token): XConnection!` | tangible | `createEntitiesThroughConnectionQueryResolver` |
@@ -220,7 +221,7 @@ Runtime decorator chain: `resolverDecorator` → `transformBefore` (args by type
 | **B22** **[fixed `e92f738a`]** | `checkLockedData` (optimistic locking in `workOutMutations`) called the `Xs` query **without `session`** for an array `lockedData.result`, while passing it for a scalar one; the lock check read data outside the transaction and could miss a conflict. The unused `projection2` was also removed | `resolvers/mutations/workOutMutations/checkLockedData.ts` |
 | **B23** **[fixed `894c564e`]** | `getUserAttributes` was called by every generated resolver, including child field resolvers for **every** parent record: `Menus { sections { … } }` over 50 menus made 51 calls (with better-auth, 51 session lookups). Now `executeAuthorisation` and `executeNodeAuthorisation` take the result from the `getUserAttributesOnce` cache, bound to the callback, the `context` object and `token`; a failed call is not cached. See §13.3 | `resolvers/utils/executeAuthorisation/getUserAttributesOnce.ts` |
 | **B24** **[fixed `894c564e`]** | With `inventoryByRoles`, a user role absent from `containedRoles` caused `TypeError: undefined is not iterable` (`[...containedRoles[role], role]`). A role from `containedRoles` that is not a key of `inventoryByRoles` was checked against the default inventory, i.e. it **got access to everything**. Now, when `containedRoles` is set, unknown roles are dropped (for `inventoryByRoles`, `filters`, `subscribePayloadFilters` and `node`), and roles without `inventoryByRoles` grant no access | `resolvers/utils/executeAuthorisation/index.ts`, `…/executeNodeAuthorisation/index.ts` |
-| **B25** **[fixed `894c564e`]** | `node(id)` had no `token` argument, and `executeNodeAuthorisation` called `getUserAttributes(context)` without it: with a token passed in arguments, `node` saw a guest. Now it is `node(id: ID!, token: String)` and `token` is passed to `getUserAttributes` | `types/composeGqlTypes.ts`, `resolvers/queries/createNodeQueryResolver`, `…/executeNodeAuthorisation/index.ts` |
+| B25 **[reverted `e35ba325`]** | `node(id)` has no `token` argument, and `executeNodeAuthorisation` calls `getUserAttributes(context)` without it: a client authenticated only by a token in arguments sees `node` as a guest. The `token: String` argument added in `894c564e` was removed in `e35ba325`: Relay compiler requires exactly `node(id: ID!): Node` (`Invalid use of @refetchable … has a node(id: ID): Node field`). **By design:** `node` takes authentication from `context` (cookies / headers) only | `types/composeGqlTypes.ts`, `resolvers/queries/createNodeQueryResolver`, `…/executeNodeAuthorisation/index.ts` |
 | **B26** **[fixed `f7587dd2`]** | Subscriptions ignored access denial. For a role without access (by `inventoryByRoles` or `filters`) `executeAuthorisation` returns `involvedFilters: { inputOutputFilterAndLimit: null }` and `subscribePayloadMongoFilter: {}`, while `createdX` / `updatedX` / `deletedX` checked only `!involvedFilters \|\| !subscribePayloadMongoFilter` (both are objects), so the user received all events of the entity. Now events are not sent when `inputOutputFilterAndLimit` is `null` (the previous checks are kept) | `resolvers/subscriptions/create{Created,Deleted,Updated}EntitySubscriptionResolver/index.ts` |
 | **B27** **[fixed `f7587dd2`]** | The payload of subscription events is checked only by `subscribePayloadFilters`; `filters`, `staticFilters` and `personalFilters` do not apply to it (they may refer to linked entities absent from the payload). With `filters` but without `subscribePayloadFilters`, a user allowed to read only some records received events about all of them. Now `composeServersideConfig` throws `Not found "subscribePayloadFilters" to use with "filters" for subscriptions: …` if `filters` are set, subscriptions are available and `subscribePayloadFilters` are not | `resolvers/utils/composeServersideConfig/index.ts` |
 | **B28** **[fixed `f7587dd2`]** | `subscriptionResolverDecorator` read `args.where` instead of the SDL argument `wherePayload` and then overwrote `wherePayload` with `transformWhere({})`: the client filter of events (and global ids in it) was lost, subscribers got all allowed events | `resolvers/utils/resolverDecorator/subscriptionResolverDecorator.ts` |
@@ -368,7 +369,7 @@ Every generated resolver (root queries, mutations, subscriptions, child field re
 
 `composeServersideConfig` checks consistency at startup: `getUserAttributes` is present for A2–A5, roles in `containedRoles` and `inventoryByRoles` match, filters are correct (calling them for every role with test attributes).
 
-**Contract:** `getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>`. `roles` is required, the other fields are passed to `filters` functions next to `role`; `id` is needed only for `personalFilters` and must be the id of a User record in graphql-fns; `token` is the value of the `token: String` argument of root queries, mutations and `node` (B25); subscriptions have no `token` argument, the user is determined from `context` only.
+**Contract:** `getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>`. `roles` is required, the other fields are passed to `filters` functions next to `role`; `id` is needed only for `personalFilters` and must be the id of a User record in graphql-fns; `token` is the value of the `token: String` argument of root queries and mutations; `node` (B25) and subscriptions have no `token` argument, the user is determined from `context` only.
 
 ### 13.3. Caching `userAttributes` (B23)
 

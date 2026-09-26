@@ -12,7 +12,7 @@ getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: 
 
 - `roles` is required. The other fields (`id`, `email`, `organizationId`…) are passed to `filters` functions next to `role`.
 - `id` is needed for `personalFilters`: it is the id of a User entity record **in graphql-fns** (see §5).
-- `token` is the value of the `token: String` argument of root queries, mutations and `node`.
+- `token` is the value of the `token: String` argument of root queries and mutations. `node` and subscriptions have no such argument (Relay requires exactly `node(id: ID!): Node`), so they rely on `context` (cookies / headers) only.
 - The library calls the function **once** per (`context`, `token`) pair and caches the result (B23). So `context` must be created per request.
 
 The integration task: in `getUserAttributes`, get the better-auth session and turn it into `{ id, roles, … }`.
