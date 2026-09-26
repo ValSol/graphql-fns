@@ -128,6 +128,22 @@ const serversideConfig = composeServersideConfig(generalConfig, {
       }
     },
   },
+
+  // required together with "filters" when subscriptions are available
+  subscribePayloadFilters: {
+    Post: ({ role, id }) => {
+      switch (role) {
+        case 'admin':
+          return [];
+        case 'user':
+          return [{ author: id }, { published: true }];
+        case 'guest':
+          return [{ published: true }];
+        default:
+          return null;
+      }
+    },
+  },
 });
 ```
 
@@ -163,6 +179,7 @@ const syncGraphqlFnsUser = async (user) => {
 
 ## 6. Subscriptions
 
+- Events are checked only by `subscribePayloadFilters` (`filters` do not apply to them), so with `filters` and available subscriptions `composeServersideConfig` requires `subscribePayloadFilters` (B27). They receive the same attributes as `filters` and are applied to the event payload, so they may use only fields of the entity itself.
 - Authorization runs **once**, when subscribing. If a session is revoked or the user is banned, they keep receiving events until reconnecting. Close the user's WebSocket connections on sign-out or ban.
 - Subscriptions have no `token` argument; the user is determined from `context` only. With `graphql-ws`, put the upgrade request headers or a token from `connectionParams` into `context`:
 
