@@ -2748,13 +2748,6 @@ input PlaceCreateOrPushChildrenInput {
   create: [PlaceCreateInput!]
   createPositions: [Int!]
 }
-enum deletePlaceWithChildrenOptionsEnum {
-  citizens
-  visitors
-}
-input deletePlaceWithChildrenOptionsInput {
-  fieldsToDelete: [deletePlaceWithChildrenOptionsEnum]
-}
 input PushIntoPersonInput {
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput
   enemies: PersonCreateOrPushChildrenInput
@@ -2931,14 +2924,10 @@ type Mutation {
   deleteFilteredPlaces(where: PlaceWhereInput, token: String): [Place!]!
   deleteFilteredPeopleReturnScalar(where: PersonWhereInput, token: String): Int!
   deleteFilteredPlacesReturnScalar(where: PlaceWhereInput, token: String): Int!
-  deleteFilteredPlacesWithChildren(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput, token: String): [Place!]!
-  deleteFilteredPlacesWithChildrenReturnScalar(where: PlaceWhereInput, options: deletePlaceWithChildrenOptionsInput, token: String): Int!
   deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!
   deleteManyPlaces(whereOne: [PlaceWhereOneInput!]!, token: String): [Place!]!
-  deleteManyPlacesWithChildren(whereOne: [PlaceWhereOneInput!]!, options: deletePlaceWithChildrenOptionsInput, token: String): [Place!]!
   deletePerson(whereOne: PersonWhereOneInput!, token: String): Person!
   deletePlace(whereOne: PlaceWhereOneInput!, token: String): Place!
-  deletePlaceWithChildren(whereOne: PlaceWhereOneInput!, options: deletePlaceWithChildrenOptionsInput, token: String): Place!
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   pushIntoPlace(whereOne: PlaceWhereOneInput!, data: PushIntoPlaceInput!, positions: PlacePushPositionsInput, token: String): Place!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!

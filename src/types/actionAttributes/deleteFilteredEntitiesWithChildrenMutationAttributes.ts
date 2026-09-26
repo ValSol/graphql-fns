@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
-import getOppositeFields from '@/utils/getOppositeFields';
+import getChildDuplexFields from '@/utils/getChildDuplexFields';
 import createEntityWhereInputType from '../inputs/createEntityWhereInputType';
 import createEntityNearInputType from '../inputs/createEntityNearInputType';
 import createStringInputTypeForSearch from '../inputs/createStringInputTypeForSearch';
@@ -53,12 +53,7 @@ const actionReturnConfig = (
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  entityConfig.type === 'tangible' &&
-  Boolean(
-    getOppositeFields(entityConfig).filter(
-      ([, { array, parent }]: [any, any]) => !(array || parent),
-    ).length,
-  );
+  entityConfig.type === 'tangible' && Boolean(getChildDuplexFields(entityConfig).length);
 
 const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
   `[${name}${representationKey}!]!`;

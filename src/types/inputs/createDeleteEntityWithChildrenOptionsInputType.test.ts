@@ -74,10 +74,27 @@ describe('createDeleteEntityWithChildrenOptionsInputType', () => {
     ],
   });
 
-  test('should create input for placeConfig', () => {
+  test('should create empty input for placeConfig without "parent" duplex fields', () => {
+    const expectedResult = ['deletePlaceWithChildrenOptionsInput', '', {}];
+
+    const result = createDeleteEntityWithChildrenOptionsInputType(placeConfig);
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should create input for "parent" duplex fields with not array opposite fields', () => {
+    // opposite fields "location" & "favoritePlace" of "Person" are scalar
+    const placeWithChildrenConfig: TangibleEntityConfig = {
+      ...placeConfig,
+      duplexFields: [
+        { ...placeConfig.duplexFields[0], parent: true },
+        { ...placeConfig.duplexFields[1], parent: true },
+      ] as any,
+    };
+
     const expectedResult = [
       'deletePlaceWithChildrenOptionsInput',
       `enum deletePlaceWithChildrenOptionsEnum {
+  citizens
   visitors
 }
 input deletePlaceWithChildrenOptionsInput {
@@ -86,7 +103,7 @@ input deletePlaceWithChildrenOptionsInput {
       {},
     ];
 
-    const result = createDeleteEntityWithChildrenOptionsInputType(placeConfig);
+    const result = createDeleteEntityWithChildrenOptionsInputType(placeWithChildrenConfig);
     expect(result).toEqual(expectedResult);
   });
 

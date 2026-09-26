@@ -1,15 +1,14 @@
-import type {InputCreator} from '../../tsTypes';
+import type { InputCreator } from '../../tsTypes';
 
-import getOppositeFields from '../../utils/getOppositeFields';
+import getChildDuplexFields from '../../utils/getChildDuplexFields';
 
 const createDeleteEntityWithChildrenOptionsInputType: InputCreator = (entityConfig) => {
   const { name } = entityConfig;
 
   const inputName = `delete${name}WithChildrenOptionsInput`;
 
-  const lines = getOppositeFields(entityConfig)
-    .filter(([, { array, parent }]: [any, any]) => !(array || parent))
-    .map(([, { oppositeName }]: [any, any]) => `  ${oppositeName}`);
+  // the same "children" fields that are deleted by "delete…WithChildren" mutations
+  const lines = getChildDuplexFields(entityConfig).map(([{ name: fieldName }]) => `  ${fieldName}`);
 
   if (!lines.length) return [inputName, '', {}];
 

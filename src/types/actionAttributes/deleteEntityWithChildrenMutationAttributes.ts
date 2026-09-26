@@ -1,7 +1,7 @@
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
-import getOppositeFields from '@/utils/getOppositeFields';
+import getChildDuplexFields from '@/utils/getChildDuplexFields';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
 import createStringInputType from '../inputs/createStringInputType';
@@ -45,12 +45,7 @@ const actionReturnConfig = (
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  entityConfig.type === 'tangible' &&
-  Boolean(
-    getOppositeFields(entityConfig).filter(
-      ([, { array, parent }]: [any, any]) => !(array || parent),
-    ).length,
-  );
+  entityConfig.type === 'tangible' && Boolean(getChildDuplexFields(entityConfig).length);
 
 const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
   `${name}${representationKey}!`;

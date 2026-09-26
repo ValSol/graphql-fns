@@ -3,7 +3,7 @@ import { Connection } from 'mongoose';
 import type { DuplexField, Enums, TangibleEntityConfig } from '../../tsTypes';
 import type { Core } from '../tsTypes';
 
-import getOppositeFields from '../../utils/getOppositeFields';
+import getChildDuplexFields from '../../utils/getChildDuplexFields';
 import createMongooseModel from '../../mongooseModels/createMongooseModel';
 import processDeleteData from './processDeleteData';
 
@@ -20,10 +20,10 @@ type ProcessChildrenField = (
   enums?: Enums,
 ) => Promise<Core>;
 
+// the same "children" as used in schema (see "getChildDuplexFields")
 const getNotArrayOppositeDuplexFields = (
   entityConfig: TangibleEntityConfig,
-): Array<[DuplexField, DuplexField]> =>
-  getOppositeFields(entityConfig).filter(([{ parent }, { array }]: [any, any]) => parent && !array);
+): Array<[DuplexField, DuplexField]> => getChildDuplexFields(entityConfig);
 
 const processEveryField = async (
   fields: Array<[DuplexField, DuplexField]>,

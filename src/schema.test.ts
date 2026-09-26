@@ -816,4 +816,37 @@ describe('graphql schema', () => {
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
+
+  test('should compose "…WithChildren" mutations only for "parent" duplex fields (B20)', () => {
+    const composeConfigs = (parent: boolean): SimplifiedEntityConfig[] => [
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title' }],
+        duplexFields: [
+          { name: 'sections', array: true, oppositeName: 'menu', configName: 'Section', parent },
+        ],
+      },
+      {
+        name: 'Section',
+        textFields: [{ name: 'title' }],
+        duplexFields: [{ name: 'menu', oppositeName: 'sections', configName: 'Menu' }],
+      },
+    ];
+
+    const { typeDefs: typeDefsWithoutParent } = composeTypeDefsAndResolvers({
+      allEntityConfigs: composeAllEntityConfigs(composeConfigs(false)),
+    });
+
+    expect(typeDefsWithoutParent).not.toMatch(/WithChildren/);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({
+      allEntityConfigs: composeAllEntityConfigs(composeConfigs(true)),
+    });
+
+    expect(typeDefs).toMatch(/\n  deleteMenuWithChildren\(/);
+    expect(typeDefs).toMatch(/\nenum deleteMenuWithChildrenOptionsEnum \{\n  sections\n\}/);
+    expect(resolvers.Mutation.deleteMenuWithChildren).toBeDefined();
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
 });
