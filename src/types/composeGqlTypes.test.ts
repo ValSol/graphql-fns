@@ -880,7 +880,7 @@ input MenuCloneSectionWhichUpdatedInput {
   updatedFields_nin: [MenuCloneSectionWhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   MenuCount(where: MenuWhereInput, token: String): Int!
   MenuCloneCount(where: MenuCloneWhereInput, token: String): Int!
   MenuSectionCount(where: MenuSectionWhereInput, token: String): Int!
@@ -1486,7 +1486,7 @@ input Example2WhichUpdatedInput {
   updatedFields_nin: [Example2WhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   Example1Count(where: Example1WhereInput, token: String): Int!
   Example2Count(where: Example2WhereInput, token: String): Int!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
@@ -1965,7 +1965,7 @@ input PlaceWhichUpdatedInput {
   updatedFields_nin: [PlaceWhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
@@ -2349,7 +2349,7 @@ input PersonWhichUpdatedInput {
   updatedFields_nin: [PersonWhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -2901,7 +2901,7 @@ input PlaceWhichUpdatedInput {
   updatedFields_nin: [PlaceWhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
@@ -3062,7 +3062,7 @@ input ExampleWhereByUniqueInput {
   id_in: [ID!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
@@ -3190,7 +3190,7 @@ input ExampleUpdateInput {
   textField: String
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   createManyExamples(data: [ExampleCreateInput!]!, token: String): [Example!]!
@@ -3300,7 +3300,7 @@ input PaginationInput {
   first: Int
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
 }`;
 
@@ -3398,7 +3398,7 @@ input PaginationInput {
   first: Int
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
 }`;
 
@@ -3456,7 +3456,7 @@ input ExampleCreateOrPushChildrenInput {
   createPositions: [Int!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   createExample(data: ExampleCreateInput!, token: String): Example!
@@ -3566,7 +3566,7 @@ input Example2CreateOrPushChildrenInput {
   createPositions: [Int!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   createExample(data: ExampleCreateInput!, token: String): Example!
@@ -3625,7 +3625,7 @@ type Example implements Node {
   textField: String
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   loadExample(path: String!): Example
@@ -3683,7 +3683,7 @@ type Example implements Node {
   textField: String
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   getExample(path: String!): Example
 }`;
 
@@ -3934,7 +3934,7 @@ input ExampleForCatalogUpdateInput {
   end: DateTime
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, pagination: PaginationInput, token: String): [ExampleForCatalog!]!
   ExampleInTimeRangeQuery(range: ExampleTimeRangeInput!): Example!
@@ -4087,7 +4087,7 @@ input MenuSectionUpdateInput {
   menu: MenuCreateChildInput
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   updateMenuWithChildren(whereOne: MenuWhereOneInput!, data: MenuUpdateInput, childWhereOne: [MenuSectionWhereOneInput!]!, childData: [MenuSectionUpdateInput!]!, deleteWhereOne: [MenuSectionWhereOneInput!]!): Menu
@@ -4277,7 +4277,7 @@ input ExampleForCatalogSortInput {
   sortBy: [ExampleForCatalogSortEnum]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
@@ -4347,7 +4347,7 @@ input ExampleForCatalogUpdateInput {
   textField: String
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
 }
 type Mutation {
   updateExampleForCatalog(whereOne: ExampleForCatalogWhereOneInput!, data: ExampleForCatalogUpdateInput!, token: String): ExampleForView!
@@ -4565,7 +4565,7 @@ input ExampleForCatalogWhichUpdatedInput {
   updatedFields_nin: [ExampleForCatalogWhichUpdatedEnum!]
 }
 type Query {
-  node(id: ID!): Node
+  node(id: ID!, token: String): Node
   ExamplesThroughConnectionForCatalog(where: ExampleForCatalogWhereInput, sort: ExampleForCatalogSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleForViewConnection!
 }
 type Subscription {

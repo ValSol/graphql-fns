@@ -21,11 +21,11 @@ const createNodeQueryResolver = (
 
   const resolver = async (
     parent: null | GraphqlObject,
-    args: { id: string },
+    args: { id: string; token?: string },
     context: Context,
     info: SintheticResolverInfo,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
-    const { id: globalId } = args;
+    const { id: globalId, token } = args;
 
     const { _id: id, entityName, representationKey } = fromGlobalId(globalId);
 
@@ -36,6 +36,7 @@ const createNodeQueryResolver = (
       context,
       generalConfig,
       serversideConfig,
+      token,
     );
 
     if (!filter) return null;

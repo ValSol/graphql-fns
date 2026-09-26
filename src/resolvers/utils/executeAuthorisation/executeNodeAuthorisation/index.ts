@@ -1,6 +1,7 @@
 import type { GeneralConfig, ServersideConfig } from '../../../../tsTypes';
 import composePersonalFilter from '../composePersonalFilter';
 import composeUserFilter from '../composeUserFilter';
+import getUserAttributesOnce from '../getUserAttributesOnce';
 
 import injectStaticOrPersonalFilter from '../injectStaticOrPersonalFilter';
 
@@ -9,10 +10,17 @@ const executeNodeAuthorisation = async (
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
+  token?: string,
 ): Promise<null | Array<any>> => {
-  const { filters, getUserAttributes, personalFilters = {}, staticFilters = {} } = serversideConfig;
+  const {
+    containedRoles,
+    filters,
+    getUserAttributes,
+    personalFilters = {},
+    staticFilters = {},
+  } = serversideConfig;
 
-  const userAttributes = getUserAttributes ? await getUserAttributes(context) : null;
+  const userAttributes = await getUserAttributesOnce(getUserAttributes, context, token);
 
   const personalFilter = personalFilters[entityName]
     ? await composePersonalFilter(
@@ -48,7 +56,12 @@ const executeNodeAuthorisation = async (
     throw new TypeError(`Not found "filter" for entityName: "${entityName}"!`);
   }
 
-  const result = composeUserFilter(entityName, userAttributes, filters, true);
+  // roles absent in "containedRoles" (unknown for config) are ignored & don't give any access
+  const userAttributes2 = containedRoles
+    ? { ...userAttributes, roles: userAttributes.roles.filter((role) => containedRoles[role]) }
+    : userAttributes;
+
+  const result = composeUserFilter(entityName, userAttributes2, filters, true);
 
   if (!result) {
     return result;

@@ -904,4 +904,155 @@ describe('executeAuthorisation', () => {
 
     expect(result2).toEqual(expectedResult2);
   });
+
+  test('should call "getUserAttributes" only once for the same request context & token', async () => {
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+
+    const getUserAttributes = jest.fn(async () => ({ roles: [viewer] }));
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+    };
+
+    const requestContext = {} as Context;
+
+    await Promise.all(
+      [1, 2, 3].map(() =>
+        executeAuthorisation(
+          inventoryChain,
+          { inputOutputEntity: 'RestaurantForView' },
+          {},
+          requestContext,
+          generalConfig,
+          serversideConfig,
+        ),
+      ),
+    );
+
+    expect(getUserAttributes).toHaveBeenCalledTimes(1);
+
+    await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForView' },
+      { token: 'some-token' },
+      requestContext,
+      generalConfig,
+      serversideConfig,
+    );
+
+    expect(getUserAttributes).toHaveBeenCalledTimes(2);
+    expect(getUserAttributes).toHaveBeenLastCalledWith(requestContext, 'some-token');
+
+    await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForView' },
+      {},
+      {} as Context, // next request
+      generalConfig,
+      serversideConfig,
+    );
+
+    expect(getUserAttributes).toHaveBeenCalledTimes(3);
+  });
+
+  test('should not cache failed "getUserAttributes" call', async () => {
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+
+    const getUserAttributes = jest
+      .fn()
+      .mockRejectedValueOnce(new Error('Session storage is unavailable!'))
+      .mockResolvedValueOnce({ roles: [viewer] });
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes,
+      inventoryByRoles,
+    };
+
+    const requestContext = {} as Context;
+
+    await expect(
+      executeAuthorisation(
+        inventoryChain,
+        { inputOutputEntity: 'RestaurantForView' },
+        {},
+        requestContext,
+        generalConfig,
+        serversideConfig,
+      ),
+    ).rejects.toThrow('Session storage is unavailable!');
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForView' },
+      {},
+      requestContext,
+      generalConfig,
+      serversideConfig,
+    );
+
+    expect(result).toEqual({ involvedFilters: { inputOutputFilterAndLimit: [[]] } });
+    expect(getUserAttributes).toHaveBeenCalledTimes(2);
+  });
+
+  test('should ignore roles absent in "containedRoles"', async () => {
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes: async () => ({ roles: ['UnknownRole'] }),
+      inventoryByRoles,
+    };
+
+    const result = await executeAuthorisation(
+      inventoryChain,
+      { inputOutputEntity: 'RestaurantForView' },
+      {},
+      {} as Context,
+      generalConfig,
+      serversideConfig,
+    );
+
+    expect(result).toEqual({ involvedFilters: { inputOutputFilterAndLimit: null } });
+
+    const serversideConfig2: ServersideConfig = {
+      containedRoles,
+      getUserAttributes: async () => ({ roles: ['UnknownRole', viewer], id }),
+      inventoryByRoles,
+      filters,
+    };
+
+    const result2 = await executeAuthorisation(
+      ['Query', 'entitiesForCatalog', 'Restaurant'],
+      { inputOutputEntity: 'RestaurantForCatalog' },
+      {},
+      {} as Context,
+      generalConfig,
+      serversideConfig2,
+    );
+
+    expect(result2).toEqual({ involvedFilters: { inputOutputFilterAndLimit: null } });
+
+    const serversideConfig3: ServersideConfig = {
+      ...serversideConfig2,
+      getUserAttributes: async () => ({ roles: ['UnknownRole', restaurantOwner], id }),
+    };
+
+    const result3 = await executeAuthorisation(
+      ['Query', 'entitiesForCatalog', 'Restaurant'],
+      { inputOutputEntity: 'RestaurantForCatalog' },
+      {},
+      {} as Context,
+      generalConfig,
+      serversideConfig3,
+    );
+
+    expect(result3).toEqual({
+      involvedFilters: {
+        inputOutputFilterAndLimit: [[{ access_: { restaurantEditors: id } }]],
+      },
+    });
+  });
 });

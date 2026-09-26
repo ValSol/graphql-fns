@@ -17,6 +17,7 @@ import checkInventory from '@/utils/inventory/checkInventory';
 import parseEntityName from '@/utils/parseEntityName';
 import composePersonalFilter from './composePersonalFilter';
 import composeUserFilter from './composeUserFilter';
+import getUserAttributesOnce from './getUserAttributesOnce';
 import injectStaticOrPersonalFilter from './injectStaticOrPersonalFilter';
 import mergeWhereAndFilter from '../mergeWhereAndFilter';
 import composeSubscriptionDummyEntityConfig from '../composeSubscriptionDummyEntityConfig';
@@ -28,9 +29,7 @@ const composeInvolvedFilterName = (key: keyof ActionInvolvedEntityNames) =>
   key.startsWith(SUBSCRIPTION) ? `${key}Name` : `${key.slice(0, -'Entity'.length)}FilterAndLimit`;
 
 type SubscriptionInvolvedKey =
-  | 'subscriptionCreatedEntity'
-  | 'subscriptionDeletedEntity'
-  | 'subscriptionUpdatedEntity';
+  'subscriptionCreatedEntity' | 'subscriptionDeletedEntity' | 'subscriptionUpdatedEntity';
 
 const composeSubscriptionInventoryChains = (
   key: SubscriptionInvolvedKey,
@@ -129,7 +128,7 @@ const executeAuthorisation = async (
     involvedEntityNames,
   ) as (keyof ActionInvolvedEntityNames)[];
 
-  const userAttributes = getUserAttributes ? await getUserAttributes(context, tokenFromArgs) : null;
+  const userAttributes = await getUserAttributesOnce(getUserAttributes, context, tokenFromArgs);
 
   // *** compose personalFilterObj
 
@@ -262,7 +261,12 @@ const executeAuthorisation = async (
     );
   }
 
-  const { roles } = userAttributes;
+  // roles absent in "containedRoles" (unknown for config) are ignored & don't give any access
+  const roles = containedRoles
+    ? userAttributes.roles.filter((role) => containedRoles[role])
+    : userAttributes.roles;
+
+  const userAttributes2 = containedRoles ? { ...userAttributes, roles } : userAttributes;
 
   const result: Record<string, InvolvedFilter[] | null | string> = {};
 
@@ -301,7 +305,7 @@ const executeAuthorisation = async (
 
         const allRoles = roles.reduce<Array<string>>((prev, role) => {
           [...containedRoles[role], role].forEach((role2) => {
-            if (!prev.includes(role2)) {
+            if (inventoryByRoles[role2] && !prev.includes(role2)) {
               prev.push(role2);
             }
           });
@@ -321,7 +325,7 @@ const executeAuthorisation = async (
 
       if (!filters || !result[involvedEntityNamesKey]) continue;
 
-      result[involvedEntityNamesKey] = composeUserFilter(entityName, userAttributes, filters);
+      result[involvedEntityNamesKey] = composeUserFilter(entityName, userAttributes2, filters);
     }
   }
 
@@ -387,7 +391,7 @@ const executeAuthorisation = async (
   const subscribePayloadMongoFilter = composeSubscribePayloadMongoFilter(
     subscribePayloadFilters,
     involvedEntityNames,
-    userAttributes,
+    userAttributes2,
     allEntityConfigs[entityName],
   );
 
