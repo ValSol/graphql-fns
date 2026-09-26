@@ -26,6 +26,7 @@
 | `894c564e` | B23, B24, B25: authorization: `userAttributes` are cached per request, unknown roles are ignored, `node` accepts `token` (see §13) |
 | `f7587dd2` | B26, B27, B28: subscriptions: access denial is respected, `subscribePayloadFilters` are required with `filters`, the client `wherePayload` filter works; tests for all subscriptions |
 | `e35ba325` | B25 reverted: Relay requires exactly `node(id: ID!): Node`, so `node` has no `token` argument again |
+| `d96aafb0` | `whereTarget` of `copy…` mutations uses `XWhereOneInput`; the duplicate `XWhereTargetInput` type is removed |
 
 ---
 
@@ -124,7 +125,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | M13 | `deleteManyEntitiesWithChildren` | `deleteManyXsWithChildren(whereOne: [..]!, options, token)` → `[X!]!` | (*) | ❌ |
 | M14 | `deleteFilteredEntitiesWithChildren` | `deleteFilteredXsWithChildren(where, near?, search?, options, token)` → `[X!]!` | (*) | ❌ |
 | M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, near?, search?, options, token)` → `Int!` | (*) | ❌ |
-| M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereTargetInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
+| M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereOneInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
 | M17 | `copyManyEntities` | `copyManyXs(whereKeyToSource: [..!]!, options, whereTarget: [..!], data: [..!], token)` → `[X!]!` | (**) | ❌ |
 | M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, token)` → `X!` | (**) and (*) | ❌ |
 | M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereKeyToSource: [..!]!, options, whereTarget: [..!], token)` → `[X!]!` | (**) and (*) | ❌ |
@@ -280,7 +281,7 @@ MenuClone   { name, description, original ↔ Menu.clone }
 |---|---|---|
 | `whereKeyToSource` (formerly `whereOnes`) | `XWhereKeyToSourceInput!`, exactly one key `{ f: YWhereOneInput }` | **Where to copy from**: selects the duplex field `f` and a specific Y record |
 | `options` | `copyXOptionsInput` = `{ f: { fieldsToCopy \| fieldsForbiddenToCopy } }` | Restricts the set of common fields; the key must match the `whereKeyToSource` key |
-| `whereTarget` (formerly `whereOne`) | `XWhereTargetInput` | **Where to copy to** (which existing X to update); needed only in mode B |
+| `whereTarget` (formerly `whereOne`) | `XWhereOneInput` (the same type as `whereOne` of `X` / `updateX`) | **Where to copy to** (which existing X to update); needed only in mode B |
 | `data` | `XUpdateInput` | Additional values for X applied on top of the copied ones |
 | `token` | `String` | The usual token |
 
@@ -289,7 +290,7 @@ MenuClone   { name, description, original ↔ Menu.clone }
 - **Mode A: `g` is scalar (1:1).** If `Y.g` already points to an X, that X is **updated** with the copied fields; if `Y.g` is empty, a new X linked to Y is **created**. `whereTarget` is forbidden (`Needless whereTarget arg!`), since X is uniquely determined.
 - **Mode B: `g` is an array (1:N).** Without `whereTarget` a new X linked to Y is **created**. With `whereTarget` the specified X is **updated**; it must already be linked to Y (`Try to copy to unconnected …`).
 
-Hence `whereTarget` is optional, and `XWhereTargetInput` is generated only when X has a duplex field with common fields and an array opposite field (mode B is possible).
+Hence `whereTarget` is optional, and it is added to the signature only when X has a duplex field with common fields and an array opposite field (mode B is possible).
 
 ### 12.4. Mutation variants
 
@@ -297,10 +298,10 @@ Current state (after `e2303727`):
 
 | Mutation | `whereKeyToSource` | `whereTarget` | `data` | Notes |
 |---|---|---|---|---|
-| `copyX` | `XWhereKeyToSourceInput!` | `XWhereTargetInput` (optional) | `XUpdateInput` | — |
-| `copyManyXs` | `[XWhereKeyToSourceInput!]!` | `[XWhereTargetInput!]` (optional) | `[XUpdateInput!]` | `whereTarget[i]` and `data[i]` correspond to `whereKeyToSource[i]` |
-| `copyXWithChildren` | `XWhereKeyToSourceInput!` | `XWhereTargetInput` (optional) | **none** (by design) | also copies the tree of "children" (*) |
-| `copyManyXsWithChildren` | `[XWhereKeyToSourceInput!]!` | `[XWhereTargetInput!]` (optional; required before `e2303727`, B18) | **none** (by design) | the same for an array |
+| `copyX` | `XWhereKeyToSourceInput!` | `XWhereOneInput` (optional) | `XUpdateInput` | — |
+| `copyManyXs` | `[XWhereKeyToSourceInput!]!` | `[XWhereOneInput!]` (optional) | `[XUpdateInput!]` | `whereTarget[i]` and `data[i]` correspond to `whereKeyToSource[i]` |
+| `copyXWithChildren` | `XWhereKeyToSourceInput!` | `XWhereOneInput` (optional) | **none** (by design) | also copies the tree of "children" (*) |
+| `copyManyXsWithChildren` | `[XWhereKeyToSourceInput!]!` | `[XWhereOneInput!]` (optional; required before `e2303727`, B18) | **none** (by design) | the same for an array |
 
 (*) "Children" are records Y refers to through duplex fields with **`parent: true`** and a scalar opposite field (`getNotArrayOppositeDuplexFields`). Only child fields that are common to X and Y and have `parent: true` with a scalar opposite field in both entities are copied (`composeCreateTree`). Copies of them are created recursively and linked to the new or updated X; on update, old children of X absent in Y are deleted (`composeCreateTree` + `mixTrees`). Fields without `parent: true` are not treated as children: the record they refer to is not copied (nor deleted in `delete…WithChildren`).
 
@@ -323,14 +324,14 @@ The problem arises when X has both a duplex field with an array opposite field (
 
 ### 12.8. Argument renaming (implemented in `e2303727`)
 
-> The names were changed twice: in `e2303727` to `whereSource` / `whereKeyToTarget`, in `dcf28990` to the final `whereKeyToSource` (`XWhereKeyToSourceInput`) and `whereTarget` (`XWhereTargetInput`). The rest of the document uses the final names.
+> The names were changed twice: in `e2303727` to `whereSource` / `whereKeyToTarget`, in `dcf28990` to the final `whereKeyToSource` (`XWhereKeyToSourceInput`) and `whereTarget` (`XWhereTargetInput`); in `d96aafb0` the type of `whereTarget` was replaced by the identical `XWhereOneInput`. The rest of the document uses the final names.
 
 The old names described the shape of the argument, not its role: `whereOnes` (the source, exactly one key) and `whereOne` (the target) differed by one letter while meaning opposite things. Agreed renaming:
 
 | Old argument | New argument | Old type | New type |
 |---|---|---|---|
 | `whereOnes` | `whereKeyToSource` | `XCopyWhereOnesInput` | `XWhereKeyToSourceInput` |
-| `whereOne` | `whereTarget` | `XWhereOneToCopyInput` | `XWhereTargetInput` |
+| `whereOne` | `whereTarget` | `XWhereOneToCopyInput` | `XWhereTargetInput`, since `d96aafb0` `XWhereOneInput` |
 
 In `copyMany…` the names stay singular with an array type, as in `updateManyXs(whereOne: [..])`.
 
