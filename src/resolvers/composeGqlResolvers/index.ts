@@ -18,18 +18,25 @@ import createCreatedEntitySubscriptionResolver from '../subscriptions/createCrea
 import createUpdatedEntitySubscriptionResolver from '../subscriptions/createUpdatedEntitySubscriptionResolver';
 import createDeletedEntitySubscriptionResolver from '../subscriptions/createDeletedEntitySubscriptionResolver';
 import subscriptionResolverDecorator from '../utils/resolverDecorator/subscriptionResolverDecorator';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-let resolvers: null | Record<string, any> = null;
+// separate cache for every combination of generalConfig & serversideConfig
+const getStore = createObjectBoundStore();
+
+// the same object for not set "serversideConfig" to use cache
+const defaultServersideConfig: ServersideConfig = Object.freeze({});
 
 const composeGqlResolvers = (
   generalConfig: GeneralConfig,
   entityTypeDic: { [entityName: string]: string },
 
-  serversideConfig: ServersideConfig = {},
+  serversideConfig: ServersideConfig = defaultServersideConfig,
 ): any => {
+  const store = getStore(generalConfig, serversideConfig);
+
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && resolvers) {
-    return resolvers;
+  if (!process.env.JEST_WORKER_ID && store.resolvers) {
+    return store.resolvers;
   }
 
   const { allEntityConfigs, inventory, representation = {} } = generalConfig;
@@ -45,7 +52,7 @@ const composeGqlResolvers = (
   const allowMutations = checkInventory(['Mutation'], inventory);
   const allowSubscriptions = checkInventory(['Subscription'], inventory);
 
-  resolvers = {};
+  const resolvers: Record<string, any> = {};
 
   resolvers.DateTime = DateTimeResolver;
 
@@ -289,6 +296,9 @@ const composeGqlResolvers = (
 
       return prev;
     }, resolvers);
+
+  // save only completely composed resolvers
+  store.resolvers = resolvers;
 
   return resolvers;
 };

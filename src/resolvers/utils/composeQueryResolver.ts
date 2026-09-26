@@ -9,8 +9,10 @@ import createEntityCountQueryResolver from '../queries/createEntityCountQueryRes
 import createEntityDistinctValuesQueryResolver from '../queries/createEntityDistinctValuesQueryResolver';
 import createEntityQueryResolver from '../queries/createEntityQueryResolver';
 import createChildEntityDistinctValuesQueryResolver from '../queries/createChildEntityDistinctValuesQueryResolver';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const queryResolversStore = Object.create(null);
+// separate cache for every combination of generalConfig & serversideConfig
+const getStore = createObjectBoundStore();
 
 const inAnyCase = true;
 
@@ -19,6 +21,8 @@ const composeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ) => {
+  const queryResolversStore = getStore(generalConfig, serversideConfig);
+
   const { allEntityConfigs } = generalConfig;
 
   const [entityName, suffix] = key.split('_');

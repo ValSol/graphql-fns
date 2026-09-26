@@ -11,8 +11,10 @@ import type {
 import composeFieldsObject from '@/utils/composeFieldsObject';
 import composeEntityConfig from '@/utils/composeEntityConfig';
 import composeRepresentationConfigName from './composeRepresentationConfigName';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every generalConfig
+const getStore = createObjectBoundStore();
 
 const checkAnyEntityNames =
   (allowEntityNames: Array<string>, representationKey: string) =>
@@ -50,6 +52,8 @@ const composeRepresentationConfig = (
   rootEntityConfig: EntityConfig,
   generalConfig: GeneralConfig,
 ): null | EntityConfig => {
+  const store = getStore(generalConfig);
+
   const { name: rootEntityName, representationNameSlicePosition } = rootEntityConfig;
 
   const {

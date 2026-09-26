@@ -3,8 +3,10 @@ import type { GeneralConfig } from '../../../tsTypes';
 import queries from '../../queries';
 import mutations from '../../mutations';
 import createResolverCreator from './createResolverCreator';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every generalConfig
+const getStore = createObjectBoundStore();
 
 const getAllowedActions = (allow) =>
   Object.keys(allow).reduce<Record<string, any>>((prev, entityName) => {
@@ -24,6 +26,8 @@ const generateRepresentationResolvers = (
     [mutationResolverCreator: string]: any;
   };
 } => {
+  const store = getStore(generalConfig);
+
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
 

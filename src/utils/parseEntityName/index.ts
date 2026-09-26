@@ -1,8 +1,10 @@
 import type { GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigName from '../composeRepresentationConfig/composeRepresentationConfigName';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every generalConfig
+const getStore = createObjectBoundStore();
 
 const parseEntityName = (
   entityConfigName: string,
@@ -11,6 +13,8 @@ const parseEntityName = (
   root: string;
   representationKey: string;
 } => {
+  const store = getStore(generalConfig);
+
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[entityConfigName]) {
     return store[entityConfigName];

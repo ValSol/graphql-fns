@@ -8,6 +8,7 @@ import {
 import parseEntityName from '../parseEntityName';
 import composeCustomAction from './composeCustomAction';
 import getTangibleEntities from './getTangibleEntities';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
 const regExp = /[\[\]\!]/g;
 
@@ -26,12 +27,15 @@ const scalarTypes = [
 
 const forClientActions = ['childEntity', 'childEntities'];
 
-const store = Object.create(null);
+// separate cache for every generalConfig
+const getStore = createObjectBoundStore();
 
 const mergeRepresentationIntoCustom = (
   generalConfig: GeneralConfig,
   variant: 'forClient' | 'forCustomResolver' | 'forGqlResolvers' = 'forGqlResolvers',
 ): null | Custom => {
+  const store = getStore(generalConfig);
+
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[variant]) return store[variant];
 

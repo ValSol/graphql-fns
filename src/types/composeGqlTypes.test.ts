@@ -4562,6 +4562,8 @@ type ExampleForView implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   textField: String
+  textField2: String
+  userId: String
 }
 type ExampleForViewUpdatedPayload {
   updatedFields(slice: SliceInput): [String!]!

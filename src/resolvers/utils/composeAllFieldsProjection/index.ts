@@ -4,12 +4,14 @@ import composeFieldsObject, {
   FOR_MONGO_QUERY,
   WITHOUT_CALCULATED_WITH_ASYNC,
 } from '@/utils/composeFieldsObject';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
 type Result = {
   [fieldName: string]: 1;
 };
 
-const store: Record<string, any> = {};
+// separate cache for every entityConfig object (not by name, that can be the same for different configs)
+const getStore = createObjectBoundStore();
 
 type Filter = typeof FOR_MONGO_QUERY | typeof WITHOUT_CALCULATED_WITH_ASYNC | '';
 
@@ -18,6 +20,8 @@ const composeAllFieldsProjection = (
   filterVariant: Filter = '',
 ): Result => {
   const { name: entityName } = entityConfig;
+
+  const store = getStore(entityConfig);
 
   const storeKey = `${entityName}:${filterVariant}`;
 

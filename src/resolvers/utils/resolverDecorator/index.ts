@@ -13,6 +13,7 @@ import transformData from './transformBefore/transformData';
 import transformWhere from './transformBefore/transformWhere';
 import transformWhereOne from './transformBefore/transformWhereOne';
 import transformWhereOnes from './transformBefore/transformWhereOnes';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
 const argTypesPrefixPlusSuffixes = [
   // prefixPlusSuffix, transformer, notUseConfig
@@ -27,10 +28,37 @@ const argTypesPrefixPlusSuffixes = [
   ['CopyWhereOnesInput', transformWhereOnes, false],
 ];
 
-const store = new Map();
-const argNamesToTransformersStore: Record<string, any> = {};
+// separate cache for every combination of generalConfig, serversideConfig & actionAttributes
+const getStore = createObjectBoundStore();
 
 const regExp = /[\[\]\!]/g;
+
+// compose transformers for args of the resolver (transformers use config of THIS entity)
+const composeArgNamesToTransformers = (
+  actionAttributes: ActionAttributes,
+  entityConfig: EntityConfig,
+): Record<string, any> => {
+  const { argNames } = actionAttributes;
+  const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
+    composer({ ...entityConfig, name: '' }).replace(regExp, ''),
+  );
+
+  return argNames.reduce<Record<string, any>>((prev, argName, i) => {
+    const argTypeWithoutEntityName = argTypesWithoutEntityNames[i];
+
+    const argTypePrefixPlusSuffix = argTypesPrefixPlusSuffixes.find(
+      ([prefixPlusSuffix]: [any]) => prefixPlusSuffix === argTypeWithoutEntityName,
+    );
+
+    if (!argTypePrefixPlusSuffix) return prev;
+
+    const [, transformer, notUseConfig] = argTypePrefixPlusSuffix;
+
+    prev[argName] = [transformer, notUseConfig ? null : entityConfig];
+
+    return prev;
+  }, {});
+};
 
 const resolverDecorator = (
   func: any,
@@ -40,16 +68,7 @@ const resolverDecorator = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any => {
-  if (!store.get(actionAttributes)) {
-    store.set(actionAttributes, {});
-  }
-
-  const obj = store.get(actionAttributes);
-
-  if (!obj) {
-    // to prevent flow error
-    throw new TypeError('Must be object!');
-  }
+  const obj = getStore(generalConfig, serversideConfig, actionAttributes);
 
   const { name } = entityConfig;
 
@@ -57,39 +76,13 @@ const resolverDecorator = (
     return obj[name];
   }
 
+  let argNamesToTransformers: null | Record<string, any> = null;
+
   obj[name] = async (...resolverArgs) => {
     const returnConfig = actionAttributes.actionReturnConfig(entityConfig, generalConfig);
 
-    const { argNames } = actionAttributes;
-    const argTypesWithoutEntityNames = actionAttributes.argTypes.map((composer) =>
-      composer({ ...entityConfig, name: '' }).replace(regExp, ''),
-    );
-
-    const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypesWithoutEntityNames.join(
-      '.',
-    )}`;
-
-    if (
-      process.env.JEST_WORKER_ID ||
-      !argNamesToTransformersStore[argNamesToTransformersStoreKey]
-    ) {
-      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<
-        Record<string, any>
-      >((prev, argName, i) => {
-        const argTypeWithoutEntityName = argTypesWithoutEntityNames[i];
-
-        const argTypePrefixPlusSuffix = argTypesPrefixPlusSuffixes.find(
-          ([prefixPlusSuffix]: [any]) => prefixPlusSuffix === argTypeWithoutEntityName,
-        );
-
-        if (!argTypePrefixPlusSuffix) return prev;
-
-        const [, transformer, notUseConfig] = argTypePrefixPlusSuffix;
-
-        prev[argName] = [transformer, notUseConfig ? null : entityConfig];
-
-        return prev;
-      }, {});
+    if (process.env.JEST_WORKER_ID || !argNamesToTransformers) {
+      argNamesToTransformers = composeArgNamesToTransformers(actionAttributes, entityConfig);
     }
 
     const [parent, args, ...rest] = resolverArgs;
@@ -102,11 +95,7 @@ const resolverDecorator = (
       involvedEntityNames,
       generalConfig,
       serversideConfig,
-    )(
-      parent,
-      transformBefore(args, argNamesToTransformersStore[argNamesToTransformersStoreKey]),
-      ...rest,
-    );
+    )(parent, transformBefore(args, argNamesToTransformers), ...rest);
 
     if (!rawResult) return rawResult;
 

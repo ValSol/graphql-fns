@@ -14,8 +14,10 @@ import transformAfter from '@/resolvers/utils/resolverDecorator/transformAfter';
 import withFilterAndTransformer from '../withFilterAndTransformer';
 import filterUpdatedFields, { WhichUpdated } from './filterUpdatedFields';
 import testSubscriptionNode from '../testSubscriptionNode';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every combination of generalConfig & serversideConfig
+const getStore = createObjectBoundStore();
 
 const createUpdatedEntitySubscriptionResolver = (
   originalOrCustomName: string,
@@ -30,6 +32,8 @@ const createUpdatedEntitySubscriptionResolver = (
   if (!checkInventory(['Subscription', originalOrCustomName, name], inventory)) {
     return null;
   }
+
+  const store = getStore(generalConfig, serversideConfig);
 
   const storeKey = `${originalOrCustomName}:${name}`;
 

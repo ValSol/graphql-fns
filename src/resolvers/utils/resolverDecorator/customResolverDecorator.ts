@@ -10,9 +10,10 @@ import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import getTransformerAndConfig from './transformBefore/getTransformerAndConfig';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = new Map();
-const argNamesToTransformersStore: Record<string, any> = {};
+// separate cache for every combination of generalConfig, serversideConfig & signatureMethods
+const getStore = createObjectBoundStore();
 
 const customResolverDecorator = (
   func: any,
@@ -22,16 +23,7 @@ const customResolverDecorator = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any => {
-  if (!store.get(signatureMethods)) {
-    store.set(signatureMethods, {});
-  }
-
-  const obj = store.get(signatureMethods);
-
-  if (!obj) {
-    // to prevent flow error
-    throw new TypeError('Must be object!');
-  }
+  const obj = getStore(generalConfig, serversideConfig, signatureMethods);
 
   const { name } = entityConfig;
 
@@ -39,20 +31,16 @@ const customResolverDecorator = (
     return obj[name];
   }
 
+  // transformers of the resolver args (use configs from THIS generalConfig)
+  let argNamesToTransformers: null | Record<string, any> = null;
+
   obj[name] = async (...resolverArgs) => {
     const returnConfig = signatureMethods.config(entityConfig, generalConfig);
     const argNames = signatureMethods.argNames(entityConfig, generalConfig);
     const argTypes = signatureMethods.argTypes(entityConfig, generalConfig);
 
-    const argNamesToTransformersStoreKey = `${argNames.join('.')}-${argTypes.join('.')}`;
-
-    if (
-      process.env.JEST_WORKER_ID ||
-      !argNamesToTransformersStore[argNamesToTransformersStoreKey]
-    ) {
-      argNamesToTransformersStore[argNamesToTransformersStoreKey] = argNames.reduce<
-        Record<string, any>
-      >((prev, argName, i) => {
+    if (process.env.JEST_WORKER_ID || !argNamesToTransformers) {
+      argNamesToTransformers = argNames.reduce<Record<string, any>>((prev, argName, i) => {
         const argType = argTypes[i];
 
         const transformerAndConfig = getTransformerAndConfig(argType, generalConfig);
@@ -75,11 +63,7 @@ const customResolverDecorator = (
       involvedEntityNames,
       generalConfig,
       serversideConfig,
-    )(
-      parent,
-      transformBefore(args, argNamesToTransformersStore[argNamesToTransformersStoreKey]),
-      ...rest,
-    );
+    )(parent, transformBefore(args, argNamesToTransformers), ...rest);
 
     if (!rawResult) return rawResult;
 

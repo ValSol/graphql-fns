@@ -1,6 +1,8 @@
 import type { AnyField, EntityConfig, EntityConfigObject, TangibleEntityConfig } from '@/tsTypes';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every entityConfig object (not by name, that can be the same for different configs)
+const getStore = createObjectBoundStore();
 
 export const FOR_MONGO_QUERY = 'forMongoQuery' as const;
 export const WITHOUT_CALCULATED_WITH_ASYNC = 'withoutCalculatedWithAsync' as const;
@@ -16,6 +18,8 @@ const composeFieldsObject = (
     allowedCalculatedWithAsyncFuncFieldNames = [],
     subscriptionActorConfig,
   } = entityConfig as TangibleEntityConfig;
+
+  const store = getStore(entityConfig);
 
   const storeKey = `${entityName}${filterVariant}`;
 

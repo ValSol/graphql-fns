@@ -1,9 +1,13 @@
 import { EntityConfig, TangibleEntityConfig } from '@/tsTypes';
+import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
-const store = Object.create(null);
+// separate cache for every entityConfig object (not by name, that can be the same for different configs)
+const getStore = createObjectBoundStore();
 
 const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): EntityConfig => {
   const { name } = entityConfig as TangibleEntityConfig;
+
+  const store = getStore(entityConfig);
 
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[name]) {
