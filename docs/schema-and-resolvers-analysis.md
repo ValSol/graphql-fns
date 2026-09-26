@@ -13,6 +13,7 @@
 | `124e7e33` | B3, B5, B5a, B6 — field-resolvers для всіх сутностей, `WherePayloadInput` без calculated virtual-полів, runtime-фільтр за calculated embedded, geospatial-типи для calculated-полів |
 | `da657196` | ?9 — calculated geospatial-значення не конвертуються з Mongo-формату |
 | `226010ff` | B9, частково B15 — стандартні мутації повторюють лише transient-помилки транзакцій, помилки прокидаються без обгортки |
+| `6002a955` | B9 (доповнення) — `workOutMutations` так само не повторює мутації без транзакцій |
 
 ---
 
@@ -118,7 +119,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 (*) «Діти» — це duplex-поля X, у яких поле-опозит **скалярне і не `parent`** (`getOppositeFields(...).filter(([, {array, parent}]) => !(array || parent))`).
 (**) Існує duplex-поле `f`, для якого `getMatchingFields(X, Y)` дає хоч одне поле, окрім `f` (тобто в X і Y є однойменні поля, які можна скопіювати).
 
-Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`. Повтор усієї транзакції (до 7 спроб з backoff) відбувається лише для помилок з міткою `TransientTransactionError` / `WriteConflict` і лише коли `serversideConfig.transactions` увімкнено; при `UnknownTransactionCommitResult` повторюється тільки `commitTransaction`. Інші помилки прокидаються як є.
+Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`. Повтор усієї транзакції (до 7 спроб з backoff) відбувається лише для помилок з міткою `TransientTransactionError` / `WriteConflict` і лише коли `serversideConfig.transactions` увімкнено; при `UnknownTransactionCommitResult` повторюється тільки `commitTransaction`. Інші помилки прокидаються як є. Те саме правило діє й для `workOutMutations`.
 
 ## 5. Subscription (для tangible `X`)
 
