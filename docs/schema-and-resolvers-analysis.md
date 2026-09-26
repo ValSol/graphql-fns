@@ -3,6 +3,15 @@
 > Кожне твердження має ідентифікатор (`E…` сутності, `F…` поля, `Q…/M…/S…` дії, `C…` дочірні поля, `R…` resolvers, `B…` помилки, `I…` неузгодженості, `?…` питання). Щоб погодитися, заперечити чи уточнити, досить послатися на ID.
 > Позначки: ✅ перевірено запуском (тимчасовий jest-probe, вже видалений); 📖 висновок лише з читання коду.
 > Статус виправлень: **[виправлено `<commit>`]** біля ID; решта пунктів ще відкриті.
+> Описові розділи §0–§7 оновлюються разом із виправленнями й відображають поточну поведінку.
+
+**Журнал виправлень**
+
+| Коміт | Що виправлено |
+|---|---|
+| `2a2e24d4` | B1, B2, B4, частково B8 (кеш `checkInventory`) — узгоджена перевірка inventory у SDL і resolvers |
+| `124e7e33` | B3, B5, B5a, B6 — field-resolvers для всіх сутностей, `WherePayloadInput` без calculated virtual-полів, runtime-фільтр за calculated embedded, geospatial-типи для calculated-полів |
+| `da657196` | ?9 — calculated geospatial-значення не конвертуються з Mongo-формату |
 
 ---
 
@@ -118,7 +127,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | S2 | `deletedX(wherePayload): XCreatedOrDeletedPayload!` | `deleted-X` |
 | S3 | `updatedX(wherePayload, whichUpdated: XWhichUpdatedInput): XUpdatedPayload!` | `updated-X` |
 
-`XWherePayloadInput` будується з усіх полів (без вимоги `index`) + calculated-полів без `asyncFunc` (або з переліку `allowedCalculatedWithAsyncFuncFieldNames`).
+`XWherePayloadInput` будується з усіх полів (без вимоги `index`) + calculated-полів без `asyncFunc` (або з переліку `allowedCalculatedWithAsyncFuncFieldNames`). Calculated-поля з `calculatedType: 'virtualFields'` у фільтр **не потрапляють** (свідоме рішення, див. B5 і ?10). Runtime-фільтр використовує той самий набір полів (`composeSubscriptionDummyEntityConfig`).
 
 ## 6. Дочірні поля всередині типу X (`createEntityType`)
 
@@ -130,12 +139,14 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | C1a | масив | `childEntitiesThroughConnection` | `fThroughConnection(where, sort, near?, search?, after, before, first, last): YConnection!` | `…ConnectionResolver` (3 варіанти, як вище) |
 | C1b | масив | `childEntityCount` | `fCount(where, search?): Int!` | `…CountResolver` |
 | C1c | масив | `childEntityDistinctValues` і в Y є text/enum | `fDistinctValues(where, search?, options!): [String!]!` | `…DistinctValuesResolver` |
-| C2 | скаляр | `childEntity` (див. B4) | `f: Y[!]` | `createEntityScalarResolver` / `createEntityFilterScalarResolver` |
+| C2 | скаляр | `childEntity` дозволено (`checkRepresentationAction`, та сама перевірка, що й для resolver-а; див. B4) | `f: Y[!]` | `createEntityScalarResolver` / `createEntityFilterScalarResolver` |
 | C3 | duplex-скаляр, не `required`, опозит скалярний | `childEntityGetOrCreate` | `fGetOrCreate(data: YCreateInput!): Y` (`whereOne` сховано) | `createEntityGetOrCreateResolver` |
 | C4 | embedded-масив | `variants` | `plain`: `f(slice): [E!]!`; `connection`: `fThroughConnection(after,before,first,last): EConnection!`; `count`: `fCount: Int!` | `fieldArrayResolver` / `fieldArrayThroughConnectionResolver` / `fieldArrayCountResolver` |
 | C5 | будь-яке інше масивне поле | — | `f(slice: SliceInput)` | `fieldArrayResolver` |
-| C6 | geospatial | — | `Geospatial…` | конвертери `…FromMongoToGql` |
+| C6 | geospatial | — | `Geospatial…` | звичайні поля: конвертери `…FromMongoToGql`; calculated: без конвертації (`func` повертає GraphQL-формат, див. ?9), масиви — `fieldArrayResolver` |
 | C7 | filter `stringified` | — | `fStringified: String` | `fieldFilterStringifiedResolver` |
+
+Field-resolvers (`composeEntityResolvers`) створюються для **кожної** сутності, тип якої є в SDL: tangible, embedded, virtual та їхні representation-версії. Порожні набори не додаються (див. B3).
 
 Кожен дочірній field-resolver усередині обгортає відповідний Query-resolver `createChildEntity*QueryResolver` через `resolverDecorator`, а для representation-конфігів — через `createCustomResolver('Query', 'childEntity…{Key}')`.
 
@@ -146,9 +157,9 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | ID | Механізм | Де діє |
 |---|---|---|
 | G1 | `actionAllowed(entityConfig)` | і в типах, і в resolvers (узгоджено) |
-| G2 | `inventory` (`include`/`exclude`, ланцюжок `[Kind, action, entity]`) | типи: `checkRepresentationAction`; resolvers: кожен creator викликає `checkInventory` і повертає `null`; у runtime ролі перевіряються через `inventoryByRoles` в `executeAuthorisation` |
+| G2 | `inventory` (`include`/`exclude`, ланцюжок `[Kind, action, entity]`; `include` обмежує на всіх рівнях, `exclude` виключає лише повністю покритий ланцюжок, `exclude: true` — усе) | типи: `checkRepresentationAction` (і для root-дій, і для дочірніх полів); resolvers: кожен creator викликає `checkInventory` і повертає `null`; у runtime ролі перевіряються через `inventoryByRoles` в `executeAuthorisation` |
 | G3 | `representation[Key].allow[X]` — список дій | типи + resolvers (через `mergeRepresentationIntoCustom` → custom-дії з назвою `${action}${Key}`) |
-| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (I-M4) |
+| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (див. B14) |
 | G5 | `manualyUsedEntities` | додає тип, навіть якщо він не досяжний |
 
 Ланцюжок runtime-декораторів: `resolverDecorator` → `transformBefore` (args за суфіксом типу: `CreateInput/UpdateInput/PushIntoInput` → `transformData`; `Where*` → `transformWhere`; `WhereOne*` → `transformWhereOne`; `CopyWhereOnesInput` → `transformWhereOnes`) → `authDecorator` (`executeAuthorisation`: inventoryByRoles, filters, staticFilters, personalFilters → `involvedFilters`, `subscriptionEntityNames`) → resolver → `transformAfter` (глобальні id).
