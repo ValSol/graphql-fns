@@ -39,6 +39,13 @@ const mergeRepresentationIntoCustom = (
 
   // *** test correctness
 
+  // only standard & representation subscriptions are supported
+  if ((custom as Custom | undefined)?.Subscription !== undefined) {
+    throw new TypeError(
+      'Custom subscriptions are not supported: remove "Subscription" from "custom" of generalConfig!',
+    );
+  }
+
   if (custom) {
     const { Query = {}, Mutation = {} } = custom;
 
@@ -213,7 +220,7 @@ const mergeRepresentationIntoCustom = (
       ...custom,
       Query: { ...Query, ...custom.Query },
       Mutation: { ...Mutation, ...custom.Mutation },
-      Subscription,
+      Subscription, // only representation subscriptions (custom subscriptions are forbidden above)
     };
   }
 
