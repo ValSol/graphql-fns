@@ -23,6 +23,7 @@
 | `e2303727` | Q6 (варіант Б), B18, B19, B21 — перейменування аргументів `copy…` (`whereKeyToSource`, `whereTarget`), необов'язковий `whereTarget` у `copyManyXsWithChildren`, порядок записів у `copyMany…` |
 | `e92f738a` | B22 — перевірка `lockedData` для масиву в тій самій транзакції |
 | `dcf28990` | Остаточні назви аргументів `copy…`: `whereKeyToSource` (`XWhereKeyToSourceInput`), `whereTarget` (`XWhereTargetInput`) |
+| `894c564e` | B23, B24, B25 — авторизація: `userAttributes` кешуються на запит, невідомі ролі ігноруються, `node` приймає `token` (див. §13) |
 
 ---
 
@@ -92,7 +93,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 
 | ID | actionName | SDL | Коли є | Resolver creator |
 |---|---|---|---|---|
-| Q0 | — | `node(id: ID!): Node` | завжди | `createNodeQueryResolver` |
+| Q0 | — | `node(id: ID!, token: String): Node` | завжди | `createNodeQueryResolver` |
 | Q1 | `entity` | `X(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, token: String): X` | tangible (`whereOne` має `!`, якщо немає `uniqueCompoundIndexes`; `whereCompoundOne` є лише з ними) | `createEntityQueryResolver` |
 | Q2 | `entities` | `Xs(where, sort, pagination, near?, search?, token): [X!]!` | tangible | `createEntitiesQueryResolver` |
 | Q3 | `entitiesThroughConnection` | `XsThroughConnection(where, sort, near?, search?, after, before, first, last, token): XConnection!` | tangible | `createEntitiesThroughConnectionQueryResolver` |
@@ -216,6 +217,9 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | **B20** **[виправлено `0fb7a9fe`]** | Умова «є діти» в SDL і під час виконання різна. Виконання (`getNotArrayOppositeDuplexFields`) вважає дітьми лише duplex-поля з власним **`parent: true`** і скалярним опозитом. `actionAllowed` усіх `copy…WithChildren` / `delete…WithChildren` і enum `deleteXWithChildrenOptionsInput` перевіряють лише, що опозит скалярний і не `parent` (`!(array \| parent)`). Наслідок: для сутності з duplex-полем без `parent: true`, але зі скалярним опозитом, генеруються `…WithChildren`-мутації, які дітей не копіюють і не видаляють (працюють як звичайні), а `fieldsToDelete` пропонує поля, які ні на що не впливають | `types/actionAttributes/*WithChildren*MutationAttributes.ts`; `types/inputs/createDeleteEntityWithChildrenOptionsInputType.ts` vs `resolvers/mutations/processFieldToDelete.ts:23-26` |
 | **B21** **[виправлено `e2303727`]** | (знайдено під час виправлення Q6) Перетворювач аргументу `whereKeyToSource` (`transformWhereOnes`) для масивного duplex-поля `f` викликав `whereKeyToSource[f].map(...)`, хоча значення завжди один `YWhereOneInput`; копіювання через масивне duplex-поле падало з `TypeError` | `resolvers/utils/resolverDecorator/transformBefore/transformWhereKeyToSource.ts` |
 | **B22** **[виправлено `e92f738a`]** | `checkLockedData` (оптимістичне блокування `workOutMutations`) для масивного `lockedData.result` викликав query `Xs` **без `session`**, хоча для скалярного передавав; перевірка блокування читала дані поза транзакцією й могла пропустити конфлікт. Також прибрано невикористаний `projection2` | `resolvers/mutations/workOutMutations/checkLockedData.ts` |
+| **B23** **[виправлено `894c564e`]** | `getUserAttributes` викликався кожним згенерованим resolver-ом, зокрема field-resolver-ами дочірніх полів для **кожного** батьківського запису: `Menus { sections { … } }` на 50 меню давав 51 виклик (з better-auth — 51 звернення до сесії). Тепер `executeAuthorisation` і `executeNodeAuthorisation` беруть результат з кешу `getUserAttributesOnce`, прив'язаного до callback-а, об'єкта `context` і `token`; невдалий виклик не кешується. Див. §13.3 | `resolvers/utils/executeAuthorisation/getUserAttributesOnce.ts` |
+| **B24** **[виправлено `894c564e`]** | З `inventoryByRoles` роль користувача, якої немає в `containedRoles`, давала `TypeError: undefined is not iterable` (`[...containedRoles[role], role]`). Роль із `containedRoles`, якої немає серед ключів `inventoryByRoles`, перевірялася за inventory за замовчуванням, тобто **отримувала доступ до всього**. Тепер, якщо задано `containedRoles`, невідомі ролі відкидаються (і для `inventoryByRoles`, і для `filters`, `subscribePayloadFilters`, `node`), а ролі без `inventoryByRoles` доступу не дають | `resolvers/utils/executeAuthorisation/index.ts`, `…/executeNodeAuthorisation/index.ts` |
+| **B25** **[виправлено `894c564e`]** | `node(id)` не мав аргументу `token`, а `executeNodeAuthorisation` викликав `getUserAttributes(context)` без нього: з токеном в аргументах `node` бачив гостя. Тепер `node(id: ID!, token: String)` і `token` передається в `getUserAttributes` | `types/composeGqlTypes.ts`, `resolvers/queries/createNodeQueryResolver`, `…/executeNodeAuthorisation/index.ts` |
 
 ## 10. Неузгодженості (можливо, так задумано: потрібне ваше рішення)
 
@@ -336,3 +340,47 @@ MenuClone   { name, description, original ↔ Menu.clone }
 
 **Рішення:** варіант Б. `whereTarget` у `copyManyXsWithChildren` необов'язковий (B18), поєднання записів у `copyMany…` зберігає порядок `whereKeyToSource` / `whereTarget` (B19: кожен запис вибирається окремо, результати `$in` впорядковуються за `ids`); `data` у `…WithChildren` не додається. Разом з цим перейменовано аргументи (§12.8) і виправлено B21.
 
+## 13. Авторизація користувачів
+
+Інтеграцію з better-auth описано окремо: [better-auth-integration.md](./better-auth-integration.md).
+
+### 13.1. Конвеєр
+
+Кожен згенерований resolver (root query, мутації, subscriptions, field-resolvers дочірніх полів) обгорнутий `authDecorator` → `executeAuthorisation`. Для `node` те саме робить `executeNodeAuthorisation`.
+
+1. **Користувач:** `userAttributes = await getUserAttributes(context, args.token)` — один раз на пару (`context`, `token`) (B23).
+2. **Фільтри доступу:** для кожної сутності, якої торкається дія (`inputOutputEntity`, `outputEntity`, …), будується `involvedFilters`.
+3. **Виконання:** resolver додає умови до запиту в MongoDB. Якщо доступу немає (`null`), resolver повертає `null`, мутація нічого не змінює, **GraphQL-помилки немає**.
+
+### 13.2. Шари
+
+| ID | Шар | Налаштування | Що робить |
+|---|---|---|---|
+| A1 | Статичний inventory | `generalConfig.inventory` | Які дії існують; однаковий для всіх |
+| A2 | Ролі | `inventoryByRoles` + `containedRoles` | Які дії дозволені ролі. `containedRoles` задає успадкування (`{ admin: ['user'] }` — admin має права user). Дію дозволяє **будь-яка** роль користувача. Ролі, яких немає в `containedRoles`, ігноруються (B24) |
+| A3 | Фільтри за ролями | `filters: { X: ({ role, ...userAttributes }) => null \| InvolvedFilter[] }` | Функція викликається для кожної ролі: `[]` — повний доступ, `null` — роль нічого не дає, масив — доступ до записів, що відповідають умовам. Результати ролей об'єднуються через OR |
+| A4 | Додаткові | `staticFilters`, `staticLimits`, `personalFilters`, `skipPersonalFilter` | Постійний фільтр і ліміт на сутність; персональний фільтр береться з filter-поля сутності User graphql-fns (або пов'язаної з нею), знайденої за `userAttributes.id` |
+| A5 | Subscriptions | `subscribePayloadFilters` | Такі самі функції, але застосовуються до payload кожної події. Сама підписка авторизується один раз, під час `subscribe` |
+
+`composeServersideConfig` на старті перевіряє узгодженість: наявність `getUserAttributes` для A2–A5, збіг ролей у `containedRoles` та `inventoryByRoles`, коректність фільтрів (викликаючи їх для кожної ролі з тестовими атрибутами).
+
+**Контракт:** `getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>`. `roles` обов'язковий, решта полів передається у функції `filters` поруч із `role`; `id` потрібен лише для `personalFilters` і має бути id запису User у graphql-fns; `token` — значення аргументу `token: String` root query, мутацій і `node` (B25); у subscriptions аргументу `token` немає, користувач визначається лише з `context`.
+
+### 13.3. Кешування `userAttributes` (B23)
+
+- Кеш прив'язаний до трійки (callback `getUserAttributes`, об'єкт `context`, `token`) через `createObjectBoundStore` (WeakMap), тому звільняється разом із `context`.
+- Кешується promise, тож паралельні resolvers одного запиту чекають один виклик.
+- Відхилений promise з кешу видаляється: наступний resolver викличе `getUserAttributes` знову.
+- Якщо `context` не об'єкт, кешу немає.
+- **Вимога:** `context` має створюватися для кожного запиту (Apollo Server, graphql-yoga, `graphql-ws` з функцією `context` так і роблять). Якщо `context` живе довше (наприклад, один об'єкт на все WebSocket-з'єднання), атрибути фіксуються на весь час його життя.
+
+### 13.4. Ризики, які лишаються на боці проєкту
+
+| ID | Суть | Що робити |
+|---|---|---|
+| A6 | Анонімний користувач: з `filters` або `inventoryByRoles` відповідь `null` від `getUserAttributes` дає `TypeError` | Повертати `{ roles: ['guest'] }` і описати `guest` у `containedRoles` / `inventoryByRoles` |
+| A7 | `personalFilters` читають сутність User **graphql-fns** (колекція `user_things`), а не користувача зовнішньої системи автентифікації | Синхронізувати запис User з тим самим `id` (для better-auth — хук `databaseHooks.user.create.after`) |
+| A8 | Subscriptions авторизуються один раз: після відкликання сесії чи блокування користувач отримує події до перепідключення | Закривати з'єднання під час виходу/блокування; для WebSocket брати заголовки на етапі підключення |
+| A9 | `token` в аргументах потрапляє в тіло запиту, а звідти в логи й кеш persisted queries | Для HTTP віддавати перевагу cookie / заголовку `Authorization`; `token` — для особливих випадків |
+| A10 | Відмова в доступі повертає `null`, а не помилку: клієнт не відрізнить «немає доступу» від «не знайдено» | Так задумано; враховувати в UX |
+| A11 | Тексти помилок конфігурації (`Not found "getUserAttributes" callback…`) віддаються клієнту як GraphQL-помилки | Маскувати внутрішні помилки на рівні сервера (`formatError` / `maskedErrors`) |
