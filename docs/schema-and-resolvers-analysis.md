@@ -16,6 +16,7 @@
 | `6002a955` | B9 (доповнення) — `workOutMutations` так само не повторює мутації без транзакцій |
 | `a323df29` | B7 — `PushIntoXInput` для duplex-масиву з обов'язковим опозитом використовує `Thru`-input, як Create/Update |
 | `dc922b25` | B10, ?8 — нестандартні (custom, створені вручну) subscriptions явно заборонені: `custom.Subscription` дає зрозумілу помилку |
+| `39794e6e` | B8, B8a — усі кеші прив'язані до об'єктів конфігів (`createObjectBoundStore`), перетворювачі аргументів складаються для кожного resolver-а |
 
 ---
 
@@ -41,6 +42,8 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 5. Результат збирається так: `scalar DateTime`, `scalar Upload`, `interface Node`, `input RegExp`, `input SliceInput`, enum-и (`XEnumeration`), geospatial-типи, interfaces, entity types, inputs, `type Query { node(id: ID!): Node … }`, `type Mutation`, `type Subscription`.
 
 Що важливо: **тип сутності потрапляє в SDL лише тоді, коли він досяжний** з якоїсь дії, дочірнього поля або з `manualyUsedEntities`.
+
+Кешування: поза jest проміжні результати кешуються, але окремо для кожного об'єкта `generalConfig` / `serversideConfig` / `entityConfig` (`src/utils/createObjectBoundStore.ts`). Повторний виклик із тими самими об'єктами повертає кешований результат, а інший конфіг отримує свій.
 
 ---
 
@@ -182,7 +185,8 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | **B6** **[виправлено `124e7e33`]** | `composeGeospatialTypes` дивиться лише на `geospatialFields`, а calculated geospatial-поля ігнорує | `src/types/specialized/composeGeospatialTypes.ts:17` | сутність лише з calculated `Point` → `Unknown type "GeospatialPoint"` (і `…PolygonInput` та інші з WherePayload) |
 | **B5a** **[виправлено `124e7e33`]** | (знайдено під час виправлення B5) Runtime-фільтр `wherePayload` за calculated embedded-полем падав: dummy-конфіг subscription губив `config` поля (`Cannot destructure property 'name' of 'entityConfig'`) | `src/resolvers/utils/composeSubscriptionDummyEntityConfig/index.ts` | тепер зберігаються `config`, `enumName`, `geospatialType`; calculated virtual-поля не фільтруються ні в SDL, ні в runtime |
 | **B7** **[виправлено `a323df29`]** | `PushIntoXInput` для duplex-масиву завжди використовує `YCreateOrPushChildrenInput`, а Create/Update, коли опозит `required`, беруть `YCreateOrPushThru_{opp}_FieldChildrenInput` | `src/types/inputs/createPushIntoEntityInputType.ts:84` | `PushIntoMenuInput.sections: SectionCreateOrPushChildrenInput` → `create: [SectionCreateInput!]`, де обов'язкове `menu: MenuCreateChildInput!`: клієнт змушений вказувати батька, якого й так відомо (для `MenuCreateInput` цього не треба) |
-| **B8** (частково: кеш `checkInventory` тепер окремий для кожного об'єкта inventory, **[виправлено `2a2e24d4`]**) | Глобальний кеш resolvers на рівні модуля не враховує аргументи | `resolvers/composeGqlResolvers/index.ts:22,31` | поза jest другий виклик з **іншим** `generalConfig` повертає resolvers першого (`a.resolvers === b.resolvers`). Схожі глобальні кеші без прив'язки до конфігу: `mergeRepresentationIntoCustom` (ключ — `variant`), `parseEntityName`, `composeRepresentationConfig` (ключ — ім'я), `checkInventory` (ключ — `inventory.name`), `resolverDecorator`, subscription creators |
+| **B8** **[виправлено `39794e6e`]** (кеш `checkInventory` — раніше, у `2a2e24d4`) | Глобальний кеш resolvers на рівні модуля не враховує аргументи | `resolvers/composeGqlResolvers/index.ts:22,31` | поза jest другий виклик з **іншим** `generalConfig` повертає resolvers першого (`a.resolvers === b.resolvers`). Схожі глобальні кеші без прив'язки до конфігу: `mergeRepresentationIntoCustom` (ключ — `variant`), `parseEntityName`, `composeRepresentationConfig` (ключ — ім'я), `checkInventory` (ключ — `inventory.name`), `resolverDecorator`, subscription creators |
+| **B8a** **[виправлено `39794e6e`]** | (знайдено під час виправлення B8) `resolverDecorator` кешував перетворювачі аргументів за ключем з імен і типів аргументів **без імені сутності**, тож поза jest resolvers однієї дії для всіх сутностей перетворювали аргументи з конфігом першої | `resolvers/utils/resolverDecorator/index.ts` | напр. глобальні id relational/duplex-полів у `where` другої сутності не розкодовувалися; тепер перетворювачі складаються для кожного resolver-а окремо |
 
 ## 9. Помилки, встановлені читанням коду 📖
 
@@ -221,7 +225,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 - ?3 I1: події для масових мутацій не публікуються навмисно (продуктивність) чи через недогляд?
 - ?4 I5/I6: як правильно поводитися з `freeze` для filter-полів у Create і з скалярними filter-полями в Push?
 - ?5 I7: `freezedFields`/`unfreezedFields` мають «перевизначати повністю» чи «доповнювати» базовий `freeze`?
-- ?6 B8: чи підтримується кілька різних `generalConfig` в одному процесі (multi-tenant, hot reload, тести поза jest)? Якщо так, кеші треба прив'язати до конфігу (наприклад, `WeakMap` за `generalConfig`).
+- ?6 ~~Чи підтримується кілька різних `generalConfig` в одному процесі?~~ Вирішено в `39794e6e`: кеші прив'язані до об'єктів `generalConfig` / `serversideConfig` / `entityConfig` через `WeakMap`, тож кілька конфігів в одному процесі не змішуються.
 - ?7 `cloneEntity`: код resolver-а та `createEntityCloneInputType` лишаються. Їх видалити чи відновити?
 - ?8 ~~Custom Subscription (`custom.Subscription`): це підтримувана функція?~~ Відповідь: ні. Вирішено в `dc922b25`: якщо в `generalConfig.custom` передано `Subscription`, кидається `TypeError`; підтримуються лише стандартні та representation-subscriptions.
 - ?9 ~~Формат calculated geospatial-значень~~ Відповідь: `func` повертає GraphQL-формат (`{ lng, lat }`). Виправлено в `da657196`: calculated geospatial-поля більше не проходять через Mongo→GraphQL-конвертер (який повертав `null`), масиви зберігають підтримку `slice`.
