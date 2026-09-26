@@ -20,8 +20,9 @@
 | `e8b906de` | B11–B17 — дрібні виправлення: сигнатури дій без аргументів, custom-resolvers лише для tangible, TS-типи, тексти помилок, мертвий код |
 | `81f368db` | I2, I4, I5, I6, I9, I11, ?7 — неузгодженості схеми за вашими рішеннями, видалено `cloneEntity`; I7, I10 — так задумано; I3, I8 — відкладено |
 | `0fb7a9fe` | B20 — однакова умова «діти» (`parent: true` + скалярний опозит) у схемі й resolvers `…WithChildren` |
-| `e2303727` | Q6 (варіант Б), B18, B19, B21 — перейменування аргументів `copy…` (`whereSource`, `whereKeyToTarget`), необов'язковий `whereKeyToTarget` у `copyManyXsWithChildren`, порядок записів у `copyMany…` |
+| `e2303727` | Q6 (варіант Б), B18, B19, B21 — перейменування аргументів `copy…` (`whereKeyToSource`, `whereTarget`), необов'язковий `whereTarget` у `copyManyXsWithChildren`, порядок записів у `copyMany…` |
 | `e92f738a` | B22 — перевірка `lockedData` для масиву в тій самій транзакції |
+| `dcf28990` | Остаточні назви аргументів `copy…`: `whereKeyToSource` (`XWhereKeyToSourceInput`), `whereTarget` (`XWhereTargetInput`) |
 
 ---
 
@@ -120,10 +121,10 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | M13 | `deleteManyEntitiesWithChildren` | `deleteManyXsWithChildren(whereOne: [..]!, options, token)` → `[X!]!` | (*) | ❌ |
 | M14 | `deleteFilteredEntitiesWithChildren` | `deleteFilteredXsWithChildren(where, near?, search?, options, token)` → `[X!]!` | (*) | ❌ |
 | M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, near?, search?, options, token)` → `Int!` | (*) | ❌ |
-| M16 | `copyEntity` | `copyX(whereSource: XWhereSourceInput!, options: copyXOptionsInput, whereKeyToTarget: XWhereKeyToTargetInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
-| M17 | `copyManyEntities` | `copyManyXs(whereSource: [..!]!, options, whereKeyToTarget: [..!], data: [..!], token)` → `[X!]!` | (**) | ❌ |
-| M18 | `copyEntityWithChildren` | `copyXWithChildren(whereSource!, options, whereKeyToTarget, token)` → `X!` | (**) і (*) | ❌ |
-| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereSource: [..!]!, options, whereKeyToTarget: [..!], token)` → `[X!]!` | (**) і (*) | ❌ |
+| M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereTargetInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
+| M17 | `copyManyEntities` | `copyManyXs(whereKeyToSource: [..!]!, options, whereTarget: [..!], data: [..!], token)` → `[X!]!` | (**) | ❌ |
+| M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, token)` → `X!` | (**) і (*) | ❌ |
+| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereKeyToSource: [..!]!, options, whereTarget: [..!], token)` → `[X!]!` | (**) і (*) | ❌ |
 | — | `cloneEntity` | видалено (див. ?7) | — | — |
 
 (*) «Діти» — записи, на які X посилається через duplex-поля з **`parent: true`**, у яких поле-опозит **скалярне** (`getNotArrayOppositeDuplexFields`: `parent && !oppositeArray`). Ту саму умову (утиліта `getChildDuplexFields`) використовують і схема (`actionAllowed` усіх `…WithChildren`-мутацій, enum `deleteXWithChildrenOptionsInput`), і виконання (видалення з дітьми в `processFieldToDelete`, копіювання дерева в `composeCreateTree`); до `0fb7a9fe` схема перевіряла іншу умову (див. B20).
@@ -131,7 +132,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 
 Усі мутації, крім `workOutMutations`, зібрано через `composeStandardMutationResolver(resolverAttributes)`: цикл `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, потім `produceResult`, `report` (публікація в pubsub) і `finalResult`. Повтор усієї транзакції (до 7 спроб з backoff) відбувається лише для помилок з міткою `TransientTransactionError` / `WriteConflict` і лише коли `serversideConfig.transactions` увімкнено; при `UnknownTransactionCommitResult` повторюється тільки `commitTransaction`. Інші помилки прокидаються як є. Те саме правило діє й для `workOutMutations`.
 
-**`lockedData` у `workOutMutations`** — оптимістичне блокування (не входить до GraphQL-схеми). Перед мутацією `checkLockedData` виконує стандартний query сутності, яку змінює мутація (для `copy…` — X, куди копіюємо), з аргументами `lockedData.args` і порівнює результат з `lockedData.result`: якщо `result` — об'єкт або `null`, викликається `X(whereOne | whereCompoundOne)`; якщо масив — `Xs(where, sort, …)`, і результати порівнюються **за індексом**, тож для масиву в `lockedData.args` варто передавати `sort`, інакше порядок від MongoDB не гарантований і перевірка може хибно впасти. `whereOne` у `lockedData.args` — аргумент query `X`, а не `whereKeyToTarget` мутацій `copy…`.
+**`lockedData` у `workOutMutations`** — оптимістичне блокування (не входить до GraphQL-схеми). Перед мутацією `checkLockedData` виконує стандартний query сутності, яку змінює мутація (для `copy…` — X, куди копіюємо), з аргументами `lockedData.args` і порівнює результат з `lockedData.result`: якщо `result` — об'єкт або `null`, викликається `X(whereOne | whereCompoundOne)`; якщо масив — `Xs(where, sort, …)`, і результати порівнюються **за індексом**, тож для масиву в `lockedData.args` варто передавати `sort`, інакше порядок від MongoDB не гарантований і перевірка може хибно впасти. `whereOne` у `lockedData.args` — аргумент query `X`, а не `whereTarget` мутацій `copy…`.
 
 ## 5. Subscription (для tangible `X`)
 
@@ -178,7 +179,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` — «custom» тут означає нестандартні дії, описані вручну (на відміну від стандартних, що генеруються з `actionAttributes`); representation-дії всередині теж перетворюються на custom-дії (G3) | сигнатура: лише tangible; resolver: `createCustomResolver` теж лише для tangible (див. B14); `custom.Subscription` заборонено (лише стандартні та representation-subscriptions) |
 | G5 | `manualyUsedEntities` | додає тип, навіть якщо він не досяжний |
 
-Ланцюжок runtime-декораторів: `resolverDecorator` → `transformBefore` (args за суфіксом типу: `CreateInput/UpdateInput/PushIntoInput` → `transformData`; `Where*` → `transformWhere`; `WhereOne*` → `transformWhereOne`; `WhereSourceInput` → `transformWhereSource`) → `authDecorator` (`executeAuthorisation`: inventoryByRoles, filters, staticFilters, personalFilters → `involvedFilters`, `subscriptionEntityNames`) → resolver → `transformAfter` (глобальні id).
+Ланцюжок runtime-декораторів: `resolverDecorator` → `transformBefore` (args за суфіксом типу: `CreateInput/UpdateInput/PushIntoInput` → `transformData`; `Where*` → `transformWhere`; `WhereOne*` → `transformWhereOne`; `WhereKeyToSourceInput` → `transformWhereKeyToSource`) → `authDecorator` (`executeAuthorisation`: inventoryByRoles, filters, staticFilters, personalFilters → `involvedFilters`, `subscriptionEntityNames`) → resolver → `transformAfter` (глобальні id).
 
 ---
 
@@ -213,7 +214,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | **B18** **[виправлено `e2303727`]** | `copyManyXsWithChildren` має **обов'язковий** `whereOne: [XWhereOneToCopyInput!]!`, а під час виконання використовується той самий `getCommonManyData`, що й у `copyManyXs`. У режимі Б (масивний опозит) можна лише оновлювати існуючі X, не створювати нові копії. У режимі А (скалярний опозит) мутація не працює взагалі: будь-який `whereOne`, навіть `[]`, дає `Needless whereOne arg!`. Детально див. §12 | `types/actionAttributes/copyManyEntitiesWithChildrenMutationAttributes.ts`; `resolvers/mutations/createCopyManyEntitiesMutationResolver/resolverAttributes/getCommonData.ts` |
 | **B19** **[виправлено `e2303727`]** | `copyManyXs` / `copyManyXsWithChildren` поєднують записи **за індексом** (`entities[i]` ↔ `whereOnes[i]` ↔ `data[i]` ↔ `whereOne[i]`), хоча Y знаходяться одним `find({ OR: whereOnes })`, а X — `find({ _id: { $in: ids } })` / `find({ OR: whereOne })`. MongoDB не гарантує порядок результатів, тож `data[i]` може потрапити не в ту копію, а в режимі А Y може поєднатися з чужим X (дані скопіюються не туди). Детально див. §12 | `resolvers/mutations/createCopyManyEntitiesMutationResolver/resolverAttributes/getCommonData.ts` |
 | **B20** **[виправлено `0fb7a9fe`]** | Умова «є діти» в SDL і під час виконання різна. Виконання (`getNotArrayOppositeDuplexFields`) вважає дітьми лише duplex-поля з власним **`parent: true`** і скалярним опозитом. `actionAllowed` усіх `copy…WithChildren` / `delete…WithChildren` і enum `deleteXWithChildrenOptionsInput` перевіряють лише, що опозит скалярний і не `parent` (`!(array \| parent)`). Наслідок: для сутності з duplex-полем без `parent: true`, але зі скалярним опозитом, генеруються `…WithChildren`-мутації, які дітей не копіюють і не видаляють (працюють як звичайні), а `fieldsToDelete` пропонує поля, які ні на що не впливають | `types/actionAttributes/*WithChildren*MutationAttributes.ts`; `types/inputs/createDeleteEntityWithChildrenOptionsInputType.ts` vs `resolvers/mutations/processFieldToDelete.ts:23-26` |
-| **B21** **[виправлено `e2303727`]** | (знайдено під час виправлення Q6) Перетворювач аргументу `whereSource` (`transformWhereOnes`) для масивного duplex-поля `f` викликав `whereSource[f].map(...)`, хоча значення завжди один `YWhereOneInput`; копіювання через масивне duplex-поле падало з `TypeError` | `resolvers/utils/resolverDecorator/transformBefore/transformWhereSource.ts` |
+| **B21** **[виправлено `e2303727`]** | (знайдено під час виправлення Q6) Перетворювач аргументу `whereKeyToSource` (`transformWhereOnes`) для масивного duplex-поля `f` викликав `whereKeyToSource[f].map(...)`, хоча значення завжди один `YWhereOneInput`; копіювання через масивне duplex-поле падало з `TypeError` | `resolvers/utils/resolverDecorator/transformBefore/transformWhereKeyToSource.ts` |
 | **B22** **[виправлено `e92f738a`]** | `checkLockedData` (оптимістичне блокування `workOutMutations`) для масивного `lockedData.result` викликав query `Xs` **без `session`**, хоча для скалярного передавав; перевірка блокування читала дані поза транзакцією й могла пропустити конфлікт. Також прибрано невикористаний `projection2` | `resolvers/mutations/workOutMutations/checkLockedData.ts` |
 
 ## 10. Неузгодженості (можливо, так задумано: потрібне ваше рішення)
@@ -262,15 +263,15 @@ Menu        { name, description, clone ↔ MenuClone.original }
 MenuClone   { name, description, original ↔ Menu.clone }
 ```
 
-`copyMenuClone(whereSource: { original: { id: "<id Menu>" } })` бере `Menu` і переносить його `name` і `description` у `MenuClone`, пов'язаний з цим `Menu`.
+`copyMenuClone(whereKeyToSource: { original: { id: "<id Menu>" } })` бере `Menu` і переносить його `name` і `description` у `MenuClone`, пов'язаний з цим `Menu`.
 
 ### 12.2. Аргументи
 
 | Аргумент | Тип (`copyX`) | Що означає |
 |---|---|---|
-| `whereSource` (раніше `whereOnes`) | `XWhereSourceInput!`, рівно один ключ `{ f: YWhereOneInput }` | **Звідки** копіювати: вибирає duplex-поле `f` і конкретний запис Y |
+| `whereKeyToSource` (раніше `whereOnes`) | `XWhereKeyToSourceInput!`, рівно один ключ `{ f: YWhereOneInput }` | **Звідки** копіювати: вибирає duplex-поле `f` і конкретний запис Y |
 | `options` | `copyXOptionsInput` = `{ f: { fieldsToCopy \| fieldsForbiddenToCopy } }` | Обмежує набір спільних полів; ключ має збігатися з ключем `whereOnes` |
-| `whereKeyToTarget` (раніше `whereOne`) | `XWhereKeyToTargetInput` | **Куди** копіювати (який існуючий X оновити); потрібен лише в режимі Б |
+| `whereTarget` (раніше `whereOne`) | `XWhereTargetInput` | **Куди** копіювати (який існуючий X оновити); потрібен лише в режимі Б |
 | `data` | `XUpdateInput` | Додаткові значення для X, що накладаються поверх скопійованих |
 | `token` | `String` | Звичайний токен |
 
@@ -279,18 +280,18 @@ MenuClone   { name, description, original ↔ Menu.clone }
 - **Режим А: `g` скалярний (1:1).** Якщо `Y.g` уже вказує на X, цей X **оновлюється** скопійованими полями; якщо `Y.g` порожній, **створюється** новий X, пов'язаний з Y. `whereOne` заборонений (`Needless whereOne arg!`), бо X однозначно визначений.
 - **Режим Б: `g` масивний (1:N).** Без `whereOne` **створюється** новий X, пов'язаний з Y. З `whereOne` **оновлюється** вказаний X; він має бути вже пов'язаний з Y (`Try to copy to unconnected …`).
 
-Тому `whereKeyToTarget` необов'язковий, а `XWhereKeyToTargetInput` генерується лише тоді, коли в X є duplex-поле зі спільними полями та масивним опозитом (режим Б можливий).
+Тому `whereTarget` необов'язковий, а `XWhereTargetInput` генерується лише тоді, коли в X є duplex-поле зі спільними полями та масивним опозитом (режим Б можливий).
 
 ### 12.4. Варіанти мутації
 
 Поточний стан (після `e2303727`):
 
-| Мутація | `whereSource` | `whereKeyToTarget` | `data` | Додатково |
+| Мутація | `whereKeyToSource` | `whereTarget` | `data` | Додатково |
 |---|---|---|---|---|
-| `copyX` | `XWhereSourceInput!` | `XWhereKeyToTargetInput` (необов'язковий) | `XUpdateInput` | — |
-| `copyManyXs` | `[XWhereSourceInput!]!` | `[XWhereKeyToTargetInput!]` (необов'язковий) | `[XUpdateInput!]` | `whereKeyToTarget[i]` і `data[i]` відповідають `whereSource[i]` |
-| `copyXWithChildren` | `XWhereSourceInput!` | `XWhereKeyToTargetInput` (необов'язковий) | **немає** (так задумано) | копіює ще й дерево «дітей» (*) |
-| `copyManyXsWithChildren` | `[XWhereSourceInput!]!` | `[XWhereKeyToTargetInput!]` (необов'язковий; до `e2303727` був обов'язковим, B18) | **немає** (так задумано) | те саме для масиву |
+| `copyX` | `XWhereKeyToSourceInput!` | `XWhereTargetInput` (необов'язковий) | `XUpdateInput` | — |
+| `copyManyXs` | `[XWhereKeyToSourceInput!]!` | `[XWhereTargetInput!]` (необов'язковий) | `[XUpdateInput!]` | `whereTarget[i]` і `data[i]` відповідають `whereKeyToSource[i]` |
+| `copyXWithChildren` | `XWhereKeyToSourceInput!` | `XWhereTargetInput` (необов'язковий) | **немає** (так задумано) | копіює ще й дерево «дітей» (*) |
+| `copyManyXsWithChildren` | `[XWhereKeyToSourceInput!]!` | `[XWhereTargetInput!]` (необов'язковий; до `e2303727` був обов'язковим, B18) | **немає** (так задумано) | те саме для масиву |
 
 (*) «Діти» — записи, на які Y посилається через duplex-поля з **`parent: true`** і скалярним полем-опозитом (`getNotArrayOppositeDuplexFields`). Копіюються лише ті дочірні поля, що є спільними для X і Y і в обох сутностях мають `parent: true` зі скалярним опозитом (`composeCreateTree`). Для них рекурсивно створюються копії, пов'язані з новим або оновленим X; при оновленні старі діти X, яких немає в Y, видаляються (`composeCreateTree` + `mixTrees`). Поля без `parent: true` дітьми не вважаються: запис, на який вони посилаються, не копіюється (і не видаляється в `delete…WithChildren`).
 
@@ -313,12 +314,14 @@ MenuClone   { name, description, original ↔ Menu.clone }
 
 ### 12.8. Перейменування аргументів (реалізовано в `e2303727`)
 
+> Назви змінено двічі: у `e2303727` — на `whereSource` / `whereKeyToTarget`, у `dcf28990` — на остаточні `whereKeyToSource` (`XWhereKeyToSourceInput`) і `whereTarget` (`XWhereTargetInput`). Нижче в документі вживаються остаточні назви.
+
 Нинішні назви описують форму аргументу, а не роль: `whereOnes` (джерело, рівно один ключ) і `whereOne` (ціль) різняться однією літерою, хоча означають протилежне. Погоджено перейменувати:
 
 | Зараз | Нова назва аргументу | Зараз тип | Новий тип |
 |---|---|---|---|
-| `whereOnes` | `whereSource` | `XCopyWhereOnesInput` | `XWhereSourceInput` |
-| `whereOne` | `whereKeyToTarget` | `XWhereOneToCopyInput` | `XWhereKeyToTargetInput` |
+| `whereOnes` | `whereKeyToSource` | `XCopyWhereOnesInput` | `XWhereKeyToSourceInput` |
+| `whereOne` | `whereTarget` | `XWhereOneToCopyInput` | `XWhereTargetInput` |
 
 У `copyMany…` назви лишаються в однині з масивним типом, як у `updateManyXs(whereOne: [..])`.
 
@@ -331,5 +334,5 @@ MenuClone   { name, description, original ↔ Menu.clone }
 - **В. Як А або Б, але з окремими `data` для створення (`XCreateInput`) та оновлення.** Найповніше рішення, змінює сигнатури всіх `copy…`.
 - **Г. Інше.** Наприклад, якщо обов'язковий `whereOne` у `copyManyXsWithChildren` свідомий — пояснення для документу.
 
-**Рішення:** варіант Б. `whereKeyToTarget` у `copyManyXsWithChildren` необов'язковий (B18), поєднання записів у `copyMany…` зберігає порядок `whereSource` / `whereKeyToTarget` (B19: кожен запис вибирається окремо, результати `$in` впорядковуються за `ids`); `data` у `…WithChildren` не додається. Разом з цим перейменовано аргументи (§12.8) і виправлено B21.
+**Рішення:** варіант Б. `whereTarget` у `copyManyXsWithChildren` необов'язковий (B18), поєднання записів у `copyMany…` зберігає порядок `whereKeyToSource` / `whereTarget` (B19: кожен запис вибирається окремо, результати `$in` впорядковуються за `ids`); `data` у `…WithChildren` не додається. Разом з цим перейменовано аргументи (§12.8) і виправлено B21.
 
