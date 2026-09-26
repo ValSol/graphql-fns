@@ -207,12 +207,12 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 
 | ID | Спостереження |
 |---|---|
-| I1 | Subscription-події публікують лише `createEntity`, `updateEntity`, `pushIntoEntity`, `deleteEntity`. Масові операції (`createMany…`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) подій не створюють, тож підписники їх пропускають |
+| I1 | Subscription-події публікують лише `createEntity`, `updateEntity`, `pushIntoEntity`, `deleteEntity`. Масові операції (`createMany…`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) подій не створюють, тож підписники їх пропускають — **так задумано**: масові мутації subscription-події не публікують (див. ?3) |
 | I2 | `update/deleteFilteredEntitiesReturnScalar` не мають аргументу `near`, хоча їхні не-скалярні версії мають |
 | I3 | `copyManyEntities.whereOne: [X!]` (nullable), а `copyManyEntitiesWithChildren.whereOne: [X!]!`; `copyEntityWithChildren` не має `data`, а `copyEntity` має |
 | I4 | У `XWhereOneInput` унікальне text-поле має тип `ID`, тоді як у `WhereByUnique` і `WhereCompoundOne` воно `String` |
 | I5 | `XCreateInput` **виключає frozen filter-поля**, хоча інші frozen-поля в CreateInput є (freeze має забороняти лише зміну) — `createEntityCreateInputType.ts:101` |
-| I6 | `PushIntoXInput` бере **всі** filter-поля, включно зі скалярними (решта полів відфільтрована за `array`), а `XPushPositionsInput` filter-поля не містить |
+| I6 | `PushIntoXInput` бере **всі** filter-поля, включно зі скалярними (решта полів відфільтрована за `array`), а `XPushPositionsInput` filter-поля не містить. Уточнення: filter-поле зберігається як рядок (`type: String`), а `pushInto` формує для нього `$push: { поле: { $each: "<json>" } }`, що MongoDB відхиляє, тож `pushInto` з filter-полем завжди падає |
 | I7 | `freezedFields[X]` робить frozen **рівно** перелічені поля (решта стає `freeze: false`, навіть якщо в базовому конфігу вони frozen); `unfreezedFields` працює навпаки. Якщо задати обидва, переможе останній |
 | I8 | `childEntityGetOrCreate` має `actionType: 'Query'`, але може створювати запис: запис даних у Query-полі |
 | I9 | `XDistinctValuesOptionsInput` пропонує всі text/enum-поля (також масивні й неіндексовані), а enum має назву `XTextNamesEnum` |
@@ -223,7 +223,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 
 - ?1 B1: ~~якою має бути семантика `include` + `exclude` разом?~~ Вирішено в `2a2e24d4`: `include` обмежує на всіх рівнях, `exclude` виключає лише повністю покритий ланцюжок, `exclude: true` виключає все.
 - ?2 B3: ~~чи планувалося, що embedded-типи (і tangible без relational/duplex/geo) отримуватимуть field-resolvers? Якщо так, умову в `composeGqlResolvers:254` треба прибрати або розширити, а embedded-типи обходити теж.~~ Вирішено в `124e7e33`: field-resolvers створюються для всіх сутностей, які є в SDL.
-- ?3 I1: події для масових мутацій не публікуються навмисно (продуктивність) чи через недогляд?
+- ?3 ~~I1: події для масових мутацій не публікуються навмисно чи через недогляд?~~ Відповідь: навмисно, масові мутації не можуть публікувати subscription-події. Поточна поведінка остаточна.
 - ?4 I5/I6: як правильно поводитися з `freeze` для filter-полів у Create і з скалярними filter-полями в Push?
 - ?5 I7: `freezedFields`/`unfreezedFields` мають «перевизначати повністю» чи «доповнювати» базовий `freeze`?
 - ?6 ~~Чи підтримується кілька різних `generalConfig` в одному процесі?~~ Вирішено в `39794e6e`: кеші прив'язані до об'єктів `generalConfig` / `serversideConfig` / `entityConfig` через `WeakMap`, тож кілька конфігів в одному процесі не змішуються.
