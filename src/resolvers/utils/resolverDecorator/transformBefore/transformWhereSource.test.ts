@@ -3,9 +3,9 @@
 import type { InvolvedFilter, TangibleEntityConfig } from '../../../../tsTypes';
 
 import toGlobalId from '../../toGlobalId';
-import transformWhereOnes from './transformWhereOnes';
+import transformWhereSource from './transformWhereSource';
 
-describe('transformWhereOnes', () => {
+describe('transformWhereSource', () => {
   const personConfig = {} as TangibleEntityConfig;
   const personCloneConfig = {} as TangibleEntityConfig;
 
@@ -92,66 +92,66 @@ describe('transformWhereOnes', () => {
 
   test('check single id transform', async () => {
     const id = '1234567890a';
-    const whereOnes = { clone: { id: toGlobalId(id, 'PersonClone') } };
+    const whereSource = { clone: { id: toGlobalId(id, 'PersonClone') } };
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
     const expectedResult = { clone: { id } };
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('check array id transform', async () => {
+  test('check id transform for array duplex field (value is single where one input)', async () => {
     const id = '1234567890a';
-    const whereOnes = {
-      clones: [{ id: toGlobalId(id, 'PersonClone') }],
+    const whereSource = {
+      clones: { id: toGlobalId(id, 'PersonClone') },
     };
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
-    const expectedResult = { clones: [{ id }] };
+    const expectedResult = { clones: { id } };
 
     expect(result).toEqual(expectedResult);
   });
 
   test('check array single id transform', async () => {
     const id = '1234567890a';
-    const whereOnes = [{ clone: { id: toGlobalId(id, 'PersonClone') } }];
+    const whereSource = [{ clone: { id: toGlobalId(id, 'PersonClone') } }];
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
     const expectedResult = [{ clone: { id } }];
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('check array of array id transform', async () => {
+  test('check array id transform for array duplex field', async () => {
     const id = '1234567890a';
-    const whereOnes = [{ clones: [{ id: toGlobalId(id, 'PersonClone') }] }];
+    const whereSource = [{ clones: { id: toGlobalId(id, 'PersonClone') } }];
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
-    const expectedResult = [{ clones: [{ id }] }];
+    const expectedResult = [{ clones: { id } }];
 
     expect(result).toEqual(expectedResult);
   });
 
   test('check single no id transform', async () => {
-    const whereOnes = { clone: { slug: 'abc' } };
+    const whereSource = { clone: { slug: 'abc' } };
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
-    const expectedResult = whereOnes;
+    const expectedResult = whereSource;
 
     expect(result).toEqual(expectedResult);
   });
 
-  test('check array no id transform', async () => {
-    const whereOnes = { clones: [{ slug: 'abc' }] };
+  test('check no id transform for array duplex field', async () => {
+    const whereSource = { clones: { slug: 'abc' } };
 
-    const result = await transformWhereOnes(whereOnes, personConfig);
+    const result = await transformWhereSource(whereSource, personConfig);
 
-    const expectedResult = whereOnes;
+    const expectedResult = whereSource;
 
     expect(result).toEqual(expectedResult);
   });

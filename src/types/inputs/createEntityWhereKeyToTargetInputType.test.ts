@@ -2,9 +2,9 @@
 
 import type { TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityWhereOneToCopyInputType from './createEntityWhereOneToCopyInputType';
+import createEntityWhereKeyToTargetInputType from './createEntityWhereKeyToTargetInputType';
 
-describe('createEntityWhereOneToCopyInputType', () => {
+describe('createEntityWhereKeyToTargetInputType', () => {
   const personConfig = {} as TangibleEntityConfig;
   const personCloneConfig = {} as TangibleEntityConfig;
   const placeConfig: TangibleEntityConfig = {
@@ -114,21 +114,21 @@ describe('createEntityWhereOneToCopyInputType', () => {
 
   test('should create Person input type', () => {
     const expectedResult = [
-      'PersonWhereOneToCopyInput',
-      `input PersonWhereOneToCopyInput {
+      'PersonWhereKeyToTargetInput',
+      `input PersonWhereKeyToTargetInput {
   id: ID!
 }`,
       {},
     ];
 
-    const result = createEntityWhereOneToCopyInputType(personConfig);
+    const result = createEntityWhereKeyToTargetInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create Person input type', () => {
-    const expectedResult = ['PersonCloneWhereOneToCopyInput', '', {}];
+    const expectedResult = ['PersonCloneWhereKeyToTargetInput', '', {}];
 
-    const result = createEntityWhereOneToCopyInputType(personCloneConfig);
+    const result = createEntityWhereKeyToTargetInputType(personCloneConfig);
     expect(result).toEqual(expectedResult);
   });
 });

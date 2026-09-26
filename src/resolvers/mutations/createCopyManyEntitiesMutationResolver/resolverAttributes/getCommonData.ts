@@ -30,49 +30,49 @@ const getCommonManyData = async (
   const { name } = entityConfig;
 
   const {
-    whereOnes,
-    whereOne,
+    whereSource,
+    whereKeyToTarget,
     options,
     data: preAdditionalData,
   } = args as {
-    whereOnes: GraphqlObject[];
-    whereOne?: GraphqlObject[];
+    whereSource: GraphqlObject[];
+    whereKeyToTarget?: GraphqlObject[];
     options?: Record<string, GraphqlObject>;
     data?: Record<string, any>;
   };
 
-  whereOnes.forEach((item) => {
-    const whereOnesKeys = Object.keys(item);
-    if (whereOnesKeys.length !== 1) {
-      throw new TypeError('Expected exactly one key in where arg!');
+  whereSource.forEach((item) => {
+    const whereSourceKeys = Object.keys(item);
+    if (whereSourceKeys.length !== 1) {
+      throw new TypeError('Expected exactly one key in whereSource item!');
     }
   });
 
-  if (whereOnes.length === 0) return [];
+  if (whereSource.length === 0) return [];
 
-  if (whereOne && whereOne.length !== whereOnes.length) {
+  if (whereKeyToTarget && whereKeyToTarget.length !== whereSource.length) {
     throw new TypeError(
-      `wehreOne length: ${whereOne.length} not equal whereOnes length: ${whereOnes.length}!`,
+      `whereKeyToTarget length: ${whereKeyToTarget.length} not equal whereSource length: ${whereSource.length}!`,
     );
   }
 
-  if (preAdditionalData && preAdditionalData.length !== whereOnes.length) {
+  if (preAdditionalData && preAdditionalData.length !== whereSource.length) {
     throw new TypeError(
-      `data length: ${preAdditionalData.length} not equal whereOnes length: ${whereOnes.length}!`,
+      `data length: ${preAdditionalData.length} not equal whereSource length: ${whereSource.length}!`,
     );
   }
 
-  const additionalData = preAdditionalData || Array(whereOnes.length).fill({});
+  const additionalData = preAdditionalData || Array(whereSource.length).fill({});
 
   const { mongooseConn } = context;
 
-  const [fieldName] = Object.keys(whereOnes[0]);
+  const [fieldName] = Object.keys(whereSource[0]);
 
-  const incorrectWhreOnesItem = whereOnes.find((item) => !item[fieldName]);
-  if (incorrectWhreOnesItem) {
+  const incorrectWhereSourceItem = whereSource.find((item) => !item[fieldName]);
+  if (incorrectWhereSourceItem) {
     throw new TypeError(
-      `Incorrect key in whereOne item: "${JSON.stringify(
-        incorrectWhreOnesItem,
+      `Incorrect key in whereSource item: "${JSON.stringify(
+        incorrectWhereSourceItem,
       )}" instead of "${fieldName}"!`,
     );
   }
@@ -101,7 +101,7 @@ const getCommonManyData = async (
 
     if (optionsKeys[0] !== fieldName) {
       throw new TypeError(
-        `Expected "options key" to be equal to "whereOnes key": "${fieldName}", but it is "${optionsKeys[0]}"!`,
+        `Expected "options key" to be equal to "whereSource key": "${fieldName}", but it is "${optionsKeys[0]}"!`,
       );
     }
 
@@ -139,23 +139,30 @@ const getCommonManyData = async (
   const CopiedEntity = await createMongooseModel(mongooseConn, config, enums);
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-  const arg = { OR: whereOnes.map((item) => item[fieldName]) } as InvolvedFilter;
+  // every entity is selected separately to keep the order of "whereSource" items...
+  // ... (entities are matched with "data" & "whereKeyToTarget" items by index)
+  const entities: Array<any> = [];
 
-  const { where } = composeWhereInput(arg, config);
-  const entities = await CopiedEntity.find(where, matchingFieldsProjection, {
-    lean: true,
-    session,
-  });
+  for (let i = 0; i < whereSource.length; i += 1) {
+    const { where } = composeWhereInput(whereSource[i][fieldName] as InvolvedFilter, config);
 
-  if (entities.length !== whereOnes.length) return null;
+    const entity = await CopiedEntity.findOne(where, matchingFieldsProjection, {
+      lean: true,
+      session,
+    });
+
+    if (!entity) return null;
+
+    entities.push(entity);
+  }
 
   let ids = null;
 
-  let entities2 = null;
+  let entities2: null | Array<any> = null;
 
   if (!oppositeArray) {
-    if (whereOne) {
-      throw new TypeError('Needless whereOne arg!');
+    if (whereKeyToTarget) {
+      throw new TypeError('Needless whereKeyToTarget arg!');
     }
 
     const entitiesWithOppositeName = entities.filter((entity) => entity[oppositeName]);
@@ -167,14 +174,39 @@ const getCommonManyData = async (
     if (entitiesWithOppositeName.length) {
       ids = entities.map((entity) => entity[oppositeName].toString());
 
-      entities2 = await Entity.find({ _id: { $in: ids } }, matchingFieldsProjection, {
+      const foundEntities2 = await Entity.find({ _id: { $in: ids } }, matchingFieldsProjection, {
         lean: true,
         session,
       });
+
+      // restore the order of "ids" (mongodb doesn't keep the order of "$in" items)
+      const entities2ById = foundEntities2.reduce((prev, entity2) => {
+        prev[entity2._id.toString()] = entity2;
+        return prev;
+      }, {});
+
+      entities2 = ids.map((id) => entities2ById[id]);
     }
-  } else if (whereOne) {
-    const { where: where2 } = mergeWhereAndFilter(inputFilter, { OR: whereOne }, entityConfig);
-    entities2 = await Entity.find(where2, matchingFieldsProjection, { lean: true, session });
+  } else if (whereKeyToTarget) {
+    // every entity is selected separately to keep the order of "whereKeyToTarget" items
+    entities2 = [];
+
+    for (let i = 0; i < whereKeyToTarget.length; i += 1) {
+      const { where: where2 } = mergeWhereAndFilter(inputFilter, whereKeyToTarget[i], entityConfig);
+
+      const entity2 = await Entity.findOne(where2, matchingFieldsProjection, {
+        lean: true,
+        session,
+      });
+
+      if (!entity2) {
+        throw new TypeError(
+          `Not found "${name}" entity to copy to: ${JSON.stringify(whereKeyToTarget[i])}!`,
+        );
+      }
+
+      entities2.push(entity2);
+    }
 
     ids = entities2.map((entity2) => entity2._id.toString());
 

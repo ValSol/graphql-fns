@@ -1308,7 +1308,7 @@ describe('workOutMutations', () => {
       actionGeneralName: 'copyEntity',
       entityConfig: personCloneConfig,
       args: {
-        whereOnes: { original: { id: createdPerson.id } },
+        whereSource: { original: { id: createdPerson.id } },
       },
       returnResult: true,
     };
@@ -1415,7 +1415,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyEntityWithChildren',
         entityConfig: menuCloneConfig,
         args: {
-          whereOnes: { original: { id: createdMenu.id } },
+          whereSource: { original: { id: createdMenu.id } },
         },
         returnResult: true,
       },
@@ -1482,7 +1482,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyManyEntities',
         entityConfig: personCloneConfig,
         args: {
-          whereOnes: [{ original: { id: createdPerson.id } }],
+          whereSource: [{ original: { id: createdPerson.id } }],
         },
         returnResult: true,
       },
@@ -1567,7 +1567,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyManyEntitiesWithChildren',
         entityConfig: menuCloneConfig,
         args: {
-          whereOnes: [{ original: { id: createdMenu.id } }],
+          whereSource: [{ original: { id: createdMenu.id } }],
         },
         returnResult: true,
       },
@@ -1679,7 +1679,7 @@ describe('workOutMutations', () => {
     // const copyedRestaurant = await copyRestaurant(
     //   null,
     //   {
-    //     whereOnes: { clone: { id: clone } },
+    //     whereSource: { clone: { id: clone } },
     //     options: { clone: { fieldsForbiddenToCopy: ['archive', 'backup'] } },
     //   },
     //   { mongooseConn, pubsub },
@@ -1696,7 +1696,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyEntity',
         entityConfig: restaurantConfig,
         args: {
-          whereOnes: { clone: { id: clone } },
+          whereSource: { clone: { id: clone } },
           options: { clone: { fieldsForbiddenToCopy: ['archive', 'backup'] } },
         },
         returnResult: true,
@@ -1709,7 +1709,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyEntity',
         entityConfig: restaurantBackupConfig,
         args: {
-          whereOnes: { original: { id } },
+          whereSource: { original: { id } },
           options: { original: { fieldsForbiddenToCopy: ['clone'] } },
         },
         returnResult: true,
@@ -1722,7 +1722,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyEntity',
         entityConfig: restaurantArchiveConfig,
         args: {
-          whereOnes: { clone: { id: clone } },
+          whereSource: { clone: { id: clone } },
           options: { clone: { fieldsForbiddenToCopy: ['original'] } },
           data: {
             original: { connect: id },
@@ -1806,7 +1806,7 @@ describe('workOutMutations', () => {
           actionGeneralName: 'copyEntity',
           entityConfig: restaurantConfig,
           args: {
-            whereOnes: { archive: { id: archive } },
+            whereSource: { archive: { id: archive } },
             options: { archive: { fieldsForbiddenToCopy: ['clone'] } },
           },
           returnResult: true,
@@ -1821,7 +1821,7 @@ describe('workOutMutations', () => {
           actionGeneralName: 'copyEntity',
           entityConfig: restaurantCloneConfig,
           args: {
-            whereOnes: { archive: { id: archive } },
+            whereSource: { archive: { id: archive } },
             options: { archive: { fieldsForbiddenToCopy: ['original'] } },
           },
           returnResult: false,
@@ -1836,7 +1836,7 @@ describe('workOutMutations', () => {
           actionGeneralName: 'copyEntity',
           entityConfig: restaurantBackupConfig,
           args: {
-            whereOnes: { original: { id } },
+            whereSource: { original: { id } },
             options: { original: { fieldsForbiddenToCopy: ['clone'] } },
           },
           returnResult: false,
@@ -1912,7 +1912,7 @@ describe('workOutMutations', () => {
           {
             actionGeneralName: 'copyEntity',
             entityConfig: restaurantBackupConfig,
-            args: { whereOnes: { original: { id } } },
+            args: { whereSource: { original: { id } } },
           },
         ] as any,
         commonResolverCreatorArg as any,

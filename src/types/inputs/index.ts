@@ -1,6 +1,6 @@
 import createCopyEntityOptionsInputType from './createCopyEntityOptionsInputType';
 import createDeleteEntityWithChildrenOptionsInputType from './createDeleteEntityWithChildrenOptionsInputType';
-import createEntityCopyWhereOnesInputType from './createEntityCopyWhereOnesInputType';
+import createEntityWhereSourceInputType from './createEntityWhereSourceInputType';
 import createEntityCreateInputType from './createEntityCreateInputType';
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
 import createEntityNearInputType from './createEntityNearInputType';
@@ -12,7 +12,7 @@ import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOn
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
-import createEntityWhereOneToCopyInputType from './createEntityWhereOneToCopyInputType';
+import createEntityWhereKeyToTargetInputType from './createEntityWhereKeyToTargetInputType';
 import createEntityWhichUpdatedInputType from './createEntityWhichUpdatedInputType';
 import createPaginationInputType from './createPaginationInputType';
 import createPushIntoEntityInputType from './createPushIntoEntityInputType';
@@ -20,7 +20,7 @@ import createPushIntoEntityInputType from './createPushIntoEntityInputType';
 const inputs = [
   createCopyEntityOptionsInputType,
   createDeleteEntityWithChildrenOptionsInputType,
-  createEntityCopyWhereOnesInputType,
+  createEntityWhereSourceInputType,
   createEntityCreateInputType,
   createEntityDistinctValuesOptionsInputType,
   createEntityNearInputType,
@@ -32,7 +32,7 @@ const inputs = [
   createEntityWhereInputType,
   createEntityWhereOneInputType,
   createEntityWherePayloadInputType,
-  createEntityWhereOneToCopyInputType,
+  createEntityWhereKeyToTargetInputType,
   createEntityWhichUpdatedInputType,
   createPaginationInputType,
   createPushIntoEntityInputType,

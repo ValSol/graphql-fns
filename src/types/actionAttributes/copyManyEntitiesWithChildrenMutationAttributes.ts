@@ -5,8 +5,8 @@ import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/t
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import getChildDuplexFields from '@/utils/getChildDuplexFields';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
-import createEntityCopyWhereOnesInputType from '../inputs/createEntityCopyWhereOnesInputType';
-import createEntityWhereOneToCopyInputType from '../inputs/createEntityWhereOneToCopyInputType';
+import createEntityWhereSourceInputType from '../inputs/createEntityWhereSourceInputType';
+import createEntityWhereKeyToTargetInputType from '../inputs/createEntityWhereKeyToTargetInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -18,18 +18,18 @@ const actionName = (baseName: string, representationKey = ''): string =>
   `copyMany${pluralize(baseName)}WithChildren${representationKey}`;
 
 const inputCreators = [
-  createEntityCopyWhereOnesInputType,
+  createEntityWhereSourceInputType,
   createCopyEntityOptionsInputType,
-  createEntityWhereOneToCopyInputType,
+  createEntityWhereKeyToTargetInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOnes', 'options', 'whereOne', 'token'];
+const argNames = ['whereSource', 'options', 'whereKeyToTarget', 'token'];
 
 const argTypes = [
-  ({ name }): string => `[${name}CopyWhereOnesInput!]!`,
+  ({ name }): string => `[${name}WhereSourceInput!]!`,
   ({ name }): string => `copy${name}OptionsInput`,
-  ({ name }): string => `[${name}WhereOneToCopyInput!]!`,
+  ({ name }): string => `[${name}WhereKeyToTargetInput!]`,
   (): string => 'String',
 ];
 
@@ -51,7 +51,7 @@ const actionReturnConfig = (
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
   entityConfig.type === 'tangible' &&
-  Boolean(createEntityCopyWhereOnesInputType(entityConfig)[1]) &&
+  Boolean(createEntityWhereSourceInputType(entityConfig)[1]) &&
   Boolean(getChildDuplexFields(entityConfig).length);
 
 const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>

@@ -22,18 +22,18 @@ const prepareBulkData: PrepareBulkData = async (
     generalConfig: { enums },
   } = resolverCreatorArg;
   const {
-    args: { whereOnes },
+    args: { whereSource },
     context: { mongooseConn },
   } = resolverArg;
   const { core } = prevPreparedData;
 
-  const getPreviousEntities = Array.isArray(whereOnes) ? getCommonManyData : getCommonData;
+  const getPreviousEntities = Array.isArray(whereSource) ? getCommonManyData : getCommonData;
 
   const previousEntities = await getPreviousEntities(resolverCreatorArg, resolverArg, session);
 
-  const whereOnesKeys = Object.keys(Array.isArray(whereOnes) ? whereOnes[0] : whereOnes);
+  const whereSourceKeys = Object.keys(Array.isArray(whereSource) ? whereSource[0] : whereSource);
 
-  const [fieldName] = whereOnesKeys;
+  const [fieldName] = whereSourceKeys;
 
   const fieldToConnect = ((entityConfig as TangibleEntityConfig).duplexFields || []).find(
     ({ name }) => name === fieldName,

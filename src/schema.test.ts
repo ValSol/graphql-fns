@@ -849,4 +849,51 @@ describe('graphql schema', () => {
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
+
+  test('should compose renamed & optional args of "copy…" mutations (Q6, B18)', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      {
+        name: 'MenuTemplate',
+        textFields: [{ name: 'title' }],
+        duplexFields: [
+          { name: 'menus', array: true, oppositeName: 'original', configName: 'Menu' },
+        ],
+      },
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title' }],
+        duplexFields: [
+          { name: 'original', oppositeName: 'menus', configName: 'MenuTemplate' },
+          {
+            name: 'sections',
+            array: true,
+            parent: true,
+            oppositeName: 'menu',
+            configName: 'Section',
+          },
+        ],
+      },
+      {
+        name: 'Section',
+        textFields: [{ name: 'title' }],
+        duplexFields: [{ name: 'menu', oppositeName: 'sections', configName: 'Menu' }],
+      },
+    ]);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    expect(typeDefs).toMatch(
+      /\n  copyMenu\(whereSource: MenuWhereSourceInput!, options: copyMenuOptionsInput, whereKeyToTarget: MenuWhereKeyToTargetInput, data: MenuUpdateInput, token: String\): Menu!\n/,
+    );
+    expect(typeDefs).toMatch(
+      /\n  copyManyMenusWithChildren\(whereSource: \[MenuWhereSourceInput!\]!, options: copyMenuOptionsInput, whereKeyToTarget: \[MenuWhereKeyToTargetInput!\], token: String\): \[Menu!\]!\n/,
+    );
+    expect(typeDefs).toMatch(
+      /\ninput MenuWhereSourceInput \{\n  original: MenuTemplateWhereOneInput\n/,
+    );
+    expect(typeDefs).toMatch(/\ninput MenuWhereKeyToTargetInput \{\n  id: ID!\n\}/);
+    expect(typeDefs).not.toMatch(/whereOnes|CopyWhereOnesInput|WhereOneToCopyInput/);
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
 });

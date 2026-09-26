@@ -3,10 +3,10 @@ import type { InputCreator } from '../../tsTypes';
 import getMatchingFields from '../../utils/getMatchingFields';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
-const createEntityCopyWhereOnesInputType: InputCreator = (entityConfig) => {
+const createEntityWhereSourceInputType: InputCreator = (entityConfig) => {
   const { name, type: entityType } = entityConfig;
 
-  const inputName = `${name}CopyWhereOnesInput`;
+  const inputName = `${name}WhereSourceInput`;
 
   if (entityType !== 'tangible') {
     return [inputName, '', {}];
@@ -44,4 +44,4 @@ ${fieldLines.join('\n')}
   return [inputName, inputDefinition, childChain];
 };
 
-export default createEntityCopyWhereOnesInputType;
+export default createEntityWhereSourceInputType;

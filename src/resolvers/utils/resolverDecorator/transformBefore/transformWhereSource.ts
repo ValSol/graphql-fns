@@ -10,28 +10,21 @@ const processItem = ({ id: globalId, ...rest }) => {
   return { ...rest, ...{ id } };
 };
 
+// value of the duplex field key is always one "YWhereOneInput" (also for array duplex field)
 const processWhere = (
-  whereOnes: InvolvedFilter | InvolvedFilter[],
+  whereSource: InvolvedFilter | InvolvedFilter[],
   duplexFieldsObject: Record<string, DuplexField>,
 ) =>
-  Object.keys(whereOnes).reduce<Record<string, InvolvedFilter>>((prev, key) => {
-    const duplexField = duplexFieldsObject[key];
+  Object.keys(whereSource).reduce<Record<string, InvolvedFilter>>((prev, key) => {
+    if (!duplexFieldsObject[key]) return prev;
 
-    if (!duplexField) return prev;
-
-    const { array } = duplexField;
-
-    if (array) {
-      prev[key] = whereOnes[key].map(processItem);
-    } else {
-      prev[key] = processItem(whereOnes[key]);
-    }
+    prev[key] = processItem(whereSource[key]);
 
     return prev;
   }, {});
 
-const transformWhereOnes = (
-  whereOnes: InvolvedFilter | InvolvedFilter[],
+const transformWhereSource = (
+  whereSource: InvolvedFilter | InvolvedFilter[],
   entityConfig: EntityConfig,
 ): InvolvedFilter | InvolvedFilter[] => {
   const { type: entityType } = entityConfig;
@@ -48,11 +41,11 @@ const transformWhereOnes = (
     }, duplexFieldsObject);
   }
 
-  if (Array.isArray(whereOnes)) {
-    return whereOnes.map((whereOnesItem) => processWhere(whereOnesItem, duplexFieldsObject));
+  if (Array.isArray(whereSource)) {
+    return whereSource.map((whereSourceItem) => processWhere(whereSourceItem, duplexFieldsObject));
   }
 
-  return processWhere(whereOnes, duplexFieldsObject);
+  return processWhere(whereSource, duplexFieldsObject);
 };
 
-export default transformWhereOnes;
+export default transformWhereSource;

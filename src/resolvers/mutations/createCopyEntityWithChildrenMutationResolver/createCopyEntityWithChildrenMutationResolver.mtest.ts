@@ -400,7 +400,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -479,7 +479,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone2 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -514,7 +514,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone3 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -575,7 +575,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone4 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -635,7 +635,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone5 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -685,7 +685,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone6 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -750,7 +750,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     const restaurantClone7 = await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
@@ -789,7 +789,7 @@ describe('createCopyEntityWithChildrenMutationResolver', () => {
     await copyRestaurantCloneWithChildren(
       null,
       {
-        whereOnes: { original: { id: createdRestaurant.id } },
+        whereSource: { original: { id: createdRestaurant.id } },
       },
       { mongooseConn, pubsub },
       null,
