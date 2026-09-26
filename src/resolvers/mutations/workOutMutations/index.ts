@@ -171,7 +171,9 @@ const workOutMutations = async (
         await session.endSession();
       }
 
-      if (i === tryCount - 1 || !isTransientTransactionError(err)) {
+      // retry only transaction errors that mongodb marks as transient, all other errors are
+      // thrown as is; without transaction nothing is retried to not repeat partially done writes
+      if (!session || i === tryCount - 1 || !isTransientTransactionError(err)) {
         throw err;
       }
 

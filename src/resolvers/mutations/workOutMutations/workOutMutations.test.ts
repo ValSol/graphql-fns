@@ -90,8 +90,24 @@ const standardMutationsArgs = [
   },
 ];
 
+// retries are possible only within transactions
 const commonResolverCreatorArg = {
   generalConfig: { allEntityConfigs: { Example: exampleConfig } },
+  serversideConfig: { transactions: true },
+  context: {
+    mongooseConn: {
+      startSession: async () => ({
+        startTransaction: () => {},
+        commitTransaction: async () => {},
+        abortTransaction: async () => {},
+        endSession: async () => {},
+      }),
+    },
+  },
+} as any;
+
+const commonResolverCreatorArgWithoutTransactions = {
+  ...commonResolverCreatorArg,
   serversideConfig: { transactions: false },
   context: { mongooseConn: {} },
 } as any;
@@ -229,6 +245,19 @@ describe('workOutMutations retries', () => {
 
     expect(executeBulkItemsMock).toHaveBeenCalledTimes(7);
     expect(sleepMock).toHaveBeenCalledTimes(6);
+  });
+
+  test('should not retry transient error without transactions', async () => {
+    const error = transientError();
+
+    executeBulkItemsMock.mockRejectedValue(error);
+
+    await expect(
+      workOutMutations(standardMutationsArgs as any, commonResolverCreatorArgWithoutTransactions),
+    ).rejects.toBe(error);
+
+    expect(executeBulkItemsMock).toHaveBeenCalledTimes(1);
+    expect(sleepMock).not.toHaveBeenCalled();
   });
 });
 
