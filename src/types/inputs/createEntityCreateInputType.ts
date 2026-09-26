@@ -97,27 +97,23 @@ const createEntityCreateInputType: InputCreator = (entityConfig) => {
     }
 
     for (let i = 0; i < entityTypeArray.length; i += 1) {
-      filterFields
-        .filter(({ freeze }) => !freeze)
-        .reduce(
-          (
-            prev,
-            { name: name2, array, required, config: config2, config: { name: entityName } },
-          ) => {
-            if (array) {
-              prev.push(`  ${name2}: ${entityName}WhereInput${required ? '!' : ''}`);
+      // frozen fields (also filter ones) can be set on creation, "freeze" forbids only updating
+      filterFields.reduce(
+        (prev, { name: name2, array, required, config: config2, config: { name: entityName } }) => {
+          if (array) {
+            prev.push(`  ${name2}: ${entityName}WhereInput${required ? '!' : ''}`);
 
-              childChain[`${entityName}WhereInput`] = [createEntityWhereInputType, config2];
-            } else {
-              prev.push(`  ${name2}: ${entityName}WhereOneInput${required ? '!' : ''}`);
+            childChain[`${entityName}WhereInput`] = [createEntityWhereInputType, config2];
+          } else {
+            prev.push(`  ${name2}: ${entityName}WhereOneInput${required ? '!' : ''}`);
 
-              childChain[`${entityName}WhereOneInput`] = [createEntityWhereOneInputType, config2];
-            }
+            childChain[`${entityName}WhereOneInput`] = [createEntityWhereOneInputType, config2];
+          }
 
-            return prev;
-          },
-          entityTypeArray[i],
-        );
+          return prev;
+        },
+        entityTypeArray[i],
+      );
     }
   }
 

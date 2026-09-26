@@ -1006,4 +1006,72 @@ describe('composeAllEntityConfigs', () => {
     const result = composeAllEntityConfigs(simplifiedAllEntityConfigs, enumeration);
     expect(result).toEqual(expectedResult);
   });
+
+  describe('checks of relations (Q11)', () => {
+    test('should throw for relational field that refers to not tangible config', () => {
+      expect(() =>
+        composeAllEntityConfigs([
+          { name: 'Item', type: 'embedded', textFields: [{ name: 'title' }] },
+          {
+            name: 'Holder',
+            relationalFields: [{ name: 'item', oppositeName: 'holders', configName: 'Item' }],
+          },
+        ] as any),
+      ).toThrow('has to refer to "tangible" one');
+    });
+
+    test('should throw for duplex field that refers to not tangible config', () => {
+      expect(() =>
+        composeAllEntityConfigs([
+          { name: 'Item', type: 'virtual', textFields: [{ name: 'title' }] },
+          {
+            name: 'Holder',
+            duplexFields: [{ name: 'item', oppositeName: 'holder', configName: 'Item' }],
+          },
+        ] as any),
+      ).toThrow('has to refer to "tangible" one');
+    });
+
+    test('should throw for duplex field whose opposite field refers to other field', () => {
+      expect(() =>
+        composeAllEntityConfigs([
+          {
+            name: 'Menu',
+            duplexFields: [
+              { name: 'sections', array: true, oppositeName: 'menu', configName: 'Section' },
+              {
+                name: 'archivedSections',
+                array: true,
+                oppositeName: 'menu',
+                configName: 'Section',
+              },
+            ],
+          },
+          {
+            name: 'Section',
+            duplexFields: [{ name: 'menu', oppositeName: 'sections', configName: 'Menu' }],
+          },
+        ]),
+      ).toThrow('has to refer back to duplex field: "archivedSections"');
+    });
+
+    test('should throw for duplex field whose opposite field refers to other entity', () => {
+      expect(() =>
+        composeAllEntityConfigs([
+          {
+            name: 'Menu',
+            duplexFields: [{ name: 'section', oppositeName: 'menu', configName: 'Section' }],
+          },
+          {
+            name: 'Restaurant',
+            duplexFields: [{ name: 'section', oppositeName: 'menu', configName: 'Section' }],
+          },
+          {
+            name: 'Section',
+            duplexFields: [{ name: 'menu', oppositeName: 'section', configName: 'Menu' }],
+          },
+        ]),
+      ).toThrow('has to refer back to duplex field: "section" of entity: "Restaurant"');
+    });
+  });
 });

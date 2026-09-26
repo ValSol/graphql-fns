@@ -933,7 +933,6 @@ export type RepresentationAttributesActionName =
   | 'childEntityCount'
   | 'childEntityDistinctValues'
   | 'childEntityGetOrCreate'
-  | 'cloneEntity'
   | 'entityCount'
   | 'entityDistinctValues'
   | 'entities'

@@ -71,7 +71,6 @@ describe('getAllEntityNames', () => {
           'inventory "test", option item: "childEntity": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntityGetOrCreate": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityCount": "Place", involvedEntityKey: "inputOutputEntity"',
-          'inventory "test", option item: "entityDistinctValues": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entity": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entities": "Place", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entitiesThroughConnection": "Place", involvedEntityKey: "inputOutputEntity"',
@@ -100,11 +99,9 @@ describe('getAllEntityNames', () => {
       Person: {
         descriptions: [
           'inventory "test", option item: "childEntityCount": "Person", involvedEntityKey: "inputOutputEntity"',
-          'inventory "test", option item: "childEntityDistinctValues": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntities": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "childEntitiesThroughConnection": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entityCount": "Person", involvedEntityKey: "inputOutputEntity"',
-          'inventory "test", option item: "entityDistinctValues": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entity": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entities": "Person", involvedEntityKey: "inputOutputEntity"',
           'inventory "test", option item: "entitiesThroughConnection": "Person", involvedEntityKey: "inputOutputEntity"',

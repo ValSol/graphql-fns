@@ -762,4 +762,58 @@ describe('graphql schema', () => {
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
+
+  test('should allow to set frozen filter field on creation only (Q1)', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      { name: 'Place', textFields: [{ name: 'title', index: true }] },
+      {
+        name: 'Selection',
+        textFields: [{ name: 'title' }],
+        filterFields: [{ name: 'places', array: true, configName: 'Place', freeze: true }],
+      },
+    ]);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    const createInput = typeDefs.match(/input SelectionCreateInput \{[^}]*\}/)?.[0];
+    const updateInput = typeDefs.match(/input SelectionUpdateInput \{[^}]*\}/)?.[0];
+
+    expect(createInput).toMatch(/\n  places: PlaceWhereInput\n/);
+    expect(updateInput).not.toMatch(/places/);
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
+
+  test('should compose distinct values actions only for indexed fields (Q9)', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      { name: 'Tag', textFields: [{ name: 'title' }] },
+      { name: 'Place', textFields: [{ name: 'title', index: true }, { name: 'description' }] },
+      {
+        name: 'Post',
+        textFields: [{ name: 'title' }],
+        relationalFields: [
+          { name: 'tags', array: true, oppositeName: 'posts', configName: 'Tag' },
+          { name: 'places', array: true, oppositeName: 'placePosts', configName: 'Place' },
+        ],
+      },
+    ]);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    // "Tag" has no indexed text or enum fields
+    expect(typeDefs).not.toMatch(/TagDistinctValues/);
+    expect(typeDefs).not.toMatch(/tagsDistinctValues/);
+    expect(resolvers.Query.TagDistinctValues).toBeUndefined();
+    expect(resolvers.Post.tagsDistinctValues).toBeUndefined();
+
+    // "Place" has indexed "title" only
+    expect(typeDefs).toMatch(/\nenum PlaceTextNamesEnum \{\n  title\n\}/);
+    expect(typeDefs).toMatch(/\n  PlaceDistinctValues\(/);
+    expect(typeDefs).toMatch(
+      /\n  placesDistinctValues\(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!\)/,
+    );
+    expect(resolvers.Post.placesDistinctValues).toBeDefined();
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
 });

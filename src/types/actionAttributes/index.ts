@@ -8,7 +8,6 @@ import childEntityDistinctValues from './childEntityDistinctValuesQueryAttribute
 import childEntityGetOrCreate from './childEntityGetOrCreateQueryAttributes';
 import childEntities from './childEntitiesQueryAttributes';
 import childEntitiesThroughConnection from './childEntitiesThroughConnectionQueryAttributes';
-// import cloneEntity from './cloneEntityMutationAttributes';
 import copyManyEntities from './copyManyEntitiesMutationAttributes';
 import copyManyEntitiesWithChildren from './copyManyEntitiesWithChildrenMutationAttributes';
 import copyEntity from './copyEntityMutationAttributes';
@@ -47,7 +46,6 @@ const actionAttributes = {
   childEntityGetOrCreate,
   childEntities,
   childEntitiesThroughConnection,
-  // cloneEntity,
   copyManyEntities,
   copyManyEntitiesWithChildren,
   copyEntity,

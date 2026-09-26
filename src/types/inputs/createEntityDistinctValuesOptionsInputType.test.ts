@@ -32,20 +32,37 @@ describe('createEntityDistinctValuesOptionsInputType', () => {
       textFields: [
         {
           name: 'textField',
+          index: true,
           type: 'textFields',
         },
         {
           name: 'textFieldArray',
           array: true,
+          index: true,
           type: 'textFields',
         },
+        {
+          name: 'uniqueTextField',
+          unique: true,
+          type: 'textFields',
+        },
+        {
+          name: 'notIndexedTextField',
+          type: 'textFields',
+        },
+      ],
+      enumFields: [
+        { name: 'enumField', enumName: 'Weekday', index: true, type: 'enumFields' },
+        { name: 'notIndexedEnumField', enumName: 'Weekday', type: 'enumFields' },
       ],
     };
     const expectedResult = [
       'ExampleDistinctValuesOptionsInput',
       `enum ExampleTextNamesEnum {
+  enumField
   textField
   textFieldArray
+  uniqueTextField
 }
 input ExampleDistinctValuesOptionsInput {
   target: ExampleTextNamesEnum!

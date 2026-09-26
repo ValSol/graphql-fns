@@ -16,7 +16,12 @@ const checkRepresentationAction = (
   const { representation, inventory } = generalConfig;
   const { root: nameRoot, representationKey } = parseEntityName(entityConfig.name, generalConfig);
 
-  const { actionGeneralName, actionType } = actionAttributes[actionBaseGeneralName];
+  const { actionAllowed, actionGeneralName, actionType } = actionAttributes[actionBaseGeneralName];
+
+  // action can be impossible for the entity (e.g. "childEntityDistinctValues" without indexed text fields)
+  if (!actionAllowed(entityConfig)) {
+    return false;
+  }
 
   if (!representationKey) {
     if (inventory) {

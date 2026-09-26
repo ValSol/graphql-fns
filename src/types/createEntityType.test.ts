@@ -207,30 +207,24 @@ describe('createEntityType', () => {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
-  friendsDistinctValues(where: PersonWhereInput): [String!]!
   fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   fellowsCount(where: PersonWhereInput): Int!
-  fellowsDistinctValues(where: PersonWhereInput): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
-  enemiesDistinctValues(where: PersonWhereInput): [String!]!
   opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   opponentsCount(where: PersonWhereInput): Int!
-  opponentsDistinctValues(where: PersonWhereInput): [String!]!
   location: Place!
   favoritePlace: Place
   selectedPlaces(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   selectedPlacesThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection!
   selectedPlacesCount(where: PlaceWhereInput): Int!
-  selectedPlacesDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!): [String!]!
   selectedPlace: Place
   selectedPlacesCalculated(where: PlaceWhereInput, sort: PlaceSortInput, pagination: PaginationInput): [Place!]!
   selectedPlacesCalculatedThroughConnection(where: PlaceWhereInput, sort: PlaceSortInput, after: String, before: String, first: Int, last: Int): PlaceConnection!
   selectedPlacesCalculatedCount(where: PlaceWhereInput): Int!
-  selectedPlacesCalculatedDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!): [String!]!
   selectedPlaceStringified: String
 }`;
 
@@ -535,11 +529,9 @@ describe('createEntityType', () => {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
-  friendsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
-  enemiesDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   location: Place!
   favoritePlace: Place
 }`;

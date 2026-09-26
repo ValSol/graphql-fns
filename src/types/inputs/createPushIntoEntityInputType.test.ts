@@ -4,8 +4,6 @@ import type { EmbeddedEntityConfig, TangibleEntityConfig } from '../../tsTypes';
 
 import createPushIntoEntityInputType from './createPushIntoEntityInputType';
 import createEntityCreateInputType from './createEntityCreateInputType';
-import createEntityWhereInputType from './createEntityWhereInputType';
-import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
 describe('createPushIntoEntityInputType', () => {
   test('should create entity input type with text fields', () => {
@@ -443,7 +441,7 @@ describe('createPushIntoEntityInputType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create entity input type with filter fields', () => {
+  test('should not include filter fields (they are stored as strings)', () => {
     const personConfig = {} as TangibleEntityConfig;
     const placeConfig: TangibleEntityConfig = {
       name: 'Place',
@@ -488,19 +486,8 @@ describe('createPushIntoEntityInputType', () => {
         },
       ],
     });
-    const expectedResult = [
-      'PushIntoPersonInput',
-      `input PushIntoPersonInput {
-  places: PlaceWhereInput
-  place: PlaceWhereOneInput
-  requiredPlaces: PlaceWhereInput
-  requiredPlace: PlaceWhereOneInput
-}`,
-      {
-        PlaceWhereInput: [createEntityWhereInputType, placeConfig],
-        PlaceWhereOneInput: [createEntityWhereOneInputType, placeConfig],
-      },
-    ];
+    // there are no array fields to push into (filter fields are not pushed)
+    const expectedResult = ['PushIntoPersonInput', '', {}];
 
     const result = createPushIntoEntityInputType(personConfig);
 

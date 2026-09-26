@@ -113,8 +113,8 @@ describe('createEntityWhereOneInputType', () => {
       'ExampleWhereOneInput',
       `input ExampleWhereOneInput {
   id: ID
-  email: ID
-  userId: ID
+  email: String
+  userId: String
   perosonaNum: Int
   perosonaNumber: Float
   birthday: DateTime

@@ -154,11 +154,9 @@ type Menu implements Node {
   sections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   sectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   sectionsCount(where: MenuSectionWhereInput): Int!
-  sectionsDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!): [String!]!
   selectedSections(where: MenuSectionWhereInput, sort: MenuSectionSortInput, pagination: PaginationInput): [MenuSection!]!
   selectedSectionsThroughConnection(where: MenuSectionWhereInput, sort: MenuSectionSortInput, after: String, before: String, first: Int, last: Int): MenuSectionConnection!
   selectedSectionsCount(where: MenuSectionWhereInput): Int!
-  selectedSectionsDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!): [String!]!
   cloneGetOrCreate(data: MenuCloneCreateInput!): MenuClone
 }
 type MenuSection implements Node {
@@ -191,7 +189,6 @@ type MenuClone implements Node {
   sections(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, pagination: PaginationInput): [MenuCloneSection!]!
   sectionsThroughConnection(where: MenuCloneSectionWhereInput, sort: MenuCloneSectionSortInput, after: String, before: String, first: Int, last: Int): MenuCloneSectionConnection!
   sectionsCount(where: MenuCloneSectionWhereInput): Int!
-  sectionsDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput!): [String!]!
   originalGetOrCreate(data: MenuCreateInput!): Menu
 }
 type MenuCloneSection implements Node {
@@ -412,30 +409,6 @@ input MenuSectionWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-}
-enum MenuTextNamesEnum {
-  name
-}
-input MenuDistinctValuesOptionsInput {
-  target: MenuTextNamesEnum!
-}
-enum MenuCloneTextNamesEnum {
-  name
-}
-input MenuCloneDistinctValuesOptionsInput {
-  target: MenuCloneTextNamesEnum!
-}
-enum MenuSectionTextNamesEnum {
-  name
-}
-input MenuSectionDistinctValuesOptionsInput {
-  target: MenuSectionTextNamesEnum!
-}
-enum MenuCloneSectionTextNamesEnum {
-  name
-}
-input MenuCloneSectionDistinctValuesOptionsInput {
-  target: MenuCloneSectionTextNamesEnum!
 }
 input MenuWhereOneInput {
   id: ID!
@@ -686,7 +659,6 @@ input deleteMenuCloneWithChildrenOptionsInput {
 }
 input PushIntoMenuInput {
   sections: MenuSectionCreateOrPushChildrenInput
-  selectedSections: MenuSectionWhereInput
 }
 input MenuPushPositionsInput {
   sections: [Int!]
@@ -913,10 +885,6 @@ type Query {
   MenuCloneCount(where: MenuCloneWhereInput, token: String): Int!
   MenuSectionCount(where: MenuSectionWhereInput, token: String): Int!
   MenuCloneSectionCount(where: MenuCloneSectionWhereInput, token: String): Int!
-  MenuDistinctValues(where: MenuWhereInput, options: MenuDistinctValuesOptionsInput!, token: String): [String!]!
-  MenuCloneDistinctValues(where: MenuCloneWhereInput, options: MenuCloneDistinctValuesOptionsInput!, token: String): [String!]!
-  MenuSectionDistinctValues(where: MenuSectionWhereInput, options: MenuSectionDistinctValuesOptionsInput!, token: String): [String!]!
-  MenuCloneSectionDistinctValues(where: MenuCloneSectionWhereInput, options: MenuCloneSectionDistinctValuesOptionsInput!, token: String): [String!]!
   Menu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, token: String): Menu
   MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone
   MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection
@@ -1285,21 +1253,6 @@ input Example2WhereWithoutBooleanOperationsInput {
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
   area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
 }
-enum Example1TextNamesEnum {
-  textField1
-  textField2
-  textField3
-}
-input Example1DistinctValuesOptionsInput {
-  target: Example1TextNamesEnum!
-}
-enum Example2TextNamesEnum {
-  textField1
-  textField2
-}
-input Example2DistinctValuesOptionsInput {
-  target: Example2TextNamesEnum!
-}
 input Example1WhereOneInput {
   id: ID!
 }
@@ -1536,8 +1489,6 @@ type Query {
   node(id: ID!): Node
   Example1Count(where: Example1WhereInput, token: String): Int!
   Example2Count(where: Example2WhereInput, token: String): Int!
-  Example1DistinctValues(where: Example1WhereInput, options: Example1DistinctValuesOptionsInput!, token: String): [String!]!
-  Example2DistinctValues(where: Example2WhereInput, options: Example2DistinctValuesOptionsInput!, token: String): [String!]!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
@@ -1554,8 +1505,8 @@ type Mutation {
   createExample2(data: Example2CreateInput!, token: String): Example2!
   deleteFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, token: String): [Example1!]!
   deleteFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, token: String): [Example2!]!
-  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, token: String): Int!
-  deleteFilteredExample2sReturnScalar(where: Example2WhereInput, token: String): Int!
+  deleteFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, token: String): Int!
+  deleteFilteredExample2sReturnScalar(where: Example2WhereInput, near: Example2NearInput, token: String): Int!
   deleteManyExample1s(whereOne: [Example1WhereOneInput!]!, token: String): [Example1!]!
   deleteManyExample2s(whereOne: [Example2WhereOneInput!]!, token: String): [Example2!]!
   deleteExample1(whereOne: Example1WhereOneInput!, token: String): Example1!
@@ -1563,8 +1514,8 @@ type Mutation {
   pushIntoExample2(whereOne: Example2WhereOneInput!, data: PushIntoExample2Input!, positions: Example2PushPositionsInput, token: String): Example2!
   updateFilteredExample1s(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): [Example1!]!
   updateFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): [Example2!]!
-  updateFilteredExample1sReturnScalar(where: Example1WhereInput, data: Example1UpdateInput!, token: String): Int!
-  updateFilteredExample2sReturnScalar(where: Example2WhereInput, data: Example2UpdateInput!, token: String): Int!
+  updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): Int!
+  updateFilteredExample2sReturnScalar(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): Int!
   updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!, token: String): [Example1!]!
   updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!, token: String): [Example2!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!, token: String): Example1!
@@ -1664,21 +1615,17 @@ type Person implements Node {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
-  friendsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
-  enemiesDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   location: Place!
   favoritePlace: Place
   fellows(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   fellowsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   fellowsCount(where: PersonWhereInput): Int!
-  fellowsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   opponents(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   opponentsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   opponentsCount(where: PersonWhereInput): Int!
-  opponentsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PersonConnection {
   pageInfo: PageInfo!
@@ -1702,11 +1649,9 @@ type Place implements Node {
   citisens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   citisensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   citisensCount(where: PersonWhereInput): Int!
-  citisensDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   customers(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   customersThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   customersCount(where: PersonWhereInput): Int!
-  customersDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PlaceConnection {
   pageInfo: PageInfo!
@@ -1809,19 +1754,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  title
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
 }
 input PersonWhereOneInput {
   id: ID!
@@ -2036,8 +1968,6 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -2265,13 +2195,6 @@ input AddressWhereInput {
   country_re: [RegExp!]
   country_exists: Boolean
 }
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -2428,7 +2351,6 @@ input PersonWhichUpdatedInput {
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
   PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection!
@@ -2546,11 +2468,9 @@ type Person implements Node {
   friends(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   friendsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   friendsCount(where: PersonWhereInput): Int!
-  friendsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   enemies(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   enemiesThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   enemiesCount(where: PersonWhereInput): Int!
-  enemiesDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   location: Place!
   favoritePlace: Place
 }
@@ -2576,11 +2496,9 @@ type Place implements Node {
   citizens(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   citizensThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   citizensCount(where: PersonWhereInput): Int!
-  citizensDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
   visitors(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput): [Person!]!
   visitorsThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int): PersonConnection!
   visitorsCount(where: PersonWhereInput): Int!
-  visitorsDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!): [String!]!
 }
 type PlaceConnection {
   pageInfo: PageInfo!
@@ -2683,19 +2601,6 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
-}
-enum PersonTextNamesEnum {
-  firstName
-  lastName
-}
-input PersonDistinctValuesOptionsInput {
-  target: PersonTextNamesEnum!
-}
-enum PlaceTextNamesEnum {
-  name
-}
-input PlaceDistinctValuesOptionsInput {
-  target: PlaceTextNamesEnum!
 }
 input PersonWhereOneInput {
   id: ID!
@@ -3006,8 +2911,6 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
-  PersonDistinctValues(where: PersonWhereInput, options: PersonDistinctValuesOptionsInput!, token: String): [String!]!
-  PlaceDistinctValues(where: PlaceWhereInput, options: PlaceDistinctValuesOptionsInput!, token: String): [String!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -3148,12 +3051,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -3178,7 +3075,6 @@ input ExampleWhereByUniqueInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!
@@ -4320,12 +4216,6 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
-enum ExampleTextNamesEnum {
-  textField
-}
-input ExampleDistinctValuesOptionsInput {
-  target: ExampleTextNamesEnum!
-}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -4400,7 +4290,6 @@ input ExampleForCatalogSortInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
-  ExampleDistinctValues(where: ExampleWhereInput, options: ExampleDistinctValuesOptionsInput!, token: String): [String!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!

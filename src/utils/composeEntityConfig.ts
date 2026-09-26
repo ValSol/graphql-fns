@@ -249,6 +249,12 @@ const composeEntityConfig = (
         );
       }
 
+      if ((config.type || 'tangible') !== 'tangible') {
+        throw new TypeError(
+          `Relational field: "${field.name}" of entity: "${simplifiedEntityConfig.name}" refers to "${config.type}" config: "${configName}" but has to refer to "tangible" one!`,
+        );
+      }
+
       if (!config.relationalFields) {
         config.relationalFields = [];
       }
@@ -278,6 +284,12 @@ const composeEntityConfig = (
         );
       }
 
+      if ((config.type || 'tangible') !== 'tangible') {
+        throw new TypeError(
+          `Duplex field: "${field.name}" of entity: "${simplifiedEntityConfig.name}" refers to "${config.type}" config: "${configName}" but has to refer to "tangible" one!`,
+        );
+      }
+
       const oppositeField = (config as TangibleEntityConfig)?.duplexFields?.find(
         ({ name }) => restField.oppositeName === name,
       );
@@ -285,6 +297,17 @@ const composeEntityConfig = (
       if (!oppositeField) {
         throw new TypeError(
           `Not found duplex field: "${field.oppositeName}" in "${config.name}" entity as opposite for duplex field: "${field.name}" of entity: "${simplifiedEntityConfig.name}"!`,
+        );
+      }
+
+      // opposite field can be not composed yet (it has "configName") or already composed (it has "config")
+      const { oppositeName: oppositeOppositeName, configName: oppositeConfigName } =
+        oppositeField as any;
+      const oppositeTargetName = oppositeConfigName || (oppositeField as any).config?.name;
+
+      if (oppositeOppositeName !== field.name || oppositeTargetName !== name) {
+        throw new TypeError(
+          `Opposite duplex field: "${oppositeField.name}" of entity: "${config.name}" has to refer back to duplex field: "${field.name}" of entity: "${name}" but refers to field: "${oppositeOppositeName}" of entity: "${oppositeTargetName}"!`,
         );
       }
 

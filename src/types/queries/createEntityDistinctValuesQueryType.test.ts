@@ -48,6 +48,7 @@ describe('createEntityDistinctValuesQueryType', () => {
       textFields: [
         {
           name: 'textField',
+          index: true,
           type: 'textFields',
         },
         {

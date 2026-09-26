@@ -15,7 +15,7 @@ const createEntityWhereOneInputType: InputCreator = (entityConfig) => {
   const fieldLines: Array<string> = [];
 
   textFields.reduce((prev, { name: name2, unique }) => {
-    if (unique) prev.push(`  ${name2}: ID`);
+    if (unique) prev.push(`  ${name2}: String`);
     return prev;
   }, fieldLines);
 
