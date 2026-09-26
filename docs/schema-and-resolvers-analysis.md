@@ -310,7 +310,7 @@ MenuClone   { name, description, original ↔ Menu.clone }
 | Зараз | Нова назва аргументу | Зараз тип | Новий тип |
 |---|---|---|---|
 | `whereOnes` | `whereSource` | `XCopyWhereOnesInput` | `XWhereSourceInput` |
-| `whereOne` | `whereKeyToTarget` | `XWhereOneToCopyInput` | `XWhereKeyToTarget` (запропоновано `XWhereKeyToTargetInput` для однаковості з іншими input-типами — очікує підтвердження) |
+| `whereOne` | `whereKeyToTarget` | `XWhereOneToCopyInput` | `XWhereKeyToTargetInput` |
 
 У `copyMany…` назви лишаються в однині з масивним типом, як у `updateManyXs(whereOne: [..])`.
 
