@@ -209,5 +209,5 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 - ?6 B8: чи підтримується кілька різних `generalConfig` в одному процесі (multi-tenant, hot reload, тести поза jest)? Якщо так, кеші треба прив'язати до конфігу (наприклад, `WeakMap` за `generalConfig`).
 - ?7 `cloneEntity`: код resolver-а та `createEntityCloneInputType` лишаються. Їх видалити чи відновити?
 - ?8 Custom Subscription (`custom.Subscription`): це підтримувана функція? `composeGqlResolvers` приймає лише імена з префіксами `createdEntity*/deletedEntity*/updatedEntity*`.
-- ?9 Calculated geospatial-поля: TS-тип `func` обіцяє повертати GraphQL-формат (`{ lng, lat }`), а field-resolver у `composeEntityResolvers` очікує Mongo-формат (`{ type, coordinates }`) і для `{ lng, lat }` поверне `null`. Який формат правильний для `func`?
-- ?10 B5: чи потрібна фільтрація `wherePayload` за calculated virtual-полями? Зараз вони свідомо не фільтруються.
+- ?9 ~~Формат calculated geospatial-значень~~ Відповідь: `func` повертає GraphQL-формат (`{ lng, lat }`). Виправлено в `da657196`: calculated geospatial-поля більше не проходять через Mongo→GraphQL-конвертер (який повертав `null`), масиви зберігають підтримку `slice`.
+- ?10 ~~Фільтрація `wherePayload` за calculated virtual-полями~~ Відповідь: не потрібна. Поточна поведінка (virtual-поля не фільтруються) остаточна.
