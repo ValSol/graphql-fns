@@ -273,7 +273,7 @@ describe('executeNodeAuthorisation', () => {
     expect(result2).toEqual(expectedResult2);
   });
 
-  test('should pass token to "getUserAttributes" & call it once per request context', async () => {
+  test('should call "getUserAttributes" once per request context', async () => {
     const getUserAttributes = jest.fn(async () => ({ roles: [admin] }));
 
     const serversideConfig: ServersideConfig = {
@@ -283,24 +283,12 @@ describe('executeNodeAuthorisation', () => {
 
     const requestContext = {};
 
-    await executeNodeAuthorisation(
-      entityName,
-      requestContext,
-      generalConfig,
-      serversideConfig,
-      'some-token',
-    );
+    await executeNodeAuthorisation(entityName, requestContext, generalConfig, serversideConfig);
 
-    await executeNodeAuthorisation(
-      entityName,
-      requestContext,
-      generalConfig,
-      serversideConfig,
-      'some-token',
-    );
+    await executeNodeAuthorisation(entityName, requestContext, generalConfig, serversideConfig);
 
     expect(getUserAttributes).toHaveBeenCalledTimes(1);
-    expect(getUserAttributes).toHaveBeenCalledWith(requestContext, 'some-token');
+    expect(getUserAttributes).toHaveBeenCalledWith(requestContext, undefined);
   });
 
   test('should ignore roles absent in "containedRoles"', async () => {

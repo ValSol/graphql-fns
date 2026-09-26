@@ -144,8 +144,9 @@ const composeGqlTypes = (
     }
   });
 
+  // Relay requires exactly "node(id: ID!): Node" (e.g. for @refetchable), so no extra args
   const queryTypes2 = `type Query {
-  node(id: ID!, token: String): Node${['', ...queryTypes].join('\n')}
+  node(id: ID!): Node${['', ...queryTypes].join('\n')}
 }`;
 
   const mutationTypes2 =

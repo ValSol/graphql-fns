@@ -10,7 +10,6 @@ const executeNodeAuthorisation = async (
   context: any,
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
-  token?: string,
 ): Promise<null | Array<any>> => {
   const {
     containedRoles,
@@ -20,7 +19,7 @@ const executeNodeAuthorisation = async (
     staticFilters = {},
   } = serversideConfig;
 
-  const userAttributes = await getUserAttributesOnce(getUserAttributes, context, token);
+  const userAttributes = await getUserAttributesOnce(getUserAttributes, context);
 
   const personalFilter = personalFilters[entityName]
     ? await composePersonalFilter(
