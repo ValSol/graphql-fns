@@ -75,8 +75,6 @@ const createEntitySortInputType: InputCreator = (entityConfig) => {
       }, fieldLines);
   }
 
-  if (!fieldLines.length) return [inputName, '', {}];
-
   const inputDefinition = `enum ${name}SortEnum {
 ${fieldLines.join('\n')}
 }

@@ -113,4 +113,28 @@ input ExampleCreateOrPushChildrenInput {
 
     expect(inputDic).toEqual(expectedDic);
   });
+
+  test('should add returned entity type for action without args (B12)', async () => {
+    const entityTypeDic: { [entityName: string]: string } = {};
+    const inputDic: { [inputName: string]: string } = {};
+
+    // action attributes without args (all "argNames" are empty)
+    const actionAttributes = {
+      ...createManyEntitiesMutationAttributes,
+      inputCreators: [],
+      argNames: [],
+      argTypes: [],
+    };
+
+    const result = composeActionSignature(
+      entityConfig,
+      generalConfig,
+      actionAttributes as any,
+      entityTypeDic,
+      inputDic,
+    );
+
+    expect(result).toBe('  createManyExamples: [Example!]!');
+    expect(entityTypeDic.Example).toBeDefined();
+  });
 });

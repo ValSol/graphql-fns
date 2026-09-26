@@ -22,7 +22,7 @@ const composeCreatedOrDeletedPayloadVirtualConfig: VirtualConfigComposer = (
 
   if (configType !== 'tangible') {
     throw new TypeError(
-      `Forbidden to use entity config with type: "${configType}" to compose "UpdatedPayload" virtual config!`,
+      `Forbidden to use entity config with type: "${configType}" to compose "CreatedOrDeletedPayload" virtual config!`,
     );
   }
 

@@ -66,6 +66,13 @@ const composeActionSignature = (
 
   const returnString = actionReturnString(entityConfig, representationKey);
 
+  // type of the returned entity has to be added in any case (also for action without args)
+  const returnConfig = actionReturnConfig(entityConfig, generalConfig, representationKey);
+
+  if (returnConfig) {
+    fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);
+  }
+
   if (filteredArgNames.length === 0) {
     return `  ${specificName}: ${returnString}`;
   }
@@ -73,12 +80,6 @@ const composeActionSignature = (
   const args = filteredArgNames
     .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfigForInputCreator)}`)
     .join(', ');
-
-  const returnConfig = actionReturnConfig(entityConfig, generalConfig, representationKey);
-
-  if (returnConfig) {
-    fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);
-  }
 
   return `  ${specificName}(${args}): ${returnString}`;
 };

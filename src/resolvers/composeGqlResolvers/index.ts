@@ -85,7 +85,8 @@ const composeGqlResolvers = (
       }
     });
 
-    const customQueryNames = Object.keys(customQuery);
+    // custom actions signatures are composed only for tangible entities (see "composeGqlTypes")
+    const customQueryNames = entityConfig.type === 'tangible' ? Object.keys(customQuery) : [];
 
     customQueryNames.forEach((customName) => {
       const customQueryResolver = createCustomResolver(
@@ -123,7 +124,8 @@ const composeGqlResolvers = (
         }
       });
 
-      const customMutationNames = Object.keys(customMutation);
+      const customMutationNames =
+        entityConfig.type === 'tangible' ? Object.keys(customMutation) : [];
 
       customMutationNames.forEach((customName) => {
         const customMutationResolver = createCustomResolver(

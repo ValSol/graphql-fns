@@ -4,8 +4,6 @@ import parseEntityName from '../utils/parseEntityName';
 import childEntitiesThroughConnectionQuery from './actionAttributes/childEntitiesThroughConnectionQueryAttributes';
 import createEntityType from './createEntityType';
 
-const all = [];
-
 const fillEntityTypeDic = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,

@@ -30,6 +30,10 @@ const composeReturnString = (
 
 const arrayArgs = '(slice: SliceInput)';
 
+// "args" is null if the child action is not allowed, or string of args (maybe empty)
+const composeChildFieldName = (fieldName: string, args: string) =>
+  args ? `${fieldName}(${args})` : fieldName;
+
 const calculatedArgs = (inputTypes: Record<string, string>, array?: boolean) => {
   const items = Object.keys(inputTypes).reduce(
     (prev, key) => {
@@ -114,8 +118,6 @@ const createEntityType = (
   const interfacesToImplement = configType === 'tangible' ? ['Node', ...interfaces] : interfaces;
 
   const entityTypeArray = [
-    // use not required ID in embedded entities...
-    // ... to not provoke error for null embedded objects
     `type ${name} ${
       interfacesToImplement.length === 0 ? '' : `implements ${interfacesToImplement.join(' & ')} `
     }{`,
@@ -187,9 +189,9 @@ const createEntityType = (
         inputDic,
       );
 
-      if (childEntitiesArgs) {
+      if (childEntitiesArgs !== null) {
         prev.push(
-          `  ${name2}(${childEntitiesArgs}): ${composeReturnString(
+          `  ${composeChildFieldName(`${name2}`, childEntitiesArgs)}: ${composeReturnString(
             config,
             generalConfig,
             childEntities,
@@ -205,9 +207,9 @@ const createEntityType = (
         inputDic,
       );
 
-      if (childEntitiesThroughConnectionArgs) {
+      if (childEntitiesThroughConnectionArgs !== null) {
         prev.push(
-          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
+          `  ${composeChildFieldName(`${name2}ThroughConnection`, childEntitiesThroughConnectionArgs)}: ${composeReturnString(
             config,
             generalConfig,
             childEntitiesThroughConnection,
@@ -223,9 +225,9 @@ const createEntityType = (
         inputDic,
       );
 
-      if (childEntityCountArgs) {
+      if (childEntityCountArgs !== null) {
         prev.push(
-          `  ${name2}Count(${childEntityCountArgs}): ${composeReturnString(
+          `  ${composeChildFieldName(`${name2}Count`, childEntityCountArgs)}: ${composeReturnString(
             config,
             generalConfig,
             childEntityCount,
@@ -241,9 +243,9 @@ const createEntityType = (
         inputDic,
       );
 
-      if (childEntityDistinctValuesArgs) {
+      if (childEntityDistinctValuesArgs !== null) {
         prev.push(
-          `  ${name2}DistinctValues(${childEntityDistinctValuesArgs}): ${composeReturnString(
+          `  ${composeChildFieldName(`${name2}DistinctValues`, childEntityDistinctValuesArgs)}: ${composeReturnString(
             config,
             generalConfig,
             childEntityDistinctValues,
@@ -281,9 +283,9 @@ const createEntityType = (
         inputDic,
       );
 
-      if (childEntityGetOrCreateArgs) {
+      if (childEntityGetOrCreateArgs !== null) {
         prev.push(
-          `  ${name2}GetOrCreate(${childEntityGetOrCreateArgs}): ${composeReturnString(
+          `  ${composeChildFieldName(`${name2}GetOrCreate`, childEntityGetOrCreateArgs)}: ${composeReturnString(
             config,
             generalConfig,
             childEntityGetOrCreate,
@@ -311,11 +313,10 @@ const createEntityType = (
         );
 
         prev.push(
-          `  ${name2}ThroughConnection(${childEntitiesThroughConnectionArgs}): ${composeReturnString(
-            config,
-            generalConfig,
-            arrayEntitiesThroughConnection,
-          )}`,
+          `  ${composeChildFieldName(
+            `${name2}ThroughConnection`,
+            childEntitiesThroughConnectionArgs as string, // "Field" action is always allowed
+          )}: ${composeReturnString(config, generalConfig, arrayEntitiesThroughConnection)}`,
         );
       }
 

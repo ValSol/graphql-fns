@@ -120,7 +120,7 @@ const mergeRepresentationIntoCustom = (
               ) {
                 const entityName2 = involvedEntityNames[involvedEntityKey];
 
-                if (!prev.includes(entityName)) {
+                if (!prev.includes(entityName2)) {
                   prev.push(entityName2);
                 }
               }

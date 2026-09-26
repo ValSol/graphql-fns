@@ -4,8 +4,8 @@ import report from '@/resolvers/mutations/createUpdateEntityMutationResolver/res
 import getPrevious from './getPrevious';
 import prepareBulkData from './prepareBulkData';
 
-const updateEntityResolverAttributes: ResolverAttributes = {
-  actionGeneralName: 'updateEntity',
+const cloneEntityResolverAttributes: ResolverAttributes = {
+  actionGeneralName: 'cloneEntity',
   array: false,
   getPrevious,
   produceCurrent: true,
@@ -14,4 +14,4 @@ const updateEntityResolverAttributes: ResolverAttributes = {
   finalResult: ({ current: [current] }) => current,
 };
 
-export default updateEntityResolverAttributes;
+export default cloneEntityResolverAttributes;

@@ -153,7 +153,7 @@ const composeInputFields = (
       return;
     }
     if (array) {
-      fields.push(`${fieldName}_size: Int
+      fields.push(`  ${fieldName}_size: Int
   ${fieldName}_notsize: Int`);
     }
     if (!array) {

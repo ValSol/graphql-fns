@@ -7,7 +7,7 @@ const createEntityNearInputType: InputCreator = (entityConfig) => {
 
   const fieldLines = geospatialFields
     ? geospatialFields
-        // for 'near' query will use only scalar points
+        // for 'near' query can be used any indexed geospatial field (scalar or array)
         .filter(
           ({ geospatialType, index }) =>
             index &&

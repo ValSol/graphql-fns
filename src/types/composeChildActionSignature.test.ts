@@ -164,4 +164,38 @@ input ExampleSortInput {
 
     expect(result2).toEqual(expectedResult2);
   });
+
+  test('should return null for not allowed action & empty string for action without args (B13)', async () => {
+    const entityConfig: EntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [{ name: 'textField', type: 'textFields' }],
+    };
+
+    const notAllowedResult = composeChildActionSignature(
+      entityConfig,
+      {
+        allEntityConfigs: { Example: entityConfig },
+        inventory: { name: 'test', exclude: { Query: { childEntities: true } } },
+      },
+      'childEntities',
+    );
+
+    expect(notAllowedResult).toBeNull();
+
+    const embeddedConfig: EntityConfig = {
+      name: 'Embedded',
+      type: 'embedded',
+      textFields: [{ name: 'textField', type: 'textFields' }],
+    };
+
+    // "arrayEntityCount" has no args
+    const withoutArgsResult = composeChildActionSignature(
+      embeddedConfig,
+      { allEntityConfigs: { Embedded: embeddedConfig } },
+      'arrayEntityCount',
+    );
+
+    expect(withoutArgsResult).toBe('');
+  });
 });

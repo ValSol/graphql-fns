@@ -474,9 +474,11 @@ export type SimplifiedTangibleEntityConfig = SimplifiedEntityConfigCommonPropert
   subscriptionActorConfigName?: string;
 };
 
+// calculated fields are not computed for embedded entities, so they are forbidden here...
+// ... (the same as in "EmbeddedEntityConfig")
 export type SimplifiedEmbeddedEntityConfig = Omit<
   SimplifiedEntityConfigCommonProperties,
-  'relationalFields' | 'duplexFields' | 'filterFields'
+  'relationalFields' | 'duplexFields' | 'filterFields' | 'calculatedFields'
 > & {
   type: 'embedded';
 };
@@ -487,9 +489,7 @@ export type SimplifiedVirtualEntityConfig = SimplifiedEntityConfigCommonProperti
 };
 
 export type SimplifiedEntityConfig =
-  | SimplifiedTangibleEntityConfig
-  | SimplifiedEmbeddedEntityConfig
-  | SimplifiedVirtualEntityConfig;
+  SimplifiedTangibleEntityConfig | SimplifiedEmbeddedEntityConfig | SimplifiedVirtualEntityConfig;
 
 type ScalarEmbeddedField = Omit<FieldCommonProperties, 'unique'> & {
   array?: false;
@@ -535,9 +535,7 @@ type ArrayParentRelationalField = Omit<
   type: 'relationalFields';
 };
 export type RelationalField =
-  | ArrayRelationalField
-  | ScalarRelationalField
-  | ArrayParentRelationalField;
+  ArrayRelationalField | ScalarRelationalField | ArrayParentRelationalField;
 
 type ScalarDuplexField = FieldCommonProperties & {
   array?: false;
@@ -791,7 +789,7 @@ type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'un
     resolverArg?: ResolverArg,
     asyncFuncResult?: any,
     index?: number,
-  ) => GraphqlScalar;
+  ) => GraphqlScalar[];
   type: 'calculatedFields';
 };
 export type CalculatedField =
@@ -801,8 +799,6 @@ export type CalculatedField =
   | ScalarCalculatedEmbeddedField
   | ArrayCalculatedVirtualField
   | ScalarCalculatedVirtualField
-  | ArrayCalculatedGeospatialField
-  | ScalarCalculatedGeospatialField
   | ArrayCalculatedGeospatialField
   | ScalarCalculatedGeospatialField
   | ArrayCalculatedFilterField
@@ -1106,9 +1102,7 @@ export type ThreeSegmentInventoryChain =
     ];
 
 export type InventoryChain =
-  | OneSegmentInventoryChain
-  | TwoSegmentInventoryChain
-  | ThreeSegmentInventoryChain;
+  OneSegmentInventoryChain | TwoSegmentInventoryChain | ThreeSegmentInventoryChain;
 
 export type InventoryByRoles = {
   // must be setted for all roles
@@ -1144,14 +1138,7 @@ export type EntityFilters = {
 };
 
 export type GraphqlScalar =
-  | string
-  | string[]
-  | number
-  | number[]
-  | boolean
-  | boolean[]
-  | null
-  | null[];
+  string | string[] | number | number[] | boolean | boolean[] | null | null[];
 
 export type GraphqlObject = {
   [key: string]: GraphqlScalar | GraphqlObject | GraphqlObject[];

@@ -14,17 +14,15 @@ const composeChildActionSignature = (
   inputDic?: {
     [inputName: string]: string;
   },
-): string => {
+): null | string => {
   const {
     actionArgsToHide = [],
     actionGeneralName,
-    actionName,
     actionType,
     inputCreators,
     argNames,
     argTypes,
     actionReturnConfig,
-    actionReturnString,
   } = actionAttributes[childQueryGeneralName];
   const { allEntityConfigs } = generalConfig;
 
@@ -38,10 +36,8 @@ const composeChildActionSignature = (
       generalConfig,
     )
   ) {
-    return '';
+    return null; // action is not allowed
   }
-
-  const specificName = actionName(rootName, representationKey);
 
   const toShow: Array<boolean> = [];
 
@@ -59,8 +55,6 @@ const composeChildActionSignature = (
   const filteredArgNames = argNames.filter((foo, i) => toShow[i]);
   const filteredArgTypes = argTypes.filter((foo, i) => toShow[i]);
 
-  const returnString = actionReturnString(allEntityConfigs[rootName], representationKey);
-
   const returnConfig = actionReturnConfig(
     allEntityConfigs[rootName],
     generalConfig,
@@ -71,15 +65,10 @@ const composeChildActionSignature = (
     fillEntityTypeDic(returnConfig, generalConfig, entityTypeDic, inputDic);
   }
 
-  if (filteredArgNames.length === 0) {
-    return `  ${specificName}: ${returnString}`;
-  }
-
-  const args = filteredArgNames
+  // return only args (maybe empty string) that are used in field signature by caller
+  return filteredArgNames
     .map((argName, i) => `${argName}: ${filteredArgTypes[i](entityConfig)}`)
     .join(', ');
-
-  return args;
 };
 
 export default composeChildActionSignature;

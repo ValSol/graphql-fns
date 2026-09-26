@@ -727,4 +727,39 @@ describe('graphql schema', () => {
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
+
+  test('should create custom action resolvers only for tangible entities (B14)', () => {
+    const getEntity = {
+      name: 'getEntity',
+      specificName: ({ name }) => `get${name}`,
+      argNames: () => [],
+      argTypes: () => [],
+      involvedEntityNames: ({ name }) => ({ inputOutputEntity: name }),
+      type: () => 'String',
+      config: () => null,
+    };
+
+    const allEntityConfigs = composeAllEntityConfigs([
+      { name: 'Item', type: 'embedded', textFields: [{ name: 'title' }] },
+      {
+        name: 'Example',
+        textFields: [{ name: 'title' }],
+        embeddedFields: [{ name: 'item', configName: 'Item' }],
+      },
+    ]);
+
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom: { Query: { getEntity } } };
+
+    const serversideConfig = { Query: { getEntity: () => async () => 'result' } };
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig, serversideConfig);
+
+    expect(typeDefs).toMatch(/\n  getExample: String\n/);
+    expect(typeDefs).not.toMatch(/getItem/);
+
+    expect(resolvers.Query.getExample).toBeDefined();
+    expect(resolvers.Query.getItem).toBeUndefined();
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
 });
