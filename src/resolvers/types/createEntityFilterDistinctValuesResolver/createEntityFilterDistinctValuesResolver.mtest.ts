@@ -41,6 +41,7 @@ describe('createEntityFilterDistinctValuesResolver', () => {
       textFields: [
         {
           name: 'title',
+          index: true,
           type: 'textFields',
         },
       ],

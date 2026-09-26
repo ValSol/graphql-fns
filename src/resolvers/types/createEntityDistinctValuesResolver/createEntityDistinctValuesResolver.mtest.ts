@@ -38,6 +38,7 @@ describe('createEntityDistinctValuesResolver', () => {
         {
           name: 'title',
           required: true,
+          index: true,
           type: 'textFields',
         },
       ],

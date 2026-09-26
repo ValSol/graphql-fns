@@ -45,6 +45,7 @@ describe('createEntityOppositeRelationDistinctValuesResolver', () => {
         {
           name: 'title',
           required: true,
+          index: true,
           type: 'textFields',
         },
       ],
