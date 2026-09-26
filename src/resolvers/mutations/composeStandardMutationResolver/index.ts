@@ -24,6 +24,8 @@ import addPeripheryToCore from '../addPeripheryToCore';
 import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
+import commitTransactionWithRetry from '../workOutMutations/commitTransactionWithRetry';
+import isTransientTransactionError from '../workOutMutations/isTransientTransactionError';
 import produceResult from './produceResult';
 
 type Args = {
@@ -76,9 +78,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       resolverOptions: {
         involvedFilters: {
           [representationConfigName: string]:
-            | null
-            | [InvolvedFilter[]]
-            | [InvolvedFilter[], number];
+            null | [InvolvedFilter[]] | [InvolvedFilter[], number];
         };
       },
     ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
@@ -183,7 +183,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           );
 
           if (!prepareBulkData) {
-            throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
+            throw new TypeError(`prepareBulkData have to be setted for "${actionGeneralName}"`);
           }
 
           const prevPreparedData: PreparedData = {
@@ -225,7 +225,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           preCommitResult.current = true;
 
           if (session) {
-            await session.commitTransaction();
+            await commitTransactionWithRetry(session, tryCount);
 
             await session.endSession();
           }
@@ -239,8 +239,10 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             await session.endSession();
           }
 
-          if (i === tryCount - 1) {
-            throw new Error(err);
+          // retry only transaction errors that mongodb marks as transient, all other errors are
+          // thrown as is; without transaction nothing is retried to not repeat partially done writes
+          if (!session || i === tryCount - 1 || !isTransientTransactionError(err)) {
+            throw err;
           }
 
           await sleep(100 * 2 ** i);
@@ -262,7 +264,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       }
 
       if (!finalResult) {
-        throw new TypeError(`report have to be setted for "${actionGeneralName}"`);
+        throw new TypeError(`finalResult have to be setted for "${actionGeneralName}"`);
       }
 
       return finalResult(result);
