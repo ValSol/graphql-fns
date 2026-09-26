@@ -2,10 +2,10 @@
 
 import type { TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityWhereSourceInputType from './createEntityWhereSourceInputType';
+import createEntityWhereKeyToSourceInputType from './createEntityWhereKeyToSourceInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
-describe('createEntityWhereSourceInputType', () => {
+describe('createEntityWhereKeyToSourceInputType', () => {
   const personConfig = {} as TangibleEntityConfig;
 
   const personCloneConfig = {} as TangibleEntityConfig;
@@ -130,9 +130,9 @@ describe('createEntityWhereSourceInputType', () => {
       name: 'Example',
       type: 'tangible',
     };
-    const expectedResult = ['ExampleWhereSourceInput', '', {}];
+    const expectedResult = ['ExampleWhereKeyToSourceInput', '', {}];
 
-    const result = createEntityWhereSourceInputType(entityConfig);
+    const result = createEntityWhereKeyToSourceInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
@@ -162,8 +162,8 @@ describe('createEntityWhereSourceInputType', () => {
     });
 
     const expectedResult = [
-      'ExampleWhereSourceInput',
-      `input ExampleWhereSourceInput {
+      'ExampleWhereKeyToSourceInput',
+      `input ExampleWhereKeyToSourceInput {
   original: ExampleWhereOneInput
   backup: ExampleWhereOneInput
 }`,
@@ -172,14 +172,14 @@ describe('createEntityWhereSourceInputType', () => {
       },
     ];
 
-    const result = createEntityWhereSourceInputType(entityConfig);
+    const result = createEntityWhereKeyToSourceInputType(entityConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create entity update input type with duplex fields', () => {
     const expectedResult = [
-      'PersonWhereSourceInput',
-      `input PersonWhereSourceInput {
+      'PersonWhereKeyToSourceInput',
+      `input PersonWhereKeyToSourceInput {
   friends: PersonWhereOneInput
   enemies: PersonWhereOneInput
   clone: PersonCloneWhereOneInput
@@ -190,14 +190,14 @@ describe('createEntityWhereSourceInputType', () => {
       },
     ];
 
-    const result = createEntityWhereSourceInputType(personConfig);
+    const result = createEntityWhereKeyToSourceInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create entity update input type with duplex fields', () => {
-    const expectedResult = ['PlaceWhereSourceInput', '', {}];
+    const expectedResult = ['PlaceWhereKeyToSourceInput', '', {}];
 
-    const result = createEntityWhereSourceInputType(placeConfig);
+    const result = createEntityWhereKeyToSourceInputType(placeConfig);
     expect(result).toEqual(expectedResult);
   });
 });

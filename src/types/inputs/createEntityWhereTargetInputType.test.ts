@@ -2,9 +2,9 @@
 
 import type { TangibleEntityConfig } from '../../tsTypes';
 
-import createEntityWhereKeyToTargetInputType from './createEntityWhereKeyToTargetInputType';
+import createEntityWhereTargetInputType from './createEntityWhereTargetInputType';
 
-describe('createEntityWhereKeyToTargetInputType', () => {
+describe('createEntityWhereTargetInputType', () => {
   const personConfig = {} as TangibleEntityConfig;
   const personCloneConfig = {} as TangibleEntityConfig;
   const placeConfig: TangibleEntityConfig = {
@@ -114,21 +114,21 @@ describe('createEntityWhereKeyToTargetInputType', () => {
 
   test('should create Person input type', () => {
     const expectedResult = [
-      'PersonWhereKeyToTargetInput',
-      `input PersonWhereKeyToTargetInput {
+      'PersonWhereTargetInput',
+      `input PersonWhereTargetInput {
   id: ID!
 }`,
       {},
     ];
 
-    const result = createEntityWhereKeyToTargetInputType(personConfig);
+    const result = createEntityWhereTargetInputType(personConfig);
     expect(result).toEqual(expectedResult);
   });
 
   test('should create Person input type', () => {
-    const expectedResult = ['PersonCloneWhereKeyToTargetInput', '', {}];
+    const expectedResult = ['PersonCloneWhereTargetInput', '', {}];
 
-    const result = createEntityWhereKeyToTargetInputType(personCloneConfig);
+    const result = createEntityWhereTargetInputType(personCloneConfig);
     expect(result).toEqual(expectedResult);
   });
 });

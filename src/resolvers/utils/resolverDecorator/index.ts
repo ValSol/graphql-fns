@@ -12,7 +12,7 @@ import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
 import transformWhere from './transformBefore/transformWhere';
 import transformWhereOne from './transformBefore/transformWhereOne';
-import transformWhereSource from './transformBefore/transformWhereSource';
+import transformWhereKeyToSource from './transformBefore/transformWhereKeyToSource';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
 const argTypesPrefixPlusSuffixes = [
@@ -24,8 +24,8 @@ const argTypesPrefixPlusSuffixes = [
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],
-  ['WhereKeyToTargetInput', transformWhereOne, false],
-  ['WhereSourceInput', transformWhereSource, false],
+  ['WhereTargetInput', transformWhereOne, false],
+  ['WhereKeyToSourceInput', transformWhereKeyToSource, false],
 ];
 
 // separate cache for every combination of generalConfig, serversideConfig & actionAttributes

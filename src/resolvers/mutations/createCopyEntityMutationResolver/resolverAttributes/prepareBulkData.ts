@@ -16,14 +16,14 @@ const prepareBulkData: PrepareBulkData = async (
 ) => {
   const { entityConfig } = resolverCreatorArg as { entityConfig: TangibleEntityConfig };
   const {
-    args: { whereSource, data: additionalData },
+    args: { whereKeyToSource, data: additionalData },
   } = resolverArg;
   const { core } = prevPreparedData;
 
-  const getMains = Array.isArray(whereSource) ? getCommonManyData : getCommonData;
+  const getMains = Array.isArray(whereKeyToSource) ? getCommonManyData : getCommonData;
 
-  const additionalDataArr = Array.isArray(whereSource)
-    ? additionalData || Array(whereSource.length).fill({})
+  const additionalDataArr = Array.isArray(whereKeyToSource)
+    ? additionalData || Array(whereKeyToSource.length).fill({})
     : additionalData
       ? [additionalData]
       : [{}];

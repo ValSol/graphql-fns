@@ -547,7 +547,7 @@ input MenuSectionWhereByUniqueInput {
 input MenuCloneSectionWhereByUniqueInput {
   id_in: [ID!]
 }
-input MenuWhereSourceInput {
+input MenuWhereKeyToSourceInput {
   clone: MenuCloneWhereOneInput
   sections: MenuSectionWhereOneInput
 }
@@ -576,7 +576,7 @@ input MenuUpdateInput {
   sections: MenuSectionCreateOrPushChildrenInput
   selectedSections: MenuSectionWhereInput
 }
-input MenuCloneWhereSourceInput {
+input MenuCloneWhereKeyToSourceInput {
   original: MenuWhereOneInput
   sections: MenuCloneSectionWhereOneInput
 }
@@ -604,7 +604,7 @@ input MenuCloneUpdateInput {
   original: MenuCreateChildInput
   sections: MenuCloneSectionCreateOrPushChildrenInput
 }
-input MenuSectionWhereSourceInput {
+input MenuSectionWhereKeyToSourceInput {
   menu: MenuWhereOneInput
 }
 enum copyMenuSectionThroughmenuOptionsEnum {
@@ -617,14 +617,14 @@ input copyMenuSectionThroughmenuOptionInput {
 input copyMenuSectionOptionsInput {
   menu: copyMenuSectionThroughmenuOptionInput
 }
-input MenuSectionWhereKeyToTargetInput {
+input MenuSectionWhereTargetInput {
   id: ID!
 }
 input MenuSectionUpdateInput {
   name: String
   menu: MenuCreateChildInput
 }
-input MenuCloneSectionWhereSourceInput {
+input MenuCloneSectionWhereKeyToSourceInput {
   menu: MenuCloneWhereOneInput
 }
 enum copyMenuCloneSectionThroughmenuOptionsEnum {
@@ -637,7 +637,7 @@ input copyMenuCloneSectionThroughmenuOptionInput {
 input copyMenuCloneSectionOptionsInput {
   menu: copyMenuCloneSectionThroughmenuOptionInput
 }
-input MenuCloneSectionWhereKeyToTargetInput {
+input MenuCloneSectionWhereTargetInput {
   id: ID!
 }
 input MenuCloneSectionUpdateInput {
@@ -903,18 +903,18 @@ type Query {
   MenuCloneSectionsByUnique(where: MenuCloneSectionWhereByUniqueInput!, sort: MenuCloneSectionSortInput, token: String): [MenuCloneSection!]!
 }
 type Mutation {
-  copyManyMenus(whereSource: [MenuWhereSourceInput!]!, options: copyMenuOptionsInput, data: [MenuUpdateInput!], token: String): [Menu!]!
-  copyManyMenuClones(whereSource: [MenuCloneWhereSourceInput!]!, options: copyMenuCloneOptionsInput, data: [MenuCloneUpdateInput!], token: String): [MenuClone!]!
-  copyManyMenuSections(whereSource: [MenuSectionWhereSourceInput!]!, options: copyMenuSectionOptionsInput, whereKeyToTarget: [MenuSectionWhereKeyToTargetInput!], data: [MenuSectionUpdateInput!], token: String): [MenuSection!]!
-  copyManyMenuCloneSections(whereSource: [MenuCloneSectionWhereSourceInput!]!, options: copyMenuCloneSectionOptionsInput, whereKeyToTarget: [MenuCloneSectionWhereKeyToTargetInput!], data: [MenuCloneSectionUpdateInput!], token: String): [MenuCloneSection!]!
-  copyManyMenusWithChildren(whereSource: [MenuWhereSourceInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
-  copyManyMenuClonesWithChildren(whereSource: [MenuCloneWhereSourceInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
-  copyMenu(whereSource: MenuWhereSourceInput!, options: copyMenuOptionsInput, data: MenuUpdateInput, token: String): Menu!
-  copyMenuClone(whereSource: MenuCloneWhereSourceInput!, options: copyMenuCloneOptionsInput, data: MenuCloneUpdateInput, token: String): MenuClone!
-  copyMenuSection(whereSource: MenuSectionWhereSourceInput!, options: copyMenuSectionOptionsInput, whereKeyToTarget: MenuSectionWhereKeyToTargetInput, data: MenuSectionUpdateInput, token: String): MenuSection!
-  copyMenuCloneSection(whereSource: MenuCloneSectionWhereSourceInput!, options: copyMenuCloneSectionOptionsInput, whereKeyToTarget: MenuCloneSectionWhereKeyToTargetInput, data: MenuCloneSectionUpdateInput, token: String): MenuCloneSection!
-  copyMenuWithChildren(whereSource: MenuWhereSourceInput!, options: copyMenuOptionsInput, token: String): Menu!
-  copyMenuCloneWithChildren(whereSource: MenuCloneWhereSourceInput!, options: copyMenuCloneOptionsInput, token: String): MenuClone!
+  copyManyMenus(whereKeyToSource: [MenuWhereKeyToSourceInput!]!, options: copyMenuOptionsInput, data: [MenuUpdateInput!], token: String): [Menu!]!
+  copyManyMenuClones(whereKeyToSource: [MenuCloneWhereKeyToSourceInput!]!, options: copyMenuCloneOptionsInput, data: [MenuCloneUpdateInput!], token: String): [MenuClone!]!
+  copyManyMenuSections(whereKeyToSource: [MenuSectionWhereKeyToSourceInput!]!, options: copyMenuSectionOptionsInput, whereTarget: [MenuSectionWhereTargetInput!], data: [MenuSectionUpdateInput!], token: String): [MenuSection!]!
+  copyManyMenuCloneSections(whereKeyToSource: [MenuCloneSectionWhereKeyToSourceInput!]!, options: copyMenuCloneSectionOptionsInput, whereTarget: [MenuCloneSectionWhereTargetInput!], data: [MenuCloneSectionUpdateInput!], token: String): [MenuCloneSection!]!
+  copyManyMenusWithChildren(whereKeyToSource: [MenuWhereKeyToSourceInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
+  copyManyMenuClonesWithChildren(whereKeyToSource: [MenuCloneWhereKeyToSourceInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
+  copyMenu(whereKeyToSource: MenuWhereKeyToSourceInput!, options: copyMenuOptionsInput, data: MenuUpdateInput, token: String): Menu!
+  copyMenuClone(whereKeyToSource: MenuCloneWhereKeyToSourceInput!, options: copyMenuCloneOptionsInput, data: MenuCloneUpdateInput, token: String): MenuClone!
+  copyMenuSection(whereKeyToSource: MenuSectionWhereKeyToSourceInput!, options: copyMenuSectionOptionsInput, whereTarget: MenuSectionWhereTargetInput, data: MenuSectionUpdateInput, token: String): MenuSection!
+  copyMenuCloneSection(whereKeyToSource: MenuCloneSectionWhereKeyToSourceInput!, options: copyMenuCloneSectionOptionsInput, whereTarget: MenuCloneSectionWhereTargetInput, data: MenuCloneSectionUpdateInput, token: String): MenuCloneSection!
+  copyMenuWithChildren(whereKeyToSource: MenuWhereKeyToSourceInput!, options: copyMenuOptionsInput, token: String): Menu!
+  copyMenuCloneWithChildren(whereKeyToSource: MenuCloneWhereKeyToSourceInput!, options: copyMenuCloneOptionsInput, token: String): MenuClone!
   createManyMenus(data: [MenuCreateInput!]!, token: String): [Menu!]!
   createManyMenuClones(data: [MenuCloneCreateInput!]!, token: String): [MenuClone!]!
   createManyMenuSections(data: [MenuSectionCreateInput!]!, token: String): [MenuSection!]!
@@ -2640,7 +2640,7 @@ input PersonWhereByUniqueInput {
 input PlaceWhereByUniqueInput {
   id_in: [ID!]
 }
-input PersonWhereSourceInput {
+input PersonWhereKeyToSourceInput {
   friends: PersonWhereOneInput
   enemies: PersonWhereOneInput
 }
@@ -2670,7 +2670,7 @@ input copyPersonOptionsInput {
   friends: copyPersonThroughfriendsOptionInput
   enemies: copyPersonThroughenemiesOptionInput
 }
-input PersonWhereKeyToTargetInput {
+input PersonWhereTargetInput {
   id: ID!
 }
 input PersonUpdateInput {
@@ -2914,8 +2914,8 @@ type Query {
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput, token: String): [Place!]!
 }
 type Mutation {
-  copyManyPeople(whereSource: [PersonWhereSourceInput!]!, options: copyPersonOptionsInput, whereKeyToTarget: [PersonWhereKeyToTargetInput!], data: [PersonUpdateInput!], token: String): [Person!]!
-  copyPerson(whereSource: PersonWhereSourceInput!, options: copyPersonOptionsInput, whereKeyToTarget: PersonWhereKeyToTargetInput, data: PersonUpdateInput, token: String): Person!
+  copyManyPeople(whereKeyToSource: [PersonWhereKeyToSourceInput!]!, options: copyPersonOptionsInput, whereTarget: [PersonWhereTargetInput!], data: [PersonUpdateInput!], token: String): [Person!]!
+  copyPerson(whereKeyToSource: PersonWhereKeyToSourceInput!, options: copyPersonOptionsInput, whereTarget: PersonWhereTargetInput, data: PersonUpdateInput, token: String): Person!
   createManyPeople(data: [PersonCreateInput!]!, token: String): [Person!]!
   createManyPlaces(data: [PlaceCreateInput!]!, token: String): [Place!]!
   createPerson(data: PersonCreateInput!, token: String): Person!

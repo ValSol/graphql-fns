@@ -883,15 +883,15 @@ describe('graphql schema', () => {
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
 
     expect(typeDefs).toMatch(
-      /\n  copyMenu\(whereSource: MenuWhereSourceInput!, options: copyMenuOptionsInput, whereKeyToTarget: MenuWhereKeyToTargetInput, data: MenuUpdateInput, token: String\): Menu!\n/,
+      /\n  copyMenu\(whereKeyToSource: MenuWhereKeyToSourceInput!, options: copyMenuOptionsInput, whereTarget: MenuWhereTargetInput, data: MenuUpdateInput, token: String\): Menu!\n/,
     );
     expect(typeDefs).toMatch(
-      /\n  copyManyMenusWithChildren\(whereSource: \[MenuWhereSourceInput!\]!, options: copyMenuOptionsInput, whereKeyToTarget: \[MenuWhereKeyToTargetInput!\], token: String\): \[Menu!\]!\n/,
+      /\n  copyManyMenusWithChildren\(whereKeyToSource: \[MenuWhereKeyToSourceInput!\]!, options: copyMenuOptionsInput, whereTarget: \[MenuWhereTargetInput!\], token: String\): \[Menu!\]!\n/,
     );
     expect(typeDefs).toMatch(
-      /\ninput MenuWhereSourceInput \{\n  original: MenuTemplateWhereOneInput\n/,
+      /\ninput MenuWhereKeyToSourceInput \{\n  original: MenuTemplateWhereOneInput\n/,
     );
-    expect(typeDefs).toMatch(/\ninput MenuWhereKeyToTargetInput \{\n  id: ID!\n\}/);
+    expect(typeDefs).toMatch(/\ninput MenuWhereTargetInput \{\n  id: ID!\n\}/);
     expect(typeDefs).not.toMatch(/whereOnes|CopyWhereOnesInput|WhereOneToCopyInput/);
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();

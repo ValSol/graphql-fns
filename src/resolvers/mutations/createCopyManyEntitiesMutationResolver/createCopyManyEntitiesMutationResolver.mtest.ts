@@ -184,12 +184,12 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     expect(typeof copyManyPersonClones).toBe('function');
     if (!copyManyPersonClones) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereSource = createdPersons.map((item) => ({ original: { id: item.id } }));
+    const whereKeyToSource = createdPersons.map((item) => ({ original: { id: item.id } }));
 
     const personClonesWithForbiddenField = await copyManyPersonClones(
       null,
       {
-        whereSource,
+        whereKeyToSource,
         options: { original: { fieldsForbiddenToCopy: ['lastName'] } },
       },
       { mongooseConn, pubsub },
@@ -210,7 +210,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     const personClones = await copyManyPersonClones(
       null,
       {
-        whereSource,
+        whereKeyToSource,
         options: { original: { fieldsToCopy: ['firstName'] } },
         data: [{ info: 'test' }, { info: 'test!' }],
       },
@@ -239,7 +239,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personBackups = await copyManyPersonBackups(
       null,
-      { whereSource },
+      { whereKeyToSource },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -281,7 +281,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personClones2 = await copyManyPersonClones(
       null,
-      { whereSource, data: [{ info: 'test2' }, { info: 'test2!' }] },
+      { whereKeyToSource, data: [{ info: 'test2' }, { info: 'test2!' }] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -301,7 +301,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personBackups2 = await copyManyPersonBackups(
       null,
-      { whereSource },
+      { whereKeyToSource },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -333,8 +333,8 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     const personBackups3 = await copyManyPersonBackups(
       null,
       {
-        whereSource,
-        whereKeyToTarget: personBackups2.map((item) => ({ id: item.id })),
+        whereKeyToSource,
+        whereTarget: personBackups2.map((item) => ({ id: item.id })),
       },
       { mongooseConn, pubsub },
       null,
@@ -358,7 +358,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const persons = await copyManyPersons(
       null,
-      { whereSource: personBackups.map((item) => ({ backups: { id: item.id } })) },
+      { whereKeyToSource: personBackups.map((item) => ({ backups: { id: item.id } })) },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },

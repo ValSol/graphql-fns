@@ -5,7 +5,7 @@ import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
 import transformWhere from './transformWhere';
 import transformWhereOne from './transformWhereOne';
-import transformWhereSource from './transformWhereSource';
+import transformWhereKeyToSource from './transformWhereKeyToSource';
 
 const argTypesInParts = [
   // prefx, suffix, transformer, notUseConfig
@@ -16,8 +16,8 @@ const argTypesInParts = [
   ['', 'WhereByUniqueInput', transformWhere, false],
   ['', 'WhereOneInput', transformWhereOne, false],
   ['', 'WhereCompoundOneInput', transformWhere, false],
-  ['', 'WhereKeyToTargetInput', transformWhereOne, false],
-  ['', 'WhereSourceInput', transformWhereSource, false],
+  ['', 'WhereTargetInput', transformWhereOne, false],
+  ['', 'WhereKeyToSourceInput', transformWhereKeyToSource, false],
 ];
 
 const getPossibleEntityName = (prefix: string, suffix: string, argType: string) =>

@@ -33,20 +33,20 @@ const getCommonData = async (
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
-  const { whereSource, whereKeyToTarget, options, data: additionalData = {} } = args;
-  const whereSourceKeys = Object.keys(whereSource);
+  const { whereKeyToSource, whereTarget, options, data: additionalData = {} } = args;
+  const whereKeyToSourceKeys = Object.keys(whereKeyToSource);
 
-  if (whereSourceKeys.length !== 1) {
+  if (whereKeyToSourceKeys.length !== 1) {
     throw new TypeError(
-      `Expected exactly one key in whereSource arg!, but have: ${
-        whereSourceKeys.length
-      } (${JSON.stringify(whereSourceKeys)})!`,
+      `Expected exactly one key in whereKeyToSource arg!, but have: ${
+        whereKeyToSourceKeys.length
+      } (${JSON.stringify(whereKeyToSourceKeys)})!`,
     );
   }
 
   const { mongooseConn } = context;
 
-  const [fieldName] = whereSourceKeys;
+  const [fieldName] = whereKeyToSourceKeys;
 
   const fieldsPair = getOppositeFields(entityConfig as TangibleEntityConfig).find(
     ([{ name: name2 }]) => name2 === fieldName,
@@ -72,7 +72,7 @@ const getCommonData = async (
 
     if (optionsKeys[0] !== fieldName) {
       throw new TypeError(
-        `Expected "options key" to be equal to "whereSource key": "${fieldName}", but it is "${optionsKeys[0]}"!`,
+        `Expected "options key" to be equal to "whereKeyToSource key": "${fieldName}", but it is "${optionsKeys[0]}"!`,
       );
     }
 
@@ -116,7 +116,7 @@ const getCommonData = async (
   const CopiedEntity = await createMongooseModel(mongooseConn, config, enums);
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
-  const { where } = composeWhereInput(whereSource[fieldName], config);
+  const { where } = composeWhereInput(whereKeyToSource[fieldName], config);
   const entity = await CopiedEntity.findOne(where, matchingFieldsProjection, {
     lean: true,
     session,
@@ -129,8 +129,8 @@ const getCommonData = async (
   let entity2 = null;
 
   if (!oppositeArray) {
-    if (whereKeyToTarget) {
-      throw new TypeError('Needless whereKeyToTarget arg!');
+    if (whereTarget) {
+      throw new TypeError('Needless whereTarget arg!');
     }
 
     if (entity[oppositeName]) {
@@ -141,14 +141,12 @@ const getCommonData = async (
         session,
       });
     }
-  } else if (whereKeyToTarget) {
-    const { where: where2 } = mergeWhereAndFilter(inputFilter, whereKeyToTarget, entityConfig);
+  } else if (whereTarget) {
+    const { where: where2 } = mergeWhereAndFilter(inputFilter, whereTarget, entityConfig);
     entity2 = await Entity.findOne(where2, matchingFieldsProjection, { lean: true, session });
 
     if (!entity2) {
-      throw new TypeError(
-        `Not found "${name}" entity to copy to: ${JSON.stringify(whereKeyToTarget)}!`,
-      );
+      throw new TypeError(`Not found "${name}" entity to copy to: ${JSON.stringify(whereTarget)}!`);
     }
 
     id = entity2._id.toString();

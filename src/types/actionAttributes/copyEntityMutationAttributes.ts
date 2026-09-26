@@ -2,9 +2,9 @@ import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/t
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
-import createEntityWhereSourceInputType from '../inputs/createEntityWhereSourceInputType';
+import createEntityWhereKeyToSourceInputType from '../inputs/createEntityWhereKeyToSourceInputType';
 import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
-import createEntityWhereKeyToTargetInputType from '../inputs/createEntityWhereKeyToTargetInputType';
+import createEntityWhereTargetInputType from '../inputs/createEntityWhereTargetInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -15,19 +15,19 @@ const actionName = (baseName: string, representationKey = ''): string =>
   `copy${baseName}${representationKey}`;
 
 const inputCreators = [
-  createEntityWhereSourceInputType,
+  createEntityWhereKeyToSourceInputType,
   createCopyEntityOptionsInputType,
-  createEntityWhereKeyToTargetInputType,
+  createEntityWhereTargetInputType,
   createEntityUpdateInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereSource', 'options', 'whereKeyToTarget', 'data', 'token'];
+const argNames = ['whereKeyToSource', 'options', 'whereTarget', 'data', 'token'];
 
 const argTypes = [
-  ({ name }): string => `${name}WhereSourceInput!`,
+  ({ name }): string => `${name}WhereKeyToSourceInput!`,
   ({ name }): string => `copy${name}OptionsInput`,
-  ({ name }): string => `${name}WhereKeyToTargetInput`,
+  ({ name }): string => `${name}WhereTargetInput`,
   ({ name }): string => `${name}UpdateInput`,
   (): string => 'String',
 ];
@@ -49,7 +49,8 @@ const actionReturnConfig = (
     : entityConfig;
 
 const actionAllowed = (entityConfig: EntityConfig): boolean =>
-  entityConfig.type === 'tangible' && Boolean(createEntityWhereSourceInputType(entityConfig)[1]);
+  entityConfig.type === 'tangible' &&
+  Boolean(createEntityWhereKeyToSourceInputType(entityConfig)[1]);
 
 const actionReturnString = ({ name }: EntityConfig, representationKey = ''): string =>
   `${name}${representationKey}!`;

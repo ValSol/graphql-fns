@@ -182,7 +182,7 @@ describe('createCopyEntityMutationResolver', () => {
     const personCloneWithForbiddenField = await copyPersonClone(
       null,
       {
-        whereSource: { original: { id: createdPerson.id } },
+        whereKeyToSource: { original: { id: createdPerson.id } },
         options: { original: { fieldsForbiddenToCopy: ['lastName'] } },
       },
       { mongooseConn, pubsub },
@@ -196,7 +196,7 @@ describe('createCopyEntityMutationResolver', () => {
     const personClone = await copyPersonClone(
       null,
       {
-        whereSource: { original: { id: createdPerson.id } },
+        whereKeyToSource: { original: { id: createdPerson.id } },
         options: { original: { fieldsToCopy: ['firstName'] } },
         data: { info: 'test' },
       },
@@ -219,7 +219,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const personBackup = await copyPersonBackup(
       null,
-      { whereSource: { original: { id: createdPerson.id } } },
+      { whereKeyToSource: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -250,7 +250,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const personClone2 = await copyPersonClone(
       null,
-      { whereSource: { original: { id: createdPerson.id } }, data: { info: 'test2' } },
+      { whereKeyToSource: { original: { id: createdPerson.id } }, data: { info: 'test2' } },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -263,7 +263,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const personBackup2 = await copyPersonBackup(
       null,
-      { whereSource: { original: { id: createdPerson.id } } },
+      { whereKeyToSource: { original: { id: createdPerson.id } } },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -286,8 +286,8 @@ describe('createCopyEntityMutationResolver', () => {
     const personBackup3 = await copyPersonBackup(
       null,
       {
-        whereSource: { original: { id: createdPerson.id } },
-        whereKeyToTarget: { id: personBackup2.id.toString() },
+        whereKeyToSource: { original: { id: createdPerson.id } },
+        whereTarget: { id: personBackup2.id.toString() },
       },
       { mongooseConn, pubsub },
       null,
@@ -307,7 +307,7 @@ describe('createCopyEntityMutationResolver', () => {
 
     const person = await copyPerson(
       null,
-      { whereSource: { backups: { id: personBackup.id } } },
+      { whereKeyToSource: { backups: { id: personBackup.id } } },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -437,7 +437,7 @@ describe('createCopyEntityMutationResolver', () => {
     const restaurantClone = await copyRestaurantClone(
       null,
       {
-        whereSource: { original: { id: createdRestaurant.id.toString() } },
+        whereKeyToSource: { original: { id: createdRestaurant.id.toString() } },
       },
       { mongooseConn, pubsub },
       null,
