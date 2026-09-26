@@ -18,6 +18,7 @@
 | `dc922b25` | B10, ?8 — нестандартні (custom, створені вручну) subscriptions явно заборонені: `custom.Subscription` дає зрозумілу помилку |
 | `39794e6e` | B8, B8a — усі кеші прив'язані до об'єктів конфігів (`createObjectBoundStore`), перетворювачі аргументів складаються для кожного resolver-а |
 | `e8b906de` | B11–B17 — дрібні виправлення: сигнатури дій без аргументів, custom-resolvers лише для tangible, TS-типи, тексти помилок, мертвий код |
+| `81f368db` | I2, I4, I5, I6, I9, I11, ?7 — неузгодженості схеми за вашими рішеннями, видалено `cloneEntity`; I7, I10 — так задумано; I3, I8 — відкладено |
 
 ---
 
@@ -77,7 +78,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | F5 | relational (tangible→tangible) | дочірні поля C1/C2 | `YCreateChildInput` / `YCreateOrPushChildrenInput` (`connect`/`create`) | те саме | `name, _in, _nin, _ne, name_: YWhereWithoutBooleanOperationsInput` |
 | F6 | **parent relational** (автоматично додається у Y як опозит для кожного relational X→Y) | масив: C1 | — | — | `name_: …WhereWithoutBooleanOperationsInput`, якщо в опозита є `index` |
 | F7 | duplex (двобічний зв'язок) | C1/C2 (+C3 GetOrCreate) | як F5, але якщо опозит `required`, то `YCreateThru_{opp}_FieldChildInput` / `YCreateOrPushThru_{opp}_FieldChildrenInput` (у Create, Update і PushInto; у такому input поле-опозит необов'язкове й заповнюється id батька) | як Create | як F5 |
-| F8 | filter (зберігає фільтр по Y) | `variants: plain` → C1/C2; `stringified` → `nameStringified: String` | масив: `YWhereInput`, скаляр: `YWhereOneInput` (**без frozen**, див. I5) | так | — |
+| F8 | filter (зберігає фільтр по Y як рядок) | `variants: plain` → C1/C2; `stringified` → `nameStringified: String` | масив: `YWhereInput`, скаляр: `YWhereOneInput` (frozen теж, див. I5) | так (без frozen) | — (у `PushIntoXInput` filter-полів немає, див. I6) |
 | F9 | calculated | за `calculatedType`, з аргументами `inputTypes` (+`slice` для масивів); `filterFields` як C1/C2 | — | — | — (але у WherePayloadInput — так) |
 | F10 | child (тільки virtual) | `name: Y` / `[Y!]!` | — | — | — |
 
@@ -93,7 +94,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | Q3 | `entitiesThroughConnection` | `XsThroughConnection(where, sort, near?, search?, after, before, first, last, token): XConnection!` | tangible | `createEntitiesThroughConnectionQueryResolver` |
 | Q4 | `entitiesByUnique` | `XsByUnique(where: XWhereByUniqueInput!, sort, near?, search?, token): [X!]!` | tangible | `createEntitiesByUniqueQueryResolver` |
 | Q5 | `entityCount` | `XCount(where, search?, token): Int!` | tangible | `createEntityCountQueryResolver` |
-| Q6 | `entityDistinctValues` | `XDistinctValues(where, search?, options: XDistinctValuesOptionsInput!, token): [String!]!` | tangible, **якщо є text або enum поля** | `createEntityDistinctValuesQueryResolver` |
+| Q6 | `entityDistinctValues` | `XDistinctValues(where, search?, options: XDistinctValuesOptionsInput!, token): [String!]!` | tangible, **якщо є індексовані text (`index`/`unique`) або enum (`index`) поля** (див. I9) | `createEntityDistinctValuesQueryResolver` |
 
 `near?` → лише якщо є geospatial-поле з `index`; `search?` → лише якщо є textField з `weight`. `sort` є завжди (id/createdAt/updatedAt + скалярні індексовані поля).
 
@@ -106,21 +107,21 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | M3 | `updateEntity` | `updateX(whereOne: XWhereOneInput!, data: XUpdateInput!, token)` → `X!` | — | ✅ `updated` |
 | M4 | `updateManyEntities` | `updateManyXs(whereOne: [..!]!, data: [XUpdateInput!]!, token)` → `[X!]!` | — | ❌ |
 | M5 | `updateFilteredEntities` | `updateFilteredXs(where, near?, search?, data: XUpdateInput!, token)` → `[X!]!` | — | ❌ |
-| M6 | `updateFilteredEntitiesReturnScalar` | `updateFilteredXsReturnScalar(where, search?, data!, token)` → `Int!` | — | ❌ |
+| M6 | `updateFilteredEntitiesReturnScalar` | `updateFilteredXsReturnScalar(where, near?, search?, data!, token)` → `Int!` | — | ❌ |
 | M7 | `pushIntoEntity` | `pushIntoX(whereOne!, data: PushIntoXInput!, positions: XPushPositionsInput, token)` → `X!` | є хоча б одне не-frozen масивне поле (або filter-поле) | ✅ `updated` |
 | M8 | `deleteEntity` | `deleteX(whereOne!, token)` → `X!` | — | ✅ `deleted` |
 | M9 | `deleteManyEntities` | `deleteManyXs(whereOne: [..!]!, token)` → `[X!]!` | — | ❌ |
 | M10 | `deleteFilteredEntities` | `deleteFilteredXs(where, near?, search?, token)` → `[X!]!` | — | ❌ |
-| M11 | `deleteFilteredEntitiesReturnScalar` | `…ReturnScalar(where, search?, token)` → `Int!` | — | ❌ |
+| M11 | `deleteFilteredEntitiesReturnScalar` | `…ReturnScalar(where, near?, search?, token)` → `Int!` | — | ❌ |
 | M12 | `deleteEntityWithChildren` | `deleteXWithChildren(whereOne!, options: deleteXWithChildrenOptionsInput, token)` → `X!` | є «діти» (*) | ❌ |
 | M13 | `deleteManyEntitiesWithChildren` | `deleteManyXsWithChildren(whereOne: [..]!, options, token)` → `[X!]!` | (*) | ❌ |
 | M14 | `deleteFilteredEntitiesWithChildren` | `deleteFilteredXsWithChildren(where, near?, search?, options, token)` → `[X!]!` | (*) | ❌ |
-| M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, search?, options, token)` → `Int!` | (*) | ❌ |
+| M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, near?, search?, options, token)` → `Int!` | (*) | ❌ |
 | M16 | `copyEntity` | `copyX(whereOnes: XCopyWhereOnesInput!, options: copyXOptionsInput, whereOne: XWhereOneToCopyInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
 | M17 | `copyManyEntities` | `copyManyXs(whereOnes: [..!]!, options, whereOne: [..!], data: [..!], token)` → `[X!]!` | (**) | ❌ |
 | M18 | `copyEntityWithChildren` | `copyXWithChildren(whereOnes!, options, whereOne, token)` → `X!` | (**) і (*) | ❌ |
 | M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereOnes: [..!]!, options, whereOne: [..!]!, token)` → `[X!]!` | (**) і (*) | ❌ |
-| — | `cloneEntity` | закоментовано в `actionAttributes/index.ts` | — | — |
+| — | `cloneEntity` | видалено (див. ?7) | — | — |
 
 (*) «Діти» — це duplex-поля X, у яких поле-опозит **скалярне і не `parent`** (`getOppositeFields(...).filter(([, {array, parent}]) => !(array || parent))`).
 (**) Існує duplex-поле `f`, для якого `getMatchingFields(X, Y)` дає хоч одне поле, окрім `f` (тобто в X і Y є однойменні поля, які можна скопіювати).
@@ -146,7 +147,7 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | C1 | масив | `childEntities` дозволено | `f(where, sort, pagination, near?, search?): [Y!]!` | relational/duplex: `createEntityArrayResolver`; parent relational: `createEntityOppositeRelationArrayResolver`; filter: `createEntityFilterArrayResolver` |
 | C1a | масив | `childEntitiesThroughConnection` | `fThroughConnection(where, sort, near?, search?, after, before, first, last): YConnection!` | `…ConnectionResolver` (3 варіанти, як вище) |
 | C1b | масив | `childEntityCount` | `fCount(where, search?): Int!` | `…CountResolver` |
-| C1c | масив | `childEntityDistinctValues` і в Y є text/enum | `fDistinctValues(where, search?, options!): [String!]!` | `…DistinctValuesResolver` |
+| C1c | масив | `childEntityDistinctValues` і в Y є індексовані text/enum-поля | `fDistinctValues(where, search?, options!): [String!]!` | `…DistinctValuesResolver` |
 | C2 | скаляр | `childEntity` дозволено (`checkRepresentationAction`, та сама перевірка, що й для resolver-а; див. B4) | `f: Y[!]` | `createEntityScalarResolver` / `createEntityFilterScalarResolver` |
 | C3 | duplex-скаляр, не `required`, опозит скалярний | `childEntityGetOrCreate` | `fGetOrCreate(data: YCreateInput!): Y` (`whereOne` сховано) | `createEntityGetOrCreateResolver` |
 | C4 | embedded-масив | `variants` | `plain`: `f(slice): [E!]!`; `connection`: `fThroughConnection(after,before,first,last): EConnection!`; `count`: `fCount: Int!` | `fieldArrayResolver` / `fieldArrayThroughConnectionResolver` / `fieldArrayCountResolver` |
@@ -155,6 +156,8 @@ composeTypeDefsAndResolvers(generalConfig, serversideConfig)
 | C7 | filter `stringified` | — | `fStringified: String` | `fieldFilterStringifiedResolver` |
 
 Field-resolvers (`composeEntityResolvers`) створюються для **кожної** сутності, тип якої є в SDL: tangible, embedded, virtual та їхні representation-версії. Порожні набори не додаються (див. B3).
+
+Дочірні поля та їхні resolvers з'являються лише якщо дія можлива для Y (`actionAllowed`, перевіряється в `checkRepresentationAction`) і дозволена inventory/representation.
 
 Кожен дочірній field-resolver усередині обгортає відповідний Query-resolver `createChildEntity*QueryResolver` через `resolverDecorator`, а для representation-конфігів — через `createCustomResolver('Query', 'childEntity…{Key}')`.
 
@@ -208,26 +211,28 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | ID | Спостереження |
 |---|---|
 | I1 | Subscription-події публікують лише `createEntity`, `updateEntity`, `pushIntoEntity`, `deleteEntity`. Масові операції (`createMany…`, `updateMany/Filtered…`, `deleteMany/Filtered/WithChildren…`, `copy…`) подій не створюють, тож підписники їх пропускають — **так задумано**: масові мутації subscription-події не публікують (див. ?3) |
-| I2 | `update/deleteFilteredEntitiesReturnScalar` не мають аргументу `near`, хоча їхні не-скалярні версії мають |
-| I3 | `copyManyEntities.whereOne: [X!]` (nullable), а `copyManyEntitiesWithChildren.whereOne: [X!]!`; `copyEntityWithChildren` не має `data`, а `copyEntity` має |
-| I4 | У `XWhereOneInput` унікальне text-поле має тип `ID`, тоді як у `WhereByUnique` і `WhereCompoundOne` воно `String` |
-| I5 | `XCreateInput` **виключає frozen filter-поля**, хоча інші frozen-поля в CreateInput є (freeze має забороняти лише зміну) — `createEntityCreateInputType.ts:101` |
-| I6 | `PushIntoXInput` бере **всі** filter-поля, включно зі скалярними (решта полів відфільтрована за `array`), а `XPushPositionsInput` filter-поля не містить. Уточнення: filter-поле зберігається як рядок (`type: String`), а `pushInto` формує для нього `$push: { поле: { $each: "<json>" } }`, що MongoDB відхиляє, тож `pushInto` з filter-полем завжди падає |
-| I7 | `freezedFields[X]` робить frozen **рівно** перелічені поля (решта стає `freeze: false`, навіть якщо в базовому конфігу вони frozen); `unfreezedFields` працює навпаки. Якщо задати обидва, переможе останній |
-| I8 | `childEntityGetOrCreate` має `actionType: 'Query'`, але може створювати запис: запис даних у Query-полі |
-| I9 | `XDistinctValuesOptionsInput` пропонує всі text/enum-поля (також масивні й неіндексовані), а enum має назву `XTextNamesEnum` |
-| I10 | `entityCount`/`entityDistinctValues` не мають `near`. Мабуть, це свідомо, бо `$nearSphere` не працює з count/distinct, але варто підтвердити |
-| I11 | `composeEntityConfig` не перевіряє, що `configName` у relational/duplex веде на **tangible**, і що `oppositeName` опозита вказує назад саме на це поле |
+| I2 | `update/deleteFilteredEntitiesReturnScalar` не мають аргументу `near`, хоча їхні не-скалярні версії мають — **виправлено** `81f368db`: `near` додано до всіх `…ReturnScalar` |
+| I3 | `copyManyEntities.whereOne: [X!]` (nullable), а `copyManyEntitiesWithChildren.whereOne: [X!]!`; `copyEntityWithChildren` не має `data`, а `copyEntity` має — **відкладено** для окремого розбору (Q6) |
+| I4 | У `XWhereOneInput` унікальне text-поле має тип `ID`, тоді як у `WhereByUnique` і `WhereCompoundOne` воно `String` — **виправлено** `81f368db`: тип `String` |
+| I5 | `XCreateInput` **виключає frozen filter-поля**, хоча інші frozen-поля в CreateInput є (freeze має забороняти лише зміну) — `createEntityCreateInputType.ts:101` — **виправлено** `81f368db`: frozen filter-поля є в `XCreateInput` |
+| I6 | `PushIntoXInput` бере **всі** filter-поля, включно зі скалярними (решта полів відфільтрована за `array`), а `XPushPositionsInput` filter-поля не містить. Уточнення: filter-поле зберігається як рядок (`type: String`), а `pushInto` формує для нього `$push: { поле: { $each: "<json>" } }`, що MongoDB відхиляє, тож `pushInto` з filter-полем завжди падає — **виправлено** `81f368db`: filter-поля прибрано з `PushIntoXInput` |
+| I7 | `freezedFields[X]` робить frozen **рівно** перелічені поля (решта стає `freeze: false`, навіть якщо в базовому конфігу вони frozen); `unfreezedFields` працює навпаки. Якщо задати обидва, переможе останній — **так задумано**: `freezedFields`/`unfreezedFields` повністю перевизначають `freeze` для всіх полів сутності (див. ?5) |
+| I8 | `childEntityGetOrCreate` має `actionType: 'Query'`, але може створювати запис: запис даних у Query-полі — **відкладено** для окремого розбору (Q8) |
+| I9 | `XDistinctValuesOptionsInput` пропонує всі text/enum-поля (також масивні й неіндексовані), а enum має назву `XTextNamesEnum` — **виправлено** `81f368db`: лише індексовані поля (text: `index` або `unique`, enum: `index`); сутність без таких полів не має `XDistinctValues` і дочірніх `…DistinctValues` |
+| I10 | `entityCount`/`entityDistinctValues` не мають `near`. Мабуть, це свідомо, бо `$nearSphere` не працює з count/distinct, але варто підтвердити — **так задумано**: `near` не лише відбирає, а й сортує за віддаленістю, що для count/distinct не потрібно; для відбору без сортування є, напр., `coordinates_withinSphere` |
+| I11 | `composeEntityConfig` не перевіряє, що `configName` у relational/duplex веде на **tangible**, і що `oppositeName` опозита вказує назад саме на це поле — **виправлено** `81f368db`: `composeAllEntityConfigs` кидає `TypeError` |
 
 ## 11. Питання до вас
 
 - ?1 B1: ~~якою має бути семантика `include` + `exclude` разом?~~ Вирішено в `2a2e24d4`: `include` обмежує на всіх рівнях, `exclude` виключає лише повністю покритий ланцюжок, `exclude: true` виключає все.
 - ?2 B3: ~~чи планувалося, що embedded-типи (і tangible без relational/duplex/geo) отримуватимуть field-resolvers? Якщо так, умову в `composeGqlResolvers:254` треба прибрати або розширити, а embedded-типи обходити теж.~~ Вирішено в `124e7e33`: field-resolvers створюються для всіх сутностей, які є в SDL.
 - ?3 ~~I1: події для масових мутацій не публікуються навмисно чи через недогляд?~~ Відповідь: навмисно, масові мутації не можуть публікувати subscription-події. Поточна поведінка остаточна.
-- ?4 I5/I6: як правильно поводитися з `freeze` для filter-полів у Create і з скалярними filter-полями в Push?
-- ?5 I7: `freezedFields`/`unfreezedFields` мають «перевизначати повністю» чи «доповнювати» базовий `freeze`?
+- ?4 ~~I5/I6: як поводитися з `freeze` для filter-полів у Create і з filter-полями в Push?~~ Відповідь: frozen filter-поля задаються при створенні; filter-поля не пушаться. Виправлено в `81f368db`.
+- ?5 ~~I7: `freezedFields`/`unfreezedFields` перевизначають чи доповнюють `freeze`?~~ Відповідь: повністю перевизначають (поточна поведінка остаточна).
 - ?6 ~~Чи підтримується кілька різних `generalConfig` в одному процесі?~~ Вирішено в `39794e6e`: кеші прив'язані до об'єктів `generalConfig` / `serversideConfig` / `entityConfig` через `WeakMap`, тож кілька конфігів в одному процесі не змішуються.
-- ?7 `cloneEntity`: код resolver-а та `createEntityCloneInputType` лишаються. Їх видалити чи відновити?
+- ?7 ~~`cloneEntity`: видалити чи відновити?~~ Відповідь: видалити. Видалено в `81f368db`.
 - ?8 ~~Custom Subscription (`custom.Subscription`): це підтримувана функція?~~ Відповідь: ні. Вирішено в `dc922b25`: якщо в `generalConfig.custom` передано `Subscription`, кидається `TypeError`; підтримуються лише стандартні та representation-subscriptions.
 - ?9 ~~Формат calculated geospatial-значень~~ Відповідь: `func` повертає GraphQL-формат (`{ lng, lat }`). Виправлено в `da657196`: calculated geospatial-поля більше не проходять через Mongo→GraphQL-конвертер (який повертав `null`), масиви зберігають підтримку `slice`.
 - ?10 ~~Фільтрація `wherePayload` за calculated virtual-полями~~ Відповідь: не потрібна. Поточна поведінка (virtual-поля не фільтруються) остаточна.
+- ?11 Q6 (I3), аргументи `copy…`: відкладено для окремого розбору.
+- ?12 Q8 (I8), `childXGetOrCreate` як Query: відкладено для окремого розбору.
