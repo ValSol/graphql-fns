@@ -163,7 +163,7 @@ Field-resolvers (`composeEntityResolvers`) створюються для **ко�
 | G1 | `actionAllowed(entityConfig)` | і в типах, і в resolvers (узгоджено) |
 | G2 | `inventory` (`include`/`exclude`, ланцюжок `[Kind, action, entity]`; `include` обмежує на всіх рівнях, `exclude` виключає лише повністю покритий ланцюжок, `exclude: true` — усе) | типи: `checkRepresentationAction` (і для root-дій, і для дочірніх полів); resolvers: кожен creator викликає `checkInventory` і повертає `null`; у runtime ролі перевіряються через `inventoryByRoles` в `executeAuthorisation` |
 | G3 | `representation[Key].allow[X]` — список дій | типи + resolvers (через `mergeRepresentationIntoCustom` → custom-дії з назвою `${action}${Key}`) |
-| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (див. B14) `custom.Subscription` заборонено (лише стандартні та representation-subscriptions) |
+| G4 | `custom.{Input,Query,Mutation}` + `serversideConfig.{Query,Mutation}` | сигнатура: лише tangible; resolver: `createCustomResolver` для **всіх** сутностей (див. B14); `custom.Subscription` заборонено (лише стандартні та representation-subscriptions) |
 | G5 | `manualyUsedEntities` | додає тип, навіть якщо він не досяжний |
 
 Ланцюжок runtime-декораторів: `resolverDecorator` → `transformBefore` (args за суфіксом типу: `CreateInput/UpdateInput/PushIntoInput` → `transformData`; `Where*` → `transformWhere`; `WhereOne*` → `transformWhereOne`; `CopyWhereOnesInput` → `transformWhereOnes`) → `authDecorator` (`executeAuthorisation`: inventoryByRoles, filters, staticFilters, personalFilters → `involvedFilters`, `subscriptionEntityNames`) → resolver → `transformAfter` (глобальні id).
