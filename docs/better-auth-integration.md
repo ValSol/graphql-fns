@@ -1,36 +1,36 @@
-# Інтеграція graphql-fns з better-auth
+# Integrating graphql-fns with better-auth
 
-> API better-auth звірено з вихідним кодом пакетів `better-auth@1.7.6` і `@better-auth/mongo-adapter@1.7.6` з npm. Сам механізм авторизації graphql-fns описано в [schema-and-resolvers-analysis.md, §13](./schema-and-resolvers-analysis.md#13-авторизація-користувачів).
+> The better-auth API was checked against the source code of the `better-auth@1.7.6` and `@better-auth/mongo-adapter@1.7.6` npm packages. The graphql-fns authorization mechanism itself is described in [schema-and-resolvers-analysis.md, §13](./schema-and-resolvers-analysis.md#13-user-authorization).
 
-## 1. Принцип
+## 1. Principle
 
-graphql-fns не працює з сесіями чи паролями. Про користувача він дізнається з однієї функції проєкту, `serversideConfig.getUserAttributes`:
+graphql-fns does not deal with sessions or passwords. It learns about the user from a single project function, `serversideConfig.getUserAttributes`:
 
 ```ts
 getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>
 ```
 
-- `roles` обов'язковий. Решта полів (`id`, `email`, `organizationId`…) передається у функції `filters` поруч із `role`.
-- `id` потрібен для `personalFilters`: це id запису сутності User **у graphql-fns** (див. §5).
-- `token` — значення аргументу `token: String`, який мають root query, мутації і `node`.
-- Бібліотека викликає функцію **один раз** на пару (`context`, `token`) і кешує результат (B23). Тому `context` має створюватися для кожного запиту.
+- `roles` is required. The other fields (`id`, `email`, `organizationId`…) are passed to `filters` functions next to `role`.
+- `id` is needed for `personalFilters`: it is the id of a User entity record **in graphql-fns** (see §5).
+- `token` is the value of the `token: String` argument of root queries, mutations and `node`.
+- The library calls the function **once** per (`context`, `token`) pair and caches the result (B23). So `context` must be created per request.
 
-Завдання інтеграції: у `getUserAttributes` отримати сесію better-auth і перетворити її на `{ id, roles, … }`.
+The integration task: in `getUserAttributes`, get the better-auth session and turn it into `{ id, roles, … }`.
 
-## 2. Відповідність
+## 2. Mapping
 
-| Потреба graphql-fns | better-auth | Як поєднати |
+| graphql-fns needs | better-auth | How to connect |
 |---|---|---|
-| Хто користувач | `auth.api.getSession({ headers })` → `{ user, session }` або `null` | Викликати в `getUserAttributes` |
-| Заголовки з Node `IncomingMessage` | `fromNodeHeaders` з `better-auth/node` | `fromNodeHeaders(context.req.headers)` |
-| `roles: string[]` | Плагін `admin`: `user.role` — **рядок**, кілька ролей через кому (`"admin,user"`), за замовчуванням `defaultRole` = `"user"`; `user.banned` | `user.role.split(',')` |
-| Ролі в організації | Плагін `organization`: `session.activeOrganizationId`, роль учасника (теж через кому) через `auth.api.getActiveMember` (кидає помилку, якщо активної організації немає) | Додати ролі учасника до `roles`, `organizationId` — в атрибути для `filters` |
-| Аргумент `token` | Плагін `bearer` читає `Authorization: Bearer <token>` | Перетворити `token` на заголовок |
-| `id` | MongoDB-адаптер зберігає `_id` як `ObjectId`, віддає `id` рядком з 24 hex-символів | Той самий формат, що в graphql-fns |
-| Навантаження на БД | `session.cookieCache` — сесія в підписаному cookie без звернення до БД | Увімкнути |
-| Гість | `getSession` → `null` | Повертати роль `guest` (§4) |
+| Who the user is | `auth.api.getSession({ headers })` → `{ user, session }` or `null` | Call it in `getUserAttributes` |
+| Headers from a Node `IncomingMessage` | `fromNodeHeaders` from `better-auth/node` | `fromNodeHeaders(context.req.headers)` |
+| `roles: string[]` | `admin` plugin: `user.role` is a **string**, several roles are comma-separated (`"admin,user"`), `defaultRole` is `"user"` by default; `user.banned` | `user.role.split(',')` |
+| Organization roles | `organization` plugin: `session.activeOrganizationId`, the member role (also comma-separated) via `auth.api.getActiveMember` (throws if there is no active organization) | Add member roles to `roles`, pass `organizationId` in the attributes for `filters` |
+| The `token` argument | The `bearer` plugin reads `Authorization: Bearer <token>` | Turn `token` into the header |
+| `id` | The MongoDB adapter stores `_id` as `ObjectId` and returns `id` as a 24-character hex string | Same format as in graphql-fns |
+| Database load | `session.cookieCache`: the session in a signed cookie without a database lookup | Enable it |
+| Guest | `getSession` → `null` | Return the `guest` role (§4) |
 
-## 3. Налаштування better-auth
+## 3. better-auth setup
 
 ```ts
 import { betterAuth } from 'better-auth';
@@ -38,11 +38,11 @@ import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import { admin, bearer } from 'better-auth/plugins';
 
 export const auth = betterAuth({
-  database: mongodbAdapter(db), // db — екземпляр Db з драйвера mongodb
+  database: mongodbAdapter(db), // db is a Db instance of the mongodb driver
   plugins: [admin(), bearer()],
   session: { cookieCache: { enabled: true, maxAge: 60 } },
   databaseHooks: {
-    user: { create: { after: syncGraphqlFnsUser } }, // див. §5
+    user: { create: { after: syncGraphqlFnsUser } }, // see §5
   },
 });
 ```
@@ -74,14 +74,14 @@ const getUserAttributes = async (context, token?: string): Promise<UserAttribute
 };
 ```
 
-Кешувати результат у проєкті не потрібно: бібліотека сама викликає `getUserAttributes` один раз на запит, навіть якщо запит зачіпає сотні field-resolvers. Невдалий виклик не кешується.
+There is no need to cache the result in the project: the library itself calls `getUserAttributes` once per request, even if the request touches hundreds of field resolvers. A failed call is not cached.
 
-### 4.1. Ролі в організації
+### 4.1. Organization roles
 
 ```ts
 const organizationId = result.session.activeOrganizationId ?? null;
 
-// без активної організації getActiveMember кидає APIError (NO_ACTIVE_ORGANIZATION)
+// without an active organization getActiveMember throws APIError (NO_ACTIVE_ORGANIZATION)
 const member = organizationId ? await auth.api.getActiveMember({ headers }) : null;
 
 return {
@@ -94,9 +94,9 @@ return {
 };
 ```
 
-Префікс `org:` розводить глобальні ролі й ролі в організації, якщо назви збігаються (`admin`).
+The `org:` prefix separates global roles from organization roles when their names coincide (`admin`).
 
-### 4.2. Налаштування ролей у graphql-fns
+### 4.2. Roles setup in graphql-fns
 
 ```ts
 const serversideConfig = composeServersideConfig(generalConfig, {
@@ -111,7 +111,7 @@ const serversideConfig = composeServersideConfig(generalConfig, {
   inventoryByRoles: {
     guest: { name: 'guest', include: { Query: { entities: ['Post'], entity: ['Post'] } } },
     user: { name: 'user', include: { Mutation: { createEntity: ['Post'], updateEntity: ['Post'] } } },
-    admin: { name: 'admin' }, // без include — усі дії
+    admin: { name: 'admin' }, // no include: all actions
   },
 
   filters: {
@@ -131,15 +131,15 @@ const serversideConfig = composeServersideConfig(generalConfig, {
 });
 ```
 
-- Кожна роль, яку може видати better-auth, має бути в `containedRoles` і `inventoryByRoles` (`composeServersideConfig` перевіряє, що ключі збігаються).
-- Роль, якої немає в `containedRoles`, graphql-fns ігнорує: вона не дає доступу й не ламає запит (B24). Тож нова роль, створена в better-auth, не відкриє дані, доки її не описано в конфігурації.
-- Функції `filters` на старті викликаються для кожної ролі з `containedRoles` з тестовими атрибутами, тому гілка `default` має повертати `null`, а не кидати помилку для відомих ролей.
+- Every role better-auth can issue must be in `containedRoles` and `inventoryByRoles` (`composeServersideConfig` checks that the keys match).
+- graphql-fns ignores a role absent from `containedRoles`: it grants no access and does not break the request (B24). So a new role created in better-auth will not expose data until it is described in the config.
+- At startup `filters` functions are called for every role from `containedRoles` with test attributes, so for known roles they must return a value rather than throw; return `null` in the `default` branch.
 
-## 5. Сутність User і `personalFilters`
+## 5. The User entity and `personalFilters`
 
-`personalFilters` шукають сутність User **graphql-fns** за `userAttributes.id`. graphql-fns зберігає її в колекції `user_things` (модель `User_Thing`), а better-auth — у колекції `user`. Потрібен запис User у graphql-fns з тим самим id.
+`personalFilters` look up the **graphql-fns** User entity by `userAttributes.id`. graphql-fns stores it in the `user_things` collection (model `User_Thing`), while better-auth uses the `user` collection. A graphql-fns User record with the same id is needed.
 
-Рекомендований спосіб — хук better-auth `databaseHooks.user.create.after`:
+The recommended way is the better-auth `databaseHooks.user.create.after` hook:
 
 ```ts
 import { createThingSchema } from 'graphql-fns';
@@ -157,14 +157,14 @@ const syncGraphqlFnsUser = async (user) => {
 };
 ```
 
-- Записувати напряму в модель, а не через згенеровану мутацію: мутація пройде авторизацію, а в хуку користувача ще немає сесії.
-- Якщо в User є duplex-поля, їх треба заповнювати мутаціями graphql-fns пізніше, щоб бібліотека підтримувала зворотні посилання.
-- Альтернатива — назвати колекцію better-auth `user_things` через `user.modelName`. Не раджу: mongoose-схема graphql-fns не знає полів better-auth, а better-auth не знає `createdAt`/`updatedAt` і полів graphql-fns.
+- Write directly to the model rather than through a generated mutation: the mutation goes through authorization, and inside the hook the user has no session yet.
+- If User has duplex fields, fill them later with graphql-fns mutations so that the library maintains the back references.
+- An alternative is to name the better-auth collection `user_things` via `user.modelName`. Not recommended: the graphql-fns mongoose schema does not know better-auth fields, and better-auth does not know graphql-fns fields.
 
 ## 6. Subscriptions
 
-- Авторизація виконується **один раз**, під час підписки. Якщо сесію відкликати або користувача заблокувати, він отримуватиме події до перепідключення. Під час виходу чи блокування закривайте WebSocket-з'єднання користувача.
-- У subscriptions немає аргументу `token`, користувач визначається лише з `context`. Для `graphql-ws` передавайте в `context` заголовки upgrade-запиту або токен з `connectionParams`, і читайте їх у `getUserAttributes`:
+- Authorization runs **once**, when subscribing. If a session is revoked or the user is banned, they keep receiving events until reconnecting. Close the user's WebSocket connections on sign-out or ban.
+- Subscriptions have no `token` argument; the user is determined from `context` only. With `graphql-ws`, put the upgrade request headers or a token from `connectionParams` into `context`:
 
 ```ts
 useServer(
@@ -181,15 +181,15 @@ useServer(
 );
 ```
 
-  У `getUserAttributes`: `const bearer = token ?? context.connectionToken;`.
-- Функція `context` викликається для кожної операції, тож кеш `userAttributes` (B23) не переживає одну підписку. Не передавайте в `context` статичний об'єкт, спільний для всього з'єднання: атрибути зафіксуються на весь час його життя.
+  and in `getUserAttributes` use `token ?? context.connectionToken` as the bearer token.
+- The `context` function is called for every operation, so the `userAttributes` cache (B23) does not outlive a single subscription. Do not pass a static object shared by the whole connection as `context`: the attributes would be fixed for its whole lifetime.
 
-## 7. Безпека
+## 7. Security
 
-| Ризик | Рекомендація |
+| Risk | Recommendation |
 |---|---|
-| Аргумент `token` потрапляє в тіло запиту, логи й кеш persisted queries | Для HTTP — cookie або заголовок `Authorization`; `token` лише там, де заголовок неможливий |
-| Відмова в доступі повертає `null`, а не помилку | Так задумано бібліотекою; клієнт не відрізнить «немає доступу» від «не знайдено» |
-| Помилки конфігурації (`Not found "getUserAttributes" callback…`) віддаються клієнту | Маскувати внутрішні помилки (`formatError` в Apollo, `maskedErrors` у graphql-yoga) |
-| `getUserAttributes` повертає `null` | З `filters` / `inventoryByRoles` це `TypeError` на кожному запиті. Завжди повертайте хоча б `{ roles: ['guest'] }` |
-| Заблокований користувач (`user.banned`) | better-auth не створює йому нових сесій, але наявна сесія з `cookieCache` може жити до `maxAge`. Перевіряйте `banned` у `getUserAttributes`, як у §4 |
+| The `token` argument ends up in the request body, logs and the persisted queries cache | For HTTP use a cookie or the `Authorization` header; use `token` only where a header is impossible |
+| Access denial returns `null`, not an error | By design of the library; the client cannot tell "no access" from "not found" |
+| Configuration errors (`Not found "getUserAttributes" callback…`) are sent to the client | Mask internal errors (`formatError` in Apollo, `maskedErrors` in graphql-yoga) |
+| `getUserAttributes` returns `null` | With `filters` / `inventoryByRoles` this is a `TypeError` on every request. Always return at least `{ roles: ['guest'] }` |
+| Banned user (`user.banned`) | better-auth does not create new sessions for them, but an existing session in `cookieCache` may live until `maxAge`. Check `banned` in `getUserAttributes`, as in §4 |
