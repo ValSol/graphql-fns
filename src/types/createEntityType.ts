@@ -1,7 +1,7 @@
 import type { ActionAttributes, EntityConfig, GeneralConfig } from '@/tsTypes';
 import composeFieldsObject from '@/utils/composeFieldsObject';
 
-import checkInventory from '@/utils/inventory/checkInventory';
+import checkRepresentationAction from '@/utils/checkRepresentationAction';
 import parseEntityName from '@/utils/parseEntityName';
 import allActionAttributes from './actionAttributes';
 import composeChildActionSignature from './composeChildActionSignature';
@@ -250,7 +250,7 @@ const createEntityType = (
           )}`,
         );
       }
-    } else if (checkInventory(['Query', 'childEntity', config.name])) {
+    } else if (checkRepresentationAction('childEntity', config, generalConfig)) {
       prev.push(
         `  ${name2}: ${composeReturnString(config, generalConfig, childEntity)}${
           required ? '!' : ''
@@ -272,7 +272,7 @@ const createEntityType = (
       return prev;
     }
 
-    if (checkInventory(['Query', 'childEntityGetOrCreate', config.name])) {
+    if (checkRepresentationAction('childEntityGetOrCreate', config, generalConfig)) {
       const childEntityGetOrCreateArgs = composeChildActionSignature(
         config,
         generalConfig,

@@ -27,7 +27,7 @@ const createChildEntityDistinctValuesQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntityDistinctValues', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (

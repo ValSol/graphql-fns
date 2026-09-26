@@ -1,53 +1,72 @@
 import type { Inventory, InventoryChain } from '@/tsTypes';
 
-const store = Object.create(null);
+type InventoryLevel = undefined | true | string[] | { [key: string]: InventoryLevel };
+
+const defaultInventory: Inventory = { name: 'undefined' };
+
+// cache results separately for every inventory object (not by "name" to prevent collisions)
+const store = new WeakMap<Inventory, Map<string, boolean>>();
+
+// return how deep "inventoryChain" is matched by "inventoryLevel":
+// "true" - chain is fully covered (on some level got "true" or array that contains chain item)
+// "false" - some chain item is absent
+// "partial" - all chain items are present but inventory goes deeper than chain
+const matchChain = (
+  inventoryChain: InventoryChain,
+  inventoryLevel: InventoryLevel,
+): true | false | 'partial' => {
+  let current = inventoryLevel;
+
+  for (let level = 0; level < inventoryChain.length; level += 1) {
+    if (current === true) return true;
+
+    if (!current) return false;
+
+    const item = inventoryChain[level];
+
+    if (Array.isArray(current)) return current.includes(item);
+
+    if (!Object.keys(current).includes(item)) return false;
+
+    current = current[item];
+  }
+
+  return current === true ? true : 'partial';
+};
 
 const checkInventory = (
   inventoryChain: InventoryChain,
-  inventory: Inventory = { name: 'undefined' },
+  inventory: Inventory = defaultInventory,
 ): boolean => {
-  const { include, exclude, name } = inventory;
+  const { include, exclude } = inventory;
 
-  const signature = `${JSON.stringify(inventoryChain)} ${name}`;
+  const signature = JSON.stringify(inventoryChain);
+
+  let inventoryStore = store.get(inventory);
+
+  if (!inventoryStore) {
+    inventoryStore = new Map();
+    store.set(inventory, inventoryStore);
+  }
 
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store[signature]) return store[signature];
-
-  let level = 0;
-  let currentInclude: any = include;
-  let currentExclude: any = exclude;
-  while (level < inventoryChain.length) {
-    if (currentInclude && currentInclude !== true) {
-      const keys = Array.isArray(currentInclude) ? currentInclude : Object.keys(currentInclude);
-      if (!keys.includes(inventoryChain[level])) {
-        store[signature] = false;
-        return store[signature];
-      }
-      if (level + 1 < inventoryChain.length) {
-        currentInclude = currentInclude[inventoryChain[level]];
-      }
-    }
-
-    if (currentExclude && currentExclude !== true) {
-      const keys = Array.isArray(currentExclude) ? currentExclude : Object.keys(currentExclude);
-      if (keys.includes(inventoryChain[level])) {
-        currentExclude = Array.isArray(currentExclude)
-          ? true
-          : currentExclude[inventoryChain[level]];
-        if (currentExclude === true) {
-          store[signature] = false;
-          return store[signature];
-        }
-      } else {
-        store[signature] = true;
-        return store[signature];
-      }
-    }
-
-    level += 1;
+  if (!process.env.JEST_WORKER_ID && inventoryStore.has(signature)) {
+    return inventoryStore.get(signature) as boolean;
   }
-  store[signature] = true;
-  return store[signature];
+
+  // "include" restricts on every level: chain have to be (at least partially) included
+  const included =
+    include === undefined || matchChain(inventoryChain, include as InventoryLevel) !== false;
+
+  // "exclude" forbids only fully covered chains
+  const excluded =
+    exclude !== undefined && matchChain(inventoryChain, exclude as InventoryLevel) === true;
+
+  const result = included && !excluded;
+
+  inventoryStore.set(signature, result);
+
+  return result;
 };
 
 export default checkInventory;

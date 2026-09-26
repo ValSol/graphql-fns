@@ -26,7 +26,7 @@ const createChildEntityCountQueryResolver = (
   const { inventory } = generalConfig;
   const { name } = entityConfig;
 
-  const inventoryChain: InventoryChain = ['Query', 'childEntitiesThroughConnection', name];
+  const inventoryChain: InventoryChain = ['Query', 'childEntityCount', name];
   if (!inAnyCase && !checkInventory(inventoryChain, inventory)) return null;
 
   const resolver = async (

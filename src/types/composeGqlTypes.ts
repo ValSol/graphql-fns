@@ -21,9 +21,6 @@ const composeGqlTypes = (
 } => {
   const { allEntityConfigs, inventory, representation = {} } = generalConfig;
 
-  const allowMutations = checkInventory(['Mutation'], inventory);
-  const allowSubscriptions = allowMutations && checkInventory(['Subscription'], inventory);
-
   const entityNames = Object.keys(allEntityConfigs);
 
   const inputDic: { [inputName: string]: string } = {};

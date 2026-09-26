@@ -476,4 +476,80 @@ describe('graphql schema', () => {
 
     expect(schema).not.toBeUndefined();
   });
+
+  describe('inventory consistency of typeDefs and resolvers', () => {
+    const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title', index: true }],
+        duplexFields: [
+          { name: 'sections', array: true, oppositeName: 'menu', configName: 'Section' },
+        ],
+      },
+      {
+        name: 'Section',
+        textFields: [{ name: 'title', index: true }],
+        duplexFields: [{ name: 'menu', oppositeName: 'sections', configName: 'Menu' }],
+      },
+    ];
+
+    test('should not show scalar child fields excluded by inventory', () => {
+      const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+      const inventory: Inventory = {
+        name: 'test',
+        exclude: { Query: { childEntity: ['Menu'], childEntityGetOrCreate: ['Menu'] } },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs, inventory });
+
+      const sectionType = typeDefs.match(/type Section implements[^}]*\}/)?.[0];
+
+      expect(sectionType).not.toMatch(/\n  menu: /);
+      expect(sectionType).not.toMatch(/\n  menuGetOrCreate\(/);
+      expect(resolvers.Section.menu).toBeUndefined();
+      expect(resolvers.Section.menuGetOrCreate).toBeUndefined();
+
+      expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+    });
+
+    test('should create child count & distinct values resolvers allowed by inventory', async () => {
+      const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+      const inventory: Inventory = {
+        name: 'test',
+        include: {
+          Query: {
+            entities: true,
+            childEntities: true,
+            childEntityCount: true,
+            childEntityDistinctValues: true,
+          },
+        },
+      };
+
+      const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs, inventory });
+
+      expect(typeDefs).toMatch(/\n  sectionsCount\(/);
+      expect(typeDefs).toMatch(/\n  sectionsDistinctValues\(/);
+      expect(typeDefs).not.toMatch(/\n  sectionsThroughConnection\(/);
+
+      const parent = { sections: ['5f1f1f1f1f1f1f1f1f1f1f1f'] };
+      const info = { path: {}, fieldName: 'sectionsCount' };
+
+      // resolvers have to fail on missing db connection, not on missing inner resolver
+      await expect(
+        resolvers.Menu.sectionsCount(parent, {}, { mongooseConn: {} }, info),
+      ).rejects.not.toThrow('func is not a function');
+
+      await expect(
+        resolvers.Menu.sectionsDistinctValues(
+          parent,
+          { options: { target: 'title' } },
+          { mongooseConn: {} },
+          { ...info, fieldName: 'sectionsDistinctValues' },
+        ),
+      ).rejects.not.toThrow('func is not a function');
+    });
+  });
 });

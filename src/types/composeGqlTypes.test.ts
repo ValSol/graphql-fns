@@ -4158,7 +4158,6 @@ type MenuSection implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   menuSectionName: String
-  menu: Menu
 }
 input MenuWhereOneInput {
   id: ID!
