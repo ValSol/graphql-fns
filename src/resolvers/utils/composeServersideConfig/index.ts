@@ -99,6 +99,22 @@ const composeServersideConfig = (
     serversideConfig,
   );
 
+  // payload of subscription events is checked only by "subscribePayloadFilters", so without them...
+  // ... "filters" would not restrict subscriptions
+  if (
+    simplifiedEntityFilters &&
+    !simplifiedSubscribePayloadFilters &&
+    Object.keys(subscribePayloadEntityNames).length > 0
+  ) {
+    throw new TypeError(
+      `Not found "subscribePayloadFilters" to use with "filters" for subscriptions: ${Object.keys(
+        subscribePayloadEntityNames,
+      )
+        .map((entityName) => `"${entityName}"`)
+        .join(', ')}!`,
+    );
+  }
+
   if (staticLimits) {
     Object.keys(staticLimits).forEach((entityName) => {
       if (!allEntityNames[entityName]) {

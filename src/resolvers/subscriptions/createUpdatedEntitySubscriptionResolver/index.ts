@@ -67,7 +67,12 @@ const createUpdatedEntitySubscriptionResolver = (
         context.pubsub.subscribe(`updated-${name}`),
 
         (payload) => {
-          if (!involvedFilters || !subscribePayloadMongoFilter) {
+          // "inputOutputFilterAndLimit" is "null" if user has no access to subscription
+          if (
+            !involvedFilters ||
+            !involvedFilters.inputOutputFilterAndLimit ||
+            !subscribePayloadMongoFilter
+          ) {
             return false;
           }
 

@@ -22,7 +22,7 @@ const subscriptionResolverDecorator = (
   const subscribe = async (...resolverArgs) => {
     const [parent, args, ...rest] = resolverArgs;
 
-    const { where: preWherePayload = {} } = args;
+    const { wherePayload: preWherePayload = {} } = args;
 
     const wherePayload = transformWhere(preWherePayload, entityConfig);
 

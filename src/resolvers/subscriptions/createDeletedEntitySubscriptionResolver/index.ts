@@ -62,7 +62,12 @@ const createDeletedEntitySubscriptionResolver = (
         (payload) => {
           const { involvedFilters, subscribePayloadMongoFilter } = resolverOptions;
 
-          if (!involvedFilters || !subscribePayloadMongoFilter) {
+          // "inputOutputFilterAndLimit" is "null" if user has no access to subscription
+          if (
+            !involvedFilters ||
+            !involvedFilters.inputOutputFilterAndLimit ||
+            !subscribePayloadMongoFilter
+          ) {
             return false;
           }
 

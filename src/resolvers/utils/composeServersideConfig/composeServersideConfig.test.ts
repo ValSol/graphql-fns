@@ -177,4 +177,21 @@ describe('composeFilters', () => {
       Object.keys(result.subscribePayloadFilters),
     );
   });
+
+  test('should require "subscribePayloadFilters" with "filters" when subscriptions are used', () => {
+    const filters = {
+      Place: () => [],
+      Person: () => [],
+      PlaceForView: () => [],
+      PersonForView: () => [],
+    } as SimplifiedEntityFilters;
+
+    const getUserAttributes = async () => ({ id: '123456890', roles: ['Admin'] });
+
+    expect(() =>
+      composeServersideConfig(generalConfig, { getUserAttributes, filters } as any),
+    ).toThrow(
+      'Not found "subscribePayloadFilters" to use with "filters" for subscriptions: "Person", "Place"!',
+    );
+  });
 });
