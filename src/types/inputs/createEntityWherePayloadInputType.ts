@@ -63,6 +63,9 @@ const composeInputFields = (
   calculatedFields.forEach((field) => {
     const { name, asyncFunc, calculatedType } = field;
 
+    // virtual objects are not filtered (there is no "where" input for virtual configs)
+    if (calculatedType === 'virtualFields') return;
+
     if (!asyncFunc || allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       preFields[calculatedType].push(field);
     }

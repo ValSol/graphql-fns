@@ -47,7 +47,8 @@ const fieldArrayThroughConnectionResolver = (
 ): any => {
   const { fieldName } = info;
 
-  const wholeArray = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`];
+  // nullable array field can be null
+  const wholeArray = parent[`${fieldName.slice(0, -'ThroughConnection'.length)}`] || [];
 
   if (!wholeArray.length) {
     return { pageInfo: { hasNextPage: false, hasPreviousPage: false }, edges: [] };

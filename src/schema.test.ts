@@ -507,8 +507,8 @@ describe('graphql schema', () => {
 
       expect(sectionType).not.toMatch(/\n  menu: /);
       expect(sectionType).not.toMatch(/\n  menuGetOrCreate\(/);
-      expect(resolvers.Section.menu).toBeUndefined();
-      expect(resolvers.Section.menuGetOrCreate).toBeUndefined();
+      expect(resolvers.Section?.menu).toBeUndefined();
+      expect(resolvers.Section?.menuGetOrCreate).toBeUndefined();
 
       expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
     });
@@ -551,5 +551,118 @@ describe('graphql schema', () => {
         ),
       ).rejects.not.toThrow('func is not a function');
     });
+  });
+
+  test('should create field resolvers for entities without relational, duplex & geospatial fields (B3)', () => {
+    const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
+      { name: 'Item', type: 'embedded', textFields: [{ name: 'labels', array: true }] },
+      {
+        name: 'Holder',
+        textFields: [{ name: 'tags', array: true }],
+        embeddedFields: [
+          {
+            name: 'items',
+            array: true,
+            nullable: true,
+            configName: 'Item',
+            variants: ['plain', 'connection', 'count'],
+          },
+        ],
+      },
+    ];
+
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    expect(Object.keys(resolvers.Holder).sort()).toEqual(
+      ['items', 'itemsCount', 'itemsThroughConnection', 'tags'].sort(),
+    );
+    expect(Object.keys(resolvers.Item)).toEqual(['labels']);
+
+    const parent = { tags: ['a', 'b', 'c'], items: [{ labels: ['x'] }, { labels: ['y'] }] };
+
+    expect(
+      resolvers.Holder.tags(parent, { slice: { begin: 1 } }, {}, { fieldName: 'tags' }),
+    ).toEqual(['b', 'c']);
+    expect(resolvers.Holder.itemsCount(parent, {}, {}, { fieldName: 'itemsCount' })).toBe(2);
+    expect(
+      resolvers.Holder.itemsThroughConnection(
+        parent,
+        { first: 1 },
+        {},
+        { fieldName: 'itemsThroughConnection' },
+      ).edges.map(({ node }) => node),
+    ).toEqual([{ labels: ['x'] }]);
+
+    // "items" is nullable
+    expect(resolvers.Holder.itemsCount({ items: null }, {}, {}, { fieldName: 'itemsCount' })).toBe(
+      0,
+    );
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
+
+  test('should ignore calculated virtual fields in "WherePayloadInput" (B5)', () => {
+    const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
+      { name: 'Summary', type: 'virtual', textFields: [{ name: 'text' }] },
+      {
+        name: 'Doc',
+        textFields: [{ name: 'title' }],
+        calculatedFields: [
+          {
+            name: 'summary',
+            calculatedType: 'virtualFields',
+            configName: 'Summary',
+            fieldsToUseNames: ['title'],
+            func: ({ title }: any) => ({ text: title }),
+          } as any,
+        ],
+      },
+    ];
+
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    const wherePayloadInput = typeDefs.match(/input DocWherePayloadInput \{[^}]*\}/)?.[0];
+
+    expect(wherePayloadInput).toMatch(/\n  title: String\n/);
+    expect(wherePayloadInput).not.toMatch(/summary/);
+    expect(typeDefs).toMatch(/\n  summary: Summary\n/);
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
+
+  test('should create geospatial types for calculated geospatial fields only (B6)', () => {
+    const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
+      {
+        name: 'Place',
+        textFields: [{ name: 'title' }],
+        calculatedFields: [
+          {
+            name: 'center',
+            calculatedType: 'geospatialFields',
+            geospatialType: 'Point',
+            func: () => null,
+          } as any,
+          {
+            name: 'area',
+            calculatedType: 'geospatialFields',
+            geospatialType: 'Polygon',
+            func: () => null,
+          } as any,
+        ],
+      },
+    ];
+
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    expect(typeDefs).toMatch(/\ntype GeospatialPoint \{/);
+    expect(typeDefs).toMatch(/\ntype GeospatialPolygon \{/);
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
 });

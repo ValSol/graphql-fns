@@ -1,58 +1,74 @@
 import type { GeneralConfig } from '@/tsTypes';
 
+// collect "geospatialType" of simple & calculated geospatial fields
+const collectGeospatialTypes = (
+  fieldsHolder: { geospatialFields?: any[]; calculatedFields?: any[] },
+  result: string[],
+) => {
+  const { geospatialFields = [], calculatedFields = [] } = fieldsHolder;
+
+  [
+    ...geospatialFields,
+    ...calculatedFields.filter(({ calculatedType }) => calculatedType === 'geospatialFields'),
+  ].forEach(({ geospatialType }) => {
+    result.push(geospatialType);
+  });
+
+  return result;
+};
+
 const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
-  const { allEntityConfigs } = generalConfig;
+  const { allEntityConfigs, representation = {} } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialLineString = false;
   let thereIsGeospatialMultiLineString = false;
   let thereIsGeospatialPolygon = false;
   let thereIsGeospatialMultiPolygon = false;
 
-  const allEntityConfigsArray = Object.keys(allEntityConfigs).map(
-    (entityName) => allEntityConfigs[entityName],
+  const geospatialTypes = Object.keys(allEntityConfigs).reduce<string[]>(
+    (prev, entityName) => collectGeospatialTypes(allEntityConfigs[entityName], prev),
+    [],
   );
 
-  for (let i = 0; i < allEntityConfigsArray.length; i += 1) {
-    const entityConfig = allEntityConfigsArray[i];
-    const { geospatialFields = [] } = entityConfig;
+  // representations can add geospatial fields by "addFields"
+  Object.keys(representation).forEach((representationKey) => {
+    const { addFields = {} } = representation[representationKey];
 
-    geospatialFields.forEach(({ geospatialType }) => {
-      switch (geospatialType) {
-        case 'Point':
-          thereIsGeospatialPoint = true;
-          break;
-        case 'LineString':
-          thereIsGeospatialLineString = true;
-          break;
-        case 'MultiLineString':
-          thereIsGeospatialMultiLineString = true;
-          break;
-        case 'Polygon':
-          thereIsGeospatialPolygon = true;
-          break;
-        case 'MultiPolygon':
-          thereIsGeospatialMultiPolygon = true;
-          break;
-
-        default:
-          throw new TypeError(`Incorrect "geospatialType": ${geospatialType}!`);
-      }
+    Object.keys(addFields).forEach((entityName) => {
+      collectGeospatialTypes(addFields[entityName], geospatialTypes);
     });
+  });
 
-    if (thereIsGeospatialMultiLineString && thereIsGeospatialMultiPolygon) {
-      break;
+  geospatialTypes.forEach((geospatialType) => {
+    switch (geospatialType) {
+      case 'Point':
+        thereIsGeospatialPoint = true;
+        break;
+      case 'LineString':
+        thereIsGeospatialLineString = true;
+        break;
+      case 'MultiLineString':
+        thereIsGeospatialMultiLineString = true;
+        break;
+      case 'Polygon':
+        thereIsGeospatialPolygon = true;
+        break;
+      case 'MultiPolygon':
+        thereIsGeospatialMultiPolygon = true;
+        break;
+
+      default:
+        throw new TypeError(`Incorrect "geospatialType": ${geospatialType}!`);
     }
-  }
+  });
 
-  if (
-    !(
-      thereIsGeospatialPoint ||
-      thereIsGeospatialLineString ||
-      thereIsGeospatialMultiLineString ||
-      thereIsGeospatialPolygon ||
-      thereIsGeospatialMultiPolygon
-    )
-  ) {
+  if (!(
+    thereIsGeospatialPoint ||
+    thereIsGeospatialLineString ||
+    thereIsGeospatialMultiLineString ||
+    thereIsGeospatialPolygon ||
+    thereIsGeospatialMultiPolygon
+  )) {
     return '';
   }
 

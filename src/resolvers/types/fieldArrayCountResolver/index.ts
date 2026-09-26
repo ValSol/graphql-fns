@@ -5,7 +5,8 @@ type Args = Record<never, never>;
 const fieldArrayCountResolver = (parent: any, args: Args, context: Context, info: any): any => {
   const { fieldName } = info;
 
-  const wholeArray = parent[`${fieldName.slice(0, -'Count'.length)}`];
+  // nullable array field can be null
+  const wholeArray = parent[`${fieldName.slice(0, -'Count'.length)}`] || [];
 
   return wholeArray.length;
 };

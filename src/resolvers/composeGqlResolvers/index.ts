@@ -1,6 +1,6 @@
 import { DateTimeResolver } from 'graphql-scalars';
 
-import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '../../tsTypes';
+import type { GeneralConfig, ServersideConfig } from '../../tsTypes';
 
 import checkInventory from '../../utils/inventory/checkInventory';
 import composeRepresentationConfigName from '../../utils/composeRepresentationConfig/composeRepresentationConfigName';
@@ -240,37 +240,50 @@ const composeGqlResolvers = (
       return prev;
     }, resolvers);
 
+  // compose field resolvers for all entity types (tangible, embedded & virtual) used in schema
   Object.keys(allEntityConfigs)
     .map((entityName) => allEntityConfigs[entityName])
-    .filter(({ type: entityType }) => entityType === 'tangible')
-    .reduce((prev, entityConfig: TangibleEntityConfig) => {
-      const {
-        name,
-        representationNameSlicePosition,
-        duplexFields,
-        geospatialFields,
-        relationalFields,
-      } = entityConfig;
-      if (entityTypeDic[name] && (duplexFields || geospatialFields || relationalFields)) {
-        prev[name] = composeEntityResolvers(entityConfig, generalConfig, serversideConfig);
+    .reduce((prev, entityConfig) => {
+      const { name, representationNameSlicePosition } = entityConfig;
+
+      if (entityTypeDic[name]) {
+        const entityResolvers = composeEntityResolvers(
+          entityConfig,
+          generalConfig,
+          serversideConfig,
+        );
+
+        if (Object.keys(entityResolvers).length > 0) {
+          prev[name] = entityResolvers;
+        }
       }
 
       // process representation objects fields
       Object.keys(representation).forEach((representationKey) => {
+        const key = composeRepresentationConfigName(
+          name,
+          representationKey,
+          representationNameSlicePosition,
+        );
+
+        if (!entityTypeDic[key]) return;
+
         const representationConfig = composeRepresentationConfig(
           representation[representationKey],
           entityConfig,
           generalConfig,
         );
 
-        if (representationConfig && entityTypeDic[representationConfig.name]) {
-          const key = composeRepresentationConfigName(
-            name,
-            representationKey,
-            representationNameSlicePosition,
+        if (representationConfig) {
+          const entityResolvers = composeEntityResolvers(
+            representationConfig,
+            generalConfig,
+            serversideConfig,
           );
 
-          prev[key] = composeEntityResolvers(representationConfig, generalConfig, serversideConfig);
+          if (Object.keys(entityResolvers).length > 0) {
+            prev[key] = entityResolvers;
+          }
         }
       });
 

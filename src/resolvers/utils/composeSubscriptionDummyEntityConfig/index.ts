@@ -36,10 +36,15 @@ const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): Entit
     dummyEntityConfig.textFields.push({ name, array, type: 'textFields' });
   });
 
-  calculatedFields.forEach(({ name, calculatedType, array, asyncFunc }) => {
+  calculatedFields.forEach((field) => {
+    const { name, calculatedType, array, asyncFunc } = field;
+
     if (asyncFunc && !allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       return;
     }
+
+    // virtual objects are not filtered (the same as in "createEntityWherePayloadInputType")
+    if (calculatedType === 'virtualFields') return;
 
     if (calculatedType === 'filterFields') {
       dummyEntityConfig.textFields.push({ name, array, type: 'textFields' });
@@ -48,7 +53,17 @@ const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): Entit
         dummyEntityConfig[calculatedType] = [];
       }
 
-      dummyEntityConfig[calculatedType].push({ name, array, type: calculatedType } as any);
+      // keep "config" (embedded), "enumName" & "geospatialType" that are used to compose filter
+      const { config, enumName, geospatialType } = field as any;
+
+      dummyEntityConfig[calculatedType].push({
+        name,
+        array,
+        type: calculatedType,
+        ...(config && { config }),
+        ...(enumName && { enumName }),
+        ...(geospatialType && { geospatialType }),
+      } as any);
     }
   });
 
