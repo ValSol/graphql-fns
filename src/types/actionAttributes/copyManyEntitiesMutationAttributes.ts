@@ -30,7 +30,7 @@ const argNames = ['whereKeyToSource', 'options', 'whereTarget', 'data', 'token']
 const argTypes = [
   ({ name }): string => `[${name}WhereKeyToSourceInput!]!`,
   ({ name }): string => `copy${name}OptionsInput`,
-  ({ name }): string => `[${name}WhereTargetInput!]`,
+  ({ name }): string => `[${name}WhereOneInput!]`,
   ({ name }): string => `[${name}UpdateInput!]`,
   (): string => 'String',
 ];

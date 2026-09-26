@@ -24,7 +24,6 @@ const argTypesPrefixPlusSuffixes = [
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],
-  ['WhereTargetInput', transformWhereOne, false],
   ['WhereKeyToSourceInput', transformWhereKeyToSource, false],
 ];
 

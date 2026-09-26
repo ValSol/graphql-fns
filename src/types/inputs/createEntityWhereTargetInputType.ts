@@ -3,10 +3,12 @@ import type { InputCreator } from '../../tsTypes';
 import getMatchingFields from '../../utils/getMatchingFields';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 
+// "whereTarget" arg of "copy…" mutations uses "XWhereOneInput", but only if some duplex field...
+// ... (with common fields) has array opposite field, i.e. existing X can be selected as copy target
 const createEntityWhereTargetInputType: InputCreator = (entityConfig) => {
   const { name, type: entityType } = entityConfig;
 
-  const inputName = `${name}WhereTargetInput`;
+  const inputName = `${name}WhereOneInput`;
 
   if (entityType !== 'tangible') {
     return [inputName, '', {}];
@@ -32,13 +34,7 @@ const createEntityWhereTargetInputType: InputCreator = (entityConfig) => {
 
   if (!notEmptyResult) return [inputName, '', {}];
 
-  const [, preInputDefinition] = createEntityWhereOneInputType(entityConfig);
-
-  const preInputDefinitionArr = preInputDefinition.split(' ');
-
-  preInputDefinitionArr[1] = inputName;
-
-  return [inputName, preInputDefinitionArr.join(' '), {}];
+  return createEntityWhereOneInputType(entityConfig);
 };
 
 export default createEntityWhereTargetInputType;

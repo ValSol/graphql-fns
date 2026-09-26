@@ -110,10 +110,10 @@ describe('createEntityWhereTargetInputType', () => {
     ],
   });
 
-  test('should create Person input type', () => {
+  test('should use "PersonWhereOneInput" if existing Person can be copy target', () => {
     const expectedResult = [
-      'PersonWhereTargetInput',
-      `input PersonWhereTargetInput {
+      'PersonWhereOneInput',
+      `input PersonWhereOneInput {
   id: ID!
 }`,
       {},
@@ -123,8 +123,8 @@ describe('createEntityWhereTargetInputType', () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test('should create Person input type', () => {
-    const expectedResult = ['PersonCloneWhereTargetInput', '', {}];
+  test('should not create input if PersonClone cannot be copy target', () => {
+    const expectedResult = ['PersonCloneWhereOneInput', '', {}];
 
     const result = createEntityWhereTargetInputType(personCloneConfig);
     expect(result).toEqual(expectedResult);
