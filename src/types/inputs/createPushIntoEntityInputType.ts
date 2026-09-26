@@ -3,6 +3,7 @@ import type { InputCreator } from '../../tsTypes';
 import createEntityCreateInputType from './createEntityCreateInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
+import isOppositeRequired from './isOppositeRequired';
 
 const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
   const {
@@ -80,13 +81,29 @@ const createPushIntoEntityInputType: InputCreator = (entityConfig) => {
 
   duplexFields
     .filter(({ array, freeze }) => array && !freeze)
-    .reduce((prev, { name: name2, config: config2, config: { name: relationalEntityName } }) => {
-      prev.push(`  ${name2}: ${relationalEntityName}CreateOrPushChildrenInput`);
+    .reduce(
+      (
+        prev,
+        { name: name2, oppositeName, config: config2, config: { name: relationalEntityName } },
+      ) => {
+        // if opposite field is required it is filled by id of the current entity...
+        // ... so use "Thru" input without the opposite field (the same as for create & update)
+        const oppositeRequired = isOppositeRequired(oppositeName, config2);
 
-      childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
+        prev.push(
+          `  ${name2}: ${relationalEntityName}${
+            oppositeRequired
+              ? `CreateOrPushThru_${oppositeName}_FieldChildrenInput`
+              : 'CreateOrPushChildrenInput'
+          }`,
+        );
 
-      return prev;
-    }, entityTypeArray);
+        childChain[`${relationalEntityName}CreateInput`] = [createEntityCreateInputType, config2];
+
+        return prev;
+      },
+      entityTypeArray,
+    );
 
   filterFields
     .filter(({ freeze }) => !freeze)

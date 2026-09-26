@@ -2851,7 +2851,7 @@ input deletePlaceWithChildrenOptionsInput {
   fieldsToDelete: [deletePlaceWithChildrenOptionsEnum]
 }
 input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }
 input PersonPushPositionsInput {
@@ -2859,7 +2859,7 @@ input PersonPushPositionsInput {
   enemies: [Int!]
 }
 input PushIntoPlaceInput {
-  citizens: PersonCreateOrPushChildrenInput
+  citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
 }
 input PlacePushPositionsInput {

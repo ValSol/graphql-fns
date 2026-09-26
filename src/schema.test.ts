@@ -685,4 +685,46 @@ describe('graphql schema', () => {
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
   });
+
+  test('should not require parent in "pushInto" input for duplex field with required opposite (B7)', () => {
+    const simplifiedEntityConfigs: SimplifiedEntityConfig[] = [
+      {
+        name: 'Menu',
+        textFields: [{ name: 'title' }],
+        duplexFields: [
+          { name: 'sections', array: true, oppositeName: 'menu', configName: 'Section' },
+        ],
+      },
+      {
+        name: 'Section',
+        textFields: [{ name: 'title' }],
+        duplexFields: [
+          { name: 'menu', oppositeName: 'sections', configName: 'Menu', required: true },
+        ],
+      },
+    ];
+
+    const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+
+    const pushIntoMenuInput = typeDefs.match(/input PushIntoMenuInput \{[^}]*\}/)?.[0];
+    const menuUpdateInput = typeDefs.match(/input MenuUpdateInput \{[^}]*\}/)?.[0];
+    const sectionCreateThruInput = typeDefs.match(
+      /input SectionCreateThru_menu_FieldInput \{[^}]*\}/,
+    )?.[0];
+
+    // the same child input as for "update"
+    expect(pushIntoMenuInput).toMatch(
+      /\n  sections: SectionCreateOrPushThru_menu_FieldChildrenInput\n/,
+    );
+    expect(menuUpdateInput).toMatch(
+      /\n  sections: SectionCreateOrPushThru_menu_FieldChildrenInput\n/,
+    );
+
+    // created sections get "menu" from the menu they are pushed into, so "menu" is optional
+    expect(sectionCreateThruInput).toMatch(/\n  menu: MenuCreateChildInput\n/);
+
+    expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
 });

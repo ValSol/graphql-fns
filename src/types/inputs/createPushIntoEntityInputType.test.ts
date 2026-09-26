@@ -430,7 +430,7 @@ describe('createPushIntoEntityInputType', () => {
     const expectedResult = [
       'PushIntoPersonInput',
       `input PushIntoPersonInput {
-  friends: PersonCreateOrPushChildrenInput
+  friends: PersonCreateOrPushThru_friends_FieldChildrenInput
   enemies: PersonCreateOrPushChildrenInput
 }`,
       {
