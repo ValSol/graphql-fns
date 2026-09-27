@@ -108,6 +108,15 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
+      if (!report) {
+        throw new TypeError(`report have to be setted for "${actionGeneralName}"`);
+      }
+
+      const subscription = await report(resolverCreatorArg, resolverArg);
+
+      // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
+      const previousIsUsed = !produceCurrent || Boolean(subscription);
+
       for (let i = 0; i < tryCount; i += 1) {
         const session = transactions ? await mongooseConn.startSession() : null;
 
@@ -139,7 +148,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
           // compose "argsForAsyncFunc" to prevent leak of MUTATION args instead of "where" or "whereOne"("whereCompoundOne")
           const { argsForAsyncFunc, notAsyncCalculatedFieldValues } =
-            previous.length === 0
+            previous.length === 0 || !previousIsUsed
               ? { argsForAsyncFunc: null }
               : array
                 ? {
@@ -171,16 +180,18 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
               )
             : {};
 
-          result.previous = previous.map((item, i) =>
-            addCalculatedFieldsToEntity(
-              addIdsToEntity(item, entityConfig),
-              infoEssence,
-              asyncFuncResults,
-              resolverArg,
-              entityConfig as TangibleEntityConfig,
-              i,
-            ),
-          );
+          result.previous = previousIsUsed
+            ? previous.map((item, i) =>
+                addCalculatedFieldsToEntity(
+                  addIdsToEntity(item, entityConfig),
+                  infoEssence,
+                  asyncFuncResults,
+                  resolverArg,
+                  entityConfig as TangibleEntityConfig,
+                  i,
+                ),
+              )
+            : previous.map((item) => addIdsToEntity(item, entityConfig));
 
           if (!prepareBulkData) {
             throw new TypeError(`prepareBulkData have to be setted for "${actionGeneralName}"`);
@@ -252,12 +263,6 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       if (produceCurrent) {
         result.current = await produceResult(preparedData, resolverCreatorArg, resolverArg, array);
       }
-
-      if (!report) {
-        throw new TypeError(`report have to be setted for "${actionGeneralName}"`);
-      }
-
-      const subscription = await report(resolverCreatorArg, resolverArg);
 
       if (subscription) {
         subscription(result);

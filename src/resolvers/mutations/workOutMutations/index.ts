@@ -226,7 +226,16 @@ const workOutMutations = async (
       ? ({} as { previous: GraphqlObject[]; current?: GraphqlObject[] })
       : null;
 
-    if (result) {
+    const subscription = result && returnReport ? await report(resolverCreatorArg, resolverArg) : null;
+
+    // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
+    const previousIsUsed = !produceCurrent || Boolean(subscription);
+
+    if (result && !previousIsUsed) {
+      result.previous = previous.map((item) => addIdsToEntity(item, entityConfig));
+    }
+
+    if (result && previousIsUsed) {
       const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
       // compose "argsForAsyncFunc" to prevent leak of MUTATION args instead of "where" or "whereOne"("whereCompoundOne")
@@ -290,11 +299,8 @@ const workOutMutations = async (
       );
     }
 
-    if (result && returnReport) {
-      const subscription = await report(resolverCreatorArg, resolverArg);
-      if (subscription) {
-        subscription(result);
-      }
+    if (result && subscription) {
+      subscription(result);
     }
 
     finalResults.push(result && finalResult(result));
