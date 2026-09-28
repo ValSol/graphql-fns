@@ -27,11 +27,11 @@ describe('composeRepresentationEntityDistinctValuesQuery', () => {
     },
   };
 
-  const representation = { ForCatalog };
+  const representations = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Example: entityConfig },
-    representation,
+    representations,
   };
 
   test('should return correct representation config', () => {

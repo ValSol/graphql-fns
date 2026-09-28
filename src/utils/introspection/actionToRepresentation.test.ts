@@ -139,9 +139,9 @@ describe('actionToRepresentation', () => {
   };
   const queryName = 'getEntity';
   const custom = { Query: { [queryName]: signatureMethods } };
-  const representation = { ForCatalog };
+  const representations = { ForCatalog };
 
-  const generalConfig = { allEntityConfigs, custom, representation };
+  const generalConfig = { allEntityConfigs, custom, representations };
 
   test('have to return representationAttributes with Person: [entitiesByUnique]', () => {
     const actionToParse: ActionToParse = {

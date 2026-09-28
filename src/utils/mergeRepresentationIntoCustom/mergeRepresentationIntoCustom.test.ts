@@ -8,7 +8,7 @@ describe('mergeRepresentationIntoCustom', () => {
     { name: 'Example', textFields: [{ name: 'title' }] },
   ]);
 
-  const representation = {
+  const representations = {
     ForView: { representationKey: 'ForView', allow: { Example: ['createdEntity' as const] } },
   };
 
@@ -23,7 +23,7 @@ describe('mergeRepresentationIntoCustom', () => {
     );
 
     expect(() =>
-      mergeRepresentationIntoCustom({ ...generalConfig, representation } as GeneralConfig),
+      mergeRepresentationIntoCustom({ ...generalConfig, representations } as GeneralConfig),
     ).toThrow('Custom subscriptions are not supported');
   });
 
@@ -31,7 +31,7 @@ describe('mergeRepresentationIntoCustom', () => {
     const result = mergeRepresentationIntoCustom({
       allEntityConfigs,
       custom: { Query: {} },
-      representation,
+      representations,
     } as GeneralConfig);
 
     expect(Object.keys(result?.Subscription || {})).toEqual(['createdEntityForView']);

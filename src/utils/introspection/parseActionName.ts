@@ -14,7 +14,7 @@ const parseAction = (
   { actionType, actionName, entityName, representationKey }: ActionToParse,
   generalConfig: GeneralConfig,
 ): ParsedAction => {
-  const { allEntityConfigs, custom, representation } = generalConfig;
+  const { allEntityConfigs, custom, representations } = generalConfig;
 
   if (!allEntityConfigs[entityName]) {
     throw new TypeError(`Not found entity with name: "${entityName}"!`);
@@ -57,9 +57,9 @@ const parseAction = (
 
       let calculatedRepresentationKey = '';
 
-      if (entityConfig && representation && !allEntityConfigs[entityConfig.name]) {
+      if (entityConfig && representations && !allEntityConfigs[entityConfig.name]) {
         const { name } = entityConfig;
-        const representationKeys = Object.keys(representation);
+        const representationKeys = Object.keys(representations);
 
         for (let i = 0; i < representationKeys.length; i += 1) {
           const currentRepresentationKey = representationKeys[i];
@@ -104,8 +104,8 @@ const parseAction = (
     }
   }
 
-  if (representation) {
-    const representationKeys = Object.keys(representation);
+  if (representations) {
+    const representationKeys = Object.keys(representations);
 
     for (let i = 0; i < representationKeys.length; i += 1) {
       const currentRepresentationKey = representationKeys[i];
@@ -120,7 +120,7 @@ const parseAction = (
 
           const {
             allow: { [entityName]: actions },
-          } = representation[currentRepresentationKey];
+          } = representations[currentRepresentationKey];
 
           if (!actions) {
             throw new TypeError(

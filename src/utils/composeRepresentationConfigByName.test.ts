@@ -25,11 +25,11 @@ describe('composeRepresentationConfigByName', () => {
       },
     };
 
-    const representation = { ForCatalog };
+    const representations = { ForCatalog };
 
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Example: entityConfig },
-      representation,
+      representations,
     };
 
     const result = composeRepresentationConfigByName('ForCatalog', entityConfig, generalConfig);

@@ -463,8 +463,8 @@ describe('graphql schema', () => {
       },
     };
 
-    const representation = { ForCatalog: ForCatalogRepresentation };
-    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
+    const representations = { ForCatalog: ForCatalogRepresentation };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
 
     const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig);
 
@@ -914,5 +914,15 @@ describe('graphql schema', () => {
     expect(typeDefs).not.toMatch(/whereOnes|CopyWhereOnesInput|WhereOneToCopyInput/);
 
     expect(makeExecutableSchema({ typeDefs, resolvers })).not.toBeUndefined();
+  });
+
+  test('should reject the renamed "representation" attribute of generalConfig', () => {
+    const allEntityConfigs = composeAllEntityConfigs([
+      { name: 'Example', textFields: [{ name: 'text' }] },
+    ]);
+
+    expect(() =>
+      composeTypeDefsAndResolvers({ allEntityConfigs, representation: {} } as GeneralConfig),
+    ).toThrow('The "representation" attribute of generalConfig is renamed to "representations"!');
   });
 });

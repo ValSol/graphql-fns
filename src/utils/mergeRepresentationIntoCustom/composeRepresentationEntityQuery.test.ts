@@ -40,11 +40,11 @@ describe('composeRepresentationEntityQuery', () => {
     },
   };
 
-  const representation = { ForCatalog, ForView };
+  const representations = { ForCatalog, ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Example: entityConfig },
-    representation,
+    representations,
   };
 
   test('should return correct representation config', () => {

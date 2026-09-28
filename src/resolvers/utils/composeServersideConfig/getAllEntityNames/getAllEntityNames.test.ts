@@ -46,7 +46,7 @@ describe('getAllEntityNames', () => {
     },
   };
 
-  const representation = { ForView };
+  const representations = { ForView };
 
   const inventory: Inventory = {
     name: 'test',
@@ -55,7 +55,7 @@ describe('getAllEntityNames', () => {
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: composeAllEntityConfigs([Person, Place]),
-    representation,
+    representations,
     inventory,
   };
 

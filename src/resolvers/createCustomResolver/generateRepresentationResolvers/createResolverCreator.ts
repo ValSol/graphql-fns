@@ -49,11 +49,14 @@ const createResolverCreator = (
 
     // the regular resolver works with the root entity config (e.g. to use its collection), but...
     // ... calculated fields have to be taken from the representation config (it can add its own)
-    const { representation = {} } = generalConfig;
+    const { representations = {} } = generalConfig;
 
     const calculatedFieldsConfig =
-      composeRepresentationConfig(representation[representationKey], entityConfig, generalConfig) ||
-      undefined;
+      composeRepresentationConfig(
+        representations[representationKey],
+        entityConfig,
+        generalConfig,
+      ) || undefined;
 
     const resolver = async (
       _: null | GraphqlObject,

@@ -77,8 +77,8 @@ describe('fillInputDicForCustom', () => {
 
   const simplifiedAllEntityConfigs = [placeConfig, personConfig, entityConfig];
   const allEntityConfigs = composeAllEntityConfigs(simplifiedAllEntityConfigs, enums);
-  const representation = { ForCatalog };
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, enums };
+  const representations = { ForCatalog };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representations, enums };
 
   test('update nothing for argType = "Int"', () => {
     const argType = 'Int';

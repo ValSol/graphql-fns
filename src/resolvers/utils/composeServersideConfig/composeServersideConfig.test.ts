@@ -118,11 +118,11 @@ describe('composeFilters', () => {
     },
   };
 
-  const representation = { ForView };
+  const representations = { ForView };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Person: personConfig, Place: placeConfig },
-    representation,
+    representations,
   };
 
   test('should check the simplest correct filter', () => {

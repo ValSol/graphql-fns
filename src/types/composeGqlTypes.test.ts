@@ -12,7 +12,7 @@ import type {
 
 import composeAllEntityConfigsAndEnums from '@/utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
-import composeRepresentation from '@/utils/composeRepresentation';
+import composeRepresentations from '@/utils/composeRepresentations';
 
 describe('composeGqlTypes', () => {
   test('should create entities types to copy with children', () => {
@@ -3733,8 +3733,8 @@ type Query {
       Input: { entityInTimeRangeInput },
       Query: { entityInTimeRangeQuery },
     };
-    const representation = { ForCatalog: ForCatalogRepresentation };
-    const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, inventory };
+    const representations = { ForCatalog: ForCatalogRepresentation };
+    const generalConfig: GeneralConfig = { allEntityConfigs, custom, representations, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4106,8 +4106,8 @@ type Mutation {
     const inventory: Inventory = { name: 'test', include: { Query: true } };
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const representation = { ForCatalog };
-    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
+    const representations = { ForCatalog };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4308,8 +4308,8 @@ type Query {
     };
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const representation = { ForCatalog, ForView };
-    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
+    const representations = { ForCatalog, ForView };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {
@@ -4394,9 +4394,12 @@ type Mutation {
 
     const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-    const representation = composeRepresentation([ForCatalog, ForView, ForGuest], allEntityConfigs);
+    const representations = composeRepresentations(
+      [ForCatalog, ForView, ForGuest],
+      allEntityConfigs,
+    );
 
-    const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
+    const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
     const expectedResult = `scalar DateTime
 scalar Upload
 interface Node {

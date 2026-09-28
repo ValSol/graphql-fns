@@ -17,7 +17,7 @@ const createNodeQueryResolver = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): any | null => {
-  const { allEntityConfigs, representation } = generalConfig;
+  const { allEntityConfigs, representations } = generalConfig;
 
   const resolver = async (
     parent: null | GraphqlObject,
@@ -42,13 +42,13 @@ const createNodeQueryResolver = (
 
     const entityConfig = allEntityConfigs[entityName];
 
-    if (representationKey && !representation?.[representationKey]) {
+    if (representationKey && !representations?.[representationKey]) {
       throw new TypeError(`Not found representationKey: "${representationKey}"!`);
     }
 
     const resultEntityConfig = representationKey
       ? composeRepresentationConfig(
-          representation?.[representationKey],
+          representations?.[representationKey],
           entityConfig,
           generalConfig,
         )

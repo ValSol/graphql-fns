@@ -92,9 +92,9 @@ describe('unwindInverntoryOptions', () => {
     Query: { specialUpdateEntity },
   };
 
-  const representation = { ForCatalog: ForCatalogRepresentation };
+  const representations = { ForCatalog: ForCatalogRepresentation };
 
-  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representation, inventory };
+  const generalConfig: GeneralConfig = { allEntityConfigs, custom, representations, inventory };
 
   describe('actions full lists', () => {
     const allQueries = {

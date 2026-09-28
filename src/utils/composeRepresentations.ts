@@ -9,7 +9,7 @@ type Result = {
 
 const actionGenericNames = Object.keys(actionAttributes);
 
-const composeRepresentation = (
+const composeRepresentations = (
   representationAttributesArray: Array<RepresentationAttributes>,
   allEntityConfigs: { [entityConfigName: string]: EntityConfig },
 ): Result => {
@@ -87,4 +87,4 @@ const composeRepresentation = (
   return result;
 };
 
-export default composeRepresentation;
+export default composeRepresentations;

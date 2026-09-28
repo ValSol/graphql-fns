@@ -67,10 +67,10 @@ const composeRepresentationConfig = (
     unfreezedFields = {},
   } = signatureMethods;
 
-  const { representation, allEntityConfigs } = generalConfig;
+  const { representations, allEntityConfigs } = generalConfig;
 
-  if (!representation)
-    throw new TypeError('"representation" attribute of generalConfig must be setted!');
+  if (!representations)
+    throw new TypeError('"representations" attribute of generalConfig must be setted!');
 
   if (!allow[rootEntityName]) return null; // not error but negative result of function!
 
@@ -216,7 +216,7 @@ const composeRepresentationConfig = (
           return item;
         }
 
-        if (representation[representationKey].allow[currentConfig.name] === undefined) {
+        if (representations[representationKey].allow[currentConfig.name] === undefined) {
           throw new TypeError(
             `Have to include "${currentConfig.name}" entity as "allow" for representationKey: "${representationKey}"!`,
           );
@@ -239,7 +239,7 @@ const composeRepresentationConfig = (
             : ['childEntity', 'childEntityGetOrCreate'];
         if (
           !childQueries.some((childQuery: RepresentationAttributesActionName) =>
-            representation[representationKey].allow[currentConfig.name].includes(childQuery),
+            representations[representationKey].allow[currentConfig.name].includes(childQuery),
           ) &&
           key !== 'childFields'
         ) {
@@ -255,7 +255,7 @@ const composeRepresentationConfig = (
         const config =
           store[`${currentConfig.name}${representationKey}`] ||
           composeRepresentationConfig(
-            representation[representationKey],
+            representations[representationKey],
             currentConfig,
             generalConfig,
           );

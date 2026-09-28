@@ -9,7 +9,7 @@ import composeManuallyCreatedResolvers from '@/composeManuallyCreatedResolvers';
 import composeServersideConfig from '@/resolvers/utils/composeServersideConfig';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeCustom from '@/utils/composeCustom';
-import composeRepresentation from '@/utils/composeRepresentation';
+import composeRepresentations from '@/utils/composeRepresentations';
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import pubsub from '@/resolvers/utils/pubsub';
 
@@ -101,7 +101,7 @@ export {
   composeServersideConfig,
   composeAllEntityConfigs,
   composeCustom,
-  composeRepresentation,
+  composeRepresentations,
   composeRepresentationConfigByName,
   composeQueryResolver,
   createCopyManyEntitiesMutationResolver,

@@ -71,7 +71,7 @@ describe('composeRepresentationEntityCountQuery', () => {
     },
   };
 
-  const representation = { ForCatalog };
+  const representations = { ForCatalog };
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: {
@@ -80,7 +80,7 @@ describe('composeRepresentationEntityCountQuery', () => {
       PaginationExample: paginationEntityConfig,
       NearExample: nearEntityConfig,
     },
-    representation,
+    representations,
   };
 
   const result = composeCustomAction(ForCatalog, entityCountQueryAttributes);

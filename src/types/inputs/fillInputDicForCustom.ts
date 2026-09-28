@@ -41,11 +41,11 @@ const fillInputDicForCustom = (
     return;
   }
 
-  const { custom = {}, allEntityConfigs, representation = {}, enums = {} } = generalConfig;
+  const { custom = {}, allEntityConfigs, representations = {}, enums = {} } = generalConfig;
 
   const allEntityNames = Object.keys(allEntityConfigs).map((name) => name);
 
-  const representationKeys = ['', ...Object.keys(representation)];
+  const representationKeys = ['', ...Object.keys(representations)];
 
   const { Input: customInput = {} } = custom;
 
@@ -66,7 +66,7 @@ const fillInputDicForCustom = (
 
         const entityConfig = representationKey
           ? composeRepresentationConfig(
-              representation[representationKey],
+              representations[representationKey],
               allEntityConfigs[entityName],
               generalConfig,
             )

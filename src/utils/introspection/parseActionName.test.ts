@@ -146,9 +146,9 @@ describe('parseActionName', () => {
     Country: countryConfig,
   };
   const custom = { Query: { getEntity, putThing } };
-  const representation = { ForCatalog };
+  const representations = { ForCatalog };
 
-  const generalConfig = { allEntityConfigs, custom, representation };
+  const generalConfig = { allEntityConfigs, custom, representations };
 
   test('should return result for entitiesByUnique action', () => {
     const actionType = 'Query';

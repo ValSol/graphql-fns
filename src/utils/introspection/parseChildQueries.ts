@@ -5,7 +5,7 @@ const parseChildQueries = (
   childQueries: Array<string>,
   generalConfig: GeneralConfig,
 ): ChildQueries => {
-  const { allEntityConfigs, representation } = generalConfig;
+  const { allEntityConfigs, representations } = generalConfig;
 
   return childQueries.map((item) => {
     const [baseAction, representationThingName] = item.split(':');
@@ -19,8 +19,8 @@ const parseChildQueries = (
       };
     }
 
-    if (representation) {
-      const representationKeys = Object.keys(representation);
+    if (representations) {
+      const representationKeys = Object.keys(representations);
 
       for (let i = 0; i < representationKeys.length; i += 1) {
         const representationKey = representationKeys[i];

@@ -877,7 +877,7 @@ export type GeneralConfig = {
       [customMutationName: string]: ActionSignatureMethods;
     };
   };
-  representation?: {
+  representations?: {
     // whole fefault representation name = entityName (baseName) + representationKey
     // OR compose from representationNameSlicePosition entity config attribute (if it's setted)
     [representationKey: string]: RepresentationAttributes;

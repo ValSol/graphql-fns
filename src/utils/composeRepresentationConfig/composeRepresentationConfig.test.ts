@@ -59,7 +59,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -99,7 +99,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -138,7 +138,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -182,7 +182,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -225,7 +225,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -268,7 +268,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { Example: entityConfig },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig, generalConfig);
@@ -318,7 +318,7 @@ describe('composeRepresentationConfig', () => {
 
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Example2: entityConfig2 },
-      representation: { ForCatalog },
+      representations: { ForCatalog },
     };
 
     const result = composeRepresentationConfig(ForCatalog, entityConfig2, generalConfig);
@@ -343,7 +343,7 @@ describe('composeRepresentationConfig', () => {
 
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Example: rootConfig },
-      representation: { ForCatalog },
+      representations: { ForCatalog },
     };
 
     const result = composeRepresentationConfig(ForCatalog, rootConfig, generalConfig);
@@ -399,7 +399,7 @@ describe('composeRepresentationConfig', () => {
 
       const generalConfig: GeneralConfig = {
         allEntityConfigs: { TextExample: entityConfig, RelationalExample: entityConfig2 },
-        representation: { ForCatalog },
+        representations: { ForCatalog },
       };
 
       const result = composeRepresentationConfig(ForCatalog, entityConfig2, generalConfig);
@@ -497,7 +497,7 @@ describe('composeRepresentationConfig', () => {
         Example2Edge: exampleEdgeConfig,
         Example2Connection: exampleConnectionConfig,
       },
-      representation: { ForCatalog },
+      representations: { ForCatalog },
     };
 
     const entityForCatalogConfig: TangibleEntityConfig = {

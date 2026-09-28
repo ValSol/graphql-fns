@@ -31,13 +31,13 @@ const generateRepresentationResolvers = (
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store.cache) return store.cache;
 
-  const { representation } = generalConfig;
+  const { representations } = generalConfig;
 
-  if (!representation) return null;
+  if (!representations) return null;
 
-  const Query = Object.keys(representation).reduce<Record<string, any>>(
+  const Query = Object.keys(representations).reduce<Record<string, any>>(
     (prev, representationKey) => {
-      const { allow } = representation[representationKey];
+      const { allow } = representations[representationKey];
       const allowedActions = getAllowedActions(allow);
 
       Object.keys(queries).forEach((actionName) => {
@@ -55,9 +55,9 @@ const generateRepresentationResolvers = (
     {},
   );
 
-  const Mutation = Object.keys(representation).reduce<Record<string, any>>(
+  const Mutation = Object.keys(representations).reduce<Record<string, any>>(
     (prev, representationKey) => {
-      const { allow } = representation[representationKey];
+      const { allow } = representations[representationKey];
       const allowedActions = getAllowedActions(allow);
 
       Object.keys(mutations).forEach((actionName) => {

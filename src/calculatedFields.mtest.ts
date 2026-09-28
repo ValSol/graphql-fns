@@ -625,7 +625,7 @@ describe('calculated fields: added by a representation', () => {
     },
   };
 
-  const catalogGeneralConfig: GeneralConfig = { ...generalConfig, representation: { ForCatalog } };
+  const catalogGeneralConfig: GeneralConfig = { ...generalConfig, representations: { ForCatalog } };
 
   const catalogServersideConfig: ServersideConfig = {
     calculatedFields: {

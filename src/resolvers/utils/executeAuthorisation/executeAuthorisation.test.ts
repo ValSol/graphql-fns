@@ -227,9 +227,9 @@ describe('executeAuthorisation', () => {
   };
 
   const allEntityConfigs = { Restaurant };
-  const representation = { ForCatalog, ForSetting, ForView };
+  const representations = { ForCatalog, ForSetting, ForView };
 
-  const generalConfig = { allEntityConfigs, representation } as GeneralConfig;
+  const generalConfig = { allEntityConfigs, representations } as GeneralConfig;
 
   const id = '1234567890';
 

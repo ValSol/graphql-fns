@@ -31,7 +31,7 @@ describe('processManualyUsedEntities', () => {
       },
     };
 
-    const representation = { ForCatalog };
+    const representations = { ForCatalog };
 
     const manualyUsedEntities = [
       { name: 'Example' },
@@ -43,7 +43,7 @@ describe('processManualyUsedEntities', () => {
 
     const generalConfig: GeneralConfig = {
       allEntityConfigs: { Example: entityConfig },
-      representation,
+      representations,
       manualyUsedEntities,
     };
 

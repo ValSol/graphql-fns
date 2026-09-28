@@ -20,16 +20,16 @@ const parseEntityName = (
     return store[entityConfigName];
   }
 
-  const { allEntityConfigs, representation } = generalConfig;
+  const { allEntityConfigs, representations } = generalConfig;
   if (allEntityConfigs[entityConfigName]) {
     store[entityConfigName] = { root: entityConfigName, representationKey: '' };
     return store[entityConfigName];
   }
 
-  if (!representation)
-    throw new TypeError('"representation" attribute of generalConfig must be setted!');
+  if (!representations)
+    throw new TypeError('"representations" attribute of generalConfig must be setted!');
 
-  const results = Object.keys(representation).reduce<Array<any>>((prev, representationKey) => {
+  const results = Object.keys(representations).reduce<Array<any>>((prev, representationKey) => {
     const root = entityConfigName.replace(representationKey, '');
 
     if (
@@ -66,7 +66,7 @@ const parseEntityName = (
 
   const { root: rootEntityName, representationKey } = result;
 
-  if (!representation[representationKey].allow[rootEntityName]) {
+  if (!representations[representationKey].allow[rootEntityName]) {
     throw new TypeError(
       `Not allow representationKey: ${representationKey} for "${rootEntityName}" entity name!`,
     );

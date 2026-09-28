@@ -19,7 +19,7 @@ const checkCalculatedFieldsCallbacks = (
   entityTypeDic: { [entityName: string]: string },
   serversideConfig: ServersideConfig,
 ) => {
-  const { allEntityConfigs, representation = {} } = generalConfig;
+  const { allEntityConfigs, representations = {} } = generalConfig;
   const { calculatedFields: allCallbacks = {} } = serversideConfig;
 
   // "entityConfigName" -> names of calculated fields whose callbacks are looked up by this name
@@ -84,7 +84,7 @@ const checkCalculatedFieldsCallbacks = (
 
     checkEntityConfig(entityConfig, entityName);
 
-    Object.keys(representation).forEach((representationKey) => {
+    Object.keys(representations).forEach((representationKey) => {
       const key = composeRepresentationConfigName(
         entityName,
         representationKey,
@@ -94,7 +94,7 @@ const checkCalculatedFieldsCallbacks = (
       if (!entityTypeDic[key]) return;
 
       const representationConfig = composeRepresentationConfig(
-        representation[representationKey],
+        representations[representationKey],
         entityConfig,
         generalConfig,
       );

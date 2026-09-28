@@ -1,8 +1,8 @@
 import type { RepresentationAttributes } from '../tsTypes';
 
-import composeRepresentation from './composeRepresentation';
+import composeRepresentations from './composeRepresentations';
 
-describe('composeRepresentation', () => {
+describe('composeRepresentations', () => {
   const exampleConfig = { name: 'Example' };
   const postConfig = { name: 'Post' };
   const restaurantConfig = { name: 'Restaurant' };
@@ -77,7 +77,7 @@ describe('composeRepresentation', () => {
 
     const allEntityConfigs = { Post: postConfig, Restaurant: restaurantConfig, User: userConfig };
 
-    const result = composeRepresentation([ForView, ForApprove], allEntityConfigs);
+    const result = composeRepresentations([ForView, ForApprove], allEntityConfigs);
 
     const expectedResult = { ForView, ForApprove };
     expect(result).toEqual(expectedResult);
@@ -100,7 +100,7 @@ describe('composeRepresentation', () => {
       excludeFields: { Example: ['anotherField'] },
     };
 
-    const result = composeRepresentation([ForView, ForCatalog], allEntityConfigs);
+    const result = composeRepresentations([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForCatalog: RepresentationAttributes = {
       allow: {
@@ -135,7 +135,7 @@ describe('composeRepresentation', () => {
       excludeFields: { Example: ['anotherField'] },
     };
 
-    const result = composeRepresentation([ForView, ForCatalog], allEntityConfigs);
+    const result = composeRepresentations([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForCatalog: RepresentationAttributes = {
       allow: {
@@ -171,7 +171,7 @@ describe('composeRepresentation', () => {
       involvedOutputRepresentationKeys: { Example: { outputEntity: 'ForView' } },
     };
 
-    const result = composeRepresentation([ForView, ForCatalog], allEntityConfigs);
+    const result = composeRepresentations([ForView, ForCatalog], allEntityConfigs);
 
     const expectedForView: RepresentationAttributes = {
       representationKey: 'ForView',

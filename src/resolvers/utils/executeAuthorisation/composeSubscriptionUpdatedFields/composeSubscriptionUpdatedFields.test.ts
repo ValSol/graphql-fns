@@ -49,8 +49,8 @@ describe('composeSubscriptionUpdatedFields', () => {
   };
   const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
 
-  const representation = { ForCatalog, ForView, ForGuest };
-  const generalConfig: GeneralConfig = { allEntityConfigs, representation, inventory };
+  const representations = { ForCatalog, ForView, ForGuest };
+  const generalConfig: GeneralConfig = { allEntityConfigs, representations, inventory };
 
   test('actionName: "updatedEntity"', () => {
     const actionName = 'updatedEntity';

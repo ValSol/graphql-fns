@@ -50,7 +50,7 @@ describe('caches are bound to configs (B8)', () => {
         allEntityConfigs: composeAllEntityConfigs([
           { name: 'Example', textFields: [{ name: 'textField' }, { name: 'textField2' }] },
         ]),
-        representation: {
+        representations: {
           ForView: {
             representationKey: 'ForView',
             allow: { Example: ['entities'] },

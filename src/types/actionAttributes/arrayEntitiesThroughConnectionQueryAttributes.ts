@@ -70,16 +70,16 @@ const actionReturnConfig = (
 ): null | EntityConfig => {
   const { name } = entityConfig;
 
-  const { allEntityConfigs, representation } = generalConfig;
+  const { allEntityConfigs, representations } = generalConfig;
 
   const connectionConfigName = `${name}Connection`;
 
   const connectionConfig = allEntityConfigs[connectionConfigName];
 
   if (representationKey) {
-    return representation
+    return representations
       ? composeRepresentationConfig(
-          representation[representationKey],
+          representations[representationKey],
           connectionConfig,
           generalConfig,
         )

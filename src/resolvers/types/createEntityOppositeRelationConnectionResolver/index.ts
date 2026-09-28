@@ -33,7 +33,7 @@ const createEntityOppositeRelationConnectionResolver = (
   serversideConfig: ServersideConfig,
 ): any => {
   const { name } = entityConfig;
-  const { allEntityConfigs, inventory, representation } = generalConfig;
+  const { allEntityConfigs, inventory, representations } = generalConfig;
 
   const { root: nameRoot, representationKey } = parseEntityName(name, generalConfig);
 

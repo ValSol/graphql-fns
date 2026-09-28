@@ -7,14 +7,14 @@ const composeRepresentationConfigByName = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
 ): EntityConfig => {
-  const { representation } = generalConfig;
+  const { representations } = generalConfig;
 
-  if (typeof representation === 'undefined') {
-    throw new TypeError('"representation" property of GeneralConfig must be setted!');
+  if (typeof representations === 'undefined') {
+    throw new TypeError('"representations" property of GeneralConfig must be setted!');
   }
 
   const result = composeRepresentationConfig(
-    representation[representationKey],
+    representations[representationKey],
     entityConfig,
     generalConfig,
   );

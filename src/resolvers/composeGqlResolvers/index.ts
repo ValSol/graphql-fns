@@ -20,6 +20,7 @@ import createUpdatedEntitySubscriptionResolver from '../subscriptions/createUpda
 import createDeletedEntitySubscriptionResolver from '../subscriptions/createDeletedEntitySubscriptionResolver';
 import subscriptionResolverDecorator from '../utils/resolverDecorator/subscriptionResolverDecorator';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
+import checkGeneralConfigKeys from '@/utils/checkGeneralConfigKeys';
 
 // separate cache for every combination of generalConfig & serversideConfig
 const getStore = createObjectBoundStore();
@@ -40,7 +41,9 @@ const composeGqlResolvers = (
     return store.resolvers;
   }
 
-  const { allEntityConfigs, inventory, representation = {} } = generalConfig;
+  checkGeneralConfigKeys(generalConfig);
+
+  const { allEntityConfigs, inventory, representations = {} } = generalConfig;
 
   checkCalculatedFieldsCallbacks(generalConfig, entityTypeDic, serversideConfig);
 
@@ -271,7 +274,7 @@ const composeGqlResolvers = (
       }
 
       // process representation objects fields
-      Object.keys(representation).forEach((representationKey) => {
+      Object.keys(representations).forEach((representationKey) => {
         const key = composeRepresentationConfigName(
           name,
           representationKey,
@@ -281,7 +284,7 @@ const composeGqlResolvers = (
         if (!entityTypeDic[key]) return;
 
         const representationConfig = composeRepresentationConfig(
-          representation[representationKey],
+          representations[representationKey],
           entityConfig,
           generalConfig,
         );

@@ -107,7 +107,7 @@ describe('checkCalculatedFieldsCallbacks', () => {
       },
     };
 
-    const generalConfig = { allEntityConfigs, representation: { ForCatalog } };
+    const generalConfig = { allEntityConfigs, representations: { ForCatalog } };
 
     const calculatedFields = {
       Example: { upper: { func }, remote: { func, asyncFunc } },

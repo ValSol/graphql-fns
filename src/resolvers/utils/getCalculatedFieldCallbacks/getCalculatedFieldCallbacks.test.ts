@@ -17,7 +17,7 @@ describe('getCalculatedFieldCallbacks', () => {
 
   const generalConfig: GeneralConfig = {
     allEntityConfigs: { Example: entityConfig },
-    representation: { ForCatalog },
+    representations: { ForCatalog },
   };
 
   const representationConfig = { ...entityConfig, name: 'ExampleForCatalog' };

@@ -12,6 +12,7 @@ import composeGeospatialTypes from './specialized/composeGeospatialTypes';
 import composeActionSignature from './composeActionSignature';
 import composeInterfaceTypeDic from './composeInterfaceTypeDic';
 import processManualyUsedEntities from './processManualyUsedEntities';
+import checkGeneralConfigKeys from '@/utils/checkGeneralConfigKeys';
 
 const composeGqlTypes = (
   generalConfig: GeneralConfig,
@@ -19,7 +20,9 @@ const composeGqlTypes = (
   typeDefs: string;
   entityTypeDic: { [entityName: string]: string };
 } => {
-  const { allEntityConfigs, inventory, representation = {} } = generalConfig;
+  checkGeneralConfigKeys(generalConfig);
+
+  const { allEntityConfigs, inventory, representations = {} } = generalConfig;
 
   const entityNames = Object.keys(allEntityConfigs);
 

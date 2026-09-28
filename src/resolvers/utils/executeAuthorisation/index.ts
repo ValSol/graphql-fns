@@ -36,8 +36,8 @@ const composeSubscriptionInventoryChains = (
   entityName: string,
   generalConfig: GeneralConfig,
 ) => {
-  const { representation = {} } = generalConfig;
-  const representationKeys = ['', ...Object.keys(representation)];
+  const { representations = {} } = generalConfig;
+  const representationKeys = ['', ...Object.keys(representations)];
 
   const { root, representationKey } = parseEntityName(entityName, generalConfig);
 

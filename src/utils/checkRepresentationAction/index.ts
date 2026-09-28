@@ -13,7 +13,7 @@ const checkRepresentationAction = (
   entityConfig: EntityConfig,
   generalConfig: GeneralConfig,
 ) => {
-  const { representation, inventory } = generalConfig;
+  const { representations, inventory } = generalConfig;
   const { root: nameRoot, representationKey } = parseEntityName(entityConfig.name, generalConfig);
 
   const { actionAllowed, actionGeneralName, actionType } = actionAttributes[actionBaseGeneralName];
@@ -31,7 +31,7 @@ const checkRepresentationAction = (
     }
   }
 
-  const allow = representation?.[representationKey]?.allow?.[nameRoot];
+  const allow = representations?.[representationKey]?.allow?.[nameRoot];
 
   if (!allow) {
     throw new TypeError(

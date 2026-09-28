@@ -39,7 +39,7 @@ const mergeRepresentationIntoCustom = (
   // use cache if no jest test environment
   if (!process.env.JEST_WORKER_ID && store[variant]) return store[variant];
 
-  const { allEntityConfigs, custom, representation } = generalConfig;
+  const { allEntityConfigs, custom, representations } = generalConfig;
 
   // *** test correctness
 
@@ -146,7 +146,7 @@ const mergeRepresentationIntoCustom = (
 
   // ***
 
-  if (!representation) {
+  if (!representations) {
     store[variant] = custom || null;
     return store[variant];
   }
@@ -159,9 +159,9 @@ const mergeRepresentationIntoCustom = (
       return prev;
     }, {});
 
-  const Query = Object.keys(representation).reduce<Record<string, any>>(
+  const Query = Object.keys(representations).reduce<Record<string, any>>(
     (prev, representationKey) => {
-      const { allow } = representation[representationKey];
+      const { allow } = representations[representationKey];
       const allowedMethods = getAllowedMethods(allow);
 
       Object.keys(queryAttributes).forEach((actionName) => {
@@ -171,7 +171,7 @@ const mergeRepresentationIntoCustom = (
           (variant === 'forCustomResolver' || !queryAttributes[actionName].actionIsChild)
         ) {
           prev[queryAttributes[actionName].actionGeneralName(representationKey)] =
-            composeCustomAction(representation[representationKey], queryAttributes[actionName]);
+            composeCustomAction(representations[representationKey], queryAttributes[actionName]);
         }
       });
 
@@ -180,15 +180,15 @@ const mergeRepresentationIntoCustom = (
     {},
   );
 
-  const Mutation = Object.keys(representation).reduce<Record<string, any>>(
+  const Mutation = Object.keys(representations).reduce<Record<string, any>>(
     (prev, representationKey) => {
-      const { allow } = representation[representationKey];
+      const { allow } = representations[representationKey];
       const allowedMethods = getAllowedMethods(allow);
 
       Object.keys(mutationAttributes).forEach((actionName) => {
         if (allowedMethods[actionName]) {
           prev[mutationAttributes[actionName].actionGeneralName(representationKey)] =
-            composeCustomAction(representation[representationKey], mutationAttributes[actionName]);
+            composeCustomAction(representations[representationKey], mutationAttributes[actionName]);
         }
       });
 
@@ -197,16 +197,16 @@ const mergeRepresentationIntoCustom = (
     {},
   );
 
-  const Subscription = Object.keys(representation).reduce<Record<string, any>>(
+  const Subscription = Object.keys(representations).reduce<Record<string, any>>(
     (prev, representationKey) => {
-      const { allow } = representation[representationKey];
+      const { allow } = representations[representationKey];
       const allowedMethods = getAllowedMethods(allow);
 
       Object.keys(subscriptionAttributes).forEach((actionName) => {
         if (allowedMethods[actionName]) {
           prev[subscriptionAttributes[actionName].actionGeneralName(representationKey)] =
             composeCustomAction(
-              representation[representationKey],
+              representations[representationKey],
               subscriptionAttributes[actionName],
             );
         }

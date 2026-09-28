@@ -18,7 +18,7 @@ const collectGeospatialTypes = (
 };
 
 const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
-  const { allEntityConfigs, representation = {} } = generalConfig;
+  const { allEntityConfigs, representations = {} } = generalConfig;
   let thereIsGeospatialPoint = false;
   let thereIsGeospatialLineString = false;
   let thereIsGeospatialMultiLineString = false;
@@ -31,8 +31,8 @@ const composeGeospatialTypes = (generalConfig: GeneralConfig): string => {
   );
 
   // representations can add geospatial fields by "addFields"
-  Object.keys(representation).forEach((representationKey) => {
-    const { addFields = {} } = representation[representationKey];
+  Object.keys(representations).forEach((representationKey) => {
+    const { addFields = {} } = representations[representationKey];
 
     Object.keys(addFields).forEach((entityName) => {
       collectGeospatialTypes(addFields[entityName], geospatialTypes);
