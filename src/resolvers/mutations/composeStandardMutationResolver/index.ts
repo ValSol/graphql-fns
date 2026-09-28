@@ -18,6 +18,8 @@ import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
+import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedFieldValues';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import incCounters from '../incCounters';
 import addPeripheryToCore from '../addPeripheryToCore';
@@ -131,12 +133,22 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);
           }
 
-          const previous = await getPrevious(
+          const prePrevious = await getPrevious(
             actionGeneralName,
             resolverCreatorArg,
             resolverArg,
             session,
           );
+
+          // "getPrevious" returns a falsy value if the mutation is not allowed
+          const previous =
+            prePrevious &&
+            prePrevious.map((item) =>
+              removeCalculatedFieldValues(
+                item,
+                getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+              ),
+            );
 
           if (!previous) {
             if (session) {

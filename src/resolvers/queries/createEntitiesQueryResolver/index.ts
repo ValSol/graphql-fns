@@ -16,6 +16,7 @@ import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
+import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedFieldValues';
 import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
@@ -129,9 +130,11 @@ const createEntitiesQueryResolver = (
 
     const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
+    const calculatedFieldsConfig = getCalculatedFieldsConfig(resolverCreatorArg, resolverArg);
+
     const projection = adaptProjectionForCalculatedFields(
       infoEssence.projection,
-      getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+      calculatedFieldsConfig,
       generalConfig,
       serversideConfig,
     );
@@ -190,11 +193,15 @@ const createEntitiesQueryResolver = (
         pipeline.push({ $project: projection as { [fieldName: string]: 1 } });
       }
 
-      const entities = await (session
+      const preEntities = await (session
         ? Entity.aggregate(pipeline).session(session).exec()
         : Entity.aggregate(pipeline).exec());
 
-      if (!entities) return [];
+      if (!preEntities) return [];
+
+      const entities = preEntities.map((item) =>
+        removeCalculatedFieldValues(item, calculatedFieldsConfig),
+      );
 
       const asyncFuncResults = await getAsyncFuncResults(
         infoEssence,
@@ -245,8 +252,12 @@ const createEntitiesQueryResolver = (
       query = query.limit(limit);
     }
 
-    const entities = await (session ? query.session(session).exec() : query.exec());
-    if (!entities) return [];
+    const preEntities = await (session ? query.session(session).exec() : query.exec());
+    if (!preEntities) return [];
+
+    const entities = preEntities.map((item) =>
+      removeCalculatedFieldValues(item, calculatedFieldsConfig),
+    );
 
     const asyncFuncResults = await getAsyncFuncResults(
       infoEssence,

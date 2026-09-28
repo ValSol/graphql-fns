@@ -12,6 +12,8 @@ import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
+import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedFieldValues';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import addPeripheryToCore from '../addPeripheryToCore';
 import produceResult from '../composeStandardMutationResolver/produceResult';
@@ -109,12 +111,22 @@ const workOutMutations = async (
           resolverOptions,
         } as const;
 
-        const previous: GraphqlObject[] = await getPrevious(
+        const prePrevious = await getPrevious(
           actionGeneralName,
           resolverCreatorArg,
           resolverArg,
           session,
         );
+
+        // "getPrevious" returns a falsy value if the mutation is not allowed
+        const previous: GraphqlObject[] =
+          prePrevious &&
+          prePrevious.map((item) =>
+            removeCalculatedFieldValues(
+              item,
+              getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+            ),
+          );
 
         if (!previous) {
           throw new TypeError(
@@ -226,7 +238,8 @@ const workOutMutations = async (
       ? ({} as { previous: GraphqlObject[]; current?: GraphqlObject[] })
       : null;
 
-    const subscription = result && returnReport ? await report(resolverCreatorArg, resolverArg) : null;
+    const subscription =
+      result && returnReport ? await report(resolverCreatorArg, resolverArg) : null;
 
     // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
     const previousIsUsed = !produceCurrent || Boolean(subscription);

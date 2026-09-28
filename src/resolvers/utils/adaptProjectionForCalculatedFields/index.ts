@@ -2,7 +2,9 @@ import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '@/ts
 
 import getCalculatedFieldCallbacks from '../getCalculatedFieldCallbacks';
 
-// add fields that requested calculated fields are calculated from
+// add fields that requested calculated fields are calculated from and remove the calculated...
+// ... fields themselves: they are not stored, and a stored property with the name of a calculated...
+// ... field (e.g. left by old data) must not be fetched
 const adaptProjectionForCalculatedFields = (
   projection: Record<string, 1>,
   entityConfig: TangibleEntityConfig,
@@ -40,7 +42,12 @@ const adaptProjectionForCalculatedFields = (
     return prev;
   }, result);
 
-  return result;
+  calculatedFields.forEach(({ name }) => {
+    delete result[name];
+  });
+
+  // an empty projection would fetch the whole document
+  return Object.keys(result).length === 0 ? ({ _id: 1 } as Record<string, 1>) : result;
 };
 
 export default adaptProjectionForCalculatedFields;

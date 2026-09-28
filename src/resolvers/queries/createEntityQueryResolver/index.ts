@@ -15,6 +15,7 @@ import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
+import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedFieldValues';
 import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
@@ -116,9 +117,11 @@ const createEntityQueryResolver = (
 
     const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
+    const calculatedFieldsConfig = getCalculatedFieldsConfig(resolverCreatorArg, resolverArg);
+
     const projection = adaptProjectionForCalculatedFields(
       infoEssence.projection,
-      getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+      calculatedFieldsConfig,
       generalConfig,
       serversideConfig,
     );
@@ -140,11 +143,13 @@ const createEntityQueryResolver = (
 
       pipeline.push({ $project: projection });
 
-      const [entity] = await (session
+      const [preEntity] = await (session
         ? Entity.aggregate(pipeline).session(session).exec()
         : Entity.aggregate(pipeline).exec());
 
-      if (!entity) return null;
+      if (!preEntity) return null;
+
+      const entity = removeCalculatedFieldValues(preEntity, calculatedFieldsConfig);
 
       const asyncFuncResults = await getAsyncFuncResults(
         infoEssence,
@@ -164,9 +169,11 @@ const createEntityQueryResolver = (
       return entity2;
     }
 
-    const entity = await Entity.findOne(conditions, projection, { lean: true, session });
+    const preEntity = await Entity.findOne(conditions, projection, { lean: true, session });
 
-    if (!entity) return null;
+    if (!preEntity) return null;
+
+    const entity = removeCalculatedFieldValues(preEntity, calculatedFieldsConfig);
 
     const asyncFuncResults = await getAsyncFuncResults(
       infoEssence,

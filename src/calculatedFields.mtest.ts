@@ -10,6 +10,7 @@ import type {
 } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
+import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import pubsub from '@/resolvers/utils/pubsub';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
@@ -507,34 +508,34 @@ describe('calculated fields: mutations', () => {
   });
 });
 
-describe('calculated fields: subscriptions', () => {
-  const subscribeTo = async (source: string, pubsub2?: any) => {
-    const result = await subscribe({
-      schema,
-      document: parse(source),
-      contextValue: contextValue(pubsub2),
-    });
+const subscribeTo = async (source: string, pubsub2?: any) => {
+  const result = await subscribe({
+    schema,
+    document: parse(source),
+    contextValue: contextValue(pubsub2),
+  });
 
-    if (!(Symbol.asyncIterator in result)) {
-      throw new TypeError(`Subscription failed: ${JSON.stringify(result)}`);
-    }
+  if (!(Symbol.asyncIterator in result)) {
+    throw new TypeError(`Subscription failed: ${JSON.stringify(result)}`);
+  }
 
-    const iterator = result as AsyncGenerator<any>;
+  const iterator = result as AsyncGenerator<any>;
 
-    // the PubSub registers its listener lazily, on the first "next()", so it is requested before any mutation
-    const first = iterator.next();
-    await sleep(100);
+  // the PubSub registers its listener lazily, on the first "next()", so it is requested before any mutation
+  const first = iterator.next();
+  await sleep(100);
 
-    return {
-      firstEvent: async () => {
-        const { value } = await first;
-        await iterator.return(undefined);
+  return {
+    firstEvent: async () => {
+      const { value } = await first;
+      await iterator.return(undefined);
 
-        return value;
-      },
-    };
+      return value;
+    },
   };
+};
 
+describe('calculated fields: subscriptions', () => {
   test('created: wherePayload by a sync calculated field, actor from an async one', async () => {
     const subscription = await subscribeTo(`subscription {
       createdBook(wherePayload: { titleUpper: "SUB2" }) {
@@ -786,5 +787,297 @@ describe('calculated fields: added by a representation', () => {
     }`);
 
     expect(deleteBookForCatalog).toEqual({ catalogTitle: 'cat (5)' });
+  });
+
+  // old data may contain properties with the names of calculated fields: they must never be taken...
+  // ... for calculated (materialized) values
+  describe('stored values with the names of calculated fields', () => {
+    const junk = {
+      titleUpper: 'JUNK',
+      priceWithTax: 999,
+      summary: { text: 'junk', position: 99 },
+      editor: 'junk',
+      labels: [{ text: 'junk' }],
+      sameAuthorBooks: '{}',
+      catalogTitle: 'junk',
+      catalogNote: 'junk',
+    };
+
+    const getRawBook = async (globalId: string) => {
+      const Book = await createMongooseModel(mongooseConn, generalConfig.allEntityConfigs.Book);
+
+      return Book.collection.findOne({
+        _id: new mongoose.Types.ObjectId(fromGlobalId(globalId)._id),
+      });
+    };
+
+    beforeAll(async () => {
+      const Book = await createMongooseModel(mongooseConn, generalConfig.allEntityConfigs.Book);
+
+      await Book.collection.updateOne(
+        { _id: new mongoose.Types.ObjectId(fromGlobalId(bookIds.abc)._id) },
+        { $set: junk },
+      );
+    });
+
+    test('sync and async fields are calculated, not taken from the database', async () => {
+      const { Book, Books } = await run(`{
+        Book(whereOne: { id: "${bookIds.abc}" }) {
+          titleUpper priceWithTax(rate: 0.5) summary { text position } editor labels { text }
+        }
+        Books(where: { id_in: ["${bookIds.abc}"] }) { titleUpper summary { text position } }
+      }`);
+
+      expect(Book).toEqual({
+        titleUpper: 'ABC',
+        priceWithTax: 15,
+        summary: { text: 'abc', position: -1 },
+        editor: 'editor of abc',
+        labels: [{ text: 'a' }, { text: 'b' }, { text: 'c' }],
+      });
+
+      expect(Books).toEqual([{ titleUpper: 'ABC', summary: { text: 'abc', position: 0 } }]);
+    });
+
+    test('calculated filter field in all variants takes the filter from "func"', async () => {
+      const { Book } = await run(`{
+        Book(whereOne: { id: "${bookIds.abc}" }) {
+          sameAuthorBooks(sort: { sortBy: [title_ASC] }) { title }
+          sameAuthorBooksCount
+          sameAuthorBooksThroughConnection(first: 5, sort: { sortBy: [title_ASC] }) {
+            edges { node { title } }
+          }
+          sameAuthorBooksDistinctValues(options: { target: title })
+        }
+      }`);
+
+      expect(Book.sameAuthorBooks).toEqual([{ title: 'abc' }, { title: 'def' }, { title: 'ghi' }]);
+      expect(Book.sameAuthorBooksCount).toBe(3);
+      expect(Book.sameAuthorBooksThroughConnection.edges).toEqual([
+        { node: { title: 'abc' } },
+        { node: { title: 'def' } },
+        { node: { title: 'ghi' } },
+      ]);
+      expect([...Book.sameAuthorBooksDistinctValues].sort()).toEqual(['abc', 'def', 'ghi']);
+      expect(funcCalls('sameAuthorBooks').length).toBeGreaterThan(0);
+    });
+
+    test('representations: inherited and added fields are calculated', async () => {
+      const { BookForCatalog, BooksForShop } = await runCatalog(`{
+        BookForCatalog(whereOne: { id: "${bookIds.abc}" }) {
+          titleUpper catalogTitle catalogNote sameAuthorBooks(sort: { sortBy: [title_ASC] }) { title }
+        }
+        BooksForShop(sort: { sortBy: [title_ASC] }, pagination: { first: 1 }) {
+          priceWithTax(rate: 0.5)
+        }
+      }`);
+
+      expect(BookForCatalog).toEqual({
+        titleUpper: 'ABC',
+        catalogTitle: 'abc (10)',
+        catalogNote: 'note of abc',
+        sameAuthorBooks: [{ title: 'abc' }, { title: 'def' }, { title: 'ghi' }],
+      });
+
+      expect(BooksForShop).toEqual([{ priceWithTax: 15 }]);
+    });
+
+    test('resolvers called from code: calculated only on request, never from the database', async () => {
+      const callBook = (resolverOptions: Record<string, any>) =>
+        composeQueryResolver('Book', generalConfig, serversideConfig)(
+          null,
+          { whereOne: { id: fromGlobalId(bookIds.abc)._id } },
+          contextValue(),
+          createInfoEssence({ projection: { titleUpper: 1, summary: 1 } }),
+          { involvedFilters: { inputOutputFilterAndLimit: [[]] }, ...resolverOptions },
+        );
+
+      const book = await callBook({});
+
+      expect(book.titleUpper).toBeUndefined();
+      expect(book.summary).toBeUndefined();
+
+      const materializedBook = await callBook({ materializeCalculatedFields: true });
+
+      expect(materializedBook.titleUpper).toBe('ABC');
+      expect(materializedBook.summary).toEqual({ text: 'abc', position: -1 });
+    });
+
+    test('subscription over a serializing PubSub gets calculated values of both nodes', async () => {
+      const serializingPubsub = {
+        publish: (channel: string, payload: any) =>
+          pubsub.publish(channel, JSON.parse(JSON.stringify(payload))),
+        subscribe: (channel: string) => pubsub.subscribe(channel),
+      };
+
+      const subscription = await subscribeTo(
+        `subscription {
+          updatedBook {
+            node { titleUpper summary { text } editor }
+            previousNode { titleUpper summary { text } editor }
+          }
+        }`,
+        serializingPubsub,
+      );
+
+      await run(
+        `mutation { updateBook(whereOne: { id: "${bookIds.abc}" }, data: { price: 11 }) { id } }`,
+        serializingPubsub,
+      );
+
+      const value = await subscription.firstEvent();
+
+      await run(
+        `mutation { updateBook(whereOne: { id: "${bookIds.abc}" }, data: { price: 10 }) { id } }`,
+      );
+
+      expect(value.errors).toBeUndefined();
+
+      const calculated = { titleUpper: 'ABC', summary: { text: 'abc' }, editor: 'editor of abc' };
+
+      expect(value.data.updatedBook).toEqual({ node: calculated, previousNode: calculated });
+    });
+
+    test('delete: the whole fetched document does not bring stored values to the result and the subscription', async () => {
+      const { createBook } = await run(
+        'mutation { createBook(data: { title: "gone", price: 1 }) { id } }',
+      );
+
+      const Book = await createMongooseModel(mongooseConn, generalConfig.allEntityConfigs.Book);
+
+      await Book.collection.updateOne(
+        { _id: new mongoose.Types.ObjectId(fromGlobalId(createBook.id)._id) },
+        { $set: junk },
+      );
+
+      const serializingPubsub = {
+        publish: (channel: string, payload: any) =>
+          pubsub.publish(channel, JSON.parse(JSON.stringify(payload))),
+        subscribe: (channel: string) => pubsub.subscribe(channel),
+      };
+
+      const subscription = await subscribeTo(
+        'subscription { deletedBook { node { titleUpper summary { text } editor } } }',
+        serializingPubsub,
+      );
+
+      // the subscriber requests "summary" that the mutation does not, so it is not materialized
+      const { deleteBook } = await run(
+        `mutation { deleteBook(whereOne: { id: "${createBook.id}" }) { titleUpper } }`,
+        serializingPubsub,
+      );
+
+      expect(deleteBook).toEqual({ titleUpper: 'GONE' });
+
+      const calculated = {
+        titleUpper: 'GONE',
+        summary: { text: 'gone' },
+        editor: 'editor of gone',
+      };
+
+      const value = await subscription.firstEvent();
+
+      expect(value.errors).toBeUndefined();
+      expect(value.data.deletedBook).toEqual({ node: calculated });
+    });
+
+    test('mutations do not write calculated values to the database', async () => {
+      // the stored values are left as they were, not replaced with calculated ones
+      expect(await getRawBook(bookIds.abc)).toEqual(expect.objectContaining(junk));
+
+      const { createBook } = await run(
+        'mutation { createBook(data: { title: "raw", price: 1 }) { id titleUpper summary { text } } }',
+      );
+
+      const { updateBook } = await run(`mutation {
+        updateBook(whereOne: { id: "${createBook.id}" }, data: { price: 2 }) {
+          titleUpper priceWithTax summary { text } editor
+        }
+      }`);
+
+      expect(updateBook).toEqual({
+        titleUpper: 'RAW',
+        priceWithTax: 2,
+        summary: { text: 'raw' },
+        editor: 'editor of raw',
+      });
+
+      const rawBook = await getRawBook(createBook.id);
+
+      Object.keys(junk).forEach((name) => {
+        expect(rawBook).not.toHaveProperty(name);
+      });
+    });
+  });
+});
+
+describe('calculated fields: copy mutations', () => {
+  const postDeclarations: SimplifiedEntityConfig[] = [
+    {
+      name: 'Post',
+      textFields: [{ name: 'title' }],
+      duplexFields: [
+        { name: 'copies', oppositeName: 'original', configName: 'PostCopy', array: true },
+      ],
+      calculatedFields: [{ name: 'titleUpper', calculatedType: 'textFields' }],
+    },
+    {
+      name: 'PostCopy',
+      textFields: [{ name: 'title' }],
+      duplexFields: [{ name: 'original', oppositeName: 'copies', configName: 'Post' }],
+      calculatedFields: [{ name: 'titleUpper', calculatedType: 'textFields' }],
+    },
+  ];
+
+  const titleUpper = {
+    fieldsToUseNames: ['title'],
+    func: (args, data) => data.title.toUpperCase(),
+  };
+
+  const postGeneralConfig: GeneralConfig = {
+    allEntityConfigs: composeAllEntityConfigs(postDeclarations),
+  };
+
+  const postSchema = makeExecutableSchema(
+    composeTypeDefsAndResolvers(postGeneralConfig, {
+      calculatedFields: { Post: { titleUpper }, PostCopy: { titleUpper } },
+    }),
+  );
+
+  const runPost = async (source: string) => {
+    const result = await graphql({ schema: postSchema, source, contextValue: contextValue() });
+
+    if (result.errors) throw result.errors[0];
+
+    return result.data as Record<string, any>;
+  };
+
+  test('a stored value with the name of a calculated field is not copied', async () => {
+    const { createPost } = await runPost('mutation { createPost(data: { title: "src" }) { id } }');
+
+    const Post = await createMongooseModel(mongooseConn, postGeneralConfig.allEntityConfigs.Post);
+
+    await Post.collection.updateOne(
+      { _id: new mongoose.Types.ObjectId(fromGlobalId(createPost.id)._id) },
+      { $set: { titleUpper: 'JUNK' } },
+    );
+
+    const { copyPostCopy } = await runPost(`mutation {
+      copyPostCopy(whereKeyToSource: { original: { id: "${createPost.id}" } }) { id title titleUpper }
+    }`);
+
+    expect(copyPostCopy).toEqual({ id: expect.any(String), title: 'src', titleUpper: 'SRC' });
+
+    const PostCopy = await createMongooseModel(
+      mongooseConn,
+      postGeneralConfig.allEntityConfigs.PostCopy,
+    );
+
+    const rawPostCopy = await PostCopy.collection.findOne({
+      _id: new mongoose.Types.ObjectId(fromGlobalId(copyPostCopy.id)._id),
+    });
+
+    expect(rawPostCopy).toEqual(expect.objectContaining({ title: 'src' }));
+    expect(rawPostCopy).not.toHaveProperty('titleUpper');
   });
 });
