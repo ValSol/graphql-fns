@@ -183,11 +183,8 @@ const composeRepresentationConfig = (
 
       const { type: fieldType } = fieldToAdd;
 
-      if (entityConfig[fieldType]) {
-        entityConfig[fieldType].push(fieldToAdd);
-      } else {
-        entityConfig[fieldType] = [fieldToAdd];
-      }
+      // a new array: "entityConfig" is a shallow copy and shares field arrays with the root config
+      entityConfig[fieldType] = [...(entityConfig[fieldType] || []), fieldToAdd];
     });
   }
 

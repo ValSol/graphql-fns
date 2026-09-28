@@ -328,6 +328,30 @@ describe('composeRepresentationConfig', () => {
     expect(result).toBe(expectedResult);
   });
 
+  test('should not change field arrays of the root config', () => {
+    const rootConfig: TangibleEntityConfig = {
+      name: 'Example',
+      type: 'tangible',
+      textFields: [{ name: 'textField', type: 'textFields' }],
+    };
+
+    const ForCatalog: RepresentationAttributes = {
+      allow: { Example: ['entity'] },
+      representationKey: 'ForCatalog',
+      addFields: { Example: { textFields: [{ name: 'catalogTitle' }] } },
+    };
+
+    const generalConfig: GeneralConfig = {
+      allEntityConfigs: { Example: rootConfig },
+      representation: { ForCatalog },
+    };
+
+    const result = composeRepresentationConfig(ForCatalog, rootConfig, generalConfig);
+
+    expect(result?.textFields?.map(({ name }) => name)).toEqual(['textField', 'catalogTitle']);
+    expect(rootConfig.textFields?.map(({ name }) => name)).toEqual(['textField']);
+  });
+
   describe('composeRepresentationConfig with relational third field', () => {
     const entityConfig2 = {} as TangibleEntityConfig;
     const entityConfig: TangibleEntityConfig = {
