@@ -25,7 +25,6 @@ describe('composeReport', () => {
         name: 'userId',
         type: 'calculatedFields',
         calculatedType: 'textFields',
-        func: (() => {}) as any,
       },
     ],
   };

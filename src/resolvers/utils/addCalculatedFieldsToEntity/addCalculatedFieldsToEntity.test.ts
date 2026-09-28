@@ -1,4 +1,4 @@
-import type { TangibleEntityConfig } from '@/tsTypes';
+import type { ResolverCreatorArg, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import addCalculatedFieldsToEntity from '.';
 
@@ -26,13 +26,7 @@ describe('addCalculatedFieldsToEntity', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        asyncFunc: async (args, { context }: any) => {
-          const result = await context.id;
-          return result;
-        },
-        fieldsToUseNames: ['text1', 'text2'],
-        func: (args, { text1, text2 }: any, resolverArg, asyncFuncResult) =>
-          `${text1} ${text2} ${asyncFuncResult}` as string,
+        async: true,
         required: true,
       },
 
@@ -40,12 +34,33 @@ describe('addCalculatedFieldsToEntity', () => {
         name: 'texts',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        fieldsToUseNames: ['text2', 'text3'],
-        func: (args, { text2, text3 }: any) => [text2, text3] as string[],
         array: true,
         required: true,
       },
     ],
+  };
+
+  const serversideConfig: ServersideConfig = {
+    calculatedFields: {
+      Example: {
+        text: {
+          asyncFunc: async (args, resolverCreatorArg, { context }: any) => context.id,
+          fieldsToUseNames: ['text1', 'text2'],
+          func: (args, { text1, text2 }, resolverArg, asyncFuncResult) =>
+            `${text1} ${text2} ${asyncFuncResult}`,
+        },
+        texts: {
+          fieldsToUseNames: ['text2', 'text3'],
+          func: (args, { text2, text3 }) => [text2, text3],
+        },
+      },
+    },
+  };
+
+  const resolverCreatorArg: ResolverCreatorArg = {
+    entityConfig: exampleConfig,
+    generalConfig: { allEntityConfigs: { Example: exampleConfig } },
+    serversideConfig,
   };
 
   const resolverArg = {
@@ -70,7 +85,7 @@ describe('addCalculatedFieldsToEntity', () => {
       infoEssence,
       asyncResolverResults,
       resolverArg,
-      exampleConfig,
+      resolverCreatorArg,
       0,
     );
 
@@ -98,7 +113,7 @@ describe('addCalculatedFieldsToEntity', () => {
       infoEssence,
       asyncResolverResults,
       resolverArg,
-      exampleConfig,
+      resolverCreatorArg,
       0,
     );
 
@@ -121,7 +136,7 @@ describe('addCalculatedFieldsToEntity', () => {
       infoEssence,
       asyncResolverResults,
       resolverArg,
-      exampleConfig,
+      resolverCreatorArg,
       0,
     );
 

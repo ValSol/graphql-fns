@@ -2,7 +2,6 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import type { InfoEssence, SintheticResolverInfo, TangibleEntityConfig } from '@/tsTypes';
 
-import adaptProjectionForCalculatedFields from '../adaptProjectionForCalculatedFields';
 import composeAllFieldsProjection from '../composeAllFieldsProjection';
 import createInfoEssence from '../createInfoEssence';
 import getSimpleProjectionFromResolvedInfo from '../getSimpleProjectionFromInfo/getSimpleProjectionFromResolvedInfo';
@@ -24,9 +23,7 @@ const getInfoEssence = (
   }
 
   if (infoEssenceTypePredicate(info)) {
-    const projection = adaptProjectionForCalculatedFields(info.projection, entityConfig);
-
-    return { ...info, projection };
+    return info;
   }
 
   const resolvedInfo = parseResolveInfoCompat(info as GraphQLResolveInfo);
@@ -37,9 +34,7 @@ const getInfoEssence = (
     );
   }
 
-  const simpleProjection = getSimpleProjectionFromResolvedInfo(resolvedInfo, path);
-
-  const projection = adaptProjectionForCalculatedFields(simpleProjection, entityConfig);
+  const projection = getSimpleProjectionFromResolvedInfo(resolvedInfo, path);
 
   const fieldArgs = Object.keys(projection).reduce(
     (prev, fieldName) => {

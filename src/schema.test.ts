@@ -6,6 +6,7 @@ import type {
   EntityConfig,
   GeneralConfig,
   Inventory,
+  ServersideConfig,
   SimplifiedEntityConfig,
   SimplifiedTangibleEntityConfig,
 } from './tsTypes';
@@ -612,16 +613,25 @@ describe('graphql schema', () => {
             name: 'summary',
             calculatedType: 'virtualFields',
             configName: 'Summary',
-            fieldsToUseNames: ['title'],
-            func: ({ title }: any) => ({ text: title }),
-          } as any,
+          },
         ],
       },
     ];
 
     const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
 
-    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+    const serversideConfig: ServersideConfig = {
+      calculatedFields: {
+        Doc: {
+          summary: { fieldsToUseNames: ['title'], func: (args, { title }) => ({ text: title }) },
+        },
+      },
+    };
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers(
+      { allEntityConfigs },
+      serversideConfig,
+    );
 
     const wherePayloadInput = typeDefs.match(/input DocWherePayloadInput \{[^}]*\}/)?.[0];
 
@@ -642,28 +652,38 @@ describe('graphql schema', () => {
             name: 'center',
             calculatedType: 'geospatialFields',
             geospatialType: 'Point',
-            func: () => null,
-          } as any,
+          },
           {
             name: 'area',
             calculatedType: 'geospatialFields',
             geospatialType: 'Polygon',
-            func: () => null,
-          } as any,
+          },
           {
             name: 'route',
             array: true,
             calculatedType: 'geospatialFields',
             geospatialType: 'Point',
-            func: () => [],
-          } as any,
+          },
         ],
       },
     ];
 
     const allEntityConfigs = composeAllEntityConfigs(simplifiedEntityConfigs);
 
-    const { typeDefs, resolvers } = composeTypeDefsAndResolvers({ allEntityConfigs });
+    const serversideConfig: ServersideConfig = {
+      calculatedFields: {
+        Place: {
+          center: { func: () => null },
+          area: { func: () => null },
+          route: { func: () => [] },
+        },
+      },
+    };
+
+    const { typeDefs, resolvers } = composeTypeDefsAndResolvers(
+      { allEntityConfigs },
+      serversideConfig,
+    );
 
     expect(typeDefs).toMatch(/\ntype GeospatialPoint \{/);
     expect(typeDefs).toMatch(/\ntype GeospatialPolygon \{/);

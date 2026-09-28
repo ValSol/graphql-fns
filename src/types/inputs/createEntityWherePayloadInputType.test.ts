@@ -968,21 +968,18 @@ describe('createEntityWherePayloadInputType', () => {
             name: 'firstName',
             type: 'calculatedFields',
             calculatedType: 'textFields',
-            func: (() => {}) as any,
           },
           {
             name: 'lastName',
             type: 'calculatedFields',
             calculatedType: 'textFields',
-            func: (() => {}) as any,
-            asyncFunc: (() => {}) as any,
+            async: true,
           },
           {
             name: 'code',
             type: 'calculatedFields',
             calculatedType: 'textFields',
-            func: (() => {}) as any,
-            asyncFunc: (() => {}) as any,
+            async: true,
           },
         ],
       };

@@ -27,8 +27,6 @@ describe('createInfoEssence', () => {
         name: 'calculatedField',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        fieldsToUseNames: ['text2', 'text3'],
-        func: ({ text2, text3 }) => [text2, text3] as string[],
         array: true,
         required: true,
       },
@@ -59,7 +57,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1 },
       fieldArgs: {},
       path: [],
     };
@@ -73,7 +71,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig, fieldArgs });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1 },
       fieldArgs,
       path: [],
     };
@@ -96,7 +94,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig, infoEssence });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text1: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1, text1: 1 },
       fieldArgs,
       path,
       originalInfo,
@@ -120,7 +118,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig, fieldArgs, infoEssence });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text1: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1, text1: 1 },
       fieldArgs,
       path,
       originalInfo,
@@ -144,7 +142,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig, fieldArgs, infoEssence });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text1: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1, text1: 1 },
       fieldArgs,
       path,
       originalInfo,
@@ -168,7 +166,7 @@ describe('createInfoEssence', () => {
     const result = createInfoEssence({ projection, entityConfig, fieldArgs, infoEssence });
 
     const expectedResult = {
-      projection: { calculatedField: 1, text1: 1, text2: 1, text3: 1 },
+      projection: { calculatedField: 1, text1: 1 },
       fieldArgs: { calculatedField: { lang: 'uk', variant: 1 } },
       path,
       originalInfo,

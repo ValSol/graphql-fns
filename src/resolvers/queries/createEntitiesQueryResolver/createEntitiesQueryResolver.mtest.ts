@@ -31,7 +31,16 @@ afterAll(async () => {
 });
 
 describe('createEntityQueryResolver', () => {
-  const serversideConfig: Record<string, any> = {};
+  const serversideConfig: Record<string, any> = {
+    calculatedFields: {
+      Person: {
+        fullName: {
+          fieldsToUseNames: ['firstName', 'lastName'],
+          func: (args, { firstName, lastName }) => `${firstName} ${lastName}`,
+        },
+      },
+    },
+  };
   test('should create query entities resolver', async () => {
     const personConfig = {} as EntityConfig;
     Object.assign(personConfig, {
@@ -73,8 +82,6 @@ describe('createEntityQueryResolver', () => {
         {
           name: 'fullName',
           calculatedType: 'text',
-          fieldsToUseNames: ['firstName', 'lastName'],
-          func: (args, { id, firstName, lastName }) => `${firstName} ${lastName}`,
           type: 'calculatedFields',
         },
       ],

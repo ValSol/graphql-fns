@@ -338,25 +338,15 @@ const composeEntityConfig = (
   if (simplifiedCalculatedFields) {
     (entityConfig as TangibleEntityConfig).calculatedFields = simplifiedCalculatedFields.map(
       (field) => {
-        const { fieldsToUseNames = [], calculatedType } = field;
+        const { calculatedType } = field;
 
-        const argsRest = fieldsToUseNames.filter(
-          (str: string) => !['createdAt', 'updatedAt', 'counter', 'id'].includes(str),
-        );
-
-        argsRest.forEach((arg: string) => {
-          if (!fieldNames.includes(arg)) {
+        ['func', 'asyncFunc', 'fieldsToUseNames'].forEach((key) => {
+          if (key in field) {
             throw new TypeError(
-              `Incorrect arg: "${arg}" in calculated field: "${field.name}" of simplified entityConfig: "${name}"!`,
+              `Forbidden "${key}" in calculated field: "${field.name}" of simplified entityConfig: "${name}", it has to be set in "serversideConfig.calculatedFields"!`,
             );
           }
         });
-
-        if (fieldsToUseNames.includes('counter') && !(simplifiedEntityConfig as any).counter) {
-          throw new TypeError(
-            `Incorrect arg: "counter" in calculated field: "${field.name}" of simplified entityConfig: "${name}"!`,
-          );
-        }
 
         if (calculatedType === 'embeddedFields') {
           const { configName, ...restField } = field;

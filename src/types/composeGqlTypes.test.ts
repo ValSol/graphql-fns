@@ -4362,7 +4362,7 @@ type Mutation {
 
       textFields: [{ name: 'textField' }, { name: 'textField2' }],
 
-      calculatedFields: [{ name: 'userId', calculatedType: 'textFields', func: (() => {}) as any }],
+      calculatedFields: [{ name: 'userId', calculatedType: 'textFields' }],
     };
 
     const ForCatalog: RepresentationAttributes = {

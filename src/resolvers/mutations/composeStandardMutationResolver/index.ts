@@ -187,7 +187,7 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
                   infoEssence,
                   asyncFuncResults,
                   resolverArg,
-                  entityConfig as TangibleEntityConfig,
+                  resolverCreatorArg,
                   i,
                 ),
               )

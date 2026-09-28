@@ -60,7 +60,6 @@ describe('composeCreatedOrDeletedPayloadVirtualConfig', () => {
           type: 'calculatedFields',
           calculatedType: 'embeddedFields',
           config: embeddedExampleConfig,
-          func: (() => {}) as any,
         },
       ],
     };

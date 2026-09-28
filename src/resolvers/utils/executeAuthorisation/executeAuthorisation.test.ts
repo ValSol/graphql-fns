@@ -214,16 +214,14 @@ describe('executeAuthorisation', () => {
         type: 'calculatedFields',
         calculatedType: 'textFields',
         array: true,
-        func: (() => []) as any,
-        asyncFunc: (() => []) as any,
+        async: true,
       },
       {
         name: 'restaurantPublishers',
         type: 'calculatedFields',
         calculatedType: 'textFields',
         array: true,
-        func: (() => []) as any,
-        asyncFunc: (() => []) as any,
+        async: true,
       },
     ],
   };

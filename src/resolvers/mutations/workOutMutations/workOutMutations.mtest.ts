@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, TangibleEntityConfig } from '@/tsTypes';
+import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
 import createThingSchema from '@/mongooseModels/createThingSchema';
@@ -28,8 +28,6 @@ const exampleConfig: TangibleEntityConfig = {
     {
       name: 'nameAndLabel',
       calculatedType: 'textFields',
-      fieldsToUseNames: ['name', 'label'],
-      func: (args, { name, label }: any) => `${name} with label: "${label}"` as string,
       type: 'calculatedFields',
     },
   ],
@@ -428,7 +426,17 @@ const generalConfig: GeneralConfig = {
   },
 };
 
-const serversideConfig = { transactions: true };
+const serversideConfig: ServersideConfig = {
+  transactions: true,
+  calculatedFields: {
+    Example: {
+      nameAndLabel: {
+        fieldsToUseNames: ['name', 'label'],
+        func: (args, { name, label }) => `${name} with label: "${label}"`,
+      },
+    },
+  },
+};
 
 beforeAll(async () => {
   const dbURI = 'mongodb://127.0.0.1:27017/jest-work-out-mutations';

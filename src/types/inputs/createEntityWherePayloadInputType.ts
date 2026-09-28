@@ -61,12 +61,12 @@ const composeInputFields = (
     entityConfig as TangibleEntityConfig;
 
   calculatedFields.forEach((field) => {
-    const { name, asyncFunc, calculatedType } = field;
+    const { name, async, calculatedType } = field;
 
     // virtual objects are not filtered (there is no "where" input for virtual configs)
     if (calculatedType === 'virtualFields') return;
 
-    if (!asyncFunc || allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
+    if (!async || allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       preFields[calculatedType].push(field);
     }
   });

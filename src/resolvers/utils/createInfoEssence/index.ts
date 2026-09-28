@@ -1,5 +1,4 @@
 import { InfoEssence, TangibleEntityConfig } from '@/tsTypes';
-import adaptProjectionForCalculatedFields from '../adaptProjectionForCalculatedFields';
 
 const createInfoEssence = ({
   projection,
@@ -18,7 +17,7 @@ const createInfoEssence = ({
 
   if (!infoEssence) {
     return {
-      projection: adaptProjectionForCalculatedFields(projection, entityConfig),
+      projection,
       fieldArgs,
       path: [],
     };
@@ -28,7 +27,7 @@ const createInfoEssence = ({
 
   return {
     ...infoEssence,
-    projection: adaptProjectionForCalculatedFields(simpleProjection, entityConfig),
+    projection: simpleProjection,
     // merge fieldArgs
     fieldArgs: Object.keys(fieldArgs).reduce((prev, calculatedfieldName) => {
       if (prev[calculatedfieldName]) {

@@ -5,6 +5,7 @@ import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getInputAndOutputFilters from '@/resolvers/utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import checkData from '@/resolvers/mutations/checkData';
+import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
@@ -81,7 +82,12 @@ const getPrevious: GetPrevious = async (
   //   ? {} // if subsciption ON - return empty projection - to get all fields of entity
   //   : { duplexFieldsProjection };
 
-  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+  const projection = adaptProjectionForCalculatedFields(
+    getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
+    entityConfig as TangibleEntityConfig,
+    generalConfig,
+    resolverCreatorArg.serversideConfig,
+  );
 
   const previousEntity = await Entity.findOne(whereOne3, projection, { lean: true, session });
 

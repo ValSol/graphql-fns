@@ -14,6 +14,7 @@ import type {
 
 import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
@@ -118,7 +119,12 @@ const createEntitiesQueryResolver = (
 
     const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
-    const { projection } = infoEssence;
+    const projection = adaptProjectionForCalculatedFields(
+      infoEssence.projection,
+      entityConfig as TangibleEntityConfig,
+      generalConfig,
+      serversideConfig,
+    );
 
     const resolverCreatorArg = {
       entityConfig,
@@ -200,7 +206,7 @@ const createEntitiesQueryResolver = (
           infoEssence,
           asyncFuncResults,
           resolverArg,
-          entityConfig as TangibleEntityConfig,
+          resolverCreatorArg,
           i,
         ),
       );
@@ -252,7 +258,7 @@ const createEntitiesQueryResolver = (
         infoEssence,
         asyncFuncResults,
         resolverArg,
-        entityConfig as TangibleEntityConfig,
+        resolverCreatorArg,
         i,
       ),
     );

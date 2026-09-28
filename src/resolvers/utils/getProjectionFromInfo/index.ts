@@ -2,7 +2,6 @@ import type { ResolverArg, TangibleEntityConfig } from '@/tsTypes';
 
 import getSimpleProjectionFromInfo from '../getSimpleProjectionFromInfo';
 import composeAllFieldsProjection from '../composeAllFieldsProjection';
-import adaptProjectionForCalculatedFields from '../adaptProjectionForCalculatedFields';
 
 type Path = string[];
 
@@ -21,9 +20,7 @@ const getProjectionFromInfo = (
     return composeAllFieldsProjection(entityConfig);
   }
 
-  const projection = getSimpleProjectionFromInfo(info, path);
-
-  return adaptProjectionForCalculatedFields(projection, entityConfig);
+  return getSimpleProjectionFromInfo(info, path);
 };
 
 export default getProjectionFromInfo;

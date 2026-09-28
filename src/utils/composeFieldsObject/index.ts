@@ -35,7 +35,7 @@ const composeFieldsObject = (
       if (!key.endsWith('Fields')) return prev;
 
       (entityConfig[key] as AnyField[]).forEach((item) => {
-        const { name, type: fieldType, asyncFunc } = item as any;
+        const { name, type: fieldType, async } = item as any;
 
         switch (filterVariant) {
           case FOR_MONGO_QUERY:
@@ -50,7 +50,7 @@ const composeFieldsObject = (
           case WITHOUT_CALCULATED_WITH_ASYNC:
             if (
               fieldType === 'calculatedFields' &&
-              asyncFunc &&
+              async &&
               !allowedCalculatedWithAsyncFuncFieldNames.includes(name) &&
               !subscriptionActorConfigFieldNames.includes(name)
             ) {

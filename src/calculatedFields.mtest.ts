@@ -90,8 +90,8 @@ const declarations: SimplifiedEntityConfig[] = [
     calculatedFields: [
       { name: 'titleUpper', calculatedType: 'textFields' },
       { name: 'priceWithTax', calculatedType: 'floatFields', inputTypes: { rate: 'Float' } },
-      { name: 'summary', calculatedType: 'virtualFields', configName: 'Summary' },
-      { name: 'editor', calculatedType: 'textFields' },
+      { name: 'summary', calculatedType: 'virtualFields', configName: 'Summary', async: true },
+      { name: 'editor', calculatedType: 'textFields', async: true },
       { name: 'labels', calculatedType: 'embeddedFields', configName: 'Label', array: true },
       {
         name: 'sameAuthorBooks',
@@ -103,7 +103,7 @@ const declarations: SimplifiedEntityConfig[] = [
   } as SimplifiedEntityConfig,
 ];
 
-const callbacks = {
+const callbacks: ServersideConfig['calculatedFields'] = {
   Book: {
     titleUpper: {
       fieldsToUseNames: ['title'],
@@ -139,26 +139,10 @@ const callbacks = {
 };
 
 // the only place that knows where the callbacks live
-const composeConfigs = (): { generalConfig: GeneralConfig; serversideConfig: ServersideConfig } => {
-  const simplifiedEntityConfigs = declarations.map((config) => {
-    const entityCallbacks = callbacks[config.name];
-
-    if (!entityCallbacks) return config;
-
-    return {
-      ...config,
-      calculatedFields: (config as any).calculatedFields.map((field) => ({
-        ...field,
-        ...entityCallbacks[field.name],
-      })),
-    } as SimplifiedEntityConfig;
-  });
-
-  return {
-    generalConfig: { allEntityConfigs: composeAllEntityConfigs(simplifiedEntityConfigs) },
-    serversideConfig: {},
-  };
-};
+const composeConfigs = (): { generalConfig: GeneralConfig; serversideConfig: ServersideConfig } => ({
+  generalConfig: { allEntityConfigs: composeAllEntityConfigs(declarations) },
+  serversideConfig: { calculatedFields: callbacks },
+});
 
 const { generalConfig, serversideConfig } = composeConfigs();
 const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig, serversideConfig);

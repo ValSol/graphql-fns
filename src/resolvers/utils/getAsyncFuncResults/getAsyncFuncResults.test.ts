@@ -1,4 +1,4 @@
-import type { ResolverCreatorArg, TangibleEntityConfig } from '../../../tsTypes';
+import type { ResolverCreatorArg, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
 
 import getAsyncFuncResults from '.';
 
@@ -26,16 +26,23 @@ describe('getAsyncFuncResults', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        asyncFunc: async (args, resolverCreatorArg, { context }: any) => {
-          const result = await context.id;
-          return result;
-        },
-        fieldsToUseNames: ['text1', 'text2'],
-        func: (args, { text1, text2 }: any, resolverArg, asyncFuncResult) =>
-          `${text1} ${text2} ${asyncFuncResult}` as string,
+        async: true,
         required: true,
       },
     ],
+  };
+
+  const serversideConfig: ServersideConfig = {
+    calculatedFields: {
+      Example: {
+        text: {
+          asyncFunc: async (args, resolverCreatorArg, { context }: any) => context.id,
+          fieldsToUseNames: ['text1', 'text2'],
+          func: (args, { text1, text2 }, resolverArg, asyncFuncResult) =>
+            `${text1} ${text2} ${asyncFuncResult}`,
+        },
+      },
+    },
   };
 
   const resolverArg = {
@@ -53,7 +60,11 @@ describe('getAsyncFuncResults', () => {
 
     const result = await getAsyncFuncResults(
       infoEssence,
-      { entityConfig: exampleConfig } as ResolverCreatorArg,
+      {
+        entityConfig: exampleConfig,
+        generalConfig: { allEntityConfigs: { Example: exampleConfig } },
+        serversideConfig,
+      } as ResolverCreatorArg,
       resolverArg,
       [], // notAsyncCalculatedFieldValues
     );

@@ -4,6 +4,7 @@ import type { GetPrevious } from '@/resolvers/tsTypes';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
+import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
@@ -65,7 +66,12 @@ const getPrevious: GetPrevious = async (
     conditions = { _id: { $in: entities.map(({ _id }) => _id) } };
   }
 
-  const projection = getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg);
+  const projection = adaptProjectionForCalculatedFields(
+    getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
+    entityConfig as TangibleEntityConfig,
+    generalConfig,
+    resolverCreatorArg.serversideConfig,
+  );
 
   ((entityConfig as TangibleEntityConfig).duplexFields || []).reduce((prev, { name: name2 }) => {
     prev[name2] = 1;

@@ -278,7 +278,7 @@ const workOutMutations = async (
           infoEssence,
           asyncFuncResults,
           resolverArg,
-          entityConfig as TangibleEntityConfig,
+          resolverCreatorArg,
           i,
         ),
       );

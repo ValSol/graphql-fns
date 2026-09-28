@@ -41,9 +41,9 @@ const composeSubscriptionDummyEntityConfig = (entityConfig: EntityConfig): Entit
   });
 
   calculatedFields.forEach((field) => {
-    const { name, calculatedType, array, asyncFunc } = field;
+    const { name, calculatedType, array, async } = field;
 
-    if (asyncFunc && !allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
+    if (async && !allowedCalculatedWithAsyncFuncFieldNames.includes(name)) {
       return;
     }
 

@@ -15,13 +15,11 @@ describe('testSubscriptionNode', () => {
           name: 'mainTag',
           calculatedType: 'embeddedFields',
           configName: 'Tag',
-          func: () => ({ label: 'news' }),
         } as any,
         {
           name: 'summary',
           calculatedType: 'virtualFields',
           configName: 'Summary',
-          func: () => ({ text: 'short' }),
         } as any,
       ],
     },

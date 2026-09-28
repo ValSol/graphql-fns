@@ -26,8 +26,6 @@ describe('composeSubscriptionDummyEntityConfig', () => {
         name: 'text',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        fieldsToUseNames: ['text1'],
-        func: ({ text1 }: any) => text1 as string,
         required: true,
       },
 
@@ -35,12 +33,7 @@ describe('composeSubscriptionDummyEntityConfig', () => {
         name: 'texts',
         calculatedType: 'textFields',
         type: 'calculatedFields',
-        fieldsToUseNames: ['text2', 'text3'],
-        func: ({ text2, text3 }) => [text2, text3] as string[],
-        asyncFunc: async (args, { context }: any) => {
-          const result = await context.id;
-          return result;
-        },
+        async: true,
         array: true,
         required: true,
       },

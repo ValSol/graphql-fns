@@ -6,6 +6,7 @@ import checkInventory from '../../utils/inventory/checkInventory';
 import composeRepresentationConfigName from '../../utils/composeRepresentationConfig/composeRepresentationConfigName';
 import mergeRepresentationIntoCustom from '../../utils/mergeRepresentationIntoCustom';
 import composeRepresentationConfig from '../../utils/composeRepresentationConfig';
+import checkCalculatedFieldsCallbacks from '../utils/checkCalculatedFieldsCallbacks';
 import { mutationAttributes, queryAttributes } from '../../types/actionAttributes';
 import resolverDecorator from '../utils/resolverDecorator';
 import composeEntityResolvers from '../types/composeEntityResolvers';
@@ -40,6 +41,8 @@ const composeGqlResolvers = (
   }
 
   const { allEntityConfigs, inventory, representation = {} } = generalConfig;
+
+  checkCalculatedFieldsCallbacks(generalConfig, entityTypeDic, serversideConfig);
 
   const custom = mergeRepresentationIntoCustom(generalConfig);
 

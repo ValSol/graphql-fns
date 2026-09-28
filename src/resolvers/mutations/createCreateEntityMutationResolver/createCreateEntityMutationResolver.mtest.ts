@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
-import type { EmbeddedEntityConfig, GeneralConfig, TangibleEntityConfig } from '../../../tsTypes';
+import type {
+  EmbeddedEntityConfig,
+  GeneralConfig,
+  ServersideConfig,
+  TangibleEntityConfig,
+} from '../../../tsTypes';
 
 import mongoOptions from '../../../test/mongo-options';
 import createThingSchema from '../../../mongooseModels/createThingSchema';
@@ -23,7 +28,17 @@ afterAll(async () => {
 });
 
 describe('createCreateEntityMutationResolver', () => {
-  const serversideConfig = { transactions: true };
+  const serversideConfig: ServersideConfig = {
+    transactions: true,
+    calculatedFields: {
+      Example: {
+        text: {
+          fieldsToUseNames: ['textField1', 'textField2'],
+          func: (args, { textField1, textField2 }) => `${textField1} + ${textField2}`,
+        },
+      },
+    },
+  };
 
   test('should create mutation add entity resolver', async () => {
     const embeddedConfig: EmbeddedEntityConfig = {
@@ -78,9 +93,6 @@ describe('createCreateEntityMutationResolver', () => {
           name: 'text',
           calculatedType: 'textFields',
           type: 'calculatedFields',
-          fieldsToUseNames: ['textField1', 'textField2'],
-          func: (args, { textField1, textField2 }: any) =>
-            `${textField1} + ${textField2}` as string,
           required: true,
         },
       ],

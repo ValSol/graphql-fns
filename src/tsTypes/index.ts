@@ -72,8 +72,24 @@ export type CalculatedFieldAsyncFunc = (
   args: Record<string, any>,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
-  notAsyncCalculatedFieldValues?: any,
+  notAsyncCalculatedFieldValues?: any, // an entity for single-entity actions, an array of entities for list ones
 ) => Promise<any>;
+
+export type CalculatedFieldFunc = (
+  args: Record<string, any>,
+  data: Record<string, GraphqlScalar | GraphqlObject>,
+  resolverArg?: ResolverArg,
+  asyncFuncResult?: any,
+  index?: number, // position of the entity in the list for list actions, 0 for single-entity ones
+) => any;
+
+// callbacks of a calculated field declared in "generalConfig" (see "ServersideConfig.calculatedFields"),
+// the declaration has "async: true" if and only if the callbacks have "asyncFunc"
+export type CalculatedFieldCallbacks = {
+  func: CalculatedFieldFunc;
+  asyncFunc?: CalculatedFieldAsyncFunc;
+  fieldsToUseNames?: string[];
+};
 
 type FieldCommonProperties = {
   name: string;
@@ -258,16 +274,8 @@ export type ScalarSimplifiedCalculatedEnumField = Omit<
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => null | string;
 };
 export type ArraySimplifiedCalculatedEnumField = Omit<
   FieldCommonProperties,
@@ -277,16 +285,8 @@ export type ArraySimplifiedCalculatedEnumField = Omit<
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => string[];
 };
 export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
   FieldCommonProperties,
@@ -296,16 +296,8 @@ export type ScalarSimplifiedCalculatedEmbeddedField = Omit<
   nullable?: false;
   calculatedType: 'embeddedFields' | 'filterFields' | 'virtualFields';
   configName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject;
 };
 export type ArraySimplifiedCalculatedEmbeddedField = Omit<
   FieldCommonProperties,
@@ -315,16 +307,8 @@ export type ArraySimplifiedCalculatedEmbeddedField = Omit<
   nullable?: boolean; // TODO fileterField must not to be nullable
   calculatedType: 'embeddedFields' | 'filterFields' | 'virtualFields';
   configName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject[];
 };
 export type ScalarSimplifiedCalculatedFilterField = Omit<
   FieldCommonProperties,
@@ -333,16 +317,8 @@ export type ScalarSimplifiedCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject;
 };
 export type ArraySimplifiedCalculatedFilterField = Omit<
   FieldCommonProperties,
@@ -351,16 +327,8 @@ export type ArraySimplifiedCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'embeddedFields' | 'filterFields';
   configName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject[];
 };
 export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   FieldCommonProperties,
@@ -370,16 +338,8 @@ export type ScalarSimplifiedCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => null | GeospatialPoint | GeospatialPolygon | GeospatialMultiPolygon;
 };
 export type ArraySimplifiedCalculatedGeospatialField = Omit<
   FieldCommonProperties,
@@ -389,16 +349,8 @@ export type ArraySimplifiedCalculatedGeospatialField = Omit<
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GeospatialPoint[] | GeospatialPolygon[] | GeospatialMultiPolygon[];
 };
 export type ScalarSimplifiedCalculatedField = Omit<
   FieldCommonProperties,
@@ -407,16 +359,8 @@ export type ScalarSimplifiedCalculatedField = Omit<
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlScalar;
 };
 export type ArraySimplifiedCalculatedField = Omit<
   FieldCommonProperties,
@@ -425,16 +369,8 @@ export type ArraySimplifiedCalculatedField = Omit<
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlScalar[];
 };
 type SimplifiedCalculatedField =
   | ArraySimplifiedCalculatedEmbeddedField
@@ -588,16 +524,8 @@ type ScalarCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' 
   nullable?: false;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => null | string;
   type: 'calculatedFields';
 };
 type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -605,16 +533,8 @@ type ArrayCalculatedEnumField = Omit<FieldCommonProperties, 'freeze' | 'index' |
   nullable?: boolean;
   calculatedType: 'enumFields';
   enumName: string;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => string[];
   type: 'calculatedFields';
 };
 type ScalarCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -622,16 +542,8 @@ type ScalarCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'ind
   nullable?: false;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject;
   type: 'calculatedFields';
 };
 type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -639,16 +551,8 @@ type ArrayCalculatedEmbeddedField = Omit<FieldCommonProperties, 'freeze' | 'inde
   nullable?: boolean;
   calculatedType: 'embeddedFields';
   config: EmbeddedEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject[];
   type: 'calculatedFields';
 };
 type ScalarCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -656,16 +560,8 @@ type ScalarCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'inde
   nullable?: false;
   calculatedType: 'virtualFields';
   config: VirtualEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject;
   type: 'calculatedFields';
 };
 type ArrayCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -673,16 +569,8 @@ type ArrayCalculatedVirtualField = Omit<FieldCommonProperties, 'freeze' | 'index
   nullable?: boolean;
   calculatedType: 'virtualFields';
   config: VirtualEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject[];
   type: 'calculatedFields';
 };
 type ScalarCalculatedGeospatialField = Omit<
@@ -693,16 +581,8 @@ type ScalarCalculatedGeospatialField = Omit<
   nullable?: false;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => null | GeospatialPoint | GeospatialPolygon | GeospatialMultiPolygon;
   type: 'calculatedFields';
 };
 type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
@@ -710,16 +590,8 @@ type ArrayCalculatedGeospatialField = Omit<FieldCommonProperties, 'freeze' | 'in
   nullable?: boolean;
   calculatedType: 'geospatialFields';
   geospatialType: 'Point' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GeospatialPoint[] | GeospatialPolygon[] | GeospatialMultiPolygon[];
   type: 'calculatedFields';
 };
 export type ScalarCalculatedFilterField = Omit<
@@ -729,16 +601,8 @@ export type ScalarCalculatedFilterField = Omit<
   array?: false;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject;
   type: 'calculatedFields';
 };
 export type ArrayCalculatedFilterField = Omit<
@@ -748,48 +612,24 @@ export type ArrayCalculatedFilterField = Omit<
   array: true;
   calculatedType: 'filterFields';
   config: TangibleEntityConfig;
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlObject[];
   type: 'calculatedFields';
 };
 type ScalarCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array?: false;
   nullable?: false;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlScalar;
   type: 'calculatedFields';
 };
 type ArrayCalculatedField = Omit<FieldCommonProperties, 'freeze' | 'index' | 'unique'> & {
   array: true;
   nullable?: boolean;
   calculatedType: 'booleanFields' | 'dateTimeFields' | 'intFields' | 'floatFields' | 'textFields';
-  asyncFunc?: CalculatedFieldAsyncFunc;
-  fieldsToUseNames?: string[];
+  async?: boolean;
   inputTypes?: Record<string, string>;
-  func: (
-    args: Record<string, any>,
-    data: Record<string, GraphqlScalar | GraphqlObject>,
-    resolverArg?: ResolverArg,
-    asyncFuncResult?: any,
-    index?: number,
-  ) => GraphqlScalar[];
   type: 'calculatedFields';
 };
 export type CalculatedField =
@@ -1165,6 +1005,12 @@ export type ActionResolver = (
 
 export type ServersideConfig = {
   transactions?: boolean;
+  // callbacks of calculated fields, by entity (or representation) config name and field name
+  calculatedFields?: {
+    [entityConfigName: string]: {
+      [calculatedFieldName: string]: CalculatedFieldCallbacks;
+    };
+  };
   Query?: {
     [customQueryName: string]: (
       entityConfig: EntityConfig,

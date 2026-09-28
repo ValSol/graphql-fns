@@ -1,19 +1,21 @@
 import { InfoEssence, ResolverArg, ResolverCreatorArg, TangibleEntityConfig } from '@/tsTypes';
 
+import getCalculatedFieldCallbacks from '../getCalculatedFieldCallbacks';
+
 const getAsyncFuncResults = async (
   infoEssence: InfoEssence,
   resolverCreatorArg: ResolverCreatorArg,
   resolverArg: ResolverArg,
   notAsyncCalculatedFieldValues: any,
 ): Promise<Record<string, any>> => {
-  const { entityConfig } = resolverCreatorArg;
+  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
 
   const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
 
   const { projection, fieldArgs } = infoEssence;
 
   const asyncCalculatedFieldsToProcess = calculatedFields.filter(
-    ({ asyncFunc, name }) => asyncFunc && projection[name] === 1,
+    ({ async, name }) => async && projection[name] === 1,
   );
 
   if (asyncCalculatedFieldsToProcess.length === 0) {
@@ -21,8 +23,15 @@ const getAsyncFuncResults = async (
   }
 
   const results = await Promise.all(
-    asyncCalculatedFieldsToProcess.map(({ asyncFunc, name }) => {
+    asyncCalculatedFieldsToProcess.map(({ name }) => {
       const args = fieldArgs[name];
+
+      const { asyncFunc } = getCalculatedFieldCallbacks(
+        entityConfig,
+        name,
+        generalConfig,
+        serversideConfig,
+      );
 
       return asyncFunc(args, resolverCreatorArg, resolverArg, notAsyncCalculatedFieldValues);
     }),

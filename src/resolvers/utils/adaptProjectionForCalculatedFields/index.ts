@@ -1,8 +1,13 @@
-import { TangibleEntityConfig } from '../../../tsTypes';
+import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
 
+import getCalculatedFieldCallbacks from '../getCalculatedFieldCallbacks';
+
+// add fields that requested calculated fields are calculated from
 const adaptProjectionForCalculatedFields = (
   projection: Record<string, 1>,
   entityConfig: TangibleEntityConfig,
+  generalConfig: GeneralConfig,
+  serversideConfig: ServersideConfig,
 ) => {
   if (Object.keys(projection).length === 0) {
     return projection;
@@ -16,10 +21,17 @@ const adaptProjectionForCalculatedFields = (
 
   const result = { ...projection };
 
-  calculatedFields.reduce((prev, { fieldsToUseNames = [], name }) => {
+  calculatedFields.reduce((prev, { name }) => {
     if (projection[name] === undefined) {
       return prev;
     }
+
+    const { fieldsToUseNames = [] } = getCalculatedFieldCallbacks(
+      entityConfig,
+      name,
+      generalConfig,
+      serversideConfig,
+    );
 
     fieldsToUseNames.forEach((fieldName) => {
       prev[fieldName] = 1;

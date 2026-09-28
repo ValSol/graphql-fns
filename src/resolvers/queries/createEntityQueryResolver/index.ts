@@ -13,6 +13,7 @@ import type {
 
 import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
+import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
@@ -112,7 +113,12 @@ const createEntityQueryResolver = (
 
     const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
 
-    const { projection } = infoEssence;
+    const projection = adaptProjectionForCalculatedFields(
+      infoEssence.projection,
+      entityConfig as TangibleEntityConfig,
+      generalConfig,
+      serversideConfig,
+    );
 
     const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
@@ -149,7 +155,7 @@ const createEntityQueryResolver = (
         infoEssence,
         asyncFuncResults,
         resolverArg,
-        entityConfig as TangibleEntityConfig,
+        resolverCreatorArg,
         0, // index
       );
       return entity2;
@@ -171,7 +177,7 @@ const createEntityQueryResolver = (
       infoEssence,
       asyncFuncResults,
       resolverArg,
-      entityConfig as TangibleEntityConfig,
+      resolverCreatorArg,
       0, // index
     );
     return entity2;
