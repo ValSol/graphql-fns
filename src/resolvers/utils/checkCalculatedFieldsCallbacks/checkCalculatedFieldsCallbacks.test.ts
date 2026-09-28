@@ -1,8 +1,4 @@
-import type {
-  RepresentationAttributes,
-  ServersideConfig,
-  SimplifiedEntityConfig,
-} from '@/tsTypes';
+import type { RepresentationAttributes, ServersideConfig, SimplifiedEntityConfig } from '@/tsTypes';
 
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
@@ -122,6 +118,56 @@ describe('checkCalculatedFieldsCallbacks', () => {
         calculatedFields: { ...calculatedFields, ExampleForCatalog: { catalogTitle: { func } } },
       }),
     ).not.toThrow();
+  });
+
+  test('should check "fieldsToUseNames" against fields of the config the callbacks are taken from', () => {
+    const ForCatalog: RepresentationAttributes = {
+      allow: { Example: ['entity'] },
+      representationKey: 'ForCatalog',
+      excludeFields: { Example: ['text'] },
+      addFields: {
+        Example: { calculatedFields: [{ name: 'catalogTitle', calculatedType: 'textFields' }] },
+      },
+    };
+
+    const generalConfig = { allEntityConfigs, representations: { ForCatalog } };
+
+    // inherited "upper" uses "text" excluded by the representation: the root collection is queried
+    const calculatedFields = {
+      Example: { upper: { func, fieldsToUseNames: ['text'] }, remote: { func, asyncFunc } },
+    };
+
+    expect(() =>
+      composeTypeDefsAndResolvers(generalConfig, {
+        calculatedFields: { ...calculatedFields, ExampleForCatalog: { catalogTitle: { func } } },
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      composeTypeDefsAndResolvers(generalConfig, {
+        calculatedFields: {
+          ...calculatedFields,
+          ExampleForCatalog: { catalogTitle: { func, fieldsToUseNames: ['unknown'] } },
+        },
+      }),
+    ).toThrow(
+      'Incorrect field: "unknown" in "fieldsToUseNames" of calculated field "catalogTitle" of entity "ExampleForCatalog"',
+    );
+
+    // callbacks of the representation's own name are checked against the representation's fields
+    expect(() =>
+      composeTypeDefsAndResolvers(generalConfig, {
+        calculatedFields: {
+          ...calculatedFields,
+          ExampleForCatalog: {
+            catalogTitle: { func },
+            upper: { func, fieldsToUseNames: ['text'] },
+          },
+        },
+      }),
+    ).toThrow(
+      'Incorrect field: "text" in "fieldsToUseNames" of calculated field "upper" of entity "ExampleForCatalog"',
+    );
   });
 
   test('should forbid callbacks in the declaration of a calculated field', () => {

@@ -625,7 +625,17 @@ describe('calculated fields: added by a representation', () => {
     },
   };
 
-  const catalogGeneralConfig: GeneralConfig = { ...generalConfig, representations: { ForCatalog } };
+  // hides the raw "price" but keeps the inherited "priceWithTax" calculated from it
+  const ForShop: RepresentationAttributes = {
+    representationKey: 'ForShop',
+    allow: { Book: ['entities', 'childEntities'], Author: ['childEntity'] },
+    excludeFields: { Book: ['price'] },
+  };
+
+  const catalogGeneralConfig: GeneralConfig = {
+    ...generalConfig,
+    representations: { ForCatalog, ForShop },
+  };
 
   const catalogServersideConfig: ServersideConfig = {
     calculatedFields: {
@@ -668,6 +678,23 @@ describe('calculated fields: added by a representation', () => {
 
     // like for fields of the root config: "asyncFunc" once for the whole list
     expect(asyncCalls('catalogNote')).toEqual([expect.objectContaining({ list: true, length: 2 })]);
+  });
+
+  test('inherited calculated field uses a root field excluded by the representation', async () => {
+    expect(catalog.typeDefs).not.toMatch(/type BookForShop \{[^}]*\bprice:/);
+
+    const { BooksForShop } = await runCatalog(`{
+      BooksForShop(sort: { sortBy: [title_ASC] }, pagination: { first: 2 }) {
+        title priceWithTax(rate: 0.5)
+      }
+    }`);
+
+    expect(BooksForShop).toEqual([
+      { title: 'abc', priceWithTax: 15 },
+      { title: 'def', priceWithTax: 30 },
+    ]);
+
+    expect(funcCalls('priceWithTax').map(({ data }) => data.price)).toEqual([10, 20]);
   });
 
   test('mutation results of a representation', async () => {

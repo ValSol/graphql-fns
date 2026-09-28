@@ -26,17 +26,25 @@ const checkCalculatedFieldsCallbacks = (
   const usedCallbackNames: Record<string, string[]> = {};
   const checkedConfigNames: string[] = [];
 
-  const checkEntityConfig = (entityConfig: EntityConfig, rootName: string) => {
+  const checkEntityConfig = (entityConfig: EntityConfig, rootConfig: EntityConfig) => {
     if (entityConfig.type !== 'tangible') return;
 
-    const { name, calculatedFields = [], counter } = entityConfig as TangibleEntityConfig;
+    const { name, calculatedFields = [] } = entityConfig as TangibleEntityConfig;
+    const { name: rootName } = rootConfig;
 
     checkedConfigNames.push(name);
 
-    const fieldNames = Object.keys(composeFieldsObject(entityConfig).fieldsObject);
-
     calculatedFields.forEach(({ name: fieldName, async }) => {
       const callbacksName = allCallbacks[name]?.[fieldName] ? name : rootName;
+
+      // "fieldsToUseNames" are checked against fields of the config the callbacks are taken from:...
+      // ...a representation queries the root collection, so its inherited calculated fields...
+      // ...may use root fields that the representation excludes
+      const callbacksConfig = (
+        callbacksName === name ? entityConfig : rootConfig
+      ) as TangibleEntityConfig;
+
+      const fieldNames = Object.keys(composeFieldsObject(callbacksConfig).fieldsObject);
 
       const callbacks = allCallbacks[callbacksName]?.[fieldName];
 
@@ -69,7 +77,7 @@ const checkCalculatedFieldsCallbacks = (
         if (
           !fieldNames.includes(fieldToUseName) &&
           !alwaysAllowedFieldsToUseNames.includes(fieldToUseName) &&
-          !(fieldToUseName === 'counter' && counter)
+          !(fieldToUseName === 'counter' && callbacksConfig.counter)
         ) {
           throw new TypeError(
             `Incorrect field: "${fieldToUseName}" in "fieldsToUseNames" of calculated field "${fieldName}" of entity "${name}"!`,
@@ -82,7 +90,7 @@ const checkCalculatedFieldsCallbacks = (
   Object.keys(allEntityConfigs).forEach((entityName) => {
     const entityConfig = allEntityConfigs[entityName];
 
-    checkEntityConfig(entityConfig, entityName);
+    checkEntityConfig(entityConfig, entityConfig);
 
     Object.keys(representations).forEach((representationKey) => {
       const key = composeRepresentationConfigName(
@@ -100,7 +108,7 @@ const checkCalculatedFieldsCallbacks = (
       );
 
       if (representationConfig) {
-        checkEntityConfig(representationConfig, entityName);
+        checkEntityConfig(representationConfig, entityConfig);
       }
     });
   });
