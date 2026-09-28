@@ -51,7 +51,11 @@ const produceResult = async (
   } = preparedData;
 
   const {
-    resolverOptions: { subscriptionEntityNames, materializeCalculatedFields },
+    resolverOptions: {
+      subscriptionEntityNames,
+      materializeCalculatedFields,
+      calculatedFieldsConfig,
+    },
   } = resolverArg;
 
   // the published entity has to contain the values of calculated fields used by...
@@ -72,7 +76,11 @@ const produceResult = async (
       { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
       infoEssence,
-      { involvedFilters: { inputOutputFilterAndLimit: [[]] }, materializeCalculatedFields },
+      {
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
+        materializeCalculatedFields,
+        calculatedFieldsConfig,
+      },
     );
   }
 
@@ -84,6 +92,7 @@ const produceResult = async (
     {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
       materializeCalculatedFields: forSubscription || materializeCalculatedFields,
+      calculatedFieldsConfig,
     },
   );
 

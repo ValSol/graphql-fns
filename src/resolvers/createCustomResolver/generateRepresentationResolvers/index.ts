@@ -45,6 +45,7 @@ const generateRepresentationResolvers = (
           prev[`${actionName}${representationKey}`] = createResolverCreator(
             actionName,
             queries[actionName],
+            representationKey,
           );
         }
       });
@@ -64,6 +65,7 @@ const generateRepresentationResolvers = (
           prev[`${actionName}${representationKey}`] = createResolverCreator(
             actionName,
             mutations[actionName],
+            representationKey,
           );
         }
       });

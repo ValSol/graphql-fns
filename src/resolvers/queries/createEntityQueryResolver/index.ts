@@ -14,6 +14,7 @@ import type {
 import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
 import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
@@ -50,6 +51,7 @@ const createEntityQueryResolver = (
         [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
       materializeCalculatedFields?: boolean;
+      calculatedFieldsConfig?: EntityConfig;
     },
     session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
@@ -116,7 +118,7 @@ const createEntityQueryResolver = (
 
     const projection = adaptProjectionForCalculatedFields(
       infoEssence.projection,
-      entityConfig as TangibleEntityConfig,
+      getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
       generalConfig,
       serversideConfig,
     );

@@ -993,14 +993,7 @@ export type ActionResolver = (
   args: GraphqlObject,
   context: Context,
   info: SintheticResolverInfo,
-  resolverOptions: {
-    involvedFilters: {
-      [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
-    };
-    subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
-    subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
-    subscriptionUpdatedFields?: string[]; // used in Subscription
-  },
+  resolverOptions: ResolverArg['resolverOptions'],
 ) => Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null>;
 
 export type ServersideConfig = {
@@ -1225,5 +1218,7 @@ export type ResolverArg = {
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
     subscriptionUpdatedFields?: string[]; // used in Subscription
     materializeCalculatedFields?: boolean; // calculate requested calculated fields at once
+    // config to take calculated fields from, e.g. a representation config for its root entity resolver
+    calculatedFieldsConfig?: EntityConfig;
   };
 };

@@ -15,6 +15,7 @@ import type {
 import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
 import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
@@ -65,6 +66,7 @@ const createEntitiesQueryResolver = (
         [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
       materializeCalculatedFields?: boolean;
+      calculatedFieldsConfig?: EntityConfig;
     },
     session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
@@ -118,21 +120,21 @@ const createEntitiesQueryResolver = (
 
     const resolverArg = { parent, args, context, info, resolverOptions };
 
-    const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
-
-    const projection = adaptProjectionForCalculatedFields(
-      infoEssence.projection,
-      entityConfig as TangibleEntityConfig,
-      generalConfig,
-      serversideConfig,
-    );
-
     const resolverCreatorArg = {
       entityConfig,
       generalConfig,
       serversideConfig,
       inAnyCase,
     };
+
+    const infoEssence = getInfoEssence(entityConfig as TangibleEntityConfig, info);
+
+    const projection = adaptProjectionForCalculatedFields(
+      infoEssence.projection,
+      getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
+      generalConfig,
+      serversideConfig,
+    );
 
     const { lookups, where: where2 } = mergeWhereAndFilter(filter, where, entityConfig);
 

@@ -2,7 +2,12 @@ import mongoose from 'mongoose';
 import { graphql, parse, subscribe } from 'graphql';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import type { GeneralConfig, ServersideConfig, SimplifiedEntityConfig } from '@/tsTypes';
+import type {
+  GeneralConfig,
+  RepresentationAttributes,
+  ServersideConfig,
+  SimplifiedEntityConfig,
+} from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
 import pubsub from '@/resolvers/utils/pubsub';
@@ -600,5 +605,86 @@ describe('calculated fields: subscriptions', () => {
     expect(previousNode).toEqual({ titleUpper: 'SUB5' });
     expect(updatedFields).toEqual(expect.arrayContaining(['title', 'titleUpper']));
     expect(updatedFields).not.toContain('price');
+  });
+});
+
+describe('calculated fields: added by a representation', () => {
+  const ForCatalog: RepresentationAttributes = {
+    representationKey: 'ForCatalog',
+    allow: {
+      Book: ['entity', 'entities', 'childEntities', 'createEntity', 'deleteEntity'],
+      Author: ['childEntity'],
+    },
+    addFields: {
+      Book: {
+        calculatedFields: [
+          { name: 'catalogTitle', calculatedType: 'textFields' },
+          { name: 'catalogNote', calculatedType: 'textFields', async: true },
+        ],
+      },
+    },
+  };
+
+  const catalogGeneralConfig: GeneralConfig = { ...generalConfig, representation: { ForCatalog } };
+
+  const catalogServersideConfig: ServersideConfig = {
+    calculatedFields: {
+      ...callbacks,
+      BookForCatalog: {
+        catalogTitle: {
+          fieldsToUseNames: ['title', 'price'],
+          func: recordFunc('catalogTitle', (args, data) => `${data.title} (${data.price})`),
+        },
+        catalogNote: {
+          asyncFunc: recordAsyncFunc('catalogNote', (entity) => `note of ${entity.title}`),
+          func: recordFunc('catalogNote', pickByIndex),
+        },
+      },
+    },
+  };
+
+  const catalog = composeTypeDefsAndResolvers(catalogGeneralConfig, catalogServersideConfig);
+  const catalogSchema = makeExecutableSchema(catalog);
+
+  const runCatalog = async (source: string) => {
+    const result = await graphql({ schema: catalogSchema, source, contextValue: contextValue() });
+
+    if (result.errors) throw result.errors[0];
+
+    return result.data as Record<string, any>;
+  };
+
+  test('fieldsToUseNames and asyncFunc of fields added by "addFields"', async () => {
+    const { BooksForCatalog } = await runCatalog(`{
+      BooksForCatalog(sort: { sortBy: [title_ASC] }, pagination: { first: 2 }) {
+        catalogTitle catalogNote titleUpper
+      }
+    }`);
+
+    expect(BooksForCatalog).toEqual([
+      { catalogTitle: 'abc (10)', catalogNote: 'note of abc', titleUpper: 'ABC' },
+      { catalogTitle: 'def (20)', catalogNote: 'note of def', titleUpper: 'DEF' },
+    ]);
+
+    // like for fields of the root config: "asyncFunc" once for the whole list
+    expect(asyncCalls('catalogNote')).toEqual([expect.objectContaining({ list: true, length: 2 })]);
+  });
+
+  test('mutation results of a representation', async () => {
+    const { createBookForCatalog } = await runCatalog(`mutation {
+      createBookForCatalog(data: { title: "cat", price: 5 }) { id catalogTitle catalogNote }
+    }`);
+
+    expect(createBookForCatalog).toEqual({
+      id: expect.any(String),
+      catalogTitle: 'cat (5)',
+      catalogNote: 'note of cat',
+    });
+
+    const { deleteBookForCatalog } = await runCatalog(`mutation {
+      deleteBookForCatalog(whereOne: { id: "${createBookForCatalog.id}" }) { catalogTitle }
+    }`);
+
+    expect(deleteBookForCatalog).toEqual({ catalogTitle: 'cat (5)' });
   });
 });

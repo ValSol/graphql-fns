@@ -1,6 +1,7 @@
-import { InfoEssence, ResolverArg, ResolverCreatorArg, TangibleEntityConfig } from '@/tsTypes';
+import { InfoEssence, ResolverArg, ResolverCreatorArg } from '@/tsTypes';
 
 import getCalculatedFieldCallbacks from '../getCalculatedFieldCallbacks';
+import getCalculatedFieldsConfig from '../getCalculatedFieldsConfig';
 
 const getAsyncFuncResults = async (
   infoEssence: InfoEssence,
@@ -8,9 +9,11 @@ const getAsyncFuncResults = async (
   resolverArg: ResolverArg,
   notAsyncCalculatedFieldValues: any,
 ): Promise<Record<string, any>> => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
+  const { generalConfig, serversideConfig } = resolverCreatorArg;
 
-  const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
+  const calculatedFieldsConfig = getCalculatedFieldsConfig(resolverCreatorArg, resolverArg);
+
+  const { calculatedFields = [] } = calculatedFieldsConfig;
 
   const { projection, fieldArgs } = infoEssence;
 
@@ -27,7 +30,7 @@ const getAsyncFuncResults = async (
       const args = fieldArgs[name];
 
       const { asyncFunc } = getCalculatedFieldCallbacks(
-        entityConfig,
+        calculatedFieldsConfig,
         name,
         generalConfig,
         serversideConfig,

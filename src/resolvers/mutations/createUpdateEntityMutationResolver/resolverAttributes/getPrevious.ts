@@ -6,6 +6,7 @@ import getInputAndOutputFilters from '@/resolvers/utils/getInputAndOutputFilters
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import checkData from '@/resolvers/mutations/checkData';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
 import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
@@ -84,7 +85,7 @@ const getPrevious: GetPrevious = async (
 
   const projection = adaptProjectionForCalculatedFields(
     getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
-    entityConfig as TangibleEntityConfig,
+    getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
     generalConfig,
     resolverCreatorArg.serversideConfig,
   );

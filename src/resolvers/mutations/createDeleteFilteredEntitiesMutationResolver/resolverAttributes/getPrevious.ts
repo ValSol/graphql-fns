@@ -6,6 +6,7 @@ import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggreg
 import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolvedFilters';
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
+import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConfig';
 import getProjectionFromInfo from '@/resolvers/utils/getProjectionFromInfo';
 
 const getPrevious: GetPrevious = async (
@@ -68,7 +69,7 @@ const getPrevious: GetPrevious = async (
 
   const projection = adaptProjectionForCalculatedFields(
     getProjectionFromInfo(entityConfig as TangibleEntityConfig, resolverArg),
-    entityConfig as TangibleEntityConfig,
+    getCalculatedFieldsConfig(resolverCreatorArg, resolverArg),
     generalConfig,
     resolverCreatorArg.serversideConfig,
   );

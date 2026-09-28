@@ -9,6 +9,10 @@ import type {
   ActionResolver,
 } from '@/tsTypes';
 
+import composeRepresentationConfig from '@/utils/composeRepresentationConfig';
+
+// resolver creators don't depend on configs (they get them as arguments), so they are cached...
+// ... by the action name & representation key only
 const store = Object.create(null);
 
 type ResoverCreator = (
@@ -20,10 +24,13 @@ type ResoverCreator = (
 const createResolverCreator = (
   queryOrMutationName: string,
   regularResolverCreator: any,
+  representationKey: string,
 ): ResoverCreator => {
+  const key = `${queryOrMutationName}${representationKey}`;
+
   // use cache if no jest test environment
-  if (!process.env.JEST_WORKER_ID && store[queryOrMutationName]) {
-    return store[queryOrMutationName];
+  if (!process.env.JEST_WORKER_ID && store[key]) {
+    return store[key];
   }
 
   const resolverCreator = (
@@ -38,7 +45,15 @@ const createResolverCreator = (
       serversideConfig,
       inAnyCase,
     );
-    if (!resolverCreator) return null;
+    if (!regularResolver) return null;
+
+    // the regular resolver works with the root entity config (e.g. to use its collection), but...
+    // ... calculated fields have to be taken from the representation config (it can add its own)
+    const { representation = {} } = generalConfig;
+
+    const calculatedFieldsConfig =
+      composeRepresentationConfig(representation[representationKey], entityConfig, generalConfig) ||
+      undefined;
 
     const resolver = async (
       _: null | GraphqlObject,
@@ -49,17 +64,15 @@ const createResolverCreator = (
       resolverOptions: {
         involvedFilters: {
           [representationConfigName: string]:
-            | null
-            | [InvolvedFilter[]]
-            | [InvolvedFilter[], number];
+            null | [InvolvedFilter[]] | [InvolvedFilter[], number];
         };
       },
-    ) => regularResolver(_, args, context, info, resolverOptions);
+    ) => regularResolver(_, args, context, info, { ...resolverOptions, calculatedFieldsConfig });
 
     return resolver;
   };
-  store[queryOrMutationName] = resolverCreator;
-  return store[queryOrMutationName];
+  store[key] = resolverCreator;
+  return store[key];
 };
 
 export default createResolverCreator;

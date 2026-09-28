@@ -1,12 +1,7 @@
-import {
-  DataObject,
-  InfoEssence,
-  ResolverArg,
-  ResolverCreatorArg,
-  TangibleEntityConfig,
-} from '@/tsTypes';
+import { DataObject, InfoEssence, ResolverArg, ResolverCreatorArg } from '@/tsTypes';
 
 import getCalculatedFieldCallbacks from '../getCalculatedFieldCallbacks';
+import getCalculatedFieldsConfig from '../getCalculatedFieldsConfig';
 
 const addCalculatedFieldsToEntity = (
   data: DataObject,
@@ -16,9 +11,11 @@ const addCalculatedFieldsToEntity = (
   resolverCreatorArg: ResolverCreatorArg,
   index: number,
 ) => {
-  const { entityConfig, generalConfig, serversideConfig } = resolverCreatorArg;
+  const { generalConfig, serversideConfig } = resolverCreatorArg;
 
-  const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
+  const calculatedFieldsConfig = getCalculatedFieldsConfig(resolverCreatorArg, resolverArg);
+
+  const { calculatedFields = [] } = calculatedFieldsConfig;
 
   if (calculatedFields.length === 0) {
     return data;
@@ -33,7 +30,7 @@ const addCalculatedFieldsToEntity = (
       const args = fieldArgs[name];
 
       const { func } = getCalculatedFieldCallbacks(
-        entityConfig,
+        calculatedFieldsConfig,
         name,
         generalConfig,
         serversideConfig,
