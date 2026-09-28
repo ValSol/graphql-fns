@@ -839,6 +839,40 @@ describe('calculated fields: added by a representation', () => {
       expect(Books).toEqual([{ titleUpper: 'ABC', summary: { text: 'abc', position: 0 } }]);
     });
 
+    test('no Mongo projection contains calculated fields', async () => {
+      const projections: Record<string, any>[] = [];
+
+      mongoose.set('debug', (collectionName: string, method: string, ...args: any[]) => {
+        args.forEach((arg) => {
+          if (arg?.projection) projections.push(arg.projection);
+
+          if (Array.isArray(arg)) {
+            arg.forEach((stage) => stage?.$project && projections.push(stage.$project));
+          }
+        });
+      });
+
+      await run(`{
+        Book(whereOne: { id: "${bookIds.abc}" }) {
+          titleUpper priceWithTax summary { text } editor labels { text }
+          sameAuthorBooks { title } sameAuthorBooksCount
+          sameAuthorBooksThroughConnection(first: 2) { edges { node { title titleUpper } } }
+          sameAuthorBooksDistinctValues(options: { target: title })
+        }
+        BooksThroughConnection(first: 2) { edges { node { titleUpper summary { text } } } }
+      }`);
+
+      mongoose.set('debug', false);
+
+      const calculatedFieldNames = Object.keys(callbacks.Book);
+
+      expect(projections.length).toBeGreaterThan(0);
+
+      projections.forEach((projection) => {
+        calculatedFieldNames.forEach((name) => expect(projection).not.toHaveProperty(name));
+      });
+    });
+
     test('calculated filter field in all variants takes the filter from "func"', async () => {
       const { Book } = await run(`{
         Book(whereOne: { id: "${bookIds.abc}" }) {
@@ -1062,9 +1096,21 @@ describe('calculated fields: copy mutations', () => {
       { $set: { titleUpper: 'JUNK' } },
     );
 
+    // calculated fields have no place in any Mongo query, copying included
+    const queries: string[] = [];
+
+    mongoose.set('debug', (collectionName: string, method: string, ...args: any[]) => {
+      queries.push(`${collectionName}.${method} ${JSON.stringify(args)}`);
+    });
+
     const { copyPostCopy } = await runPost(`mutation {
       copyPostCopy(whereKeyToSource: { original: { id: "${createPost.id}" } }) { id title titleUpper }
     }`);
+
+    mongoose.set('debug', false);
+
+    expect(queries.length).toBeGreaterThan(0);
+    expect(queries.filter((query) => query.includes('titleUpper'))).toEqual([]);
 
     expect(copyPostCopy).toEqual({ id: expect.any(String), title: 'src', titleUpper: 'SRC' });
 

@@ -91,7 +91,7 @@ const getCommonData = async (
 
   const [{ array, config, oppositeName }, { array: oppositeArray }] = fieldsPair;
 
-  const matchingFields = getMatchingFields(entityConfig, config).filter((matchingField) => {
+  const matchingFields = getMatchingFields(entityConfig, config, true).filter((matchingField) => {
     if (matchingField === fieldName) return false;
 
     return optionFields
