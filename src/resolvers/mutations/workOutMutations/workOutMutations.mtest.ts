@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
-import type { GeneralConfig, ServersideConfig, TangibleEntityConfig } from '@/tsTypes';
+import type {
+  GeneralConfig,
+  InvolvedFilter,
+  ServersideConfig,
+  TangibleEntityConfig,
+} from '@/tsTypes';
 
 import mongoOptions from '@/test/mongo-options';
 import createThingSchema from '@/mongooseModels/createThingSchema';
@@ -583,6 +588,11 @@ describe('workOutMutations', () => {
         actionGeneralName: 'updateEntity',
         entityConfig: exampleConfig,
         args: { whereOne: { id: createdExample.id }, data: { name: null } },
+        // to read the calculated "nameAndLabel" from the result
+        resolverOptions: {
+          involvedFilters: { inputOutputFilterAndLimit: [[]] as [InvolvedFilter[]] },
+          materializeCalculatedFields: true,
+        },
         returnResult: true,
       },
       {

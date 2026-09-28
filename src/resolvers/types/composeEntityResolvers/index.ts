@@ -9,6 +9,7 @@ import type {
 } from '@/tsTypes';
 
 import composeFieldsObject from '@/utils/composeFieldsObject';
+import composeCalculatedFieldResolver from '../composeCalculatedFieldResolver';
 import createEntityArrayResolver from '../createEntityArrayResolver';
 import createEntityCountResolver from '../createEntityCountResolver';
 import createEntityDistinctValuesResolver from '../createEntityDistinctValuesResolver';
@@ -34,6 +35,9 @@ import fieldFilterStringifiedResolver from '../fieldFilterStringifiedResolver';
 import lineStringFromMongoToGql from '../lineStringFromMongoToGql';
 import multiLineStringFromMongoToGql from '../multiLineStringFromMongoToGql';
 
+const thenOrNow = (value: any, callback: (value: any) => any) =>
+  value instanceof Promise ? value.then(callback) : callback(value);
+
 type EntityResolver = {
   [key: string]: any;
 };
@@ -50,35 +54,10 @@ const composeEntityResolvers = (
   generalConfig: GeneralConfig,
   serversideConfig: ServersideConfig,
 ): EntityResolver => {
-  const {
-    embeddedFields: preEmbeddedFields = [],
-    geospatialFields: preGeospatialFields = [],
-    type: entityType,
-  } = entityConfig;
+  const { embeddedFields = [], geospatialFields = [], type: entityType } = entityConfig;
   const { fieldsObject } = composeFieldsObject(entityConfig);
 
   const resolvers: Record<string, any> = {};
-
-  // repack "embeddedFields", "geospatialFields" in the new arrays...
-  // ...to can mix up calculated fields if need
-  const embeddedFields = [...preEmbeddedFields];
-  const geospatialFields = [...preGeospatialFields];
-
-  if (entityType === 'tangible') {
-    const { calculatedFields = [] } = entityConfig;
-
-    calculatedFields.forEach((field) => {
-      const { calculatedType, array } = field;
-
-      if (calculatedType === 'embeddedFields') {
-        const updatedField = array ? { ...field, variants: 'plain' } : field;
-        embeddedFields.push(updatedField as any);
-      }
-
-      // calculated geospatial fields are NOT mixed up with "geospatialFields" because...
-      // ... calculated "func" returns value in graphql format (not mongodb one) that doesn't need conversion
-    });
-  }
 
   Object.keys(fieldsObject).forEach((fieldName) => {
     const { array, type: fieldType } = fieldsObject[fieldName];
@@ -87,17 +66,10 @@ const composeEntityResolvers = (
       fieldType === 'duplexFields' ||
       fieldType === 'filterFields' ||
       fieldType === 'geospatialFields' ||
-      fieldType === 'embeddedFields'
+      fieldType === 'embeddedFields' ||
+      fieldType === 'calculatedFields' // see below
     ) {
       return;
-    }
-
-    if (fieldType === 'calculatedFields') {
-      const { calculatedType } = fieldsObject[fieldName] as any;
-
-      if (calculatedType === 'filterFields') {
-        return;
-      }
     }
 
     if (array) resolvers[fieldName] = fieldArrayResolver;
@@ -355,6 +327,42 @@ const composeEntityResolvers = (
       prev[name] = resolver;
       return prev;
     }, resolvers);
+  }
+
+  if (entityType === 'tangible') {
+    const { calculatedFields = [] } = entityConfig as TangibleEntityConfig;
+
+    const resolverCreatorArg = { entityConfig, generalConfig, serversideConfig };
+
+    // the value of a calculated field comes from its "func", then array and filter fields...
+    // ... apply their usual logic to it; calculated geospatial values are already in graphql format
+    calculatedFields.forEach((field) => {
+      const { name, array, calculatedType } = field;
+
+      const valueResolver = composeCalculatedFieldResolver(field, resolverCreatorArg);
+
+      if (calculatedType === 'filterFields') {
+        ['', 'ThroughConnection', 'Count', 'DistinctValues'].forEach((suffix) => {
+          const filterResolver = resolvers[`${name}${suffix}`];
+
+          if (!filterResolver) return;
+
+          resolvers[`${name}${suffix}`] = (parent: any, args: any, context: Context, info: any) =>
+            thenOrNow(valueResolver(parent, {}, context, info), (value) =>
+              filterResolver({ ...parent, [name]: value }, args, context, info),
+            );
+        });
+
+        return;
+      }
+
+      resolvers[name] = array
+        ? (parent: any, args: Args, context: Context, info: any) =>
+            thenOrNow(valueResolver(parent, args, context, info), (value) =>
+              fieldArrayResolver({ [name]: value }, args, context, info),
+            )
+        : valueResolver;
+    });
   }
 
   return resolvers;

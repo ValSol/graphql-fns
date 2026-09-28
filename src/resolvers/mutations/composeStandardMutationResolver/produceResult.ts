@@ -51,17 +51,20 @@ const produceResult = async (
   } = preparedData;
 
   const {
-    resolverOptions: { subscriptionEntityNames },
+    resolverOptions: { subscriptionEntityNames, materializeCalculatedFields },
   } = resolverArg;
 
-  const infoEssence =
-    subscriptionEntityNames && !array
-      ? createInfoEssence({
-          projection: composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
-          entityConfig,
-          infoEssence: getInfoEssence(entityConfig, info),
-        })
-      : getInfoEssence(entityConfig, info);
+  // the published entity has to contain the values of calculated fields used by...
+  // ... "wherePayload", "updatedFields" & "actor" of subscriptions
+  const forSubscription = Boolean(subscriptionEntityNames && !array);
+
+  const infoEssence = forSubscription
+    ? createInfoEssence({
+        projection: composeAllFieldsProjection(entityConfig, WITHOUT_CALCULATED_WITH_ASYNC),
+        entityConfig,
+        infoEssence: getInfoEssence(entityConfig, info),
+      })
+    : getInfoEssence(entityConfig, info);
 
   if (array) {
     return await composeQueryResolver(pluralize(entityName), generalConfig, serversideConfig)(
@@ -69,7 +72,7 @@ const produceResult = async (
       { where: { id_in: mains.map(({ _id }) => _id) }, token },
       context,
       infoEssence,
-      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] }, materializeCalculatedFields },
     );
   }
 
@@ -78,7 +81,10 @@ const produceResult = async (
     { whereOne: { id: first._id }, token },
     context,
     infoEssence,
-    { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+    {
+      involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      materializeCalculatedFields: forSubscription || materializeCalculatedFields,
+    },
   );
 
   return [instance];

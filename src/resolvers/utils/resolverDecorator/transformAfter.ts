@@ -2,6 +2,7 @@ import type { EntityConfig, GeneralConfig, GraphqlObject } from '../../../tsType
 
 import parseEntityName from '../../../utils/parseEntityName';
 import toGlobalId from '../toGlobalId';
+import { copyCalculatedContext } from '../calculatedContext';
 
 const transformAfter = (
   args: GraphqlObject,
@@ -88,13 +89,13 @@ const transformAfter = (
 
   const { token } = args;
 
-  return {
+  return copyCalculatedContext(item, {
     ...rest,
     ...recursiveFields,
     ...transformedFields,
     id: globalId,
     _token: token,
-  };
+  });
 };
 
 export default transformAfter;

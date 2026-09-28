@@ -15,7 +15,7 @@ import type {
 import checkInventory from '@/utils/inventory/checkInventory';
 import createMongooseModel from '@/mongooseModels/createMongooseModel';
 import adaptProjectionForCalculatedFields from '@/resolvers/utils/adaptProjectionForCalculatedFields';
-import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
+import prepareCalculatedFields from '@/resolvers/utils/prepareCalculatedFields';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
 import composeNearForAggregateInput from '@/resolvers/utils/composeNearForAggregateInput';
 import createInfoEssence from '@/resolvers/utils/createInfoEssence';
@@ -64,6 +64,7 @@ const createEntitiesQueryResolver = (
       involvedFilters: {
         [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
+      materializeCalculatedFields?: boolean;
     },
     session?: any,
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
@@ -201,7 +202,7 @@ const createEntitiesQueryResolver = (
       );
 
       const result = entities.map((item, i) =>
-        addCalculatedFieldsToEntity(
+        prepareCalculatedFields(
           addIdsToEntity(item, entityConfig),
           infoEssence,
           asyncFuncResults,
@@ -253,7 +254,7 @@ const createEntitiesQueryResolver = (
     );
 
     const result = entities.map((item, i) =>
-      addCalculatedFieldsToEntity(
+      prepareCalculatedFields(
         addIdsToEntity(item, entityConfig),
         infoEssence,
         asyncFuncResults,

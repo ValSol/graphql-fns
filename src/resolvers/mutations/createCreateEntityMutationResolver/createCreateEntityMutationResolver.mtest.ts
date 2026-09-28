@@ -125,6 +125,7 @@ describe('createCreateEntityMutationResolver', () => {
 
     const createdExample = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      materializeCalculatedFields: true, // to read the calculated "text" from the result
     });
     const createdExample2 = await createExample(null, { data }, { mongooseConn, pubsub }, null, {
       involvedFilters: { inputOutputFilterAndLimit: [[]] },

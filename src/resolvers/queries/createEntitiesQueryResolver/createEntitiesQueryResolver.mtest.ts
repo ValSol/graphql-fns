@@ -134,7 +134,8 @@ describe('createEntityQueryResolver', () => {
       {},
       { mongooseConn, pubsub },
       createInfoEssence({ projection: { fullName: 1 } }),
-      { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
+      // to read the calculated "fullName" from the result
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] }, materializeCalculatedFields: true },
     );
 
     expect(people.length).toBe(5);

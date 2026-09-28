@@ -689,8 +689,9 @@ describe('graphql schema', () => {
     expect(typeDefs).toMatch(/\ntype GeospatialPolygon \{/);
 
     // calculated geospatial values are already in graphql format, so they are not converted
-    expect(resolvers.Place?.center).toBeUndefined();
-    expect(resolvers.Place?.area).toBeUndefined();
+    const center = { lng: 1, lat: 2 };
+
+    expect(resolvers.Place.center({ center }, {}, {}, { fieldName: 'center' })).toBe(center);
 
     const route = [
       { lng: 1, lat: 2 },

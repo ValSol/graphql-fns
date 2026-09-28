@@ -8,6 +8,9 @@ import mongoOptions from '@/test/mongo-options';
 import pubsub from '@/resolvers/utils/pubsub';
 import composeAllEntityConfigs from '@/utils/composeAllEntityConfigs';
 import composeTypeDefsAndResolvers from '@/composeTypeDefsAndResolvers';
+import composeQueryResolver from '@/resolvers/utils/composeQueryResolver';
+import createInfoEssence from '@/resolvers/utils/createInfoEssence';
+import fromGlobalId from '@/resolvers/utils/fromGlobalId';
 import sleep from '@/utils/sleep';
 
 // End-to-end behaviour of calculated fields through real GraphQL operations.
@@ -139,7 +142,10 @@ const callbacks: ServersideConfig['calculatedFields'] = {
 };
 
 // the only place that knows where the callbacks live
-const composeConfigs = (): { generalConfig: GeneralConfig; serversideConfig: ServersideConfig } => ({
+const composeConfigs = (): {
+  generalConfig: GeneralConfig;
+  serversideConfig: ServersideConfig;
+} => ({
   generalConfig: { allEntityConfigs: composeAllEntityConfigs(declarations) },
   serversideConfig: { calculatedFields: callbacks },
 });
@@ -150,10 +156,10 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 let mongooseConn;
 
-const contextValue = () => ({ mongooseConn, pubsub });
+const contextValue = (pubsub2: any = pubsub) => ({ mongooseConn, pubsub: pubsub2 });
 
-const run = async (source: string) => {
-  const result = await graphql({ schema, source, contextValue: contextValue() });
+const run = async (source: string, pubsub2?: any) => {
+  const result = await graphql({ schema, source, contextValue: contextValue(pubsub2) });
 
   if (result.errors) throw result.errors[0];
 
@@ -217,11 +223,20 @@ describe('calculated fields: queries', () => {
       editor: 'editor of abc',
     });
 
-    expect(asyncCalls('summary')).toEqual([
-      expect.objectContaining({ list: false, length: 1 }),
-    ]);
+    expect(asyncCalls('summary')).toEqual([expect.objectContaining({ list: false, length: 1 })]);
     expect(funcCalls('summary').map(({ index }) => index)).toEqual([0]);
     expect(funcCalls('priceWithTax')[0].args).toEqual({ rate: 0.5 });
+  });
+
+  test('aliases of a calculated field with different args', async () => {
+    const { Book } = await run(`{
+      Book(whereOne: { id: "${bookIds.abc}" }) {
+        half: priceWithTax(rate: 0.5)
+        full: priceWithTax(rate: 1)
+      }
+    }`);
+
+    expect(Book).toEqual({ half: 15, full: 20 });
   });
 
   test('list: asyncFunc runs once for the whole list, func picks its element by index', async () => {
@@ -347,6 +362,33 @@ describe('calculated fields: queries', () => {
   });
 });
 
+describe('calculated fields: programmatic calls of query resolvers', () => {
+  const infoEssence = createInfoEssence({ projection: { titleUpper: 1, summary: 1 } });
+
+  const callBook = (resolverOptions: Record<string, any>) =>
+    composeQueryResolver('Book', generalConfig, serversideConfig)(
+      null,
+      { whereOne: { id: fromGlobalId(bookIds.abc)._id } }, // raw resolvers use mongo ids
+      contextValue(),
+      infoEssence,
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] }, ...resolverOptions },
+    );
+
+  test('without "materializeCalculatedFields" values are left to field resolvers', async () => {
+    const book = await callBook({});
+
+    expect(book.titleUpper).toBeUndefined();
+    expect(book.summary).toBeUndefined();
+  });
+
+  test('with "materializeCalculatedFields" values are calculated at once', async () => {
+    const book = await callBook({ materializeCalculatedFields: true });
+
+    expect(book.titleUpper).toBe('ABC');
+    expect(book.summary).toEqual({ text: 'abc', position: -1 });
+  });
+});
+
 describe('calculated fields: mutations', () => {
   test('single-entity mutation result; asyncFunc does not get the mutation args', async () => {
     const { createBook } = await run(`mutation {
@@ -429,11 +471,11 @@ describe('calculated fields: mutations', () => {
 });
 
 describe('calculated fields: subscriptions', () => {
-  const subscribeTo = async (source: string) => {
+  const subscribeTo = async (source: string, pubsub2?: any) => {
     const result = await subscribe({
       schema,
       document: parse(source),
-      contextValue: contextValue(),
+      contextValue: contextValue(pubsub2),
     });
 
     if (!(Symbol.asyncIterator in result)) {
@@ -471,10 +513,46 @@ describe('calculated fields: subscriptions', () => {
 
     expect(value.errors).toBeUndefined();
     expect(value.data.createdBook).toEqual({
-      // today an async calculated field that is not in "allowedCalculatedWithAsyncFuncFieldNames"
-      // is not calculated for subscribers (CF13); the D7 fallback is going to calculate it
-      node: { title: 'sub2', titleUpper: 'SUB2', summary: null },
+      // an async calculated field that is not in "allowedCalculatedWithAsyncFuncFieldNames" is not
+      // published, the field resolver calculates it like for a single-entity action
+      node: { title: 'sub2', titleUpper: 'SUB2', summary: { text: 'sub2', position: -1 } },
       actor: { editor: 'editor of sub2' },
+    });
+  });
+
+  test('created: a serializing PubSub keeps calculated values of the payload', async () => {
+    // like PubSub over Redis: the published payload is serialized, the hidden context is lost
+    const serializingPubsub = {
+      publish: (channel: string, payload: any) =>
+        pubsub.publish(channel, JSON.parse(JSON.stringify(payload))),
+      subscribe: (channel: string) => pubsub.subscribe(channel),
+    };
+
+    const subscription = await subscribeTo(
+      `subscription {
+        createdBook(wherePayload: { titleUpper: "SUB8" }) {
+          node { title titleUpper summary { text position } }
+          actor { editor }
+        }
+      }`,
+      serializingPubsub,
+    );
+
+    await run(
+      'mutation { createBook(data: { title: "sub7", price: 7 }) { id } }',
+      serializingPubsub,
+    );
+    await run(
+      'mutation { createBook(data: { title: "sub8", price: 8 }) { id } }',
+      serializingPubsub,
+    );
+
+    const value = await subscription.firstEvent();
+
+    expect(value.errors).toBeUndefined();
+    expect(value.data.createdBook).toEqual({
+      node: { title: 'sub8', titleUpper: 'SUB8', summary: { text: 'sub8', position: -1 } },
+      actor: { editor: 'editor of sub8' },
     });
   });
 

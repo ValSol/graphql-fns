@@ -26,6 +26,7 @@ export type StandardMutationsArg = {
     involvedFilters: {
       inputOutputFilterAndLimit: [InvolvedFilter[]] | [InvolvedFilter[], number];
     };
+    materializeCalculatedFields?: boolean; // calculate calculated fields of the result at once
   };
   returnReport?: boolean;
   returnResult: boolean;

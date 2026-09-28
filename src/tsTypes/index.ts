@@ -1224,5 +1224,6 @@ export type ResolverArg = {
     subscriptionEntityNames?: Record<SubscriptionInvolvedEntityNames, string>;
     subscribePayloadMongoFilter?: Record<string, any>; // used in Subscription
     subscriptionUpdatedFields?: string[]; // used in Subscription
+    materializeCalculatedFields?: boolean; // calculate requested calculated fields at once
   };
 };
