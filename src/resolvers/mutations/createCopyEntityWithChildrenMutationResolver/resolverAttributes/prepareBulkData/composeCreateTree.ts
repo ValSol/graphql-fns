@@ -13,7 +13,7 @@ const composeProjectionAndDuplexFieldsToCopy = (
   secondEntityConfig: TangibleEntityConfig,
   secondEntityConfig2: TangibleEntityConfig,
 ) => {
-  const matchingFields = getMatchingFields(secondEntityConfig, secondEntityConfig2, true).filter(
+  const matchingFields = getMatchingFields(secondEntityConfig, secondEntityConfig2).filter(
     (matchingField) => matchingField !== fieldName,
   );
 

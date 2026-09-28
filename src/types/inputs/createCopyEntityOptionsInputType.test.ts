@@ -163,4 +163,58 @@ input copyPersonOptionsInput {
     const result = createCopyEntityOptionsInputType(placeConfig);
     expect(result).toEqual(expectedResult);
   });
+
+  test('should not offer calculated fields to copy', () => {
+    const postConfig = {} as TangibleEntityConfig;
+    const postCopyConfig = {} as TangibleEntityConfig;
+
+    Object.assign(postConfig, {
+      name: 'Post',
+      type: 'tangible',
+      textFields: [{ name: 'title', type: 'textFields' }],
+      duplexFields: [
+        {
+          name: 'copies',
+          oppositeName: 'original',
+          array: true,
+          config: postCopyConfig,
+          type: 'duplexFields',
+        },
+      ],
+      calculatedFields: [
+        { name: 'titleUpper', calculatedType: 'textFields', type: 'calculatedFields' },
+      ],
+    });
+
+    Object.assign(postCopyConfig, {
+      name: 'PostCopy',
+      type: 'tangible',
+      textFields: [{ name: 'title', type: 'textFields' }],
+      duplexFields: [
+        { name: 'original', oppositeName: 'copies', config: postConfig, type: 'duplexFields' },
+      ],
+      calculatedFields: [
+        { name: 'titleUpper', calculatedType: 'textFields', type: 'calculatedFields' },
+      ],
+    });
+
+    const [, inputDefinition] = createCopyEntityOptionsInputType(postCopyConfig);
+
+    expect(inputDefinition).toContain(`enum copyPostCopyThroughoriginalOptionsEnum {
+  title
+}`);
+
+    // the only common field is calculated: nothing to copy
+    const postDraftConfig = {
+      ...postCopyConfig,
+      name: 'PostDraft',
+      textFields: [],
+    } as TangibleEntityConfig;
+
+    expect(createCopyEntityOptionsInputType(postDraftConfig)).toEqual([
+      'copyPostDraftOptionsInput',
+      '',
+      {},
+    ]);
+  });
 });

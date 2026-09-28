@@ -121,4 +121,45 @@ describe('canBeCopyTarget', () => {
   test('should return "false" if there are no common fields to copy', () => {
     expect(canBeCopyTarget(placeConfig)).toBe(false);
   });
+
+  test('should return "false" if the only common field is calculated', () => {
+    const postConfig = {} as TangibleEntityConfig;
+    const postCopyConfig = {} as TangibleEntityConfig;
+    const titleUpper = {
+      name: 'titleUpper',
+      calculatedType: 'textFields',
+      type: 'calculatedFields',
+    };
+
+    Object.assign(postConfig, {
+      name: 'Post',
+      type: 'tangible',
+      textFields: [{ name: 'title', type: 'textFields' }],
+      duplexFields: [
+        {
+          name: 'copies',
+          oppositeName: 'original',
+          array: true,
+          config: postCopyConfig,
+          type: 'duplexFields',
+        },
+      ],
+      calculatedFields: [titleUpper],
+    });
+
+    Object.assign(postCopyConfig, {
+      name: 'PostCopy',
+      type: 'tangible',
+      duplexFields: [
+        { name: 'original', oppositeName: 'copies', config: postConfig, type: 'duplexFields' },
+      ],
+      calculatedFields: [titleUpper],
+    });
+
+    expect(canBeCopyTarget(postCopyConfig)).toBe(false);
+
+    postCopyConfig.textFields = [{ name: 'title', type: 'textFields' }];
+
+    expect(canBeCopyTarget(postCopyConfig)).toBe(true);
+  });
 });
