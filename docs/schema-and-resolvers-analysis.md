@@ -35,7 +35,7 @@
 ```
 SimplifiedEntityConfig[] ──composeAllEntityConfigs──▶ allEntityConfigs (+ PageInfo, Edge, Connection, Payloads)
                                                         │
-GeneralConfig { allEntityConfigs, enums, inventory, representation, custom, interfaces, manualyUsedEntities }
+GeneralConfig { allEntityConfigs, enums, inventory, representations, custom, interfaces, manualyUsedEntities }
                                                         │
 composeTypeDefsAndResolvers(generalConfig, serversideConfig)
    ├─ composeGqlTypes(generalConfig)            → typeDefs (SDL string) + entityTypeDic
@@ -69,7 +69,7 @@ Caching: outside jest intermediate results are cached, but separately for every 
 | E6 | `XConnection` (virtual) | auto for tangible and embedded | `pageInfo: PageInfo!`, `edges: [XEdge!]!` | returned by `XsThroughConnection` and child `…ThroughConnection` fields |
 | E7 | `XUpdatedPayload` (virtual) | auto for tangible | `node: X!`, `previousNode: X!`, `updatedFields: [String!]!`, `[actor: Actor]` | return type of `updatedX` |
 | E8 | `XCreatedOrDeletedPayload` (virtual) | auto for tangible | `node: X!`, `[actor: Actor]` | return type of `createdX` / `deletedX` |
-| E9 | **representation** config `X{Key}` (or with `representationNameSlicePosition`, e.g. `XKeyConnection`) | `generalConfig.representation[Key]` | a copy of X with include/exclude/add/freeze/unfreeze fields and relational/duplex/filter/child references replaced by `Y{Key}` | `…{Key}` actions from `allow[X]` |
+| E9 | **representation** config `X{Key}` (or with `representationNameSlicePosition`, e.g. `XKeyConnection`) | `generalConfig.representations[Key]` | a copy of X with include/exclude/add/freeze/unfreeze fields and relational/duplex/filter/child references replaced by `Y{Key}` | `…{Key}` actions from `allow[X]` |
 
 Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no plural (`pluralize(name) === name`), not `DateTime/Node/node/PageInfo`. Fields cannot contain `_`, cannot end with `ThroughConnection` / `GetOrCreate` / `DistinctValues` / (for arrays) `Count`, and filter fields cannot end with `Stringified`. Reserved names `id, createdAt, updatedAt, counter, in, nin, …, connect, create, pageInfo` are forbidden (except in virtual entities). `freeze` is forbidden in embedded/virtual entities.
 
@@ -146,7 +146,7 @@ All mutations except `workOutMutations` are built by `composeStandardMutationRes
 | S2 | `deletedX(wherePayload): XCreatedOrDeletedPayload!` | `deleted-X` |
 | S3 | `updatedX(wherePayload, whichUpdated: XWhichUpdatedInput): XUpdatedPayload!` | `updated-X` |
 
-`XWherePayloadInput` is built from all fields (no `index` required) + calculated fields without `asyncFunc` (or listed in `allowedCalculatedWithAsyncFuncFieldNames`). Calculated fields with `calculatedType: 'virtualFields'` are **not** included in the filter (a deliberate decision, see B5 and ?10). The runtime filter uses the same set of fields (`composeSubscriptionDummyEntityConfig`). An event is sent if it matches both the client `wherePayload` (for `updatedX`, both `previousNode` and `node` must match) and the `subscribePayloadFilters` of the user's roles; `whichUpdated` additionally filters `updatedX` by the changed fields. Authorization runs once, on subscribe (§13); if the user has no access to the subscription (B26), no events are sent.
+`XWherePayloadInput` is built from all fields (no `index` required) + calculated fields without `async: true` (or listed in `allowedCalculatedWithAsyncFuncFieldNames`). Calculated fields with `calculatedType: 'virtualFields'` are **not** included in the filter (a deliberate decision, see B5 and ?10). The runtime filter uses the same set of fields (`composeSubscriptionDummyEntityConfig`). An event is sent if it matches both the client `wherePayload` (for `updatedX`, both `previousNode` and `node` must match) and the `subscribePayloadFilters` of the user's roles; `whichUpdated` additionally filters `updatedX` by the changed fields. Authorization runs once, on subscribe (§13); if the user has no access to the subscription (B26), no events are sent.
 
 ## 6. Child fields inside type X (`createEntityType`)
 
@@ -162,7 +162,7 @@ For relational (including parent), duplex, filter (`plain`) and calculated (`fil
 | C3 | duplex scalar, not `required`, scalar opposite field | `childEntityGetOrCreate` | `fGetOrCreate(data: YCreateInput!): Y` (`whereOne` hidden) | `createEntityGetOrCreateResolver` |
 | C4 | embedded array | `variants` | `plain`: `f(slice): [E!]!`; `connection`: `fThroughConnection(after,before,first,last): EConnection!`; `count`: `fCount: Int!` | `fieldArrayResolver` / `fieldArrayThroughConnectionResolver` / `fieldArrayCountResolver` |
 | C5 | any other array field | — | `f(slice: SliceInput)` | `fieldArrayResolver` |
-| C6 | geospatial | — | `Geospatial…` | regular fields: `…FromMongoToGql` converters; calculated: no conversion (`func` returns the GraphQL format, see ?9), arrays: `fieldArrayResolver` |
+| C6 | geospatial | — | `Geospatial…` | regular fields: `…FromMongoToGql` converters; calculated: the field resolver of the calculated field without conversion (`func` returns the GraphQL format, see ?9, and [calculated-fields.md](./calculated-fields.md)), arrays: `fieldArrayResolver` |
 | C7 | filter `stringified` | — | `fStringified: String` | `fieldFilterStringifiedResolver` |
 
 Field resolvers (`composeEntityResolvers`) are created for **every** entity whose type is in the SDL: tangible, embedded, virtual and their representation versions. Empty sets are not added (see B3).
