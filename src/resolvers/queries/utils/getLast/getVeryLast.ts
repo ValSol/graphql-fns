@@ -41,7 +41,7 @@ const getVeryLast = async (
     last < count ? { ...args, pagination } : args,
     context,
     infoEssence,
-    { involvedFilters },
+    { ...resolverArg.resolverOptions, involvedFilters },
   );
 
   return composeLastEdges(-count, last, entities);

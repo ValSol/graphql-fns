@@ -29,7 +29,7 @@ const getVeryFirst = async (
     { ...args, pagination },
     context,
     infoEssence,
-    { involvedFilters },
+    { ...resolverArg.resolverOptions, involvedFilters },
   );
 
   const shift = -1;

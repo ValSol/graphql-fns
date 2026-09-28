@@ -9,6 +9,7 @@ import type {
 
 import composeRepresentationConfig from '../../../utils/composeRepresentationConfig';
 import composeQueryResolver from '../../utils/composeQueryResolver';
+import { copyCalculatedContext } from '../../utils/calculatedContext';
 import executeNodeAuthorisation from '../../utils/executeAuthorisation/executeNodeAuthorisation';
 import fromGlobalId from '../../utils/fromGlobalId';
 import transformAfter from '../../utils/resolverDecorator/transformAfter';
@@ -59,15 +60,20 @@ const createNodeQueryResolver = (
       { whereOne: { id } },
       context,
       info,
-      { involvedFilters: { inputOutputFilterAndLimit: filter } },
+      {
+        involvedFilters: { inputOutputFilterAndLimit: filter },
+        // calculated fields of a representation node (with "addFields") are taken from its config
+        calculatedFieldsConfig: resultEntityConfig || undefined,
+      },
     );
 
     if (!entity) return null;
 
-    return {
+    // the spread rebuilds the entity, so the hidden context of calculated fields is passed on
+    return copyCalculatedContext(entity, {
       ...transformAfter({}, entity, resultEntityConfig, generalConfig),
       __typename: `${entityName}${representationKey}`,
-    };
+    });
   };
 
   return resolver;

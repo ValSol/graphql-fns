@@ -83,6 +83,8 @@ const createEntitiesThroughConnectionQueryResolver = (
       involvedFilters: {
         [representationConfigName: string]: null | [InvolvedFilter[]] | [InvolvedFilter[], number];
       };
+      materializeCalculatedFields?: boolean;
+      calculatedFieldsConfig?: EntityConfig;
     },
   ): Promise<GraphqlObject | GraphqlObject[] | GraphqlScalar | GraphqlScalar[] | null> => {
     const { involvedFilters: preInvolvedFilters } = resolverOptions;
@@ -138,7 +140,8 @@ const createEntitiesThroughConnectionQueryResolver = (
       args,
       context,
       info,
-      resolverOptions: { involvedFilters },
+      // "materializeCalculatedFields" & "calculatedFieldsConfig" are passed on to the list resolver
+      resolverOptions: { ...resolverOptions, involvedFilters },
     } as ResolverArg;
 
     const { after, before, first, last } = args;

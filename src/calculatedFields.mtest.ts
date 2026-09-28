@@ -309,6 +309,15 @@ describe('calculated fields: queries', () => {
     expect(asyncCalls('summary')).toEqual([expect.objectContaining({ list: true, length: 3 })]);
   });
 
+  test('"node" query: asyncFunc runs once, in the root resolver', async () => {
+    const { node } = await run(`{
+      node(id: "${bookIds.abc}") { ... on Book { titleUpper summary { text position } } }
+    }`);
+
+    expect(node).toEqual({ titleUpper: 'ABC', summary: { text: 'abc', position: -1 } });
+    expect(asyncCalls('summary')).toEqual([expect.objectContaining({ list: false })]);
+  });
+
   test('nested entities via a relational field get their own asyncFunc call', async () => {
     const { Author } = await run(`{
       Author(whereOne: { id: "${authorId}" }) {
@@ -391,6 +400,29 @@ describe('calculated fields: programmatic calls of query resolvers', () => {
 
     expect(book.titleUpper).toBe('ABC');
     expect(book.summary).toEqual({ text: 'abc', position: -1 });
+  });
+
+  test('connection passes "materializeCalculatedFields" on to the list resolver', async () => {
+    const { edges } = await composeQueryResolver(
+      'Book_ThroughConnection',
+      generalConfig,
+      serversideConfig,
+    )(
+      null,
+      { first: 2, sort: { sortBy: ['title_ASC'] } },
+      contextValue(),
+      createInfoEssence({ projection: { title: 1, titleUpper: 1, summary: 1 } }),
+      { involvedFilters: { inputOutputFilterAndLimit: [[]] }, materializeCalculatedFields: true },
+    );
+
+    expect(
+      edges.map(({ node: { title, titleUpper, summary } }) => ({ title, titleUpper, summary })),
+    ).toEqual([
+      { title: 'abc', titleUpper: 'ABC', summary: { text: 'abc', position: 0 } },
+      { title: 'def', titleUpper: 'DEF', summary: { text: 'def', position: 1 } },
+    ]);
+
+    expect(asyncCalls('summary')).toEqual([expect.objectContaining({ list: true, length: 3 })]);
   });
 });
 
@@ -612,7 +644,16 @@ describe('calculated fields: added by a representation', () => {
   const ForCatalog: RepresentationAttributes = {
     representationKey: 'ForCatalog',
     allow: {
-      Book: ['entity', 'entities', 'childEntities', 'createEntity', 'deleteEntity'],
+      Book: [
+        'entity',
+        'entities',
+        'entitiesThroughConnection',
+        'childEntities',
+        'createEntity',
+        'deleteEntity',
+      ],
+      BookConnection: [],
+      BookEdge: [],
       Author: ['childEntity'],
     },
     addFields: {
@@ -678,6 +719,38 @@ describe('calculated fields: added by a representation', () => {
 
     // like for fields of the root config: "asyncFunc" once for the whole list
     expect(asyncCalls('catalogNote')).toEqual([expect.objectContaining({ list: true, length: 2 })]);
+  });
+
+  test('connection action of a representation calculates fields added by "addFields"', async () => {
+    const { BooksThroughConnectionForCatalog } = await runCatalog(`{
+      BooksThroughConnectionForCatalog(first: 2, sort: { sortBy: [title_ASC] }) {
+        edges { node { catalogTitle catalogNote } }
+      }
+    }`);
+
+    expect(BooksThroughConnectionForCatalog.edges).toEqual([
+      { node: { catalogTitle: 'abc (10)', catalogNote: 'note of abc' } },
+      { node: { catalogTitle: 'def (20)', catalogNote: 'note of def' } },
+    ]);
+
+    expect(asyncCalls('catalogNote')).toEqual([expect.objectContaining({ list: true, length: 3 })]);
+  });
+
+  test('"node" query of a representation calculates fields added by "addFields"', async () => {
+    const {
+      BooksForCatalog: [{ id }],
+    } = await runCatalog(`{
+      BooksForCatalog(sort: { sortBy: [title_ASC] }, pagination: { first: 1 }) { id }
+    }`);
+
+    resetCalls();
+
+    const { node } = await runCatalog(`{
+      node(id: "${id}") { ... on BookForCatalog { catalogTitle catalogNote } }
+    }`);
+
+    expect(node).toEqual({ catalogTitle: 'abc (10)', catalogNote: 'note of abc' });
+    expect(asyncCalls('catalogNote')).toEqual([expect.objectContaining({ list: false })]);
   });
 
   test('inherited calculated field uses a root field excluded by the representation', async () => {

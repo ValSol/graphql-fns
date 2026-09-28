@@ -28,7 +28,7 @@ const getLast = async (
     { ...args, pagination },
     context,
     infoEssence,
-    { involvedFilters },
+    { ...resolverArg.resolverOptions, involvedFilters },
   );
 
   const { length } = entities;

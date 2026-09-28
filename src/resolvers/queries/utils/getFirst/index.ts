@@ -31,7 +31,7 @@ const getFirst = async (
     { ...args, pagination },
     context,
     infoEssence,
-    { involvedFilters },
+    { ...resolverArg.resolverOptions, involvedFilters },
   );
 
   if (entities?.[0]?.id?.toString() === _id) {
