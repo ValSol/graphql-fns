@@ -13,7 +13,7 @@ const personalFilterFromFilterEntity = async (
 
   const { allEntityConfigs } = generalConfig;
 
-  const { [filterEntityPointerName]: filterEntityPointer } = await composeQueryResolver(
+  const user = await composeQueryResolver(
     userEntityName,
     generalConfig,
     serversideConfig,
@@ -24,6 +24,9 @@ const personalFilterFromFilterEntity = async (
     createInfoEssence({ projection: { [filterEntityPointerName]: 1 } }),
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
+
+  // no User record or no pointer means no access, as for a user without "id"
+  const filterEntityPointer = user?.[filterEntityPointerName];
 
   if (!filterEntityPointer) {
     return null;
@@ -41,7 +44,7 @@ const personalFilterFromFilterEntity = async (
 
   // ***
 
-  const { [filterFieldName]: filterField } = await composeQueryResolver(
+  const filterEntity = await composeQueryResolver(
     filterEntityConfig.name,
     generalConfig,
     serversideConfig,
@@ -53,7 +56,8 @@ const personalFilterFromFilterEntity = async (
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 
-  return filterField;
+  // the pointer may point to a deleted record
+  return filterEntity ? filterEntity[filterFieldName] : null;
 };
 
 export default personalFilterFromFilterEntity;

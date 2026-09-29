@@ -11,7 +11,7 @@ const personalFilterFromUserEntity = async (
 ) => {
   const [userEntityName, , filterFieldName] = personalFiltersTuple;
 
-  const { [filterFieldName]: filterField } = await composeQueryResolver(
+  const user = await composeQueryResolver(
     userEntityName,
     generalConfig,
     serversideConfig,
@@ -23,7 +23,8 @@ const personalFilterFromUserEntity = async (
     { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
   );
 
-  return filterField;
+  // no User record means no access, as for a user without "id"
+  return user ? user[filterFieldName] : null;
 };
 
 export default personalFilterFromUserEntity;
