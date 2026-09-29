@@ -5,9 +5,10 @@ import type {
   ResolverCreatorArg,
   TangibleEntityConfig,
 } from '@/tsTypes';
-import type { Core, PreparedData } from '@/resolvers/tsTypes';
+import type { Core, PreparedData, Report } from '@/resolvers/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
+import { checkPubsub } from '@/utils/composeReport';
 import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
@@ -39,6 +40,55 @@ const workOutMutations = async (
 
   if (!Array.isArray(standardMutationsArgs)) {
     throw new TypeError('Got standardMutationsArgs that is not array!');
+  }
+
+  const composeResolverArgs = (mutationArgs: StandardMutationsArg) => {
+    const {
+      entityConfig,
+      inAnyCase,
+      parent: parentInArgs,
+      args,
+      info: infoInArgs,
+      resolverOptions: resolverOptionsInArgs,
+    } = mutationArgs;
+
+    const resolverCreatorArg = {
+      entityConfig,
+      generalConfig,
+      serversideConfig,
+      inAnyCase,
+    } as ResolverCreatorArg;
+
+    const resolverArg = {
+      parent: parentInArgs || null,
+      args,
+      context,
+      info: infoInArgs || null,
+      resolverOptions: resolverOptionsInArgs || {
+        involvedFilters: { inputOutputFilterAndLimit: [[]] },
+      },
+    } as ResolverArg;
+
+    return { resolverCreatorArg, resolverArg };
+  };
+
+  // reports are published after writes, so "pubsub" is checked before any write
+  const subscriptions: Array<Awaited<ReturnType<Report>>> = [];
+
+  for (let i = 0; i < standardMutationsArgs.length; i += 1) {
+    const mutationArgs = standardMutationsArgs[i];
+    const { actionGeneralName, returnReport, returnResult } = mutationArgs;
+    const { report } = mutationsResolverAttributes[actionGeneralName];
+    const { resolverCreatorArg, resolverArg } = composeResolverArgs(mutationArgs);
+
+    const subscription =
+      returnResult && returnReport ? await report(resolverCreatorArg, resolverArg) : null;
+
+    if (subscription) {
+      checkPubsub(context);
+    }
+
+    subscriptions.push(subscription);
   }
 
   let previouses: GraphqlObject[][] = [];
@@ -197,49 +247,19 @@ const workOutMutations = async (
   for (let i = 0; i < standardMutationsArgs.length; i += 1) {
     const mutationArgs = standardMutationsArgs[i];
 
-    const {
-      actionGeneralName,
-      entityConfig,
-      inAnyCase,
-      parent: parentInArgs,
-      args,
-      info: infoInArgs,
-      resolverOptions: resolverOptionsInArgs,
-      returnReport,
-      returnResult,
-    } = mutationArgs;
+    const { actionGeneralName, entityConfig, returnResult } = mutationArgs;
 
-    const parent = parentInArgs || null;
-    const info = infoInArgs || null;
-    const resolverOptions = resolverOptionsInArgs || {
-      involvedFilters: { inputOutputFilterAndLimit: [[]] },
-    };
+    const { array, produceCurrent, finalResult } = mutationsResolverAttributes[actionGeneralName];
 
-    const { array, produceCurrent, report, finalResult } =
-      mutationsResolverAttributes[actionGeneralName];
-
-    const resolverCreatorArg = {
-      entityConfig,
-      generalConfig,
-      serversideConfig,
-      inAnyCase,
-    } as ResolverCreatorArg;
-
-    const resolverArg = {
-      parent,
-      args,
-      context,
-      info,
-      resolverOptions,
-    } as ResolverArg;
+    const { resolverCreatorArg, resolverArg } = composeResolverArgs(mutationArgs);
+    const { info } = resolverArg;
 
     const previous = previouses[i];
     const result: null | { previous: GraphqlObject[]; current?: GraphqlObject[] } = returnResult
       ? ({} as { previous: GraphqlObject[]; current?: GraphqlObject[] })
       : null;
 
-    const subscription =
-      result && returnReport ? await report(resolverCreatorArg, resolverArg) : null;
+    const subscription = subscriptions[i];
 
     // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
     const previousIsUsed = !produceCurrent || Boolean(subscription);

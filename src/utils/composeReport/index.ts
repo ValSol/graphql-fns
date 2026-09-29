@@ -5,6 +5,15 @@ import composeFieldsObject, { FOR_MONGO_QUERY } from '../composeFieldsObject';
 
 type About = 'created' | 'deleted' | 'updated';
 
+// reports are published after writes, so mutations call it before any write to not change data in vain
+export const checkPubsub = (context: Context) => {
+  if (context.pubsub === undefined) {
+    throw new TypeError(
+      `PubSub not found! If you don't use "Subscription" exclude it in "inventory"!`,
+    );
+  }
+};
+
 const composeReport = (
   about: About,
   entityConfig: EntityConfig,
@@ -12,13 +21,9 @@ const composeReport = (
   node: Record<string, any>,
   previousNode?: Record<string, any>, // used only for "updated"
 ) => {
-  const { pubsub } = context;
+  checkPubsub(context);
 
-  if (pubsub === undefined) {
-    throw new TypeError(
-      `PubSub not found! If you don't use "Subscription" exclude it in "inventory"!`,
-    );
-  }
+  const { pubsub } = context;
 
   const { name, subscriptionActorConfig } = entityConfig as TangibleEntityConfig;
 

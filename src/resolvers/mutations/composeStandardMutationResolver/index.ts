@@ -14,6 +14,7 @@ import type {
 import type { PreparedData, ResolverAttributes } from '@/resolvers/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
+import { checkPubsub } from '@/utils/composeReport';
 import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
 import addIdsToEntity from '@/resolvers/utils/addIdsToEntity';
@@ -115,6 +116,10 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
       }
 
       const subscription = await report(resolverCreatorArg, resolverArg);
+
+      if (subscription) {
+        checkPubsub(context);
+      }
 
       // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
       const previousIsUsed = !produceCurrent || Boolean(subscription);
