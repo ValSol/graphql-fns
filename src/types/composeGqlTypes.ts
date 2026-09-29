@@ -13,6 +13,7 @@ import composeActionSignature from './composeActionSignature';
 import composeInterfaceTypeDic from './composeInterfaceTypeDic';
 import processManualyUsedEntities from './processManualyUsedEntities';
 import checkGeneralConfigKeys from '@/utils/checkGeneralConfigKeys';
+import checkGeneralInventory from '@/utils/inventory/checkGeneralInventory';
 
 const composeGqlTypes = (
   generalConfig: GeneralConfig,
@@ -21,6 +22,7 @@ const composeGqlTypes = (
   entityTypeDic: { [entityName: string]: string };
 } => {
   checkGeneralConfigKeys(generalConfig);
+  checkGeneralInventory(generalConfig);
 
   const { allEntityConfigs, inventory, representations = {} } = generalConfig;
 

@@ -12,7 +12,7 @@ import {
   queryAttributes,
   subscriptionAttributes,
 } from '@/types/actionAttributes';
-import unwindInverntoryOptions from './unwindInverntoryOptions';
+import unwindInverntoryOptions from '@/utils/inventory/unwindInverntoryOptions';
 import subtructInventoryOptions from './subtructInventoryOptions';
 
 const inventoryKeys = ['Query', 'Mutation', 'Subscription'];
@@ -113,19 +113,19 @@ const addEntityNames = (
           Subscription: true;
         });
 
-  const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig, name);
+  const unwindedInclude = unwindInverntoryOptions(amendedInclude, generalConfig, name, 'include');
 
   const amendedExclude =
     typeof exclude === 'object'
-      ? inventoryKeys.reduce<Record<string, any>>((prev, key) => {
-          if (exclude[key]) {
-            prev[key] = exclude[key];
-          } else {
-            prev[key] = {};
-          }
+      ? {
+          // unknown keys are kept to be rejected by "unwindInverntoryOptions"
+          ...exclude,
+          ...inventoryKeys.reduce<Record<string, any>>((prev, key) => {
+            prev[key] = exclude[key] || {};
 
-          return prev;
-        }, {})
+            return prev;
+          }, {}),
+        }
       : {
           // "exclude" may be "true" or 'undefined"
           Query: exclude || {},
@@ -133,7 +133,7 @@ const addEntityNames = (
           Subscription: exclude || {},
         };
 
-  const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig, name);
+  const unwindedExclude = unwindInverntoryOptions(amendedExclude, generalConfig, name, 'exclude');
 
   const includeMinusExclude = subtructInventoryOptions(unwindedInclude, unwindedExclude);
 

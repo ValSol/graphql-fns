@@ -6,9 +6,9 @@ import type {
   Inventory,
   InventoryOptions,
   TangibleEntityConfig,
-} from '../../../../tsTypes';
+} from '@/tsTypes';
 
-import composeRepresentationConfigByName from '../../../../utils/composeRepresentationConfigByName';
+import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import unwindInverntoryOptions from './unwindInverntoryOptions';
 
 describe('unwindInverntoryOptions', () => {
