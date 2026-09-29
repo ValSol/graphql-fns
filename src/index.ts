@@ -12,6 +12,7 @@ import composeCustom from '@/utils/composeCustom';
 import composeRepresentations from '@/utils/composeRepresentations';
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import pubsub from '@/resolvers/utils/pubsub';
+import addChildActions from '@/utils/inventory/addChildActions';
 
 // mutation resolvers
 
@@ -95,6 +96,7 @@ export type * from '@/tsTypes';
 
 export {
   adaptProjectionForCalculatedFields,
+  addChildActions,
   createThingSchema,
   composeTypeDefsAndResolvers,
   composeManuallyCreatedResolvers,
