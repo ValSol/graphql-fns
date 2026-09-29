@@ -7,20 +7,6 @@ import createObjectBoundStore from '@/utils/createObjectBoundStore';
 // ... of children) call "getUserAttributes" only once
 const getStore = createObjectBoundStore<Promise<UserAttributes>>();
 
-// every user with "roles" (the guest included) has to have "id" of a User record...
-// ... "personalFilters" rely on it, so its absence is a configuration error
-const checkUserAttributes = (userAttributes: UserAttributes) => {
-  if (userAttributes && !userAttributes.id) {
-    throw new TypeError(
-      `Not found "id" in attributes returned by "getUserAttributes" for roles: ${JSON.stringify(
-        userAttributes.roles,
-      )}!`,
-    );
-  }
-
-  return userAttributes;
-};
-
 const getUserAttributesOnce = (
   getUserAttributes: ServersideConfig['getUserAttributes'],
   context: any,
@@ -30,7 +16,7 @@ const getUserAttributesOnce = (
 
   // without object "context" it is impossible to bind cache to a request
   if (!context || (typeof context !== 'object' && typeof context !== 'function')) {
-    return getUserAttributes(context, token).then(checkUserAttributes);
+    return getUserAttributes(context, token);
   }
 
   const store = getStore(getUserAttributes, context);
@@ -40,7 +26,6 @@ const getUserAttributesOnce = (
   if (!store[key]) {
     store[key] = Promise.resolve()
       .then(() => getUserAttributes(context, token))
-      .then(checkUserAttributes)
       .catch((err) => {
         // do not cache failures to allow retry in following resolvers
         delete store[key];

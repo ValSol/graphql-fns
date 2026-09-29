@@ -102,7 +102,7 @@ describe('executeNodeAuthorisation', () => {
   test('should returnv null for "Viewer" role', async () => {
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [viewer], id };
+      return { roles: [viewer] };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -138,7 +138,7 @@ describe('executeNodeAuthorisation', () => {
   test('should returnv [] for "admin" role', async () => {
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [admin], id };
+      return { roles: [admin] };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -274,7 +274,7 @@ describe('executeNodeAuthorisation', () => {
   });
 
   test('should call "getUserAttributes" once per request context', async () => {
-    const getUserAttributes = jest.fn(async () => ({ roles: [admin], id }));
+    const getUserAttributes = jest.fn(async () => ({ roles: [admin] }));
 
     const serversideConfig: ServersideConfig = {
       filters,

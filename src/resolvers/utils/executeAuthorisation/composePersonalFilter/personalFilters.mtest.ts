@@ -196,12 +196,10 @@ describe('personalFilters with the filter field of the User record', () => {
   });
 
   // "id" is required for every user with roles, the guest included
-  test('an error without "id"', async () => {
-    const { errors } = await run(schema, { roles: ['guest'] });
+  test('no access without "id"', async () => {
+    const result = await run(schema, { roles: ['guest'] });
 
-    expect(errors?.[0].message).toBe(
-      'Not found "id" in attributes returned by "getUserAttributes" for roles: ["guest"]!',
-    );
+    expect(result).toEqual({ data: cityNames([]) });
   });
 
   test('"skipPersonalFilter" gives access permitted by "filters"', async () => {
