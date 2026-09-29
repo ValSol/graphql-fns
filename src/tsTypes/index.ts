@@ -959,7 +959,7 @@ export type InvolvedFilter = Merge<
   { AND?: InvolvedFilter[]; OR?: InvolvedFilter[]; XOR?: InvolvedFilter[] }
 >;
 
-export type UserAttributes = Merge<DataObject, { roles: string[] }>;
+export type UserAttributes = Merge<DataObject, { id: string; roles: string[] }>;
 
 export type FilterArg = Merge<DataObject, { role: string }>;
 

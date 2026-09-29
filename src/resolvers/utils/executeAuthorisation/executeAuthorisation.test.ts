@@ -267,7 +267,7 @@ describe('executeAuthorisation', () => {
     const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [viewer] };
+      return { roles: [viewer], id };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -313,7 +313,7 @@ describe('executeAuthorisation', () => {
     const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [guest] };
+      return { roles: [guest], id };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -357,7 +357,7 @@ describe('executeAuthorisation', () => {
     const inventoryChain: InventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [restaurantOwner] };
+      return { roles: [restaurantOwner], id };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -403,7 +403,7 @@ describe('executeAuthorisation', () => {
     const inventoryChain: InventoryChain = ['Mutation', 'cloneEntity', 'Restaurant'];
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: [guest] };
+      return { roles: [guest], id };
     };
 
     const serversideConfig: ServersideConfig = {
@@ -904,7 +904,7 @@ describe('executeAuthorisation', () => {
   test('should call "getUserAttributes" only once for the same request context & token', async () => {
     const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
 
-    const getUserAttributes = jest.fn(async () => ({ roles: [viewer] }));
+    const getUserAttributes = jest.fn(async () => ({ roles: [viewer], id }));
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -959,7 +959,7 @@ describe('executeAuthorisation', () => {
     const getUserAttributes = jest
       .fn()
       .mockRejectedValueOnce(new Error('Session storage is unavailable!'))
-      .mockResolvedValueOnce({ roles: [viewer] });
+      .mockResolvedValueOnce({ roles: [viewer], id });
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
@@ -993,12 +993,35 @@ describe('executeAuthorisation', () => {
     expect(getUserAttributes).toHaveBeenCalledTimes(2);
   });
 
+  test('should throw if "getUserAttributes" returns roles without "id"', async () => {
+    const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
+
+    const serversideConfig: ServersideConfig = {
+      containedRoles,
+      getUserAttributes: async () => ({ roles: [guest] }) as any,
+      inventoryByRoles,
+    };
+
+    await expect(
+      executeAuthorisation(
+        inventoryChain,
+        { inputOutputEntity: 'RestaurantForView' },
+        {},
+        {} as Context,
+        generalConfig,
+        serversideConfig,
+      ),
+    ).rejects.toThrow(
+      `Not found "id" in attributes returned by "getUserAttributes" for roles: ["${guest}"]!`,
+    );
+  });
+
   test('should ignore roles absent in "containedRoles"', async () => {
     const inventoryChain: InventoryChain = ['Query', 'entitiesForView', 'Restaurant'];
 
     const serversideConfig: ServersideConfig = {
       containedRoles,
-      getUserAttributes: async () => ({ roles: ['UnknownRole'] }),
+      getUserAttributes: async () => ({ roles: ['UnknownRole'], id }),
       inventoryByRoles,
     };
 

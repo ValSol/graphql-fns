@@ -33,7 +33,7 @@ describe('createNodeQueryResolver', () => {
   test('should use query entity resolver', async () => {
     const getUserAttributes = async () => {
       await sleep(100);
-      return { roles: ['Admin'], textField1: 'textField1' };
+      return { roles: ['Admin'], id: '000000000000000000000001', textField1: 'textField1' };
     };
 
     const filters: EntityFilters = { Example: [true, ({ textField1 }) => [{ textField1 }]] };
