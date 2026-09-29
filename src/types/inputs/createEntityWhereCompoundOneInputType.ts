@@ -24,28 +24,24 @@ const createEntityWhereCompoundOneInputType: InputCreator = (entityConfig) => {
   textFields.forEach(({ name: fieldName }) => {
     if (compoundNameSet.has(fieldName)) {
       fields.push(`  ${fieldName}: String`);
-      fields.push(`  ${fieldName}_exists: Boolean`);
     }
   });
 
   intFields.forEach(({ name: fieldName }) => {
     if (compoundNameSet.has(fieldName)) {
       fields.push(`  ${fieldName}: Int`);
-      fields.push(`  ${fieldName}_exists: Boolean`);
     }
   });
 
   floatFields.forEach(({ name: fieldName }) => {
     if (compoundNameSet.has(fieldName)) {
       fields.push(`  ${fieldName}: Float`);
-      fields.push(`  ${fieldName}_exists: Boolean`);
     }
   });
 
   dateTimeFields.forEach(({ name: fieldName }) => {
     if (compoundNameSet.has(fieldName)) {
       fields.push(`  ${fieldName}: DateTime`);
-      fields.push(`  ${fieldName}_exists: Boolean`);
     }
   });
 
@@ -55,15 +51,13 @@ const createEntityWhereCompoundOneInputType: InputCreator = (entityConfig) => {
     relationalFields.forEach(({ name: fieldName, parent }) => {
       if (!parent && compoundNameSet.has(fieldName)) {
         fields.push(`  ${fieldName}: ID`);
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
+        }
     });
 
     duplexFields.forEach(({ name: fieldName }) => {
       if (compoundNameSet.has(fieldName)) {
         fields.push(`  ${fieldName}: ID`);
-        fields.push(`  ${fieldName}_exists: Boolean`);
-      }
+        }
     });
   }
 

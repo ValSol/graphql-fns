@@ -30,9 +30,7 @@ describe('createEntityWhereCompoundOneInputType', () => {
       'ExampleWhereCompoundOneInput',
       `input ExampleWhereCompoundOneInput {
   firstName: String
-  firstName_exists: Boolean
   code: String
-  code_exists: Boolean
 }`,
       {},
     ];

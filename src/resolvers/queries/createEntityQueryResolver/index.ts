@@ -22,6 +22,7 @@ import getFilterFromInvolvedFilters from '@/resolvers/utils/getFilterFromInvolve
 import mergeWhereAndFilter from '@/resolvers/utils/mergeWhereAndFilter';
 import getAsyncFuncResults from '@/resolvers/utils/getAsyncFuncResults';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
+import checkWhereCompoundOne from '@/resolvers/utils/checkWhereCompoundOne';
 
 type Args = {
   whereOne?: {
@@ -81,29 +82,7 @@ const createEntityQueryResolver = (
         throw new TypeError('Expected "whereCompoundOne" or "whereOne" input!');
       }
 
-      const compoundKeySet = Object.keys(whereCompoundOne).reduce((prev, key) => {
-        if (key.endsWith('_exists')) {
-          prev.add(key.slice(0, -'_exists'.length));
-        } else {
-          prev.add(key);
-        }
-
-        return prev;
-      }, new Set<string>());
-
-      const { uniqueCompoundIndexes } = entityConfig as TangibleEntityConfig;
-
-      const isCorrect = (uniqueCompoundIndexes as string[][]).some((arr) =>
-        arr.every((key) => compoundKeySet.has(key)),
-      );
-
-      if (!isCorrect) {
-        throw new TypeError(
-          `Got "whereCompoundOne" keys: ${JSON.stringify(
-            whereCompoundOne,
-          )} that not fit to "uniqueCompoundIndexes": ${JSON.stringify(uniqueCompoundIndexes)}`,
-        );
-      }
+      checkWhereCompoundOne(whereCompoundOne, entityConfig);
     }
 
     const resolverArg = { parent, args, context, info, resolverOptions };

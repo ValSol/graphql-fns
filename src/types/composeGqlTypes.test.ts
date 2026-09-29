@@ -413,9 +413,7 @@ input MenuWhereOneInput {
 }
 input MenuWhereCompoundOneInput {
   name: String
-  name_exists: Boolean
   clone: ID
-  clone_exists: Boolean
 }
 enum MenuSectionSortEnum {
   id_ASC
