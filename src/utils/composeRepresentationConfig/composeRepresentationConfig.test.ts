@@ -68,7 +68,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        // the index is dropped: one of its fields is not left in the representation
+        // indexes are dropped: one of their fields is not left in the representation
         interfaces: ['ExampleForCatalogInterview'],
 
         textFields: [
@@ -190,7 +190,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        // the index is dropped: one of its fields is not left in the representation
+        // indexes are dropped: one of their fields is not left in the representation
         textFields: [
           {
             name: 'textField',
@@ -275,7 +275,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        // the index is dropped: one of its fields is not left in the representation
+        // indexes are dropped: one of their fields is not left in the representation
         enumFields: [
           {
             name: 'textField',
@@ -374,24 +374,42 @@ describe('composeRepresentationConfig', () => {
         representations: { ForCatalog },
       }) as TangibleEntityConfig;
 
-    test('should keep only indexes with all fields left', () => {
+    test('should keep "uniqueCompoundIndexes" if all fields are left', () => {
+      const result = composeCity({
+        allow: { City: ['entity'] },
+        representationKey: 'ForCatalog',
+        addFields: { City: { intFields: [{ name: 'population' }] } },
+      });
+
+      expect(result.uniqueCompoundIndexes).toEqual(cityConfig.uniqueCompoundIndexes);
+    });
+
+    test('should drop "uniqueCompoundIndexes" if a field of one index is excluded', () => {
       const result = composeCity({
         allow: { City: ['entity'] },
         representationKey: 'ForCatalog',
         excludeFields: { City: ['postcode'] },
-        // replaced by a calculated field
-        addFields: { City: { calculatedFields: [{ name: 'code', calculatedType: 'textFields' }] } },
       });
 
-      expect(result.uniqueCompoundIndexes).toEqual([['name', 'region']]);
+      expect(result).not.toHaveProperty('uniqueCompoundIndexes');
       expect(cityConfig.uniqueCompoundIndexes).toHaveLength(3);
     });
 
-    test('should drop "uniqueCompoundIndexes" if no index is left', () => {
+    test('should drop "uniqueCompoundIndexes" if a field of one index is not included', () => {
       const result = composeCity({
         allow: { City: ['entity'] },
         representationKey: 'ForCatalog',
-        excludeFields: { City: ['region'] },
+        includeFields: { City: ['name', 'postcode', 'region'] },
+      });
+
+      expect(result).not.toHaveProperty('uniqueCompoundIndexes');
+    });
+
+    test('should drop "uniqueCompoundIndexes" if a field of one index is replaced', () => {
+      const result = composeCity({
+        allow: { City: ['entity'] },
+        representationKey: 'ForCatalog',
+        addFields: { City: { calculatedFields: [{ name: 'code', calculatedType: 'textFields' }] } },
       });
 
       expect(result).not.toHaveProperty('uniqueCompoundIndexes');

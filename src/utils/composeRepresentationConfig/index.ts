@@ -189,7 +189,7 @@ const composeRepresentationConfig = (
     });
   }
 
-  // a unique compound index is kept only if all its fields are left (not excluded or replaced)
+  // unique compound indexes are kept only if all fields of all indexes are left (not excluded or replaced)
   if (entityConfig.type === 'tangible' && entityConfig.uniqueCompoundIndexes) {
     const compoundIndexFieldNames = compoundIndexFieldKinds.reduce<string[]>((prev, key) => {
       (entityConfig[key] || []).forEach(({ name: fieldName, parent }) => {
@@ -199,13 +199,11 @@ const composeRepresentationConfig = (
       return prev;
     }, []);
 
-    const uniqueCompoundIndexes = entityConfig.uniqueCompoundIndexes.filter((fieldNames) =>
+    const allFieldsAreLeft = entityConfig.uniqueCompoundIndexes.every((fieldNames) =>
       fieldNames.every((fieldName) => compoundIndexFieldNames.includes(fieldName)),
     );
 
-    if (uniqueCompoundIndexes.length) {
-      entityConfig.uniqueCompoundIndexes = uniqueCompoundIndexes;
-    } else {
+    if (!allFieldsAreLeft) {
       delete entityConfig.uniqueCompoundIndexes;
     }
   }
