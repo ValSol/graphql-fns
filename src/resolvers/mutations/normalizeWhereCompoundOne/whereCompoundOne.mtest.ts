@@ -82,9 +82,16 @@ const ForCatalog: RepresentationAttributes = {
   excludeFields: { City: ['districts'] },
 };
 
+// "country" is in both indexes, so no index is left
+const ForMap: RepresentationAttributes = {
+  representationKey: 'ForMap',
+  allow: { City: ['entity', 'updateEntity'] },
+  excludeFields: { City: ['country', 'districts'] },
+};
+
 const generalConfig: GeneralConfig = {
   allEntityConfigs,
-  representations: { ForCatalog },
+  representations: { ForCatalog, ForMap },
 };
 
 const { typeDefs, resolvers } = composeTypeDefsAndResolvers(generalConfig, {});
@@ -172,6 +179,9 @@ describe('whereCompoundOne in mutations', () => {
       'deleteManyCities(whereOne: [CityWhereOneInput!], whereCompoundOne: [CityWhereCompoundOneInput!], token: String): [City!]!',
       'updateCityForCatalog(whereOne: CityForCatalogWhereOneInput, whereCompoundOne: CityForCatalogWhereCompoundOneInput, data: CityForCatalogUpdateInput!, token: String): CityForCatalog!',
       'updateManyCitiesForCatalog(whereOne: [CityForCatalogWhereOneInput!], whereCompoundOne: [CityForCatalogWhereCompoundOneInput!], data: [CityForCatalogUpdateInput!]!, token: String): [CityForCatalog!]!',
+      // a representation without fields of indexes has no "uniqueCompoundIndexes"
+      'CityForMap(whereOne: CityForMapWhereOneInput!, token: String): CityForMap',
+      'updateCityForMap(whereOne: CityForMapWhereOneInput!, data: CityForMapUpdateInput!, token: String): CityForMap!',
       // an entity without "uniqueCompoundIndexes" keeps required "whereOne"
       'updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!',
       'deleteManyPeople(whereOne: [PersonWhereOneInput!]!, token: String): [Person!]!',

@@ -10,6 +10,7 @@ import type {
 
 import composeFieldsObject from '@/utils/composeFieldsObject';
 import composeEntityConfig from '@/utils/composeEntityConfig';
+import compoundIndexFieldKinds from '@/utils/compoundIndexFieldKinds';
 import composeRepresentationConfigName from './composeRepresentationConfigName';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
 
@@ -186,6 +187,27 @@ const composeRepresentationConfig = (
       // a new array: "entityConfig" is a shallow copy and shares field arrays with the root config
       entityConfig[fieldType] = [...(entityConfig[fieldType] || []), fieldToAdd];
     });
+  }
+
+  // a unique compound index is kept only if all its fields are left (not excluded or replaced)
+  if (entityConfig.type === 'tangible' && entityConfig.uniqueCompoundIndexes) {
+    const compoundIndexFieldNames = compoundIndexFieldKinds.reduce<string[]>((prev, key) => {
+      (entityConfig[key] || []).forEach(({ name: fieldName, parent }) => {
+        if (!(key === 'relationalFields' && parent)) prev.push(fieldName);
+      });
+
+      return prev;
+    }, []);
+
+    const uniqueCompoundIndexes = entityConfig.uniqueCompoundIndexes.filter((fieldNames) =>
+      fieldNames.every((fieldName) => compoundIndexFieldNames.includes(fieldName)),
+    );
+
+    if (uniqueCompoundIndexes.length) {
+      entityConfig.uniqueCompoundIndexes = uniqueCompoundIndexes;
+    } else {
+      delete entityConfig.uniqueCompoundIndexes;
+    }
   }
 
   const filterFieldsCalculated =

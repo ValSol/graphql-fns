@@ -1073,4 +1073,51 @@ describe('composeAllEntityConfigs', () => {
       ).toThrow('has to refer back to duplex field: "section" of entity: "Restaurant"');
     });
   });
+
+  describe('check uniqueCompoundIndexes', () => {
+    const compose = (uniqueCompoundIndexes: any) =>
+      composeAllEntityConfigs(
+        [
+          { name: 'Country', type: 'tangible', textFields: [{ name: 'code' }] },
+          {
+            name: 'City',
+            type: 'tangible',
+            uniqueCompoundIndexes,
+            textFields: [{ name: 'name' }],
+            intFields: [{ name: 'population' }],
+            floatFields: [{ name: 'area' }],
+            dateTimeFields: [{ name: 'foundedAt' }],
+            booleanFields: [{ name: 'capital' }],
+            enumFields: [{ name: 'kind', enumName: 'CityKind' }],
+            relationalFields: [{ name: 'country', oppositeName: 'cities', configName: 'Country' }],
+            duplexFields: [{ name: 'twin', oppositeName: 'twin', configName: 'City' }],
+          },
+        ],
+        { CityKind: ['town', 'village'] },
+      );
+
+    test('should accept text, int, float, dateTime, relational and duplex fields', () => {
+      expect(() =>
+        compose([
+          ['name', 'country'],
+          ['population', 'area', 'foundedAt', 'twin'],
+        ]),
+      ).not.toThrow();
+    });
+
+    test('should reject fields of other kinds', () => {
+      expect(() => compose([['name', 'capital']])).toThrow(
+        'Found unique compaund index field: "capital" in "City" entity while only',
+      );
+      expect(() => compose([['name', 'kind']])).toThrow(
+        'Found unique compaund index field: "kind" in "City" entity while only',
+      );
+    });
+
+    test('should reject empty "uniqueCompoundIndexes"', () => {
+      expect(() => compose([])).toThrow(
+        '"uniqueCompoundIndexes" of "City" entity has to be not empty array but it is []!',
+      );
+    });
+  });
 });

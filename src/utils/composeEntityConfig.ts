@@ -4,6 +4,7 @@ import type {
   TangibleEntityConfig,
   VirtualEntityConfig,
 } from '../tsTypes';
+import compoundIndexFieldKinds from './compoundIndexFieldKinds';
 import isCommonlyAllowedTypeName from './isCommonlyAllowedTypeName';
 
 const forbiddenFieldNames = [
@@ -58,6 +59,7 @@ const composeEntityConfig = (
 
   const fieldNames = [];
   const arrayFieldNames = [];
+  const compoundIndexFieldNames = []; // fields that can be used in "uniqueCompoundIndexes"
 
   // check field names
   Object.keys(simplifiedEntityConfig)
@@ -69,7 +71,7 @@ const composeEntityConfig = (
         );
       }
 
-      simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze, array }) => {
+      simplifiedEntityConfig[key].forEach(({ name: fieldName, freeze, array, parent }) => {
         if (fieldNames.includes(fieldName)) {
           throw new TypeError(`Field name: "${fieldName}" used twice in entity: "${name}"!`);
         }
@@ -88,6 +90,10 @@ const composeEntityConfig = (
 
         if (array) {
           arrayFieldNames.push(fieldName);
+        }
+
+        if (compoundIndexFieldKinds.includes(key) && !(key === 'relationalFields' && parent)) {
+          compoundIndexFieldNames.push(fieldName);
         }
 
         if (fieldName.search('_') !== -1) {
@@ -149,6 +155,14 @@ const composeEntityConfig = (
   // check uniqueCompoundIndexes
 
   if (uniqueCompoundIndexes) {
+    if (!Array.isArray(uniqueCompoundIndexes) || !uniqueCompoundIndexes.length) {
+      throw new TypeError(
+        `"uniqueCompoundIndexes" of "${name}" entity has to be not empty array but it is ${JSON.stringify(
+          uniqueCompoundIndexes,
+        )}!`,
+      );
+    }
+
     uniqueCompoundIndexes.forEach((uniqueCompoundIndex) => {
       if (uniqueCompoundIndex.length < 2) {
         throw new TypeError(
@@ -166,6 +180,14 @@ const composeEntityConfig = (
         if (arrayFieldNames.includes(fieldName)) {
           throw new TypeError(
             `Found unique compaund index field: "${fieldName}" in "${name}" entity while it is "array"!`,
+          );
+        }
+
+        if (!compoundIndexFieldNames.includes(fieldName)) {
+          throw new TypeError(
+            `Found unique compaund index field: "${fieldName}" in "${name}" entity while only ${compoundIndexFieldKinds.join(
+              ', ',
+            )} (not parent) fields are allowed!`,
           );
         }
       });

@@ -68,8 +68,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        uniqueCompoundIndexes: [['textField', 'anotherField']],
-
+        // the index is dropped: one of its fields is not left in the representation
         interfaces: ['ExampleForCatalogInterview'],
 
         textFields: [
@@ -191,8 +190,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        uniqueCompoundIndexes: [['textField', 'anotherField']],
-
+        // the index is dropped: one of its fields is not left in the representation
         textFields: [
           {
             name: 'textField',
@@ -277,8 +275,7 @@ describe('composeRepresentationConfig', () => {
         name: 'ExampleForCatalog',
         type: 'tangible',
 
-        uniqueCompoundIndexes: [['textField', 'anotherField']],
-
+        // the index is dropped: one of its fields is not left in the representation
         enumFields: [
           {
             name: 'textField',
@@ -350,6 +347,55 @@ describe('composeRepresentationConfig', () => {
 
     expect(result?.textFields?.map(({ name }) => name)).toEqual(['textField', 'catalogTitle']);
     expect(rootConfig.textFields?.map(({ name }) => name)).toEqual(['textField']);
+  });
+
+  describe('composeRepresentationConfig with uniqueCompoundIndexes', () => {
+    const cityConfig: TangibleEntityConfig = {
+      name: 'City',
+      type: 'tangible',
+
+      uniqueCompoundIndexes: [
+        ['name', 'region'],
+        ['postcode', 'region'],
+        ['code', 'region'],
+      ],
+
+      textFields: [
+        { name: 'name', type: 'textFields' },
+        { name: 'postcode', type: 'textFields' },
+        { name: 'code', type: 'textFields' },
+        { name: 'region', type: 'textFields' },
+      ],
+    };
+
+    const composeCity = (ForCatalog: RepresentationAttributes) =>
+      composeRepresentationConfig(ForCatalog, cityConfig, {
+        allEntityConfigs: { City: cityConfig },
+        representations: { ForCatalog },
+      }) as TangibleEntityConfig;
+
+    test('should keep only indexes with all fields left', () => {
+      const result = composeCity({
+        allow: { City: ['entity'] },
+        representationKey: 'ForCatalog',
+        excludeFields: { City: ['postcode'] },
+        // replaced by a calculated field
+        addFields: { City: { calculatedFields: [{ name: 'code', calculatedType: 'textFields' }] } },
+      });
+
+      expect(result.uniqueCompoundIndexes).toEqual([['name', 'region']]);
+      expect(cityConfig.uniqueCompoundIndexes).toHaveLength(3);
+    });
+
+    test('should drop "uniqueCompoundIndexes" if no index is left', () => {
+      const result = composeCity({
+        allow: { City: ['entity'] },
+        representationKey: 'ForCatalog',
+        excludeFields: { City: ['region'] },
+      });
+
+      expect(result).not.toHaveProperty('uniqueCompoundIndexes');
+    });
   });
 
   describe('composeRepresentationConfig with relational third field', () => {
