@@ -107,6 +107,7 @@ const absentId = '000000000000000000000008';
 const ids = {
   userKyiv: new Types.ObjectId().toString(),
   userAll: new Types.ObjectId().toString(),
+  guest: new Types.ObjectId().toString(),
   userWithoutFilter: new Types.ObjectId().toString(),
   userInKyivGroup: new Types.ObjectId().toString(),
   userInGroupWithoutFilter: new Types.ObjectId().toString(),
@@ -146,6 +147,7 @@ beforeAll(async () => {
   await User.create([
     { _id: ids.userKyiv, name: 'Kyiv', cityFilter: kyivFilter },
     { _id: ids.userAll, name: 'All', cityFilter: JSON.stringify({}) },
+    { _id: ids.guest, name: 'Guest', cityFilter: JSON.stringify({}) },
     { _id: ids.userWithoutFilter, name: 'Without filter' },
     { _id: ids.userInKyivGroup, name: 'In Kyiv group', group: ids.kyivGroup },
     { _id: ids.userInGroupWithoutFilter, name: 'In group', group: ids.groupWithoutFilter },
@@ -175,6 +177,12 @@ describe('personalFilters with the filter field of the User record', () => {
     expect(result).toEqual({ data: cityNames(['Kyiv', 'Lviv', 'Odesa']) });
   });
 
+  test('a guest with the id of a guest User record gets access permitted by "filters"', async () => {
+    const result = await run(schema, { roles: ['guest'], id: ids.guest });
+
+    expect(result).toEqual({ data: cityNames(['Kyiv', 'Lviv']) });
+  });
+
   test('no access if the filter field is not set', async () => {
     const result = await run(schema, { roles: ['user'], id: ids.userWithoutFilter });
 
@@ -187,6 +195,7 @@ describe('personalFilters with the filter field of the User record', () => {
     expect(result).toEqual({ data: cityNames([]) });
   });
 
+  // "id" is required for every user with roles, the guest included
   test('no access without "id"', async () => {
     const result = await run(schema, { roles: ['guest'] });
 
