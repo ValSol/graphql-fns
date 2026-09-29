@@ -10,6 +10,7 @@ import composeRepresentationConfigByName from '@/utils/composeRepresentationConf
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityWhereKeyToSourceInputType from '../inputs/createEntityWhereKeyToSourceInputType';
 import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
+import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
@@ -26,20 +27,35 @@ const whereTargetInputCreator: InputCreator = (entityConfig) =>
     ? createEntityWhereOneInputType(entityConfig)
     : [`${entityConfig.name}WhereOneInput`, '', {}];
 
+// "whereCompoundTarget" arg (alternative to "whereTarget") is available only if X can be copy target
+const whereCompoundTargetInputCreator: InputCreator = (entityConfig) =>
+  canBeCopyTarget(entityConfig)
+    ? createEntityWhereCompoundOneInputType(entityConfig)
+    : [`${entityConfig.name}WhereCompoundOneInput`, '', {}];
+
 const inputCreators = [
   createEntityWhereKeyToSourceInputType,
   createCopyEntityOptionsInputType,
   whereTargetInputCreator,
+  whereCompoundTargetInputCreator,
   createEntityUpdateInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereKeyToSource', 'options', 'whereTarget', 'data', 'token'];
+const argNames = [
+  'whereKeyToSource',
+  'options',
+  'whereTarget',
+  'whereCompoundTarget',
+  'data',
+  'token',
+];
 
 const argTypes = [
   ({ name }): string => `${name}WhereKeyToSourceInput!`,
   ({ name }): string => `copy${name}OptionsInput`,
   ({ name }): string => `${name}WhereOneInput`,
+  ({ name }): string => `${name}WhereCompoundOneInput`,
   ({ name }): string => `${name}UpdateInput`,
   (): string => 'String',
 ];

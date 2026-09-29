@@ -4,6 +4,7 @@ import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/t
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import getChildDuplexFields from '@/utils/getChildDuplexFields';
+import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createDeleteEntityWithChildrenOptionsInputType from '../inputs/createDeleteEntityWithChildrenOptionsInputType';
 import createStringInputType from '../inputs/createStringInputType';
@@ -18,14 +19,17 @@ const actionName = (baseName: string, representationKey = ''): string =>
 
 const inputCreators = [
   createEntityWhereOneInputType,
+  createEntityWhereCompoundOneInputType,
   createDeleteEntityWithChildrenOptionsInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOne', 'options', 'token'];
+const argNames = ['whereOne', 'whereCompoundOne', 'options', 'token'];
 
 const argTypes = [
-  ({ name }): string => `[${name}WhereOneInput!]!`,
+  ({ name, uniqueCompoundIndexes }): string =>
+    `[${name}WhereOneInput!]${uniqueCompoundIndexes ? '' : '!'}`,
+  ({ name }): string => `[${name}WhereCompoundOneInput!]`,
   ({ name }): string => `delete${name}WithChildrenOptionsInput`,
   (): string => 'String',
 ];

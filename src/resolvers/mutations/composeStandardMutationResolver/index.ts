@@ -23,6 +23,7 @@ import getCalculatedFieldsConfig from '@/resolvers/utils/getCalculatedFieldsConf
 import removeCalculatedFieldValues from '@/resolvers/utils/removeCalculatedFieldValues';
 import getInfoEssence from '@/resolvers/utils/getInfoEssence';
 import incCounters from '../incCounters';
+import normalizeWhereCompoundOne from '../normalizeWhereCompoundOne';
 import addPeripheryToCore from '../addPeripheryToCore';
 import executeBulkItems from '../executeBulkItems';
 import optimizeBulkItems from '../optimizeBulkItems';
@@ -92,8 +93,11 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
         inAnyCase,
       } as const;
 
-      const resolverArg = { parent, args, context, info, resolverOptions } as const;
+      const resolverArg0 = { parent, args, context, info, resolverOptions } as const;
       const { mongooseConn } = context;
+
+      // "whereCompoundOne" is replaced by "whereOne" inside every try (in the same session as writes)
+      let resolverArg = resolverArg0;
 
       if (loophole) {
         return loophole(actionGeneralName, resolverCreatorArg, resolverArg);
@@ -133,6 +137,18 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
           if (session) {
             await session.startTransaction();
           }
+
+          resolverArg = {
+            ...resolverArg0,
+            args: (await normalizeWhereCompoundOne(
+              actionGeneralName,
+              args,
+              entityConfig,
+              generalConfig,
+              mongooseConn,
+              session,
+            )) as Args,
+          };
 
           if (!getPrevious) {
             throw new TypeError(`getPrevious have to be setted for "${actionGeneralName}"`);

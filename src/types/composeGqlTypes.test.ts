@@ -925,19 +925,19 @@ type Mutation {
   deleteFilteredMenuClonesWithChildren(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput, token: String): [MenuClone!]!
   deleteFilteredMenusWithChildrenReturnScalar(where: MenuWhereInput, options: deleteMenuWithChildrenOptionsInput, token: String): Int!
   deleteFilteredMenuClonesWithChildrenReturnScalar(where: MenuCloneWhereInput, options: deleteMenuCloneWithChildrenOptionsInput, token: String): Int!
-  deleteManyMenus(whereOne: [MenuWhereOneInput!]!, token: String): [Menu!]!
+  deleteManyMenus(whereOne: [MenuWhereOneInput!], whereCompoundOne: [MenuWhereCompoundOneInput!], token: String): [Menu!]!
   deleteManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, token: String): [MenuClone!]!
   deleteManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, token: String): [MenuSection!]!
   deleteManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, token: String): [MenuCloneSection!]!
-  deleteManyMenusWithChildren(whereOne: [MenuWhereOneInput!]!, options: deleteMenuWithChildrenOptionsInput, token: String): [Menu!]!
+  deleteManyMenusWithChildren(whereOne: [MenuWhereOneInput!], whereCompoundOne: [MenuWhereCompoundOneInput!], options: deleteMenuWithChildrenOptionsInput, token: String): [Menu!]!
   deleteManyMenuClonesWithChildren(whereOne: [MenuCloneWhereOneInput!]!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): [MenuClone!]!
-  deleteMenu(whereOne: MenuWhereOneInput!, token: String): Menu!
+  deleteMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, token: String): Menu!
   deleteMenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone!
   deleteMenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection!
   deleteMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, token: String): MenuCloneSection!
-  deleteMenuWithChildren(whereOne: MenuWhereOneInput!, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
+  deleteMenuWithChildren(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, options: deleteMenuWithChildrenOptionsInput, token: String): Menu!
   deleteMenuCloneWithChildren(whereOne: MenuCloneWhereOneInput!, options: deleteMenuCloneWithChildrenOptionsInput, token: String): MenuClone!
-  pushIntoMenu(whereOne: MenuWhereOneInput!, data: PushIntoMenuInput!, positions: MenuPushPositionsInput, token: String): Menu!
+  pushIntoMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: PushIntoMenuInput!, positions: MenuPushPositionsInput, token: String): Menu!
   pushIntoMenuClone(whereOne: MenuCloneWhereOneInput!, data: PushIntoMenuCloneInput!, positions: MenuClonePushPositionsInput, token: String): MenuClone!
   updateFilteredMenus(where: MenuWhereInput, data: MenuUpdateInput!, token: String): [Menu!]!
   updateFilteredMenuClones(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): [MenuClone!]!
@@ -947,11 +947,11 @@ type Mutation {
   updateFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): Int!
   updateFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!, token: String): Int!
   updateFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!, token: String): Int!
-  updateManyMenus(whereOne: [MenuWhereOneInput!]!, data: [MenuUpdateInput!]!, token: String): [Menu!]!
+  updateManyMenus(whereOne: [MenuWhereOneInput!], whereCompoundOne: [MenuWhereCompoundOneInput!], data: [MenuUpdateInput!]!, token: String): [Menu!]!
   updateManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, data: [MenuCloneUpdateInput!]!, token: String): [MenuClone!]!
   updateManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, data: [MenuSectionUpdateInput!]!, token: String): [MenuSection!]!
   updateManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, data: [MenuCloneSectionUpdateInput!]!, token: String): [MenuCloneSection!]!
-  updateMenu(whereOne: MenuWhereOneInput!, data: MenuUpdateInput!, token: String): Menu!
+  updateMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: MenuUpdateInput!, token: String): Menu!
   updateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneUpdateInput!, token: String): MenuClone!
   updateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionUpdateInput!, token: String): MenuSection!
   updateMenuCloneSection(whereOne: MenuCloneSectionWhereOneInput!, data: MenuCloneSectionUpdateInput!, token: String): MenuCloneSection!

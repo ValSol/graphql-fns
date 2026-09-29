@@ -3,6 +3,7 @@ import pluralize from 'pluralize';
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
+import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
@@ -14,11 +15,20 @@ const actionGeneralName = (representationKey = ''): string =>
 const actionName = (baseName: string, representationKey = ''): string =>
   `deleteMany${pluralize(baseName)}${representationKey}`;
 
-const inputCreators = [createEntityWhereOneInputType, createStringInputType];
+const inputCreators = [
+  createEntityWhereOneInputType,
+  createEntityWhereCompoundOneInputType,
+  createStringInputType,
+];
 
-const argNames = ['whereOne', 'token'];
+const argNames = ['whereOne', 'whereCompoundOne', 'token'];
 
-const argTypes = [({ name }): string => `[${name}WhereOneInput!]!`, (): string => 'String'];
+const argTypes = [
+  ({ name, uniqueCompoundIndexes }): string =>
+    `[${name}WhereOneInput!]${uniqueCompoundIndexes ? '' : '!'}`,
+  ({ name }): string => `[${name}WhereCompoundOneInput!]`,
+  (): string => 'String',
+];
 
 const actionInvolvedEntityNames = (
   name: string,

@@ -3,6 +3,7 @@ import pluralize from 'pluralize';
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
+import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
 import createStringInputType from '../inputs/createStringInputType';
@@ -17,14 +18,17 @@ const actionName = (baseName: string, representationKey = ''): string =>
 
 const inputCreators = [
   createEntityWhereOneInputType,
+  createEntityWhereCompoundOneInputType,
   createEntityUpdateInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOne', 'data', 'token'];
+const argNames = ['whereOne', 'whereCompoundOne', 'data', 'token'];
 
 const argTypes = [
-  ({ name }): string => `[${name}WhereOneInput!]!`,
+  ({ name, uniqueCompoundIndexes }): string =>
+    `[${name}WhereOneInput!]${uniqueCompoundIndexes ? '' : '!'}`,
+  ({ name }): string => `[${name}WhereCompoundOneInput!]`,
   ({ name }): string => `[${name}UpdateInput!]!`,
   (): string => 'String',
 ];

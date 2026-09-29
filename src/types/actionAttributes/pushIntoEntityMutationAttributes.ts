@@ -1,6 +1,7 @@
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '../../utils/composeRepresentationConfigByName';
+import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
 import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createPushIntoEntityInputType from '../inputs/createPushIntoEntityInputType';
 import createEntityPushPositionsInputType from '../inputs/createEntityPushPositionsInputType';
@@ -15,15 +16,18 @@ const actionName = (baseName: string, representationKey = ''): string =>
 
 const inputCreators = [
   createEntityWhereOneInputType,
+  createEntityWhereCompoundOneInputType,
   createPushIntoEntityInputType,
   createEntityPushPositionsInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOne', 'data', 'positions', 'token'];
+const argNames = ['whereOne', 'whereCompoundOne', 'data', 'positions', 'token'];
 
 const argTypes = [
-  ({ name }): string => `${name}WhereOneInput!`,
+  ({ name, uniqueCompoundIndexes }): string =>
+    `${name}WhereOneInput${uniqueCompoundIndexes ? '' : '!'}`,
+  ({ name }): string => `${name}WhereCompoundOneInput`,
   ({ name }): string => `PushInto${name}Input!`,
   ({ name }): string => `${name}PushPositionsInput`,
   (): string => 'String',

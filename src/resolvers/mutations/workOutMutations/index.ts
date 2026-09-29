@@ -20,6 +20,7 @@ import addPeripheryToCore from '../addPeripheryToCore';
 import produceResult from '../composeStandardMutationResolver/produceResult';
 import executeBulkItems from '../executeBulkItems';
 import incCounters from '../incCounters';
+import normalizeWhereCompoundOne from '../normalizeWhereCompoundOne';
 import optimizeBulkItems from '../optimizeBulkItems';
 import unwindCore from '../unwindCore';
 import mutationsResolverAttributes from './mutationsResolverAttributes';
@@ -155,7 +156,15 @@ const workOutMutations = async (
 
         const resolverArg = {
           parent,
-          args,
+          // "whereCompoundOne" is replaced by "whereOne" in the same session as writes
+          args: await normalizeWhereCompoundOne(
+            actionGeneralName,
+            args,
+            entityConfig,
+            generalConfig,
+            mongooseConn,
+            session,
+          ),
           context,
           info,
           resolverOptions,
