@@ -3,7 +3,7 @@ import { Connection } from 'mongoose';
 import type { DataObject, TangibleEntityConfig } from '../../../tsTypes';
 import type { Core } from '../../tsTypes';
 
-import createThingSchema from '../../../mongooseModels/createThingSchema';
+import createMongooseModel from '../../../mongooseModels/createMongooseModel';
 import extractItemsToProcess from './extractItemsToProcess';
 
 type Result = Map<TangibleEntityConfig, Array<DataObject>>;
@@ -21,11 +21,7 @@ const unwindCore = async (core: Core, mongooseConn: Connection, session?: any): 
     const [bulkItems, index, config] = itemsToProcess[i - 1];
 
     if (mongooseModels[config.name] === undefined) {
-      const thingSchema = createThingSchema(config);
-
-      mongooseModels[config.name] =
-        mongooseConn.models[`${config.name}_Thing`] ||
-        mongooseConn.model(`${config.name}_Thing`, thingSchema);
+      mongooseModels[config.name] = await createMongooseModel(mongooseConn, config);
     }
 
     const {

@@ -1,15 +1,15 @@
-import { Connection } from 'mongoose';
-
 import type { Enums, EntityConfig } from '../tsTypes';
 
 import createThingSchema from './createThingSchema';
+import syncModelIndexes from './syncModelIndexes';
 
-const syncedIndexes: Record<string, any> = {};
-
+// the only way to get a model of an entity: the model is registered on the passed connection and
+// its collection and indexes are synced before the first use (see "docs/mongoose-models.md")
 const createMongooseModel = async (
-  mongooseConn: Connection,
+  mongooseConn: any,
   entityConfig: EntityConfig,
   enums: Enums = {},
+  force = false,
 ): Promise<any> => {
   const { name, type: configType } = entityConfig;
 
@@ -19,10 +19,7 @@ const createMongooseModel = async (
     const ThingModel =
       mongooseConn.models[`${name}_Thing`] || mongooseConn.model(`${name}_Thing`, thingSchema);
 
-    if (!syncedIndexes[name]) {
-      syncedIndexes[name] = true;
-      await ThingModel.syncIndexes();
-    }
+    await syncModelIndexes(mongooseConn, ThingModel, `"${name}" entity`, force);
 
     return ThingModel;
   }

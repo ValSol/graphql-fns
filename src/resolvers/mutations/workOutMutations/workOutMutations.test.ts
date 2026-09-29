@@ -11,6 +11,11 @@ jest.mock('@/utils/sleep', () => ({ __esModule: true, default: jest.fn(() => Pro
 
 jest.mock('../executeBulkItems', () => ({ __esModule: true, default: jest.fn() }));
 
+jest.mock('@/mongooseModels/initMongooseModels', () => ({
+  __esModule: true,
+  syncAllMongooseModels: jest.fn(() => Promise.resolve({})),
+}));
+
 // mimics real "addPeripheryToCore" that "unshift"s items into arrays of "core"
 jest.mock('../addPeripheryToCore', () => ({
   __esModule: true,

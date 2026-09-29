@@ -8,6 +8,7 @@ import type {
 import type { Core, PreparedData, Report } from '@/resolvers/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
+import { syncAllMongooseModels } from '@/mongooseModels/initMongooseModels';
 import { checkPubsub } from '@/utils/composeReport';
 import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
@@ -97,6 +98,11 @@ const workOutMutations = async (
   const tryCount = 7;
 
   const initialPreparedData = copyPreparedData(preparedBulkData);
+
+  // collections and indexes can't be created within a transaction: all models are synced before
+  if (transactions) {
+    await syncAllMongooseModels(mongooseConn, generalConfig);
+  }
 
   for (let i = 0; i < tryCount; i += 1) {
     let preparedData = copyPreparedData(initialPreparedData);

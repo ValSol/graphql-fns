@@ -17,7 +17,9 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
   if (thingSchemas[name]) return thingSchemas[name];
 
   const thingSchemaProperties = composeThingSchemaProperties(entityConfig, enums);
-  const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true });
+  // indexes are built only by "syncModelIndexes" (see "createMongooseModel"): the background
+  // "autoIndex" silently fails on conflicting documents and never drops indexes absent in the config
+  const ThingSchema = new Schema(thingSchemaProperties, { timestamps: true, autoIndex: false });
   ThingSchema.index({ createdAt: 1 });
   ThingSchema.index({ updatedAt: 1 });
 
@@ -51,10 +53,7 @@ const createThingSchema = (entityConfig: EntityConfig, enums: Enums = {}): any =
     }
   }
 
-  // to work dynamic adding fields
-  mongoose.models[`${name}_Thing`] || mongoose.model(`${name}_Thing`, ThingSchema);
-
-  // to supplement cache
+  // to supplement cache (models are registered on the connection only by "createMongooseModel")
   thingSchemas[name] = ThingSchema;
 
   return thingSchemas[name];

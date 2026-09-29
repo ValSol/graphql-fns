@@ -28,7 +28,7 @@ const incCounters = async (
     return core;
   }
 
-  const Counter = createCounter(mongooseConn);
+  const Counter = await createCounter(mongooseConn);
 
   const nameToCounter: Record<string, any> = {};
 

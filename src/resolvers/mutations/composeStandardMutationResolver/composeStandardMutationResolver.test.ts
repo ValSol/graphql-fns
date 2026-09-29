@@ -11,6 +11,11 @@ jest.mock('@/utils/sleep', () => ({ __esModule: true, default: jest.fn(() => Pro
 
 jest.mock('../executeBulkItems', () => ({ __esModule: true, default: jest.fn() }));
 
+jest.mock('@/mongooseModels/initMongooseModels', () => ({
+  __esModule: true,
+  syncAllMongooseModels: jest.fn(() => Promise.resolve({})),
+}));
+
 jest.mock('../unwindCore', () => ({ __esModule: true, default: jest.fn() }));
 
 jest.mock('../incCounters', () => ({ __esModule: true, default: jest.fn(async (core) => core) }));

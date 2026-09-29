@@ -1,6 +1,7 @@
 // mongoose util
 
 import createThingSchema from '@/mongooseModels/createThingSchema';
+import initMongooseModels from '@/mongooseModels/initMongooseModels';
 
 // build schema utils
 
@@ -98,6 +99,7 @@ export {
   adaptProjectionForCalculatedFields,
   addChildActions,
   createThingSchema,
+  initMongooseModels,
   composeTypeDefsAndResolvers,
   composeManuallyCreatedResolvers,
   composeServersideConfig,

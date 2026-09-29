@@ -3,7 +3,7 @@ import { Connection } from 'mongoose';
 import type { DataObject, Periphery, TangibleEntityConfig } from '../../tsTypes';
 import type { Core } from '../tsTypes';
 
-import createThingSchema from '../../mongooseModels/createThingSchema';
+import createMongooseModel from '../../mongooseModels/createMongooseModel';
 
 type Result = Map<TangibleEntityConfig, Array<DataObject>>;
 
@@ -16,11 +16,7 @@ const addPeripheryToCore = async (
   const tasks: Array<() => Promise<void | DataObject>> = [];
 
   for (const [config, obj] of periphery.entries()) {
-    const { name: configName } = config;
-    const thingSchema = createThingSchema(config);
-    const Entity =
-      mongooseConn.models[`${configName}_Thing`] ||
-      mongooseConn.model(`${configName}_Thing`, thingSchema);
+    const Entity = await createMongooseModel(mongooseConn, config);
 
     for (const oppositeName of Object.keys(obj)) {
       const { array, name, oppositeConfig, oppositeIds } = obj[oppositeName];

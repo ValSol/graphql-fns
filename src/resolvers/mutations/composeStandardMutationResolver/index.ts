@@ -14,6 +14,7 @@ import type {
 import type { PreparedData, ResolverAttributes } from '@/resolvers/tsTypes';
 
 import checkInventory from '@/utils/inventory/checkInventory';
+import { syncAllMongooseModels } from '@/mongooseModels/initMongooseModels';
 import { checkPubsub } from '@/utils/composeReport';
 import sleep from '@/utils/sleep';
 import addCalculatedFieldsToEntity from '@/resolvers/utils/addCalculatedFieldsToEntity';
@@ -127,6 +128,11 @@ const composeStandardMutationResolver = (resolverAttributes: ResolverAttributes)
 
       // calculated fields of "previous" entities are used only if they are returned (delete…) or reported
       const previousIsUsed = !produceCurrent || Boolean(subscription);
+
+      // collections and indexes can't be created within a transaction: all models are synced before
+      if (transactions) {
+        await syncAllMongooseModels(mongooseConn, generalConfig);
+      }
 
       for (let i = 0; i < tryCount; i += 1) {
         const session = transactions ? await mongooseConn.startSession() : null;
