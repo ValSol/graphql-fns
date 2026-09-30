@@ -35,7 +35,7 @@
 | ID | Fact |
 |---|---|
 | MM12 | ✅ `initMongooseModels(mongooseConn, generalConfig): Promise<Record<string, Model>>` (exported from the package) syncs every tangible entity of `generalConfig.allEntityConfigs` and, if any entity has `counter`, the counters collection; it returns `{ [entityName]: Model, Counter_Variable?: Model }`. It always syncs (`force`), even models already synced, and refreshes the cache, so later lazy calls (MM6) don't repeat the work. Call it on the start of an application (after connecting) and after a database is dropped by the driver. |
-| MM13 | ✅ Collections of entities that are no longer in the config are not touched: there is no model for them. |
+| MM13 | ✅ Only collections of tangible entities of `generalConfig` (`<name>_things`) and `counter_variables` are synced, so only their indexes are dropped or created. Any other collection of the database is never touched, whatever indexes it has: collections of other libraries (e.g. `user`, `session`, … of better-auth, see [better-auth-integration.md](./better-auth-integration.md)), own collections of the application, collections of entities that are no longer in the config (there is no model for them). |
 
 ## 5. Reproduction of the race (before the fix)
 

@@ -118,6 +118,24 @@ describe('initMongooseModels', () => {
     counterSyncIndexes.mockRestore();
   });
 
+  test('should not touch collections that are not of entities of the config', async () => {
+    const conn = await connect('jest-init-models-foreign');
+
+    // e.g. collections of an auth library and of an entity removed from the config
+    await conn.db!.collection('user').createIndex({ email: 1 }, { unique: true });
+    await conn.db!.collection('session').createIndex({ token: 1 }, { unique: true });
+    await conn.db!.collection('session').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+    await conn.db!.collection('region_things').createIndex({ name: 1 });
+
+    await initMongooseModels(conn, generalConfig);
+
+    expect(await indexNames(conn, 'user')).toEqual(['_id_', 'email_1']);
+    expect(await indexNames(conn, 'session')).toEqual(['_id_', 'expiresAt_1', 'token_1']);
+    expect(await indexNames(conn, 'region_things')).toEqual(['_id_', 'name_1']);
+
+    expect(await indexNames(conn, 'city_things')).toEqual(expectedIndexes.city_things);
+  });
+
   test('should throw an error with the entity and index names if an index is not built', async () => {
     const conn = await connect('jest-init-models-duplicates');
 
