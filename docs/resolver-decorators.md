@@ -47,6 +47,7 @@ Transformers are chosen by the GraphQL type of the argument without the entity n
 | ID | Fact |
 |---|---|
 | RD6 | 📖 `resolverDecorator` builds the map once per decorated resolver from `actionAttributes.argTypes` composed for the entity with an empty name (`composeArgNamesToTransformers`); `customResolverDecorator` parses the full type names with `getTransformerAndConfig`, which resolves representation names through `parseEntityName` and uses the representation config. |
+| RD6a | ✅ Since transformers are chosen by the argument type, `whereCompoundOne` of mutations and `whereCompoundTarget` of `copy…` (single or array, `…WhereCompoundOneInput`) get `whereFromGlobalIds` like `whereCompoundOne` of `X`, so relational/duplex fields of a unique compound index are passed as global ids (tested in `normalizeWhereCompoundOne/whereCompoundOne.mtest.ts`). |
 
 ## 4. `transformAfter`: results
 

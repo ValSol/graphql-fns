@@ -11,7 +11,7 @@ getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: 
 ```
 
 - `roles` is required. The other fields (`id`, `email`, `organizationId`…) are passed to `filters` functions next to `role`.
-- `id` is needed for `personalFilters`: it is the id of a User entity record **in graphql-fns** (see §5).
+- `id` is needed for `personalFilters`: it is the id of a User entity record **in graphql-fns** (see §5). A user without `id` (e.g. a guest) gets no access to entities with a personal filter; to give guests access to them, return the id of a service guest User record (§4).
 - `token` is the value of the `token: String` argument of root queries and mutations. `node` and subscriptions have no such argument (Relay requires exactly `node(id: ID!): Node`), so they rely on `context` (cookies / headers) only.
 - The library calls the function **once** per (`context`, `token`) pair and caches the result (B23). So `context` must be created per request.
 
@@ -28,7 +28,7 @@ The integration task: in `getUserAttributes`, get the better-auth session and tu
 | The `token` argument | The `bearer` plugin reads `Authorization: Bearer <token>` | Turn `token` into the header |
 | `id` | The MongoDB adapter stores `_id` as `ObjectId` and returns `id` as a 24-character hex string | Same format as in graphql-fns |
 | Database load | `session.cookieCache`: the session in a signed cookie without a database lookup | Enable it |
-| Guest | `getSession` → `null` | Return the `guest` role (§4) |
+| Guest | `getSession` → `null` | Return the `guest` role (§4); with `personalFilters` also the id of the guest User record |
 
 ## 3. better-auth setup
 
@@ -53,7 +53,8 @@ export const auth = betterAuth({
 import type { UserAttributes } from 'graphql-fns';
 import { fromNodeHeaders } from 'better-auth/node';
 
-const GUEST: UserAttributes = { id: null, roles: ['guest'] };
+// a service User record created once (e.g. by an upsert at startup, as in §5)
+const GUEST: UserAttributes = { id: GUEST_USER_ID, roles: ['guest'] }; // "id" is needed only with personalFilters
 
 const getUserAttributes = async (context, token?: string): Promise<UserAttributes> => {
   const headers = fromNodeHeaders(context.req.headers);
@@ -73,6 +74,8 @@ const getUserAttributes = async (context, token?: string): Promise<UserAttribute
   };
 };
 ```
+
+The guest `id` is shared by all anonymous requests: `filters` that use `id` (e.g. `{ author: id }`) give the guest the records of the guest User, so this record must own nothing. Its personal filter fields decide what guests see on top of their role filters (`'{}'`: no personal restriction).
 
 There is no need to cache the result in the project: the library itself calls `getUserAttributes` once per request, even if the request touches hundreds of field resolvers. A failed call is not cached.
 
@@ -153,7 +156,7 @@ const serversideConfig = composeServersideConfig(generalConfig, {
 
 ## 5. The User entity and `personalFilters`
 
-`personalFilters` look up the **graphql-fns** User entity by `userAttributes.id`. graphql-fns stores it in the `user_things` collection (model `User_Thing`), while better-auth uses the `user` collection. A graphql-fns User record with the same id is needed.
+`personalFilters` look up the **graphql-fns** User entity by `userAttributes.id`. graphql-fns stores it in the `user_things` collection (model `User_Thing`), while better-auth uses the `user` collection. A graphql-fns User record with the same id is needed. Without it the user has no access to entities with a personal filter (the request does not fail, lists are just empty), unless `skipPersonalFilter` returns `true` for them. The same applies to the guest User record (§4). Attributes without `id` get no access to such entities either ([personal-filters.md](./personal-filters.md) PF5).
 
 The recommended way is the better-auth `databaseHooks.user.create.after` hook:
 
@@ -175,7 +178,7 @@ const syncGraphqlFnsUser = async (user) => {
 
 - Write directly to the model rather than through a generated mutation: the mutation goes through authorization, and inside the hook the user has no session yet.
 - If User has duplex fields, fill them later with graphql-fns mutations so that the library maintains the back references.
-- An alternative is to name the better-auth collection `user_things` via `user.modelName`. Not recommended: the graphql-fns mongoose schema does not know better-auth fields, and better-auth does not know graphql-fns fields.
+- An alternative is to name the better-auth collection `user_things` via `user.modelName`. Not recommended: the graphql-fns mongoose schema does not know better-auth fields, and better-auth does not know graphql-fns fields. Besides, `user_things` is then a collection graphql-fns syncs: its indexes that are not in the entity config are dropped ([mongoose-models.md](./mongoose-models.md) MM6). With separate collections nothing of better-auth (`user`, `session`, `account`, `verification`) is touched by the sync ✅ (MM13).
 
 ## 6. Subscriptions
 
@@ -208,5 +211,5 @@ useServer(
 | The `token` argument ends up in the request body, logs and the persisted queries cache | For HTTP use a cookie or the `Authorization` header; use `token` only where a header is impossible |
 | Access denial returns `null`, not an error | By design of the library; the client cannot tell "no access" from "not found" |
 | Configuration errors (`Not found "getUserAttributes" callback…`) are sent to the client | Mask internal errors (`formatError` in Apollo, `maskedErrors` in graphql-yoga) |
-| `getUserAttributes` returns `null` | With `filters` / `inventoryByRoles` this is a `TypeError` on every request. Always return at least `{ roles: ['guest'] }` |
+| `getUserAttributes` returns `null` | With `filters` / `inventoryByRoles` this is a `TypeError` on every request. Always return at least `{ roles: ['guest'] }` (with `personalFilters` plus the guest `id`) |
 | Banned user (`user.banned`) | better-auth does not create new sessions for them, but an existing session in `cookieCache` may live until `maxAge`. Check `banned` in `getUserAttributes`, as in §4 |

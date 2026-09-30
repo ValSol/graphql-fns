@@ -97,7 +97,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | ID | actionName | SDL | When present | Resolver creator |
 |---|---|---|---|---|
 | Q0 | — | `node(id: ID!): Node` (exactly this signature: Relay requires it, e.g. for `@refetchable` fragments, see B25) | always | `createNodeQueryResolver` |
-| Q1 | `entity` | `X(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, token: String): X` | tangible (`whereOne` has `!` if there are no `uniqueCompoundIndexes`; `whereCompoundOne` exists only with them) | `createEntityQueryResolver` |
+| Q1 | `entity` | `X(whereOne: XWhereOneInput[!], whereCompoundOne: XWhereCompoundOneInput, token: String): X` | tangible (`whereOne` has `!` if there are no `uniqueCompoundIndexes`; `whereCompoundOne` exists only with them; see [where-compound-one.md](./where-compound-one.md)) | `createEntityQueryResolver` |
 | Q2 | `entities` | `Xs(where, sort, pagination, near?, search?, token): [X!]!` | tangible | `createEntitiesQueryResolver` |
 | Q3 | `entitiesThroughConnection` | `XsThroughConnection(where, sort, near?, search?, after, before, first, last, token): XConnection!` | tangible | `createEntitiesThroughConnectionQueryResolver` |
 | Q4 | `entitiesByUnique` | `XsByUnique(where: XWhereByUniqueInput!, sort, near?, search?, token): [X!]!` | tangible | `createEntitiesByUniqueQueryResolver` |
@@ -106,37 +106,43 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 
 `near?` → only if there is a geospatial field with `index`; `search?` → only if there is a textField with `weight`. `sort` is always present (id/createdAt/updatedAt + indexed scalar fields).
 
+✅ `XWhereCompoundOneInput` contains only the fields listed in `uniqueCompoundIndexes` (all of them, of all indexes, all optional), without `…_exists` (they were generated before `8dbda839`). Exactly one of `whereOne` / `whereCompoundOne` is required at runtime; the keys of `whereCompoundOne` must be **exactly** the fields of one index (`checkWhereCompoundOne`), and a field passed as `null` matches an absent value. `composeEntityConfig` allows in `uniqueCompoundIndexes` only text, int, float, dateTime, relational (not `parent`) and duplex fields and rejects an empty array; a representation keeps `uniqueCompoundIndexes` only if all fields of all indexes are left in it, otherwise it has none.
+
 ## 4. Mutation (for tangible `X`)
 
 | ID | actionName | SDL (args → return) | Extra `actionAllowed` condition | Publishes a subscription event? |
 |---|---|---|---|---|
 | M1 | `createEntity` | `createX(data: XCreateInput!, token)` → `X!` | — | ✅ `created` |
 | M2 | `createManyEntities` | `createManyXs(data: [XCreateInput!]!, token)` → `[X!]!` | — | ❌ |
-| M3 | `updateEntity` | `updateX(whereOne: XWhereOneInput!, data: XUpdateInput!, token)` → `X!` | — | ✅ `updated` |
-| M4 | `updateManyEntities` | `updateManyXs(whereOne: [..!]!, data: [XUpdateInput!]!, token)` → `[X!]!` | — | ❌ |
+| M3 | `updateEntity` | `updateX(whereOne: XWhereOneInput!, data: XUpdateInput!, token)` → `X!` (***) | — | ✅ `updated` |
+| M4 | `updateManyEntities` | `updateManyXs(whereOne: [..!]!, data: [XUpdateInput!]!, token)` → `[X!]!` (***) | — | ❌ |
 | M5 | `updateFilteredEntities` | `updateFilteredXs(where, near?, search?, data: XUpdateInput!, token)` → `[X!]!` | — | ❌ |
 | M6 | `updateFilteredEntitiesReturnScalar` | `updateFilteredXsReturnScalar(where, near?, search?, data!, token)` → `Int!` | — | ❌ |
-| M7 | `pushIntoEntity` | `pushIntoX(whereOne!, data: PushIntoXInput!, positions: XPushPositionsInput, token)` → `X!` | at least one non-frozen array field (or filter field) | ✅ `updated` |
-| M8 | `deleteEntity` | `deleteX(whereOne!, token)` → `X!` | — | ✅ `deleted` |
-| M9 | `deleteManyEntities` | `deleteManyXs(whereOne: [..!]!, token)` → `[X!]!` | — | ❌ |
+| M7 | `pushIntoEntity` | `pushIntoX(whereOne!, data: PushIntoXInput!, positions: XPushPositionsInput, token)` → `X!` (***) | at least one non-frozen array field (or filter field) | ✅ `updated` |
+| M8 | `deleteEntity` | `deleteX(whereOne!, token)` → `X!` (***) | — | ✅ `deleted` |
+| M9 | `deleteManyEntities` | `deleteManyXs(whereOne: [..!]!, token)` → `[X!]!` (***) | — | ❌ |
 | M10 | `deleteFilteredEntities` | `deleteFilteredXs(where, near?, search?, token)` → `[X!]!` | — | ❌ |
 | M11 | `deleteFilteredEntitiesReturnScalar` | `…ReturnScalar(where, near?, search?, token)` → `Int!` | — | ❌ |
-| M12 | `deleteEntityWithChildren` | `deleteXWithChildren(whereOne!, options: deleteXWithChildrenOptionsInput, token)` → `X!` | has "children" (*) | ❌ |
-| M13 | `deleteManyEntitiesWithChildren` | `deleteManyXsWithChildren(whereOne: [..]!, options, token)` → `[X!]!` | (*) | ❌ |
+| M12 | `deleteEntityWithChildren` | `deleteXWithChildren(whereOne!, options: deleteXWithChildrenOptionsInput, token)` → `X!` (***) | has "children" (*) | ❌ |
+| M13 | `deleteManyEntitiesWithChildren` | `deleteManyXsWithChildren(whereOne: [..!]!, options, token)` → `[X!]!` (***) | (*) | ❌ |
 | M14 | `deleteFilteredEntitiesWithChildren` | `deleteFilteredXsWithChildren(where, near?, search?, options, token)` → `[X!]!` | (*) | ❌ |
 | M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, near?, search?, options, token)` → `Int!` | (*) | ❌ |
-| M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereOneInput, data: XUpdateInput, token)` → `X!` | (**) | ❌ |
-| M17 | `copyManyEntities` | `copyManyXs(whereKeyToSource: [..!]!, options, whereTarget: [..!], data: [..!], token)` → `[X!]!` | (**) | ❌ |
-| M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, token)` → `X!` | (**) and (*) | ❌ |
-| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereKeyToSource: [..!]!, options, whereTarget: [..!], token)` → `[X!]!` | (**) and (*) | ❌ |
+| M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereOneInput, whereCompoundTarget: XWhereCompoundOneInput, data: XUpdateInput, token)` → `X!` (****) | (**) | ❌ |
+| M17 | `copyManyEntities` | `copyManyXs(whereKeyToSource: [..!]!, options, whereTarget: [..!], whereCompoundTarget: [..!], data: [..!], token)` → `[X!]!` (****) | (**) | ❌ |
+| M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, whereCompoundTarget, token)` → `X!` (****) | (**) and (*) | ❌ |
+| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereKeyToSource: [..!]!, options, whereTarget: [..!], whereCompoundTarget: [..!], token)` → `[X!]!` (****) | (**) and (*) | ❌ |
 | — | `cloneEntity` | removed (see ?7) | — | — |
 
 (*) "Children" are records X refers to through duplex fields with **`parent: true`** whose opposite field is **scalar** (`getNotArrayOppositeDuplexFields`: `parent && !oppositeArray`). The same condition (the `getChildDuplexFields` util) is used both by the schema (`actionAllowed` of all `…WithChildren` mutations, the `deleteXWithChildrenOptionsInput` enum) and at runtime (deleting with children in `processFieldToDelete`, copying the tree in `composeCreateTree`); before `0fb7a9fe` the schema checked a different condition (see B20).
 (**) There is a duplex field `f` for which `getMatchingFields(X, Y)` yields at least one field other than `f` (i.e. X and Y have same-named fields that can be copied).
+(***) ✅ If X has `uniqueCompoundIndexes`, `whereOne` loses `!` (`XWhereOneInput` / `[XWhereOneInput!]`) and `whereCompoundOne: XWhereCompoundOneInput` (`[XWhereCompoundOneInput!]` for `…Many…`) is added, as in Q1. Exactly one of the two is required at runtime; in `…Many…` the chosen array is matched with `data` by index (lengths must be equal), items of `whereCompoundOne` may use different indexes, mixing `whereOne` and `whereCompoundOne` in one call is not possible. Not found by `whereCompoundOne` gives the same result as not found by `whereOne`. Details: [where-compound-one.md](./where-compound-one.md).
+(****) ✅ `whereCompoundTarget` (alternative to `whereTarget`, exactly one of them or none) exists if X can be a copy target and has `uniqueCompoundIndexes`; not found → `Not found "X" entity to copy to: …`, as for `whereTarget`. `whereKeyToSource` has no compound variant (by design).
 
 All mutations except `workOutMutations` are built by `composeStandardMutationResolver(resolverAttributes)`: the loop `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, then `produceResult`, `report` (publishing to pubsub) and `finalResult`. The whole transaction is retried (up to 7 attempts with backoff) only for errors labelled `TransientTransactionError` / `WriteConflict` and only when `serversideConfig.transactions` is enabled; on `UnknownTransactionCommitResult` only `commitTransaction` is retried. Other errors are rethrown as is. The same rule applies to `workOutMutations`.
 
-**`lockedData` in `workOutMutations`** is optimistic locking (not part of the GraphQL schema). Before the mutation `checkLockedData` runs the standard query of the entity the mutation changes (for `copy…`, the X being copied into) with `lockedData.args` and compares the result with `lockedData.result`: if `result` is an object or `null`, `X(whereOne | whereCompoundOne)` is called; if it is an array, `Xs(where, sort, …)` is called and results are compared **by index**, so for arrays `lockedData.args` should include `sort`, otherwise the MongoDB order is not guaranteed and the check may fail spuriously. `whereOne` in `lockedData.args` is an argument of the `X` query, not the `whereTarget` of `copy…` mutations.
+**`lockedData` in `workOutMutations`** is optimistic locking (not part of the GraphQL schema). Before the mutation `checkLockedData` runs the standard query of the entity the mutation changes (for `copy…`, the X being copied into) with `lockedData.args` and compares the result with `lockedData.result`: if `result` is an object or `null`, `X(whereOne | whereCompoundOne)` is called; if it is an array, `Xs(where, sort, …)` is called and results are compared **by index**, so for arrays `lockedData.args` should include `sort`, otherwise the MongoDB order is not guaranteed and the check may fail spuriously. `whereOne` in `lockedData.args` is an argument of the `X` query, not the `whereTarget` of `copy…` mutations. ✅ `whereCompoundOne` works both in `lockedData.args` and in `args` of the mutations of `workOutMutations` (with mongo ids).
+
+Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereKeyToSource` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`).
 
 ## 5. Subscription (for tangible `X`)
 
@@ -365,12 +371,12 @@ Every generated resolver (root queries, mutations, subscriptions, child field re
 | A1 | Static inventory | `generalConfig.inventory` | Which actions exist; the same for everyone |
 | A2 | Roles | `inventoryByRoles` + `containedRoles` | Which actions a role allows. `containedRoles` defines inheritance (`{ admin: ['user'] }`: admin has the permissions of user). An action is allowed if **any** of the user's roles allows it. Roles absent from `containedRoles` are ignored (B24) |
 | A3 | Role filters | `filters: { X: ({ role, ...userAttributes }) => null \| InvolvedFilter[] }` | The function is called for every role: `[]` means full access, `null` means the role grants nothing, an array grants access to records matching the conditions. Results of the roles are combined with OR |
-| A4 | Additional | `staticFilters`, `staticLimits`, `personalFilters`, `skipPersonalFilter` | A constant filter and limit per entity; the personal filter is taken from a filter field of the graphql-fns User entity (or an entity linked to it) found by `userAttributes.id` |
+| A4 | Additional | `staticFilters`, `staticLimits`, `personalFilters`, `skipPersonalFilter` | A constant filter and limit per entity; the personal filter is taken from a filter field of the graphql-fns User entity (or an entity linked to it) found by `userAttributes.id` and combined with role filters by AND. ✅ No `id`, no User record, no pointer, no linked record or an empty filter field mean no access to the entity (without an error); a stored `{}` means no personal restriction; `skipPersonalFilter` switches the personal filter off, but only for users with `id`. Details: [personal-filters.md](./personal-filters.md) |
 | A5 | Subscriptions | `subscribePayloadFilters` | The same kind of functions, applied to the payload of every event. The subscription itself is authorized once, on `subscribe`: without access to it no events are sent (B26). `filters`, `staticFilters` and `personalFilters` do not apply to events, so `subscribePayloadFilters` are required together with `filters` when subscriptions are available (B27) |
 
 `composeServersideConfig` checks consistency at startup: `getUserAttributes` is present for A2–A5, roles in `containedRoles` and `inventoryByRoles` match, filters are correct (calling them for every role with test attributes).
 
-**Contract:** `getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>`. `roles` is required, the other fields are passed to `filters` functions next to `role`; `id` is needed only for `personalFilters` and must be the id of a User record in graphql-fns; `token` is the value of the `token: String` argument of root queries and mutations; `node` (B25) and subscriptions have no `token` argument, the user is determined from `context` only.
+**Contract:** `getUserAttributes: (context, token?: string) => Promise<{ roles: string[]; id?: string; [key: string]: any }>`. `roles` is required, the other fields are passed to `filters` functions next to `role`; `id` is needed only for `personalFilters` and must be the id of a User record in graphql-fns: a user without it (e.g. a guest) gets no access to entities with a personal filter (PF5 in [personal-filters.md](./personal-filters.md)), other requests work; `token` is the value of the `token: String` argument of root queries and mutations; `node` (B25) and subscriptions have no `token` argument, the user is determined from `context` only.
 
 ### 13.3. Caching `userAttributes` (B23)
 
@@ -384,8 +390,8 @@ Every generated resolver (root queries, mutations, subscriptions, child field re
 
 | ID | Summary | What to do |
 |---|---|---|
-| A6 | Anonymous user: with `filters` or `inventoryByRoles`, a `null` result of `getUserAttributes` causes a `TypeError` | Return `{ roles: ['guest'] }` and describe `guest` in `containedRoles` / `inventoryByRoles` |
-| A7 | `personalFilters` read the **graphql-fns** User entity (collection `user_things`), not the user of the external authentication system | Sync a User record with the same `id` (for better-auth: the `databaseHooks.user.create.after` hook) |
+| A6 | Anonymous user: with `filters` or `inventoryByRoles`, a `null` result of `getUserAttributes` causes a `TypeError` | Return `{ id: <guest User id>, roles: ['guest'] }` and describe `guest` in `containedRoles` / `inventoryByRoles` |
+| A7 | `personalFilters` read the **graphql-fns** User entity (collection `user_things`), not the user of the external authentication system. ✅ Without a synced record the user has no access to entities with a personal filter (before the fix the request failed with `Cannot destructure '(intermediate value)' as it is null.`) | Sync a User record with the same `id` (for better-auth: the `databaseHooks.user.create.after` hook) |
 | A8 | Subscriptions are authorized once: after a session is revoked or the user is banned, they keep receiving events until reconnecting | Close connections on sign-out/ban; for WebSocket take headers at connection time |
 | A9 | `token` in arguments ends up in the request body and from there in logs and the persisted queries cache | For HTTP prefer a cookie / the `Authorization` header; use `token` only for special cases |
 | A10 | Access denial returns `null` (queries of a single entity), `[]` / `0` (lists and counts), an empty connection, or no events (subscriptions); the client cannot tell "no access" from "not found". Mutations return `null` for the non-null type `X!`, so the client gets a generic `Cannot return null for non-nullable field` error | By design; take it into account in the UX |
@@ -393,3 +399,4 @@ Every generated resolver (root queries, mutations, subscriptions, child field re
 | A12 | Custom (manually defined) resolvers are called even when access is denied: `authDecorator` passes them `involvedFilters` with `null` values (e.g. `inputOutputFilterAndLimit: null`) | Check `involvedFilters` in the custom resolver and return `null` / `[]` on denial |
 | A13 | `workOutMutations` bypasses authorization (full access `[[]]`): it is a server-side utility | Call it only from trusted server code, after checking permissions yourself |
 | A14 | Minor code issues: the check `if (!involvedFilters) return null` in `authDecorator` never fires (`involvedFilters` is always an object); `limit === limit` in `getFilterFromInvolvedFilters` is always true | Cleanup, no behaviour impact |
+| A15 | ✅ **[reverted `2f16271b`]** `a8bd85a6` required `id` from every user and failed every request without it (`Not found "id" in attributes returned by "getUserAttributes"…`); it broke anonymous users of projects without a guest User record and was reverted. Now attributes without `id` get no access only to entities with a personal filter (PF5 in [personal-filters.md](./personal-filters.md)) | With `personalFilters`, give the guest the id of a service guest User record, whose filter fields set what guests see (`'{}'`: no personal restriction) |
