@@ -4,7 +4,13 @@ import type { Connection, Model } from 'mongoose';
 // is shared by concurrent first calls and removed if the sync fails to retry it by the next call
 type SyncState = { promise: Promise<void>; init: unknown };
 
-const syncedIndexes = new WeakMap<Connection, Map<string, SyncState>>();
+// kept on "globalThis": bundlers (e.g. Next.js) may put several copies of the library into one
+// process, and a module-level cache would make every copy sync the same collections again
+const CACHE_KEY = Symbol.for('graphql-fns.syncedIndexes');
+
+const syncedIndexes: WeakMap<Connection, Map<string, SyncState>> = ((globalThis as any)[
+  CACHE_KEY
+] ??= new WeakMap());
 
 // "mongooseConn" is a Connection or a Mongoose instance (its default connection is used)
 export const getConnection = (mongooseConn: any): Connection =>
