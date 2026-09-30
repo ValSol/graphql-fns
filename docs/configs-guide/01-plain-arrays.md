@@ -182,7 +182,7 @@ const mongooseConn = await mongoose.connect(process.env.MONGODB_URI!);
 export const context = () => ({ mongooseConn });
 ```
 
-The resolvers take the connection from `context.mongooseConn` ✅.
+The resolvers take the connection from `context.mongooseConn` ✅. A complete setup with GraphQL Yoga in a Next.js application: [infrastructure guide, part 3](../infrastructure-guide/03-server.md).
 
 `context.pubsub` is needed **whenever the schema has subscriptions**, and without `inventory` it always has them: besides the subscription resolvers, the mutations `createX`, `updateX`, `deleteX` and `pushIntoX` publish the `createdX` / `updatedX` / `deletedX` events ✅. So:
 

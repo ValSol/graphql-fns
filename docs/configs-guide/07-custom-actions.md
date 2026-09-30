@@ -245,7 +245,7 @@ How the resolver talks to the rest of the library ✅:
 
 ### Step 5. Types for your own schema parts: `manualyUsedEntities`
 
-A virtual entity that no generated or custom action uses is not in the schema. If you write part of the schema by hand (your own `typeDefs` merged with the generated ones, and resolvers composed e.g. by `composeManuallyCreatedResolvers`) and need such a type there, list it in `generalConfig.manualyUsedEntities: [{ name: 'CountryBadge' }]`: the type is then added to the generated `typeDefs` ✅. An entity that is already in the schema must not be listed (it throws) 📖.
+A virtual entity that no generated or custom action uses is not in the schema. If you write part of the schema by hand (your own `typeDefs` merged with the generated ones, and resolvers composed e.g. by `composeManuallyCreatedResolvers`) and need such a type there, list it in `generalConfig.manualyUsedEntities: [{ name: 'CountryBadge' }]`: the type is then added to the generated `typeDefs` ✅. An entity that is already in the schema must not be listed (it throws) 📖. The hand-written part of a schema is described in the [infrastructure guide, part 5](../infrastructure-guide/05-manually-created.md).
 
 ### Checklist
 

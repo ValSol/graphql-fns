@@ -10,6 +10,8 @@
 | `graphql-fns.general.config.ts` | `GeneralConfig` | shape of the API: entities, fields, enums, inventory, signatures of custom actions (no resolvers, callbacks or secrets) | server **and** client code |
 | `graphql-fns.serverSide.config.ts` | `ServersideConfig` | behaviour: callbacks of calculated fields, authorization, filters, limits, transactions | server code only |
 
+How to wire the configs into an application (Next.js, GraphQL Yoga, Relay) is described in the [infrastructure guide](../infrastructure-guide/README.md).
+
 The general config is safe to bundle into a client; everything that runs on the server (resolvers, callbacks, access to the database) or is a secret goes into the server-side config. The only functions in the general config are the pure signature methods of custom actions (part 7): they compute names and types from entity configs. For plain data neither needs anything server-side, so part 1 is almost entirely about the general config.
 
 ## Contents
