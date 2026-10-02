@@ -7,10 +7,10 @@ const mergeWhereAndFilter = (
   filter: Array<GraphqlObject>,
   where: any,
   entityConfig: EntityConfig,
-  notCreateObjectId?: boolean,
+  options: { forRestrictedWhere?: boolean; notCreateObjectId?: boolean } = {},
 ): {
   where: any;
   lookups: PipelineMongoDB;
-} => composeWhereInput(addFilter(filter, where), entityConfig, notCreateObjectId);
+} => composeWhereInput(addFilter(filter, where), entityConfig, options);
 
 export default mergeWhereAndFilter;

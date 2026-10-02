@@ -78,7 +78,7 @@ textFields: [
 
 `weight` on a text field includes it in the text index of the collection with this weight; text fields of embedded entities ([part 3](03-nested-objects-and-geodata.md)) are included too, with the path (`names.text`), and the embedded field needs no `index` for that ✅. MongoDB allows one text index per collection, so the library creates one index `TextIndex` over all weighted fields ✅.
 
-Although the index is common, `weight` is set on each text field: it is what puts the field into the index. The entity then gets the `search: String` argument in `Xs`, `XsThroughConnection`, `XsByUnique`, `XCount`, `XDistinctValues`, `updateFiltered…`, `deleteFiltered…` ✅:
+Although the index is common, `weight` is set on each text field: it is what puts the field into the index. The entity then gets the `search: String` argument in `Xs`, `XsThroughConnection`, `XsByUnique`, `XCount`, `XCounts`, `XDistinctValues`, `updateFiltered…`, `deleteFiltered…` ✅:
 
 ```graphql
 {
@@ -241,6 +241,7 @@ For every tangible entity (shown for `Country`, `Currency` is the same) ✅:
 | `CountriesThroughConnection(where, sort, first, after, last, before)` | Relay connection |
 | `CountriesByUnique(where)` | list by arrays of `id`s / unique values, preserving order |
 | `CountryCount(where)` | number of entities |
+| `CountryCounts(where, restrictedWhere)` | several numbers in one query: one per item of `restrictedWhere` within `where` ([entity-counts.md](../entity-counts.md)) |
 | `CountryDistinctValues(where, options)` | distinct values of an indexed or unique text / enum field |
 | `node(id)` | any entity by its global id |
 
@@ -261,6 +262,12 @@ Examples ✅:
   ) { id code name continent createdAt }
 
   CountryCount(where: { continent: EUROPE })
+
+  # [all not EU, not EU in Europe, not EU with population > 10M]
+  CountryCounts(
+    where: { euMember: false }
+    restrictedWhere: [{}, { continent: EUROPE }, { population_gt: 10000000 }]
+  )
 
   CountriesThroughConnection(first: 10) {
     edges { node { code } }

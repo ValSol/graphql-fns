@@ -408,6 +408,90 @@ input MenuSectionWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+input MenuRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuRestrictedWhereInput!]
+  NOR: [MenuRestrictedWhereInput!]
+  OR: [MenuRestrictedWhereInput!]
+}
+input MenuCloneRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuCloneRestrictedWhereInput!]
+  NOR: [MenuCloneRestrictedWhereInput!]
+  OR: [MenuCloneRestrictedWhereInput!]
+}
+input MenuSectionRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuSectionRestrictedWhereInput!]
+  NOR: [MenuSectionRestrictedWhereInput!]
+  OR: [MenuSectionRestrictedWhereInput!]
+}
+input MenuCloneSectionRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [MenuCloneSectionRestrictedWhereInput!]
+  NOR: [MenuCloneSectionRestrictedWhereInput!]
+  OR: [MenuCloneSectionRestrictedWhereInput!]
+}
 input MenuWhereOneInput {
   id: ID!
 }
@@ -875,6 +959,10 @@ type Query {
   MenuCloneCount(where: MenuCloneWhereInput, token: String): Int!
   MenuSectionCount(where: MenuSectionWhereInput, token: String): Int!
   MenuCloneSectionCount(where: MenuCloneSectionWhereInput, token: String): Int!
+  MenuCounts(where: MenuWhereInput, restrictedWhere: [MenuRestrictedWhereInput!]!, token: String): [Int!]!
+  MenuCloneCounts(where: MenuCloneWhereInput, restrictedWhere: [MenuCloneRestrictedWhereInput!]!, token: String): [Int!]!
+  MenuSectionCounts(where: MenuSectionWhereInput, restrictedWhere: [MenuSectionRestrictedWhereInput!]!, token: String): [Int!]!
+  MenuCloneSectionCounts(where: MenuCloneSectionWhereInput, restrictedWhere: [MenuCloneSectionRestrictedWhereInput!]!, token: String): [Int!]!
   Menu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, token: String): Menu
   MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone
   MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection
@@ -1243,6 +1331,59 @@ input Example2WhereWithoutBooleanOperationsInput {
   area_intersectsMultiPolygon: GeospatialMultiPolygonInput
   area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
 }
+input Example1RestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  position_exists: Boolean
+  position_withinPolygon: GeospatialPolygonInput
+  position_withinMultiPolygon: GeospatialMultiPolygonInput
+  position_withinSphere: GeospatialSphereInput
+  position_aroundLineString: GeospatialLineStringCorridorInput
+  position_aroundMultiLineString: GeospatialMultiLineStringCorridorInput
+  AND: [Example1RestrictedWhereInput!]
+  NOR: [Example1RestrictedWhereInput!]
+  OR: [Example1RestrictedWhereInput!]
+}
+input Example2RestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  area_exists: Boolean
+  area_intersectsPoint: GeospatialPointInput
+  area_intersectsPolygon: GeospatialPolygonInput
+  area_intersectsMultiPolygon: GeospatialMultiPolygonInput
+  area_intersectsCircleApproximatedByPolygon: GeospatialCircleApproximatedByPolygonInput
+  AND: [Example2RestrictedWhereInput!]
+  NOR: [Example2RestrictedWhereInput!]
+  OR: [Example2RestrictedWhereInput!]
+}
 input Example1WhereOneInput {
   id: ID!
 }
@@ -1479,6 +1620,8 @@ type Query {
   node(id: ID!): Node
   Example1Count(where: Example1WhereInput, token: String): Int!
   Example2Count(where: Example2WhereInput, token: String): Int!
+  Example1Counts(where: Example1WhereInput, restrictedWhere: [Example1RestrictedWhereInput!]!, token: String): [Int!]!
+  Example2Counts(where: Example2WhereInput, restrictedWhere: [Example2RestrictedWhereInput!]!, token: String): [Int!]!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
@@ -1745,6 +1888,48 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+input PersonRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PersonRestrictedWhereInput!]
+  NOR: [PersonRestrictedWhereInput!]
+  OR: [PersonRestrictedWhereInput!]
+}
+input PlaceRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PlaceRestrictedWhereInput!]
+  NOR: [PlaceRestrictedWhereInput!]
+  OR: [PlaceRestrictedWhereInput!]
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -1958,6 +2143,8 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
+  PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
+  PlaceCounts(where: PlaceWhereInput, restrictedWhere: [PlaceRestrictedWhereInput!]!, token: String): [Int!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -2185,6 +2372,44 @@ input AddressWhereInput {
   country_re: [RegExp!]
   country_exists: Boolean
 }
+input PersonRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  place: AddressRestrictedWhereInput
+  place_exists: Boolean
+  AND: [PersonRestrictedWhereInput!]
+  NOR: [PersonRestrictedWhereInput!]
+  OR: [PersonRestrictedWhereInput!]
+}
+input AddressRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  _index: Int
+  country: String
+  country_in: [String!]
+  country_nin: [String!]
+  country_ne: String
+  country_gt: String
+  country_gte: String
+  country_lt: String
+  country_lte: String
+  country_re: [RegExp!]
+  country_exists: Boolean
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -2341,6 +2566,7 @@ input PersonWhichUpdatedInput {
 type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
+  PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
   PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection!
@@ -2591,6 +2817,48 @@ input PlaceWhereWithoutBooleanOperationsInput {
   updatedAt_gte: DateTime
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
+}
+input PersonRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PersonRestrictedWhereInput!]
+  NOR: [PersonRestrictedWhereInput!]
+  OR: [PersonRestrictedWhereInput!]
+}
+input PlaceRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [PlaceRestrictedWhereInput!]
+  NOR: [PlaceRestrictedWhereInput!]
+  OR: [PlaceRestrictedWhereInput!]
 }
 input PersonWhereOneInput {
   id: ID!
@@ -2891,6 +3159,8 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PlaceCount(where: PlaceWhereInput, token: String): Int!
+  PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
+  PlaceCounts(where: PlaceWhereInput, restrictedWhere: [PlaceRestrictedWhereInput!]!, token: String): [Int!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -3027,6 +3297,27 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+input ExampleRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [ExampleRestrictedWhereInput!]
+  NOR: [ExampleRestrictedWhereInput!]
+  OR: [ExampleRestrictedWhereInput!]
+}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -3051,6 +3342,7 @@ input ExampleWhereByUniqueInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
+  ExampleCounts(where: ExampleWhereInput, restrictedWhere: [ExampleRestrictedWhereInput!]!, token: String): [Int!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!
@@ -4192,6 +4484,27 @@ input ExampleWhereWithoutBooleanOperationsInput {
   updatedAt_lt: DateTime
   updatedAt_lte: DateTime
 }
+input ExampleRestrictedWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  AND: [ExampleRestrictedWhereInput!]
+  NOR: [ExampleRestrictedWhereInput!]
+  OR: [ExampleRestrictedWhereInput!]
+}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -4266,6 +4579,7 @@ input ExampleForCatalogSortInput {
 type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
+  ExampleCounts(where: ExampleWhereInput, restrictedWhere: [ExampleRestrictedWhereInput!]!, token: String): [Int!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!

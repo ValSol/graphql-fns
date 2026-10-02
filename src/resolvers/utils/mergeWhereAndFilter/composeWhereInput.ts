@@ -51,8 +51,10 @@ const processIdKey = (
   result: {
     _id: string;
   },
-  notCreateObjectId: undefined | boolean,
+  options: { forRestrictedWhere?: boolean; notCreateObjectId?: boolean },
 ) => {
+  const { notCreateObjectId } = options;
+
   const keyWithoutSuffix = key.slice(0, -suffix.length);
 
   const key2 = keyWithoutSuffix === 'id' ? '_id' : keyWithoutSuffix;
@@ -97,9 +99,11 @@ const composeWhereInputRecursively = (
   lookupArray: Array<string>,
   entityConfig: EntityConfig,
   entireWhere: string,
-  notCreateObjectId?: boolean,
+  options: { forRestrictedWhere?: boolean; notCreateObjectId?: boolean },
 ): any => {
   if (!where || Object.keys(where).length === 0) return {};
+
+  const { forRestrictedWhere, notCreateObjectId } = options;
 
   const { name: entityName, type: entityType } = entityConfig;
 
@@ -129,9 +133,9 @@ const composeWhereInputRecursively = (
     if (key === '_index') {
       // do nothing
     } else if (key.endsWith('_in') && idFields.includes(key.slice(0, -'_in'.length))) {
-      processIdKey(key, '_in', prefix, embeddedPrefix, where, result, notCreateObjectId);
+      processIdKey(key, '_in', prefix, embeddedPrefix, where, result, options);
     } else if (key.endsWith('_nin') && idFields.includes(key.slice(0, -'_nin'.length))) {
-      processIdKey(key, '_nin', prefix, embeddedPrefix, where, result, notCreateObjectId);
+      processIdKey(key, '_nin', prefix, embeddedPrefix, where, result, options);
     } else if (key.endsWith('_in')) {
       processKey(
         key,
@@ -412,7 +416,7 @@ const composeWhereInputRecursively = (
           lookupArray,
           entityConfig,
           entireWhere,
-          notCreateObjectId,
+          options,
         ),
       );
     } else if (idFields.includes(key)) {
@@ -426,6 +430,12 @@ const composeWhereInputRecursively = (
         where[key] &&
         (notCreateObjectId ? where[key] : new Types.ObjectId(where[key] as unknown as string));
     } else if (key.endsWith('_')) {
+      if (forRestrictedWhere) {
+        throw new TypeError(
+          `Relational field: "${key}" forbidden in restricted where of "${entityName}" entity in filter: "${entireWhere}!`,
+        );
+      }
+
       checkField(key.slice(0, -1), entityName, embeddedPrefix, fieldsObj, entireWhere);
 
       if (parentFieldName) {
@@ -451,7 +461,7 @@ const composeWhereInputRecursively = (
         lookupArray,
         entityConfig2,
         entireWhere,
-        notCreateObjectId,
+        options,
       );
 
       Object.keys(result2).forEach((key2) => {
@@ -480,7 +490,7 @@ const composeWhereInputRecursively = (
           lookupArray,
           config,
           entireWhere,
-          notCreateObjectId,
+          options,
         );
 
         Object.keys(result2).forEach((key2) => {
@@ -501,7 +511,7 @@ const composeWhereInputRecursively = (
 const composeWhereInput = (
   where: InvolvedFilter,
   entityConfig: EntityConfig,
-  notCreateObjectId?: boolean,
+  options: { forRestrictedWhere?: boolean; notCreateObjectId?: boolean } = {},
 ): {
   where: InvolvedFilter;
   lookups: LookupMongoDB[];
@@ -514,7 +524,7 @@ const composeWhereInput = (
     lookupArray,
     entityConfig,
     `"${entityConfig.name}": "${JSON.stringify(where)}"`,
-    notCreateObjectId,
+    options,
   );
 
   const lookups = lookupArray.reduce<Array<LookupMongoDB>>((prev, fieldEntityPair) => {

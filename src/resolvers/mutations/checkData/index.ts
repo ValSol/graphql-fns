@@ -93,7 +93,7 @@ const checkData = async (
 
   const notCreateObjectId = true;
 
-  const { where } = mergeWhereAndFilter(filter, {}, entityConfig, notCreateObjectId);
+  const { where } = mergeWhereAndFilter(filter, {}, entityConfig, { notCreateObjectId });
 
   const query = new mingo.Query(where);
 

@@ -113,6 +113,7 @@ describe('unwindInverntoryOptions', () => {
       entitiesThroughConnection: ['Example', 'ChildExample'],
       entity: ['Example', 'ChildExample'],
       entityCount: ['Example', 'ChildExample'],
+      entityCounts: ['Example', 'ChildExample'],
       entityDistinctValues: ['Example', 'ChildExample'],
       specialUpdateEntity: ['Example'],
     };

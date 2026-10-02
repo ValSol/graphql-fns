@@ -13,6 +13,7 @@ const argTypesInParts = [
   ['PushInto', 'Input', transformData, true],
   ['', 'UpdateInput', transformData, true],
   ['', 'WhereInput', transformWhere, false],
+  ['', 'RestrictedWhereInput', transformWhere, false],
   ['', 'WhereByUniqueInput', transformWhere, false],
   ['', 'WhereOneInput', transformWhereOne, false],
   ['', 'WhereCompoundOneInput', transformWhere, false],

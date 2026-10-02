@@ -205,7 +205,7 @@ describe('composeWhereInput', () => {
       lookups: [],
     };
     const notCreateObjectId = true;
-    const result = composeWhereInput(where, entityConfig, notCreateObjectId);
+    const result = composeWhereInput(where, entityConfig, { notCreateObjectId });
 
     expect(result).toEqual(expectedResult);
   });
@@ -218,7 +218,7 @@ describe('composeWhereInput', () => {
       lookups: [],
     };
     const notCreateObjectId = true;
-    const result = composeWhereInput(where, entityConfig, notCreateObjectId);
+    const result = composeWhereInput(where, entityConfig, { notCreateObjectId });
 
     expect(result).toEqual(expectedResult);
   });
@@ -818,6 +818,44 @@ describe('composeWhereInput', () => {
           },
         },
       ],
+    };
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test('should throw error for relational where if "forRestrictedWhere"', () => {
+    const where = {
+      relationalField_: { name_gt: 'ABC' },
+    };
+
+    expect(() => composeWhereInput(where, entityConfig, { forRestrictedWhere: true })).toThrow(
+      'Relational field: "relationalField_" forbidden in restricted where of "Example" entity',
+    );
+  });
+
+  test('should throw error for nested relational where if "forRestrictedWhere"', () => {
+    const where = {
+      OR: [{ name_gt: 'ABC' }, { relationalField_: { name_gt: 'ABC' } }],
+    };
+
+    expect(() => composeWhereInput(where, entityConfig, { forRestrictedWhere: true })).toThrow(
+      'Relational field: "relationalField_" forbidden in restricted where of "Example" entity',
+    );
+  });
+
+  test('should return result for not relational where if "forRestrictedWhere"', () => {
+    const where = {
+      name_gt: 'ABC',
+      embedded: { embedded2: { name2_lt: 'XYZ' } },
+    };
+
+    const result = composeWhereInput(where, entityConfig, { forRestrictedWhere: true });
+    const expectedResult = {
+      where: {
+        name: { $gt: 'ABC' },
+        'embedded.embedded2.name2': { $lt: 'XYZ' },
+      },
+      lookups: [],
     };
 
     expect(result).toEqual(expectedResult);

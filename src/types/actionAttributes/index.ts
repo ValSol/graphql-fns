@@ -16,6 +16,7 @@ import createdEntity from './createdEntitySubscriptionAttributes';
 import createManyEntities from './createManyEntitiesMutationAttributes';
 import entityDistinctValues from './entityDistinctValuesQueryAttributes';
 import entityCount from './entityCountQueryAttributes';
+import entityCounts from './entityCountsQueryAttributes';
 import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
@@ -64,6 +65,7 @@ const actionAttributes = {
   deleteEntityWithChildren,
   pushIntoEntity,
   entityCount,
+  entityCounts,
   entityDistinctValues,
   entity,
   entities,

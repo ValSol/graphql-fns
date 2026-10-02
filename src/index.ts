@@ -42,6 +42,7 @@ import createChildEntitiesThroughConnectionQueryResolver from '@/resolvers/queri
 import createChildEntityCountQueryResolver from '@/resolvers/queries/createChildEntityCountQueryResolver';
 import createEntityDistinctValuesQueryResolver from '@/resolvers/queries/createEntityDistinctValuesQueryResolver';
 import createEntityCountQueryResolver from '@/resolvers/queries/createEntityCountQueryResolver';
+import createEntityCountsQueryResolver from '@/resolvers/queries/createEntityCountsQueryResolver';
 import createEntityQueryResolver from '@/resolvers/queries/createEntityQueryResolver';
 import createEntitiesQueryResolver from '@/resolvers/queries/createEntitiesQueryResolver';
 import createEntitiesByUniqueQueryResolver from '@/resolvers/queries/createEntitiesByUniqueQueryResolver';
@@ -130,6 +131,7 @@ export {
   createChildEntityCountQueryResolver,
   createEntityDistinctValuesQueryResolver,
   createEntityCountQueryResolver,
+  createEntityCountsQueryResolver,
   createEntityQueryResolver,
   createEntitiesQueryResolver,
   createEntitiesByUniqueQueryResolver,

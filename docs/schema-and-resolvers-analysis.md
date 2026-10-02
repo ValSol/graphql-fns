@@ -103,6 +103,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | Q4 | `entitiesByUnique` | `XsByUnique(where: XWhereByUniqueInput!, sort, near?, search?, token): [X!]!` | tangible | `createEntitiesByUniqueQueryResolver` |
 | Q5 | `entityCount` | `XCount(where, search?, token): Int!` | tangible | `createEntityCountQueryResolver` |
 | Q6 | `entityDistinctValues` | `XDistinctValues(where, search?, options: XDistinctValuesOptionsInput!, token): [String!]!` | tangible, **if it has indexed text (`index`/`unique`) or enum (`index`) fields** (see I9) | `createEntityDistinctValuesQueryResolver` |
+| Q7 | `entityCounts` | `XCounts(where, restrictedWhere: [XRestrictedWhereInput!]!, search?, token): [Int!]!` (one count per item of `restrictedWhere` within `where`; `XRestrictedWhereInput` is `XWhereInput` without relational filters `x_`; see [entity-counts.md](./entity-counts.md)) | tangible | `createEntityCountsQueryResolver` |
 
 `near?` → only if there is a geospatial field with `index`; `search?` → only if there is a textField with `weight`. `sort` is always present (id/createdAt/updatedAt + indexed scalar fields).
 

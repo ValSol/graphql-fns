@@ -41,7 +41,7 @@ Transformers are chosen by the GraphQL type of the argument without the entity n
 | Argument type suffix | Transformer | Uses entity config |
 |---|---|---|
 | `CreateInput`, `PushIntoInput`, `UpdateInput` | `transformData`: `id`, `connect` (scalar or array) from global ids; recursive into `create` | no |
-| `WhereInput`, `WhereByUniqueInput`, `WhereCompoundOneInput`, `WhereOneInput` | `whereFromGlobalIds`: `id`, `id_in`, `id_nin`; relational/duplex fields `x`, `x_ne`, `x_in`, `x_nin` (`x_exists` as is); recursive into `x_` (the related entity's where) and `AND`/`OR`/`NOR`; an unknown suffix of a relational field throws | yes (to know relational/duplex fields) |
+| `WhereInput`, `RestrictedWhereInput`, `WhereByUniqueInput`, `WhereCompoundOneInput`, `WhereOneInput` | `whereFromGlobalIds`: `id`, `id_in`, `id_nin`; relational/duplex fields `x`, `x_ne`, `x_in`, `x_nin` (`x_exists` as is); recursive into `x_` (the related entity's where) and `AND`/`OR`/`NOR`; an unknown suffix of a relational field throws | yes (to know relational/duplex fields) |
 | `WhereKeyToSourceInput` | `transformWhereKeyToSource`: `id` of every duplex field key | yes |
 
 | ID | Fact |

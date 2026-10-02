@@ -178,7 +178,7 @@ describe('patchExternalReferences util', () => {
     ];
 
     const notCreateObjectId = true;
-    const { where } = mergeWhereAndFilter(filter, {}, postConfig, notCreateObjectId);
+    const { where } = mergeWhereAndFilter(filter, {}, postConfig, { notCreateObjectId });
 
     const query = new mingo.Query(where);
     const result = query.test(data);

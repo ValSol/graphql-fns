@@ -5,6 +5,7 @@ import createEntityCreateInputType from './createEntityCreateInputType';
 import createEntityDistinctValuesOptionsInputType from './createEntityDistinctValuesOptionsInputType';
 import createEntityNearInputType from './createEntityNearInputType';
 import createEntityPushPositionsInputType from './createEntityPushPositionsInputType';
+import createEntityRestrictedWhereInputType from './createEntityRestrictedWhereInputType';
 import createEntitySortInputType from './createEntitySortInputType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
@@ -24,6 +25,7 @@ const inputs = [
   createEntityDistinctValuesOptionsInputType,
   createEntityNearInputType,
   createEntityPushPositionsInputType,
+  createEntityRestrictedWhereInputType,
   createEntitySortInputType,
   createEntityUpdateInputType,
   createEntityWhereByUniqueInputType,
