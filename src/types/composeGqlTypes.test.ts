@@ -10,6 +10,8 @@ import type {
   SimplifiedVirtualEntityConfig,
 } from '@/tsTypes';
 
+import { buildSchema } from 'graphql';
+
 import composeAllEntityConfigsAndEnums from '@/utils/composeAllEntityConfigs';
 import composeGqlTypes from './composeGqlTypes';
 import composeRepresentations from '@/utils/composeRepresentations';
@@ -492,6 +494,18 @@ input MenuCloneSectionRestrictedWhereInput {
   NOR: [MenuCloneSectionRestrictedWhereInput!]
   OR: [MenuCloneSectionRestrictedWhereInput!]
 }
+input MenuWhereAndSearchInput {
+  where: MenuWhereInput = {}
+}
+input MenuCloneWhereAndSearchInput {
+  where: MenuCloneWhereInput = {}
+}
+input MenuSectionWhereAndSearchInput {
+  where: MenuSectionWhereInput = {}
+}
+input MenuCloneSectionWhereAndSearchInput {
+  where: MenuCloneSectionWhereInput = {}
+}
 input MenuWhereOneInput {
   id: ID!
 }
@@ -963,6 +977,10 @@ type Query {
   MenuCloneCounts(where: MenuCloneWhereInput, restrictedWhere: [MenuCloneRestrictedWhereInput!]!, token: String): [Int!]!
   MenuSectionCounts(where: MenuSectionWhereInput, restrictedWhere: [MenuSectionRestrictedWhereInput!]!, token: String): [Int!]!
   MenuCloneSectionCounts(where: MenuCloneSectionWhereInput, restrictedWhere: [MenuCloneSectionRestrictedWhereInput!]!, token: String): [Int!]!
+  MenuExistences(whereAndSearch: [MenuWhereAndSearchInput!]!, token: String): [Boolean!]!
+  MenuCloneExistences(whereAndSearch: [MenuCloneWhereAndSearchInput!]!, token: String): [Boolean!]!
+  MenuSectionExistences(whereAndSearch: [MenuSectionWhereAndSearchInput!]!, token: String): [Boolean!]!
+  MenuCloneSectionExistences(whereAndSearch: [MenuCloneSectionWhereAndSearchInput!]!, token: String): [Boolean!]!
   Menu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, token: String): Menu
   MenuClone(whereOne: MenuCloneWhereOneInput!, token: String): MenuClone
   MenuSection(whereOne: MenuSectionWhereOneInput!, token: String): MenuSection
@@ -1384,6 +1402,12 @@ input Example2RestrictedWhereInput {
   NOR: [Example2RestrictedWhereInput!]
   OR: [Example2RestrictedWhereInput!]
 }
+input Example1WhereAndSearchInput {
+  where: Example1WhereInput = {}
+}
+input Example2WhereAndSearchInput {
+  where: Example2WhereInput = {}
+}
 input Example1WhereOneInput {
   id: ID!
 }
@@ -1622,6 +1646,8 @@ type Query {
   Example2Count(where: Example2WhereInput, token: String): Int!
   Example1Counts(where: Example1WhereInput, restrictedWhere: [Example1RestrictedWhereInput!]!, token: String): [Int!]!
   Example2Counts(where: Example2WhereInput, restrictedWhere: [Example2RestrictedWhereInput!]!, token: String): [Int!]!
+  Example1Existences(whereAndSearch: [Example1WhereAndSearchInput!]!, token: String): [Boolean!]!
+  Example2Existences(whereAndSearch: [Example2WhereAndSearchInput!]!, token: String): [Boolean!]!
   Example1(whereOne: Example1WhereOneInput!, token: String): Example1
   Example2(whereOne: Example2WhereOneInput!, token: String): Example2
   Example1s(where: Example1WhereInput, sort: Example1SortInput, pagination: PaginationInput, near: Example1NearInput, token: String): [Example1!]!
@@ -1930,6 +1956,12 @@ input PlaceRestrictedWhereInput {
   NOR: [PlaceRestrictedWhereInput!]
   OR: [PlaceRestrictedWhereInput!]
 }
+input PersonWhereAndSearchInput {
+  where: PersonWhereInput = {}
+}
+input PlaceWhereAndSearchInput {
+  where: PlaceWhereInput = {}
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -2145,6 +2177,8 @@ type Query {
   PlaceCount(where: PlaceWhereInput, token: String): Int!
   PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
   PlaceCounts(where: PlaceWhereInput, restrictedWhere: [PlaceRestrictedWhereInput!]!, token: String): [Int!]!
+  PersonExistences(whereAndSearch: [PersonWhereAndSearchInput!]!, token: String): [Boolean!]!
+  PlaceExistences(whereAndSearch: [PlaceWhereAndSearchInput!]!, token: String): [Boolean!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -2410,6 +2444,9 @@ input AddressRestrictedWhereInput {
   country_re: [RegExp!]
   country_exists: Boolean
 }
+input PersonWhereAndSearchInput {
+  where: PersonWhereInput = {}
+}
 input PersonWhereOneInput {
   id: ID!
 }
@@ -2567,6 +2604,7 @@ type Query {
   node(id: ID!): Node
   PersonCount(where: PersonWhereInput, token: String): Int!
   PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
+  PersonExistences(whereAndSearch: [PersonWhereAndSearchInput!]!, token: String): [Boolean!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
   PeopleThroughConnection(where: PersonWhereInput, sort: PersonSortInput, after: String, before: String, first: Int, last: Int, token: String): PersonConnection!
@@ -2859,6 +2897,12 @@ input PlaceRestrictedWhereInput {
   AND: [PlaceRestrictedWhereInput!]
   NOR: [PlaceRestrictedWhereInput!]
   OR: [PlaceRestrictedWhereInput!]
+}
+input PersonWhereAndSearchInput {
+  where: PersonWhereInput = {}
+}
+input PlaceWhereAndSearchInput {
+  where: PlaceWhereInput = {}
 }
 input PersonWhereOneInput {
   id: ID!
@@ -3161,6 +3205,8 @@ type Query {
   PlaceCount(where: PlaceWhereInput, token: String): Int!
   PersonCounts(where: PersonWhereInput, restrictedWhere: [PersonRestrictedWhereInput!]!, token: String): [Int!]!
   PlaceCounts(where: PlaceWhereInput, restrictedWhere: [PlaceRestrictedWhereInput!]!, token: String): [Int!]!
+  PersonExistences(whereAndSearch: [PersonWhereAndSearchInput!]!, token: String): [Boolean!]!
+  PlaceExistences(whereAndSearch: [PlaceWhereAndSearchInput!]!, token: String): [Boolean!]!
   Person(whereOne: PersonWhereOneInput!, token: String): Person
   Place(whereOne: PlaceWhereOneInput!, token: String): Place
   People(where: PersonWhereInput, sort: PersonSortInput, pagination: PaginationInput, token: String): [Person!]!
@@ -3318,6 +3364,9 @@ input ExampleRestrictedWhereInput {
   NOR: [ExampleRestrictedWhereInput!]
   OR: [ExampleRestrictedWhereInput!]
 }
+input ExampleWhereAndSearchInput {
+  where: ExampleWhereInput = {}
+}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -3343,6 +3392,7 @@ type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
   ExampleCounts(where: ExampleWhereInput, restrictedWhere: [ExampleRestrictedWhereInput!]!, token: String): [Int!]!
+  ExampleExistences(whereAndSearch: [ExampleWhereAndSearchInput!]!, token: String): [Boolean!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!
@@ -3683,6 +3733,198 @@ type Query {
 
     const result = composeGqlTypes(generalConfig);
     expect(result.typeDefs).toBe(expectedResult);
+  });
+
+  test('should create entities types with inventory for only entityExistences query', () => {
+    const simplifiedEntityConfigs: Array<SimplifiedTangibleEntityConfig> = [
+      {
+        name: 'Country',
+        type: 'tangible',
+        textFields: [{ name: 'code', unique: true, weight: 1 }],
+        duplexFields: [
+          {
+            name: 'cities',
+            oppositeName: 'country',
+            array: true,
+            configName: 'City',
+            parent: true,
+          },
+        ],
+      },
+      {
+        name: 'City',
+        type: 'tangible',
+        textFields: [{ name: 'name', index: true }],
+        duplexFields: [
+          { name: 'country', oppositeName: 'cities', configName: 'Country', index: true },
+        ],
+      },
+    ];
+
+    // "XWhereInput" & "XWhereWithoutBooleanOperationsInput" of both entities are added ...
+    // ... only through "childChain" of "XWhereAndSearchInput" (no other action uses them)
+    const inventory: Inventory = { name: 'test', include: { Query: { entityExistences: true } } };
+    const allEntityConfigs = composeAllEntityConfigsAndEnums(simplifiedEntityConfigs);
+
+    const generalConfig: GeneralConfig = { allEntityConfigs, inventory };
+    const expectedResult = `scalar DateTime
+scalar Upload
+interface Node {
+  id: ID!
+}
+input RegExp {
+  pattern: String!
+  flags: String
+}
+input SliceInput {
+  begin: Int
+  end: Int
+}
+
+input CountryWhereAndSearchInput {
+  where: CountryWhereInput = {}
+  search: String
+}
+input CountryWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  code_in: [String!]
+  code_nin: [String!]
+  code_ne: String
+  code_gt: String
+  code_gte: String
+  code_lt: String
+  code_lte: String
+  code_re: [RegExp!]
+  AND: [CountryWhereInput!]
+  NOR: [CountryWhereInput!]
+  OR: [CountryWhereInput!]
+}
+input CountryWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  code_in: [String!]
+  code_nin: [String!]
+  code_ne: String
+  code_gt: String
+  code_gte: String
+  code_lt: String
+  code_lte: String
+  code_re: [RegExp!]
+}
+input CityWhereInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  country: ID
+  country_in: [ID!]
+  country_nin: [ID!]
+  country_ne: ID
+  country_: CountryWhereWithoutBooleanOperationsInput
+  country_exists: Boolean
+  AND: [CityWhereInput!]
+  NOR: [CityWhereInput!]
+  OR: [CityWhereInput!]
+}
+input CityWhereWithoutBooleanOperationsInput {
+  id_in: [ID!]
+  id_nin: [ID!]
+  createdAt_in: [DateTime!]
+  createdAt_nin: [DateTime!]
+  createdAt_ne: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_nin: [DateTime!]
+  updatedAt_ne: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  name: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_ne: String
+  name_gt: String
+  name_gte: String
+  name_lt: String
+  name_lte: String
+  name_re: [RegExp!]
+  name_exists: Boolean
+  country: ID
+  country_in: [ID!]
+  country_nin: [ID!]
+  country_ne: ID
+  country_: CountryWhereWithoutBooleanOperationsInput
+  country_exists: Boolean
+}
+input CityWhereAndSearchInput {
+  where: CityWhereInput = {}
+}
+type Query {
+  node(id: ID!): Node
+  CountryExistences(whereAndSearch: [CountryWhereAndSearchInput!]!, token: String): [Boolean!]!
+  CityExistences(whereAndSearch: [CityWhereAndSearchInput!]!, token: String): [Boolean!]!
+}`;
+
+    const result = composeGqlTypes(generalConfig);
+    expect(result.typeDefs).toBe(expectedResult);
+
+    // all used inputs are defined and default "where: {}" is valid
+    expect(() => buildSchema(result.typeDefs)).not.toThrow();
   });
 
   test('should create entities types with inventory for only create mutations', () => {
@@ -4505,6 +4747,9 @@ input ExampleRestrictedWhereInput {
   NOR: [ExampleRestrictedWhereInput!]
   OR: [ExampleRestrictedWhereInput!]
 }
+input ExampleWhereAndSearchInput {
+  where: ExampleWhereInput = {}
+}
 input ExampleWhereOneInput {
   id: ID!
 }
@@ -4580,6 +4825,7 @@ type Query {
   node(id: ID!): Node
   ExampleCount(where: ExampleWhereInput, token: String): Int!
   ExampleCounts(where: ExampleWhereInput, restrictedWhere: [ExampleRestrictedWhereInput!]!, token: String): [Int!]!
+  ExampleExistences(whereAndSearch: [ExampleWhereAndSearchInput!]!, token: String): [Boolean!]!
   Example(whereOne: ExampleWhereOneInput!, token: String): Example
   Examples(where: ExampleWhereInput, sort: ExampleSortInput, pagination: PaginationInput, token: String): [Example!]!
   ExamplesThroughConnection(where: ExampleWhereInput, sort: ExampleSortInput, after: String, before: String, first: Int, last: Int, token: String): ExampleConnection!

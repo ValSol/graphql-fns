@@ -775,6 +775,7 @@ export type RepresentationAttributesActionName =
   | 'childEntityGetOrCreate'
   | 'entityCount'
   | 'entityCounts'
+  | 'entityExistences'
   | 'entityDistinctValues'
   | 'entities'
   | 'entitiesThroughConnection'
@@ -999,6 +1000,8 @@ export type ActionResolver = (
 
 export type ServersideConfig = {
   transactions?: boolean;
+  // max number of MongoDB queries that one "XExistences" query runs at once (10 by default)
+  entityExistencesConcurrency?: number;
   // callbacks of calculated fields, by entity (or representation) config name and field name
   calculatedFields?: {
     [entityConfigName: string]: {

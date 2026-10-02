@@ -4,6 +4,7 @@ import composeRepresentationConfigByName from '../../../../utils/composeRepresen
 import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
 import transformWhere from './transformWhere';
+import transformWhereAndSearch from './transformWhereAndSearch';
 import transformWhereOne from './transformWhereOne';
 import transformWhereKeyToSource from './transformWhereKeyToSource';
 
@@ -14,6 +15,7 @@ const argTypesInParts = [
   ['', 'UpdateInput', transformData, true],
   ['', 'WhereInput', transformWhere, false],
   ['', 'RestrictedWhereInput', transformWhere, false],
+  ['', 'WhereAndSearchInput', transformWhereAndSearch, false],
   ['', 'WhereByUniqueInput', transformWhere, false],
   ['', 'WhereOneInput', transformWhereOne, false],
   ['', 'WhereCompoundOneInput', transformWhere, false],

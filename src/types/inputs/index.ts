@@ -8,6 +8,7 @@ import createEntityPushPositionsInputType from './createEntityPushPositionsInput
 import createEntityRestrictedWhereInputType from './createEntityRestrictedWhereInputType';
 import createEntitySortInputType from './createEntitySortInputType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
+import createEntityWhereAndSearchInputType from './createEntityWhereAndSearchInputType';
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
 import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOneInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
@@ -28,6 +29,7 @@ const inputs = [
   createEntityRestrictedWhereInputType,
   createEntitySortInputType,
   createEntityUpdateInputType,
+  createEntityWhereAndSearchInputType,
   createEntityWhereByUniqueInputType,
   createEntityWhereCompoundOneInputType,
   createEntityWhereInputType,

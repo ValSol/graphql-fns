@@ -11,6 +11,7 @@ import entity from './createEntityQueryResolver';
 import entityDistinctValues from './createEntityDistinctValuesQueryResolver';
 import entityCount from './createEntityCountQueryResolver';
 import entityCounts from './createEntityCountsQueryResolver';
+import entityExistences from './createEntityExistencesQueryResolver';
 
 const queries = {
   childEntities,
@@ -21,6 +22,7 @@ const queries = {
   childEntityGetOrCreate,
   entityCount,
   entityCounts,
+  entityExistences,
   entityDistinctValues,
   entity,
   entities,

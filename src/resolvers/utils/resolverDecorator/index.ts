@@ -11,6 +11,7 @@ import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
 import transformWhere from './transformBefore/transformWhere';
+import transformWhereAndSearch from './transformBefore/transformWhereAndSearch';
 import transformWhereOne from './transformBefore/transformWhereOne';
 import transformWhereKeyToSource from './transformBefore/transformWhereKeyToSource';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
@@ -22,6 +23,7 @@ const argTypesPrefixPlusSuffixes = [
   ['UpdateInput', transformData, true],
   ['WhereInput', transformWhere, false],
   ['RestrictedWhereInput', transformWhere, false],
+  ['WhereAndSearchInput', transformWhereAndSearch, false],
   ['WhereByUniqueInput', transformWhere, false],
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],

@@ -7,6 +7,7 @@ import createEntitiesQueryResolver from '../queries/createEntitiesQueryResolver'
 import createEntitiesThroughConnectionQueryResolver from '../queries/createEntitiesThroughConnectionQueryResolver';
 import createEntityCountQueryResolver from '../queries/createEntityCountQueryResolver';
 import createEntityDistinctValuesQueryResolver from '../queries/createEntityDistinctValuesQueryResolver';
+import createEntityExistencesQueryResolver from '../queries/createEntityExistencesQueryResolver';
 import createEntityQueryResolver from '../queries/createEntityQueryResolver';
 import createChildEntityDistinctValuesQueryResolver from '../queries/createChildEntityDistinctValuesQueryResolver';
 import createObjectBoundStore from '@/utils/createObjectBoundStore';
@@ -49,6 +50,25 @@ const composeQueryResolver = (
           if (!queryResolversStore[key]) {
             throw new TypeError(
               `Count query resolver for entityName: "${entityName}" not created!`,
+            );
+          }
+
+          return queryResolversStore[key];
+        }
+
+        case 'Existences': {
+          if (process.env.JEST_WORKER_ID || !queryResolversStore[key]) {
+            queryResolversStore[key] = createEntityExistencesQueryResolver(
+              entityConfig,
+              generalConfig,
+              serversideConfig,
+              inAnyCase,
+            );
+          }
+
+          if (!queryResolversStore[key]) {
+            throw new TypeError(
+              `Existences query resolver for entityName: "${entityName}" not created!`,
             );
           }
 

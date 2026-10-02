@@ -17,6 +17,7 @@ import createManyEntities from './createManyEntitiesMutationAttributes';
 import entityDistinctValues from './entityDistinctValuesQueryAttributes';
 import entityCount from './entityCountQueryAttributes';
 import entityCounts from './entityCountsQueryAttributes';
+import entityExistences from './entityExistencesQueryAttributes';
 import entity from './entityQueryAttributes';
 import entities from './entitiesQueryAttributes';
 import entitiesThroughConnection from './entitiesThroughConnectionQueryAttributes';
@@ -66,6 +67,7 @@ const actionAttributes = {
   pushIntoEntity,
   entityCount,
   entityCounts,
+  entityExistences,
   entityDistinctValues,
   entity,
   entities,

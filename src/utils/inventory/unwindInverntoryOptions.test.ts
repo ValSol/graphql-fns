@@ -114,6 +114,7 @@ describe('unwindInverntoryOptions', () => {
       entity: ['Example', 'ChildExample'],
       entityCount: ['Example', 'ChildExample'],
       entityCounts: ['Example', 'ChildExample'],
+      entityExistences: ['Example', 'ChildExample'],
       entityDistinctValues: ['Example', 'ChildExample'],
       specialUpdateEntity: ['Example'],
     };

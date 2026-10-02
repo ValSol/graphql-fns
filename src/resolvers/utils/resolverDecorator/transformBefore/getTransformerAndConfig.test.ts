@@ -3,6 +3,7 @@ import type { GeneralConfig, TangibleEntityConfig } from '../../../../tsTypes';
 import getTransformerAndConfig from './getTransformerAndConfig';
 import transformData from './transformData';
 import transformWhere from './transformWhere';
+import transformWhereAndSearch from './transformWhereAndSearch';
 
 describe('getTransformerAndConfig', () => {
   const personConfig = {} as TangibleEntityConfig;
@@ -40,6 +41,12 @@ describe('getTransformerAndConfig', () => {
     const result = getTransformerAndConfig('[PersonRestrictedWhereInput!]!', generalConfig);
 
     expect(result).toEqual([transformWhere, personConfig]);
+  });
+
+  test('should return transformer for list of where and search inputs', () => {
+    const result = getTransformerAndConfig('[PersonWhereAndSearchInput!]!', generalConfig);
+
+    expect(result).toEqual([transformWhereAndSearch, personConfig]);
   });
 
   test('should return transformer for create input', () => {
