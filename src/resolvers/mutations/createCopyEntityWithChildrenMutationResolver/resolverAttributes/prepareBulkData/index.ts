@@ -6,6 +6,7 @@ import processCreateInputData from '../../../processCreateInputData';
 import processDeleteData from '../../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../../processDeleteDataPrepareArgs';
 import getCommonManyData from '../../../createCopyManyEntitiesMutationResolver/resolverAttributes/getCommonData';
+import unpairSourceAndTarget from '../../../createCopyManyEntitiesMutationResolver/resolverAttributes/unpairSourceAndTarget';
 import getCommonData from '../../../createCopyEntityMutationResolver/resolverAttributes/getCommonData';
 
 import composeCreateTree from './composeCreateTree';
@@ -22,17 +23,20 @@ const prepareBulkData: PrepareBulkData = async (
     generalConfig: { enums },
   } = resolverCreatorArg;
   const {
-    args: { whereKeyToSource },
+    args,
     context: { mongooseConn },
   } = resolverArg;
   const { core } = prevPreparedData;
 
-  const getPreviousEntities = Array.isArray(whereKeyToSource) ? getCommonManyData : getCommonData;
+  // shared by "copyXWithChildren" & "copyManyXsWithChildren"
+  const unpaired = unpairSourceAndTarget(args);
+
+  const getPreviousEntities = unpaired ? getCommonManyData : getCommonData;
 
   const previousEntities = await getPreviousEntities(resolverCreatorArg, resolverArg, session);
 
   const whereKeyToSourceKeys = Object.keys(
-    Array.isArray(whereKeyToSource) ? whereKeyToSource[0] : whereKeyToSource,
+    unpaired ? unpaired.whereKeyToSource[0] : (args.whereKeyToSource as GraphqlObject),
   );
 
   const [fieldName] = whereKeyToSourceKeys;

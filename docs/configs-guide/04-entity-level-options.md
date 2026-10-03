@@ -41,8 +41,10 @@ A city name is not unique by itself, but it is unique within a country. `uniqueC
 |---|---|
 | query `City` | `whereCompoundOne` |
 | `updateCity`, `deleteCity`, `pushIntoCity`, `deleteCityWithChildren` | `whereCompoundOne` |
-| `updateManyCities`, `deleteManyCities`, `deleteManyCitiesWithChildren` | `whereCompoundOne: [CityWhereCompoundOneInput!]` |
-| `copyCity`, `copyManyCities`, `…WithChildren` | `whereCompoundTarget` next to `whereTarget` (the entity copied **into**); the source is still selected by `whereKeyToSource` |
+| `deleteManyCities`, `deleteManyCitiesWithChildren` | `whereCompoundOne: [CityWhereCompoundOneInput!]` |
+| `updateManyCities` | `whereCompoundOneAndData: [CityWhereCompoundOneAndDataInput!]`, items `{ whereCompoundOne, data }` |
+| `copyCity`, `copyCityWithChildren` | `whereCompoundTarget` next to `whereTarget` (the entity copied **into**); the source is still selected by `whereKeyToSource` |
+| `copyManyCities`, `copyManyCitiesWithChildren` | `sourceAndCompoundTargetAndData` / `sourceAndCompoundTarget`, items `{ whereKeyToSource, whereCompoundTarget, data? }` |
 
 ```graphql
 { City(whereCompoundOne: { name: "Novyi Svit", country: "<id of PL>" }) { name country { code } } }

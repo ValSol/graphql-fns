@@ -92,9 +92,8 @@ describe('whereCompoundOne args of mutations', () => {
     ]);
 
     expect(composeArgs(updateManyEntitiesMutationAttributes, PersonBackup)).toEqual([
-      'whereOne: [PersonBackupWhereOneInput!]',
-      'whereCompoundOne: [PersonBackupWhereCompoundOneInput!]',
-      'data: [PersonBackupUpdateInput!]!',
+      'whereOneAndData: [PersonBackupWhereOneAndDataInput!]',
+      'whereCompoundOneAndData: [PersonBackupWhereCompoundOneAndDataInput!]',
       'token: String',
     ]);
 
@@ -131,19 +130,16 @@ describe('whereCompoundOne args of mutations', () => {
     ]);
 
     expect(composeArgs(copyManyEntitiesMutationAttributes, PersonBackup)).toEqual([
-      'whereKeyToSource: [PersonBackupWhereKeyToSourceInput!]!',
+      'sourceAndTargetAndData: [PersonBackupCopySourceAndTargetAndDataInput!]',
+      'sourceAndCompoundTargetAndData: [PersonBackupCopySourceAndCompoundTargetAndDataInput!]',
       'options: copyPersonBackupOptionsInput',
-      'whereTarget: [PersonBackupWhereOneInput!]',
-      'whereCompoundTarget: [PersonBackupWhereCompoundOneInput!]',
-      'data: [PersonBackupUpdateInput!]',
       'token: String',
     ]);
 
     expect(composeArgs(copyManyEntitiesWithChildrenMutationAttributes, PersonBackup)).toEqual([
-      'whereKeyToSource: [PersonBackupWhereKeyToSourceInput!]!',
+      'sourceAndTarget: [PersonBackupCopySourceAndTargetInput!]',
+      'sourceAndCompoundTarget: [PersonBackupCopySourceAndCompoundTargetInput!]',
       'options: copyPersonBackupOptionsInput',
-      'whereTarget: [PersonBackupWhereOneInput!]',
-      'whereCompoundTarget: [PersonBackupWhereCompoundOneInput!]',
       'token: String',
     ]);
   });
@@ -152,6 +148,11 @@ describe('whereCompoundOne args of mutations', () => {
     expect(composeArgs(updateEntityMutationAttributes, Person)).toEqual([
       'whereOne: PersonWhereOneInput!',
       'data: PersonUpdateInput!',
+      'token: String',
+    ]);
+
+    expect(composeArgs(updateManyEntitiesMutationAttributes, Person)).toEqual([
+      'whereOneAndData: [PersonWhereOneAndDataInput!]!',
       'token: String',
     ]);
 

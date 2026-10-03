@@ -1,19 +1,12 @@
 import pluralize from 'pluralize';
 
-import type {
-  ActionInvolvedEntityNames,
-  EntityConfig,
-  GeneralConfig,
-  InputCreator,
-} from '@/tsTypes';
+import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
-import canBeCopyTarget from '@/utils/canBeCopyTarget';
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
 import getChildDuplexFields from '@/utils/getChildDuplexFields';
+import composeCopySourceAndTargetInputCreator from '../inputs/composeCopySourceAndTargetInputCreator';
 import createCopyEntityOptionsInputType from '../inputs/createCopyEntityOptionsInputType';
 import createEntityWhereKeyToSourceInputType from '../inputs/createEntityWhereKeyToSourceInputType';
-import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
-import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -24,33 +17,28 @@ const actionGeneralName = (representationKey = ''): string =>
 const actionName = (baseName: string, representationKey = ''): string =>
   `copyMany${pluralize(baseName)}WithChildren${representationKey}`;
 
-// "whereTarget" arg (existing X to copy to) is available only if X can be copy target
-const whereTargetInputCreator: InputCreator = (entityConfig) =>
-  canBeCopyTarget(entityConfig)
-    ? createEntityWhereOneInputType(entityConfig)
-    : [`${entityConfig.name}WhereOneInput`, '', {}];
+const sourceAndTargetInputCreator = composeCopySourceAndTargetInputCreator(false, false);
 
-// "whereCompoundTarget" arg (alternative to "whereTarget") is available only if X can be copy target
-const whereCompoundTargetInputCreator: InputCreator = (entityConfig) =>
-  canBeCopyTarget(entityConfig)
-    ? createEntityWhereCompoundOneInputType(entityConfig)
-    : [`${entityConfig.name}WhereCompoundOneInput`, '', {}];
+// "sourceAndCompoundTarget" arg (alternative to "sourceAndTarget") is available only...
+// ... if X can be copy target & has "uniqueCompoundIndexes"
+const sourceAndCompoundTargetInputCreator = composeCopySourceAndTargetInputCreator(true, false);
 
 const inputCreators = [
-  createEntityWhereKeyToSourceInputType,
+  sourceAndTargetInputCreator,
+  sourceAndCompoundTargetInputCreator,
   createCopyEntityOptionsInputType,
-  whereTargetInputCreator,
-  whereCompoundTargetInputCreator,
   createStringInputType,
 ];
 
-const argNames = ['whereKeyToSource', 'options', 'whereTarget', 'whereCompoundTarget', 'token'];
+const argNames = ['sourceAndTarget', 'sourceAndCompoundTarget', 'options', 'token'];
 
 const argTypes = [
-  ({ name }): string => `[${name}WhereKeyToSourceInput!]!`,
+  (entityConfig): string =>
+    `[${entityConfig.name}CopySourceAndTargetInput!]${
+      sourceAndCompoundTargetInputCreator(entityConfig)[1] ? '' : '!'
+    }`,
+  ({ name }): string => `[${name}CopySourceAndCompoundTargetInput!]`,
   ({ name }): string => `copy${name}OptionsInput`,
-  ({ name }): string => `[${name}WhereOneInput!]`,
-  ({ name }): string => `[${name}WhereCompoundOneInput!]`,
   (): string => 'String',
 ];
 

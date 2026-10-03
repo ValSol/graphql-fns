@@ -1046,8 +1046,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'updateManyEntities',
         entityConfig: exampleCloneConfig,
         args: {
-          whereOne: [],
-          data: [],
+          whereOneAndData: [],
         },
         returnResult: true,
       },
@@ -1063,8 +1062,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'updateManyEntities',
         entityConfig: exampleConfig,
         args: {
-          whereOne: [],
-          data: [],
+          whereOneAndData: [],
         },
         returnResult: true,
       },
@@ -1111,8 +1109,10 @@ describe('workOutMutations', () => {
         actionGeneralName: 'updateManyEntities',
         entityConfig: exampleCloneConfig,
         args: {
-          whereOne: whereOneToUpdateManyExampleClones,
-          data: dataToUpdateExampleClones,
+          whereOneAndData: whereOneToUpdateManyExampleClones.map((whereOne, i) => ({
+            whereOne,
+            data: dataToUpdateExampleClones[i],
+          })),
         },
         returnResult: true,
       },
@@ -1120,8 +1120,10 @@ describe('workOutMutations', () => {
         actionGeneralName: 'updateManyEntities',
         entityConfig: exampleConfig,
         args: {
-          whereOne: whereOneToUpdateManyExamples,
-          data: dataToUpdateExamples,
+          whereOneAndData: whereOneToUpdateManyExamples.map((whereOne, i) => ({
+            whereOne,
+            data: dataToUpdateExamples[i],
+          })),
         },
         returnResult: true,
       },
@@ -1498,7 +1500,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyManyEntities',
         entityConfig: personCloneConfig,
         args: {
-          whereKeyToSource: [{ original: { id: createdPerson.id } }],
+          sourceAndTargetAndData: [{ whereKeyToSource: { original: { id: createdPerson.id } } }],
         },
         returnResult: true,
       },
@@ -1583,7 +1585,7 @@ describe('workOutMutations', () => {
         actionGeneralName: 'copyManyEntitiesWithChildren',
         entityConfig: menuCloneConfig,
         args: {
-          whereKeyToSource: [{ original: { id: createdMenu.id } }],
+          sourceAndTarget: [{ whereKeyToSource: { original: { id: createdMenu.id } } }],
         },
         returnResult: true,
       },

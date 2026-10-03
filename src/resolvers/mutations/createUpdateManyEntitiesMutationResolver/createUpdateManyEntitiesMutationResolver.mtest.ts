@@ -165,69 +165,67 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       );
       if (!updateManyPersons) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-      const dataForUpdate = [
-        {
-          sibling: {
-            create: { firstName: 'Vasya', lastName: 'Pupkin', locations: [], favorities: [] },
-          },
-          firstName: 'Mark 2',
-          lastName: 'Tven 2',
-          friend: {
-            create: {
-              firstName: 'Karl 2',
-              lastName: 'Marx 2',
-              location: {
-                create: {
-                  name: 'German 2',
-                },
+      const dataForUpdate = {
+        sibling: {
+          create: { firstName: 'Vasya', lastName: 'Pupkin', locations: [], favorities: [] },
+        },
+        firstName: 'Mark 2',
+        lastName: 'Tven 2',
+        friend: {
+          create: {
+            firstName: 'Karl 2',
+            lastName: 'Marx 2',
+            location: {
+              create: {
+                name: 'German 2',
               },
             },
-          },
-          location: {
-            create: {
-              name: 'Canada 2',
-            },
-          },
-          locations: {
-            create: [
-              {
-                name: 'Nigeria',
-              },
-              {
-                name: 'Ethiopia',
-              },
-              {
-                name: 'Egypt',
-              },
-              {
-                name: 'Congo',
-              },
-            ],
-          },
-          favorities: {
-            create: [
-              {
-                name: 'Tanzania',
-              },
-              {
-                name: 'South Africa',
-              },
-              {
-                name: 'Kenya',
-              },
-              {
-                name: 'Uganda',
-              },
-            ],
           },
         },
-      ];
+        location: {
+          create: {
+            name: 'Canada 2',
+          },
+        },
+        locations: {
+          create: [
+            {
+              name: 'Nigeria',
+            },
+            {
+              name: 'Ethiopia',
+            },
+            {
+              name: 'Egypt',
+            },
+            {
+              name: 'Congo',
+            },
+          ],
+        },
+        favorities: {
+          create: [
+            {
+              name: 'Tanzania',
+            },
+            {
+              name: 'South Africa',
+            },
+            {
+              name: 'Kenya',
+            },
+            {
+              name: 'Uganda',
+            },
+          ],
+        },
+      };
 
-      const whereOne = [{ id }];
+      const whereOne = { id };
 
       const [updatedPerson] = await updateManyPersons(
         null,
-        { whereOne, data: dataForUpdate },
+        { whereOneAndData: [{ whereOne, data: dataForUpdate }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -235,8 +233,8 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
       expect(Boolean(updatedPerson.friend)).toBe(true);
-      expect(updatedPerson.firstName).toBe(dataForUpdate[0].firstName);
-      expect(updatedPerson.lastName).toBe(dataForUpdate[0].lastName);
+      expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson.locations.length).toBe(4);
       expect(updatedPerson.favorities.length).toBe(4);
       expect(updatedPerson.counter).toBe(1);
@@ -245,59 +243,57 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       const createdSibling = await Person.findById(siblingId);
 
-      expect(createdSibling.firstName).toBe(dataForUpdate[0].sibling.create.firstName);
-      expect(createdSibling.lastName).toBe(dataForUpdate[0].sibling.create.lastName);
+      expect(createdSibling.firstName).toBe(dataForUpdate.sibling.create.firstName);
+      expect(createdSibling.lastName).toBe(dataForUpdate.sibling.create.lastName);
       expect(createdSibling.counter).toBe(2);
 
       const friendId = updatedPerson.friend;
 
       const createdFriend = await Person.findById(friendId);
 
-      expect(createdFriend.firstName).toBe(dataForUpdate[0].friend.create.firstName);
-      expect(createdFriend.lastName).toBe(dataForUpdate[0].friend.create.lastName);
+      expect(createdFriend.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend.lastName).toBe(dataForUpdate.friend.create.lastName);
       expect(createdFriend.friend).toEqual(id);
       expect(createdFriend.counter).toBe(3);
 
-      const dataForUpdate2 = [
-        {
-          locations: {
-            connect: [...updatedPerson.locations],
-            create: [
-              {
-                name: 'Algeria',
-              },
-              {
-                name: 'Somalia',
-              },
-              {
-                name: 'Morocco',
-              },
-            ],
-            createPositions: [0, 1, 2],
-          },
-          favorities: {
-            create: [
-              {
-                name: 'Mozambique',
-              },
-              {
-                name: 'Ghana',
-              },
-              {
-                name: 'Angola',
-              },
-            ],
-            createPositions: [2, 3, 4],
-            connect: [...updatedPerson.favorities],
-          },
+      const dataForUpdate2 = {
+        locations: {
+          connect: [...updatedPerson.locations],
+          create: [
+            {
+              name: 'Algeria',
+            },
+            {
+              name: 'Somalia',
+            },
+            {
+              name: 'Morocco',
+            },
+          ],
+          createPositions: [0, 1, 2],
         },
-      ];
+        favorities: {
+          create: [
+            {
+              name: 'Mozambique',
+            },
+            {
+              name: 'Ghana',
+            },
+            {
+              name: 'Angola',
+            },
+          ],
+          createPositions: [2, 3, 4],
+          connect: [...updatedPerson.favorities],
+        },
+      };
 
       // const positions = { locations: [0, 1, 2], favorities: [2, 3, 4] };
 
       const [updatedPerson2] = await updateManyPersons(
         null,
-        { whereOne, data: dataForUpdate2 },
+        { whereOneAndData: [{ whereOne, data: dataForUpdate2 }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -305,42 +301,40 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       const createdFriend2 = await Person.findById(friendId);
 
-      expect(createdFriend2.firstName).toBe(dataForUpdate[0].friend.create.firstName);
-      expect(createdFriend2.lastName).toBe(dataForUpdate[0].friend.create.lastName);
+      expect(createdFriend2.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend2.lastName).toBe(dataForUpdate.friend.create.lastName);
       expect(createdFriend2.friend).toEqual(id);
 
       expect(Boolean(updatedPerson.sibling)).toBe(true);
       expect(Boolean(updatedPerson.friend)).toBe(true);
-      expect(updatedPerson2.firstName).toBe(dataForUpdate[0].firstName);
-      expect(updatedPerson2.lastName).toBe(dataForUpdate[0].lastName);
+      expect(updatedPerson2.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson2.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson2.locations.length).toBe(7);
       expect(updatedPerson2.locations.slice(3)).toEqual(updatedPerson.locations);
       expect(updatedPerson2.favorities.length).toBe(7);
       expect(updatedPerson2.favorities.slice(0, 2)).toEqual(updatedPerson.favorities.slice(0, 2));
       expect(updatedPerson2.favorities.slice(5)).toEqual(updatedPerson.favorities.slice(2));
 
-      const dataForUpdate3 = [
-        {
-          sibling: {
-            connect: null,
-          },
-          friend: {
-            create: {
-              firstName: 'Karl 3',
-              lastName: 'Marx 3',
-              location: {
-                create: {
-                  name: 'German 3',
-                },
+      const dataForUpdate3 = {
+        sibling: {
+          connect: null,
+        },
+        friend: {
+          create: {
+            firstName: 'Karl 3',
+            lastName: 'Marx 3',
+            location: {
+              create: {
+                name: 'German 3',
               },
             },
           },
         },
-      ];
+      };
 
       const [updatedPerson3] = await updateManyPersons(
         null,
-        { whereOne, data: dataForUpdate3 },
+        { whereOneAndData: [{ whereOne, data: dataForUpdate3 }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -348,14 +342,14 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       const createdFriend3 = await Person.findById(friendId);
 
-      expect(createdFriend3.firstName).toBe(dataForUpdate[0].friend.create.firstName);
-      expect(createdFriend3.lastName).toBe(dataForUpdate[0].friend.create.lastName);
+      expect(createdFriend3.firstName).toBe(dataForUpdate.friend.create.firstName);
+      expect(createdFriend3.lastName).toBe(dataForUpdate.friend.create.lastName);
       expect(createdFriend3.friend).toEqual(undefined);
 
       expect(updatedPerson3.sibling).toBe(undefined);
       expect(Boolean(updatedPerson3.friend)).toBe(true);
-      expect(updatedPerson3.firstName).toBe(dataForUpdate[0].firstName);
-      expect(updatedPerson3.lastName).toBe(dataForUpdate[0].lastName);
+      expect(updatedPerson3.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson3.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson3.locations.length).toBe(7);
       expect(updatedPerson3.locations.slice(3)).toEqual(updatedPerson.locations);
       expect(updatedPerson3.favorities.length).toBe(7);
@@ -364,17 +358,15 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       const friendId2 = updatedPerson3.friend;
 
-      const dataForUpdate4 = [
-        {
-          friend: {
-            connect: null,
-          },
+      const dataForUpdate4 = {
+        friend: {
+          connect: null,
         },
-      ];
+      };
 
       const [updatedPerson4] = await updateManyPersons(
         null,
-        { whereOne, data: dataForUpdate4 },
+        { whereOneAndData: [{ whereOne, data: dataForUpdate4 }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -382,14 +374,14 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
       const createdFriend4 = await Person.findById(friendId2);
 
-      expect(createdFriend4.firstName).toBe(dataForUpdate3[0].friend.create.firstName);
-      expect(createdFriend4.lastName).toBe(dataForUpdate3[0].friend.create.lastName);
+      expect(createdFriend4.firstName).toBe(dataForUpdate3.friend.create.firstName);
+      expect(createdFriend4.lastName).toBe(dataForUpdate3.friend.create.lastName);
       expect(createdFriend4.friend).toEqual(undefined);
 
       expect(updatedPerson4.sibling).toBe(undefined);
       expect(updatedPerson4.friend).toBe(undefined);
-      expect(updatedPerson4.firstName).toBe(dataForUpdate[0].firstName);
-      expect(updatedPerson4.lastName).toBe(dataForUpdate[0].lastName);
+      expect(updatedPerson4.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson4.lastName).toBe(dataForUpdate.lastName);
       expect(updatedPerson4.locations.length).toBe(7);
       expect(updatedPerson4.locations.slice(3)).toEqual(updatedPerson.locations);
       expect(updatedPerson4.favorities.length).toBe(7);
@@ -598,26 +590,24 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       );
       if (!updateManyPersons) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-      const whereOne = [{ id }];
-      const dataForUpdate = [
-        {
-          firstName: 'Vasya',
-          lastName: 'Pupkin',
-          friend: { connect: createdFriend2._id },
-          location: { connect: createdLocation2._id },
-          locations: { connect: [createdLocations2[0]._id, createdLocations2[1]._id] },
-          favorities: { connect: [createdFavorities2[0]._id, createdFavorities2[1]._id] },
-        },
-      ];
+      const whereOne = { id };
+      const dataForUpdate = {
+        firstName: 'Vasya',
+        lastName: 'Pupkin',
+        friend: { connect: createdFriend2._id },
+        location: { connect: createdLocation2._id },
+        locations: { connect: [createdLocations2[0]._id, createdLocations2[1]._id] },
+        favorities: { connect: [createdFavorities2[0]._id, createdFavorities2[1]._id] },
+      };
       const [updatedPerson] = await updateManyPersons(
         null,
-        { whereOne, data: dataForUpdate },
+        { whereOneAndData: [{ whereOne, data: dataForUpdate }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
-      expect(updatedPerson.firstName).toBe(dataForUpdate[0].firstName);
-      expect(updatedPerson.lastName).toBe(dataForUpdate[0].lastName);
+      expect(updatedPerson.firstName).toBe(dataForUpdate.firstName);
+      expect(updatedPerson.lastName).toBe(dataForUpdate.lastName);
       const {
         friend: friendId3,
         id: id3,
@@ -685,22 +675,22 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       );
       if (!updateManyPlaces) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-      const whereOne2 = [{ name: data.location.create.name }];
+      const whereOne2 = { name: data.location.create.name };
 
-      const dataForUpdate2 = [{ name: 'Mexico' }];
+      const dataForUpdate2 = { name: 'Mexico' };
       const [updatedPlace] = await updateManyPlaces(
         null,
-        { whereOne: whereOne2, data: dataForUpdate2 },
+        { whereOneAndData: [{ whereOne: whereOne2, data: dataForUpdate2 }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
       );
 
-      expect(updatedPlace.name).toBe(dataForUpdate2[0].name);
+      expect(updatedPlace.name).toBe(dataForUpdate2.name);
 
       const updatedPlaces = await updateManyPlaces(
         null,
-        { whereOne: whereOne2, data: dataForUpdate2 },
+        { whereOneAndData: [{ whereOne: whereOne2, data: dataForUpdate2 }] },
         { mongooseConn, pubsub },
         null,
         { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -786,71 +776,65 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     );
     if (!updateManyExamples) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = [{ id }];
-    const dataForUpdate = [
-      {
-        textField1: 'text Field 1 Plus',
-        textField2: 'text Field 2 Plus',
-        embeddedField: {
-          embeddedTextField: 'embedded Text Field Plus',
-        },
+    const whereOne = { id };
+    const dataForUpdate = {
+      textField1: 'text Field 1 Plus',
+      textField2: 'text Field 2 Plus',
+      embeddedField: {
+        embeddedTextField: 'embedded Text Field Plus',
       },
-    ];
+    };
     const [updatedExample] = await updateManyExamples(
       null,
-      { whereOne, data: dataForUpdate },
+      { whereOneAndData: [{ whereOne, data: dataForUpdate }] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
-    expect(updatedExample.textField1).toBe(dataForUpdate[0].textField1);
-    expect(updatedExample.textField2).toBe(dataForUpdate[0].textField2);
+    expect(updatedExample.textField1).toBe(dataForUpdate.textField1);
+    expect(updatedExample.textField2).toBe(dataForUpdate.textField2);
     expect(updatedExample.embeddedField.embeddedTextField).toBe(
-      dataForUpdate[0].embeddedField.embeddedTextField,
+      dataForUpdate.embeddedField.embeddedTextField,
     );
 
-    const dataForUpdate2 = [
-      {
-        textField1: 'text Field 1 Plus Plus',
-        textField2: undefined,
-        embeddedField: undefined,
-      },
-    ];
+    const dataForUpdate2 = {
+      textField1: 'text Field 1 Plus Plus',
+      textField2: undefined,
+      embeddedField: undefined,
+    };
 
     const [updatedExample2] = await updateManyExamples(
       null,
-      { whereOne, data: dataForUpdate2 },
+      { whereOneAndData: [{ whereOne, data: dataForUpdate2 }] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
-    expect(updatedExample2.textField1).toBe(dataForUpdate2[0].textField1);
-    expect(updatedExample2.textField2).toBe(dataForUpdate[0].textField2);
+    expect(updatedExample2.textField1).toBe(dataForUpdate2.textField1);
+    expect(updatedExample2.textField2).toBe(dataForUpdate.textField2);
     expect(updatedExample2.embeddedField.embeddedTextField).toEqual(
-      dataForUpdate[0].embeddedField.embeddedTextField,
+      dataForUpdate.embeddedField.embeddedTextField,
     );
 
-    const dataForUpdate3 = [
-      {
-        textField1: 'text Field 1 Plus Plus Plus',
-        textField2: null,
-      },
-    ];
+    const dataForUpdate3 = {
+      textField1: 'text Field 1 Plus Plus Plus',
+      textField2: null,
+    };
 
     const [updatedExample3] = await updateManyExamples(
       null,
-      { whereOne, data: dataForUpdate3 },
+      { whereOneAndData: [{ whereOne, data: dataForUpdate3 }] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
-    expect(updatedExample3.textField1).toBe(dataForUpdate3[0].textField1);
+    expect(updatedExample3.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample3.textField2).toBe(undefined);
 
     const updatedExample31 = await Example.findById(id);
     const updatedExample32 = updatedExample31.toObject();
-    expect(updatedExample32.textField1).toBe(dataForUpdate3[0].textField1);
+    expect(updatedExample32.textField1).toBe(dataForUpdate3.textField1);
     expect(updatedExample32.textField2).toBe(undefined);
   });
 
@@ -919,36 +903,34 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     );
     if (!updateMain) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = [{ id }];
-    const dataForUpdate = [
-      {
-        textField: 'text Field 2',
-        embeddedFields: [
-          {
-            embeddedTextField: 'embedded Text Field 1',
-          },
-          {
-            embeddedTextField: 'embedded Text Field 2',
-          },
-        ],
-      },
-    ];
+    const whereOne = { id };
+    const dataForUpdate = {
+      textField: 'text Field 2',
+      embeddedFields: [
+        {
+          embeddedTextField: 'embedded Text Field 1',
+        },
+        {
+          embeddedTextField: 'embedded Text Field 2',
+        },
+      ],
+    };
 
     const [updatedMain] = await updateMain(
       null,
-      { whereOne, data: dataForUpdate },
+      { whereOneAndData: [{ whereOne, data: dataForUpdate }] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
     );
 
-    expect(updatedMain.textField).toBe(dataForUpdate[0].textField);
+    expect(updatedMain.textField).toBe(dataForUpdate.textField);
     expect(updatedMain.embeddedFields.length).toBe(2);
     expect(updatedMain.embeddedFields[0].embeddedTextField).toBe(
-      dataForUpdate[0].embeddedFields[0].embeddedTextField,
+      dataForUpdate.embeddedFields[0].embeddedTextField,
     );
     expect(updatedMain.embeddedFields[1].embeddedTextField).toBe(
-      dataForUpdate[0].embeddedFields[1].embeddedTextField,
+      dataForUpdate.embeddedFields[1].embeddedTextField,
     );
   });
 
@@ -1054,13 +1036,13 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     );
     if (!updateManyParents) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = [{ name: 'name-2' }];
+    const whereOne = { name: 'name-2' };
 
     const info = createInfoEssence({ projection: { _id: 1, name: 1 } });
-    const data = [{ name: 'name-99' }];
+    const data = { name: 'name-99' };
     const [updatedParent] = await updateManyParents(
       null,
-      { data, whereOne },
+      { whereOneAndData: [{ whereOne, data }] },
       { mongooseConn, pubsub },
       info,
       {
@@ -1072,11 +1054,11 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     expect(updatedParent.name).toBe('name-99');
 
-    const whereOne2 = [{ name: 'name-99' }];
+    const whereOne2 = { name: 'name-99' };
 
     const [updatedParent2] = await updateManyParents(
       null,
-      { data: [{ name: 'updatedName2' }], whereOne: whereOne2 },
+      { whereOneAndData: [{ whereOne: whereOne2, data: { name: 'updatedName2' } }] },
       { mongooseConn, pubsub },
       info,
       {
@@ -1258,17 +1240,15 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
     expect(typeof updateManyPosts).toBe('function');
     if (!updateManyPosts) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereOne = [{ id: post.id.toString() }];
+    const whereOne = { id: post.id.toString() };
 
-    const dataToUpdate = [
-      {
-        restaurant: { connect: '6073f383f1b1bcd591983c92' },
-      },
-    ];
+    const dataToUpdate = {
+      restaurant: { connect: '6073f383f1b1bcd591983c92' },
+    };
 
     const updatedPosts = await updateManyPosts(
       null,
-      { whereOne, data: dataToUpdate },
+      { whereOneAndData: [{ whereOne, data: dataToUpdate }] },
       { mongooseConn, pubsub },
       null,
       {
@@ -1282,16 +1262,14 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     expect(updatedPosts).toBe(null);
 
-    const dataToUpdate2 = [
-      {
-        restaurant: { connect: restaurantId },
-        slug: 'updatedSlug',
-      },
-    ];
+    const dataToUpdate2 = {
+      restaurant: { connect: restaurantId },
+      slug: 'updatedSlug',
+    };
 
     const [updatedPost2] = await updateManyPosts(
       null,
-      { whereOne, data: dataToUpdate2 },
+      { whereOneAndData: [{ whereOne, data: dataToUpdate2 }] },
       { mongooseConn, pubsub },
       null,
       {
@@ -1303,11 +1281,11 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
       },
     );
 
-    expect(updatedPost2.slug).toBe(dataToUpdate2[0].slug);
+    expect(updatedPost2.slug).toBe(dataToUpdate2.slug);
 
     const emptyUpdatedPosts = await updateManyPosts(
       null,
-      { whereOne: [], data: [] },
+      { whereOneAndData: [] },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -1315,15 +1293,13 @@ describe('createUpdateManyEntitiesMutationResolver', () => {
 
     expect(emptyUpdatedPosts).toEqual([]);
 
-    const dataToUpdate3 = [
-      {
-        type: 'toProfessionals',
-      },
-    ];
+    const dataToUpdate3 = {
+      type: 'toProfessionals',
+    };
 
     const updatedPosts2 = await updateManyPosts(
       null,
-      { whereOne, data: dataToUpdate3 },
+      { whereOneAndData: [{ whereOne, data: dataToUpdate3 }] },
       { mongooseConn, pubsub },
       null,
       {

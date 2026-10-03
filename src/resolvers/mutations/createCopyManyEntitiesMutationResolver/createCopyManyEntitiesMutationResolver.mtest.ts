@@ -182,12 +182,14 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     expect(typeof copyManyPersonClones).toBe('function');
     if (!copyManyPersonClones) throw new TypeError('Resolver have to be function!'); // to prevent flowjs error
 
-    const whereKeyToSource = createdPersons.map((item) => ({ original: { id: item.id } }));
+    const sourceAndTarget = createdPersons.map((item) => ({
+      whereKeyToSource: { original: { id: item.id } },
+    }));
 
     const personClonesWithForbiddenField = await copyManyPersonClones(
       null,
       {
-        whereKeyToSource,
+        sourceAndTargetAndData: sourceAndTarget,
         options: { original: { fieldsForbiddenToCopy: ['lastName'] } },
       },
       { mongooseConn, pubsub },
@@ -208,9 +210,11 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     const personClones = await copyManyPersonClones(
       null,
       {
-        whereKeyToSource,
+        sourceAndTargetAndData: [
+          { ...sourceAndTarget[0], data: { info: 'test' } },
+          { ...sourceAndTarget[1], data: { info: 'test!' } },
+        ],
         options: { original: { fieldsToCopy: ['firstName'] } },
-        data: [{ info: 'test' }, { info: 'test!' }],
       },
       { mongooseConn, pubsub },
       null,
@@ -237,7 +241,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personBackups = await copyManyPersonBackups(
       null,
-      { whereKeyToSource },
+      { sourceAndTargetAndData: sourceAndTarget },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -266,8 +270,10 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     const updatedPersons = await updateManyPersons(
       null,
       {
-        whereOne: createdPersons.map((item) => ({ id: item.id })),
-        data: data2,
+        whereOneAndData: createdPersons.map((item, i) => ({
+          whereOne: { id: item.id },
+          data: data2[i],
+        })),
       },
       { mongooseConn, pubsub },
       null,
@@ -279,7 +285,12 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personClones2 = await copyManyPersonClones(
       null,
-      { whereKeyToSource, data: [{ info: 'test2' }, { info: 'test2!' }] },
+      {
+        sourceAndTargetAndData: [
+          { ...sourceAndTarget[0], data: { info: 'test2' } },
+          { ...sourceAndTarget[1], data: { info: 'test2!' } },
+        ],
+      },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -299,7 +310,7 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const personBackups2 = await copyManyPersonBackups(
       null,
-      { whereKeyToSource },
+      { sourceAndTargetAndData: sourceAndTarget },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -317,7 +328,12 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const updatedPersons2 = await updateManyPersons(
       null,
-      { whereOne: createdPersons.map((item) => ({ id: item.id })), data: data3 },
+      {
+        whereOneAndData: createdPersons.map((item, i) => ({
+          whereOne: { id: item.id },
+          data: data3[i],
+        })),
+      },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },
@@ -331,8 +347,10 @@ describe('createCopyManyEntitiesMutationResolver', () => {
     const personBackups3 = await copyManyPersonBackups(
       null,
       {
-        whereKeyToSource,
-        whereTarget: personBackups2.map((item) => ({ id: item.id })),
+        sourceAndTargetAndData: sourceAndTarget.map((item, i) => ({
+          ...item,
+          whereTarget: { id: personBackups2[i].id },
+        })),
       },
       { mongooseConn, pubsub },
       null,
@@ -356,7 +374,11 @@ describe('createCopyManyEntitiesMutationResolver', () => {
 
     const persons = await copyManyPersons(
       null,
-      { whereKeyToSource: personBackups.map((item) => ({ backups: { id: item.id } })) },
+      {
+        sourceAndTargetAndData: personBackups.map((item) => ({
+          whereKeyToSource: { backups: { id: item.id } },
+        })),
+      },
       { mongooseConn, pubsub },
       null,
       { involvedFilters: { inputOutputFilterAndLimit: [[]] } },

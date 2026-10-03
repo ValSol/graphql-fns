@@ -9,7 +9,9 @@ const prepareBulkData: PrepareBulkData = (resolverCreatorArg, resolverArg, prevP
   const { entityConfig } = resolverCreatorArg;
   const { args } = resolverArg;
 
-  const { data } = args as { data: GraphqlObject[] };
+  const { whereOneAndData } = args as { whereOneAndData: Array<{ data: GraphqlObject }> };
+
+  const data = whereOneAndData.map(({ data: dataItem }) => dataItem);
 
   const { duplexFields } = entityConfig as TangibleEntityConfig;
   const duplexFieldsProjection = duplexFields

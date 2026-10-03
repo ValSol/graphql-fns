@@ -8,6 +8,7 @@ import getInputAndOutputFilters from '../../../utils/getInputAndOutputFilters';
 import mergeWhereAndFilter from '../../../utils/mergeWhereAndFilter';
 import composeWhereInput from '../../../utils/mergeWhereAndFilter/composeWhereInput';
 import checkData from '../../checkData';
+import unpairSourceAndTarget from './unpairSourceAndTarget';
 import { GraphqlObject } from '../../../../tsTypes';
 
 const getCommonManyData = async (
@@ -29,17 +30,15 @@ const getCommonManyData = async (
   const { enums } = generalConfig;
   const { name } = entityConfig;
 
-  const {
-    whereKeyToSource,
-    whereTarget,
-    options,
-    data: preAdditionalData,
-  } = args as {
-    whereKeyToSource: GraphqlObject[];
-    whereTarget?: GraphqlObject[];
-    options?: Record<string, GraphqlObject>;
-    data?: Record<string, any>;
-  };
+  const { options } = args as { options?: Record<string, GraphqlObject> };
+
+  const unpaired = unpairSourceAndTarget(args);
+
+  if (!unpaired) {
+    throw new TypeError('Expected "sourceAndTarget…" input!');
+  }
+
+  const { whereKeyToSource, whereTarget, data: additionalData } = unpaired;
 
   whereKeyToSource.forEach((item) => {
     const whereKeyToSourceKeys = Object.keys(item);
@@ -49,20 +48,6 @@ const getCommonManyData = async (
   });
 
   if (whereKeyToSource.length === 0) return [];
-
-  if (whereTarget && whereTarget.length !== whereKeyToSource.length) {
-    throw new TypeError(
-      `whereTarget length: ${whereTarget.length} not equal whereKeyToSource length: ${whereKeyToSource.length}!`,
-    );
-  }
-
-  if (preAdditionalData && preAdditionalData.length !== whereKeyToSource.length) {
-    throw new TypeError(
-      `data length: ${preAdditionalData.length} not equal whereKeyToSource length: ${whereKeyToSource.length}!`,
-    );
-  }
-
-  const additionalData = preAdditionalData || Array(whereKeyToSource.length).fill({});
 
   const { mongooseConn } = context;
 
@@ -140,7 +125,7 @@ const getCommonManyData = async (
   const Entity = await createMongooseModel(mongooseConn, entityConfig, enums);
 
   // every entity is selected separately to keep the order of "whereKeyToSource" items...
-  // ... (entities are matched with "data" & "whereTarget" items by index)
+  // ... (entities are matched with "data" & "whereTarget" of the same items by index)
   const entities: Array<any> = [];
 
   for (let i = 0; i < whereKeyToSource.length; i += 1) {
@@ -162,7 +147,7 @@ const getCommonManyData = async (
 
   if (!oppositeArray) {
     if (whereTarget) {
-      throw new TypeError('Needless whereTarget arg!');
+      throw new TypeError('Needless whereTarget!');
     }
 
     const entitiesWithOppositeName = entities.filter((entity) => entity[oppositeName]);

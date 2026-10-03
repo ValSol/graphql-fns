@@ -3,9 +3,8 @@ import pluralize from 'pluralize';
 import type { ActionInvolvedEntityNames, EntityConfig, GeneralConfig } from '@/tsTypes';
 
 import composeRepresentationConfigByName from '@/utils/composeRepresentationConfigByName';
-import createEntityWhereCompoundOneInputType from '../inputs/createEntityWhereCompoundOneInputType';
-import createEntityWhereOneInputType from '../inputs/createEntityWhereOneInputType';
-import createEntityUpdateInputType from '../inputs/createEntityUpdateInputType';
+import createEntityWhereCompoundOneAndDataInputType from '../inputs/createEntityWhereCompoundOneAndDataInputType';
+import createEntityWhereOneAndDataInputType from '../inputs/createEntityWhereOneAndDataInputType';
 import createStringInputType from '../inputs/createStringInputType';
 
 const actionType = 'Mutation';
@@ -17,19 +16,17 @@ const actionName = (baseName: string, representationKey = ''): string =>
   `updateMany${pluralize(baseName)}${representationKey}`;
 
 const inputCreators = [
-  createEntityWhereOneInputType,
-  createEntityWhereCompoundOneInputType,
-  createEntityUpdateInputType,
+  createEntityWhereOneAndDataInputType,
+  createEntityWhereCompoundOneAndDataInputType,
   createStringInputType,
 ];
 
-const argNames = ['whereOne', 'whereCompoundOne', 'data', 'token'];
+const argNames = ['whereOneAndData', 'whereCompoundOneAndData', 'token'];
 
 const argTypes = [
   ({ name, uniqueCompoundIndexes }): string =>
-    `[${name}WhereOneInput!]${uniqueCompoundIndexes ? '' : '!'}`,
-  ({ name }): string => `[${name}WhereCompoundOneInput!]`,
-  ({ name }): string => `[${name}UpdateInput!]!`,
+    `[${name}WhereOneAndDataInput!]${uniqueCompoundIndexes ? '' : '!'}`,
+  ({ name }): string => `[${name}WhereCompoundOneAndDataInput!]`,
   (): string => 'String',
 ];
 

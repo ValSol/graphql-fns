@@ -117,7 +117,7 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | M1 | `createEntity` | `createX(data: XCreateInput!, token)` → `X!` | — | ✅ `created` |
 | M2 | `createManyEntities` | `createManyXs(data: [XCreateInput!]!, token)` → `[X!]!` | — | ❌ |
 | M3 | `updateEntity` | `updateX(whereOne: XWhereOneInput!, data: XUpdateInput!, token)` → `X!` (***) | — | ✅ `updated` |
-| M4 | `updateManyEntities` | `updateManyXs(whereOne: [..!]!, data: [XUpdateInput!]!, token)` → `[X!]!` (***) | — | ❌ |
+| M4 | `updateManyEntities` | `updateManyXs(whereOneAndData: [XWhereOneAndDataInput!]!, token)` → `[X!]!` (***) | — | ❌ |
 | M5 | `updateFilteredEntities` | `updateFilteredXs(where, near?, search?, data: XUpdateInput!, token)` → `[X!]!` | — | ❌ |
 | M6 | `updateFilteredEntitiesReturnScalar` | `updateFilteredXsReturnScalar(where, near?, search?, data!, token)` → `Int!` | — | ❌ |
 | M7 | `pushIntoEntity` | `pushIntoX(whereOne!, data: PushIntoXInput!, positions: XPushPositionsInput, token)` → `X!` (***) | at least one non-frozen array field (or filter field) | ✅ `updated` |
@@ -130,21 +130,21 @@ Name restrictions (`composeAllEntityConfigs`, `composeEntityConfig`): no `_`, no
 | M14 | `deleteFilteredEntitiesWithChildren` | `deleteFilteredXsWithChildren(where, near?, search?, options, token)` → `[X!]!` | (*) | ❌ |
 | M15 | `deleteFilteredEntitiesWithChildrenReturnScalar` | `…(where, near?, search?, options, token)` → `Int!` | (*) | ❌ |
 | M16 | `copyEntity` | `copyX(whereKeyToSource: XWhereKeyToSourceInput!, options: copyXOptionsInput, whereTarget: XWhereOneInput, whereCompoundTarget: XWhereCompoundOneInput, data: XUpdateInput, token)` → `X!` (****) | (**) | ❌ |
-| M17 | `copyManyEntities` | `copyManyXs(whereKeyToSource: [..!]!, options, whereTarget: [..!], whereCompoundTarget: [..!], data: [..!], token)` → `[X!]!` (****) | (**) | ❌ |
+| M17 | `copyManyEntities` | `copyManyXs(sourceAndTargetAndData: [XCopySourceAndTargetAndDataInput!]!, sourceAndCompoundTargetAndData: [..!], options, token)` → `[X!]!` (****) | (**) | ❌ |
 | M18 | `copyEntityWithChildren` | `copyXWithChildren(whereKeyToSource!, options, whereTarget, whereCompoundTarget, token)` → `X!` (****) | (**) and (*) | ❌ |
-| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(whereKeyToSource: [..!]!, options, whereTarget: [..!], whereCompoundTarget: [..!], token)` → `[X!]!` (****) | (**) and (*) | ❌ |
+| M19 | `copyManyEntitiesWithChildren` | `copyManyXsWithChildren(sourceAndTarget: [XCopySourceAndTargetInput!]!, sourceAndCompoundTarget: [..!], options, token)` → `[X!]!` (****) | (**) and (*) | ❌ |
 | — | `cloneEntity` | removed (see ?7) | — | — |
 
 (*) "Children" are records X refers to through duplex fields with **`parent: true`** whose opposite field is **scalar** (`getNotArrayOppositeDuplexFields`: `parent && !oppositeArray`). The same condition (the `getChildDuplexFields` util) is used both by the schema (`actionAllowed` of all `…WithChildren` mutations, the `deleteXWithChildrenOptionsInput` enum) and at runtime (deleting with children in `processFieldToDelete`, copying the tree in `composeCreateTree`); before `0fb7a9fe` the schema checked a different condition (see B20).
 (**) There is a duplex field `f` for which `getMatchingFields(X, Y)` yields at least one field other than `f` (i.e. X and Y have same-named fields that can be copied).
-(***) ✅ If X has `uniqueCompoundIndexes`, `whereOne` loses `!` (`XWhereOneInput` / `[XWhereOneInput!]`) and `whereCompoundOne: XWhereCompoundOneInput` (`[XWhereCompoundOneInput!]` for `…Many…`) is added, as in Q1. Exactly one of the two is required at runtime; in `…Many…` the chosen array is matched with `data` by index (lengths must be equal), items of `whereCompoundOne` may use different indexes, mixing `whereOne` and `whereCompoundOne` in one call is not possible. Not found by `whereCompoundOne` gives the same result as not found by `whereOne`. Details: [where-compound-one.md](./where-compound-one.md).
-(****) ✅ `whereCompoundTarget` (alternative to `whereTarget`, exactly one of them or none) exists if X can be a copy target and has `uniqueCompoundIndexes`; not found → `Not found "X" entity to copy to: …`, as for `whereTarget`. `whereKeyToSource` has no compound variant (by design).
+(***) ✅ If X has `uniqueCompoundIndexes`, `whereOne` loses `!` (`XWhereOneInput` / `[XWhereOneInput!]`) and `whereCompoundOne: XWhereCompoundOneInput` (`[XWhereCompoundOneInput!]` for `…Many…`) is added, as in Q1. Exactly one of the two is required at runtime. `updateManyXs` has `whereOneAndData` / `whereCompoundOneAndData` instead: items pair the selector with `data` ([paired-items-args.md](./paired-items-args.md)). Items of `whereCompoundOne` may use different indexes, mixing `whereOne` and `whereCompoundOne` in one call is not possible. Not found by `whereCompoundOne` gives the same result as not found by `whereOne`. Details: [where-compound-one.md](./where-compound-one.md).
+(****) ✅ `whereCompoundTarget` (alternative to `whereTarget`, exactly one of them or none) exists if X can be a copy target and has `uniqueCompoundIndexes`; not found → `Not found "X" entity to copy to: …`, as for `whereTarget`. `whereKeyToSource` has no compound variant (by design). In `copyMany…` the source, the target and `data` are paired in items of `sourceAndTarget…` / `sourceAndCompoundTarget…` ([paired-items-args.md](./paired-items-args.md)).
 
 All mutations except `workOutMutations` are built by `composeStandardMutationResolver(resolverAttributes)`: the loop `getPrevious → prepareBulkData → unwindCore → addPeripheryToCore → optimizeBulkItems → incCounters → executeBulkItems`, then `produceResult`, `report` (publishing to pubsub) and `finalResult`. The whole transaction is retried (up to 7 attempts with backoff) only for errors labelled `TransientTransactionError` / `WriteConflict` and only when `serversideConfig.transactions` is enabled; on `UnknownTransactionCommitResult` only `commitTransaction` is retried. Other errors are rethrown as is. The same rule applies to `workOutMutations`.
 
 **`lockedData` in `workOutMutations`** is optimistic locking (not part of the GraphQL schema). Before the mutation `checkLockedData` runs the standard query of the entity the mutation changes (for `copy…`, the X being copied into) with `lockedData.args` and compares the result with `lockedData.result`: if `result` is an object or `null`, `X(whereOne | whereCompoundOne)` is called; if it is an array, `Xs(where, sort, …)` is called and results are compared **by index**, so for arrays `lockedData.args` should include `sort`, otherwise the MongoDB order is not guaranteed and the check may fail spuriously. `whereOne` in `lockedData.args` is an argument of the `X` query, not the `whereTarget` of `copy…` mutations. ✅ `whereCompoundOne` works both in `lockedData.args` and in `args` of the mutations of `workOutMutations` (with mongo ids).
 
-Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereKeyToSource` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`).
+Results of `…Many…` mutations are returned in the order of MongoDB, **not** in the order of `whereOne` / `whereCompoundOne` / `whereOneAndData` / `sourceAnd…Target…` items, for `whereOne` as well: ✅ `updateManyXs`, `copyManyXs` (`produceResult` reads them by `id_in`); 📖 `deleteManyXs` (returns what `getPrevious` found by `$in`/`OR`).
 
 ## 5. Subscription (for tangible `X`)
 
@@ -302,7 +302,7 @@ Hence `whereTarget` is optional, and it is added to the signature only when X ha
 
 ### 12.4. Mutation variants
 
-Current state (after `e2303727`):
+State after `e2303727` (in `copyMany…` the arrays below are now paired in items of one argument, see [paired-items-args.md](./paired-items-args.md)):
 
 | Mutation | `whereKeyToSource` | `whereTarget` | `data` | Notes |
 |---|---|---|---|---|

@@ -905,7 +905,10 @@ describe('graphql schema', () => {
       /\n  copyMenu\(whereKeyToSource: MenuWhereKeyToSourceInput!, options: copyMenuOptionsInput, whereTarget: MenuWhereOneInput, data: MenuUpdateInput, token: String\): Menu!\n/,
     );
     expect(typeDefs).toMatch(
-      /\n  copyManyMenusWithChildren\(whereKeyToSource: \[MenuWhereKeyToSourceInput!\]!, options: copyMenuOptionsInput, whereTarget: \[MenuWhereOneInput!\], token: String\): \[Menu!\]!\n/,
+      /\n  copyManyMenusWithChildren\(sourceAndTarget: \[MenuCopySourceAndTargetInput!\]!, options: copyMenuOptionsInput, token: String\): \[Menu!\]!\n/,
+    );
+    expect(typeDefs).toMatch(
+      /\ninput MenuCopySourceAndTargetInput \{\n  whereKeyToSource: MenuWhereKeyToSourceInput!\n  whereTarget: MenuWhereOneInput\n\}/,
     );
     expect(typeDefs).toMatch(
       /\ninput MenuWhereKeyToSourceInput \{\n  original: MenuTemplateWhereOneInput\n/,

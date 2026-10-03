@@ -160,13 +160,13 @@ await run(
 
 // 4. links to the same entity: a second pass over the created countries
 await run(
-  `mutation ($whereOne: [CountryWhereOneInput!]!, $data: [CountryUpdateInput!]!) {
-    updateManyCountries(whereOne: $whereOne, data: $data) { id }
+  `mutation ($whereOneAndData: [CountryWhereOneAndDataInput!]!) {
+    updateManyCountries(whereOneAndData: $whereOneAndData) { id }
   }`,
   {
-    whereOne: countries.map(({ code }) => ({ code })),
-    data: countries.map(({ neighbourCodes }) => ({
-      neighbours: { connect: neighbourCodes.map((code) => countryIds[code]) },
+    whereOneAndData: countries.map(({ code, neighbourCodes }) => ({
+      whereOne: { code },
+      data: { neighbours: { connect: neighbourCodes.map((code2) => countryIds[code2]) } },
     })),
   },
 );

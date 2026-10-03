@@ -10,6 +10,7 @@ import authDecorator from './authDecorator';
 import transformAfter from './transformAfter';
 import transformBefore from './transformBefore';
 import transformData from './transformBefore/transformData';
+import transformPairedItems from './transformBefore/transformPairedItems';
 import transformWhere from './transformBefore/transformWhere';
 import transformWhereAndSearch from './transformBefore/transformWhereAndSearch';
 import transformWhereOne from './transformBefore/transformWhereOne';
@@ -28,6 +29,12 @@ const argTypesPrefixPlusSuffixes = [
   ['WhereOneInput', transformWhereOne, false],
   ['WhereCompoundOneInput', transformWhere, false],
   ['WhereKeyToSourceInput', transformWhereKeyToSource, false],
+  ['WhereOneAndDataInput', transformPairedItems, false],
+  ['WhereCompoundOneAndDataInput', transformPairedItems, false],
+  ['CopySourceAndTargetAndDataInput', transformPairedItems, false],
+  ['CopySourceAndCompoundTargetAndDataInput', transformPairedItems, false],
+  ['CopySourceAndTargetInput', transformPairedItems, false],
+  ['CopySourceAndCompoundTargetInput', transformPairedItems, false],
 ];
 
 // separate cache for every combination of generalConfig, serversideConfig & actionAttributes

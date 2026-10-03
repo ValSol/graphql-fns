@@ -175,10 +175,10 @@ describe('whereCompoundOne in mutations', () => {
       'updateCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, data: CityUpdateInput!, token: String): City!',
       'deleteCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, token: String): City!',
       'pushIntoCity(whereOne: CityWhereOneInput, whereCompoundOne: CityWhereCompoundOneInput, data: PushIntoCityInput!, positions: CityPushPositionsInput, token: String): City!',
-      'updateManyCities(whereOne: [CityWhereOneInput!], whereCompoundOne: [CityWhereCompoundOneInput!], data: [CityUpdateInput!]!, token: String): [City!]!',
+      'updateManyCities(whereOneAndData: [CityWhereOneAndDataInput!], whereCompoundOneAndData: [CityWhereCompoundOneAndDataInput!], token: String): [City!]!',
       'deleteManyCities(whereOne: [CityWhereOneInput!], whereCompoundOne: [CityWhereCompoundOneInput!], token: String): [City!]!',
       'updateCityForCatalog(whereOne: CityForCatalogWhereOneInput, whereCompoundOne: CityForCatalogWhereCompoundOneInput, data: CityForCatalogUpdateInput!, token: String): CityForCatalog!',
-      'updateManyCitiesForCatalog(whereOne: [CityForCatalogWhereOneInput!], whereCompoundOne: [CityForCatalogWhereCompoundOneInput!], data: [CityForCatalogUpdateInput!]!, token: String): [CityForCatalog!]!',
+      'updateManyCitiesForCatalog(whereOneAndData: [CityForCatalogWhereOneAndDataInput!], whereCompoundOneAndData: [CityForCatalogWhereCompoundOneAndDataInput!], token: String): [CityForCatalog!]!',
       // a representation without a field of an index has no "uniqueCompoundIndexes"
       'CityForMap(whereOne: CityForMapWhereOneInput!, token: String): CityForMap',
       'updateCityForMap(whereOne: CityForMapWhereOneInput!, data: CityForMapUpdateInput!, token: String): CityForMap!',
@@ -199,7 +199,7 @@ describe('whereCompoundOne in mutations', () => {
       /copyPersonBackup\(.*whereTarget: PersonBackupWhereOneInput, whereCompoundTarget: PersonBackupWhereCompoundOneInput, /,
     );
     expect(sdl).toMatch(
-      /copyManyPersonBackups\(.*whereTarget: \[PersonBackupWhereOneInput!\], whereCompoundTarget: \[PersonBackupWhereCompoundOneInput!\], /,
+      /copyManyPersonBackups\(sourceAndTargetAndData: \[PersonBackupCopySourceAndTargetAndDataInput!\], sourceAndCompoundTargetAndData: \[PersonBackupCopySourceAndCompoundTargetAndDataInput!\], /,
     );
 
     expect(sdl).not.toMatch(/WhereCompoundOneInput \{[^}]*_exists/);
@@ -330,11 +330,10 @@ describe('whereCompoundOne in mutations', () => {
     // different indexes in one array (results of "…Many…" are in the order of the db, as for "whereOne")
     const r1 = await run(`mutation {
       updateManyCities(
-        whereCompoundOne: [
-          { postcode: "30000", country: "${pl}" }
-          { name: "Odesa", country: "${ua}" }
+        whereCompoundOneAndData: [
+          { whereCompoundOne: { postcode: "30000", country: "${pl}" }, data: { population: 30 } }
+          { whereCompoundOne: { name: "Odesa", country: "${ua}" }, data: { population: 65 } }
         ]
-        data: [{ population: 30 }, { population: 65 }]
       ) { id population }
     }`);
     expect(r1.errors).toBeUndefined();
@@ -347,30 +346,45 @@ describe('whereCompoundOne in mutations', () => {
 
     const r2 = await run(`mutation {
       updateManyCitiesForCatalog(
-        whereCompoundOne: [{ name: "Odesa", country: "${ua}" }]
-        data: [{ population: 66 }]
+        whereCompoundOneAndData: [
+          { whereCompoundOne: { name: "Odesa", country: "${ua}" }, data: { population: 66 } }
+        ]
       ) { id population }
     }`);
     expect(r2.errors).toBeUndefined();
     expect(mongoId((r2.data as any).updateManyCitiesForCatalog[0].id)).toBe(mongoId(odesa));
 
-    const lengths = await run(`mutation {
-      updateManyCities(whereCompoundOne: [{ name: "Odesa", country: "${ua}" }], data: []) { id }
+    const both = await run(`mutation {
+      updateManyCities(
+        whereOneAndData: [{ whereOne: { id: "${odesa}" }, data: { population: 0 } }]
+        whereCompoundOneAndData: [
+          { whereCompoundOne: { name: "Odesa", country: "${ua}" }, data: { population: 0 } }
+        ]
+      ) { id }
     }`);
-    expect(lengths.errors?.[0]).toMatch(/^Length of whereOne is "1", length of data is "0"/);
+    expect(both.errors).toEqual([
+      'Expected exactly one input from "whereOneAndData" && "whereCompoundOneAndData"!',
+    ]);
+
+    const none = await run('mutation { updateManyCities { id } }');
+    expect(none.errors).toEqual(['Expected "whereCompoundOneAndData" or "whereOneAndData" input!']);
 
     // one item is not found: nothing is changed, as for "whereOne"
     const notFound = await run(`mutation {
       updateManyCities(
-        whereCompoundOne: [{ name: "Odesa", country: "${ua}" }, { name: "Absent", country: "${ua}" }]
-        data: [{ population: 0 }, { population: 0 }]
+        whereCompoundOneAndData: [
+          { whereCompoundOne: { name: "Odesa", country: "${ua}" }, data: { population: 0 } }
+          { whereCompoundOne: { name: "Absent", country: "${ua}" }, data: { population: 0 } }
+        ]
       ) { id }
     }`);
     const absentId = toGlobalId(new mongoose.Types.ObjectId().toString(), 'City');
     const notFoundByWhereOne = await run(`mutation {
       updateManyCities(
-        whereOne: [{ id: "${odesa}" }, { id: "${absentId}" }]
-        data: [{ population: 0 }, { population: 0 }]
+        whereOneAndData: [
+          { whereOne: { id: "${odesa}" }, data: { population: 0 } }
+          { whereOne: { id: "${absentId}" }, data: { population: 0 } }
+        ]
       ) { id }
     }`);
     expect(notFound.errors).toHaveLength(1);
@@ -428,8 +442,10 @@ describe('whereCompoundOne in mutations', () => {
 
     await run(`mutation {
       updateManyPeople(
-        whereOne: [{ id: "${hugo}" }, { id: "${coco}" }]
-        data: [{ firstName: "Hugo2" }, { firstName: "Coco2" }]
+        whereOneAndData: [
+          { whereOne: { id: "${hugo}" }, data: { firstName: "Hugo2" } }
+          { whereOne: { id: "${coco}" }, data: { firstName: "Coco2" } }
+        ]
       ) { id }
     }`);
 
@@ -445,17 +461,24 @@ describe('whereCompoundOne in mutations', () => {
 
     await run(`mutation {
       updateManyPeople(
-        whereOne: [{ id: "${hugo}" }, { id: "${coco}" }]
-        data: [{ firstName: "Hugo3" }, { firstName: "Coco3" }]
+        whereOneAndData: [
+          { whereOne: { id: "${hugo}" }, data: { firstName: "Hugo3" } }
+          { whereOne: { id: "${coco}" }, data: { firstName: "Coco3" } }
+        ]
       ) { id }
     }`);
 
     const r2 = await run(`mutation {
       copyManyPersonBackups(
-        whereKeyToSource: [{ original: { id: "${coco}" } }, { original: { id: "${hugo}" } }]
-        whereCompoundTarget: [
-          { lastName: "Chanel", original: "${coco}" }
-          { lastName: "Boss", original: "${hugo}" }
+        sourceAndCompoundTargetAndData: [
+          {
+            whereKeyToSource: { original: { id: "${coco}" } }
+            whereCompoundTarget: { lastName: "Chanel", original: "${coco}" }
+          }
+          {
+            whereKeyToSource: { original: { id: "${hugo}" } }
+            whereCompoundTarget: { lastName: "Boss", original: "${hugo}" }
+          }
         ]
       ) { id firstName }
     }`);

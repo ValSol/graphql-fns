@@ -25,15 +25,15 @@ const getPrevious: GetPrevious = async (
 
   if (!inputFilter || !outputFilter) return null;
 
-  const { data, whereOne } = args as { data: GraphqlObject[]; whereOne: InvolvedFilter[] };
+  // "whereCompoundOneAndData" is already replaced by "whereOneAndData" (see "normalizeWhereCompoundOne")
+  const { whereOneAndData } = args as {
+    whereOneAndData: Array<{ whereOne: InvolvedFilter; data: GraphqlObject }>;
+  };
 
-  if (whereOne.length !== data.length) {
-    throw new TypeError(
-      `Length of whereOne is "${whereOne.length}", length of data is "${data.length}" but have to be equal!`,
-    );
-  }
+  if (!whereOneAndData.length) return [];
 
-  if (!whereOne.length) return [];
+  const whereOne = whereOneAndData.map(({ whereOne: whereOneItem }) => whereOneItem);
+  const data = whereOneAndData.map(({ data: dataItem }) => dataItem);
 
   const [whereKey] = Object.keys(whereOne[0]);
 

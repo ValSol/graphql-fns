@@ -447,8 +447,10 @@ describe('calculated fields: mutations', () => {
   test('list mutation result: list cardinality', async () => {
     const { updateManyBooks } = await run(`mutation {
       updateManyBooks(
-        whereOne: [{ id: "${bookIds.abc}" }, { id: "${bookIds.def}" }]
-        data: [{ price: 11 }, { price: 21 }]
+        whereOneAndData: [
+          { whereOne: { id: "${bookIds.abc}" }, data: { price: 11 } }
+          { whereOne: { id: "${bookIds.def}" }, data: { price: 21 } }
+        ]
       ) { title priceWithTax summary { text position } }
     }`);
 
@@ -466,8 +468,10 @@ describe('calculated fields: mutations', () => {
 
     await run(`mutation {
       updateManyBooks(
-        whereOne: [{ id: "${bookIds.abc}" }, { id: "${bookIds.def}" }]
-        data: [{ price: 10 }, { price: 20 }]
+        whereOneAndData: [
+          { whereOne: { id: "${bookIds.abc}" }, data: { price: 10 } }
+          { whereOne: { id: "${bookIds.def}" }, data: { price: 20 } }
+        ]
       ) { id }
     }`);
   });

@@ -3,6 +3,7 @@ import type { GeneralConfig, EntityConfig } from '../../../../tsTypes';
 import composeRepresentationConfigByName from '../../../../utils/composeRepresentationConfigByName';
 import parseEntityName from '../../../../utils/parseEntityName';
 import transformData from './transformData';
+import transformPairedItems from './transformPairedItems';
 import transformWhere from './transformWhere';
 import transformWhereAndSearch from './transformWhereAndSearch';
 import transformWhereOne from './transformWhereOne';
@@ -20,6 +21,12 @@ const argTypesInParts = [
   ['', 'WhereOneInput', transformWhereOne, false],
   ['', 'WhereCompoundOneInput', transformWhere, false],
   ['', 'WhereKeyToSourceInput', transformWhereKeyToSource, false],
+  ['', 'WhereOneAndDataInput', transformPairedItems, false],
+  ['', 'WhereCompoundOneAndDataInput', transformPairedItems, false],
+  ['', 'CopySourceAndTargetAndDataInput', transformPairedItems, false],
+  ['', 'CopySourceAndCompoundTargetAndDataInput', transformPairedItems, false],
+  ['', 'CopySourceAndTargetInput', transformPairedItems, false],
+  ['', 'CopySourceAndCompoundTargetInput', transformPairedItems, false],
 ];
 
 const getPossibleEntityName = (prefix: string, suffix: string, argType: string) =>

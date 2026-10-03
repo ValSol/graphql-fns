@@ -6,6 +6,7 @@ import processCreateInputData from '../../processCreateInputData';
 import processDeleteData from '../../processDeleteData';
 import processDeleteDataPrepareArgs from '../../processDeleteDataPrepareArgs';
 import getCommonManyData from '../../createCopyManyEntitiesMutationResolver/resolverAttributes/getCommonData';
+import unpairSourceAndTarget from '../../createCopyManyEntitiesMutationResolver/resolverAttributes/unpairSourceAndTarget';
 import getCommonData from './getCommonData';
 
 const prepareBulkData: PrepareBulkData = async (
@@ -16,14 +17,17 @@ const prepareBulkData: PrepareBulkData = async (
 ) => {
   const { entityConfig } = resolverCreatorArg as { entityConfig: TangibleEntityConfig };
   const {
-    args: { whereKeyToSource, data: additionalData },
+    args: { data: additionalData },
   } = resolverArg;
   const { core } = prevPreparedData;
 
-  const getMains = Array.isArray(whereKeyToSource) ? getCommonManyData : getCommonData;
+  // shared by "copyX" & "copyManyXs"
+  const unpaired = unpairSourceAndTarget(resolverArg.args);
 
-  const additionalDataArr = Array.isArray(whereKeyToSource)
-    ? additionalData || Array(whereKeyToSource.length).fill({})
+  const getMains = unpaired ? getCommonManyData : getCommonData;
+
+  const additionalDataArr: Array<any> = unpaired
+    ? unpaired.data
     : additionalData
       ? [additionalData]
       : [{}];

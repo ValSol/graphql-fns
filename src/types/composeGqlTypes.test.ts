@@ -641,9 +641,19 @@ input MenuSectionWhereByUniqueInput {
 input MenuCloneSectionWhereByUniqueInput {
   id_in: [ID!]
 }
+input MenuCopySourceAndTargetAndDataInput {
+  whereKeyToSource: MenuWhereKeyToSourceInput!
+  data: MenuUpdateInput
+}
 input MenuWhereKeyToSourceInput {
   clone: MenuCloneWhereOneInput
   sections: MenuSectionWhereOneInput
+}
+input MenuUpdateInput {
+  name: String
+  clone: MenuCloneCreateChildInput
+  sections: MenuSectionCreateOrPushChildrenInput
+  selectedSections: MenuSectionWhereInput
 }
 enum copyMenuThroughcloneOptionsEnum {
   name
@@ -664,15 +674,18 @@ input copyMenuOptionsInput {
   clone: copyMenuThroughcloneOptionInput
   sections: copyMenuThroughsectionsOptionInput
 }
-input MenuUpdateInput {
-  name: String
-  clone: MenuCloneCreateChildInput
-  sections: MenuSectionCreateOrPushChildrenInput
-  selectedSections: MenuSectionWhereInput
+input MenuCloneCopySourceAndTargetAndDataInput {
+  whereKeyToSource: MenuCloneWhereKeyToSourceInput!
+  data: MenuCloneUpdateInput
 }
 input MenuCloneWhereKeyToSourceInput {
   original: MenuWhereOneInput
   sections: MenuCloneSectionWhereOneInput
+}
+input MenuCloneUpdateInput {
+  name: String
+  original: MenuCreateChildInput
+  sections: MenuCloneSectionCreateOrPushChildrenInput
 }
 enum copyMenuCloneThroughoriginalOptionsEnum {
   name
@@ -693,13 +706,17 @@ input copyMenuCloneOptionsInput {
   original: copyMenuCloneThroughoriginalOptionInput
   sections: copyMenuCloneThroughsectionsOptionInput
 }
-input MenuCloneUpdateInput {
-  name: String
-  original: MenuCreateChildInput
-  sections: MenuCloneSectionCreateOrPushChildrenInput
+input MenuSectionCopySourceAndTargetAndDataInput {
+  whereKeyToSource: MenuSectionWhereKeyToSourceInput!
+  whereTarget: MenuSectionWhereOneInput
+  data: MenuSectionUpdateInput
 }
 input MenuSectionWhereKeyToSourceInput {
   menu: MenuWhereOneInput
+}
+input MenuSectionUpdateInput {
+  name: String
+  menu: MenuCreateChildInput
 }
 enum copyMenuSectionThroughmenuOptionsEnum {
   name
@@ -711,12 +728,17 @@ input copyMenuSectionThroughmenuOptionInput {
 input copyMenuSectionOptionsInput {
   menu: copyMenuSectionThroughmenuOptionInput
 }
-input MenuSectionUpdateInput {
-  name: String
-  menu: MenuCreateChildInput
+input MenuCloneSectionCopySourceAndTargetAndDataInput {
+  whereKeyToSource: MenuCloneSectionWhereKeyToSourceInput!
+  whereTarget: MenuCloneSectionWhereOneInput
+  data: MenuCloneSectionUpdateInput
 }
 input MenuCloneSectionWhereKeyToSourceInput {
   menu: MenuCloneWhereOneInput
+}
+input MenuCloneSectionUpdateInput {
+  name: String
+  menu: MenuCloneCreateChildInput
 }
 enum copyMenuCloneSectionThroughmenuOptionsEnum {
   name
@@ -728,9 +750,11 @@ input copyMenuCloneSectionThroughmenuOptionInput {
 input copyMenuCloneSectionOptionsInput {
   menu: copyMenuCloneSectionThroughmenuOptionInput
 }
-input MenuCloneSectionUpdateInput {
-  name: String
-  menu: MenuCloneCreateChildInput
+input MenuCopySourceAndTargetInput {
+  whereKeyToSource: MenuWhereKeyToSourceInput!
+}
+input MenuCloneCopySourceAndTargetInput {
+  whereKeyToSource: MenuCloneWhereKeyToSourceInput!
 }
 enum deleteMenuWithChildrenOptionsEnum {
   clone
@@ -756,6 +780,26 @@ input PushIntoMenuCloneInput {
 }
 input MenuClonePushPositionsInput {
   sections: [Int!]
+}
+input MenuWhereOneAndDataInput {
+  whereOne: MenuWhereOneInput!
+  data: MenuUpdateInput!
+}
+input MenuWhereCompoundOneAndDataInput {
+  whereCompoundOne: MenuWhereCompoundOneInput!
+  data: MenuUpdateInput!
+}
+input MenuCloneWhereOneAndDataInput {
+  whereOne: MenuCloneWhereOneInput!
+  data: MenuCloneUpdateInput!
+}
+input MenuSectionWhereOneAndDataInput {
+  whereOne: MenuSectionWhereOneInput!
+  data: MenuSectionUpdateInput!
+}
+input MenuCloneSectionWhereOneAndDataInput {
+  whereOne: MenuCloneSectionWhereOneInput!
+  data: MenuCloneSectionUpdateInput!
 }
 input MenuWherePayloadInput {
   id_in: [ID!]
@@ -999,12 +1043,12 @@ type Query {
   MenuCloneSectionsByUnique(where: MenuCloneSectionWhereByUniqueInput!, sort: MenuCloneSectionSortInput, token: String): [MenuCloneSection!]!
 }
 type Mutation {
-  copyManyMenus(whereKeyToSource: [MenuWhereKeyToSourceInput!]!, options: copyMenuOptionsInput, data: [MenuUpdateInput!], token: String): [Menu!]!
-  copyManyMenuClones(whereKeyToSource: [MenuCloneWhereKeyToSourceInput!]!, options: copyMenuCloneOptionsInput, data: [MenuCloneUpdateInput!], token: String): [MenuClone!]!
-  copyManyMenuSections(whereKeyToSource: [MenuSectionWhereKeyToSourceInput!]!, options: copyMenuSectionOptionsInput, whereTarget: [MenuSectionWhereOneInput!], data: [MenuSectionUpdateInput!], token: String): [MenuSection!]!
-  copyManyMenuCloneSections(whereKeyToSource: [MenuCloneSectionWhereKeyToSourceInput!]!, options: copyMenuCloneSectionOptionsInput, whereTarget: [MenuCloneSectionWhereOneInput!], data: [MenuCloneSectionUpdateInput!], token: String): [MenuCloneSection!]!
-  copyManyMenusWithChildren(whereKeyToSource: [MenuWhereKeyToSourceInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
-  copyManyMenuClonesWithChildren(whereKeyToSource: [MenuCloneWhereKeyToSourceInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
+  copyManyMenus(sourceAndTargetAndData: [MenuCopySourceAndTargetAndDataInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
+  copyManyMenuClones(sourceAndTargetAndData: [MenuCloneCopySourceAndTargetAndDataInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
+  copyManyMenuSections(sourceAndTargetAndData: [MenuSectionCopySourceAndTargetAndDataInput!]!, options: copyMenuSectionOptionsInput, token: String): [MenuSection!]!
+  copyManyMenuCloneSections(sourceAndTargetAndData: [MenuCloneSectionCopySourceAndTargetAndDataInput!]!, options: copyMenuCloneSectionOptionsInput, token: String): [MenuCloneSection!]!
+  copyManyMenusWithChildren(sourceAndTarget: [MenuCopySourceAndTargetInput!]!, options: copyMenuOptionsInput, token: String): [Menu!]!
+  copyManyMenuClonesWithChildren(sourceAndTarget: [MenuCloneCopySourceAndTargetInput!]!, options: copyMenuCloneOptionsInput, token: String): [MenuClone!]!
   copyMenu(whereKeyToSource: MenuWhereKeyToSourceInput!, options: copyMenuOptionsInput, data: MenuUpdateInput, token: String): Menu!
   copyMenuClone(whereKeyToSource: MenuCloneWhereKeyToSourceInput!, options: copyMenuCloneOptionsInput, data: MenuCloneUpdateInput, token: String): MenuClone!
   copyMenuSection(whereKeyToSource: MenuSectionWhereKeyToSourceInput!, options: copyMenuSectionOptionsInput, whereTarget: MenuSectionWhereOneInput, data: MenuSectionUpdateInput, token: String): MenuSection!
@@ -1053,10 +1097,10 @@ type Mutation {
   updateFilteredMenuClonesReturnScalar(where: MenuCloneWhereInput, data: MenuCloneUpdateInput!, token: String): Int!
   updateFilteredMenuSectionsReturnScalar(where: MenuSectionWhereInput, data: MenuSectionUpdateInput!, token: String): Int!
   updateFilteredMenuCloneSectionsReturnScalar(where: MenuCloneSectionWhereInput, data: MenuCloneSectionUpdateInput!, token: String): Int!
-  updateManyMenus(whereOne: [MenuWhereOneInput!], whereCompoundOne: [MenuWhereCompoundOneInput!], data: [MenuUpdateInput!]!, token: String): [Menu!]!
-  updateManyMenuClones(whereOne: [MenuCloneWhereOneInput!]!, data: [MenuCloneUpdateInput!]!, token: String): [MenuClone!]!
-  updateManyMenuSections(whereOne: [MenuSectionWhereOneInput!]!, data: [MenuSectionUpdateInput!]!, token: String): [MenuSection!]!
-  updateManyMenuCloneSections(whereOne: [MenuCloneSectionWhereOneInput!]!, data: [MenuCloneSectionUpdateInput!]!, token: String): [MenuCloneSection!]!
+  updateManyMenus(whereOneAndData: [MenuWhereOneAndDataInput!], whereCompoundOneAndData: [MenuWhereCompoundOneAndDataInput!], token: String): [Menu!]!
+  updateManyMenuClones(whereOneAndData: [MenuCloneWhereOneAndDataInput!]!, token: String): [MenuClone!]!
+  updateManyMenuSections(whereOneAndData: [MenuSectionWhereOneAndDataInput!]!, token: String): [MenuSection!]!
+  updateManyMenuCloneSections(whereOneAndData: [MenuCloneSectionWhereOneAndDataInput!]!, token: String): [MenuCloneSection!]!
   updateMenu(whereOne: MenuWhereOneInput, whereCompoundOne: MenuWhereCompoundOneInput, data: MenuUpdateInput!, token: String): Menu!
   updateMenuClone(whereOne: MenuCloneWhereOneInput!, data: MenuCloneUpdateInput!, token: String): MenuClone!
   updateMenuSection(whereOne: MenuSectionWhereOneInput!, data: MenuSectionUpdateInput!, token: String): MenuSection!
@@ -1514,6 +1558,14 @@ input Example2UpdateInput {
   textField2: [String!]
   area: GeospatialPolygonInput
 }
+input Example1WhereOneAndDataInput {
+  whereOne: Example1WhereOneInput!
+  data: Example1UpdateInput!
+}
+input Example2WhereOneAndDataInput {
+  whereOne: Example2WhereOneInput!
+  data: Example2UpdateInput!
+}
 input Example1WherePayloadInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -1675,8 +1727,8 @@ type Mutation {
   updateFilteredExample2s(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): [Example2!]!
   updateFilteredExample1sReturnScalar(where: Example1WhereInput, near: Example1NearInput, data: Example1UpdateInput!, token: String): Int!
   updateFilteredExample2sReturnScalar(where: Example2WhereInput, near: Example2NearInput, data: Example2UpdateInput!, token: String): Int!
-  updateManyExample1s(whereOne: [Example1WhereOneInput!]!, data: [Example1UpdateInput!]!, token: String): [Example1!]!
-  updateManyExample2s(whereOne: [Example2WhereOneInput!]!, data: [Example2UpdateInput!]!, token: String): [Example2!]!
+  updateManyExample1s(whereOneAndData: [Example1WhereOneAndDataInput!]!, token: String): [Example1!]!
+  updateManyExample2s(whereOneAndData: [Example2WhereOneAndDataInput!]!, token: String): [Example2!]!
   updateExample1(whereOne: Example1WhereOneInput!, data: Example1UpdateInput!, token: String): Example1!
   updateExample2(whereOne: Example2WhereOneInput!, data: Example2UpdateInput!, token: String): Example2!
 }
@@ -2050,6 +2102,14 @@ input PersonUpdateInput {
 input PlaceUpdateInput {
   title: String
 }
+input PersonWhereOneAndDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonUpdateInput!
+}
+input PlaceWhereOneAndDataInput {
+  whereOne: PlaceWhereOneInput!
+  data: PlaceUpdateInput!
+}
 input PersonWherePayloadInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2206,8 +2266,8 @@ type Mutation {
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
   updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
-  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!, token: String): [Place!]!
+  updateManyPeople(whereOneAndData: [PersonWhereOneAndDataInput!]!, token: String): [Person!]!
+  updateManyPlaces(whereOneAndData: [PlaceWhereOneAndDataInput!]!, token: String): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
@@ -2510,6 +2570,10 @@ input AddressUpdateInput {
   country: String
   province: String
 }
+input PersonWhereOneAndDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonUpdateInput!
+}
 input PersonWherePayloadInput {
   id_in: [ID!]
   id_nin: [ID!]
@@ -2620,7 +2684,7 @@ type Mutation {
   pushIntoPerson(whereOne: PersonWhereOneInput!, data: PushIntoPersonInput!, positions: PersonPushPositionsInput, token: String): Person!
   updateFilteredPeople(where: PersonWhereInput, data: PersonUpdateInput!, token: String): [Person!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
+  updateManyPeople(whereOneAndData: [PersonWhereOneAndDataInput!]!, token: String): [Person!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
 }
 type Subscription {
@@ -2942,35 +3006,14 @@ input PersonWhereByUniqueInput {
 input PlaceWhereByUniqueInput {
   id_in: [ID!]
 }
+input PersonCopySourceAndTargetAndDataInput {
+  whereKeyToSource: PersonWhereKeyToSourceInput!
+  whereTarget: PersonWhereOneInput
+  data: PersonUpdateInput
+}
 input PersonWhereKeyToSourceInput {
   friends: PersonWhereOneInput
   enemies: PersonWhereOneInput
-}
-enum copyPersonThroughfriendsOptionsEnum {
-  firstName
-  lastName
-  enemies
-  location
-  favoritePlace
-}
-enum copyPersonThroughenemiesOptionsEnum {
-  firstName
-  lastName
-  friends
-  location
-  favoritePlace
-}
-input copyPersonThroughfriendsOptionInput {
-  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]
-  fieldsForbiddenToCopy: [copyPersonThroughfriendsOptionsEnum!]
-}
-input copyPersonThroughenemiesOptionInput {
-  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]
-  fieldsForbiddenToCopy: [copyPersonThroughenemiesOptionsEnum!]
-}
-input copyPersonOptionsInput {
-  friends: copyPersonThroughfriendsOptionInput
-  enemies: copyPersonThroughenemiesOptionInput
 }
 input PersonUpdateInput {
   firstName: String
@@ -3047,6 +3090,32 @@ input PlaceCreateOrPushChildrenInput {
   create: [PlaceCreateInput!]
   createPositions: [Int!]
 }
+enum copyPersonThroughfriendsOptionsEnum {
+  firstName
+  lastName
+  enemies
+  location
+  favoritePlace
+}
+enum copyPersonThroughenemiesOptionsEnum {
+  firstName
+  lastName
+  friends
+  location
+  favoritePlace
+}
+input copyPersonThroughfriendsOptionInput {
+  fieldsToCopy: [copyPersonThroughfriendsOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughfriendsOptionsEnum!]
+}
+input copyPersonThroughenemiesOptionInput {
+  fieldsToCopy: [copyPersonThroughenemiesOptionsEnum!]
+  fieldsForbiddenToCopy: [copyPersonThroughenemiesOptionsEnum!]
+}
+input copyPersonOptionsInput {
+  friends: copyPersonThroughfriendsOptionInput
+  enemies: copyPersonThroughenemiesOptionInput
+}
 input PushIntoPersonInput {
   friends: PersonCreateOrPushThru_friends_FieldChildrenInput
   enemies: PersonCreateOrPushChildrenInput
@@ -3067,6 +3136,14 @@ input PlaceUpdateInput {
   name: String
   citizens: PersonCreateOrPushThru_location_FieldChildrenInput
   visitors: PersonCreateOrPushChildrenInput
+}
+input PersonWhereOneAndDataInput {
+  whereOne: PersonWhereOneInput!
+  data: PersonUpdateInput!
+}
+input PlaceWhereOneAndDataInput {
+  whereOne: PlaceWhereOneInput!
+  data: PlaceUpdateInput!
 }
 input PersonWherePayloadInput {
   id_in: [ID!]
@@ -3217,7 +3294,7 @@ type Query {
   PlacesByUnique(where: PlaceWhereByUniqueInput!, sort: PlaceSortInput, token: String): [Place!]!
 }
 type Mutation {
-  copyManyPeople(whereKeyToSource: [PersonWhereKeyToSourceInput!]!, options: copyPersonOptionsInput, whereTarget: [PersonWhereOneInput!], data: [PersonUpdateInput!], token: String): [Person!]!
+  copyManyPeople(sourceAndTargetAndData: [PersonCopySourceAndTargetAndDataInput!]!, options: copyPersonOptionsInput, token: String): [Person!]!
   copyPerson(whereKeyToSource: PersonWhereKeyToSourceInput!, options: copyPersonOptionsInput, whereTarget: PersonWhereOneInput, data: PersonUpdateInput, token: String): Person!
   createManyPeople(data: [PersonCreateInput!]!, token: String): [Person!]!
   createManyPlaces(data: [PlaceCreateInput!]!, token: String): [Place!]!
@@ -3237,8 +3314,8 @@ type Mutation {
   updateFilteredPlaces(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): [Place!]!
   updateFilteredPeopleReturnScalar(where: PersonWhereInput, data: PersonUpdateInput!, token: String): Int!
   updateFilteredPlacesReturnScalar(where: PlaceWhereInput, data: PlaceUpdateInput!, token: String): Int!
-  updateManyPeople(whereOne: [PersonWhereOneInput!]!, data: [PersonUpdateInput!]!, token: String): [Person!]!
-  updateManyPlaces(whereOne: [PlaceWhereOneInput!]!, data: [PlaceUpdateInput!]!, token: String): [Place!]!
+  updateManyPeople(whereOneAndData: [PersonWhereOneAndDataInput!]!, token: String): [Person!]!
+  updateManyPlaces(whereOneAndData: [PlaceWhereOneAndDataInput!]!, token: String): [Place!]!
   updatePerson(whereOne: PersonWhereOneInput!, data: PersonUpdateInput!, token: String): Person!
   updatePlace(whereOne: PlaceWhereOneInput!, data: PlaceUpdateInput!, token: String): Place!
 }
@@ -3518,6 +3595,10 @@ input ExampleWhereOneInput {
 input ExampleUpdateInput {
   textField: String
 }
+input ExampleWhereOneAndDataInput {
+  whereOne: ExampleWhereOneInput!
+  data: ExampleUpdateInput!
+}
 type Query {
   node(id: ID!): Node
 }
@@ -3530,7 +3611,7 @@ type Mutation {
   deleteExample(whereOne: ExampleWhereOneInput!, token: String): Example!
   updateFilteredExamples(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): [Example!]!
   updateFilteredExamplesReturnScalar(where: ExampleWhereInput, data: ExampleUpdateInput!, token: String): Int!
-  updateManyExamples(whereOne: [ExampleWhereOneInput!]!, data: [ExampleUpdateInput!]!, token: String): [Example!]!
+  updateManyExamples(whereOneAndData: [ExampleWhereOneAndDataInput!]!, token: String): [Example!]!
   updateExample(whereOne: ExampleWhereOneInput!, data: ExampleUpdateInput!, token: String): Example!
 }`;
 

@@ -10,8 +10,10 @@ import createEntitySortInputType from './createEntitySortInputType';
 import createEntityUpdateInputType from './createEntityUpdateInputType';
 import createEntityWhereAndSearchInputType from './createEntityWhereAndSearchInputType';
 import createEntityWhereByUniqueInputType from './createEntityWhereByUniqueInputType';
+import createEntityWhereCompoundOneAndDataInputType from './createEntityWhereCompoundOneAndDataInputType';
 import createEntityWhereCompoundOneInputType from './createEntityWhereCompoundOneInputType';
 import createEntityWhereInputType from './createEntityWhereInputType';
+import createEntityWhereOneAndDataInputType from './createEntityWhereOneAndDataInputType';
 import createEntityWhereOneInputType from './createEntityWhereOneInputType';
 import createEntityWherePayloadInputType from './createEntityWherePayloadInputType';
 import createEntityWhichUpdatedInputType from './createEntityWhichUpdatedInputType';
@@ -31,8 +33,10 @@ const inputs = [
   createEntityUpdateInputType,
   createEntityWhereAndSearchInputType,
   createEntityWhereByUniqueInputType,
+  createEntityWhereCompoundOneAndDataInputType,
   createEntityWhereCompoundOneInputType,
   createEntityWhereInputType,
+  createEntityWhereOneAndDataInputType,
   createEntityWhereOneInputType,
   createEntityWherePayloadInputType,
   createEntityWhichUpdatedInputType,

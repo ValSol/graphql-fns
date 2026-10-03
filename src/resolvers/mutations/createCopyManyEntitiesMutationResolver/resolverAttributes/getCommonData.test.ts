@@ -77,7 +77,7 @@ describe('getCommonData of copyManyEntities (B19)', () => {
     ];
   });
 
-  test('should match sources with their targets in order of "whereKeyToSource" (scalar opposite)', async () => {
+  test('should match sources with their targets in order of items (scalar opposite)', async () => {
     const result = await getCommonManyData(
       {
         entityConfig: allEntityConfigs.PersonClone as TangibleEntityConfig,
@@ -85,7 +85,12 @@ describe('getCommonData of copyManyEntities (B19)', () => {
         serversideConfig: {},
       },
       {
-        args: { whereKeyToSource: [{ original: { id: id(1) } }, { original: { id: id(2) } }] },
+        args: {
+          sourceAndTargetAndData: [
+            { whereKeyToSource: { original: { id: id(1) } } },
+            { whereKeyToSource: { original: { id: id(2) } } },
+          ],
+        },
         context: { mongooseConn: {} },
       } as any,
       null,
@@ -100,7 +105,7 @@ describe('getCommonData of copyManyEntities (B19)', () => {
     ]);
   });
 
-  test('should match sources with "whereTarget" items by index (array opposite)', async () => {
+  test('should match sources with "whereTarget" of the same items (array opposite)', async () => {
     const result = await getCommonManyData(
       {
         entityConfig: allEntityConfigs.PersonBackup as TangibleEntityConfig,
@@ -109,8 +114,10 @@ describe('getCommonData of copyManyEntities (B19)', () => {
       },
       {
         args: {
-          whereKeyToSource: [{ original: { id: id(1) } }, { original: { id: id(2) } }],
-          whereTarget: [{ id: id(5) }, { id: id(6) }],
+          sourceAndTargetAndData: [
+            { whereKeyToSource: { original: { id: id(1) } }, whereTarget: { id: id(5) } },
+            { whereKeyToSource: { original: { id: id(2) } }, whereTarget: { id: id(6) } },
+          ],
         },
         context: { mongooseConn: {} },
       } as any,
